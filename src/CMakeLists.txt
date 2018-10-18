@@ -22,6 +22,7 @@ SET (SRC_FETZER_TESTS
     tests/unit_test.cpp
     tests/midi_tests.cpp
     tests/test_common.cpp
+    tests/test_lexer.cpp
 )
 
 add_executable(rehearse ${SRC_FETZER_TESTS})
