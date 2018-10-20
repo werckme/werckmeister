@@ -11,6 +11,7 @@
 
 namespace fm {
 	typedef unsigned char Byte;
+	typedef wchar_t CharType;
 	typedef std::string UId;
     typedef std::wstring String;
     typedef std::wstringstream StringStream;

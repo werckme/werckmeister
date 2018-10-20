@@ -4,6 +4,7 @@ SET (SRC_FETZER_LIB
     fm/werckmeister.cpp
     fm/midi.cpp
     fm/common.cpp
+    compiler/compiler.cpp
 )
 
 
@@ -23,6 +24,7 @@ SET (SRC_FETZER_TESTS
     tests/midi_tests.cpp
     tests/test_common.cpp
     tests/test_lexer.cpp
+    tests/test_parser.cpp
 )
 
 add_executable(rehearse ${SRC_FETZER_TESTS})
