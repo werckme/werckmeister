@@ -12,6 +12,7 @@ Xmaj: 1 5 8
 X7: 1 5 8 10
 Xmaj7: 1 5 8 11
 X7+: Xmaj7
+X/V: -6 1 5 8 --quinte im bass
 ```
 
 ## Styles

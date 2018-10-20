@@ -5,6 +5,7 @@ SET (SRC_FETZER_LIB
     fm/midi.cpp
     fm/common.cpp
     compiler/compiler.cpp
+    compiler/chordDefParser.cpp
 )
 
 

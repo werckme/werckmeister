@@ -17,9 +17,9 @@ namespace sheet {
 		typedef fm::CharType CharType;
 		typedef fm::String StringType;
 		typedef
-			boost::spirit::lex::lexertl::token<CharType const*, boost::spirit::lex::omit, boost::mpl::false_> token_type;
+			boost::spirit::lex::lexertl::token<CharType const*, boost::spirit::lex::omit, boost::mpl::false_> TokenType;
 
-		typedef boost::spirit::lex::lexertl::actor_lexer<token_type> lexer_type;
+		typedef boost::spirit::lex::lexertl::actor_lexer<TokenType> LexerType;
 
 		template <typename Lexer>
 		struct ASheetTokenizer : boost::spirit::lex::lexer<Lexer>
@@ -41,6 +41,7 @@ namespace sheet {
 			{
 			}
 			TokenDef documentConfig, eol, any, comment, chordDef;
+			virtual ~ASheetTokenizer() = default;
 		};
 
 		/////////////////////////////////////////////////////////////////////////////
