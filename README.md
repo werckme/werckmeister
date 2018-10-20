@@ -11,7 +11,6 @@
 Xmaj: 1 5 8
 X7: 1 5 8 10
 Xmaj7: 1 5 8 11
-X7+: Xmaj7
 X/V: -6 1 5 8 --quinte im bass
 ```
 
@@ -25,11 +24,12 @@ X/V: -6 1 5 8 --quinte im bass
 @using 'simplePianoStyle.style';
 
 [ -- track 1 begin
-  (voice: voice1) -- meta informationen
+  /soundselect: 0 0/ -- meta informationen
+  /channel: 1/
   c4 d4 e4 f4 | c4 d4 e4 f4 | -- notation ähnlich lilypond
 ] -- track 1 end
 [
-  (style: style1)
+  /style: style1/
   Cmaj | Cmaj C7 |
 ]
 

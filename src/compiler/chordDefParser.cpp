@@ -34,7 +34,7 @@ namespace sheet {
 					using qi::lexeme;
 					using ascii::char_;
 
-					chordName %= (char_('X') | 'x') >> *char_("a-zA-Z0-9/+#~*!?-");
+					chordName %= char_("Xx") >> *char_("a-zA-Z0-9/+#~*!?-");
 					intervals %= +int_;
 					start %= chordName >> ':' >> intervals;
 				}
