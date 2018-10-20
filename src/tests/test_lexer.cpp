@@ -10,21 +10,42 @@
 
 #include <iostream>
 
-BOOST_AUTO_TEST_CASE(test_lexer01)
+BOOST_AUTO_TEST_CASE(test_chorddef)
 {
+	using namespace sheet::compiler;
+	ChordDefTokenizer<lexer_type> chordDefTok;
 
-	fm::word_count_tokens<fm::lexer_type> word_count_lexer;
-
-	std::string str("@rule1 abba\n@rule2\n#comment\n@rule3");
+	std::string str("--here goes comment 1\n\
+  \t@import 'old.chdef';\r\n\
+@import 'old2.chdef'; --here goes comment 2\n\
+@import 'old3.chdef'; \n\
+Xmaj: 1 5 8\n\
+X7: 1 5 8 10\n\
+\n\
+\r\n\
+   \n\
+  \t\r\n\
+Xmaj7 : 1 5 8 11\n\
+X7 + : Xmaj7\n\
+");
+	
 	char const* first = str.c_str();
 	char const* last = &first[str.size()];
 
-	fm::lexer_type::iterator_type iter = word_count_lexer.begin(first, last);
-	fm::lexer_type::iterator_type end = word_count_lexer.end();
+	lexer_type::iterator_type iter = chordDefTok.begin(first, last);
+	lexer_type::iterator_type end = chordDefTok.end();
 
-	boost::spirit::lex::tokenize(first, last, word_count_lexer);
-
-	for (const auto &x : word_count_lexer.found) {
+	boost::spirit::lex::tokenize(first, last, chordDefTok);
+	BOOST_TEST( chordDefTok.documentConfigs.size() == 3 );
+	for (const auto &x : chordDefTok.documentConfigs) {
+		std::cout << x << std::endl;
+	}
+	BOOST_TEST(chordDefTok.comments.size() == 2);
+	for (const auto &x : chordDefTok.comments) {
+		std::cout << x << std::endl;
+	}
+	BOOST_TEST(chordDefTok.chordDefs.size() == 4);
+	for (const auto &x : chordDefTok.chordDefs) {
 		std::cout << x << std::endl;
 	}
 }

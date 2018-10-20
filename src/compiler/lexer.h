@@ -10,41 +10,62 @@
 #include <boost/bind.hpp>
 #include <vector>
 
-namespace fm {
+namespace sheet {
 
-	typedef
-		boost::spirit::lex::lexertl::token<char const*, boost::spirit::lex::omit, boost::mpl::false_> token_type;
+	namespace compiler {
 
-	typedef boost::spirit::lex::lexertl::actor_lexer<token_type> lexer_type;
+		typedef
+			boost::spirit::lex::lexertl::token<char const*, boost::spirit::lex::omit, boost::mpl::false_> token_type;
 
-	template <typename Lexer>
-	struct word_count_tokens : boost::spirit::lex::lexer<Lexer>
-	{
+		typedef boost::spirit::lex::lexertl::actor_lexer<token_type> lexer_type;
 
-		void add(char const *begin, char const *end) {
-			found.push_back(std::string(begin, end));
-		}
-
-		word_count_tokens()
-			: word("@.+$")     // define tokens
-			, comment("#.+$")
-			, eol("\n")
-			, any(".")
+		template <typename Lexer>
+		struct ASheetTokenizer : boost::spirit::lex::lexer<Lexer>
 		{
-			using boost::spirit::lex::_start;
-			using boost::spirit::lex::_end;
-			using boost::phoenix::ref;
-			auto f = boost::bind(&word_count_tokens::add, this, _1, _2);
+			typedef std::string Token;
+			typedef std::vector<std::string> Tokens;
+			typedef boost::spirit::lex::token_def<> TokenDef;
+
+			void add(char const *begin, char const *end, Tokens &container) {
+				container.push_back(std::string(begin, end));
+			}
+
+			ASheetTokenizer()
+				: documentConfig("^\\s*@.+?;")     // define tokens
+				, comment("--.+$")
+				, eol("\\s*\n")
+				, any(".")
+				, chordDef("^.*$")
+			{
+			}
+			TokenDef documentConfig, eol, any, comment, chordDef;
+		};
+
+		/////////////////////////////////////////////////////////////////////////////
+		template <typename Lexer>
+		struct ChordDefTokenizer : public ASheetTokenizer<Lexer>
+		{
+			typedef ASheetTokenizer<Lexer> Base;
+			ChordDefTokenizer();
+			Tokens comments;
+			Tokens documentConfigs;
+			Tokens chordDefs;
+		};
+
+		template <typename Lexer>
+		ChordDefTokenizer<Lexer>::ChordDefTokenizer()
+		{
+			auto addComments = boost::bind(&Base::add, this, _1, _2, boost::ref(comments));
+			auto addConfigs = boost::bind(&Base::add, this, _1, _2, boost::ref(documentConfigs));
+			auto addDef = boost::bind(&Base::add, this, _1, _2, boost::ref(chordDefs));
 			// associate tokens with the lexer
 			this->self
-				= (word[f] | comment)
+				= (documentConfig[addConfigs] | comment[addComments] | chordDef[addDef])
 				| eol
 				| any
 				;
 		}
-		std::vector<std::string> found;
-		boost::spirit::lex::token_def<> word, eol, any, comment;
-	};
+	}
 }
 
 #endif

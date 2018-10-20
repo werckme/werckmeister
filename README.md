@@ -11,6 +11,7 @@
 Xmaj: 1 5 8
 X7: 1 5 8 10
 Xmaj7: 1 5 8 11
+X7+: Xmaj7
 ```
 
 ## Styles
@@ -18,10 +19,9 @@ Xmaj7: 1 5 8 11
 ## Sheet
 
 ```
-@using Chords1.def
-@using simplePianoStyle.style
-
-@voice: voice1 0 0 -- name, program, sound select
+-- document configs
+@using 'Chords1.chdef';
+@using 'simplePianoStyle.style';
 
 [ -- track 1 begin
   (voice: voice1) -- meta informationen
