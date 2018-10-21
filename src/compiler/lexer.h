@@ -10,6 +10,7 @@
 #include <boost/bind.hpp>
 #include <vector> 
 #include <fm/common.hpp>
+#include <exception>
 
 namespace sheet {
 
@@ -34,13 +35,16 @@ namespace sheet {
 
 			ASheetTokenizer()
 				: documentConfig(FM_STRING("^\\s*@.+?;"))     // define tokens
-				, comment(FM_STRING("--.+$"))
+				, comment(FM_STRING("^\\s*--.+$"))
 				, eol(FM_STRING("\\s*\n"))
 				, any(FM_STRING("."))
-				, chordDef(FM_STRING("^.*$"))
+				, chordDef(FM_STRING("^.+$"))
+				, beginSection(FM_STRING("\\s*section\\s+[a-zA-Z0-9]+"))
+				, line(FM_STRING("^.+$"))
+				, endSection(FM_STRING("\\s*end"))
 			{
 			}
-			TokenDef documentConfig, eol, any, comment, chordDef;
+			TokenDef documentConfig, eol, any, comment, chordDef, beginSection, line, endSection;
 			virtual ~ASheetTokenizer() = default;
 		};
 
@@ -50,7 +54,6 @@ namespace sheet {
 		{
 			typedef ASheetTokenizer<Lexer> Base;
 			ChordDefTokenizer();
-			Tokens comments;
 			Tokens documentConfigs;
 			Tokens chordDefs;
 		};
@@ -58,16 +61,54 @@ namespace sheet {
 		template <typename Lexer>
 		ChordDefTokenizer<Lexer>::ChordDefTokenizer()
 		{
-			auto addComments = boost::bind(&Base::add, this, _1, _2, boost::ref(comments));
 			auto addConfigs = boost::bind(&Base::add, this, _1, _2, boost::ref(documentConfigs));
 			auto addDef = boost::bind(&Base::add, this, _1, _2, boost::ref(chordDefs));
-			// associate tokens with the lexer
 			this->self
-				= (documentConfig[addConfigs] | comment[addComments] | chordDef[addDef])
+				= (documentConfig[addConfigs] | comment | chordDef[addDef])
 				| eol
 				| any
 				;
 		}
+		/////////////////////////////////////////////////////////////////////////////
+		template <typename Lexer>
+		struct StyleDefTokenizer : public ASheetTokenizer<Lexer>
+		{
+			typedef ASheetTokenizer<Lexer> Base;
+			StyleDefTokenizer();
+			Tokens documentConfigs;
+			Tokens sections;
+		private:
+			void beginSection_(CharType const *begin, CharType const *end)
+			{
+				if (this->sectionBegin) {
+					throw std::runtime_error("invalid section");
+				}
+				this->sectionBegin = begin;
+			}
+			void endSection_(CharType const *begin, CharType const *end)
+			{
+				if (end && begin >= end) {
+					throw std::runtime_error("invalid section");
+				}
+				sections.push_back(StringType(this->sectionBegin, end));
+				this->sectionBegin = nullptr;
+			}
+			CharType const* sectionBegin = nullptr;
+		};
+
+		template <typename Lexer>
+		StyleDefTokenizer<Lexer>::StyleDefTokenizer()
+		{
+			auto addConfigs = boost::bind(&Base::add, this, _1, _2, boost::ref(documentConfigs));
+			auto onBeginSection = boost::bind(&StyleDefTokenizer::beginSection_, this, _1, _2);
+			auto onEndSection = boost::bind(&StyleDefTokenizer::endSection_, this, _1, _2);
+			this->self
+				= (documentConfig[addConfigs] | comment | line | beginSection[onBeginSection] | endSection[onEndSection])
+				| eol
+				| any
+				;
+		}
+
 	}
 }
 

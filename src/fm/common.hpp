@@ -2,6 +2,7 @@
 #define FM_COMMON_HPP
 
 #define FM_STRING(str) L##str
+#define FM_COUT std::wcout
 
 #include <string>
 #include <sstream>
@@ -25,6 +26,7 @@ namespace fm {
 		std::reverse(memp, memp + sizeof(TType));
 	}
 	UId generateUid();
+
 }
 
 #endif
