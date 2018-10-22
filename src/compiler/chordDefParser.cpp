@@ -23,10 +23,10 @@ namespace sheet {
 			namespace ascii = boost::spirit::ascii;
 
 			template <typename Iterator>
-			struct _ChordDefParser : qi::grammar<Iterator, ChordDef(), ascii::space_type>
+			struct _SectionParser : qi::grammar<Iterator, ChordDef(), ascii::space_type>
 			{
 				typedef ChordDef::Intervals Intervals;
-				_ChordDefParser() : _ChordDefParser::base_type(start)
+				_SectionParser() : _SectionParser::base_type(start)
 				{
 					using qi::int_;
 					using qi::lit;
@@ -47,7 +47,7 @@ namespace sheet {
 			void _parse(const fm::String &defStr, ChordDef &def) 
 			{
 				using boost::spirit::ascii::space;
-				typedef _ChordDefParser<fm::String::const_iterator> ChordParserType;
+				typedef _SectionParser<fm::String::const_iterator> ChordParserType;
 				ChordParserType g;
 				bool r = phrase_parse(defStr.begin(), defStr.end(), g, space, def);
 			}
