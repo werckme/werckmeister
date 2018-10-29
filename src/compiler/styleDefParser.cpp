@@ -1,11 +1,29 @@
 #include "parser.h"
 #include "lexer.h"
+#include <boost/config/warning_disable.hpp>
+#include <boost/spirit/include/qi.hpp>
+#include <boost/spirit/include/phoenix_core.hpp>
+#include <boost/spirit/include/phoenix_operator.hpp>
+#include <boost/spirit/include/phoenix_object.hpp>
+#include <boost/fusion/include/adapt_struct.hpp>
+#include <boost/fusion/include/io.hpp>
 
-//BOOST_FUSION_ADAPT_STRUCT(
-//	sheet::ChordDef,
-//	(fm::String, name)
-//	(sheet::ChordDef::Intervals, intervals)
-//)
+
+BOOST_FUSION_ADAPT_STRUCT(
+	sheet::Voice,
+	(sheet::Voice::Events, events)
+)
+
+BOOST_FUSION_ADAPT_STRUCT(
+	sheet::Track,
+	(sheet::Track::Voices, voices)
+)
+
+BOOST_FUSION_ADAPT_STRUCT(
+	sheet::Section,
+	(fm::String, name)
+	(sheet::Section::Tracks, tracks)
+)
 
 namespace sheet {
 	namespace compiler {
@@ -15,10 +33,10 @@ namespace sheet {
 			namespace ascii = boost::spirit::ascii;
 
 			template <typename Iterator>
-			struct _SectionParser : qi::grammar<Iterator, ChordDef(), ascii::space_type>
+			struct _SectionParser : qi::grammar<Iterator, Section(), ascii::space_type>
 			{
 				//typedef ChordDef::Intervals Intervals;
-			/*	_SectionParser() : _SectionParser::base_type(start)
+				_SectionParser() : _SectionParser::base_type(start)
 				{
 					using qi::int_;
 					using qi::lit;
@@ -26,22 +44,31 @@ namespace sheet {
 					using qi::lexeme;
 					using ascii::char_;
 
-					chordName %= char_("Xx") >> *char_("a-zA-Z0-9/+#~*!?-");
-					intervals %= +int_;
-					start %= chordName >> ':' >> intervals;
-				}*/
-				/*qi::rule<Iterator, Intervals(), ascii::space_type> intervals;
-				qi::rule<Iterator, fm::String(), ascii::space_type> chordName;
-				qi::rule<Iterator, ChordDef(), ascii::space_type> start;*/
+					event_ %= qi::lexeme[ +char_("a-zA-Z") ];
+					events %= *event_;
+					voice %= "{" >> events >> "}";
+					sectionName %= "section" >> *char_("a-zA-Z0-9");
+					track %= "[" >> *voice >> "]";
+
+					//chordName %= char_("Xx") >> *char_("a-zA-Z0-9/+#~*!?-");
+					//intervals %= +int_;
+					start %= sectionName >> +track >> "end";
+				}
+				qi::rule<Iterator, Section(), ascii::space_type> start;
+				qi::rule<Iterator, fm::String(), ascii::space_type> sectionName;
+				qi::rule<Iterator, fm::String(), ascii::space_type> event_;
+				qi::rule<Iterator, Track(), ascii::space_type> track;
+				qi::rule<Iterator, Voice(), ascii::space_type> voice;
+				qi::rule<Iterator, Voice::Events(), ascii::space_type> events;
 			};
 
 
 			void _parse(const fm::String &defStr, Section &def)
 			{
-				//using boost::spirit::ascii::space;
-				//typedef _SectionParser<fm::String::const_iterator> SectionParserType;
-				//SectionParserType g;
-				//bool r = phrase_parse(defStr.begin(), defStr.end(), g, space, def);
+				using boost::spirit::ascii::space;
+				typedef _SectionParser<fm::String::const_iterator> SectionParserType;
+				SectionParserType g;
+				bool r = phrase_parse(defStr.begin(), defStr.end(), g, space, def);
 			}
 		}
 
@@ -56,7 +83,7 @@ namespace sheet {
 			boost::spirit::lex::tokenize(first, last, styleDefTok);
 			for (const auto& defStr : styleDefTok.sections) {
 				Section sec;
-				//_parse(defStr, def);
+				_parse(defStr, sec);
 				result.sections.push_back(sec);
 			}
 

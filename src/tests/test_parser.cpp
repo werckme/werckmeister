@@ -68,41 +68,19 @@ X/V: -6 1 5 8 --quinte im bass\
 }
 
 
-BOOST_AUTO_TEST_CASE(test_styleDefparser)
+BOOST_AUTO_TEST_CASE(test_styleDefparser_Simple)
 {
 	fm::String text = FM_STRING("\
 		@use anything; \n\
 		@or not; \n\
 	--some useless comment\n\
-		section intro -- section \n\
-		[--track 1 begin\n\
-		/ name:piano / --meta informationen\n\
-		/ soundselect : 0 0 /\n\
-		/ channel : 1 /\n\
-	{ I4 II4 III4 IV4 | } --a separate voice / similar to lilypond\n\
-	{ I,4 II,4 III,4 IV,4 }\n\
-		] --track 1 end\n\
+		section intro\n\
 		[\n\
-			/ name:bass /\n\
-			/ soundselect : 0 0 /\n\
-		/ channel : 2 /\n\
-		I4 I'4 III4 I'4\n\
-		]\n\
-		end\n\
-\n\
-	section normal\n\
-		  [--track 1 begin\n\
-			  / name:piano / --meta informationen\n\
-			  / soundselect : 0 0 / \n\
-			  / channel : 1 / \n\
-			  / signature : 4 | 4 / \n\
-		  { I4 II4 III4 IV4 | } --a separate voice / similar to lilypond\n\
-		  { I8 <III V VII>2.. | }\n\
-		  ] --track 1 end\n\
-			  [\n\
-				  / name:bass / \n\
-				  I4 I'4 III4 I'4\n\
-			  ]\n\
-end");
+{xxx yyy}\n\
+{x y} \n\
+] \n\
+end\n\
+");
 	sheet::compiler::StyleDefParser parser;
+	auto defs = parser.parse(text);
 }

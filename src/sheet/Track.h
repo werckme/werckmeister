@@ -8,11 +8,13 @@
 namespace sheet {
 
 	struct Voice {
-		typedef std::vector<events::AEvent> Events;
+		typedef std::vector<fm::String> Events;
+		Events events;
 	};
 
 	struct Track {
 		typedef std::vector<Voice> Voices;
+		Voices voices;
 	};
 
 }
