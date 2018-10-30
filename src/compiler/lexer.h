@@ -8,7 +8,7 @@
 #include <boost/spirit/include/phoenix_algorithm.hpp>
 #include <boost/spirit/include/phoenix_core.hpp>
 #include <boost/bind.hpp>
-#include <vector> 
+#include <vector>
 #include <fm/common.hpp>
 #include <exception>
 
@@ -54,8 +54,8 @@ namespace sheet {
 		{
 			typedef ASheetTokenizer<Lexer> Base;
 			ChordDefTokenizer();
-			Tokens documentConfigs;
-			Tokens chordDefs;
+			typename Base::Tokens documentConfigs;
+			typename Base::Tokens chordDefs;
 		};
 
 		template <typename Lexer>
@@ -64,9 +64,9 @@ namespace sheet {
 			auto addConfigs = boost::bind(&Base::add, this, _1, _2, boost::ref(documentConfigs));
 			auto addDef = boost::bind(&Base::add, this, _1, _2, boost::ref(chordDefs));
 			this->self
-				= (documentConfig[addConfigs] | comment | chordDef[addDef])
-				| eol
-				| any
+				= (Base::documentConfig[addConfigs] | Base::comment | Base::chordDef[addDef])
+				| Base::eol
+				| Base::any
 				;
 		}
 		/////////////////////////////////////////////////////////////////////////////
@@ -75,8 +75,8 @@ namespace sheet {
 		{
 			typedef ASheetTokenizer<Lexer> Base;
 			StyleDefTokenizer();
-			Tokens documentConfigs;
-			Tokens sections;
+			typename Base::Tokens documentConfigs;
+			typename Base::Tokens sections;
 		private:
 			void beginSection_(CharType const *begin, CharType const *end)
 			{
@@ -103,9 +103,13 @@ namespace sheet {
 			auto onBeginSection = boost::bind(&StyleDefTokenizer::beginSection_, this, _1, _2);
 			auto onEndSection = boost::bind(&StyleDefTokenizer::endSection_, this, _1, _2);
 			this->self
-				= (documentConfig[addConfigs] | comment | line | beginSection[onBeginSection] | endSection[onEndSection])
-				| eol
-				| any
+				= (Base::documentConfig[addConfigs] 
+				| Base::comment 
+				| Base::line 
+				| Base::beginSection[onBeginSection] 
+				| Base::endSection[onEndSection])
+				| Base::eol
+				| Base::any
 				;
 		}
 
