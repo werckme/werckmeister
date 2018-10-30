@@ -3,32 +3,32 @@
 
 namespace fm {
     typedef unsigned long long Ticks;
-    typedef int N1;
-    typedef int N2;
-    typedef int N4;
-    typedef int N8;
-    typedef int N16;
-    typedef int N32;
-    typedef int N64;
-    typedef int N128;
+    typedef Ticks N1;
+    typedef Ticks N2;
+    typedef Ticks N4;
+    typedef Ticks N8;
+    typedef Ticks N16;
+    typedef Ticks N32;
+    typedef Ticks N64;
+    typedef Ticks N128;
 
-    typedef int N1p;
-    typedef int N2p;
-    typedef int N4p;
-    typedef int N8p;
-    typedef int N16p;
-    typedef int N32p;
-    typedef int N64p;
-    typedef int N128p;
+    typedef Ticks N1p;
+    typedef Ticks N2p;
+    typedef Ticks N4p;
+    typedef Ticks N8p;
+    typedef Ticks N16p;
+    typedef Ticks N32p;
+    typedef Ticks N64p;
+    typedef Ticks N128p;
 
-    typedef int N1t;
-    typedef int N2t;
-    typedef int N4t;
-    typedef int N8t;
-    typedef int N16t;
-    typedef int N32t;
-    typedef int N64t;
-    typedef int N128t;
+    typedef Ticks N1t;
+    typedef Ticks N2t;
+    typedef Ticks N4t;
+    typedef Ticks N8t;
+    typedef Ticks N16t;
+    typedef Ticks N32t;
+    typedef Ticks N64t;
+    typedef Ticks N128t;
 }
 
 #endif

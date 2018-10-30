@@ -8,7 +8,7 @@
 namespace sheet {
 
 	struct Voice {
-		typedef std::vector<events::DegreeNote> Events;
+		typedef std::vector<Event> Events;
 		Events events;
 	};
 
