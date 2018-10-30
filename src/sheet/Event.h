@@ -16,6 +16,10 @@ namespace sheet {
 
 		};
 
+		struct RelativeNote : public AEvent {
+
+		};
+
 		struct Accord : public AEvent {
 
 		};
