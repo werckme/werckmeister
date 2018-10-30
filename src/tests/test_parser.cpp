@@ -23,48 +23,48 @@ X/V: -6 1 5 8 --quinte im bass\
 	sheet::compiler::ChordDefParser defParser;
 	
 	auto chordDefs = defParser.parse(str);
-	BOOST_TEST( chordDefs.size() == 5 );
+	BOOST_CHECK( chordDefs.size() == 5 );
 	auto &def = chordDefs[0];
-	BOOST_TEST( (chordDefs[0].name == FM_STRING("Xmaj")));
+	BOOST_CHECK( (chordDefs[0].name == FM_STRING("Xmaj")));
 	auto interval = def.intervals.begin();
-	BOOST_TEST((interval++)->value == 1);
-	BOOST_TEST((interval++)->value == 5);
-	BOOST_TEST((interval++)->value == 8);
-	BOOST_TEST((interval == chordDefs[0].intervals.end()));
+	BOOST_CHECK((interval++)->value == 1);
+	BOOST_CHECK((interval++)->value == 5);
+	BOOST_CHECK((interval++)->value == 8);
+	BOOST_CHECK((interval == chordDefs[0].intervals.end()));
 
 
-	BOOST_TEST((chordDefs[1].name == FM_STRING("X7")));
+	BOOST_CHECK((chordDefs[1].name == FM_STRING("X7")));
 	interval = chordDefs[1].intervals.begin();
-	BOOST_TEST((interval++)->value == 1);
-	BOOST_TEST((interval++)->value == 5);
-	BOOST_TEST((interval++)->value == 8);
-	BOOST_TEST((interval++)->value == 10);
-	BOOST_TEST((interval == chordDefs[1].intervals.end()));
+	BOOST_CHECK((interval++)->value == 1);
+	BOOST_CHECK((interval++)->value == 5);
+	BOOST_CHECK((interval++)->value == 8);
+	BOOST_CHECK((interval++)->value == 10);
+	BOOST_CHECK((interval == chordDefs[1].intervals.end()));
 
 
-	BOOST_TEST((chordDefs[2].name == FM_STRING("Xmaj7")));
+	BOOST_CHECK((chordDefs[2].name == FM_STRING("Xmaj7")));
 	interval = chordDefs[2].intervals.begin();
-	BOOST_TEST((interval++)->value == 1);
-	BOOST_TEST((interval++)->value == 5);
-	BOOST_TEST((interval++)->value == 8);
-	BOOST_TEST((interval++)->value == 11);
-	BOOST_TEST((interval == chordDefs[2].intervals.end()));
+	BOOST_CHECK((interval++)->value == 1);
+	BOOST_CHECK((interval++)->value == 5);
+	BOOST_CHECK((interval++)->value == 8);
+	BOOST_CHECK((interval++)->value == 11);
+	BOOST_CHECK((interval == chordDefs[2].intervals.end()));
 
-	BOOST_TEST((chordDefs[3].name == FM_STRING("x7+")));
+	BOOST_CHECK((chordDefs[3].name == FM_STRING("x7+")));
 	interval = chordDefs[3].intervals.begin();
-	BOOST_TEST((interval++)->value == 1);
-	BOOST_TEST((interval++)->value == 5);
-	BOOST_TEST((interval++)->value == 8);
-	BOOST_TEST((interval++)->value == 11);
-	BOOST_TEST((interval == chordDefs[3].intervals.end()));
+	BOOST_CHECK((interval++)->value == 1);
+	BOOST_CHECK((interval++)->value == 5);
+	BOOST_CHECK((interval++)->value == 8);
+	BOOST_CHECK((interval++)->value == 11);
+	BOOST_CHECK((interval == chordDefs[3].intervals.end()));
 
-	BOOST_TEST((chordDefs[4].name == FM_STRING("X/V")));
+	BOOST_CHECK((chordDefs[4].name == FM_STRING("X/V")));
 	interval = chordDefs[4].intervals.begin();
-	BOOST_TEST((interval++)->value == -6);
-	BOOST_TEST((interval++)->value == 1);
-	BOOST_TEST((interval++)->value == 5);
-	BOOST_TEST((interval++)->value == 8);
-	BOOST_TEST((interval == chordDefs[4].intervals.end()));
+	BOOST_CHECK((interval++)->value == -6);
+	BOOST_CHECK((interval++)->value == 1);
+	BOOST_CHECK((interval++)->value == 5);
+	BOOST_CHECK((interval++)->value == 8);
+	BOOST_CHECK((interval == chordDefs[4].intervals.end()));
 }
 
 

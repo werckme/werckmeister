@@ -31,11 +31,11 @@ X7: 1 5 8 10 --as usual\n\
 	LexerType::iterator_type end = chordDefTok.end();
 
 	boost::spirit::lex::tokenize(first, last, chordDefTok);
-	BOOST_TEST( chordDefTok.documentConfigs.size() == 3 );
+	BOOST_CHECK( chordDefTok.documentConfigs.size() == 3 );
 	//for (const auto &x : chordDefTok.documentConfigs) {
 	//	FM_COUT << x << std::endl;
 	//}
-	BOOST_TEST(chordDefTok.chordDefs.size() == 4);
+	BOOST_CHECK(chordDefTok.chordDefs.size() == 4);
 	//for (const auto &x : chordDefTok.chordDefs) {
 	//	FM_COUT << x << std::endl;
 	//}
@@ -86,11 +86,11 @@ end");
 	LexerType::iterator_type iter = styleDefToken.begin(first, last);
 	LexerType::iterator_type end = styleDefToken.end();
 	boost::spirit::lex::tokenize(first, last, styleDefToken);
-	BOOST_TEST(styleDefToken.documentConfigs.size() == 2 );
+	BOOST_CHECK(styleDefToken.documentConfigs.size() == 2 );
 	for (const auto &x : styleDefToken.documentConfigs) {
 		FM_COUT << x << std::endl;
 	}
-	BOOST_TEST(styleDefToken.sections.size() == 2);
+	BOOST_CHECK(styleDefToken.sections.size() == 2);
 	for (const auto &x : styleDefToken.sections) {
 		FM_COUT << "\n\n!\n\n" << x << std::endl;
 	}
