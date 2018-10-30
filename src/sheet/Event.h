@@ -16,8 +16,9 @@ namespace sheet {
 
 		};
 
-		struct RelativeNote : public AEvent {
-
+		struct DegreeNote : public AEvent {
+			typedef unsigned char Degree;
+			Degree degree;
 		};
 
 		struct Accord : public AEvent {

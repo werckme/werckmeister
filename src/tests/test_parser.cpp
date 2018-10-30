@@ -76,8 +76,8 @@ BOOST_AUTO_TEST_CASE(test_styleDefparser_Simple)
 	--some useless comment\n\
 		section intro\n\
 		[\n\
-{I4 II4 III4 IV4 }\n\
-{IV4 VII4 VIII4 IX4 } \n\
+{I II III IV }\n\
+{IV VII I II } \n\
 ] \n\
 end\n\
 ");

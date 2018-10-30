@@ -15,6 +15,11 @@ BOOST_FUSION_ADAPT_STRUCT(
 )
 
 BOOST_FUSION_ADAPT_STRUCT(
+	sheet::events::DegreeNote,
+	(sheet::events::DegreeNote::Degree, degree)
+)
+
+BOOST_FUSION_ADAPT_STRUCT(
 	sheet::Track,
 	(sheet::Track::Voices, voices)
 )
@@ -28,6 +33,23 @@ BOOST_FUSION_ADAPT_STRUCT(
 namespace sheet {
 	namespace compiler {
 
+		struct degree_ : boost::spirit::qi::symbols<char, unsigned>
+		{
+			degree_()
+			{
+				add
+				("I", 1)
+					("II", 2)
+					("III", 3)
+					("IV", 4)
+					("V", 5)
+					("VI", 6)
+					("VII", 7)
+					;
+			}
+
+		} degree_;
+
 		namespace {
 			namespace qi = boost::spirit::qi;
 			namespace ascii = boost::spirit::ascii;
@@ -40,11 +62,12 @@ namespace sheet {
 				{
 					using qi::int_;
 					using qi::lit;
+					using qi::_val;
 					using qi::double_;
 					using qi::lexeme;
 					using ascii::char_;
 
-					event_ %= qi::lexeme[ +char_("a-zA-Z") ];
+					event_ %= degree_;
 					events %= *event_;
 					voice %= "{" >> events >> "}";
 					sectionName %= "section" >> *char_("a-zA-Z0-9");
@@ -56,7 +79,7 @@ namespace sheet {
 				}
 				qi::rule<Iterator, Section(), ascii::space_type> start;
 				qi::rule<Iterator, fm::String(), ascii::space_type> sectionName;
-				qi::rule<Iterator, fm::String(), ascii::space_type> event_;
+				qi::rule<Iterator, events::DegreeNote(), ascii::space_type> event_;
 				qi::rule<Iterator, Track(), ascii::space_type> track;
 				qi::rule<Iterator, Voice(), ascii::space_type> voice;
 				qi::rule<Iterator, Voice::Events(), ascii::space_type> events;
