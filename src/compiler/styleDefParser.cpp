@@ -15,10 +15,18 @@ BOOST_FUSION_ADAPT_STRUCT(
 )
 
 BOOST_FUSION_ADAPT_STRUCT(
+	sheet::PitchDef,
+	(sheet::PitchDef::Pitch, pitch)
+	(sheet::PitchDef::Octave, octave)
+)
+
+BOOST_FUSION_ADAPT_STRUCT(
 	sheet::Event,
-	(sheet::Event::Pitch, pitch)
 	(sheet::Event::Type, type)
+	(sheet::PitchDef, pitch)
 	(sheet::Event::Duration, duration)
+	(fm::String, metaCommand)
+	(fm::String, metaArgs)
 )
 
 BOOST_FUSION_ADAPT_STRUCT(
@@ -35,7 +43,7 @@ BOOST_FUSION_ADAPT_STRUCT(
 namespace sheet {
 	namespace compiler {
 
-		struct degree_ : boost::spirit::qi::symbols<char, Event::Pitch >
+		struct degree_ : boost::spirit::qi::symbols<char, PitchDef::Pitch >
 		{
 			degree_()
 			{
@@ -51,6 +59,22 @@ namespace sheet {
 			}
 
 		} degree_;
+
+		struct octave_ : boost::spirit::qi::symbols<char, PitchDef::Octave >
+		{
+			octave_()
+			{
+				add
+				(",,,", -3)
+					(",,", -2)
+					(",", -1)
+					("'", 1)
+					("''", 2)
+					("'''", 3)
+					;
+			}
+
+		} octave_;
 
 		struct duration_ : boost::spirit::qi::symbols<char, fm::Ticks>
 		{
@@ -97,9 +121,12 @@ namespace sheet {
 					using ascii::char_;
 					using qi::attr;
 
-					event_ %= (degree_ >> attr(Event::Degree) >> (duration_ | attr(Event::NoDuration)))
-							| ("r" >> attr(Event::NoPitch) >> attr(Event::Rest) >> (duration_ | attr(Event::NoDuration)))
-							| ("|" >> attr(Event::NoPitch) >> attr(Event::EOB) >> attr(0));
+					pitch_ %= degree_ >> (octave_ | attr(PitchDef::DefaultOctave));
+
+					event_ %= (attr(Event::Degree) >> pitch_ >> (duration_ | attr(Event::NoDuration)))
+							| ("r" >> attr(Event::Rest) >> attr(PitchDef()) >> (duration_ | attr(Event::NoDuration)))
+							| ("|" >> attr(Event::EOB) >> attr(PitchDef()) >> attr(0))
+						;
 					events %= *event_;
 					voice %= "{" >> events >> "}";
 					sectionName %= "section" >> *char_("a-zA-Z0-9");
@@ -109,6 +136,7 @@ namespace sheet {
 				qi::rule<Iterator, Section(), ascii::space_type> start;
 				qi::rule<Iterator, fm::String(), ascii::space_type> sectionName;
 				qi::rule<Iterator, Event(), ascii::space_type> event_;
+				qi::rule<Iterator, PitchDef(), ascii::space_type> pitch_;
 				qi::rule<Iterator, Track(), ascii::space_type> track;
 				qi::rule<Iterator, Voice(), ascii::space_type> voice;
 				qi::rule<Iterator, Voice::Events(), ascii::space_type> events;

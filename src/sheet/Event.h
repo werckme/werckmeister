@@ -6,10 +6,21 @@
 #include <vector>
 
 namespace sheet {
+
+	struct PitchDef {
+		typedef int Pitch;
+		typedef int Octave;
+		enum {
+			NoPitch = -1,
+			DefaultOctave = 0,
+		};
+		Pitch pitch = NoPitch;
+		Octave octave = DefaultOctave;
+	};
+
 	struct Event {
 		enum {
 			NoDuration = 0,
-			NoPitch = -1,
 		};
 		enum Type { 
 			Unknown,
@@ -19,11 +30,12 @@ namespace sheet {
 			EOB, // End of Bar aka. Bar Line
 			Meta
 		};
-		typedef int Pitch;
 		typedef fm::Ticks Duration;
-		Pitch pitch = NoPitch;
+		PitchDef pitch;
 		Type type = Unknown;
 		Duration duration = NoDuration;
+		fm::String metaCommand;
+		fm::String metaArgs;
 	};
 }
 
