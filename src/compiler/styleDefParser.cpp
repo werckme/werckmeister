@@ -99,7 +99,7 @@ namespace sheet {
 
 					event_ %= (degree_ >> attr(Event::Degree) >> (duration_ | attr(Event::NoDuration)))
 							| ("r" >> attr(Event::NoPitch) >> attr(Event::Rest) >> (duration_ | attr(Event::NoDuration)))
-							| ("|" >> attr(0) >> attr(Event::EOB) >> attr(0));
+							| ("|" >> attr(Event::NoPitch) >> attr(Event::EOB) >> attr(0));
 					events %= *event_;
 					voice %= "{" >> events >> "}";
 					sectionName %= "section" >> *char_("a-zA-Z0-9");

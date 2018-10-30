@@ -1,7 +1,7 @@
 #include <boost/test/unit_test.hpp>
 #include <iostream>
 #include "compiler/parser.h"
-
+#include <fm/literals.hpp>
 
 BOOST_AUTO_TEST_CASE(test_chordDefparser)
 {
@@ -67,9 +67,21 @@ X/V: -6 1 5 8 --quinte im bass\
 	BOOST_CHECK((interval == chordDefs[4].intervals.end()));
 }
 
+namespace {
+	bool checkNote(const sheet::Event &ev, 
+		sheet::Event::Type type,
+		sheet::Event::Pitch pitch,
+		sheet::Event::Duration duration) 
+	{
+		return ev.type == type
+			&& ev.pitch == pitch
+			&& ev.duration == duration;
+	}
+}
 
 BOOST_AUTO_TEST_CASE(test_styleDefparser_Simple)
 {
+	using namespace fm;
 	fm::String text = FM_STRING("\
 		@use anything; \n\
 		@or not; \n\
@@ -83,4 +95,33 @@ end\n\
 ");
 	sheet::compiler::StyleDefParser parser;
 	auto defs = parser.parse(text);
+	BOOST_CHECK(defs.sections.size() == 1);
+	BOOST_CHECK(defs.sections[0].name == FM_STRING("intro"));
+	BOOST_CHECK(defs.sections[0].tracks.size() == 1);
+	BOOST_CHECK(defs.sections[0].tracks[0].voices.size() == 2);
+	BOOST_CHECK(defs.sections[0].tracks[0].voices[0].events.size() == 11);
+	BOOST_CHECK(defs.sections[0].tracks[0].voices[1].events.size() == 11);
+	BOOST_CHECK(checkNote(defs.sections[0].tracks[0].voices[0].events[0], sheet::Event::Degree, 1, 1.0_N4));
+	BOOST_CHECK(checkNote(defs.sections[0].tracks[0].voices[0].events[1], sheet::Event::Degree, 2, 1.0_N8));
+	BOOST_CHECK(checkNote(defs.sections[0].tracks[0].voices[0].events[2], sheet::Event::Degree, 3, 1.0_N16));
+	BOOST_CHECK(checkNote(defs.sections[0].tracks[0].voices[0].events[3], sheet::Event::Degree, 4, 1.0_N32));
+	BOOST_CHECK(checkNote(defs.sections[0].tracks[0].voices[0].events[4], sheet::Event::EOB, sheet::Event::NoPitch, sheet::Event::NoDuration));
+	BOOST_CHECK(checkNote(defs.sections[0].tracks[0].voices[0].events[5], sheet::Event::Degree, 1, 1.0_N4));
+	BOOST_CHECK(checkNote(defs.sections[0].tracks[0].voices[0].events[6], sheet::Event::Degree, 1, sheet::Event::NoDuration));
+	BOOST_CHECK(checkNote(defs.sections[0].tracks[0].voices[0].events[7], sheet::Event::Degree, 1, sheet::Event::NoDuration));
+	BOOST_CHECK(checkNote(defs.sections[0].tracks[0].voices[0].events[8], sheet::Event::Degree, 1, sheet::Event::NoDuration));
+	BOOST_CHECK(checkNote(defs.sections[0].tracks[0].voices[0].events[9], sheet::Event::EOB, sheet::Event::NoPitch, sheet::Event::NoDuration));
+	BOOST_CHECK(checkNote(defs.sections[0].tracks[0].voices[0].events[10], sheet::Event::Rest, sheet::Event::NoPitch, 1.0_N1));
+
+	BOOST_CHECK(checkNote(defs.sections[0].tracks[0].voices[1].events[0], sheet::Event::Degree, 4, 1.0_N4p));
+	BOOST_CHECK(checkNote(defs.sections[0].tracks[0].voices[1].events[1], sheet::Event::Degree, 7, 1.0_N8p));
+	BOOST_CHECK(checkNote(defs.sections[0].tracks[0].voices[1].events[2], sheet::Event::Degree, 1, 1.0_N16p));
+	BOOST_CHECK(checkNote(defs.sections[0].tracks[0].voices[1].events[3], sheet::Event::Degree, 2, 1.0_N32p));
+	BOOST_CHECK(checkNote(defs.sections[0].tracks[0].voices[1].events[4], sheet::Event::EOB, sheet::Event::NoPitch, sheet::Event::NoDuration));
+	BOOST_CHECK(checkNote(defs.sections[0].tracks[0].voices[1].events[5], sheet::Event::Degree, 2, 1.0_N4));
+	BOOST_CHECK(checkNote(defs.sections[0].tracks[0].voices[1].events[6], sheet::Event::Degree, 2, sheet::Event::NoDuration));
+	BOOST_CHECK(checkNote(defs.sections[0].tracks[0].voices[1].events[7], sheet::Event::Degree, 2, sheet::Event::NoDuration));
+	BOOST_CHECK(checkNote(defs.sections[0].tracks[0].voices[1].events[8], sheet::Event::Degree, 2, sheet::Event::NoDuration));
+	BOOST_CHECK(checkNote(defs.sections[0].tracks[0].voices[1].events[9], sheet::Event::EOB, sheet::Event::NoPitch, sheet::Event::NoDuration));
+	BOOST_CHECK(checkNote(defs.sections[0].tracks[0].voices[1].events[10], sheet::Event::Rest, sheet::Event::NoPitch, 1.0_N1));
 }

@@ -16,7 +16,8 @@ namespace sheet {
 			Rest,
 			Degree, 
 			Absolute, 
-			EOB // End of Bar aka. Bar Line 
+			EOB, // End of Bar aka. Bar Line
+			Meta
 		};
 		typedef int Pitch;
 		typedef fm::Ticks Duration;
