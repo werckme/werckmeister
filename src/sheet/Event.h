@@ -31,7 +31,8 @@ namespace sheet {
 			Meta
 		};
 		typedef fm::Ticks Duration;
-		PitchDef pitch;
+		typedef std::vector<PitchDef> Pitches;
+		Pitches pitches;
 		Type type = Unknown;
 		Duration duration = NoDuration;
 		fm::String metaCommand;

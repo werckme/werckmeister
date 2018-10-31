@@ -23,7 +23,7 @@ BOOST_FUSION_ADAPT_STRUCT(
 BOOST_FUSION_ADAPT_STRUCT(
 	sheet::Event,
 	(sheet::Event::Type, type)
-	(sheet::PitchDef, pitch)
+	(sheet::Event::Pitches, pitches)
 	(sheet::Event::Duration, duration)
 	(fm::String, metaCommand)
 	(fm::String, metaArgs)
@@ -126,7 +126,7 @@ namespace sheet {
 					event_ %= (attr(Event::Degree) >> pitch_ >> (duration_ | attr(Event::NoDuration)))
 							| ("r" >> attr(Event::Rest) >> attr(PitchDef()) >> (duration_ | attr(Event::NoDuration)))
 							| ("|" >> attr(Event::EOB) >> attr(PitchDef()) >> attr(0))
-						;
+							;
 					events %= *event_;
 					voice %= "{" >> events >> "}";
 					sectionName %= "section" >> *char_("a-zA-Z0-9");

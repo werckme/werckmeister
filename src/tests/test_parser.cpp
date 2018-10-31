@@ -75,8 +75,8 @@ namespace {
 		sheet::Event::Duration duration = sheet::Event::NoDuration) 
 	{
 		return ev.type == type
-			&& ev.pitch.pitch == pitch
-			&& ev.pitch.octave == octave
+			&& ev.pitches.at(0).pitch == pitch
+			&& ev.pitches.at(0).octave == octave
 			&& ev.duration == duration;
 	}
 }
