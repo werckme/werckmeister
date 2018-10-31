@@ -79,6 +79,29 @@ namespace {
 			&& ev.pitches.at(0).octave == octave
 			&& ev.duration == duration;
 	}
+	bool checkNote(const sheet::Event &ev,
+		sheet::Event::Type type,
+		const sheet::Event::Pitches &pitches,
+		sheet::Event::Duration duration = sheet::Event::NoDuration)
+	{
+		bool pre = ev.type == type && ev.duration == duration;
+		if (!pre) {
+			return false;
+		}
+		if (ev.pitches.size() != pitches.size()) {
+			return false;
+		}
+		auto &it1 = ev.pitches.begin();
+		auto &it2 = pitches.begin();
+		while (it1 != ev.pitches.end())
+		{
+			if (it1->pitch != it2->pitch || it1->octave != it2->octave) {
+				return false;
+			}
+			++it1;
+			++it2;
+		}
+	}
 }
 
 BOOST_AUTO_TEST_CASE(test_styleDefparser_Simple)
@@ -90,7 +113,7 @@ BOOST_AUTO_TEST_CASE(test_styleDefparser_Simple)
 	--some useless comment\n\
 		section intro\n\
 		[\n\
-{I,4 II,,8 III,,,16 IV32 | I,4 I,, I,,, I | r1}\n\
+{I,4 II,,8 III,,,16 IV32 | I,4 I,, I,,, I | r1 | <I' III' V'>4 }\n\
 {IV'4. VII''8. I'''16. II32. | II'4 II'' II''' II | r1 } \n\
 ] \n\
 end\n\
@@ -101,7 +124,7 @@ end\n\
 	BOOST_CHECK(defs.sections[0].name == FM_STRING("intro"));
 	BOOST_CHECK(defs.sections[0].tracks.size() == 1);
 	BOOST_CHECK(defs.sections[0].tracks[0].voices.size() == 2);
-	BOOST_CHECK(defs.sections[0].tracks[0].voices[0].events.size() == 11);
+	BOOST_CHECK(defs.sections[0].tracks[0].voices[0].events.size() == 13);
 	BOOST_CHECK(defs.sections[0].tracks[0].voices[1].events.size() == 11);
 	BOOST_CHECK(checkNote(defs.sections[0].tracks[0].voices[0].events[0], sheet::Event::Degree, 1, -1, 1.0_N4));
 	BOOST_CHECK(checkNote(defs.sections[0].tracks[0].voices[0].events[1], sheet::Event::Degree, 2, -2, 1.0_N8));

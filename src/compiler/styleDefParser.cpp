@@ -110,7 +110,6 @@ namespace sheet {
 			template <typename Iterator>
 			struct _SectionParser : qi::grammar<Iterator, Section(), ascii::space_type>
 			{
-				//typedef ChordDef::Intervals Intervals;
 				_SectionParser() : _SectionParser::base_type(start)
 				{
 					using qi::int_;
@@ -123,7 +122,7 @@ namespace sheet {
 
 					pitch_ %= degree_ >> (octave_ | attr(PitchDef::DefaultOctave));
 
-					event_ %= (attr(Event::Degree) >> pitch_ >> (duration_ | attr(Event::NoDuration)))
+					event_ %= (attr(Event::Degree) >> ( pitch_ | ("<" >> +pitch_ >> ">") ) >> (duration_ | attr(Event::NoDuration)))
 							| ("r" >> attr(Event::Rest) >> attr(PitchDef()) >> (duration_ | attr(Event::NoDuration)))
 							| ("|" >> attr(Event::EOB) >> attr(PitchDef()) >> attr(0))
 							;

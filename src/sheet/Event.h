@@ -16,6 +16,7 @@ namespace sheet {
 		};
 		Pitch pitch = NoPitch;
 		Octave octave = DefaultOctave;
+		PitchDef(Pitch p = NoPitch, Octave o = DefaultOctave) : pitch(p), octave(o) {}
 	};
 
 	struct Event {
