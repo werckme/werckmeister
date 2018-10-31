@@ -7,7 +7,7 @@
 #include <boost/spirit/include/phoenix_object.hpp>
 #include <boost/fusion/include/adapt_struct.hpp>
 #include <boost/fusion/include/io.hpp>
-
+#include "error.hpp"
 
 BOOST_FUSION_ADAPT_STRUCT(
 	sheet::ChordDef,
@@ -26,17 +26,25 @@ namespace sheet {
 			struct _SectionParser : qi::grammar<Iterator, ChordDef(), ascii::space_type>
 			{
 				typedef ChordDef::Intervals Intervals;
-				_SectionParser() : _SectionParser::base_type(start)
+				_SectionParser() : _SectionParser::base_type(start, "chord def")
 				{
 					using qi::int_;
 					using qi::lit;
 					using qi::double_;
 					using qi::lexeme;
 					using ascii::char_;
+					using qi::on_error;
+					using qi::fail;
 
-					chordName %= char_("Xx") >> *char_("a-zA-Z0-9/+#~*!?-");
+					chordName.name("chord name");
+					intervals.name("intervals");
+
+					chordName %= char_("Xx") > *char_("a-zA-Z0-9/+#~*!?-");
 					intervals %= +int_;
-					start %= chordName >> ':' >> intervals;
+					start %= chordName > ':' > intervals;
+
+					auto onError = boost::bind(&handler::errorHandler<Iterator>, _1);
+					on_error<fail>(start, onError);
 				}
 				qi::rule<Iterator, Intervals(), ascii::space_type> intervals;
 				qi::rule<Iterator, fm::String(), ascii::space_type> chordName;

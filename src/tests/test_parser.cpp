@@ -1,6 +1,7 @@
 #include <boost/test/unit_test.hpp>
 #include <iostream>
 #include "compiler/parser.h"
+#include "compiler/error.hpp"
 #include <fm/literals.hpp>
 
 BOOST_AUTO_TEST_CASE(test_chordDefparser)
@@ -132,7 +133,7 @@ namespace {
 	}
 }
 
-BOOST_AUTO_TEST_CASE(test_styleDefparser_Simple)
+BOOST_AUTO_TEST_CASE(test_styleDefparser)
 {
 	using namespace fm;
 	using sheet::PitchDef;
@@ -191,4 +192,32 @@ end\n\
 	BOOST_CHECK(checkNote(defs.sections[0].tracks[0].voices[1].events[8], sheet::Event::Degree, 2, 0, sheet::Event::NoDuration));
 	BOOST_CHECK(checkNote(defs.sections[0].tracks[0].voices[1].events[9], sheet::Event::EOB));
 	BOOST_CHECK(checkNote(defs.sections[0].tracks[0].voices[1].events[10], sheet::Event::Rest, sheet::PitchDef::NoPitch, 0, 1.0_N1));
+}
+
+
+BOOST_AUTO_TEST_CASE(test_styleDefparser_fail)
+{
+	using namespace fm;
+	using sheet::PitchDef;
+	fm::String text = FM_STRING("\
+		@use anything; \n\
+		@or not; \n\
+	--some useless comment\n\
+		section intro--begin a section\n\
+[--a track\n\
+	{\n\
+		I,4 II,,8 III,,,16 IV32 | I,4 I,, I,,, I | r1 | <I' III' V'>4 \n\
+		/name: bass/\n\
+		/soundselect: 0 0/\n\
+		/acommand: arg1 arg2/\n\
+	} -- a voice\n\
+	{\n\
+		IV'4. VII''8. I'''16. II32. | II'4 II'' II''' IIt --here is the error (t is not valid without a value)\n\
+ | r1 \n\
+	}-- further voice \n\
+] \n\
+end\n\
+");
+	sheet::compiler::StyleDefParser parser;
+	BOOST_CHECK_THROW(parser.parse(text), sheet::compiler::Exception);
 }

@@ -7,7 +7,11 @@
 #include <boost/spirit/include/phoenix_object.hpp>
 #include <boost/fusion/include/adapt_struct.hpp>
 #include <boost/fusion/include/io.hpp>
+#include <boost/fusion/include/vector.hpp>
 #include <fm/literals.hpp>
+#include "error.hpp"
+#include <sstream>
+
 
 BOOST_FUSION_ADAPT_STRUCT(
 	sheet::Voice,
@@ -142,7 +146,8 @@ namespace sheet {
 			template <typename Iterator>
 			struct _SectionParser : qi::grammar<Iterator, Section(), ascii::space_type>
 			{
-				_SectionParser() : _SectionParser::base_type(start)
+
+				_SectionParser() : _SectionParser::base_type(start, "section")
 				{
 					using qi::int_;
 					using qi::lit;
@@ -151,6 +156,16 @@ namespace sheet {
 					using qi::lexeme;
 					using ascii::char_;
 					using qi::attr;
+					using qi::on_error;
+					using qi::fail;
+
+					start.name("section");
+					sectionName.name("section name");
+					event_.name("event");
+					pitch_.name("pitch");
+					track.name("track");
+					voice.name("voice");
+					events.name("events");
 
 					pitch_ %= degree_ >> (octave_ | attr(PitchDef::DefaultOctave));
 
@@ -161,9 +176,12 @@ namespace sheet {
 							;
 					events %= *event_;
 					voice %= "{" >> events >> "}";
-					sectionName %= "section" >> *char_("a-zA-Z0-9");
-					track %= "[" >> *voice >> "]";
-					start %= sectionName >> +track >> "end";
+					sectionName %= "section" > *char_("a-zA-Z0-9");
+					track %= "[" > +voice > "]";
+					start %= sectionName > +track > "end";
+
+					auto onError = boost::bind(&handler::errorHandler<Iterator>, _1);
+					on_error<fail>(start, onError);
 				}
 				qi::rule<Iterator, Section(), ascii::space_type> start;
 				qi::rule<Iterator, fm::String(), ascii::space_type> sectionName;
