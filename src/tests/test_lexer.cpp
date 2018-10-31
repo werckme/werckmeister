@@ -62,8 +62,9 @@ BOOST_AUTO_TEST_CASE(test_styledef)
 		I4 I'4 III4 I'4\n\
 		]\n\
 		end\n\
-\n\
-	section normal\n\
+-\n\
+--\n\
+	section normal--\n\
 		  [--track 1 begin\n\
 			  / name:piano / --meta informationen\n\
 			  / soundselect : 0 0 / \n\

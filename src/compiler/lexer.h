@@ -12,11 +12,14 @@
 #include <fm/common.hpp>
 #include <exception>
 
+#include <iostream>
+
 namespace sheet {
 
 	namespace compiler {
 		typedef fm::CharType CharType;
 		typedef fm::String StringType;
+		typedef fm::StringStream StringStream;
 		typedef
 			boost::spirit::lex::lexertl::token<CharType const*, boost::spirit::lex::omit, boost::mpl::false_> TokenType;
 
@@ -31,6 +34,20 @@ namespace sheet {
 
 			void add(CharType const *begin, CharType const *end, Tokens &container) {
 				container.push_back(StringType(begin, end));
+			}
+
+			StringType withoutComment(CharType const *begin, CharType const *end)
+			{
+				auto it = begin;
+				while (it != end) {
+					if (*it == '-') {
+						if ((it + 1) != end && *(it + 1) == '-') {
+							break;
+						}
+					}
+					++it;
+				}
+				return StringType(begin, it);
 			}
 
 			ASheetTokenizer()
@@ -77,23 +94,21 @@ namespace sheet {
 			StyleDefTokenizer();
 			typename Base::Tokens documentConfigs;
 			typename Base::Tokens sections;
+			StringStream sstream;
 		private:
 			void beginSection_(CharType const *begin, CharType const *end)
 			{
-				if (this->sectionBegin) {
-					throw std::runtime_error("invalid section");
-				}
-				this->sectionBegin = begin;
+				sstream << Base::withoutComment(begin, end) << std::endl;
+			}
+			void onLine_(CharType const *begin, CharType const *end)
+			{
+				sstream << Base::withoutComment(begin, end) << std::endl;
 			}
 			void endSection_(CharType const *begin, CharType const *end)
 			{
-				if (end && begin >= end) {
-					throw std::runtime_error("invalid section");
-				}
-				sections.push_back(StringType(this->sectionBegin, end));
-				this->sectionBegin = nullptr;
+				sstream << Base::withoutComment(begin, end) << std::endl;
+				sections.push_back(sstream.str());
 			}
-			CharType const* sectionBegin = nullptr;
 		};
 
 		template <typename Lexer>
@@ -102,10 +117,11 @@ namespace sheet {
 			auto addConfigs = boost::bind(&Base::add, this, _1, _2, boost::ref(documentConfigs));
 			auto onBeginSection = boost::bind(&StyleDefTokenizer::beginSection_, this, _1, _2);
 			auto onEndSection = boost::bind(&StyleDefTokenizer::endSection_, this, _1, _2);
+			auto onLine = boost::bind(&StyleDefTokenizer::onLine_, this, _1, _2);
 			this->self
 				= (Base::documentConfig[addConfigs] 
 				| Base::comment 
-				| Base::line 
+				| Base::line[onLine]
 				| Base::beginSection[onBeginSection] 
 				| Base::endSection[onEndSection])
 				| Base::eol

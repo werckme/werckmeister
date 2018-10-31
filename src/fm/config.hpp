@@ -13,6 +13,7 @@
 
 namespace fm {
     const Ticks PPQ = 500;
+	const int NotesPerOctave = 12;
 }
 
 #endif

@@ -4,7 +4,7 @@
  - Styles: Rhythmen und Begleitung notiert Relativ zu Tonleiterstufen
  - Sheet: Leadsheet-Dokument verwendet unter Angabe styles, Akkorden und Melodien
 
-#Beispiel
+#Beispiele
 ## ChordDefs
 
 ```

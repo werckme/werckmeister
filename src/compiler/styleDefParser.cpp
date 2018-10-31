@@ -26,7 +26,7 @@ BOOST_FUSION_ADAPT_STRUCT(
 	(sheet::Event::Pitches, pitches)
 	(sheet::Event::Duration, duration)
 	(fm::String, metaCommand)
-	(fm::String, metaArgs)
+	(sheet::Event::Args, metaArgs)
 )
 
 BOOST_FUSION_ADAPT_STRUCT(
@@ -82,7 +82,7 @@ namespace sheet {
 			{
 				using namespace fm;
 				add
-				("1", 1.0_N1)
+					("1", 1.0_N1)
 					("2", 1.0_N2)
 					("4", 1.0_N4)
 					("8", 1.0_N8)
@@ -98,6 +98,38 @@ namespace sheet {
 					("32.", 1.0_N32p)
 					("64.", 1.0_N64p)
 					("128.", 1.0_N128p)
+					("1t", 1.0_N1t)
+					("2t", 1.0_N2t)
+					("4t", 1.0_N4t)
+					("8t", 1.0_N8t)
+					("16t", 1.0_N16t)
+					("32t", 1.0_N32t)
+					("64t", 1.0_N64t)
+					("128t", 1.0_N128t)
+					("1n5", 1.0_N1n5)
+					("2n5", 1.0_N2n5)
+					("4n5", 1.0_N4n5)
+					("8n5", 1.0_N8n5)
+					("16n5", 1.0_N16n5)
+					("32n5", 1.0_N32n5)
+					("64n5", 1.0_N64n5)
+					("128n5", 1.0_N128n5)
+					("1n7", 1.0_N1n7)
+					("2n7", 1.0_N2n7)
+					("4n7", 1.0_N4n7)
+					("8n7", 1.0_N8n7)
+					("16n7", 1.0_N16n7)
+					("32n7", 1.0_N32n7)
+					("64n7", 1.0_N64n7)
+					("128n7", 1.0_N128n7)
+					("1n9", 1.0_N1n9)
+					("2n9", 1.0_N2n9)
+					("4n9", 1.0_N4n9)
+					("8n9", 1.0_N8n9)
+					("16n9", 1.0_N16n9)
+					("32n9", 1.0_N32n9)
+					("64n9", 1.0_N64n9)
+					("128n9", 1.0_N128n9)
 					;
 			}
 
@@ -124,7 +156,8 @@ namespace sheet {
 
 					event_ %= (attr(Event::Degree) >> ( pitch_ | ("<" >> +pitch_ >> ">") ) >> (duration_ | attr(Event::NoDuration)))
 							| ("r" >> attr(Event::Rest) >> attr(PitchDef()) >> (duration_ | attr(Event::NoDuration)))
-							| ("|" >> attr(Event::EOB) >> attr(PitchDef()) >> attr(0))
+							| ("|" >> attr(Event::EOB) >> attr(PitchDef()) >> attr(Event::NoDuration))
+							| ("/" >> attr(Event::Meta) >> attr(PitchDef()) >> attr(Event::NoDuration) >> +char_("a-zA-Z") >> ":" >> +( lexeme[+char_("a-zA-Z0-9")] ) >> "/")
 							;
 					events %= *event_;
 					voice %= "{" >> events >> "}";

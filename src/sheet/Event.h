@@ -3,7 +3,9 @@
 
 #include <fm/common.hpp>
 #include <fm/units.hpp>
+#include <fm/config.hpp>
 #include <vector>
+#include <set>
 
 namespace sheet {
 
@@ -17,6 +19,14 @@ namespace sheet {
 		Pitch pitch = NoPitch;
 		Octave octave = DefaultOctave;
 		PitchDef(Pitch p = NoPitch, Octave o = DefaultOctave) : pitch(p), octave(o) {}
+		int id() const 
+		{
+			return pitch + (octave * fm::NotesPerOctave);
+		}
+		bool operator<(const PitchDef& b) const
+		{
+			return id() < b.id();
+		}
 	};
 
 	struct Event {
@@ -32,12 +42,13 @@ namespace sheet {
 			Meta
 		};
 		typedef fm::Ticks Duration;
-		typedef std::vector<PitchDef> Pitches;
+		typedef std::set<PitchDef> Pitches;
+		typedef std::vector<fm::String> Args;
 		Pitches pitches;
 		Type type = Unknown;
 		Duration duration = NoDuration;
 		fm::String metaCommand;
-		fm::String metaArgs;
+		Args metaArgs;
 	};
 }
 
