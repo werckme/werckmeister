@@ -4,6 +4,8 @@
 #include <vector>
 #include "sheet/ChordDef.h"
 #include "sheet/StyleDef.h"
+#include "sheet/SheetDef.h"
+
 
 namespace sheet {
 	namespace compiler {
