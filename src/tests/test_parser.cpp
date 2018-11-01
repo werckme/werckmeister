@@ -20,13 +20,13 @@ Xmaj7 : 1 5 8 11\n\
 x7+ : 1 5 8 11\n\
 X/V: -6 1 5 8 --quinte im bass\
 "));
-	
+
 	sheet::compiler::ChordDefParser defParser;
-	
+
 	auto chordDefs = defParser.parse(str);
-	BOOST_CHECK( chordDefs.size() == 5 );
+	BOOST_CHECK(chordDefs.size() == 5);
 	auto &def = chordDefs[0];
-	BOOST_CHECK( (chordDefs[0].name == FM_STRING("Xmaj")));
+	BOOST_CHECK((chordDefs[0].name == FM_STRING("Xmaj")));
 	auto interval = def.intervals.begin();
 	BOOST_CHECK((interval++)->value == 1);
 	BOOST_CHECK((interval++)->value == 5);
@@ -69,11 +69,11 @@ X/V: -6 1 5 8 --quinte im bass\
 }
 
 namespace {
-	bool checkNote(const sheet::Event &ev, 
+	bool checkNote(const sheet::Event &ev,
 		sheet::Event::Type type,
 		sheet::PitchDef::Pitch pitch = sheet::PitchDef::NoPitch,
 		sheet::PitchDef::Octave octave = sheet::PitchDef::DefaultOctave,
-		sheet::Event::Duration duration = sheet::Event::NoDuration) 
+		sheet::Event::Duration duration = sheet::Event::NoDuration)
 	{
 		if (ev.pitches.empty()) {
 			return false;
@@ -181,7 +181,7 @@ end\n\
 	BOOST_CHECK(checkMetaEvent(defs.sections[0].tracks[0].voices[0].events[14], FM_STRING("soundselect"), sheet::Event::Args({ FM_STRING("0"), FM_STRING("0") })));
 	BOOST_CHECK(checkMetaEvent(defs.sections[0].tracks[0].voices[0].events[15], FM_STRING("acommand"), sheet::Event::Args({ FM_STRING("arg1"), FM_STRING("arg2") })));
 
-	BOOST_CHECK(checkNote(defs.sections[0].tracks[0].voices[1].events[0], sheet::Event::Degree, 4, 1,  1.0_N4p));
+	BOOST_CHECK(checkNote(defs.sections[0].tracks[0].voices[1].events[0], sheet::Event::Degree, 4, 1, 1.0_N4p));
 	BOOST_CHECK(checkNote(defs.sections[0].tracks[0].voices[1].events[1], sheet::Event::Degree, 7, 2, 1.0_N8p));
 	BOOST_CHECK(checkNote(defs.sections[0].tracks[0].voices[1].events[2], sheet::Event::Degree, 1, 3, 1.0_N16p));
 	BOOST_CHECK(checkNote(defs.sections[0].tracks[0].voices[1].events[3], sheet::Event::Degree, 2, 0, 1.0_N32p));
@@ -195,7 +195,7 @@ end\n\
 }
 
 
-BOOST_AUTO_TEST_CASE(test_styleDefparser_fail)
+BOOST_AUTO_TEST_CASE(test_styleDefParser_fail)
 {
 	using namespace fm;
 	using sheet::PitchDef;
@@ -220,4 +220,27 @@ end\n\
 ");
 	sheet::compiler::StyleDefParser parser;
 	BOOST_CHECK_THROW(parser.parse(text), sheet::compiler::Exception);
+}
+
+
+BOOST_AUTO_TEST_CASE(test_sheetDefParser)
+{
+	using namespace fm;
+	using sheet::PitchDef;
+	fm::String text = FM_STRING("\
+-- document configs\n\
+@using 'Chords1.chdef';\n\
+	@using 'simplePianoStyle.style';\n\
+\n\
+	[{\n\
+		/ soundselect: 0 0 /\n\
+			/ channel : 1 /\n\
+			c4 d4 e4 f4 | c4 d4 e4 f4 |\n\
+	}]\n\
+	[{\n\
+		/ style: simplePianoStyle:intro /\n\
+			/ voicingStrategy : asNotated /\n\
+			Cmaj | Cmaj C7 |\n\
+	}]\n\
+");
 }

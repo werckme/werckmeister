@@ -58,16 +58,21 @@ end
 @using 'Chords1.chdef';
 @using 'simplePianoStyle.style';
 
-[ 
+[
+{ 
   /soundselect: 0 0/ 
   /channel: 1/
   c4 d4 e4 f4 | c4 d4 e4 f4 | 
+}
+{ 
+  f4 f4 f4 f4 | h4 h4 h4 h4 | 
+}
 ] 
-[
+[{
   /style: simplePianoStyle:intro/
   /voicingStrategy: asNotated/
   Cmaj | Cmaj C7 |
-]
+}]
 
 ```
 

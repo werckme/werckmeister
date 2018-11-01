@@ -51,7 +51,7 @@ namespace sheet {
 			}
 
 			ASheetTokenizer()
-				: documentConfig(FM_STRING("^\\s*@.+?;"))     // define tokens
+				: documentConfig(FM_STRING("\\s*@.+?;"))     // define tokens
 				, comment(FM_STRING("^\\s*--.+$"))
 				, eol(FM_STRING("\\s*\n"))
 				, any(FM_STRING("."))
@@ -61,7 +61,15 @@ namespace sheet {
 				, endSection(FM_STRING("\\s*end"))
 			{
 			}
-			TokenDef documentConfig, eol, any, comment, chordDef, beginSection, line, endSection;
+			TokenDef documentConfig
+				, eol
+				, any
+				, comment
+				, chordDef
+				, beginSection
+				, line
+				, endSection;
+
 			virtual ~ASheetTokenizer() = default;
 		};
 
@@ -108,6 +116,7 @@ namespace sheet {
 			{
 				sstream << Base::withoutComment(begin, end) << std::endl;
 				sections.push_back(sstream.str());
+				sstream.str(fm::String());
 			}
 		};
 
@@ -129,6 +138,35 @@ namespace sheet {
 				;
 		}
 
+
+		/////////////////////////////////////////////////////////////////////////////
+		template <typename Lexer>
+		struct SheetDefTokenizer : public ASheetTokenizer<Lexer>
+		{
+			typedef ASheetTokenizer<Lexer> Base;
+			SheetDefTokenizer();
+			typename Base::Tokens documentConfigs;
+			StringStream tracks;
+		private:
+			void onLine_(CharType const *begin, CharType const *end)
+			{
+				tracks << Base::withoutComment(begin, end) << std::endl;
+			}
+		};
+
+		template <typename Lexer>
+		SheetDefTokenizer<Lexer>::SheetDefTokenizer()
+		{
+			auto addConfigs = boost::bind(&Base::add, this, _1, _2, boost::ref(documentConfigs));
+			auto onLine = boost::bind(&SheetDefTokenizer::onLine_, this, _1, _2);
+			this->self
+				= (Base::documentConfig[addConfigs]
+					| Base::comment
+					| Base::line[onLine])
+				| Base::eol
+				| Base::any
+				;
+		}
 	}
 }
 

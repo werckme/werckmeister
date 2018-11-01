@@ -95,5 +95,46 @@ end");
 	for (const auto &x : styleDefToken.sections) {
 		//FM_COUT << "\n\n!\n\n" << x << std::endl;
 	}
+}
 
+BOOST_AUTO_TEST_CASE(test_sheetDefLexer)
+{
+	using namespace fm;
+	fm::String text = FM_STRING("-- document configs\n\
+@using 'Chords1.chdef';\n\
+@using 'simplePianoStyle.style';\n\
+\n\
+	[\n\
+	{\n\
+		/ soundselect: 0 0 /\n\
+			/ channel : 1 /\n\
+			c4 d4 e4 f4 | c4 d4 e4 f4 |\n\
+	}\n\
+	{\n\
+		f4 f4 f4 f4 | h4 h4 h4 h4 |\n\
+	}\n\
+	]\n\
+	[{\n\
+		/ style: simplePianoStyle:intro /\n\
+			/ voicingStrategy : asNotated /\n\
+			Cmaj | Cmaj C7 |\n\
+	}]\n\
+		[{}]");
+
+	using namespace sheet::compiler;
+	SheetDefTokenizer<LexerType> sheetDefToken;
+
+	fm::CharType const* first = text.c_str();
+	fm::CharType const* last = &first[text.size()];
+
+	LexerType::iterator_type iter = sheetDefToken.begin(first, last);
+	LexerType::iterator_type end = sheetDefToken.end();
+	boost::spirit::lex::tokenize(first, last, sheetDefToken);
+	BOOST_CHECK(sheetDefToken.documentConfigs.size() == 2);
+	for (const auto &x : sheetDefToken.documentConfigs) {
+	//	FM_COUT << x << std::endl;
+	}
+	auto tracks = sheetDefToken.tracks.str();
+	BOOST_CHECK(tracks.length() > 0);
+//	FM_COUT << std::endl << std::endl << tracks << std::endl;
 }

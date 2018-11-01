@@ -86,7 +86,7 @@ namespace sheet {
 			{
 				using namespace fm;
 				add
-					("1", 1.0_N1)
+				("1", 1.0_N1)
 					("2", 1.0_N2)
 					("4", 1.0_N4)
 					("8", 1.0_N8)
@@ -169,11 +169,11 @@ namespace sheet {
 
 					pitch_ %= degree_ >> (octave_ | attr(PitchDef::DefaultOctave));
 
-					event_ %= (attr(Event::Degree) >> ( pitch_ | ("<" >> +pitch_ >> ">") ) >> (duration_ | attr(Event::NoDuration)))
-							| ("r" >> attr(Event::Rest) >> attr(PitchDef()) >> (duration_ | attr(Event::NoDuration)))
-							| ("|" >> attr(Event::EOB) >> attr(PitchDef()) >> attr(Event::NoDuration))
-							| ("/" >> attr(Event::Meta) >> attr(PitchDef()) >> attr(Event::NoDuration) >> +char_("a-zA-Z") >> ":" >> +( lexeme[+char_("a-zA-Z0-9")] ) >> "/")
-							;
+					event_ %= (attr(Event::Degree) >> (pitch_ | ("<" >> +pitch_ >> ">")) >> (duration_ | attr(Event::NoDuration)))
+						| ("r" >> attr(Event::Rest) >> attr(PitchDef()) >> (duration_ | attr(Event::NoDuration)))
+						| ("|" >> attr(Event::EOB) >> attr(PitchDef()) >> attr(Event::NoDuration))
+						| ("/" >> attr(Event::Meta) >> attr(PitchDef()) >> attr(Event::NoDuration) >> +char_("a-zA-Z") >> ":" >> +(lexeme[+char_("a-zA-Z0-9")]) >> "/")
+						;
 					events %= *event_;
 					voice %= "{" >> events >> "}";
 					sectionName %= "section" > *char_("a-zA-Z0-9");
@@ -200,12 +200,19 @@ namespace sheet {
 				SectionParserType g;
 				bool r = phrase_parse(defStr.begin(), defStr.end(), g, space, def);
 			}
+
+			void _parse(const fm::String &defStr, Track &def)
+			{
+				using boost::spirit::ascii::space;
+				//typedef _SectionParser<fm::String::const_iterator> SectionParserType;
+				//SectionParserType g;
+				//bool r = phrase_parse(defStr.begin(), defStr.end(), g, space, def);
+			}
 		}
 
 
 		StyleDef StyleDefParser::parse(fm::CharType const* first, fm::CharType const* last)
 		{
-
 			StyleDef result;
 			StyleDefTokenizer<LexerType> styleDefTok;
 			LexerType::iterator_type iter = styleDefTok.begin(first, last);
@@ -216,7 +223,22 @@ namespace sheet {
 				_parse(defStr, sec);
 				result.sections.push_back(sec);
 			}
+			return result;
+		}
 
+		SheetDef SheetDefParser::parse(fm::CharType const* first, fm::CharType const* last)
+		{
+
+			SheetDef result;
+			/*StyleDefTokenizer<LexerType> styleDefTok;
+			LexerType::iterator_type iter = styleDefTok.begin(first, last);
+			LexerType::iterator_type end = styleDefTok.end();
+			boost::spirit::lex::tokenize(first, last, styleDefTok);
+			for (const auto& defStr : styleDefTok.sections) {
+				Section sec;
+				_parse(defStr, sec);
+				result.sections.push_back(sec);
+			}*/
 			return result;
 		}
 	}

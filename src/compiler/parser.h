@@ -30,6 +30,15 @@ namespace sheet {
 				return parse(cstr, cstr + str.length());
 			}
 		};
+		struct SheetDefParser {
+
+			SheetDef parse(fm::CharType const* first, fm::CharType const* last);
+			SheetDef parse(const fm::String &str)
+			{
+				fm::CharType const* cstr = str.c_str();
+				return parse(cstr, cstr + str.length());
+			}
+		};
 	}
 }
 
