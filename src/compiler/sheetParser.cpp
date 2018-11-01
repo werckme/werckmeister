@@ -144,10 +144,50 @@ namespace sheet {
 			namespace ascii = boost::spirit::ascii;
 
 			template <typename Iterator>
-			struct _SectionParser : qi::grammar<Iterator, Section(), ascii::space_type>
+			struct ASheetParser 
+			{
+				ASheetParser()
+				{
+					using qi::int_;
+					using qi::lit;
+					using qi::_val;
+					using qi::double_;
+					using qi::lexeme;
+					using ascii::char_;
+					using qi::attr;
+					using qi::on_error;
+					using qi::fail;
+
+					event_.name("event");
+					pitch_.name("pitch");
+					track.name("track");
+					voice.name("voice");
+					events.name("events");
+
+					track %= "[" > +voice > "]";
+
+					pitch_ %= degree_ >> (octave_ | attr(PitchDef::DefaultOctave));
+					event_ %= (attr(Event::Degree) >> (pitch_ | ("<" >> +pitch_ >> ">")) >> (duration_ | attr(Event::NoDuration)))
+						| ("r" >> attr(Event::Rest) >> attr(PitchDef()) >> (duration_ | attr(Event::NoDuration)))
+						| ("|" >> attr(Event::EOB) >> attr(PitchDef()) >> attr(Event::NoDuration))
+						| ("/" >> attr(Event::Meta) >> attr(PitchDef()) >> attr(Event::NoDuration) >> +char_("a-zA-Z") >> ":" >> +(lexeme[+char_("a-zA-Z0-9")]) >> "/")
+						;
+					events %= *event_;
+					voice %= "{" >> events >> "}";
+				}
+				qi::rule<Iterator, PitchDef(), ascii::space_type> pitch_;
+				qi::rule<Iterator, Track(), ascii::space_type> track;
+				qi::rule<Iterator, Voice(), ascii::space_type> voice;
+				qi::rule<Iterator, Voice::Events(), ascii::space_type> events;
+				qi::rule<Iterator, Event(), ascii::space_type> event_;
+
+			};
+			///////////////////////////////////////////////////////////////////
+			template <typename Iterator>
+			struct _SectionParser : qi::grammar<Iterator, Section(), ascii::space_type>, public ASheetParser<Iterator>
 			{
 
-				_SectionParser() : _SectionParser::base_type(start, "section")
+				_SectionParser() : _SectionParser::base_type(start, "section"), ASheetParser<Iterator>()
 				{
 					using qi::int_;
 					using qi::lit;
@@ -161,23 +201,8 @@ namespace sheet {
 
 					start.name("section");
 					sectionName.name("section name");
-					event_.name("event");
-					pitch_.name("pitch");
-					track.name("track");
-					voice.name("voice");
-					events.name("events");
 
-					pitch_ %= degree_ >> (octave_ | attr(PitchDef::DefaultOctave));
-
-					event_ %= (attr(Event::Degree) >> (pitch_ | ("<" >> +pitch_ >> ">")) >> (duration_ | attr(Event::NoDuration)))
-						| ("r" >> attr(Event::Rest) >> attr(PitchDef()) >> (duration_ | attr(Event::NoDuration)))
-						| ("|" >> attr(Event::EOB) >> attr(PitchDef()) >> attr(Event::NoDuration))
-						| ("/" >> attr(Event::Meta) >> attr(PitchDef()) >> attr(Event::NoDuration) >> +char_("a-zA-Z") >> ":" >> +(lexeme[+char_("a-zA-Z0-9")]) >> "/")
-						;
-					events %= *event_;
-					voice %= "{" >> events >> "}";
 					sectionName %= "section" > *char_("a-zA-Z0-9");
-					track %= "[" > +voice > "]";
 					start %= sectionName > +track > "end";
 
 					auto onError = boost::bind(&handler::errorHandler<Iterator>, _1);
@@ -185,28 +210,51 @@ namespace sheet {
 				}
 				qi::rule<Iterator, Section(), ascii::space_type> start;
 				qi::rule<Iterator, fm::String(), ascii::space_type> sectionName;
-				qi::rule<Iterator, Event(), ascii::space_type> event_;
-				qi::rule<Iterator, PitchDef(), ascii::space_type> pitch_;
-				qi::rule<Iterator, Track(), ascii::space_type> track;
-				qi::rule<Iterator, Voice(), ascii::space_type> voice;
-				qi::rule<Iterator, Voice::Events(), ascii::space_type> events;
 			};
-
 
 			void _parse(const fm::String &defStr, Section &def)
 			{
 				using boost::spirit::ascii::space;
 				typedef _SectionParser<fm::String::const_iterator> SectionParserType;
 				SectionParserType g;
-				bool r = phrase_parse(defStr.begin(), defStr.end(), g, space, def);
+				phrase_parse(defStr.begin(), defStr.end(), g, space, def);
 			}
+			///////////////////////////////////////////////////////////////////
+			template <typename Iterator>
+			struct _SheetParser : qi::grammar<Iterator, SheetDef(), ascii::space_type>, public ASheetParser<Iterator>
+			{
 
-			void _parse(const fm::String &defStr, Track &def)
+				_SheetParser() : _SheetParser::base_type(start, "sheet"), ASheetParser<Iterator>()
+				{
+					using qi::int_;
+					using qi::lit;
+					using qi::_val;
+					using qi::double_;
+					using qi::lexeme;
+					using ascii::char_;
+					using qi::attr;
+					using qi::on_error;
+					using qi::fail;
+
+					/*start.name("section");
+					sectionName.name("section name");
+
+					sectionName %= "section" > *char_("a-zA-Z0-9");
+					start %= sectionName > +track > "end";
+
+					auto onError = boost::bind(&handler::errorHandler<Iterator>, _1);*/
+					//on_error<fail>(start, onError);
+				}
+				qi::rule<Iterator, SheetDef(), ascii::space_type> start;
+			};
+
+
+			void _parse(const fm::String &defStr, SheetDef &def)
 			{
 				using boost::spirit::ascii::space;
-				//typedef _SectionParser<fm::String::const_iterator> SectionParserType;
-				//SectionParserType g;
-				//bool r = phrase_parse(defStr.begin(), defStr.end(), g, space, def);
+				typedef _SheetParser<fm::String::const_iterator> SheetParserType;
+				SheetParserType g;
+				phrase_parse(defStr.begin(), defStr.end(), g, space, def);
 			}
 		}
 
@@ -230,15 +278,11 @@ namespace sheet {
 		{
 
 			SheetDef result;
-			/*StyleDefTokenizer<LexerType> styleDefTok;
-			LexerType::iterator_type iter = styleDefTok.begin(first, last);
-			LexerType::iterator_type end = styleDefTok.end();
-			boost::spirit::lex::tokenize(first, last, styleDefTok);
-			for (const auto& defStr : styleDefTok.sections) {
-				Section sec;
-				_parse(defStr, sec);
-				result.sections.push_back(sec);
-			}*/
+			SheetDefTokenizer<LexerType> sheetDefTok;
+			LexerType::iterator_type iter = sheetDefTok.begin(first, last);
+			LexerType::iterator_type end = sheetDefTok.end();
+			boost::spirit::lex::tokenize(first, last, sheetDefTok);
+			_parse(sheetDefTok.tracks.str(), result);
 			return result;
 		}
 	}

@@ -228,19 +228,23 @@ BOOST_AUTO_TEST_CASE(test_sheetDefParser)
 	using namespace fm;
 	using sheet::PitchDef;
 	fm::String text = FM_STRING("\
--- document configs\n\
-@using 'Chords1.chdef';\n\
-	@using 'simplePianoStyle.style';\n\
-\n\
-	[{\n\
+[\n\
+	{\n\
 		/ soundselect: 0 0 /\n\
 			/ channel : 1 /\n\
 			c4 d4 e4 f4 | c4 d4 e4 f4 |\n\
-	}]\n\
-	[{\n\
-		/ style: simplePianoStyle:intro /\n\
-			/ voicingStrategy : asNotated /\n\
-			Cmaj | Cmaj C7 |\n\
-	}]\n\
+	}\n\
+	{\n\
+		f4 f4 f4 f4 | h4 h4 h4 h4 | \n\
+	}\n\
+]\n\
+[--the sheet track, no voices here\n\
+/ style:simplePianoStyle:intro / \n\
+/ voicingStrategy : asNotated / \n\
+Cmaj | Cmaj C7 | \n\
+]\n\
 ");
+	sheet::compiler::SheetDefParser parser;
+	parser.parse(text);
+
 }
