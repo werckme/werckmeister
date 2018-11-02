@@ -37,7 +37,8 @@ namespace sheet {
 			Unknown,
 			Rest,
 			Degree, 
-			Absolute, 
+			Note,
+			Chord,
 			EOB, // End of Bar aka. Bar Line
 			Meta
 		};
@@ -50,6 +51,12 @@ namespace sheet {
 		fm::String metaCommand;
 		Args metaArgs;
 	};
+
+	struct ChordEvent : Event {
+		fm::String chordName;
+	};
+
+
 }
 
 #endif

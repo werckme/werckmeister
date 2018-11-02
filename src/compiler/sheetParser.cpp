@@ -12,7 +12,6 @@
 #include "error.hpp"
 #include <sstream>
 
-
 BOOST_FUSION_ADAPT_STRUCT(
 	sheet::Voice,
 	(sheet::Voice::Events, events)
@@ -34,6 +33,14 @@ BOOST_FUSION_ADAPT_STRUCT(
 )
 
 BOOST_FUSION_ADAPT_STRUCT(
+	sheet::ChordEvent,
+	(sheet::Event::Type, type)
+	(fm::String, chordName)
+	(fm::String, metaCommand)
+	(sheet::Event::Args, metaArgs)
+)
+
+BOOST_FUSION_ADAPT_STRUCT(
 	sheet::Track,
 	(sheet::Track::Voices, voices)
 )
@@ -44,12 +51,18 @@ BOOST_FUSION_ADAPT_STRUCT(
 	(sheet::Section::Tracks, tracks)
 )
 
+BOOST_FUSION_ADAPT_STRUCT(
+	sheet::SheetDef,
+	(sheet::SheetDef::Tracks, tracks)
+	(sheet::SheetDef::Events, chords)
+)
+
 namespace sheet {
 	namespace compiler {
 
-		struct degree_ : boost::spirit::qi::symbols<char, PitchDef::Pitch >
+		struct degreeSymbols_ : boost::spirit::qi::symbols<char, PitchDef::Pitch >
 		{
-			degree_()
+			degreeSymbols_()
 			{
 				add
 				("I", 1)
@@ -62,11 +75,40 @@ namespace sheet {
 					;
 			}
 
-		} degree_;
+		} degreeSymbols_;
 
-		struct octave_ : boost::spirit::qi::symbols<char, PitchDef::Octave >
+		struct pitchSymbols_ : boost::spirit::qi::symbols<char, PitchDef::Pitch >
 		{
-			octave_()
+			pitchSymbols_()
+			{
+				add
+				("c", 1)
+				("cis", 2)
+				("des", 2)
+				("d", 3)
+				("dis", 4)
+				("es", 4)
+				("e", 5)
+				("fes", 5)
+				("f", 6)
+				("fis", 7)
+				("ges", 7)
+				("g", 8)
+				("gis", 9)
+				("as", 9)
+				("a", 10)
+				("ais", 11)
+				("bes", 11)
+				("b", 12)
+				("ces", 12)
+				;
+			}
+
+		} pitchSymbols_;
+
+		struct octaveSymbols_ : boost::spirit::qi::symbols<char, PitchDef::Octave >
+		{
+			octaveSymbols_()
 			{
 				add
 				(",,,", -3)
@@ -78,11 +120,11 @@ namespace sheet {
 					;
 			}
 
-		} octave_;
+		} octaveSymbols_;
 
-		struct duration_ : boost::spirit::qi::symbols<char, fm::Ticks>
+		struct durationSymbols_ : boost::spirit::qi::symbols<char, fm::Ticks>
 		{
-			duration_()
+			durationSymbols_()
 			{
 				using namespace fm;
 				add
@@ -137,7 +179,7 @@ namespace sheet {
 					;
 			}
 
-		} duration_;
+		} durationSymbols_;
 
 		namespace {
 			namespace qi = boost::spirit::qi;
@@ -146,6 +188,7 @@ namespace sheet {
 			template <typename Iterator>
 			struct ASheetParser 
 			{
+
 				ASheetParser()
 				{
 					using qi::int_;
@@ -158,36 +201,18 @@ namespace sheet {
 					using qi::on_error;
 					using qi::fail;
 
-					event_.name("event");
-					pitch_.name("pitch");
-					track.name("track");
-					voice.name("voice");
-					events.name("events");
-
-					track %= "[" > +voice > "]";
-
-					pitch_ %= degree_ >> (octave_ | attr(PitchDef::DefaultOctave));
-					event_ %= (attr(Event::Degree) >> (pitch_ | ("<" >> +pitch_ >> ">")) >> (duration_ | attr(Event::NoDuration)))
-						| ("r" >> attr(Event::Rest) >> attr(PitchDef()) >> (duration_ | attr(Event::NoDuration)))
-						| ("|" >> attr(Event::EOB) >> attr(PitchDef()) >> attr(Event::NoDuration))
-						| ("/" >> attr(Event::Meta) >> attr(PitchDef()) >> attr(Event::NoDuration) >> +char_("a-zA-Z") >> ":" >> +(lexeme[+char_("a-zA-Z0-9")]) >> "/")
-						;
-					events %= *event_;
-					voice %= "{" >> events >> "}";
 				}
-				qi::rule<Iterator, PitchDef(), ascii::space_type> pitch_;
-				qi::rule<Iterator, Track(), ascii::space_type> track;
-				qi::rule<Iterator, Voice(), ascii::space_type> voice;
-				qi::rule<Iterator, Voice::Events(), ascii::space_type> events;
-				qi::rule<Iterator, Event(), ascii::space_type> event_;
+
 
 			};
 			///////////////////////////////////////////////////////////////////
 			template <typename Iterator>
-			struct _SectionParser : qi::grammar<Iterator, Section(), ascii::space_type>, public ASheetParser<Iterator>
+			struct _SectionParser : qi::grammar<Iterator, Section(), ascii::space_type>
 			{
 
-				_SectionParser() : _SectionParser::base_type(start, "section"), ASheetParser<Iterator>()
+				virtual void x() {}
+
+				_SectionParser() : _SectionParser::base_type(start, "section")
 				{
 					using qi::int_;
 					using qi::lit;
@@ -198,6 +223,24 @@ namespace sheet {
 					using qi::attr;
 					using qi::on_error;
 					using qi::fail;
+					
+					event_.name("event");
+					track.name("track");
+					voice.name("voice");
+					events.name("events");
+
+					pitch_.name("pitch");
+					pitch_ %= degreeSymbols_ >> (octaveSymbols_ | attr(PitchDef::DefaultOctave));
+
+					event_ %= (attr(Event::Degree) >> (pitch_ | ("<" >> +pitch_ >> ">")) >> (durationSymbols_ | attr(Event::NoDuration)))
+						| ("r" >> attr(Event::Rest) >> attr(PitchDef()) >> (durationSymbols_ | attr(Event::NoDuration)))
+						| ("|" >> attr(Event::EOB) >> attr(PitchDef()) >> attr(Event::NoDuration))
+						| ("/" >> attr(Event::Meta) >> attr(PitchDef()) >> attr(Event::NoDuration) >> +char_("a-zA-Z") >> ":" >> +(lexeme[+char_("a-zA-Z0-9")]) >> "/")
+						;
+
+					track %= "[" > +voice > "]";
+					events %= *event_;
+					voice %= "{" >> events >> "}";
 
 					start.name("section");
 					sectionName.name("section name");
@@ -210,6 +253,11 @@ namespace sheet {
 				}
 				qi::rule<Iterator, Section(), ascii::space_type> start;
 				qi::rule<Iterator, fm::String(), ascii::space_type> sectionName;
+				qi::rule<Iterator, PitchDef(), ascii::space_type> pitch_;
+				qi::rule<Iterator, Track(), ascii::space_type> track;
+				qi::rule<Iterator, Voice(), ascii::space_type> voice;
+				qi::rule<Iterator, Voice::Events(), ascii::space_type> events;
+				qi::rule<Iterator, Event(), ascii::space_type> event_;
 			};
 
 			void _parse(const fm::String &defStr, Section &def)
@@ -221,10 +269,10 @@ namespace sheet {
 			}
 			///////////////////////////////////////////////////////////////////
 			template <typename Iterator>
-			struct _SheetParser : qi::grammar<Iterator, SheetDef(), ascii::space_type>, public ASheetParser<Iterator>
+			struct _SheetParser : qi::grammar<Iterator, SheetDef(), ascii::space_type>
 			{
 
-				_SheetParser() : _SheetParser::base_type(start, "sheet"), ASheetParser<Iterator>()
+				_SheetParser() : _SheetParser::base_type(start, "sheet")
 				{
 					using qi::int_;
 					using qi::lit;
@@ -236,16 +284,48 @@ namespace sheet {
 					using qi::on_error;
 					using qi::fail;
 
-					/*start.name("section");
-					sectionName.name("section name");
+					start.name("sheet");
 
-					sectionName %= "section" > *char_("a-zA-Z0-9");
-					start %= sectionName > +track > "end";
+					event_.name("event");
+					track.name("track");
+					voice.name("voice");
+					events.name("events");
 
-					auto onError = boost::bind(&handler::errorHandler<Iterator>, _1);*/
-					//on_error<fail>(start, onError);
+					pitch_.name("pitch");
+					pitch_ %= pitchSymbols_ >> (octaveSymbols_ | attr(PitchDef::DefaultOctave));
+
+					event_ %= (attr(Event::Note) >> (pitch_ | ("<" >> +pitch_ >> ">")) >> (durationSymbols_ | attr(Event::NoDuration)))
+						| ("r" >> attr(Event::Rest) >> attr(PitchDef()) >> (durationSymbols_ | attr(Event::NoDuration)))
+						| ("|" >> attr(Event::EOB) >> attr(PitchDef()) >> attr(Event::NoDuration))
+						| ("/" >> attr(Event::Meta) >> attr(PitchDef()) >> attr(Event::NoDuration) >> +char_("a-zA-Z") >> ":" >> +(lexeme[+char_("a-zA-Z0-9")]) >> "/")
+						;
+					events %= *event_;
+
+					chord_ %= (attr(Event::Chord) >> lexeme[char_("a-gA-G") > *char_("a-zA-Z0-9+/#~*!?-")])
+						| ("r" >> attr(Event::Rest) >> attr(""))
+						| ("|" >> attr(Event::EOB) >> attr(""))
+						| ("/" >> attr(Event::Meta) >> attr("") >> +char_("a-zA-Z") >> ":" >> +(lexeme[+char_("a-zA-Z0-9")]) >> "/")
+						;
+					chords_ %= *chord_;
+
+					track %= "[" > +voice > "]";
+					voice %= "{" >> events >> "}";
+
+					start %= *track >> chords_;
+
+					auto onError = boost::bind(&handler::errorHandler<Iterator>, _1);
+					on_error<fail>(start, onError);
+
 				}
 				qi::rule<Iterator, SheetDef(), ascii::space_type> start;
+				qi::rule<Iterator, PitchDef(), ascii::space_type> pitch_;
+				qi::rule<Iterator, Track(), ascii::space_type> track;
+				qi::rule<Iterator, Voice(), ascii::space_type> voice;
+				qi::rule<Iterator, Voice::Events(), ascii::space_type> events;
+				qi::rule<Iterator, Event(), ascii::space_type> event_;
+
+				qi::rule<Iterator, SheetDef::Events(), ascii::space_type> chords_;
+				qi::rule<Iterator, ChordEvent(), ascii::space_type> chord_;
 			};
 
 

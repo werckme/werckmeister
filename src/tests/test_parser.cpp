@@ -231,20 +231,18 @@ BOOST_AUTO_TEST_CASE(test_sheetDefParser)
 [\n\
 	{\n\
 		/ soundselect: 0 0 /\n\
-			/ channel : 1 /\n\
-			c4 d4 e4 f4 | c4 d4 e4 f4 |\n\
+		/ channel : 1 /\n\
+		c4 d4 e4 f4 | c4 d4 e4 f4 |\n\
 	}\n\
 	{\n\
-		f4 f4 f4 f4 | h4 h4 h4 h4 | \n\
+		f4 f4 f4 f4 | b4 b4 b4 b4 | \n\
 	}\n\
 ]\n\
-[--the sheet track, no voices here\n\
-/ style:simplePianoStyle:intro / \n\
+/ style : simplePianoStyle Intro / \n\
 / voicingStrategy : asNotated / \n\
-Cmaj | Cmaj C7 | \n\
-]\n\
+Cmaj | Cmaj C7 | r G \n\
 ");
 	sheet::compiler::SheetDefParser parser;
-	parser.parse(text);
+	auto defs = parser.parse(text);
 
 }
