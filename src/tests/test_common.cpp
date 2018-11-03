@@ -1,6 +1,8 @@
 #include <boost/test/unit_test.hpp>
 #include <fm/common.hpp>
 #include <fm/midi.hpp>
+#include <fm/werckmeister.hpp>
+#include <iterator>
 
 BOOST_AUTO_TEST_CASE(test_endswap)
 {
@@ -31,4 +33,13 @@ BOOST_AUTO_TEST_CASE(test_endswap)
 		BOOST_CHECK(bytes[2] == 0xAB);
 		BOOST_CHECK(bytes[3] == 0xAA);
 	}
+}
+
+BOOST_AUTO_TEST_CASE(test_resource_loader)
+{
+	auto resource = fm::getWerckmeister().openResource(FM_STRING("../../chords/default.chords"));
+	fm::StreamBuffIterator eos;
+	fm::StreamBuffIterator it(*resource.get());
+	fm::String res(it, eos);
+	BOOST_CHECK(res.length() > 0);
 }

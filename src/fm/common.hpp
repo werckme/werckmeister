@@ -16,6 +16,7 @@ namespace fm {
 	typedef std::string UId;
     typedef std::wstring String;
     typedef std::wstringstream StringStream;
+	typedef std::istreambuf_iterator<String::value_type> StreamBuffIterator;
 	bool isLittleEndian();
 
 	template<typename TType>

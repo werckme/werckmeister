@@ -8,6 +8,7 @@ SET (SRC_FETZER_LIB
     compiler/chordDefParser.cpp
     compiler/sheetParser.cpp
     compiler/documentConfigParser.cpp
+    sheet/Document.cpp
 )
 
 
@@ -32,3 +33,6 @@ SET (SRC_FETZER_TESTS
 
 add_executable(rehearse ${SRC_FETZER_TESTS})
 target_link_libraries (rehearse sheet ${Boost_LIBRARIES})
+
+add_executable(sheetc sheet_main.cpp)
+target_link_libraries (sheetc sheet ${Boost_LIBRARIES})

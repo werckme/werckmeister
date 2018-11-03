@@ -55,8 +55,8 @@ end
 
 ```
 -- document configs
-@using 'Chords1.chdef';
-@using 'simplePianoStyle.style';
+@load 'Chords1.chdef';
+@load 'simplePianoStyle.style';
 
 [
 { 
