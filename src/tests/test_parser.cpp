@@ -91,8 +91,8 @@ namespace {
 		if (ev.pitches.size() != pitches.size()) {
 			return false;
 		}
-		auto &it1 = ev.pitches.begin();
-		auto &it2 = pitches.begin();
+		auto it1 = ev.pitches.begin();
+		auto it2 = pitches.begin();
 		while (it1 != ev.pitches.end())
 		{
 			if (it1->pitch != it2->pitch || it1->octave != it2->octave) {
