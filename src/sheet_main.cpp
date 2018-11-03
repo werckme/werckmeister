@@ -4,10 +4,12 @@
 #include <string>
 #include <iostream>
 #include <exception>
+#include "compiler/parser.h"
 
 void processFile(const std::string &file)
 {
-	int i = 0;
+	sheet::compiler::DocumentParser docparser;
+	auto doc = docparser.parse(fm::to_wstring(file));
 }
 
 

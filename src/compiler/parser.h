@@ -6,6 +6,7 @@
 #include "sheet/StyleDef.h"
 #include "sheet/SheetDef.h"
 #include "sheet/DocumentConfig.h"
+#include "forward.hpp"
 
 namespace sheet {
 	namespace compiler {
@@ -48,6 +49,12 @@ namespace sheet {
 				fm::CharType const* cstr = str.c_str();
 				return parse(cstr, cstr + str.length());
 			}
+		};
+
+		struct DocumentParser {
+
+			DocumentPtr parse(const fm::String path);
+
 		};
 	}
 }

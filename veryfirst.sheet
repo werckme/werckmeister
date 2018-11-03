@@ -1,0 +1,11 @@
+-- document configs
+@load "../chords/default.chords";
+@load "../styles/simpleDisco.style";
+
+[
+{ 
+  c4 d4 e4 f4 | c4 d4 e4 f4 | 
+}
+] 
+
+C | C E | C E |

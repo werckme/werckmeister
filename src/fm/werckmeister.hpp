@@ -7,6 +7,7 @@
 #include <fstream>
 #include <memory>
 #include "fm/common.hpp"
+#include "forward.hpp"
 
 #if defined(__GNUC__) || defined(__GNUG__)
 #pragma GCC diagnostic push
@@ -17,12 +18,6 @@
 #include <loki/Singleton.h>
 #endif
 
-namespace sheet {
-	namespace compiler {
-		class Compiler;
-		typedef std::shared_ptr<Compiler> CompilerPtr;
-	}
-}
 
 namespace fm {
     class Werckmeister {
@@ -40,8 +35,18 @@ namespace fm {
 		midi::MidiPtr createMidi();
         virtual ~Werckmeister();
         const char * version() const;
-		ResourceStream openResource(const fm::String &path);
 		sheet::compiler::CompilerPtr createCompiler();
+	private:
+		ResourceStream openResourceImpl(const fm::String &path);
+	public:
+		ResourceStream openResource(const std::string &path)
+		{
+			return openResourceImpl(fm::to_wstring(path));
+		}
+		ResourceStream openResource(const std::wstring &path)
+		{
+			return openResourceImpl(path);
+		}
     };
     Werckmeister & getWerckmeister();
 }

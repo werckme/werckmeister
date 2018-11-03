@@ -39,8 +39,8 @@ namespace sheet {
 					start.name("document config");
 					quoted_string.name("quoted string");
 
-					quoted_string %= lexeme['"' >> +(char_ - '"') >> '"'];
-					using_ %= "@load" >> quoted_string >> ";";
+					quoted_string %= lexeme['"' > +(char_ - '"') > '"'];
+					using_ %= "@load" > quoted_string > ";";
 					usings_ %= *using_;
 					start %= usings_;
 

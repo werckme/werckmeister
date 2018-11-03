@@ -26,13 +26,14 @@ namespace fm {
 		return std::make_shared<midi::Midi>(PPQ);
 	}
 
-	Werckmeister::ResourceStream Werckmeister::openResource(const fm::String &path)
+
+	Werckmeister::ResourceStream Werckmeister::openResourceImpl(const fm::String &path)
 	{
 		auto fpath = boost::filesystem::system_complete(path);
-		auto absolute = fpath.string();
+		auto absolute = fpath.wstring();
 		if (!boost::filesystem::exists(path))
 		{
-			throw std::runtime_error("resource not found: " + absolute);
+			throw std::runtime_error("resource not found: " + fpath.string());
 		}
 		auto result = std::make_unique<StreamType>(absolute.c_str());
 		return result;

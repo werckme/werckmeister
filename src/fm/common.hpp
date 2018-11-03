@@ -28,6 +28,16 @@ namespace fm {
 	}
 	UId generateUid();
 
+	inline std::string to_string(const fm::String &str)
+	{
+		return std::string(str.begin(), str.end());
+	}
+
+	inline std::wstring to_wstring(const std::string &str)
+	{
+		return std::wstring(str.begin(), str.end());
+	}
+
 }
 
 #endif

@@ -11,6 +11,9 @@
 #define FETZER_VERSION "libfetzer: " GIT_VERSION
 #endif
 
+#define CHORD_DEF_EXTENSION  ".chords"
+#define STYLE_DEF_EXTENSION ".style"
+
 namespace fm {
     const Ticks PPQ = 500;
 	const int NotesPerOctave = 12;
