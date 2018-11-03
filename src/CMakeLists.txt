@@ -7,6 +7,7 @@ SET (SRC_FETZER_LIB
     compiler/compiler.cpp
     compiler/chordDefParser.cpp
     compiler/sheetParser.cpp
+    compiler/documentConfigParser.cpp
 )
 
 

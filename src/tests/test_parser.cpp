@@ -376,3 +376,73 @@ BOOST_AUTO_TEST_CASE(test_sheetDefParser_03)
 	BOOST_CHECK(checkNote(defs.tracks[1].voices[0].events[9], sheet::Event::EOB));
 
 }
+
+
+BOOST_AUTO_TEST_CASE(test_documentConfigParser)
+{
+	using namespace fm;
+	fm::String text = FM_STRING("\
+@load \"Chords1.chords\"; \n\
+@load \"Chords.chords\"; \n\
+@load \"simplePianoStyle.style\"; \n\
+@load \"chords/Chords1.chords\"; \n\
+@load \"chords/Chords.chords\"; \n\
+@load \"styles/simplePianoStyle.style\"; \n\
+@load \"C:\\drivers\\Intel Rapid Storage Technology Driver\"; \n\
+\n\
+	[\n\
+	{\n\
+		/ soundselect: 0 0 /\n\
+			/ channel : 1 /\n\
+			c4 d4 e4 f4 | c4 d4 e4 f4 |\n\
+	}\n\
+	{\n\
+		f4 f4 f4 f4 | h4 h4 h4 h4 |\n\
+	}\n\
+	]\n\
+	--the sheet, no voices here\n\
+		/ style: simplePianoStyle:intro /\n\
+		/ voicingStrategy : asNotated /\n\
+		Cmaj | Cmaj C7 |\n\
+\n\
+");
+	sheet::compiler::DocumentConfigParser parser;
+	auto defs = parser.parse(text);
+	BOOST_CHECK(defs.usings.size() == 7);
+	auto it = defs.usings.begin();
+	BOOST_CHECK(*(it++) == FM_STRING("Chords1.chords"));
+	BOOST_CHECK(*(it++) == FM_STRING("Chords.chords"));
+	BOOST_CHECK(*(it++) == FM_STRING("simplePianoStyle.style"));
+	BOOST_CHECK(*(it++) == FM_STRING("chords/Chords1.chords"));
+	BOOST_CHECK(*(it++) == FM_STRING("chords/Chords.chords"));
+	BOOST_CHECK(*(it++) == FM_STRING("styles/simplePianoStyle.style"));
+	BOOST_CHECK(*(it++) == FM_STRING("C:\\drivers\\Intel Rapid Storage Technology Driver"));
+
+}
+
+BOOST_AUTO_TEST_CASE(test_documentConfigParser_empty)
+{
+	using namespace fm;
+	fm::String text = FM_STRING("\
+\n\
+	[\n\
+	{\n\
+		/ soundselect: 0 0 /\n\
+			/ channel : 1 /\n\
+			c4 d4 e4 f4 | c4 d4 e4 f4 |\n\
+	}\n\
+	{\n\
+		f4 f4 f4 f4 | h4 h4 h4 h4 |\n\
+	}\n\
+	]\n\
+	--the sheet, no voices here\n\
+		/ style: simplePianoStyle:intro /\n\
+		/ voicingStrategy : asNotated /\n\
+		Cmaj | Cmaj C7 |\n\
+\n\
+");
+	sheet::compiler::DocumentConfigParser parser;
+	auto defs = parser.parse(text);
+	BOOST_CHECK(defs.usings.size() == 0);
+
+}

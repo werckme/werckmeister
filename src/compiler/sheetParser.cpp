@@ -301,7 +301,7 @@ namespace sheet {
 						;
 					events %= *event_;
 
-					chord_ %= (attr(Event::Chord) >> lexeme[char_("a-gA-G") > *char_("a-zA-Z0-9+/#~*!?-")])
+					chord_ %= (attr(Event::Chord) >> lexeme[char_("a-gA-G") > *char_(ChordDefParser::ALLOWED_CHORD_SYMBOLS_REGEX)])
 						| ("r" >> attr(Event::Rest) >> attr(""))
 						| ("|" >> attr(Event::EOB) >> attr(""))
 						| ("/" >> attr(Event::Meta) >> attr("") >> +char_("a-zA-Z") >> ":" >> +(lexeme[+char_("a-zA-Z0-9")]) >> "/")

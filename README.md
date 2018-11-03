@@ -68,11 +68,11 @@ end
   f4 f4 f4 f4 | h4 h4 h4 h4 | 
 }
 ] 
-[ -- the sheet track, no voices here
-  /style: simplePianoStyle:intro/
-  /voicingStrategy: asNotated/
-  Cmaj | Cmaj C7 |
-]
+-- the sheet, no voices here
+/style: simplePianoStyle:intro/
+/voicingStrategy: asNotated/
+Cmaj | Cmaj C7 |
+
 
 ```
 

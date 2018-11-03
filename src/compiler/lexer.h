@@ -96,6 +96,29 @@ namespace sheet {
 		}
 		/////////////////////////////////////////////////////////////////////////////
 		template <typename Lexer>
+		struct DocumentConfigTokenizer : public ASheetTokenizer<Lexer>
+		{
+			typedef ASheetTokenizer<Lexer> Base;
+			DocumentConfigTokenizer();
+			StringStream documentConfigs;
+			void onDocDef(CharType const *begin, CharType const *end) 
+			{
+				documentConfigs << fm::String(begin, end) << std::endl;
+			}
+		};
+
+		template <typename Lexer>
+		DocumentConfigTokenizer<Lexer>::DocumentConfigTokenizer()
+		{
+			auto addConfigs = boost::bind(&DocumentConfigTokenizer::onDocDef, this, _1, _2);
+			this->self
+				= (Base::documentConfig[addConfigs] | Base::comment)
+				| Base::eol
+				| Base::any
+				;
+		}
+		/////////////////////////////////////////////////////////////////////////////
+		template <typename Lexer>
 		struct StyleDefTokenizer : public ASheetTokenizer<Lexer>
 		{
 			typedef ASheetTokenizer<Lexer> Base;

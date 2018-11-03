@@ -17,6 +17,8 @@ BOOST_FUSION_ADAPT_STRUCT(
 
 namespace sheet {
 	namespace compiler {
+		
+		const char * ChordDefParser::ALLOWED_CHORD_SYMBOLS_REGEX = "a-zA-Z0-9/+#~*!?-";
 
 		namespace {
 			namespace qi = boost::spirit::qi;
@@ -39,7 +41,7 @@ namespace sheet {
 					chordName.name("chord name");
 					intervals.name("intervals");
 
-					chordName %= char_("Xx") > *char_("a-zA-Z0-9/+#~*!?-");
+					chordName %= char_("Xx") > *char_(ChordDefParser::ALLOWED_CHORD_SYMBOLS_REGEX);
 					intervals %= +int_;
 					start %= chordName > ':' > intervals;
 
