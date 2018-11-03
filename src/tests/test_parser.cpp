@@ -127,8 +127,8 @@ namespace {
 		if (ev.metaArgs.size() != args.size()) {
 			return false;
 		}
-		auto &it1 = ev.metaArgs.begin();
-		auto &it2 = args.begin();
+		auto it1 = ev.metaArgs.begin();
+		auto it2 = args.begin();
 		while (it1 != ev.metaArgs.end())
 		{
 			if (*it1 != *it2) {
