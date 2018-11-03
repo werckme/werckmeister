@@ -75,15 +75,18 @@ namespace {
 		sheet::PitchDef::Octave octave = sheet::PitchDef::DefaultOctave,
 		sheet::Event::Duration duration = sheet::Event::NoDuration)
 	{
-		if (ev.pitches.empty()) {
+		if (ev.pitches.empty() && pitch != sheet::PitchDef::NoPitch) {
 			return false;
 		}
-		auto first = ev.pitches.begin();
-		return ev.type == type
-			&& first->pitch == pitch
-			&& first->octave == octave
-			&& ev.duration == duration;
+		if (pitch != sheet::PitchDef::NoPitch) {
+			auto first = ev.pitches.begin();
+			if (first->pitch != pitch || first->octave != octave) {
+				return false;
+			}
+		}
+		return ev.type == type && ev.duration == duration;
 	}
+
 
 	bool checkNote(const sheet::Event &ev,
 		sheet::Event::Type type,
@@ -108,6 +111,11 @@ namespace {
 			++it2;
 		}
 		return true;
+	}
+
+	bool checkChord(const sheet::ChordEvent &ev, fm::String chordName)
+	{
+		return ev.type == sheet::Event::Chord && ev.chordName == chordName;
 	}
 
 	bool checkMetaEvent(const sheet::Event &ev, const fm::String &command, const sheet::Event::Args &args)
@@ -232,17 +240,139 @@ BOOST_AUTO_TEST_CASE(test_sheetDefParser)
 	{\n\
 		/ soundselect: 0 0 /\n\
 		/ channel : 1 /\n\
-		c4 d4 e4 f4 | c4 d4 e4 f4 |\n\
+		c4 d4 e4 f4 | c'4 d'4 e'4 f'4 |\n\
 	}\n\
 	{\n\
-		f4 f4 f4 f4 | b4 b4 b4 b4 | \n\
+		<c e g>4 f4 f4 f4 | b4 b4 b4 b4 | \n\
 	}\n\
 ]\n\
+-- the sheet, no tracks and voices here\n\
 / style : simplePianoStyle Intro / \n\
 / voicingStrategy : asNotated / \n\
 Cmaj | Cmaj C7 | r G \n\
 ");
 	sheet::compiler::SheetDefParser parser;
 	auto defs = parser.parse(text);
+	BOOST_CHECK(defs.tracks.size() == 1);
+	BOOST_CHECK(defs.tracks[0].voices.size() == 2);
+	BOOST_CHECK(defs.tracks[0].voices[0].events.size() == 12);
+	BOOST_CHECK(defs.tracks[0].voices[1].events.size() == 10);
+	BOOST_CHECK(checkMetaEvent(defs.tracks[0].voices[0].events[0], FM_STRING("soundselect"), sheet::Event::Args({ FM_STRING("0"), FM_STRING("0") })));
+	BOOST_CHECK(checkMetaEvent(defs.tracks[0].voices[0].events[1], FM_STRING("channel"), sheet::Event::Args({ FM_STRING("1") })));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[2], sheet::Event::Note, 0, 0, 1.0_N4));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[3], sheet::Event::Note, 2, 0, 1.0_N4));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[4], sheet::Event::Note, 4, 0, 1.0_N4));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[5], sheet::Event::Note, 5, 0, 1.0_N4));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[6], sheet::Event::EOB));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[7], sheet::Event::Note, 0, 1, 1.0_N4));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[8], sheet::Event::Note, 2, 1, 1.0_N4));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[9], sheet::Event::Note, 4, 1, 1.0_N4));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[10], sheet::Event::Note, 5, 1, 1.0_N4));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[11], sheet::Event::EOB));
+
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[1].events[0], sheet::Event::Note, sheet::Event::Pitches({ PitchDef(0, 0), PitchDef(4, 0), PitchDef(7, 0) }), 1.0_N4));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[1].events[1], sheet::Event::Note, 5, 0, 1.0_N4));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[1].events[2], sheet::Event::Note, 5, 0, 1.0_N4));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[1].events[3], sheet::Event::Note, 5, 0, 1.0_N4));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[1].events[4], sheet::Event::EOB));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[1].events[5], sheet::Event::Note, 11, 0, 1.0_N4));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[1].events[6], sheet::Event::Note, 11, 0, 1.0_N4));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[1].events[7], sheet::Event::Note, 11, 0, 1.0_N4));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[1].events[8], sheet::Event::Note, 11, 0, 1.0_N4));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[1].events[9], sheet::Event::EOB));
+
+	BOOST_CHECK(defs.chords.size() == 9);
+	BOOST_CHECK(checkMetaEvent(defs.chords[0], FM_STRING("style"), sheet::Event::Args({ FM_STRING("simplePianoStyle"), FM_STRING("Intro") })));
+	BOOST_CHECK(checkMetaEvent(defs.chords[1], FM_STRING("voicingStrategy"), sheet::Event::Args({ FM_STRING("asNotated") })));
+	BOOST_CHECK(checkChord(defs.chords[2], FM_STRING("Cmaj")));
+	BOOST_CHECK(checkNote(defs.chords[3], sheet::Event::EOB));
+	BOOST_CHECK(checkChord(defs.chords[4], FM_STRING("Cmaj")));
+	BOOST_CHECK(checkChord(defs.chords[5], FM_STRING("C7")));
+	BOOST_CHECK(checkNote(defs.chords[6], sheet::Event::EOB));
+	BOOST_CHECK(checkNote(defs.chords[7], sheet::Event::Rest));
+	BOOST_CHECK(checkChord(defs.chords[8], FM_STRING("G")));
+}
+
+BOOST_AUTO_TEST_CASE(test_sheetDefParser_02)
+{
+	using namespace fm;
+	using sheet::PitchDef;
+	fm::String text = FM_STRING("\
+[\n\
+	{\n\
+		/ soundselect: 0 0 /\n\
+		/ channel : 1 /\n\
+		c4 d4 e4 f4 | c'4 d'4 e'4 f'4 |\n\
+	}\n\
+]\n\
+");
+	sheet::compiler::SheetDefParser parser;
+	auto defs = parser.parse(text);
+	BOOST_CHECK(defs.tracks.size() == 1);
+	BOOST_CHECK(defs.tracks[0].voices.size() == 1);
+	BOOST_CHECK(defs.tracks[0].voices[0].events.size() == 12);
+	BOOST_CHECK(checkMetaEvent(defs.tracks[0].voices[0].events[0], FM_STRING("soundselect"), sheet::Event::Args({ FM_STRING("0"), FM_STRING("0") })));
+	BOOST_CHECK(checkMetaEvent(defs.tracks[0].voices[0].events[1], FM_STRING("channel"), sheet::Event::Args({ FM_STRING("1") })));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[2], sheet::Event::Note, 0, 0, 1.0_N4));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[3], sheet::Event::Note, 2, 0, 1.0_N4));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[4], sheet::Event::Note, 4, 0, 1.0_N4));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[5], sheet::Event::Note, 5, 0, 1.0_N4));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[6], sheet::Event::EOB));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[7], sheet::Event::Note, 0, 1, 1.0_N4));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[8], sheet::Event::Note, 2, 1, 1.0_N4));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[9], sheet::Event::Note, 4, 1, 1.0_N4));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[10], sheet::Event::Note, 5, 1, 1.0_N4));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[11], sheet::Event::EOB));
+
+}
+
+BOOST_AUTO_TEST_CASE(test_sheetDefParser_03)
+{
+	using namespace fm;
+	using sheet::PitchDef;
+	fm::String text = FM_STRING("\
+[\n\
+	{\n\
+		/ soundselect: 0 0 /\n\
+		/ channel : 1 /\n\
+		c4 d4 e4 f4 | c'4 d'4 e'4 f'4 |\n\
+	}\n\
+]\n\
+[\n\
+	{\n\
+		<c e g>4 f4 f4 f4 | b4 b4 b4 b4 | \n\
+	}\n\
+]\n\
+");
+	sheet::compiler::SheetDefParser parser;
+	auto defs = parser.parse(text);
+	BOOST_CHECK(defs.tracks.size() == 2);
+	BOOST_CHECK(defs.tracks[0].voices.size() == 1);
+	BOOST_CHECK(defs.tracks[0].voices[0].events.size() == 12);
+	BOOST_CHECK(checkMetaEvent(defs.tracks[0].voices[0].events[0], FM_STRING("soundselect"), sheet::Event::Args({ FM_STRING("0"), FM_STRING("0") })));
+	BOOST_CHECK(checkMetaEvent(defs.tracks[0].voices[0].events[1], FM_STRING("channel"), sheet::Event::Args({ FM_STRING("1") })));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[2], sheet::Event::Note, 0, 0, 1.0_N4));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[3], sheet::Event::Note, 2, 0, 1.0_N4));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[4], sheet::Event::Note, 4, 0, 1.0_N4));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[5], sheet::Event::Note, 5, 0, 1.0_N4));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[6], sheet::Event::EOB));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[7], sheet::Event::Note, 0, 1, 1.0_N4));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[8], sheet::Event::Note, 2, 1, 1.0_N4));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[9], sheet::Event::Note, 4, 1, 1.0_N4));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[10], sheet::Event::Note, 5, 1, 1.0_N4));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[11], sheet::Event::EOB));
+
+	BOOST_CHECK(defs.tracks[1].voices.size() == 1);
+	BOOST_CHECK(defs.tracks[1].voices[0].events.size() == 10);
+	BOOST_CHECK(checkNote(defs.tracks[1].voices[0].events[0], sheet::Event::Note, sheet::Event::Pitches({ PitchDef(0, 0), PitchDef(4, 0), PitchDef(7, 0) }), 1.0_N4));
+	BOOST_CHECK(checkNote(defs.tracks[1].voices[0].events[1], sheet::Event::Note, 5, 0, 1.0_N4));
+	BOOST_CHECK(checkNote(defs.tracks[1].voices[0].events[2], sheet::Event::Note, 5, 0, 1.0_N4));
+	BOOST_CHECK(checkNote(defs.tracks[1].voices[0].events[3], sheet::Event::Note, 5, 0, 1.0_N4));
+	BOOST_CHECK(checkNote(defs.tracks[1].voices[0].events[4], sheet::Event::EOB));
+	BOOST_CHECK(checkNote(defs.tracks[1].voices[0].events[5], sheet::Event::Note, 11, 0, 1.0_N4));
+	BOOST_CHECK(checkNote(defs.tracks[1].voices[0].events[6], sheet::Event::Note, 11, 0, 1.0_N4));
+	BOOST_CHECK(checkNote(defs.tracks[1].voices[0].events[7], sheet::Event::Note, 11, 0, 1.0_N4));
+	BOOST_CHECK(checkNote(defs.tracks[1].voices[0].events[8], sheet::Event::Note, 11, 0, 1.0_N4));
+	BOOST_CHECK(checkNote(defs.tracks[1].voices[0].events[9], sheet::Event::EOB));
 
 }
