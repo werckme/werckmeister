@@ -23,7 +23,7 @@ IF(WIN32)
   set(Boost_USE_STATIC_RUNTIME ON)
 ENDIF(WIN32)
 
-find_package(Boost COMPONENTS unit_test_framework filesystem REQUIRED)
+find_package(Boost COMPONENTS unit_test_framework filesystem program_options REQUIRED)
 
 INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(src/)
