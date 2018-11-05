@@ -36,6 +36,7 @@ namespace fm {
         virtual ~Werckmeister();
         const char * version() const;
 		sheet::compiler::CompilerPtr createCompiler();
+		sheet::compiler::AContextPtr createContext();
 	private:
 		ResourceStream openResourceImpl(const fm::String &path);
 	public:

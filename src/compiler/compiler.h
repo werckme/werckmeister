@@ -11,8 +11,12 @@ namespace sheet {
 			Compiler();
 			Compiler(const Compiler&) = delete;
 			Compiler & operator=(const Compiler&) = delete;
-
-			DocumentPtr load(fm::StreamBuffIterator begin, fm::StreamBuffIterator end);
+			void context(AContextPtr context) { context_ = context; }
+			AContextPtr context() const { return context_; }
+			void compile(DocumentPtr document);
+		private:
+			AContextPtr context_;
+			DocumentPtr document_;
 		};
 	}
 }

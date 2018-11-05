@@ -4,12 +4,20 @@
 #include <string>
 #include <iostream>
 #include <exception>
+#include "compiler/compiler.h"
 #include "compiler/parser.h"
+#include "compiler/MidiContext.h"
 
 void processFile(const std::string &file)
 {
+	auto &wm = fm::getWerckmeister();
 	sheet::compiler::DocumentParser docparser;
 	auto doc = docparser.parse(fm::to_wstring(file));
+	auto context = std::dynamic_pointer_cast<sheet::compiler::MidiContext>( wm.createContext() );
+	auto midi = wm.createMidi();
+	context->midi(midi);
+	auto compiler = wm.createCompiler();
+	compiler->context(context);
 }
 
 

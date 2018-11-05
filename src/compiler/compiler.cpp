@@ -6,5 +6,9 @@ namespace sheet {
 		Compiler::Compiler() 
 		{
 		}
+		void Compiler::compile(DocumentPtr document)
+		{
+			this->document_ = document;
+		}
 	}
 }

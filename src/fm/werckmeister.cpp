@@ -6,6 +6,7 @@
 #include <exception>
 #include <fstream>
 #include "compiler/compiler.h"
+#include "compiler/MidiContext.h"
 
 namespace fm {
     
@@ -42,6 +43,12 @@ namespace fm {
 	sheet::compiler::CompilerPtr Werckmeister::createCompiler()
 	{
 		return std::make_shared<sheet::compiler::Compiler>();
+	}
+
+	sheet::compiler::AContextPtr Werckmeister::createContext()
+	{
+		auto midiContext = std::make_shared<sheet::compiler::MidiContext>();
+		return midiContext;
 	}
 
 	Werckmeister::~Werckmeister() = default;

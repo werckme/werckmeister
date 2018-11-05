@@ -9,6 +9,7 @@
 #include "units.hpp"
 #include <map>
 #include <algorithm>
+#include <stdlib.h>
 
 namespace fm {
 	typedef unsigned char Byte;
@@ -30,12 +31,25 @@ namespace fm {
 
 	inline std::string to_string(const fm::String &str)
 	{
-		return std::string(str.begin(), str.end());
+		//std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
+		//return converter.from_bytes(str); // this failed for some reason on windows with path names and umlaute
+		std::stringstream ss;
+		char mb[MB_LEN_MAX];
+		for (auto ch : str) {
+			int length = 0;
+			wctomb_s(&length, &mb[0], MB_LEN_MAX, ch);
+			ss.write(&mb[0], length);
+		}
+		return ss.str();
 	}
 
 	inline std::wstring to_wstring(const std::string &str)
 	{
-		return std::wstring(str.begin(), str.end());
+		std::wstringstream ss;
+		for (auto ch : str) {
+			ss << ch;
+		}
+		return ss.str();
 	}
 
 }
