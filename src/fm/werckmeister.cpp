@@ -31,7 +31,7 @@ namespace fm {
 	Werckmeister::ResourceStream Werckmeister::openResourceImpl(const fm::String &path)
 	{
 		auto fpath = boost::filesystem::system_complete(path);
-		auto absolute = fpath.wstring();
+		auto absolute = fpath.string();
 		if (!boost::filesystem::exists(path))
 		{
 			throw std::runtime_error("resource not found: " + fpath.string());
