@@ -13,27 +13,29 @@ namespace sheet {
         class AContext {
         public:
 			static const fm::Ticks DefaultDuration;
+			static const fm::Ticks DefaultBarLength;
 			enum { INVALID_TRACK_ID = -1, INVALID_VOICE_ID = -1 };
 			typedef int TrackId;
 			typedef int VoiceId;
 			struct VoiceMetaData {
 				fm::Ticks position = 0;
 				fm::Ticks duration = DefaultDuration;
+				fm::Ticks barLength = DefaultBarLength;
+				fm::Ticks barPosition = 0;
 				virtual ~VoiceMetaData() = default;
 			};
 			typedef std::shared_ptr<VoiceMetaData> VoiceMetaDataPtr;
 			typedef std::unordered_map<VoiceId, VoiceMetaDataPtr> VoiceMetaDataMap;
 			virtual void setTrack(TrackId trackId);
 			virtual void setVoice(VoiceId voice);
-			inline TrackId track() const { return trackId_; }
-			inline VoiceId voice() const { return voiceId_; }
+			TrackId track() const;
+			VoiceId voice() const;
 			inline void setTarget(TrackId trackId, VoiceId voiceId)
 			{
 				setTrack(trackId);
 				setVoice(voiceId);
 			}
 			virtual void addEvent(const PitchDef &pitch, fm::Ticks absolutePosition, fm::Ticks duration) = 0;
-			virtual void addEvent(const PitchDef &pitch, fm::Ticks duration);
             virtual ~AContext() = default;
 			virtual TrackId createTrack();
 			virtual VoiceId createVoice();
@@ -43,6 +45,10 @@ namespace sheet {
 			{
 				return std::dynamic_pointer_cast<TVoiceMeta>(voiceMetaData(voiceid));
 			}
+			/////// actual context stuff
+			virtual void addEvent(const PitchDef &pitch, fm::Ticks duration);
+			virtual void newBar();
+			virtual void rest(fm::Ticks duration);
 		protected:
 			virtual TrackId createTrackImpl() = 0;
 			virtual VoiceId createVoiceImpl() = 0;
