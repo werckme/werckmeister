@@ -10,6 +10,7 @@
 #include <map>
 #include <algorithm>
 #include <stdlib.h>
+#include <limits.h>
 
 namespace fm {
 	typedef unsigned char Byte;

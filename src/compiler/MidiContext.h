@@ -3,26 +3,26 @@
 
 #include "AContext.h"
 #include "forward.hpp"
-#include <unordered_map>
+
 
 namespace sheet {
     namespace compiler {
         class MidiContext : public AContext {
 		public:
 			typedef AContext Base;
-			void midi(fm::midi::MidiPtr midi) { midi_ = midi; }
-			fm::midi::MidiPtr midi() const { return midi_; }
-			virtual TrackId createTrack() override;
-			virtual VoiceId createVoice() override;
-			virtual void addEvent(const PitchDef &pitch, fm::Ticks absolutePosition, fm::Ticks duration) override;
-		private:
-			struct VoiceConfig {
+			struct VoiceMetaData : Base::VoiceMetaData {
 				int midiChannel = 0;
 				int velocity = 70;
 			};
-			typedef std::unordered_map<VoiceId, VoiceConfig> VoiceConfigs;
+			void midi(fm::midi::MidiPtr midi) { midi_ = midi; }
+			fm::midi::MidiPtr midi() const { return midi_; }
+			virtual TrackId createTrackImpl() override;
+			virtual VoiceId createVoiceImpl() override;
+			virtual void addEvent(const PitchDef &pitch, fm::Ticks absolutePosition, fm::Ticks duration) override;
+		protected:
+			virtual Base::VoiceMetaDataPtr createVoiceMetaData() override;
+		private:
 			fm::midi::MidiPtr midi_;
-			VoiceConfigs voiceConfigs;
 			
         };
     }

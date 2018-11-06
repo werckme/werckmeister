@@ -38,22 +38,26 @@ namespace sheet {
 			_checkMidi(midi_);
 			_checkTrackId(track());
 			_checkVoiceId(voice());
-			const auto& voiceConfig = voiceConfigs[voice()];
-			midi_->tracks().at(track())->events().addNote(voiceConfig.midiChannel, absolutePosition, getAbsolutePitch(pitch), voiceConfig.velocity, duration);
+			auto voiceConfig = voiceMetaData<MidiContext::VoiceMetaData>(voice());
+			midi_->tracks().at(track())->events().addNote(voiceConfig->midiChannel, absolutePosition, getAbsolutePitch(pitch), voiceConfig->velocity, duration);
 		}
 
-		MidiContext::Base::TrackId MidiContext::createTrack()
+		MidiContext::Base::TrackId MidiContext::createTrackImpl()
 		{
 			_checkMidi(midi_);
 			auto track = midi_->createTrack();
 			midi_->addTrack(track);
 			return midi_->tracks().size() - 1;
 		}
-		MidiContext::Base::VoiceId MidiContext::createVoice()
+		MidiContext::Base::VoiceId MidiContext::createVoiceImpl()
 		{
 			auto id = _voiceIds++;
-			voiceConfigs[id] = VoiceConfig();
 			return id;
+		}
+
+		MidiContext::Base::VoiceMetaDataPtr MidiContext::createVoiceMetaData() 
+		{
+			return std::make_shared<MidiContext::VoiceMetaData>();
 		}
 	}
 }
