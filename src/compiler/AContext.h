@@ -47,6 +47,7 @@ namespace sheet {
 			}
 			/////// actual context stuff
 			virtual void addEvent(const PitchDef &pitch, fm::Ticks duration);
+			virtual void seek(fm::Ticks duration);
 			virtual void newBar();
 			virtual void rest(fm::Ticks duration);
 		protected:

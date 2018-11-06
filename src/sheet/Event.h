@@ -40,7 +40,8 @@ namespace sheet {
 			Note,
 			Chord,
 			EOB, // End of Bar aka. Bar Line
-			Meta
+			Meta,
+			NumEvents
 		};
 		typedef fm::Ticks Duration;
 		typedef std::set<PitchDef> Pitches;

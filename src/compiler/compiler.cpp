@@ -11,7 +11,7 @@ namespace sheet {
 			template<int EventType>
 			bool renderEvent(AContextPtr ctx, const Event &ev)
 			{
-				static_assert(false, "Invalid Event Type");
+				return false;
 			}
 
 			template<>
@@ -21,6 +21,7 @@ namespace sheet {
 				{
 					ctx->addEvent(pitch, ev.duration);
 				}
+				ctx->seek(ev.duration);
 				return true;
 			}
 
@@ -39,20 +40,23 @@ namespace sheet {
 			}
 
 			//////////////////////////////////////////////////
-			bool renderEvent(AContextPtr ctx, const Event &ev)
+			template <int EventId>
+			bool renderEventUnrolled(AContextPtr ctx, const Event &ev)
 			{
-				// TODO: replace using variadic templates eg. handleEvent<Event::Note, Event::EOB, Event::Rest>(ctx, ev)
-				switch (ev.type)
-				{
-				case Event::Note:
-					return renderEvent<Event::Note>(ctx, ev);
-				case Event::EOB:
-					return renderEvent<Event::EOB>(ctx, ev);
-				case Event::Rest:
-					return renderEvent<Event::Rest>(ctx, ev);
-				default:
-					return false;
+				if (ev.type == EventId) {
+					return renderEvent<EventId>(ctx, ev);
 				}
+				return renderEventUnrolled<EventId + 1>(ctx, ev);
+			}
+			template <>
+			bool renderEventUnrolled<Event::NumEvents>(AContextPtr ctx, const Event &ev)
+			{
+				return false;
+			}
+
+			void renderEvent(AContextPtr ctx, const Event &ev)
+			{
+				renderEventUnrolled<0>(ctx, ev);
 			}
 		}
 	}

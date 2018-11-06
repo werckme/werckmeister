@@ -64,6 +64,15 @@ namespace sheet {
 				meta->duration = duration;
 			}
 			addEvent(pitch, meta->position, meta->duration);
+			
+		}
+
+		void AContext::seek(fm::Ticks duration)
+		{
+			auto meta = voiceMetaData(voice());
+			if (duration > 0) {
+				meta->duration = duration;
+			}
 			meta->position += meta->duration;
 			meta->barPosition += meta->duration;
 		}
@@ -79,13 +88,7 @@ namespace sheet {
 
 		void AContext::rest(fm::Ticks duration)
 		{
-			using namespace fm;
-			auto meta = voiceMetaData(voice());
-			if (duration > 0) {
-				meta->duration = duration;
-			}
-			meta->position += meta->duration;
-			meta->barPosition += meta->duration;
+			seek(duration);
 		}
 	}
 }
