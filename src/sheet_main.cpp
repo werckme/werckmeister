@@ -7,6 +7,16 @@
 #include "compiler/compiler.h"
 #include "compiler/parser.h"
 #include "compiler/MidiContext.h"
+#include <fstream>
+#include <fm/common.hpp>
+#include "sheet/Document.h"
+
+void saveMidi(fm::midi::MidiPtr midi, const std::string &filename)
+{
+	std::ofstream fstream(filename, std::ios::binary);
+	midi->write(fstream);
+	fstream.flush();
+}
 
 void processFile(const std::string &file)
 {
@@ -18,6 +28,8 @@ void processFile(const std::string &file)
 	context->midi(midi);
 	auto compiler = wm.createCompiler();
 	compiler->context(context);
+	compiler->compile(doc);
+	saveMidi(midi, "sheet.mid");
 }
 
 

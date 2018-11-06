@@ -4,24 +4,36 @@
 #include "sheet/Event.h"
 #include <memory>
 #include <unordered_map>
+#include <fm/units.hpp>
+#include <fm/literals.hpp>
+
 
 namespace sheet {
     namespace compiler {
         class AContext {
         public:
+			static const fm::Ticks DefaultDuration;
 			enum { INVALID_TRACK_ID = -1, INVALID_VOICE_ID = -1 };
 			typedef int TrackId;
 			typedef int VoiceId;
 			struct VoiceMetaData {
+				fm::Ticks position = 0;
+				fm::Ticks duration = DefaultDuration;
 				virtual ~VoiceMetaData() = default;
 			};
 			typedef std::shared_ptr<VoiceMetaData> VoiceMetaDataPtr;
 			typedef std::unordered_map<VoiceId, VoiceMetaDataPtr> VoiceMetaDataMap;
-			virtual void track(TrackId trackId);
-			virtual void voice(VoiceId voice);
+			virtual void setTrack(TrackId trackId);
+			virtual void setVoice(VoiceId voice);
 			inline TrackId track() const { return trackId_; }
 			inline VoiceId voice() const { return voiceId_; }
+			inline void setTarget(TrackId trackId, VoiceId voiceId)
+			{
+				setTrack(trackId);
+				setVoice(voiceId);
+			}
 			virtual void addEvent(const PitchDef &pitch, fm::Ticks absolutePosition, fm::Ticks duration) = 0;
+			virtual void addEvent(const PitchDef &pitch, fm::Ticks duration);
             virtual ~AContext() = default;
 			virtual TrackId createTrack();
 			virtual VoiceId createVoice();

@@ -12,7 +12,7 @@ namespace sheet {
 			typedef AContext Base;
 			struct VoiceMetaData : Base::VoiceMetaData {
 				int midiChannel = 0;
-				int velocity = 70;
+				int velocity = 90;
 			};
 			void midi(fm::midi::MidiPtr midi) { midi_ = midi; }
 			fm::midi::MidiPtr midi() const { return midi_; }

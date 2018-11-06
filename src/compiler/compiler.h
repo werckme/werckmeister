@@ -14,6 +14,8 @@ namespace sheet {
 			void context(AContextPtr context) { context_ = context; }
 			AContextPtr context() const { return context_; }
 			void compile(DocumentPtr document);
+		protected:
+			void renderTracks();
 		private:
 			AContextPtr context_;
 			DocumentPtr document_;

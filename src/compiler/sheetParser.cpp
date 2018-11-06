@@ -83,25 +83,25 @@ namespace sheet {
 			{
 				add
 				("c", 0)
-				("cis", 1)
-				("des", 1)
-				("d", 2)
-				("dis", 3)
-				("es", 3)
-				("e", 4)
-				("fes", 4)
-				("f", 5)
-				("fis", 6)
-				("ges", 6)
-				("g", 7)
-				("gis", 8)
-				("as", 8)
-				("a", 9)
-				("ais", 10)
-				("bes", 10)
-				("b", 11)
-				("ces", 11)
-				;
+					("cis", 1)
+					("des", 1)
+					("d", 2)
+					("dis", 3)
+					("es", 3)
+					("e", 4)
+					("fes", 4)
+					("f", 5)
+					("fis", 6)
+					("ges", 6)
+					("g", 7)
+					("gis", 8)
+					("as", 8)
+					("a", 9)
+					("ais", 10)
+					("bes", 10)
+					("b", 11)
+					("ces", 11)
+					;
 			}
 
 		} pitchSymbols_;
@@ -111,12 +111,16 @@ namespace sheet {
 			octaveSymbols_()
 			{
 				add
-				(",,,", -3)
+				(",,,,,", -5)
+					(",,,,", -4)
+					(",,,", -3)
 					(",,", -2)
 					(",", -1)
 					("'", 1)
 					("''", 2)
 					("'''", 3)
+					("''''", 4)
+					("'''''", 5)
 					;
 			}
 
@@ -186,7 +190,7 @@ namespace sheet {
 			namespace ascii = boost::spirit::ascii;
 
 			template <typename Iterator>
-			struct ASheetParser 
+			struct ASheetParser
 			{
 
 				ASheetParser()
@@ -223,7 +227,7 @@ namespace sheet {
 					using qi::attr;
 					using qi::on_error;
 					using qi::fail;
-					
+
 					event_.name("event");
 					track.name("track");
 					voice.name("voice");

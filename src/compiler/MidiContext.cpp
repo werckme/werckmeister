@@ -7,6 +7,7 @@ namespace sheet {
 	namespace compiler {
 
 		namespace {
+			const int MidiSchluesselCOffset = 60;
 			MidiContext::Base::VoiceId _voiceIds = 0;
 			inline void _checkMidi(fm::midi::MidiPtr midi) 
 			{
@@ -29,7 +30,7 @@ namespace sheet {
 
 			int getAbsolutePitch(const PitchDef &pitch)
 			{
-				return pitch.pitch + (pitch.octave * fm::NotesPerOctave);
+				return MidiSchluesselCOffset + pitch.pitch + (pitch.octave * fm::NotesPerOctave);
 			}
 		}
 

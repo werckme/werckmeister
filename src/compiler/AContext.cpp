@@ -3,13 +3,16 @@
 
 namespace sheet {
 	namespace compiler {
-	
-		void AContext::track(TrackId trackId)
+		
+		using namespace fm;
+		const Ticks AContext::DefaultDuration = 1.0_N4;
+
+		void AContext::setTrack(TrackId trackId)
 		{
 			this->trackId_ = trackId;
 		}
 
-		void AContext::voice(VoiceId voice)
+		void AContext::setVoice(VoiceId voice)
 		{
 			this->voiceId_ = voice;
 		}
@@ -34,6 +37,17 @@ namespace sheet {
 				throw std::runtime_error("no meta data found for voiceid: " + std::to_string(voiceid));
 			}
 			return it->second;
+		}
+		
+		void AContext::addEvent(const PitchDef &pitch, fm::Ticks duration)
+		{
+			using namespace fm;
+			auto meta = voiceMetaData(voice());
+			if (duration > 0) {
+				meta->duration = duration;
+			}
+			addEvent(pitch, meta->position, meta->duration);
+			meta->position += meta->duration;
 		}
 	}
 }
