@@ -38,6 +38,7 @@ namespace sheet {
 			Rest,
 			Degree, 
 			Note,
+			TiedNote,
 			Chord,
 			EOB, // End of Bar aka. Bar Line
 			Meta,
