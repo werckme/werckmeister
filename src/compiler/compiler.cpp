@@ -26,6 +26,17 @@ namespace sheet {
 			}
 
 			template<>
+			bool renderEvent<Event::TiedNote>(AContextPtr ctx, const Event &ev)
+			{
+				for (const auto &pitch : ev.pitches)
+				{
+					ctx->addEvent(pitch, ev.duration, true);
+				}
+				ctx->seek(ev.duration);
+				return true;
+			}
+
+			template<>
 			bool renderEvent<Event::EOB>(AContextPtr ctx, const Event &ev)
 			{
 				ctx->newBar();

@@ -2,14 +2,9 @@
 @load "../chords/default.chords";
 @load "../styles/simpleDisco.style";
 
-[
-{ 
-  c,,,,, c,,,, c,,, c,, | c, c c' c'' | c''' c''''  c''''' r |
-  c1~ | c1 
-}
-{ 
-  <b d f>1 | <b d f> 1
-}
-] 
+[{
+    -- voice 0
+    c d e <g a c'>~ | <g a c'>8 f4 e d4. |
+}] 
 
 C | C E | C E |

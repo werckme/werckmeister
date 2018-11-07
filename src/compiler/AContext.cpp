@@ -2,26 +2,27 @@
 #include <exception>
 #include <exception>
 
+
 namespace sheet {
 	namespace compiler {
-		
+
 		using namespace fm;
 		const Ticks AContext::DefaultDuration = 1.0_N4;
 		const Ticks AContext::DefaultBarLength = 4 * 1.0_N4;
 
-		AContext::TrackId AContext::track() const 
-		{ 
+		AContext::TrackId AContext::track() const
+		{
 			if (trackId_ == INVALID_TRACK_ID) {
 				throw std::runtime_error("no track set");
 			}
-			return trackId_; 
+			return trackId_;
 		}
-		AContext::VoiceId AContext::voice() const 
-		{ 
+		AContext::VoiceId AContext::voice() const
+		{
 			if (voiceId_ == INVALID_VOICE_ID) {
 				throw std::runtime_error("no voice set");
 			}
-			return voiceId_; 
+			return voiceId_;
 		}
 
 		void AContext::setTrack(TrackId trackId)
@@ -33,7 +34,7 @@ namespace sheet {
 		{
 			this->voiceId_ = voice;
 		}
-	
+
 		AContext::TrackId AContext::createTrack()
 		{
 			auto tid = createTrackImpl();
@@ -55,16 +56,36 @@ namespace sheet {
 			}
 			return it->second;
 		}
-		
-		void AContext::addEvent(const PitchDef &pitch, fm::Ticks duration)
+
+		void AContext::throwContextException(const std::string &msg)
+		{
+			auto meta = voiceMetaData(voice());
+			throw std::runtime_error(msg + " at voice " + std::to_string(voice()) + " bar: " + std::to_string(meta->position / meta->barLength));
+		}
+
+		void AContext::addEvent(const PitchDef &pitch, fm::Ticks duration, bool tying)
 		{
 			using namespace fm;
 			auto meta = voiceMetaData(voice());
 			if (duration > 0) {
 				meta->duration = duration;
 			}
-			addEvent(pitch, meta->position, meta->duration);
-			
+			if (tying) {
+				meta->waitForTieBuffer.insert({ pitch, meta->duration });
+			}
+			else if (meta->pendingTie()) {
+				auto it = meta->waitForTieBuffer.find(pitch);
+				if (it == meta->waitForTieBuffer.end()) {
+					throwContextException("note tie error");
+				}
+				auto firstDuration = it->second;
+				addEvent(pitch, meta->position - firstDuration, firstDuration + meta->duration);
+				meta->waitForTieBuffer.erase(it);
+				return;
+			}
+			else {
+				addEvent(pitch, meta->position, meta->duration);
+			}
 		}
 
 		void AContext::seek(fm::Ticks duration)
@@ -81,7 +102,7 @@ namespace sheet {
 		{
 			auto meta = voiceMetaData(voice());
 			if (meta->barPosition != meta->barLength) {
-				throw std::runtime_error("bar check error at voice " + std::to_string(voice()) + " bar: " + std::to_string(meta->position / meta->barLength));
+				throwContextException("bar check error");
 			}
 			meta->barPosition = 0;
 		}
