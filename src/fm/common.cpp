@@ -2,6 +2,9 @@
 #include <boost/uuid/uuid.hpp>
 #include <boost/uuid/uuid_generators.hpp>
 #include <boost/uuid/uuid_io.hpp>
+#include <boost/locale.hpp>
+#include "config.hpp"
+
 
 namespace {
 	union {
@@ -28,5 +31,15 @@ namespace fm {
 	{
         boost::uuids::uuid u = boost::uuids::random_generator()();
         return boost::uuids::to_string(u);
+	}
+
+	std::string to_string(const fm::String &str)
+	{
+		return boost::locale::conv::from_utf(str, FM_CHARSET);
+	}
+
+	std::wstring to_wstring(const std::string &str)
+	{
+		return boost::locale::conv::to_utf<wchar_t>(str, FM_CHARSET);
 	}
 }

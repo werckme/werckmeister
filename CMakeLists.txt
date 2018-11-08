@@ -5,6 +5,11 @@ execute_process(COMMAND git --work-tree=. log --pretty=format:%h -n 1
 # Project name.
 project(sheet)
 
+# PROJECT CONFIG
+set(FM_CHARSET "ISO-8859-1")
+set(FM_PPQ 500)
+#END PROJECT CONFIG
+
 set(CMAKE_BINARY_DIR ${CMAKE_SOURCE_DIR}/build)
  
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR})
@@ -23,7 +28,7 @@ IF(WIN32)
   set(Boost_USE_STATIC_RUNTIME ON)
 ENDIF(WIN32)
 
-find_package(Boost COMPONENTS unit_test_framework filesystem program_options REQUIRED)
+find_package(Boost COMPONENTS unit_test_framework filesystem program_options locale REQUIRED)
 
 INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(src/)
@@ -32,4 +37,6 @@ INCLUDE_DIRECTORIES(submodules/rtmidi)
 
 add_subdirectory(submodules/rtmidi) #rtmidi needs /MT or /MTd for windows
 add_subdirectory(src)
+
+configure_file("${PROJECT_SOURCE_DIR}/src/fm/config.hpp.in" "${PROJECT_SOURCE_DIR}/src/fm/config.hpp")
 

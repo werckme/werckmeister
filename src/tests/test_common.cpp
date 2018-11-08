@@ -4,6 +4,7 @@
 #include <fm/werckmeister.hpp>
 #include <iterator>
 
+
 BOOST_AUTO_TEST_CASE(test_endswap)
 {
 	using namespace fm;
@@ -42,4 +43,13 @@ BOOST_AUTO_TEST_CASE(test_resource_loader)
 	fm::StreamBuffIterator it(*resource.get());
 	fm::String res(it, eos);
 	BOOST_CHECK(res.length() > 0);
+}
+
+BOOST_AUTO_TEST_CASE(test_sconv)
+{
+	std::wstring wstr = fm::to_wstring("הצüִײÜ?§");
+	BOOST_CHECK(L"הצüִײÜ?§" == wstr);
+
+	std::string str = fm::to_string(L"הצüִײÜ?§");
+	BOOST_CHECK("הצüִײÜ?§" == str);
 }

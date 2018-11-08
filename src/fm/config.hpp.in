@@ -3,16 +3,15 @@
 
 #include "units.hpp"
 
-#define FETZER_TO_STRING(x) #x
+#define SHEET_VERSION "@GIT_VERSION@"
+#define CHORD_DEF_EXTENSION  ".chords"
+#define STYLE_DEF_EXTENSION ".style"
 
-#ifndef GIT_VERSION
-#define FETZER_VERSION "fetzer unknown version"
-#else
-#define FETZER_VERSION "libfetzer: " GIT_VERSION
-#endif
+#define FM_CHARSET "@FM_CHARSET@"
 
 namespace fm {
-    const Ticks PPQ = 500;
+    const Ticks PPQ = @FM_PPQ@;
+	const int NotesPerOctave = 12;
 }
 
 #endif

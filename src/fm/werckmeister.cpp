@@ -19,7 +19,7 @@ namespace fm {
 
     const char * Werckmeister::version() const
     {
-        return FETZER_VERSION;
+        return SHEET_VERSION;
     }
 
 	midi::MidiPtr Werckmeister::createMidi()

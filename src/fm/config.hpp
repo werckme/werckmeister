@@ -3,16 +3,11 @@
 
 #include "units.hpp"
 
-#define FETZER_TO_STRING(x) #x
-
-#ifndef GIT_VERSION
-#define FETZER_VERSION "fetzer unknown version"
-#else
-#define FETZER_VERSION "libfetzer: " GIT_VERSION
-#endif
-
+#define SHEET_VERSION "bbf0773"
 #define CHORD_DEF_EXTENSION  ".chords"
 #define STYLE_DEF_EXTENSION ".style"
+
+#define FM_CHARSET "ISO-8859-1"
 
 namespace fm {
     const Ticks PPQ = 500;
