@@ -76,3 +76,10 @@ Cmaj | Cmaj C7 |
 
 ```
 
+## Nice to have
+### lilypond drum notes
+bd sn ht ....
+
+### note variables
+/ noteVar: bassDrum c, /
+c4 {bassDrum} c'4  

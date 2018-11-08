@@ -30,6 +30,6 @@ INCLUDE_DIRECTORIES(src/)
 INCLUDE_DIRECTORIES(src/ext)
 INCLUDE_DIRECTORIES(submodules/rtmidi)
 
-add_subdirectory(submodules/rtmidi) #rtmidi needs /MT or /MTd for windows
+#add_subdirectory(submodules/rtmidi) #rtmidi needs /MT or /MTd for windows
 add_subdirectory(src)
 
