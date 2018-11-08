@@ -10,6 +10,7 @@ namespace sheet {
 		const Ticks AContext::DefaultDuration = 1.0_N4;
 		const Ticks AContext::DefaultBarLength = 4 * 1.0_N4;
 
+
 		AContext::TrackId AContext::track() const
 		{
 			if (trackId_ == INVALID_TRACK_ID) {
@@ -111,5 +112,6 @@ namespace sheet {
 		{
 			seek(duration);
 		}
+
 	}
 }

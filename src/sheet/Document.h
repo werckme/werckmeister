@@ -18,6 +18,8 @@ namespace sheet {
 		SheetDef sheetDef;
 		ChordDefs chordDefs;
 		StyleDefs styleDefs;
+		const StyleDef * Document::getStyle(const fm::String &name) const;
+		const ChordDef::Intervals * Document::getChord(const fm::String &name) const;
 	};
 }
 

@@ -7,6 +7,7 @@
 #include <fm/units.hpp>
 #include <fm/literals.hpp>
 #include <map>
+#include "sheet/ChordDef.h"
 
 namespace sheet {
     namespace compiler {
@@ -39,7 +40,7 @@ namespace sheet {
 				setVoice(voiceId);
 			}
 			virtual void addEvent(const PitchDef &pitch, fm::Ticks absolutePosition, fm::Ticks duration) = 0;
-            virtual ~AContext() = default;
+			virtual ~AContext() {};
 			virtual TrackId createTrack();
 			virtual VoiceId createVoice();
 			VoiceMetaDataPtr voiceMetaData(VoiceId voiceid) const;
@@ -48,6 +49,7 @@ namespace sheet {
 			{
 				return std::dynamic_pointer_cast<TVoiceMeta>(voiceMetaData(voiceid));
 			}
+			virtual void throwContextException(const std::string &msg);
 			/////// actual context stuff
 			virtual void addEvent(const PitchDef &pitch, fm::Ticks duration, bool tying = false);
 			virtual void seek(fm::Ticks duration);
@@ -57,7 +59,6 @@ namespace sheet {
 			virtual TrackId createTrackImpl() = 0;
 			virtual VoiceId createVoiceImpl() = 0;
 			virtual VoiceMetaDataPtr createVoiceMetaData() = 0;
-			virtual void throwContextException(const std::string &msg);
 		private:
 			TrackId trackId_ = INVALID_TRACK_ID;
 			VoiceId voiceId_ = INVALID_VOICE_ID;

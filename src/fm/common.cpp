@@ -8,8 +8,8 @@
 
 namespace {
 	union {
-		unsigned short shortVar;    // bin�re Ganzzahl der L�nge 16 Bits
-		unsigned char  charVar[2];  // 2 bin�re Ganzzahlen, jede 8 Bits
+		unsigned short shortVar;    // binaere Ganzzahl der Laenge 16 Bits
+		unsigned char  charVar[2];  // 2 binaere Ganzzahlen, jede 8 Bits
 	} test_endianness;
 }
 
@@ -18,11 +18,11 @@ namespace fm {
 	bool isLittleEndian() {
 		test_endianness.shortVar = 0x8000; // das Most Significant Bit innerhalb von 16
 		if (test_endianness.charVar[0] != 0) {
-			// Das Programm l�uft auf einer Big-Endian-Maschine.
+			// Das Programm laeuft auf einer Big-Endian-Maschine.
 			return false;
 		}
 		else {
-			// Das Programm l�uft auf einer Little-Endian-Maschine.
+			// Das Programm laeuft auf einer Little-Endian-Maschine.
 			return true;
 		}
 	}

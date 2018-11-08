@@ -3,6 +3,8 @@
 #include "AContext.h"
 #include "sheet/Event.h"
 #include <type_traits>
+#include <algorithm>
+#include <list>
 
 namespace sheet {
 	namespace compiler {
@@ -50,6 +52,12 @@ namespace sheet {
 				return true;
 			}
 
+			template<>
+			bool renderEvent<Event::Chord>(AContextPtr ctx, const Event &ev)
+			{
+				ctx->rest(ev.duration);
+				return true;
+			}
 			//////////////////////////////////////////////////
 			template <int EventId>
 			bool renderEventUnrolled(AContextPtr ctx, const Event &ev)
@@ -83,7 +91,9 @@ namespace sheet {
 		void Compiler::compile(DocumentPtr document)
 		{
 			this->document_ = document;
+			auto ctx = context();
 			renderTracks();
+			renderChordTrack();
 		}
 
 		void Compiler::renderTracks()
@@ -100,6 +110,52 @@ namespace sheet {
 					{
 						renderEvent(ctx, ev);
 					}
+				}
+			}
+		}
+
+		namespace {
+			template<typename TIt>
+			void determineChordLengths(TIt begin, TIt end) {
+				using namespace fm;
+				auto it = begin;
+				std::list<Event*> barEvents;
+				while (it != end) {
+					if (it->type == Event::EOB) {
+						// TODO: we assume 4/4
+						int c = barEvents.size();
+						if (c > 0) {
+							std::for_each(barEvents.begin(), barEvents.end(), [c](Event *ev) { ev->duration = 4.0_N4 / c; });
+						}
+						barEvents.clear();
+					}
+					if (it->type == Event::Chord) {
+						barEvents.push_back(&(*it));
+					}
+					++it;
+				}
+			}
+		}
+
+		void Compiler::renderStyle(const ChordDef::Intervals *, const StyleDef *style, fm::Ticks duration)
+		{
+			
+		}
+
+		void Compiler::renderChordTrack() 
+		{
+			auto ctx = context();
+			auto trackId = ctx->createTrack();
+			auto voiceId = ctx->createVoice();
+			determineChordLengths(document_->sheetDef.chords.begin(), document_->sheetDef.chords.end());
+			for (const auto &ev : document_->sheetDef.chords) {
+				if (ev.type == Event::Chord) {
+					const ChordDef::Intervals *def = document_->getChord(ev.chordName);
+					if (!def) {
+						ctx->throwContextException("chord not found: " + fm::to_string(ev.chordName));
+					}
+					const StyleDef *style = document_->getStyle(L"");
+					renderStyle(def, style, ev.duration);
 				}
 			}
 		}
