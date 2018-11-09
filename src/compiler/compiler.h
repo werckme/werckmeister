@@ -3,6 +3,8 @@
 
 #include <fm/common.hpp>
 #include "forward.hpp"
+#include "sheet/ChordDef.h"
+#include "sheet/StyleDef.h"
 
 namespace sheet {
 	namespace compiler {
@@ -17,7 +19,7 @@ namespace sheet {
 		protected:
 			void renderTracks();
 			void renderChordTrack();
-			void renderStyle(const ChordDef::Intervals *, const StyleDef *style, fm::Ticks duration);
+			void renderStyle(const ChordDef::Intervals *intervals, const StyleDef *style, fm::Ticks duration);
 		private:
 			AContextPtr context_;
 			DocumentPtr document_;
