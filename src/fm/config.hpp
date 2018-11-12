@@ -3,7 +3,7 @@
 
 #include "units.hpp"
 
-#define SHEET_VERSION "6645106"
+#define SHEET_VERSION "fbbabd2"
 #define CHORD_DEF_EXTENSION  ".chords"
 #define STYLE_DEF_EXTENSION ".style"
 

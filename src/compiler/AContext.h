@@ -9,6 +9,7 @@
 #include <map>
 #include "sheet/ChordDef.h"
 #include "sheet/StyleDefServer.h"
+#include "sheet/VoicingStrategy.h"
 
 namespace sheet {
     namespace compiler {
@@ -68,9 +69,11 @@ namespace sheet {
 			virtual VoiceMetaDataPtr createVoiceMetaData() = 0;
 			virtual IStyleDefServer::ConstChordValueType currentChord();
 			virtual IStyleDefServer::ConstStyleValueType currentStyle();
+			virtual VoicingStrategyPtr currentVoicingStrategy();
 		private:
 			IStyleDefServer::ConstChordValueType currentChord_ = nullptr;
 			IStyleDefServer::ConstStyleValueType currentStyle_ = nullptr;
+			VoicingStrategyPtr currentVoicingStrategy_ = nullptr;
 			TrackId trackId_ = INVALID_TRACK_ID;
 			VoiceId voiceId_ = INVALID_VOICE_ID;
 			VoiceMetaDataMap voiceMetaDataMap_;

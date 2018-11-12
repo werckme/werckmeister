@@ -1,7 +1,7 @@
 #include "AContext.h"
 #include <exception>
 #include <exception>
-
+#include <fm/werckmeister.hpp>
 
 namespace sheet {
 	namespace compiler {
@@ -140,6 +140,13 @@ namespace sheet {
 			}
 			return currentStyle_;
 		}
+		VoicingStrategyPtr AContext::currentVoicingStrategy()
+		{
+			if (!currentVoicingStrategy_) {
+				currentVoicingStrategy_ = fm::getWerckmeister().getDefaultVoicingStrategy();
+			}
+			return currentVoicingStrategy_;
+		}
 		void AContext::setChord(const fm::String &chodrname)
 		{
 
@@ -152,7 +159,7 @@ namespace sheet {
 		{
 			auto chord = currentChord();
 			auto style = currentStyle();
-
+			seek(duration);
 		}
 	}
 }

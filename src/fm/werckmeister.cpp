@@ -8,6 +8,7 @@
 #include "compiler/compiler.h"
 #include "compiler/MidiContext.h"
 #include <memory>
+#include "sheet/DirectVoicingStrategy.h"
 
 namespace fm {
     
@@ -50,6 +51,16 @@ namespace fm {
 	{
 		auto midiContext = std::make_shared<sheet::compiler::MidiContext>();
 		return midiContext;
+	}
+
+	sheet::VoicingStrategyPtr Werckmeister::getDirectVoicingStrategy()
+	{
+		return std::make_shared<sheet::SimpleVoicingStrategy>();
+	}
+
+	sheet::VoicingStrategyPtr Werckmeister::getDefaultVoicingStrategy()
+	{
+		return getDirectVoicingStrategy();
 	}
 
 	Werckmeister::~Werckmeister() = default;
