@@ -10,6 +10,17 @@ namespace sheet {
 		const Ticks AContext::DefaultDuration = 1.0_N4;
 		const Ticks AContext::DefaultBarLength = 4 * 1.0_N4;
 
+		AContext::IStyleDefServerPtr AContext::styleDefServer() const
+		{
+			if (!styleDefServer_) {
+				throw std::runtime_error("no styledef server set");
+			}
+			return styleDefServer_;
+		}
+		void AContext::styleDefServer(IStyleDefServerPtr server)
+		{
+			styleDefServer_ = server;
+		}
 
 		AContext::TrackId AContext::track() const
 		{
@@ -113,5 +124,27 @@ namespace sheet {
 			seek(duration);
 		}
 
+		/////////////////////////////////////////////////////////////////////////////
+		// Stylerendering
+		ChordDef::Intervals* AContext::currentChord()
+		{
+			return currentChord_;
+		}
+		StyleDef* AContext::currentStyle()
+		{
+			return currentStyle_;
+		}
+		void AContext::setChord(const fm::String &chodrname)
+		{
+
+		}
+		void AContext::setStyle(const fm::String &styleName)
+		{
+
+		}
+		void AContext::renderStyle(fm::Ticks duration)
+		{
+			seek(duration);
+		}
 	}
 }

@@ -7,9 +7,10 @@
 #include "ChordDef.h"
 #include "SheetDef.h"
 #include <unordered_map>
+#include "sheet/StyleDefServer.h"
 
 namespace sheet {
-	class Document {
+	class Document : public IStyleDefServer {
 	public:
 		typedef std::unordered_map<fm::String, ChordDef::Intervals> ChordDefs;
 		typedef std::unordered_map<fm::String, StyleDef> StyleDefs;
@@ -18,8 +19,8 @@ namespace sheet {
 		SheetDef sheetDef;
 		ChordDefs chordDefs;
 		StyleDefs styleDefs;
-		const StyleDef * Document::getStyle(const fm::String &name) const;
-		const ChordDef::Intervals * Document::getChord(const fm::String &name) const;
+		const StyleDef * Document::getStyle(const fm::String &name) const override;
+		const ChordDef::Intervals * Document::getChord(const fm::String &name) const override;
 	};
 }
 

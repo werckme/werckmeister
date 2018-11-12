@@ -11,69 +11,71 @@ namespace sheet {
 
 		namespace {
 			template<int EventType>
-			bool renderEvent(AContextPtr ctx, const Event &ev)
+			bool renderEvent(AContextPtr ctx, const Event *ev)
 			{
 				return false;
 			}
 
 			template<>
-			bool renderEvent<Event::Note>(AContextPtr ctx, const Event &ev)
+			bool renderEvent<Event::Note>(AContextPtr ctx, const Event *ev)
 			{
-				for (const auto &pitch : ev.pitches)
+				for (const auto &pitch : ev->pitches)
 				{
-					ctx->addEvent(pitch, ev.duration);
+					ctx->addEvent(pitch, ev->duration);
 				}
-				ctx->seek(ev.duration);
+				ctx->seek(ev->duration);
 				return true;
 			}
 
 			template<>
-			bool renderEvent<Event::TiedNote>(AContextPtr ctx, const Event &ev)
+			bool renderEvent<Event::TiedNote>(AContextPtr ctx, const Event *ev)
 			{
-				for (const auto &pitch : ev.pitches)
+				for (const auto &pitch : ev->pitches)
 				{
-					ctx->addEvent(pitch, ev.duration, true);
+					ctx->addEvent(pitch, ev->duration, true);
 				}
-				ctx->seek(ev.duration);
+				ctx->seek(ev->duration);
 				return true;
 			}
 
 			template<>
-			bool renderEvent<Event::EOB>(AContextPtr ctx, const Event &ev)
+			bool renderEvent<Event::EOB>(AContextPtr ctx, const Event *ev)
 			{
 				ctx->newBar();
 				return true;
 			}
 
 			template<>
-			bool renderEvent<Event::Rest>(AContextPtr ctx, const Event &ev)
+			bool renderEvent<Event::Rest>(AContextPtr ctx, const Event *ev)
 			{
-				ctx->rest(ev.duration);
+				ctx->rest(ev->duration);
 				return true;
 			}
 
 			template<>
-			bool renderEvent<Event::Chord>(AContextPtr ctx, const Event &ev)
+			bool renderEvent<Event::Chord>(AContextPtr ctx, const Event *ev)
 			{
-				ctx->rest(ev.duration);
+				auto chordEv = static_cast<const ChordEvent*>(ev);
+				ctx->setChord(chordEv->chordName);
+				ctx->renderStyle(chordEv->duration);
 				return true;
 			}
 			//////////////////////////////////////////////////
 			template <int EventId>
-			bool renderEventUnrolled(AContextPtr ctx, const Event &ev)
+			bool renderEventUnrolled(AContextPtr ctx, const Event *ev)
 			{
-				if (ev.type == EventId) {
+				if (ev->type == EventId) {
 					return renderEvent<EventId>(ctx, ev);
 				}
 				return renderEventUnrolled<EventId + 1>(ctx, ev);
 			}
 			template <>
-			bool renderEventUnrolled<Event::NumEvents>(AContextPtr ctx, const Event &ev)
+			bool renderEventUnrolled<Event::NumEvents>(AContextPtr ctx, const Event *ev)
 			{
 				return false;
 			}
 
-			void renderEvent(AContextPtr ctx, const Event &ev)
+			void renderEvent(AContextPtr ctx, const Event *ev)
 			{
 				renderEventUnrolled<0>(ctx, ev);
 			}
@@ -108,7 +110,7 @@ namespace sheet {
 					ctx->setTarget(trackId, voiceId);
 					for (const auto &ev : voice.events)
 					{
-						renderEvent(ctx, ev);
+						renderEvent(ctx, &ev);
 					}
 				}
 			}
@@ -137,26 +139,13 @@ namespace sheet {
 			}
 		}
 
-		void Compiler::renderStyle(const ChordDef::Intervals *, const StyleDef *style, fm::Ticks duration)
-		{
-			
-		}
 
 		void Compiler::renderChordTrack() 
 		{
 			auto ctx = context();
-			auto trackId = ctx->createTrack();
-			auto voiceId = ctx->createVoice();
 			determineChordLengths(document_->sheetDef.chords.begin(), document_->sheetDef.chords.end());
 			for (const auto &ev : document_->sheetDef.chords) {
-				if (ev.type == Event::Chord) {
-					const ChordDef::Intervals *def = document_->getChord(ev.chordName);
-					if (!def) {
-						ctx->throwContextException("chord not found: " + fm::to_string(ev.chordName));
-					}
-					const StyleDef *style = document_->getStyle(L"");
-					renderStyle(def, style, ev.duration);
-				}
+				renderEvent(ctx, &ev);
 			}
 		}
 	}
