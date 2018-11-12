@@ -126,12 +126,18 @@ namespace sheet {
 
 		/////////////////////////////////////////////////////////////////////////////
 		// Stylerendering
-		ChordDef::Intervals* AContext::currentChord()
+		IStyleDefServer::ConstChordValueType AContext::currentChord()
 		{
+			if (!currentChord_) {
+				currentChord_ = styleDefServer()->getChord(FM_STRING("?"));
+			}
 			return currentChord_;
 		}
-		StyleDef* AContext::currentStyle()
+		IStyleDefServer::ConstStyleValueType AContext::currentStyle()
 		{
+			if (!currentStyle_) {
+				currentStyle_ = styleDefServer()->getStyle(FM_STRING("?"));
+			}
 			return currentStyle_;
 		}
 		void AContext::setChord(const fm::String &chodrname)
@@ -144,7 +150,9 @@ namespace sheet {
 		}
 		void AContext::renderStyle(fm::Ticks duration)
 		{
-			seek(duration);
+			auto chord = currentChord();
+			auto style = currentStyle();
+
 		}
 	}
 }

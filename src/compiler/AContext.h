@@ -66,11 +66,11 @@ namespace sheet {
 			virtual TrackId createTrackImpl() = 0;
 			virtual VoiceId createVoiceImpl() = 0;
 			virtual VoiceMetaDataPtr createVoiceMetaData() = 0;
-			virtual ChordDef::Intervals* currentChord();
-			virtual StyleDef* currentStyle();
+			virtual IStyleDefServer::ConstChordValueType currentChord();
+			virtual IStyleDefServer::ConstStyleValueType currentStyle();
 		private:
-			ChordDef::Intervals *currentChord_ = nullptr;
-			StyleDef *currentStyle_ = nullptr;
+			IStyleDefServer::ConstChordValueType currentChord_ = nullptr;
+			IStyleDefServer::ConstStyleValueType currentStyle_ = nullptr;
 			TrackId trackId_ = INVALID_TRACK_ID;
 			VoiceId voiceId_ = INVALID_VOICE_ID;
 			VoiceMetaDataMap voiceMetaDataMap_;

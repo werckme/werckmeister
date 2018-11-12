@@ -28,7 +28,7 @@ namespace sheet {
 				ChordDefParser chordDefParser;
 				auto chords = chordDefParser.parse(documentText);
 				for (const auto &x : chords) {
-					doc->chordDefs[x.name] = x.intervals;
+					doc->chordDefs[x.name] = x;
 				}
 			}
 			void useStyleDef(DocumentPtr doc, const fm::String &path)

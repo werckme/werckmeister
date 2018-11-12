@@ -12,15 +12,15 @@
 namespace sheet {
 	class Document : public IStyleDefServer {
 	public:
-		typedef std::unordered_map<fm::String, ChordDef::Intervals> ChordDefs;
+		typedef std::unordered_map<fm::String, ChordDef> ChordDefs;
 		typedef std::unordered_map<fm::String, StyleDef> StyleDefs;
 		fm::String path;
 		DocumentConfig documentConfig;
 		SheetDef sheetDef;
 		ChordDefs chordDefs;
 		StyleDefs styleDefs;
-		const StyleDef * Document::getStyle(const fm::String &name) const override;
-		const ChordDef::Intervals * Document::getChord(const fm::String &name) const override;
+		IStyleDefServer::ConstStyleValueType getStyle(const fm::String &filename, const fm::String &sectionName = FM_STRING("?")) const override;
+		IStyleDefServer::ConstChordValueType getChord(const fm::String &name) const override;
 	};
 }
 
