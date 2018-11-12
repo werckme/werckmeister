@@ -7,6 +7,7 @@
 #include <fstream>
 #include "compiler/compiler.h"
 #include "compiler/MidiContext.h"
+#include <memory>
 
 namespace fm {
     
