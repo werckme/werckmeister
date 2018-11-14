@@ -4,7 +4,80 @@
 #include <fm/werckmeister.hpp>
 
 namespace sheet {
+
 	namespace compiler {
+
+		namespace {
+			template<int EventType>
+			bool renderEvent(AContext * ctx, const Event *ev)
+			{
+				return false;
+			}
+
+			template<>
+			bool renderEvent<Event::Note>(AContext * ctx, const Event *ev)
+			{
+				for (const auto &pitch : ev->pitches)
+				{
+					ctx->addEvent(pitch, ev->duration);
+				}
+				ctx->seek(ev->duration);
+				return true;
+			}
+
+			template<>
+			bool renderEvent<Event::TiedNote>(AContext * ctx, const Event *ev)
+			{
+				for (const auto &pitch : ev->pitches)
+				{
+					ctx->addEvent(pitch, ev->duration, true);
+				}
+				ctx->seek(ev->duration);
+				return true;
+			}
+
+			template<>
+			bool renderEvent<Event::EOB>(AContext * ctx, const Event *ev)
+			{
+				ctx->newBar();
+				return true;
+			}
+
+			template<>
+			bool renderEvent<Event::Rest>(AContext * ctx, const Event *ev)
+			{
+				ctx->rest(ev->duration);
+				return true;
+			}
+
+			template<>
+			bool renderEvent<Event::Chord>(AContext * ctx, const Event *ev)
+			{
+				auto chordEv = static_cast<const ChordEvent*>(ev);
+				ctx->setChord(chordEv->chordName);
+				ctx->renderStyle(chordEv->duration);
+				return true;
+			}
+			//////////////////////////////////////////////////
+			template <int EventId>
+			bool renderEventUnrolled(AContext * ctx, const Event *ev)
+			{
+				if (ev->type == EventId) {
+					return renderEvent<EventId>(ctx, ev);
+				}
+				return renderEventUnrolled<EventId + 1>(ctx, ev);
+			}
+			template <>
+			bool renderEventUnrolled<Event::NumEvents>(AContext * ctx, const Event *ev)
+			{
+				return false;
+			}
+
+			void _addEvent(AContext * ctx, const Event *ev)
+			{
+				renderEventUnrolled<0>(ctx, ev);
+			}
+		}
 
 		using namespace fm;
 		const Ticks AContext::DefaultDuration = 1.0_N4;
@@ -98,6 +171,11 @@ namespace sheet {
 			else {
 				addEvent(pitch, meta->position, meta->duration);
 			}
+		}
+
+		void AContext::addEvent(const Event &ev)
+		{
+			_addEvent(this, &ev);
 		}
 
 		void AContext::seek(fm::Ticks duration)
