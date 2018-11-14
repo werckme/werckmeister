@@ -55,7 +55,8 @@ namespace sheet {
 	};
 
 	struct ChordEvent : Event {
-		fm::String chordName;
+		PitchDef::Pitch root;
+		fm::String options;
 	};
 
 

@@ -7,6 +7,8 @@ namespace sheet {
 
     class SimpleVoicingStrategy : public VoicingStrategy {
     public:
+		typedef VoicingStrategy Base;
+		virtual AbsolutePitches get(const DegreePitches &degreePicthes, const ChordDef &chord) override;
         ~SimpleVoicingStrategy() = default;
     };
 }

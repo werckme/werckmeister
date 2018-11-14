@@ -39,7 +39,8 @@ BOOST_FUSION_ADAPT_STRUCT(
 BOOST_FUSION_ADAPT_STRUCT(
 	sheet::ChordEvent,
 	(sheet::Event::Type, type)
-	(fm::String, chordName)
+	(sheet::PitchDef::Pitch, root)
+	(fm::String, options)
 	(fm::String, metaCommand)
 	(sheet::Event::Args, metaArgs)
 )
@@ -105,6 +106,25 @@ namespace sheet {
 					("bes", 10)
 					("b", 11)
 					("ces", 11)
+					("C", 0)
+					("Cis", 1)
+					("Des", 1)
+					("D", 2)
+					("Dis", 3)
+					("Es", 3)
+					("E", 4)
+					("Fes", 4)
+					("F", 5)
+					("Fis", 6)
+					("Ges", 6)
+					("G", 7)
+					("Gis", 8)
+					("As", 8)
+					("A", 9)
+					("Ais", 10)
+					("Bes", 10)
+					("B", 11)
+					("Ces", 11)
 					;
 			}
 
@@ -310,10 +330,12 @@ namespace sheet {
 						;
 					events %= *event_;
 
-					chord_ %= (attr(Event::Chord) >> lexeme[char_("a-gA-G") > *char_(ChordDefParser::ALLOWED_CHORD_SYMBOLS_REGEX)])
-						| ("r" >> attr(Event::Rest) >> attr(""))
-						| ("|" >> attr(Event::EOB) >> attr(""))
-						| ("/" >> attr(Event::Meta) >> attr("") >> +char_("a-zA-Z") >> ":" >> +(lexeme[+char_("a-zA-Z0-9")]) >> "/")
+					chordOption %= lexeme[+char_(ChordDefParser::ALLOWED_CHORD_SYMBOLS_REGEX)];
+
+					chord_ %= (attr(Event::Chord) >> pitchSymbols_ >> (char_(ChordDefParser::ALLOWED_CHORD_SYMBOLS_REGEX) | attr("X")))
+						| ("r" >> attr(Event::Rest) >> attr(0) >> attr(""))
+						| ("|" >> attr(Event::EOB) >> attr(0) >> attr(""))
+						| ("/" >> attr(Event::Meta) >> attr(0) >> attr("") >> +char_("a-zA-Z") >> ":" >> +(lexeme[+char_("a-zA-Z0-9")]) >> "/")
 						;
 					chords_ %= *chord_;
 
@@ -332,7 +354,7 @@ namespace sheet {
 				qi::rule<Iterator, Voice(), ascii::space_type> voice;
 				qi::rule<Iterator, Voice::Events(), ascii::space_type> events;
 				qi::rule<Iterator, Event(), ascii::space_type> event_;
-
+				qi::rule<Iterator, fm::String(), ascii::space_type> chordOption;
 				qi::rule<Iterator, SheetDef::Events(), ascii::space_type> chords_;
 				qi::rule<Iterator, ChordEvent(), ascii::space_type> chord_;
 			};

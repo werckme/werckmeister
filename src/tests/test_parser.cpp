@@ -113,9 +113,9 @@ namespace {
 		return true;
 	}
 
-	bool checkChord(const sheet::ChordEvent &ev, fm::String chordName)
+	bool checkChord(const sheet::ChordEvent &ev, sheet::PitchDef::Pitch root, const fm::String &options)
 	{
-		return ev.type == sheet::Event::Chord && ev.chordName == chordName;
+		return ev.type == sheet::Event::Chord && ev.root == root && ev.options == options;
 	}
 
 	bool checkMetaEvent(const sheet::Event &ev, const fm::String &command, const sheet::Event::Args &args)
@@ -249,7 +249,7 @@ BOOST_AUTO_TEST_CASE(test_sheetDefParser)
 -- the sheet, no tracks and voices here\n\
 / style : simplePianoStyle Intro / \n\
 / voicingStrategy : asNotated / \n\
-Cmaj | Cmaj C7 | r G \n\
+Cmaj | Cmaj C7 | G G | F A9\n\
 ");
 	sheet::compiler::SheetDefParser parser;
 	auto defs = parser.parse(text);
@@ -281,16 +281,19 @@ Cmaj | Cmaj C7 | r G \n\
 	BOOST_CHECK(checkNote(defs.tracks[0].voices[1].events[8], sheet::Event::Note, 11, 0, 1.0_N4));
 	BOOST_CHECK(checkNote(defs.tracks[0].voices[1].events[9], sheet::Event::EOB));
 
-	BOOST_CHECK(defs.chords.size() == 9);
+	BOOST_CHECK(defs.chords.size() == 12);
 	BOOST_CHECK(checkMetaEvent(defs.chords[0], FM_STRING("style"), sheet::Event::Args({ FM_STRING("simplePianoStyle"), FM_STRING("Intro") })));
 	BOOST_CHECK(checkMetaEvent(defs.chords[1], FM_STRING("voicingStrategy"), sheet::Event::Args({ FM_STRING("asNotated") })));
-	BOOST_CHECK(checkChord(defs.chords[2], FM_STRING("Cmaj")));
+	BOOST_CHECK(checkChord(defs.chords[2], 0, FM_STRING("maj")));
 	BOOST_CHECK(checkNote(defs.chords[3], sheet::Event::EOB));
-	BOOST_CHECK(checkChord(defs.chords[4], FM_STRING("Cmaj")));
-	BOOST_CHECK(checkChord(defs.chords[5], FM_STRING("C7")));
+	BOOST_CHECK(checkChord(defs.chords[4], 0, FM_STRING("maj")));
+	BOOST_CHECK(checkChord(defs.chords[5], 0, FM_STRING("7")));
 	BOOST_CHECK(checkNote(defs.chords[6], sheet::Event::EOB));
 	BOOST_CHECK(checkNote(defs.chords[7], sheet::Event::Rest));
-	BOOST_CHECK(checkChord(defs.chords[8], FM_STRING("G")));
+	BOOST_CHECK(checkChord(defs.chords[8], 7, FM_STRING("")));
+	BOOST_CHECK(checkNote(defs.chords[9], sheet::Event::EOB));
+	BOOST_CHECK(checkChord(defs.chords[10], 6, FM_STRING("")));
+	BOOST_CHECK(checkChord(defs.chords[11], 10, FM_STRING("9+")));
 }
 
 BOOST_AUTO_TEST_CASE(test_sheetDefParser_02)

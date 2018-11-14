@@ -54,7 +54,7 @@ namespace sheet {
 			bool renderEvent<Event::Chord>(AContext * ctx, const Event *ev)
 			{
 				auto chordEv = static_cast<const ChordEvent*>(ev);
-				ctx->setChord(chordEv->chordName);
+				//ctx->setChord(chordEv->chordName);
 				ctx->renderStyle(chordEv->duration);
 				return true;
 			}
@@ -236,8 +236,21 @@ namespace sheet {
 		void AContext::renderStyle(fm::Ticks duration)
 		{
 			auto chord = currentChord();
-			auto style = currentStyle();
-			seek(duration);
+			auto styleTracks = currentStyle();
+			for (const auto &track : *styleTracks)
+			{
+				auto trackId = createTrack();
+				for (const auto &voice : track.voices)
+				{
+					auto voiceId = createVoice();
+					setTarget(trackId, voiceId);
+					for (const auto &ev : voice.events)
+					{
+
+						addEvent(ev);
+					}
+				}
+			}
 		}
 	}
 }
