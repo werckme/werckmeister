@@ -60,7 +60,7 @@ namespace sheet {
 			virtual void seek(fm::Ticks duration);
 			virtual void newBar();
 			virtual void rest(fm::Ticks duration);
-			virtual void setChord(const fm::String &chordname);
+			virtual void setChord(const ChordEvent &ev);
 			virtual void setStyle(const fm::String &styleName);
 			virtual void renderStyle(fm::Ticks duration);
 			virtual void addEvent(const Event &ev);
@@ -72,8 +72,9 @@ namespace sheet {
 			virtual IStyleDefServer::ConstStyleValueType currentStyle();
 			virtual VoicingStrategyPtr currentVoicingStrategy();
 		private:
-			IStyleDefServer::ConstChordValueType currentChord_ = nullptr;
-			IStyleDefServer::ConstStyleValueType currentStyle_ = nullptr;
+			ChordEvent currentChord_;
+			IStyleDefServer::ConstChordValueType currentChordDef_ = nullptr;
+			IStyleDefServer::ConstStyleValueType currentStyleDef_ = nullptr;
 			VoicingStrategyPtr currentVoicingStrategy_ = nullptr;
 			TrackId trackId_ = INVALID_TRACK_ID;
 			VoiceId voiceId_ = INVALID_VOICE_ID;

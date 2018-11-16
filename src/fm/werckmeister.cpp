@@ -55,7 +55,7 @@ namespace fm {
 
 	sheet::VoicingStrategyPtr Werckmeister::getDirectVoicingStrategy()
 	{
-		return std::make_shared<sheet::SimpleVoicingStrategy>();
+		return std::make_shared<sheet::DirectVoicingStrategy>();
 	}
 
 	sheet::VoicingStrategyPtr Werckmeister::getDefaultVoicingStrategy()

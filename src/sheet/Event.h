@@ -6,7 +6,7 @@
 #include <fm/config.hpp>
 #include <vector>
 #include <set>
-
+#include <tuple>
 namespace sheet {
 
 	struct PitchDef {
@@ -56,6 +56,10 @@ namespace sheet {
 
 	struct ChordEvent : Event {
 		fm::String chordName;
+		typedef fm::String Options;
+		typedef std::tuple<PitchDef::Pitch, Options> ChordElements;
+		ChordElements chordElements() const;
+		fm::String chordDefName() const;
 	};
 
 

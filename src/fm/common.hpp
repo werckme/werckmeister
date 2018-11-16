@@ -2,6 +2,7 @@
 #define FM_COMMON_HPP
 
 #define FM_STRING(str) L##str
+#define FM_CHAR(str) L##str
 #define FM_COUT std::wcout
 
 #include <string>

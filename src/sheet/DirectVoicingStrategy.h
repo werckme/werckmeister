@@ -5,9 +5,11 @@
 
 namespace sheet {
 
-    class SimpleVoicingStrategy : public VoicingStrategy {
+    class DirectVoicingStrategy : public VoicingStrategy {
     public:
-        ~SimpleVoicingStrategy() = default;
+		typedef VoicingStrategy Base;
+        virtual ~DirectVoicingStrategy() = default;
+		virtual PitchIntervals get(const ChordDef &def, const DegreeIntervals &degreeIntervals) override;
     };
 }
 

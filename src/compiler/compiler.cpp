@@ -69,6 +69,7 @@ namespace sheet {
 			determineChordLengths(document_->sheetDef.chords.begin(), document_->sheetDef.chords.end());
 			for (const auto &ev : document_->sheetDef.chords) {
 				ctx->addEvent(ev);
+				ctx->renderStyle(ev.duration);
 			}
 		}
 	}

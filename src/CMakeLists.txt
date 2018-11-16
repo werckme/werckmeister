@@ -11,6 +11,7 @@ SET (SRC_FETZER_LIB
     compiler/documentParser.cpp
     compiler/MidiContext.cpp
     compiler/AContext.cpp
+    sheet/Event.cpp
     sheet/Document.cpp
     sheet/DirectVoicingStrategy.cpp
 )

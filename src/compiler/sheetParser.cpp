@@ -13,6 +13,7 @@
 #include <boost/spirit/include/phoenix_fusion.hpp>
 #include <boost/spirit/include/phoenix_stl.hpp>
 #include <fm/literals.hpp>
+#include <fm/units.hpp>
 #include "error.hpp"
 #include <sstream>
 
@@ -86,25 +87,25 @@ namespace sheet {
 			pitchSymbols_()
 			{
 				add
-				("c", 0)
-					("cis", 1)
-					("des", 1)
-					("d", 2)
-					("dis", 3)
-					("es", 3)
-					("e", 4)
-					("fes", 4)
-					("f", 5)
-					("fis", 6)
-					("ges", 6)
-					("g", 7)
-					("gis", 8)
-					("as", 8)
-					("a", 9)
-					("ais", 10)
-					("bes", 10)
-					("b", 11)
-					("ces", 11)
+				("c", fm::notes::C)
+					("cis", fm::notes::CIS)
+					("des", fm::notes::DES)
+					("d", fm::notes::D)
+					("dis", fm::notes::DIS)
+					("es", fm::notes::ES)
+					("e", fm::notes::E)
+					("fes", fm::notes::FES)
+					("f", fm::notes::F)
+					("fis", fm::notes::FIS)
+					("ges", fm::notes::GES)
+					("g", fm::notes::G)
+					("gis", fm::notes::GIS)
+					("as", fm::notes::AS)
+					("a", fm::notes::A)
+					("ais", fm::notes::AIS)
+					("bes", fm::notes::BES)
+					("b", fm::notes::B)
+					("ces", fm::notes::CES)
 					;
 			}
 

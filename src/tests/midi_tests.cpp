@@ -14,7 +14,7 @@
 BOOST_AUTO_TEST_CASE(literals)
 {
 	using namespace fm;
-	N1 ganze = PPQ * 4;
+	Ticks ganze = PPQ * 4;
 	BOOST_CHECK(ganze == 1.0_N1);
 	BOOST_CHECK(ganze / 2 == 1.0_N2);
 	BOOST_CHECK(ganze / 4 == 1.0_N4);

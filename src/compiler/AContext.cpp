@@ -54,8 +54,7 @@ namespace sheet {
 			bool renderEvent<Event::Chord>(AContext * ctx, const Event *ev)
 			{
 				auto chordEv = static_cast<const ChordEvent*>(ev);
-				ctx->setChord(chordEv->chordName);
-				ctx->renderStyle(chordEv->duration);
+				ctx->setChord(*chordEv);
 				return true;
 			}
 			//////////////////////////////////////////////////
@@ -206,17 +205,17 @@ namespace sheet {
 		// Stylerendering
 		IStyleDefServer::ConstChordValueType AContext::currentChord()
 		{
-			if (!currentChord_) {
-				currentChord_ = styleDefServer()->getChord(FM_STRING("?"));
+			if (!currentChordDef_) {
+				currentChordDef_ = styleDefServer()->getChord(FM_STRING("?"));
 			}
-			return currentChord_;
+			return currentChordDef_;
 		}
 		IStyleDefServer::ConstStyleValueType AContext::currentStyle()
 		{
-			if (!currentStyle_) {
-				currentStyle_ = styleDefServer()->getStyle(FM_STRING("?"));
+			if (!currentStyleDef_) {
+				currentStyleDef_ = styleDefServer()->getStyle(FM_STRING("?"));
 			}
-			return currentStyle_;
+			return currentStyleDef_;
 		}
 		VoicingStrategyPtr AContext::currentVoicingStrategy()
 		{
@@ -225,9 +224,13 @@ namespace sheet {
 			}
 			return currentVoicingStrategy_;
 		}
-		void AContext::setChord(const fm::String &chodrname)
+		void AContext::setChord(const ChordEvent &chord)
 		{
-
+			currentChord_ = chord;
+			currentChordDef_ = styleDefServer()->getChord(currentChord_.chordDefName());
+			if (currentChordDef_ == nullptr) {
+				throw std::runtime_error("chord not found: " + fm::to_string(currentChord_.chordName));
+			}
 		}
 		void AContext::setStyle(const fm::String &styleName)
 		{
@@ -236,8 +239,21 @@ namespace sheet {
 		void AContext::renderStyle(fm::Ticks duration)
 		{
 			auto chord = currentChord();
-			auto style = currentStyle();
-			seek(duration);
+			auto styleTracks = currentStyle();
+			
+			for (const auto &track : *styleTracks)
+			{
+				auto trackId = createTrack();
+				for (const auto &voice : track.voices)
+				{
+					auto voiceId = createVoice();
+					setTarget(trackId, voiceId);
+					for (const auto &ev : voice.events)
+					{
+
+					}
+				}
+			}
 		}
 	}
 }
