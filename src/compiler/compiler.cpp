@@ -67,7 +67,10 @@ namespace sheet {
 		{
 			auto ctx = context();
 			determineChordLengths(document_->sheetDef.chords.begin(), document_->sheetDef.chords.end());
+			auto chordTrack = ctx->createTrack();
+			auto voice = ctx->createVoice();
 			for (const auto &ev : document_->sheetDef.chords) {
+				ctx->setTarget(chordTrack, voice);
 				ctx->addEvent(ev);
 				ctx->renderStyle(ev.duration);
 			}

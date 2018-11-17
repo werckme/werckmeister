@@ -7,6 +7,7 @@
 #include <fm/units.hpp>
 #include <fm/literals.hpp>
 #include <map>
+#include <unordered_map>
 #include "sheet/ChordDef.h"
 #include "sheet/StyleDefServer.h"
 #include "sheet/VoicingStrategy.h"
@@ -18,8 +19,9 @@ namespace sheet {
 			static const fm::Ticks DefaultDuration;
 			static const fm::Ticks DefaultBarLength;
 			enum { INVALID_TRACK_ID = -1, INVALID_VOICE_ID = -1 };
-			typedef int TrackId;
-			typedef int VoiceId;
+			typedef int Id;
+			typedef Id TrackId;
+			typedef Id VoiceId;
 			typedef IStyleDefServer* IStyleDefServerPtr;
 			struct VoiceMetaData {
 				typedef std::map<PitchDef, fm::Ticks> WaitForTieBuffer;
@@ -55,6 +57,10 @@ namespace sheet {
 			virtual void throwContextException(const std::string &msg);
 			IStyleDefServerPtr styleDefServer() const;
 			void styleDefServer(IStyleDefServerPtr server);
+			virtual IStyleDefServer::ConstChordValueType currentChordDef();
+			virtual IStyleDefServer::ConstStyleValueType currentStyle();
+			virtual VoicingStrategyPtr currentVoicingStrategy();
+			virtual const ChordEvent * currentChord() const { return &currentChord_; }
 			/////// actual context stuff
 			virtual void addEvent(const PitchDef &pitch, fm::Ticks duration, bool tying = false);
 			virtual void seek(fm::Ticks duration);
@@ -68,10 +74,10 @@ namespace sheet {
 			virtual TrackId createTrackImpl() = 0;
 			virtual VoiceId createVoiceImpl() = 0;
 			virtual VoiceMetaDataPtr createVoiceMetaData() = 0;
-			virtual IStyleDefServer::ConstChordValueType currentChord();
-			virtual IStyleDefServer::ConstStyleValueType currentStyle();
-			virtual VoicingStrategyPtr currentVoicingStrategy();
 		private:
+			typedef std::unordered_map<const void*, Id> PtrIdMap;
+			PtrIdMap ptrIdMap_;
+			void setTarget(const Track &track, const Voice &voice);
 			ChordEvent currentChord_;
 			IStyleDefServer::ConstChordValueType currentChordDef_ = nullptr;
 			IStyleDefServer::ConstStyleValueType currentStyleDef_ = nullptr;

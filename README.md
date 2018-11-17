@@ -83,3 +83,7 @@ bd sn ht ....
 ### note variables
 / noteVar: bassDrum c, /
 c4 {bassDrum} c'4  
+
+## Cool DAW-Editor
+all character based 
+sophisticated highligting such as position or markers

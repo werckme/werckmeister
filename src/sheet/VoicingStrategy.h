@@ -10,9 +10,9 @@ namespace sheet {
 
     class VoicingStrategy {
     public:
-		typedef ChordDef::Intervals DegreeIntervals;
-		typedef ChordDef::Intervals PitchIntervals;
-		virtual PitchIntervals get(const ChordDef &def, const DegreeIntervals &degreeIntervals) = 0;
+		typedef Event::Pitches Degrees;
+		typedef Degrees Pitches;
+		virtual Pitches get(const ChordEvent &chord, const ChordDef &def, const Degrees &degreeIntervals) = 0;
         virtual ~VoicingStrategy() = default;
     };
     typedef std::shared_ptr<VoicingStrategy> VoicingStrategyPtr;

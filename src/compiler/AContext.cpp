@@ -26,6 +26,23 @@ namespace sheet {
 			}
 
 			template<>
+			bool renderEvent<Event::Degree>(AContext * ctx, const Event *ev)
+			{
+				auto chordDef = ctx->currentChordDef();
+				auto chord = ctx->currentChord();
+				auto voicingStratgy = ctx->currentVoicingStrategy();
+				auto pitches = voicingStratgy->get(*chord, *chordDef, ev->pitches);
+
+				for (const auto &pitch : pitches)
+				{
+					ctx->addEvent(pitch, ev->duration);
+				}
+				ctx->seek(ev->duration);
+
+				return true;
+			}
+
+			template<>
 			bool renderEvent<Event::TiedNote>(AContext * ctx, const Event *ev)
 			{
 				for (const auto &pitch : ev->pitches)
@@ -55,6 +72,7 @@ namespace sheet {
 			{
 				auto chordEv = static_cast<const ChordEvent*>(ev);
 				ctx->setChord(*chordEv);
+				ctx->seek(ev->duration);
 				return true;
 			}
 			//////////////////////////////////////////////////
@@ -203,7 +221,7 @@ namespace sheet {
 
 		/////////////////////////////////////////////////////////////////////////////
 		// Stylerendering
-		IStyleDefServer::ConstChordValueType AContext::currentChord()
+		IStyleDefServer::ConstChordValueType AContext::currentChordDef()
 		{
 			if (!currentChordDef_) {
 				currentChordDef_ = styleDefServer()->getChord(FM_STRING("?"));
@@ -236,6 +254,28 @@ namespace sheet {
 		{
 
 		}
+		void AContext::setTarget(const Track &track, const Voice &voice)
+		{
+			TrackId trackId;
+			VoiceId voiceId;
+			auto it = ptrIdMap_.find(&track);
+			if (it == ptrIdMap_.end()) {
+				trackId = createTrack();
+				ptrIdMap_[&track] = trackId;
+			}
+			else {
+				trackId = it->second;
+			}
+			it = ptrIdMap_.find(&voice);
+			if (it == ptrIdMap_.end()) {
+				voiceId = createVoice();
+				ptrIdMap_[&voice] = voiceId;
+			}
+			else {
+				voiceId = it->second;
+			}
+			setTarget(trackId, voiceId);
+		}
 		void AContext::renderStyle(fm::Ticks duration)
 		{
 			auto chord = currentChord();
@@ -243,14 +283,12 @@ namespace sheet {
 			
 			for (const auto &track : *styleTracks)
 			{
-				auto trackId = createTrack();
 				for (const auto &voice : track.voices)
 				{
-					auto voiceId = createVoice();
-					setTarget(trackId, voiceId);
+					setTarget(track, voice);
 					for (const auto &ev : voice.events)
 					{
-
+						addEvent(ev);
 					}
 				}
 			}

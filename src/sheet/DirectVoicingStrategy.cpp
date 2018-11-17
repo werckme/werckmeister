@@ -1,9 +1,11 @@
 #include "DirectVoicingStrategy.h"
 
 namespace sheet {
-	DirectVoicingStrategy::PitchIntervals DirectVoicingStrategy::get(const ChordDef &def, const DegreeIntervals &degreeIntervals)
+	DirectVoicingStrategy::Pitches DirectVoicingStrategy::get(const ChordEvent &chord, const ChordDef &def, const Degrees &degreeIntervals)
 	{
-		PitchIntervals result;
-		return result;
+		Pitches result;
+		auto chordElements = chord.chordElements();
+		auto root = std::get<0>(chordElements);
+		return degreeIntervals;
 	}
 }
