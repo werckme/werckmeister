@@ -10,7 +10,7 @@
 namespace sheet {
 
 	struct PitchDef {
-		typedef int Pitch;
+		typedef fm::Pitch Pitch;
 		typedef int Octave;
 		enum {
 			NoPitch = -1,

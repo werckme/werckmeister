@@ -8,6 +8,14 @@
 #include <boost/fusion/include/adapt_struct.hpp>
 #include <boost/fusion/include/io.hpp>
 #include "error.hpp"
+#include "sheet/parserSymbols.h"
+
+
+BOOST_FUSION_ADAPT_STRUCT(
+	sheet::ChordOption,
+	(fm::Pitch, degree)
+	(int, value)
+)
 
 BOOST_FUSION_ADAPT_STRUCT(
 	sheet::ChordDef,
@@ -17,7 +25,12 @@ BOOST_FUSION_ADAPT_STRUCT(
 
 namespace sheet {
 	namespace compiler {
-		
+
+
+		namespace {
+			DegreeSymbols degreeSymbols_;
+		}
+
 		const char * ChordDefParser::ALLOWED_CHORD_SYMBOLS_REGEX = "a-zA-Z0-9/+#~*!?-";
 
 		namespace {
@@ -42,12 +55,14 @@ namespace sheet {
 					intervals.name("intervals");
 
 					chordName %= char_("Xx") > *char_(ChordDefParser::ALLOWED_CHORD_SYMBOLS_REGEX);
-					intervals %= +int_;
+					interval %= degreeSymbols_ > '=' > int_ ;
+					intervals %= +(interval);
 					start %= chordName > ':' > intervals;
 
 					auto onError = boost::bind(&handler::errorHandler<Iterator>, _1);
 					on_error<fail>(start, onError);
 				}
+				qi::rule<Iterator, ChordOption(), ascii::space_type> interval;
 				qi::rule<Iterator, Intervals(), ascii::space_type> intervals;
 				qi::rule<Iterator, fm::String(), ascii::space_type> chordName;
 				qi::rule<Iterator, ChordDef(), ascii::space_type> start;

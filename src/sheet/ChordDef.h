@@ -2,13 +2,14 @@
 #define CHORD_DEF_H
 
 #include <fm/common.hpp>
+#include <fm/units.hpp>
 #include <set>
 #include "Interval.h"
 
 namespace sheet {
 
     struct ChordDef {
-        typedef std::set<Interval> Intervals;
+        typedef std::set<ChordOption> Intervals;
         fm::String name;
 		Intervals intervals;
 	};

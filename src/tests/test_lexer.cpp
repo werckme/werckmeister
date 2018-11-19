@@ -14,13 +14,13 @@ BOOST_AUTO_TEST_CASE(test_chorddef)
 @import 'old2.chdef'; --here goes comment 2\n\
 @import 'old3.chdef'; \n\
 	-- 4th\n\
-Xmaj: 1 5 8\n\
-X7: 1 5 8 10 --as usual\n\
+Xmaj: I=1 III=5 V=8\n\
+X7: I=1 III=5 V=8 VII=10 --as usual\n\
 \n\
 \r\n\
    \n\
   \t\r\n\
-	Xmaj7 : 1 5 8 11\n\
+	Xmaj7 : I=1 III=5 V=8 VII=11\n\
 	X7 + : Xmaj7\n\
 "));
 	

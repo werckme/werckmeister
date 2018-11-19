@@ -3,6 +3,7 @@
 
 namespace fm {
     typedef unsigned long long Ticks;
+	typedef int Pitch;
 	namespace notes {
 		enum Note {
 			C = 0,
@@ -24,6 +25,17 @@ namespace fm {
 			BES = 10,
 			B = 11,
 			CES = 11,
+		};
+	}
+	namespace degrees {
+		enum Degree {
+			I = 1,
+			II = 2,
+			III = 3,
+			IV = 4,
+			V = 5,
+			VI = 6,
+			VII = 7
 		};
 	}
 }
