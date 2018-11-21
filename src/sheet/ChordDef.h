@@ -12,6 +12,7 @@ namespace sheet {
         typedef std::set<ChordOption> Intervals;
         fm::String name;
 		Intervals intervals;
+		const ChordOption * getIntervalBy(fm::Pitch degree) const;
 	};
 
 }

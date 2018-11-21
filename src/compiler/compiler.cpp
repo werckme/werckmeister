@@ -72,7 +72,9 @@ namespace sheet {
 			for (const auto &ev : document_->sheetDef.chords) {
 				ctx->setTarget(chordTrack, voice);
 				ctx->addEvent(ev);
-				ctx->renderStyle(ev.duration);
+				if (ev.type == Event::Chord) {
+					ctx->renderStyle(ev.duration);
+				}
 			}
 		}
 	}

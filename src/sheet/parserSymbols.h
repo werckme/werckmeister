@@ -39,6 +39,7 @@ namespace sheet {
 					("es", fm::notes::ES)
 					("e", fm::notes::E)
 					("fes", fm::notes::FES)
+					("eis", fm::notes::F)
 					("f", fm::notes::F)
 					("fis", fm::notes::FIS)
 					("ges", fm::notes::GES)
@@ -50,6 +51,7 @@ namespace sheet {
 					("bes", fm::notes::BES)
 					("b", fm::notes::B)
 					("ces", fm::notes::CES)
+					("bis", fm::notes::C)
 					;
 			}
 

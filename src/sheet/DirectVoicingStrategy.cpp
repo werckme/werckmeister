@@ -6,6 +6,16 @@ namespace sheet {
 		Pitches result;
 		auto chordElements = chord.chordElements();
 		auto root = std::get<0>(chordElements);
-		return degreeIntervals;
+		PitchDef x;
+		for (const auto& degree : degreeIntervals) {
+			const auto *interval = def.getIntervalBy(degree.pitch);
+			if (!interval) {
+				continue;
+			}
+			x.pitch = (root-1) + interval->value;
+			x.octave = degree.octave;
+			result.insert(x);
+		}
+		return result;
 	}
 }

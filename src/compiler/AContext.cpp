@@ -2,6 +2,7 @@
 #include <exception>
 #include <exception>
 #include <fm/werckmeister.hpp>
+#include <algorithm>
 
 namespace sheet {
 
@@ -190,6 +191,12 @@ namespace sheet {
 			}
 		}
 
+		fm::Ticks AContext::barPos() const
+		{
+			auto meta = voiceMetaData(voice());
+			return meta->barPosition;
+		}
+
 		void AContext::addEvent(const Event &ev)
 		{
 			_addEvent(this, &ev);
@@ -285,10 +292,18 @@ namespace sheet {
 			{
 				for (const auto &voice : track.voices)
 				{
+					fm::Ticks writtenDuration = 0;
 					setTarget(track, voice);
-					for (const auto &ev : voice.events)
-					{
-						addEvent(ev);
+					while (writtenDuration < duration) {
+						for (auto ev : voice.events)
+						{
+							ev.duration = std::min(ev.duration, duration - writtenDuration);
+							addEvent(ev);
+							writtenDuration += ev.duration;
+							if (writtenDuration >= duration) {
+								break;
+							}
+						}
 					}
 				}
 			}

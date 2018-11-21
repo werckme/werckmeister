@@ -70,6 +70,7 @@ namespace sheet {
 			virtual void setStyle(const fm::String &styleName);
 			virtual void renderStyle(fm::Ticks duration);
 			virtual void addEvent(const Event &ev);
+			virtual fm::Ticks barPos() const;
 		protected:
 			virtual TrackId createTrackImpl() = 0;
 			virtual VoiceId createVoiceImpl() = 0;
