@@ -37,8 +37,21 @@ SET (SRC_FETZER_TESTS
     tests/test_parser.cpp
 )
 
+## PLAYER
+SET (SRC_SHEET_PLAYER
+    fmapp/os_win.cpp
+    fmapp/rtmidiBackend.cpp
+    fmapp/midiplayer.cpp
+    fmapp/midiProvider.cpp
+    sheetplayer_main.cpp 
+    sheet.cpp
+)
+
 add_executable(rehearse ${SRC_FETZER_TESTS})
 target_link_libraries (rehearse sheet ${Boost_LIBRARIES})
 
-add_executable(sheetc sheet_main.cpp)
+add_executable(sheetc sheetcompiler_main.cpp sheet.cpp)
 target_link_libraries (sheetc sheet ${Boost_LIBRARIES})
+
+add_executable(sheetp ${SRC_SHEET_PLAYER})
+target_link_libraries (sheetp sheet ${Boost_LIBRARIES} rtmidi_static)
