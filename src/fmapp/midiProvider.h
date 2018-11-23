@@ -22,6 +22,7 @@ namespace fmapp {
 		typedef fm::midi::EventContainer::ConstIterator EventIt;
 		typedef std::unordered_map<fm::midi::TrackPtr, EventIt> TrackEventIts;
 		TrackEventIts trackEventIts_;
+		EventIt* getEventIt(fm::midi::TrackPtr trackPtr);
 	};
 
 }
