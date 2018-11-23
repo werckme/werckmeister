@@ -76,6 +76,19 @@ Cmaj | Cmaj C7 |
 
 ```
 
+## TODO: weitere Lilypond Ausdrücke
+
+# Dynamik
+Absolute Dynamikbezeichnung wird mit Befehlen nach den Noten angezeigt, etwa c4\ff. Die vordefinierten Befehle lauten: \ppppp, \pppp, \ppp, \pp, \p, \mp, \mf, \f, \ff, \fff, \ffff, fffff, \fp, \sf, \sff, \sp, \spp, \sfz, and \rfz. 
+
+# Crescendo
+Eine Crescendo-Klammer wird mit dem Befehl \< begonnen und mit \!, einem absoluten Dynamikbefehl oder einer weiteren Crescendo- oder Decrescendo-Klammer beendet. Ein Decrescendo beginnt mit \> und wird auch beendet mit \!, einem absoluten Dynamikbefehl oder einem weiteren Crescendo oder Decrescendo. \cr und \decr können anstelle von \< und \> benutzt werden.
+
+# Espressivo
+Der \espressivo-Befehl kann eingesetzt werden, um crescendo und decrescendo für die selbe Note anzuzeigen
+
+
+
 ## Nice to have
 ### lilypond drum notes
 bd sn ht ....
@@ -83,6 +96,7 @@ bd sn ht ....
 ### note variables
 / noteVar: bassDrum c, /
 c4 {bassDrum} c'4  
+
 
 ## Cool DAW-Editor
 all character based 
