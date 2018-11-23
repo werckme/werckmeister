@@ -163,6 +163,7 @@ namespace fm {
 			TrackContainer & tracks() { return _container; }
 			void write(const char* filename) const;
 			void write(std::ostream&) const;
+			Ticks duration() const;
 		private:
 			Ticks _ppq = 0;
 			TrackContainer _container;

@@ -47,13 +47,18 @@ fmapp::Midiplayer::Output findOutput(MidiOutputId id)
 void play(fm::midi::MidiPtr midi, MidiOutputId midiOutput) {
 	auto &player = fmapp::getMidiplayer();
 	auto output = findOutput(midiOutput);
+	auto duration = midi->duration();
 	std::cout << "playing on: " << output.name << std::endl;
 	player.setOutput(output);
 	player.midi(midi);
 	player.play();
 	while (true) {
 		std::this_thread::sleep_for( std::chrono::milliseconds(10) );
+		if (player.elapsed() > duration) {
+			break;
+		}
 	}
+	player.stop();
 }
 
 int main(int argc, const char** argv)

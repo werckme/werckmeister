@@ -400,5 +400,19 @@ namespace fm {
 			os.flush();
 			delete[] bff;
 		}
+
+		Ticks Midi::duration() const
+		{
+			Ticks duration = 0;
+			for (auto track : tracks()) {
+				auto &events = track->events();
+				if (events.container().size() == 0) {
+					continue;
+				}
+				auto last = --(events.end());
+				duration = std::max(duration, last->absPosition());
+			}
+			return duration;
+		}
 	}
 }

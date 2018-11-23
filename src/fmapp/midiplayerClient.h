@@ -41,6 +41,7 @@ namespace fmapp {
 		void stop();
 		inline long IdleMillis() const { return 1; }
 		inline double bpm() const { return bpm_; }
+		fm::Ticks elapsed() const { return elapsed_; }
 		void reset();
 	private:
 		std::unique_ptr<PlayerTimer> playerTimer_;
