@@ -16,6 +16,7 @@
 #include "fmapp/os.hpp"
 #include <fm/config.hpp>
 #include <chrono>
+#include <mutex>
 
 namespace fmapp {
 
@@ -42,8 +43,11 @@ namespace fmapp {
 		inline long IdleMillis() const { return 1; }
 		inline double bpm() const { return bpm_; }
 		fm::Ticks elapsed() const { return elapsed_; }
+		void seek(fm::Ticks ticks);
 		void reset();
 	private:
+		typedef std::recursive_mutex Lock;
+		Lock lock;
 		std::unique_ptr<PlayerTimer> playerTimer_;
 		State state_ = Stopped;
 		void onProcess();
@@ -87,6 +91,7 @@ namespace fmapp {
 	template<class TBackend, class TMidiProvider>
 	void MidiplayerClient<TBackend, TMidiProvider>::onProcess()
 	{
+		std::lock_guard<Lock> lockGuard(lock);
 		MidiProvider::Events events;
 		MidiProvider::getEvents(this->elapsed_, events);
 		Backend::send(events);
@@ -125,6 +130,15 @@ namespace fmapp {
 	void MidiplayerClient<TBackend, TMidiProvider>::reset()
 	{
 		MidiProvider::reset();
+	}
+
+	template<class TBackend, class TMidiProvider>
+	void MidiplayerClient<TBackend, TMidiProvider>::seek(fm::Ticks ticks)
+	{
+		std::lock_guard<Lock> lockGuard(lock);
+		started_ = Clock::now();
+		MidiProvider::seek(ticks);
+		elapsed_ = ticks;
 	}
 
 }

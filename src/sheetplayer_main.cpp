@@ -16,6 +16,7 @@
 #include <algorithm>
 #include <thread>
 #include <chrono>
+#include "fmapp/os.hpp"
 
 #define ARG_HELP "help"
 #define ARG_INPUT "input"
@@ -52,10 +53,19 @@ void play(fm::midi::MidiPtr midi, MidiOutputId midiOutput) {
 	player.setOutput(output);
 	player.midi(midi);
 	player.play();
-	while (true) {
+	bool playing = true;
+	
+	fmapp::os::setSigtermHandler([&playing]{
+		playing = false;
+		std::cout << "aborted by user" << std::endl;
+		std::cout.flush();
+	});
+
+	while (playing) {
 		std::this_thread::sleep_for( std::chrono::milliseconds(10) );
 		if (player.elapsed() > duration) {
-			break;
+			//break;
+			player.seek(0);
 		}
 	}
 	player.stop();

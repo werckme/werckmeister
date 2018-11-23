@@ -16,6 +16,7 @@ namespace fmapp {
 		virtual ~MidiProvider() = default;
 		void midi(fm::midi::MidiPtr midi);
 		fm::midi::MidiPtr midi() const;
+		virtual void seek(fm::Ticks ticks) override;
 	private:
 		void copyEvents(Events &events, fm::Ticks at);
 		fm::midi::MidiPtr midi_ = nullptr;

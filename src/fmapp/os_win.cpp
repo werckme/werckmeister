@@ -5,18 +5,18 @@
 
 namespace {
 	VOID CALLBACK WaitOrTimerCallback(PVOID lpParam, BOOLEAN TimerOrWaitFired);
+	BOOL WINAPI ConsoleHandler(DWORD signal);
 }
 
 namespace fmapp {
 	namespace os {
-
 		void MMTimer::start(std::chrono::milliseconds millis) 
 		{
 			if (handle_) {
 				return;
 			}
-			auto due = millis.count();
-			CreateTimerQueueTimer(
+			auto due = static_cast<DWORD>(millis.count());
+			::CreateTimerQueueTimer(
 				&handle_,
 				NULL,
 				&WaitOrTimerCallback,
@@ -34,10 +34,22 @@ namespace fmapp {
 			// accoding to doc:
 			// If this parameter is INVALID_HANDLE_VALUE, the function 
 			// waits for any running timer callback functions to complete before returning.
-			DeleteTimerQueueTimer(NULL, handle_, INVALID_HANDLE_VALUE); 
+			::DeleteTimerQueueTimer(NULL, handle_, INVALID_HANDLE_VALUE); 
 			handle_ = nullptr;
 		}
+	}
+}
 
+namespace fmapp {
+	namespace os {
+		namespace {
+			SigtermHandler sigtermHandler_;
+		}
+		void setSigtermHandler(const SigtermHandler &sigtermHandler)
+		{
+			sigtermHandler_ = sigtermHandler;
+			::SetConsoleCtrlHandler(ConsoleHandler, TRUE);
+		}
 	}
 }
 
@@ -46,6 +58,14 @@ namespace {
 	{
 		auto *callback = reinterpret_cast<fmapp::os::MMTimer::Callback*>(lpParam);
 		(*callback)();
+	}
+
+	BOOL WINAPI ConsoleHandler(DWORD signal)
+	{
+		if (signal == CTRL_C_EVENT && !!fmapp::os::sigtermHandler_) {
+			fmapp::os::sigtermHandler_();
+		}
+		return TRUE;
 	}
 }
 

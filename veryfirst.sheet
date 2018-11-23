@@ -7,7 +7,11 @@
 --    -- voice 0
 --    c d e <g a c'>~ | <g a c'>8 f4 e d4. | <c c'>1 | r | 
 --    <ces ces'>1 | c4 d e <g a c'> | <g a c'>1  |  <cis cis'>1 | d8 g b e8. f16 g8 a b |
---}] 
+--}]
+
+[{
+    c4 c c c | c4 c c c | c4 c c c | c4 c c c | c4 c c c | c4 c c c | c4 c c c | c4 c c c
+}]
 
 --C | C E | C E | D
 

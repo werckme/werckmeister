@@ -18,6 +18,9 @@ namespace fmapp {
 			void *handle_ = nullptr;
 			Callback callback_;
 		};
+	
+		typedef std::function<void()> SigtermHandler;
+		void setSigtermHandler(const SigtermHandler&);
 	}
 }
 
