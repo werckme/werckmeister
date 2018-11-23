@@ -41,6 +41,12 @@ namespace fmapp {
 	void MidiProvider::seek(fm::Ticks ticks)
 	{
 		trackEventIts_.clear();
+		Events events;
+		if (ticks > 0) {
+			// reset iterators
+			ticks -= 1;
+			getEvents(ticks, events);
+		}
 	}
 
 }

@@ -17,6 +17,7 @@
 #include <fm/config.hpp>
 #include <chrono>
 #include <mutex>
+#include <algorithm>
 
 namespace fmapp {
 
@@ -41,7 +42,7 @@ namespace fmapp {
 		void play();
 		void stop();
 		inline long IdleMillis() const { return 1; }
-		inline double bpm() const { return bpm_; }
+		inline double bpm() const { return std::max(bpm_, 1.0); }
 		fm::Ticks elapsed() const { return elapsed_; }
 		void seek(fm::Ticks ticks);
 		void reset();
@@ -136,7 +137,8 @@ namespace fmapp {
 	void MidiplayerClient<TBackend, TMidiProvider>::seek(fm::Ticks ticks)
 	{
 		std::lock_guard<Lock> lockGuard(lock);
-		started_ = Clock::now();
+		int offset_ms = static_cast<int>((1000.0 * 60.0 / bpm()) * ((double)ticks / (double)fm::PPQ ));
+		started_ = Clock::now() - std::chrono::milliseconds(offset_ms);
 		MidiProvider::seek(ticks);
 		elapsed_ = ticks;
 	}
