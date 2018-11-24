@@ -17,6 +17,10 @@
 #include <thread>
 #include <chrono>
 #include "fmapp/os.hpp"
+#include <thread>
+#include <fm/config.hpp>
+
+#include "fmapp/boostTimer.h"
 
 #define ARG_HELP "help"
 #define ARG_INPUT "input"
@@ -150,6 +154,12 @@ void play(fm::midi::MidiPtr midi, MidiOutputId midiOutput, const Settings &setti
 		std::cout << "stopped" << std::endl;
 		std::cout.flush();
 	});
+	
+#ifndef USE_WINDOWS_MME_TIMER
+	std::thread boost_asio_([] {
+		fmapp::BoostTimer::io_run();
+	});
+#endif
 
 	while (playing) {
 		std::this_thread::sleep_for( std::chrono::milliseconds(10) );
@@ -161,6 +171,10 @@ void play(fm::midi::MidiPtr midi, MidiOutputId midiOutput, const Settings &setti
 		}
 	}
 	player.stop();
+
+#ifndef USE_WINDOWS_MME_TIMER
+	boost_asio_.join();
+#endif
 }
 
 int main(int argc, const char** argv)
@@ -190,7 +204,6 @@ int main(int argc, const char** argv)
 		std::string infile = settings.getInput();
 		auto midi = sheet::processFile(infile);
 		play(midi, midi_out, settings);
-
 
 		return 0;
 	}

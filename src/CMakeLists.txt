@@ -40,6 +40,7 @@ SET (SRC_FETZER_TESTS
 ## PLAYER
 SET (SRC_SHEET_PLAYER
     fmapp/os_win.cpp
+    fmapp/boostTimer.cpp
     fmapp/rtmidiBackend.cpp
     fmapp/midiplayer.cpp
     fmapp/midiProvider.cpp
