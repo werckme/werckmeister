@@ -43,4 +43,15 @@ namespace sheet {
 		}
 		return &(it->second);
 	}
+
+	IStyleDefServer::ConstPitchDefValueType Document::getAlias(fm::String alias) const
+	{
+		PitchmapDefs::const_iterator it;
+		it = pitchmapDefs.find(alias);
+		
+		if (it == pitchmapDefs.end()) {
+			return nullptr;
+		}
+		return &(it->second);
+	}
 }

@@ -31,6 +31,19 @@ namespace sheet {
 					doc->chordDefs[x.name] = x;
 				}
 			}
+			void usePitchmapDef(DocumentPtr doc, const fm::String &path)
+			{
+				auto apath = getAbsolutePath(doc, path);
+				auto filestream = fm::getWerckmeister().openResource(apath);
+				fm::StreamBuffIterator begin(*filestream);
+				fm::StreamBuffIterator end;
+				fm::String documentText(begin, end);
+				PitchmapParser pitchmapParser;
+				auto pitchmaps = pitchmapParser.parse(documentText);
+				for (const auto &x : pitchmaps) {
+					doc->pitchmapDefs[x.name] = x.pitch;
+				}
+			}
 			void useStyleDef(DocumentPtr doc, const fm::String &path)
 			{
 				auto apath = getAbsolutePath(doc, path);
@@ -45,7 +58,8 @@ namespace sheet {
 			typedef std::function<void(DocumentPtr, const fm::String&)> ExtHandler;
 			std::unordered_map <std::string, ExtHandler> exthandlers({
 				{ CHORD_DEF_EXTENSION , &useChordDef },
-				{ STYLE_DEF_EXTENSION , &useStyleDef }
+				{ STYLE_DEF_EXTENSION , &useStyleDef },
+				{ PITCHMAP_DEF_EXTENSION , &usePitchmapDef }
 			});
 
 			void processUsings(DocumentPtr doc)
