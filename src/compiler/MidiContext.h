@@ -3,7 +3,7 @@
 
 #include "AContext.h"
 #include "forward.hpp"
-
+#include <fm/midi.hpp>
 
 namespace sheet {
     namespace compiler {
@@ -19,6 +19,10 @@ namespace sheet {
 			virtual TrackId createTrackImpl() override;
 			virtual VoiceId createVoiceImpl() override;
 			virtual void addEvent(const PitchDef &pitch, fm::Ticks absolutePosition, fm::Ticks duration) override;
+			virtual void addEvent(const fm::midi::Event &ev);
+			virtual void metaSetChannel(int channel);
+			virtual void metaSoundSelect(int cc, int pc);
+			virtual void setMeta(const Event &metaEvent) override;
 		protected:
 			virtual Base::VoiceMetaDataPtr createVoiceMetaData() override;
 		private:

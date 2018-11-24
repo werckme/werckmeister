@@ -28,6 +28,11 @@ namespace sheet {
 			midi_->tracks().at(track())->events().addNote(voiceConfig->midiChannel, absolutePosition, getAbsolutePitch(pitch), voiceConfig->velocity, duration);
 		}
 
+		void MidiContext::addEvent(const fm::midi::Event &ev)
+		{
+			midi_->tracks().at(track())->events().add(ev);
+		}
+
 		MidiContext::Base::TrackId MidiContext::createTrackImpl()
 		{
 			_checkMidi(midi_);
@@ -44,6 +49,40 @@ namespace sheet {
 		MidiContext::Base::VoiceMetaDataPtr MidiContext::createVoiceMetaData() 
 		{
 			return std::make_shared<MidiContext::VoiceMetaData>();
+		}
+
+		void MidiContext::metaSetChannel(int channel)
+		{
+			auto meta = voiceMetaData<MidiContext::VoiceMetaData>(voice());
+			meta->midiChannel = channel;
+		}
+
+		void MidiContext::metaSoundSelect(int cc, int pc)
+		{
+			auto meta = voiceMetaData<MidiContext::VoiceMetaData>(voice());
+			auto ev = fm::midi::Event();
+			ev.channel(meta->midiChannel);
+			ev.eventType(fm::midi::Controller);
+			ev.parameter1(0);
+			ev.parameter2(cc);
+			ev.absPosition(meta->position);
+			addEvent(ev);
+			ev.eventType(fm::midi::ProgramChange);
+			ev.parameter1(pc);
+			ev.parameter2(0);
+			addEvent(ev);
+		}
+
+		void MidiContext::setMeta(const Event &metaEvent)
+		{
+			Base::setMeta(metaEvent);
+
+			if (metaEvent.metaCommand == SHEET_META__MIDI_CHANNEL) {
+				metaSetChannel(getArgument<int>(metaEvent, 0));
+			}
+			if (metaEvent.metaCommand == SHEET_META__MIDI_SOUNDSELECT) {
+				metaSoundSelect(getArgument<int>(metaEvent, 0), getArgument<int>(metaEvent, 1));
+			}
 		}
 	}
 }

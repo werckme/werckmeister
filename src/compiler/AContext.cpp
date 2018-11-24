@@ -8,6 +8,7 @@ namespace sheet {
 
 	namespace compiler {
 
+
 		namespace {
 			template<int EventType>
 			bool renderEvent(AContext * ctx, const Event *ev)
@@ -74,6 +75,12 @@ namespace sheet {
 				auto chordEv = static_cast<const ChordEvent*>(ev);
 				ctx->setChord(*chordEv);
 				ctx->seek(ev->duration);
+				return true;
+			}
+			template<>
+			bool renderEvent<Event::Meta>(AContext * ctx, const Event *ev)
+			{
+				ctx->setMeta(*ev);
 				return true;
 			}
 			//////////////////////////////////////////////////
@@ -224,6 +231,13 @@ namespace sheet {
 		void AContext::rest(fm::Ticks duration)
 		{
 			seek(duration);
+		}
+
+		void AContext::setMeta(const Event &metaEvent)
+		{
+			if (metaEvent.metaCommand.empty()) {
+				throwContextException("invalid meta command ");
+			}
 		}
 
 		/////////////////////////////////////////////////////////////////////////////

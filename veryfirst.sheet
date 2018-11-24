@@ -10,11 +10,15 @@
 --}]
 
 [{
-    c4 c c c | c4 c c c | c4 c c c | c4 c c c | c4 c c c | c4 c c c | c4 c c c | c4 c <c e> <c e f> |
+    /channel: 5/
+    /soundSelect: 0 8/
+    c4 c c c | c4 c c c | c4 c c c | c4 c c c | 
+    c4 c c c | c4 c c c | c4 c c c | c4 c <c e> <c e f> |
 }]
  
 --C | C E | C E | D
 
+ /soundSelect: 3 90/
 C Cis7 | D Dis | E F | Fis G | Gis A | Ais B | C Cmin | E |
 
 --C7+ | Dmin7 | Emin7 | F7+ | G7 | Amin7 | B-7  

@@ -11,11 +11,16 @@
 #include "sheet/ChordDef.h"
 #include "sheet/StyleDefServer.h"
 #include "sheet/VoicingStrategy.h"
+#include <fm/common.hpp>
+#include "metaCommands.h"
 
 namespace sheet {
     namespace compiler {
+
         class AContext {
         public:
+			template<typename TArg>
+			TArg getArgument(const Event &metaEvent, int idx, TArg *defaultValue = nullptr);
 			static const fm::Ticks DefaultDuration;
 			static const fm::Ticks DefaultBarLength;
 			enum { INVALID_TRACK_ID = -1, INVALID_VOICE_ID = -1 };
@@ -61,6 +66,8 @@ namespace sheet {
 			virtual IStyleDefServer::ConstStyleValueType currentStyle();
 			virtual VoicingStrategyPtr currentVoicingStrategy();
 			virtual const ChordEvent * currentChord() const { return &currentChord_; }
+			/////// meta commands
+			virtual void setMeta(const Event &metaEvent);
 			/////// actual context stuff
 			virtual void addEvent(const PitchDef &pitch, fm::Ticks duration, bool tying = false);
 			virtual void seek(fm::Ticks duration);
@@ -89,6 +96,23 @@ namespace sheet {
 			IStyleDefServerPtr styleDefServer_ = nullptr;
 
         };
+
+		template<typename TArg>
+		TArg AContext::getArgument(const Event &metaEvent, int idx, TArg *defaultValue) {
+			if (idx >= (int)metaEvent.metaArgs.size()) {
+				if (defaultValue) {
+					return *defaultValue;
+				}
+				throw std::runtime_error("missing argument for '" + fm::to_string(metaEvent.metaCommand) + "'");
+			}
+			TArg result;
+			fm::StringStream ss;
+			ss << metaEvent.metaArgs[idx];
+			ss >> result;
+			return result;
+		}
+
+
     }
 }
 
