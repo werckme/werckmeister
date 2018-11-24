@@ -3,10 +3,9 @@
 
 #include "units.hpp"
 
-#define SHEET_VERSION "1c9cfcf"
+#define SHEET_VERSION "ddc2688"
 #define CHORD_DEF_EXTENSION  ".chords"
 #define STYLE_DEF_EXTENSION ".style"
-#define USE_WINDOWS_MME_TIMER
 
 #define FM_CHARSET "ISO-8859-1"
 

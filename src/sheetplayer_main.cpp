@@ -155,7 +155,7 @@ void play(fm::midi::MidiPtr midi, MidiOutputId midiOutput, const Settings &setti
 		std::cout.flush();
 	});
 	
-#ifndef USE_WINDOWS_MME_TIMER
+#ifdef SHEET_USE_BOOST_TIMER
 	std::thread boost_asio_([] {
 		fmapp::BoostTimer::io_run();
 	});
@@ -172,7 +172,7 @@ void play(fm::midi::MidiPtr midi, MidiOutputId midiOutput, const Settings &setti
 	}
 	player.stop();
 
-#ifndef USE_WINDOWS_MME_TIMER
+#ifdef SHEET_USE_BOOST_TIMER
 	boost_asio_.join();
 #endif
 }

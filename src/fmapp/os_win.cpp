@@ -1,4 +1,4 @@
-#ifdef WIN32
+#ifdef SHEET_OS_WINDOWS
 #include "os.hpp"
 #include "windows.h"
 #include "shlwapi.h"

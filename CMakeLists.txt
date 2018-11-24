@@ -17,10 +17,13 @@ set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR})
 
 IF(UNIX)
   SET (CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "-std=c++14 -Wall")
+  add_definitions( -DSHEET_USE_BOOST_TIMER )
+  add_definitions( -DSHEET_OS_UNIX )
 ENDIF(UNIX)
 
 IF(WIN32)
   add_definitions( -DBOOST_ALL_NO_LIB )
+  add_definitions( -DSHEET_OS_WINDOWS )
   SET (BOOST_ROOT "C:\\Users\\samba\\libs\\boost_1_66_0")
   SET (BOOST_LIBRARYDIR "C:\\Users\\samba\\libs\\boost_1_66_0\\stage\\lib")
   SET(Boost_USE_STATIC_LIBS ON)

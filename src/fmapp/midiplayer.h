@@ -6,17 +6,17 @@
 #include "midiProvider.h"
 #include "rtmidiBackend.h"
 
-#ifdef USE_WINDOWS_MME_TIMER
-#include "fmapp/os.hpp"
-#else
+#ifdef SHEET_USE_BOOST_TIMER
 #include "fmapp/boostTimer.h"
+#else
+#include "fmapp/os.hpp"
 #endif
 
 namespace fmapp {
-#ifdef USE_WINDOWS_MME_TIMER
-	typedef fmapp::os::MMTimer TimerImpl;
-#else
+#ifdef SHEET_USE_BOOST_TIMER
 	typedef fmapp::BoostTimer TimerImpl;
+#else
+	typedef fmapp::os::MMTimer TimerImpl;
 #endif
 	template<class TBackend, class TMidiProvider, class TimerImpl>
 	class MidiplayerClient;
