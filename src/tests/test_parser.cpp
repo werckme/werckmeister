@@ -242,6 +242,42 @@ end\n\
 	BOOST_CHECK(checkNote(defs.sections[0].tracks[0].voices[1].events[10], sheet::Event::Rest, sheet::PitchDef::NoPitch, 0, 1.0_N1));
 }
 
+BOOST_AUTO_TEST_CASE(test_styleDefparser_mixed_with_absolute_notes)
+{
+	using namespace fm;
+	using sheet::PitchDef;
+	fm::String text = FM_STRING("\
+		@use anything; \n\
+		@or not; \n\
+	--some useless comment\n\
+		section intro--begin a section\n\
+[--a track\n\
+	{\n\
+		I,4 II,,8 III,,,16 IV32 \n\
+	} -- a voice\n\
+	{\n\
+		c4 d4 e4 f4 \n\
+	}-- further voice \n\
+] \n\
+end\n\
+");
+	sheet::compiler::StyleDefParser parser;
+	auto defs = parser.parse(text);
+	BOOST_CHECK(defs.sections[0].tracks.size() == 1);
+	BOOST_CHECK(defs.sections[0].tracks[0].voices.size() == 2);
+	BOOST_CHECK(defs.sections[0].tracks[0].voices[0].events.size() == 4);
+	BOOST_CHECK(checkNote(defs.sections[0].tracks[0].voices[0].events[0], sheet::Event::Degree, 1, -1, 1.0_N4));
+	BOOST_CHECK(checkNote(defs.sections[0].tracks[0].voices[0].events[1], sheet::Event::Degree, 2, -2, 1.0_N8));
+	BOOST_CHECK(checkNote(defs.sections[0].tracks[0].voices[0].events[2], sheet::Event::Degree, 3, -3, 1.0_N16));
+	BOOST_CHECK(checkNote(defs.sections[0].tracks[0].voices[0].events[3], sheet::Event::Degree, 4, 0, 1.0_N32));
+
+	BOOST_CHECK(defs.sections[0].tracks[0].voices[1].events.size() == 4);
+	BOOST_CHECK(checkNote(defs.sections[0].tracks[0].voices[1].events[0], sheet::Event::Note, fm::notes::C, 0, 1.0_N4));
+	BOOST_CHECK(checkNote(defs.sections[0].tracks[0].voices[1].events[1], sheet::Event::Note, fm::notes::D, 0, 1.0_N4));
+	BOOST_CHECK(checkNote(defs.sections[0].tracks[0].voices[1].events[2], sheet::Event::Note, fm::notes::E, 0, 1.0_N4));
+	BOOST_CHECK(checkNote(defs.sections[0].tracks[0].voices[1].events[3], sheet::Event::Note, fm::notes::F, 0, 1.0_N4));
+}
+
 
 BOOST_AUTO_TEST_CASE(test_styleDefParser_fail)
 {
