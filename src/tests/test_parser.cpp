@@ -643,3 +643,23 @@ BOOST_AUTO_TEST_CASE(test_documentConfigParser_empty)
 	BOOST_CHECK(defs.usings.size() == 0);
 
 }
+
+
+BOOST_AUTO_TEST_CASE(test_pitchmap_parser)
+{
+	using namespace fm;
+	fm::String str(FM_STRING("\
+\"bd\": c,,\n\
+\"sn\": e,\n\
+"));
+	sheet::compiler::PitchmapParser parser;
+	auto defs = parser.parse(str);
+	BOOST_CHECK(defs.size() == 2);
+	BOOST_CHECK(defs[0].name == FM_STRING("bd"));
+	BOOST_CHECK(defs[0].pitch.pitch == fm::notes::C);
+	BOOST_CHECK(defs[0].pitch.octave == -2);
+
+	BOOST_CHECK(defs[1].name == FM_STRING("sn"));
+	BOOST_CHECK(defs[1].pitch.pitch == fm::notes::E);
+	BOOST_CHECK(defs[1].pitch.octave == -1);
+}

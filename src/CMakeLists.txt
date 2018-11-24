@@ -9,6 +9,7 @@ SET (SRC_FETZER_LIB
     compiler/sheetParser.cpp
     compiler/documentConfigParser.cpp
     compiler/documentParser.cpp
+    compiler/pitchmapParser.cpp
     compiler/MidiContext.cpp
     compiler/AContext.cpp
     sheet/Event.cpp

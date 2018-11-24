@@ -41,6 +41,33 @@ X7: I=1 III=5 V=8 VII=10 --as usual\n\
 	//}
 }
 
+BOOST_AUTO_TEST_CASE(test_pitchmap)
+{
+	using namespace sheet::compiler;
+	PitchmapTokenizer<LexerType> pitchmapTok;
+
+	fm::String str(FM_STRING("\
+\"bd\": c,,\n\
+\"sn\": e,\n\
+"));
+
+	fm::CharType const* first = str.c_str();
+	fm::CharType const* last = &first[str.size()];
+
+	LexerType::iterator_type iter = pitchmapTok.begin(first, last);
+	LexerType::iterator_type end = pitchmapTok.end();
+
+	boost::spirit::lex::tokenize(first, last, pitchmapTok);
+	BOOST_CHECK(pitchmapTok.documentConfigs.size() == 0);
+	//for (const auto &x : chordDefTok.documentConfigs) {
+	//	FM_COUT << x << std::endl;
+	//}
+	BOOST_CHECK(pitchmapTok.pitchdefs.size() == 2);
+	//for (const auto &x : chordDefTok.chordDefs) {
+	//	FM_COUT << x << std::endl;
+	//}
+}
+
 BOOST_AUTO_TEST_CASE(test_styledef)
 {
 	fm::String text = FM_STRING("\

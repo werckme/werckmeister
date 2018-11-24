@@ -5,6 +5,7 @@
 #include "sheet/ChordDef.h"
 #include "sheet/StyleDef.h"
 #include "sheet/SheetDef.h"
+#include "sheet/Pitchmap.h"
 #include "sheet/DocumentConfig.h"
 #include "forward.hpp"
 
@@ -18,6 +19,15 @@ namespace sheet {
 			typedef std::vector<ChordDef> ChordDefs;
 			ChordDefs parse(fm::CharType const* first, fm::CharType const* last);
 			ChordDefs parse(const fm::String &str)
+			{
+				fm::CharType const* cstr = str.c_str();
+				return parse(cstr, cstr + str.length());
+			}
+		};
+		struct PitchmapParser {
+			typedef std::vector<Pitchmap> PitchmapDefs;
+			PitchmapDefs parse(fm::CharType const* first, fm::CharType const* last);
+			PitchmapDefs parse(const fm::String &str)
 			{
 				fm::CharType const* cstr = str.c_str();
 				return parse(cstr, cstr + str.length());

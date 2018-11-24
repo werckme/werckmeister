@@ -56,6 +56,7 @@ namespace sheet {
 				, eol(FM_STRING("\\s*\n"))
 				, any(FM_STRING("."))
 				, chordDef(FM_STRING("^.+$"))
+				, pitchDef(FM_STRING("^.+$"))
 				, beginSection(FM_STRING("\\s*section\\s+[a-zA-Z0-9]+"))
 				, line(FM_STRING("^.+$"))
 				, endSection(FM_STRING("\\s*end"))
@@ -66,6 +67,7 @@ namespace sheet {
 				, any
 				, comment
 				, chordDef
+				, pitchDef
 				, beginSection
 				, line
 				, endSection;
@@ -90,6 +92,27 @@ namespace sheet {
 			auto addDef = boost::bind(&Base::add, this, _1, _2, boost::ref(chordDefs));
 			this->self
 				= (Base::documentConfig[addConfigs] | Base::comment | Base::chordDef[addDef])
+				| Base::eol
+				| Base::any
+				;
+		}
+		/////////////////////////////////////////////////////////////////////////////
+		template <typename Lexer>
+		struct PitchmapTokenizer : public ASheetTokenizer<Lexer>
+		{
+			typedef ASheetTokenizer<Lexer> Base;
+			PitchmapTokenizer();
+			typename Base::Tokens documentConfigs;
+			typename Base::Tokens pitchdefs;
+		};
+
+		template <typename Lexer>
+		PitchmapTokenizer<Lexer>::PitchmapTokenizer()
+		{
+			auto addConfigs = boost::bind(&Base::add, this, _1, _2, boost::ref(documentConfigs));
+			auto addDef = boost::bind(&Base::add, this, _1, _2, boost::ref(pitchdefs));
+			this->self
+				= (Base::documentConfig[addConfigs] | Base::comment | Base::pitchDef[addDef])
 				| Base::eol
 				| Base::any
 				;

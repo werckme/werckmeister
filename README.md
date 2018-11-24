@@ -14,6 +14,13 @@ Xmaj7: 1 5 8 11
 X/V: -6 1 5 8 --quinte im bass
 ```
 
+## pitch aliases
+```
+-- file defaultMidiDrumMap.pitchmap
+"bd": c,,
+"sn": e, 
+```
+
 ## Styles
 ```
 -- file: simplePianoStyle.style
