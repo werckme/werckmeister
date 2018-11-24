@@ -22,6 +22,7 @@ IF(UNIX)
 ENDIF(UNIX)
 
 IF(WIN32)
+  add_definitions( -DSHEET_USE_BOOST_TIMER )
   add_definitions( -DBOOST_ALL_NO_LIB )
   add_definitions( -DSHEET_OS_WINDOWS )
   SET (BOOST_ROOT "C:\\Users\\samba\\libs\\boost_1_66_0")

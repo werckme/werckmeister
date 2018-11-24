@@ -8,6 +8,7 @@ namespace fmapp {
 	public:
 		virtual ~AMidiProvider() = default;
 		virtual void reset() {}
+	protected:
 		virtual void seek(fm::Ticks ticks) {}
 	};
 }

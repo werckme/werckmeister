@@ -19,7 +19,7 @@
 #include "fmapp/os.hpp"
 #include <thread>
 #include <fm/config.hpp>
-
+#include <ctime>
 #include "fmapp/boostTimer.h"
 
 #define ARG_HELP "help"
@@ -29,6 +29,7 @@
 #define ARG_LOOP "loop"
 #define ARG_BEGIN "begin"
 #define ARG_END "end"
+#define ARG_WATCH "watch"
 
 typedef int MidiOutputId;
 
@@ -50,6 +51,7 @@ struct Settings {
 			(ARG_BEGIN, po::value<double>(), "start postition in quarter notes. E.g.: 1.2")
 			(ARG_END, po::value<double>(), "estop postition in quarter notes. E.g.: 1.2")
 			(ARG_MIDI_OUTPUT, po::value<MidiOutputId>(), "select midi device (default = 0)")
+			(ARG_WATCH, "checks the input file for changes and recompiles if any")
 			;
 		po::positional_options_description p;
 		p.add(ARG_INPUT, -1);
@@ -103,6 +105,10 @@ struct Settings {
 		return variables[ARG_END].as<double>();
 	}
 
+	bool watch() const {
+		return !!variables.count(ARG_WATCH);
+	}
+
 };
 
 int listDevices() {
@@ -125,29 +131,22 @@ fmapp::Midiplayer::Output findOutput(MidiOutputId id)
 	return *it;
 }
 
-void play(fm::midi::MidiPtr midi, MidiOutputId midiOutput, const Settings &settings) {
+auto getTimestamp(const std::string input) {
+	auto path = boost::filesystem::path(input);
+	return boost::filesystem::last_write_time(path);
+}
+
+void play(fm::midi::MidiPtr midi, MidiOutputId midiOutput, fm::Ticks begin, fm::Ticks end, const Settings &settings) {
 	auto &player = fmapp::getMidiplayer();
 	auto output = findOutput(midiOutput);
-	auto end = midi->duration();
-	fm::Ticks begin = 0;
 	std::cout << "playing on: " << output.name << std::endl;
 	player.setOutput(output);
 	player.midi(midi);
-	player.play();
+	player.play(begin);
 	bool playing = true;
-	
-	if (settings.begin()) {
-		begin = fm::Ticks((double)fm::PPQ * settings.getBegin());
-		player.seek(begin);
-	}
-
-	if (settings.end()) {
-		end = fm::Ticks((double)fm::PPQ * settings.getEnd());
-	}
-
-	if (begin >= end) {
-		throw std::runtime_error("invalid begin/end range");
-	}
+	bool watch = settings.watch();
+	auto inputfile = settings.getInput();
+	auto timestamp = getTimestamp(inputfile);
 
 	fmapp::os::setSigtermHandler([&playing]{
 		playing = false;
@@ -163,16 +162,29 @@ void play(fm::midi::MidiPtr midi, MidiOutputId midiOutput, const Settings &setti
 
 	while (playing) {
 		std::this_thread::sleep_for( std::chrono::milliseconds(10) );
+		if (watch) {
+			auto newTimestamp = getTimestamp(inputfile);
+			if (timestamp != newTimestamp) {
+				timestamp = newTimestamp;
+				auto pos = player.elapsed();
+				player.stop();
+				player.midi(sheet::processFile(inputfile));
+				player.play(pos);
+				continue;
+			}
+			
+		}
 		if (player.elapsed() > end) {
 			if (!settings.loop()) {
 				break;
 			}
-			player.seek(begin);
+			player.play(begin);
 		}
 	}
 	player.stop();
 
 #ifdef SHEET_USE_BOOST_TIMER
+	fmapp::BoostTimer::io_stop();
 	boost_asio_.join();
 #endif
 }
@@ -203,7 +215,23 @@ int main(int argc, const char** argv)
 
 		std::string infile = settings.getInput();
 		auto midi = sheet::processFile(infile);
-		play(midi, midi_out, settings);
+		fm::Ticks begin = 0;
+
+		auto end = midi->duration();
+		if (settings.begin()) {
+			begin = fm::Ticks((double)fm::PPQ * settings.getBegin());
+		}
+
+		if (settings.end()) {
+			end = fm::Ticks((double)fm::PPQ * settings.getEnd());
+		}
+
+		if (begin >= end) {
+			throw std::runtime_error("invalid begin/end range");
+		}
+
+
+		play(midi, midi_out, begin, end, settings);
 
 		return 0;
 	}

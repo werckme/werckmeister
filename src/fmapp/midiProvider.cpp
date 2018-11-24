@@ -38,6 +38,11 @@ namespace fmapp {
 		return &it->second;
 	}
 
+	void MidiProvider::reset()
+	{
+		trackEventIts_.clear();
+	}
+
 	void MidiProvider::seek(fm::Ticks ticks)
 	{
 		trackEventIts_.clear();

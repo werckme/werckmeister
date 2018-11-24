@@ -39,10 +39,10 @@ namespace fmapp {
 		bool setOutput(const Output &);
 		bool isPlaying() const { return state_ == Playing; }
 		void play();
+		void play(fm::Ticks ticks);
 		void stop();
 		inline double bpm() const { return std::max(bpm_, 1.0); }
 		fm::Ticks elapsed() const { return elapsed_; }
-		void seek(fm::Ticks ticks);
 		void reset();
 	private:
 		typedef std::recursive_mutex Lock;
@@ -105,11 +105,24 @@ namespace fmapp {
 		using namespace std::chrono;
 		state_ = Playing;
 		started_ = Clock::now();
-		playerTimer_ = std::make_unique<TTimer>([this]() {
-			updateTicks();
-			onProcess();
-		});
+		if (!playerTimer_) {
+			playerTimer_ = std::make_unique<TTimer>([this]() {
+				updateTicks();
+				onProcess();
+			});
+		}
 		playerTimer_->start(milliseconds(1));
+	}
+
+	template<class TBackend, class TMidiProvider, class TTimer>
+	void MidiplayerClient<TBackend, TMidiProvider, TTimer>::play(fm::Ticks ticks)
+	{
+		std::lock_guard<Lock> lockGuard(lock);
+		play();
+		int offset_ms = static_cast<int>((1000.0 * 60.0 / bpm()) * ((double)ticks / (double)fm::PPQ));
+		started_ = Clock::now() - std::chrono::milliseconds(offset_ms);
+		MidiProvider::seek(ticks);
+		elapsed_ = ticks;
 	}
 
 	template<class TBackend, class TMidiProvider, class TTimer>
@@ -122,7 +135,6 @@ namespace fmapp {
 		playerTimer_->stop();
 		elapsed_ = 0;
 		reset();
-		playerTimer_.reset();
 	}
 
 	template<class TBackend, class TMidiProvider, class TTimer>
@@ -131,15 +143,6 @@ namespace fmapp {
 		MidiProvider::reset();
 	}
 
-	template<class TBackend, class TMidiProvider, class TTimer>
-	void MidiplayerClient<TBackend, TMidiProvider, TTimer>::seek(fm::Ticks ticks)
-	{
-		std::lock_guard<Lock> lockGuard(lock);
-		int offset_ms = static_cast<int>((1000.0 * 60.0 / bpm()) * ((double)ticks / (double)fm::PPQ ));
-		started_ = Clock::now() - std::chrono::milliseconds(offset_ms);
-		MidiProvider::seek(ticks);
-		elapsed_ = ticks;
-	}
 
 }
 #endif
