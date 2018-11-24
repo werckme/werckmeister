@@ -127,6 +127,23 @@ namespace {
 		return ev.type == type && ev.duration == duration;
 	}
 
+	bool checkNote(const sheet::Event &ev,
+		sheet::Event::Type type,
+		const fm::String &alias,
+		sheet::Event::Duration duration = sheet::Event::NoDuration)
+	{
+		if (ev.pitches.empty()) {
+			return false;
+		}
+		
+		auto first = ev.pitches.begin();
+		if (first->alias != alias) {
+			return false;
+		}
+		return ev.type == type && ev.duration == duration;
+	}
+
+
 
 	bool checkNote(const sheet::Event &ev,
 		sheet::Event::Type type,
@@ -276,6 +293,53 @@ end\n\
 	BOOST_CHECK(checkNote(defs.sections[0].tracks[0].voices[1].events[1], sheet::Event::Note, fm::notes::D, 0, 1.0_N4));
 	BOOST_CHECK(checkNote(defs.sections[0].tracks[0].voices[1].events[2], sheet::Event::Note, fm::notes::E, 0, 1.0_N4));
 	BOOST_CHECK(checkNote(defs.sections[0].tracks[0].voices[1].events[3], sheet::Event::Note, fm::notes::F, 0, 1.0_N4));
+}
+
+
+BOOST_AUTO_TEST_CASE(test_alias_notes)
+{
+	using namespace fm;
+	using sheet::PitchDef;
+	fm::String text = FM_STRING("\
+		section intro--begin a section\n\
+		[\n\
+			{\n\
+				\"bd\"4 \"sn\"8	<\"ht\" \"cymbal1\" >8\n\
+			}\n\
+		] \n\
+end\n\
+");
+	sheet::compiler::StyleDefParser parser;
+	auto defs = parser.parse(text);
+	BOOST_CHECK(defs.sections[0].tracks.size() == 1);
+	BOOST_CHECK(defs.sections[0].tracks[0].voices.size() == 1);
+	BOOST_CHECK(defs.sections[0].tracks[0].voices[0].events.size() == 3);
+	BOOST_CHECK(checkNote(defs.sections[0].tracks[0].voices[0].events[0], sheet::Event::Note, FM_STRING("bd"), 1.0_N4));
+	BOOST_CHECK(checkNote(defs.sections[0].tracks[0].voices[0].events[1], sheet::Event::Note, FM_STRING("sn"), 1.0_N8));
+	BOOST_CHECK(defs.sections[0].tracks[0].voices[0].events[2].pitches.size() == 2);
+	BOOST_CHECK(checkNote(defs.sections[0].tracks[0].voices[0].events[2], sheet::Event::Note, sheet::Event::Pitches({ PitchDef(FM_STRING("ht")), PitchDef(FM_STRING("cymbal1")) }), 1.0_N8));
+}
+
+BOOST_AUTO_TEST_CASE(test_alias_sheetdef)
+{
+	using namespace fm;
+	using sheet::PitchDef;
+	fm::String text = FM_STRING("\
+		[\n\
+			{\n\
+				\"bd\"4 \"sn\"8	<\"ht\" \"cymbal1\" >8\n\
+			}\n\
+		] \n\
+");
+	sheet::compiler::SheetDefParser parser;
+	auto defs = parser.parse(text);
+	BOOST_CHECK(defs.tracks.size() == 1);
+	BOOST_CHECK(defs.tracks[0].voices.size() == 1);
+	BOOST_CHECK(defs.tracks[0].voices[0].events.size() == 3);
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[0], sheet::Event::Note, FM_STRING("bd"), 1.0_N4));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[1], sheet::Event::Note, FM_STRING("sn"), 1.0_N8));
+	BOOST_CHECK(defs.tracks[0].voices[0].events[2].pitches.size() == 2);
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[2], sheet::Event::Note, sheet::Event::Pitches({ PitchDef(FM_STRING("ht")), PitchDef(FM_STRING("cymbal1")) }), 1.0_N8));
 }
 
 

@@ -7,7 +7,13 @@
 #include <vector>
 #include <set>
 #include <tuple>
+#include <functional>
+
 namespace sheet {
+
+	namespace {
+		std::hash<fm::String> hash_fn;
+	}
 
 	struct PitchDef {
 		typedef fm::Pitch Pitch;
@@ -18,9 +24,14 @@ namespace sheet {
 		};
 		Pitch pitch = NoPitch;
 		Octave octave = DefaultOctave;
+		fm::String alias;
+		PitchDef(const fm::String &alias) : alias(alias) {}
 		PitchDef(Pitch p = NoPitch, Octave o = DefaultOctave) : pitch(p), octave(o) {}
 		int id() const 
 		{
+			if (!alias.empty()) {
+				return static_cast<int>(hash_fn(alias));
+			}
 			return pitch + (octave * fm::NotesPerOctave);
 		}
 		bool operator<(const PitchDef& b) const
@@ -28,6 +39,8 @@ namespace sheet {
 			return id() < b.id();
 		}
 	};
+
+	struct AliasPitch : public PitchDef {};
 
 	struct Event {
 		enum {
@@ -61,8 +74,6 @@ namespace sheet {
 		ChordElements chordElements() const;
 		fm::String chordDefName() const;
 	};
-
-
 }
 
 #endif
