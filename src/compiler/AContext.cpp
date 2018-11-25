@@ -232,11 +232,18 @@ namespace sheet {
 			meta->barPosition += meta->duration;
 		}
 
+		void AContext::warn(const std::string &msg)
+		{
+			auto meta = voiceMetaData(voice());
+			std::string warning(msg + " at voice " + std::to_string(voice()) + " bar: " + std::to_string(meta->position / meta->barLength));
+			warnings.push_back(warning);
+		}
+
 		void AContext::newBar()
 		{
 			auto meta = voiceMetaData(voice());
 			if (meta->barPosition != meta->barLength) {
-				throwContextException("bar check error");
+				warn("bar check error");
 			}
 			meta->barPosition = 0;
 		}
@@ -319,19 +326,38 @@ namespace sheet {
 			{
 				for (const auto &voice : track.voices)
 				{
+					setTarget(track, voice);
 					auto meta = voiceMetaData(this->voice());
 					fm::Ticks writtenDuration = 0;
-					setTarget(track, voice);
+					
 					while (writtenDuration < duration) {
 						auto it = voice.events.begin();
+						if (meta->idxLastWrittenEvent >= 0) {
+							it += meta->idxLastWrittenEvent;
+							meta->idxLastWrittenEvent = -1;
+						}
+						
 						for (; it != voice.events.end(); ++it)
 						{
 							auto ev = *it;
-							auto currentPos = voiceMetaData(this->voice())->position;
+							auto currentPos = meta->position;
+							auto originalDuration = ev.duration;
+							if (ev.isTimeConsuming() && meta->remainingTime > 0) {
+								if (ev.duration == 0) {
+									ev.duration = meta->duration;
+								}
+								ev.duration = ev.duration + meta->remainingTime;
+								meta->remainingTime = 0;
+							}
 							ev.duration = std::min(ev.duration, duration - writtenDuration);
 							addEvent(ev);
-							writtenDuration += voiceMetaData(this->voice())->position - currentPos;
+							writtenDuration += meta->position - currentPos;
 							if (writtenDuration >= duration) {
+								bool hasRemainings = ev.duration != originalDuration;
+								if (hasRemainings) {
+									meta->remainingTime = originalDuration - ev.duration;
+								}
+								meta->idxLastWrittenEvent = it - voice.events.begin() + 1;
 								break;
 							}
 						}

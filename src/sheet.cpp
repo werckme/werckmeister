@@ -5,6 +5,7 @@
 #include "compiler/parser.h"
 #include "compiler/MidiContext.h"
 #include "sheet.h"
+#include <iostream>
 
 namespace sheet {
 
@@ -20,6 +21,9 @@ namespace sheet {
         auto compiler = wm.createCompiler();
         compiler->context(context);
         compiler->compile(doc);
+		for (const auto &warning : context->warnings) {
+			std::cout << warning << std::endl;
+		}
         return midi;
     }
 

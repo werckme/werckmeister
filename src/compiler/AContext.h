@@ -13,6 +13,7 @@
 #include "sheet/VoicingStrategy.h"
 #include <fm/common.hpp>
 #include "metaCommands.h"
+#include <list>
 
 namespace sheet {
     namespace compiler {
@@ -28,6 +29,7 @@ namespace sheet {
 			typedef Id TrackId;
 			typedef Id VoiceId;
 			typedef IStyleDefServer* IStyleDefServerPtr;
+			typedef std::list<std::string> Warnings;
 			struct VoiceMetaData {
 				typedef std::map<PitchDef, fm::Ticks> WaitForTieBuffer;
 				fm::Ticks position = 0;
@@ -35,6 +37,15 @@ namespace sheet {
 				fm::Ticks barLength = DefaultBarLength;
 				fm::Ticks barPosition = 0;
 				WaitForTieBuffer waitForTieBuffer;
+				/*
+					used for continue style track rendering after chord change
+				*/
+				int idxLastWrittenEvent = -1;
+				/*
+					from a aborted style rendering
+				*/
+				fm::Ticks remainingTime = 0;
+
 				virtual ~VoiceMetaData() = default;
 				bool pendingTie() const { return !waitForTieBuffer.empty(); }
 			};
@@ -60,6 +71,7 @@ namespace sheet {
 				return std::dynamic_pointer_cast<TVoiceMeta>(voiceMetaData(voiceid));
 			}
 			virtual void throwContextException(const std::string &msg);
+			virtual void warn(const std::string &msg);
 			IStyleDefServerPtr styleDefServer() const;
 			void styleDefServer(IStyleDefServerPtr server);
 			virtual IStyleDefServer::ConstChordValueType currentChordDef();
@@ -78,6 +90,7 @@ namespace sheet {
 			virtual void renderStyle(fm::Ticks duration);
 			virtual void addEvent(const Event &ev);
 			virtual fm::Ticks barPos() const;
+			Warnings warnings;
 		protected:
 			PitchDef resolvePitch(const PitchDef &pitch) const;
 			virtual TrackId createTrackImpl() = 0;

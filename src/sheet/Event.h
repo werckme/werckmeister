@@ -65,6 +65,10 @@ namespace sheet {
 		Duration duration = NoDuration;
 		fm::String metaCommand;
 		Args metaArgs;
+
+		bool isTimeConsuming() const {
+			return type == Rest || type == Note || type == Degree || type == TiedNote || type == Chord;
+		}
 	};
 
 	struct ChordEvent : Event {
