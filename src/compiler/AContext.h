@@ -79,6 +79,7 @@ namespace sheet {
 			virtual void addEvent(const Event &ev);
 			virtual fm::Ticks barPos() const;
 		protected:
+			PitchDef resolvePitch(const PitchDef &pitch) const;
 			virtual TrackId createTrackImpl() = 0;
 			virtual VoiceId createVoiceImpl() = 0;
 			virtual VoiceMetaDataPtr createVoiceMetaData() = 0;

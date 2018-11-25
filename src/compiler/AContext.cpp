@@ -173,9 +173,22 @@ namespace sheet {
 			throw std::runtime_error(msg + " at voice " + std::to_string(voice()) + " bar: " + std::to_string(meta->position / meta->barLength));
 		}
 
-		void AContext::addEvent(const PitchDef &pitch, fm::Ticks duration, bool tying)
+		PitchDef AContext::resolvePitch(const PitchDef &pitch) const
+		{
+			if (pitch.alias.empty()) {
+				return pitch;
+			}
+			const PitchDef *result = styleDefServer()->getAlias(pitch.alias);
+			if (result == nullptr) {
+				throw std::runtime_error("could not resolve alias: " + fm::to_string(pitch.alias));
+			}
+			return *result;
+		}
+
+		void AContext::addEvent(const PitchDef &rawPitch, fm::Ticks duration, bool tying)
 		{
 			using namespace fm;
+			PitchDef pitch = resolvePitch(rawPitch);
 			auto meta = voiceMetaData(voice());
 			if (duration > 0) {
 				meta->duration = duration;
