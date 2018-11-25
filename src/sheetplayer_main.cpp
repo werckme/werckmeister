@@ -33,6 +33,14 @@
 
 typedef int MidiOutputId;
 
+void onCompilerError(const std::exception &ex) {
+	std::cout << ex.what() << std::endl;
+}
+
+void onCompilerError() {
+	std::cout << "unkown error" << std::endl;
+}
+
 struct Settings {
 	typedef boost::program_options::variables_map Variables;
 	typedef boost::program_options::options_description OptionsDescription;
@@ -136,6 +144,7 @@ auto getTimestamp(const std::string input) {
 	return boost::filesystem::last_write_time(path);
 }
 
+
 void play(fm::midi::MidiPtr midi, MidiOutputId midiOutput, fm::Ticks begin, fm::Ticks end, const Settings &settings) {
 	auto &player = fmapp::getMidiplayer();
 	auto output = findOutput(midiOutput);
@@ -173,12 +182,12 @@ void play(fm::midi::MidiPtr midi, MidiOutputId midiOutput, fm::Ticks begin, fm::
 				}
 				catch (const std::exception &ex)
 				{
-					std::cout << ex.what() << std::endl;
+					onCompilerError(ex);
 					break;
 				}
 				catch (...)
 				{
-					std::cout << "unkown error" << std::endl;
+					onCompilerError();
 					break;
 				}
 				player.play(pos);
@@ -249,11 +258,11 @@ int main(int argc, const char** argv)
 	}
 	catch (const std::exception &ex)
 	{
-		std::cout << ex.what() << std::endl;
+		onCompilerError(ex);
 	}
 	catch (...)
 	{
-		std::cout << "unkown error" << std::endl;
+		onCompilerError();
 	}
 	return -1;
 }
