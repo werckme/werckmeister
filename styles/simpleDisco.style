@@ -2,7 +2,7 @@ section normal
 [ -- piano
 {
     /channel: 1/
-    /soundSelect: 16 1/
+    /soundSelect: 0 0/
     <I II III IV V VI VII>2. r16  <I II III IV V VI VII>16 r8 |
 }   
 ]
@@ -18,6 +18,8 @@ section normal
 [ -- drums
 {
     /channel: 10/
+    r8 "ht"16 "ht"16 "sn"8 "ht"16 "ht"16 r8 "ht"16 "ht"16 "sn"8 "ht"16 "ht"16 |
+    r8 "ht"16 "ht"16 "sn"8 "ht"16 "ht"16 r8 "ht"16 "ht"16 "sn"8 <"sn" "ht">16 "sn"16 |
     "cy"8 "ht"16 "ht"16 "sn"8 "ht"16 "ht"16 r8 "ht"16 "ht"16 "sn"8 "ht"16 "ht"16 |
     r8 "ht"16 "ht"16 "sn"8 "ht"16 "ht"16 r8 "ht"16 "ht"16 "sn"8 <"sn" "ht">16 "sn"16 |
 }   
@@ -25,7 +27,7 @@ section normal
     /channel: 10/
     /soundSelect: 0 17/
     "bd"4 "bd" "bd" "bd" |
-    "bd"4 "bd" "bd" "bd" |
+    "bd" "bd" "bd" "bd" |
 }   
 ] 
 end
