@@ -54,7 +54,7 @@ namespace sheet {
 		void MidiContext::metaSetChannel(int channel)
 		{
 			auto meta = voiceMetaData<MidiContext::VoiceMetaData>(voice());
-			meta->midiChannel = channel;
+			meta->midiChannel = channel - 1;
 		}
 
 		void MidiContext::metaSoundSelect(int cc, int pc)

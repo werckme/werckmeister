@@ -1,7 +1,29 @@
 section normal
-[ 
+
+[ -- piano
 {
+    /channel: 1/
+    /soundSelect: 0 0/
+    <I II III IV V VI VII>2. r16  <I II III IV V VI VII>16 r8 |
+}   
+]
+
+[ -- bass
+{
+    /channel: 3/
+    /soundSelect: 0 34/
     I,,8 I,16 I,16  I,,8 I,16 I,16  I,,8 I,16 I,16  I,,8 I,16 I,16 |
+}   
+]
+
+[ -- drums
+{
+    /channel: 10/
+    r8 "ht"16 "ht"16 "sn"8 "ht"16 "ht"16 r8 "ht"16 "ht"16 "sn"8 "ht"16 "ht"16 |
+}   
+{
+    /channel: 10/
+    "bd"4 "bd" "bd" "bd" | "bd"1 | "bd"1 --TODO: retrigger does start from beginning
 }   
 ] 
 end

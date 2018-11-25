@@ -319,14 +319,18 @@ namespace sheet {
 			{
 				for (const auto &voice : track.voices)
 				{
+					auto meta = voiceMetaData(this->voice());
 					fm::Ticks writtenDuration = 0;
 					setTarget(track, voice);
 					while (writtenDuration < duration) {
-						for (auto ev : voice.events)
+						auto it = voice.events.begin();
+						for (; it != voice.events.end(); ++it)
 						{
+							auto ev = *it;
+							auto currentPos = voiceMetaData(this->voice())->position;
 							ev.duration = std::min(ev.duration, duration - writtenDuration);
 							addEvent(ev);
-							writtenDuration += ev.duration;
+							writtenDuration += voiceMetaData(this->voice())->position - currentPos;
 							if (writtenDuration >= duration) {
 								break;
 							}

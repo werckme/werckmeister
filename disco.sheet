@@ -1,0 +1,9 @@
+-- document configs
+@load "../chords/default.chords";
+@load "../styles/simpleDisco.style";
+@load "../pitchmaps/defaultMidiDrumMap.pitchmap";
+
+
+
+
+C | C | Cmin| Cmin7+ E7 | E7 | D | G | F | A B | C |
