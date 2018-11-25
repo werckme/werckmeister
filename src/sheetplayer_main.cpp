@@ -168,7 +168,19 @@ void play(fm::midi::MidiPtr midi, MidiOutputId midiOutput, fm::Ticks begin, fm::
 				timestamp = newTimestamp;
 				auto pos = player.elapsed();
 				player.stop();
-				player.midi(sheet::processFile(inputfile));
+				try {
+					player.midi(sheet::processFile(inputfile));
+				}
+				catch (const std::exception &ex)
+				{
+					std::cout << ex.what() << std::endl;
+					break;
+				}
+				catch (...)
+				{
+					std::cout << "unkown error" << std::endl;
+					break;
+				}
 				player.play(pos);
 				continue;
 			}
