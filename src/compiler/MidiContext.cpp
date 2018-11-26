@@ -30,7 +30,9 @@ namespace sheet {
 		{
 			_checkMidi(midi_);
 			auto voiceConfig = voiceMetaData<MidiContext::VoiceMetaData>(voice());
-			midi_->tracks().at(track())->events().addNote(getChannel(*voiceConfig), absolutePosition, getAbsolutePitch(pitch), voiceConfig->velocity, duration);
+			for (const auto &instrument : voiceConfig->instrumentDefs) {
+				midi_->tracks().at(track())->events().addNote(instrument.channel, absolutePosition, getAbsolutePitch(pitch), voiceConfig->velocity, duration);
+			}
 		}
 
 		void MidiContext::addEvent(const fm::midi::Event &ev)
@@ -59,7 +61,7 @@ namespace sheet {
 		void MidiContext::metaSetChannel(int channel)
 		{
 			auto meta = voiceMetaData<MidiContext::VoiceMetaData>(voice());
-			meta->instrumentDefs.at(0).channel = channel - 1;
+			meta->instrumentDefs.at(0).channel = channel;
 		}
 
 		void MidiContext::metaSoundSelect(int cc, int pc)
@@ -90,17 +92,23 @@ namespace sheet {
 		void MidiContext::metaSetUname(const fm::String &uname)
 		{
 			Base::metaSetUname(uname);
-			const auto * instrumentDef = getMidiInstrumentDef(uname);
-			if (!instrumentDef) {
+			auto range = midiInstrumentDefs_.equal_range(uname);
+			if (range.first == midiInstrumentDefs_.end()) {
 				return;
 			}
-			metaSetChannel(instrumentDef->channel);
-			metaSoundSelect(instrumentDef->cc, instrumentDef->pc);
+			auto meta = voiceMetaData<MidiContext::VoiceMetaData>(voice());
+			auto it = range.first;
+			auto end = range.second;
+			meta->instrumentDefs.clear();
+			for (; it != end; ++it) {
+				meta->instrumentDefs.push_back(it->second);
+				metaSoundSelect(it->second.cc, it->second.pc);
+			}
 		}
 
 		void MidiContext::setMidiInstrumentDef(const fm::String &uname, const MidiInstrumentDef &def)
 		{
-			midiInstrumentDefs_[uname] = def;
+			midiInstrumentDefs_.insert({ uname, def });
 		}
 
 		void MidiContext::metaInstrument(const fm::String &uname, int chanel, int cc, int pc)

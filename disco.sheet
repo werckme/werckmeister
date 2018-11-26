@@ -4,9 +4,10 @@
 @load "../pitchmaps/defaultMidiDrumMap.pitchmap";
 
 --           uname ch cc pc
-/instrument: piano 0 0 0/
-/instrument: bass 3 3 87/
-/instrument: drums 10 0 17/
+/instrument: piano 3 0 0/
+/instrument: piano 4 0 13/
+/instrument: bass 5 3 87/
+/instrument: drums 9 0 17/
 
 /style: simpleDisco normal/
 
@@ -17,5 +18,10 @@ C | C | Cmin | Ces7+ | E | D | G | F | A B |
  C | C | /style: simpleDisco solo2/  C | C |
 
 /style: simpleDisco normal/
+
+/instrument: piano 3 0 0/
+/instrument: piano 4 0 51/
+/instrument: bass 5 3 87/
+/instrument: drums 9 0 17/
 
 C | C | Cmin | Ces7+ | E | D | G | F | A B | 

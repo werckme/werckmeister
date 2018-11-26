@@ -65,6 +65,15 @@ end
 @load 'Chords1.chdef';
 @load 'simplePianoStyle.style';
 
+-- instrument definitions
+--           uname ch cc pc
+/instrument: bass 3 3 87/
+/instrument: drums 10 0 17/
+
+-- definitions with the same name will create unisono events
+/instrument: piano 0 0 0/
+/instrument: pinao 3 3 3/
+
 [
 { 
   /soundselect: 0 0/ 

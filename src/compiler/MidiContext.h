@@ -18,7 +18,7 @@ namespace sheet {
         class MidiContext : public AContext {
 		public:
 			typedef AContext Base;
-			typedef std::unordered_map<fm::String, MidiInstrumentDef> MidiInstrumentDefs;
+			typedef std::unordered_multimap<fm::String, MidiInstrumentDef> MidiInstrumentDefs;
 			struct VoiceMetaData : Base::VoiceMetaData {
 				typedef std::vector<MidiInstrumentDef> InstrumentDefContainer;
 				int velocity = 90;
