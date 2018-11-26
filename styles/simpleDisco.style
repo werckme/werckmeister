@@ -1,31 +1,67 @@
-section normal
-[ -- piano
-{
-    /channel: 1/
-    /soundSelect: 0 0/
+section normal --<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+[
+{ 
+    /uname: piano/
     <I II III IV V VI VII>2. r16  <I II III IV V VI VII>16 r8 |
 }   
 ]
 
-[ -- bass
+[
 {
-    /channel: 3/
-    /soundSelect: 3 87/
+    /uname: bass/
     I,,8 I,16 I,16  I,,8 I,16 I,16  I,,8 I,16 I,16  I,,8 I,16 I,16 |
 }   
 ]
 
 [ -- drums
 {
-    /channel: 10/
+    /uname: drums/
     r8 "ht"16 "ht"16 "sn"8 "ht"16 "ht"16 r8 "ht"16 "ht"16 "sn"8 "ht"16 "ht"16 |
     r8 "ht"16 "ht"16 "sn"8 "ht"16 "ht"16 r8 "ht"16 "ht"16 "sn"8 <"sn" "ht">16 "sn"16 |
     "cy"8 "ht"16 "ht"16 "sn"8 "ht"16 "ht"16 r8 "ht"16 "ht"16 "sn"8 "ht"16 "ht"16 |
     r8 "ht"16 "ht"16 "sn"8 "ht"16 "ht"16 r8 "ht"16 "ht"16 "sn"8 <"sn" "ht">16 "sn"16 |
 }   
 {
-    /channel: 10/
-    /soundSelect: 0 17/
+    /uname: drums/
+    "bd"4 "bd" "bd" "bd" |
+    "bd" "bd" "bd" "bd" |
+}   
+] 
+end
+
+section solo --<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+[
+{
+    /uname: bass/
+    I,,8 I,16 I,16  I,,8 I,16 I,16  I,,8 I,16 I,16  I,,8 I,16 I,16 |
+}   
+]
+
+[ -- drums 
+{
+    /uname: drums/
+    "bd"4 "bd" "bd" "bd" |
+    "bd" "bd" "bd" "bd" |
+}   
+] 
+end
+
+section solo2 --<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+[
+{
+    /uname: bass/
+    I,,8 I,16 I,16  I,,8 I,16 I,16  I,,8 I,16 I,16  I,,8 I,16 I,16 |
+}   
+]
+
+[ -- drums 
+{
+    /uname: drums/
+    "cy"8 "ht"16 "ht"16 "sn"8 "ht"16 "ht"16 r8 "ht"16 "ht"16 "sn"8 "ht"16 "ht"16 |
+    r8 "ht"16 "ht"16 "sn"8 "ht"16 "ht"16 r8 "ht"16 "ht"16 "sn"8 <"sn" "ht">16 "sn"16 |
+}   
+{
+    /uname: drums/
     "bd"4 "bd" "bd" "bd" |
     "bd" "bd" "bd" "bd" |
 }   

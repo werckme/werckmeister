@@ -258,6 +258,54 @@ namespace sheet {
 			if (metaEvent.metaCommand.empty()) {
 				throwContextException("invalid meta command ");
 			}
+			if (metaEvent.metaCommand == SHEET_META__SET_UNAME) {
+				metaSetUname(getArgument<fm::String>(metaEvent, 0));
+			}
+			if (metaEvent.metaCommand == SHEET_META__SET_STYLE) {
+				metaSetStyle(getArgument<fm::String>(metaEvent, 0), getArgument<fm::String>(metaEvent, 1));
+			}
+		}
+
+		void AContext::metaSetUname(const fm::String &uname)
+		{
+			auto meta = voiceMetaData(voice());
+			meta->uname = uname;
+		}
+
+		void AContext::metaSetStyle(const fm::String &file, const fm::String &section)
+		{
+			auto style = styleDefServer_->getStyle(file, section);
+			if (!style) {
+				throw std::runtime_error("style not found: " + fm::to_string(file) + " " + fm::to_string(section));
+			}
+			switchStyle(currentStyleDef_, style);
+		}
+
+		void AContext::switchStyle(IStyleDefServer::ConstStyleValueType current, IStyleDefServer::ConstStyleValueType next)
+		{
+			if (current == nullptr || next == nullptr || current == next) {
+				return;
+			}
+			// set position for new track
+			auto chordMeta = voiceMetaData(chordVoice_);
+			for (const auto &track : *next) {
+				for (const auto &voice : track.voices)
+				{
+					setTarget(track, voice);
+					auto meta = voiceMetaData(this->voice());
+					meta->position = chordMeta->position;
+				}
+			}
+			currentStyleDef_ = next;
+		}
+
+		void AContext::setChordTrackTarget()
+		{
+			if (chordTrack_ == INVALID_TRACK_ID) {
+				chordTrack_ = createTrack();
+				chordVoice_ = createVoice();
+			}
+			setTarget(chordTrack_, chordVoice_);
 		}
 
 		/////////////////////////////////////////////////////////////////////////////
@@ -291,10 +339,7 @@ namespace sheet {
 				throw std::runtime_error("chord not found: " + fm::to_string(currentChord_.chordName));
 			}
 		}
-		void AContext::setStyle(const fm::String &styleName)
-		{
 
-		}
 		void AContext::setTarget(const Track &track, const Voice &voice)
 		{
 			TrackId trackId;
@@ -321,7 +366,7 @@ namespace sheet {
 		{
 			auto chord = currentChord();
 			auto styleTracks = currentStyle();
-			
+
 			for (const auto &track : *styleTracks)
 			{
 				for (const auto &voice : track.voices)
@@ -329,14 +374,14 @@ namespace sheet {
 					setTarget(track, voice);
 					auto meta = voiceMetaData(this->voice());
 					fm::Ticks writtenDuration = 0;
-					
+
 					while (writtenDuration < duration) {
 						auto it = voice.events.begin();
 						if (meta->idxLastWrittenEvent >= 0) {
 							it += meta->idxLastWrittenEvent;
 							meta->idxLastWrittenEvent = -1;
 						}
-						
+
 						for (; it != voice.events.end(); ++it)
 						{
 							auto ev = *it;

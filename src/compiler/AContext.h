@@ -22,6 +22,8 @@ namespace sheet {
         public:
 			template<typename TArg>
 			TArg getArgument(const Event &metaEvent, int idx, TArg *defaultValue = nullptr);
+			template<>
+			fm::String getArgument<fm::String>(const Event &metaEvent, int idx, fm::String *defaultValue);
 			static const fm::Ticks DefaultDuration;
 			static const fm::Ticks DefaultBarLength;
 			enum { INVALID_TRACK_ID = -1, INVALID_VOICE_ID = -1 };
@@ -45,7 +47,7 @@ namespace sheet {
 					from a aborted style rendering
 				*/
 				fm::Ticks remainingTime = 0;
-
+				fm::String uname;
 				virtual ~VoiceMetaData() = default;
 				bool pendingTie() const { return !waitForTieBuffer.empty(); }
 			};
@@ -64,6 +66,7 @@ namespace sheet {
 			virtual ~AContext() {};
 			virtual TrackId createTrack();
 			virtual VoiceId createVoice();
+			virtual void setChordTrackTarget();
 			VoiceMetaDataPtr voiceMetaData(VoiceId voiceid) const;
 			template<typename TVoiceMeta>
 			std::shared_ptr<TVoiceMeta> voiceMetaData(VoiceId voiceid) const 
@@ -80,13 +83,14 @@ namespace sheet {
 			virtual const ChordEvent * currentChord() const { return &currentChord_; }
 			/////// meta commands
 			virtual void setMeta(const Event &metaEvent);
+			virtual void metaSetUname(const fm::String &uname);
+			virtual void metaSetStyle(const fm::String &file, const fm::String &section);
 			/////// actual context stuff
 			virtual void addEvent(const PitchDef &pitch, fm::Ticks duration, bool tying = false);
 			virtual void seek(fm::Ticks duration);
 			virtual void newBar();
 			virtual void rest(fm::Ticks duration);
 			virtual void setChord(const ChordEvent &ev);
-			virtual void setStyle(const fm::String &styleName);
 			virtual void renderStyle(fm::Ticks duration);
 			virtual void addEvent(const Event &ev);
 			virtual fm::Ticks barPos() const;
@@ -96,6 +100,7 @@ namespace sheet {
 			virtual TrackId createTrackImpl() = 0;
 			virtual VoiceId createVoiceImpl() = 0;
 			virtual VoiceMetaDataPtr createVoiceMetaData() = 0;
+			virtual void switchStyle(IStyleDefServer::ConstStyleValueType current, IStyleDefServer::ConstStyleValueType next);
 		private:
 			typedef std::unordered_map<const void*, Id> PtrIdMap;
 			PtrIdMap ptrIdMap_;
@@ -104,15 +109,16 @@ namespace sheet {
 			IStyleDefServer::ConstChordValueType currentChordDef_ = nullptr;
 			IStyleDefServer::ConstStyleValueType currentStyleDef_ = nullptr;
 			VoicingStrategyPtr currentVoicingStrategy_ = nullptr;
-			TrackId trackId_ = INVALID_TRACK_ID;
-			VoiceId voiceId_ = INVALID_VOICE_ID;
+			TrackId trackId_ = INVALID_TRACK_ID, chordTrack_ = INVALID_TRACK_ID;
+			VoiceId voiceId_ = INVALID_VOICE_ID, chordVoice_ = INVALID_VOICE_ID;
 			VoiceMetaDataMap voiceMetaDataMap_;
 			IStyleDefServerPtr styleDefServer_ = nullptr;
 
         };
 
 		template<typename TArg>
-		TArg AContext::getArgument(const Event &metaEvent, int idx, TArg *defaultValue) {
+		TArg AContext::getArgument(const Event &metaEvent, int idx, TArg *defaultValue) 
+		{
 			if (idx >= (int)metaEvent.metaArgs.size()) {
 				if (defaultValue) {
 					return *defaultValue;
@@ -126,6 +132,18 @@ namespace sheet {
 			return result;
 		}
 
+
+		template<>
+		fm::String AContext::getArgument<fm::String>(const Event &metaEvent, int idx, fm::String *defaultValue)
+		{
+			if (idx >= (int)metaEvent.metaArgs.size()) {
+				if (defaultValue) {
+					return *defaultValue;
+				}
+				throw std::runtime_error("missing argument for '" + fm::to_string(metaEvent.metaCommand) + "'");
+			}
+			return metaEvent.metaArgs[idx];
+		}
 
     }
 }
