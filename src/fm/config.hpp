@@ -3,7 +3,7 @@
 
 #include "units.hpp"
 
-#define SHEET_VERSION "00d1c7a"
+#define SHEET_VERSION "26935eb"
 #define CHORD_DEF_EXTENSION  ".chords"
 #define STYLE_DEF_EXTENSION ".style"
 #define PITCHMAP_DEF_EXTENSION ".pitchmap"

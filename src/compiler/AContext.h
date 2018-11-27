@@ -22,8 +22,6 @@ namespace sheet {
         public:
 			template<typename TArg>
 			TArg getArgument(const Event &metaEvent, int idx, TArg *defaultValue = nullptr);
-			template<>
-			fm::String getArgument<fm::String>(const Event &metaEvent, int idx, fm::String *defaultValue);
 			static const fm::Ticks DefaultDuration;
 			static const fm::Ticks DefaultBarLength;
 			enum { INVALID_TRACK_ID = -1, INVALID_VOICE_ID = -1 };
@@ -115,36 +113,44 @@ namespace sheet {
 			IStyleDefServerPtr styleDefServer_ = nullptr;
 
         };
+		
+		namespace {
 
+			template<typename TArg>
+			TArg __getArgument(const Event &metaEvent, int idx, TArg *defaultValue) 
+			{
+				if (idx >= (int)metaEvent.metaArgs.size()) {
+					if (defaultValue) {
+						return *defaultValue;
+					}
+					throw std::runtime_error("missing argument for '" + fm::to_string(metaEvent.metaCommand) + "'");
+				}
+				TArg result;
+				fm::StringStream ss;
+				ss << metaEvent.metaArgs[idx];
+				ss >> result;
+				return result;
+			}
+			
+			template<>
+			fm::String __getArgument<fm::String>(const Event &metaEvent, int idx, fm::String *defaultValue)
+			{
+				if (idx >= (int)metaEvent.metaArgs.size()) {
+					if (defaultValue) {
+						return *defaultValue;
+					}
+					throw std::runtime_error("missing argument for '" + fm::to_string(metaEvent.metaCommand) + "'");
+				}
+				return metaEvent.metaArgs[idx];
+			}
+		
+		}
+		
 		template<typename TArg>
 		TArg AContext::getArgument(const Event &metaEvent, int idx, TArg *defaultValue) 
 		{
-			if (idx >= (int)metaEvent.metaArgs.size()) {
-				if (defaultValue) {
-					return *defaultValue;
-				}
-				throw std::runtime_error("missing argument for '" + fm::to_string(metaEvent.metaCommand) + "'");
-			}
-			TArg result;
-			fm::StringStream ss;
-			ss << metaEvent.metaArgs[idx];
-			ss >> result;
-			return result;
+			return __getArgument(metaEvent, idx, defaultValue);
 		}
-
-
-		template<>
-		fm::String AContext::getArgument<fm::String>(const Event &metaEvent, int idx, fm::String *defaultValue)
-		{
-			if (idx >= (int)metaEvent.metaArgs.size()) {
-				if (defaultValue) {
-					return *defaultValue;
-				}
-				throw std::runtime_error("missing argument for '" + fm::to_string(metaEvent.metaCommand) + "'");
-			}
-			return metaEvent.metaArgs[idx];
-		}
-
     }
 }
 
