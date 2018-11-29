@@ -19,6 +19,12 @@ IF(UNIX)
   SET (CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "-std=c++14 -Wall")
   add_definitions( -DSHEET_USE_BOOST_TIMER )
   add_definitions( -DSHEET_OS_UNIX )
+  add_definitions( -DBOOST_ALL_NO_LIB )
+  SET(Boost_USE_STATIC_LIBS ON)
+  set(Boost_USE_MULTITHREADED ON)
+  set(Boost_USE_STATIC_RUNTIME ON)
+
+
 ENDIF(UNIX)
 
 IF(WIN32)
