@@ -5,6 +5,7 @@
 #include <list>
 #include <fm/midi.hpp>
 #include <map>
+#include <climits>
 
 namespace fmapp {
 
