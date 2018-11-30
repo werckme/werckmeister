@@ -13,7 +13,7 @@ namespace sheet {
 		namespace {
 			fm::String getAbsolutePath(DocumentPtr doc, const fm::String &path)
 			{
-				auto a = boost::filesystem::path(doc->path);
+				auto a = boost::filesystem::path(doc->path).parent_path();
 				auto b = boost::filesystem::path(path);
 				auto x = boost::filesystem::absolute(b, a);
 				return boost::filesystem::system_complete(x).wstring();
