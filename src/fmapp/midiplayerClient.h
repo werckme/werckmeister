@@ -91,7 +91,7 @@ namespace fmapp {
 	void MidiplayerClient<TBackend, TMidiProvider, TTimer>::onProcess()
 	{
 		std::lock_guard<Lock> lockGuard(lock);
-		MidiProvider::Events events;
+		typename MidiProvider::Events events;
 		MidiProvider::getEvents(this->elapsed_, events);
 		Backend::send(events);
 	}

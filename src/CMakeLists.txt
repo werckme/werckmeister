@@ -40,7 +40,6 @@ SET (SRC_FETZER_TESTS
 
 ## PLAYER
 SET (SRC_SHEET_PLAYER
-    fmapp/os_win.cpp
     fmapp/boostTimer.cpp
     fmapp/rtmidiBackend.cpp
     fmapp/midiplayer.cpp
@@ -48,6 +47,16 @@ SET (SRC_SHEET_PLAYER
     sheetplayer_main.cpp 
     sheet.cpp
 )
+
+if (WIN32)
+  SET(SRC_SHEET_PLAYER ${SRC_SHEET_PLAYER}  fmapp/os_win.cpp)
+endif(WIN32)
+
+if (UNIX)
+  SET(SRC_SHEET_PLAYER ${SRC_SHEET_PLAYER}  fmapp/os_linux.cpp)
+endif(UNIX)
+
+
 
 add_executable(rehearse ${SRC_FETZER_TESTS})
 target_link_libraries (rehearse sheet ${Boost_LIBRARIES})

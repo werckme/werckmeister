@@ -1,3 +1,4 @@
+src/fm/config.hpp
 cefapp/third_party/
 third_party
 fe/package-lock.jso
