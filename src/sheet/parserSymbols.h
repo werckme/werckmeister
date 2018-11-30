@@ -3,6 +3,7 @@
 
 #include <fm/units.hpp>
 #include <fm/literals.hpp>
+#include <fm/common.hpp>
 #include <boost/spirit/include/qi.hpp>
 #include "sheet/Event.h"
 
@@ -21,6 +22,25 @@ namespace sheet {
 					("V", fm::degrees::V)
 					("VI", fm::degrees::VI)
 					("VII", fm::degrees::VII)
+					;
+			}
+		};
+
+		struct ExpressionSymbols : boost::spirit::qi::symbols<char, fm::String>
+		{
+			ExpressionSymbols()
+			{
+				add
+				("ppppp", FM_STRING("ppppp"))
+					("pppp", FM_STRING("pppp"))
+					("ppp", FM_STRING("ppp"))
+					("pp", FM_STRING("pp"))
+					("p", FM_STRING("p"))
+					("f", FM_STRING("f"))
+					("ff", FM_STRING("ff"))
+					("fff", FM_STRING("fff"))
+					("ffff", FM_STRING("ffff"))
+					("fffff", FM_STRING("fffff"))
 					;
 			}
 

@@ -55,6 +55,7 @@ namespace sheet {
 			Chord,
 			EOB, // End of Bar aka. Bar Line
 			Meta,
+			Expression,
 			NumEvents
 		};
 		typedef fm::Ticks Duration;

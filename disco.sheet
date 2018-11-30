@@ -1,7 +1,7 @@
 -- TODO: when removing this line, the resulting midi is empty
-@load "chords/default.chords";
-@load "styles/simpleDisco.style";
-@load "pitchmaps/defaultMidiDrumMap.pitchmap";
+@load "./chords/default.chords";
+@load "./styles/simpleDisco.style";
+@load "./pitchmaps/defaultMidiDrumMap.pitchmap";
 
 --           uname ch cc pc
 /instrument: piano 3 0 0/

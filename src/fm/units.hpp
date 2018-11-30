@@ -2,8 +2,9 @@
 #define FM_UNITS_HPP
 
 namespace fm {
-    typedef unsigned long long Ticks;
+	typedef unsigned long long Ticks;
 	typedef int Pitch;
+	typedef int Expression;
 	namespace notes {
 		enum Note {
 			C = 0,
@@ -36,6 +37,21 @@ namespace fm {
 			V = 5,
 			VI = 6,
 			VII = 7
+		};
+	}
+	namespace expression {
+		enum {
+			PPPPP = -5,
+			PPPP = -4,
+			PPP = -3,
+			PP = -2,
+			P = -1,
+			Default = 0,
+			F = 1,
+			FF = 2,
+			FFF = 3,
+			FFFF = 4,
+			FFFFF = 5
 		};
 	}
 }

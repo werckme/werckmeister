@@ -76,6 +76,7 @@ namespace sheet {
 			PitchSymbols pitchSymbols_;
 			OctaveSymbols octaveSymbols_;
 			DurationSymbols durationSymbols_;
+			ExpressionSymbols expressionSymbols_;
 		}
 
 		namespace {
@@ -135,7 +136,7 @@ namespace sheet {
 
 					alias_ %= lexeme['"' >> +(char_ - '"') >> '"'];
 
-					event_ %= (attr(Event::Degree) >> (pitch_ | ("<" >> +pitch_ >> ">")) >> (durationSymbols_ | attr(Event::NoDuration)))
+					event_ %= (attr(Event::Degree) >> (pitch_ | ("<" >> +pitch_ >> ">")) >> (durationSymbols_ | attr(Event::NoDuration) ))
 						| (attr(Event::Note) >> (absolutePitch_ | ("<" >> +absolutePitch_ >> ">")) >> (durationSymbols_ | attr(Event::NoDuration)) >> -(lit("~")[at_c<0>(_val) = Event::TiedNote]))
 						| (attr(Event::Note) >> (alias_ | ("<" >> +alias_ >> ">")) >> (durationSymbols_ | attr(Event::NoDuration)) >> -(lit("~")[at_c<0>(_val) = Event::TiedNote]))
 						| ("r" >> attr(Event::Rest) >> attr(PitchDef()) >> (durationSymbols_ | attr(Event::NoDuration)))
@@ -204,8 +205,9 @@ namespace sheet {
 
 					alias_ %= lexeme['"' >> +(char_ - '"') >> '"'];
 
-					event_ %= (attr(Event::Note) >> (pitch_ | ("<" >> +pitch_ >> ">")) >> (durationSymbols_ | attr(Event::NoDuration)) >> -(lit("~")[at_c<0>(_val) = Event::TiedNote]) )
+					event_ %= (attr(Event::Note) >> (pitch_ | ("<" >> +pitch_ >> ">")) >> (durationSymbols_ | attr(Event::NoDuration)) >> -(lit("~")[at_c<0>(_val) = Event::TiedNote]))
 						| (attr(Event::Note) >> (alias_ | ("<" >> +alias_ >> ">")) >> (durationSymbols_ | attr(Event::NoDuration)) >> -(lit("~")[at_c<0>(_val) = Event::TiedNote]))
+						| ("\\" >> attr(Event::Meta) >> attr(PitchDef()) >> attr(Event::NoDuration) >> attr("expression") >> expressionSymbols_)
 						| ("r" >> attr(Event::Rest) >> attr(PitchDef()) >> (durationSymbols_ | attr(Event::NoDuration)))
 						| ("|" >> attr(Event::EOB) >> attr(PitchDef()) >> attr(Event::NoDuration))
 						| ("/" >> attr(Event::Meta) >> attr(PitchDef()) >> attr(Event::NoDuration) >> +char_("a-zA-Z") >> ":" >> +(lexeme[+char_("a-zA-Z0-9")]) >> "/")

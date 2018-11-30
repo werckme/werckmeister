@@ -555,6 +555,37 @@ BOOST_AUTO_TEST_CASE(test_sheetDefParser_03)
 
 }
 
+BOOST_AUTO_TEST_CASE(test_expression_meta)
+{
+	using namespace fm;
+	using sheet::PitchDef;
+	fm::String text = FM_STRING("\
+[\n\
+	{\n\
+		c4\\pp d4 e4 f4 | \\ffff c'4 d'4 e'4 f'4 |\n\
+	}\n\
+]\n\
+");
+	sheet::compiler::SheetDefParser parser;
+	auto defs = parser.parse(text);
+	BOOST_CHECK(defs.tracks.size() == 1);
+	BOOST_CHECK(defs.tracks[0].voices.size() == 1);
+	BOOST_CHECK(defs.tracks[0].voices[0].events.size() == 12);
+
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[0], sheet::Event::Note, fm::notes::C, 0, 1.0_N4));
+	BOOST_CHECK(checkMetaEvent(defs.tracks[0].voices[0].events[1], FM_STRING("expression"), sheet::Event::Args({ FM_STRING("pp") })));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[2], sheet::Event::Note, fm::notes::D, 0, 1.0_N4));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[3], sheet::Event::Note, fm::notes::E, 0, 1.0_N4));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[4], sheet::Event::Note, fm::notes::F, 0, 1.0_N4));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[5], sheet::Event::EOB));
+	BOOST_CHECK(checkMetaEvent(defs.tracks[0].voices[0].events[6], FM_STRING("expression"), sheet::Event::Args({ FM_STRING("ffff") })));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[7], sheet::Event::Note, fm::notes::C, 1, 1.0_N4));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[8], sheet::Event::Note, fm::notes::D, 1, 1.0_N4));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[9], sheet::Event::Note, fm::notes::E, 1, 1.0_N4));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[10], sheet::Event::Note, fm::notes::F, 1, 1.0_N4));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[11], sheet::Event::EOB));
+
+}
 
 BOOST_AUTO_TEST_CASE(test_sheetDefParser_tie)
 {
