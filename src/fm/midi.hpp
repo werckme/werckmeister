@@ -164,7 +164,10 @@ namespace fm {
 			void write(const char* filename) const;
 			void write(std::ostream&) const;
 			Ticks duration() const;
+			BPM bpm() const { return bpm_; }
+			void bpm(BPM bpm) { bpm_ = bpm; }
 		private:
+			BPM bpm_ = 120;
 			Ticks _ppq = 0;
 			TrackContainer _container;
 		};

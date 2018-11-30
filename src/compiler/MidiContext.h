@@ -21,7 +21,6 @@ namespace sheet {
 			typedef std::unordered_multimap<fm::String, MidiInstrumentDef> MidiInstrumentDefs;
 			struct VoiceMetaData : Base::VoiceMetaData {
 				typedef std::vector<MidiInstrumentDef> InstrumentDefContainer;
-				int velocity = 90;
 				InstrumentDefContainer instrumentDefs = InstrumentDefContainer(1);
 			};
 			void midi(fm::midi::MidiPtr midi) { midi_ = midi; }
@@ -34,6 +33,7 @@ namespace sheet {
 			virtual void metaSoundSelect(int cc, int pc);
 			virtual void metaInstrument(const fm::String &uname, int chanel, int cc, int pc);
 			virtual void metaSetUname(const fm::String &uname) override;
+			virtual void metaSetTempo(double bpm) override;
 			virtual void setMeta(const Event &metaEvent) override;
 		protected:
 			virtual Base::VoiceMetaDataPtr createVoiceMetaData() override;

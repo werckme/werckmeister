@@ -14,6 +14,7 @@
 
 #include <memory>
 #include <fm/config.hpp>
+#include <fm/units.hpp>
 #include <chrono>
 #include <mutex>
 #include <algorithm>
@@ -41,7 +42,8 @@ namespace fmapp {
 		void play();
 		void play(fm::Ticks ticks);
 		void stop();
-		inline double bpm() const { return std::max(bpm_, 1.0); }
+		inline fm::BPM bpm() const { return std::max(bpm_, 1.0); }
+		void bpm(fm::BPM bpm) { bpm_ = bpm; }
 		fm::Ticks elapsed() const { return elapsed_; }
 		void reset();
 	private:
@@ -52,7 +54,7 @@ namespace fmapp {
 		void onProcess();
 		void updateTicks();
 		Clock::time_point started_;
-		double bpm_ = 120.0;
+		fm::BPM bpm_ = 120.0;
 		fm::Ticks elapsed_ = 0;
 	};
 

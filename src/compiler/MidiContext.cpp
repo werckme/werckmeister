@@ -1,6 +1,7 @@
 #include "MidiContext.h"
 #include <fm/midi.hpp>
 #include <fm/config.hpp>
+#include <math.h>
 
 namespace sheet {
 	namespace compiler {
@@ -20,6 +21,12 @@ namespace sheet {
 				return MidiSchluesselCOffset + pitch.pitch + (pitch.octave * fm::NotesPerOctave);
 			}
 
+			int getAbsoluteVelocity(fm::Expression expression)
+			{
+				float expr = static_cast<float>(expression);
+				return static_cast<int>(::ceil((expr) * 127.0f / 10.0f));
+			}
+
 			int getChannel(const MidiContext::VoiceMetaData &meta)
 			{
 				return meta.instrumentDefs.at(0).channel;
@@ -31,7 +38,12 @@ namespace sheet {
 			_checkMidi(midi_);
 			auto voiceConfig = voiceMetaData<MidiContext::VoiceMetaData>(voice());
 			for (const auto &instrument : voiceConfig->instrumentDefs) {
-				midi_->tracks().at(track())->events().addNote(instrument.channel, absolutePosition, getAbsolutePitch(pitch), voiceConfig->velocity, duration);
+				midi_->tracks().at(track())->events().addNote(
+					instrument.channel, 
+					absolutePosition, 
+					getAbsolutePitch(pitch), 
+					getAbsoluteVelocity( getNextExpressionValue(voiceConfig) ),
+					duration);
 			}
 		}
 
@@ -56,6 +68,12 @@ namespace sheet {
 		MidiContext::Base::VoiceMetaDataPtr MidiContext::createVoiceMetaData() 
 		{
 			return std::make_shared<MidiContext::VoiceMetaData>();
+		}
+
+		void MidiContext::metaSetTempo(double bpm)
+		{
+			Base::metaSetTempo(bpm);
+			midi_->bpm(bpm);
 		}
 
 		void MidiContext::metaSetChannel(int channel)

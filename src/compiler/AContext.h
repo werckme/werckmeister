@@ -20,6 +20,7 @@ namespace sheet {
 
         class AContext {
         public:
+			AContext();
 			template<typename TArg>
 			TArg getArgument(const Event &metaEvent, int idx, TArg *defaultValue = nullptr);
 			static const fm::Ticks DefaultDuration;
@@ -30,12 +31,15 @@ namespace sheet {
 			typedef Id VoiceId;
 			typedef IStyleDefServer* IStyleDefServerPtr;
 			typedef std::list<std::string> Warnings;
+			typedef std::unordered_map<fm::String, fm::Expression> ExpressionMap;
 			struct VoiceMetaData {
 				typedef std::map<PitchDef, fm::Ticks> WaitForTieBuffer;
 				fm::Ticks position = 0;
 				fm::Ticks duration = DefaultDuration;
 				fm::Ticks barLength = DefaultBarLength;
 				fm::Ticks barPosition = 0;
+				fm::Expression expression = fm::expression::FF;
+				fm::Expression singleExpression = fm::expression::Default;
 				WaitForTieBuffer waitForTieBuffer;
 				/*
 					used for continue style track rendering after chord change
@@ -79,10 +83,14 @@ namespace sheet {
 			virtual IStyleDefServer::ConstStyleValueType currentStyle();
 			virtual VoicingStrategyPtr currentVoicingStrategy();
 			virtual const ChordEvent * currentChord() const { return &currentChord_; }
+			virtual fm::Expression getExpression(const fm::String &str) const;
 			/////// meta commands
 			virtual void setMeta(const Event &metaEvent);
 			virtual void metaSetUname(const fm::String &uname);
 			virtual void metaSetStyle(const fm::String &file, const fm::String &section);
+			virtual void metaSetExpression(const fm::String &value);
+			virtual void metaSetSingleExpression(const fm::String &value);
+			virtual void metaSetTempo(double bpm) {}
 			/////// actual context stuff
 			virtual void addEvent(const PitchDef &pitch, fm::Ticks duration, bool tying = false);
 			virtual void seek(fm::Ticks duration);
@@ -99,6 +107,7 @@ namespace sheet {
 			virtual VoiceId createVoiceImpl() = 0;
 			virtual VoiceMetaDataPtr createVoiceMetaData() = 0;
 			virtual void switchStyle(IStyleDefServer::ConstStyleValueType current, IStyleDefServer::ConstStyleValueType next);
+			virtual fm::Expression getNextExpressionValue(VoiceMetaDataPtr meta) const;
 		private:
 			typedef std::unordered_map<const void*, Id> PtrIdMap;
 			PtrIdMap ptrIdMap_;
@@ -111,6 +120,7 @@ namespace sheet {
 			VoiceId voiceId_ = INVALID_VOICE_ID, chordVoice_ = INVALID_VOICE_ID;
 			VoiceMetaDataMap voiceMetaDataMap_;
 			IStyleDefServerPtr styleDefServer_ = nullptr;
+			ExpressionMap expressionMap_;
 
         };
 		

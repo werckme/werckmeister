@@ -147,6 +147,7 @@ auto getTimestamp(const std::string input) {
 
 void play(fm::midi::MidiPtr midi, MidiOutputId midiOutput, fm::Ticks begin, fm::Ticks end, const Settings &settings) {
 	auto &player = fmapp::getMidiplayer();
+	player.bpm(midi->bpm());
 	auto output = findOutput(midiOutput);
 	std::cout << "playing on: " << output.name << std::endl;
 	player.setOutput(output);

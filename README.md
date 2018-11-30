@@ -94,12 +94,15 @@ Cmaj | Cmaj C7 |
 
 ## Meta Commands
 # expressions
+
+\fff --set all to fff
+!fff --set only next note to fff
+
 /dynamicsTarget: volume/
 /dynamicsRemap: ffff 127/
 /dynamicsRemap: ff 57/
-/dynamicsRemap: sehrleise 12/
 
- c,,4\ffff d\sehrleise
+ c,,4\ffff
 
 /dynamicsTarget: velocity/
  c,,4\ffff

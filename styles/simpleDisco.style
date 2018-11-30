@@ -2,13 +2,14 @@ section normal --<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 [
 { 
     /uname: piano/
-    <I II III IV V VI VII>2. r16  <I II III IV V VI VII>16 r8 |
+    \fff <I II III IV V VI VII>2. r16  \ff<I II III IV V VI VII>16 r8 |
 }   
 ]
 
 [
 {
     /uname: bass/
+    \ffff
     I,,8 I,16 I,16  I,,8 I,16 I,16  I,,8 I,16 I,16  I,,8 I,16 I,16 |
 }   
 ]
@@ -16,10 +17,10 @@ section normal --<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 [ -- drums
 {
     /uname: drums/
-    r8 "ht"16 "ht"16 "sn"8 "ht"16 "ht"16 r8 "ht"16 "ht"16 "sn"8 "ht"16 "ht"16 |
-    r8 "ht"16 "ht"16 "sn"8 "ht"16 "ht"16 r8 "ht"16 "ht"16 "sn"8 <"sn" "ht">16 "sn"16 |
-    "cy"8 "ht"16 "ht"16 "sn"8 "ht"16 "ht"16 r8 "ht"16 "ht"16 "sn"8 "ht"16 "ht"16 |
-    r8 "ht"16 "ht"16 "sn"8 "ht"16 "ht"16 r8 "ht"16 "ht"16 "sn"8 <"sn" "ht">16 "sn"16 |
+    r8 "ht"16 "ht"16 !ffff"sn"8 "ht"16 "ht"16 r8 "ht"16 "ht"16 !ffff"sn"8 "ht"16 "ht"16 |
+    r8 "ht"16 "ht"16 !ffff"sn"8 "ht"16 "ht"16 r8 "ht"16 "ht"16 !ffff"sn"8 !ffff<"sn" "ht">16 !fffff"sn"16 |
+    "cy"8 "ht"16 "ht"16 !ffff"sn"8 "ht"16 "ht"16 r8 "ht"16 "ht"16 !ffff"sn"8 "ht"16 "ht"16 |
+    r8 "ht"16 "ht"16 !ffff"sn"8 "ht"16 "ht"16 r8 "ht"16 "ht"16 !ffff"sn"8 <"sn" "ht">16 !fffff"sn"16 |
 }   
 {
     /uname: drums/
@@ -48,6 +49,7 @@ section solo2 --<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 [
 {
     /uname: bass/
+    \fff
     I,,8 I,16 I,16  I,,8 I,16 I,16  I,,8 I,16 I,16  I,,8 I,16 I,16 |
 }   
 ]
@@ -55,8 +57,8 @@ section solo2 --<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 [ -- drums 
 {
     /uname: drums/
-    "cy"8 "ht"16 "ht"16 "sn"8 "ht"16 "ht"16 r8 "ht"16 "ht"16 "sn"8 "ht"16 "ht"16 |
-    r8 "ht"16 "ht"16 "sn"8 "ht"16 "ht"16 r8 "ht"16 "ht"16 "sn"8 <"sn" "ht">16 "sn"16 |
+    "cy"8 "ht"16 "ht"16 !ffff"sn"8 "ht"16 "ht"16 r8 "ht"16 "ht"16 !ffff"sn"8 "ht"16 "ht"16 |
+    r8 "ht"16 "ht"16 !ffff"sn"8 "ht"16 "ht"16 r8 "ht"16 "ht"16 !ffff"sn"8 <"sn" "ht">16 !fffff"sn"16 |
 }   
 {
     /uname: drums/

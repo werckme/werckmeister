@@ -5,6 +5,7 @@ namespace fm {
 	typedef unsigned long long Ticks;
 	typedef int Pitch;
 	typedef int Expression;
+	typedef double BPM;
 	namespace notes {
 		enum Note {
 			C = 0,
@@ -41,17 +42,17 @@ namespace fm {
 	}
 	namespace expression {
 		enum {
-			PPPPP = -5,
-			PPPP = -4,
-			PPP = -3,
-			PP = -2,
-			P = -1,
+			PPPPP = 1,
+			PPPP = 2,
+			PPP = 3,
+			PP = 4,
+			P = 5,
 			Default = 0,
-			F = 1,
-			FF = 2,
-			FFF = 3,
-			FFFF = 4,
-			FFFFF = 5
+			F = 6,
+			FF = 7,
+			FFF = 8,
+			FFFF = 9,
+			FFFFF = 10
 		};
 	}
 }

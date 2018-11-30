@@ -108,6 +108,31 @@ namespace sheet {
 		const Ticks AContext::DefaultDuration = 1.0_N4;
 		const Ticks AContext::DefaultBarLength = 4 * 1.0_N4;
 
+		AContext::AContext() 
+			: expressionMap_({
+				{FM_STRING("ppppp"), fm::expression::PPPPP},
+				{ FM_STRING("pppp"), fm::expression::PPPP },
+				{ FM_STRING("ppp"), fm::expression::PPP },
+				{ FM_STRING("pp"), fm::expression::PP },
+				{ FM_STRING("p"), fm::expression::P },
+				{ FM_STRING("f"), fm::expression::F },
+				{ FM_STRING("ff"), fm::expression::FF },
+				{ FM_STRING("fff"), fm::expression::FFF },
+				{ FM_STRING("ffff"), fm::expression::FFFF },
+				{ FM_STRING("fffff"), fm::expression::FFFFF }
+			})
+		{
+		}
+
+		fm::Expression AContext::getExpression(const fm::String &str) const
+		{
+			auto it = expressionMap_.find(str);
+			if (it == expressionMap_.end()) {
+				return fm::expression::Default;
+			}
+			return it->second;
+		}
+
 		AContext::IStyleDefServerPtr AContext::styleDefServer() const
 		{
 			if (!styleDefServer_) {
@@ -264,6 +289,15 @@ namespace sheet {
 			if (metaEvent.metaCommand == SHEET_META__SET_STYLE) {
 				metaSetStyle(getArgument<fm::String>(metaEvent, 0), getArgument<fm::String>(metaEvent, 1));
 			}
+			if (metaEvent.metaCommand == SHEET_META__SET_EXPRESSION) {
+				metaSetExpression(getArgument<fm::String>(metaEvent, 0));
+			}
+			if (metaEvent.metaCommand == SHEET_META__SET_SINGLE_EXPRESSION) {
+				metaSetSingleExpression(getArgument<fm::String>(metaEvent, 0));
+			}
+			if (metaEvent.metaCommand == SHEET_META__SET_TEMPO) {
+				metaSetTempo(getArgument<fm::BPM>(metaEvent, 0));
+			}
 		}
 
 		void AContext::metaSetUname(const fm::String &uname)
@@ -279,6 +313,36 @@ namespace sheet {
 				throw std::runtime_error("style not found: " + fm::to_string(file) + " " + fm::to_string(section));
 			}
 			switchStyle(currentStyleDef_, style);
+		}
+
+		void AContext::metaSetExpression(const fm::String &value)
+		{
+			auto meta = voiceMetaData(voice());
+			auto expr = getExpression(value);
+			if (expr == fm::expression::Default) {
+				return;
+			}
+			meta->expression = expr;
+		}
+
+		void AContext::metaSetSingleExpression(const fm::String &value)
+		{
+			auto meta = voiceMetaData(voice());
+			auto expr = getExpression(value);
+			if (expr == fm::expression::Default) {
+				return;
+			}
+			meta->singleExpression = expr;
+		}
+
+		fm::Expression AContext::getNextExpressionValue(VoiceMetaDataPtr meta) const
+		{
+			if (meta->singleExpression != fm::expression::Default) {
+				auto expr = meta->singleExpression;
+				meta->singleExpression = fm::expression::Default;
+				return expr;
+			}
+			return meta->expression;
 		}
 
 		void AContext::switchStyle(IStyleDefServer::ConstStyleValueType current, IStyleDefServer::ConstStyleValueType next)
