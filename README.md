@@ -92,6 +92,23 @@ Cmaj | Cmaj C7 |
 
 ```
 
+## Meta Commands
+# expressions
+/dynamicsTarget: volume/
+/dynamicsRemap: ffff 127/
+/dynamicsRemap: ff 57/
+/dynamicsRemap: sehrleise 12/
+
+ c,,4\ffff d\sehrleise
+
+/dynamicsTarget: velocity/
+ c,,4\ffff
+
+# channel
+/channelVolume: 10 127/
+
+
+
 ## TODO: weitere Lilypond Ausdrücke
 
 # Dynamik
