@@ -1,0 +1,28 @@
+section normal
+[ 
+{
+    /uname: guitar/
+    <I II III IV V VI VII>4. <I II III IV V VI VII>4 <I II III IV V VI VII>4 <I II III IV V VI VII>8  |
+}   
+] 
+[ 
+{
+    /uname: bass/
+    I,,4. I,,8 V,,,4. V,,,8 |
+}   
+] 
+[
+{
+    /uname: drums/
+    "ht"8 !f"ht"8 "ht"8 !f"ht"8 "ht"8 !f"ht"8 "ht"8 !f"ht"8 |
+}    
+{
+    /uname: drums/
+    r4 "sn" r "sn" |
+}
+{
+    /uname: drums/
+    "bd"4. "bd"8 "bd"4. "bd"8 |
+}      
+] 
+end

@@ -7,7 +7,10 @@
 namespace sheet {
 
 	namespace compiler {
+		using namespace fm;
 
+		const Ticks AContext::DefaultDuration = 1.0_N4;
+		const Ticks AContext::DefaultBarLength = 4 * 1.0_N4;
 
 		namespace {
 			template<int EventType>
@@ -104,9 +107,6 @@ namespace sheet {
 			}
 		}
 
-		using namespace fm;
-		const Ticks AContext::DefaultDuration = 1.0_N4;
-		const Ticks AContext::DefaultBarLength = 4 * 1.0_N4;
 
 		AContext::AContext() 
 			: expressionMap_({
@@ -447,7 +447,6 @@ namespace sheet {
 		}
 		void AContext::renderStyle(fm::Ticks duration)
 		{
-			auto chord = currentChord();
 			auto styleTracks = currentStyle();
 
 			for (const auto &track : *styleTracks)

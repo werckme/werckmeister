@@ -1,0 +1,14 @@
+-- TODO: when removing this line, the resulting midi is empty
+@load "./chords/default.chords";
+@load "./styles/country.schlager.1.style";
+@load "./pitchmaps/defaultMidiDrumMap.pitchmap";
+
+/tempo: 120/
+
+--           uname ch cc pc
+/instrument: guitar 2 0 25/
+/instrument: piano 3 0 0/
+/instrument: bass 8 0 33/
+/instrument: drums 9 0 33/
+
+C | C | C | 
