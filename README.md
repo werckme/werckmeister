@@ -113,8 +113,12 @@ Cmaj | Cmaj C7 |
 #rhythmik
 /upbeat: 8/ -- auftakt 1 8tel
 
+## TODO:
+andere Taktarten als 4/4
 
 ## TODO: weitere Lilypond Ausdrücke
+
+
 
 Arpeggios
 
@@ -131,6 +135,12 @@ Der \espressivo-Befehl kann eingesetzt werden, um crescendo und decrescendo für
 
 ## Nice to have
 
+## Bugs
+ - sheet hat Länge 0 wenn kein Chordtrack vorhanden
+ - sheet hat Länge 0 sobald reihenfolge tacks, chords nicht eingehalten
+ - sheet hat Länge 0 oder ist fehlerhaft wenn erste zeile kein Kommentar ist
+ - die Akkorde As und Es werden nicht erkannt. Workaround: Aes Ees 
+ - Style switching (zb.: countryschlager->disco) funktioniert nicht
 
 ## Cool DAW-Editor
 all character based 

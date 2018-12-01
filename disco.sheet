@@ -7,7 +7,7 @@
 --           uname ch cc pc
 /instrument: piano 3 0 0/
 /instrument: bass 5 3 87/
-/instrument: drums 9 0 17/
+/instrument: drums 9 0 8/
 
 /style: simpleDisco normal/
 
