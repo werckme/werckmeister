@@ -244,6 +244,8 @@ namespace sheet {
 
 		void AContext::addEvent(const Event &ev)
 		{
+			auto meta = voiceMetaData(voice());
+			++(meta->eventCount);
 			_addEvent(this, &ev);
 		}
 
@@ -267,10 +269,15 @@ namespace sheet {
 		void AContext::newBar()
 		{
 			auto meta = voiceMetaData(voice());
-			if (meta->barPosition != meta->barLength) {
+			if (meta->isUpbeat) {
+				meta->isUpbeat = false;
+				meta->eventOffset = meta->eventCount;
+			}
+			else if (meta->barPosition != meta->barLength) {
 				warn("bar check error");
 			}
 			meta->barPosition = 0;
+			++(meta->barCount);
 		}
 
 		void AContext::rest(fm::Ticks duration)
@@ -295,8 +302,11 @@ namespace sheet {
 			if (metaEvent.metaCommand == SHEET_META__SET_SINGLE_EXPRESSION) {
 				metaSetSingleExpression(getArgument<fm::String>(metaEvent, 0));
 			}
-			if (metaEvent.metaCommand == SHEET_META__SET_TEMPO) {
+			if (metaEvent.metaCommand == SHEET_META__SET_TEMPO) { 
 				metaSetTempo(getArgument<fm::BPM>(metaEvent, 0));
+			}
+			if (metaEvent.metaCommand == SHEET_META__SET_UPBEAT) { 
+				metaSetUpbeat(metaEvent);
 			}
 		}
 
@@ -333,6 +343,15 @@ namespace sheet {
 				return;
 			}
 			meta->singleExpression = expr;
+		}
+
+		void AContext::metaSetUpbeat(const Event &event) 
+		{
+			auto meta = voiceMetaData(voice());
+			if (meta->position > 0) {
+				throwContextException("upbeat only allowed on begin of track");
+			}
+			meta->isUpbeat = true;
 		}
 
 		fm::Expression AContext::getNextExpressionValue(VoiceMetaDataPtr meta) const
@@ -438,14 +457,15 @@ namespace sheet {
 					setTarget(track, voice);
 					auto meta = voiceMetaData(this->voice());
 					fm::Ticks writtenDuration = 0;
-
 					while (writtenDuration < duration) {
 						auto it = voice.events.begin();
-						if (meta->idxLastWrittenEvent >= 0) {
+						if (meta->idxLastWrittenEvent >= 0) { // continue rendering
 							it += meta->idxLastWrittenEvent;
 							meta->idxLastWrittenEvent = -1;
 						}
-
+						else if (meta->eventOffset > 0) { // skip events (for upbeat)
+							it += meta->eventOffset;
+						}
 						for (; it != voice.events.end(); ++it)
 						{
 							auto ev = *it;

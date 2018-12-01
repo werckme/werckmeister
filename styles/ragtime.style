@@ -2,6 +2,8 @@ section normal --<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 [
 { 
     /uname: piano/
+    /upbeat: 8/ 
+    V,, |
     I,4 <II, III, IV, V, VI, VII,> <II, III, IV, V, VI, VII,> V,, |
 }   
 ]

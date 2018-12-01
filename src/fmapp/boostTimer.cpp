@@ -14,7 +14,6 @@ namespace fmapp {
 	}
 
 	BoostTimer::BoostTimer(const Callback &callback) : callback_(callback) {
-		int i = 0;
 	}
 
 	void BoostTimer::start(std::chrono::milliseconds millis)

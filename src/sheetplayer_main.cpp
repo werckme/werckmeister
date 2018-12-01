@@ -209,6 +209,8 @@ void play(fm::midi::MidiPtr midi, MidiOutputId midiOutput, fm::Ticks begin, fm::
 	fmapp::BoostTimer::io_stop();
 	boost_asio_.join();
 #endif
+
+	player.panic();
 }
 
 int main(int argc, const char** argv)

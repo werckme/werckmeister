@@ -11,5 +11,6 @@
 #define SHEET_META__SET_SINGLE_EXPRESSION FM_STRING("singleExpression")
 #define SHEET_META__SET_EXPRESSION FM_STRING("expression")
 #define SHEET_META__SET_TEMPO FM_STRING("tempo")
+#define SHEET_META__SET_UPBEAT FM_STRING("upbeat")
 
 #endif

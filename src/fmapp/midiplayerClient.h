@@ -18,6 +18,8 @@
 #include <chrono>
 #include <mutex>
 #include <algorithm>
+#include <fm/midi.hpp>
+#include <list>
 
 namespace fmapp {
 
@@ -41,6 +43,7 @@ namespace fmapp {
 		bool isPlaying() const { return state_ == Playing; }
 		void play();
 		void play(fm::Ticks ticks);
+		void panic();
 		void stop();
 		inline fm::BPM bpm() const { return std::max(bpm_, 1.0); }
 		void bpm(fm::BPM bpm) { bpm_ = bpm; }
@@ -87,6 +90,16 @@ namespace fmapp {
 		auto t = Clock::now();
 		auto millis = duration_cast<duration<fm::Ticks, std::milli>>(t - started_).count();
 		elapsed_ = static_cast<fm::Ticks>( millis / (60 / (bpm() * fm::PPQ) * 1000) );
+	}
+
+	template<class TBackend, class TMidiProvider, class TTimer>
+	void MidiplayerClient<TBackend, TMidiProvider, TTimer>::panic()
+	{
+		for (fm::midi::Channel channel=0; channel <= fm::midi::MaxChannel; ++channel) {
+			for (fm::midi::Pitch pitch=0; pitch <= fm::midi::MaxPitch; ++pitch)  {
+				Backend::send(fm::midi::Event::NoteOff(channel, 0, pitch));
+			}
+		}
 	}
 
 	template<class TBackend, class TMidiProvider, class TTimer>

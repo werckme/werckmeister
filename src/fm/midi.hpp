@@ -36,7 +36,8 @@ namespace fm {
 			MaxTickValue = 0x0FFFFFFF,
 			MaxChannel = 0xF,
 			MinEventSize = 3,
-			MaxEventSize = 7
+			MaxEventSize = 7,
+			MaxPitch = 127
 		};
 		enum EventType {
 			UndefinedEvent = 0,

@@ -1,3 +1,5 @@
+set(CMAKE_BUILD_TYPE Debug)
+
 ## lib
 SET (SRC_FETZER_LIB
     fm/literals.cpp
@@ -64,5 +66,12 @@ target_link_libraries (rehearse sheet ${Boost_LIBRARIES})
 add_executable(sheetc sheetcompiler_main.cpp sheet.cpp)
 target_link_libraries (sheetc sheet ${Boost_LIBRARIES})
 
+if (WIN32)
+    SET(LIBS_PLAYER ${LIBS_PLAYER} rtmidi_static)
+endif(WIN32)
+if (UNIX)
+    SET(LIBS_PLAYER ${LIBS_PLAYER} rtmidi pthread)
+endif(UNIX)
+
 add_executable(sheetp ${SRC_SHEET_PLAYER})
-target_link_libraries (sheetp sheet ${Boost_LIBRARIES} rtmidi_static)
+target_link_libraries (sheetp sheet ${Boost_LIBRARIES} ${LIBS_PLAYER})

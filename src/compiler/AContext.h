@@ -38,6 +38,10 @@ namespace sheet {
 				fm::Ticks duration = DefaultDuration;
 				fm::Ticks barLength = DefaultBarLength;
 				fm::Ticks barPosition = 0;
+				int barCount = 0;
+				long long eventCount = 0;
+				long long eventOffset = 0;
+				bool isUpbeat = false;
 				fm::Expression expression = fm::expression::FF;
 				fm::Expression singleExpression = fm::expression::Default;
 				WaitForTieBuffer waitForTieBuffer;
@@ -91,6 +95,7 @@ namespace sheet {
 			virtual void metaSetExpression(const fm::String &value);
 			virtual void metaSetSingleExpression(const fm::String &value);
 			virtual void metaSetTempo(double bpm) {}
+			virtual void metaSetUpbeat(const Event &event);
 			/////// actual context stuff
 			virtual void addEvent(const PitchDef &pitch, fm::Ticks duration, bool tying = false);
 			virtual void seek(fm::Ticks duration);

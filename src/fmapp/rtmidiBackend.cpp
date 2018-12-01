@@ -28,4 +28,29 @@ namespace fmapp {
 		this->output_ = output;
 		return true;
 	}
+
+	void RtMidiBackend::send(const fm::midi::Event &ev, Output *output)
+	{
+		if (output == nullptr) {
+			output = &output_;
+		}
+		if (output->id == UNKNOWN_PORT) {
+			return;
+		}
+		if (!midiout_->isPortOpen()) {
+			midiout_->openPort(output->id);
+		}
+		const unsigned int StaticBufferSize = 255;
+		fm::Byte buffer[StaticBufferSize];
+		std::vector<fm::Byte> fallback;
+		auto eventSize = ev.payloadSize();
+		fm::Byte *bff = &buffer[0];
+		if (eventSize > StaticBufferSize) {
+			fallback.resize(eventSize, 0);
+			bff = fallback.data();
+		}
+		
+		ev.writePayload(bff, eventSize);
+		midiout_->sendMessage(bff, eventSize);
+	}
 }

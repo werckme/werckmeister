@@ -4,7 +4,7 @@
 #include <memory>
 #include <vector>
 #include <fm/midi.hpp>
-#include <RtMidi.h>
+#include <rtmidi/RtMidi.h>
 
 namespace fmapp {
 	class RtMidiBackend {
@@ -23,6 +23,7 @@ namespace fmapp {
 		virtual ~RtMidiBackend();
 		template<class TEvents>
 		void send(const TEvents &events, Output *output = nullptr);
+		void send(const fm::midi::Event &event, Output *output = nullptr);
 	private:
 		std::unique_ptr<RtMidiOut> midiout_;
 		Output output_;
@@ -36,21 +37,8 @@ namespace fmapp {
 		if (events.empty()) {
 			return;
 		}
-		if (output == nullptr) {
-			output = &output_;
-		}
-		if (output->id == UNKNOWN_PORT) {
-			return;
-		}
-		if (!midiout_->isPortOpen()) {
-			midiout_->openPort(output->id);
-		}
-		std::vector<fm::Byte> bytes;
-		bytes.reserve(3);
 		for (auto &ev : events) {
-			bytes.resize(ev.payloadSize(), 0);
-			ev.writePayload(bytes.data(), bytes.size());
-			midiout_->sendMessage(&bytes);
+			send(ev, output);
 		}
 	}
 }

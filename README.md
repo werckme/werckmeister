@@ -110,6 +110,8 @@ Cmaj | Cmaj C7 |
 # channel
 /channelVolume: 10 127/
 
+#rhythmik
+/upbeat: 8/ -- auftakt 1 8tel
 
 
 ## TODO: weitere Lilypond Ausdrücke

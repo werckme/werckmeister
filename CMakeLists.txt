@@ -10,6 +10,8 @@ set(FM_CHARSET "ISO-8859-1")
 set(FM_PPQ 500)
 #END PROJECT CONFIG
 
+
+
 set(CMAKE_BINARY_DIR ${CMAKE_SOURCE_DIR}/build)
  
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR})
@@ -42,9 +44,12 @@ find_package(Boost COMPONENTS unit_test_framework filesystem program_options loc
 INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(src/)
 INCLUDE_DIRECTORIES(src/ext)
-INCLUDE_DIRECTORIES(submodules/rtmidi)
 
-add_subdirectory(submodules/rtmidi) #rtmidi needs /MT or /MTd for windows
+if(WIN32)
+  INCLUDE_DIRECTORIES(submodules)
+  add_subdirectory(submodules/rtmidi) #rtmidi needs /MT or /MTd for windows
+endif(WIN32)
+
 add_subdirectory(src)
 
 configure_file("${PROJECT_SOURCE_DIR}/src/fm/config.hpp.in" "${PROJECT_SOURCE_DIR}/src/fm/config.hpp")
