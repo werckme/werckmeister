@@ -22,9 +22,6 @@ namespace fmapp {
 
 	bool RtMidiBackend::setOutput(const Output &output)
 	{
-		if (output_.id != UNKNOWN_PORT && midiout_->isPortOpen()) {
-			midiout_->closePort();
-		}
 		this->output_ = output;
 		return true;
 	}
@@ -37,9 +34,8 @@ namespace fmapp {
 		if (output->id == UNKNOWN_PORT) {
 			return;
 		}
-		if (!midiout_->isPortOpen()) {
-			midiout_->openPort(output->id);
-		}
+		
+		midiout_->openPort(output->id);
 		const unsigned int StaticBufferSize = 255;
 		fm::Byte buffer[StaticBufferSize];
 		std::vector<fm::Byte> fallback;
@@ -52,5 +48,6 @@ namespace fmapp {
 		
 		ev.writePayload(bff, eventSize);
 		midiout_->sendMessage(bff, eventSize);
+		midiout_->closePort();
 	}
 }
