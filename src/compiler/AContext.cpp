@@ -3,6 +3,7 @@
 #include <exception>
 #include <fm/werckmeister.hpp>
 #include <algorithm>
+#include <fm/common.hpp>
 
 namespace sheet {
 
@@ -224,7 +225,8 @@ namespace sheet {
 			else if (meta->pendingTie()) {
 				auto it = meta->waitForTieBuffer.find(pitch);
 				if (it == meta->waitForTieBuffer.end()) {
-					throwContextException("note tie error");
+					warn("note tie error");
+					meta->waitForTieBuffer.clear();
 				}
 				auto firstDuration = it->second;
 				addEvent(pitch, meta->position - firstDuration, firstDuration + meta->duration);
@@ -273,7 +275,7 @@ namespace sheet {
 				meta->isUpbeat = false;
 				meta->eventOffset = meta->eventCount;
 			}
-			else if (meta->barPosition != meta->barLength) {
+			else if (!fm::compareTolerant(meta->barPosition, meta->barLength, fm::Ticks(2))) {
 				warn("bar check error");
 			}
 			meta->barPosition = 0;
