@@ -92,6 +92,18 @@ Cmaj | Cmaj C7 |
 
 ```
 
+## Voicing Strategy
+#Direct
+#SimpleGuitar
+ Voicing I V I III: Basis
+ 	 I V VII III: 7
+	 I III VII II V: 9
+	 I IV VII II V: 11
+	 I IV VII III VI: 13
+
+ Min/Max Octavraum
+ Keine Prüfung ob wirklich spielbar
+
 ## Meta Commands
 # expressions
 
