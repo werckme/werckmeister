@@ -1,12 +1,11 @@
--- TODO: when removing this line, the resulting midi is emp
+-- TODO: when removing this line, the resulting midi is empty
 @load "./chords/default.chords";
 @load "./styles/countryschlager1.style";
 @load "./pitchmaps/defaultMidiDrumMap.pitchmap";
 --@load "./styles/simpleDisco.style";
 
 [{
-    /channel: 5/
-    /soundSelect: 7 26/
+    /uname: slide/
     \ffff
     r1 | r1 |c2 d | e r | r2 c4 d4 | e4 e g c | dis2 dis4 d | c2 bes4 a | g2  g4 a | bes c' bes a | as2 as4 bes | 
     c' as,4 as,4  bes,~ | <c bes,> as as bes | c' c' es'8 d' c' d' | b2 b, | r1 | r4 b4 b4 c' | d' d' d' d' | d' d' e'8 d' c' b | c'1 
@@ -24,4 +23,7 @@
 
 
 C | C | C | C | C | C | Ees | Ees | Ees | Ees | 
-Aes | Aes | Aes | Aes | G7 | G7 | G7 | G7 | G7 | C | C | C |
+Aes | Aes | Aes | Aes | G7 | G7 | G7 | G7 | G7 | C | C | Cmin |
+
+/style: countryschlager1 ende/
+Cmin |

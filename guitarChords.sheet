@@ -1,0 +1,8 @@
+-- document configs
+@load "./chords/default.chords";
+@load "./styles/justchords.style";
+
+
+ 
+C | C7 |
+

@@ -9,6 +9,8 @@
 #include "compiler/MidiContext.h"
 #include <memory>
 #include "sheet/DirectVoicingStrategy.h"
+#include "sheet/SimpleGuitar.h"
+#include "compiler/voicingStrategies.h"
 
 namespace fm {
     
@@ -53,14 +55,20 @@ namespace fm {
 		return midiContext;
 	}
 
-	sheet::VoicingStrategyPtr Werckmeister::getDirectVoicingStrategy()
-	{
-		return std::make_shared<sheet::DirectVoicingStrategy>();
-	}
-
 	sheet::VoicingStrategyPtr Werckmeister::getDefaultVoicingStrategy()
 	{
-		return getDirectVoicingStrategy();
+		return getVoicingStrategy(SHEET_VOICING_STRATEGY_DEFAULT);
+	}
+
+	sheet::VoicingStrategyPtr Werckmeister::getVoicingStrategy(const fm::String &name)
+	{
+		if (name == SHEET_VOICING_STRATEGY_SIMPLE_GUITAR) {
+			return std::make_shared<sheet::SimpleGuitar>();
+		}
+		if (name == SHEET_VOICING_STRATEGY_AS_NOTATED) {
+			return std::make_shared<sheet::DirectVoicingStrategy>();
+		}
+		throw std::runtime_error("voicing strategy not found: " + fm::to_string(name));
 	}
 
 	Werckmeister::~Werckmeister() = default;

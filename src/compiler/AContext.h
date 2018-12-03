@@ -54,6 +54,7 @@ namespace sheet {
 				*/
 				fm::Ticks remainingTime = 0;
 				fm::String uname;
+				VoicingStrategyPtr voicingStrategy = nullptr;
 				virtual ~VoiceMetaData() = default;
 				bool pendingTie() const { return !waitForTieBuffer.empty(); }
 			};
@@ -96,6 +97,7 @@ namespace sheet {
 			virtual void metaSetSingleExpression(const fm::String &value);
 			virtual void metaSetTempo(double bpm) {}
 			virtual void metaSetUpbeat(const Event &event);
+			virtual void metaSetVoicingStrategy(const fm::String &name);
 			/////// actual context stuff
 			virtual void addEvent(const PitchDef &pitch, fm::Ticks duration, bool tying = false);
 			virtual void seek(fm::Ticks duration);
@@ -118,9 +120,9 @@ namespace sheet {
 			PtrIdMap ptrIdMap_;
 			void setTarget(const Track &track, const Voice &voice);
 			ChordEvent currentChord_;
+			VoicingStrategyPtr defaultVoiceStrategy_;
 			IStyleDefServer::ConstChordValueType currentChordDef_ = nullptr;
 			IStyleDefServer::ConstStyleValueType currentStyleDef_ = nullptr;
-			VoicingStrategyPtr currentVoicingStrategy_ = nullptr;
 			TrackId trackId_ = INVALID_TRACK_ID, chordTrack_ = INVALID_TRACK_ID;
 			VoiceId voiceId_ = INVALID_VOICE_ID, chordVoice_ = INVALID_VOICE_ID;
 			VoiceMetaDataMap voiceMetaDataMap_;
@@ -164,7 +166,7 @@ namespace sheet {
 		template<typename TArg>
 		TArg AContext::getArgument(const Event &metaEvent, int idx, TArg *defaultValue) 
 		{
-			return __getArgument(metaEvent, idx, defaultValue);
+			return __getArgument<TArg>(metaEvent, idx, defaultValue);
 		}
     }
 }

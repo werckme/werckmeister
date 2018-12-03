@@ -12,5 +12,6 @@
 #define SHEET_META__SET_EXPRESSION FM_STRING("expression")
 #define SHEET_META__SET_TEMPO FM_STRING("tempo")
 #define SHEET_META__SET_UPBEAT FM_STRING("upbeat")
+#define SHEET_META__SET_VOICING_STRATEGY FM_STRING("voicingStrategy")
 
 #endif

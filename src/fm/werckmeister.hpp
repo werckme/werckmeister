@@ -39,7 +39,7 @@ namespace fm {
 		sheet::compiler::CompilerPtr createCompiler();
 		sheet::compiler::AContextPtr createContext();
 		sheet::VoicingStrategyPtr getDefaultVoicingStrategy();
-		sheet::VoicingStrategyPtr getDirectVoicingStrategy();
+		sheet::VoicingStrategyPtr getVoicingStrategy(const fm::String &name);
 	private:
 		ResourceStream openResourceImpl(const fm::String &path);
 	public:

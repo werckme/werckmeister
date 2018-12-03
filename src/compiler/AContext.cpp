@@ -37,7 +37,7 @@ namespace sheet {
 				auto chordDef = ctx->currentChordDef();
 				auto chord = ctx->currentChord();
 				auto voicingStratgy = ctx->currentVoicingStrategy();
-				auto pitches = voicingStratgy->get(*chord, *chordDef, ev->pitches);
+				auto pitches = voicingStratgy->get(*chord, *chordDef, ev->pitches, VoicingStrategy::TimeInfo());
 
 				for (const auto &pitch : pitches)
 				{
@@ -310,6 +310,16 @@ namespace sheet {
 			if (metaEvent.metaCommand == SHEET_META__SET_UPBEAT) { 
 				metaSetUpbeat(metaEvent);
 			}
+			if (metaEvent.metaCommand == SHEET_META__SET_VOICING_STRATEGY) {
+				metaSetVoicingStrategy(getArgument<fm::String>(metaEvent, 0));
+			}
+		}
+
+		void AContext::metaSetVoicingStrategy(const fm::String &name)
+		{
+			auto &wm = fm::getWerckmeister();
+			auto meta = voiceMetaData(voice());
+			meta->voicingStrategy = wm.getVoicingStrategy(name);
 		}
 
 		void AContext::metaSetUname(const fm::String &uname)
@@ -411,10 +421,14 @@ namespace sheet {
 		}
 		VoicingStrategyPtr AContext::currentVoicingStrategy()
 		{
-			if (!currentVoicingStrategy_) {
-				currentVoicingStrategy_ = fm::getWerckmeister().getDefaultVoicingStrategy();
+			auto meta = voiceMetaData(voice());
+			if (!defaultVoiceStrategy_) {
+				defaultVoiceStrategy_ = fm::getWerckmeister().getDefaultVoicingStrategy();
 			}
-			return currentVoicingStrategy_;
+			if (!meta->voicingStrategy) {
+				return defaultVoiceStrategy_;
+			}
+			return meta->voicingStrategy;
 		}
 		void AContext::setChord(const ChordEvent &chord)
 		{

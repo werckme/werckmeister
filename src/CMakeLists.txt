@@ -17,6 +17,7 @@ SET (SRC_FETZER_LIB
     sheet/Event.cpp
     sheet/Document.cpp
     sheet/DirectVoicingStrategy.cpp
+    sheet/SimpleGuitar.cpp
     sheet/ChordDef.cpp
 )
 

@@ -151,7 +151,8 @@ Der \espressivo-Befehl kann eingesetzt werden, um crescendo und decrescendo für
  - sheet hat Länge 0 wenn kein Chordtrack vorhanden
  - sheet hat Länge 0 sobald reihenfolge tacks, chords nicht eingehalten
  - sheet hat Länge 0 oder ist fehlerhaft wenn erste zeile kein Kommentar ist
- - die Akkorde As und Es werden nicht erkannt. Workaround: Aes Ees 
+ - die Akkorde As und Es werden nicht erkannt. Workaround: Aes Ees
+ - style-section switch legt neue tracks an, anstatt bestehende zu nutzen 
  - Style switching (zb.: countryschlager->disco) funktioniert nicht
 
 ## Cool DAW-Editor

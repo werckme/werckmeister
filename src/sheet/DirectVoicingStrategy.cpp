@@ -1,7 +1,7 @@
 #include "DirectVoicingStrategy.h"
 
 namespace sheet {
-	DirectVoicingStrategy::Pitches DirectVoicingStrategy::get(const ChordEvent &chord, const ChordDef &def, const Degrees &degreeIntervals)
+	DirectVoicingStrategy::Pitches DirectVoicingStrategy::get(const ChordEvent &chord, const ChordDef &def, const Degrees &degreeIntervals, const TimeInfo&)
 	{
 		Pitches result;
 		auto chordElements = chord.chordElements();
