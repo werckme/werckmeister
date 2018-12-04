@@ -1,8 +1,8 @@
-[
-{
-    e4 e e e | g8t g g g'4 g' g' | f f f f | a a a a | b4n5 b4n5 b4n5 b4n5 b4n5 c4 c | g'
-}
-{
-    c c c c |  c        c  c  c | d d d d | f f f f | g g g g | e, 
-}
-]
+-- WORKAROUND COMMENT
+@load "./styles/purdie.style";
+@load "./pitchmaps/defaultMidiDrumMap.pitchmap";
+@load "./chords/default.chords";
+
+/instrument: drums 9 0 32/
+
+C | C | C | C | C | C | C | C | C | C | C | C |

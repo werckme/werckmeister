@@ -1,8 +1,8 @@
 -- document configs
-@load "../chords/default.chords";
---@load "../styles/simpleDisco.style";
-@load "../styles/justchords.style";
-@load "../pitchmaps/defaultMidiDrumMap.pitchmap";
+@load "./chords/default.chords";
+--@load "./styles/simpleDisco.style";
+@load "./styles/justchords.style";
+@load "./pitchmaps/defaultMidiDrumMap.pitchmap";
 
 --[{ 
 --    -- voice 0

@@ -275,7 +275,7 @@ namespace sheet {
 				meta->isUpbeat = false;
 				meta->eventOffset = meta->eventCount;
 			}
-			else if (!fm::compareTolerant(meta->barPosition, meta->barLength, fm::Ticks(2))) {
+			else if (!fm::compareTolerant(meta->barPosition, meta->barLength, fm::Ticks(4))) {
 				warn("bar check error");
 			}
 			meta->barPosition = 0;

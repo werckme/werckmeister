@@ -148,6 +148,8 @@ Der \espressivo-Befehl kann eingesetzt werden, um crescendo und decrescendo für
 ## Nice to have
 
 ## Bugs
+ - style mit leerer Voice friert programm ein
+ - !ff<c d e f g>: expression bezieht sich nur auf c, nicht auf alle töne in <...> 
  - sheet hat Länge 0 wenn kein Chordtrack vorhanden
  - sheet hat Länge 0 sobald reihenfolge tacks, chords nicht eingehalten
  - sheet hat Länge 0 oder ist fehlerhaft wenn erste zeile kein Kommentar ist
