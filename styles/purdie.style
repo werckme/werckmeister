@@ -2,9 +2,29 @@ section normal
 [ 
 {
     /uname: drums/
-    "ht"8t "ht"8t "ht"8t    "ht"8t "ht"8t "ht"8t    "ht"8t "ht"8t "ht"8t    "ht"8t "ht"8t "ht"8t  |
+    \p"ht"8t r8t !pp"ht"8t    "ht"8t r8t !pp"ht"8t    "ht"8t r8t !pp"ht"8t   "ht"8t r8t !pp"ht"8t |
 }
-
+{
+    /uname: drums/
+    r8t !ppp"sn"8t r8t    r8t !pp"sn"8t r8t    \f"ss"8t !ppp"sn"8t r8t   r8t !pp"sn"8t r8t |
+}
+{
+    /uname: drums/
+    "bd"4t r8t r4t "bd"8t r4t r8t "bd"4t r8t |
+}
+] 
+[ 
+{
+    /uname: organ/
+    --/voicingStrategy: simpleGuitar/
+    I4t r8t <III VII I' IV>4t I,,8t r4t <V, II, IV, I,,>8t r4t r8t |
+}
+] 
+[ 
+{
+    /uname: bass/
+    I,,4t r8t r4t I,,8t r4t r8t V,,,4t VII,,,8t |
+}
 ] 
 end
 

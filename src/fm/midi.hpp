@@ -16,14 +16,15 @@ namespace fm {
 		class Track;
 		typedef std::shared_ptr<Track> TrackPtr;
 		class Midi;
+		typedef unsigned long MidiTicks;
 		typedef std::shared_ptr<Midi> MidiPtr;
 		typedef std::string MetaKey;
 		typedef std::string MetaValue;
 		extern const MetaValue NoMetaValue;
 		typedef std::unordered_map<MetaKey, MetaValue> MetaDataContainer;
-		size_t variableLengthRequiredSize(Ticks value);
-		size_t variableLengthWrite(Ticks value, Byte *outval, size_t maxSize);
-		Ticks variableLengthRead(const Byte *inval, size_t maxSize, size_t *outReadBytes = nullptr);
+		size_t variableLengthRequiredSize(MidiTicks value);
+		size_t variableLengthWrite(MidiTicks value, Byte *outval, size_t maxSize);
+		MidiTicks variableLengthRead(const Byte *inval, size_t maxSize, size_t *outReadBytes = nullptr);
 		typedef Byte Channel;
 		typedef Byte Pitch;
 		typedef Byte Velocity;

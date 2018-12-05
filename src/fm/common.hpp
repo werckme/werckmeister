@@ -22,11 +22,18 @@ namespace fm {
 	bool isLittleEndian();
 
 	template<typename TType>
-	bool compareTolerant(const TType &a, const TType &b, const TType &range)
+	TType absDifference(const TType &a, const TType &b)
 	{
+		// we dont use abs, because in case of unsigned int smaller - bigger = insanely big
 		auto max = std::max(a, b);
 		auto min = std::min(a, b);
-		return (max - min) <= range;
+		return (max - min);
+	}
+
+	template<typename TType>
+	bool compareTolerant(const TType &a, const TType &b, const TType &range)
+	{
+		return absDifference(a, b) <= range;
 	}
 
 	template<typename TType>

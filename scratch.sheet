@@ -3,6 +3,11 @@
 @load "./pitchmaps/defaultMidiDrumMap.pitchmap";
 @load "./chords/default.chords";
 
+
+/tempo: 136/
+/instrument: organ 2 0 18/
+/instrument: guitar 3 0 37/
+/instrument: bass 8 0 33/
 /instrument: drums 9 0 32/
 
-C | C | C | C | C | C | C | C | C | C | C | C |
+C7 | C7 | Emin7 | A B | Cmin | Cmin | Ces7+9 | G7 B | G7 Aes7+ | F | F | E13 | Aes7+ | B A11 | B A11 | Emin11 | Cmin | Cmin |

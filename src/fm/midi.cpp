@@ -9,7 +9,7 @@ namespace fm {
 
 		const MetaValue NoMetaValue = "not_a_meta_value";
 
-		size_t variableLengthRequiredSize(Ticks value)
+		size_t variableLengthRequiredSize(MidiTicks value)
 		{
 			if (value <= 0x7F) {
 				return 1;
@@ -25,7 +25,7 @@ namespace fm {
 			}
 			throw std::runtime_error("invalid tick length");
 		}
-		size_t variableLengthWrite(Ticks value, Byte *outval, size_t size)
+		size_t variableLengthWrite(MidiTicks value, Byte *outval, size_t size)
 		{
 			if (value > 0x0FFFFFFF)
 			{
@@ -36,7 +36,7 @@ namespace fm {
 				return 1;
 			}
 			// according to http://midi.teragonaudio.com/tech/midifile/vari.htm
-			Ticks buffer = value & 0x7F;
+			MidiTicks buffer = value & 0x7F;
 			while ((value >>= 7))
 			{
 				buffer <<= 8;
@@ -57,10 +57,10 @@ namespace fm {
 			}
 			return c;
 		}
-		Ticks variableLengthRead(const Byte *inval, size_t maxSize, size_t *outReadBytes)
+		MidiTicks variableLengthRead(const Byte *inval, size_t maxSize, size_t *outReadBytes)
 		{
 			// http://midi.teragonaudio.com/tech/midifile/vari.htm
-			Ticks value;
+			MidiTicks value;
 			Byte c;
 			int idx = 0;
 			if ((value = inval[idx++]) & 0x80) {

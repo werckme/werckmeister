@@ -2,7 +2,7 @@
 #define FM_UNITS_HPP
 
 namespace fm {
-	typedef unsigned long long Ticks;
+	typedef long double Ticks;
 	typedef int Pitch;
 	typedef int Expression;
 	typedef double BPM;

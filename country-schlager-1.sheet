@@ -3,12 +3,12 @@
 @load "./styles/countryschlager1.style";
 @load "./pitchmaps/defaultMidiDrumMap.pitchmap";
 --@load "./styles/simpleDisco.style";
-
+--@load "./styles/purdie.style";
 [{
     /channel: 0/
     /soundSelect: 0 26/
     \fffff
-    r1 | r1 |c2 d | e r | r2 c4 d4 | e4 e g c | dis2 dis4 d | c2 bes4 a | g2  g4 a | bes c' bes a | as2 as4 bes | 
+    r1 | r1 |c2 d | e1 | r2 c4 d4 | e4 e g c | dis2 dis4 d | c2 bes4 a | g2  g4 a | bes c' bes a | as2 as4 bes | 
     c' as,4 as,4  bes,~ | <bes, c> as as bes | c' c' es'8 d' c' d' | b2 b, | r1 | r4 b4 b4 c' | d' d' d' d' | d' d' e'8 d' c' b | c'1 
 }]
 
@@ -19,6 +19,7 @@
 /instrument: piano 3 1 2/
 /instrument: bass 8 0 33/
 /instrument: drums 9 0 32/
+/instrument: organ 2 0 18/
 
 
 

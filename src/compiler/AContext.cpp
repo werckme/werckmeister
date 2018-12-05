@@ -5,6 +5,10 @@
 #include <algorithm>
 #include <fm/common.hpp>
 
+namespace {
+	const fm::Ticks TickTolerance = 0.5; // rounding errors e.g. for triplets
+}
+
 namespace sheet {
 
 	namespace compiler {
@@ -275,7 +279,7 @@ namespace sheet {
 				meta->isUpbeat = false;
 				meta->eventOffset = meta->eventCount;
 			}
-			else if (!fm::compareTolerant(meta->barPosition, meta->barLength, fm::Ticks(4))) {
+			else if (!fm::compareTolerant(meta->barPosition, meta->barLength, fm::Ticks(TickTolerance))) {
 				warn("bar check error");
 			}
 			meta->barPosition = 0;
@@ -472,7 +476,7 @@ namespace sheet {
 					setTarget(track, voice);
 					auto meta = voiceMetaData(this->voice());
 					fm::Ticks writtenDuration = 0;
-					while (writtenDuration < duration) {
+					while (fm::absDifference(writtenDuration, duration) > TickTolerance) { // loop until enough events are written
 						auto it = voice.events.begin();
 						if (meta->idxLastWrittenEvent >= 0) { // continue rendering
 							it += meta->idxLastWrittenEvent;
@@ -496,7 +500,7 @@ namespace sheet {
 							ev.duration = std::min(ev.duration, duration - writtenDuration);
 							addEvent(ev);
 							writtenDuration += meta->position - currentPos;
-							if (writtenDuration >= duration) {
+							if (fm::absDifference(writtenDuration, duration) <= TickTolerance) {
 								bool hasRemainings = ev.duration != originalDuration;
 								if (hasRemainings) {
 									meta->remainingTime = originalDuration - ev.duration;

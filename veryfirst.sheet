@@ -4,22 +4,7 @@
 @load "./styles/justchords.style";
 @load "./pitchmaps/defaultMidiDrumMap.pitchmap";
 
---[{ 
---    -- voice 0
---    c d e <g a c'>~ | <g a c'>8 f4 e d4. | <c c'>1 | r | 
---    <ces ces'>1 | c4 d e <g a c'> | <g a c'>1  |  <cis cis'>1 | d8 g b e8. f16 g8 a b |
---}]
+/instrument: piano 0 0 0/
 
---[{
---    /channel: 5/
---    /soundSelect: 0 8/
---    c4 c c c | c4 c c c | c4 c c c | c4 c c c | 
---    c4 c c c | c4 c c c | c4 c c c | c4 c <c e> <c e f> |
---}]
- 
-C | D E | F G | C | 
+C9 | C11 | C13 |
 
- /soundSelect: 3 90/
---C Cis7 | D Dis | E F | Fis G | Gis A | Ais B | C Cmin | E |
-
---C7+ | Dmin7 | Emin7 | F7+ | G7 | Amin7 | B-7  
