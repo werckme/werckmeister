@@ -382,7 +382,7 @@ namespace sheet {
 
 		void AContext::switchStyle(IStyleDefServer::ConstStyleValueType current, IStyleDefServer::ConstStyleValueType next)
 		{
-			if (current == nullptr || next == nullptr || current == next) {
+			if (next == nullptr || current == next) {
 				return;
 			}
 			// set position for new track

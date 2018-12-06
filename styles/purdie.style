@@ -16,7 +16,7 @@ section normal
 [ 
 {
     /uname: organ/
-    --/voicingStrategy: simpleGuitar/
+    /voicingStrategy: simpleGuitar/
     I4t r8t <III VII I' IV>4t I,,8t r4t <V, II, IV, I,,>8t r4t r8t |
 }
 ] 

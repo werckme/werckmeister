@@ -13,4 +13,21 @@ namespace sheet {
 		return &(*it);
 	}
 
+	bool has7(const ChordDef &def)
+	{
+		return std::any_of(def.intervals.begin(), def.intervals.end(), [](const auto &chordOption){ return chordOption.degree == fm::degrees::VII; });
+	}
+	bool has9(const ChordDef &def)
+	{
+		return std::any_of(def.intervals.begin(), def.intervals.end(), [](const auto &chordOption){ return chordOption.degree == fm::degrees::II; });
+	}
+	bool has11(const ChordDef &def)
+	{
+		return std::any_of(def.intervals.begin(), def.intervals.end(), [](const auto &chordOption){ return chordOption.degree == fm::degrees::IV; });
+	}
+	bool has13(const ChordDef &def)
+	{
+		return std::any_of(def.intervals.begin(), def.intervals.end(), [](const auto &chordOption){ return chordOption.degree == fm::degrees::VI; });
+	}
+
 }

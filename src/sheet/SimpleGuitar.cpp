@@ -1,32 +1,44 @@
 #include "SimpleGuitar.h"
-#include <algorithm>
 
 namespace sheet {
 
-	bool SimpleGuitar::has7(const ChordDef &def) const
-	{
-		return std::any_of(def.intervals.begin(), def.intervals.end(), [](const auto &chordOption){ return chordOption.degree == fm::degrees::VII; });
-	}
-	bool SimpleGuitar::has9(const ChordDef &def) const
-	{
-		return std::any_of(def.intervals.begin(), def.intervals.end(), [](const auto &chordOption){ return chordOption.degree == fm::degrees::II; });
-	}
-	bool SimpleGuitar::has11(const ChordDef &def) const
-	{
-		return std::any_of(def.intervals.begin(), def.intervals.end(), [](const auto &chordOption){ return chordOption.degree == fm::degrees::IV; });
-	}
-	bool SimpleGuitar::has13(const ChordDef &def) const
-	{
-		return std::any_of(def.intervals.begin(), def.intervals.end(), [](const auto &chordOption){ return chordOption.degree == fm::degrees::VI; });
-	}
-
  	SimpleGuitar::OctaveMap SimpleGuitar::createOctaveMap(const ChordDef &def) const
 	{
+		if (has7(def) && has9(def) && has11(def) && has13(def)) {
+			return  OctaveMap({
+				{fm::degrees::I, -1},
+				{fm::degrees::IV, -1},
+				{fm::degrees::VII, 0},
+				{fm::degrees::II, 0},
+				{fm::degrees::VI, 0},
+				{fm::degrees::I, 1},
+			});
+		}		
+		if (has7(def) && has9(def) && has11(def)) {
+			return  OctaveMap({
+				{fm::degrees::I, -1},
+				{fm::degrees::IV, -1},
+				{fm::degrees::VII, 0},
+				{fm::degrees::II, 0},
+				{fm::degrees::V, 0},
+				{fm::degrees::I, 1},
+			});
+		}
+		if (has7(def) && has9(def)) {
+			return  OctaveMap({
+				{fm::degrees::I, -1},
+				{fm::degrees::III, -1},
+				{fm::degrees::VII, 0},
+				{fm::degrees::II, 0},
+				{fm::degrees::V, 0},
+				{fm::degrees::I, 1},
+			});
+		}
 		if (has7(def)) {
 			return  OctaveMap({
 				{fm::degrees::I, -1},
-				{fm::degrees::VII, -1},
-				{fm::degrees::I, 0},
+				{fm::degrees::V, -1},
+				{fm::degrees::VII, 0},
 				{fm::degrees::III, 0},
 				{fm::degrees::V, 0},
 				{fm::degrees::I, 1},

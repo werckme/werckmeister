@@ -22,10 +22,6 @@ namespace sheet {
 		typedef DirectVoicingStrategy Base;
         virtual ~SimpleGuitar() = default;
 		virtual Pitches get(const ChordEvent &chord, const ChordDef &def, const Degrees &degreeIntervals, const TimeInfo&) override;
-        bool has7(const ChordDef &def) const;
-        bool has9(const ChordDef &def) const;
-        bool has11(const ChordDef &def) const;
-        bool has13(const ChordDef &def) const;
         OctaveMap createOctaveMap(const ChordDef &def) const;
     };
 }
