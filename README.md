@@ -130,8 +130,6 @@ andere Taktarten als 4/4
 
 ## TODO: weitere Lilypond Ausdrücke
 
-
-
 Arpeggios
 
 # Dynamik
@@ -142,6 +140,22 @@ Eine Crescendo-Klammer wird mit dem Befehl \< begonnen und mit \!, einem absolut
 
 # Espressivo
 Der \espressivo-Befehl kann eingesetzt werden, um crescendo und decrescendo für die selbe Note anzuzeigen
+
+
+Paralleles abspielen verschiedener Styles
+
+{
+  /style: disco normal/
+  /exclude: all/
+  /inlcude: bass/
+  C | C | E |
+}
+{
+  /style: latin normal/
+  /include: all/
+  /exlclude: bass/
+  C | C | E |
+}
 
 
 
