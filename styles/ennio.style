@@ -2,7 +2,7 @@ section normal
 [ 
 {
     /uname: piano/
-    I,,4 <II, III, IV, V, VI, VII,> <II, III, IV, V, VI, VII,> V,,, |
+    !ffffI,,4 <II, III, IV, V, VI, VII,> <II, III, IV, V, VI, VII,> !fffV,,, |
 }
 ] 
 end

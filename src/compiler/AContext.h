@@ -14,6 +14,7 @@
 #include <fm/common.hpp>
 #include "metaCommands.h"
 #include <list>
+#include "forward.hpp"
 
 namespace sheet {
     namespace compiler {
@@ -57,6 +58,7 @@ namespace sheet {
 				VoicingStrategyPtr voicingStrategy = nullptr;
 				virtual ~VoiceMetaData() = default;
 				bool pendingTie() const { return !waitForTieBuffer.empty(); }
+				ASpielanweisungPtr spielanweisung;
 			};
 			typedef std::shared_ptr<VoiceMetaData> VoiceMetaDataPtr;
 			typedef std::unordered_map<VoiceId, VoiceMetaDataPtr> VoiceMetaDataMap;
@@ -89,6 +91,7 @@ namespace sheet {
 			virtual VoicingStrategyPtr currentVoicingStrategy();
 			virtual const ChordEvent * currentChord() const { return &currentChord_; }
 			virtual fm::Expression getExpression(const fm::String &str) const;
+			virtual ASpielanweisungPtr spielanweisung();
 			/////// meta commands
 			virtual void setMeta(const Event &metaEvent);
 			virtual void metaSetUname(const fm::String &uname);
@@ -99,6 +102,7 @@ namespace sheet {
 			virtual void metaSetUpbeat(const Event &event);
 			virtual void metaSetVoicingStrategy(const fm::String &name);
 			/////// actual context stuff
+			virtual void addEvent(const Event::Pitches &pitches, fm::Ticks duration, bool tying = false);
 			virtual void addEvent(const PitchDef &pitch, fm::Ticks duration, bool tying = false);
 			virtual void seek(fm::Ticks duration);
 			virtual void newBar();
@@ -114,7 +118,6 @@ namespace sheet {
 			virtual VoiceId createVoiceImpl() = 0;
 			virtual VoiceMetaDataPtr createVoiceMetaData() = 0;
 			virtual void switchStyle(IStyleDefServer::ConstStyleValueType current, IStyleDefServer::ConstStyleValueType next);
-			virtual fm::Expression getNextExpressionValue(VoiceMetaDataPtr meta) const;
 		private:
 			typedef std::unordered_map<const void*, Id> PtrIdMap;
 			PtrIdMap ptrIdMap_;
@@ -128,6 +131,7 @@ namespace sheet {
 			VoiceMetaDataMap voiceMetaDataMap_;
 			IStyleDefServerPtr styleDefServer_ = nullptr;
 			ExpressionMap expressionMap_;
+			ASpielanweisungPtr defaultSpielanweisung_;
 
         };
 		

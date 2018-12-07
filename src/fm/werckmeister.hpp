@@ -8,7 +8,7 @@
 #include <memory>
 #include "fm/common.hpp"
 #include "forward.hpp"
-#include "sheet/VoicingStrategy.h"
+
 
 #if defined(__GNUC__) || defined(__GNUG__)
 #pragma GCC diagnostic push
@@ -38,6 +38,7 @@ namespace fm {
         const char * version() const;
 		sheet::compiler::CompilerPtr createCompiler();
 		sheet::compiler::AContextPtr createContext();
+		sheet::compiler::ASpielanweisungPtr getDefaultSpielanweisung();
 		sheet::VoicingStrategyPtr getDefaultVoicingStrategy();
 		sheet::VoicingStrategyPtr getVoicingStrategy(const fm::String &name);
 	private:

@@ -11,6 +11,8 @@
 #include "sheet/DirectVoicingStrategy.h"
 #include "sheet/SimpleGuitar.h"
 #include "compiler/voicingStrategies.h"
+#include "sheet/VoicingStrategy.h"
+#include "compiler/spielanweisung/Normal.h"
 
 namespace fm {
     
@@ -53,6 +55,11 @@ namespace fm {
 	{
 		auto midiContext = std::make_shared<sheet::compiler::MidiContext>();
 		return midiContext;
+	}
+
+	sheet::compiler::ASpielanweisungPtr Werckmeister::getDefaultSpielanweisung()
+	{
+		return std::make_shared<sheet::compiler::Normal>();
 	}
 
 	sheet::VoicingStrategyPtr Werckmeister::getDefaultVoicingStrategy()

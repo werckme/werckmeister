@@ -42,7 +42,7 @@ namespace sheet {
 					instrument.channel, 
 					absolutePosition, 
 					getAbsolutePitch(pitch), 
-					getAbsoluteVelocity( getNextExpressionValue(voiceConfig) ),
+					getAbsoluteVelocity( voiceConfig->expression ),
 					duration);
 			}
 		}

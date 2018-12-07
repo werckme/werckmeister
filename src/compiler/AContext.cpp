@@ -4,6 +4,7 @@
 #include <fm/werckmeister.hpp>
 #include <algorithm>
 #include <fm/common.hpp>
+#include "spielanweisung/ASpielanweisung.h"
 
 namespace {
 	const fm::Ticks TickTolerance = 0.5; // rounding errors e.g. for triplets
@@ -27,11 +28,7 @@ namespace sheet {
 			template<>
 			bool renderEvent<Event::Note>(AContext * ctx, const Event *ev)
 			{
-				for (const auto &pitch : ev->pitches)
-				{
-					ctx->addEvent(pitch, ev->duration);
-				}
-				ctx->seek(ev->duration);
+				ctx->addEvent(ev->pitches, ev->duration);
 				return true;
 			}
 
@@ -43,11 +40,7 @@ namespace sheet {
 				auto voicingStratgy = ctx->currentVoicingStrategy();
 				auto pitches = voicingStratgy->get(*chord, *chordDef, ev->pitches, VoicingStrategy::TimeInfo());
 
-				for (const auto &pitch : pitches)
-				{
-					ctx->addEvent(pitch, ev->duration);
-				}
-				ctx->seek(ev->duration);
+				ctx->addEvent(pitches, ev->duration);
 
 				return true;
 			}
@@ -55,11 +48,8 @@ namespace sheet {
 			template<>
 			bool renderEvent<Event::TiedNote>(AContext * ctx, const Event *ev)
 			{
-				for (const auto &pitch : ev->pitches)
-				{
-					ctx->addEvent(pitch, ev->duration, true);
-				}
-				ctx->seek(ev->duration);
+
+				ctx->addEvent(ev->pitches, ev->duration, true);
 				return true;
 			}
 
@@ -127,6 +117,18 @@ namespace sheet {
 				{ FM_STRING("fffff"), fm::expression::FFFFF }
 			})
 		{
+		}
+
+		ASpielanweisungPtr AContext::spielanweisung()
+		{
+			auto meta = voiceMetaData(voice());
+			if (!defaultSpielanweisung_) {
+				defaultSpielanweisung_ = fm::getWerckmeister().getDefaultSpielanweisung();
+			}
+			if (!meta->spielanweisung) {
+				return defaultSpielanweisung_;
+			}
+			return meta->spielanweisung;
 		}
 
 		fm::Expression AContext::getExpression(const fm::String &str) const
@@ -255,6 +257,12 @@ namespace sheet {
 			_addEvent(this, &ev);
 		}
 
+		void AContext::addEvent(const Event::Pitches &pitches, fm::Ticks duration, bool tying)
+		{
+			auto sanweis = spielanweisung();
+			sanweis->addEvent(this, pitches, duration, tying);
+		}
+
 		void AContext::seek(fm::Ticks duration)
 		{
 			auto meta = voiceMetaData(voice());
@@ -368,16 +376,6 @@ namespace sheet {
 				throwContextException("upbeat only allowed on begin of track");
 			}
 			meta->isUpbeat = true;
-		}
-
-		fm::Expression AContext::getNextExpressionValue(VoiceMetaDataPtr meta) const
-		{
-			if (meta->singleExpression != fm::expression::Default) {
-				auto expr = meta->singleExpression;
-				meta->singleExpression = fm::expression::Default;
-				return expr;
-			}
-			return meta->expression;
 		}
 
 		void AContext::switchStyle(IStyleDefServer::ConstStyleValueType current, IStyleDefServer::ConstStyleValueType next)

@@ -9,9 +9,13 @@ namespace sheet {
 		typedef std::shared_ptr<Compiler> CompilerPtr;
 		class AContext;
 		typedef std::shared_ptr<AContext> AContextPtr;
+		class ASpielanweisung;
+		typedef std::shared_ptr<ASpielanweisung> ASpielanweisungPtr;
 	}
 	class Document;
 	typedef std::shared_ptr<Document> DocumentPtr;
+	class VoicingStrategy;
+	typedef std::shared_ptr<VoicingStrategy> VoicingStrategyPtr;
 }
 
 namespace fm {

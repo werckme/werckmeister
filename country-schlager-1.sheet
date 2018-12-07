@@ -1,9 +1,11 @@
 -- TODO: when removing this line, the resulting midi is empty
 @load "./chords/default.chords";
-@load "./styles/countryschlager1.style";
 @load "./pitchmaps/defaultMidiDrumMap.pitchmap";
+@load "./styles/countryschlager1.style";
 @load "./styles/simpleDisco.style";
 @load "./styles/ennio.style";
+@load "./styles/purdie.style";
+
 [{
     /channel: 3/
     \fffff
@@ -19,7 +21,7 @@
 }]
 
 
-/tempo: 120/
+/tempo: 130/
 --           uname ch cc pc
 /instrument: piano 3 0 3/
 /instrument: guitar 4 0 3/
@@ -29,9 +31,17 @@
 
 /style: ennio normal/
 
-C7+ | C7+ | C7+ | C7+ | C7+ | C7+ | Ees7+ | Ees7+ | Ees7+ | Ees7+ | Aes7+ | Aes7+ | Aes7+ | Aes7+ | G7 | G7 | G7 | G7 | G7 | C | C | Cmin | Cmin |
+C7+ | C7+ | C7+ | C7+ | C7+ | C7+ | Ees7+ | Ees7+ | Ees7+ | Ees7+ | Aes7+ | Aes7+ | Aes7+ | Aes7+ | G7 | G7 | G7 | G7 | G7 | C | C | 
+
+/style: purdie normal/
+
+Cmin | Cmin |
 
 /style: countryschlager1 normal/
-/instrument: guitar 2 0 25/
+/instrument: guitar 4 0 24/
 
-C | C | C | C | Ees | Ees | Ees | Ees | Aes | Aes | Aes | Aes | G7 | G7 | G7 | G7 | G7 | C | C | 
+C | C | C | C | Ees | Ees | Ees | Ees | Aes | Aes | Aes | Aes | G7 | G7 | G7 | G7 | G7 | C | C | Cmin |
+
+/style: countryschlager1 ende/
+
+Cmin |
