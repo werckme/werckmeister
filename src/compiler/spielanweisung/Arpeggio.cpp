@@ -27,7 +27,7 @@ namespace sheet {
 			}
 			auto roundingError = duration - (arpduration * pitches.size());
 			if (roundingError != 0) {
-				ctx->seek(roundingError);
+				//ctx->seek(roundingError);
 			}
         }
 

@@ -1,19 +1,20 @@
--- WORKAROUND COMMENT
-@load "./styles/purdie.style";
-@load "./pitchmaps/defaultMidiDrumMap.pitchmap";
+-- document configs
 @load "./chords/default.chords";
-@load "./styles/countryschlager1.style";
+--@load "./styles/simpleDisco.style";
+@load "./styles/justchords.style";
+@load "./pitchmaps/defaultMidiDrumMap.pitchmap";
 
-[
-{
-    /soundSelect: 0 16/
-    /doOnce: arpeggio/
-    <c e g b c'>4~ <c e g b c'>8 r2 c8~ | c1 |
-}
-{
-    /channel: 9/
-    /doOnce: arpeggio/
-    "bd"4 "bd"4 "bd"4 "bd"4 | "bd"4 "bd"4 "bd"4 "bd"4 |
-}
-]
+/instrument: piano 0 9 11/
 
+/style: justchords arpeggio/
+C Cmin | D D7 | D9 D | B7+ B7 | Fmin E | C D | 
+/style: justchords arpeggioT/
+C11 Cmin |
+/style: justchords arpeggio/
+D7+9 D | Aes7+ Aes7 | Ges11 | C D | 
+/style: justchords arpeggioT/
+E | 
+/style: justchords arpeggioUp/
+E7 Emin | Fis11 | Des11 | G13 |
+/style: justchords normal/
+C7+ |
