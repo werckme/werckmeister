@@ -29,6 +29,8 @@ namespace sheet {
 			virtual VoiceId createVoiceImpl() override;
 			virtual void addEvent(const PitchDef &pitch, fm::Ticks absolutePosition, fm::Ticks duration) override;
 			virtual void addEvent(const fm::midi::Event &ev);
+			virtual void startEvent(const PitchDef &pitch, fm::Ticks absolutePosition) override;
+			virtual void stopEvent(const PitchDef &pitch, fm::Ticks absolutePosition) override;
 			virtual void metaSetChannel(int channel);
 			virtual void metaSoundSelect(int cc, int pc);
 			virtual void metaInstrument(const fm::String &uname, int chanel, int cc, int pc);

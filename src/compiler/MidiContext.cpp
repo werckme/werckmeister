@@ -47,6 +47,34 @@ namespace sheet {
 			}
 		}
 
+		void MidiContext::startEvent(const PitchDef &pitch, fm::Ticks absolutePosition)
+		{
+			_checkMidi(midi_);
+			auto voiceConfig = voiceMetaData<MidiContext::VoiceMetaData>(voice());
+			for (const auto &instrument : voiceConfig->instrumentDefs) {
+				auto event = fm::midi::Event::NoteOn(instrument.channel, 
+					absolutePosition, 
+					getAbsolutePitch(pitch), 
+					getAbsoluteVelocity(voiceConfig->expression)
+				);
+				midi_->tracks().at(track())->events().add(event);
+			}
+		}
+
+		
+		void MidiContext::stopEvent(const PitchDef &pitch, fm::Ticks absolutePosition)
+		{
+			_checkMidi(midi_);
+			auto voiceConfig = voiceMetaData<MidiContext::VoiceMetaData>(voice());
+			for (const auto &instrument : voiceConfig->instrumentDefs) {
+				auto event = fm::midi::Event::NoteOff(instrument.channel, 
+					absolutePosition, 
+					getAbsolutePitch(pitch)
+				);
+				midi_->tracks().at(track())->events().add(event);
+			}
+		}
+
 		void MidiContext::addEvent(const fm::midi::Event &ev)
 		{
 			midi_->tracks().at(track())->events().add(ev);

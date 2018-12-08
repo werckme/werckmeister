@@ -4,7 +4,6 @@ section normal
     /uname: guitar/
     /voicingStrategy: simpleGuitar/
     \f
-    /doOnce: arpeggio/
     <I II III IV V VI VII>4. <I II III IV V VI VII>4 <I II III IV V VI VII>4 <I II III IV V VI VII>8  |
 }   
 ] 

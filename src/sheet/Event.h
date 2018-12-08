@@ -38,6 +38,10 @@ namespace sheet {
 		{
 			return id() < b.id();
 		}
+		bool operator>(const PitchDef& b) const
+		{
+			return id() > b.id();
+		}
 	};
 
 	struct AliasPitch : public PitchDef {};
@@ -79,6 +83,48 @@ namespace sheet {
 		ChordElements chordElements() const;
 		fm::String chordDefName() const;
 	};
+
+
+	///////////////////////////////////////////////////////////////////////////
+			namespace {
+			struct MissingArgument {};
+			template<typename TArg>
+			TArg __getArgument(const Event::Args &args, int idx, TArg *defaultValue) 
+			{
+				if (idx >= (int)args.size()) {
+					if (defaultValue) {
+						return *defaultValue;
+					}
+					throw MissingArgument();
+				}
+				TArg result;
+				fm::StringStream ss;
+				ss << args[idx];
+				ss >> result;
+				return result;
+			}		
+		}
+		
+		template<typename TArg>
+		TArg getArgument(const Event &metaEvent, int idx, TArg *defaultValue = nullptr) 
+		{
+			try {
+				return __getArgument<TArg>(metaEvent.metaArgs, idx, defaultValue);
+			} catch(const MissingArgument&) {
+				throw std::runtime_error("missing argument for '" + fm::to_string(metaEvent.metaCommand) + "'");
+			}
+		}
+
+		template<typename TArg>
+		TArg getArgument(const Event::Args &args, int idx, TArg *defaultValue = nullptr) 
+		{
+			try {
+				return __getArgument<TArg>(args, idx, defaultValue);
+			} catch(const MissingArgument&) {
+				throw std::runtime_error("missing meta argumnet");
+			}
+		}	
+
 }
 
 #endif

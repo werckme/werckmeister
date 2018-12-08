@@ -22,8 +22,6 @@ namespace sheet {
         class AContext {
         public:
 			AContext();
-			template<typename TArg>
-			TArg getArgument(const Event &metaEvent, int idx, TArg *defaultValue = nullptr);
 			static const fm::Ticks DefaultDuration;
 			static const fm::Ticks DefaultBarLength;
 			enum { INVALID_TRACK_ID = -1, INVALID_VOICE_ID = -1 };
@@ -103,11 +101,13 @@ namespace sheet {
 			virtual void metaSetTempo(double bpm) {}
 			virtual void metaSetUpbeat(const Event &event);
 			virtual void metaSetVoicingStrategy(const fm::String &name);
-			virtual void metaSetSpielanweisung(const fm::String &name);
-			virtual void metaSetSpielanweisungOnce(const fm::String &name);
+			virtual void metaSetSpielanweisung(const fm::String &name, const Event::Args &args);
+			virtual void metaSetSpielanweisungOnce(const fm::String &name, const Event::Args &args);
 			/////// actual context stuff
 			virtual void addEvent(const Event::Pitches &pitches, fm::Ticks duration, bool tying = false);
 			virtual void addEvent(const PitchDef &pitch, fm::Ticks duration, bool tying = false);
+			virtual void startEvent(const PitchDef &pitch, fm::Ticks absolutePosition) = 0;
+			virtual void stopEvent(const PitchDef &pitch, fm::Ticks absolutePosition) = 0;			
 			virtual void seek(fm::Ticks duration);
 			virtual void newBar();
 			virtual void rest(fm::Ticks duration);
@@ -136,46 +136,7 @@ namespace sheet {
 			IStyleDefServerPtr styleDefServer_ = nullptr;
 			ExpressionMap expressionMap_;
 			ASpielanweisungPtr defaultSpielanweisung_;
-
-        };
-		
-		namespace {
-
-			template<typename TArg>
-			TArg __getArgument(const Event &metaEvent, int idx, TArg *defaultValue) 
-			{
-				if (idx >= (int)metaEvent.metaArgs.size()) {
-					if (defaultValue) {
-						return *defaultValue;
-					}
-					throw std::runtime_error("missing argument for '" + fm::to_string(metaEvent.metaCommand) + "'");
-				}
-				TArg result;
-				fm::StringStream ss;
-				ss << metaEvent.metaArgs[idx];
-				ss >> result;
-				return result;
-			}
-			
-			template<>
-			fm::String __getArgument<fm::String>(const Event &metaEvent, int idx, fm::String *defaultValue)
-			{
-				if (idx >= (int)metaEvent.metaArgs.size()) {
-					if (defaultValue) {
-						return *defaultValue;
-					}
-					throw std::runtime_error("missing argument for '" + fm::to_string(metaEvent.metaCommand) + "'");
-				}
-				return metaEvent.metaArgs[idx];
-			}
-		
-		}
-		
-		template<typename TArg>
-		TArg AContext::getArgument(const Event &metaEvent, int idx, TArg *defaultValue) 
-		{
-			return __getArgument<TArg>(metaEvent, idx, defaultValue);
-		}
+        };	
     }
 }
 

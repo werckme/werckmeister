@@ -232,6 +232,7 @@ namespace sheet {
 			}
 			if (tying) {
 				meta->waitForTieBuffer.insert({ pitch, meta->duration });
+				startEvent(pitch, meta->position);
 			}
 			else if (meta->pendingTie()) {
 				auto it = meta->waitForTieBuffer.find(pitch);
@@ -240,7 +241,7 @@ namespace sheet {
 					meta->waitForTieBuffer.clear();
 				}
 				auto firstDuration = it->second;
-				addEvent(pitch, meta->position - firstDuration, firstDuration + meta->duration);
+				stopEvent(pitch, meta->position + meta->duration);
 				meta->waitForTieBuffer.erase(it);
 				return;
 			}
@@ -264,8 +265,17 @@ namespace sheet {
 
 		void AContext::addEvent(const Event::Pitches &pitches, fm::Ticks duration, bool tying)
 		{
+			auto meta = voiceMetaData(voice());
+			auto tmpExpression = meta->expression;
+
+			if (meta->singleExpression != fm::expression::Default) {
+				tmpExpression = meta->expression;
+				meta->expression = meta->singleExpression;
+				meta->singleExpression = fm::expression::Default;
+			}
 			auto sanweis = spielanweisung();
 			sanweis->addEvent(this, pitches, duration, tying);
+			meta->expression = tmpExpression;
 		}
 
 		void AContext::seek(fm::Ticks duration)
@@ -331,10 +341,10 @@ namespace sheet {
 				metaSetVoicingStrategy(getArgument<fm::String>(metaEvent, 0));
 			}
 			if (metaEvent.metaCommand == SHEET_META__SET_SPIELANWEISUNG) {
-				metaSetSpielanweisung(getArgument<fm::String>(metaEvent, 0));
+				metaSetSpielanweisung(getArgument<fm::String>(metaEvent, 0), metaEvent.metaArgs);
 			}	
 			if (metaEvent.metaCommand == SHEET_META__SET_SPIELANWEISUNG_ONCE) {
-				metaSetSpielanweisungOnce(getArgument<fm::String>(metaEvent, 0));
+				metaSetSpielanweisungOnce(getArgument<fm::String>(metaEvent, 0), metaEvent.metaArgs);
 			}					
 		}
 
@@ -345,18 +355,20 @@ namespace sheet {
 			meta->voicingStrategy = wm.getVoicingStrategy(name);
 		}
 
-		void AContext::metaSetSpielanweisung(const fm::String &name)
+		void AContext::metaSetSpielanweisung(const fm::String &name, const Event::Args &args)
 		{
 			auto &wm = fm::getWerckmeister();
 			auto meta = voiceMetaData(voice());
 			meta->spielanweisung = wm.getSpielanweisung(name);
+			meta->spielanweisung->setArguments(args);
 		}
 
-		void AContext::metaSetSpielanweisungOnce(const fm::String &name)
+		void AContext::metaSetSpielanweisungOnce(const fm::String &name, const Event::Args &args)
 		{
 			auto &wm = fm::getWerckmeister();
 			auto meta = voiceMetaData(voice());
 			meta->spielanweisungOnce = wm.getSpielanweisung(name);
+			meta->spielanweisungOnce->setArguments(args);
 		}
 
 		void AContext::metaSetUname(const fm::String &uname)

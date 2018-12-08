@@ -2,7 +2,8 @@ section normal
 [ 
 {
     /uname: piano/
-    /voicingStrategy: simpleGuitar/
+    --/voicingStrategy: simpleGuitar/
+    /do: arpeggio/
     <I II III IV V VI VII>1
 }   
 ] 

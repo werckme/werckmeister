@@ -10,6 +10,7 @@ namespace sheet {
             Arpeggio() = default;
             virtual ~Arpeggio() = default;
             virtual void addEvent(AContext *ctx, const Event::Pitches &pitches, fm::Ticks duration, bool tying = false) override;
+            virtual void setArguments(const Event::Args &args) override;
             enum Direction { Up, Down };
             Direction direction = Up;
         };
