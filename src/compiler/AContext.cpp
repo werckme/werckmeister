@@ -125,6 +125,11 @@ namespace sheet {
 			if (!defaultSpielanweisung_) {
 				defaultSpielanweisung_ = fm::getWerckmeister().getDefaultSpielanweisung();
 			}
+			if (meta->spielanweisungOnce) {
+				auto tmp = meta->spielanweisungOnce;
+				meta->spielanweisungOnce.reset();
+				return tmp;
+			}
 			if (!meta->spielanweisung) {
 				return defaultSpielanweisung_;
 			}
@@ -325,6 +330,12 @@ namespace sheet {
 			if (metaEvent.metaCommand == SHEET_META__SET_VOICING_STRATEGY) {
 				metaSetVoicingStrategy(getArgument<fm::String>(metaEvent, 0));
 			}
+			if (metaEvent.metaCommand == SHEET_META__SET_SPIELANWEISUNG) {
+				metaSetSpielanweisung(getArgument<fm::String>(metaEvent, 0));
+			}	
+			if (metaEvent.metaCommand == SHEET_META__SET_SPIELANWEISUNG_ONCE) {
+				metaSetSpielanweisungOnce(getArgument<fm::String>(metaEvent, 0));
+			}					
 		}
 
 		void AContext::metaSetVoicingStrategy(const fm::String &name)
@@ -332,6 +343,20 @@ namespace sheet {
 			auto &wm = fm::getWerckmeister();
 			auto meta = voiceMetaData(voice());
 			meta->voicingStrategy = wm.getVoicingStrategy(name);
+		}
+
+		void AContext::metaSetSpielanweisung(const fm::String &name)
+		{
+			auto &wm = fm::getWerckmeister();
+			auto meta = voiceMetaData(voice());
+			meta->spielanweisung = wm.getSpielanweisung(name);
+		}
+
+		void AContext::metaSetSpielanweisungOnce(const fm::String &name)
+		{
+			auto &wm = fm::getWerckmeister();
+			auto meta = voiceMetaData(voice());
+			meta->spielanweisungOnce = wm.getSpielanweisung(name);
 		}
 
 		void AContext::metaSetUname(const fm::String &uname)

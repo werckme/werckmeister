@@ -35,6 +35,7 @@ namespace sheet {
 			typedef std::unordered_map<fm::String, fm::Expression> ExpressionMap;
 			struct VoiceMetaData {
 				typedef std::map<PitchDef, fm::Ticks> WaitForTieBuffer;
+				typedef std::list<ASpielanweisungPtr> Spielanweisungen;
 				fm::Ticks position = 0;
 				fm::Ticks duration = DefaultDuration;
 				fm::Ticks barLength = DefaultBarLength;
@@ -59,6 +60,7 @@ namespace sheet {
 				virtual ~VoiceMetaData() = default;
 				bool pendingTie() const { return !waitForTieBuffer.empty(); }
 				ASpielanweisungPtr spielanweisung;
+				ASpielanweisungPtr spielanweisungOnce; // played once
 			};
 			typedef std::shared_ptr<VoiceMetaData> VoiceMetaDataPtr;
 			typedef std::unordered_map<VoiceId, VoiceMetaDataPtr> VoiceMetaDataMap;
@@ -101,6 +103,8 @@ namespace sheet {
 			virtual void metaSetTempo(double bpm) {}
 			virtual void metaSetUpbeat(const Event &event);
 			virtual void metaSetVoicingStrategy(const fm::String &name);
+			virtual void metaSetSpielanweisung(const fm::String &name);
+			virtual void metaSetSpielanweisungOnce(const fm::String &name);
 			/////// actual context stuff
 			virtual void addEvent(const Event::Pitches &pitches, fm::Ticks duration, bool tying = false);
 			virtual void addEvent(const PitchDef &pitch, fm::Ticks duration, bool tying = false);

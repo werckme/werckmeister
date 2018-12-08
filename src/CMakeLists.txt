@@ -16,6 +16,7 @@ SET (SRC_FETZER_LIB
     compiler/AContext.cpp
     compiler/spielanweisung/Normal.cpp
     compiler/spielanweisung/ASpielanweisung.cpp
+    compiler/spielanweisung/Arpeggio.cpp
     sheet/Event.cpp
     sheet/Document.cpp
     sheet/DirectVoicingStrategy.cpp

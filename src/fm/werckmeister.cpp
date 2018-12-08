@@ -13,6 +13,8 @@
 #include "compiler/voicingStrategies.h"
 #include "sheet/VoicingStrategy.h"
 #include "compiler/spielanweisung/Normal.h"
+#include "compiler/spielanweisung/Arpeggio.h"
+#include "compiler/spielanweisung/spielanweisungen.h"
 
 namespace fm {
     
@@ -59,7 +61,7 @@ namespace fm {
 
 	sheet::compiler::ASpielanweisungPtr Werckmeister::getDefaultSpielanweisung()
 	{
-		return std::make_shared<sheet::compiler::Normal>();
+		return getSpielanweisung(SHEET_SPIELANWEISUNG_NORMAL);
 	}
 
 	sheet::VoicingStrategyPtr Werckmeister::getDefaultVoicingStrategy()
@@ -76,6 +78,17 @@ namespace fm {
 			return std::make_shared<sheet::DirectVoicingStrategy>();
 		}
 		throw std::runtime_error("voicing strategy not found: " + fm::to_string(name));
+	}
+
+	sheet::compiler::ASpielanweisungPtr Werckmeister::getSpielanweisung(const fm::String &name)
+	{
+		if (name == SHEET_SPIELANWEISUNG_NORMAL) {
+			return std::make_shared<sheet::compiler::Normal>(); 
+		}
+		if (name == SHEET_SPIELANWEISUNG_ARPEGGIO) {
+			return std::make_shared<sheet::compiler::Arpeggio>(); 
+		}
+		throw std::runtime_error("spielanweisung not found: " + fm::to_string(name));
 	}
 
 	Werckmeister::~Werckmeister() = default;

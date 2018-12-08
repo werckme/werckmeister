@@ -4,6 +4,7 @@ section normal
     /uname: guitar/
     /voicingStrategy: simpleGuitar/
     \f
+    /doOnce: arpeggio/
     <I II III IV V VI VII>4. <I II III IV V VI VII>4 <I II III IV V VI VII>4 <I II III IV V VI VII>8  |
 }   
 ] 
@@ -21,10 +22,14 @@ section normal
 {
     /uname: drums/
     r4 "sn" r "sn" |
+    r4 "sn" r "sn" |
+    r4 "sn" r !fff"sn" |
 }
 {
     /uname: drums/
     "bd"4. "bd"8 "bd"4. "bd"8 |
+    "bd"4. "bd"8 "bd"4. "bd"8 |
+    "bd"4. "bd"8 "bd"8 !f"bd"8 r8 "bd"8 |
 }      
 ] 
 end
