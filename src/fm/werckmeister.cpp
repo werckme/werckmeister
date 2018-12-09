@@ -15,6 +15,8 @@
 #include "compiler/spielanweisung/Normal.h"
 #include "compiler/spielanweisung/Arpeggio.h"
 #include "compiler/spielanweisung/spielanweisungen.h"
+#include "compiler/modification/modifications.h"
+#include "compiler/modification/Bend.h"
 
 namespace fm {
     
@@ -89,6 +91,14 @@ namespace fm {
 			return std::make_shared<sheet::compiler::Arpeggio>(); 
 		}
 		throw std::runtime_error("spielanweisung not found: " + fm::to_string(name));
+	}
+
+	sheet::compiler::AModificationPtr Werckmeister::getModification(const fm::String &name)
+	{
+		if (name == SHEET_MOD_BEND) {
+			return std::make_shared<sheet::compiler::Bend>();  
+		}
+		throw std::runtime_error("modification not found: " + fm::to_string(name));
 	}
 
 	Werckmeister::~Werckmeister() = default;

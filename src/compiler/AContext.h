@@ -22,6 +22,7 @@ namespace sheet {
         class AContext {
         public:
 			AContext();
+			static const double PitchbendMiddle;
 			static const fm::Ticks DefaultDuration;
 			static const fm::Ticks DefaultBarLength;
 			enum { INVALID_TRACK_ID = -1, INVALID_VOICE_ID = -1 };
@@ -34,6 +35,7 @@ namespace sheet {
 			struct VoiceMetaData {
 				typedef std::map<PitchDef, fm::Ticks> WaitForTieBuffer;
 				typedef std::list<ASpielanweisungPtr> Spielanweisungen;
+				typedef std::list<AModificationPtr> Modifications;
 				fm::Ticks position = 0;
 				fm::Ticks duration = DefaultDuration;
 				fm::Ticks barLength = DefaultBarLength;
@@ -59,6 +61,8 @@ namespace sheet {
 				bool pendingTie() const { return !waitForTieBuffer.empty(); }
 				ASpielanweisungPtr spielanweisung;
 				ASpielanweisungPtr spielanweisungOnce; // played once
+				Modifications modifications;
+				Modifications modificationsOnce; // played once				
 			};
 			typedef std::shared_ptr<VoiceMetaData> VoiceMetaDataPtr;
 			typedef std::unordered_map<VoiceId, VoiceMetaDataPtr> VoiceMetaDataMap;
@@ -103,9 +107,15 @@ namespace sheet {
 			virtual void metaSetVoicingStrategy(const fm::String &name);
 			virtual void metaSetSpielanweisung(const fm::String &name, const Event::Args &args);
 			virtual void metaSetSpielanweisungOnce(const fm::String &name, const Event::Args &args);
+			virtual void metaSetModification(const fm::String &name, const Event::Args &args);
+			virtual void metaSetModificationOnce(const fm::String &name, const Event::Args &args);
 			/////// actual context stuff
 			virtual void addEvent(const Event::Pitches &pitches, fm::Ticks duration, bool tying = false);
 			virtual void addEvent(const PitchDef &pitch, fm::Ticks duration, bool tying = false);
+			/*
+			 * value = 0..1
+			 */
+			virtual void addPitchbendEvent(double value, fm::Ticks absolutePosition) = 0;			
 			virtual void startEvent(const PitchDef &pitch, fm::Ticks absolutePosition) = 0;
 			virtual void stopEvent(const PitchDef &pitch, fm::Ticks absolutePosition) = 0;			
 			virtual void seek(fm::Ticks duration);

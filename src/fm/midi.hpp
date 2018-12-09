@@ -38,7 +38,8 @@ namespace fm {
 			MaxChannel = 0xF,
 			MinEventSize = 3,
 			MaxEventSize = 7,
-			MaxPitch = 127
+			MaxPitch = 127,
+			MaxPitchbend = 16383
 		};
 		enum EventType {
 			UndefinedEvent = 0,
@@ -80,6 +81,10 @@ namespace fm {
 			size_t writePayload(Byte *, size_t maxByteSize) const;
 			static Event NoteOn(Channel, Ticks, Pitch, Velocity);
 			static Event NoteOff(Channel, Ticks, Pitch);
+			/**
+			 * a value between 0 .. 1. 0.5 is middle
+			 */
+			static Event PitchBend(Channel channel, Ticks absPos, double value);
 			bool equals(const Event&) const;
 			bool operator==(const Event &b) const { return equals(b); }
 			bool operator!=(const Event &b) const { return !(*this == b); }

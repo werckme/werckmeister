@@ -11,6 +11,8 @@ namespace sheet {
 		typedef std::shared_ptr<AContext> AContextPtr;
 		class ASpielanweisung;
 		typedef std::shared_ptr<ASpielanweisung> ASpielanweisungPtr;
+		class AModification;
+		typedef std::shared_ptr<AModification> AModificationPtr;		
 	}
 	class Document;
 	typedef std::shared_ptr<Document> DocumentPtr;

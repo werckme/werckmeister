@@ -80,6 +80,16 @@ namespace sheet {
 			midi_->tracks().at(track())->events().add(ev);
 		}
 
+		void MidiContext::addPitchbendEvent(double value, fm::Ticks absolutePosition) 
+		{
+			_checkMidi(midi_);
+			auto voiceConfig = voiceMetaData<MidiContext::VoiceMetaData>(voice());
+			for (const auto &instrument : voiceConfig->instrumentDefs) {
+				auto event = fm::midi::Event::PitchBend(instrument.channel, absolutePosition, value);
+				midi_->tracks().at(track())->events().add(event);
+			}
+		}
+
 		MidiContext::Base::TrackId MidiContext::createTrackImpl()
 		{
 			_checkMidi(midi_);

@@ -49,3 +49,18 @@ section arpeggioT
 }   
 ] 
 end
+
+section bending
+[ 
+{
+    /uname: piano/
+    /voicingStrategy: simpleGuitar/
+    /modOnce: bend from 1/
+    <I II III IV V VI VII>8
+    <I II III IV V VI VII>2
+    /modOnce: bend to 40/
+    <I II III IV V VI VII>4.
+    |
+}   
+] 
+end

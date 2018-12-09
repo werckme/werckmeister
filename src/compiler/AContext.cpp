@@ -5,6 +5,7 @@
 #include <algorithm>
 #include <fm/common.hpp>
 #include "spielanweisung/ASpielanweisung.h"
+#include "modification/AModification.h"
 
 namespace {
 	const fm::Ticks TickTolerance = 0.5; // rounding errors e.g. for triplets
@@ -14,10 +15,9 @@ namespace sheet {
 
 	namespace compiler {
 		using namespace fm;
-
 		const Ticks AContext::DefaultDuration = 1.0_N4;
 		const Ticks AContext::DefaultBarLength = 4 * 1.0_N4;
-
+		const double AContext::PitchbendMiddle = 0.5;
 		namespace {
 			template<int EventType>
 			bool renderEvent(AContext * ctx, const Event *ev)
@@ -273,6 +273,13 @@ namespace sheet {
 				meta->expression = meta->singleExpression;
 				meta->singleExpression = fm::expression::Default;
 			}
+			for (auto mod : meta->modifications) {
+				mod->addModificationEvents(this, meta->position, duration);
+			}
+			for (auto mod : meta->modificationsOnce) {
+				mod->addModificationEvents(this, meta->position, duration);
+			}			
+			meta->modificationsOnce.clear();
 			auto sanweis = spielanweisung();
 			sanweis->addEvent(this, pitches, duration, tying);
 			meta->expression = tmpExpression;
@@ -345,7 +352,13 @@ namespace sheet {
 			}	
 			if (metaEvent.metaCommand == SHEET_META__SET_SPIELANWEISUNG_ONCE) {
 				metaSetSpielanweisungOnce(getArgument<fm::String>(metaEvent, 0), metaEvent.metaArgs);
-			}					
+			}	
+			if (metaEvent.metaCommand == SHEET_META__SET_MOD) {
+				metaSetModification(getArgument<fm::String>(metaEvent, 0), metaEvent.metaArgs);
+			}	
+			if (metaEvent.metaCommand == SHEET_META__SET_MOD_ONCE) {
+				metaSetModificationOnce(getArgument<fm::String>(metaEvent, 0), metaEvent.metaArgs);
+			}											
 		}
 
 		void AContext::metaSetVoicingStrategy(const fm::String &name)
@@ -369,6 +382,24 @@ namespace sheet {
 			auto meta = voiceMetaData(voice());
 			meta->spielanweisungOnce = wm.getSpielanweisung(name);
 			meta->spielanweisungOnce->setArguments(args);
+		}
+
+		void AContext::metaSetModification(const fm::String &name, const Event::Args &args)
+		{
+			auto &wm = fm::getWerckmeister();
+			auto meta = voiceMetaData(voice());
+			auto mod = wm.getModification(name);
+			meta->modifications.push_back(mod);
+			mod->setArguments(args);
+		}
+
+		void AContext::metaSetModificationOnce(const fm::String &name, const Event::Args &args)
+		{
+			auto &wm = fm::getWerckmeister();
+			auto meta = voiceMetaData(voice());
+			auto mod = wm.getModification(name);
+			meta->modificationsOnce.push_back(mod);
+			mod->setArguments(args);
 		}
 
 		void AContext::metaSetUname(const fm::String &uname)

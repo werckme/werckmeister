@@ -4,7 +4,10 @@
 @load "./styles/justchords.style";
 @load "./pitchmaps/defaultMidiDrumMap.pitchmap";
 
-/instrument: piano 0 9 11/
+/instrument: piano 0 0 104/
+
+/style: justchords bending/
+C Cmin | D D7 | D9 D | B7+ B7 | Fmin E | C D | 
 
 /style: justchords arpeggio/
 C Cmin | D D7 | D9 D | B7+ B7 | Fmin E | C D | 

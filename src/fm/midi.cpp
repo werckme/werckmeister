@@ -168,6 +168,17 @@ namespace fm {
 			ev.eventType(midi::NoteOff);
 			return ev;
 		}
+		Event Event::PitchBend(Channel channel, Ticks absPos, double value)
+		{
+			int ivalue = static_cast<int>( (value * (double)MaxPitchbend) );
+			Event ev;
+			ev.channel(channel);
+			ev.absPosition(absPos);
+			ev.parameter2( static_cast<Byte>(ivalue >> 7) );
+			ev.parameter1( static_cast<Byte>(ivalue & 0x7f) );
+			ev.eventType(midi::PitchBend);
+			return ev;
+		}
 		bool Event::equals(const Event&b) const
 		{
 			return absPosition() == b.absPosition()

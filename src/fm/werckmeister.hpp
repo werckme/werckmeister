@@ -40,6 +40,7 @@ namespace fm {
 		sheet::compiler::AContextPtr createContext();
 		sheet::compiler::ASpielanweisungPtr getDefaultSpielanweisung();
 		sheet::compiler::ASpielanweisungPtr getSpielanweisung(const fm::String &name);
+		sheet::compiler::AModificationPtr getModification(const fm::String &name);		
 		sheet::VoicingStrategyPtr getDefaultVoicingStrategy();
 		sheet::VoicingStrategyPtr getVoicingStrategy(const fm::String &name);
 	private:
