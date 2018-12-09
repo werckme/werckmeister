@@ -136,7 +136,7 @@ namespace sheet {
 
 					alias_ %= lexeme['"' >> +(char_ - '"') >> '"'];
 
-					event_ %= (attr(Event::Degree) >> (pitch_ | ("<" >> +pitch_ >> ">")) >> (durationSymbols_ | attr(Event::NoDuration) ))
+					event_ %= (attr(Event::Degree) >> (pitch_ | ("<" >> +pitch_ >> ">")) >> (durationSymbols_ | attr(Event::NoDuration) ) >> -(lit("~")[at_c<0>(_val) = Event::TiedDegree]) )
 						| (attr(Event::Note) >> (absolutePitch_ | ("<" >> +absolutePitch_ >> ">")) >> (durationSymbols_ | attr(Event::NoDuration)) >> -(lit("~")[at_c<0>(_val) = Event::TiedNote]))
 						| (attr(Event::Note) >> (alias_ | ("<" >> +alias_ >> ">")) >> (durationSymbols_ | attr(Event::NoDuration)) >> -(lit("~")[at_c<0>(_val) = Event::TiedNote]))
 						| ("\\" >> attr(Event::Meta) >> attr(PitchDef()) >> attr(Event::NoDuration) >> attr("expression") >> expressionSymbols_)

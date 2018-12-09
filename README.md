@@ -170,7 +170,6 @@ Paralleles abspielen verschiedener Styles
  - die Akkorde As und Es werden nicht erkannt. Workaround: Aes Ees
  - style-section switch legt neue tracks an, anstatt bestehende zu nutzen 
  - Style switching (zb.: countryschlager->disco) funktioniert nicht
- - gebundene Degree Events nicht impl.
  -  <I II III IV V VI VII>1  | -> erzeugt bar check error
 
 ## Cool DAW-Editor

@@ -54,6 +54,7 @@ namespace sheet {
 			Unknown,
 			Rest,
 			Degree, 
+			TiedDegree,
 			Note,
 			TiedNote,
 			Chord,

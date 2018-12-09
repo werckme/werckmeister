@@ -46,6 +46,19 @@ namespace sheet {
 			}
 
 			template<>
+			bool renderEvent<Event::TiedDegree>(AContext * ctx, const Event *ev)
+			{
+				auto chordDef = ctx->currentChordDef();
+				auto chord = ctx->currentChord();
+				auto voicingStratgy = ctx->currentVoicingStrategy();
+				auto pitches = voicingStratgy->get(*chord, *chordDef, ev->pitches, VoicingStrategy::TimeInfo());
+
+				ctx->addEvent(pitches, ev->duration, true);
+
+				return true;
+			}
+
+			template<>
 			bool renderEvent<Event::TiedNote>(AContext * ctx, const Event *ev)
 			{
 
