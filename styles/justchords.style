@@ -65,3 +65,11 @@ section bending
 }   
 ] 
 end
+
+section empty
+[
+{
+    r1 |
+}   
+] 
+end

@@ -32,6 +32,7 @@ namespace sheet {
 			typedef IStyleDefServer* IStyleDefServerPtr;
 			typedef std::list<std::string> Warnings;
 			typedef std::unordered_map<fm::String, fm::Expression> ExpressionMap;
+			typedef std::set<PitchDef> PitchDefSet;
 			struct VoiceMetaData {
 				typedef std::map<PitchDef, fm::Ticks> WaitForTieBuffer;
 				typedef std::list<ASpielanweisungPtr> Spielanweisungen;
@@ -62,7 +63,8 @@ namespace sheet {
 				ASpielanweisungPtr spielanweisung;
 				ASpielanweisungPtr spielanweisungOnce; // played once
 				Modifications modifications;
-				Modifications modificationsOnce; // played once				
+				Modifications modificationsOnce; // played once		
+				PitchDefSet startedEvents;		
 			};
 			typedef std::shared_ptr<VoiceMetaData> VoiceMetaDataPtr;
 			typedef std::unordered_map<VoiceId, VoiceMetaDataPtr> VoiceMetaDataMap;
@@ -116,14 +118,15 @@ namespace sheet {
 			 * value = 0..1
 			 */
 			virtual void addPitchbendEvent(double value, fm::Ticks absolutePosition) = 0;			
-			virtual void startEvent(const PitchDef &pitch, fm::Ticks absolutePosition) = 0;
-			virtual void stopEvent(const PitchDef &pitch, fm::Ticks absolutePosition) = 0;			
+			virtual void startEvent(const PitchDef &pitch, fm::Ticks absolutePosition);
+			virtual void stopEvent(const PitchDef &pitch, fm::Ticks absolutePosition);	
 			virtual void seek(fm::Ticks duration);
 			virtual void newBar();
 			virtual void rest(fm::Ticks duration);
 			virtual void setChord(const ChordEvent &ev);
 			virtual void renderStyle(fm::Ticks duration);
 			virtual void addEvent(const Event &ev);
+			virtual void stopTying();
 			virtual fm::Ticks barPos() const;
 			Warnings warnings;
 		protected:

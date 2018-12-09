@@ -9,6 +9,7 @@
 /instrument: guitar 3 0 37/
 /instrument: bass 8 0 33/
 /instrument: drums 9 0 32/
+/instrument: slide 2 32 17/
 
 
 /style: countryschlager1 normal/

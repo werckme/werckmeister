@@ -19,7 +19,7 @@ namespace sheet {
             double c = e - b;
             double d = static_cast<double>(duration);
             
-			for (double t=0; t<duration; t+=1.0) {
+			for (double t=0; t<duration; t+=50.0) {
                 double x = c*t/d + b;
                 ctx->addPitchbendEvent(x, absPosition + static_cast<fm::Ticks>(t));
             }

@@ -250,8 +250,8 @@ namespace sheet {
 			else if (meta->pendingTie()) {
 				auto it = meta->waitForTieBuffer.find(pitch);
 				if (it == meta->waitForTieBuffer.end()) {
-					warn("note tie error");
-					meta->waitForTieBuffer.clear();
+					stopTying();
+					return;
 				}
 				auto firstDuration = it->second;
 				stopEvent(pitch, meta->position + meta->duration);
@@ -261,6 +261,26 @@ namespace sheet {
 			else {
 				addEvent(pitch, meta->position, meta->duration);
 			}
+		}
+
+		void AContext::stopTying()
+		{
+			auto meta = voiceMetaData(voice());
+			for(auto tied : meta->startedEvents){
+				stopEvent(tied, meta->position + meta->duration);
+			}
+		}
+
+		void AContext::startEvent(const PitchDef &pitch, fm::Ticks absolutePosition)
+		{
+			auto meta = voiceMetaData(voice());
+			meta->startedEvents.insert(pitch);
+		}
+
+		void AContext::stopEvent(const PitchDef &pitch, fm::Ticks absolutePosition)
+		{
+			auto meta = voiceMetaData(voice());
+			meta->startedEvents.erase(pitch);
 		}
 
 		fm::Ticks AContext::barPos() const
@@ -516,6 +536,7 @@ namespace sheet {
 		void AContext::setChord(const ChordEvent &chord)
 		{
 			currentChord_ = chord;
+			auto oldChordDef = currentChordDef_;
 			currentChordDef_ = styleDefServer()->getChord(currentChord_.chordDefName());
 			if (currentChordDef_ == nullptr) {
 				throw std::runtime_error("chord not found: " + fm::to_string(currentChord_.chordName));
@@ -552,6 +573,9 @@ namespace sheet {
 			{
 				for (const auto &voice : track.voices)
 				{
+					if (voice.events.empty()) {
+						continue;
+					}
 					setTarget(track, voice);
 					auto meta = voiceMetaData(this->voice());
 					fm::Ticks writtenDuration = 0;

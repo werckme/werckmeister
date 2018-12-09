@@ -24,9 +24,10 @@
 /tempo: 130/
 --           uname ch cc pc
 /instrument: piano 3 0 3/
-/instrument: guitar 4 0 3/
+/instrument: guitar 4 0 25/
 /instrument: bass 8 0 33/
 /instrument: drums 9 0 32/
+/instrument: slide 2 8 26/
 
 
 /style: ennio normal/
@@ -38,7 +39,6 @@ C7+ | C7+ | C7+ | C7+ | C7+ | C7+ | Ees7+ | Ees7+ | Ees7+ | Ees7+ | Aes7+ | Aes7
 Cmin | Cmin |
 
 /style: countryschlager1 normal/
-/instrument: guitar 4 0 24/
 
 C | C | C | C | Ees | Ees | Ees | Ees | Aes | Aes | Aes | Aes | G7 | G7 | G7 | G7 | G7 | C | C | Cmin |
 

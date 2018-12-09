@@ -49,6 +49,7 @@ namespace sheet {
 
 		void MidiContext::startEvent(const PitchDef &pitch, fm::Ticks absolutePosition)
 		{
+			Base::startEvent(pitch, absolutePosition);
 			_checkMidi(midi_);
 			auto voiceConfig = voiceMetaData<MidiContext::VoiceMetaData>(voice());
 			for (const auto &instrument : voiceConfig->instrumentDefs) {
@@ -64,6 +65,7 @@ namespace sheet {
 		
 		void MidiContext::stopEvent(const PitchDef &pitch, fm::Ticks absolutePosition)
 		{
+			Base::stopEvent(pitch, absolutePosition);
 			_checkMidi(midi_);
 			auto voiceConfig = voiceMetaData<MidiContext::VoiceMetaData>(voice());
 			for (const auto &instrument : voiceConfig->instrumentDefs) {

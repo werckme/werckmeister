@@ -6,6 +6,9 @@
 
 /instrument: piano 0 0 104/
 
+/style: justchords empty/
+C |
+
 /style: justchords bending/
 C Cmin | D D7 | D9 D | B7+ B7 | Fmin E | C D | 
 
