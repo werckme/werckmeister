@@ -584,6 +584,12 @@ namespace sheet {
 						if (meta->idxLastWrittenEvent >= 0) { // continue rendering
 							it += meta->idxLastWrittenEvent;
 							meta->idxLastWrittenEvent = -1;
+							if (it->type == Event::EOB) {
+								// happens: | r1 |  ->  | A B |
+								// after a half rest the next event would be a new bar
+								// its length check would produce a message
+								++it;
+							}
 						}
 						else if (meta->eventOffset > 0) { // skip events (for upbeat)
 							it += meta->eventOffset;

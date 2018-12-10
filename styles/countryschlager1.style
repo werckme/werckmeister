@@ -12,13 +12,13 @@ section normal ----------------------------------------------------------------
     /uname: slide/
     \f
     /modOnce: bend from 0/
-    r2 r2 |
-    r2 r2 |
-    r2 r2 |
+    r1 |
+    r1 |
+    r1 |
     <I' II' III' IV' V' VI' VII'>1 |
-    r2 r2 |
-    r2 r2 |
-    r2 r2 |
+    r1 |
+    r1 |
+    r1 |
     /modOnce: bend to 1/
     <I' II' III' IV' V' VI' VII'>1 |
 }   
