@@ -162,14 +162,11 @@ Paralleles abspielen verschiedener Styles
 ## Nice to have
 
 ## Bugs
- - style mit leerer Voice friert programm ein
  - sheet hat Länge 0 wenn kein Chordtrack vorhanden
  - sheet hat Länge 0 sobald reihenfolge tacks, chords nicht eingehalten
  - sheet hat Länge 0 oder ist fehlerhaft wenn erste zeile kein Kommentar ist
  - die Akkorde As und Es werden nicht erkannt. Workaround: Aes Ees
  - style-section switch legt neue tracks an, anstatt bestehende zu nutzen 
- - Style switching (zb.: countryschlager->disco) funktioniert nicht
- -  <I II III IV V VI VII>1  | -> erzeugt bar check error
 
 ## Cool DAW-Editor
 all character based 
