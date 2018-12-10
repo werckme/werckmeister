@@ -11,9 +11,13 @@ namespace sheet {
 
     fm::midi::MidiPtr processFile(const std::string &file)
     {
+        auto doc = createDocument(file);
+        return processFile(doc);
+    }
+
+    fm::midi::MidiPtr processFile(sheet::DocumentPtr doc) 
+    {
         auto &wm = fm::getWerckmeister();
-        sheet::compiler::DocumentParser docparser;
-        auto doc = docparser.parse(fm::to_wstring(file));
         auto context = std::dynamic_pointer_cast<sheet::compiler::MidiContext>( wm.createContext() );
         auto midi = wm.createMidi();
         context->midi(midi);
@@ -27,4 +31,10 @@ namespace sheet {
         return midi;
     }
 
+	sheet::DocumentPtr createDocument(const std::string &file)
+    {
+        sheet::compiler::DocumentParser docparser;
+        auto doc = docparser.parse(fm::to_wstring(file));
+        return doc;
+    }
 }

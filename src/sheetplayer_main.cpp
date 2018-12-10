@@ -21,6 +21,7 @@
 #include <fm/config.hpp>
 #include <ctime>
 #include "fmapp/boostTimer.h"
+#include <boost/format.hpp>
 
 #define ARG_HELP "help"
 #define ARG_INPUT "input"
@@ -144,12 +145,28 @@ auto getTimestamp(const std::string input) {
 	return boost::filesystem::last_write_time(path);
 }
 
+void printElapsedTime(fm::Ticks elapsed) 
+{
+	using boost::format;
+	using boost::str;
+	using boost::io::group;
 
-void play(fm::midi::MidiPtr midi, MidiOutputId midiOutput, fm::Ticks begin, fm::Ticks end, const Settings &settings) {
+	std::string strOut = str(format("%.3f") % (elapsed / (double)fm::PPQ));
+	static std::string lastOutput;
+	for (size_t i=0; i<lastOutput.size(); ++i) {
+		std::cout << "\b";
+	}
+	std::cout 
+		<< strOut 
+		<< std::flush;
+	lastOutput = strOut;
+}
+
+void play(sheet::DocumentPtr document, fm::midi::MidiPtr midi, MidiOutputId midiOutput, fm::Ticks begin, fm::Ticks end, const Settings &settings) {
 	auto &player = fmapp::getMidiplayer();
 	player.bpm(midi->bpm());
 	auto output = findOutput(midiOutput);
-	std::cout << "playing on: " << output.name << std::endl;
+	std::cout << "playing on: " << output.name << " --> ";
 	player.setOutput(output);
 	player.midi(midi);
 	player.play(begin);
@@ -160,7 +177,7 @@ void play(fm::midi::MidiPtr midi, MidiOutputId midiOutput, fm::Ticks begin, fm::
 
 	fmapp::os::setSigtermHandler([&playing]{
 		playing = false;
-		std::cout << "stopped" << std::endl;
+		std::cout << std::endl << "stopped" << std::endl;
 		std::cout.flush();
 	});
 	
@@ -171,6 +188,8 @@ void play(fm::midi::MidiPtr midi, MidiOutputId midiOutput, fm::Ticks begin, fm::
 #endif
 
 	while (playing) {
+		auto elapsed = player.elapsed();
+		printElapsedTime(elapsed);
 		std::this_thread::sleep_for( std::chrono::milliseconds(10) );
 		if (watch) {
 			auto newTimestamp = getTimestamp(inputfile);
@@ -196,13 +215,14 @@ void play(fm::midi::MidiPtr midi, MidiOutputId midiOutput, fm::Ticks begin, fm::
 			}
 			
 		}
-		if (player.elapsed() > end) {
+		if (elapsed > end) {
 			if (!settings.loop()) {
 				break;
 			}
 			player.play(begin);
 		}
 	}
+	std::cout << std::endl;
 	player.stop();
 
 #ifdef SHEET_USE_BOOST_TIMER
@@ -238,7 +258,8 @@ int main(int argc, const char** argv)
 		}
 
 		std::string infile = settings.getInput();
-		auto midi = sheet::processFile(infile);
+		auto doc = sheet::createDocument(infile);
+		auto midi = sheet::processFile(doc);
 		fm::Ticks begin = 0;
 
 		auto end = midi->duration();
@@ -255,7 +276,7 @@ int main(int argc, const char** argv)
 		}
 
 
-		play(midi, midi_out, begin, end, settings);
+		play(doc, midi, midi_out, begin, end, settings);
 
 		return 0;
 	}

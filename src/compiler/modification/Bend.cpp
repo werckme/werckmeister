@@ -1,12 +1,13 @@
 #include "Bend.h"
 #include "compiler/AContext.h"
 #include <algorithm>
-
+#include <fm/literals.hpp>
 namespace sheet {
     namespace compiler {
 
         void Bend::addModificationEvents(AContext *ctx, fm::Ticks absPosition, fm::Ticks duration)
         {
+            using namespace fm;
             if (duration == 0) {
                 return;
             }
@@ -19,7 +20,7 @@ namespace sheet {
             double c = e - b;
             double d = static_cast<double>(duration);
             
-			for (double t=0; t<duration; t+=50.0) {
+			for (double t=0; t<duration; t+=static_cast<double>( 1.0_N64 )) {
                 double x = c*t/d + b;
                 ctx->addPitchbendEvent(x, absPosition + static_cast<fm::Ticks>(t));
             }
