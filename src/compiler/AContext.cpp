@@ -6,6 +6,7 @@
 #include <fm/common.hpp>
 #include "spielanweisung/ASpielanweisung.h"
 #include "modification/AModification.h"
+#include <fm/literals.hpp>
 
 namespace {
 	const fm::Ticks TickTolerance = 0.5; // rounding errors e.g. for triplets
@@ -391,7 +392,10 @@ namespace sheet {
 			}	
 			if (metaEvent.metaCommand == SHEET_META__SET_MOD_ONCE) {
 				metaSetModificationOnce(getArgument<fm::String>(metaEvent, 0), metaEvent.metaArgs);
-			}											
+			}
+			if (metaEvent.metaCommand == SHEET_META__SET_SIGNATURE) {
+				metaSetSignature(getArgument<int>(metaEvent, 0), getArgument<int>(metaEvent, 1));
+			}															
 		}
 
 		void AContext::metaSetVoicingStrategy(const fm::String &name)
@@ -477,6 +481,13 @@ namespace sheet {
 				throwContextException("upbeat only allowed on begin of track");
 			}
 			meta->isUpbeat = true;
+		}
+
+		void AContext::metaSetSignature(int upper, int lower)
+		{
+			using namespace fm;
+			auto meta = voiceMetaData(voice());
+			meta->barLength = (1.0_N1 / (fm::Ticks)lower) * (fm::Ticks)upper;
 		}
 
 		void AContext::switchStyle(IStyleDefServer::ConstStyleValueType current, IStyleDefServer::ConstStyleValueType next)

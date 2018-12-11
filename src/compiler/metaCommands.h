@@ -17,5 +17,6 @@
 #define SHEET_META__SET_SPIELANWEISUNG_ONCE FM_STRING("doOnce")
 #define SHEET_META__SET_MOD FM_STRING("mod")
 #define SHEET_META__SET_MOD_ONCE FM_STRING("modOnce")
+#define SHEET_META__SET_SIGNATURE FM_STRING("signature")
 
 #endif

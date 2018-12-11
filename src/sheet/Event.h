@@ -81,8 +81,10 @@ namespace sheet {
 		fm::String chordName;
 		typedef fm::String Options;
 		typedef std::tuple<PitchDef::Pitch, Options> ChordElements;
+		typedef long double Multiplicator;
 		ChordElements chordElements() const;
 		fm::String chordDefName() const;
+		Multiplicator multiplicator = 1; // to multiplicate with bar length e.g.: | C(1) | C(0.5) C(0.5) |
 	};
 
 

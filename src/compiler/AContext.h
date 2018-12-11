@@ -38,7 +38,10 @@ namespace sheet {
 				typedef std::list<ASpielanweisungPtr> Spielanweisungen;
 				typedef std::list<AModificationPtr> Modifications;
 				fm::Ticks position = 0;
-				fm::Ticks duration = DefaultDuration;
+				/**
+				 * current note duration
+				 */
+				fm::Ticks duration = DefaultDuration; 
 				fm::Ticks barLength = DefaultBarLength;
 				fm::Ticks barPosition = 0;
 				int barCount = 0;
@@ -72,6 +75,8 @@ namespace sheet {
 			virtual void setVoice(VoiceId voice);
 			TrackId track() const;
 			VoiceId voice() const;
+			TrackId chordTrackId() const { return chordTrack_; }
+			VoiceId voiceTrackId() const { return chordVoice_; }
 			inline void setTarget(TrackId trackId, VoiceId voiceId)
 			{
 				setTrack(trackId);
@@ -111,6 +116,7 @@ namespace sheet {
 			virtual void metaSetSpielanweisungOnce(const fm::String &name, const Event::Args &args);
 			virtual void metaSetModification(const fm::String &name, const Event::Args &args);
 			virtual void metaSetModificationOnce(const fm::String &name, const Event::Args &args);
+			virtual void metaSetSignature(int upper, int lower);
 			/////// actual context stuff
 			virtual void addEvent(const Event::Pitches &pitches, fm::Ticks duration, bool tying = false);
 			virtual void addEvent(const PitchDef &pitch, fm::Ticks duration, bool tying = false);

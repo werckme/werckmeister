@@ -9,11 +9,11 @@
 /instrument: guitar 3 0 37/
 /instrument: bass 8 0 33/
 /instrument: drums 9 0 32/
-/instrument: slide 2 0 102/
+/instrument: slide 2 0 104/
 
 /style: countryschlager1 normal/
 
-C7 | C7 | Emin7 | A B | Cmin | Cmin | Ces7+9 | G7 Gesmin | 
+C7  C7 | Emin7 | A B | Cmin | Cmin | Ces7+9 | G7 Gesmin | 
 
 /style: countryschlager1 fill1/
 

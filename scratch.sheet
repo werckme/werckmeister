@@ -1,28 +1,9 @@
 -- document configs
 @load "./chords/default.chords";
---@load "./styles/simpleDisco.style";
-@load "./styles/justchords.style";
-@load "./pitchmaps/defaultMidiDrumMap.pitchmap";
+@load "./styles/3-4.style";
 
-/instrument: piano 0 0 104/
 
-/style: justchords empty/
+
+/style: 3-4 normal/
 C |
-
-/style: justchords bending/
-C Cmin |
-
-/style: justchords arpeggio/
-C Cmin | D D7 | D9 D | B7+ B7 | Fmin E | C D | 
-/style: justchords arpeggioT/
-C11 Cmin |
-/style: justchords arpeggio/
-D7+9 D | Aes7+ Aes7 | Ges11 | C D | 
-/style: justchords arpeggioT/
-E | 
-/style: justchords arpeggioUp/
-E7 Emin | Fis11 | Des11 | G13 |
-/style: justchords arpeggioT/
-C7+ |
-/style: justchords bending/
-C13 |
+--| D7 | D9 D | B7+ B7 | Fmin E | C D | 

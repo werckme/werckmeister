@@ -43,14 +43,14 @@ namespace sheet {
 			template<typename TIt>
 			void determineChordLengths(TIt begin, TIt end) {
 				using namespace fm;
+				typedef ChordEvent::Multiplicator Multiplicator;
 				auto it = begin;
-				std::list<Event*> barEvents;
+				std::list<ChordEvent*> barEvents;
 				while (it != end) {
 					if (it->type == Event::EOB) {
-						// TODO: we assume 4/4
 						int c = barEvents.size();
 						if (c > 0) {
-							std::for_each(barEvents.begin(), barEvents.end(), [c](Event *ev) { ev->duration = 4.0_N4 / c; });
+							std::for_each(barEvents.begin(), barEvents.end(), [c](ChordEvent *ev) { ev->multiplicator = 1.0 / (Multiplicator)c; });
 						}
 						barEvents.clear();
 					}
@@ -72,7 +72,9 @@ namespace sheet {
 				ctx->setChordTrackTarget(); // target will be lost after calling addEvent
 				ctx->addEvent(ev);
 				if (ev.type == Event::Chord) {
-					ctx->renderStyle(ev.duration);
+					//auto meta = ctx->voiceMetaData(ctx->voiceTrackId());
+					using namespace fm;
+					ctx->renderStyle(1.0_N1 * ev.multiplicator);
 				}
 			}
 		}
