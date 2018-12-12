@@ -167,6 +167,7 @@ Paralleles abspielen verschiedener Styles
  - sheet hat Länge 0 oder ist fehlerhaft wenn erste zeile kein Kommentar ist
  - die Akkorde As und Es werden nicht erkannt. Workaround: Aes Ees
  - style-section switch legt neue tracks an, anstatt bestehende zu nutzen 
+ - meta command style lädt keine files mit sonderzeichen
 
 ## Cool DAW-Editor
 all character based 

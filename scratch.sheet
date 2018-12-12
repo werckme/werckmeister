@@ -1,9 +1,14 @@
 -- document configs
 @load "./chords/default.chords";
-@load "./styles/3-4.style";
+@load "./styles/34.style";
+@load "./styles/simpleDisco.style";
+@load "./pitchmaps/defaultMidiDrumMap.pitchmap";
 
+/instrument: piano 3 0 0/
+/instrument: bass 5 3 87/
+/instrument: drums 9 0 8/
 
-
-/style: 3-4 normal/
-C |
---| D7 | D9 D | B7+ B7 | Fmin E | C D | 
+/tempo: 90/
+/style: 34 normal/
+/signature: 3 4/
+C | D7 | C9 D B | B7+ B7 E | Fmin E C | C | 

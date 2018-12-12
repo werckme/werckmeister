@@ -344,7 +344,7 @@ namespace sheet {
 				meta->eventOffset = meta->eventCount;
 			}
 			else if (!fm::compareTolerant(meta->barPosition, meta->barLength, fm::Ticks(TickTolerance))) {
-				warn("bar check error");
+				warn("bar check error (" + std::to_string(fm::absDifference(meta->barPosition, meta->barLength)) + ")");
 			}
 			meta->barPosition = 0;
 			++(meta->barCount);
@@ -590,7 +590,7 @@ namespace sheet {
 					setTarget(track, voice);
 					auto meta = voiceMetaData(this->voice());
 					fm::Ticks writtenDuration = 0;
-					while (fm::absDifference(writtenDuration, duration) > TickTolerance) { // loop until enough events are written
+					while ((duration - writtenDuration) > TickTolerance) { // loop until enough events are written
 						auto it = voice.events.begin();
 						if (meta->idxLastWrittenEvent >= 0) { // continue rendering
 							it += meta->idxLastWrittenEvent;
@@ -600,6 +600,7 @@ namespace sheet {
 								// after a half rest the next event would be a new bar
 								// its length check would produce a message
 								++it;
+								meta->barPosition = 0;
 							}
 						}
 						else if (meta->eventOffset > 0) { // skip events (for upbeat)
@@ -620,7 +621,7 @@ namespace sheet {
 							ev.duration = std::min(ev.duration, duration - writtenDuration);
 							addEvent(ev);
 							writtenDuration += meta->position - currentPos;
-							if (fm::absDifference(writtenDuration, duration) <= TickTolerance) {
+							if ((duration - writtenDuration) <= TickTolerance) {
 								bool hasRemainings = ev.duration != originalDuration;
 								if (hasRemainings) {
 									meta->remainingTime = originalDuration - ev.duration;

@@ -50,7 +50,9 @@ namespace sheet {
 					if (it->type == Event::EOB) {
 						int c = barEvents.size();
 						if (c > 0) {
-							std::for_each(barEvents.begin(), barEvents.end(), [c](ChordEvent *ev) { ev->multiplicator = 1.0 / (Multiplicator)c; });
+							std::for_each(barEvents.begin(), barEvents.end(), [c](ChordEvent *ev) { 
+								ev->multiplicator = 1.0 / (Multiplicator)c; 
+							});
 						}
 						barEvents.clear();
 					}
@@ -68,13 +70,15 @@ namespace sheet {
 			auto ctx = context();
 			determineChordLengths(document_->sheetDef.chords.begin(), document_->sheetDef.chords.end());
 
-			for (const auto &ev : document_->sheetDef.chords) {
+			for (auto &ev : document_->sheetDef.chords) {
 				ctx->setChordTrackTarget(); // target will be lost after calling addEvent
-				ctx->addEvent(ev);
-				if (ev.type == Event::Chord) {
-					//auto meta = ctx->voiceMetaData(ctx->voiceTrackId());
-					using namespace fm;
-					ctx->renderStyle(1.0_N1 * ev.multiplicator);
+				if (ev.type != Event::Chord) {
+					ctx->addEvent(ev);
+				} else {
+					auto meta = ctx->voiceMetaData(ctx->voiceTrackId());
+					ev.duration = meta->barLength * ev.multiplicator;	
+					ctx->addEvent(ev);
+					ctx->renderStyle(meta->barLength * ev.multiplicator);
 				}
 			}
 		}
