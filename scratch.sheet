@@ -1,14 +1,17 @@
 -- document configs
 @load "./chords/default.chords";
-@load "./styles/34.style";
+@load "./styles/bossanova.style";
 @load "./styles/simpleDisco.style";
 @load "./pitchmaps/defaultMidiDrumMap.pitchmap";
 
+/tempo: 170/
+--           uname ch cc pc
 /instrument: piano 3 0 0/
-/instrument: bass 5 3 87/
-/instrument: drums 9 0 8/
+/instrument: guitar 4 0 25/
+/instrument: bass 8 0 33/
+/instrument: drums 9 0 32/
+/instrument: slide 2 8 26/
 
-/tempo: 90/
-/style: 34 normal/
-/signature: 3 4/
-C | D7 | C9 D B | B7+ B7 E | Fmin E C | C | 
+/style: bossanova normal/
+
+C7 | C7 | C9 | C7 | C7 | C7 | C7 | C7 | C7 |

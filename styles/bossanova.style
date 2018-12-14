@@ -1,0 +1,85 @@
+section normal ----------------------------------------------------------------
+[ 
+{
+    /uname: drums/
+    "ht"8 !f"ht" "ht" !f"ht"   "ht" "ht" "ht" !f"ht" |
+}    
+{
+    /uname: drums/
+    \fff
+    r4 "ss"8 r4 "ss"8 r4 | "ss"4. "ss"8 r4 "ss" |
+}    
+{
+    /uname: drums/
+    "bd"4. "bd"8 "bd"4. "bd"8 |
+}      
+]
+[ 
+{
+    /uname: guitar/
+    /voicingStrategy: simpleGuitar/
+    \f
+    <I II III IV V VI VII>4 <I II III IV V VI VII>4 r8 <I II III IV V VI VII>8 r8 <I II III IV V VI VII>8  |
+    r8 <I II III IV V VI VII>8 r8 <I II III IV V VI VII>8 r4 <I II III IV V VI VII>4 |
+    <I II III IV V VI VII>4 <I II III IV V VI VII>4 r8 <I II III IV V VI VII>8 r8 <I II III IV V VI VII>8  |
+    r4 r8 <I II III IV V VI VII>8 r8 <I II III IV V VI VII>4. |
+}    
+] 
+[ 
+{
+    /uname: piano/
+    <VII VII'>4 <III V>8 <V V'>8 r8 <III V>8 r8 <V V'> | r8 <III V>8 r8 <V V'> r8 <III V> r8 <VII VII'> |
+}    
+] 
+[ 
+{
+    /uname: bass/
+    \fff
+    I,,4. V,,8 V,,4. I,,8  |
+    I,,4. V,,8 V,,4 I,,4  |
+    I,,4. V,,8 V,,4. I,,8  |
+    I,,4. V,,8 V,,4 I,,8 V,,8  |
+}    
+] 
+end
+
+
+section normal2 ----------------------------------------------------------------
+[ 
+{
+    /uname: drums/
+    \pp
+    "sn"8 "sn" !f"sn" "sn"   "sn" !f"sn" "sn" "sn" |
+    !f"sn"8 "sn" "sn" !f"sn"   "sn" "sn" !f"sn" "sn" |
+}    
+{
+    /uname: drums/
+    r4 "ht"8 r4 "ht"8 r4 | "ht"4. "ht"8 r4 "ht" |
+}    
+{
+    /uname: drums/
+    "bd"4. "bd"8 "bd"4. "bd"8 |
+}      
+]
+[ 
+{
+    /uname: guitar/
+    /voicingStrategy: simpleGuitar/
+    \f
+    <I II III IV V VI VII>4 <I II III IV V VI VII>4 r8 <I II III IV V VI VII>8 r8 <I II III IV V VI VII>8  |
+    r8 <I II III IV V VI VII>8 r8 <I II III IV V VI VII>8 r4 <I II III IV V VI VII>4 |
+    <I II III IV V VI VII>4 <I II III IV V VI VII>4 r8 <I II III IV V VI VII>8 r8 <I II III IV V VI VII>8  |
+    r4 r8 <I II III IV V VI VII>8 r8 <I II III IV V VI VII>4. |
+}    
+] 
+[ 
+{
+    /uname: bass/
+    \fff
+    I,,4. V,,8 V,,4. I,,8  |
+    I,,4. V,,8 V,,4 I,,4  |
+    I,,4. V,,8 V,,4. I,,8  |
+    I,,4. V,,8 V,,4 I,,8 V,,8  |
+}    
+] 
+end
