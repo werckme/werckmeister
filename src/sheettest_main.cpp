@@ -28,7 +28,7 @@
 #define ARG_MIDI_OUTPUT "device"
 #define ARG_WATCH "watch"
 #define ARG_CHORDS "sheet"
-#define ARG_SECTION "section"
+#define ARG_SECTION "style"
 #define ARG_TEMPO "tempo"
 #define ARG_INCLUDE "include"
 
@@ -60,7 +60,7 @@ struct Settings {
 			(ARG_MIDI_OUTPUT, po::value<MidiOutputId>(), "select midi device (default = 0)")
 			(ARG_WATCH, "checks the input file for changes and recompiles if any")
             (ARG_CHORDS, po::value<std::string>()->default_value("C"), "the sheet text, default is 'C'")
-            (ARG_SECTION, po::value<std::string>()->default_value("normal"), "the style section, default is 'normal'")
+            (ARG_SECTION, po::value<std::string>(), "the style selection, e.g.: \"swing normal\"")
             (ARG_TEMPO, po::value<double>()->default_value(119), "the tempo in bpm, default is 119")
             (ARG_INCLUDE, po::value<std::string>(), "a file with sheet text to prepend (e.g. for instrument defs)")
 			;
@@ -75,7 +75,11 @@ struct Settings {
         return variables[ARG_CHORDS].as<std::string>();
     }
 
-    std::string section() const {
+    bool hasStyle() const {
+        return !!variables.count(ARG_SECTION);
+    }
+
+    std::string style() const {
         return variables[ARG_SECTION].as<std::string>();
     }
 
@@ -188,6 +192,16 @@ fm::String getFileText(const std::string &path) {
     return fm::String(begin, end);
 }
 
+fm::String getStyleText(const Settings &settings) 
+{
+    if (!settings.hasStyle()) {
+        return FM_STRING("");
+    }
+    fm::StringStream ss;
+    ss << "/style: " << fm::to_wstring(settings.style()) << "/";
+    return ss.str();
+}
+
 int main(int argc, const char** argv)
 {
 	try {
@@ -217,6 +231,7 @@ int main(int argc, const char** argv)
         std::vector<fm::String> infiles(infilesNarrow.size());
         std::transform(infilesNarrow.begin(), infilesNarrow.end(), infiles.begin(), [](const auto &x){ return fm::to_wstring(x); });
         fm::String prependText = settings.hasIncludeFile() ? getFileText(settings.getIncludeFile()) : FM_STRING("");
+        prependText += FM_STRING("\n") + getStyleText(settings);
         fm::String sheetText = prependText + FM_STRING("\n") + fm::to_wstring(settings.chords());
 
 		auto doc = sheet::createDocumentByString(sheetText, infiles);
