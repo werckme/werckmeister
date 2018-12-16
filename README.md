@@ -162,6 +162,7 @@ Paralleles abspielen verschiedener Styles
 ## Nice to have
 
 ## Bugs
+ - style voice nur meta events -> bleibt hängen
  - sheet hat Länge 0 wenn kein Chordtrack vorhanden
  - sheet hat Länge 0 sobald reihenfolge tacks, chords nicht eingehalten
  - sheet hat Länge 0 oder ist fehlerhaft wenn erste zeile kein Kommentar ist

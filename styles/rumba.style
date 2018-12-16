@@ -1,0 +1,53 @@
+section normal ----------------------------------------------------------------
+[ 
+{
+    /uname: drums/
+    \f
+    !ff"ss"8 "ht"16 "ht"16   "ht"8 "ht"8   !ff"ss"8 "ht"8 "ss"8 "ht"8  |
+}    
+]
+[
+{
+    /uname: drums/
+    \ff
+    "bd"4. "bd"8 "bd"4. "bd"8 |
+}     
+]
+[ 
+{
+    /uname: guitar/
+    /voicingStrategy: simpleGuitar/
+    \f
+    <I II III IV V VI VII>8 
+    <I II III IV V VI VII>8 
+    r8 
+    <I II III IV V VI VII>8 
+    <I II III IV V VI VII>8 
+    <I II III IV V VI VII>8 
+    r4 | 
+}
+]
+[ 
+{
+    /uname: piano/
+    \ff
+    r8 I'16t V16t III16t r8 
+    <I II III IV V VI VII> r <I II III IV V VI VII> r <I II III IV V VI VII> |  
+    r8 <III, V,>8 r8 <V, V> r8 <III, V,> r8 <VII, VII> |
+}
+{
+    /uname: piano/
+    I,,4. I,,8 V,,4 V,, |
+} 
+]  
+[ 
+{
+    /uname: bass/
+    \fff
+    I,,4. V,,8 V,,4 V,,4  |
+    I,,4. V,,8 V,,4 V,,,4 |
+    I,,4. V,,8 V,,4 V,,4  |
+    I,,4. III,, V,,4 |
+}    
+] 
+end

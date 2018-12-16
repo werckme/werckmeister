@@ -28,7 +28,7 @@ section normal ----------------------------------------------------------------
 [ 
 {
     /uname: piano/
-    <VII VII'>4 <III V>8 <V V'>8 r8 <III V>8 r8 <V V'> | r8 <III V>8 r8 <V V'> r8 <III V> r8 <VII VII'> |
+    <VII, VII>4 <III, V,>8 <V, V>8 r8 <III, V,>8 r8 <V, V> | r8 <III, V,>8 r8 <V, V> r8 <III, V,> r8 <VII, VII> |
 }    
 ] 
 [ 
@@ -43,6 +43,50 @@ section normal ----------------------------------------------------------------
 ] 
 end
 
+section fill1 ----------------------------------------------------------------
+[ 
+{
+    /uname: drums/
+    "ht"8 !f"ht" "ht" !f"ht"   "ht" "ht" "ht" !f"ht" |
+}    
+{
+    /uname: drums/
+    \fff
+    "ss"4. "sn"8 "sn"8 "sn"8 "sn"8 "sn"8 |
+}    
+{
+    /uname: drums/
+    "bd"4. "bd"8 "bd"4. "bd"8 |
+}      
+]
+[ 
+{
+    /uname: guitar/
+    /voicingStrategy: simpleGuitar/
+    \f
+    <I II III IV V VI VII>4 <I II III IV V VI VII>4 r8 <I II III IV V VI VII>8 r8 <I II III IV V VI VII>8  |
+    r8 <I II III IV V VI VII>8 r8 <I II III IV V VI VII>8 r4 <I II III IV V VI VII>4 |
+    <I II III IV V VI VII>4 <I II III IV V VI VII>4 r8 <I II III IV V VI VII>8 r8 <I II III IV V VI VII>8  |
+    r4 r8 <I II III IV V VI VII>8 r8 <I II III IV V VI VII>4. |
+}    
+] 
+[ 
+{
+    /uname: piano/
+    <VII, VII>4 <III, V,>8 <V, V>8 r8 <III, V,>8 r8 <V, V> | r8 <III, V,>8 r8 <V, V> r8 <III, V,> r8 <VII, VII> |
+}    
+] 
+[ 
+{
+    /uname: bass/
+    \fff
+    I,,4. V,,8 V,,4. I,,8  |
+    I,,4. V,,8 V,,4 I,,4  |
+    I,,4. V,,8 V,,4. I,,8  |
+    I,,4. V,,8 V,,4 I,,8 V,,8  |
+}    
+] 
+end
 
 section normal2 ----------------------------------------------------------------
 [ 
@@ -71,7 +115,13 @@ section normal2 ----------------------------------------------------------------
     <I II III IV V VI VII>4 <I II III IV V VI VII>4 r8 <I II III IV V VI VII>8 r8 <I II III IV V VI VII>8  |
     r4 r8 <I II III IV V VI VII>8 r8 <I II III IV V VI VII>4. |
 }    
-] 
+]
+[ 
+{
+    /uname: piano/
+    <VII, VII>4 <III, V,>8 <V, V>8 r8 <III, V,>8 r8 <V, V> | r8 <III, V,>8 r8 <V, V> r8 <III, V,> r8 <VII, VII> |
+}    
+]  
 [ 
 {
     /uname: bass/

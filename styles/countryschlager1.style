@@ -19,7 +19,7 @@ section normal ----------------------------------------------------------------
     r1 |
     r1 |
     r1 |
-    /modOnce: bend to 1/
+    /modOnce: bend to 100/
     <I' II' III' IV' V' VI' VII'>1 |
 }   
 ]  
@@ -68,7 +68,7 @@ section fill1 ----------------------------------------------------------------
     r2 r2 |
     r2 r2 |
     r2 r2 |
-    /modOnce: bend to 1/
+    /modOnce: bend to 100/
     <I' II' III' IV' V' VI' VII'>1 |
 }   
 ]  
@@ -125,7 +125,7 @@ section fill2 ----------------------------------------------------------------
     r2 r2 |
     r2 r2 |
     r2 r2 |
-    /modOnce: bend to 1/
+    /modOnce: bend to 100/
     <I' II' III' IV' V' VI' VII'>1 |
 }   
 ]  
@@ -181,7 +181,7 @@ section normal2 ----------------------------------------------------------------
     r2 r2 |
     r2 r2 |
     r2 r2 |
-    /modOnce: bend to 1/
+    /modOnce: bend to 100/
     <I' II' III' IV' V' VI' VII'>1 |
 }   
 ]  
