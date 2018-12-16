@@ -1,0 +1,5 @@
+--           uname ch cc pc
+/instrument: piano 3 0 0/
+/instrument: guitar 4 0 25/
+/instrument: bass 8 0 33/
+/instrument: drums 9 0 32/

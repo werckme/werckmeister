@@ -56,12 +56,24 @@ SET (SRC_SHEET_PLAYER
     sheet.cpp
 )
 
+## PLAYER
+SET (SRC_SHEET_TESTER
+    fmapp/boostTimer.cpp
+    fmapp/rtmidiBackend.cpp
+    fmapp/midiplayer.cpp
+    fmapp/midiProvider.cpp
+    sheettest_main.cpp
+    sheet.cpp
+)
+
 if (WIN32)
+  SET(SRC_SHEET_PLAYER ${SRC_SHEET_PLAYER}  fmapp/os_win.cpp)
   SET(SRC_SHEET_PLAYER ${SRC_SHEET_PLAYER}  fmapp/os_win.cpp)
 endif(WIN32)
 
 if (UNIX)
   SET(SRC_SHEET_PLAYER ${SRC_SHEET_PLAYER}  fmapp/os_linux.cpp)
+  SET(SRC_SHEET_TESTER ${SRC_SHEET_TESTER}  fmapp/os_linux.cpp)
 endif(UNIX)
 
 
@@ -81,3 +93,6 @@ endif(UNIX)
 
 add_executable(sheetp ${SRC_SHEET_PLAYER})
 target_link_libraries (sheetp sheet ${Boost_LIBRARIES} ${LIBS_PLAYER})
+
+add_executable(sheett ${SRC_SHEET_TESTER})
+target_link_libraries (sheett sheet ${Boost_LIBRARIES} ${LIBS_PLAYER})

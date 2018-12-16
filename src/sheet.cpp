@@ -37,4 +37,11 @@ namespace sheet {
         auto doc = docparser.parse(fm::to_wstring(file));
         return doc;
     }
+
+    sheet::DocumentPtr createDocumentByString(const fm::String &sheetText, const std::vector<fm::String> &usings)
+    {
+        sheet::compiler::DocumentParser docparser;
+        auto doc = docparser.parseString(sheetText, usings);
+        return doc;
+    }
 }

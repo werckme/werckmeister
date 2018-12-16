@@ -101,5 +101,39 @@ namespace sheet {
 			processUsings(res);
 			return res;
 		}
+
+		DocumentPtr DocumentParser::parseString(const fm::String &sheetText, const Usings &optUsings)
+		{
+			fm::StringStream ss;
+			ss << "-- BUG LINE" << std::endl;
+			for (const auto &using_ : optUsings) {
+				ss << "@load \""<< using_ << "\";" << std::endl;
+			}
+			for (int i=0; i<10; ++i) {
+				ss << sheetText << "|" << std::endl;
+			}
+			fm::String documentText(ss.str());
+			const fm::String::value_type *first = documentText.c_str();
+			const fm::String::value_type *last = first + documentText.length();
+
+			auto res = std::make_shared<Document>();
+			res->path = boost::filesystem::system_complete(".").wstring();
+
+			{
+				DocumentConfigParser configParser;
+				res->documentConfig = configParser.parse(first, last);
+			}
+			{
+				SheetDefParser sheetParser;
+				res->sheetDef = sheetParser.parse(first, last);
+			}
+
+			processUsings(res);
+			return res;
+		}
+		DocumentPtr DocumentParser::parseString(const fm::String &sheetText)
+		{
+			return parseString(sheetText, Usings());
+		}
 	}
 }
