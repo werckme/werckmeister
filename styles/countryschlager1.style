@@ -93,7 +93,7 @@ section fill1 ----------------------------------------------------------------
     /uname: drums/
     \ffff
     /mod: bend to 0/ 
-    !ff"hto1"32 "hto2"16. r16 "hto1"16 r8 "hto1"8 r4 !fffff"lto1"2. |
+    !ff"hto1"32 "hto2"16. r16 "hto1"16 r8 "hto1"8 r4 !fffff"lto1"8 "lto2"8 |
 }
 {
     /uname: drums/

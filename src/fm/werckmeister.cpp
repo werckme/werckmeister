@@ -8,10 +8,10 @@
 #include "compiler/compiler.h"
 #include "compiler/MidiContext.h"
 #include <memory>
-#include "sheet/DirectVoicingStrategy.h"
-#include "sheet/SimpleGuitar.h"
+#include "compiler/voicings/DirectVoicingStrategy.h"
+#include "compiler/voicings/SimpleGuitar.h"
 #include "compiler/voicingStrategies.h"
-#include "sheet/VoicingStrategy.h"
+#include "compiler/voicings/VoicingStrategy.h"
 #include "compiler/spielanweisung/Normal.h"
 #include "compiler/spielanweisung/Arpeggio.h"
 #include "compiler/spielanweisung/spielanweisungen.h"

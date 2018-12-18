@@ -1,9 +1,20 @@
 section normal
 [ 
 {
-    <I II III IV V VI VII>2 r2 |
+    <I II III IV V VI VII>1 |
 }   
 ] 
+end
+
+section guitar
+[
+{
+    /uname: guitar/
+    /voicingStrategy: simpleGuitar/
+    \f
+    <I II III IV V VI VII>4. <I II III IV V VI VII>4 <I II III IV V VI VII>4 <I II III IV V VI VII>8  |
+}   
+]
 end
 
 section arpeggio

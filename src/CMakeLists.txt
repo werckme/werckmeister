@@ -19,10 +19,10 @@ SET (SRC_FETZER_LIB
     compiler/spielanweisung/Arpeggio.cpp
     compiler/modification/AModification.cpp
     compiler/modification/Bend.cpp
+    compiler/voicings/DirectVoicingStrategy.cpp
+    compiler/voicings/SimpleGuitar.cpp
     sheet/Event.cpp
     sheet/Document.cpp
-    sheet/DirectVoicingStrategy.cpp
-    sheet/SimpleGuitar.cpp
     sheet/ChordDef.cpp
 )
 

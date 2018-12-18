@@ -1,9 +1,0 @@
--- document configs
-@load "../chords/default.chords";
-@load "../styles/justchords.style";
-
- /chanel: 0/
- /soundSelect: 0 0/
-
-C7+ Dmin7 | Emin7 F7+ | G7 Amin7 | B5-/7  |  
-

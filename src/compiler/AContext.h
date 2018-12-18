@@ -10,7 +10,7 @@
 #include <unordered_map>
 #include "sheet/ChordDef.h"
 #include "sheet/StyleDefServer.h"
-#include "sheet/VoicingStrategy.h"
+#include "compiler/voicings/VoicingStrategy.h"
 #include <fm/common.hpp>
 #include "metaCommands.h"
 #include <list>

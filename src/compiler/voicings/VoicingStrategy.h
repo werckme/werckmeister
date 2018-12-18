@@ -1,8 +1,8 @@
 #ifndef VOICE_STATEGY_HPP
 #define VOICE_STATEGY_HPP
 
-#include "ChordDef.h"
-#include "Event.h"
+#include "sheet/ChordDef.h"
+#include "sheet/Event.h"
 #include <memory>
 
 

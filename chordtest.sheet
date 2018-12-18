@@ -1,0 +1,8 @@
+-- document configs
+@load "./chords/default.chords";
+@load "./styles/justchords.style";
+
+/instrument: guitar 0 0 36/
+/style: justchords guitar/
+C | G | C | B |
+
