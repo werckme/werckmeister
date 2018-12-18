@@ -2,7 +2,7 @@
 @load "./styles/purdie.style";
 @load "./pitchmaps/defaultMidiDrumMap.pitchmap";
 @load "./chords/default.chords";
-@load "./styles/countryschlager1.style";
+@load "./styles/ido.style";
 
 /tempo: 145/
 /instrument: organ 2 0 18/
@@ -11,21 +11,21 @@
 /instrument: drums 9 0 32/
 /instrument: slide 2 0 102/
 
-/style: countryschlager1 normal/
+/style: ido normal/
 
 C7 | C7 | Emin7 | A B | Cmin | Cmin | Ces7+9 | G7 Gesmin | 
 
-/style: countryschlager1 fill1/
+/style: ido fill1/
 
 G7 Gmin7 | 
 
-/style: countryschlager1 normal2/
+/style: ido normal2/
 
 F | F | E13 | E13 | F7 | F7 | Aes7+ | B A | B A | 
 
-/style: countryschlager1 normal/
+/style: ido normal/
 
 Cmin | Cmin | Fis | Fis | Cmin | Cmin | D | Eesmin7 | D | Eesmin7 | D Eesmin7 | D Eesmin9 | Emin | Emin | Emin9 | Emin13 |
 
-/style: countryschlager1 ende/
+/style: ido ende/
 Cmin |

@@ -379,7 +379,7 @@ namespace sheet {
 				metaSetUpbeat(metaEvent);
 			}
 			if (metaEvent.metaCommand == SHEET_META__SET_VOICING_STRATEGY) {
-				metaSetVoicingStrategy(getArgument<fm::String>(metaEvent, 0));
+				metaSetVoicingStrategy(getArgument<fm::String>(metaEvent, 0), metaEvent.metaArgs);
 			}
 			if (metaEvent.metaCommand == SHEET_META__SET_SPIELANWEISUNG) {
 				metaSetSpielanweisung(getArgument<fm::String>(metaEvent, 0), metaEvent.metaArgs);
@@ -398,11 +398,12 @@ namespace sheet {
 			}															
 		}
 
-		void AContext::metaSetVoicingStrategy(const fm::String &name)
+		void AContext::metaSetVoicingStrategy(const fm::String &name, const Event::Args &args)
 		{
 			auto &wm = fm::getWerckmeister();
 			auto meta = voiceMetaData(voice());
 			meta->voicingStrategy = wm.getVoicingStrategy(name);
+			meta->voicingStrategy->setArguments(args);
 		}
 
 		void AContext::metaSetSpielanweisung(const fm::String &name, const Event::Args &args)

@@ -6,7 +6,7 @@ section normal
 }
 {
     /uname: drums/
-    r8t !ppp"sn"8t r8t    r8t !pp"sn"8t r8t    \f"ss"8t !ppp"sn"8t r8t   r8t !pp"sn"8t r8t |
+    r8t !ppp"sn"8t r8t    r8t !pp"sn"8t r8t    \ff"sn"8t !ppp"sn"8t r8t   r8t !pp"sn"8t r8t |
 }
 {
     /uname: drums/
@@ -23,7 +23,7 @@ section normal
 [ 
 {
     /uname: bass/
-    I,,4t r8t r4t I,,8t r4t r8t V,,,4t VII,,,8t |
+    I,,8t I,,8t r8t r4t I,,8t r4t r8t V,,,4t VII,,,8t |
 }
 ] 
 end

@@ -23,6 +23,8 @@ namespace sheet {
         virtual ~SimpleGuitar() = default;
 		virtual Pitches get(const ChordEvent &chord, const ChordDef &def, const Degrees &degreeIntervals, const TimeInfo&) override;
         OctaveMap createOctaveMap(const ChordDef &def) const;
+        virtual void setArguments(const Event::Args &args) override;
+        bool lowerRange = true;
     };
 }
 

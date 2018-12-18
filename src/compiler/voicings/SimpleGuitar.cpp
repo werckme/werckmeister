@@ -66,8 +66,8 @@ namespace sheet {
 		PitchDef x;
 		auto octaves = createOctaveMap(def);
 		int transpose = 0;
-		if (root > fm::notes::D) {
-			//transpose = -1;
+		if (root > fm::notes::D && lowerRange) {
+			transpose = -1;
 		}
 		for (const auto& degree : degreeIntervals) {
 			const auto *interval = def.getIntervalBy(degree.pitch);
@@ -84,5 +84,18 @@ namespace sheet {
 		}
 
         return result;
+	}
+
+	void SimpleGuitar::setArguments(const Event::Args &args) 
+	{
+		if (args.size() > 1) {
+				auto optionStr = getArgument<fm::String>(args, 1);
+				if (optionStr == FM_STRING("lowerRange")) {
+					lowerRange = true;
+				}
+				if (optionStr == FM_STRING("higerRange")) {
+					lowerRange = false;
+				}
+			}
 	}
 }

@@ -15,6 +15,7 @@ namespace sheet {
 		typedef Degrees Pitches;
 		virtual Pitches get(const ChordEvent &chord, const ChordDef &def, const Degrees &degreeIntervals, const TimeInfo&) = 0;
         virtual ~VoicingStrategy() = default;
+        virtual void setArguments(const Event::Args &args) {}
     };
     typedef std::shared_ptr<VoicingStrategy> VoicingStrategyPtr;
 }
