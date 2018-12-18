@@ -65,6 +65,10 @@ namespace sheet {
 		auto root = std::get<0>(chordElements);
 		PitchDef x;
 		auto octaves = createOctaveMap(def);
+		int transpose = 0;
+		if (root > fm::notes::D) {
+			//transpose = -1;
+		}
 		for (const auto& degree : degreeIntervals) {
 			const auto *interval = def.getIntervalBy(degree.pitch);
 			if (!interval) {
@@ -73,8 +77,8 @@ namespace sheet {
 			x.pitch = (root-1) + interval->value;
 			auto octaveRange = octaves.equal_range(degree.pitch);
 			auto octave = octaveRange.first;
-			for(; octave != octaveRange.second; ++octave) {
-				x.octave = octave->second;
+			for(; octave != octaveRange.second; ++octave) { // some degrees may be twice (lower I & upper I)
+				x.octave = octave->second + transpose;
 				result.insert(x);
 			}
 		}

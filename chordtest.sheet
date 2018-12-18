@@ -2,7 +2,7 @@
 @load "./chords/default.chords";
 @load "./styles/justchords.style";
 
-/instrument: guitar 0 0 36/
+/instrument: guitar 0 0 25/
 /style: justchords guitar/
-C | G | C | B |
+C7+ | G7 | C7+ | F7 | G7 | C |
 

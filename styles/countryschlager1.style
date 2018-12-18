@@ -4,7 +4,8 @@ section normal ----------------------------------------------------------------
     /uname: guitar/
     /voicingStrategy: simpleGuitar/
     \f
-    <I II III IV V VI VII>4. <I II III IV V VI VII>4 <I II III IV V VI VII>4 <I II III IV V VI VII>8  |
+    <I II III IV V VI VII>8 <I II III IV V VI VII>8 r8 
+    <I II III IV V VI VII>4  <I II III IV V VI VII>8 <I II III IV V VI VII>8 <I II III IV V VI VII>8 |
 }   
 ]
 [ 
