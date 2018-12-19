@@ -162,7 +162,7 @@ Paralleles abspielen verschiedener Styles
 ## Nice to have
 
 ## Bugs
- - chordefs möglicherweise falsch ab 11+ 
+ - arpeggio generiert zu viele noten
  - keine möglichkeit meta commands für style instruments zu überschreiben (voicing strategy)
  - style rendering kommt ins stolpern wenn ungerade teiler z.b: 4/4 | C C C |  
  - style voice nur meta events -> bleibt hängen

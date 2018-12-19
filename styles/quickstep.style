@@ -24,7 +24,7 @@ section normal
 [
 {
     /uname: guitar/
-    /voicingStrategy: simpleGuitar/
+    /voicingStrategy: simpleGuitar lowerRange/
     \ff
     r4 <I II III IV V VI VII> r <I II III IV V VI VII> |
     \ff

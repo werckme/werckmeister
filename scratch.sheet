@@ -1,11 +1,10 @@
 -- document configs
 @load "./chords/default.chords";
 @load "./styles/bossanova.style";
-@load "./styles/rumba.style";
-@load "./styles/simpleDisco.style";
-@load "./pitchmaps/defaultMidiDrumMap.pitchmap";
+@load "./styles/justchords.style";
 
-/tempo: 150/
+
+/tempo: 120/
 --           uname ch cc pc
 /instrument: piano 3 0 0/
 /instrument: guitar 4 0 25/
@@ -13,19 +12,6 @@
 /instrument: drums 9 0 32/
 /instrument: slide 2 8 26/
 
-/style: rumba normal/
+/style: justchords normal/
 
-C9 | C9 | C9 | C9 | C9 | C9 | --C9 | C9 | C9 | C9 | C9 | C9 | C9 | C9 | C9 | C9 |
-
-
-/style: bossanova fill1/
-C9 |
-/style: bossanova normal2/
-F7 | F7 | F7 | F7 | 
-
-/style: bossanova fill1/
-F7 | 
-
-/style: bossanova normal/
-
-C9 | C9 | C9 | C9 | C9 |
+C | C7 | C9 | C11 | C13 |

@@ -22,7 +22,6 @@ section arpeggio
 [ 
 {
     /uname: piano/
-    /voicingStrategy: simpleGuitar/
     /doOnce: arpeggio up/
     <I II III IV V VI VII>2
     /doOnce: arpeggio down/
@@ -37,7 +36,6 @@ section arpeggioUp
 [ 
 {
     /uname: piano/
-    /voicingStrategy: simpleGuitar/
     /do: arpeggio up/
     <I II III IV V VI VII>2
     <I II III IV V VI VII>2
@@ -50,7 +48,6 @@ section arpeggioT
 [ 
 {
     /uname: piano/
-    /voicingStrategy: simpleGuitar/
     /doOnce: arpeggio up/
     <I II III IV V VI VII>2t
     /doOnce: arpeggio down/
@@ -66,7 +63,6 @@ section bending
 [ 
 {
     /uname: piano/
-    /voicingStrategy: simpleGuitar/
     /modOnce: bend from 1/
     <I II III IV V VI VII>16~
     <I II III IV V VI VII>2

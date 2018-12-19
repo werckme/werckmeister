@@ -8,37 +8,34 @@ namespace sheet {
 			return  OctaveMap({
 				{fm::degrees::I, -1},
 				{fm::degrees::IV, -1},
-				{fm::degrees::VII, 0},
+				{fm::degrees::VII, -1},
 				{fm::degrees::II, 0},
 				{fm::degrees::VI, 0},
-				{fm::degrees::I, 1},
 			});
 		}		
 		if (has7(def) && has9(def) && has11(def)) {
 			return  OctaveMap({
 				{fm::degrees::I, -1},
 				{fm::degrees::IV, -1},
-				{fm::degrees::VII, 0},
+				{fm::degrees::VII, -1},
 				{fm::degrees::II, 0},
 				{fm::degrees::V, 0},
-				{fm::degrees::I, 1},
 			});
 		}
 		if (has7(def) && has9(def)) {
 			return  OctaveMap({
 				{fm::degrees::I, -1},
 				{fm::degrees::III, -1},
-				{fm::degrees::VII, 0},
+				{fm::degrees::VII, -1},
 				{fm::degrees::II, 0},
 				{fm::degrees::V, 0},
-				{fm::degrees::I, 1},
 			});
 		}
 		if (has7(def)) {
 			return  OctaveMap({
 				{fm::degrees::I, -1},
 				{fm::degrees::V, -1},
-				{fm::degrees::VII, 0},
+				{fm::degrees::VII, -1},
 				{fm::degrees::III, 0},
 				{fm::degrees::V, 0},
 				{fm::degrees::I, 1},
@@ -74,7 +71,7 @@ namespace sheet {
 			if (!interval) {
 				continue;
 			}
-			x.pitch = (root-1) + interval->value;
+			x.pitch = (root-1) + (interval->value % 12);
 			auto octaveRange = octaves.equal_range(degree.pitch);
 			auto octave = octaveRange.first;
 			for(; octave != octaveRange.second; ++octave) { // some degrees may be twice (lower I & upper I)
@@ -93,7 +90,7 @@ namespace sheet {
 				if (optionStr == FM_STRING("lowerRange")) {
 					lowerRange = true;
 				}
-				if (optionStr == FM_STRING("higerRange")) {
+				if (optionStr == FM_STRING("higherRange")) {
 					lowerRange = false;
 				}
 			}
