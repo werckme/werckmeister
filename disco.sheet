@@ -3,6 +3,7 @@
 @load "./styles/simpleDisco.style";
 @load "./pitchmaps/defaultMidiDrumMap.pitchmap";
 
+/tempo: 125/
 
 --           uname ch cc pc
 /instrument: piano 3 0 0/

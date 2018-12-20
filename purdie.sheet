@@ -1,0 +1,25 @@
+-- TODO: when removing this line, the resulting midi is empty
+@load "./chords/default.chords";
+@load "./pitchmaps/defaultMidiDrumMap.pitchmap";
+@load "./styles/purdie.style";
+
+
+/tempo: 160/
+--           uname ch cc pc
+--/instrument: piano 4 0 25/
+/instrument: piano 4 0 26/
+/instrument: bass 8 0 33/
+/instrument: drums 9 0 32/
+/instrument: slide 2 8 26/
+
+/style: purdie normal/
+
+C | G | F9 G7+ | C |
+C | G | F9 G7+ | C7 |
+C | G | F13 G | C |
+C | G | F9 G7+ | C7 |
+F13 | F13 | C11 | C7 | F13 | F13| G7 | G9 |
+C | G | F9 G7+ | C |
+C | G | F9 G7+ | C7 |
+Amin7 | G | F9 G7+ | C7 |
+Amin9 | G | F11 | C | C | C | C |

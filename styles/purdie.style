@@ -15,15 +15,21 @@ section normal
 ] 
 [ 
 {
-    /uname: organ/
+    /uname: piano/
     /voicingStrategy: simpleGuitar/
     I4t r8t <III VII I' IV>4t I,,8t r4t <V, II, IV, I,,>8t r4t r8t |
+    I4t r8t <III VII I' IV>4t I,,8t r4t <V, II, IV, I,,>8t r4t r8t |
+    I4t r8t <III VII I' IV>4t I,,8t r4t <V, II, IV, I,,>8t r4t r8t |
+    I4t r8t <III VII I' IV>4t I,,8t r4t <I II III IV V VI VII >2t  |
 }
 ] 
 [ 
 {
     /uname: bass/
     I,,8t I,,8t r8t r4t I,,8t r4t r8t V,,,4t VII,,,8t |
+    I,,8t I,,8t r8t r4t I,,8t r4t r8t V,,,4t VII,,,8t |
+    I,,8t I,,8t r8t r4t I,,8t r4t r8t V,,,4t VII,,,8t |
+    I,,8t I,,8t r8t r4t I,,8t r4t r8t V,,,4t~ V,,,8t |
 }
 ] 
 end
