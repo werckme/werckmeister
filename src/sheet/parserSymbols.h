@@ -22,6 +22,22 @@ namespace sheet {
 					("V", fm::degrees::V)
 					("VI", fm::degrees::VI)
 					("VII", fm::degrees::VII)
+
+					("I#", fm::degrees::Iis)
+					("II#", fm::degrees::IIis)
+					("III#", fm::degrees::IIIis)
+					("IV#", fm::degrees::IVis)
+					("V#", fm::degrees::Vis)
+					("VI#", fm::degrees::VIis)
+					("VII#", fm::degrees::VIIis)
+
+					("Ib", fm::degrees::Ies)
+					("IIb", fm::degrees::IIes)
+					("IIIb", fm::degrees::IIIes)
+					("IVb", fm::degrees::IVes)
+					("Vb", fm::degrees::Ves)
+					("VIb", fm::degrees::VIes)
+					("VIIb", fm::degrees::VIIes)
 					;
 			}
 		};

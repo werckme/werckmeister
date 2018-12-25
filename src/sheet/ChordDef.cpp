@@ -3,14 +3,35 @@
 
 namespace sheet {
 
-	const ChordOption * ChordDef::getIntervalBy(fm::Pitch degree) const
+
+	int getDegreeValue(int degree)
+	{
+		return 0xff & (int)degree;
+	}
+
+	fm::degrees::Flag getFlag(int degree)
+	{
+		return static_cast<fm::degrees::Flag>((degree) >> 8);
+	}
+
+	ChordOption ChordDef::getIntervalBy(fm::Pitch degree) const
 	{
 		Intervals::const_iterator it = 
-			std::find_if(intervals.begin(), intervals.end(), [degree](const auto &x) { return x.degree == degree; });
+			std::find_if(intervals.begin(), intervals.end(), [degree](const auto &x) 
+			{ 
+				return getDegreeValue(x.degree) == getDegreeValue(degree); 
+			});
 		if (it == intervals.end()) {
-			return nullptr;
+			return ChordOption::invalid();
 		}
-		return &(*it);
+		auto res = *it;
+		if (getFlag(degree) == fm::degrees::Sharp) {
+			res.value += 1;
+		}
+		if (getFlag(degree) == fm::degrees::Flat) {
+			res.value -= 1;
+		}
+		return res;
 	}
 
 	bool has7(const ChordDef &def)

@@ -8,11 +8,11 @@ namespace sheet {
 		auto root = std::get<0>(chordElements);
 		PitchDef x;
 		for (const auto& degree : degreeIntervals) {
-			const auto *interval = def.getIntervalBy(degree.pitch);
-			if (!interval) {
+			auto interval = def.getIntervalBy(degree.pitch);
+			if (!interval.valid()) {
 				continue;
 			}
-			x.pitch = (root-1) + interval->value;
+			x.pitch = (root-1) + interval.value;
 			x.octave = degree.octave;
 			result.insert(x);
 		}

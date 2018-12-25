@@ -2,7 +2,7 @@
 @load "./chords/default.chords";
 @load "./styles/bossanova.style";
 @load "./styles/justchords.style";
-
+@load "./styles/chromatic.style";
 
 /tempo: 120/
 --           uname ch cc pc
@@ -12,6 +12,6 @@
 /instrument: drums 9 0 32/
 /instrument: slide 2 8 26/
 
-/style: justchords normal/
+/style: chromatic normal/
 
-C | C7 | C9 | C11 | C13 |
+C | 

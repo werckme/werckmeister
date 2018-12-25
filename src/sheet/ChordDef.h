@@ -12,14 +12,15 @@ namespace sheet {
         typedef std::set<ChordOption> Intervals;
         fm::String name;
 		Intervals intervals;
-		const ChordOption * getIntervalBy(fm::Pitch degree) const;
+		ChordOption getIntervalBy(fm::Pitch degree) const;
 	};
 
     bool has7(const ChordDef &def);
     bool has9(const ChordDef &def);
     bool has11(const ChordDef &def);
     bool has13(const ChordDef &def);
-
+    int getDegreeValue(int degree);
+    fm::degrees::Flag getFlag(int degree);
 }
 
 #endif

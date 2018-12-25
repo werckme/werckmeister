@@ -30,14 +30,37 @@ namespace fm {
 		};
 	}
 	namespace degrees {
+		enum Flag {
+			Normal,
+			Sharp,
+			Flat
+		};
+
 		enum Degree {
-			I = 1,
-			II = 2,
-			III = 3,
-			IV = 4,
-			V = 5,
-			VI = 6,
-			VII = 7
+			// Flag << 8 | value 
+			I = (Normal << 8) | 1,
+			II = (Normal << 8) | 2,
+			III = (Normal << 8) | 3,
+			IV = (Normal << 8) | 4,
+			V = (Normal << 8) | 5,
+			VI = (Normal << 8) | 6,
+			VII = (Normal << 8) | 7,
+
+			Iis = (Sharp << 8) | 1,
+			IIis = (Sharp << 8) | 2,
+			IIIis = (Sharp << 8) | 3,
+			IVis = (Sharp << 8) | 4,
+			Vis = (Sharp << 8) | 5,
+			VIis = (Sharp << 8) | 6,
+			VIIis = (Sharp << 8) | 7,
+
+			Ies = (Flat << 8) | 1,
+			IIes = (Flat << 8) | 2,
+			IIIes = (Flat << 8) | 3,
+			IVes = (Flat << 8) | 4,
+			Ves = (Flat << 8) | 5,
+			VIes = (Flat << 8) | 6,
+			VIIes = (Flat << 8) | 7,
 		};
 	}
 	namespace expression {

@@ -2,16 +2,24 @@
 #define INTERVAL_H
 
 #include <fm/units.hpp>
+#include <climits>
 
 namespace sheet {
     struct Interval {
+		enum { INVALID_VALUE = INT_MAX };
         int value;
 		bool operator <(const Interval &b) const { return value < b.value; }
+		bool valid() const { return value != INVALID_VALUE; }
     };
 
 	struct ChordOption : public Interval {
 		fm::Pitch degree;
 		bool operator <(const ChordOption &b) const { return degree < b.degree; }
+		static ChordOption invalid() {
+			ChordOption res;
+			res.value = INVALID_VALUE;
+			return res;
+		}
 	};
 }
 
