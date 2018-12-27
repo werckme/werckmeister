@@ -142,27 +142,42 @@ Eine Crescendo-Klammer wird mit dem Befehl \< begonnen und mit \!, einem absolut
 Der \espressivo-Befehl kann eingesetzt werden, um crescendo und decrescendo für die selbe Note anzuzeigen
 
 
-Paralleles abspielen verschiedener Styles
+## next features
+
+### midi Meta-Commands 
+
+### device config:
+  ```
+  -- file myDevices.devices
+  orch1: vst2 "c:\plugins\gpo.dll" "./violins.preset"
+  roland1: midi 0 -- 0 is the device number, as displayed with 'sheetp --list'
+
+  ...
+
+  @load "myDevices.devices"
+  /instrument: piano orch1 nChanel nCC nPC/
+
+  ```
+
+
+## Nice to have
+### Paralleles abspielen verschiedener Styles
 
 {
   /style: disco normal/
   /exclude: all/
-  /inlcude: bass/
+  /include: bass/
   C | C | E |
 }
 {
   /style: latin normal/
   /include: all/
-  /exlclude: bass/
+  /exclude: bass/
   C | C | E |
 }
 
 
-
-## Nice to have
-
 ## Bugs
- - Degrees die in Akkorden nicht vorkommen konsumieren keine Zeit: C -> II4 II II II |
  - arpeggio generiert zu viele noten
  - keine möglichkeit meta commands für style instruments zu überschreiben (voicing strategy)
  - style rendering kommt ins stolpern wenn ungerade teiler z.b: 4/4 | C C C |  
@@ -173,6 +188,7 @@ Paralleles abspielen verschiedener Styles
  - die Akkorde As und Es werden nicht erkannt. Workaround: Aes Ees
  - style-section switch legt neue tracks an, anstatt bestehende zu nutzen 
  - meta command style lädt keine files mit sonderzeichen
+ - Degrees die in Akkorden nicht vorkommen konsumieren keine Zeit: C -> II4 II II II |
 
 ## Cool DAW-Editor
 all character based 
