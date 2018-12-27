@@ -68,7 +68,7 @@ SET (SRC_SHEET_TESTER
 
 if (WIN32)
   SET(SRC_SHEET_PLAYER ${SRC_SHEET_PLAYER}  fmapp/os_win.cpp)
-  SET(SRC_SHEET_PLAYER ${SRC_SHEET_PLAYER}  fmapp/os_win.cpp)
+  SET(SRC_SHEET_TESTER ${SRC_SHEET_TESTER}  fmapp/os_win.cpp)
 endif(WIN32)
 
 if (UNIX)
