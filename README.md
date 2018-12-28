@@ -148,19 +148,18 @@ Der \espressivo-Befehl kann eingesetzt werden, um crescendo und decrescendo für
 
 ### device config:
   ```
-  -- file myDevices.devices
-  orch1: vst2 "c:\plugins\gpo.dll" "./violins.preset"
-  roland1: midi 0 -- 0 is the device number, as displayed with 'sheetp --list'
+  -- device: name type [arg1 ... argn]
+  /device: orch1 vst2 "c:\plugins\gpo.dll" "./violins.preset"/
+  /device: roland1 midi 0 / -- 0 is the device number, as displayed with 'sheetp --list'
 
-  ...
-
-  @load "myDevices.devices"
   /instrument: piano orch1 nChanel nCC nPC/
 
   ```
 
 
 ## Nice to have
+- device vst support
+
 ### Paralleles abspielen verschiedener Styles
 
 {
