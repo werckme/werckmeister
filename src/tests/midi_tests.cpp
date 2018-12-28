@@ -626,3 +626,28 @@ BOOST_AUTO_TEST_CASE(meta_event_read_write_1)
 	auto name = midi::Event::MetaGetStringValue(dst.metaData(), dst.metaDataSize());
 	BOOST_CHECK(name == "bass");
 }
+
+extern const char * LongString1001;
+
+BOOST_AUTO_TEST_CASE(meta_event_read_write_long_string)
+{
+	using namespace fm;
+	constexpr size_t eventSize = 5 + 1001;
+	auto metaOrg = midi::Event::MetaInstrument(LongString1001);
+	BOOST_CHECK( metaOrg.eventType() == midi::MetaEvent );
+	BOOST_CHECK( metaOrg.metaEventType() == midi::InstrumentName );
+	BOOST_CHECK( metaOrg.byteSize(0) == 5 + 1001 );
+	BOOST_CHECK( metaOrg.payloadSize() == 4 + 1001);
+
+	Byte bff[eventSize];
+	BOOST_CHECK_THROW(metaOrg.write(0, &bff[0], eventSize-1), std::runtime_error);
+	auto written = metaOrg.write(0, &bff[0], eventSize);
+	BOOST_CHECK(written == eventSize);
+
+	auto dst = midi::Event();
+	BOOST_CHECK_THROW(dst.read(0, bff, eventSize-1), std::runtime_error);
+	size_t bytesRead = dst.read(0, bff, eventSize);
+	BOOST_CHECK(written == bytesRead);
+	auto name = midi::Event::MetaGetStringValue(dst.metaData(), dst.metaDataSize());
+	BOOST_CHECK(name == LongString1001);
+}

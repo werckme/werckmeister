@@ -44,6 +44,7 @@ SET (SRC_FETZER_TESTS
     tests/test_common.cpp
     tests/test_lexer.cpp
     tests/test_parser.cpp
+    tests/longString1.cpp
 )
 
 ## PLAYER

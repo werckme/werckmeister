@@ -31,6 +31,9 @@ namespace fm {
 			{
 				return 0;
 			}
+			if (size == 0) {
+				throw std::runtime_error("buffer too small");
+			}
 			if (value < 128) {
 				outval[0] = static_cast<Byte>(value);
 				return 1;
@@ -107,7 +110,9 @@ namespace fm {
 			if (*bytes != MetaEvent) {
 				return readPayloadDefault(bytes, maxByteSize);
 			}
-			return readPayloadMeta(bytes + 1, maxByteSize - 1);
+			eventType(MetaEvent);
+			size_t eventTypeByteSize = 1;
+			return readPayloadMeta(bytes + eventTypeByteSize, maxByteSize - eventTypeByteSize) + eventTypeByteSize;
 		}
 		size_t Event::readPayloadDefault(const Byte *bytes, size_t maxByteSize)
 		{
@@ -122,21 +127,21 @@ namespace fm {
 		}
 		size_t Event::readPayloadMeta(const Byte *bytes, size_t maxByteSize)
 		{
-			eventType(MetaEvent);
 			_metaEventType = static_cast<MetaEventType>(*(bytes++));
-			_metaDataSize = *(bytes++);
-			if ((maxByteSize - 2) < _metaDataSize) {
+			size_t vlengthBytes = 0;
+			size_t metaTypeByteSize = 1;
+			_metaDataSize = variableLengthRead(bytes, maxByteSize - metaTypeByteSize, &vlengthBytes);
+			bytes+=vlengthBytes;
+
+			if ((maxByteSize-vlengthBytes-metaTypeByteSize) < _metaDataSize) {
 				throw std::runtime_error("buffer to small");
-			}
-			if (_metaDataSize > 255) {
-				throw std::runtime_error("meta data > 255 bytes not supported");
 			}
 			if (_metaDataSize >= MaxVarLength) {
 				throw std::runtime_error("meta data bytes overflow");
 			}
 			_metaData = Bytes(new Byte[_metaDataSize]);
 			::memcpy(_metaData.get(), bytes, _metaDataSize);
-			return 2 + _metaDataSize;
+			return metaTypeByteSize + vlengthBytes + _metaDataSize;
 		}
 		size_t Event::write(Ticks deltaOffset, Byte *bytes, size_t maxByteSize) const
 		{
@@ -180,7 +185,8 @@ namespace fm {
 			}
 			(*bytes++) = eventType();
 			(*bytes++) = metaEventType();
-			(*bytes++) = metaDataSize();
+			size_t vlengthBytes = variableLengthWrite(metaDataSize(), bytes, maxByteSize - 2);
+			bytes += vlengthBytes;
 			::memcpy(bytes, _metaData.get(), metaDataSize());
 			return 3 + metaDataSize();
 		}
@@ -190,7 +196,7 @@ namespace fm {
 			{
 			case ProgramChange: return 2;
 			case ChannelAftertouch: return 2;
-			case MetaEvent: return 3 + _metaDataSize;
+			case MetaEvent: return 2 + variableLengthRequiredSize(_metaDataSize) + _metaDataSize;
 			default:break;
 			}
 			return 3;
@@ -247,9 +253,6 @@ namespace fm {
 		}
 		void Event::metaData(MetaEventType type, Byte *data, size_t numBytes)
 		{
-			if (numBytes > 255) {
-				throw std::runtime_error("meta data > 255 bytes not supported");
-			}
 			if (numBytes >= MaxVarLength) {
 				throw std::runtime_error("meta data bytes overflow");
 			}
