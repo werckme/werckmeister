@@ -570,10 +570,12 @@ BOOST_AUTO_TEST_CASE(meta_event_write_1)
 	constexpr size_t eventSize = 8;
 	auto tempo = midi::Event::MetaTempo(120.0);
 	BOOST_CHECK( tempo.eventType() == midi::MetaEvent );
+	BOOST_CHECK( tempo.metaEventType() == midi::Tempo);
 	BOOST_CHECK( tempo.byteSize(0) == 8 );
 	BOOST_CHECK( tempo.payloadSize() == 7);
 	
 	Byte bff[eventSize];
+	BOOST_CHECK_THROW(tempo.write(0, &bff[0], eventSize-1), std::runtime_error);
 	tempo.write(0, &bff[0], eventSize);
 	
 	BOOST_CHECK(bff[0] == 0);
@@ -595,6 +597,7 @@ BOOST_AUTO_TEST_CASE(meta_event_read_1)
 	tempo.write(0, &bff[0], eventSize);
 	
 	auto readTempo = midi::Event();
+	BOOST_CHECK_THROW(readTempo.read(0, &bff[0], eventSize-1), std::runtime_error);
 	readTempo.read(0, &bff[0], eventSize);
 
 	BOOST_CHECK(readTempo.eventType() == midi::MetaEvent);
@@ -603,4 +606,23 @@ BOOST_AUTO_TEST_CASE(meta_event_read_1)
 
 	int bpmMicros = midi::Event::MetaGetIntValue(readTempo.metaData(), readTempo.metaDataSize());
 	BOOST_CHECK(midi::MicrosecondsPerMinute / bpmMicros == 120);
+}
+
+BOOST_AUTO_TEST_CASE(meta_event_read_write_1)
+{
+	using namespace fm;
+	constexpr size_t eventSize = 8;
+	auto metaOrg = midi::Event::MetaInstrument("bass");
+	BOOST_CHECK( metaOrg.eventType() == midi::MetaEvent );
+	BOOST_CHECK( metaOrg.metaEventType() == midi::InstrumentName );
+	BOOST_CHECK( metaOrg.byteSize(0) == 8 );
+	BOOST_CHECK( metaOrg.payloadSize() == 7);
+
+	Byte bff[eventSize];
+	metaOrg.write(0, &bff[0], eventSize);
+	
+	auto dst = midi::Event();
+	dst.read(0, bff, eventSize);
+	auto name = midi::Event::MetaGetStringValue(dst.metaData(), dst.metaDataSize());
+	BOOST_CHECK(name == "bass");
 }

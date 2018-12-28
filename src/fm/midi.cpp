@@ -125,6 +125,9 @@ namespace fm {
 			eventType(MetaEvent);
 			_metaEventType = static_cast<MetaEventType>(*(bytes++));
 			_metaDataSize = *(bytes++);
+			if ((maxByteSize - 2) < _metaDataSize) {
+				throw std::runtime_error("buffer to small");
+			}
 			if (_metaDataSize > 255) {
 				throw std::runtime_error("meta data > 255 bytes not supported");
 			}
@@ -235,6 +238,13 @@ namespace fm {
 			ev.metaData(Tempo, bytes.data(), bytes.size());
 			return ev;
 		}
+		Event Event::MetaInstrument(const std::string &name)
+		{
+			auto ev = Event();
+			auto bytes = MetaCreateStringData(name);
+			ev.metaData(InstrumentName, bytes.data(), bytes.size());
+			return ev;
+		}
 		void Event::metaData(MetaEventType type, Byte *data, size_t numBytes)
 		{
 			if (numBytes > 255) {
@@ -275,6 +285,14 @@ namespace fm {
 				result = result << 8;
 			}
 			return result;
+		}
+		std::vector<Byte> Event::MetaCreateStringData(const std::string &string)
+		{
+			return std::vector<Byte>(string.begin(), string.end());
+		}
+		std::string Event::MetaGetStringValue(const Byte *data, size_t length)
+		{
+			return std::string(data, data + length);
 		}
 		bool Event::equals(const Event&b) const
 		{

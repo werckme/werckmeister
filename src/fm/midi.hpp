@@ -11,6 +11,7 @@
 #include "common.hpp"
 #include <memory>
 #include <boost/shared_array.hpp>
+#include <string>
 
 namespace fm {
 	namespace midi {
@@ -104,8 +105,14 @@ namespace fm {
 			static Event NoteOn(Channel, Ticks, Pitch, Velocity);
 			static Event NoteOff(Channel, Ticks, Pitch);
 			static Event MetaTempo(double bpm);
-			static std::vector<Byte> MetaCreateIntData(int value);
+			static Event MetaInstrument(const std::string &name);
+			
+			static std::vector<Byte> MetaCreateStringData(const std::string &string);
+			static std::string MetaGetStringValue(const Byte *data, size_t length);
+
 			static int MetaGetIntValue(const Byte *data, size_t length);
+			static std::vector<Byte> MetaCreateIntData(int value);
+
 			/**
 			 * a value between 0 .. 1. 0.5 is middle
 			 */
