@@ -10,6 +10,7 @@
 #include <ostream>
 #include "common.hpp"
 #include <memory>
+#include <boost/shared_array.hpp>
 
 namespace fm {
 	namespace midi {
@@ -34,12 +35,14 @@ namespace fm {
 		static_assert(sizeof(Word) == 2, "wrong WORD size");
 
 		enum {
-			MaxTickValue = 0x0FFFFFFF,
+			MaxVarLength = 0x0FFFFFFF,
+			MaxTickValue = MaxVarLength,
 			MaxChannel = 0xF,
 			MinEventSize = 3,
 			MaxEventSize = 7,
 			MaxPitch = 127,
-			MaxPitchbend = 16383
+			MaxPitchbend = 16383,
+			MicrosecondsPerMinute = 60000000
 		};
 		enum EventType {
 			UndefinedEvent = 0,
@@ -53,8 +56,22 @@ namespace fm {
 			MetaEvent = 0xFF
 		};
 		enum MetaEventType {
-			UndefinedMetaEvent = 0,
+			Undefined = 0xFF,
+			SequenceNumber = 0,
+			TextEvent,
+			Copyright,
+			SequenceName,
+			InstrumentName,
+			LyricText,
+			MarkerText,
+			CuePoint,
+			MIDIChannelPrefixAssignment = 0x20,
 			EndOfTrack = 0x2F,
+			Tempo = 0x51,
+			SMPTEOffset = 0x54,
+			TimeSignature = 0x58,
+			KeySignature = 0x59,
+			CustomEvent = 0x7F
 		};
 		struct Event {
 			Ticks relDelta(Ticks deltaOffset) const;
@@ -76,11 +93,18 @@ namespace fm {
 			*/
 			size_t payloadSize() const;
 			/**
-				writes the event excluding offset
-			*/
-			size_t writePayload(Byte *, size_t maxByteSize) const;
+			 * set the type to MetaData and sets the meta data.
+			 * @see metaDataSize() and metaData
+			 */
+			void metaData(MetaEventType type, Byte *data, size_t numBytes);
+			size_t metaDataSize() const { return _metaDataSize; }
+			MetaEventType metaEventType() const { return _metaEventType; }
+			const Byte * metaData() const { return _metaData.get(); }
 			static Event NoteOn(Channel, Ticks, Pitch, Velocity);
 			static Event NoteOff(Channel, Ticks, Pitch);
+			static Event MetaTempo(double bpm);
+			static std::vector<Byte> MetaCreateIntData(int value);
+			static int MetaGetIntValue(const Byte *data, size_t length);
 			/**
 			 * a value between 0 .. 1. 0.5 is middle
 			 */
@@ -88,13 +112,27 @@ namespace fm {
 			bool equals(const Event&) const;
 			bool operator==(const Event &b) const { return equals(b); }
 			bool operator!=(const Event &b) const { return !(*this == b); }
-			mutable bool __muted__ = false;
+		protected:
+			/**
+				writes the event excluding offset
+			*/
+			size_t writePayload(Byte *, size_t maxByteSize) const;
+			size_t readPayload(const Byte *, size_t maxByteSize);
+			size_t readPayloadDefault(const Byte *, size_t maxByteSize);
+			size_t readPayloadMeta(const Byte *, size_t maxByteSize);
+		private:
+			size_t writePayloadDefault(Byte *, size_t maxByteSize) const;
+			size_t writePayloadMeta(Byte *, size_t maxByteSize) const;
 		private:
 			Ticks _deltaTime = 0;
 			EventType _type = UndefinedEvent;
 			int _ch = 0;
 			Byte _p1 = 0;
 			Byte _p2 = 0;
+			typedef boost::shared_array<Byte> Bytes;
+			Bytes _metaData;
+			size_t _metaDataSize = 0;
+			MetaEventType _metaEventType = Undefined;
 		};
 		struct EventCompare {
 			bool operator() (const Event& a, const Event& b) const;

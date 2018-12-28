@@ -8,6 +8,7 @@
 #include <string>
 #include <fstream>
 #include <fm/common.hpp>
+#include <iostream>
 
 #define TEST_MIDI_FILE "testmidi.mid"
 
@@ -561,4 +562,45 @@ BOOST_AUTO_TEST_CASE(event_container_from)
 
 	auto it = events.to(100);
 	BOOST_CHECK((*it).channel() == 4);
+}
+
+BOOST_AUTO_TEST_CASE(meta_event_write_1)
+{
+	using namespace fm;
+	constexpr size_t eventSize = 8;
+	auto tempo = midi::Event::MetaTempo(120.0);
+	BOOST_CHECK( tempo.eventType() == midi::MetaEvent );
+	BOOST_CHECK( tempo.byteSize(0) == 8 );
+	BOOST_CHECK( tempo.payloadSize() == 7);
+	
+	Byte bff[eventSize];
+	tempo.write(0, &bff[0], eventSize);
+	
+	BOOST_CHECK(bff[0] == 0);
+	BOOST_CHECK(bff[1] == 0xFF);
+	BOOST_CHECK(bff[2] == 0x51);
+	BOOST_CHECK(bff[3] == 0x4);
+	BOOST_CHECK(bff[4] == 0);
+	BOOST_CHECK(bff[5] == 0x7);
+	BOOST_CHECK(bff[6] == 0xA1);
+	BOOST_CHECK(bff[7] == 0x20);
+}
+
+BOOST_AUTO_TEST_CASE(meta_event_read_1)
+{
+	using namespace fm;
+	constexpr size_t eventSize = 8;
+	auto tempo = midi::Event::MetaTempo(120.0);	
+	Byte bff[eventSize];
+	tempo.write(0, &bff[0], eventSize);
+	
+	auto readTempo = midi::Event();
+	readTempo.read(0, &bff[0], eventSize);
+
+	BOOST_CHECK(readTempo.eventType() == midi::MetaEvent);
+	BOOST_CHECK(readTempo.metaEventType() == midi::Tempo);
+	BOOST_CHECK(readTempo.metaDataSize() == 4);
+
+	int bpmMicros = midi::Event::MetaGetIntValue(readTempo.metaData(), readTempo.metaDataSize());
+	BOOST_CHECK(midi::MicrosecondsPerMinute / bpmMicros == 120);
 }

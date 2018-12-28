@@ -99,13 +99,41 @@ namespace fm {
 			}
 			size_t c = 0;
 			absPosition(variableLengthRead(bytes, maxByteSize, &c) + deltaOffset);
-			eventType(static_cast<EventType>((bytes[c] & 0xF0) >> 4));
+			return c + readPayload(bytes + c, maxByteSize - c);
+		}
+		size_t Event::readPayload(const Byte *bytes, size_t maxByteSize)
+		{
+			
+			if (*bytes != MetaEvent) {
+				return readPayloadDefault(bytes, maxByteSize);
+			}
+			return readPayloadMeta(bytes + 1, maxByteSize - 1);
+		}
+		size_t Event::readPayloadDefault(const Byte *bytes, size_t maxByteSize)
+		{
+			size_t c = 0;
+			eventType(static_cast<EventType>((*(bytes) & 0xF0) >> 4));
 			channel((bytes[c++] & 0xF));
 			parameter1(bytes[c++]);
 			if (payloadSize() > 2) {
 				parameter2(bytes[c++]);
 			}
 			return c;
+		}
+		size_t Event::readPayloadMeta(const Byte *bytes, size_t maxByteSize)
+		{
+			eventType(MetaEvent);
+			_metaEventType = static_cast<MetaEventType>(*(bytes++));
+			_metaDataSize = *(bytes++);
+			if (_metaDataSize > 255) {
+				throw std::runtime_error("meta data > 255 bytes not supported");
+			}
+			if (_metaDataSize >= MaxVarLength) {
+				throw std::runtime_error("meta data bytes overflow");
+			}
+			_metaData = Bytes(new Byte[_metaDataSize]);
+			::memcpy(_metaData.get(), bytes, _metaDataSize);
+			return 2 + _metaDataSize;
 		}
 		size_t Event::write(Ticks deltaOffset, Byte *bytes, size_t maxByteSize) const
 		{
@@ -119,6 +147,13 @@ namespace fm {
 			return length;
 		}
 		size_t Event::writePayload(Byte *bytes, size_t maxByteSize) const
+		{
+			if (eventType()==MetaEvent) {
+				return writePayloadMeta(bytes, maxByteSize);
+			}
+			return writePayloadDefault(bytes, maxByteSize);
+		}
+		size_t Event::writePayloadDefault(Byte *bytes, size_t maxByteSize) const
 		{
 			if (maxByteSize < 2) {
 				throw std::runtime_error("buffer to small");
@@ -134,12 +169,25 @@ namespace fm {
 			}
 			return 2;
 		}
+
+		size_t Event::writePayloadMeta(Byte *bytes, size_t maxByteSize) const
+		{
+			if (maxByteSize < payloadSize()) {
+				throw std::runtime_error("buffer to small");
+			}
+			(*bytes++) = eventType();
+			(*bytes++) = metaEventType();
+			(*bytes++) = metaDataSize();
+			::memcpy(bytes, _metaData.get(), metaDataSize());
+			return 3 + metaDataSize();
+		}
 		size_t Event::payloadSize() const
 		{
 			switch (eventType())
 			{
 			case ProgramChange: return 2;
 			case ChannelAftertouch: return 2;
+			case MetaEvent: return 3 + _metaDataSize;
 			default:break;
 			}
 			return 3;
@@ -179,13 +227,72 @@ namespace fm {
 			ev.eventType(midi::PitchBend);
 			return ev;
 		}
+		Event Event::MetaTempo(double bpm)
+		{
+			bpm = std::max(bpm, 1.0);
+			auto ev = Event();
+			auto bytes = MetaCreateIntData(static_cast<int>(MicrosecondsPerMinute / bpm));
+			ev.metaData(Tempo, bytes.data(), bytes.size());
+			return ev;
+		}
+		void Event::metaData(MetaEventType type, Byte *data, size_t numBytes)
+		{
+			if (numBytes > 255) {
+				throw std::runtime_error("meta data > 255 bytes not supported");
+			}
+			if (numBytes >= MaxVarLength) {
+				throw std::runtime_error("meta data bytes overflow");
+			}
+			eventType(MetaEvent);
+			_metaEventType = type;
+			_metaDataSize = numBytes;
+			_metaData = Bytes(new Byte[numBytes]);
+			::memcpy(_metaData.get(), data, numBytes);
+		}
+		std::vector<Byte> Event::MetaCreateIntData(int value)
+		{
+			constexpr size_t numBytes = sizeof(int);
+			std::vector<Byte> result(numBytes);
+			for (size_t i=1; i<=numBytes; ++i) {
+				auto byte = value & 0xFF;
+				result[numBytes-i] = byte;
+				value = value >> 8;
+			}
+			return result;
+		}
+		int Event::MetaGetIntValue(const Byte *data, size_t length)
+		{
+			if (length > sizeof(int)) {
+				throw std::runtime_error("to many bytes for meta data int value");
+			}
+			int result = 0;
+			size_t idx = 0;
+			while(true) {
+				result |= data[idx++];
+				if (idx >= length) {
+					break;
+				}
+				result = result << 8;
+			}
+			return result;
+		}
 		bool Event::equals(const Event&b) const
 		{
-			return absPosition() == b.absPosition()
+			bool res = absPosition() == b.absPosition()
 				&& eventType() == b.eventType()
 				&& channel() == b.channel()
 				&& parameter1() == b.parameter1()
 				&& parameter2() == b.parameter2();
+			if (eventType() != MetaEvent) {
+				return res;
+			}
+			if (metaEventType() != b.metaEventType()) {
+				return false;
+			}
+			if (metaDataSize() != b.metaDataSize()) {
+				return false;
+			}
+			return ::memcmp(metaData(), b.metaData(), metaDataSize()) == 0;
 		}
 
 
