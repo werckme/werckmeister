@@ -71,7 +71,7 @@ namespace sheet {
 			if (!interval.valid()) {
 				continue;
 			}
-			x.pitch = (root-1) + (interval.value % 12);
+			x.pitch = root + (interval.value % 12);
 			auto octaveRange = octaves.equal_range(degree.pitch);
 			auto octave = octaveRange.first;
 			for(; octave != octaveRange.second; ++octave) { // some degrees may be twice (lower I & upper I)

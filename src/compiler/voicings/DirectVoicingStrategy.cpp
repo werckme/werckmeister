@@ -12,7 +12,7 @@ namespace sheet {
 			if (!interval.valid()) {
 				continue;
 			}
-			x.pitch = (root-1) + interval.value;
+			x.pitch = root + interval.value;
 			x.octave = degree.octave;
 			result.insert(x);
 		}

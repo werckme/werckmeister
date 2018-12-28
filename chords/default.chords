@@ -1,15 +1,15 @@
-X: 			I=1			III=5 			V=8
-Xmin: 		I=1 		III=4 			V=8
-X7: 		I=1 		III=5 			V=8 			VII=11
-X7+: 		I=1 		III=5 			V=8 			VII=12
-Xmin7: 		I=1 		III=4 			V=8 			VII=11
-Xmin7+: 	I=1 		III=4 			V=8 			VII=12
-X5-/7: 		I=1 	  	III=4 			V=7 			VII=11
-X9: 		I=1 II=15 	III=5 			V=8 			VII=11
-Xmin9: 		I=1 II=15 	III=4 			V=8 			VII=11
-X7+9: 		I=1 II=15 	III=5 			V=8 			VII=12
-Xmin7+9: 	I=1 II=15 	III=4 			V=8 			VII=12
-X11: 		I=1 II=15 	III=5 	IV=18 	V=8 			VII=11
-Xmin11: 	I=1 II=15 	III=4 	IV=18 	V=8 			VII=11
-X13: 		I=1 II=15 	III=5 	IV=18 	V=8		VI=22 	VII=11
-Xmin13: 	I=1 II=15 	III=4 	IV=18 	V=8		VI=22 	VII=11
+X: 			I=0			III=4 			V=7
+Xmin: 		I=0 		III=3 			V=7
+
+X7: 		I=0 		III=4 			V=7 			VII=10
+Xmin7: 		I=0 		III=3 			V=7 			VII=10
+Xmaj7: 		I=0 		III=4 			V=7 			VII=11
+
+X9: 		I=0 II=14 	III=4 			V=7 			VII=10
+Xmin9: 		I=0 II=14 	III=3 			V=7 			VII=10
+
+X11: 		I=0 II=14 	III=4 	IV=17 	V=7 			VII=10
+Xmin11: 	I=0 II=14 	III=3 	IV=17 	V=7 			VII=10
+
+X13: 		I=0 II=14 	III=4 	IV=17 	V=7		VI=21 	VII=10
+Xmin13: 	I=0 II=14 	III=3 	IV=17 	V=7		VI=21 	VII=10
