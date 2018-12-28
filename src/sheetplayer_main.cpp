@@ -164,7 +164,6 @@ void printElapsedTime(fm::Ticks elapsed)
 
 void play(sheet::DocumentPtr document, fm::midi::MidiPtr midi, MidiOutputId midiOutput, fm::Ticks begin, fm::Ticks end, const Settings &settings) {
 	auto &player = fmapp::getMidiplayer();
-	player.bpm(midi->bpm());
 	auto output = findOutput(midiOutput);
 	std::cout << "playing on: " << output.name << " --> ";
 	player.setOutput(output);

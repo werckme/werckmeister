@@ -113,7 +113,10 @@ namespace sheet {
 		void MidiContext::metaSetTempo(double bpm)
 		{
 			Base::metaSetTempo(bpm);
-			midi_->bpm(bpm);
+			auto meta = voiceMetaData<MidiContext::VoiceMetaData>(voice());
+			auto tempoEvent = fm::midi::Event::MetaTempo(bpm);
+			tempoEvent.absPosition(meta->position);
+			addEvent(tempoEvent);
 		}
 
 		void MidiContext::metaSetChannel(int channel)

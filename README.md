@@ -144,8 +144,6 @@ Der \espressivo-Befehl kann eingesetzt werden, um crescendo und decrescendo für
 
 ## next features
 
-### midi Meta-Commands 
-
 ### device config:
   ```
   -- device: name type [arg1 ... argn]
@@ -178,6 +176,8 @@ Der \espressivo-Befehl kann eingesetzt werden, um crescendo und decrescendo für
 
 ## Bugs
  - arpeggio generiert zu viele noten
+ - tempo changes inmitten eines Songs verursacht hänger. 
+   (grund: player berechnet elapsedTime anhand zeipunkt_start * bpm. )
  - keine möglichkeit meta commands für style instruments zu überschreiben (voicing strategy)
  - style rendering kommt ins stolpern wenn ungerade teiler z.b: 4/4 | C C C |  
  - style voice nur meta events -> bleibt hängen

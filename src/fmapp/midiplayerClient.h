@@ -50,6 +50,7 @@ namespace fmapp {
 		fm::Ticks elapsed() const { return elapsed_; }
 		void reset();
 	private:
+		void handleMetaEvent(const fm::midi::Event &ev);
 		typedef std::recursive_mutex Lock;
 		Lock lock;
 		std::unique_ptr<TTimer> playerTimer_;
@@ -103,11 +104,27 @@ namespace fmapp {
 	}
 
 	template<class TBackend, class TMidiProvider, class TTimer>
+	void MidiplayerClient<TBackend, TMidiProvider, TTimer>::handleMetaEvent(const fm::midi::Event &ev)
+	{
+		using namespace fm;
+		if (ev.metaEventType() == midi::Tempo) {
+			auto metaIntValue = midi::Event::MetaGetIntValue(ev.metaData(), ev.metaDataSize());
+			bpm(midi::MicrosecondsPerMinute/(double)metaIntValue);
+		}
+	}
+
+	template<class TBackend, class TMidiProvider, class TTimer>
 	void MidiplayerClient<TBackend, TMidiProvider, TTimer>::onProcess()
 	{
 		std::lock_guard<Lock> lockGuard(lock);
 		typename MidiProvider::Events events;
-		MidiProvider::getEvents(this->elapsed_, events);
+		MidiProvider::getEvents(this->elapsed_, events, [this](const auto &ev) {
+			if (ev.eventType() == fm::midi::MetaEvent) {
+				this->handleMetaEvent(ev);
+				return false;
+			}
+			return true;
+		});
 		Backend::send(events);
 	}
 

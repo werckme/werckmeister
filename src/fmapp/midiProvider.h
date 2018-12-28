@@ -6,6 +6,7 @@
 #include <fm/midi.hpp>
 #include <map>
 #include <climits>
+#include <functional>
 
 namespace fmapp {
 
@@ -13,6 +14,8 @@ namespace fmapp {
 	public:
 		enum { NO_TICK = INT_MAX };
 		typedef std::list<fm::midi::Event> Events;
+		typedef std::function<bool(const fm::midi::Event&)> FilterFunc;
+		void getEvents(fm::Ticks at, Events &out, const FilterFunc &filter);
 		void getEvents(fm::Ticks at, Events &out);
 		virtual ~MidiProvider() = default;
 		void midi(fm::midi::MidiPtr midi);

@@ -120,11 +120,11 @@ namespace fm {
 			bool equals(const Event&) const;
 			bool operator==(const Event &b) const { return equals(b); }
 			bool operator!=(const Event &b) const { return !(*this == b); }
-		protected:
 			/**
 				writes the event excluding offset
 			*/
-			size_t writePayload(Byte *, size_t maxByteSize) const;
+			size_t writePayload(Byte *, size_t maxByteSize) const;			
+		protected:
 			size_t readPayload(const Byte *, size_t maxByteSize);
 			size_t readPayloadDefault(const Byte *, size_t maxByteSize);
 			size_t readPayloadMeta(const Byte *, size_t maxByteSize);

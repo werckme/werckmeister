@@ -147,7 +147,6 @@ fmapp::Midiplayer::Output findOutput(MidiOutputId id)
 
 void play(sheet::DocumentPtr document, fm::midi::MidiPtr midi, MidiOutputId midiOutput, const Settings &settings) {
 	auto &player = fmapp::getMidiplayer();
-	player.bpm(settings.tempo());
 	auto output = findOutput(midiOutput);
 	std::cout << "playing on: " << output.name;
 	player.setOutput(output);
