@@ -251,6 +251,13 @@ namespace fm {
 			ev.metaData(InstrumentName, bytes.data(), bytes.size());
 			return ev;
 		}
+		Event Event::MetaTrack(const std::string &name)
+		{
+			auto ev = Event();
+			auto bytes = MetaCreateStringData(name);
+			ev.metaData(SequenceOrTrackName, bytes.data(), bytes.size());
+			return ev;
+		}
 		void Event::metaData(MetaEventType type, Byte *data, size_t numBytes)
 		{
 			if (numBytes >= MaxVarLength) {

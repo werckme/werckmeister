@@ -152,12 +152,18 @@ namespace sheet {
 
 		void MidiContext::metaSetUname(const fm::String &uname)
 		{
+			auto meta = voiceMetaData<MidiContext::VoiceMetaData>(voice());
+			// send instrument name meta event
+			auto trackName = fm::midi::Event::MetaTrack(fm::to_string(uname));
+			trackName.absPosition(0);
+			addEvent(trackName); 
+
+			// find instrument defs and assign them to the meta data of the voice
 			Base::metaSetUname(uname);
 			auto range = midiInstrumentDefs_.equal_range(uname);
 			if (range.first == midiInstrumentDefs_.end()) {
 				return;
 			}
-			auto meta = voiceMetaData<MidiContext::VoiceMetaData>(voice());
 			auto it = range.first;
 			auto end = range.second;
 			meta->instrumentDefs.clear();

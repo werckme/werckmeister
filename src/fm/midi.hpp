@@ -62,7 +62,7 @@ namespace fm {
 			SequenceNumber = 0,
 			TextEvent,
 			Copyright,
-			SequenceName,
+			SequenceOrTrackName,
 			InstrumentName,
 			LyricText,
 			MarkerText,
@@ -106,6 +106,7 @@ namespace fm {
 			static Event NoteOff(Channel, Ticks, Pitch);
 			static Event MetaTempo(double bpm);
 			static Event MetaInstrument(const std::string &name);
+			static Event MetaTrack(const std::string &name);
 			
 			static std::vector<Byte> MetaCreateStringData(const std::string &string);
 			static std::string MetaGetStringValue(const Byte *data, size_t length);
