@@ -57,7 +57,7 @@ namespace fmapp {
 		State state_ = Stopped;
 		void onProcess();
 		void updateTicks();
-		Clock::time_point started_;
+		Clock::time_point elapsed_time_;
 		fm::BPM bpm_ = 120.0;
 		fm::Ticks elapsed_ = 0;
 	};
@@ -89,8 +89,9 @@ namespace fmapp {
 		}
 		using namespace std::chrono;
 		auto t = Clock::now();
-		auto millis = duration_cast<duration<fm::Ticks, std::milli>>(t - started_).count();
-		elapsed_ = static_cast<fm::Ticks>( millis / (60 / (bpm() * fm::PPQ) * 1000) );
+		auto millis = duration_cast<duration<fm::Ticks, std::milli>>(t - elapsed_time_).count();
+		elapsed_ += static_cast<fm::Ticks>( millis / (60 / (bpm() * fm::PPQ) * 1000) );
+		elapsed_time_ = t;
 	}
 
 	template<class TBackend, class TMidiProvider, class TTimer>
@@ -136,7 +137,7 @@ namespace fmapp {
 		}
 		using namespace std::chrono;
 		state_ = Playing;
-		started_ = Clock::now();
+		elapsed_time_ = Clock::now();
 		if (!playerTimer_) {
 			playerTimer_ = std::make_unique<TTimer>([this]() {
 				updateTicks();
@@ -151,8 +152,6 @@ namespace fmapp {
 	{
 		std::lock_guard<Lock> lockGuard(lock);
 		play();
-		int offset_ms = static_cast<int>((1000.0 * 60.0 / bpm()) * ((double)ticks / (double)fm::PPQ));
-		started_ = Clock::now() - std::chrono::milliseconds(offset_ms);
 		MidiProvider::seek(ticks);
 		elapsed_ = ticks;
 	}
