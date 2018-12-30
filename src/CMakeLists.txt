@@ -53,6 +53,7 @@ SET (SRC_SHEET_PLAYER
     fmapp/rtmidiBackend.cpp
     fmapp/midiplayer.cpp
     fmapp/midiProvider.cpp
+    fmapp/config/configServer.cpp
     sheetplayer_main.cpp 
     sheet.cpp
 )
@@ -63,6 +64,7 @@ SET (SRC_SHEET_TESTER
     fmapp/rtmidiBackend.cpp
     fmapp/midiplayer.cpp
     fmapp/midiProvider.cpp
+    fmapp/config/configServer.cpp
     sheettest_main.cpp
     sheet.cpp
 )
