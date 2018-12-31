@@ -7,6 +7,7 @@
 #include "spielanweisung/ASpielanweisung.h"
 #include "modification/AModification.h"
 #include <fm/literals.hpp>
+#include <fm/config/configServer.h>
 
 namespace {
 	const fm::Ticks TickTolerance = 0.5; // rounding errors e.g. for triplets
@@ -394,7 +395,21 @@ namespace sheet {
 			}
 			if (metaEvent.metaCommand == SHEET_META__SET_SIGNATURE) {
 				metaSetSignature(getArgument<int>(metaEvent, 0), getArgument<int>(metaEvent, 1));
+			}	
+			if (metaEvent.metaCommand == SHEET_META__SET_DEVICE) {
+				metaAddDevice(getArgument<fm::String>(metaEvent, 0), metaEvent.metaArgs);
 			}															
+		}
+
+		void AContext::metaAddDevice(const fm::String name, const Event::Args &args)
+		{
+			auto &cs = getConfigServer();
+			if (args.size() < 2) {
+				throw std::runtime_error("not enough arguments for device config");
+			}
+			std::vector<fm::String> deviceArgs(args.begin() + 1, args.end());
+			auto device = cs.createDeviceConfig(name, deviceArgs);
+			cs.addDevice(name, device);		
 		}
 
 		void AContext::metaSetVoicingStrategy(const fm::String &name, const Event::Args &args)

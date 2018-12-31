@@ -6,6 +6,7 @@ SET (SRC_FETZER_LIB
     fm/werckmeister.cpp
     fm/midi.cpp
     fm/common.cpp
+    fm/config/configServer.cpp
     compiler/compiler.cpp
     compiler/chordDefParser.cpp
     compiler/sheetParser.cpp
@@ -53,7 +54,6 @@ SET (SRC_SHEET_PLAYER
     fmapp/rtmidiBackend.cpp
     fmapp/midiplayer.cpp
     fmapp/midiProvider.cpp
-    fmapp/config/configServer.cpp
     sheetplayer_main.cpp 
     sheet.cpp
 )
@@ -64,7 +64,6 @@ SET (SRC_SHEET_TESTER
     fmapp/rtmidiBackend.cpp
     fmapp/midiplayer.cpp
     fmapp/midiProvider.cpp
-    fmapp/config/configServer.cpp
     sheettest_main.cpp
     sheet.cpp
 )

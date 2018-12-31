@@ -9,7 +9,6 @@
 #include "fm/common.hpp"
 #include "forward.hpp"
 
-
 #if defined(__GNUC__) || defined(__GNUG__)
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wdeprecated-declarations"

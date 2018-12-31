@@ -117,6 +117,7 @@ namespace sheet {
 			virtual void metaSetModification(const fm::String &name, const Event::Args &args);
 			virtual void metaSetModificationOnce(const fm::String &name, const Event::Args &args);
 			virtual void metaSetSignature(int upper, int lower);
+			virtual void metaAddDevice(const fm::String name, const Event::Args &args);
 			/////// actual context stuff
 			virtual void addEvent(const Event::Pitches &pitches, fm::Ticks duration, bool tying = false);
 			virtual void addEvent(const PitchDef &pitch, fm::Ticks duration, bool tying = false);

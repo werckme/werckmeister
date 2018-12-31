@@ -18,5 +18,6 @@
 #define SHEET_META__SET_MOD FM_STRING("mod")
 #define SHEET_META__SET_MOD_ONCE FM_STRING("modOnce")
 #define SHEET_META__SET_SIGNATURE FM_STRING("signature")
+#define SHEET_META__SET_DEVICE FM_STRING("device")
 
 #endif

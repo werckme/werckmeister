@@ -3,7 +3,7 @@
 
 #include <string>
 
-namespace fmapp {
+namespace fm {
     struct DeviceConfig {
         enum Type {
             Undefinded,

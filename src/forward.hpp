@@ -25,6 +25,7 @@ namespace fm {
 		class Midi;
 		typedef std::shared_ptr<Midi> MidiPtr;
 	}
+	class IConfigServer;
+	typedef IConfigServer *IConfigServerPtr;
 }
-
 #endif
