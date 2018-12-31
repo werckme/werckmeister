@@ -254,7 +254,6 @@ namespace sheet {
 					stopTying();
 					return;
 				}
-				auto firstDuration = it->second;
 				stopEvent(pitch, meta->position + meta->duration);
 				meta->waitForTieBuffer.erase(it);
 				return;
@@ -548,7 +547,6 @@ namespace sheet {
 		void AContext::setChord(const ChordEvent &chord)
 		{
 			currentChord_ = chord;
-			auto oldChordDef = currentChordDef_;
 			currentChordDef_ = styleDefServer()->getChord(currentChord_.chordDefName());
 			if (currentChordDef_ == nullptr) {
 				throw std::runtime_error("chord not found: " + fm::to_string(currentChord_.chordName));
