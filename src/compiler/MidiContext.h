@@ -40,6 +40,10 @@ namespace sheet {
 			virtual void metaSetUname(const fm::String &uname) override;
 			virtual void metaSetTempo(double bpm) override;
 			virtual void setMeta(const Event &metaEvent) override;
+			/**
+			 * sends a custom meta event containing a device name
+			 */
+			virtual void sendDeviceChangeEvent(const fm::String &deviceName, fm::Ticks position);
 		protected:
 			virtual Base::VoiceMetaDataPtr createVoiceMetaData() override;
 			const MidiInstrumentDef * getMidiInstrumentDef(const fm::String &uname) const;

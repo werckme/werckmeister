@@ -169,8 +169,25 @@ namespace sheet {
 			meta->instrumentDefs.clear();
 			for (; it != end; ++it) {
 				meta->instrumentDefs.push_back(it->second);
+				if (!it->second.deviceName.empty()) {
+					sendDeviceChangeEvent(it->second.deviceName, meta->position);
+				}
 				metaSoundSelect(it->second.cc, it->second.pc);
 			}
+		}
+
+		void MidiContext::sendDeviceChangeEvent(const fm::String &deviceName, fm::Ticks position)
+		{
+			if (deviceName.empty()) {
+				return;
+			}
+			fm::midi::CustomMetaData cdata;
+			cdata.type = fm::midi::CustomMetaData::SetDevice;
+			std::string ndeviceName = fm::to_string(deviceName);
+			cdata.data = fm::midi::CustomMetaData::Data(ndeviceName.begin(), ndeviceName.end());
+			auto ev = fm::midi::Event::MetaCustom(cdata);
+			ev.absPosition(position);
+			addEvent(ev);
 		}
 
 		void MidiContext::setMidiInstrumentDef(const fm::String &uname, const MidiInstrumentDef &def)
