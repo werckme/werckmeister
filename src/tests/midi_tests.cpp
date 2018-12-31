@@ -651,3 +651,54 @@ BOOST_AUTO_TEST_CASE(meta_event_read_write_long_string)
 	auto name = midi::Event::MetaGetStringValue(dst.metaData(), dst.metaDataSize());
 	BOOST_CHECK(name == LongString1001);
 }
+
+BOOST_AUTO_TEST_CASE(meta_event_read_write_custom_meta)
+{
+	using namespace fm;
+	constexpr size_t dataSize = 1001 + 1;
+	constexpr size_t eventSize = 5 + dataSize;
+	midi::CustomMetaData data;
+	data.type = midi::CustomMetaData::SetDevice;
+	std::string longString(&LongString1001[0]);
+	data.data = midi::CustomMetaData::Data(longString.begin(), longString.end());
+	auto org = midi::Event::MetaCustom(data);
+
+	BOOST_CHECK( org.eventType() == midi::MetaEvent );
+	BOOST_CHECK( org.metaEventType() == midi::CustomMetaEvent );
+	BOOST_CHECK( org.byteSize(0) == eventSize );
+
+	Byte bff[eventSize];
+	org.write(0, bff, eventSize);
+
+	midi::Event copy;
+	copy.read(0, &bff[0], eventSize);
+
+	midi::CustomMetaData dataCopy = midi::Event::MetaGetCustomData(copy.metaData(), copy.metaDataSize());
+	BOOST_CHECK( dataCopy.type == midi::CustomMetaData::SetDevice );
+	std::string dataCopyAsString(dataCopy.data.begin(), dataCopy.data.end());
+	BOOST_CHECK( longString == dataCopyAsString );
+}
+
+BOOST_AUTO_TEST_CASE(meta_event_read_write_custom_meta_0)
+{
+	using namespace fm;
+	constexpr size_t dataSize = 1;
+	constexpr size_t eventSize = 4 + dataSize;
+	midi::CustomMetaData data;
+	data.type = midi::CustomMetaData::SetDevice;
+	auto org = midi::Event::MetaCustom(data);
+
+	BOOST_CHECK( org.eventType() == midi::MetaEvent );
+	BOOST_CHECK( org.metaEventType() == midi::CustomMetaEvent );
+	BOOST_CHECK( org.byteSize(0) == eventSize );
+
+	Byte bff[eventSize];
+	org.write(0, bff, eventSize);
+
+	midi::Event copy;
+	copy.read(0, &bff[0], eventSize);
+
+	midi::CustomMetaData dataCopy = midi::Event::MetaGetCustomData(copy.metaData(), copy.metaDataSize());
+	BOOST_CHECK( dataCopy.type == midi::CustomMetaData::SetDevice );
+	BOOST_CHECK( dataCopy.data.size() == 0 );
+}

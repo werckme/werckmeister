@@ -304,6 +304,31 @@ namespace fm {
 		{
 			return std::string(data, data + length);
 		}
+		Event Event::MetaCustom(const CustomMetaData &custom)
+		{
+			if (custom.type == CustomMetaData::Undefined) {
+				throw std::runtime_error("invalid meta custom data");
+			}
+			std::vector<Byte> bff(custom.data.size() + 1);
+			bff[0] = static_cast<Byte>(custom.type);
+			std::copy(custom.data.begin(), custom.data.end(), bff.begin() + 1);
+			Event result;
+			result.metaData(CustomMetaEvent, bff.data(), bff.size());
+			return result;
+		}
+		CustomMetaData Event::MetaGetCustomData(const Byte *data, size_t length)
+		{
+			if (length == 0) {
+				throw std::runtime_error("invalid meta custom data");
+			}
+			CustomMetaData result;
+			result.type = static_cast<CustomMetaData::Type>(data[0]);
+			if (length == 1) {
+				return result;
+			}
+			result.data = CustomMetaData::Data(&data[1], &data[length]);
+			return result;
+		}
 		bool Event::equals(const Event&b) const
 		{
 			bool res = absPosition() == b.absPosition()

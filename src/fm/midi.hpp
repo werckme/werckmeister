@@ -15,6 +15,16 @@
 
 namespace fm {
 	namespace midi {
+		struct CustomMetaData {
+			enum Type {
+				Undefined,
+				SetDevice,
+				MaxTypeId = 0xFF
+			};
+			typedef std::vector<Byte> Data;
+			Data data;
+			Type type;
+		};
 		class Track;
 		typedef std::shared_ptr<Track> TrackPtr;
 		class Midi;
@@ -73,7 +83,7 @@ namespace fm {
 			SMPTEOffset = 0x54,
 			TimeSignature = 0x58,
 			KeySignature = 0x59,
-			CustomEvent = 0x7F
+			CustomMetaEvent = 0x7F
 		};
 		struct Event {
 			Ticks relDelta(Ticks deltaOffset) const;
@@ -107,12 +117,12 @@ namespace fm {
 			static Event MetaTempo(double bpm);
 			static Event MetaInstrument(const std::string &name);
 			static Event MetaTrack(const std::string &name);
-			
+			static Event MetaCustom(const CustomMetaData &custom);
 			static std::vector<Byte> MetaCreateStringData(const std::string &string);
 			static std::string MetaGetStringValue(const Byte *data, size_t length);
-
 			static int MetaGetIntValue(const Byte *data, size_t length);
 			static std::vector<Byte> MetaCreateIntData(int value);
+			static CustomMetaData MetaGetCustomData(const Byte *data, size_t length);
 
 			/**
 			 * a value between 0 .. 1. 0.5 is middle
