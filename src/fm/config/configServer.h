@@ -3,8 +3,9 @@
 
 #include <unordered_map>
 #include <string>
-#include "IConfigServer.h"
-
+#include <vector>
+#include "deviceConfig.h"
+#include <fm/common.hpp>
 
 #if defined(__GNUC__) || defined(__GNUG__)
 #pragma GCC diagnostic push
@@ -16,16 +17,16 @@
 #endif
 
 namespace fm {
-    class ConfigServer : public IConfigServer {
+    class ConfigServer {
     friend struct Loki::CreateUsingNew<ConfigServer>;
     public:
         ConfigServer();
 		ConfigServer(const ConfigServer&&) = delete;
 		ConfigServer& operator=(const ConfigServer&&) = delete;
         ~ConfigServer();
-        virtual DeviceConfig createDeviceConfig(const fm::String &name, std::vector<fm::String> &args) override;
-        virtual void addDevice(const fm::String &name, const DeviceConfig &config) override;
-        virtual const DeviceConfig * getDevice(const fm::String &name) const override;
+        DeviceConfig createDeviceConfig(const fm::String &name, std::vector<fm::String> &args);
+        void addDevice(const fm::String &name, const DeviceConfig &config);
+        const DeviceConfig * getDevice(const fm::String &name) const;
     private:
         typedef std::unordered_map<fm::String, DeviceConfig> Devices;
         Devices devices;

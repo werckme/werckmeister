@@ -27,12 +27,16 @@ namespace fm {
         if (args.empty()) {
             throw std::runtime_error("missing device type argument");
         }
-        if (args.at(0) == FM_STRING("midi")) {
+        auto type = args.at(0);
+        if (type == FM_STRING("midi")) {
             if (args.size() < 2) {
                 throw std::runtime_error("missing deviceid argument");
             }
             cf.type = DeviceConfig::Midi;
             cf.deviceId = fm::to_string(args.at(1));
+        }
+        if (cf.type == DeviceConfig::Undefinded) {
+            throw std::runtime_error("no config for " + fm::to_string(name) + ", " + fm::to_string(type));
         }
         return cf;
     }

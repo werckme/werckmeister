@@ -4,7 +4,8 @@
 @load "./styles/justchords.style";
 @load "./styles/chromatic.style";
 
-/tempo: 120/
+
+/device: roland1 midi 0/
 --           uname ch cc pc
 /instrument: piano 3 0 0/
 /instrument: guitar 4 0 25/
@@ -12,6 +13,7 @@
 /instrument: drums 9 0 32/
 /instrument: slide 2 8 26/
 
+/tempo: 120/
 /style: justchords guitar/
 
 C7#9 | 

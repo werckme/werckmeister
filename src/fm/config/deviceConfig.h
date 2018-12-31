@@ -9,7 +9,7 @@ namespace fm {
             Undefinded,
             Midi
         };
-        Type type;
+        Type type = Undefinded;
         typedef std::string DeviceId;
         DeviceId deviceId;
     };
