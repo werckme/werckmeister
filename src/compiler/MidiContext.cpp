@@ -178,12 +178,18 @@ namespace sheet {
 			midiInstrumentDefs_.insert({ uname, def });
 		}
 
-		void MidiContext::metaInstrument(const fm::String &uname, int chanel, int cc, int pc)
+		void MidiContext::metaInstrument(const fm::String &uname, int channel, int cc, int pc)
+		{
+			metaInstrument(uname, fm::String(), channel, cc, pc);
+		}
+
+		void MidiContext::metaInstrument(const fm::String &uname, const fm::String &deviceName, int channel, int cc, int pc)
 		{
 			MidiInstrumentDef def;
-			def.channel = chanel;
+			def.channel = channel;
 			def.cc = cc;
 			def.pc = pc;
+			def.deviceName = deviceName;
 			setMidiInstrumentDef(uname, def);
 		}
 
@@ -198,7 +204,17 @@ namespace sheet {
 				metaSoundSelect(getArgument<int>(metaEvent, 0), getArgument<int>(metaEvent, 1));
 			}
 			if (metaEvent.metaCommand == SHEET_META__MIDI_INSTRUMENT_DEF) {
-				metaInstrument(getArgument<fm::String>(metaEvent, 0), getArgument<int>(metaEvent, 1), getArgument<int>(metaEvent, 2), getArgument<int>(metaEvent, 3));
+				auto name = getArgument<fm::String>(metaEvent, 0);
+				size_t numArgs = metaEvent.metaArgs.size();
+				if (numArgs == 4) {
+					metaInstrument(getArgument<fm::String>(metaEvent, 0), getArgument<int>(metaEvent, 1), getArgument<int>(metaEvent, 2), getArgument<int>(metaEvent, 3));
+					return;
+				}
+				if (numArgs == 5) {
+					metaInstrument(getArgument<fm::String>(metaEvent, 0), getArgument<fm::String>(metaEvent, 1),getArgument<int>(metaEvent, 2), getArgument<int>(metaEvent, 3), getArgument<int>(metaEvent, 4));					
+					return;
+				}
+				throw std::runtime_error("invalid number of arguments for instrument: " + fm::to_string(name) );
 			}
 		}
 	}

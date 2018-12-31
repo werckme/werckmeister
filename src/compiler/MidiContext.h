@@ -11,6 +11,7 @@ namespace sheet {
     namespace compiler {
 		struct MidiInstrumentDef {
 			fm::String uname;
+			fm::String deviceName;
 			int channel = 0;
 			int cc = 0;
 			int pc = 0;
@@ -34,7 +35,8 @@ namespace sheet {
 			virtual void stopEvent(const PitchDef &pitch, fm::Ticks absolutePosition) override;
 			virtual void metaSetChannel(int channel);
 			virtual void metaSoundSelect(int cc, int pc);
-			virtual void metaInstrument(const fm::String &uname, int chanel, int cc, int pc);
+			virtual void metaInstrument(const fm::String &uname, int channel, int cc, int pc);
+			virtual void metaInstrument(const fm::String &uname, const fm::String &deviceName, int channel, int cc, int pc);
 			virtual void metaSetUname(const fm::String &uname) override;
 			virtual void metaSetTempo(double bpm) override;
 			virtual void setMeta(const Event &metaEvent) override;
