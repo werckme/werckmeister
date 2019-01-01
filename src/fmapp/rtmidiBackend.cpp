@@ -14,7 +14,8 @@ namespace fmapp {
 		Outputs result(nOutputs);
 		for (size_t idx = 0; idx < nOutputs; ++idx) {
 			auto &output = result[idx];
-			output.id = idx;
+			output.portid = idx;
+			output.id = std::to_string(idx);
 			output.name = midiout_->getPortName(idx);
 		}
 		return result;
@@ -31,11 +32,11 @@ namespace fmapp {
 		if (output == nullptr) {
 			output = &output_;
 		}
-		if (output->id == UNKNOWN_PORT) {
+		if (output->portid == UNKNOWN_PORT) {
 			return;
 		}
 		
-		midiout_->openPort(output->id);
+		midiout_->openPort(output->portid);
 		const unsigned int StaticBufferSize = 255;
 		fm::Byte buffer[StaticBufferSize];
 		std::vector<fm::Byte> fallback;

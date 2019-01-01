@@ -133,7 +133,7 @@ fmapp::Midiplayer::Output findOutput(MidiOutputId id)
 {
 	auto &player = fmapp::getMidiplayer();
 	auto outputs = player.getOutputs();
-	auto it = std::find_if(outputs.begin(), outputs.end(), [id](const auto &x) { return x.id == id; });
+	auto it = std::find_if(outputs.begin(), outputs.end(), [id](const auto &x) { return x.portid == id; });
 	if (it == outputs.end()) {
 		throw std::runtime_error("device not found: " + std::to_string(id));
 	}

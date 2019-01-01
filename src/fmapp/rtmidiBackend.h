@@ -11,7 +11,8 @@ namespace fmapp {
 	public:
 		enum { UNKNOWN_PORT = -1 };
 		struct Output {
-			int id = UNKNOWN_PORT;
+			int portid = UNKNOWN_PORT;
+			std::string id;
 			std::string name = "undefined output";
 		};
 		typedef std::vector<Output> Outputs;
