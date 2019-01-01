@@ -55,8 +55,9 @@ namespace fmapp {
 	private:
 		void initOutputMap();
 		void handleMetaEvent(const fm::midi::Event &ev);
+		void changeDevice(const std::string &deviceId);
 		typedef std::recursive_mutex Lock;
-		typedef std::unordered_map<fm::String, Output> OutputMap;
+		typedef std::unordered_map<std::string, Output> OutputMap;
 		Lock lock;
 		std::unique_ptr<TTimer> playerTimer_;
 		State state_ = Stopped;
@@ -82,7 +83,7 @@ namespace fmapp {
 		auto &cs = fm::getConfigServer();
 		auto outputs = getOutputs();
 		for(const auto &x : cs.getDevices()) {
-			auto name = x.first;
+			auto name = fm::to_string(x.first);
 			auto id = x.second.deviceId;
 			auto it = std::find_if(outputs.begin(), outputs.end(), [id](const auto &x) { return x.id == id; });
 			if (it==outputs.end()) {
@@ -128,12 +129,25 @@ namespace fmapp {
 	}
 
 	template<class TBackend, class TMidiProvider, class TTimer>
+	void MidiplayerClient<TBackend, TMidiProvider, TTimer>::changeDevice(const std::string &deviceId)
+	{
+
+	}
+
+	template<class TBackend, class TMidiProvider, class TTimer>
 	void MidiplayerClient<TBackend, TMidiProvider, TTimer>::handleMetaEvent(const fm::midi::Event &ev)
 	{
 		using namespace fm;
 		if (ev.metaEventType() == midi::Tempo) {
 			auto metaIntValue = midi::Event::MetaGetIntValue(ev.metaData(), ev.metaDataSize());
 			bpm(midi::MicrosecondsPerMinute/(double)metaIntValue);
+		}
+		if (ev.metaEventType() == midi::CustomMetaEvent) {
+			auto customEvent = midi::Event::MetaGetCustomData(ev.metaData(), ev.metaDataSize());
+			if (customEvent.type == midi::CustomMetaData::SetDevice) {
+				std::string deviceId(customEvent.data.begin(), customEvent.data.end());
+				changeDevice(deviceId);
+			}
 		}
 	}
 
