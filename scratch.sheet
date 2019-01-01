@@ -6,7 +6,6 @@
 
 
 /device: roland1 midi 0/
-/device: roland2 midi 1/
 
 --           uname ch cc pc
 /instrument: piano roland1 3 0 0/

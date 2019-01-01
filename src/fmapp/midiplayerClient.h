@@ -20,6 +20,9 @@
 #include <algorithm>
 #include <fm/midi.hpp>
 #include <list>
+#include <unordered_map>
+#include <fm/config/configServer.h>
+#include <algorithm>
 
 namespace fmapp {
 
@@ -50,8 +53,10 @@ namespace fmapp {
 		fm::Ticks elapsed() const { return elapsed_; }
 		void reset();
 	private:
+		void initOutputMap();
 		void handleMetaEvent(const fm::midi::Event &ev);
 		typedef std::recursive_mutex Lock;
+		typedef std::unordered_map<fm::String, Output> OutputMap;
 		Lock lock;
 		std::unique_ptr<TTimer> playerTimer_;
 		State state_ = Stopped;
@@ -60,6 +65,7 @@ namespace fmapp {
 		Clock::time_point elapsed_time_;
 		fm::BPM bpm_ = 120.0;
 		fm::Ticks elapsed_ = 0;
+		OutputMap outputMap_;
 	};
 
 	///////////////////////////////////////////////////////////////////////////////
@@ -67,6 +73,23 @@ namespace fmapp {
 	template<class TBackend, class TMidiProvider, class TTimer>
 	MidiplayerClient<TBackend, TMidiProvider, TTimer>::MidiplayerClient()
 	{
+		initOutputMap();
+	}
+
+	template<class TBackend, class TMidiProvider, class TTimer>
+	void MidiplayerClient<TBackend, TMidiProvider, TTimer>::initOutputMap()
+	{
+		auto &cs = fm::getConfigServer();
+		auto outputs = getOutputs();
+		for(const auto &x : cs.getDevices()) {
+			auto name = x.first;
+			auto id = x.second.deviceId;
+			auto it = std::find_if(outputs.begin(), outputs.end(), [id](const auto &x) { return x.id == id; });
+			if (it==outputs.end()) {
+				throw std::runtime_error("output with id = " + id + " not found");
+			}
+			outputMap_[name] = *it; 
+		}
 	}
 
 	template<class TBackend, class TMidiProvider, class TTimer>

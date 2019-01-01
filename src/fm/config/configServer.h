@@ -20,6 +20,7 @@ namespace fm {
     class ConfigServer {
     friend struct Loki::CreateUsingNew<ConfigServer>;
     public:
+        typedef std::unordered_map<fm::String, DeviceConfig> Devices;
         ConfigServer();
 		ConfigServer(const ConfigServer&&) = delete;
 		ConfigServer& operator=(const ConfigServer&&) = delete;
@@ -27,8 +28,8 @@ namespace fm {
         DeviceConfig createDeviceConfig(const fm::String &name, std::vector<fm::String> &args);
         void addDevice(const fm::String &name, const DeviceConfig &config);
         const DeviceConfig * getDevice(const fm::String &name) const;
+        const Devices & getDevices() const { return devices; }
     private:
-        typedef std::unordered_map<fm::String, DeviceConfig> Devices;
         Devices devices;
     };
     ConfigServer & getConfigServer();
