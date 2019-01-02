@@ -183,7 +183,6 @@ Der \espressivo-Befehl kann eingesetzt werden, um crescendo und decrescendo für
 
 
 ## Bugs
- - arpeggio generiert zu viele noten
  - keine möglichkeit meta commands für style instruments zu überschreiben (voicing strategy)
  - style rendering kommt ins stolpern wenn ungerade teiler z.b: 4/4 | C C C |  
  - style voice nur meta events -> bleibt hängen

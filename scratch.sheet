@@ -3,15 +3,25 @@
 @load "./styles/bossanova.style";
 @load "./styles/justchords.style";
 @load "./styles/chromatic.style";
+@load "./pitchmaps/defaultMidiDrumMap.pitchmap";
 
+[
+{
+    /channel: 9/
+    /soundSelect: 0 0/
+    !fffff"bd"4 "bd"4 "bd"4 "bd"4 | !fffff"bd"4 "bd"4 "bd"4 "bd"4 | !fffff"bd"4 "bd"4 "bd"4 "bd"4 | !fffff"bd"4 "bd"4 "bd"4 "bd"4 | 
+}
+]
 
-
-/device: roland1 midi 1/
 
 --           uname ch cc pc
-/instrument: guitar roland1 0 0 25/
+/instrument: guitar 0 0 25/
+/instrument: piano 0 0 25/
+/instrument: drum 9 0 0/
 
 /tempo: 120/
-/style: justchords guitar/
+/style: justchords arpeggio/
 
-C7#9 | 
+C7#9 | D7 | E9 |
+/style: justchords bending/
+ G |
