@@ -163,6 +163,9 @@ Der \espressivo-Befehl kann eingesetzt werden, um crescendo und decrescendo für
   "easy"4 "easy" "easy meat"2 |
 ```
   - compiler baut midi+srt file
+
+- soundselect generic midisequences
+  /soundSelect: cc 0 pc 1/
 ### Paralleles abspielen verschiedener Styles
 
 {
