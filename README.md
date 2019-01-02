@@ -157,7 +157,12 @@ Der \espressivo-Befehl kann eingesetzt werden, um crescendo und decrescendo für
 
 ## Nice to have
 - device vst support
-
+- Lyrics:
+```
+  /mode: lyrics/
+  "easy"4 "easy" "easy meat"2 |
+```
+  - compiler baut midi+srt file
 ### Paralleles abspielen verschiedener Styles
 
 {
