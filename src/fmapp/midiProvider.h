@@ -13,9 +13,12 @@ namespace fmapp {
 	class MidiProvider : public AMidiProvider {
 	public:
 		enum { NO_TICK = INT_MAX };
-		typedef std::list<fm::midi::Event> Events;
-		typedef std::function<bool(const fm::midi::Event&)> FilterFunc;
-		void getEvents(fm::Ticks at, Events &out, const FilterFunc &filter);
+		typedef long TrackId;
+		struct Event {
+			TrackId trackId;
+			fm::midi::Event event;
+		};
+		typedef std::list<Event> Events;
 		void getEvents(fm::Ticks at, Events &out);
 		virtual ~MidiProvider() = default;
 		void midi(fm::midi::MidiPtr midi);
@@ -24,7 +27,6 @@ namespace fmapp {
 	protected:
 		virtual void seek(fm::Ticks ticks) override;
 	private:
-		void copyEvents(Events &events, fm::Ticks at);
 		fm::midi::MidiPtr midi_ = nullptr;
 		typedef fm::midi::EventContainer::ConstIterator EventIt;
 		typedef std::unordered_map<fm::midi::TrackPtr, EventIt> TrackEventIts;

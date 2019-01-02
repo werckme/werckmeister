@@ -12,7 +12,7 @@ namespace fmapp {
 		return midi_;
 	}
 
-	void MidiProvider::getEvents(fm::Ticks at, Events &out, const FilterFunc &filter)
+	void MidiProvider::getEvents(fm::Ticks at, Events &out)
 	{
 		for (auto track : midi_->tracks()) {
 			auto end = track->events().end();
@@ -22,17 +22,13 @@ namespace fmapp {
 				if (pos > at) {
 					break;
 				}
-				if (filter(*it)){
-					out.push_back(*it);
-				}
+				Event ev;
+				ev.event = *it;
+				ev.trackId = reinterpret_cast<TrackId>(track.get()); 
+				out.push_back(ev);
 				++it;
 			}
 		}
-	}
-
-	void MidiProvider::getEvents(fm::Ticks at, Events &out)
-	{
-		getEvents(at, out, [](const auto&){return true;});
 	}
 
 	MidiProvider::EventIt* MidiProvider::getEventIt(fm::midi::TrackPtr trackPtr)

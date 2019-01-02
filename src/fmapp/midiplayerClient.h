@@ -156,14 +156,15 @@ namespace fmapp {
 	{
 		std::lock_guard<Lock> lockGuard(lock);
 		typename MidiProvider::Events events;
-		MidiProvider::getEvents(this->elapsed_, events, [this](const auto &ev) {
+		MidiProvider::getEvents(this->elapsed_, events);
+		for(const auto &evAndTrack : events) {
+			const auto &ev = evAndTrack.event;
 			if (ev.eventType() == fm::midi::MetaEvent) {
 				this->handleMetaEvent(ev);
-				return false;
+				continue;
 			}
-			return true;
-		});
-		Backend::send(events);
+			Backend::send(ev);
+		}
 	}
 
 	template<class TBackend, class TMidiProvider, class TTimer>
