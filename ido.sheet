@@ -4,12 +4,15 @@
 @load "./chords/default.chords";
 @load "./styles/ido.style";
 
+
+/device: SC8850 midi 1/
+
 /tempo: 145/
-/instrument: organ 2 0 18/
-/instrument: guitar 3 0 37/
-/instrument: bass 8 0 33/
-/instrument: drums 9 0 32/
-/instrument: slide 2 0 102/
+/instrument: organ SC8850 2 0 18/
+/instrument: guitar SC8850 3 0 37/
+/instrument: bass SC8850 8 0 33/
+/instrument: drums SC8850 9 0 32/
+/instrument: slide SC8850 2 0 102/
 
 /style: ido normal/
 

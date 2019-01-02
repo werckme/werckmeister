@@ -43,7 +43,7 @@ namespace sheet {
 			/**
 			 * sends a custom meta event containing a device name
 			 */
-			virtual void sendDeviceChangeEvent(const fm::String &deviceName, fm::Ticks position);
+			virtual void addDeviceChangeEvent(const fm::String &deviceName, fm::Ticks position);
 		protected:
 			virtual Base::VoiceMetaDataPtr createVoiceMetaData() override;
 			const MidiInstrumentDef * getMidiInstrumentDef(const fm::String &uname) const;

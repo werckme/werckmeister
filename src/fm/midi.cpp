@@ -363,6 +363,12 @@ namespace fm {
 			}
 			int t1 = a.eventType();
 			int t2 = b.eventType();
+			if (t1==MetaEvent && t2!=MetaEvent ) { // could be custom meta: change device
+				return true;
+			}
+			if (t2==MetaEvent && t1!=MetaEvent) { // could be custom meta: change device
+				return false;
+			}
 			bool isNoteEvent1 = t1 == NoteOn || t1 == NoteOff;
 			bool isNoteEvent2 = t2 == NoteOn || t2 == NoteOff;
 			if (isNoteEvent1) {

@@ -5,14 +5,11 @@
 @load "./styles/chromatic.style";
 
 
-/device: roland1 midi 0/
+
+/device: roland1 midi 1/
 
 --           uname ch cc pc
-/instrument: piano roland1 3 0 0/
-/instrument: guitar roland1 4 0 25/
-/instrument: bass 8 0 33/
-/instrument: drums 9 0 32/
-/instrument: slide 2 8 26/
+/instrument: guitar roland1 0 0 25/
 
 /tempo: 120/
 /style: justchords guitar/

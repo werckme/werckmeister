@@ -170,13 +170,13 @@ namespace sheet {
 			for (; it != end; ++it) {
 				meta->instrumentDefs.push_back(it->second);
 				if (!it->second.deviceName.empty()) {
-					sendDeviceChangeEvent(it->second.deviceName, meta->position);
+					addDeviceChangeEvent(it->second.deviceName, meta->position);
 				}
 				metaSoundSelect(it->second.cc, it->second.pc);
 			}
 		}
 
-		void MidiContext::sendDeviceChangeEvent(const fm::String &deviceName, fm::Ticks position)
+		void MidiContext::addDeviceChangeEvent(const fm::String &deviceName, fm::Ticks position)
 		{
 			if (deviceName.empty()) {
 				return;

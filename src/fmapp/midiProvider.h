@@ -12,7 +12,7 @@ namespace fmapp {
 
 	class MidiProvider : public AMidiProvider {
 	public:
-		enum { NO_TICK = INT_MAX };
+		enum { NO_TICK = INT_MAX, INVALID_TRACKID = 0 };
 		typedef long TrackId;
 		struct Event {
 			TrackId trackId;

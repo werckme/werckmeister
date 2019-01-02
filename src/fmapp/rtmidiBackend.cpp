@@ -27,7 +27,7 @@ namespace fmapp {
 		return true;
 	}
 
-	void RtMidiBackend::send(const fm::midi::Event &ev, Output *output)
+	void RtMidiBackend::send(const fm::midi::Event &ev, const Output *output)
 	{
 		if (output == nullptr) {
 			output = &output_;

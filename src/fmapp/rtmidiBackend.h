@@ -23,8 +23,8 @@ namespace fmapp {
 		bool setOutput(const Output &output);
 		virtual ~RtMidiBackend();
 		template<class TEvents>
-		void send(const TEvents &events, Output *output = nullptr);
-		void send(const fm::midi::Event &event, Output *output = nullptr);
+		void send(const TEvents &events, const Output *output = nullptr);
+		void send(const fm::midi::Event &event, const Output *output = nullptr);
 	private:
 		std::unique_ptr<RtMidiOut> midiout_;
 		Output output_;
@@ -33,7 +33,7 @@ namespace fmapp {
 	///////////////////////////////////////////////////////////////////////////////
 	// Impl.
 	template<class TEvents>
-	void RtMidiBackend::send(const TEvents &events, Output *output)
+	void RtMidiBackend::send(const TEvents &events, const Output *output)
 	{
 		if (events.empty()) {
 			return;
