@@ -2,19 +2,19 @@
 @load "./chords/default.chords";
 @load "./pitchmaps/defaultMidiDrumMap.pitchmap";
 @load "./styles/countryschlager1.style";
+@load "./styles/bossanova.style";
 @load "./styles/simpleDisco.style";
 @load "./styles/ennio.style";
 @load "./styles/purdie.style";
  
 [{
-    /channel: 3/
+    /uname: piano/
     \fffff
     r1 | r1 |c2 d | e1 | r2 c4 d4 | e4 e g c | dis2 dis4 d | c2 bes4 a | g2  g4 a | bes c' bes a | as2 as4 bes | 
     c' as,4 as,4  bes,~ | <bes, c> as as bes | c' c' es'8 d' c' d' | b2 b, | r1 | r4 b4 b4 c' | d' d' d' d' | d' d' e'8 d' c' b | c'1 |
 
     r1 | r1 | r1 | 
-    /channel: 0/
-    /soundSelect: 0 26/
+    /uname: guitar2/
     \ffff    
     c2 d | /modOnce: bend from 0/ e2~ e2 | r2 c4 d4 | e4 e g c | /modOnce: bend from 40/dis2 dis4 d | c2 bes4 a 
     | g2  g4 a | bes c' bes a | as2 as4 bes | c' as,4 as,4  bes,~ | <bes, c> as as bes | c' c' es'8 d' c' d' 
@@ -22,15 +22,16 @@
 
 }]
 
+/device: SC1 midi 1/
 
 /tempo: 130/
 --           uname ch cc pc
-/instrument: piano 3 0 3/
-/instrument: guitar 4 0 25/
-/instrument: bass 8 0 33/
-/instrument: drums 9 0 32/
-/instrument: slide 2 8 26/
-
+/instrument: piano   SC1 2 0 3/
+/instrument: guitar  SC1 3 0 25/
+/instrument: guitar2 SC1 4 0 11/
+/instrument: bass    SC1 5 0 33/
+/instrument: slide   SC1 6 8 26/
+/instrument: drums   SC1 9 0 32/
 
 /style: ennio normal/
 

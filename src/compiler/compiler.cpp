@@ -17,8 +17,8 @@ namespace sheet {
 		{
 			this->document_ = document;
 			auto ctx = context();
-			renderTracks();
 			renderChordTrack();
+			renderTracks();
 		}
 
 		void Compiler::renderTracks()
