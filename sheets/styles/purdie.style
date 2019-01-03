@@ -3,10 +3,36 @@ section normal
 {
     /uname: drums/
     \p"ht"8t r8t !pp"ht"8t    "ht"8t r8t !pp"ht"8t    "ht"8t r8t !pp"ht"8t   "ht"8t r8t !pp"ht"8t |
+    \p"ht"8t r8t !pp"ht"8t    "ht"8t r8t !pp"ht"8t    "ht"8t r8t !pp"ht"8t   "ht"8t r8t !pp"ht"8t |
+    \p"ht"8t r8t !pp"ht"8t    "ht"8t r8t !pp"ht"8t    "ht"8t r8t !pp"ht"8t   "ht"8t r8t !pp"ht"8t |
+    \p"ho"8t r8t !pp"ht"8t    "ht"8t r8t !pp"ht"8t    "ht"8t r8t !pp"ht"8t   "ht"8t r8t !pp"ht"8t |
+
+    \p"ht"8t r8t !pp"ht"8t    "ht"8t r8t !pp"ht"8t    "ht"8t r8t !pp"ht"8t   "ht"8t r8t !pp"ht"8t |
+    \p"ht"8t r8t !pp"ht"8t    "ht"8t r8t !pp"ht"8t    "ht"8t r8t !pp"ht"8t   "ht"8t r8t !pp"ht"8t |
+    \p"ht"8t r8t !pp"ht"8t    "ht"8t r8t !pp"ht"8t    "ht"8t r8t !pp"ht"8t   r8t !pp"ho"8t !pp"ht"8t |
+    \p"ht"8t r8t !pp"ht"8t    "ht"8t r8t !pp"ht"8t    "ht"8t r8t !pp"ht"8t   "ht"8t r8t !pp"ht"8t |
+
+    \p"ht"8t r8t !pp"ht"8t    "ht"8t r8t !pp"ht"8t    "ht"8t r8t !pp"ht"8t   "ht"8t r8t !pp"ht"8t |
+    \p"ht"8t r8t !pp"ht"8t    "ht"8t r8t !pp"ht"8t    "ht"8t r8t !pp"ht"8t   "ht"8t r8t !pp"ht"8t |
+    \p"ht"8t r8t !pp"ht"8t    "ht"8t r8t !pp"ht"8t    "ht"8t r8t !pp"ht"8t   "ht"8t r8t !pp"ht"8t |
+    \f"ho"8t "ht"8t "bd"8t    \f"ho"8t "ht"8t r8t     "ht"8t r8t !pp"ht"8t   "ht"8t r8t !pp"ht"8t |
 }
 {
     /uname: drums/
     r8t !pppp"sng"8t r8t    r8t !pppp"sng"8t r8t    \ff"sn"8t !pppp"sng"8t r8t   r8t !pppp"sng"8t r8t |
+    r8t !pppp"sng"8t r8t    r8t !pppp"sng"8t r8t    \ff"sn"8t !pppp"sng"8t r8t   r8t !pppp"sng"8t r8t |    
+    r8t !pppp"sng"8t r8t    r8t !pppp"sng"8t r8t    \ff"sn"8t !pppp"sng"8t r8t   r8t !ppp"sn"8t !pp"sn"8t |
+    r8t !pppp"sng"8t r8t    r8t !pppp"sng"8t r8t    \ff"sn"8t !pppp"sng"8t r8t   r8t !pppp"sng"8t r8t |
+
+    r8t !pppp"sng"8t r8t    r8t !pppp"sng"8t r8t    \ff"sn"8t !pppp"sng"8t r8t   r8t !pppp"sng"8t r8t |
+    r8t !pppp"sng"8t r8t    r8t !pppp"sng"8t r8t    \ff"sn"8t !pppp"sng"8t r8t   r8t !pppp"sng"8t r8t |    
+    r8t !pppp"sng"8t r8t    r8t !pppp"sng"8t r8t    \ff"sn"8t !pppp"sng"8t r8t   r4t r8t              |   
+    r8t !pppp"sng"8t r8t    r8t !pppp"sng"8t r8t    \ff"sn"8t !pppp"sng"8t r8t   r8t !pppp"sng"8t r8t |
+
+    r8t !pppp"sng"8t r8t    r8t !pppp"sng"8t r8t    \ff"sn"8t !pppp"sng"8t r8t   r8t !pppp"sng"8t r8t |
+    r8t !pppp"sng"8t r8t    r8t !pppp"sng"8t r8t    \ff"sn"8t !pppp"sng"8t r8t   r8t !pppp"sng"8t r8t |    
+    r8t !pppp"sng"8t r8t    r8t !pppp"sng"8t r8t    \ff"sn"8t !pppp"sng"8t r8t   r8t !ppp"sn"8t !pp"sn"8t |
+    r8t !pppp"sng"8t r8t    r8t !pppp"sng"8t r8t    \ff"sn"8t !pppp"sng"8t r8t   r8t !pppp"sng"8t r8t |   
 }
 {
     /uname: drums/
@@ -15,14 +41,14 @@ section normal
 ] 
 [ 
 {
-    /uname: piano/
+    /uname: jzguitar/
     /voicingStrategy: simpleGuitar/
     I4t r8t <III VII I' IV>4t I,,8t r4t <V, II, IV, I,,>8t r4t r8t |
     I4t r8t <III VII I' IV>4t I,,8t r4t <V, II, IV, I,,>8t r4t r8t |
     I4t r8t <III VII I' IV>4t I,,8t r4t <V, II, IV, I,,>8t r4t r8t |
     I4t r8t <III VII I' IV>4t I,,8t r4t <I II III IV V VI VII >2t  |
 }
-] 
+]
 [ 
 {
     /uname: bass/
@@ -34,3 +60,33 @@ section normal
 ] 
 end
 
+
+section ende ------------------------------------------------------------------------------------
+[ 
+{
+    /uname: drums/
+    \f"cy"1  |
+}
+{
+    /uname: drums/
+    "bd"1 |
+}
+] 
+[ 
+{
+    /uname: jzguitar/
+    /voicingStrategy: simpleGuitar/
+    \p 
+    /doOnce: arpeggio up/
+    <I II III IV V VI VII >8~
+    <I II III IV V VI VII >2.~ <I II III IV V VI VII >8 |
+}
+] 
+[ 
+{
+    /uname: bass/
+    I,,1 |
+
+}
+] 
+end

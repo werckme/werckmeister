@@ -3,24 +3,34 @@
 @load "./pitchmaps/defaultMidiDrumMap.pitchmap";
 @load "./styles/purdie.style";
 
+[
+{
+    /uname: fx/
+    \p
+    c1 | r1 | f1 |
+}
+]
+
 
 /tempo: 160/
 /device: SC1 midi 1/
 --           uname ch cc pc
---/instrument: piano SC1 4 0 25/
-/instrument: piano SC1 4 0 26/
-/instrument: bass SC1 8 0 33/
-/instrument: drums SC1 9 0 32/
-/instrument: slide SC1 2 8 26/
+/instrument: jzguitar   SC1 2 0  26/
+/instrument: bass       SC1 3 0  33/
+/instrument: fx         SC1 4 35 80/
+/instrument: drums      SC1 9 0  32/
+
 
 /style: purdie normal/
 
-C | G | F9 Gmaj7 | C |
-C | G | F9 Gmaj7 | C7#9 |
-C | G | F13 G | C |
-C | G | F9 Gmaj7 | C7#9 |
-F13 | F13 | C11 | C7 | F13 | F13| G7 | G9 |
-C | G | F9 Gmaj7 | C |
-C | G | F9 Gmaj7 | C7#9 |
-Amin7 | G | F9 Gmaj7 | C7 |
-Amin9 | G | F11 | C | C | C | C | C7#9
+C     | G   | F9  Gmaj7 | C    |
+C     | G   | F9  Gmaj7 | C7#9 |
+C     | G   | F13 G     | C    |
+C     | G   | F9 Gmaj7  | C7#9 |
+F13   | F13 | C11 | C7 | F13 | F13| G7 | G9 |
+C     | G   | F9 Gmaj7 | C     |
+C     | G   | F9 Gmaj7 | C7#9  |
+Amin7 | G   | F9 Gmaj7 | C7    |
+Amin9 | G   | F11      | C | C | C | C | C7#9
+/style: purdie ende/
+C7#9
