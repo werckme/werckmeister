@@ -156,6 +156,8 @@ Der \espressivo-Befehl kann eingesetzt werden, um crescendo und decrescendo für
 
 
 ## Nice to have
+- setStyle rename to switchStyle
+- /setStyle: samba normal [startAtBar 3]/ 
 - device vst support
 - Lyrics:
 ```
