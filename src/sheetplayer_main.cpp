@@ -151,7 +151,7 @@ void printElapsedTime(fm::Ticks elapsed)
 	using boost::str;
 	using boost::io::group;
 
-	std::string strOut = str(format("%.3f") % (elapsed / (double)fm::PPQ));
+	std::string strOut = "[" + str(format("%.3f") % (elapsed / (double)fm::PPQ)) + "]";
 	static std::string lastOutput;
 	for (size_t i=0; i<lastOutput.size(); ++i) {
 		std::cout << "\b";
@@ -165,7 +165,6 @@ void printElapsedTime(fm::Ticks elapsed)
 void play(sheet::DocumentPtr document, fm::midi::MidiPtr midi, MidiOutputId midiOutput, fm::Ticks begin, fm::Ticks end, const Settings &settings) {
 	auto &player = fmapp::getMidiplayer();
 	auto output = findOutput(midiOutput);
-	std::cout <<  "--> ";
 	player.setOutput(output);
 	player.midi(midi);
 	player.play(begin);
