@@ -185,7 +185,11 @@ Der \espressivo-Befehl kann eingesetzt werden, um crescendo und decrescendo für
 
 
 ## Bugs
- - purdie fails, wenn ende zwei takte gespielt wird. (hängt mit tie zusammen)
+ - purdie fail: (08e0b66f9f37a3e8704212108cc596615dc7d75f)
+  C7#9
+  /style: purdie ende/
+  C7#9 | 
+  C07  |
  - keine möglichkeit meta commands für style instruments zu überschreiben (voicing strategy)
  - style rendering kommt ins stolpern wenn ungerade teiler z.b: 4/4 | C C C |  
  - style voice nur meta events -> bleibt hängen
