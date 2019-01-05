@@ -12,7 +12,7 @@
 
 }]
 
-/device: SC1 midi 1/
+/device: SC1 midi 2/
 
 /tempo: 130/
 --           uname device ch cc pc

@@ -229,7 +229,7 @@ void play(sheet::DocumentPtr document, fm::midi::MidiPtr midi, MidiOutputId midi
 	boost_asio_.join();
 #endif
 
-	player.panic();
+	//player.panic();
 }
 
 int main(int argc, const char** argv)

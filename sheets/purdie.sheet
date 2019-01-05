@@ -13,7 +13,7 @@
 
 
 /tempo: 160/
-/device: SC1 midi 1/
+/device: SC1 midi 2/
 --           uname ch cc pc
 /instrument: jzguitar   SC1 2 0  26/
 /instrument: bass       SC1 3 0  33/
@@ -31,6 +31,6 @@ F13   | F13 | C11 | C7 | F13 | F13| G7 | G9 |
 C     | G   | F9 Gmaj7 | C     |
 C     | G   | F9 Gmaj7 | C7#9  |
 Amin7 | G   | F9 Gmaj7 | C7    |
-Amin9 | G   | F11      | C | C | C | C | C7#9
+Amin9 | G   | F11      | C | C | C | C | C7#9 |
 /style: purdie ende/
-C7#9
+C7#9 |  C07  | /tempo: 80/ C |
