@@ -10,7 +10,7 @@
     c' as,4 as,4  bes,~ | <bes, c> as as bes | c' c' es'8 d' c' d' | b2 b, | r1 | r4 b4 b4 c' | d' d' d' d' | d' d' e'8 d' c' b | c'1 |
 }]
 
-/device: SC1 midi 1/
+/device: SC1 midi 2/
 
 /tempo: 130/
 --           uname ch cc pc

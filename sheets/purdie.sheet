@@ -1,6 +1,7 @@
 -- TODO: when removing this line, the resulting midi is empty
 @load "./chords/default.chords";
 @load "./pitchmaps/defaultMidiDrumMap.pitchmap";
+@load "./styles/rumba.style";
 @load "./styles/purdie.style";
 
 [
@@ -13,8 +14,9 @@
 
 
 /tempo: 160/
-/device: SC1 midi 1/
+/device: SC1 midi 2/
 --           uname ch cc pc
+/instrument: piano      SC1 0 0  0/
 /instrument: jzguitar   SC1 2 0  26/
 /instrument: bass       SC1 3 0  33/
 /instrument: fx         SC1 4 35 80/
@@ -30,7 +32,10 @@ C     | G   | F9 Gmaj7  | C7#9 |
 F13   | F13 | C11 | C7 | F13 | F13| G7 | G9 |
 C     | G   | F9 Gmaj7 | C     |
 C     | G   | F9 Gmaj7 | C7#9  |
+/style: rumba normal/
 Amin7 | G   | F9 Gmaj7 | C7    |
-Amin9 | G   | F11      | C | C | C | C | C7#9
+/style: purdie normal/
+Amin9 | G   | F11      | C |
+ C | C | C | C7#9 |
 /style: purdie ende/
-C7#9
+C7#9 |  C07  | /tempo: 80/ C |

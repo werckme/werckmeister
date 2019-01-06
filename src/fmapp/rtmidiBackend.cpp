@@ -36,7 +36,9 @@ namespace fmapp {
 			return;
 		}
 		
-		midiout_->openPort(output->portid);
+		if (!midiout_->isPortOpen()) {
+			midiout_->openPort(output->portid);
+		}
 		const unsigned int StaticBufferSize = 255;
 		fm::Byte buffer[StaticBufferSize];
 		std::vector<fm::Byte> fallback;
@@ -49,6 +51,5 @@ namespace fmapp {
 		
 		ev.writePayload(bff, eventSize);
 		midiout_->sendMessage(bff, eventSize);
-		midiout_->closePort();
 	}
 }
