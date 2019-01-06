@@ -173,10 +173,11 @@ void play(sheet::DocumentPtr document, fm::midi::MidiPtr midi, MidiOutputId midi
 	auto inputfile = settings.getInput();
 	auto timestamp = getTimestamp(inputfile);
 
-	fmapp::os::setSigtermHandler([&playing]{
+	fmapp::os::setSigtermHandler([&playing, &player]{
 		playing = false;
 		std::cout << std::endl << "stopped" << std::endl;
 		std::cout.flush();
+		player.panic();
 	});
 	
 #ifdef SHEET_USE_BOOST_TIMER
@@ -228,7 +229,7 @@ void play(sheet::DocumentPtr document, fm::midi::MidiPtr midi, MidiOutputId midi
 	boost_asio_.join();
 #endif
 
-	//player.panic();
+	player.Backend:: tearDown();
 }
 
 int main(int argc, const char** argv)

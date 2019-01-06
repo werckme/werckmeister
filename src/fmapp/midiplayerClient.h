@@ -53,6 +53,7 @@ namespace fmapp {
 		void bpm(fm::BPM bpm) { bpm_ = bpm; }
 		fm::Ticks elapsed() const { return elapsed_; }
 		void reset();
+		void send(const fm::midi::Event &ev);
 	private:
 		const Output * getOutput() const;
 		void initOutputMap();
@@ -126,14 +127,7 @@ namespace fmapp {
 	template<class TBackend, class TMidiProvider, class TTimer>
 	void MidiplayerClient<TBackend, TMidiProvider, TTimer>::panic()
 	{
-		for (fm::midi::Channel channel=0; channel <= fm::midi::MaxChannel; ++channel) {
-			for (fm::midi::Pitch pitch=0; pitch <= fm::midi::MaxPitch; ++pitch)  {
-				for (const auto &trackoput : trackOutputs_) {
-					Backend::send(fm::midi::Event::NoteOff(channel, 0, pitch), &trackoput.second);
-				}
-				Backend::send(fm::midi::Event::NoteOff(channel, 0, pitch));
-			}
-		}
+		Backend::panic();
 	}
 
 	template<class TBackend, class TMidiProvider, class TTimer>
@@ -178,6 +172,16 @@ namespace fmapp {
 	}
 
 	template<class TBackend, class TMidiProvider, class TTimer>
+	void MidiplayerClient<TBackend, TMidiProvider, TTimer>::send(const fm::midi::Event &ev)
+	{
+		if (ev.eventType() == fm::midi::MetaEvent) {
+			this->handleMetaEvent(ev);
+			return;
+		}
+		Backend::send(ev, getOutput());
+	}
+
+	template<class TBackend, class TMidiProvider, class TTimer>
 	void MidiplayerClient<TBackend, TMidiProvider, TTimer>::onProcess()
 	{
 		std::lock_guard<Lock> lockGuard(lock);
@@ -186,11 +190,7 @@ namespace fmapp {
 		for(const auto &evAndTrack : events) {
 			currentTrack_ = evAndTrack.trackId;
 			const auto &ev = evAndTrack.event;
-			if (ev.eventType() == fm::midi::MetaEvent) {
-				this->handleMetaEvent(ev);
-				continue;
-			}
-			Backend::send(ev, getOutput());
+			send(ev);
 		}
 		currentTrack_ = MidiProvider::INVALID_TRACKID;
 	}
@@ -217,6 +217,21 @@ namespace fmapp {
 	void MidiplayerClient<TBackend, TMidiProvider, TTimer>::play(fm::Ticks ticks)
 	{
 		std::lock_guard<Lock> lockGuard(lock);
+		MidiProvider::iterate([this, ticks](fm::Ticks pos, const typename MidiProvider::Event &ev) 
+		{	// consume all events except NoteOn and NoteOff
+			if (pos >= ticks) {
+				currentTrack_ = MidiProvider::INVALID_TRACKID;
+				return false; // aka break
+			}
+			if (ev.event.eventType() == fm::midi::NoteOn
+				|| ev.event.eventType() == fm::midi::NoteOff)
+			{
+				return true; // aka continue
+			}
+			currentTrack_ = ev.trackId;
+			send(ev.event);
+			return true;
+		});
 		play();
 		MidiProvider::seek(ticks);
 		elapsed_ = ticks;

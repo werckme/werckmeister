@@ -5,7 +5,7 @@
 @load "./styles/ido.style";
 
 
-/device: SC1 midi 1/
+/device: SC1 midi 2/
 
 /tempo: 145/
 /instrument: organ SC1 2 0 18/

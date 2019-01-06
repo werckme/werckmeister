@@ -15,6 +15,7 @@
 
 /tempo: 160/
 /device: SC1 midi 2/
+
 --           uname ch cc pc
 /instrument: piano      SC1 0 0  0/
 /instrument: jzguitar   SC1 2 0  26/
@@ -32,9 +33,9 @@ C     | G   | F9 Gmaj7  | C7#9 |
 F13   | F13 | C11 | C7 | F13 | F13| G7 | G9 |
 C     | G   | F9 Gmaj7 | C     |
 C     | G   | F9 Gmaj7 | C7#9  |
-/style: rumba normal/
+--/style: rumba normal/
 Amin7 | G   | F9 Gmaj7 | C7    |
-/style: purdie normal/
+--/style: purdie normal/
 Amin9 | G   | F11      | C |
  C | C | C | C7#9 |
 /style: purdie ende/

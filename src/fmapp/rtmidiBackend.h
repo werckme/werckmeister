@@ -25,8 +25,14 @@ namespace fmapp {
 		template<class TEvents>
 		void send(const TEvents &events, const Output *output = nullptr);
 		void send(const fm::midi::Event &event, const Output *output = nullptr);
+		void tearDown() { closeAllPorts(); }
+		void panic();
 	private:
-		std::unique_ptr<RtMidiOut> midiout_;
+		void closeAllPorts();
+		typedef std::vector<std::unique_ptr<RtMidiOut>> MidiOuts;
+		MidiOuts midiOuts;
+		inline RtMidiOut * defaultRtOutput() const { return midiOuts.at(0).get(); }
+		RtMidiOut * getRtOutputReadyForSend(int idx);
 		Output output_;
 	};
 

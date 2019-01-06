@@ -31,6 +31,24 @@ namespace fmapp {
 		}
 	}
 
+	void MidiProvider::iterate(const IterateFunction &f)
+	{
+		for (auto track : midi_->tracks()) {
+			auto end = track->events().end();
+			EventIt &it = *getEventIt(track);
+			while (it != end) {
+				auto pos = it->absPosition();
+				Event ev;
+				ev.event = *it;
+				ev.trackId = reinterpret_cast<TrackId>(track.get()); 
+				if (!f(pos, ev)) {
+					break;
+				}
+				++it;
+			}
+		}
+	}
+
 	MidiProvider::EventIt* MidiProvider::getEventIt(fm::midi::TrackPtr trackPtr)
 	{
 		auto it = trackEventIts_.find(trackPtr);

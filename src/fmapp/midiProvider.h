@@ -19,7 +19,9 @@ namespace fmapp {
 			fm::midi::Event event;
 		};
 		typedef std::list<Event> Events;
+		typedef std::function<bool(fm::Ticks, const Event &)> IterateFunction;
 		void getEvents(fm::Ticks at, Events &out);
+		void iterate(const IterateFunction &f);
 		virtual ~MidiProvider() = default;
 		void midi(fm::midi::MidiPtr midi);
 		fm::midi::MidiPtr midi() const;
