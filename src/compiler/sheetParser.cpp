@@ -207,8 +207,8 @@ namespace sheet {
 
 					alias_ %= lexeme['"' >> +(char_ - '"') >> '"'];
 
-					event_ %= (attr(Event::Note) >> (pitch_ | ("<" >> +pitch_ >> ">")) >> (durationSymbols_ | attr(Event::NoDuration)) >> -(lit("~")[at_c<0>(_val) = Event::TiedNote]))
-						| (attr(Event::Note) >> (alias_ | ("<" >> +alias_ >> ">")) >> (durationSymbols_ | attr(Event::NoDuration)) >> -(lit("~")[at_c<0>(_val) = Event::TiedNote]))
+					event_ %= (attr(Event::Note) >> (pitch_ | ("<" >> +pitch_ >> ">")) >> (durationSymbols_ | attr(Event::NoDuration)) >> -( lit("~")[at_c<0>(_val) = Event::TiedNote] | (lit("`")[at_c<0>(_val) = Event::Meta][at_c<3>(_val) = FM_STRING("vorschlag")])  ))
+						| (attr(Event::Note) >> (alias_ | ("<" >> +alias_ >> ">")) >> (durationSymbols_ | attr(Event::NoDuration)) >> -(lit("~")[at_c<0>(_val) = Event::TiedNote] | (lit("`")[at_c<0>(_val) = Event::Meta][at_c<3>(_val) = FM_STRING("vorschlag")]) ))
 						| ("\\" >> attr(Event::Meta) >> attr(PitchDef()) >> attr(Event::NoDuration) >> attr("expression") >> expressionSymbols_)
 						| ("!" >> attr(Event::Meta) >> attr(PitchDef()) >> attr(Event::NoDuration) >> attr("singleExpression") >> expressionSymbols_)
 						| ("r" >> attr(Event::Rest) >> attr(PitchDef()) >> (durationSymbols_ | attr(Event::NoDuration)))

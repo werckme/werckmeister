@@ -588,6 +588,55 @@ BOOST_AUTO_TEST_CASE(test_expression_meta)
 
 }
 
+BOOST_AUTO_TEST_CASE(test_vorschlag)
+{
+	using namespace fm;
+	using sheet::PitchDef;
+	fm::String text = FM_STRING("\
+[\n\
+	{\n\
+	 d'32`c'4 r2.|\n\
+	}\n\
+]\n\
+");
+	sheet::compiler::SheetDefParser parser;
+	auto defs = parser.parse(text);
+	BOOST_CHECK(defs.tracks.size() == 1);
+	BOOST_CHECK(defs.tracks[0].voices.size() == 1);
+	BOOST_CHECK(defs.tracks[0].voices[0].events.size() == 4);
+
+	BOOST_CHECK(checkMetaEvent(defs.tracks[0].voices[0].events[0], FM_STRING("vorschlag"), sheet::Event::Args({})));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[0], sheet::Event::Meta, fm::notes::D, 1, 1.0_N32));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[1], sheet::Event::Note, fm::notes::C, 1, 1.0_N4));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[2], sheet::Event::Rest, sheet::PitchDef::NoPitch, 0, 1.0_N2p));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[3], sheet::Event::EOB));
+}
+
+BOOST_AUTO_TEST_CASE(test_alias_vorschlag)
+{
+	using namespace fm;
+	using sheet::PitchDef;
+	fm::String text = FM_STRING("\
+[\n\
+	{\n\
+	 \"bd\"32`c'4 r2.|\n\
+	}\n\
+]\n\
+");
+	sheet::compiler::SheetDefParser parser;
+	auto defs = parser.parse(text);
+	BOOST_CHECK(defs.tracks.size() == 1);
+	BOOST_CHECK(defs.tracks[0].voices.size() == 1);
+	BOOST_CHECK(defs.tracks[0].voices[0].events.size() == 4);
+
+	BOOST_CHECK(checkMetaEvent(defs.tracks[0].voices[0].events[0], FM_STRING("vorschlag"), sheet::Event::Args({})));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[0], sheet::Event::Meta, FM_STRING("bd"), 1.0_N32));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[1], sheet::Event::Note, fm::notes::C, 1, 1.0_N4));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[2], sheet::Event::Rest, sheet::PitchDef::NoPitch, 0, 1.0_N2p));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[3], sheet::Event::EOB));
+}
+
+
 BOOST_AUTO_TEST_CASE(test_sheetDefParser_tie)
 {
 	using namespace fm;

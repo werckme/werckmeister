@@ -38,7 +38,7 @@ BOOST_AUTO_TEST_CASE(test_endswap)
 
 BOOST_AUTO_TEST_CASE(test_resource_loader)
 {
-	auto resource = fm::getWerckmeister().openResource(FM_STRING("../chords/default.chords"));
+	auto resource = fm::getWerckmeister().openResource(FM_STRING("../sheets/chords/default.chords"));
 	fm::StreamBuffIterator eos;
 	fm::StreamBuffIterator it(*resource.get());
 	fm::String res(it, eos);
