@@ -4,4 +4,5 @@
 #include <fm/common.hpp>
 #define SHEET_SPIELANWEISUNG_NORMAL FM_STRING("normal")
 #define SHEET_SPIELANWEISUNG_ARPEGGIO FM_STRING("arpeggio")
+#define SHEET_SPIELANWEISUNG_VORSCHLAG FM_STRING("vorschlag")
 #endif

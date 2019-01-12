@@ -9,7 +9,11 @@
 [
 {
     /uname: drums/
-    !fffff"bd"4 "bd"4 "bd"4 "bd"4 | !fffff"bd"4 "bd"4 "bd"4 "bd"4 | !fffff"bd"4 "bd"4 "bd"4 "bd"4 | !fffff"bd"4 "bd"4 "bd"4 "bd"4 | 
+    "ho"4 r2. | \fffff "hto"`\ff"hto"8 "hto"8 "bd"16 "bd"16 "mto"8 "mto"8 "bd"16 "mto"16 "lto"8 "lto"16 "bd"16  |
+}
+{
+    /uname: drums/
+    "bd"4 "bd"4 "bd"4 "bd"4 | "bd"4 r2. |
 }
 ]
 
@@ -17,12 +21,7 @@
 
 --           uname ch cc pc
 /instrument: guitar SC1 0 0 25/
-/instrument: piano SC1 0 0 25/
+/instrument: piano SC1 0 0 0/
 /instrument: drums SC1 9 0 0/
 
 /tempo: 120/
-/style: justchords arpeggio/
-
-C7#9 | D7 | E9 |
-/style: justchords bending/
- G |

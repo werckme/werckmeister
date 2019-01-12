@@ -14,6 +14,7 @@
 #include "compiler/voicings/VoicingStrategy.h"
 #include "compiler/spielanweisung/Normal.h"
 #include "compiler/spielanweisung/Arpeggio.h"
+#include "compiler/spielanweisung/Vorschlag.h"
 #include "compiler/spielanweisung/spielanweisungen.h"
 #include "compiler/modification/modifications.h"
 #include "compiler/modification/Bend.h"
@@ -90,6 +91,9 @@ namespace fm {
 		if (name == SHEET_SPIELANWEISUNG_ARPEGGIO) {
 			return std::make_shared<sheet::compiler::Arpeggio>(); 
 		}
+		if (name == SHEET_SPIELANWEISUNG_VORSCHLAG) {
+			return std::make_shared<sheet::compiler::Vorschlag>(); 
+		}		
 		throw std::runtime_error("spielanweisung not found: " + fm::to_string(name));
 	}
 

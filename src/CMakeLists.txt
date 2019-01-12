@@ -18,6 +18,7 @@ SET (SRC_FETZER_LIB
     compiler/spielanweisung/Normal.cpp
     compiler/spielanweisung/ASpielanweisung.cpp
     compiler/spielanweisung/Arpeggio.cpp
+    compiler/spielanweisung/Vorschlag.cpp
     compiler/modification/AModification.cpp
     compiler/modification/Bend.cpp
     compiler/voicings/DirectVoicingStrategy.cpp

@@ -5,6 +5,8 @@
 #include <algorithm>
 #include <fm/common.hpp>
 #include "spielanweisung/ASpielanweisung.h"
+#include "spielanweisung/spielanweisungen.h"
+#include "spielanweisung/Vorschlag.h"
 #include "modification/AModification.h"
 #include <fm/literals.hpp>
 #include <fm/config/configServer.h>
@@ -322,7 +324,7 @@ namespace sheet {
 		void AContext::seek(fm::Ticks duration)
 		{
 			auto meta = voiceMetaData(voice());
-			if (duration > 0) {
+			if (duration != 0) {
 				meta->duration = duration;
 			}
 			meta->position += meta->duration;
@@ -395,10 +397,22 @@ namespace sheet {
 			}
 			if (metaEvent.metaCommand == SHEET_META__SET_SIGNATURE) {
 				metaSetSignature(getArgument<int>(metaEvent, 0), getArgument<int>(metaEvent, 1));
-			}	
+			}
 			if (metaEvent.metaCommand == SHEET_META__SET_DEVICE) {
 				metaAddDevice(getArgument<fm::String>(metaEvent, 0), metaEvent.metaArgs);
-			}															
+			}
+			if (metaEvent.metaCommand == SHEET_META__SET_VORSCHLAG) {
+				metaAddVorschlag(metaEvent);
+			}																
+		}
+
+		void AContext::metaAddVorschlag(const Event &ev)
+		{
+			auto &wm = fm::getWerckmeister();
+			auto meta = voiceMetaData(voice());
+			meta->spielanweisungOnce = wm.getSpielanweisung(SHEET_SPIELANWEISUNG_VORSCHLAG);
+			auto vorschlag = std::dynamic_pointer_cast<Vorschlag>(meta->spielanweisungOnce);
+			vorschlag->vorschlagNote = ev;
 		}
 
 		void AContext::metaAddDevice(const fm::String name, const Event::Args &args)
@@ -409,7 +423,7 @@ namespace sheet {
 			}
 			std::vector<fm::String> deviceArgs(args.begin() + 1, args.end());
 			auto device = cs.createDeviceConfig(name, deviceArgs);
-			cs.addDevice(name, device);		
+			cs.addDevice(name, device);
 		}
 
 		void AContext::metaSetVoicingStrategy(const fm::String &name, const Event::Args &args)
