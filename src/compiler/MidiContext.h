@@ -15,6 +15,7 @@ namespace sheet {
 			int cc = 0;
 			int pc = 0;
 			int volume = 100;
+			int pan = 50;
 		};
         class MidiContext : public AContext {
 		public:
@@ -37,11 +38,12 @@ namespace sheet {
 			virtual void metaSoundSelect(int cc, int pc);
 			virtual void metaInstrument(const fm::String &uname, int channel, int cc, int pc);
 			virtual void metaInstrument(const fm::String &uname, const fm::String &deviceName, int channel, int cc, int pc);
-			virtual void metaSetInstrumentConfig(const fm::String &uname, const fm::String &propertyName, const Event::Args &args);
+			virtual void metaSetInstrumentConfig(const fm::String &uname, const Event::Args &args);
 			virtual void metaSetUname(const fm::String &uname) override;
 			virtual void metaSetTempo(double bpm) override;
 			virtual void setMeta(const Event &metaEvent) override;
 			virtual void metaSetVolume(int volume) override;
+			virtual void metaSetPan(int val) override;
 			/**
 			 * sends a custom meta event containing a device name
 			 */

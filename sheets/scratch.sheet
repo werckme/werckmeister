@@ -3,6 +3,15 @@
 @load "./styles/bossanova.style";
 @load "./pitchmaps/defaultMidiDrumMap.pitchmap";
 
+[
+{
+    /uname: vibra/
+    /volume: 100/
+    /pan: 50/ 
+    c1 | 
+}
+]
+
 
 /device: SC1 midi 1/
 
@@ -13,8 +22,8 @@
 /instrument: bass    SC1 5 0 33/
 /instrument: drums   SC1 9 0 32/
 /instrumentConf: bass volume 100/
-/instrumentConf: guitar volume 60/
-/instrumentConf: piano volume 100/
+/instrumentConf: guitar volume 70 pan 0/
+/instrumentConf: piano volume 100 pan 100/
 /instrumentConf: drums volume 100/
 
 /tempo: 120/

@@ -27,7 +27,7 @@ namespace sheet {
 			static const double PitchbendMiddle;
 			static const fm::Ticks DefaultDuration;
 			static const fm::Ticks DefaultBarLength;
-			enum { INVALID_TRACK_ID = -1, INVALID_VOICE_ID = -1, MAX_VOLUME = 100 };
+			enum { INVALID_TRACK_ID = -1, INVALID_VOICE_ID = -1, MAX_VOLUME = 100, MAX_PAN = 100 };
 			typedef int Id;
 			typedef Id TrackId;
 			typedef Id VoiceId;
@@ -71,6 +71,7 @@ namespace sheet {
 				Modifications modificationsOnce; // played once		
 				PitchDefSet startedEvents;
 				int volume = 100;	
+				int pan = 50;
 			};
 			typedef std::shared_ptr<VoiceMetaData> VoiceMetaDataPtr;
 			typedef std::unordered_map<VoiceId, VoiceMetaDataPtr> VoiceMetaDataMap;
@@ -124,6 +125,7 @@ namespace sheet {
 			virtual void metaAddDevice(const fm::String name, const Event::Args &args);
 			virtual void metaAddVorschlag(const Event &ev);
 			virtual void metaSetVolume(int volume);
+			virtual void metaSetPan(int val);
 			/////// actual context stuff
 			virtual void addEvent(const Event::Pitches &pitches, fm::Ticks duration, bool tying = false);
 			virtual void addEvent(const PitchDef &pitch, fm::Ticks duration, bool tying = false);

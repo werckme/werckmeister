@@ -406,7 +406,10 @@ namespace sheet {
 			}		
 			if (metaEvent.metaCommand == SHEET_META__SET_VOLUME) {
 				metaSetVolume(getArgument<int>(metaEvent, 0));
-			}																		
+			}
+			if (metaEvent.metaCommand == SHEET_META__SET_PAN) {
+				metaSetPan(getArgument<int>(metaEvent, 0));
+			}																					
 		}
 
 		void AContext::metaSetVolume(int volume)
@@ -414,6 +417,12 @@ namespace sheet {
 			auto meta = voiceMetaData(voice());
 			meta->volume = std::max(std::min(volume, 100), 0);
 		}
+
+		void AContext::metaSetPan(int val)
+		{
+			auto meta = voiceMetaData(voice());
+			meta->pan = std::max(std::min(val, 100), 0);
+		}		
 
 		void AContext::metaAddVorschlag(const Event &ev)
 		{

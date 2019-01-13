@@ -205,6 +205,15 @@ namespace fm {
 		{
 			return variableLengthRequiredSize(relDelta(deltaOffset)) + payloadSize();
 		}
+		Event Event::CCPan(Channel channel, Byte val)
+		{
+			auto ev = fm::midi::Event();
+			ev.eventType(fm::midi::Controller);
+			ev.channel(channel);
+			ev.parameter1(0xA);
+			ev.parameter2(std::max(std::min(val, (Byte)MaxMidiValue), (Byte)0));
+			return ev;
+		}		
 		Event Event::CCVolume(Channel channel, Byte volume)
 		{
 			auto ev = fm::midi::Event();

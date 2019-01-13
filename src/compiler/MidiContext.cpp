@@ -166,6 +166,16 @@ namespace sheet {
 			addEvent(ev); 
 		}
 
+		void MidiContext::metaSetPan(int val)
+		{
+			Base::metaSetPan(val);
+			auto meta = voiceMetaData<MidiContext::VoiceMetaData>(voice());
+			auto midiVal = meta->pan * fm::midi::MaxMidiValue / MAX_VOLUME;
+			auto channel = getChannel(*meta);
+			auto ev = fm::midi::Event::CCPan(channel, midiVal);
+			ev.absPosition(meta->position);
+			addEvent(ev); 
+		}
 		namespace {
 			fm::midi::Event __createVolumeEvent(MidiInstrumentDef &def, fm::Ticks pos)
 			{
@@ -174,24 +184,40 @@ namespace sheet {
 				ev.absPosition(pos);
 				return ev;
 			}
+			fm::midi::Event __createPanEvent(MidiInstrumentDef &def, fm::Ticks pos)
+			{
+				auto midiVal = def.pan * fm::midi::MaxMidiValue / MidiContext::MAX_PAN;
+				auto ev = fm::midi::Event::CCPan(def.channel, midiVal);
+				ev.absPosition(pos);
+				return ev;
+			}			
 		}
 
-		void MidiContext::metaSetInstrumentConfig(const fm::String &uname, const fm::String &propertyName, const Event::Args &args)
+		void MidiContext::metaSetInstrumentConfig(const fm::String &uname, const Event::Args &args)
 		{
+			if (args.size() < 3 || args.size() % 2 == 0) {
+				throw std::runtime_error("not enough values for " + fm::to_string(SHEET_META__SET_INSTRUMENT_CONFIG) +  ": " + fm::to_string(uname));
+			}
 			auto instrumentDef = getMidiInstrumentDef(uname);
 			auto meta = voiceMetaData<MidiContext::VoiceMetaData>(voice());
 			if (instrumentDef == nullptr) {
 				throw std::runtime_error("insrtument not found: " + fm::to_string(uname));
 			}
-			fm::midi::Event theEvent;
-			if (propertyName == SHEET_META__SET_INSTRUMENT_CONFIG_VOLUME) {
-				auto volume = getArgument<int>(args, 2);
-				instrumentDef->volume = std::max(std::min(volume, 100), 0);
-				theEvent = __createVolumeEvent(*instrumentDef, meta->position);
-			} else {
-				throw std::runtime_error("instrument config not found: " + fm::to_string(uname));
+			for (size_t idx = 1; idx < args.size(); idx+=2) {
+				auto propertyName = getArgument<fm::String>(args, idx);
+				fm::midi::Event theEvent;
+				if (propertyName == SHEET_META__SET_INSTRUMENT_CONFIG_VOLUME) {
+					instrumentDef->volume = getArgument<int>(args, idx+1);
+					theEvent = __createVolumeEvent(*instrumentDef, meta->position);
+				} 
+				else if (propertyName == SHEET_META__SET_INSTRUMENT_CONFIG_PAN) {
+					instrumentDef->pan = getArgument<int>(args, idx+1);
+					theEvent = __createPanEvent(*instrumentDef, meta->position);
+				} else {
+					throw std::runtime_error("instrument config not found: " + fm::to_string(uname) + ", " + fm::to_string(propertyName));
+				}
+				addEvent(theEvent); 
 			}
-			addEvent(theEvent); 
 		}
 
 		void MidiContext::metaSetUname(const fm::String &uname)
@@ -218,7 +244,9 @@ namespace sheet {
 				}
 				metaSoundSelect(it->second.cc, it->second.pc);
 				// volume
-				addEvent(__createVolumeEvent(it->second, meta->position)); 
+				addEvent(__createVolumeEvent(it->second, meta->position));
+				// pan
+				addEvent(__createPanEvent(it->second, meta->position));
 			}
 		}
 
@@ -280,7 +308,7 @@ namespace sheet {
 				throw std::runtime_error("invalid number of arguments for instrument: " + fm::to_string(name) );
 			}
 			if (metaEvent.metaCommand == SHEET_META__SET_INSTRUMENT_CONFIG) {
-				metaSetInstrumentConfig(getArgument<fm::String>(metaEvent, 0), getArgument<fm::String>(metaEvent, 1), metaEvent.metaArgs);
+				metaSetInstrumentConfig(getArgument<fm::String>(metaEvent, 0), metaEvent.metaArgs);
 			}	
 		}
 	}

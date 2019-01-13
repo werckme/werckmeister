@@ -117,6 +117,7 @@ namespace fm {
 			static Event NoteOff(Channel, Ticks, Pitch);
 			static Event MetaTempo(double bpm);
 			static Event CCVolume(Channel channel, Byte volume);
+			static Event CCPan(Channel channel, Byte volume);
 			static Event MetaInstrument(const std::string &name);
 			static Event MetaTrack(const std::string &name);
 			static Event MetaCustom(const CustomMetaData &custom);
