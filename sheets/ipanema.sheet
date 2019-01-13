@@ -1,0 +1,52 @@
+-- document configs
+@load "./chords/default.chords";
+@load "./styles/simpleJazz.style";
+@load "./styles/bossanova.style";
+@load "./pitchmaps/defaultMidiDrumMap.pitchmap";
+
+[
+{
+    /uname: lead/
+    \fff
+    g4. e8 e d4 g8~ | g4 e8 e4 e8 d g~ | g4 e e d8 g~ | g8 g e e4 e8 d f~ |
+    f8 d4 d4 d8 c e~ | e c4 c4 c8 bes,4 | r4 c2.~ | c1 |
+    g4. e8 e d4 g8~ | g4 e8 e4 e8 d g~ | g4 e e d8 g~ | g8 g e e4 e8 d f~ |
+    f8 d4 d4 d8 c e~ | e c4 c4 c8 bes,4 | 
+    r4 c2.~ | c2. r4 | f1~ | f4t ges f es f es |
+    des4. es8~ es2~ | es2. r8 gis~ | gis1~ | gis4t a gis fis gis fis |
+    e4. fis8~ fis2~ | fis2. r8 a~ | a1~ | a4t bes a g a g |
+    f4. g8~g2~ | g2 r4t a bes | c' c d e f g | gis2. a4 | 
+    bes4t bes, c d e f | fis1 | g4. e8 e d4 g8~ | g4 e8 e4 e8 d g~ |
+    g4 e e d8 g~ | g8 g e e4 e8 d a~ | a4. f8 f f d c' | c'4. e8 e4t e d |
+    e1~ | e4 r2. |
+}  
+]
+
+/tempo: 120/
+/device: SC1 midi 1/
+
+--           uname ch cc pc
+/instrument: piano      SC1 2 0 0/
+/instrument: lead     SC1 3 0 11/
+--/instrument: bass     SC1 4 0 0/
+/instrument: bass    SC1 7 0 33/
+/instrument: drums   SC1 9 0 32/
+
+--/instrument: guitar  SC1 6 0 25/
+
+/instrumentConf: piano volume 90/
+/instrumentConf: lead volume 100/
+/instrumentConf: bass volume 100/
+
+/style: bossanova normal/
+Fmaj7 | Fmaj7 | G7 | G7 |
+G-7 | Ges7 | Fmaj7 | Ges7 |
+Fmaj7 | Fmaj7 | G7 | G7 |
+G-7 | Ges7 | 
+Fmaj7 | Fmaj7 | Gesmaj7 | Gesmaj7 |
+B7 | B7 | Fis-7 | Fis-7 |
+D7 | D7 | G-7 | G-7 |
+Ees7 | Ees7 | A-7 | D7b9 |
+G-7 | C7b9 | Fmaj7 | Fmaj7 |
+G7 | G7 | G-7 | Ges7 |
+Fmaj7 | Ges9 |
