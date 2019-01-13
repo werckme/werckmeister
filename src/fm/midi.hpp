@@ -49,10 +49,11 @@ namespace fm {
 		enum {
 			MaxVarLength = 0x0FFFFFFF,
 			MaxTickValue = MaxVarLength,
+			MaxMidiValue = 127,
 			MaxChannel = 0xF,
 			MinEventSize = 3,
 			MaxEventSize = 7,
-			MaxPitch = 127,
+			MaxPitch = MaxMidiValue,
 			MaxPitchbend = 16383,
 			MicrosecondsPerMinute = 60000000
 		};
@@ -115,6 +116,7 @@ namespace fm {
 			static Event NoteOn(Channel, Ticks, Pitch, Velocity);
 			static Event NoteOff(Channel, Ticks, Pitch);
 			static Event MetaTempo(double bpm);
+			static Event CCVolume(Channel channel, Byte volume);
 			static Event MetaInstrument(const std::string &name);
 			static Event MetaTrack(const std::string &name);
 			static Event MetaCustom(const CustomMetaData &custom);

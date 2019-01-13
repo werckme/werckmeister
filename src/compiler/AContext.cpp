@@ -403,7 +403,16 @@ namespace sheet {
 			}
 			if (metaEvent.metaCommand == SHEET_META__SET_VORSCHLAG) {
 				metaAddVorschlag(metaEvent);
-			}																
+			}		
+			if (metaEvent.metaCommand == SHEET_META__SET_VOLUME) {
+				metaSetVolume(getArgument<int>(metaEvent, 0));
+			}																		
+		}
+
+		void AContext::metaSetVolume(int volume)
+		{
+			auto meta = voiceMetaData(voice());
+			meta->volume = std::max(std::min(volume, 100), 0);
 		}
 
 		void AContext::metaAddVorschlag(const Event &ev)

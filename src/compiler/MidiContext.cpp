@@ -141,13 +141,57 @@ namespace sheet {
 			addEvent(ev);
 		}
 
-		const MidiInstrumentDef * MidiContext::getMidiInstrumentDef(const fm::String &uname) const
+		MidiInstrumentDef * MidiContext::getMidiInstrumentDef(const fm::String &uname)
 		{
 			auto it = midiInstrumentDefs_.find(uname);
 			if (it == midiInstrumentDefs_.end()) {
 				return nullptr;
 			}
 			return &it->second;
+		}
+
+		AInstrumentDef * MidiContext::getInstrumentDef(const fm::String &uname) 
+		{
+			return getMidiInstrumentDef(uname);
+		}
+
+		void MidiContext::metaSetVolume(int volume)
+		{
+			Base::metaSetVolume(volume);
+			auto meta = voiceMetaData<MidiContext::VoiceMetaData>(voice());
+			auto midiVol = meta->volume * fm::midi::MaxMidiValue / MAX_VOLUME;
+			auto channel = getChannel(*meta);
+			auto ev = fm::midi::Event::CCVolume(channel, midiVol);
+			ev.absPosition(meta->position);
+			addEvent(ev); 
+		}
+
+		namespace {
+			fm::midi::Event __createVolumeEvent(MidiInstrumentDef &def, fm::Ticks pos)
+			{
+				auto midiVol = def.volume * fm::midi::MaxMidiValue / MidiContext::MAX_VOLUME;
+				auto ev = fm::midi::Event::CCVolume(def.channel, midiVol);
+				ev.absPosition(pos);
+				return ev;
+			}
+		}
+
+		void MidiContext::metaSetInstrumentConfig(const fm::String &uname, const fm::String &propertyName, const Event::Args &args)
+		{
+			auto instrumentDef = getMidiInstrumentDef(uname);
+			auto meta = voiceMetaData<MidiContext::VoiceMetaData>(voice());
+			if (instrumentDef == nullptr) {
+				throw std::runtime_error("insrtument not found: " + fm::to_string(uname));
+			}
+			fm::midi::Event theEvent;
+			if (propertyName == SHEET_META__SET_INSTRUMENT_CONFIG_VOLUME) {
+				auto volume = getArgument<int>(args, 2);
+				instrumentDef->volume = std::max(std::min(volume, 100), 0);
+				theEvent = __createVolumeEvent(*instrumentDef, meta->position);
+			} else {
+				throw std::runtime_error("instrument config not found: " + fm::to_string(uname));
+			}
+			addEvent(theEvent); 
 		}
 
 		void MidiContext::metaSetUname(const fm::String &uname)
@@ -173,6 +217,8 @@ namespace sheet {
 					addDeviceChangeEvent(it->second.deviceName, meta->position);
 				}
 				metaSoundSelect(it->second.cc, it->second.pc);
+				// volume
+				addEvent(__createVolumeEvent(it->second, meta->position)); 
 			}
 		}
 
@@ -233,6 +279,9 @@ namespace sheet {
 				}
 				throw std::runtime_error("invalid number of arguments for instrument: " + fm::to_string(name) );
 			}
+			if (metaEvent.metaCommand == SHEET_META__SET_INSTRUMENT_CONFIG) {
+				metaSetInstrumentConfig(getArgument<fm::String>(metaEvent, 0), getArgument<fm::String>(metaEvent, 1), metaEvent.metaArgs);
+			}	
 		}
 	}
 }

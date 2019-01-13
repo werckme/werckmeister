@@ -18,14 +18,16 @@
 
 namespace sheet {
     namespace compiler {
-
+		struct AInstrumentDef {
+			fm::String uname;
+		};
         class AContext {
         public:
 			AContext();
 			static const double PitchbendMiddle;
 			static const fm::Ticks DefaultDuration;
 			static const fm::Ticks DefaultBarLength;
-			enum { INVALID_TRACK_ID = -1, INVALID_VOICE_ID = -1 };
+			enum { INVALID_TRACK_ID = -1, INVALID_VOICE_ID = -1, MAX_VOLUME = 100 };
 			typedef int Id;
 			typedef Id TrackId;
 			typedef Id VoiceId;
@@ -67,7 +69,8 @@ namespace sheet {
 				ASpielanweisungPtr spielanweisungOnce; // played once
 				Modifications modifications;
 				Modifications modificationsOnce; // played once		
-				PitchDefSet startedEvents;		
+				PitchDefSet startedEvents;
+				int volume = 100;	
 			};
 			typedef std::shared_ptr<VoiceMetaData> VoiceMetaDataPtr;
 			typedef std::unordered_map<VoiceId, VoiceMetaDataPtr> VoiceMetaDataMap;
@@ -103,6 +106,7 @@ namespace sheet {
 			virtual const ChordEvent * currentChord() const { return &currentChord_; }
 			virtual fm::Expression getExpression(const fm::String &str) const;
 			virtual ASpielanweisungPtr spielanweisung();
+			virtual AInstrumentDef * getInstrumentDef(const fm::String &uname) = 0;
 			/////// meta commands
 			virtual void setMeta(const Event &metaEvent);
 			virtual void metaSetUname(const fm::String &uname);
@@ -119,6 +123,7 @@ namespace sheet {
 			virtual void metaSetSignature(int upper, int lower);
 			virtual void metaAddDevice(const fm::String name, const Event::Args &args);
 			virtual void metaAddVorschlag(const Event &ev);
+			virtual void metaSetVolume(int volume);
 			/////// actual context stuff
 			virtual void addEvent(const Event::Pitches &pitches, fm::Ticks duration, bool tying = false);
 			virtual void addEvent(const PitchDef &pitch, fm::Ticks duration, bool tying = false);

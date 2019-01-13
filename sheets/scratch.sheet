@@ -1,27 +1,23 @@
 -- document configs
 @load "./chords/default.chords";
 @load "./styles/bossanova.style";
-@load "./styles/justchords.style";
-@load "./styles/chromatic.style";
 @load "./pitchmaps/defaultMidiDrumMap.pitchmap";
 
-
-[
-{
-    /uname: drums/
-    "ho"4 r2. | \fffff "hto"`\ff"hto"8 "hto"8 "bd"16 "bd"16 "mto"8 "mto"8 "bd"16 "mto"16 "lto"8 "lto"16 "bd"16  |
-}
-{
-    /uname: drums/
-    "bd"4 "bd"4 "bd"4 "bd"4 | "bd"4 r2. |
-}
-]
 
 /device: SC1 midi 1/
 
 --           uname ch cc pc
-/instrument: guitar SC1 0 0 25/
-/instrument: piano SC1 0 0 0/
-/instrument: drums SC1 9 0 0/
+/instrument: piano   SC1 2 0 0/
+/instrument: guitar  SC1 3 0 25/
+/instrument: vibra   SC1 4 0 11/
+/instrument: bass    SC1 5 0 33/
+/instrument: drums   SC1 9 0 32/
+/instrumentConf: bass volume 100/
+/instrumentConf: guitar volume 60/
+/instrumentConf: piano volume 100/
+/instrumentConf: drums volume 100/
 
 /tempo: 120/
+
+
+C7#9 | CO7 | 

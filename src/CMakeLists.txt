@@ -96,6 +96,3 @@ endif(UNIX)
 
 add_executable(sheetp ${SRC_SHEET_PLAYER})
 target_link_libraries (sheetp sheet ${Boost_LIBRARIES} ${LIBS_PLAYER})
-
-add_executable(sheett ${SRC_SHEET_TESTER})
-target_link_libraries (sheett sheet ${Boost_LIBRARIES} ${LIBS_PLAYER})
