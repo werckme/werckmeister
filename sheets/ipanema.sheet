@@ -1,6 +1,5 @@
 -- document configs
 @load "./chords/default.chords";
-@load "./styles/simpleJazz.style";
 @load "./styles/bossanova.style";
 @load "./pitchmaps/defaultMidiDrumMap.pitchmap";
 
@@ -22,17 +21,18 @@
 }  
 ]
 
-/tempo: 120/
+/tempo: 140/
 /device: SC1 midi 1/
 
 --           uname ch cc pc
 /instrument: piano      SC1 2 0 0/
+/instrumentConf: piano pan 60/
 /instrument: lead     SC1 3 0 11/
---/instrument: bass     SC1 4 0 0/
 /instrument: bass    SC1 7 0 33/
 /instrument: drums   SC1 9 0 32/
 
---/instrument: guitar  SC1 6 0 25/
+/instrument: guitar  SC1 6 0 25/
+/instrumentConf: guitar volume 80 pan 40/
 
 /instrumentConf: piano volume 90/
 /instrumentConf: lead volume 100/
