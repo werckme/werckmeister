@@ -191,6 +191,8 @@ Der \espressivo-Befehl kann eingesetzt werden, um crescendo und decrescendo für
   C7#9 | 
   C07  |
  - keine möglichkeit meta commands für style instruments zu überschreiben (voicing strategy)
+ - Akkordnotationen mit r führen dazu dass keine Styles gespielt werden: r1 | C |
+ - (falsch gesetzter)Haltebogen stoppt wiedergabe(c4 hat nicht die selbe oktave): r4 e f g | c'1~ | c4 d e f |
  - style rendering kommt ins stolpern wenn ungerade teiler z.b: 4/4 | C C C |  
  - style voice nur meta events -> bleibt hängen
  - sheet hat Länge 0 wenn kein Chordtrack vorhanden

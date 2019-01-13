@@ -1,0 +1,16 @@
+section normal
+[ 
+{
+    /uname: piano/
+    /voicingStrategy: simpleGuitar/
+    <I II III IV V VI VII>1 |
+}   
+]
+[ 
+{
+    /uname: bass/
+    \ff
+    I,,2. V,,4 |
+}   
+] 
+end

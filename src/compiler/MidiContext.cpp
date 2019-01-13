@@ -201,7 +201,7 @@ namespace sheet {
 			auto instrumentDef = getMidiInstrumentDef(uname);
 			auto meta = voiceMetaData<MidiContext::VoiceMetaData>(voice());
 			if (instrumentDef == nullptr) {
-				throw std::runtime_error("insrtument not found: " + fm::to_string(uname));
+				throw std::runtime_error("instrument not found: " + fm::to_string(uname));
 			}
 			for (size_t idx = 1; idx < args.size(); idx+=2) {
 				auto propertyName = getArgument<fm::String>(args, idx);
