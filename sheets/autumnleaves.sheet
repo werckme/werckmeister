@@ -6,13 +6,14 @@
 
 [
 {
-    /uname: lead/ 
+    /uname: lead/
     \fff
     r4 e fis g | c'1~ | c'4 d e fis | b2 b2~ | b4 c d e | a1~ | a4 b, cis dis | g1 |
     -- wiederholung
     r4 e fis g | c'1~ | c'4 d e fis | b2 b2~ | b4 c d e | a1~ | 
     -- 2.
-    a4 fis a g | e1~ | e4 r dis e | fis b, fis2~ | fis4 fis e fis | g1~ | g4 g fis g | a1
+    a4 fis a g | e1~ | e4 r dis e | fis b, fis2~ | fis4 fis e fis | g1~ | g4 g fis g | a1~ |
+    a4 d d' c' | b1~ | b4 r ais b | c' c' a a | fis2. c'4 | b2 b2~ | b2. e4 | a2. g4 | fis2 g4 b, | e1 |
 }
 ]
 
@@ -21,20 +22,22 @@
 
 --           uname ch cc pc
 /instrument: piano      SC1 2 0 0/
+/instrument: jzguitar      SC1 2 0 0/
 /instrument: lead     SC1 3 0 11/
---/instrument: bass     SC1 4 0 0/
+/instrument: bass     SC1 4 0 0/
+--/instrument: bass    SC1 7 0 33/
+/instrument: drums   SC1 9 0 32/
 
 /instrument: guitar  SC1 6 0 25/
-/instrument: bass    SC1 7 0 33/
-/instrument: drums   SC1 9 0 32/
 
 /instrumentConf: piano volume 90/
 /instrumentConf: lead volume 100/
 /instrumentConf: bass volume 100/
 
-/style: bossanova normal/
-A-7 | A-7 | D7 | Gmaj7 | Cmaj7 | Fis07 | B7 | E- | E- |
+/style: simpleJazz normal/
+E- | A-7 | D7 | Gmaj7 | Cmaj7 | Fis07 | B7 | E- | E- |
 -- wiederholung
 A-7 | D7 | Gmaj7 | Cmaj7 | Fis07 | 
 -- 2.
-B7 | E- | E- | Fis07 | B7b9 | E- | E- | A-7 |
+B7 | E- | E- | Fis07 | B7b9 | E- | E- | A-7 | D7 | Gmaj7 | Gmaj7 |
+Fis07 | B7b9 | E-7 Ees7 | D-7 Des7 | Cmaj7 | B7b9 | E- |
