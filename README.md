@@ -1,4 +1,4 @@
-#Eine Scriptsprache für Sheetnotation
+#Eine Scriptsprache für Sheetnotation angelehnt an Lilypond
 
  - ChordDefs: Definiere Akkorde
  - Styles: Rhythmen und Begleitung notiert Relativ zu Tonleiterstufen
@@ -183,26 +183,6 @@ Der \espressivo-Befehl kann eingesetzt werden, um crescendo und decrescendo für
   C | C | E |
 }
 
-
-## Bugs
- - purdie fail: (08e0b66f9f37a3e8704212108cc596615dc7d75f)
-  C7#9
-  /style: purdie ende/
-  C7#9 | 
-  C07  |
- - keine möglichkeit meta commands für style instruments zu überschreiben (voicing strategy)
- - Akkordnotationen mit r führen dazu dass keine Styles gespielt werden: r1 | C |
- - (falsch gesetzter)Haltebogen stoppt wiedergabe(c4 hat nicht die selbe oktave): r4 e f g | c'1~ | c4 d e f |
- - mehrfach hintereinander gesetzte Haltebögen werden nicht ignoriert (ipanema: | fis2. r8 a~ | a1~ | a1)
- - style rendering kommt ins stolpern wenn ungerade teiler z.b: 4/4 | C C C |  
- - style voice nur meta events -> bleibt hängen
- - sheet hat Länge 0 wenn kein Chordtrack vorhanden
- - sheet hat Länge 0 sobald reihenfolge tacks, chords nicht eingehalten
- - sheet hat Länge 0 oder ist fehlerhaft wenn erste zeile kein Kommentar ist
- - die Akkorde As und Es werden nicht erkannt. Workaround: Aes Ees
- - style-section switch legt neue tracks an, anstatt bestehende zu nutzen 
- - meta command style lädt keine files mit sonderzeichen
- - Degrees die in Akkorden nicht vorkommen konsumieren keine Zeit: C -> II4 II II II |
 
 ## Cool DAW-Editor
 all character based 
