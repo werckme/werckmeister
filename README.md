@@ -1,4 +1,4 @@
-#Eine Scriptsprache für Sheetnotation
+#Eine Scriptsprache für Sheetnotation angelehnt an Lilypond
 
  - ChordDefs: Definiere Akkorde
  - Styles: Rhythmen und Begleitung notiert Relativ zu Tonleiterstufen
