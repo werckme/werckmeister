@@ -28,12 +28,13 @@
 
 /instrument: guitar  SC1 6 0 25/
 
-/instrumentConf: piano volume 90/
+/instrumentConf: piano volume 90 pan 80/
 /instrumentConf: lead volume 100/
-/instrumentConf: bass volume 100/
+/instrumentConf: bass volume 90/
+/instrumentConf: drums volume 86/
 
 /style: bossanova normal/
-E- | A-7 | D7 | Gmaj7 | Cmaj7 | Fis07 | B7 | E- | E- |
+r | A-7 | D7 | Gmaj7 | Cmaj7 | Fis07 | B7 | E- | E- |
 -- wiederholung
 A-7 | D7 | Gmaj7 | Cmaj7 | Fis07 | 
 -- 2.

@@ -56,7 +56,7 @@ namespace sheet {
 						}
 						barEvents.clear();
 					}
-					if (it->type == Event::Chord) {
+					if (it->isTimeConsuming()) {
 						barEvents.push_back(&(*it));
 					}
 					++it;
@@ -72,13 +72,19 @@ namespace sheet {
 
 			for (auto &ev : document_->sheetDef.chords) {
 				ctx->setChordTrackTarget(); // target will be lost after calling addEvent
-				if (ev.type != Event::Chord) {
+				if (ev.type == Event::Rest) {
+					auto meta = ctx->voiceMetaData(ctx->voiceTrackId());
+					ev.duration = meta->barLength * ev.multiplicator;
+					ctx->rest(ev.duration);
+					ctx->styleRest(ev.duration);
+				}
+				else if (ev.type != Event::Chord) {
 					ctx->addEvent(ev);
 				} else {
 					auto meta = ctx->voiceMetaData(ctx->voiceTrackId());
 					ev.duration = meta->barLength * ev.multiplicator;	
 					ctx->addEvent(ev);
-					ctx->renderStyle(meta->barLength * ev.multiplicator);
+					ctx->renderStyle(ev.duration);
 				}
 			}
 		}

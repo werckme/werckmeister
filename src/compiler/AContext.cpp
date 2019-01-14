@@ -248,8 +248,11 @@ namespace sheet {
 				meta->duration = duration;
 			}
 			if (tying) {
-				meta->waitForTieBuffer.insert({ pitch, meta->duration });
-				startEvent(pitch, meta->position);
+				auto alreadyTying = meta->waitForTieBuffer.find(pitch) != meta->waitForTieBuffer.end();
+				if (!alreadyTying) {
+					meta->waitForTieBuffer.insert({ pitch, meta->duration });
+					startEvent(pitch, meta->position);
+				}
 			}
 			else if (meta->pendingTie()) {
 				auto it = meta->waitForTieBuffer.find(pitch);
@@ -622,6 +625,20 @@ namespace sheet {
 			}
 			setTarget(trackId, voiceId);
 		}
+		void AContext::styleRest(fm::Ticks duration)
+		{
+			auto styleTracks = currentStyle();
+
+			for (const auto &track : *styleTracks)
+			{
+				for (const auto &voice : track.voices)
+				{
+					setTarget(track, voice);
+					auto meta = voiceMetaData(this->voice());
+					seek(duration);
+				}
+			}
+		}
 		void AContext::renderStyle(fm::Ticks duration)
 		{
 			auto styleTracks = currentStyle();
@@ -652,7 +669,7 @@ namespace sheet {
 						else if (meta->eventOffset > 0) { // skip events (for upbeat)
 							it += meta->eventOffset;
 						}
-						for (; it != voice.events.end(); ++it)
+						for (; it != voice.events.end(); ++it) // loop voice events
 						{
 							auto ev = *it;
 							auto currentPos = meta->position;

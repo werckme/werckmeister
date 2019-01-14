@@ -28,15 +28,16 @@
 /instrument: piano      SC1 2 0 0/
 /instrumentConf: piano pan 60/
 /instrument: lead     SC1 3 0 11/
-/instrument: bass    SC1 7 0 33/
+/instrument: bass    SC1 7 8 33/
 /instrument: drums   SC1 9 0 32/
 
-/instrument: guitar  SC1 6 0 25/
-/instrumentConf: guitar volume 80 pan 40/
+/instrument: guitar  SC1 6 0 24/
+/instrumentConf: guitar volume 80 pan 20/
 
-/instrumentConf: piano volume 90/
+/instrumentConf: piano volume 90 pan 80/
 /instrumentConf: lead volume 100/
-/instrumentConf: bass volume 100/
+/instrumentConf: bass volume 90/
+/instrumentConf: drums volume 86/
 
 /style: bossanova normal/
 Fmaj7 | Fmaj7 | G7 | G7 |

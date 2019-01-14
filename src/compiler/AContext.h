@@ -140,6 +140,7 @@ namespace sheet {
 			virtual void rest(fm::Ticks duration);
 			virtual void setChord(const ChordEvent &ev);
 			virtual void renderStyle(fm::Ticks duration);
+			virtual void styleRest(fm::Ticks duration);
 			virtual void addEvent(const Event &ev);
 			virtual void stopTying();
 			virtual fm::Ticks barPos() const;
