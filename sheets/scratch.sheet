@@ -5,10 +5,13 @@
 
 [
 {
-    /uname: vibra/
-    /volume: 100/
-    /pan: 50/ 
-   a1~ | a1~ | a1~ | a1~ | a1 | b1 | b2~ b2~ | b4 c d e |
+    /uname: drums/
+    "hto1"8 "hto2" r2.  | "hto2"`"mto1"4. "mto2"8 "mto1"16 "mto2" "lto1"16 "lto2"4 r16   | 
+    "hto1"8t "hto1"8t "lto1"4t r "hto"`"mto1"8t "mto1"8t "lto1"4t r |
+}
+{
+    /uname: drums/
+    "bd"4t r8t r4t "bd"8t r4t r8t "bd"4t r8t | "bd"4t r8t r4t "bd"8t r4t r8t "bd"4t r8t | "bd"4t r8t r4t "bd"8t r4t r8t "bd"4t r8t |
 }
 ]
 

@@ -349,7 +349,8 @@ namespace sheet {
 				meta->eventOffset = meta->eventCount;
 			}
 			else if (!fm::compareTolerant(meta->barPosition, meta->barLength, fm::Ticks(TickTolerance))) {
-				warn("bar check error (" + std::to_string(fm::absDifference(meta->barPosition, meta->barLength)) + ")");
+				auto errorInQuaters = -(meta->barLength - meta->barPosition) / fm::PPQ;
+				warn("bar check error (" + std::to_string( errorInQuaters )+ ")");
 			}
 			meta->barPosition = 0;
 			++(meta->barCount);
