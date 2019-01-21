@@ -168,6 +168,10 @@ Der \espressivo-Befehl kann eingesetzt werden, um crescendo und decrescendo für
 
 - soundselect generic midisequences
   /soundSelect: cc 0 pc 1/
+
+- Stufen optionen
+VII#?II?I -- wenn vorhanden, entweder VII# oder II oder I
+
 ### Paralleles abspielen verschiedener Styles
 
 {

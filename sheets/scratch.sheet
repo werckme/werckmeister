@@ -1,34 +1,26 @@
 -- document configs
 @load "./chords/default.chords";
-@load "./styles/bossanova.style";
+@load "./styles/reaggae.style";
 @load "./pitchmaps/defaultMidiDrumMap.pitchmap";
-
-[
-{
-    /uname: drums/
-    "hto1"8 "hto2" r2.  | "hto2"`"mto1"4. "mto2"8 "mto1"16 "mto2" "lto1"16 "lto2"4 r16   | 
-    "hto1"8t "hto1"8t "lto1"4t r "hto"`"mto1"8t "mto1"8t "lto1"4t r |
-}
-{
-    /uname: drums/
-    "bd"4t r8t r4t "bd"8t r4t r8t "bd"4t r8t | "bd"4t r8t r4t "bd"8t r4t r8t "bd"4t r8t | "bd"4t r8t r4t "bd"8t r4t r8t "bd"4t r8t |
-}
-]
 
 
 /device: SC1 midi 1/
 
 --           uname ch cc pc
-/instrument: piano   SC1 2 0 0/
-/instrument: guitar  SC1 3 0 25/
-/instrument: vibra   SC1 4 0 11/
-/instrument: bass    SC1 5 0 33/
-/instrument: drums   SC1 9 0 32/
-/instrumentConf: bass volume 100/
-/instrumentConf: guitar volume 70 pan 0/
-/instrumentConf: piano volume 100 pan 100/
-/instrumentConf: drums volume 100/
+/instrument: piano      SC1 0 0  0/
+/instrument: guitar   SC1 2 0  26/
+/instrumentConf: guitar volume 80 pan 20/
+/instrument: bass       SC1 3 0  33/
+/instrument: fx         SC1 4 35 80/
+/instrument: drums      SC1 9 0  32/
+/tempo: 70/
+/style: reaggae normal/
 
-/tempo: 120/
+
+C     | G   | F  | C    |
+C     | G   | F  | C    |
+C     | G   | F  | C    |
+C     | G   | F  | C    |
+C     | G   | F  | C    |
 
 
