@@ -1,7 +1,17 @@
 #include "Document.h"
 #include <algorithm>
+#include <boost/filesystem.hpp>
 
 namespace sheet {
+
+	fm::String Document::getAbsolutePath(const fm::String &path)
+	{
+		auto a = boost::filesystem::path(this->path).parent_path();
+		auto b = boost::filesystem::path(path);
+		auto x = boost::filesystem::absolute(b, a);
+		return boost::filesystem::system_complete(x).wstring();
+	}
+
 	IStyleDefServer::ConstStyleValueType Document::getStyle(const fm::String &name, const fm::String &sectionName) const
 	{
 		StyleDefs::const_iterator it;

@@ -25,6 +25,10 @@ namespace sheet {
 		IStyleDefServer::ConstStyleValueType getStyle(const fm::String &filename, const fm::String &sectionName = FM_STRING("?")) const override;
 		IStyleDefServer::ConstChordValueType getChord(const fm::String &name) const override;
 		IStyleDefServer::ConstPitchDefValueType getAlias(fm::String alias) const override;
+		/**
+		 * creates an absolute path from a path relative to the document.
+		 **/
+		fm::String getAbsolutePath(const fm::String &path);
 	};
 }
 

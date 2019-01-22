@@ -22,6 +22,7 @@
 #include <ctime>
 #include "fmapp/boostTimer.h"
 #include <boost/format.hpp>
+#include <map>
 
 #define ARG_HELP "help"
 #define ARG_INPUT "input"
@@ -33,6 +34,7 @@
 #define ARG_WATCH "watch"
 
 typedef int MidiOutputId;
+typedef std::unordered_map<fm::String, time_t> Timestamps;
 
 void onCompilerError(const std::exception &ex) {
 	std::cout << ex.what() << std::endl;
@@ -140,9 +142,33 @@ fmapp::Midiplayer::Output findOutput(MidiOutputId id)
 	return *it;
 }
 
-auto getTimestamp(const std::string input) {
+time_t getTimestamp(const fm::String &input) {
 	auto path = boost::filesystem::path(input);
 	return boost::filesystem::last_write_time(path);
+}
+
+bool hasChanges(sheet::DocumentPtr document, Timestamps &timestamps)
+{
+	auto changed = [document, &timestamps](const fm::String &path) {
+		time_t new_timestamp = getTimestamp(path);
+		auto it = timestamps.find(path);
+		if (it == timestamps.end()) {
+			timestamps.emplace(std::make_pair(path, new_timestamp));
+			return true;
+		}
+		if (it->second != getTimestamp(path)) {
+			timestamps[path] = new_timestamp;
+			return true;
+		}
+		return false;
+	};
+	bool result = changed(document->path);
+	// check all files, even if a file has changed already
+	for(const auto &p : document->documentConfig.usings) {
+		auto fullPath = document->getAbsolutePath(p);
+		result |= changed(fullPath);
+	}
+	return result;
 }
 
 void printElapsedTime(fm::Ticks elapsed) 
@@ -162,7 +188,7 @@ void printElapsedTime(fm::Ticks elapsed)
 	lastOutput = strOut;
 }
 
-void update_player(fmapp::Midiplayer &player, const std::string &inputfile)
+void updatePlayer(fmapp::Midiplayer &player, const std::string &inputfile)
 {
 	
 	auto pos = player.elapsed();
@@ -192,13 +218,12 @@ void play(sheet::DocumentPtr document, fm::midi::MidiPtr midi, MidiOutputId midi
 	player.play(begin);
 	bool playing = true;
 	bool watch = settings.watch();
+	Timestamps timestamps;
+	hasChanges(document, timestamps);	// init timestamps
 	auto inputfile = settings.getInput();
-	auto timestamp = getTimestamp(inputfile);
 
 	fmapp::os::setSigtermHandler([&playing, &player]{
 		playing = false;
-		std::cout << std::endl << "stopped" << std::endl;
-		std::cout.flush();
 		player.panic();
 	});
 	
@@ -213,12 +238,11 @@ void play(sheet::DocumentPtr document, fm::midi::MidiPtr midi, MidiOutputId midi
 		printElapsedTime(elapsed);
 		std::this_thread::sleep_for( std::chrono::milliseconds(10) );
 		if (watch) {
-			auto newTimestamp = getTimestamp(inputfile);
-			if (timestamp != newTimestamp) {
-				timestamp = newTimestamp;
+			if (hasChanges(document, timestamps)) {
 				try {
-					update_player(player, inputfile);
+					updatePlayer(player, inputfile);
 				} catch(...) {
+					player.panic();
 					break;
 				}
 			}
