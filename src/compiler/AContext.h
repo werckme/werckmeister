@@ -41,9 +41,9 @@ namespace sheet {
 				typedef std::list<AModificationPtr> Modifications;
 				fm::Ticks position = 0;
 				/**
-				 * current note duration
+				 * last note duration
 				 */
-				fm::Ticks duration = DefaultDuration; 
+				fm::Ticks lastEventDuration = DefaultDuration; 
 				fm::Ticks barLength = DefaultBarLength;
 				fm::Ticks barPosition = 0;
 				int barCount = 0;
@@ -80,7 +80,7 @@ namespace sheet {
 			TrackId track() const;
 			VoiceId voice() const;
 			TrackId chordTrackId() const { return chordTrack_; }
-			VoiceId voiceTrackId() const { return chordVoice_; }
+			VoiceId chordVoiceId() const { return chordVoice_; }
 			inline void setTarget(TrackId trackId, VoiceId voiceId)
 			{
 				setTrack(trackId);

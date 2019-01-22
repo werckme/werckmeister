@@ -73,7 +73,7 @@ namespace sheet {
 			for (auto &ev : document_->sheetDef.chords) {
 				ctx->setChordTrackTarget(); // target will be lost after calling addEvent
 				if (ev.type == Event::Rest) {
-					auto meta = ctx->voiceMetaData(ctx->voiceTrackId());
+					auto meta = ctx->voiceMetaData(ctx->chordVoiceId());
 					ev.duration = meta->barLength * ev.multiplicator;
 					ctx->rest(ev.duration);
 					ctx->styleRest(ev.duration);
@@ -81,7 +81,7 @@ namespace sheet {
 				else if (ev.type != Event::Chord) {
 					ctx->addEvent(ev);
 				} else {
-					auto meta = ctx->voiceMetaData(ctx->voiceTrackId());
+					auto meta = ctx->voiceMetaData(ctx->chordVoiceId());
 					ev.duration = meta->barLength * ev.multiplicator;	
 					ctx->addEvent(ev);
 					ctx->renderStyle(ev.duration);

@@ -245,12 +245,12 @@ namespace sheet {
 			PitchDef pitch = resolvePitch(rawPitch);
 			auto meta = voiceMetaData(voice());
 			if (duration > 0) {
-				meta->duration = duration;
+				meta->lastEventDuration = duration;
 			}
 			if (tying) {
 				auto alreadyTying = meta->waitForTieBuffer.find(pitch) != meta->waitForTieBuffer.end();
 				if (!alreadyTying) {
-					meta->waitForTieBuffer.insert({ pitch, meta->duration });
+					meta->waitForTieBuffer.insert({ pitch, meta->lastEventDuration });
 					startEvent(pitch, meta->position);
 				}
 			}
@@ -260,12 +260,12 @@ namespace sheet {
 					stopTying();
 					return;
 				}
-				stopEvent(pitch, meta->position + meta->duration);
+				stopEvent(pitch, meta->position + meta->lastEventDuration);
 				meta->waitForTieBuffer.erase(it);
 				return;
 			}
 			else {
-				addEvent(pitch, meta->position, meta->duration);
+				addEvent(pitch, meta->position, meta->lastEventDuration);
 			}
 		}
 
@@ -273,7 +273,7 @@ namespace sheet {
 		{
 			auto meta = voiceMetaData(voice());
 			for(auto tied : meta->startedEvents){
-				stopEvent(tied, meta->position + meta->duration);
+				stopEvent(tied, meta->position + meta->lastEventDuration);
 			}
 		}
 
@@ -327,11 +327,8 @@ namespace sheet {
 		void AContext::seek(fm::Ticks duration)
 		{
 			auto meta = voiceMetaData(voice());
-			if (duration != 0) {
-				meta->duration = duration;
-			}
-			meta->position += meta->duration;
-			meta->barPosition += meta->duration;
+			meta->position += duration;
+			meta->barPosition += duration;
 		}
 
 		void AContext::warn(const std::string &msg)
@@ -358,7 +355,11 @@ namespace sheet {
 
 		void AContext::rest(fm::Ticks duration)
 		{
-			seek(duration);
+			auto meta = voiceMetaData(voice());
+			if (duration != 0) {
+				meta->lastEventDuration = duration;
+			}
+			seek(meta->lastEventDuration);
 		}
 
 		void AContext::setMeta(const Event &metaEvent)
@@ -636,7 +637,7 @@ namespace sheet {
 				{
 					setTarget(track, voice);
 					auto meta = voiceMetaData(this->voice());
-					seek(duration);
+					rest(duration);
 				}
 			}
 		}
@@ -677,7 +678,7 @@ namespace sheet {
 							auto originalDuration = ev.duration;
 							if (ev.isTimeConsuming() && meta->remainingTime > 0) {
 								if (ev.duration == 0) {
-									ev.duration = meta->duration;
+									ev.duration = meta->lastEventDuration;
 								}
 								ev.duration = ev.duration + meta->remainingTime;
 								meta->remainingTime = 0;

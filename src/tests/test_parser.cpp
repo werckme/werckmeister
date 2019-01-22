@@ -637,6 +637,29 @@ BOOST_AUTO_TEST_CASE(test_alias_vorschlag)
 }
 
 
+
+BOOST_AUTO_TEST_CASE(test_styleDefparser_vorschlag)
+{
+	using namespace fm;
+	using sheet::PitchDef;
+	fm::String text = FM_STRING("\
+section intro\n\
+[\n\
+	{\n\
+		I#4`I4 I4 I4 I4 |\n\
+	}\n\
+] \n\
+end\n\
+");
+	sheet::compiler::StyleDefParser parser;
+	auto defs = parser.parse(text);
+	auto &events = defs.sections[0].tracks[0].voices[0].events;
+	BOOST_CHECK(defs.sections.size() == 1);
+	BOOST_CHECK(defs.sections[0].tracks.size() == 1);
+	BOOST_CHECK(defs.sections[0].tracks[0].voices.size() == 1);
+	BOOST_CHECK(defs.sections[0].tracks[0].voices[0].events.size() == 6);
+}
+
 BOOST_AUTO_TEST_CASE(test_sheetDefParser_tie)
 {
 	using namespace fm;
