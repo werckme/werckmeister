@@ -334,7 +334,8 @@ namespace sheet {
 		void AContext::warn(const std::string &msg)
 		{
 			auto meta = voiceMetaData(voice());
-			std::string warning(msg + " at voice " + std::to_string(voice()) + " bar: " + std::to_string(meta->position / meta->barLength));
+			auto voiceName = meta->uname.empty() ? std::to_string(voice()) : fm::to_string(meta->uname);
+			std::string warning(msg + " at '" + voiceName + "', bar: " + std::to_string(meta->position / meta->barLength));
 			warnings.push_back(warning);
 		}
 
