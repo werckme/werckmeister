@@ -162,6 +162,28 @@ void printElapsedTime(fm::Ticks elapsed)
 	lastOutput = strOut;
 }
 
+void update_player(fmapp::Midiplayer &player, const std::string &inputfile)
+{
+	
+	auto pos = player.elapsed();
+	player.stop();
+	try {
+		player.midi(sheet::processFile(inputfile));
+	}
+	catch (const std::exception &ex)
+	{
+		onCompilerError(ex);
+		throw;
+	}
+	catch (...)
+	{
+		onCompilerError();
+		throw;
+	}
+	player.play(pos);
+
+}
+
 void play(sheet::DocumentPtr document, fm::midi::MidiPtr midi, MidiOutputId midiOutput, fm::Ticks begin, fm::Ticks end, const Settings &settings) {
 	auto &player = fmapp::getMidiplayer();
 	auto output = findOutput(midiOutput);
@@ -194,23 +216,11 @@ void play(sheet::DocumentPtr document, fm::midi::MidiPtr midi, MidiOutputId midi
 			auto newTimestamp = getTimestamp(inputfile);
 			if (timestamp != newTimestamp) {
 				timestamp = newTimestamp;
-				auto pos = player.elapsed();
-				player.stop();
 				try {
-					player.midi(sheet::processFile(inputfile));
-				}
-				catch (const std::exception &ex)
-				{
-					onCompilerError(ex);
+					update_player(player, inputfile);
+				} catch(...) {
 					break;
 				}
-				catch (...)
-				{
-					onCompilerError();
-					break;
-				}
-				player.play(pos);
-				continue;
 			}
 			
 		}

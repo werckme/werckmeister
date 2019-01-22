@@ -10,7 +10,7 @@
 /instrument: piano      SC1 0 0  0/
 /instrument: guitar   SC1 2 0  26/
 /instrumentConf: guitar volume 80 pan 20/
-/instrument: bass       SC1 3 0  36/
+/instrument: bass       SC1 3 0  32/
 /instrument: fx         SC1 4 35 80/
 /instrument: drums      SC1 9 0  32/
 /tempo: 70/
