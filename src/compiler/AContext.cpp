@@ -327,6 +327,9 @@ namespace sheet {
 		void AContext::seek(fm::Ticks duration)
 		{
 			auto meta = voiceMetaData(voice());
+			if (duration == 0) {
+				duration = meta->lastEventDuration;
+			}
 			meta->position += duration;
 			meta->barPosition += duration;
 		}

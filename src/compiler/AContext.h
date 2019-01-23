@@ -134,7 +134,10 @@ namespace sheet {
 			 */
 			virtual void addPitchbendEvent(double value, fm::Ticks absolutePosition) = 0;			
 			virtual void startEvent(const PitchDef &pitch, fm::Ticks absolutePosition);
-			virtual void stopEvent(const PitchDef &pitch, fm::Ticks absolutePosition);	
+			virtual void stopEvent(const PitchDef &pitch, fm::Ticks absolutePosition);
+			/**
+			 * if duration == 0 the last event duration will be used
+			 */ 
 			virtual void seek(fm::Ticks duration);
 			virtual void newBar();
 			virtual void rest(fm::Ticks duration);

@@ -11,11 +11,7 @@ namespace sheet {
 			{
 				ctx->addEvent(pitch, duration, tying);
 			}
-            if (duration > 0) {
-                ctx->seek(duration);
-            } else {
-			    ctx->seek(meta->lastEventDuration);
-            }
+			ctx->seek(duration);
         }
 
     }
