@@ -312,6 +312,9 @@ namespace sheet {
 				meta->expression = meta->singleExpression;
 				meta->singleExpression = fm::expression::Default;
 			}
+			if (duration == 0) {
+				duration = meta->lastEventDuration;
+			}
 			for (auto mod : meta->modifications) {
 				mod->addModificationEvents(this, meta->position, duration);
 			}
@@ -327,9 +330,6 @@ namespace sheet {
 		void AContext::seek(fm::Ticks duration)
 		{
 			auto meta = voiceMetaData(voice());
-			if (duration == 0) {
-				duration = meta->lastEventDuration;
-			}
 			meta->position += duration;
 			meta->barPosition += duration;
 		}
