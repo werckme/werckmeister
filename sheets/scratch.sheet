@@ -1,6 +1,6 @@
 -- document configs
 @load "./chords/default.chords";
-@load "./styles/reaggae.style";
+@load "./styles/scratch.style";
 @load "./pitchmaps/defaultMidiDrumMap.pitchmap";
 
 
@@ -8,19 +8,12 @@
 
 --           uname ch cc pc
 /instrument: piano      SC1 0 0  0/
-/instrument: guitar   SC1 2 0  26/
-/instrumentConf: guitar volume 80 pan 20/
-/instrument: bass       SC1 3 0  32/
-/instrument: fx         SC1 4 35 80/
-/instrument: drums      SC1 9 0  32/
-/tempo: 70/
-/style: reaggae normal/
+/tempo: 170/
+/style: scratch normal/
+
+A-7 | D-7 | G7 | Cmaj7 C7 |
+Fmaj7 | B07 | E7b9 |
 
 
-C     | G   | F  | C    |
-C     | G   | F  | C    |
-C     | G   | F  | C    |
-C     | G   | F  | C    |
-C     | G   | F  | C    |
 
 

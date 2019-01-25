@@ -1,0 +1,22 @@
+section normal
+[
+{
+    /uname: drums/
+    \ppp
+    !p"ht"16 "ht"16 !p"ht"16 "ht"16
+    !p"ht"16 "ht"16 !p"ht"16 "ht"16
+    !p"ht"16 "ht"16 !p"ht"16 "ht"16
+    !p"ht"16 "ht"16 !p"ht"16 "ht"16
+}
+{
+    /uname: drums/
+    !f"hto2"`!fff"hto1"4. "hto1"8 "hto1"4 "hto1"4 |
+}
+]
+[
+{
+    /uname: bass/
+    I,,4 !fffI#,,`I,, I, Vb,,`!ffV,, |
+}
+]
+end
