@@ -1,3 +1,5 @@
+
+
 #Eine Scriptsprache für Sheetnotation angelehnt an Lilypond
 
  - ChordDefs: Definiere Akkorde
@@ -191,3 +193,6 @@ VII#?II?I -- wenn vorhanden, entweder VII# oder II oder I
 ## Cool DAW-Editor
 all character based 
 sophisticated highligting such as position or markers
+
+## Misc
+- http://www.guitarcats.com/realbook-jazz-standards/
