@@ -16,7 +16,9 @@ namespace sheet {
 	}
 	namespace lua {
 		class ALuaScript;
-		typedef std::shared_ptr<ALuaScript> ALuaScriptPtr;	
+		typedef std::shared_ptr<ALuaScript> ALuaScriptPtr;
+		class LuaMidiContext;
+		typedef std::shared_ptr<LuaMidiContext> LuaMidiContextPtr;			
 	}
 	class Document;
 	typedef std::shared_ptr<Document> DocumentPtr;

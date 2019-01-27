@@ -16,8 +16,10 @@
 #include "compiler/spielanweisung/Arpeggio.h"
 #include "compiler/spielanweisung/Vorschlag.h"
 #include "compiler/spielanweisung/spielanweisungen.h"
+#include "compiler/spielanweisung/Lua.h"
 #include "compiler/modification/modifications.h"
 #include "compiler/modification/Bend.h"
+
 
 namespace fm {
     
@@ -91,7 +93,10 @@ namespace fm {
 	{
 		const fm::String *scriptPath = findScriptPathByName(name);
 		if (scriptPath != nullptr) {
-
+			auto anw = std::make_shared<sheet::compiler::LuaSpielanweisung>(*scriptPath);
+			if (anw->canExecute()) {
+				return anw;
+			}
 		}
 		if (name == SHEET_SPIELANWEISUNG_NORMAL) {
 			return std::make_shared<sheet::compiler::Normal>(); 
@@ -119,7 +124,7 @@ namespace fm {
 
 	void Werckmeister::registerLuaScript(const fm::String &path)
 	{
-		auto name = boost::filesystem::path(path).filename().wstring();
+		auto name = boost::filesystem::path(path).filename().stem().wstring();
 		_scriptMap[name] = path;
 	}
 

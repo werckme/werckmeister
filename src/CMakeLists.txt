@@ -28,6 +28,8 @@ SET (SRC_FETZER_LIB
     sheet/Document.cpp
     sheet/ChordDef.cpp
     sheet/lua/ALuaScript.cpp
+    sheet/lua/LuaMidiContext.cpp
+    sheet/lua/ALuaObject.cpp
 )
 
 

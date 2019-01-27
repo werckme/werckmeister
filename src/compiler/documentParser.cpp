@@ -44,7 +44,7 @@ namespace sheet {
 			void useLuaScript(DocumentPtr doc, const fm::String &path)
 			{
 				auto &wm = fm::getWerckmeister();
-				wm.registerLuaScript(path);
+				wm.registerLuaScript(doc->getAbsolutePath(path));
 			}			
 			void useStyleDef(DocumentPtr doc, const fm::String &path)
 			{

@@ -78,6 +78,9 @@ namespace sheet {
 			virtual void setTrack(TrackId trackId);
 			virtual void setVoice(VoiceId voice);
 			TrackId track() const;
+			/**
+			 * @return the current voiceId
+			 */
 			VoiceId voice() const;
 			TrackId chordTrackId() const { return chordTrack_; }
 			VoiceId chordVoiceId() const { return chordVoice_; }
