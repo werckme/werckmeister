@@ -79,13 +79,13 @@ if (UNIX)
   SET(SRC_SHEET_TESTER ${SRC_SHEET_TESTER}  fmapp/os_linux.cpp)
 endif(UNIX)
 
-
+SET (SHEET_LIBS ${SHEET_LIBS} sheet ${Boost_LIBRARIES} lua)
 
 add_executable(rehearse ${SRC_FETZER_TESTS})
-target_link_libraries (rehearse sheet ${Boost_LIBRARIES})
+target_link_libraries (rehearse ${SHEET_LIBS})
 
 add_executable(sheetc sheetcompiler_main.cpp sheet.cpp)
-target_link_libraries (sheetc sheet ${Boost_LIBRARIES})
+target_link_libraries (sheetc ${SHEET_LIBS})
 
 if (WIN32)
     SET(LIBS_PLAYER ${LIBS_PLAYER} rtmidi_static)
@@ -95,4 +95,4 @@ if (UNIX)
 endif(UNIX)
 
 add_executable(sheetp ${SRC_SHEET_PLAYER})
-target_link_libraries (sheetp sheet ${Boost_LIBRARIES} ${LIBS_PLAYER})
+target_link_libraries (sheetp ${SHEET_LIBS} ${LIBS_PLAYER})
