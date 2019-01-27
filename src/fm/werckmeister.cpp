@@ -74,6 +74,10 @@ namespace fm {
 
 	sheet::VoicingStrategyPtr Werckmeister::getVoicingStrategy(const fm::String &name)
 	{
+		const fm::String *scriptPath = findScriptPathByName(name);
+		if (scriptPath != nullptr) {
+			
+		}
 		if (name == SHEET_VOICING_STRATEGY_SIMPLE_GUITAR) {
 			return std::make_shared<sheet::SimpleGuitar>();
 		}
@@ -85,6 +89,10 @@ namespace fm {
 
 	sheet::compiler::ASpielanweisungPtr Werckmeister::getSpielanweisung(const fm::String &name)
 	{
+		const fm::String *scriptPath = findScriptPathByName(name);
+		if (scriptPath != nullptr) {
+
+		}
 		if (name == SHEET_SPIELANWEISUNG_NORMAL) {
 			return std::make_shared<sheet::compiler::Normal>(); 
 		}
@@ -99,10 +107,29 @@ namespace fm {
 
 	sheet::compiler::AModificationPtr Werckmeister::getModification(const fm::String &name)
 	{
+		const fm::String *scriptPath = findScriptPathByName(name);
+		if (scriptPath != nullptr) {
+			
+		}		
 		if (name == SHEET_MOD_BEND) {
 			return std::make_shared<sheet::compiler::Bend>();  
 		}
 		throw std::runtime_error("modification not found: " + fm::to_string(name));
+	}
+
+	void Werckmeister::registerLuaScript(const fm::String &path)
+	{
+		auto name = boost::filesystem::path(path).filename().wstring();
+		_scriptMap[name] = path;
+	}
+
+	const fm::String * Werckmeister::findScriptPathByName(const fm::String &name) const
+	{
+		auto it = _scriptMap.find(name);
+		if (it == _scriptMap.end()) {
+			return nullptr;
+		}
+		return &it->second;
 	}
 
 	Werckmeister::~Werckmeister() = default;

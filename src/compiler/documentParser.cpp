@@ -41,6 +41,11 @@ namespace sheet {
 					doc->pitchmapDefs[x.name] = x.pitch;
 				}
 			}
+			void useLuaScript(DocumentPtr doc, const fm::String &path)
+			{
+				auto &wm = fm::getWerckmeister();
+				wm.registerLuaScript(path);
+			}			
 			void useStyleDef(DocumentPtr doc, const fm::String &path)
 			{
 				auto apath = getAbsolutePath(doc, path);
@@ -56,7 +61,8 @@ namespace sheet {
 			std::unordered_map <std::string, ExtHandler> exthandlers({
 				{ CHORD_DEF_EXTENSION , &useChordDef },
 				{ STYLE_DEF_EXTENSION , &useStyleDef },
-				{ PITCHMAP_DEF_EXTENSION , &usePitchmapDef }
+				{ PITCHMAP_DEF_EXTENSION , &usePitchmapDef },
+				{ LUA_DEF_EXTENSION , &useLuaScript }
 			});
 
 			void processUsings(DocumentPtr doc)

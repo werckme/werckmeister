@@ -14,6 +14,10 @@ namespace sheet {
 		class AModification;
 		typedef std::shared_ptr<AModification> AModificationPtr;		
 	}
+	namespace lua {
+		class ALuaScript;
+		typedef std::shared_ptr<ALuaScript> ALuaScriptPtr;	
+	}
 	class Document;
 	typedef std::shared_ptr<Document> DocumentPtr;
 	class VoicingStrategy;
