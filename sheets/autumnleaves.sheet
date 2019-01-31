@@ -5,7 +5,7 @@
 
 [
 {
-    /uname: lead/
+    /instrument: lead/
     \fff
     r4 e fis g | c'1~ | c'4 d e fis | b2 b2~ | b4 c d e | a1~ | a4 b, cis dis | g1 |
     -- wiederholung
@@ -19,11 +19,11 @@
 /tempo: 120/
 /device: SC1 midi 1/
 
---           uname ch cc pc
-/instrument: piano      SC1 2 0 0/
-/instrument: lead     SC1 3 0 0/
-/instrument: bass    SC1 7 0 32/
-/instrument: drums   SC1 9 0 32/
+--           instrument ch cc pc
+/instrumentDef: piano      SC1 2 0 0/
+/instrumentDef: lead     SC1 3 0 0/
+/instrumentDef: bass    SC1 7 0 32/
+/instrumentDef: drums   SC1 9 0 32/
 
 
 /instrumentConf: piano volume 90 pan 80/

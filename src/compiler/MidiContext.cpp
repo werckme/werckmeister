@@ -37,9 +37,9 @@ namespace sheet {
 		{
 			_checkMidi(midi_);
 			auto voiceConfig = voiceMetaData<MidiContext::VoiceMetaData>(voice());
-			for (const auto &instrument : voiceConfig->instrumentDefs) {
+			for (const auto &instrumentDef : voiceConfig->instrumentDefs) {
 				midi_->tracks().at(track())->events().addNote(
-					instrument.channel, 
+					instrumentDef.channel, 
 					absolutePosition, 
 					getAbsolutePitch(pitch), 
 					getAbsoluteVelocity( voiceConfig->expression ),
@@ -52,8 +52,8 @@ namespace sheet {
 			Base::startEvent(pitch, absolutePosition);
 			_checkMidi(midi_);
 			auto voiceConfig = voiceMetaData<MidiContext::VoiceMetaData>(voice());
-			for (const auto &instrument : voiceConfig->instrumentDefs) {
-				auto event = fm::midi::Event::NoteOn(instrument.channel, 
+			for (const auto &instrumentDef : voiceConfig->instrumentDefs) {
+				auto event = fm::midi::Event::NoteOn(instrumentDef.channel, 
 					absolutePosition, 
 					getAbsolutePitch(pitch), 
 					getAbsoluteVelocity(voiceConfig->expression)
@@ -68,8 +68,8 @@ namespace sheet {
 			Base::stopEvent(pitch, absolutePosition);
 			_checkMidi(midi_);
 			auto voiceConfig = voiceMetaData<MidiContext::VoiceMetaData>(voice());
-			for (const auto &instrument : voiceConfig->instrumentDefs) {
-				auto event = fm::midi::Event::NoteOff(instrument.channel, 
+			for (const auto &instrumentDef : voiceConfig->instrumentDefs) {
+				auto event = fm::midi::Event::NoteOff(instrumentDef.channel, 
 					absolutePosition, 
 					getAbsolutePitch(pitch)
 				);
@@ -86,8 +86,8 @@ namespace sheet {
 		{
 			_checkMidi(midi_);
 			auto voiceConfig = voiceMetaData<MidiContext::VoiceMetaData>(voice());
-			for (const auto &instrument : voiceConfig->instrumentDefs) {
-				auto event = fm::midi::Event::PitchBend(instrument.channel, absolutePosition, value);
+			for (const auto &instrumentDef : voiceConfig->instrumentDefs) {
+				auto event = fm::midi::Event::PitchBend(instrumentDef.channel, absolutePosition, value);
 				midi_->tracks().at(track())->events().add(event);
 			}
 		}
@@ -201,7 +201,7 @@ namespace sheet {
 			auto instrumentDef = getMidiInstrumentDef(uname);
 			auto meta = voiceMetaData<MidiContext::VoiceMetaData>(voice());
 			if (instrumentDef == nullptr) {
-				throw std::runtime_error("instrument not found: " + fm::to_string(uname));
+				throw std::runtime_error("instrumentDef not found: " + fm::to_string(uname));
 			}
 			for (size_t idx = 1; idx < args.size(); idx+=2) {
 				auto propertyName = getArgument<fm::String>(args, idx);
@@ -214,21 +214,21 @@ namespace sheet {
 					instrumentDef->pan = getArgument<int>(args, idx+1);
 					theEvent = __createPanEvent(*instrumentDef, meta->position);
 				} else {
-					throw std::runtime_error("instrument config not found: " + fm::to_string(uname) + ", " + fm::to_string(propertyName));
+					throw std::runtime_error("instrumentDef config not found: " + fm::to_string(uname) + ", " + fm::to_string(propertyName));
 				}
 				addEvent(theEvent); 
 			}
 		}
 
-		void MidiContext::metaSetUname(const fm::String &uname)
+		void MidiContext::metaSetInstrument(const fm::String &uname)
 		{
-			// send instrument name meta event
+			// send instrumentDef name meta event
 			auto trackName = fm::midi::Event::MetaTrack(fm::to_string(uname));
 			trackName.absPosition(0);
 			addEvent(trackName); 
 
-			// find instrument defs and assign them to the meta data of the voice
-			Base::metaSetUname(uname);
+			// find instrumentDef defs and assign them to the meta data of the voice
+			Base::metaSetInstrument(uname);
 			auto range = midiInstrumentDefs_.equal_range(uname);
 			if (range.first == midiInstrumentDefs_.end()) {
 				return;
@@ -305,7 +305,7 @@ namespace sheet {
 					metaInstrument(getArgument<fm::String>(metaEvent, 0), getArgument<fm::String>(metaEvent, 1),getArgument<int>(metaEvent, 2), getArgument<int>(metaEvent, 3), getArgument<int>(metaEvent, 4));					
 					return;
 				}
-				throw std::runtime_error("invalid number of arguments for instrument: " + fm::to_string(name) );
+				throw std::runtime_error("invalid number of arguments for instrumentDef: " + fm::to_string(name) );
 			}
 			if (metaEvent.metaCommand == SHEET_META__SET_INSTRUMENT_CONFIG) {
 				metaSetInstrumentConfig(getArgument<fm::String>(metaEvent, 0), metaEvent.metaArgs);

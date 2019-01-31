@@ -61,7 +61,7 @@ namespace sheet {
 					from a aborted style rendering
 				*/
 				fm::Ticks remainingTime = 0;
-				fm::String uname;
+				fm::String instrument;
 				VoicingStrategyPtr voicingStrategy = nullptr;
 				virtual ~VoiceMetaData() = default;
 				bool pendingTie() const { return !waitForTieBuffer.empty(); }
@@ -110,7 +110,7 @@ namespace sheet {
 			virtual AInstrumentDef * getInstrumentDef(const fm::String &uname) = 0;
 			/////// meta commands
 			virtual void setMeta(const Event &metaEvent);
-			virtual void metaSetUname(const fm::String &uname);
+			virtual void metaSetInstrument(const fm::String &uname);
 			virtual void metaSetStyle(const fm::String &file, const fm::String &section);
 			virtual void metaSetExpression(const fm::String &value);
 			virtual void metaSetSingleExpression(const fm::String &value);

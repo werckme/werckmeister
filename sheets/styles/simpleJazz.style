@@ -1,7 +1,7 @@
 section normal
 [ 
 {
-    /uname: piano/
+    /instrument: piano/
     /voicingStrategy: simpleGuitar/
     <I II III IV V VI VII>1  |
     <I II III IV V VI VII>2. <I II III IV V VI VII>4  |
@@ -10,7 +10,7 @@ section normal
 ]
 [ 
 {
-    /uname: bass/
+    /instrument: bass/
     \ff
     I,,4 III,, V,, I,, |
 }   

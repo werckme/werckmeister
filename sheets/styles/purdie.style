@@ -1,7 +1,7 @@
 section normal
 [ 
 {
-    /uname: drums/
+    /instrument: drums/
     \p"ht"8t r8t !pp"ht"8t    "ht"8t r8t !pp"ht"8t    "ht"8t r8t !pp"ht"8t   "ht"8t r8t !pp"ht"8t |
     \p"ht"8t r8t !pp"ht"8t    "ht"8t r8t !pp"ht"8t    "ht"8t r8t !pp"ht"8t   "ht"8t r8t !pp"ht"8t |
     \p"ht"8t r8t !pp"ht"8t    "ht"8t r8t !pp"ht"8t    "ht"8t r8t !pp"ht"8t   "ht"8t r8t !pp"ht"8t |
@@ -18,7 +18,7 @@ section normal
     \f"ho"8t "ht"8t "bd"8t    \f"ho"8t "ht"8t r8t     "ht"8t r8t !pp"ht"8t   "ht"8t r8t !pp"ht"8t |
 }
 {
-    /uname: drums/
+    /instrument: drums/
     r8t !pppp"sng"8t r8t    r8t !pppp"sng"8t r8t    \ff"sn"8t !pppp"sng"8t r8t   r8t !pppp"sng"8t r8t |
     r8t !pppp"sng"8t r8t    r8t !pppp"sng"8t r8t    \ff"sn"8t !pppp"sng"8t r8t   r8t !pppp"sng"8t r8t |    
     r8t !pppp"sng"8t r8t    r8t !pppp"sng"8t r8t    \ff"sn"8t !pppp"sng"8t r8t   r8t !ppp"sn"8t !pp"sn"8t |
@@ -35,13 +35,13 @@ section normal
     r8t !pppp"sng"8t r8t    r8t !pppp"sng"8t r8t    \ff"sn"8t !pppp"sng"8t r8t   r8t !pppp"sng"8t r8t |   
 }
 {
-    /uname: drums/
+    /instrument: drums/
     "bd"4t r8t r4t "bd"8t r4t r8t "bd"4t r8t |
 }
 ]
 [ 
 {
-    /uname: jzguitar/
+    /instrument: jzguitar/
     /voicingStrategy: simpleGuitar/
     I4t r8t <III VII I' IV>4t I,,8t r4t <V, II, IV, I,,>8t r4t r8t |
     I4t r8t <III VII I' IV>4t I,,8t r4t <V, II, IV, I,,>8t r4t r8t |
@@ -51,7 +51,7 @@ section normal
 ]
 [ 
 {
-    /uname: bass/
+    /instrument: bass/
     I,,8t I,,8t r8t r4t I,,8t r4t r8t V,,,4t VII,,,8t |
     I,,8t I,,8t r8t r4t I,,8t r4t r8t V,,,4t VII,,,8t |
     I,,8t I,,8t r8t r4t I,,8t r4t r8t V,,,4t VII,,,8t |
@@ -63,17 +63,17 @@ end
 section ende ------------------------------------------------------------------------------------
 [ 
 {
-    /uname: drums/
+    /instrument: drums/
     \f"cy"1  |
 }
 {
-    /uname: drums/
+    /instrument: drums/
     "bd"1 |
 }
 ] 
 [ 
 {
-    /uname: jzguitar/
+    /instrument: jzguitar/
     /voicingStrategy: simpleGuitar/
     \p 
     /doOnce: arpeggio up/
@@ -83,7 +83,7 @@ section ende -------------------------------------------------------------------
 ] 
 [ 
 {
-    /uname: bass/
+    /instrument: bass/
     I,,1 |
 
 }

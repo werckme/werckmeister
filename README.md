@@ -67,14 +67,14 @@ end
 @load 'Chords1.chdef';
 @load 'simplePianoStyle.style';
 
--- instrument definitions
---           uname ch cc pc
-/instrument: bass 3 3 87/
-/instrument: drums 10 0 17/
+-- instrumentDef definitions
+--           instrument ch cc pc
+/instrumentDef: bass 3 3 87/
+/instrumentDef: drums 10 0 17/
 
 -- definitions with the same name will create unisono events
-/instrument: piano 0 0 0/
-/instrument: pinao 3 3 3/
+/instrumentDef: piano 0 0 0/
+/instrumentDef: pinao 3 3 3/
 
 [
 { 
@@ -152,7 +152,7 @@ Der \espressivo-Befehl kann eingesetzt werden, um crescendo und decrescendo für
   /device: orch1 vst2 "c:\plugins\gpo.dll" "./violins.preset"/
   /device: roland1 midi 0 / -- 0 is the device number, as displayed with 'sheetp --list'
 
-  /instrument: piano orch1 nChanel nCC nPC/
+  /instrumentDef: piano orch1 nChanel nCC nPC/
 
   ```
 

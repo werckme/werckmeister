@@ -337,7 +337,7 @@ namespace sheet {
 		void AContext::warn(const std::string &msg)
 		{
 			auto meta = voiceMetaData(voice());
-			auto voiceName = meta->uname.empty() ? std::to_string(voice()) : fm::to_string(meta->uname);
+			auto voiceName = meta->instrument.empty() ? std::to_string(voice()) : fm::to_string(meta->instrument);
 			std::string warning(msg + " at '" + voiceName + "', bar: " + std::to_string(meta->position / meta->barLength));
 			warnings.push_back(warning);
 		}
@@ -371,8 +371,8 @@ namespace sheet {
 			if (metaEvent.metaCommand.empty()) {
 				throwContextException("invalid meta command ");
 			}
-			if (metaEvent.metaCommand == SHEET_META__SET_UNAME) {
-				metaSetUname(getArgument<fm::String>(metaEvent, 0));
+			if (metaEvent.metaCommand == SHEET_META__SET_INSTRUMENT) {
+				metaSetInstrument(getArgument<fm::String>(metaEvent, 0));
 			}
 			if (metaEvent.metaCommand == SHEET_META__SET_STYLE) {
 				metaSetStyle(getArgument<fm::String>(metaEvent, 0), getArgument<fm::String>(metaEvent, 1));
@@ -495,10 +495,10 @@ namespace sheet {
 			mod->setArguments(args);
 		}
 
-		void AContext::metaSetUname(const fm::String &uname)
+		void AContext::metaSetInstrument(const fm::String &uname)
 		{
 			auto meta = voiceMetaData(voice());
-			meta->uname = uname;
+			meta->instrument = uname;
 		}
 
 		void AContext::metaSetStyle(const fm::String &file, const fm::String &section)

@@ -1,21 +1,21 @@
 section normal ----------------------------------------------------------------
 [ 
 {
-    /uname: drums/
+    /instrument: drums/
     \f
     !ff"ss"8 "ht"16 "ht"16   "ht"8 "ht"8   !ff"ss"8 "ht"8 "ss"8 "ht"8  |
 }    
 ]
 [
 {
-    /uname: drums/
+    /instrument: drums/
     \ff
     "bd"4. "bd"8 "bd"4. "bd"8 |
 }     
 ]
 [ 
 {
-    /uname: guitar/
+    /instrument: guitar/
     /voicingStrategy: simpleGuitar/
     \f
     <I II III IV V VI VII>8 
@@ -29,20 +29,20 @@ section normal ----------------------------------------------------------------
 ]
 [ 
 {
-    /uname: piano/
+    /instrument: piano/
     \ff
     r8 I'16t V16t III16t r8 
     <I II III IV V VI VII> r <I II III IV V VI VII> r <I II III IV V VI VII> |  
     r8 <III, V,>8 r8 <V, V> r8 <III, V,> r8 <VII, VII> |
 }
 {
-    /uname: piano/
+    /instrument: piano/
     I,,4. I,,8 V,,4 V,, |
 } 
 ]  
 [ 
 {
-    /uname: bass/
+    /instrument: bass/
     \fff
     I,,4. V,,8 V,,4 V,,4  |
     I,,4. V,,8 V,,4 V,,,4 |

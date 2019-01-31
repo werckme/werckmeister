@@ -4,7 +4,7 @@
 @load "./styles/countryschlager1.style";
  
 [{
-    /uname: guitar2/
+    /instrument: guitar2/
     \ffff    
     c2 d | /modOnce: bend from 0/ e2~ e2 | r2 c4 d4 | e4 e g c | /modOnce: bend from 40/dis2 dis4 d | c2 bes4 a 
     | g2  g4 a | bes c' bes a | as2 as4 bes | c' as,4 as,4  bes,~ | <bes, c> as as bes | c' c' es'8 d' c' d' 
@@ -15,13 +15,13 @@
 /device: SC1 midi 2/
 
 /tempo: 130/
---           uname device ch cc pc
-/instrument: piano   SC1 2 0 0/
-/instrument: guitar  SC1 3 0 25/
-/instrument: guitar2 SC1 4 0 26/
-/instrument: bass    SC1 5 0 33/
-/instrument: slide   SC1 6 8 26/
-/instrument: drums   SC1 9 0 32/
+--           instrument device ch cc pc
+/instrumentDef: piano   SC1 2 0 0/
+/instrumentDef: guitar  SC1 3 0 25/
+/instrumentDef: guitar2 SC1 4 0 26/
+/instrumentDef: bass    SC1 5 0 33/
+/instrumentDef: slide   SC1 6 8 26/
+/instrumentDef: drums   SC1 9 0 32/
 
 /style: countryschlager1 normal/
 

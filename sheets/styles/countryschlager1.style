@@ -1,7 +1,7 @@
 section normal ----------------------------------------------------------------
 [ 
 {
-    /uname: guitar/
+    /instrument: guitar/
     /voicingStrategy: simpleGuitar/
     \f
     <I II III IV V VI VII>8 <I II III IV V VI VII>8 r8 
@@ -10,7 +10,7 @@ section normal ----------------------------------------------------------------
 ]
 [ 
 {
-    /uname: slide/
+    /instrument: slide/
     \f
     /modOnce: bend from 0/
     r1 |
@@ -26,21 +26,21 @@ section normal ----------------------------------------------------------------
 ]  
 [ 
 {
-    /uname: bass/
+    /instrument: bass/
     I,,4. I,,8 V,,,4. V,,,8 |
 }   
 ] 
 [
 {
-    /uname: drums/
+    /instrument: drums/
     "ht"8 !f"ht"8 "ht"8 !f"ht"8 "ht"8 !f"ht"8 "ht"8 !f"ht"8 |
 }    
 {
-    /uname: drums/
+    /instrument: drums/
     r4 "sn" r "sn" |
 }
 {
-    /uname: drums/
+    /instrument: drums/
     "bd"4. "bd"8 "bd"4. "bd"8 |
     "bd"4. "bd"8 "bd"4. "bd"8 |
     "bd"4. "bd"8 "bd"8 !f"bd"8 r8 "bd"8 |
@@ -52,29 +52,29 @@ end
 section ende ----------------------------------------------------------------
 [ 
 {
-    /uname: guitar/
+    /instrument: guitar/
     <I II III IV V VI VII>1  |
 }   
 ] 
 [ 
 {
-    /uname: bass/
+    /instrument: bass/
     I,,1 |
 }   
 ] 
 [
 {
-    /uname: drums/
+    /instrument: drums/
     "cy"1 |
 }    
 {
-    /uname: drums/
+    /instrument: drums/
     "bd"1|
 }      
 ]
 [ 
 {
-    /uname: slide/
+    /instrument: slide/
     \f
     /modOnce: bend from 1/
     <I' II' III' IV' V' VI' VII'>1 |

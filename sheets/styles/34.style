@@ -1,7 +1,7 @@
 section normal
 [ 
 {
-    /uname: piano/
+    /instrument: piano/
     /signature: 3 4/
     V,,,4 <II, III, IV, V, VI, VII,> <II, III, IV, V, VI, VII,> |
 }

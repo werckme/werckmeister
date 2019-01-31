@@ -6,8 +6,8 @@
 
 /device: SC1 midi 1/
 
---           uname ch cc pc
-/instrument: piano      SC1 0 0  0/
+--           instrument ch cc pc
+/instrumentDef: piano      SC1 0 0  0/
 /tempo: 170/
 /style: scratch normal/
 

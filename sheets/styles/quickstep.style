@@ -1,21 +1,21 @@
 section normal
 [
 {
-    /uname: drums/
+    /instrument: drums/
     !p"ho"4 "ht"8 "ht" !p"ho"4 "ht"8 "ht" |
 }
 {
-    /uname: drums/
+    /instrument: drums/
     r4 "sn" r "sn" |
 }
 {
-    /uname: drums/
+    /instrument: drums/
     "bd"4 r "bd" r |
 }
 ]
 [
 {
-    /uname: bass/
+    /instrument: bass/
     I,,4 V,, III,, VII,, |
     I,,4 I,, V,, V,, |
     I,,2 V,, |
@@ -23,7 +23,7 @@ section normal
 ]
 [
 {
-    /uname: guitar/
+    /instrument: guitar/
     /voicingStrategy: simpleGuitar lowerRange/
     \ff
     r4 <I II III IV V VI VII> r <I II III IV V VI VII> |
@@ -33,11 +33,11 @@ section normal
 ]
 [
 {
-    /uname: piano/
+    /instrument: piano/
     r4 <I II III IV V VI VII> r <I II III IV V VI VII> |
 }
 {
-    /uname: piano/
+    /instrument: piano/
     I,4 r4 V, r4
 }
 ]

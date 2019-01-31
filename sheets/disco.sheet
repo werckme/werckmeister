@@ -5,10 +5,10 @@
 
 /tempo: 125/
 
---           uname ch cc pc
-/instrument: piano 3 0 0/
-/instrument: bass 5 0 2/
-/instrument: drums 9 0 8/
+--           instrument ch cc pc
+/instrumentDef: piano 3 0 0/
+/instrumentDef: bass 5 0 2/
+/instrumentDef: drums 9 0 8/
 
 /style: simpleDisco normal/
 

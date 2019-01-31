@@ -1,22 +1,22 @@
 section normal ----------------------------------------------------------------
 [ 
 {
-    /uname: drums/
+    /instrument: drums/
     "ht"8 !f"ht" "ht" !f"ht"   "ht" "ht" "ht" !f"ht" |
 }    
 {
-    /uname: drums/
+    /instrument: drums/
     \fff
     r4 "ss"8 r4 "ss"8 r4 | "ss"4. "ss"8 r4 "ss" |
 }    
 {
-    /uname: drums/
+    /instrument: drums/
     "bd"4. "bd"8 "bd"4. "bd"8 |
 }      
 ]
 [ 
 {
-    /uname: guitar/
+    /instrument: guitar/
     /voicingStrategy: simpleGuitar/
     \f
     <I II III IV V VI VII>4 <I II III IV V VI VII>4 r8 <I II III IV V VI VII>8 r8 <I II III IV V VI VII>8  |
@@ -27,13 +27,13 @@ section normal ----------------------------------------------------------------
 ] 
 [ 
 {
-    /uname: piano/
+    /instrument: piano/
     <VII, VII>4 <III, V,>8 <V, V>8 r8 <III, V,>8 r8 <V, V> | r8 <III, V,>8 r8 <V, V> r8 <III, V,> r8 <VII, VII> |
 }    
 ] 
 [ 
 {
-    /uname: bass/
+    /instrument: bass/
     \fff
     I,,4. V,,8 V,,4. I,,8  |
     I,,4. V,,8 V,,4 I,,4  |
@@ -46,22 +46,22 @@ end
 section fill1 ----------------------------------------------------------------
 [ 
 {
-    /uname: drums/
+    /instrument: drums/
     "ht"8 !f"ht" "ht" !f"ht"   "ht" "ht" "ht" !f"ht" |
 }    
 {
-    /uname: drums/
+    /instrument: drums/
     \fff
     "ss"4. "sn"8 "sn"8 "sn"8 "sn"8 "sn"8 |
 }    
 {
-    /uname: drums/
+    /instrument: drums/
     "bd"4. "bd"8 "bd"4. "bd"8 |
 }      
 ]
 [ 
 {
-    /uname: guitar/
+    /instrument: guitar/
     /voicingStrategy: simpleGuitar/
     \f
     <I II III IV V VI VII>4 <I II III IV V VI VII>4 r8 <I II III IV V VI VII>8 r8 <I II III IV V VI VII>8  |
@@ -72,13 +72,13 @@ section fill1 ----------------------------------------------------------------
 ] 
 [ 
 {
-    /uname: piano/
+    /instrument: piano/
     <VII, VII>4 <III, V,>8 <V, V>8 r8 <III, V,>8 r8 <V, V> | r8 <III, V,>8 r8 <V, V> r8 <III, V,> r8 <VII, VII> |
 }    
 ] 
 [ 
 {
-    /uname: bass/
+    /instrument: bass/
     \fff
     I,,4. V,,8 V,,4. I,,8  |
     I,,4. V,,8 V,,4 I,,4  |
@@ -91,23 +91,23 @@ end
 section normal2 ----------------------------------------------------------------
 [ 
 {
-    /uname: drums/
+    /instrument: drums/
     \pp
     "sn"8 "sn" !f"sn" "sn"   "sn" !f"sn" "sn" "sn" |
     !f"sn"8 "sn" "sn" !f"sn"   "sn" "sn" !f"sn" "sn" |
 }    
 {
-    /uname: drums/
+    /instrument: drums/
     r4 "ht"8 r4 "ht"8 r4 | "ht"4. "ht"8 r4 "ht" |
 }    
 {
-    /uname: drums/
+    /instrument: drums/
     "bd"4. "bd"8 "bd"4. "bd"8 |
 }      
 ]
 [ 
 {
-    /uname: guitar/
+    /instrument: guitar/
     /voicingStrategy: simpleGuitar/
     \f
     <I II III IV V VI VII>4 <I II III IV V VI VII>4 r8 <I II III IV V VI VII>8 r8 <I II III IV V VI VII>8  |
@@ -118,13 +118,13 @@ section normal2 ----------------------------------------------------------------
 ]
 [ 
 {
-    /uname: piano/
+    /instrument: piano/
     <VII, VII>4 <III, V,>8 <V, V>8 r8 <III, V,>8 r8 <V, V> | r8 <III, V,>8 r8 <V, V> r8 <III, V,> r8 <VII, VII> |
 }    
 ]  
 [ 
 {
-    /uname: bass/
+    /instrument: bass/
     \fff
     I,,4. V,,8 V,,4. I,,8  |
     I,,4. V,,8 V,,4 I,,4  |

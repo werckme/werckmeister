@@ -39,7 +39,7 @@ namespace sheet {
 			virtual void metaInstrument(const fm::String &uname, int channel, int cc, int pc);
 			virtual void metaInstrument(const fm::String &uname, const fm::String &deviceName, int channel, int cc, int pc);
 			virtual void metaSetInstrumentConfig(const fm::String &uname, const Event::Args &args);
-			virtual void metaSetUname(const fm::String &uname) override;
+			virtual void metaSetInstrument(const fm::String &uname) override;
 			virtual void metaSetTempo(double bpm) override;
 			virtual void setMeta(const Event &metaEvent) override;
 			virtual void metaSetVolume(int volume) override;
