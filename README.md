@@ -174,6 +174,39 @@ Der \espressivo-Befehl kann eingesetzt werden, um crescendo und decrescendo für
 - Stufen optionen
 VII#?II?I -- wenn vorhanden, entweder VII# oder II oder I
 
+style handling umbauten:
+[
+type: sheet
+uname: chorus
+-- style: bossanova 
+{  
+  Cmaj7 ...
+}
+]
+-- style track config (optional)
+[
+type: sheetRendered
+sheet: chorus
+style: bossnova
+instrument: bass 
+]
+[
+type: sheetRendered
+sheet: chorus
+style: bossnova
+instrument: piano
+]
+[
+type: sheetRendered
+sheet: chorus
+style: bossnova
+instrument: drums
+]
+
+
+
+
+
 ### Paralleles abspielen verschiedener Styles
 
 {
