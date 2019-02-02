@@ -52,7 +52,14 @@ BOOST_FUSION_ADAPT_STRUCT(
 )
 
 BOOST_FUSION_ADAPT_STRUCT(
+	sheet::TrackInfo,
+	(fm::String, name)
+	(sheet::Event::Args, args)
+)
+
+BOOST_FUSION_ADAPT_STRUCT(
 	sheet::Track,
+	(sheet::Track::TrackInfos, trackInfos)
 	(sheet::Track::Voices, voices)
 )
 
@@ -83,12 +90,7 @@ namespace sheet {
 		namespace {
 			namespace qi = boost::spirit::qi;
 			namespace ascii = boost::spirit::ascii;
-
-			// template<int EventType>
-			// struct EventTieType {
-
-			// };
-
+		
 			struct ASheetParser
 			{
 				virtual ~ASheetParser() = default;
@@ -96,10 +98,25 @@ namespace sheet {
 				{
 				}
 
-				template<class Track, class Voice>
-				void createTrackRules(Track &track, Voice &voice) const
+				template<class TrackInfoRules>
+				void createTrackInfoRules(TrackInfoRules &trackInfo) const
 				{
-					track %= "[" > +voice > "]";
+					using qi::lexeme;
+					using ascii::char_;
+					using qi::eol;
+					trackInfo %= 
+						"/"
+						>> +char_("a-zA-Z") 
+						>> ":" 
+						>> +(lexeme[+char_("a-zA-Z0-9")])
+						>> "/";
+				}
+
+				template<class TrackRules, class VoiceRules, class TrackInfoRules>
+				void createTrackRules(TrackRules &track, VoiceRules &voice, TrackInfoRules &trackInfo) const
+				{
+					createTrackInfoRules(trackInfo);
+					track %= "[" > *trackInfo > +voice > "]";
 				}
 
 				template <int EventType>
@@ -212,7 +229,7 @@ namespace sheet {
 					events %= *event_;
 					voice %= "{" >> events >> "}";
 
-					createTrackRules(track, voice);
+					createTrackRules(track, voice, trackInfo_);
 
 					start.name("section");
 					sectionName.name("section name");
@@ -230,6 +247,7 @@ namespace sheet {
 				qi::rule<Iterator, PitchDef(), ascii::space_type> absolutePitch_;
 				qi::rule<Iterator, PitchDef(), ascii::space_type> pitchOrAlias_;
 				qi::rule<Iterator, Track(), ascii::space_type> track;
+				qi::rule<Iterator, TrackInfo(), ascii::space_type> trackInfo_;
 				qi::rule<Iterator, Voice(), ascii::space_type> voice;
 				qi::rule<Iterator, Voice::Events(), ascii::space_type> events;
 				qi::rule<Iterator, Event(), ascii::space_type> event_;
@@ -330,7 +348,7 @@ namespace sheet {
 
 					voice %= "{" >> events >> "}";
 
-					createTrackRules(track, voice);
+					createTrackRules(track, voice, trackInfo_);
 
 					start %= *track >> chords_;
 
@@ -349,6 +367,7 @@ namespace sheet {
 
 				qi::rule<Iterator, SheetDef::Events(), ascii::space_type> chords_;
 				qi::rule<Iterator, ChordEvent(), ascii::space_type> chord_;
+				qi::rule<Iterator, TrackInfo(), ascii::space_type> trackInfo_;
 			};
 
 
