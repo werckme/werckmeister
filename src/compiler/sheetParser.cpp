@@ -68,6 +68,7 @@ BOOST_FUSION_ADAPT_STRUCT(
 	(sheet::SheetDef::Events, chords)
 )
 
+
 namespace sheet {
 	namespace compiler {
 
@@ -83,6 +84,11 @@ namespace sheet {
 			namespace qi = boost::spirit::qi;
 			namespace ascii = boost::spirit::ascii;
 
+			// template<int EventType>
+			// struct EventTieType {
+
+			// };
+
 			struct ASheetParser
 			{
 				virtual ~ASheetParser() = default;
@@ -94,7 +100,24 @@ namespace sheet {
 				void createTrackRules(Track &track, Voice &voice) const
 				{
 					track %= "[" > +voice > "]";
-				}	
+				}
+
+				template <int EventType>
+				auto noteEventAppendings() {
+					using qi::lit;
+					using qi::_val;
+					using qi::attr;
+					using boost::phoenix::at_c;
+					constexpr Event::Type tieType = EventType == Event::Degree 
+															   ? Event::TiedDegree
+															   : Event::TiedNote;
+					return 
+						(durationSymbols_ | attr(Event::NoDuration))  
+						>> -(
+								lit("~")[at_c<0>(_val) = tieType] 
+								| (lit("`")[at_c<0>(_val) = Event::Meta][at_c<3>(_val) = FM_STRING("vorschlag")])
+							);
+				}
 			};
 			///////////////////////////////////////////////////////////////////
 			template <typename Iterator>
@@ -133,21 +156,13 @@ namespace sheet {
 					(
 						attr(Event::Degree) 
 						>> (degree_ | ("<" >> +degree_ >> ">")) 				 
-						>> (durationSymbols_ | attr(Event::NoDuration))  
-						>> -(
-								lit("~")[at_c<0>(_val) = Event::TiedDegree] 
-								| (lit("`")[at_c<0>(_val) = Event::Meta][at_c<3>(_val) = FM_STRING("vorschlag")])
-							)
+						>> noteEventAppendings<Event::Degree>()
 					)
 					| 
 					(
 						attr(Event::Note)   
 						>> (pitchOrAlias_ | ("<" >> +pitchOrAlias_ >> ">")) 
-						>> (durationSymbols_ | attr(Event::NoDuration))  
-						>> -(
-								lit("~")[at_c<0>(_val) = Event::TiedNote] 
-								| (lit("`")[at_c<0>(_val) = Event::Meta][at_c<3>(_val) = FM_STRING("vorschlag")])
-							)
+						>> noteEventAppendings<Event::Note>()
 					)
 					|
 					(
@@ -262,11 +277,7 @@ namespace sheet {
 					(
 						attr(Event::Note) 
 						>> (pitchOrAlias_ | ("<" >> +pitchOrAlias_ >> ">")) 
-						>> (durationSymbols_ | attr(Event::NoDuration)) 
-						>> -( 
-								lit("~")[at_c<0>(_val) = Event::TiedNote] 
-								| (lit("`")[at_c<0>(_val) = Event::Meta][at_c<3>(_val) = FM_STRING("vorschlag")])
-							)
+						>> noteEventAppendings<Event::Note>()
 					)
 					| 
 					(
