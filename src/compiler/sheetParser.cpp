@@ -83,33 +83,25 @@ namespace sheet {
 			namespace qi = boost::spirit::qi;
 			namespace ascii = boost::spirit::ascii;
 
-			template <typename Iterator>
 			struct ASheetParser
 			{
-
+				virtual ~ASheetParser() = default;
 				ASheetParser()
 				{
-					using qi::int_;
-					using qi::lit;
-					using qi::_val;
-					using qi::double_;
-					using qi::lexeme;
-					using ascii::char_;
-					using qi::attr;
-					using qi::on_error;
-					using qi::fail;
-
 				}
 
-
+				template<class Track, class Voice>
+				void createTrackRules(Track &track, Voice &voice) const
+				{
+					track %= "[" > +voice > "]";
+				}	
 			};
 			///////////////////////////////////////////////////////////////////
 			template <typename Iterator>
-			struct _SectionParser : qi::grammar<Iterator, Section(), ascii::space_type>
+			struct _SectionParser : public ASheetParser, 
+								    qi::grammar<Iterator, Section(), ascii::space_type>
 			{
-
-				virtual void x() {}
-
+				typedef ASheetParser Base;
 				_SectionParser() : _SectionParser::base_type(start, "section")
 				{
 					using qi::int_;
@@ -128,28 +120,84 @@ namespace sheet {
 					voice.name("voice");
 					events.name("events");
 
-					pitch_.name("pitch");
-					pitch_ %= degreeSymbols_ >> (octaveSymbols_ | attr(PitchDef::DefaultOctave));
+					degree_.name("pitch");
+					degree_ %= degreeSymbols_ >> (octaveSymbols_ | attr(PitchDef::DefaultOctave));
 
 					absolutePitch_.name("absolute pitch");
 					absolutePitch_ %= pitchSymbols_ >> (octaveSymbols_ | attr(PitchDef::DefaultOctave));
 
 					alias_ %= lexeme['"' >> +(char_ - '"') >> '"'];
 
+					pitchOrAlias_ %= absolutePitch_ | alias_;
 					event_ %= 
-						  (attr(Event::Degree) >> (pitch_ | ("<" >> +pitch_ >> ">")) 				 >> (durationSymbols_ | attr(Event::NoDuration))  >> -(lit("~")[at_c<0>(_val) = Event::TiedDegree] | (lit("`")[at_c<0>(_val) = Event::Meta][at_c<3>(_val) = FM_STRING("vorschlag")])))
-						| (attr(Event::Note)   >> (absolutePitch_ | ("<" >> +absolutePitch_ >> ">")) >> (durationSymbols_ | attr(Event::NoDuration))  >> -(lit("~")[at_c<0>(_val) = Event::TiedNote] | (lit("`")[at_c<0>(_val) = Event::Meta][at_c<3>(_val) = FM_STRING("vorschlag")])))
-						| (attr(Event::Note)   >> (alias_ | ("<" >> +alias_ >> ">")) 				 >> (durationSymbols_ | attr(Event::NoDuration))  >> -(lit("~")[at_c<0>(_val) = Event::TiedNote] | (lit("`")[at_c<0>(_val) = Event::Meta][at_c<3>(_val) = FM_STRING("vorschlag")])))
-						| ("\\" >> attr(Event::Meta) >> attr(PitchDef()) >> attr(Event::NoDuration) >> attr("expression") >> expressionSymbols_)
-						| ("!" >> attr(Event::Meta) >> attr(PitchDef()) >> attr(Event::NoDuration) >> attr("singleExpression") >> expressionSymbols_)
-						| ("r" >> attr(Event::Rest) >> attr(PitchDef()) >> (durationSymbols_ | attr(Event::NoDuration)))
-						| ("|" >> attr(Event::EOB) >> attr(PitchDef()) >> attr(Event::NoDuration))
-						| ("/" >> attr(Event::Meta) >> attr(PitchDef()) >> attr(Event::NoDuration) >> +char_("a-zA-Z") >> ":" >> +(lexeme[+char_("a-zA-Z0-9")]) >> "/")
-						;
+					(
+						attr(Event::Degree) 
+						>> (degree_ | ("<" >> +degree_ >> ">")) 				 
+						>> (durationSymbols_ | attr(Event::NoDuration))  
+						>> -(
+								lit("~")[at_c<0>(_val) = Event::TiedDegree] 
+								| (lit("`")[at_c<0>(_val) = Event::Meta][at_c<3>(_val) = FM_STRING("vorschlag")])
+							)
+					)
+					| 
+					(
+						attr(Event::Note)   
+						>> (pitchOrAlias_ | ("<" >> +pitchOrAlias_ >> ">")) 
+						>> (durationSymbols_ | attr(Event::NoDuration))  
+						>> -(
+								lit("~")[at_c<0>(_val) = Event::TiedNote] 
+								| (lit("`")[at_c<0>(_val) = Event::Meta][at_c<3>(_val) = FM_STRING("vorschlag")])
+							)
+					)
+					|
+					(
+						"\\" 
+						>> attr(Event::Meta) 
+						>> attr(PitchDef()) 
+						>> attr(Event::NoDuration) 
+						>> attr("expression") 
+						>> expressionSymbols_
+					)
+					| 
+					(
+						"!" 
+						>> attr(Event::Meta) 
+						>> attr(PitchDef()) 
+						>> attr(Event::NoDuration) 
+						>> attr("singleExpression") 
+						>> expressionSymbols_
+					)
+					| 
+					(
+						"r" 
+						>> attr(Event::Rest) 
+						>> attr(PitchDef()) 
+						>> (durationSymbols_ | attr(Event::NoDuration))
+					)
+					| 
+					(
+						"|" 
+						>> attr(Event::EOB) 
+						>> attr(PitchDef()) 
+						>> attr(Event::NoDuration)
+					)
+					| 
+					(
+						"/" 
+						>> attr(Event::Meta) 
+						>> attr(PitchDef()) 
+						>> attr(Event::NoDuration) 
+						>> +char_("a-zA-Z") 
+						>> ":" 
+						>> +(lexeme[+char_("a-zA-Z0-9")]) 
+						>> "/"
+					)
+					;
 
-					track %= "[" > +voice > "]";
 					events %= *event_;
 					voice %= "{" >> events >> "}";
+
+					createTrackRules(track, voice);
 
 					start.name("section");
 					sectionName.name("section name");
@@ -163,8 +211,9 @@ namespace sheet {
 				qi::rule<Iterator, Section(), ascii::space_type> start;
 				qi::rule<Iterator, fm::String(), ascii::space_type> sectionName;
 				qi::rule<Iterator, AliasPitch(), ascii::space_type> alias_;
-				qi::rule<Iterator, PitchDef(), ascii::space_type> pitch_;
+				qi::rule<Iterator, PitchDef(), ascii::space_type> degree_;
 				qi::rule<Iterator, PitchDef(), ascii::space_type> absolutePitch_;
+				qi::rule<Iterator, PitchDef(), ascii::space_type> pitchOrAlias_;
 				qi::rule<Iterator, Track(), ascii::space_type> track;
 				qi::rule<Iterator, Voice(), ascii::space_type> voice;
 				qi::rule<Iterator, Voice::Events(), ascii::space_type> events;
@@ -180,7 +229,8 @@ namespace sheet {
 			}
 			///////////////////////////////////////////////////////////////////
 			template <typename Iterator>
-			struct _SheetParser : qi::grammar<Iterator, SheetDef(), ascii::space_type>
+			struct _SheetParser : public ASheetParser,
+							      qi::grammar<Iterator, SheetDef(), ascii::space_type>
 			{
 
 				_SheetParser() : _SheetParser::base_type(start, "sheet")
@@ -207,15 +257,57 @@ namespace sheet {
 					pitch_ %= pitchSymbols_ >> (octaveSymbols_ | attr(PitchDef::DefaultOctave));
 
 					alias_ %= lexeme['"' >> +(char_ - '"') >> '"'];
-
-					event_ %= (attr(Event::Note) >> (pitch_ | ("<" >> +pitch_ >> ">")) >> (durationSymbols_ | attr(Event::NoDuration)) >> -( lit("~")[at_c<0>(_val) = Event::TiedNote] | (lit("`")[at_c<0>(_val) = Event::Meta][at_c<3>(_val) = FM_STRING("vorschlag")])  ))
-						| (attr(Event::Note) >> (alias_ | ("<" >> +alias_ >> ">")) >> (durationSymbols_ | attr(Event::NoDuration)) >> -(lit("~")[at_c<0>(_val) = Event::TiedNote] | (lit("`")[at_c<0>(_val) = Event::Meta][at_c<3>(_val) = FM_STRING("vorschlag")]) ))
-						| ("\\" >> attr(Event::Meta) >> attr(PitchDef()) >> attr(Event::NoDuration) >> attr("expression") >> expressionSymbols_)
-						| ("!" >> attr(Event::Meta) >> attr(PitchDef()) >> attr(Event::NoDuration) >> attr("singleExpression") >> expressionSymbols_)
-						| ("r" >> attr(Event::Rest) >> attr(PitchDef()) >> (durationSymbols_ | attr(Event::NoDuration)))
-						| ("|" >> attr(Event::EOB) >> attr(PitchDef()) >> attr(Event::NoDuration))
-						| ("/" >> attr(Event::Meta) >> attr(PitchDef()) >> attr(Event::NoDuration) >> +char_("a-zA-Z") >> ":" >> +(lexeme[+char_("a-zA-Z0-9")]) >> "/")
-						;
+					pitchOrAlias_ %= pitch_ | alias_;
+					event_ %= 
+					(
+						attr(Event::Note) 
+						>> (pitchOrAlias_ | ("<" >> +pitchOrAlias_ >> ">")) 
+						>> (durationSymbols_ | attr(Event::NoDuration)) 
+						>> -( 
+								lit("~")[at_c<0>(_val) = Event::TiedNote] 
+								| (lit("`")[at_c<0>(_val) = Event::Meta][at_c<3>(_val) = FM_STRING("vorschlag")])
+							)
+					)
+					| 
+					(
+						"\\" 
+						>> attr(Event::Meta) 
+						>> attr(PitchDef()) 
+						>> attr(Event::NoDuration) 
+						>> attr("expression") 
+						>> expressionSymbols_
+					)
+					| 
+					(
+						"!" 
+						>> attr(Event::Meta) 
+						>> attr(PitchDef()) 
+						>> attr(Event::NoDuration) 
+						>> attr("singleExpression") 
+						>> expressionSymbols_
+					)
+					| 
+					(
+						"r" 
+						>> attr(Event::Rest) 
+						>> attr(PitchDef()) 
+						>> (durationSymbols_ | attr(Event::NoDuration)))
+					| 
+					(
+						"|" 
+						>> attr(Event::EOB) 
+						>> attr(PitchDef()) 
+						>> attr(Event::NoDuration)
+					)
+					| 
+					(
+						"/" 
+						>> attr(Event::Meta) 
+						>> attr(PitchDef()) 
+						>> attr(Event::NoDuration) 
+						>> +char_("a-zA-Z") >> ":" >> +(lexeme[+char_("a-zA-Z0-9")]) >> "/"
+					)
+					;
 					events %= *event_;
 
 					chord_ %= (attr(Event::Chord) >> lexeme[char_("a-gA-G") > *char_(ChordDefParser::ALLOWED_CHORD_SYMBOLS_REGEX)])
@@ -225,8 +317,9 @@ namespace sheet {
 						;
 					chords_ %= *chord_;
 
-					track %= "[" > +voice > "]";
 					voice %= "{" >> events >> "}";
+
+					createTrackRules(track, voice);
 
 					start %= *track >> chords_;
 
@@ -236,6 +329,7 @@ namespace sheet {
 				}
 				qi::rule<Iterator, SheetDef(), ascii::space_type> start;
 				qi::rule<Iterator, PitchDef(), ascii::space_type> pitch_;
+				qi::rule<Iterator, PitchDef(), ascii::space_type> pitchOrAlias_;
 				qi::rule<Iterator, Track(), ascii::space_type> track;
 				qi::rule<Iterator, AliasPitch(), ascii::space_type> alias_;
 				qi::rule<Iterator, Voice(), ascii::space_type> voice;
