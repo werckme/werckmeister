@@ -102,6 +102,7 @@ namespace sheet {
 			virtual fm::Expression getExpression(const fm::String &str) const;
 			virtual ASpielanweisungPtr spielanweisung();
 			virtual AInstrumentDef * getInstrumentDef(const fm::String &uname) = 0;
+			virtual fm::Ticks currentPosition() const;
 			/////// meta commands
 			virtual void setMeta(const Event &metaEvent);
 			virtual void metaSetInstrument(const fm::String &uname) {}

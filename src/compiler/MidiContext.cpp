@@ -243,16 +243,15 @@ namespace sheet {
 				throw std::runtime_error("instrument " + fm::to_string(uname) + " not found");
 			}
 			auto meta = trackMetaData<MidiContext::TrackMetaData>();
-			auto voiceMeta = voiceMetaData<MidiContext::VoiceMetaData>();
 			meta->instrument = *instrumentDef;
 			if (!instrumentDef->deviceName.empty()) {
-				addDeviceChangeEvent(instrumentDef->deviceName, voiceMeta->position);
+				addDeviceChangeEvent(instrumentDef->deviceName, currentPosition());
 			}
 			metaSoundSelect(instrumentDef->cc, instrumentDef->pc);
 			// volume
-			addEvent(__createVolumeEvent(*instrumentDef, voiceMeta->position));
+			addEvent(__createVolumeEvent(*instrumentDef, currentPosition()));
 			// pan
-			addEvent(__createPanEvent(*instrumentDef, voiceMeta->position));
+			addEvent(__createPanEvent(*instrumentDef, currentPosition()));
 		}
 
 		void MidiContext::addDeviceChangeEvent(const fm::String &deviceName, fm::Ticks position)

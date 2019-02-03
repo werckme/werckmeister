@@ -246,6 +246,15 @@ namespace sheet {
 			throw std::runtime_error(msg + " at voice " + std::to_string(voice()) + " bar: " + std::to_string(meta->position / meta->barLength));
 		}
 
+		fm::Ticks AContext::currentPosition() const
+		{
+			auto voiceMeta = voiceMetaData();
+			if (!voiceMeta) {
+				return 0;
+			}
+			return voiceMeta->position;
+		}
+
 		PitchDef AContext::resolvePitch(const PitchDef &pitch) const
 		{
 			if (pitch.alias.empty()) {
