@@ -2,6 +2,7 @@
 #include <fm/midi.hpp>
 #include <fm/config.hpp>
 #include <math.h>
+#include "error.hpp"
 
 namespace sheet {
 	namespace compiler {
@@ -12,7 +13,7 @@ namespace sheet {
 			inline void _checkMidi(fm::midi::MidiPtr midi) 
 			{
 				if (!midi) {
-					throw std::runtime_error("missing midi object");
+					FM_THROW(Exception, "missing midi object");
 				}
 			}
 
@@ -38,6 +39,9 @@ namespace sheet {
 			_checkMidi(midi_);
 			auto voiceConfig = voiceMetaData<MidiContext::VoiceMetaData>();
 			auto trackMeta = trackMetaData<MidiContext::TrackMetaData>();
+			if (!voiceConfig || !trackMeta) {
+				FM_THROW(Exception, "meta data = null");
+			}
 			const auto &instrumentDef = trackMeta->instrument;
 			midi_->tracks().at(track())->events().addNote(
 				instrumentDef.channel, 
@@ -54,6 +58,9 @@ namespace sheet {
 			_checkMidi(midi_);
 			auto voiceConfig = voiceMetaData<MidiContext::VoiceMetaData>();
 			auto trackMeta = trackMetaData<MidiContext::TrackMetaData>();
+			if (!voiceConfig || !trackMeta) {
+				FM_THROW(Exception, "meta data = null");
+			}			
 			const auto &instrumentDef = trackMeta->instrument;
 			auto event = fm::midi::Event::NoteOn(instrumentDef.channel, 
 				absolutePosition, 
@@ -68,8 +75,10 @@ namespace sheet {
 		{
 			Base::stopEvent(pitch, absolutePosition);
 			_checkMidi(midi_);
-			auto voiceConfig = voiceMetaData<MidiContext::VoiceMetaData>();
 			auto trackMeta = trackMetaData<MidiContext::TrackMetaData>();
+			if (!trackMeta) {
+				FM_THROW(Exception, "meta data = null");
+			}			
 			const auto &instrumentDef = trackMeta->instrument;
 			auto event = fm::midi::Event::NoteOff(instrumentDef.channel, 
 				absolutePosition, 
@@ -86,8 +95,10 @@ namespace sheet {
 		void MidiContext::addPitchbendEvent(double value, fm::Ticks absolutePosition) 
 		{
 			_checkMidi(midi_);
-			auto voiceConfig = voiceMetaData<MidiContext::VoiceMetaData>();
 			auto trackMeta = trackMetaData<MidiContext::TrackMetaData>();
+			if (!trackMeta) {
+				FM_THROW(Exception, "meta data = null");
+			}			
 			const auto &instrumentDef = trackMeta->instrument;
 			auto event = fm::midi::Event::PitchBend(instrumentDef.channel, absolutePosition, value);
 			midi_->tracks().at(track())->events().add(event);
@@ -128,6 +139,9 @@ namespace sheet {
 		void MidiContext::metaSetChannel(int channel)
 		{
 			auto meta = trackMetaData<MidiContext::TrackMetaData>();
+			if (!meta) {
+				FM_THROW(Exception, "meta data = null");
+			}			
 			meta->instrument.channel = channel;
 		}
 
@@ -135,12 +149,15 @@ namespace sheet {
 		{
 			auto meta = voiceMetaData<MidiContext::VoiceMetaData>();
 			auto trackMeta = trackMetaData<MidiContext::TrackMetaData>();
+			if (!meta || !trackMeta) {
+				FM_THROW(Exception, "meta data = null");
+			}				
 			auto ev = fm::midi::Event();
 			ev.channel(getChannel(*trackMeta));
 			ev.eventType(fm::midi::Controller);
 			ev.parameter1(0);
 			ev.parameter2(cc);
-			ev.absPosition(meta->position);
+			ev.absPosition(currentPosition());
 			addEvent(ev);
 			ev.eventType(fm::midi::ProgramChange);
 			ev.parameter1(pc);
@@ -167,6 +184,9 @@ namespace sheet {
 			Base::metaSetVolume(volume);
 			auto meta = voiceMetaData<MidiContext::VoiceMetaData>();
 			auto trackMeta = trackMetaData<MidiContext::TrackMetaData>();
+			if (!meta || !trackMeta) {
+				FM_THROW(Exception, "meta data = null");
+			}				
 			auto midiVol = meta->volume * fm::midi::MaxMidiValue / MAX_VOLUME;
 			auto channel = getChannel(*trackMeta);
 			auto ev = fm::midi::Event::CCVolume(channel, midiVol);
@@ -179,6 +199,9 @@ namespace sheet {
 			Base::metaSetPan(val);
 			auto meta = voiceMetaData<MidiContext::VoiceMetaData>();
 			auto trackMeta = trackMetaData<MidiContext::TrackMetaData>();
+			if (!meta || !trackMeta) {
+				FM_THROW(Exception, "meta data = null");
+			}				
 			auto midiVal = meta->pan * fm::midi::MaxMidiValue / MAX_VOLUME;
 			auto channel = getChannel(*trackMeta);
 			auto ev = fm::midi::Event::CCPan(channel, midiVal);
@@ -205,12 +228,12 @@ namespace sheet {
 		void MidiContext::metaSetInstrumentConfig(const fm::String &uname, const Event::Args &args)
 		{
 			if (args.size() < 3 || args.size() % 2 == 0) {
-				throw std::runtime_error("not enough values for " + fm::to_string(SHEET_META__SET_INSTRUMENT_CONFIG) +  ": " + fm::to_string(uname));
+				FM_THROW(Exception, "not enough values for " + fm::to_string(SHEET_META__SET_INSTRUMENT_CONFIG) +  ": " + fm::to_string(uname));
 			}
 			auto instrumentDef = getMidiInstrumentDef(uname);
 			auto meta = voiceMetaData<MidiContext::VoiceMetaData>();
 			if (instrumentDef == nullptr) {
-				throw std::runtime_error("instrumentDef not found: " + fm::to_string(uname));
+				FM_THROW(Exception, "instrumentDef not found: " + fm::to_string(uname));
 			}
 			for (size_t idx = 1; idx < args.size(); idx+=2) {
 				auto propertyName = getArgument<fm::String>(args, idx);
@@ -223,7 +246,7 @@ namespace sheet {
 					instrumentDef->pan = getArgument<int>(args, idx+1);
 					theEvent = __createPanEvent(*instrumentDef, meta->position);
 				} else {
-					throw std::runtime_error("instrumentDef config not found: " + fm::to_string(uname) + ", " + fm::to_string(propertyName));
+					FM_THROW(Exception, "instrumentDef config not found: " + fm::to_string(uname) + ", " + fm::to_string(propertyName));
 				}
 				addEvent(theEvent); 
 			}
@@ -235,17 +258,19 @@ namespace sheet {
 			auto trackName = fm::midi::Event::MetaTrack(fm::to_string(uname));
 			trackName.absPosition(0);
 			addEvent(trackName); 
-
 			// find instrumentDef defs and assign them to the meta data of the voice
 			Base::metaSetInstrument(uname);
 			auto instrumentDef = getMidiInstrumentDef(uname);
 			if (instrumentDef == nullptr) {
-				throw std::runtime_error("instrument " + fm::to_string(uname) + " not found");
+				FM_THROW(Exception, "instrument " + fm::to_string(uname) + " not found");
 			}
 			auto meta = trackMetaData<MidiContext::TrackMetaData>();
+			if (!meta) {
+				FM_THROW(Exception, "meta data = null");
+			}				
 			meta->instrument = *instrumentDef;
 			if (!instrumentDef->deviceName.empty()) {
-				addDeviceChangeEvent(instrumentDef->deviceName, currentPosition());
+				addDeviceChangeEvent(instrumentDef->deviceName, 0);
 			}
 			metaSoundSelect(instrumentDef->cc, instrumentDef->pc);
 			// volume
@@ -309,7 +334,7 @@ namespace sheet {
 					metaInstrument(getArgument<fm::String>(metaEvent, 0), getArgument<fm::String>(metaEvent, 1),getArgument<int>(metaEvent, 2), getArgument<int>(metaEvent, 3), getArgument<int>(metaEvent, 4));					
 					return;
 				}
-				throw std::runtime_error("invalid number of arguments for instrumentDef: " + fm::to_string(name) );
+				FM_THROW(Exception, "invalid number of arguments for instrumentDef: " + fm::to_string(name) );
 			}
 			if (metaEvent.metaCommand == SHEET_META__SET_INSTRUMENT_CONFIG) {
 				metaSetInstrumentConfig(getArgument<fm::String>(metaEvent, 0), metaEvent.metaArgs);

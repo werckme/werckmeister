@@ -3,6 +3,10 @@
 
 #include <fm/common.hpp>
 
+// TRACK
+#define SHEET_META__INSTRUMENT FM_STRING("instrument")
+
+// VOICE
 #define SHEET_META__MIDI_INSTRUMENT_DEF FM_STRING("instrumentDef")
 #define SHEET_META__MIDI_CHANNEL FM_STRING("channel")
 #define SHEET_META__MIDI_SOUNDSELECT FM_STRING("soundSelect")

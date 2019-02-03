@@ -4,6 +4,7 @@
 #include <boost/algorithm/string.hpp>
 #include <unordered_map>
 #include <locale>
+#include <fm/exception.hpp>
 
 namespace sheet {
 
@@ -31,13 +32,13 @@ namespace sheet {
 		PitchDef::Pitch pitch = 0;
 		auto nameLower = chordName;
 		if (nameLower.length() == 0) {
-			throw std::runtime_error("empty chord");
+			FM_THROW(fm::Exception, "empty chord");
 		}
 		boost::algorithm::to_lower(nameLower);
 		fm::String::const_iterator it = nameLower.begin();
 		auto pitchIt = _name2pitch.find(*it);
 		if (pitchIt == _name2pitch.end()) {
-			throw std::runtime_error("ivalid chord: " + fm::to_string(chordName));
+			FM_THROW(fm::Exception, "ivalid chord: " + fm::to_string(chordName));
 		}
 		pitch = pitchIt->second;
 		++it;

@@ -1,6 +1,5 @@
 #include "AContext.h"
-#include <exception>
-#include <exception>
+#include "error.hpp"
 #include <fm/werckmeister.hpp>
 #include <algorithm>
 #include <fm/common.hpp>
@@ -10,6 +9,7 @@
 #include "modification/AModification.h"
 #include <fm/literals.hpp>
 #include <fm/config/configServer.h>
+#include <sheet/Track.h>
 
 namespace {
 	const fm::Ticks TickTolerance = 0.5; // rounding errors e.g. for triplets
@@ -163,7 +163,7 @@ namespace sheet {
 		AContext::IStyleDefServerPtr AContext::styleDefServer() const
 		{
 			if (!styleDefServer_) {
-				throw std::runtime_error("no styledef server set");
+				FM_THROW(Exception, "no styledef server set");
 			}
 			return styleDefServer_;
 		}
@@ -174,27 +174,43 @@ namespace sheet {
 
 		AContext::TrackId AContext::track() const
 		{
-			if (trackId_ == INVALID_TRACK_ID) {
-				throw std::runtime_error("no track set");
-			}
 			return trackId_;
 		}
 		AContext::VoiceId AContext::voice() const
 		{
-			if (voiceId_ == INVALID_VOICE_ID) {
-				throw std::runtime_error("no voice set");
-			}
 			return voiceId_;
 		}
 
 		void AContext::setTrack(TrackId trackId)
 		{
+			this->voiceId_ = INVALID_VOICE_ID;
 			this->trackId_ = trackId;
 		}
 
 		void AContext::setVoice(VoiceId voice)
 		{
 			this->voiceId_ = voice;
+		}
+
+		void AContext::processTrackMetaData(const sheet::Track &track)
+		{
+			auto trackMeta = trackMetaData();
+			for(const auto &it : track.trackInfos) {
+				processTrackMetaCommand(it.name, it.args, trackMeta);
+			}
+		}
+
+		void AContext::processTrackMetaCommand(const fm::String &command, const sheet::TrackInfo::Args &args, TrackMetaDataPtr dst)
+		{
+			if (dst == nullptr) {
+				dst = trackMetaData();
+			}
+			if (!dst) {
+				FM_THROW(Exception, "metadata == null");
+			}
+			if (command == SHEET_META__INSTRUMENT) {
+				metaSetInstrument(getArgument<fm::String>(args, 0));
+			}
 		}
 
 		AContext::TrackId AContext::createTrack(const sheet::Track *track)
@@ -216,34 +232,34 @@ namespace sheet {
 		{
 			auto it = voiceMetaDataMap_.find(voiceid);
 			if (it == voiceMetaDataMap_.end()) {
-				throw std::runtime_error("no meta data found for voiceid: " + std::to_string(voiceid));
+				return nullptr;
 			}
 			return it->second;
 		}
 
 		AContext::VoiceMetaDataPtr AContext::voiceMetaData() const
 		{
-			return voiceMetaData();
+			return voiceMetaData(voice());
 		}
 
 		AContext::TrackMetaDataPtr AContext::trackMetaData(TrackId trackid) const
 		{
 			auto it = trackMetaDataMap_.find(trackid);
 			if (it == trackMetaDataMap_.end()) {
-				throw std::runtime_error("no meta data found for voiceid: " + std::to_string(trackid));
+				return nullptr;
 			}
 			return it->second;
 		}
 
 		AContext::TrackMetaDataPtr AContext::trackMetaData() const
 		{
-			return trackMetaData();
+			return trackMetaData(track());
 		}
 
 		void AContext::throwContextException(const std::string &msg)
 		{
 			auto meta = voiceMetaData();
-			throw std::runtime_error(msg + " at voice " + std::to_string(voice()) + " bar: " + std::to_string(meta->position / meta->barLength));
+			FM_THROW(Exception, msg + " at voice " + std::to_string(voice()) + " bar: " + std::to_string(meta->position / meta->barLength));
 		}
 
 		fm::Ticks AContext::currentPosition() const
@@ -262,7 +278,7 @@ namespace sheet {
 			}
 			const PitchDef *result = styleDefServer()->getAlias(pitch.alias);
 			if (result == nullptr) {
-				throw std::runtime_error("could not resolve alias: " + fm::to_string(pitch.alias));
+				FM_THROW(Exception, "could not resolve alias: " + fm::to_string(pitch.alias));
 			}
 			return *result;
 		}
@@ -366,8 +382,15 @@ namespace sheet {
 		{
 			auto tmeta = trackMetaData();
 			auto vmeta = voiceMetaData();
-			auto voiceName = tmeta->instrument.empty() ? std::to_string(voice()) : fm::to_string(tmeta->instrument);
-			std::string warning(msg + " at '" + voiceName + "', bar: " + std::to_string(vmeta->position / vmeta->barLength));
+			std::string voiceName;
+			fm::Ticks pos = 0;
+			if (tmeta) {
+				voiceName = tmeta->instrument.empty() ? std::to_string(voice()) : fm::to_string(tmeta->instrument);
+			}
+			if (vmeta) {
+				pos = vmeta->position / vmeta->barLength;
+			}
+			std::string warning(msg + " at '" + voiceName + "', bar: " + std::to_string(pos));
 			warnings.push_back(warning);
 		}
 
@@ -472,7 +495,7 @@ namespace sheet {
 		{
 			auto &cs = getConfigServer();
 			if (args.size() < 2) {
-				throw std::runtime_error("not enough arguments for device config");
+				FM_THROW(Exception, "not enough arguments for device config");
 			}
 			std::vector<fm::String> deviceArgs(args.begin() + 1, args.end());
 			auto device = cs.createDeviceConfig(name, deviceArgs);
@@ -525,7 +548,7 @@ namespace sheet {
 		{
 			auto style = styleDefServer_->getStyle(file, section);
 			if (!style) {
-				throw std::runtime_error("style not found: " + fm::to_string(file) + " " + fm::to_string(section));
+				FM_THROW(Exception, "style not found: " + fm::to_string(file) + " " + fm::to_string(section));
 			}
 			switchStyle(currentStyleDef_, style);
 		}
@@ -625,7 +648,7 @@ namespace sheet {
 			currentChord_ = chord;
 			currentChordDef_ = styleDefServer()->getChord(currentChord_.chordDefName());
 			if (currentChordDef_ == nullptr) {
-				throw std::runtime_error("chord not found: " + fm::to_string(currentChord_.chordName));
+				FM_THROW(Exception, "chord not found: " + fm::to_string(currentChord_.chordName));
 			}
 		}
 

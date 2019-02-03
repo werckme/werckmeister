@@ -27,6 +27,8 @@ namespace sheet {
 			for (const auto &track : document_->sheetDef.tracks)
 			{
 				auto trackId = ctx->createTrack(&track);
+				ctx->setTrack(trackId);
+				ctx->processTrackMetaData(track);
 				for (const auto &voice : track.voices)
 				{
 					auto voiceId = ctx->createVoice(&voice);

@@ -12,6 +12,8 @@
 #include <algorithm>
 #include <cstdlib>
 
+#define FM_THROW(ex, msg) throw ex((msg), __FILE__, __LINE__)
+
 namespace fm {
 	typedef unsigned char Byte;
 	typedef wchar_t CharType;

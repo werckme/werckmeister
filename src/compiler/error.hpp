@@ -5,21 +5,20 @@
 #include <boost/fusion/include/vector.hpp>
 #include <boost/fusion/include/at_c.hpp>
 #include <boost/spirit/home/support/info.hpp>
+#include <fm/exception.hpp>
+#include <string>
 
 namespace sheet {
 	namespace compiler {
-		class Exception : public std::exception
+		class Exception : public fm::Exception
 		{
+		typedef fm::Exception Base;
 		public:
-			explicit Exception(const std::string& what_) : msg_(what_)
+			explicit Exception(const std::string& what_) : Base(what_) {} 
+			explicit Exception(const std::string& what_, const char *filename, int line) 
+				: Base(what_, filename, line)
 			{}
-			virtual ~Exception() throw () {}
-			virtual const char* what() const throw () {
-				return msg_.c_str();
-			}
-
-		protected:
-			std::string msg_;
+			virtual ~Exception() throw () = default;
 		};
 
 		namespace handler {

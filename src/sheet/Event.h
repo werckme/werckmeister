@@ -8,6 +8,7 @@
 #include <set>
 #include <tuple>
 #include <functional>
+#include <fm/exception.hpp>
 
 namespace sheet {
 
@@ -89,10 +90,10 @@ namespace sheet {
 
 
 	///////////////////////////////////////////////////////////////////////////
-			namespace {
+		namespace {
 			struct MissingArgument {};
-			template<typename TArg>
-			TArg __getArgument(const Event::Args &args, int idx, TArg *defaultValue) 
+			template<typename TArg, typename TArgs>
+			TArg __getArgument(const TArgs &args, int idx, TArg *defaultValue) 
 			{
 				if (idx >= (int)args.size()) {
 					if (defaultValue) {
@@ -114,17 +115,17 @@ namespace sheet {
 			try {
 				return __getArgument<TArg>(metaEvent.metaArgs, idx, defaultValue);
 			} catch(const MissingArgument&) {
-				throw std::runtime_error("missing argument for '" + fm::to_string(metaEvent.metaCommand) + "'");
+				FM_THROW(fm::Exception, "missing argument for '" + fm::to_string(metaEvent.metaCommand) + "'");
 			}
 		}
 
-		template<typename TArg>
-		TArg getArgument(const Event::Args &args, int idx, TArg *defaultValue = nullptr) 
+		template<typename TArg, typename TArgs>
+		TArg getArgument(const TArgs &args, int idx, TArg *defaultValue = nullptr) 
 		{
 			try {
-				return __getArgument<TArg>(args, idx, defaultValue);
+				return __getArgument<TArg, TArgs>(args, idx, defaultValue);
 			} catch(const MissingArgument&) {
-				throw std::runtime_error("missing meta argumnet");
+				FM_THROW(fm::Exception, "missing meta argumnet");
 			}
 		}	
 

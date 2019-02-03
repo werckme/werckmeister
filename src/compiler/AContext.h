@@ -103,6 +103,8 @@ namespace sheet {
 			virtual ASpielanweisungPtr spielanweisung();
 			virtual AInstrumentDef * getInstrumentDef(const fm::String &uname) = 0;
 			virtual fm::Ticks currentPosition() const;
+			virtual void processTrackMetaData(const sheet::Track &track);
+			virtual void processTrackMetaCommand(const fm::String &command, const sheet::TrackInfo::Args &args, TrackMetaDataPtr dst = nullptr);
 			/////// meta commands
 			virtual void setMeta(const Event &metaEvent);
 			virtual void metaSetInstrument(const fm::String &uname) {}

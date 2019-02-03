@@ -6,6 +6,7 @@
 #include <functional>
 #include "fm/common.hpp"
 #include "fm/werckmeister.hpp"
+#include "error.hpp"
 
 namespace sheet {
 	namespace compiler {
@@ -67,7 +68,7 @@ namespace sheet {
 					auto ext = path.extension().string();
 					auto it = exthandlers.find(ext);
 					if (it == exthandlers.end()) {
-						throw std::runtime_error("unsupported file type: " + fm::to_string(x));
+						FM_THROW(Exception, "unsupported file type: " + fm::to_string(x));
 					}
 					it->second(doc, x);
 				}
