@@ -147,9 +147,8 @@ namespace sheet {
 
 		void MidiContext::metaSoundSelect(int cc, int pc)
 		{
-			auto meta = voiceMetaData<MidiContext::VoiceMetaData>();
 			auto trackMeta = trackMetaData<MidiContext::TrackMetaData>();
-			if (!meta || !trackMeta) {
+			if (!trackMeta) {
 				FM_THROW(Exception, "meta data = null");
 			}				
 			auto ev = fm::midi::Event();

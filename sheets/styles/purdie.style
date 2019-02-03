@@ -1,7 +1,7 @@
 section normal
-[ 
+[
+/instrument: drums/     
 {
-    /instrument: drums/
     \p"ht"8t r8t !pp"ht"8t    "ht"8t r8t !pp"ht"8t    "ht"8t r8t !pp"ht"8t   "ht"8t r8t !pp"ht"8t |
     \p"ht"8t r8t !pp"ht"8t    "ht"8t r8t !pp"ht"8t    "ht"8t r8t !pp"ht"8t   "ht"8t r8t !pp"ht"8t |
     \p"ht"8t r8t !pp"ht"8t    "ht"8t r8t !pp"ht"8t    "ht"8t r8t !pp"ht"8t   "ht"8t r8t !pp"ht"8t |
@@ -18,7 +18,6 @@ section normal
     \f"ho"8t "ht"8t "bd"8t    \f"ho"8t "ht"8t r8t     "ht"8t r8t !pp"ht"8t   "ht"8t r8t !pp"ht"8t |
 }
 {
-    /instrument: drums/
     r8t !pppp"sng"8t r8t    r8t !pppp"sng"8t r8t    \ff"sn"8t !pppp"sng"8t r8t   r8t !pppp"sng"8t r8t |
     r8t !pppp"sng"8t r8t    r8t !pppp"sng"8t r8t    \ff"sn"8t !pppp"sng"8t r8t   r8t !pppp"sng"8t r8t |    
     r8t !pppp"sng"8t r8t    r8t !pppp"sng"8t r8t    \ff"sn"8t !pppp"sng"8t r8t   r8t !ppp"sn"8t !pp"sn"8t |
@@ -35,13 +34,12 @@ section normal
     r8t !pppp"sng"8t r8t    r8t !pppp"sng"8t r8t    \ff"sn"8t !pppp"sng"8t r8t   r8t !pppp"sng"8t r8t |   
 }
 {
-    /instrument: drums/
     "bd"4t r8t r4t "bd"8t r4t r8t "bd"4t r8t |
 }
 ]
-[ 
+[
+/instrument: jzguitar/ 
 {
-    /instrument: jzguitar/
     /voicingStrategy: simpleGuitar/
     I4t r8t <III VII I' IV>4t I,,8t r4t <V, II, IV, I,,>8t r4t r8t |
     I4t r8t <III VII I' IV>4t I,,8t r4t <V, II, IV, I,,>8t r4t r8t |
@@ -49,9 +47,9 @@ section normal
     I4t r8t <III VII I' IV>4t I,,8t r4t <I II III IV V VI VII >2t  |
 }
 ]
-[ 
+[
+/instrument: bass/ 
 {
-    /instrument: bass/
     I,,8t I,,8t r8t r4t I,,8t r4t r8t V,,,4t VII,,,8t |
     I,,8t I,,8t r8t r4t I,,8t r4t r8t V,,,4t VII,,,8t |
     I,,8t I,,8t r8t r4t I,,8t r4t r8t V,,,4t VII,,,8t |
@@ -61,19 +59,18 @@ section normal
 end
 
 section ende ------------------------------------------------------------------------------------
-[ 
+[
+/instrument: drums/ 
 {
-    /instrument: drums/
     \f"cy"1  |
 }
 {
-    /instrument: drums/
     "bd"1 |
 }
 ] 
-[ 
+[
+/instrument: jzguitar/ 
 {
-    /instrument: jzguitar/
     /voicingStrategy: simpleGuitar/
     \p 
     /doOnce: arpeggio up/
@@ -81,9 +78,9 @@ section ende -------------------------------------------------------------------
     <I II III IV V VI VII >2.~ <I II III IV V VI VII >8 |
 }
 ] 
-[ 
+[
+/instrument: bass/ 
 {
-    /instrument: bass/
     I,,1 |
 
 }

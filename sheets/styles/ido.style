@@ -1,29 +1,27 @@
 section normal ----------------------------------------------------------------
-[ 
+[
+/instrument: guitar/ 
 {
-    /instrument: guitar/
     /voicingStrategy: simpleGuitar higherRange/
     \f
     <I II III IV V VI VII>4. <I II III IV V VI VII>4 <I II III IV V VI VII>4 <I II III IV V VI VII>8  |
 }   
 ]
-[ 
+[
+/instrument: bass/ 
 {
-    /instrument: bass/
     I,,4. I,,8 V,,,4. V,,,8 |
 }   
 ] 
 [
+/instrument: drums/
 {
-    /instrument: drums/
     "ht"8 !f"ht"8 "ht"8 !f"ht"8 "ht"8 !f"ht"8 "ht"8 !f"ht"8 |
 }    
 {
-    /instrument: drums/
     r4 "sn" r "sn" |
 }
 {
-    /instrument: drums/
     "bd"4. "bd"8 "bd"4. "bd"8 |
     "bd"4. "bd"8 "bd"4. "bd"8 |
     "bd"4. "bd"8 "bd"8 !f"bd"8 r8 "bd"8 |
@@ -32,39 +30,36 @@ section normal ----------------------------------------------------------------
 end
 
 section fill1 ----------------------------------------------------------------
-[ 
+[
+/instrument: guitar/ 
 {
-    /instrument: guitar/
     /voicingStrategy: simpleGuitar higerRange/
     \f
     <I II III IV V VI VII>4. <I II III IV V VI VII>4 <I II III IV V VI VII>4 <I II III IV V VI VII>8  |
 }   
 ]
-[ 
+[
+/instrument: bass/ 
 {
-    /instrument: bass/
     I,,4. I,,8 V,,,4. V,,,8 |
 }   
 ] 
 [
+/instrument: drums/
 {
-    /instrument: drums/
     "ht"8 !f"ht"8 "ht"8 !f"ht"8 "ht"8 !f"ht"8 "ht"8 !f"ht"8 |
 }    
 {
-    /instrument: drums/
     r4 "sn" r "sn" |
     r4 "sn" r "sn" |
     r4 "sn" r !fff"sn" |
 }
 {
-    /instrument: drums/
     \ffff
     /mod: bend to 0/ 
     !ff"hto1"32 "hto2"16. r16 "hto1"16 r8 "hto1"8 r4 !fffff"lto1"8 "lto2"8 |
 }
 {
-    /instrument: drums/
     "bd"4. "bd"8 "bd"4. "bd"8 |
     "bd"4. "bd"8 "bd"4. "bd"8 |
     "bd"4. "bd"8 "bd"8 !f"bd"8 r8 "bd"8 |
@@ -74,23 +69,23 @@ end
 
 
 section normal2 ----------------------------------------------------------------
-[ 
+[
+/instrument: guitar/ 
 {
-    /instrument: guitar/
     /voicingStrategy: simpleGuitar higerRange/
     \f
     <I II III IV V VI VII>4. <I II III IV V VI VII>4 <I II III IV V VI VII>4 <I II III IV V VI VII>8  |
 }   
 ]
-[ 
+[
+ /instrument: bass/ 
 {
-    /instrument: bass/
     I,,4. I,,8 V,,,4. V,,,8 |
 }   
 ] 
 [
+/instrument: drums/
 {
-    /instrument: drums/
     "cy"8 !f"ht"8 "ht"8 !f"ht"8 "ht"8 !f"ht"8 "ht"8 !f"ht"8 |
     "ht"8 !f"ht"8 "ht"8 !f"ht"8 "ht"8 !f"ht"8 "ht"8 !f"ht"8 |
     "ht"8 !f"ht"8 "ht"8 !f"ht"8 "ht"8 !f"ht"8 "ht"8 !f"ht"8 |
@@ -98,18 +93,15 @@ section normal2 ----------------------------------------------------------------
     "ht"8 !f"ht"8 "ht"8 !f"ht"8 "ht"8 !f"ht"8 "ht"8 !f"ht"8 |
 }  
 {
-    /instrument: drums/
     \p
     "otr"4 "mtr"8 "mtr"8 "otr"4 "mtr"8 "mtr"8 |
 }    
 {
-    /instrument: drums/
     r4 "sn" r "sn" |
     r4 "sn" r "sn" |
     r4 "sn" r !fff"sn" |
 }
 {
-    /instrument: drums/
     "bd"4. "bd"8 "bd"4. "bd"8 |
     "bd"4. "bd"8 "bd"4. "bd"8 |
     "bd"4. "bd"8 "bd"8 !f"bd"8 r8 "bd"8 |
@@ -120,25 +112,24 @@ end
 
 
 section ende ----------------------------------------------------------------
-[ 
+[
+/instrument: guitar/ 
 {
-    /instrument: guitar/
     <I II III IV V VI VII>1  |
 }   
 ] 
-[ 
+[
+/instrument: bass/ 
 {
-    /instrument: bass/
     I,,1 |
 }   
 ] 
 [
+/instrument: drums/
 {
-    /instrument: drums/
     "cy"1 |
 }    
 {
-    /instrument: drums/
     "bd"1|
 }      
 ]

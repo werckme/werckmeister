@@ -26,7 +26,6 @@
 
 --           instrument ch cc pc
 /instrumentDef: piano      SC1 2 0 0/
-/instrumentConf: piano pan 60/
 /instrumentDef: lead     SC1 3 0 11/
 /instrumentDef: bass    SC1 7 8 33/
 /instrumentDef: drums   SC1 9 0 32/

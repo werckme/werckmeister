@@ -105,11 +105,10 @@ namespace sheet {
 					using ascii::char_;
 					using qi::eol;
 					trackInfo %= 
-						"/"
-						>> +char_("a-zA-Z") 
+						+char_("a-zA-Z") 
 						>> ":" 
 						>> +(lexeme[+char_("a-zA-Z0-9")])
-						>> "/";
+						>> ";";
 				}
 
 				template<class TrackRules, class VoiceRules, class TrackInfoRules>

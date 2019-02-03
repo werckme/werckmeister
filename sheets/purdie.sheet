@@ -5,8 +5,8 @@
 @load "./styles/purdie.style";
 
 [
+/instrument: fx/
 {
-    /instrument: fx/
     \p
     c1 | r1 | f1 |
 }

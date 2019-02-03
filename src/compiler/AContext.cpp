@@ -657,9 +657,11 @@ namespace sheet {
 			TrackId trackId;
 			VoiceId voiceId;
 			auto it = ptrIdMap_.find(&track);
+			bool trackIsNew = false;
 			if (it == ptrIdMap_.end()) {
 				trackId = createTrack(&track);
 				ptrIdMap_[&track] = trackId;
+				trackIsNew = true;
 			}
 			else {
 				trackId = it->second;
@@ -673,6 +675,9 @@ namespace sheet {
 				voiceId = it->second;
 			}
 			setTarget(trackId, voiceId);
+			if (trackIsNew) {
+				processTrackMetaData(track);
+			}
 		}
 		void AContext::styleRest(fm::Ticks duration)
 		{
