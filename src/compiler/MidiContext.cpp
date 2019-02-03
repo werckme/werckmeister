@@ -246,7 +246,7 @@ namespace sheet {
 			auto voiceMeta = voiceMetaData<MidiContext::VoiceMetaData>();
 			meta->instrument = *instrumentDef;
 			if (!instrumentDef->deviceName.empty()) {
-				addDeviceChangeEvent(instrumentDef->deviceName, 0);
+				addDeviceChangeEvent(instrumentDef->deviceName, voiceMeta->position);
 			}
 			metaSoundSelect(instrumentDef->cc, instrumentDef->pc);
 			// volume
