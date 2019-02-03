@@ -9,6 +9,7 @@
 #include <fstream>
 #include <fm/common.hpp>
 #include <iostream>
+#include <fm/exception.hpp>
 
 #define TEST_MIDI_FILE "testmidi.mid"
 
@@ -56,7 +57,7 @@ BOOST_AUTO_TEST_CASE(write_variable_required_size)
 	BOOST_CHECK(midi::variableLengthRequiredSize(0b011111111111111111111111) == 4);
 	BOOST_CHECK(midi::variableLengthRequiredSize(0b100000000000000000000000) == 4);
 	BOOST_CHECK(midi::variableLengthRequiredSize(midi::MaxTickValue) == 4);
-	BOOST_CHECK_THROW(midi::variableLengthRequiredSize(midi::MaxTickValue + 1), std::runtime_error);
+	BOOST_CHECK_THROW(midi::variableLengthRequiredSize(midi::MaxTickValue + 1), fm::Exception);
 }
 
 BOOST_AUTO_TEST_CASE(write_variable_length)
@@ -116,7 +117,7 @@ BOOST_AUTO_TEST_CASE(read_variable_length_fail)
 	using namespace fm;
 	{
 		Byte val[] = { 0xFF, 0xFF, 0xFF, 0xFF };
-		BOOST_CHECK_THROW(midi::variableLengthRead(val, 4), std::runtime_error);
+		BOOST_CHECK_THROW(midi::variableLengthRead(val, 4), fm::Exception);
 	}
 }
 
@@ -168,7 +169,7 @@ BOOST_AUTO_TEST_CASE(write_midi_event_fail)
 	Ticks deltaOffset = 0;
 	constexpr size_t size = 4; // 5 are needed
 	Byte bytes[size] = { 0 };
-	BOOST_CHECK_THROW(event.write(deltaOffset, &bytes[0], size), std::runtime_error);
+	BOOST_CHECK_THROW(event.write(deltaOffset, &bytes[0], size), fm::Exception);
 }
 
 BOOST_AUTO_TEST_CASE(write_midi_event_0)
@@ -274,7 +275,7 @@ BOOST_AUTO_TEST_CASE(write_midi_event_container_write_fail)
 	events.add(midi::Event::NoteOn(0, 2.0_N4, 26, 100));
 	events.add(midi::Event::NoteOn(0, 3.0_N4, 27, 100));
 	Byte bytes[1];
-	BOOST_CHECK_THROW(events.write(&bytes[0], 3), std::runtime_error);
+	BOOST_CHECK_THROW(events.write(&bytes[0], 3), fm::Exception);
 }
 
 BOOST_AUTO_TEST_CASE(write_midi_event_container_write)
@@ -405,7 +406,7 @@ BOOST_AUTO_TEST_CASE(write_midi_event_track_write_fail)
 
 	constexpr size_t byteSize = 20;
 	Byte bytes[byteSize];
-	BOOST_CHECK_THROW(track.write(&bytes[0], byteSize - 1), std::runtime_error);
+	BOOST_CHECK_THROW(track.write(&bytes[0], byteSize - 1), fm::Exception);
 }
 
 BOOST_AUTO_TEST_CASE(write_midi_event_track_write)
@@ -446,7 +447,7 @@ BOOST_AUTO_TEST_CASE(write_midi_write_fail)
 
 	constexpr size_t byteSize = 14 + 8 + 4 * 3;
 	Byte bytes[byteSize];
-	BOOST_CHECK_THROW(midi.write(&bytes[0], byteSize - 1), std::runtime_error);
+	BOOST_CHECK_THROW(midi.write(&bytes[0], byteSize - 1), fm::Exception);
 }
 
 BOOST_AUTO_TEST_CASE(write_midi_write)
@@ -575,7 +576,7 @@ BOOST_AUTO_TEST_CASE(meta_event_write_1)
 	BOOST_CHECK( tempo.payloadSize() == 7);
 	
 	Byte bff[eventSize];
-	BOOST_CHECK_THROW(tempo.write(0, &bff[0], eventSize-1), std::runtime_error);
+	BOOST_CHECK_THROW(tempo.write(0, &bff[0], eventSize-1), fm::Exception);
 	tempo.write(0, &bff[0], eventSize);
 	
 	BOOST_CHECK(bff[0] == 0);
@@ -597,7 +598,7 @@ BOOST_AUTO_TEST_CASE(meta_event_read_1)
 	tempo.write(0, &bff[0], eventSize);
 	
 	auto readTempo = midi::Event();
-	BOOST_CHECK_THROW(readTempo.read(0, &bff[0], eventSize-1), std::runtime_error);
+	BOOST_CHECK_THROW(readTempo.read(0, &bff[0], eventSize-1), fm::Exception);
 	readTempo.read(0, &bff[0], eventSize);
 
 	BOOST_CHECK(readTempo.eventType() == midi::MetaEvent);
@@ -640,12 +641,12 @@ BOOST_AUTO_TEST_CASE(meta_event_read_write_long_string)
 	BOOST_CHECK( metaOrg.payloadSize() == 4 + 1001);
 
 	Byte bff[eventSize];
-	BOOST_CHECK_THROW(metaOrg.write(0, &bff[0], eventSize-1), std::runtime_error);
+	BOOST_CHECK_THROW(metaOrg.write(0, &bff[0], eventSize-1), fm::Exception);
 	auto written = metaOrg.write(0, &bff[0], eventSize);
 	BOOST_CHECK(written == eventSize);
 
 	auto dst = midi::Event();
-	BOOST_CHECK_THROW(dst.read(0, bff, eventSize-1), std::runtime_error);
+	BOOST_CHECK_THROW(dst.read(0, bff, eventSize-1), fm::Exception);
 	size_t bytesRead = dst.read(0, bff, eventSize);
 	BOOST_CHECK(written == bytesRead);
 	auto name = midi::Event::MetaGetStringValue(dst.metaData(), dst.metaDataSize());

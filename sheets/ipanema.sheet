@@ -22,7 +22,7 @@ instrument: lead;
 ]
 
 /tempo: 140/
-/device: SC1 midi 1/
+/device: SC1 midi 2/
 
 --           instrument ch cc pc
 /instrumentDef: piano      SC1 2 0 0/

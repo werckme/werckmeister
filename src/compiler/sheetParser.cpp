@@ -98,6 +98,19 @@ namespace sheet {
 				{
 				}
 
+				template<class DocumentInfoRules>
+				void createDocInfoRules(DocumentInfoRules &docInfo) const
+				{
+					using qi::lexeme;
+					using ascii::char_;
+					using qi::eol;
+					docInfo %= 
+						+char_("a-zA-Z") 
+						>> ":" 
+						>> +(lexeme[+char_("a-zA-Z0-9")])
+						>> ";";
+				}
+
 				template<class TrackInfoRules>
 				void createTrackInfoRules(TrackInfoRules &trackInfo) const
 				{
