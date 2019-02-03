@@ -5,7 +5,9 @@
 #include "forward.hpp"
 
 namespace sheet {
+	class Event;
 	namespace compiler {
+		class StyleRenderer;
 		class Compiler {
 		public:
 			Compiler();
@@ -20,6 +22,7 @@ namespace sheet {
 		private:
 			AContextPtr context_;
 			DocumentPtr document_;
+			void switchStyle(StyleRenderer &styleRenderer, const Event &metaEvent);
 		};
 	}
 }

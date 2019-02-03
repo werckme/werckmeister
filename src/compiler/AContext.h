@@ -99,6 +99,7 @@ namespace sheet {
 			void styleDefServer(IStyleDefServerPtr server);
 			virtual IStyleDefServer::ConstChordValueType currentChordDef();
 			virtual IStyleDefServer::ConstStyleValueType currentStyle();
+			virtual void currentStyle(IStyleDefServer::ConstStyleValueType style);
 			virtual VoicingStrategyPtr currentVoicingStrategy();
 			virtual const ChordEvent * currentChord() const { return &currentChord_; }
 			virtual fm::Expression getExpression(const fm::String &str) const;
@@ -141,27 +142,17 @@ namespace sheet {
 			virtual void newBar();
 			virtual void rest(fm::Ticks duration);
 			virtual void setChord(const ChordEvent &ev);
-			virtual void sheetRest(fm::Ticks duration);
 			virtual void addEvent(const Event &ev);
 			virtual void stopTying();
 			virtual fm::Ticks barPos() const;
 			Warnings warnings;
-			/**
-			 * set current track and voice.
-			 * if either track or voice dosen't exists a new
-			 * track or voice will be created.
-			 */
-			void setTarget(const Track &track, const Voice &voice);			
 		protected:
 			PitchDef resolvePitch(const PitchDef &pitch) const;
 			virtual TrackId createTrackImpl() = 0;
 			virtual VoiceId createVoiceImpl() = 0;
 			virtual VoiceMetaDataPtr createVoiceMetaData() = 0;
 			virtual TrackMetaDataPtr createTrackMetaData() = 0;
-			virtual void switchStyle(IStyleDefServer::ConstStyleValueType current, IStyleDefServer::ConstStyleValueType next);
 		private:
-			typedef std::unordered_map<const void*, Id> PtrIdMap;
-			PtrIdMap ptrIdMap_;
 			ChordEvent currentChord_;
 			VoicingStrategyPtr defaultVoiceStrategy_;
 			IStyleDefServer::ConstChordValueType currentChordDef_ = nullptr;

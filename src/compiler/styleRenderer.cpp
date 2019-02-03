@@ -2,9 +2,71 @@
 
 namespace sheet {
     namespace compiler {
-        void StyleRenderer::render(AContextPtr ctx, fm::Ticks duration)
+
+		void StyleRenderer::switchStyle(IStyleDefServer::ConstStyleValueType current, IStyleDefServer::ConstStyleValueType next)
+		{
+			if (next == nullptr || current == next) {
+				return;
+			}
+			// set position for new track
+			auto chordMeta = ctx_->voiceMetaData();
+			for (const auto &track : *next) {
+				for (const auto &voice : track.voices)
+				{
+					setTargetCreateIfNotExists(track, voice);
+					auto meta = ctx_->voiceMetaData();
+					meta->position = chordMeta->position;
+				}
+			}
+			ctx_->currentStyle(next);
+		}
+
+        void StyleRenderer::setTargetCreateIfNotExists(const Track &track, const Voice &voice)
+		{
+			AContext::TrackId trackId;
+			AContext::VoiceId voiceId;
+			auto it = ptrIdMap_.find(&track);
+			bool trackIsNew = false;
+			if (it == ptrIdMap_.end()) {
+				trackId = ctx_->createTrack();
+				ptrIdMap_[&track] = trackId;
+				trackIsNew = true;
+			}
+			else {
+				trackId = it->second;
+			}
+			it = ptrIdMap_.find(&voice);
+			if (it == ptrIdMap_.end()) {
+				voiceId = ctx_->createVoice();
+				ptrIdMap_[&voice] = voiceId;
+			}
+			else {
+				voiceId = it->second;
+			}
+			ctx_->setTarget(trackId, voiceId);
+			if (trackIsNew) {
+				ctx_->processTrackMetaData(track);
+			}
+		}
+
+        void StyleRenderer::sheetRest(fm::Ticks duration)
+		{
+			auto styleTracks = ctx_->currentStyle();
+
+			for (const auto &track : *styleTracks)
+			{
+				for (const auto &voice : track.voices)
+				{
+					setTargetCreateIfNotExists(track, voice);
+					auto meta = ctx_->voiceMetaData();
+					ctx_->rest(duration);
+				}
+			}
+		}
+
+        void StyleRenderer::render(fm::Ticks duration)
         {
-            auto styleTracks = ctx->currentStyle();
+            auto styleTracks = ctx_->currentStyle();
 
 			for (const auto &track : *styleTracks)
 			{
@@ -13,8 +75,8 @@ namespace sheet {
 					if (voice.events.empty()) {
 						continue;
 					}
-					ctx->setTarget(track, voice);
-					auto meta = ctx->voiceMetaData();
+					setTargetCreateIfNotExists(track, voice);
+					auto meta = ctx_->voiceMetaData();
 					fm::Ticks writtenDuration = 0;
 					while ((duration - writtenDuration) > AContext::TickTolerance) { // loop until enough events are written
 						auto it = voice.events.begin();
@@ -45,7 +107,7 @@ namespace sheet {
 								meta->remainingTime = 0;
 							}
 							ev.duration = std::min(ev.duration, duration - writtenDuration);
-							ctx->addEvent(ev);
+							ctx_->addEvent(ev);
 							writtenDuration += meta->position - currentPos;
 							if ((duration - writtenDuration) <= AContext::TickTolerance) {
 								bool hasRemainings = ev.duration != originalDuration;

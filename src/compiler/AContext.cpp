@@ -543,11 +543,6 @@ namespace sheet {
 
 		void AContext::metaSetStyle(const fm::String &file, const fm::String &section)
 		{
-			auto style = styleDefServer_->getStyle(file, section);
-			if (!style) {
-				FM_THROW(Exception, "style not found: " + fm::to_string(file) + " " + fm::to_string(section));
-			}
-			switchStyle(currentStyleDef_, style);
 		}
 
 		void AContext::metaSetExpression(const fm::String &value)
@@ -586,24 +581,6 @@ namespace sheet {
 			meta->barLength = (1.0_N1 / (fm::Ticks)lower) * (fm::Ticks)upper;
 		}
 
-		void AContext::switchStyle(IStyleDefServer::ConstStyleValueType current, IStyleDefServer::ConstStyleValueType next)
-		{
-			if (next == nullptr || current == next) {
-				return;
-			}
-			// set position for new track
-			auto chordMeta = voiceMetaData();
-			for (const auto &track : *next) {
-				for (const auto &voice : track.voices)
-				{
-					setTarget(track, voice);
-					auto meta = voiceMetaData();
-					meta->position = chordMeta->position;
-				}
-			}
-			currentStyleDef_ = next;
-		}
-
 		void AContext::setChordTrackTarget()
 		{
 			if (chordTrack_ == INVALID_TRACK_ID) {
@@ -629,6 +606,10 @@ namespace sheet {
 			}
 			return currentStyleDef_;
 		}
+		void AContext::currentStyle(IStyleDefServer::ConstStyleValueType style)
+		{
+			currentStyleDef_ = style;
+		}
 		VoicingStrategyPtr AContext::currentVoicingStrategy()
 		{
 			auto meta = voiceMetaData();
@@ -646,48 +627,6 @@ namespace sheet {
 			currentChordDef_ = styleDefServer()->getChord(currentChord_.chordDefName());
 			if (currentChordDef_ == nullptr) {
 				FM_THROW(Exception, "chord not found: " + fm::to_string(currentChord_.chordName));
-			}
-		}
-
-		void AContext::setTarget(const Track &track, const Voice &voice)
-		{
-			TrackId trackId;
-			VoiceId voiceId;
-			auto it = ptrIdMap_.find(&track);
-			bool trackIsNew = false;
-			if (it == ptrIdMap_.end()) {
-				trackId = createTrack();
-				ptrIdMap_[&track] = trackId;
-				trackIsNew = true;
-			}
-			else {
-				trackId = it->second;
-			}
-			it = ptrIdMap_.find(&voice);
-			if (it == ptrIdMap_.end()) {
-				voiceId = createVoice();
-				ptrIdMap_[&voice] = voiceId;
-			}
-			else {
-				voiceId = it->second;
-			}
-			setTarget(trackId, voiceId);
-			if (trackIsNew) {
-				processTrackMetaData(track);
-			}
-		}
-		void AContext::sheetRest(fm::Ticks duration)
-		{
-			auto styleTracks = currentStyle();
-
-			for (const auto &track : *styleTracks)
-			{
-				for (const auto &voice : track.voices)
-				{
-					setTarget(track, voice);
-					auto meta = voiceMetaData();
-					rest(duration);
-				}
 			}
 		}
 	}

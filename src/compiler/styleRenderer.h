@@ -22,7 +22,17 @@ namespace sheet {
     namespace compiler {
         class StyleRenderer {
         public:
-            void render(AContextPtr ctx, fm::Ticks duration);
+            StyleRenderer(AContextPtr ctx) : ctx_(ctx) {}
+            virtual ~StyleRenderer() = default;
+            void render(fm::Ticks duration);
+            void sheetRest(fm::Ticks duration);
+            void switchStyle(IStyleDefServer::ConstStyleValueType current, IStyleDefServer::ConstStyleValueType next);
+            AContextPtr context() const { return this->ctx_; }
+        private:
+            void setTargetCreateIfNotExists(const Track &track, const Voice &voice);
+            typedef std::unordered_map<const void*, AContext::Id> PtrIdMap;
+			PtrIdMap ptrIdMap_;
+            AContextPtr ctx_;
         };
     }
 }

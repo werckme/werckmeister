@@ -6,7 +6,8 @@
 #include <algorithm>
 #include <list>
 #include "styleRenderer.h"
-
+#include "metaCommands.h"
+#include "error.hpp"
 namespace sheet {
 
 	namespace compiler {
@@ -67,19 +68,33 @@ namespace sheet {
 			}
 		}
 
+		void Compiler::switchStyle(StyleRenderer &styleRenderer, const Event &metaEvent)
+		{
+			auto file = getArgument<fm::String>(metaEvent, 0);
+			auto section = getArgument<fm::String>(metaEvent, 1);
+			auto ctx = styleRenderer.context();
+			auto style = ctx->styleDefServer()->getStyle(file, section);
+			if (!style) {
+				FM_THROW(Exception, "style not found: " + fm::to_string(file) + " " + fm::to_string(section));
+			}
+			styleRenderer.switchStyle(ctx->currentStyle(), style);
+		}
 
 		void Compiler::renderChordTrack() 
 		{
 			auto ctx = context();
 			determineChordLengths(document_->sheetDef.chords.begin(), document_->sheetDef.chords.end());
-			StyleRenderer styleRenderer;
+			StyleRenderer styleRenderer(ctx);
 			for (auto &ev : document_->sheetDef.chords) {
 				ctx->setChordTrackTarget(); // target will be lost after calling addEvent
 				if (ev.type == Event::Rest) {
 					auto meta = ctx->voiceMetaData(ctx->chordVoiceId());
 					ev.duration = meta->barLength * ev.multiplicator;
 					ctx->rest(ev.duration);
-					ctx->sheetRest(ev.duration);
+					styleRenderer.sheetRest(ev.duration);
+				}
+				else if (ev.metaCommand == SHEET_META__SET_STYLE) {
+					switchStyle(styleRenderer, ev);
 				}
 				else if (ev.type != Event::Chord) {
 					ctx->addEvent(ev);
@@ -87,7 +102,7 @@ namespace sheet {
 					auto meta = ctx->voiceMetaData(ctx->chordVoiceId());
 					ev.duration = meta->barLength * ev.multiplicator;	
 					ctx->addEvent(ev);
-					styleRenderer.render(ctx, ev.duration);
+					styleRenderer.render(ev.duration);
 				}
 			}
 		}
