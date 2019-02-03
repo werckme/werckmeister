@@ -34,7 +34,9 @@ namespace sheet {
 			typedef std::list<std::string> Warnings;
 			typedef std::unordered_map<fm::String, fm::Expression> ExpressionMap;
 			typedef std::shared_ptr<VoiceMetaData> VoiceMetaDataPtr;
+			typedef std::shared_ptr<TrackMetaData> TrackMetaDataPtr;
 			typedef std::unordered_map<VoiceId, VoiceMetaDataPtr> VoiceMetaDataMap;
+			typedef std::unordered_map<TrackId, TrackMetaDataPtr> TrackMetaDataMap;
 			virtual void setTrack(TrackId trackId);
 			virtual void setVoice(VoiceId voice);
 			TrackId track() const;
@@ -48,15 +50,47 @@ namespace sheet {
 			}
 			virtual void addEvent(const PitchDef &pitch, fm::Ticks absolutePosition, fm::Ticks duration) = 0;
 			virtual ~AContext() {};
-			virtual TrackId createTrack();
-			virtual VoiceId createVoice();
+			/**
+			 * creates a track and returns an id.
+			 * @arg a track model, can be null
+			 */
+			virtual TrackId createTrack(const sheet::Track *track);
+			/**
+			 * creates a vocie and returns an id.
+			 * @arg a voice model, can be null
+			 */			
+			virtual VoiceId createVoice(const sheet::Voice *voice);
 			virtual void setChordTrackTarget();
+			/**
+			 * @return the metdata for the current voice  
+			 */
+			VoiceMetaDataPtr voiceMetaData() const;
 			VoiceMetaDataPtr voiceMetaData(VoiceId voiceid) const;
 			template<typename TVoiceMeta>
 			std::shared_ptr<TVoiceMeta> voiceMetaData(VoiceId voiceid) const 
 			{
 				return std::dynamic_pointer_cast<TVoiceMeta>(voiceMetaData(voiceid));
 			}
+			template<typename TVoiceMeta>
+			std::shared_ptr<TVoiceMeta> voiceMetaData() const 
+			{
+				return std::dynamic_pointer_cast<TVoiceMeta>(voiceMetaData());
+			}
+			/**
+			 * @return the metdata for the current track  
+			 */
+			TrackMetaDataPtr trackMetaData() const;
+			TrackMetaDataPtr trackMetaData(TrackId trackid) const;
+			template<typename TTrackMeta>
+			std::shared_ptr<TTrackMeta> trackMetaData(TrackId trackid) const 
+			{
+				return std::dynamic_pointer_cast<TTrackMeta>(trackMetaData(trackid));
+			}
+			template<typename TTrackMeta>
+			std::shared_ptr<TTrackMeta> trackMetaData() const 
+			{
+				return std::dynamic_pointer_cast<TTrackMeta>(trackMetaData());
+			}					
 			virtual void throwContextException(const std::string &msg);
 			virtual void warn(const std::string &msg);
 			IStyleDefServerPtr styleDefServer() const;
@@ -70,7 +104,7 @@ namespace sheet {
 			virtual AInstrumentDef * getInstrumentDef(const fm::String &uname) = 0;
 			/////// meta commands
 			virtual void setMeta(const Event &metaEvent);
-			virtual void metaSetInstrument(const fm::String &uname);
+			virtual void metaSetInstrument(const fm::String &uname) {}
 			virtual void metaSetStyle(const fm::String &file, const fm::String &section);
 			virtual void metaSetExpression(const fm::String &value);
 			virtual void metaSetSingleExpression(const fm::String &value);
@@ -113,10 +147,16 @@ namespace sheet {
 			virtual TrackId createTrackImpl() = 0;
 			virtual VoiceId createVoiceImpl() = 0;
 			virtual VoiceMetaDataPtr createVoiceMetaData() = 0;
+			virtual TrackMetaDataPtr createTrackMetaData() = 0;
 			virtual void switchStyle(IStyleDefServer::ConstStyleValueType current, IStyleDefServer::ConstStyleValueType next);
 		private:
 			typedef std::unordered_map<const void*, Id> PtrIdMap;
 			PtrIdMap ptrIdMap_;
+			/**
+			 * set current track and voice.
+			 * if either track or voice dosen't exists a new
+			 * track or voice will be created.
+			 */
 			void setTarget(const Track &track, const Voice &voice);
 			ChordEvent currentChord_;
 			VoicingStrategyPtr defaultVoiceStrategy_;
@@ -125,6 +165,7 @@ namespace sheet {
 			TrackId trackId_ = INVALID_TRACK_ID, chordTrack_ = INVALID_TRACK_ID;
 			VoiceId voiceId_ = INVALID_VOICE_ID, chordVoice_ = INVALID_VOICE_ID;
 			VoiceMetaDataMap voiceMetaDataMap_;
+			TrackMetaDataMap trackMetaDataMap_;
 			IStyleDefServerPtr styleDefServer_ = nullptr;
 			ExpressionMap expressionMap_;
 			ASpielanweisungPtr defaultSpielanweisung_;

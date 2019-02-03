@@ -17,6 +17,11 @@
 
 namespace sheet {
     namespace compiler {
+        struct TrackMetaData {
+            fm::String instrument;
+            fm::String uname;
+            virtual ~TrackMetaData() = default;
+        };
         struct VoiceMetaData {
             typedef std::set<PitchDef> PitchDefSet;
             static const fm::Ticks DefaultDuration;
@@ -46,7 +51,6 @@ namespace sheet {
                 from a aborted style rendering
             */
             fm::Ticks remainingTime = 0;
-            fm::String instrument;
             VoicingStrategyPtr voicingStrategy = nullptr;
             virtual ~VoiceMetaData() = default;
             bool pendingTie() const { return !waitForTieBuffer.empty(); }
@@ -56,7 +60,7 @@ namespace sheet {
             Modifications modificationsOnce; // played once		
             PitchDefSet startedEvents;
             int volume = 100;	
-            int pan = 50;
+            int pan = 50;            
         };
     }
 }

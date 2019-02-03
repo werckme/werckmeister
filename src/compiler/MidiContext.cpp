@@ -27,39 +27,40 @@ namespace sheet {
 				return static_cast<int>(::ceil((expr) * 127.0f / 10.0f));
 			}
 
-			int getChannel(const MidiContext::VoiceMetaData &meta)
+			int getChannel(const MidiContext::TrackMetaData &meta)
 			{
-				return meta.instrumentDefs.at(0).channel;
+				return meta.instrument.channel;
 			}
 		}
 
 		void MidiContext::addEvent(const PitchDef &pitch, fm::Ticks absolutePosition, fm::Ticks duration)
 		{
 			_checkMidi(midi_);
-			auto voiceConfig = voiceMetaData<MidiContext::VoiceMetaData>(voice());
-			for (const auto &instrumentDef : voiceConfig->instrumentDefs) {
-				midi_->tracks().at(track())->events().addNote(
-					instrumentDef.channel, 
-					absolutePosition, 
-					getAbsolutePitch(pitch), 
-					getAbsoluteVelocity( voiceConfig->expression ),
-					duration);
-			}
+			auto voiceConfig = voiceMetaData<MidiContext::VoiceMetaData>();
+			auto trackMeta = trackMetaData<MidiContext::TrackMetaData>();
+			const auto &instrumentDef = trackMeta->instrument;
+			midi_->tracks().at(track())->events().addNote(
+				instrumentDef.channel, 
+				absolutePosition, 
+				getAbsolutePitch(pitch), 
+				getAbsoluteVelocity( voiceConfig->expression ),
+				duration);
+			
 		}
 
 		void MidiContext::startEvent(const PitchDef &pitch, fm::Ticks absolutePosition)
 		{
 			Base::startEvent(pitch, absolutePosition);
 			_checkMidi(midi_);
-			auto voiceConfig = voiceMetaData<MidiContext::VoiceMetaData>(voice());
-			for (const auto &instrumentDef : voiceConfig->instrumentDefs) {
-				auto event = fm::midi::Event::NoteOn(instrumentDef.channel, 
-					absolutePosition, 
-					getAbsolutePitch(pitch), 
-					getAbsoluteVelocity(voiceConfig->expression)
-				);
-				midi_->tracks().at(track())->events().add(event);
-			}
+			auto voiceConfig = voiceMetaData<MidiContext::VoiceMetaData>();
+			auto trackMeta = trackMetaData<MidiContext::TrackMetaData>();
+			const auto &instrumentDef = trackMeta->instrument;
+			auto event = fm::midi::Event::NoteOn(instrumentDef.channel, 
+				absolutePosition, 
+				getAbsolutePitch(pitch), 
+				getAbsoluteVelocity(voiceConfig->expression)
+			);
+			midi_->tracks().at(track())->events().add(event);
 		}
 
 		
@@ -67,14 +68,14 @@ namespace sheet {
 		{
 			Base::stopEvent(pitch, absolutePosition);
 			_checkMidi(midi_);
-			auto voiceConfig = voiceMetaData<MidiContext::VoiceMetaData>(voice());
-			for (const auto &instrumentDef : voiceConfig->instrumentDefs) {
-				auto event = fm::midi::Event::NoteOff(instrumentDef.channel, 
-					absolutePosition, 
-					getAbsolutePitch(pitch)
-				);
-				midi_->tracks().at(track())->events().add(event);
-			}
+			auto voiceConfig = voiceMetaData<MidiContext::VoiceMetaData>();
+			auto trackMeta = trackMetaData<MidiContext::TrackMetaData>();
+			const auto &instrumentDef = trackMeta->instrument;
+			auto event = fm::midi::Event::NoteOff(instrumentDef.channel, 
+				absolutePosition, 
+				getAbsolutePitch(pitch)
+			);
+			midi_->tracks().at(track())->events().add(event);
 		}
 
 		void MidiContext::addEvent(const fm::midi::Event &ev)
@@ -85,11 +86,11 @@ namespace sheet {
 		void MidiContext::addPitchbendEvent(double value, fm::Ticks absolutePosition) 
 		{
 			_checkMidi(midi_);
-			auto voiceConfig = voiceMetaData<MidiContext::VoiceMetaData>(voice());
-			for (const auto &instrumentDef : voiceConfig->instrumentDefs) {
-				auto event = fm::midi::Event::PitchBend(instrumentDef.channel, absolutePosition, value);
-				midi_->tracks().at(track())->events().add(event);
-			}
+			auto voiceConfig = voiceMetaData<MidiContext::VoiceMetaData>();
+			auto trackMeta = trackMetaData<MidiContext::TrackMetaData>();
+			const auto &instrumentDef = trackMeta->instrument;
+			auto event = fm::midi::Event::PitchBend(instrumentDef.channel, absolutePosition, value);
+			midi_->tracks().at(track())->events().add(event);
 		}
 
 		MidiContext::Base::TrackId MidiContext::createTrackImpl()
@@ -110,10 +111,15 @@ namespace sheet {
 			return std::make_shared<MidiContext::VoiceMetaData>();
 		}
 
+		MidiContext::Base::TrackMetaDataPtr MidiContext::createTrackMetaData() 
+		{
+			return std::make_shared<MidiContext::TrackMetaData>();
+		}
+
 		void MidiContext::metaSetTempo(double bpm)
 		{
 			Base::metaSetTempo(bpm);
-			auto meta = voiceMetaData<MidiContext::VoiceMetaData>(voice());
+			auto meta = voiceMetaData<MidiContext::VoiceMetaData>();
 			auto tempoEvent = fm::midi::Event::MetaTempo(bpm);
 			tempoEvent.absPosition(meta->position);
 			addEvent(tempoEvent);
@@ -121,15 +127,16 @@ namespace sheet {
 
 		void MidiContext::metaSetChannel(int channel)
 		{
-			auto meta = voiceMetaData<MidiContext::VoiceMetaData>(voice());
-			meta->instrumentDefs.at(0).channel = channel;
+			auto meta = trackMetaData<MidiContext::TrackMetaData>();
+			meta->instrument.channel = channel;
 		}
 
 		void MidiContext::metaSoundSelect(int cc, int pc)
 		{
-			auto meta = voiceMetaData<MidiContext::VoiceMetaData>(voice());
+			auto meta = voiceMetaData<MidiContext::VoiceMetaData>();
+			auto trackMeta = trackMetaData<MidiContext::TrackMetaData>();
 			auto ev = fm::midi::Event();
-			ev.channel(getChannel(*meta));
+			ev.channel(getChannel(*trackMeta));
 			ev.eventType(fm::midi::Controller);
 			ev.parameter1(0);
 			ev.parameter2(cc);
@@ -158,9 +165,10 @@ namespace sheet {
 		void MidiContext::metaSetVolume(int volume)
 		{
 			Base::metaSetVolume(volume);
-			auto meta = voiceMetaData<MidiContext::VoiceMetaData>(voice());
+			auto meta = voiceMetaData<MidiContext::VoiceMetaData>();
+			auto trackMeta = trackMetaData<MidiContext::TrackMetaData>();
 			auto midiVol = meta->volume * fm::midi::MaxMidiValue / MAX_VOLUME;
-			auto channel = getChannel(*meta);
+			auto channel = getChannel(*trackMeta);
 			auto ev = fm::midi::Event::CCVolume(channel, midiVol);
 			ev.absPosition(meta->position);
 			addEvent(ev); 
@@ -169,9 +177,10 @@ namespace sheet {
 		void MidiContext::metaSetPan(int val)
 		{
 			Base::metaSetPan(val);
-			auto meta = voiceMetaData<MidiContext::VoiceMetaData>(voice());
+			auto meta = voiceMetaData<MidiContext::VoiceMetaData>();
+			auto trackMeta = trackMetaData<MidiContext::TrackMetaData>();
 			auto midiVal = meta->pan * fm::midi::MaxMidiValue / MAX_VOLUME;
-			auto channel = getChannel(*meta);
+			auto channel = getChannel(*trackMeta);
 			auto ev = fm::midi::Event::CCPan(channel, midiVal);
 			ev.absPosition(meta->position);
 			addEvent(ev); 
@@ -199,7 +208,7 @@ namespace sheet {
 				throw std::runtime_error("not enough values for " + fm::to_string(SHEET_META__SET_INSTRUMENT_CONFIG) +  ": " + fm::to_string(uname));
 			}
 			auto instrumentDef = getMidiInstrumentDef(uname);
-			auto meta = voiceMetaData<MidiContext::VoiceMetaData>(voice());
+			auto meta = voiceMetaData<MidiContext::VoiceMetaData>();
 			if (instrumentDef == nullptr) {
 				throw std::runtime_error("instrumentDef not found: " + fm::to_string(uname));
 			}
@@ -229,25 +238,21 @@ namespace sheet {
 
 			// find instrumentDef defs and assign them to the meta data of the voice
 			Base::metaSetInstrument(uname);
-			auto range = midiInstrumentDefs_.equal_range(uname);
-			if (range.first == midiInstrumentDefs_.end()) {
-				return;
+			auto instrumentDef = getMidiInstrumentDef(uname);
+			if (instrumentDef == nullptr) {
+				throw std::runtime_error("instrument " + fm::to_string(uname) + " not found");
 			}
-			auto meta = voiceMetaData<MidiContext::VoiceMetaData>(voice());
-			auto it = range.first;
-			auto end = range.second;
-			meta->instrumentDefs.clear();
-			for (; it != end; ++it) {
-				meta->instrumentDefs.push_back(it->second);
-				if (!it->second.deviceName.empty()) {
-					addDeviceChangeEvent(it->second.deviceName, meta->position);
-				}
-				metaSoundSelect(it->second.cc, it->second.pc);
-				// volume
-				addEvent(__createVolumeEvent(it->second, meta->position));
-				// pan
-				addEvent(__createPanEvent(it->second, meta->position));
+			auto meta = trackMetaData<MidiContext::TrackMetaData>();
+			auto voiceMeta = voiceMetaData<MidiContext::VoiceMetaData>();
+			meta->instrument = *instrumentDef;
+			if (!instrumentDef->deviceName.empty()) {
+				addDeviceChangeEvent(instrumentDef->deviceName, 0);
 			}
+			metaSoundSelect(instrumentDef->cc, instrumentDef->pc);
+			// volume
+			addEvent(__createVolumeEvent(*instrumentDef, voiceMeta->position));
+			// pan
+			addEvent(__createPanEvent(*instrumentDef, voiceMeta->position));
 		}
 
 		void MidiContext::addDeviceChangeEvent(const fm::String &deviceName, fm::Ticks position)

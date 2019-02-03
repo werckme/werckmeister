@@ -24,8 +24,14 @@ namespace sheet {
 	struct Track {
 		typedef std::vector<Voice> Voices;
 		typedef std::vector<TrackInfo> TrackInfos;
+		enum Type {
+			Notation,
+			StyleDef,
+			Sheet
+		};
 		TrackInfos trackInfos;
 		Voices voices;
+		Type type = Notation;
 	};
 
 }

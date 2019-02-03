@@ -20,10 +20,12 @@ namespace sheet {
         class MidiContext : public AContext {
 		public:
 			typedef AContext Base;
-			typedef std::unordered_multimap<fm::String, MidiInstrumentDef> MidiInstrumentDefs;
-			struct VoiceMetaData : sheet::compiler::VoiceMetaData {
-				typedef std::vector<MidiInstrumentDef> InstrumentDefContainer;
-				InstrumentDefContainer instrumentDefs = InstrumentDefContainer(1);
+			typedef std::unordered_map<fm::String, MidiInstrumentDef> MidiInstrumentDefs;
+			typedef std::vector<MidiInstrumentDef> InstrumentDefContainer;
+			InstrumentDefContainer instrumentDefs = InstrumentDefContainer(1);
+			struct VoiceMetaData : sheet::compiler::VoiceMetaData {};
+			struct TrackMetaData : sheet::compiler::TrackMetaData {
+				MidiInstrumentDef instrument;
 			};
 			void midi(fm::midi::MidiPtr midi) { midi_ = midi; }
 			fm::midi::MidiPtr midi() const { return midi_; }
@@ -52,6 +54,7 @@ namespace sheet {
 			MidiInstrumentDef * getMidiInstrumentDef(const fm::String &uname);
 		protected:
 			virtual Base::VoiceMetaDataPtr createVoiceMetaData() override;
+			virtual Base::TrackMetaDataPtr createTrackMetaData() override;
 			void setMidiInstrumentDef(const fm::String &uname, const MidiInstrumentDef &def);
 		private:
 			MidiInstrumentDefs midiInstrumentDefs_;

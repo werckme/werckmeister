@@ -136,7 +136,7 @@ namespace sheet {
 
 		ASpielanweisungPtr AContext::spielanweisung()
 		{
-			auto meta = voiceMetaData(voice());
+			auto meta = voiceMetaData();
 			if (!defaultSpielanweisung_) {
 				defaultSpielanweisung_ = fm::getWerckmeister().getDefaultSpielanweisung();
 			}
@@ -197,12 +197,14 @@ namespace sheet {
 			this->voiceId_ = voice;
 		}
 
-		AContext::TrackId AContext::createTrack()
+		AContext::TrackId AContext::createTrack(const sheet::Track *track)
 		{
 			auto tid = createTrackImpl();
+			auto meta = createTrackMetaData();
+			trackMetaDataMap_[tid] = meta;
 			return tid;
 		}
-		AContext::VoiceId AContext::createVoice()
+		AContext::VoiceId AContext::createVoice(const sheet::Voice *voice)
 		{
 			VoiceId vid = createVoiceImpl();
 			auto meta = createVoiceMetaData();
@@ -219,9 +221,28 @@ namespace sheet {
 			return it->second;
 		}
 
+		AContext::VoiceMetaDataPtr AContext::voiceMetaData() const
+		{
+			return voiceMetaData();
+		}
+
+		AContext::TrackMetaDataPtr AContext::trackMetaData(TrackId trackid) const
+		{
+			auto it = trackMetaDataMap_.find(trackid);
+			if (it == trackMetaDataMap_.end()) {
+				throw std::runtime_error("no meta data found for voiceid: " + std::to_string(trackid));
+			}
+			return it->second;
+		}
+
+		AContext::TrackMetaDataPtr AContext::trackMetaData() const
+		{
+			return trackMetaData();
+		}
+
 		void AContext::throwContextException(const std::string &msg)
 		{
-			auto meta = voiceMetaData(voice());
+			auto meta = voiceMetaData();
 			throw std::runtime_error(msg + " at voice " + std::to_string(voice()) + " bar: " + std::to_string(meta->position / meta->barLength));
 		}
 
@@ -241,7 +262,7 @@ namespace sheet {
 		{
 			using namespace fm;
 			PitchDef pitch = resolvePitch(rawPitch);
-			auto meta = voiceMetaData(voice());
+			auto meta = voiceMetaData();
 			if (duration > 0) {
 				meta->lastEventDuration = duration;
 			}
@@ -269,7 +290,7 @@ namespace sheet {
 
 		void AContext::stopTying()
 		{
-			auto meta = voiceMetaData(voice());
+			auto meta = voiceMetaData();
 			for(auto tied : meta->startedEvents){
 				stopEvent(tied, meta->position + meta->lastEventDuration);
 			}
@@ -277,32 +298,32 @@ namespace sheet {
 
 		void AContext::startEvent(const PitchDef &pitch, fm::Ticks absolutePosition)
 		{
-			auto meta = voiceMetaData(voice());
+			auto meta = voiceMetaData();
 			meta->startedEvents.insert(pitch);
 		}
 
 		void AContext::stopEvent(const PitchDef &pitch, fm::Ticks absolutePosition)
 		{
-			auto meta = voiceMetaData(voice());
+			auto meta = voiceMetaData();
 			meta->startedEvents.erase(pitch);
 		}
 
 		fm::Ticks AContext::barPos() const
 		{
-			auto meta = voiceMetaData(voice());
+			auto meta = voiceMetaData();
 			return meta->barPosition;
 		}
 
 		void AContext::addEvent(const Event &ev)
 		{
-			auto meta = voiceMetaData(voice());
+			auto meta = voiceMetaData();
 			++(meta->eventCount);
 			_addEvent(this, &ev);
 		}
 
 		void AContext::addEvent(const Event::Pitches &pitches, fm::Ticks duration, bool tying)
 		{
-			auto meta = voiceMetaData(voice());
+			auto meta = voiceMetaData();
 			auto tmpExpression = meta->expression;
 
 			if (meta->singleExpression != fm::expression::Default) {
@@ -327,22 +348,23 @@ namespace sheet {
 
 		void AContext::seek(fm::Ticks duration)
 		{
-			auto meta = voiceMetaData(voice());
+			auto meta = voiceMetaData();
 			meta->position += duration;
 			meta->barPosition += duration;
 		}
 
 		void AContext::warn(const std::string &msg)
 		{
-			auto meta = voiceMetaData(voice());
-			auto voiceName = meta->instrument.empty() ? std::to_string(voice()) : fm::to_string(meta->instrument);
-			std::string warning(msg + " at '" + voiceName + "', bar: " + std::to_string(meta->position / meta->barLength));
+			auto tmeta = trackMetaData();
+			auto vmeta = voiceMetaData();
+			auto voiceName = tmeta->instrument.empty() ? std::to_string(voice()) : fm::to_string(tmeta->instrument);
+			std::string warning(msg + " at '" + voiceName + "', bar: " + std::to_string(vmeta->position / vmeta->barLength));
 			warnings.push_back(warning);
 		}
 
 		void AContext::newBar()
 		{
-			auto meta = voiceMetaData(voice());
+			auto meta = voiceMetaData();
 			if (meta->isUpbeat) {
 				meta->isUpbeat = false;
 				meta->eventOffset = meta->eventCount;
@@ -357,7 +379,7 @@ namespace sheet {
 
 		void AContext::rest(fm::Ticks duration)
 		{
-			auto meta = voiceMetaData(voice());
+			auto meta = voiceMetaData();
 			if (duration != 0) {
 				meta->lastEventDuration = duration;
 			}
@@ -368,9 +390,6 @@ namespace sheet {
 		{
 			if (metaEvent.metaCommand.empty()) {
 				throwContextException("invalid meta command ");
-			}
-			if (metaEvent.metaCommand == SHEET_META__SET_INSTRUMENT) {
-				metaSetInstrument(getArgument<fm::String>(metaEvent, 0));
 			}
 			if (metaEvent.metaCommand == SHEET_META__SET_STYLE) {
 				metaSetStyle(getArgument<fm::String>(metaEvent, 0), getArgument<fm::String>(metaEvent, 1));
@@ -421,20 +440,20 @@ namespace sheet {
 
 		void AContext::metaSetVolume(int volume)
 		{
-			auto meta = voiceMetaData(voice());
+			auto meta = voiceMetaData();
 			meta->volume = std::max(std::min(volume, 100), 0);
 		}
 
 		void AContext::metaSetPan(int val)
 		{
-			auto meta = voiceMetaData(voice());
+			auto meta = voiceMetaData();
 			meta->pan = std::max(std::min(val, 100), 0);
 		}		
 
 		void AContext::metaAddVorschlag(const Event &ev)
 		{
 			auto &wm = fm::getWerckmeister();
-			auto meta = voiceMetaData(voice());
+			auto meta = voiceMetaData();
 			meta->spielanweisungOnce = wm.getSpielanweisung(SHEET_SPIELANWEISUNG_VORSCHLAG);
 			auto vorschlag = std::dynamic_pointer_cast<Vorschlag>(meta->spielanweisungOnce);
 			vorschlag->vorschlagNote = ev;
@@ -454,7 +473,7 @@ namespace sheet {
 		void AContext::metaSetVoicingStrategy(const fm::String &name, const Event::Args &args)
 		{
 			auto &wm = fm::getWerckmeister();
-			auto meta = voiceMetaData(voice());
+			auto meta = voiceMetaData();
 			meta->voicingStrategy = wm.getVoicingStrategy(name);
 			meta->voicingStrategy->setArguments(args);
 		}
@@ -462,7 +481,7 @@ namespace sheet {
 		void AContext::metaSetSpielanweisung(const fm::String &name, const Event::Args &args)
 		{
 			auto &wm = fm::getWerckmeister();
-			auto meta = voiceMetaData(voice());
+			auto meta = voiceMetaData();
 			meta->spielanweisung = wm.getSpielanweisung(name);
 			meta->spielanweisung->setArguments(args);
 		}
@@ -470,7 +489,7 @@ namespace sheet {
 		void AContext::metaSetSpielanweisungOnce(const fm::String &name, const Event::Args &args)
 		{
 			auto &wm = fm::getWerckmeister();
-			auto meta = voiceMetaData(voice());
+			auto meta = voiceMetaData();
 			meta->spielanweisungOnce = wm.getSpielanweisung(name);
 			meta->spielanweisungOnce->setArguments(args);
 		}
@@ -478,7 +497,7 @@ namespace sheet {
 		void AContext::metaSetModification(const fm::String &name, const Event::Args &args)
 		{
 			auto &wm = fm::getWerckmeister();
-			auto meta = voiceMetaData(voice());
+			auto meta = voiceMetaData();
 			auto mod = wm.getModification(name);
 			meta->modifications.push_back(mod);
 			mod->setArguments(args);
@@ -487,16 +506,10 @@ namespace sheet {
 		void AContext::metaSetModificationOnce(const fm::String &name, const Event::Args &args)
 		{
 			auto &wm = fm::getWerckmeister();
-			auto meta = voiceMetaData(voice());
+			auto meta = voiceMetaData();
 			auto mod = wm.getModification(name);
 			meta->modificationsOnce.push_back(mod);
 			mod->setArguments(args);
-		}
-
-		void AContext::metaSetInstrument(const fm::String &uname)
-		{
-			auto meta = voiceMetaData(voice());
-			meta->instrument = uname;
 		}
 
 		void AContext::metaSetStyle(const fm::String &file, const fm::String &section)
@@ -510,7 +523,7 @@ namespace sheet {
 
 		void AContext::metaSetExpression(const fm::String &value)
 		{
-			auto meta = voiceMetaData(voice());
+			auto meta = voiceMetaData();
 			auto expr = getExpression(value);
 			if (expr == fm::expression::Default) {
 				return;
@@ -520,7 +533,7 @@ namespace sheet {
 
 		void AContext::metaSetSingleExpression(const fm::String &value)
 		{
-			auto meta = voiceMetaData(voice());
+			auto meta = voiceMetaData();
 			auto expr = getExpression(value);
 			if (expr == fm::expression::Default) {
 				return;
@@ -530,7 +543,7 @@ namespace sheet {
 
 		void AContext::metaSetUpbeat(const Event &event) 
 		{
-			auto meta = voiceMetaData(voice());
+			auto meta = voiceMetaData();
 			if (meta->position > 0) {
 				throwContextException("upbeat only allowed on begin of track");
 			}
@@ -540,7 +553,7 @@ namespace sheet {
 		void AContext::metaSetSignature(int upper, int lower)
 		{
 			using namespace fm;
-			auto meta = voiceMetaData(voice());
+			auto meta = voiceMetaData();
 			meta->barLength = (1.0_N1 / (fm::Ticks)lower) * (fm::Ticks)upper;
 		}
 
@@ -550,12 +563,12 @@ namespace sheet {
 				return;
 			}
 			// set position for new track
-			auto chordMeta = voiceMetaData(chordVoice_);
+			auto chordMeta = voiceMetaData();
 			for (const auto &track : *next) {
 				for (const auto &voice : track.voices)
 				{
 					setTarget(track, voice);
-					auto meta = voiceMetaData(this->voice());
+					auto meta = voiceMetaData();
 					meta->position = chordMeta->position;
 				}
 			}
@@ -565,8 +578,8 @@ namespace sheet {
 		void AContext::setChordTrackTarget()
 		{
 			if (chordTrack_ == INVALID_TRACK_ID) {
-				chordTrack_ = createTrack();
-				chordVoice_ = createVoice();
+				chordTrack_ = createTrack(nullptr);
+				chordVoice_ = createVoice(nullptr);
 			}
 			setTarget(chordTrack_, chordVoice_);
 		}
@@ -589,7 +602,7 @@ namespace sheet {
 		}
 		VoicingStrategyPtr AContext::currentVoicingStrategy()
 		{
-			auto meta = voiceMetaData(voice());
+			auto meta = voiceMetaData();
 			if (!defaultVoiceStrategy_) {
 				defaultVoiceStrategy_ = fm::getWerckmeister().getDefaultVoicingStrategy();
 			}
@@ -613,7 +626,7 @@ namespace sheet {
 			VoiceId voiceId;
 			auto it = ptrIdMap_.find(&track);
 			if (it == ptrIdMap_.end()) {
-				trackId = createTrack();
+				trackId = createTrack(&track);
 				ptrIdMap_[&track] = trackId;
 			}
 			else {
@@ -621,7 +634,7 @@ namespace sheet {
 			}
 			it = ptrIdMap_.find(&voice);
 			if (it == ptrIdMap_.end()) {
-				voiceId = createVoice();
+				voiceId = createVoice(&voice);
 				ptrIdMap_[&voice] = voiceId;
 			}
 			else {
@@ -638,7 +651,7 @@ namespace sheet {
 				for (const auto &voice : track.voices)
 				{
 					setTarget(track, voice);
-					auto meta = voiceMetaData(this->voice());
+					auto meta = voiceMetaData();
 					rest(duration);
 				}
 			}
@@ -655,7 +668,7 @@ namespace sheet {
 						continue;
 					}
 					setTarget(track, voice);
-					auto meta = voiceMetaData(this->voice());
+					auto meta = voiceMetaData();
 					fm::Ticks writtenDuration = 0;
 					while ((duration - writtenDuration) > TickTolerance) { // loop until enough events are written
 						auto it = voice.events.begin();

@@ -26,10 +26,10 @@ namespace sheet {
 			auto ctx = context();
 			for (const auto &track : document_->sheetDef.tracks)
 			{
-				auto trackId = ctx->createTrack();
+				auto trackId = ctx->createTrack(&track);
 				for (const auto &voice : track.voices)
 				{
-					auto voiceId = ctx->createVoice();
+					auto voiceId = ctx->createVoice(&voice);
 					ctx->setTarget(trackId, voiceId);
 					for (const auto &ev : voice.events)
 					{
