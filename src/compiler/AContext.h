@@ -15,6 +15,7 @@
 #include "metaCommands.h"
 #include <list>
 #include "forward.hpp"
+#include "metaData.h"
 
 namespace sheet {
     namespace compiler {
@@ -25,8 +26,6 @@ namespace sheet {
         public:
 			AContext();
 			static const double PitchbendMiddle;
-			static const fm::Ticks DefaultDuration;
-			static const fm::Ticks DefaultBarLength;
 			enum { INVALID_TRACK_ID = -1, INVALID_VOICE_ID = -1, MAX_VOLUME = 100, MAX_PAN = 100 };
 			typedef int Id;
 			typedef Id TrackId;
@@ -34,45 +33,6 @@ namespace sheet {
 			typedef IStyleDefServer* IStyleDefServerPtr;
 			typedef std::list<std::string> Warnings;
 			typedef std::unordered_map<fm::String, fm::Expression> ExpressionMap;
-			typedef std::set<PitchDef> PitchDefSet;
-			struct VoiceMetaData {
-				typedef std::map<PitchDef, fm::Ticks> WaitForTieBuffer;
-				typedef std::list<ASpielanweisungPtr> Spielanweisungen;
-				typedef std::list<AModificationPtr> Modifications;
-				fm::Ticks position = 0;
-				/**
-				 * last note duration
-				 */
-				fm::Ticks lastEventDuration = DefaultDuration; 
-				fm::Ticks barLength = DefaultBarLength;
-				fm::Ticks barPosition = 0;
-				int barCount = 0;
-				long long eventCount = 0;
-				long long eventOffset = 0;
-				bool isUpbeat = false;
-				fm::Expression expression = fm::expression::FF;
-				fm::Expression singleExpression = fm::expression::Default;
-				WaitForTieBuffer waitForTieBuffer;
-				/*
-					used for continue style track rendering after chord change
-				*/
-				int idxLastWrittenEvent = -1;
-				/*
-					from a aborted style rendering
-				*/
-				fm::Ticks remainingTime = 0;
-				fm::String instrument;
-				VoicingStrategyPtr voicingStrategy = nullptr;
-				virtual ~VoiceMetaData() = default;
-				bool pendingTie() const { return !waitForTieBuffer.empty(); }
-				ASpielanweisungPtr spielanweisung;
-				ASpielanweisungPtr spielanweisungOnce; // played once
-				Modifications modifications;
-				Modifications modificationsOnce; // played once		
-				PitchDefSet startedEvents;
-				int volume = 100;	
-				int pan = 50;
-			};
 			typedef std::shared_ptr<VoiceMetaData> VoiceMetaDataPtr;
 			typedef std::unordered_map<VoiceId, VoiceMetaDataPtr> VoiceMetaDataMap;
 			virtual void setTrack(TrackId trackId);

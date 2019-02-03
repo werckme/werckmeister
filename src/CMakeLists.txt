@@ -23,6 +23,7 @@ SET (SRC_FETZER_LIB
     compiler/modification/Bend.cpp
     compiler/voicings/DirectVoicingStrategy.cpp
     compiler/voicings/SimpleGuitar.cpp
+    compiler/metaData.cpp
     sheet/Event.cpp
     sheet/Document.cpp
     sheet/ChordDef.cpp

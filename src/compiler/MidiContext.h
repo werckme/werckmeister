@@ -21,7 +21,7 @@ namespace sheet {
 		public:
 			typedef AContext Base;
 			typedef std::unordered_multimap<fm::String, MidiInstrumentDef> MidiInstrumentDefs;
-			struct VoiceMetaData : Base::VoiceMetaData {
+			struct VoiceMetaData : sheet::compiler::VoiceMetaData {
 				typedef std::vector<MidiInstrumentDef> InstrumentDefContainer;
 				InstrumentDefContainer instrumentDefs = InstrumentDefContainer(1);
 			};

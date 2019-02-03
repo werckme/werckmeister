@@ -19,8 +19,6 @@ namespace sheet {
 
 	namespace compiler {
 		using namespace fm;
-		const Ticks AContext::DefaultDuration = 1.0_N4;
-		const Ticks AContext::DefaultBarLength = 4 * 1.0_N4;
 		const double AContext::PitchbendMiddle = 0.5;
 		namespace {
 			template<int EventType>
