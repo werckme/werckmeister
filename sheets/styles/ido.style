@@ -1,6 +1,6 @@
 section normal ----------------------------------------------------------------
 [
-/instrument: guitar/ 
+instrument: guitar; 
 {
     /voicingStrategy: simpleGuitar higherRange/
     \f
@@ -8,13 +8,13 @@ section normal ----------------------------------------------------------------
 }   
 ]
 [
-/instrument: bass/ 
+instrument: bass; 
 {
     I,,4. I,,8 V,,,4. V,,,8 |
 }   
 ] 
 [
-/instrument: drums/
+instrument: drums;
 {
     "ht"8 !f"ht"8 "ht"8 !f"ht"8 "ht"8 !f"ht"8 "ht"8 !f"ht"8 |
 }    
@@ -31,7 +31,7 @@ end
 
 section fill1 ----------------------------------------------------------------
 [
-/instrument: guitar/ 
+instrument: guitar; 
 {
     /voicingStrategy: simpleGuitar higerRange/
     \f
@@ -39,13 +39,13 @@ section fill1 ----------------------------------------------------------------
 }   
 ]
 [
-/instrument: bass/ 
+instrument: bass; 
 {
     I,,4. I,,8 V,,,4. V,,,8 |
 }   
 ] 
 [
-/instrument: drums/
+instrument: drums;
 {
     "ht"8 !f"ht"8 "ht"8 !f"ht"8 "ht"8 !f"ht"8 "ht"8 !f"ht"8 |
 }    
@@ -70,7 +70,7 @@ end
 
 section normal2 ----------------------------------------------------------------
 [
-/instrument: guitar/ 
+instrument: guitar; 
 {
     /voicingStrategy: simpleGuitar higerRange/
     \f
@@ -78,13 +78,13 @@ section normal2 ----------------------------------------------------------------
 }   
 ]
 [
- /instrument: bass/ 
+ instrument: bass; 
 {
     I,,4. I,,8 V,,,4. V,,,8 |
 }   
 ] 
 [
-/instrument: drums/
+instrument: drums;
 {
     "cy"8 !f"ht"8 "ht"8 !f"ht"8 "ht"8 !f"ht"8 "ht"8 !f"ht"8 |
     "ht"8 !f"ht"8 "ht"8 !f"ht"8 "ht"8 !f"ht"8 "ht"8 !f"ht"8 |
@@ -113,19 +113,19 @@ end
 
 section ende ----------------------------------------------------------------
 [
-/instrument: guitar/ 
+instrument: guitar; 
 {
     <I II III IV V VI VII>1  |
 }   
 ] 
 [
-/instrument: bass/ 
+instrument: bass; 
 {
     I,,1 |
 }   
 ] 
 [
-/instrument: drums/
+instrument: drums;
 {
     "cy"1 |
 }    

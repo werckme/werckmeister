@@ -1,6 +1,6 @@
 section normal ----------------------------------------------------------------
 [
-/instrument: drums/ 
+instrument: drums; 
 {
     \f
     !ff"ss"8 "ht"16 "ht"16   "ht"8 "ht"8   !ff"ss"8 "ht"8 "ss"8 "ht"8  |
@@ -13,7 +13,7 @@ section normal ----------------------------------------------------------------
 }     
 ]
 [
-/instrument: guitar/ 
+instrument: guitar; 
 {
     /voicingStrategy: simpleGuitar/
     \f
@@ -27,7 +27,7 @@ section normal ----------------------------------------------------------------
 }
 ]
 [
-/instrument: piano/ 
+instrument: piano; 
 {
     \ff
     r8 I'16t V16t III16t r8 
@@ -39,7 +39,7 @@ section normal ----------------------------------------------------------------
 } 
 ]  
 [
-/instrument: bass/ 
+instrument: bass; 
 {
     \fff
     I,,4. V,,8 V,,4 V,,4  |

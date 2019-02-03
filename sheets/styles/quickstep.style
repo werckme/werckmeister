@@ -1,6 +1,6 @@
 section normal
 [
-/instrument: drums/
+instrument: drums;
 {
     !p"ho"4 "ht"8 "ht" !p"ho"4 "ht"8 "ht" |
 }
@@ -12,7 +12,7 @@ section normal
 }
 ]
 [
-/instrument: bass/
+instrument: bass;
 {
     I,,4 V,, III,, VII,, |
     I,,4 I,, V,, V,, |
@@ -20,7 +20,7 @@ section normal
 }
 ]
 [
-/instrument: guitar/
+instrument: guitar;
 {
     /voicingStrategy: simpleGuitar lowerRange/
     \ff
@@ -30,7 +30,7 @@ section normal
 }
 ]
 [
-/instrument: piano/
+instrument: piano;
 {
     r4 <I II III IV V VI VII> r <I II III IV V VI VII> |
 }

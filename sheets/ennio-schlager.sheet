@@ -4,7 +4,7 @@
 @load "./styles/countryschlager1.style";
  
 [
-/instrument: guitar2/
+instrument: guitar2;
 {
     \ffff    
     c2 d | /modOnce: bend from 0/ e2~ e2 | r2 c4 d4 | e4 e g c | /modOnce: bend from 40/dis2 dis4 d | c2 bes4 a 

@@ -1,29 +1,28 @@
 section normal --<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 [
+instrument: piano;
 { 
-    /instrument: piano/
     \fff <I II III IV V VI VII>2. r16  \ff<I II III IV V VI VII>16 r8 |
 }   
 ]
 
 [
+instrument: bass;
 {
-    /instrument: bass/
     \ffff
     I,,8 I,16 I,16  I,,8 I,16 I,16  I,,8 I,16 I,16  I,,8 I,16 I,16 |
 }   
 ]
 
 [ -- drums
+instrument: drums;
 {
-    /instrument: drums/
     r8 "ht"16 "ht"16 !ffff"sn"8 "ht"16 "ht"16 r8 "ht"16 "ht"16 !ffff"sn"8 "ht"16 "ht"16 |
     r8 "ht"16 "ht"16 !ffff"sn"8 "ht"16 "ht"16 r8 "ht"16 "ht"16 !ffff"sn"8 !ffff<"sn" "ht">16 !fffff"sn"16 |
     "cy"8 "ht"16 "ht"16 !ffff"sn"8 "ht"16 "ht"16 r8 "ht"16 "ht"16 !ffff"sn"8 "ht"16 "ht"16 |
     r8 "ht"16 "ht"16 !ffff"sn"8 "ht"16 "ht"16 r8 "ht"16 "ht"16 !ffff"sn"8 <"sn" "ht">16 !fffff"sn"16 |
 }   
 {
-    /instrument: drums/
     "bd"4 "bd" "bd" "bd" |
 }   
 ] 
@@ -31,15 +30,15 @@ end
 
 section solo --<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 [
+instrument: bass;
 {
-    /instrument: bass/
     I,,8 I,16 I,16  I,,8 I,16 I,16  I,,8 I,16 I,16  I,,8 I,16 I,16 |
 }   
 ]
 
-[ -- drums 
+[ -- drums
+instrument: drums;
 {
-    /instrument: drums/
     "bd"4 "bd" "bd" "bd" |
 }   
 ] 
@@ -47,21 +46,20 @@ end
 
 section solo2 --<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 [
+instrument: bass;
 {
-    /instrument: bass/
     \fff
     I,,8 I,16 I,16  I,,8 I,16 I,16  I,,8 I,16 I,16  I,,8 I,16 I,16 |
 }   
 ]
 
 [ -- drums 
+instrument: drums;
 {
-    /instrument: drums/
     "cy"8 "ht"16 "ht"16 !ffff"sn"8 "ht"16 "ht"16 r8 "ht"16 "ht"16 !ffff"sn"8 "ht"16 "ht"16 |
     r8 "ht"16 "ht"16 !ffff"sn"8 "ht"16 "ht"16 r8 "ht"16 "ht"16 !ffff"sn"8 <"sn" "ht">16 !fffff"sn"16 |
 }   
 {
-    /instrument: drums/
     "bd"4 "bd" "bd" "bd" |
 }   
 ] 

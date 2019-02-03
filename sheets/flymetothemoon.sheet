@@ -4,8 +4,8 @@
 @load "./pitchmaps/defaultMidiDrumMap.pitchmap";
 
 [
+instrument: lead;
 {
-    /instrument: lead/
     \fff
     c'4. b8 a4 g8 f~  | f8 g4. a4 c' | b4. a8 g4 f8 e~ | e1 |
     a4. g8 f4 e8 d~ | d e4. f4 a | gis4. f8 e4 d8 c~ | c2 r4 cis |

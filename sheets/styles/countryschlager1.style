@@ -1,6 +1,6 @@
 section normal ----------------------------------------------------------------
 [
-/instrument: guitar/ 
+instrument: guitar; 
 {
     /voicingStrategy: simpleGuitar/
     \f
@@ -9,7 +9,7 @@ section normal ----------------------------------------------------------------
 }   
 ]
 [
-/instrument: slide/ 
+instrument: slide; 
 {
     \f
     /modOnce: bend from 0/
@@ -25,13 +25,13 @@ section normal ----------------------------------------------------------------
 }   
 ]  
 [
-/instrument: bass/ 
+instrument: bass; 
 {
     I,,4. I,,8 V,,,4. V,,,8 |
 }   
 ] 
 [
-/instrument: drums/
+instrument: drums;
 {
     "ht"8 !f"ht"8 "ht"8 !f"ht"8 "ht"8 !f"ht"8 "ht"8 !f"ht"8 |
 }    
@@ -49,19 +49,19 @@ end
 
 section ende ----------------------------------------------------------------
 [
-/instrument: guitar/ 
+instrument: guitar; 
 {
     <I II III IV V VI VII>1  |
 }   
 ] 
 [
-/instrument: bass/ 
+instrument: bass; 
 {
     I,,1 |
 }   
 ] 
 [
-/instrument: drums/
+instrument: drums;
 {
     "cy"1 |
 }    
@@ -70,7 +70,7 @@ section ende ----------------------------------------------------------------
 }      
 ]
 [
-/instrument: slide/ 
+instrument: slide; 
 {
     \f
     /modOnce: bend from 1/

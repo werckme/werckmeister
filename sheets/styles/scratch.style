@@ -1,6 +1,6 @@
 section normal
 [
-/instrument: piano/ 
+instrument: piano; 
 {
     /voicingStrategy: simpleGuitar/
     --<I II III IV V VI VII>1  |

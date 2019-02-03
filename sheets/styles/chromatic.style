@@ -1,6 +1,6 @@
 section normal
 [
- /instrument: piano/ 
+ instrument: piano; 
 {
     V#4 V Vb I# |
 }

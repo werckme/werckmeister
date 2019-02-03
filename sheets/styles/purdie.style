@@ -1,6 +1,6 @@
 section normal
 [
-/instrument: drums/     
+instrument: drums;     
 {
     \p"ht"8t r8t !pp"ht"8t    "ht"8t r8t !pp"ht"8t    "ht"8t r8t !pp"ht"8t   "ht"8t r8t !pp"ht"8t |
     \p"ht"8t r8t !pp"ht"8t    "ht"8t r8t !pp"ht"8t    "ht"8t r8t !pp"ht"8t   "ht"8t r8t !pp"ht"8t |
@@ -38,7 +38,7 @@ section normal
 }
 ]
 [
-/instrument: jzguitar/ 
+instrument: jzguitar; 
 {
     /voicingStrategy: simpleGuitar/
     I4t r8t <III VII I' IV>4t I,,8t r4t <V, II, IV, I,,>8t r4t r8t |
@@ -48,7 +48,7 @@ section normal
 }
 ]
 [
-/instrument: bass/ 
+instrument: bass; 
 {
     I,,8t I,,8t r8t r4t I,,8t r4t r8t V,,,4t VII,,,8t |
     I,,8t I,,8t r8t r4t I,,8t r4t r8t V,,,4t VII,,,8t |
@@ -60,7 +60,7 @@ end
 
 section ende ------------------------------------------------------------------------------------
 [
-/instrument: drums/ 
+instrument: drums; 
 {
     \f"cy"1  |
 }
@@ -69,7 +69,7 @@ section ende -------------------------------------------------------------------
 }
 ] 
 [
-/instrument: jzguitar/ 
+instrument: jzguitar; 
 {
     /voicingStrategy: simpleGuitar/
     \p 
@@ -79,7 +79,7 @@ section ende -------------------------------------------------------------------
 }
 ] 
 [
-/instrument: bass/ 
+instrument: bass; 
 {
     I,,1 |
 

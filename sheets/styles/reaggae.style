@@ -1,6 +1,6 @@
 section normal
 [
-/instrument: drums/
+instrument: drums;
 {
     \ppp
     !p"ht"16 "ht"16 !p"ht"16 "ht"16
@@ -13,7 +13,7 @@ section normal
 }
 ]
 [
-/instrument: bass/
+instrument: bass;
 {
     I,,4 !fffI#,,`I,, I, Vb,,`!ffV,, |
 }

@@ -1,6 +1,6 @@
 section normal
 [
-/instrument: piano/ 
+instrument: piano; 
 {
     /voicingStrategy: simpleGuitar/
     <I II III IV V VI VII>1 |
@@ -10,7 +10,7 @@ end
 
 section guitar
 [
-/instrument: guitar/
+instrument: guitar;
 {
     /voicingStrategy: simpleGuitar/
     \f
@@ -22,7 +22,7 @@ end
 
 section arpeggio
 [
-/instrument: piano/ 
+instrument: piano; 
 {
     /doOnce: arpeggio up/
     <I II III IV V VI VII>2
@@ -36,7 +36,7 @@ end
 
 section arpeggioUp
 [
-/instrument: piano/ 
+instrument: piano; 
 {
     /do: arpeggio up/
     <I II III IV V VI VII>2
@@ -48,7 +48,7 @@ end
 
 section arpeggioT
 [
-/instrument: piano/ 
+instrument: piano; 
 {
     /doOnce: arpeggio up/
     <I II III IV V VI VII>2t
@@ -63,7 +63,7 @@ end
 
 section bending
 [
-/instrument: piano/ 
+instrument: piano; 
 {
     /modOnce: bend from 1/
     <I II III IV V VI VII>16~

@@ -1,6 +1,6 @@
 section normal
 [
-/instrument: piano/ 
+instrument: piano; 
 {
     !ffffI,,4 <II, III, IV, V, VI, VII,> <II, III, IV, V, VI, VII,> !fffV,,, |
 }
