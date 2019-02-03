@@ -5,6 +5,7 @@
 #include <type_traits>
 #include <algorithm>
 #include <list>
+#include "styleRenderer.h"
 
 namespace sheet {
 
@@ -26,12 +27,12 @@ namespace sheet {
 			auto ctx = context();
 			for (const auto &track : document_->sheetDef.tracks)
 			{
-				auto trackId = ctx->createTrack(&track);
+				auto trackId = ctx->createTrack();
 				ctx->setTrack(trackId);
 				ctx->processTrackMetaData(track);
 				for (const auto &voice : track.voices)
 				{
-					auto voiceId = ctx->createVoice(&voice);
+					auto voiceId = ctx->createVoice();
 					ctx->setTarget(trackId, voiceId);
 					for (const auto &ev : voice.events)
 					{
@@ -71,14 +72,14 @@ namespace sheet {
 		{
 			auto ctx = context();
 			determineChordLengths(document_->sheetDef.chords.begin(), document_->sheetDef.chords.end());
-
+			StyleRenderer styleRenderer;
 			for (auto &ev : document_->sheetDef.chords) {
 				ctx->setChordTrackTarget(); // target will be lost after calling addEvent
 				if (ev.type == Event::Rest) {
 					auto meta = ctx->voiceMetaData(ctx->chordVoiceId());
 					ev.duration = meta->barLength * ev.multiplicator;
 					ctx->rest(ev.duration);
-					ctx->styleRest(ev.duration);
+					ctx->sheetRest(ev.duration);
 				}
 				else if (ev.type != Event::Chord) {
 					ctx->addEvent(ev);
@@ -86,7 +87,7 @@ namespace sheet {
 					auto meta = ctx->voiceMetaData(ctx->chordVoiceId());
 					ev.duration = meta->barLength * ev.multiplicator;	
 					ctx->addEvent(ev);
-					ctx->renderStyle(ev.duration);
+					styleRenderer.render(ctx, ev.duration);
 				}
 			}
 		}

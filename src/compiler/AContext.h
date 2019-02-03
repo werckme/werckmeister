@@ -27,6 +27,10 @@ namespace sheet {
 			AContext();
 			static const double PitchbendMiddle;
 			enum { INVALID_TRACK_ID = -1, INVALID_VOICE_ID = -1, MAX_VOLUME = 100, MAX_PAN = 100 };
+			/**
+			 * for rounding errors e.g. for triplets
+			 */
+			static const fm::Ticks TickTolerance;
 			typedef int Id;
 			typedef Id TrackId;
 			typedef Id VoiceId;
@@ -52,14 +56,12 @@ namespace sheet {
 			virtual ~AContext() {};
 			/**
 			 * creates a track and returns an id.
-			 * @arg a track model, can be null
 			 */
-			virtual TrackId createTrack(const sheet::Track *track);
+			virtual TrackId createTrack();
 			/**
 			 * creates a vocie and returns an id.
-			 * @arg a voice model, can be null
 			 */			
-			virtual VoiceId createVoice(const sheet::Voice *voice);
+			virtual VoiceId createVoice();
 			virtual void setChordTrackTarget();
 			/**
 			 * @return the metdata for the current voice  
@@ -139,12 +141,17 @@ namespace sheet {
 			virtual void newBar();
 			virtual void rest(fm::Ticks duration);
 			virtual void setChord(const ChordEvent &ev);
-			virtual void renderStyle(fm::Ticks duration);
-			virtual void styleRest(fm::Ticks duration);
+			virtual void sheetRest(fm::Ticks duration);
 			virtual void addEvent(const Event &ev);
 			virtual void stopTying();
 			virtual fm::Ticks barPos() const;
 			Warnings warnings;
+			/**
+			 * set current track and voice.
+			 * if either track or voice dosen't exists a new
+			 * track or voice will be created.
+			 */
+			void setTarget(const Track &track, const Voice &voice);			
 		protected:
 			PitchDef resolvePitch(const PitchDef &pitch) const;
 			virtual TrackId createTrackImpl() = 0;
@@ -155,12 +162,6 @@ namespace sheet {
 		private:
 			typedef std::unordered_map<const void*, Id> PtrIdMap;
 			PtrIdMap ptrIdMap_;
-			/**
-			 * set current track and voice.
-			 * if either track or voice dosen't exists a new
-			 * track or voice will be created.
-			 */
-			void setTarget(const Track &track, const Voice &voice);
 			ChordEvent currentChord_;
 			VoicingStrategyPtr defaultVoiceStrategy_;
 			IStyleDefServer::ConstChordValueType currentChordDef_ = nullptr;

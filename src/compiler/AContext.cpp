@@ -11,15 +11,12 @@
 #include <fm/config/configServer.h>
 #include <sheet/Track.h>
 
-namespace {
-	const fm::Ticks TickTolerance = 0.5; // rounding errors e.g. for triplets
-}
-
 namespace sheet {
 
 	namespace compiler {
 		using namespace fm;
 		const double AContext::PitchbendMiddle = 0.5;
+		const Ticks AContext::TickTolerance = 0.5;
 		namespace {
 			template<int EventType>
 			bool renderEvent(AContext * ctx, const Event *ev)
@@ -213,14 +210,14 @@ namespace sheet {
 			}
 		}
 
-		AContext::TrackId AContext::createTrack(const sheet::Track *track)
+		AContext::TrackId AContext::createTrack()
 		{
 			auto tid = createTrackImpl();
 			auto meta = createTrackMetaData();
 			trackMetaDataMap_[tid] = meta;
 			return tid;
 		}
-		AContext::VoiceId AContext::createVoice(const sheet::Voice *voice)
+		AContext::VoiceId AContext::createVoice()
 		{
 			VoiceId vid = createVoiceImpl();
 			auto meta = createVoiceMetaData();
@@ -610,8 +607,8 @@ namespace sheet {
 		void AContext::setChordTrackTarget()
 		{
 			if (chordTrack_ == INVALID_TRACK_ID) {
-				chordTrack_ = createTrack(nullptr);
-				chordVoice_ = createVoice(nullptr);
+				chordTrack_ = createTrack();
+				chordVoice_ = createVoice();
 			}
 			setTarget(chordTrack_, chordVoice_);
 		}
@@ -659,7 +656,7 @@ namespace sheet {
 			auto it = ptrIdMap_.find(&track);
 			bool trackIsNew = false;
 			if (it == ptrIdMap_.end()) {
-				trackId = createTrack(&track);
+				trackId = createTrack();
 				ptrIdMap_[&track] = trackId;
 				trackIsNew = true;
 			}
@@ -668,7 +665,7 @@ namespace sheet {
 			}
 			it = ptrIdMap_.find(&voice);
 			if (it == ptrIdMap_.end()) {
-				voiceId = createVoice(&voice);
+				voiceId = createVoice();
 				ptrIdMap_[&voice] = voiceId;
 			}
 			else {
@@ -679,7 +676,7 @@ namespace sheet {
 				processTrackMetaData(track);
 			}
 		}
-		void AContext::styleRest(fm::Ticks duration)
+		void AContext::sheetRest(fm::Ticks duration)
 		{
 			auto styleTracks = currentStyle();
 
@@ -690,64 +687,6 @@ namespace sheet {
 					setTarget(track, voice);
 					auto meta = voiceMetaData();
 					rest(duration);
-				}
-			}
-		}
-		void AContext::renderStyle(fm::Ticks duration)
-		{
-			auto styleTracks = currentStyle();
-
-			for (const auto &track : *styleTracks)
-			{
-				for (const auto &voice : track.voices)
-				{
-					if (voice.events.empty()) {
-						continue;
-					}
-					setTarget(track, voice);
-					auto meta = voiceMetaData();
-					fm::Ticks writtenDuration = 0;
-					while ((duration - writtenDuration) > TickTolerance) { // loop until enough events are written
-						auto it = voice.events.begin();
-						if (meta->idxLastWrittenEvent >= 0) { // continue rendering
-							it += meta->idxLastWrittenEvent;
-							meta->idxLastWrittenEvent = -1;
-							if (it->type == Event::EOB) {
-								// happens: | r1 |  ->  | A B |
-								// after a half rest the next event would be a new bar
-								// its length check would produce a message
-								++it;
-								meta->barPosition = 0;
-							}
-						}
-						else if (meta->eventOffset > 0) { // skip events (for upbeat)
-							it += meta->eventOffset;
-						}
-						for (; it != voice.events.end(); ++it) // loop voice events
-						{
-							auto ev = *it;
-							auto currentPos = meta->position;
-							auto originalDuration = ev.duration;
-							if (ev.isTimeConsuming() && meta->remainingTime > 0) {
-								if (ev.duration == 0) {
-									ev.duration = meta->lastEventDuration;
-								}
-								ev.duration = ev.duration + meta->remainingTime;
-								meta->remainingTime = 0;
-							}
-							ev.duration = std::min(ev.duration, duration - writtenDuration);
-							addEvent(ev);
-							writtenDuration += meta->position - currentPos;
-							if ((duration - writtenDuration) <= TickTolerance) {
-								bool hasRemainings = ev.duration != originalDuration;
-								if (hasRemainings) {
-									meta->remainingTime = originalDuration - ev.duration;
-								}
-								meta->idxLastWrittenEvent = it - voice.events.begin() + 1;
-								break;
-							}
-						}
-					}
 				}
 			}
 		}
