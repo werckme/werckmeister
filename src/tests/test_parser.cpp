@@ -808,41 +808,41 @@ command: 01 02 03; \n\
 	BOOST_CHECK(defs.tracks[0].trackInfos[2].args[2] == FM_STRING("03") );
 }
 
-// BOOST_AUTO_TEST_CASE(test_docmentInfo)
-// {
-// 	using namespace fm;
-// 	using sheet::PitchDef;
-// 	fm::String text = FM_STRING("\
-// [\n\
-// /type: notation/ \n\
-// /uname: bass/ \n\
-// /command: 01 02 03/ \n\
-// 	{\n\
-// 		/ soundselect: 0 0 /\n\
-// 		/ channel : 1 /\n\
-// 		c4 d4 e4 f4 | c'4 d'4 e'4 f'4 |\n\
-// 	}\n\
-// ]\n\
-// ");
-// 	sheet::compiler::SheetDefParser parser;
-// 	auto defs = parser.parse(text);
-// 	BOOST_CHECK(defs.tracks.size() == 1);
-// 	BOOST_CHECK(defs.tracks[0].voices.size() == 1);
-// 	BOOST_CHECK(defs.tracks[0].voices[0].events.size() == 12);
+BOOST_AUTO_TEST_CASE(test_docmentInfo)
+{
+	using namespace fm;
+	using sheet::PitchDef;
+	fm::String text = FM_STRING("\
+instrumentDef: drums  SC1 9 0 32; \n\
+command: 01 02 03; \n\
+[\n\
+	{\n\
+		/ soundselect: 0 0 /\n\
+		/ channel : 1 /\n\
+		c4 d4 e4 f4 | c'4 d'4 e'4 f'4 |\n\
+	}\n\
+]\n\
+");
+	sheet::compiler::SheetDefParser parser;
+	auto defs = parser.parse(text);
+	BOOST_CHECK(defs.tracks.size() == 1);
+	BOOST_CHECK(defs.tracks[0].voices.size() == 1);
+	BOOST_CHECK(defs.tracks[0].voices[0].events.size() == 12);
 
-// 	BOOST_CHECK(defs.tracks[0].trackInfos.size() == 3);
+	BOOST_CHECK(defs.sheetInfos.size() == 2); 
 
-// 	BOOST_CHECK(defs.tracks[0].trackInfos[0].name == FM_STRING("type") );
-// 	BOOST_CHECK(defs.tracks[0].trackInfos[0].args.size() == 1 );
-// 	BOOST_CHECK(defs.tracks[0].trackInfos[0].args[0] == FM_STRING("notation") );
+	BOOST_CHECK(defs.sheetInfos.size() == 2);
+	BOOST_CHECK(defs.sheetInfos[0].name == FM_STRING("instrumentDef") );
+	BOOST_CHECK(defs.sheetInfos[0].args.size() == 5);
+	BOOST_CHECK(defs.sheetInfos[0].args[0] == FM_STRING("drums"));
+	BOOST_CHECK(defs.sheetInfos[0].args[1] == FM_STRING("SC1"));
+	BOOST_CHECK(defs.sheetInfos[0].args[2] == FM_STRING("9"));
+	BOOST_CHECK(defs.sheetInfos[0].args[3] == FM_STRING("0"));
+	BOOST_CHECK(defs.sheetInfos[0].args[4] == FM_STRING("32"));
 
-// 	BOOST_CHECK(defs.tracks[0].trackInfos[1].name == FM_STRING("uname") );
-// 	BOOST_CHECK(defs.tracks[0].trackInfos[1].args.size() == 1 );
-// 	BOOST_CHECK(defs.tracks[0].trackInfos[1].args[0] == FM_STRING("bass") );
-
-// 	BOOST_CHECK(defs.tracks[0].trackInfos[2].name == FM_STRING("command") );
-// 	BOOST_CHECK(defs.tracks[0].trackInfos[2].args.size() == 3 );
-// 	BOOST_CHECK(defs.tracks[0].trackInfos[2].args[0] == FM_STRING("01") );
-// 	BOOST_CHECK(defs.tracks[0].trackInfos[2].args[1] == FM_STRING("02") );
-// 	BOOST_CHECK(defs.tracks[0].trackInfos[2].args[2] == FM_STRING("03") );
-// }
+	BOOST_CHECK(defs.sheetInfos[1].name == FM_STRING("command") );
+	BOOST_CHECK(defs.sheetInfos[1].args.size() == 3);
+	BOOST_CHECK(defs.sheetInfos[1].args[0] == FM_STRING("01"));
+	BOOST_CHECK(defs.sheetInfos[1].args[1] == FM_STRING("02"));
+	BOOST_CHECK(defs.sheetInfos[1].args[2] == FM_STRING("03"));
+}

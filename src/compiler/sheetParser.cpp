@@ -70,7 +70,14 @@ BOOST_FUSION_ADAPT_STRUCT(
 )
 
 BOOST_FUSION_ADAPT_STRUCT(
+	sheet::SheetInfo,
+	(fm::String, name)
+	(sheet::Event::Args, args)
+)
+
+BOOST_FUSION_ADAPT_STRUCT(
 	sheet::SheetDef,
+	(sheet::SheetDef::SheetInfos, sheetInfos)
 	(sheet::SheetDef::Tracks, tracks)
 	(sheet::SheetDef::Events, chords)
 )
@@ -98,13 +105,13 @@ namespace sheet {
 				{
 				}
 
-				template<class DocumentInfoRules>
-				void createDocInfoRules(DocumentInfoRules &docInfo) const
+				template<class SheetInfoRules>
+				void createSheetInfoRules(SheetInfoRules &sheetInfo) const
 				{
 					using qi::lexeme;
 					using ascii::char_;
 					using qi::eol;
-					docInfo %= 
+					sheetInfo %= 
 						+char_("a-zA-Z") 
 						>> ":" 
 						>> +(lexeme[+char_("a-zA-Z0-9")])
@@ -361,8 +368,8 @@ namespace sheet {
 					voice %= "{" >> events >> "}";
 
 					createTrackRules(track, voice, trackInfo_);
-
-					start %= *track >> chords_;
+					createSheetInfoRules(sheetInfo_);
+					start %= *sheetInfo_ >> *track >> chords_;
 
 					auto onError = boost::bind(&handler::errorHandler<Iterator>, _1);
 					on_error<fail>(start, onError);
@@ -376,7 +383,7 @@ namespace sheet {
 				qi::rule<Iterator, Voice(), ascii::space_type> voice;
 				qi::rule<Iterator, Voice::Events(), ascii::space_type> events;
 				qi::rule<Iterator, Event(), ascii::space_type> event_;
-
+				qi::rule<Iterator, SheetInfo(), ascii::space_type> sheetInfo_;
 				qi::rule<Iterator, SheetDef::Events(), ascii::space_type> chords_;
 				qi::rule<Iterator, ChordEvent(), ascii::space_type> chord_;
 				qi::rule<Iterator, TrackInfo(), ascii::space_type> trackInfo_;

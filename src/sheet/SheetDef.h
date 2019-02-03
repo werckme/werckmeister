@@ -8,9 +8,17 @@
 
 namespace sheet {
 
+	struct SheetInfo {
+		typedef std::vector<fm::String> Args;
+		fm::String name;
+		Args args;
+	};
+
 	struct SheetDef {
 		typedef std::vector<Track> Tracks;
 		typedef std::vector<ChordEvent> Events;
+		typedef std::vector<SheetInfo> SheetInfos;
+		SheetInfos sheetInfos;
 		Tracks tracks;
 		Events chords;
 	};
