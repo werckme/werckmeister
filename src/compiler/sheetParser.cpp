@@ -174,10 +174,11 @@ namespace sheet {
 					track.name("track");
 					voice.name("voice");
 					events.name("events");
-
 					pitch_.name("pitch");
-					pitch_ %= pitchSymbols_ >> (octaveSymbols_ | attr(PitchDef::DefaultOctave));
+					degree_.name("pitch");
+					degree_ %= degreeSymbols_ >> (octaveSymbols_ | attr(PitchDef::DefaultOctave));
 
+					pitch_ %= pitchSymbols_ >> (octaveSymbols_ | attr(PitchDef::DefaultOctave));
 					alias_ %= lexeme['"' >> +(char_ - '"') >> '"'];
 					pitchOrAlias_ %= pitch_ | alias_;
 					event_ %= 
@@ -185,6 +186,12 @@ namespace sheet {
 						attr(Event::Note) 
 						>> (pitchOrAlias_ | ("<" >> +pitchOrAlias_ >> ">")) 
 						>> noteEventAppendings<Event::Note>()
+					)
+					|
+					(
+						attr(Event::Degree) 
+						>> (degree_ | ("<" >> +degree_ >> ">")) 
+						>> noteEventAppendings<Event::Degree>()
 					)
 					| 
 					(
@@ -245,6 +252,7 @@ namespace sheet {
 					on_error<fail>(start, onError);
 
 				}
+				qi::rule<Iterator, PitchDef(), ascii::space_type> degree_;
 				qi::rule<Iterator, SheetDef(), ascii::space_type> start;
 				qi::rule<Iterator, PitchDef(), ascii::space_type> pitch_;
 				qi::rule<Iterator, PitchDef(), ascii::space_type> pitchOrAlias_;
