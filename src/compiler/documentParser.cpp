@@ -44,14 +44,15 @@ namespace sheet {
 			}
 			void useStyleDef(DocumentPtr doc, const fm::String &path)
 			{
-				auto apath = getAbsolutePath(doc, path);
-				auto filestream = fm::getWerckmeister().openResource(apath);
-				fm::StreamBuffIterator begin(*filestream);
-				fm::StreamBuffIterator end;
-				fm::String documentText(begin, end);
-				StyleDefParser styleDefParser;
-				auto name = boost::filesystem::path(path).stem().wstring();
-				doc->styleDefs[name] = styleDefParser.parse(documentText);
+				throw "implement me";
+				// auto apath = getAbsolutePath(doc, path);
+				// auto filestream = fm::getWerckmeister().openResource(apath);
+				// fm::StreamBuffIterator begin(*filestream);
+				// fm::StreamBuffIterator end;
+				// fm::String documentText(begin, end);
+				// StyleDefParser styleDefParser;
+				// auto name = boost::filesystem::path(path).stem().wstring();
+				// doc->styleDefs[name] = styleDefParser.parse(documentText);
 			}
 			typedef std::function<void(DocumentPtr, const fm::String&)> ExtHandler;
 			std::unordered_map <std::string, ExtHandler> exthandlers({

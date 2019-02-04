@@ -140,49 +140,6 @@ namespace sheet {
 				| Base::any
 				;
 		}
-		/////////////////////////////////////////////////////////////////////////////
-		template <typename Lexer>
-		struct StyleDefTokenizer : public ASheetTokenizer<Lexer>
-		{
-			typedef ASheetTokenizer<Lexer> Base;
-			StyleDefTokenizer();
-			typename Base::Tokens documentConfigs;
-			typename Base::Tokens sections;
-			StringStream sstream;
-		private:
-			void beginSection_(CharType const *begin, CharType const *end)
-			{
-				sstream << Base::withoutComment(begin, end) << std::endl;
-			}
-			void onLine_(CharType const *begin, CharType const *end)
-			{
-				sstream << Base::withoutComment(begin, end) << std::endl;
-			}
-			void endSection_(CharType const *begin, CharType const *end)
-			{
-				sstream << Base::withoutComment(begin, end) << std::endl;
-				sections.push_back(sstream.str());
-				sstream.str(fm::String());
-			}
-		};
-
-		template <typename Lexer>
-		StyleDefTokenizer<Lexer>::StyleDefTokenizer()
-		{
-			auto addConfigs = boost::bind(&Base::add, this, _1, _2, boost::ref(documentConfigs));
-			auto onBeginSection = boost::bind(&StyleDefTokenizer::beginSection_, this, _1, _2);
-			auto onEndSection = boost::bind(&StyleDefTokenizer::endSection_, this, _1, _2);
-			auto onLine = boost::bind(&StyleDefTokenizer::onLine_, this, _1, _2);
-			this->self
-				= (Base::documentConfig[addConfigs] 
-				| Base::comment 
-				| Base::line[onLine]
-				| Base::beginSection[onBeginSection] 
-				| Base::endSection[onEndSection])
-				| Base::eol
-				| Base::any
-				;
-		}
 
 
 		/////////////////////////////////////////////////////////////////////////////

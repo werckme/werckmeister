@@ -1,17 +1,16 @@
 #ifndef STYLEDEF_SERVER_HPP
 #define STYLEDEF_SERVER_HPP
 
-#include "StyleDef.h"
 #include "ChordDef.h"
-
+#include "SheetDef.h"
 namespace sheet {
 
     class IStyleDefServer {
     public:
-		typedef Section::Tracks* StyleValueType;
+		typedef SheetDef::Tracks* StyleValueType;
 		typedef ChordDef* ChordValueType;
 		typedef PitchDef* PitchDefValueType;
-		typedef const Section::Tracks* ConstStyleValueType;
+		typedef const SheetDef::Tracks* ConstStyleValueType;
 		typedef const ChordDef* ConstChordValueType;
 		typedef const PitchDef* ConstPitchDefValueType;
         ~IStyleDefServer() = default;

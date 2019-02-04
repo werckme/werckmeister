@@ -3,7 +3,6 @@
 #include <fm/common.hpp>
 #include <vector>
 #include "sheet/ChordDef.h"
-#include "sheet/StyleDef.h"
 #include "sheet/SheetDef.h"
 #include "sheet/Pitchmap.h"
 #include "sheet/DocumentConfig.h"
@@ -33,15 +32,7 @@ namespace sheet {
 				return parse(cstr, cstr + str.length());
 			}
 		};
-		struct StyleDefParser {
-			
-			StyleDef parse(fm::CharType const* first, fm::CharType const* last);
-			StyleDef parse(const fm::String &str)
-			{
-				fm::CharType const* cstr = str.c_str();
-				return parse(cstr, cstr + str.length());
-			}
-		};
+
 		struct SheetDefParser {
 
 			SheetDef parse(fm::CharType const* first, fm::CharType const* last);
