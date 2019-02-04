@@ -206,7 +206,6 @@ BOOST_AUTO_TEST_CASE(test_styleDefparser)
 		@use anything; \n\
 		@or not; \n\
 	--some useless comment\n\
-		section intro--begin a section\n\
 [--a track\n\
 	{\n\
 		I,4 II,,8 III,,,16 IV32 | I,4 I,, I,,, I | r1 | <I' III' V'>4 \n\
@@ -218,12 +217,10 @@ BOOST_AUTO_TEST_CASE(test_styleDefparser)
 		IV'4. VII''8. I'''16. II32. | II'4 II'' II''' II | r1 \n\
 	}-- further voice \n\
 ] \n\
-end\n\
 ");
 	sheet::compiler::StyleDefParser parser;
 	auto defs = parser.parse(text);
 	BOOST_CHECK(defs.sections.size() == 1);
-	BOOST_CHECK(defs.sections[0].name == FM_STRING("intro"));
 	BOOST_CHECK(defs.sections[0].tracks.size() == 1);
 	BOOST_CHECK(defs.sections[0].tracks[0].voices.size() == 2);
 	BOOST_CHECK(defs.sections[0].tracks[0].voices[0].events.size() == 16);
@@ -267,7 +264,6 @@ BOOST_AUTO_TEST_CASE(test_styleDefparser_mixed_with_absolute_notes)
 		@use anything; \n\
 		@or not; \n\
 	--some useless comment\n\
-		section intro--begin a section\n\
 [--a track\n\
 	{\n\
 		I,4 II,,8 III,,,16 IV32 \n\
@@ -276,7 +272,6 @@ BOOST_AUTO_TEST_CASE(test_styleDefparser_mixed_with_absolute_notes)
 		c4 d4 e4 f4 \n\
 	}-- further voice \n\
 ] \n\
-end\n\
 ");
 	sheet::compiler::StyleDefParser parser;
 	auto defs = parser.parse(text);
@@ -301,13 +296,11 @@ BOOST_AUTO_TEST_CASE(test_alias_notes)
 	using namespace fm;
 	using sheet::PitchDef;
 	fm::String text = FM_STRING("\
-		section intro--begin a section\n\
 		[\n\
 			{\n\
 				\"bd\"4 \"sn\"8	<\"ht\" \"cymbal1\" >8\n\
 			}\n\
 		] \n\
-end\n\
 ");
 	sheet::compiler::StyleDefParser parser;
 	auto defs = parser.parse(text);
@@ -351,7 +344,6 @@ BOOST_AUTO_TEST_CASE(test_styleDefParser_fail)
 		@use anything; \n\
 		@or not; \n\
 	--some useless comment\n\
-		section intro--begin a section\n\
 [--a track\n\
 	{\n\
 		I,4 II,,8 III,,,16 IV32 | I,4 I,, I,,, I | r1 | <I' III' V'>4 \n\
@@ -364,7 +356,6 @@ BOOST_AUTO_TEST_CASE(test_styleDefParser_fail)
  | r1 \n\
 	}-- further voice \n\
 ] \n\
-end\n\
 ");
 	sheet::compiler::StyleDefParser parser;
 	BOOST_CHECK_THROW(parser.parse(text), sheet::compiler::Exception);
@@ -643,13 +634,11 @@ BOOST_AUTO_TEST_CASE(test_styleDefparser_vorschlag)
 	using namespace fm;
 	using sheet::PitchDef;
 	fm::String text = FM_STRING("\
-section intro\n\
 [\n\
 	{\n\
 		I#4`I4 I4 I4 I4 |\n\
 	}\n\
 ] \n\
-end\n\
 ");
 	sheet::compiler::StyleDefParser parser;
 	auto defs = parser.parse(text);
