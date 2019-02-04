@@ -16,7 +16,7 @@
 #include <fm/units.hpp>
 #include "error.hpp"
 #include <sstream>
-#include "sheet/parserSymbols.h"
+#include "parserSymbols.h"
 
 BOOST_FUSION_ADAPT_STRUCT(
 	sheet::Voice,
