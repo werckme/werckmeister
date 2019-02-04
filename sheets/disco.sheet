@@ -3,12 +3,15 @@
 @load "./styles/simpleDisco.style";
 @load "./pitchmaps/defaultMidiDrumMap.pitchmap";
 
-/tempo: 125/
+tempo: 125;
 
---           instrument ch cc pc
-/instrumentDef: piano 3 0 0/
-/instrumentDef: bass 5 0 2/
-/instrumentDef: drums 9 0 8/
+--       instrument ch cc pc
+instrumentDef: piano 3 0 0;
+instrumentDef: bass 5 0 35;
+instrumentDef: drums 9 0 8;
+
+instrumentConf: piano volume 100;
+instrumentConf: bass volume 85;
 
 /style: simpleDisco normal/
 

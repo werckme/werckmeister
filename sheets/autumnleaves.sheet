@@ -3,6 +3,22 @@
 @load "./styles/simpleJazz.style";
 @load "./pitchmaps/defaultMidiDrumMap.pitchmap";
 
+tempo: 120;
+device: SC1 midi 2;
+
+--          instrument dv ch cc pc
+instrumentDef: piano   SC1 2 0 0;
+instrumentDef: lead    SC1 3 0 0;
+instrumentDef: bass    SC1 7 0 32;
+instrumentDef: drums   SC1 9 0 32;
+
+
+instrumentConf: piano volume 90 pan 80;
+instrumentConf: lead volume 100;
+instrumentConf: bass volume 90;
+instrumentConf: drums volume 86;
+
+
 [
 instrument: lead;
 {
@@ -15,21 +31,6 @@ instrument: lead;
     a4 d d' c' | b1~ | b4 r ais b | c' c' a a | fis2. c'4 | b2 b2~ | b2. e4 | a2. g4 | fis2 g4 b, | e1 |
 }
 ]
-
-/tempo: 120/
-/device: SC1 midi 2/
-
---           instrument ch cc pc
-/instrumentDef: piano      SC1 2 0 0/
-/instrumentDef: lead     SC1 3 0 0/
-/instrumentDef: bass    SC1 7 0 32/
-/instrumentDef: drums   SC1 9 0 32/
-
-
-/instrumentConf: piano volume 90 pan 80/
-/instrumentConf: lead volume 100/
-/instrumentConf: bass volume 90/
-/instrumentConf: drums volume 86/
 
 /style: simpleJazz normal/
 r | A-7 | D7 | Gmaj7 | Cmaj7 | Fis07 | B7 | E- | E- |

@@ -4,10 +4,10 @@
 @load "./styles/justchords.style";
 @load "./pitchmaps/defaultMidiDrumMap.pitchmap";
 
-/device: SC1 midi 1/
+device: SC1 midi 1;
+--           instrument   dv ch cc pc
+instrumentDef: piano      SC1 2 0 104;
 
---           instrument ch cc pc
-/instrumentDef: piano      SC1 2 0 104/
 
 /style: justchords empty/
 C |

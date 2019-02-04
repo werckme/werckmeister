@@ -19,6 +19,10 @@ namespace sheet {
 		{
 			this->document_ = document;
 			auto ctx = context();
+			ctx->processMeta(document->sheetDef.sheetInfos, 
+				[](const auto &x) { return x.name; }, 
+				[](const auto &x) { return x.args; }
+			);
 			renderChordTrack();
 			renderTracks();
 		}
@@ -30,7 +34,11 @@ namespace sheet {
 			{
 				auto trackId = ctx->createTrack();
 				ctx->setTrack(trackId);
-				ctx->processTrackMetaData(track);
+				ctx->processMeta(track.trackInfos, 
+					[](const auto &x) { return x.name; }, 
+					[](const auto &x) { return x.args; }
+				);
+				
 				for (const auto &voice : track.voices)
 				{
 					auto voiceId = ctx->createVoice();

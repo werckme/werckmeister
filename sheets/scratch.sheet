@@ -4,12 +4,12 @@
 @load "./pitchmaps/defaultMidiDrumMap.pitchmap";
 
 
-/device: SC1 midi 1/
+device: SC1 midi 1;
 
---           instrument ch cc pc
-/instrumentDef: piano      SC1 0 0  0/
-/tempo: 170/
-/style: scratch normal/
+--           instrument dv ch cc pc
+instrumentDef: piano    SC1 0  0  0;
+tempo: 170;
+style: scratch normal;
 
 A-7 | D-7 | G7 | Cmaj7 C7 |
 Fmaj7 | B07 | E7b9 |

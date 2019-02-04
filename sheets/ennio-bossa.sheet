@@ -4,6 +4,24 @@
 @load "./styles/bossanova.style";
 @load "./styles/countryschlager1.style";
  
+device: SC1 midi 2;
+
+tempo: 130;
+--           instrument device ch cc pc
+instrumentDef: piano   SC1 2 0 0;
+instrumentDef: guitar  SC1 3 0 25;
+instrumentDef: vibra   SC1 4 0 11;
+instrumentDef: bass    SC1 5 0 33;
+instrumentDef: drums   SC1 9 0 32;
+instrumentDef: slide   SC1 0 0 0;
+
+instrumentDef: guitar  SC1 6 0 24;
+instrumentConf: guitar volume 80 pan 20;
+instrumentConf: piano volume 90 pan 80;
+instrumentConf: bass volume 90;
+instrumentConf: drums volume 86;
+
+
 [
 instrument: vibra;
 {
@@ -15,26 +33,10 @@ instrument: vibra;
 }
 ]
 
-/device: SC1 midi 2/
-
-/tempo: 130/
---           instrument device ch cc pc
-/instrumentDef: piano   SC1 2 0 0/
-/instrumentDef: guitar  SC1 3 0 25/
-/instrumentDef: vibra   SC1 4 0 11/
-/instrumentDef: bass    SC1 5 0 33/
-/instrumentDef: drums   SC1 9 0 32/
-/instrumentDef: slide   SC1 0 0 0/
-
-/instrumentDef: guitar  SC1 6 0 24/
-/instrumentConf: guitar volume 80 pan 20/
-/instrumentConf: piano volume 90 pan 80/
-/instrumentConf: bass volume 90/
-/instrumentConf: drums volume 86/
-
 /style: bossanova normal/
 
-Cmaj7 | Cmaj7 | Cmaj7 | Cmaj7 | Eesmaj7 | Eesmaj7 | Eesmaj7 | Eesmaj7 | Aesmaj7 | Aesmaj7 | Aesmaj7 | Aesmaj7 | G7 | G7 | G7 | G7 | G7 | C | C | Cmin |
+Cmaj7 | Cmaj7 | Cmaj7 | Cmaj7 | Eesmaj7 | Eesmaj7 | Eesmaj7 | Eesmaj7 | Aesmaj7 
+| Aesmaj7 | Aesmaj7 | Aesmaj7 | G7 | G7 | G7 | G7 | G7 | C | C | Cmin |
 
 /style: countryschlager1 ende/
 

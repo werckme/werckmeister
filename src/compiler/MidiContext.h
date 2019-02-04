@@ -32,7 +32,7 @@ namespace sheet {
 			virtual TrackId createTrackImpl() override;
 			virtual VoiceId createVoiceImpl() override;
 			virtual void addEvent(const PitchDef &pitch, fm::Ticks absolutePosition, fm::Ticks duration) override;
-			virtual void addEvent(const fm::midi::Event &ev);
+			virtual void addEvent(const fm::midi::Event &ev, TrackId trackId = INVALID_TRACK_ID);
 			virtual void addPitchbendEvent(double value, fm::Ticks absolutePosition) override;
 			virtual void startEvent(const PitchDef &pitch, fm::Ticks absolutePosition) override;
 			virtual void stopEvent(const PitchDef &pitch, fm::Ticks absolutePosition) override;
@@ -43,7 +43,7 @@ namespace sheet {
 			virtual void metaSetInstrumentConfig(const fm::String &uname, const Event::Args &args);
 			virtual void metaSetInstrument(const fm::String &uname) override;
 			virtual void metaSetTempo(double bpm) override;
-			virtual void setMeta(const Event &metaEvent) override;
+			virtual void processMeta(const fm::String &command, const std::vector<fm::String> &args) override;
 			virtual void metaSetVolume(int volume) override;
 			virtual void metaSetPan(int val) override;
 			/**
@@ -56,6 +56,7 @@ namespace sheet {
 			virtual Base::VoiceMetaDataPtr createVoiceMetaData() override;
 			virtual Base::TrackMetaDataPtr createTrackMetaData() override;
 			void setMidiInstrumentDef(const fm::String &uname, const MidiInstrumentDef &def);
+			virtual TrackId createMasterTrack() override;
 		private:
 			MidiInstrumentDefs midiInstrumentDefs_;
 			fm::midi::MidiPtr midi_;

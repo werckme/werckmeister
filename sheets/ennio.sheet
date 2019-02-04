@@ -2,7 +2,13 @@
 @load "./chords/default.chords";
 @load "./pitchmaps/defaultMidiDrumMap.pitchmap";
 @load "./styles/ennio.style";
- 
+
+device: SC1 midi 2;
+
+tempo: 130;
+--          instrument dv ch cc pc
+instrumentDef: piano   SC1 2 0 3;
+
 [
 instrument: piano;
 {
@@ -11,13 +17,6 @@ instrument: piano;
     c' as,4 as,4  bes,~ | <bes, c> as as bes | c' c' es'8 d' c' d' | b2 b, | r1 | r4 b4 b4 c' | d' d' d' d' | d' d' e'8 d' c' b | c'1 |
 }
 ]
-
-/device: SC1 midi 2/
-
-/tempo: 130/
---           instrument ch cc pc
-/instrumentDef: piano   SC1 2 0 3/
-
 
 /style: ennio normal/
 

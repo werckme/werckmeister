@@ -45,7 +45,10 @@ namespace sheet {
 			}
 			ctx_->setTarget(trackId, voiceId);
 			if (trackIsNew) {
-				ctx_->processTrackMetaData(track);
+				ctx_->processMeta(track.trackInfos, 
+					[](const auto &x) { return x.name; }, 
+					[](const auto &x) { return x.args; }
+				);
 			}
 		}
 

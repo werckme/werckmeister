@@ -4,6 +4,18 @@
 @load "./styles/rumba.style";
 @load "./styles/purdie.style";
 
+
+tempo: 160;
+device: SC1 midi 2;
+--             instrument dv ch cc pc
+instrumentDef: piano      SC1 0 0  0;
+instrumentDef: jzguitar   SC1 2 0  26;
+instrumentDef: bass       SC1 3 0  33;
+instrumentDef: fx         SC1 4 35 80;
+instrumentDef: drums      SC1 9 0  32;
+
+
+
 [
 instrument: fx;
 {
@@ -11,17 +23,6 @@ instrument: fx;
     c1 | r1 | f1 |
 }
 ]
-
-
-/tempo: 160/
-/device: SC1 midi 2/
-
---           instrument ch cc pc
-/instrumentDef: piano      SC1 0 0  0/
-/instrumentDef: jzguitar   SC1 2 0  26/
-/instrumentDef: bass       SC1 3 0  33/
-/instrumentDef: fx         SC1 4 35 80/
-/instrumentDef: drums      SC1 9 0  32/
 
 
 /style: purdie normal/

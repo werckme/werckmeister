@@ -131,6 +131,12 @@ namespace sheet {
 		{
 		}
 
+		AContext::TrackId AContext::createMasterTrack()
+		{
+			this->masterTrackId_ = createTrack();
+			return this->masterTrackId_;
+		}
+
 		ASpielanweisungPtr AContext::spielanweisung()
 		{
 			auto meta = voiceMetaData();
@@ -187,27 +193,6 @@ namespace sheet {
 		void AContext::setVoice(VoiceId voice)
 		{
 			this->voiceId_ = voice;
-		}
-
-		void AContext::processTrackMetaData(const sheet::Track &track)
-		{
-			auto trackMeta = trackMetaData();
-			for(const auto &it : track.trackInfos) {
-				processTrackMetaCommand(it.name, it.args, trackMeta);
-			}
-		}
-
-		void AContext::processTrackMetaCommand(const fm::String &command, const sheet::TrackInfo::Args &args, TrackMetaDataPtr dst)
-		{
-			if (dst == nullptr) {
-				dst = trackMetaData();
-			}
-			if (!dst) {
-				FM_THROW(Exception, "metadata == null");
-			}
-			if (command == SHEET_META__INSTRUMENT) {
-				metaSetInstrument(getArgument<fm::String>(args, 0));
-			}
 		}
 
 		AContext::TrackId AContext::createTrack()
@@ -414,57 +399,71 @@ namespace sheet {
 			}
 			seek(meta->lastEventDuration);
 		}
-
+		void AContext::processMeta(const fm::String &command, const std::vector<fm::String> &args)
+		{
+			try {
+				if (command == SHEET_META__SET_STYLE) {
+					metaSetStyle(getArgument<fm::String>(args, 0), getArgument<fm::String>(args, 1));
+				}
+				if (command == SHEET_META__SET_EXPRESSION) {
+					metaSetExpression(getArgument<fm::String>(args, 0));
+				}
+				if (command == SHEET_META__SET_SINGLE_EXPRESSION) {
+					metaSetSingleExpression(getArgument<fm::String>(args, 0));
+				}
+				if (command == SHEET_META__SET_TEMPO) { 
+					metaSetTempo(getArgument<fm::BPM>(args, 0));
+				}
+				if (command == SHEET_META__SET_VOICING_STRATEGY) {
+					metaSetVoicingStrategy(getArgument<fm::String>(args, 0), args);
+				}
+				if (command == SHEET_META__SET_SPIELANWEISUNG) {
+					metaSetSpielanweisung(getArgument<fm::String>(args, 0), args);
+				}	
+				if (command == SHEET_META__SET_SPIELANWEISUNG_ONCE) {
+					metaSetSpielanweisungOnce(getArgument<fm::String>(args, 0), args);
+				}	
+				if (command == SHEET_META__SET_MOD) {
+					metaSetModification(getArgument<fm::String>(args, 0), args);
+				}	
+				if (command == SHEET_META__SET_MOD_ONCE) {
+					metaSetModificationOnce(getArgument<fm::String>(args, 0), args);
+				}
+				if (command == SHEET_META__SET_SIGNATURE) {
+					metaSetSignature(getArgument<int>(args, 0), getArgument<int>(args, 1));
+				}
+				if (command == SHEET_META__SET_DEVICE) {
+					metaAddDevice(getArgument<fm::String>(args, 0), args);
+				}	
+				if (command == SHEET_META__SET_VOLUME) {
+					metaSetVolume(getArgument<int>(args, 0));
+				}
+				if (command == SHEET_META__SET_PAN) {
+					metaSetPan(getArgument<int>(args, 0));
+				}
+				if (command == SHEET_META__INSTRUMENT) {
+					metaSetInstrument(getArgument<fm::String>(args, 0));
+				}
+			} catch(const std::exception &ex) {
+				FM_THROW(Exception, "failed to process " + fm::to_string(command)
+									+"\n" + ex.what());
+			}	
+			catch(...) {
+				FM_THROW(Exception, "failed to process " + fm::to_string(command));
+			}												
+		}
 		void AContext::setMeta(const Event &metaEvent)
 		{
 			if (metaEvent.metaCommand.empty()) {
 				throwContextException("invalid meta command ");
 			}
-			if (metaEvent.metaCommand == SHEET_META__SET_STYLE) {
-				metaSetStyle(getArgument<fm::String>(metaEvent, 0), getArgument<fm::String>(metaEvent, 1));
-			}
-			if (metaEvent.metaCommand == SHEET_META__SET_EXPRESSION) {
-				metaSetExpression(getArgument<fm::String>(metaEvent, 0));
-			}
-			if (metaEvent.metaCommand == SHEET_META__SET_SINGLE_EXPRESSION) {
-				metaSetSingleExpression(getArgument<fm::String>(metaEvent, 0));
-			}
-			if (metaEvent.metaCommand == SHEET_META__SET_TEMPO) { 
-				metaSetTempo(getArgument<fm::BPM>(metaEvent, 0));
-			}
 			if (metaEvent.metaCommand == SHEET_META__SET_UPBEAT) { 
 				metaSetUpbeat(metaEvent);
 			}
-			if (metaEvent.metaCommand == SHEET_META__SET_VOICING_STRATEGY) {
-				metaSetVoicingStrategy(getArgument<fm::String>(metaEvent, 0), metaEvent.metaArgs);
-			}
-			if (metaEvent.metaCommand == SHEET_META__SET_SPIELANWEISUNG) {
-				metaSetSpielanweisung(getArgument<fm::String>(metaEvent, 0), metaEvent.metaArgs);
-			}	
-			if (metaEvent.metaCommand == SHEET_META__SET_SPIELANWEISUNG_ONCE) {
-				metaSetSpielanweisungOnce(getArgument<fm::String>(metaEvent, 0), metaEvent.metaArgs);
-			}	
-			if (metaEvent.metaCommand == SHEET_META__SET_MOD) {
-				metaSetModification(getArgument<fm::String>(metaEvent, 0), metaEvent.metaArgs);
-			}	
-			if (metaEvent.metaCommand == SHEET_META__SET_MOD_ONCE) {
-				metaSetModificationOnce(getArgument<fm::String>(metaEvent, 0), metaEvent.metaArgs);
-			}
-			if (metaEvent.metaCommand == SHEET_META__SET_SIGNATURE) {
-				metaSetSignature(getArgument<int>(metaEvent, 0), getArgument<int>(metaEvent, 1));
-			}
-			if (metaEvent.metaCommand == SHEET_META__SET_DEVICE) {
-				metaAddDevice(getArgument<fm::String>(metaEvent, 0), metaEvent.metaArgs);
-			}
 			if (metaEvent.metaCommand == SHEET_META__SET_VORSCHLAG) {
 				metaAddVorschlag(metaEvent);
-			}		
-			if (metaEvent.metaCommand == SHEET_META__SET_VOLUME) {
-				metaSetVolume(getArgument<int>(metaEvent, 0));
 			}
-			if (metaEvent.metaCommand == SHEET_META__SET_PAN) {
-				metaSetPan(getArgument<int>(metaEvent, 0));
-			}																					
+			processMeta(metaEvent.metaCommand, metaEvent.metaArgs);				
 		}
 
 		void AContext::metaSetVolume(int volume)

@@ -5,14 +5,14 @@
 @load "./styles/ido.style";
 
 
-/device: SC1 midi 2/
+device: SC1 midi 2;
 
-/tempo: 145/
-/instrumentDef: organ SC1 2 0 18/
-/instrumentDef: guitar SC1 3 0 37/
-/instrumentDef: bass SC1 8 0 33/
-/instrumentDef: drums SC1 9 0 32/
-/instrumentDef: slide SC1 2 0 102/
+tempo: 145;
+instrumentDef: organ SC1 2 0 18;
+instrumentDef: guitar SC1 3 0 37;
+instrumentDef: bass SC1 8 0 33;
+instrumentDef: drums SC1 9 0 32;
+instrumentDef: slide SC1 2 0 102;
 
 /style: ido normal/
 

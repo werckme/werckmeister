@@ -46,6 +46,13 @@ namespace sheet {
 			TrackId track() const;
 			VoiceId voice() const;
 			TrackId chordTrackId() const { return chordTrack_; }
+			TrackId masterTrackId() 
+			{ 
+				if (masterTrackId_ == INVALID_TRACK_ID) {
+					this->createMasterTrack();
+				}
+				return masterTrackId_; 
+			}
 			VoiceId chordVoiceId() const { return chordVoice_; }
 			inline void setTarget(TrackId trackId, VoiceId voiceId)
 			{
@@ -106,10 +113,20 @@ namespace sheet {
 			virtual ASpielanweisungPtr spielanweisung();
 			virtual AInstrumentDef * getInstrumentDef(const fm::String &uname) = 0;
 			virtual fm::Ticks currentPosition() const;
-			virtual void processTrackMetaData(const sheet::Track &track);
-			virtual void processTrackMetaCommand(const fm::String &command, const sheet::TrackInfo::Args &args, TrackMetaDataPtr dst = nullptr);
 			/////// meta commands
 			virtual void setMeta(const Event &metaEvent);
+			virtual void processMeta(const fm::String &command, const std::vector<fm::String> &args);
+			
+			/**
+			 * processed a cointainer of meta commands
+			 * @arg the container
+			 * @arg a function which returns the command of an container value_type object
+			 * @arg a function which returns the args of an container value_type object
+			 */
+			template<class TContainer>
+			void processMeta(const TContainer &container, 
+							std::function<fm::String(const typename TContainer::value_type&)> fcommand, 
+							std::function<std::vector<fm::String>(const typename TContainer::value_type&)> fargs);
 			virtual void metaSetInstrument(const fm::String &uname) {}
 			virtual void metaSetStyle(const fm::String &file, const fm::String &section);
 			virtual void metaSetExpression(const fm::String &value);
@@ -152,19 +169,35 @@ namespace sheet {
 			virtual VoiceId createVoiceImpl() = 0;
 			virtual VoiceMetaDataPtr createVoiceMetaData() = 0;
 			virtual TrackMetaDataPtr createTrackMetaData() = 0;
+			virtual TrackId createMasterTrack();
 		private:
 			ChordEvent currentChord_;
 			VoicingStrategyPtr defaultVoiceStrategy_;
 			IStyleDefServer::ConstChordValueType currentChordDef_ = nullptr;
 			IStyleDefServer::ConstStyleValueType currentStyleDef_ = nullptr;
-			TrackId trackId_ = INVALID_TRACK_ID, chordTrack_ = INVALID_TRACK_ID;
+			TrackId trackId_ = INVALID_TRACK_ID, 
+				 chordTrack_ = INVALID_TRACK_ID,
+				 masterTrackId_ = INVALID_TRACK_ID;
 			VoiceId voiceId_ = INVALID_VOICE_ID, chordVoice_ = INVALID_VOICE_ID;
 			VoiceMetaDataMap voiceMetaDataMap_;
 			TrackMetaDataMap trackMetaDataMap_;
 			IStyleDefServerPtr styleDefServer_ = nullptr;
 			ExpressionMap expressionMap_;
 			ASpielanweisungPtr defaultSpielanweisung_;
-        };	
+        };
+
+		///////////////////////////////////////////////////////////////////////
+		template<class TContainer>
+		void AContext::processMeta(const TContainer &container, 
+						std::function<fm::String(const typename TContainer::value_type&)> fcommand, 
+						std::function<std::vector<fm::String>(const typename TContainer::value_type&)> fargs)
+		{
+			for(const auto &x : container) {
+				fm::String command = fcommand(x);
+				std::vector<fm::String> args = fargs(x);
+				processMeta(command, args);
+			}
+		}
     }
 }
 
