@@ -38,7 +38,7 @@ namespace sheet {
 		return &(it->second);
 	}
 
-	Document::Tracks * Document::findTracks(const fm::String &partName, Parts &parts)
+	Document::StyleType * Document::findStyle(const fm::String &partName, Parts &parts)
 	{
 		Parts::iterator it = parts.find(partName);
 		if (it == parts.end()) {
@@ -69,12 +69,12 @@ namespace sheet {
 				styles[styleName] = Parts();
 				parts = &styles[styleName];
 			}
-			auto tracks = findTracks(partName, *parts);
-			if (tracks == nullptr) {
-				(*parts)[partName] = Document::Tracks();
-				tracks = &(*parts)[partName];
+			auto style = findStyle(partName, *parts);
+			if (style == nullptr) {
+				(*parts)[partName] = Style(styleName, partName);
+				style = &(*parts)[partName];
 			}
-			tracks->push_back(track);
+			style->tracks.push_back(&track);
 		}
 	}
 
@@ -86,23 +86,23 @@ namespace sheet {
 		return *styles_;
 	}
 
-	IStyleDefServer::ConstStyleValueType Document::getStyle(const fm::String &name, const fm::String &part)
+	Document::StyleType Document::getStyle(const fm::String &name, const fm::String &part)
 	{
 		const Styles &styles = this->styles();
 		// find style by name
 		Styles::const_iterator it = _findByName(name, styles);
 		if (it == styles.end()) {
-			return nullptr;
+			return StyleType();
 		}
 		// find track by name
 		const auto& partContainer = it->second;
 		Parts::const_iterator partIt = _findByName(part, partContainer);
 		if (partIt == partContainer.end()) {
-			return nullptr;
+			return StyleType();
 		}
-		return &(partIt->second);
-
+		return partIt->second;
 	}
+
 	IStyleDefServer::ConstChordValueType Document::getChord(const fm::String &name)
 	{
 		ChordDefs::const_iterator it;

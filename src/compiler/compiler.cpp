@@ -87,7 +87,7 @@ namespace sheet {
 			auto part = getArgument<fm::String>(metaEvent, 1);
 			auto ctx = styleRenderer.context();
 			auto style = ctx->styleDefServer()->getStyle(file, part);
-			if (!style) {
+			if (style.empty()) {
 				FM_THROW(Exception, "style not found: " + fm::to_string(file) + " " + fm::to_string(part));
 			}
 			styleRenderer.switchStyle(ctx->currentStyle(), style);

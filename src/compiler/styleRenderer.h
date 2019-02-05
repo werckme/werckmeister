@@ -26,7 +26,7 @@ namespace sheet {
             virtual ~StyleRenderer() = default;
             void render(fm::Ticks duration);
             void sheetRest(fm::Ticks duration);
-            void switchStyle(IStyleDefServer::ConstStyleValueType current, IStyleDefServer::ConstStyleValueType next);
+            void switchStyle(const IStyleDefServer::Style &current, const IStyleDefServer::Style &next);
             AContextPtr context() const { return this->ctx_; }
         private:
             void setTargetCreateIfNotExists(const Track &track, const Voice &voice);

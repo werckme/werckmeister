@@ -3,17 +3,17 @@
 namespace sheet {
     namespace compiler {
 
-		void StyleRenderer::switchStyle(IStyleDefServer::ConstStyleValueType current, IStyleDefServer::ConstStyleValueType next)
+		void StyleRenderer::switchStyle(const IStyleDefServer::Style &current, const IStyleDefServer::Style &next)
 		{
-			if (next == nullptr || current == next) {
+			if (next.empty() || current == next) {
 				return;
 			}
 			// set position for new track
 			auto chordMeta = ctx_->voiceMetaData();
-			for (const auto &track : *next) {
-				for (const auto &voice : track.voices)
+			for (auto track : next.tracks) {
+				for (const auto &voice : track->voices)
 				{
-					setTargetCreateIfNotExists(track, voice);
+					setTargetCreateIfNotExists(*track, voice);
 					auto meta = ctx_->voiceMetaData();
 					meta->position = chordMeta->position;
 				}
@@ -54,13 +54,13 @@ namespace sheet {
 
         void StyleRenderer::sheetRest(fm::Ticks duration)
 		{
-			auto styleTracks = ctx_->currentStyle();
+			const auto &styleTracks = ctx_->currentStyle().tracks;
 
-			for (const auto &track : *styleTracks)
+			for (const auto &track : styleTracks)
 			{
-				for (const auto &voice : track.voices)
+				for (const auto &voice : track->voices)
 				{
-					setTargetCreateIfNotExists(track, voice);
+					setTargetCreateIfNotExists(*track, voice);
 					auto meta = ctx_->voiceMetaData();
 					ctx_->rest(duration);
 				}
@@ -69,16 +69,16 @@ namespace sheet {
 
         void StyleRenderer::render(fm::Ticks duration)
         {
-            auto styleTracks = ctx_->currentStyle();
+            const auto &styleTracks = ctx_->currentStyle().tracks;
 
-			for (const auto &track : *styleTracks)
+			for (const auto &track : styleTracks)
 			{
-				for (const auto &voice : track.voices)
+				for (const auto &voice : track->voices)
 				{
 					if (voice.events.empty()) {
 						continue;
 					}
-					setTargetCreateIfNotExists(track, voice);
+					setTargetCreateIfNotExists(*track, voice);
 					auto meta = ctx_->voiceMetaData();
 					fm::Ticks writtenDuration = 0;
 					while ((duration - writtenDuration) > AContext::TickTolerance) { // loop until enough events are written

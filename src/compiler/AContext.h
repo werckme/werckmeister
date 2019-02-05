@@ -105,8 +105,8 @@ namespace sheet {
 			IStyleDefServerPtr styleDefServer() const;
 			void styleDefServer(IStyleDefServerPtr server);
 			virtual IStyleDefServer::ConstChordValueType currentChordDef();
-			virtual IStyleDefServer::ConstStyleValueType currentStyle();
-			virtual void currentStyle(IStyleDefServer::ConstStyleValueType style);
+			virtual IStyleDefServer::Style currentStyle();
+			virtual void currentStyle(const IStyleDefServer::Style &style);
 			virtual VoicingStrategyPtr currentVoicingStrategy();
 			virtual const ChordEvent * currentChord() const { return &currentChord_; }
 			virtual fm::Expression getExpression(const fm::String &str) const;
@@ -174,7 +174,7 @@ namespace sheet {
 			ChordEvent currentChord_;
 			VoicingStrategyPtr defaultVoiceStrategy_;
 			IStyleDefServer::ConstChordValueType currentChordDef_ = nullptr;
-			IStyleDefServer::ConstStyleValueType currentStyleDef_ = nullptr;
+			IStyleDefServer::Style currentStyle_;
 			TrackId trackId_ = INVALID_TRACK_ID, 
 				 chordTrack_ = INVALID_TRACK_ID,
 				 masterTrackId_ = INVALID_TRACK_ID;

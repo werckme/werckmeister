@@ -9,7 +9,8 @@ device: SC1 midi 1;
 instrumentDef: piano   SC1 3  0  0;
 instrumentDef: bass    SC1 4  0  35;
 
-instrumentConf: bass volume 80;
+instrumentConf: piano volume 100;
+instrumentConf: bass volume 90;
 tempo: 100;
 
 
@@ -19,7 +20,7 @@ name: scratch;
 part: normal;
 instrument: piano;
 {
-    <I II III IV V VI VII>1 |
+    <I II III IV Vb VI VII>1 |
 }
 ]
 
@@ -29,7 +30,7 @@ name: scratch;
 part: normal;
 instrument: bass;
 {
-    I V I V |
+    V Vb V Vb |
 }
 ]
 

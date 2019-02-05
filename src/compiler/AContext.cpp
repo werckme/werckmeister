@@ -599,16 +599,16 @@ namespace sheet {
 			}
 			return currentChordDef_;
 		}
-		IStyleDefServer::ConstStyleValueType AContext::currentStyle()
+		IStyleDefServer::Style AContext::currentStyle()
 		{
-			if (!currentStyleDef_) {
-				currentStyleDef_ = styleDefServer()->getStyle(FM_STRING("?"));
+			if (currentStyle_.empty()) {
+				currentStyle_ = styleDefServer()->getStyle(FM_STRING("?"));
 			}
-			return currentStyleDef_;
+			return currentStyle_;
 		}
-		void AContext::currentStyle(IStyleDefServer::ConstStyleValueType style)
+		void AContext::currentStyle(const IStyleDefServer::Style &style)
 		{
-			currentStyleDef_ = style;
+			currentStyle_ = style;
 		}
 		VoicingStrategyPtr AContext::currentVoicingStrategy()
 		{

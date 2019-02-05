@@ -13,20 +13,20 @@
 namespace sheet {
 	class Document : public IStyleDefServer {
 	public:
-		typedef IStyleDefServer::ConstStyleValueType StyleType;
+		typedef IStyleDefServer::Style StyleType;
 		typedef std::unordered_map<fm::String, ChordDef> ChordDefs;
 		typedef std::unordered_map<fm::String, PitchDef> PitchmapDefs;
 		typedef fm::String StyleName;
 		typedef fm::String PartName;
-		typedef std::vector<Track> Tracks;
-		typedef std::unordered_map<PartName, Tracks> Parts;
+		typedef IStyleDefServer::Style Style;
+		typedef std::unordered_map<PartName, Style> Parts;
 		typedef std::unordered_map<StyleName, Parts> Styles;
 		fm::String path;
 		DocumentConfig documentConfig;
 		SheetDef sheetDef;
 		ChordDefs chordDefs;
 		PitchmapDefs pitchmapDefs;
-		StyleType getStyle(const fm::String &filename, const fm::String &part = FM_STRING("?")) override;
+		StyleType getStyle(const fm::String &name, const fm::String &part = FM_STRING("?")) override;
 		IStyleDefServer::ConstChordValueType getChord(const fm::String &name) override;
 		IStyleDefServer::ConstPitchDefValueType getAlias(fm::String alias) override;
 		/**
@@ -36,7 +36,7 @@ namespace sheet {
 		const Styles & styles();
 	private:
 		Parts * findParts(const fm::String &styleName);
-		Tracks * findTracks(const fm::String &partName, Parts &parts);
+		StyleType * findStyle(const fm::String &partName, Parts &parts);
 		std::unique_ptr<Styles> styles_;
 		void createStylesMap();
 	};
