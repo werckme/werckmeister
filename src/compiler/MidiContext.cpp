@@ -3,6 +3,7 @@
 #include <fm/config.hpp>
 #include <math.h>
 #include "error.hpp"
+#include "sheet/tools.h"
 
 #define SHEET_MASTER_TRACKNAME "master track"
 

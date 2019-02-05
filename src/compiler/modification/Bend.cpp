@@ -2,6 +2,8 @@
 #include "compiler/AContext.h"
 #include <algorithm>
 #include <fm/literals.hpp>
+#include "sheet/tools.h"
+
 namespace sheet {
     namespace compiler {
 

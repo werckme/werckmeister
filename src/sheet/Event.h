@@ -88,47 +88,6 @@ namespace sheet {
 		Multiplicator multiplicator = 1; // to multiplicate with bar length e.g.: | C(1) | C(0.5) C(0.5) |
 	};
 
-
-	///////////////////////////////////////////////////////////////////////////
-		namespace {
-			struct MissingArgument {};
-			template<typename TArg, typename TArgs>
-			TArg __getArgument(const TArgs &args, int idx, TArg *defaultValue) 
-			{
-				if (idx >= (int)args.size()) {
-					if (defaultValue) {
-						return *defaultValue;
-					}
-					throw MissingArgument();
-				}
-				TArg result;
-				fm::StringStream ss;
-				ss << args[idx];
-				ss >> result;
-				return result;
-			}		
-		}
-		
-		template<typename TArg>
-		TArg getArgument(const Event &metaEvent, int idx, TArg *defaultValue = nullptr) 
-		{
-			try {
-				return __getArgument<TArg>(metaEvent.metaArgs, idx, defaultValue);
-			} catch(const MissingArgument&) {
-				FM_THROW(fm::Exception, "missing argument for '" + fm::to_string(metaEvent.metaCommand) + "'");
-			}
-		}
-
-		template<typename TArg, typename TArgs>
-		TArg getArgument(const TArgs &args, int idx, TArg *defaultValue = nullptr) 
-		{
-			try {
-				return __getArgument<TArg, TArgs>(args, idx, defaultValue);
-			} catch(const MissingArgument&) {
-				FM_THROW(fm::Exception, "missing meta argumnet");
-			}
-		}	
-
 }
 
 #endif

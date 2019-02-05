@@ -1,4 +1,5 @@
 #include "SimpleGuitar.h"
+#include "sheet/tools.h"
 
 namespace sheet {
 

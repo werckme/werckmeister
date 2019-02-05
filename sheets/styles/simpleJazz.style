@@ -1,5 +1,6 @@
-section normal
 [
+type: style;
+part: normal;
 instrument: piano; 
 {
     /voicingStrategy: simpleGuitar/
@@ -8,11 +9,13 @@ instrument: piano;
     <I II III IV V VI VII>1  |
 }   
 ]
+
 [
+type: style;
+part: normal;
 instrument: bass; 
 {
     \ff
     I,,4 III,, V,, I,, |
 }   
 ] 
-end

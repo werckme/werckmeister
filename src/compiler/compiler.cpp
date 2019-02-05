@@ -1,5 +1,6 @@
 #include "compiler.h"
 #include "sheet/Document.h"
+#include "sheet/tools.h"
 #include "AContext.h"
 #include "sheet/Event.h"
 #include <type_traits>
@@ -32,6 +33,10 @@ namespace sheet {
 			auto ctx = context();
 			for (const auto &track : document_->sheetDef.tracks)
 			{
+				fm::String type = getFirstMetaValueBy(SHEET_META__TRACK_META_KEY_TYPE, track.trackInfos);
+				if (!type.empty()) { // do not render tracks with a specific type
+					continue;
+				}				
 				auto trackId = ctx->createTrack();
 				ctx->setTrack(trackId);
 				ctx->processMeta(track.trackInfos, 
@@ -79,11 +84,11 @@ namespace sheet {
 		void Compiler::switchStyle(StyleRenderer &styleRenderer, const Event &metaEvent)
 		{
 			auto file = getArgument<fm::String>(metaEvent, 0);
-			auto section = getArgument<fm::String>(metaEvent, 1);
+			auto part = getArgument<fm::String>(metaEvent, 1);
 			auto ctx = styleRenderer.context();
-			auto style = ctx->styleDefServer()->getStyle(file, section);
+			auto style = ctx->styleDefServer()->getStyle(file, part);
 			if (!style) {
-				FM_THROW(Exception, "style not found: " + fm::to_string(file) + " " + fm::to_string(section));
+				FM_THROW(Exception, "style not found: " + fm::to_string(file) + " " + fm::to_string(part));
 			}
 			styleRenderer.switchStyle(ctx->currentStyle(), style);
 		}

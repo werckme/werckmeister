@@ -44,7 +44,7 @@ namespace sheet {
 			}
 			void useStyleDef(DocumentPtr doc, const fm::String &path)
 			{
-				throw "implement me";
+				FM_THROW(Exception, "implement me");
 				// auto apath = getAbsolutePath(doc, path);
 				// auto filestream = fm::getWerckmeister().openResource(apath);
 				// fm::StreamBuffIterator begin(*filestream);

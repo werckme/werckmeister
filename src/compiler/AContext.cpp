@@ -10,6 +10,7 @@
 #include <fm/literals.hpp>
 #include <fm/config/configServer.h>
 #include <sheet/Track.h>
+#include "sheet/tools.h"
 
 namespace sheet {
 
@@ -540,7 +541,7 @@ namespace sheet {
 			mod->setArguments(args);
 		}
 
-		void AContext::metaSetStyle(const fm::String &file, const fm::String &section)
+		void AContext::metaSetStyle(const fm::String &file, const fm::String &part)
 		{
 		}
 

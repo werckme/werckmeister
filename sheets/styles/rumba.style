@@ -1,18 +1,21 @@
-section normal ----------------------------------------------------------------
 [
+type: style;
+name: rumba;
+part: normal;
 instrument: drums; 
 {
     \f
     !ff"ss"8 "ht"16 "ht"16   "ht"8 "ht"8   !ff"ss"8 "ht"8 "ss"8 "ht"8  |
 }    
-]
-[
 {
     \ff
     "bd"4. "bd"8 "bd"4. "bd"8 |
 }     
 ]
+
 [
+name: rumba;
+part: normal;
 instrument: guitar; 
 {
     /voicingStrategy: simpleGuitar/
@@ -26,7 +29,10 @@ instrument: guitar;
     r4 | 
 }
 ]
+
 [
+name: rumba;
+part: normal;
 instrument: piano; 
 {
     \ff
@@ -37,8 +43,11 @@ instrument: piano;
 {
     I,,4. I,,8 V,,4 V,, |
 } 
-]  
+] 
+
 [
+name: rumba;
+part: normal;
 instrument: bass; 
 {
     \fff
@@ -47,5 +56,4 @@ instrument: bass;
     I,,4. V,,8 V,,4 V,,4  |
     I,,4. III,, V,,4 |
 }    
-] 
-end
+]

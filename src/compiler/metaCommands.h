@@ -3,8 +3,13 @@
 
 #include <fm/common.hpp>
 
-// TRACK
+// TRACK META INFO
 #define SHEET_META__INSTRUMENT FM_STRING("instrument")
+#define SHEET_META__TRACK_META_KEY_TYPE FM_STRING("type")
+#define SHEET_META__TRACK_META_VALUE_TYPE_STYLE FM_STRING("style")
+#define SHEET_META__TRACK_META_KEY_PART FM_STRING("part")
+#define SHEET_META__TRACK_META_KEY_NAME FM_STRING("name")
+
 
 // VOICE
 #define SHEET_META__MIDI_INSTRUMENT_DEF FM_STRING("instrumentDef")

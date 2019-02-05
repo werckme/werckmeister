@@ -6,16 +6,55 @@
 device: SC1 midi 1;
 
 --           instrument dv ch cc pc
-instrumentDef: piano    SC1 0  0  0;
-tempo: 170;
-style: scratch normal;
+instrumentDef: piano   SC1 3  0  0;
+instrumentDef: bass    SC1 4  0  35;
+
+instrumentConf: bass volume 80;
+tempo: 100;
+
 
 [
+type: style;
+name: scratch;
+part: normal;
 instrument: piano;
 {
-    c d e f |
+    <I II III IV V VI VII>1 |
 }
 ]
 
+[
+type: style;
+name: scratch;
+part: normal;
+instrument: bass;
+{
+    I V I V |
+}
+]
 
+[
+type: style;
+name: scratch;
+part: rest;
+instrument: piano;
+{
+    <I II III IV V VI VII>1 |
+}
+]
 
+[
+type: style;
+name: scratch;
+part: rest;
+instrument: bass;
+{
+    I,1 | V,,1 |
+}
+]
+
+/style: scratch normal/
+
+C13 | C6 | Cmin | C |
+/style: scratch rest/
+C13 | C6 | C7 | Cmin |
