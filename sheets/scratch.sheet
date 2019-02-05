@@ -1,6 +1,5 @@
 -- document configs
 @load "./chords/default.chords";
-@load "./styles/scratch.style";
 @load "./pitchmaps/defaultMidiDrumMap.pitchmap";
 
 
@@ -11,9 +10,11 @@ instrumentDef: piano    SC1 0  0  0;
 tempo: 170;
 style: scratch normal;
 
-A-7 | D-7 | G7 | Cmaj7 C7 |
-Fmaj7 | B07 | E7b9 |
-
+[
+{
+    c d e f |
+}
+]
 
 
 
