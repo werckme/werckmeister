@@ -11,6 +11,7 @@ tempo: 170;
 style: scratch normal;
 
 [
+instrument: piano;
 {
     c d e f |
 }
