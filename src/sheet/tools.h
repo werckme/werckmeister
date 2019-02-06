@@ -5,6 +5,7 @@
 #include <fm/exception.hpp>
 #include <algorithm>
 
+
 namespace sheet {
     class Event;
     namespace {
@@ -79,6 +80,32 @@ namespace sheet {
             return;
         }
         dst.insert(dst.end(), toAppend.begin(), toAppend.end());
+    }
+
+    /**
+     * returns a value from an argument list such as:
+     * key1 value1 key2 value2 ...
+     * @return std::pair(found, theValue)
+     **/
+    template <typename TValue, class TContainer>
+    std::pair<bool, TValue> getArgValueFor(const typename TContainer::value_type &key, const TContainer &container)
+    {
+        auto defaultValue = TValue();
+        if (key.empty()) {
+            return std::make_pair(false, defaultValue);
+        }
+        size_t idx = 0;
+        for(const auto &x : container) {
+            if (x == key) {
+                if (idx+1 >= container.size()) {
+                    return std::make_pair(false, defaultValue);
+                }
+                auto result = getArgument<TValue>(container, idx+1, &defaultValue);
+                return std::make_pair(true, result);
+            }
+            ++idx;
+        }
+        return std::make_pair(false, defaultValue);
     }
 
 }

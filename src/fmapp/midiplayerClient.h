@@ -35,6 +35,10 @@ namespace fmapp {
 		typedef TBackend Backend;
 		typedef typename Backend::Output Output;
 		typedef typename Backend::Outputs Outputs;
+		struct OutputInfo {
+			Output output;
+			int offset = 0;
+		};
 		typedef TMidiProvider MidiProvider;
 		typedef typename MidiProvider::TrackId TrackId;
 		typedef std::chrono::high_resolution_clock Clock;
@@ -49,30 +53,35 @@ namespace fmapp {
 		void play(fm::Ticks ticks);
 		void panic();
 		void stop();
-		inline fm::BPM bpm() const { return std::max(bpm_, 1.0); }
-		void bpm(fm::BPM bpm) { bpm_ = bpm; }
-		fm::Ticks elapsed() const { return elapsed_; }
+		fm::Ticks elapsed() const { return MidiProvider::millisToTicks(elapsedMillis_); }
 		void reset();
 		void send(const fm::midi::Event &ev);
 	private:
-		const Output * getOutput() const;
+		const OutputInfo * getOutputInfo() const;
 		void initOutputMap();
 		void handleMetaEvent(const fm::midi::Event &ev);
 		void changeDevice(const std::string &deviceId);
 		typedef std::recursive_mutex Lock;
-		typedef std::unordered_map<std::string, Output> OutputMap;
-		typedef std::unordered_map<TrackId, Output> TrackOutputMap;
+		/**
+		 * device name and assigned output
+		 */
+		typedef std::unordered_map<std::string, OutputInfo> OutputMap;
+		/**
+		 * trackid and assigned output
+		 */
+		typedef std::unordered_map<TrackId, OutputInfo> TrackOutputMap;
+		typedef std::unordered_map<TrackId, int> TrackOffsets;
 		Lock lock;
 		std::unique_ptr<TTimer> playerTimer_;
 		State state_ = Stopped;
 		void onProcess();
-		void updateTicks();
+		void updateElapsedTime();
 		Clock::time_point elapsed_time_;
-		fm::BPM bpm_ = 120.0;
-		fm::Ticks elapsed_ = 0;
+		typename MidiProvider::Millis elapsedMillis_ = 0;
 		OutputMap outputMap_;
 		TrackOutputMap trackOutputs_;
 		TrackId currentTrack_ = MidiProvider::INVALID_TRACKID;
+		TrackOffsets trackOffsets_;
 	};
 
 	///////////////////////////////////////////////////////////////////////////////
@@ -95,7 +104,10 @@ namespace fmapp {
 			if (it==outputs.end()) {
 				throw std::runtime_error("output with id = " + id + " not found");
 			}
-			outputMap_[name] = *it; 
+			OutputInfo inf;
+			inf.output = *it;
+			inf.offset = x.second.offsetMillis;
+			outputMap_[name] = inf;
 		}
 	}
 
@@ -112,15 +124,14 @@ namespace fmapp {
 	}
 
 	template<class TBackend, class TMidiProvider, class TTimer>
-	void MidiplayerClient<TBackend, TMidiProvider, TTimer>::updateTicks()
+	void MidiplayerClient<TBackend, TMidiProvider, TTimer>::updateElapsedTime()
 	{
 		if (!isPlaying()) {
 			return;
 		}
 		using namespace std::chrono;
 		auto t = Clock::now();
-		auto millis = duration_cast<duration<fm::Ticks, std::milli>>(t - elapsed_time_).count();
-		elapsed_ += static_cast<fm::Ticks>( millis / (60 / (bpm() * fm::PPQ) * 1000) );
+		elapsedMillis_ += duration_cast<duration<fm::Ticks, std::milli>>(t - elapsed_time_).count();
 		elapsed_time_ = t;
 	}
 
@@ -141,11 +152,12 @@ namespace fmapp {
 			return;
 		}
 		trackOutputs_[currentTrack_] = outputIt->second;
+		trackOffsets_[currentTrack_] = outputIt->second.offset;
 	}
 
 	template<class TBackend, class TMidiProvider, class TTimer>
-	const typename MidiplayerClient<TBackend, TMidiProvider, TTimer>::Output * 
-	MidiplayerClient<TBackend, TMidiProvider, TTimer>::getOutput() const
+	const typename MidiplayerClient<TBackend, TMidiProvider, TTimer>::OutputInfo * 
+	MidiplayerClient<TBackend, TMidiProvider, TTimer>::getOutputInfo() const
 	{
 		auto it = trackOutputs_.find(currentTrack_);
 		if (it == trackOutputs_.end()) {
@@ -160,7 +172,7 @@ namespace fmapp {
 		using namespace fm;
 		if (ev.metaEventType() == midi::Tempo) {
 			auto metaIntValue = midi::Event::MetaGetIntValue(ev.metaData(), ev.metaDataSize());
-			bpm(midi::MicrosecondsPerMinute/(double)metaIntValue);
+			MidiProvider::bpm(midi::MicrosecondsPerMinute/(double)metaIntValue);
 		}
 		if (ev.metaEventType() == midi::CustomMetaEvent) {
 			auto customEvent = midi::Event::MetaGetCustomData(ev.metaData(), ev.metaDataSize());
@@ -178,7 +190,8 @@ namespace fmapp {
 			this->handleMetaEvent(ev);
 			return;
 		}
-		Backend::send(ev, getOutput());
+		auto outputInfo = getOutputInfo();
+		Backend::send(ev, &outputInfo->output);
 	}
 
 	template<class TBackend, class TMidiProvider, class TTimer>
@@ -186,9 +199,9 @@ namespace fmapp {
 	{
 		std::lock_guard<Lock> lockGuard(lock);
 		typename MidiProvider::Events events;
-		MidiProvider::getEvents(this->elapsed_, events);
+		MidiProvider::getEvents(this->elapsedMillis_, events, trackOffsets_);
 		for(const auto &evAndTrack : events) {
-			currentTrack_ = evAndTrack.trackId;
+			currentTrack_ = evAndTrack.trackId;		
 			const auto &ev = evAndTrack.event;
 			send(ev);
 		}
@@ -206,7 +219,7 @@ namespace fmapp {
 		elapsed_time_ = Clock::now();
 		if (!playerTimer_) {
 			playerTimer_ = std::make_unique<TTimer>([this]() {
-				updateTicks();
+				updateElapsedTime();
 				onProcess();
 			});
 		}
@@ -233,8 +246,8 @@ namespace fmapp {
 			return true;
 		});
 		play();
-		MidiProvider::seek(ticks);
-		elapsed_ = ticks;
+		elapsedMillis_ = MidiProvider::ticksToMillis(ticks);
+		MidiProvider::seek(elapsedMillis_, trackOffsets_);
 	}
 
 	template<class TBackend, class TMidiProvider, class TTimer>
@@ -245,7 +258,7 @@ namespace fmapp {
 		}
 		state_ = Stopped;
 		playerTimer_->stop();
-		elapsed_ = 0;
+		elapsedMillis_ = 0;
 		reset();
 	}
 

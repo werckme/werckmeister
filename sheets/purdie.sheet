@@ -1,17 +1,18 @@
 -- TODO: when removing this line, the resulting midi is empty
 @load "./chords/default.chords";
-@load "./pitchmaps/defaultMidiDrumMap.pitchmap";
+@load "./pitchmaps/battery3.tight.pitchmap";
 @load "./styles/purdie.style";
 
 
 tempo: 160;
 device: SC1 midi 2;
+device: BT  midi 8 offset 1000;
 --             instrument dv ch cc pc
 instrumentDef: piano      SC1 0 0  0;
 instrumentDef: jzguitar   SC1 2 0  26;
 instrumentDef: bass       SC1 3 0  33;
 instrumentDef: fx         SC1 4 35 80;
-instrumentDef: drums      SC1 9 0  32;
+instrumentDef: drums      BT 9 0  32;
 
 
 

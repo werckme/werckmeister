@@ -9,6 +9,7 @@ namespace fm {
             Undefinded,
             Midi
         };
+        int offsetMillis = 0;
         Type type = Undefinded;
         typedef std::string DeviceId;
         DeviceId deviceId;
