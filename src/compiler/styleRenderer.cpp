@@ -97,7 +97,7 @@ namespace sheet {
 						else if (meta->eventOffset > 0) { // skip events (for upbeat)
 							it += meta->eventOffset;
 						}
-						for (; it != voice.events.end(); ++it) // loop voice events
+						for (; it < voice.events.end(); ++it) // loop voice events
 						{
 							auto ev = *it;
 							auto currentPos = meta->position;
