@@ -1,5 +1,6 @@
 [
 type: style;
+name: simpleJazz;
 part: normal;
 instrument: piano; 
 {
@@ -12,6 +13,7 @@ instrument: piano;
 
 [
 type: style;
+name: simpleJazz;
 part: normal;
 instrument: bass; 
 {

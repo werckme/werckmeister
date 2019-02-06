@@ -1,5 +1,7 @@
-section normal ----------------------------------------------------------------
 [
+type: style;
+name: ido;
+part: normal;
 instrument: guitar; 
 {
     /voicingStrategy: simpleGuitar higherRange/
@@ -7,13 +9,21 @@ instrument: guitar;
     <I II III IV V VI VII>4. <I II III IV V VI VII>4 <I II III IV V VI VII>4 <I II III IV V VI VII>8  |
 }   
 ]
+
 [
+type: style;
+name: ido;
+part: normal;
 instrument: bass; 
 {
     I,,4. I,,8 V,,,4. V,,,8 |
 }   
-] 
+]
+
 [
+type: style;
+name: ido;
+part: normal;
 instrument: drums;
 {
     "ht"8 !f"ht"8 "ht"8 !f"ht"8 "ht"8 !f"ht"8 "ht"8 !f"ht"8 |
@@ -27,10 +37,12 @@ instrument: drums;
     "bd"4. "bd"8 "bd"8 !f"bd"8 r8 "bd"8 |
 }      
 ] 
-end
 
-section fill1 ----------------------------------------------------------------
+
 [
+type: style;
+name: ido;
+part: fill1;
 instrument: guitar; 
 {
     /voicingStrategy: simpleGuitar higerRange/
@@ -38,13 +50,21 @@ instrument: guitar;
     <I II III IV V VI VII>4. <I II III IV V VI VII>4 <I II III IV V VI VII>4 <I II III IV V VI VII>8  |
 }   
 ]
+
 [
+type: style;
+name: ido;
+part: fill1;
 instrument: bass; 
 {
     I,,4. I,,8 V,,,4. V,,,8 |
 }   
-] 
+]
+
 [
+type: style;
+name: ido;
+part: fill1;
 instrument: drums;
 {
     "ht"8 !f"ht"8 "ht"8 !f"ht"8 "ht"8 !f"ht"8 "ht"8 !f"ht"8 |
@@ -65,11 +85,12 @@ instrument: drums;
     "bd"4. "bd"8 "bd"8 !f"bd"8 r8 "bd"8 |
 }      
 ] 
-end
 
 
-section normal2 ----------------------------------------------------------------
 [
+type: style;
+name: ido;
+part: normal2;
 instrument: guitar; 
 {
     /voicingStrategy: simpleGuitar higerRange/
@@ -77,13 +98,21 @@ instrument: guitar;
     <I II III IV V VI VII>4. <I II III IV V VI VII>4 <I II III IV V VI VII>4 <I II III IV V VI VII>8  |
 }   
 ]
+
 [
- instrument: bass; 
+type: style;
+name: ido;
+part: normal2;
+instrument: bass; 
 {
     I,,4. I,,8 V,,,4. V,,,8 |
 }   
 ] 
+
 [
+type: style;
+name: ido;
+part: normal2;
 instrument: drums;
 {
     "cy"8 !f"ht"8 "ht"8 !f"ht"8 "ht"8 !f"ht"8 "ht"8 !f"ht"8 |
@@ -107,24 +136,33 @@ instrument: drums;
     "bd"4. "bd"8 "bd"8 !f"bd"8 r8 "bd"8 |
 }      
 ] 
-end
 
 
 
-section ende ----------------------------------------------------------------
 [
+type: style;
+name: ido;
+part: ende;
 instrument: guitar; 
 {
     <I II III IV V VI VII>1  |
 }   
 ] 
+
 [
+type: style;
+name: ido;
+part: ende;
 instrument: bass; 
 {
     I,,1 |
 }   
 ] 
+
 [
+type: style;
+name: ido;
+part: ende;
 instrument: drums;
 {
     "cy"1 |
@@ -133,4 +171,3 @@ instrument: drums;
     "bd"1|
 }      
 ]
-end

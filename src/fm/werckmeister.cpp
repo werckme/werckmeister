@@ -42,6 +42,9 @@ namespace fm {
 
 	Werckmeister::ResourceStream Werckmeister::openResourceImpl(const fm::String &path)
 	{
+		if (path.empty()) {
+			FM_THROW(Exception, "tried to load an empty path");
+		}
 		auto fpath = boost::filesystem::system_complete(path);
 		auto absolute = fpath.string();
 		if (!boost::filesystem::exists(path))

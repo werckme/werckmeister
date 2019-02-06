@@ -14,6 +14,7 @@ instrument: drums;
 ]
 
 [
+type: style;
 name: rumba;
 part: normal;
 instrument: guitar; 
@@ -31,6 +32,7 @@ instrument: guitar;
 ]
 
 [
+type: style;
 name: rumba;
 part: normal;
 instrument: piano; 
@@ -46,6 +48,7 @@ instrument: piano;
 ] 
 
 [
+type: style;
 name: rumba;
 part: normal;
 instrument: bass; 
