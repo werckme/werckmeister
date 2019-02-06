@@ -7,11 +7,20 @@
 #include "fm/common.hpp"
 #include "fm/werckmeister.hpp"
 #include "error.hpp"
+#include <sheet/tools.h>
 
 namespace sheet {
 	namespace compiler {
 
 		namespace {
+
+			void append(DocumentPtr doc, const SheetDef &sheetDef)
+			{
+				append(doc->sheetDef.chords, sheetDef.chords);
+				append(doc->sheetDef.sheetInfos, sheetDef.sheetInfos);
+				append(doc->sheetDef.tracks, sheetDef.tracks);
+			}
+
 			fm::String getAbsolutePath(DocumentPtr doc, const fm::String &path)
 			{
 				return doc->getAbsolutePath(path);
@@ -44,15 +53,15 @@ namespace sheet {
 			}
 			void useStyleDef(DocumentPtr doc, const fm::String &path)
 			{
-				FM_THROW(Exception, "implement me");
-				// auto apath = getAbsolutePath(doc, path);
-				// auto filestream = fm::getWerckmeister().openResource(apath);
-				// fm::StreamBuffIterator begin(*filestream);
-				// fm::StreamBuffIterator end;
-				// fm::String documentText(begin, end);
-				// StyleDefParser styleDefParser;
-				// auto name = boost::filesystem::path(path).stem().wstring();
-				// doc->styleDefs[name] = styleDefParser.parse(documentText);
+				auto apath = getAbsolutePath(doc, path);
+				auto filestream = fm::getWerckmeister().openResource(apath);
+				fm::StreamBuffIterator begin(*filestream);
+				fm::StreamBuffIterator end;
+				fm::String documentText(begin, end);
+				SheetDefParser sheetDefParser;
+				auto name = boost::filesystem::path(path).stem().wstring();
+				auto sheetDef = sheetDefParser.parse(documentText);
+				append(doc, sheetDef);
 			}
 			typedef std::function<void(DocumentPtr, const fm::String&)> ExtHandler;
 			std::unordered_map <std::string, ExtHandler> exthandlers({

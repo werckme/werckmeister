@@ -70,7 +70,16 @@ namespace sheet {
             return fm::String();
         }
         return *values.begin();
-    } 
+    }
+
+    template <class TContainer>
+    void append(TContainer &dst, const TContainer &toAppend)
+    {
+        if (toAppend.empty()) {
+            return;
+        }
+        dst.insert(dst.end(), toAppend.begin(), toAppend.end());
+    }
 
 }
 

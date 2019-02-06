@@ -1,7 +1,6 @@
 -- TODO: when removing this line, the resulting midi is empty
 @load "./chords/default.chords";
 @load "./pitchmaps/defaultMidiDrumMap.pitchmap";
-@load "./styles/rumba.style";
 @load "./styles/purdie.style";
 
 
