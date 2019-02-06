@@ -11,7 +11,7 @@ instrumentDef: bass    SC1 4  0  35;
 
 instrumentConf: piano volume 100;
 instrumentConf: bass volume 90;
-tempo: 100;
+tempo: 180;
 
 
 [
@@ -20,42 +20,11 @@ name: scratch;
 part: normal;
 instrument: piano;
 {
-    <I II III IV Vb VI VII>1 |
+    I1~ | I1 |
 }
 ]
 
-[
-type: style;
-name: scratch;
-part: normal;
-instrument: bass;
-{
-    V Vb V Vb |
-}
-]
-
-[
-type: style;
-name: scratch;
-part: rest;
-instrument: piano;
-{
-    <I II III IV V VI VII>1 |
-}
-]
-
-[
-type: style;
-name: scratch;
-part: rest;
-instrument: bass;
-{
-    I,1 | V,,1 |
-}
-]
-
-/style: scratch normal/
 
 C13 | C6 | Cmin | C |
-/style: scratch rest/
+/style: scratch normal/
 C13 | C6 | C7 | Cmin |

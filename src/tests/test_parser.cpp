@@ -832,3 +832,26 @@ command: 01 02 03; \n\
 	BOOST_CHECK(defs.sheetInfos[1].args[1] == FM_STRING("02"));
 	BOOST_CHECK(defs.sheetInfos[1].args[2] == FM_STRING("03"));
 }
+
+BOOST_AUTO_TEST_CASE(test_tied_degree_failed)
+{
+	using namespace fm;
+	using sheet::PitchDef;
+	fm::String text = FM_STRING("\
+[\n\
+	{\n\
+		I1~ | I1 | \n\
+	}\n\
+]\n\
+");
+	sheet::compiler::SheetDefParser parser;
+	auto defs = parser.parse(text);
+	BOOST_CHECK(defs.tracks.size() == 1);
+	BOOST_CHECK(defs.tracks[0].voices.size() == 1);
+	BOOST_CHECK(defs.tracks[0].voices[0].events.size() == 4);
+
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[0], sheet::Event::TiedDegree, fm::degrees::I, 0, 1.0_N1));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[1], sheet::Event::EOB));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[2], sheet::Event::Degree, fm::degrees::I, 0, 1.0_N1));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[3], sheet::Event::EOB));
+}

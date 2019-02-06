@@ -131,23 +131,6 @@ namespace sheet {
 					createTrackInfoRules(trackInfo);
 					track %= "[" > *trackInfo > +voice > "]";
 				}
-
-				template <int EventType>
-				auto noteEventAppendings() {
-					using qi::lit;
-					using qi::_val;
-					using qi::attr;
-					using boost::phoenix::at_c;
-					constexpr Event::Type tieType = EventType == Event::Degree 
-															   ? Event::TiedDegree
-															   : Event::TiedNote;
-					return 
-						(durationSymbols_ | attr(Event::NoDuration))  
-						>> -(
-								lit("~")[at_c<0>(_val) = tieType] 
-								| (lit("`")[at_c<0>(_val) = Event::Meta][at_c<3>(_val) = FM_STRING("vorschlag")])
-							);
-				}
 			};
 			///////////////////////////////////////////////////////////////////
 			template <typename Iterator>
@@ -184,14 +167,22 @@ namespace sheet {
 					event_ %= 
 					(
 						attr(Event::Note) 
-						>> (pitchOrAlias_ | ("<" >> +pitchOrAlias_ >> ">")) 
-						>> noteEventAppendings<Event::Note>()
+						>> (pitchOrAlias_ | ("<" >> +pitchOrAlias_ >> ">"))
+						>> (durationSymbols_ | attr(Event::NoDuration))  
+						>> -(
+								lit("~")[at_c<0>(_val) = Event::TiedNote] 
+								| (lit("`")[at_c<0>(_val) = Event::Meta][at_c<3>(_val) = FM_STRING("vorschlag")])
+							)
 					)
 					|
 					(
 						attr(Event::Degree) 
-						>> (degree_ | ("<" >> +degree_ >> ">")) 
-						>> noteEventAppendings<Event::Degree>()
+						>> (degree_ | ("<" >> +degree_ >> ">"))
+						>> (durationSymbols_ | attr(Event::NoDuration))  
+						>> -(
+								lit("~")[at_c<0>(_val) = Event::TiedDegree] 
+								| (lit("`")[at_c<0>(_val) = Event::Meta][at_c<3>(_val) = FM_STRING("vorschlag")])
+							)
 					)
 					| 
 					(
