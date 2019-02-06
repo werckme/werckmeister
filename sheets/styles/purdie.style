@@ -44,7 +44,7 @@ instrument: drums;
 type: style;
 name: purdie;
 part: normal;
-instrument: jzguitar; 
+instrument: rhythm1; 
 {
     /voicingStrategy: simpleGuitar/
     I4t r8t <III VII I' IV>4t I,,8t r4t <V, II, IV, I,,>8t r4t r8t |
@@ -85,7 +85,7 @@ instrument: drums;
 type: style;
 name: purdie;
 part: ende;
-instrument: jzguitar; 
+instrument: rhythm1; 
 {
     /voicingStrategy: simpleGuitar/
     \p 

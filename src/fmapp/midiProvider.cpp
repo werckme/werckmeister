@@ -25,13 +25,10 @@ namespace fmapp {
 
 	void MidiProvider::getEvents(Millis millis, Events &out, const TrackOffsets &offsets)
 	{
-		auto at = millisToTicks(millis);
 		for (auto track : midi_->tracks()) {
 			auto trackId = reinterpret_cast<TrackId>(track.get());
 			auto offset = getOffset(offsets, trackId);
-			if (offset != 0) {
-				at = millisToTicks(millis + offset);
-			}
+			auto at = millisToTicks(millis - offset);
 			auto end = track->events().end();
 			EventIt &it = *getEventIt(track);
 			while (it != end) {
