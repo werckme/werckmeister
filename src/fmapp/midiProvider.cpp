@@ -82,11 +82,9 @@ namespace fmapp {
 	{
 		trackEventIts_.clear();
 		Events events;
-		auto ticks = millisToTicks(millis);
-		if (ticks > 0) {
-			// reset iterators
-			ticks -= 1;
-			getEvents(ticks, events, offsets);
+		if (millis > 0) {
+			millis = std::max(millis-ticksToMillis(1), Millis(0.0));
+			getEvents(millis, events, offsets);
 		}
 	}
 

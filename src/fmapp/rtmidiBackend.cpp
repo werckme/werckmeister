@@ -57,12 +57,10 @@ namespace fmapp {
 				continue;
 			}
 			for (fm::midi::Channel channel=0; channel <= fm::midi::MaxChannel; ++channel) {
-				message[0] = static_cast<fm::Byte>((0x8 << 4) | channel);
-				for (fm::midi::Pitch pitch=0; pitch <= fm::midi::MaxPitch; ++pitch)  {
-					message[1] = pitch;
-					message[2] = pitch;
-					rtOut->sendMessage(&message[0], 3);
-				}
+				message[0] = static_cast<fm::Byte>((0xB << 4) | channel);
+				message[1] = 0x7B; // all notes off
+				message[2] = 0;
+				rtOut->sendMessage(&message[0], 3);
 			}
 		}
 	}

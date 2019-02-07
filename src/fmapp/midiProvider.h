@@ -10,7 +10,10 @@
 #include <fm/units.hpp>
 
 namespace fmapp {
-
+	namespace {
+		const double MINUTE = 60.0;
+		const double ONE_SECOND_MILLIS = 1000.0;
+	}
 	class MidiProvider  {
 	public:
 		enum { NO_TICK = INT_MAX, INVALID_TRACKID = 0 };
@@ -30,10 +33,10 @@ namespace fmapp {
 		fm::midi::MidiPtr midi() const;
 		void reset();
 		inline fm::Ticks millisToTicks(Millis millis) const {
-			return static_cast<fm::Ticks>( millis / (60 / (bpm() * fm::PPQ) * 1000) );
+			return static_cast<fm::Ticks>( millis * bpm() * fm::PPQ / (MINUTE * ONE_SECOND_MILLIS) );
 		}
 		inline Millis ticksToMillis(fm::Ticks ticks) const {
-			return 0; // TODO;
+			return MINUTE * ONE_SECOND_MILLIS * ticks / (bpm() * fm::PPQ);
 		}
 		inline fm::BPM bpm() const { return std::max(bpm_, 1.0); }
 		void bpm(fm::BPM bpm) { bpm_ = bpm; }
