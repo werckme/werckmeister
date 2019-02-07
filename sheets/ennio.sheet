@@ -23,8 +23,8 @@ type: sheet;
 {
     /style: ennio normal/
 
-    Cmaj7 | Cmaj7 | Cmaj7 | Cmaj7 | Cmaj7 | Cmaj7 | Eesmaj7 | Eesmaj7 | 
-    Eesmaj7 | Eesmaj7 | Aesmaj7 | Aesmaj7 | Aesmaj7 | Aesmaj7 | G7 
+    Cmaj7 | Cmaj7 | Cmaj7 | Cmaj7 | Cmaj7 | Cmaj7 | Esmaj7 | Esmaj7 | 
+    Esmaj7 | Esmaj7 | Aesmaj7 | Aesmaj7 | Aesmaj7 | Aesmaj7 | G7 
     | G7 | G7 | G7 | G7 | C | C | Cmin | Cmin | 
 }
 ]

@@ -43,7 +43,7 @@ namespace sheet {
 		pitch = pitchIt->second;
 		++it;
 		// check for is or es
-		if (nameLower.length() == 2) {
+		if (nameLower.length() >= 2) {
 			if (pitch == fm::notes::E && *(it) == FM_CHAR('s')) {
 				pitch -= 1;
 				it += 1;
@@ -52,9 +52,7 @@ namespace sheet {
 				pitch -= 1;
 				it += 1;
 			}
-		}
-		if (nameLower.length() >= 3) {
-			if (*(it) == FM_CHAR('i') && *(it + 1) == FM_CHAR('s')) {
+			else if (*(it) == FM_CHAR('i') && *(it + 1) == FM_CHAR('s')) {
 				pitch += 1;
 				it += 2;
 			}
