@@ -455,16 +455,16 @@ namespace sheet {
 		}
 		void AContext::setMeta(const Event &metaEvent)
 		{
-			if (metaEvent.metaCommand.empty()) {
+			if (metaEvent.stringValue.empty()) {
 				throwContextException("invalid meta command ");
 			}
-			if (metaEvent.metaCommand == SHEET_META__SET_UPBEAT) { 
+			if (metaEvent.stringValue == SHEET_META__SET_UPBEAT) { 
 				metaSetUpbeat(metaEvent);
 			}
-			if (metaEvent.metaCommand == SHEET_META__SET_VORSCHLAG) {
+			if (metaEvent.stringValue == SHEET_META__SET_VORSCHLAG) {
 				metaAddVorschlag(metaEvent);
 			}
-			processMeta(metaEvent.metaCommand, metaEvent.metaArgs);				
+			processMeta(metaEvent.stringValue, metaEvent.metaArgs);				
 		}
 
 		void AContext::metaSetVolume(int volume)

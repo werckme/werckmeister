@@ -33,7 +33,7 @@ namespace sheet {
         try {
             return __getArgument<TArg>(metaEvent.metaArgs, idx, defaultValue);
         } catch(const MissingArgument&) {
-            FM_THROW(fm::Exception, "missing argument for '" + fm::to_string(metaEvent.metaCommand) + "'");
+            FM_THROW(fm::Exception, "missing argument for '" + fm::to_string(metaEvent.stringValue) + "'");
         }
     }
 

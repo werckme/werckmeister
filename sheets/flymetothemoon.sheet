@@ -1,18 +1,17 @@
 -- document configs
 @load "./chords/default.chords";
 @load "./styles/quickstep.style";
---@load "./pitchmaps/defaultMidiDrumMap.pitchmap";
-@load "./pitchmaps/battery3.tight.pitchmap";
+@load "./pitchmaps/defaultMidiDrumMap.pitchmap";
 
 tempo: 180;
-device: SC1 midi 1 offset 20;
-device: BT midi 8;
+device: SC1 midi 1;
+
 
 --          instrument dv ch cc pc
 instrumentDef: piano   SC1 2 0 0;
 instrumentDef: lead    SC1 3 0 26;
 instrumentDef: bass    SC1 7 0 32;
-instrumentDef: drums   BT 9 0 32;
+instrumentDef: drums   SC1 9 0 32;
 instrumentDef: guitar  SC1 4 8 21;
 
 
@@ -26,7 +25,7 @@ instrumentConf: guitar volume 70;
 [
 instrument: lead;
 {
-    \fffff
+    \ffff
     c'4. b8 a4 g8 f~  | f8 g4. a4 c' | b4. a8 g4 f8 e~ | e1 |
     a4. g8 f4 e8 d~ | d e4. f4 a | gis4. f8 e4 d8 c~ | c2 r4 cis |
     d8 a4 a8~ a2~ | a4 c'2 b4 | g1~ | g2. b,4 | 

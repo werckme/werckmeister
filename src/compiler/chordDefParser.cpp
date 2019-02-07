@@ -54,7 +54,7 @@ namespace sheet {
 					chordName.name("chord name");
 					intervals.name("intervals");
 
-					chordName %= char_("Xx") > *char_(ChordDefParser::ALLOWED_CHORD_SYMBOLS_REGEX);
+					chordName %= char_("X") > *char_(ChordDefParser::ALLOWED_CHORD_SYMBOLS_REGEX);
 					interval %= degreeSymbols_ > '=' > int_ ;
 					intervals %= +(interval);
 					start %= chordName > ':' > intervals;

@@ -39,16 +39,9 @@ BOOST_FUSION_ADAPT_STRUCT(
 	(sheet::Event::Type, type)
 	(sheet::Event::Pitches, pitches)
 	(sheet::Event::Duration, duration)
-	(fm::String, metaCommand)
+	(fm::String, stringValue)
 	(sheet::Event::Args, metaArgs)
-)
-
-BOOST_FUSION_ADAPT_STRUCT(
-	sheet::ChordEvent,
-	(sheet::Event::Type, type)
 	(fm::String, chordName)
-	(fm::String, metaCommand)
-	(sheet::Event::Args, metaArgs)
 )
 
 BOOST_FUSION_ADAPT_STRUCT(
@@ -159,6 +152,7 @@ namespace sheet {
 					events.name("events");
 					pitch_.name("pitch");
 					degree_.name("pitch");
+
 					degree_ %= degreeSymbols_ >> (octaveSymbols_ | attr(PitchDef::DefaultOctave));
 
 					pitch_ %= pitchSymbols_ >> (octaveSymbols_ | attr(PitchDef::DefaultOctave));
@@ -184,7 +178,25 @@ namespace sheet {
 								| (lit("`")[at_c<0>(_val) = Event::Meta][at_c<3>(_val) = FM_STRING("vorschlag")])
 							)
 					)
-					| 
+					|
+
+	// 					sheet::Event,
+	// (sheet::Event::Type, type)
+	// (sheet::Event::Pitches, pitches)
+	// (sheet::Event::Duration, duration)
+	// (fm::String, stringValue)
+	// (sheet::Event::Args, metaArgs)
+	// (fm::String, chordName)
+					(
+						attr(Event::Chord)
+						>> attr(PitchDef())
+						>> attr(Event::NoDuration) 
+						>> lexeme[
+							char_("a-gA-G")
+							> *char_(ChordDefParser::ALLOWED_CHORD_SYMBOLS_REGEX)
+						]
+					)
+					|
 					(
 						"\\" 
 						>> attr(Event::Meta) 
@@ -226,18 +238,12 @@ namespace sheet {
 					;
 					events %= *event_;
 
-					chord_ %= (attr(Event::Chord) >> lexeme[char_("a-gA-G") > *char_(ChordDefParser::ALLOWED_CHORD_SYMBOLS_REGEX)])
-						| ("r" >> attr(Event::Rest) >> attr(""))
-						| ("|" >> attr(Event::EOB) >> attr(""))
-						| ("/" >> attr(Event::Meta) >> attr("") >> +char_("a-zA-Z") >> ":" >> +(lexeme[+char_("a-zA-Z0-9")]) >> "/")
-						;
-					chords_ %= *chord_;
 
 					voice %= "{" >> events >> "}";
 
 					createTrackRules(track, voice, trackInfo_);
 					createSheetInfoRules(sheetInfo_);
-					start %= *sheetInfo_ >> *track >> chords_;
+					start %= *sheetInfo_ >> *track;
 
 					auto onError = boost::bind(&handler::errorHandler<Iterator>, _1);
 					on_error<fail>(start, onError);
@@ -253,8 +259,6 @@ namespace sheet {
 				qi::rule<Iterator, Voice::Events(), ascii::space_type> events;
 				qi::rule<Iterator, Event(), ascii::space_type> event_;
 				qi::rule<Iterator, SheetInfo(), ascii::space_type> sheetInfo_;
-				qi::rule<Iterator, SheetDef::Events(), ascii::space_type> chords_;
-				qi::rule<Iterator, ChordEvent(), ascii::space_type> chord_;
 				qi::rule<Iterator, TrackInfo(), ascii::space_type> trackInfo_;
 			};
 

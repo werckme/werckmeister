@@ -20,11 +20,16 @@ name: scratch;
 part: normal;
 instrument: piano;
 {
-    I1~ | I1 |
+    I#`I1~ | I1 |
 }
 ]
 
-
-C13 | C6 | Cmin | C |
-/style: scratch normal/
-C13 | C6 | C7 | Cmin |
+[
+type: sheet;
+{
+    /style: scratch normal/
+    C13 | C6 | Cmin | C |
+    /style: scratch normal/
+    C13 | C6 | C7 | Cmin |
+}
+]

@@ -67,10 +67,19 @@ namespace sheet {
 		typedef fm::Ticks Duration;
 		typedef std::set<PitchDef> Pitches;
 		typedef std::vector<fm::String> Args;
+		typedef fm::String Options;
+		typedef std::tuple<PitchDef::Pitch, Options> ChordElements;
+		typedef long double Multiplicator;
+		ChordElements chordElements() const;
+		fm::String chordDefName() const;
+		Multiplicator multiplicator = 1; // to multiplicate with bar length e.g.: | C(1) | C(0.5) C(0.5) |		
 		Pitches pitches;
 		Type type = Unknown;
 		Duration duration = NoDuration;
-		fm::String metaCommand;
+		/**
+		 *  can be for instance a meta event command or a chordname
+		 */
+		fm::String stringValue;
 		Args metaArgs;
 
 		bool isTimeConsuming() const {
@@ -83,11 +92,10 @@ namespace sheet {
 		typedef fm::String Options;
 		typedef std::tuple<PitchDef::Pitch, Options> ChordElements;
 		typedef long double Multiplicator;
-		ChordElements chordElements() const;
-		fm::String chordDefName() const;
+		ChordElements chordElements() const { return ChordElements(); }
+		fm::String chordDefName() const { return fm::String(); }
 		Multiplicator multiplicator = 1; // to multiplicate with bar length e.g.: | C(1) | C(0.5) C(0.5) |
 	};
-
 }
 
 #endif

@@ -18,7 +18,7 @@ X7: I=1 III=5 V=8 VII=10\n\
    \n\
   \t\r\n\
 Xmaj7 : I=1 III=5 V=8 VII=11\n\
-x7+ : I=1 III=5 V=8 VII=11\n\
+X7+ : I=1 III=5 V=8 VII=11\n\
 X/V: I=1 III=5 V=-6  --quinte im bass\
 "));
 
@@ -74,7 +74,7 @@ X/V: I=1 III=5 V=-6  --quinte im bass\
 	BOOST_CHECK((interval++)->value == 11);
 	BOOST_CHECK((interval == chordDefs[2].intervals.end()));
 
-	BOOST_CHECK((chordDefs[3].name == FM_STRING("x7+")));
+	BOOST_CHECK((chordDefs[3].name == FM_STRING("X7+")));
 	interval = chordDefs[3].intervals.begin();
 
 	BOOST_CHECK((interval)->degree == I);
@@ -170,14 +170,14 @@ namespace {
 		return true;
 	}
 
-	bool checkChord(const sheet::ChordEvent &ev, fm::String chordName)
+	bool checkChord(const sheet::Event &ev, fm::String chordName)
 	{
-		return ev.type == sheet::Event::Chord && ev.chordName == chordName;
+		return ev.type == sheet::Event::Chord && ev.stringValue == chordName;
 	}
 
 	bool checkMetaEvent(const sheet::Event &ev, const fm::String &command, const sheet::Event::Args &args)
 	{
-		bool pre = ev.type == sheet::Event::Meta && ev.metaCommand == command;
+		bool pre = ev.type == sheet::Event::Meta && ev.stringValue == command;
 		if (!pre) {
 			return false;
 		}
@@ -377,13 +377,18 @@ BOOST_AUTO_TEST_CASE(test_sheetDefParser)
 	}\n\
 ]\n\
 -- the sheet, no tracks and voices here\n\
-/ style : simplePianoStyle Intro / \n\
-/ voicingStrategy : asNotated / \n\
-Cmaj | Cmaj c7 | r G | Ais B | Cismaj79 r Ai \n\
+[\n\
+type: sheet;\n\
+{\n\
+	/ style : simplePianoStyle Intro / \n\
+	/ voicingStrategy : asNotated / \n\
+	Cmaj | Cmaj C7 | r G | Ais B | Cismaj79 r Ai \n\
+}\n\
+] \n\
 ");
 	sheet::compiler::SheetDefParser parser;
 	auto defs = parser.parse(text);
-	BOOST_CHECK(defs.tracks.size() == 1);
+	BOOST_CHECK(defs.tracks.size() == 2);
 	BOOST_CHECK(defs.tracks[0].voices.size() == 2);
 	BOOST_CHECK(defs.tracks[0].voices[0].events.size() == 12);
 	BOOST_CHECK(defs.tracks[0].voices[1].events.size() == 10);
@@ -411,53 +416,55 @@ Cmaj | Cmaj c7 | r G | Ais B | Cismaj79 r Ai \n\
 	BOOST_CHECK(checkNote(defs.tracks[0].voices[1].events[8], sheet::Event::Note, 11, 0, 1.0_N4));
 	BOOST_CHECK(checkNote(defs.tracks[0].voices[1].events[9], sheet::Event::EOB));
 
-	BOOST_CHECK(defs.chords.size() == 16);
-	BOOST_CHECK(checkMetaEvent(defs.chords[0], FM_STRING("style"), sheet::Event::Args({ FM_STRING("simplePianoStyle"), FM_STRING("Intro") })));
-	BOOST_CHECK(checkMetaEvent(defs.chords[1], FM_STRING("voicingStrategy"), sheet::Event::Args({ FM_STRING("asNotated") })));
-	BOOST_CHECK(checkChord(defs.chords[2], FM_STRING("Cmaj")));
-	BOOST_CHECK(checkNote(defs.chords[3], sheet::Event::EOB));
-	BOOST_CHECK(checkChord(defs.chords[4], FM_STRING("Cmaj")));
-	BOOST_CHECK(checkChord(defs.chords[5], FM_STRING("c7")));
-	BOOST_CHECK(checkNote(defs.chords[6], sheet::Event::EOB));
-	BOOST_CHECK(checkNote(defs.chords[7], sheet::Event::Rest));
-	BOOST_CHECK(checkChord(defs.chords[8], FM_STRING("G")));
-	BOOST_CHECK(checkNote(defs.chords[9], sheet::Event::EOB));
-	BOOST_CHECK(checkChord(defs.chords[10], FM_STRING("Ais")));
-	BOOST_CHECK(checkChord(defs.chords[11], FM_STRING("B")));
-	BOOST_CHECK(checkNote(defs.chords[12], sheet::Event::EOB));
-	BOOST_CHECK(checkChord(defs.chords[13], FM_STRING("Cismaj79")));
-	BOOST_CHECK(checkNote(defs.chords[14], sheet::Event::Rest));
-	BOOST_CHECK(checkChord(defs.chords[15], FM_STRING("Ai")));
+	const auto &chords = defs.tracks[1].voices[0].events;
 
-	auto chordelements = defs.chords[2].chordElements();
+	BOOST_CHECK(chords.size() == 16);
+	BOOST_CHECK(checkMetaEvent(chords[0], FM_STRING("style"), sheet::Event::Args({ FM_STRING("simplePianoStyle"), FM_STRING("Intro") })));
+	BOOST_CHECK(checkMetaEvent(chords[1], FM_STRING("voicingStrategy"), sheet::Event::Args({ FM_STRING("asNotated") })));
+	BOOST_CHECK(checkChord(chords[2], FM_STRING("Cmaj")));
+	BOOST_CHECK(checkNote(chords[3], sheet::Event::EOB));
+	BOOST_CHECK(checkChord(chords[4], FM_STRING("Cmaj")));
+	BOOST_CHECK(checkChord(chords[5], FM_STRING("C7")));
+	BOOST_CHECK(checkNote(chords[6], sheet::Event::EOB));
+	BOOST_CHECK(checkNote(chords[7], sheet::Event::Rest));
+	BOOST_CHECK(checkChord(chords[8], FM_STRING("G")));
+	BOOST_CHECK(checkNote(chords[9], sheet::Event::EOB));
+	BOOST_CHECK(checkChord(chords[10], FM_STRING("Ais")));
+	BOOST_CHECK(checkChord(chords[11], FM_STRING("B")));
+	BOOST_CHECK(checkNote(chords[12], sheet::Event::EOB));
+	BOOST_CHECK(checkChord(chords[13], FM_STRING("Cismaj79")));
+	BOOST_CHECK(checkNote(chords[14], sheet::Event::Rest));
+	BOOST_CHECK(checkChord(chords[15], FM_STRING("Ai")));
+
+	auto chordelements = chords[2].chordElements();
 	BOOST_CHECK(std::get<0>(chordelements) == fm::notes::C);
 	BOOST_CHECK(std::get<1>(chordelements) == FM_STRING("maj"));
-	BOOST_CHECK(defs.chords[2].chordDefName() == FM_STRING("Xmaj"));
+	BOOST_CHECK(chords[2].chordDefName() == FM_STRING("Xmaj"));
 
-	chordelements = defs.chords[5].chordElements();
+	chordelements = chords[5].chordElements();
 	BOOST_CHECK(std::get<0>(chordelements) == fm::notes::C);
 	BOOST_CHECK(std::get<1>(chordelements) == FM_STRING("7"));
-	BOOST_CHECK(defs.chords[5].chordDefName() == FM_STRING("x7"));
+	BOOST_CHECK(chords[5].chordDefName() == FM_STRING("X7"));
 
-	chordelements = defs.chords[8].chordElements();
+	chordelements = chords[8].chordElements();
 	BOOST_CHECK(std::get<0>(chordelements) == fm::notes::G);
 	BOOST_CHECK(std::get<1>(chordelements) == FM_STRING(""));
-	BOOST_CHECK(defs.chords[8].chordDefName() == FM_STRING("X"));
+	BOOST_CHECK(chords[8].chordDefName() == FM_STRING("X"));
 
-	chordelements = defs.chords[10].chordElements();
+	chordelements = chords[10].chordElements();
 	BOOST_CHECK(std::get<0>(chordelements) == fm::notes::AIS);
 	BOOST_CHECK(std::get<1>(chordelements) == FM_STRING(""));
-	BOOST_CHECK(defs.chords[10].chordDefName() == FM_STRING("X"));
+	BOOST_CHECK(chords[10].chordDefName() == FM_STRING("X"));
 
-	chordelements = defs.chords[13].chordElements();
+	chordelements = chords[13].chordElements();
 	BOOST_CHECK(std::get<0>(chordelements) == fm::notes::CIS);
 	BOOST_CHECK(std::get<1>(chordelements) == FM_STRING("maj79"));
-	BOOST_CHECK(defs.chords[13].chordDefName() == FM_STRING("Xmaj79"));
+	BOOST_CHECK(chords[13].chordDefName() == FM_STRING("Xmaj79"));
 
-	chordelements = defs.chords[15].chordElements();
+	chordelements = chords[15].chordElements();
 	BOOST_CHECK(std::get<0>(chordelements) == fm::notes::A);
 	BOOST_CHECK(std::get<1>(chordelements) == FM_STRING("i"));
-	BOOST_CHECK(defs.chords[15].chordDefName() == FM_STRING("Xi"));
+	BOOST_CHECK(chords[15].chordDefName() == FM_STRING("Xi"));
 
 }
 
@@ -687,10 +694,13 @@ BOOST_AUTO_TEST_CASE(test_documentConfigParser)
 		f4 f4 f4 f4 | h4 h4 h4 h4 |\n\
 	}\n\
 	]\n\
-	--the sheet, no voices here\n\
+    [\n\
+	{\n\
 		/ style: simplePianoStyle:intro /\n\
 		/ voicingStrategy : asNotated /\n\
 		Cmaj | Cmaj C7 |\n\
+	}\n\
+	]\n\
 \n\
 ");
 	sheet::compiler::DocumentConfigParser parser;
@@ -722,10 +732,13 @@ BOOST_AUTO_TEST_CASE(test_documentConfigParser_empty)
 		f4 f4 f4 f4 | h4 h4 h4 h4 |\n\
 	}\n\
 	]\n\
-	--the sheet, no voices here\n\
+    [\n\
+	{\n\
 		/ style: simplePianoStyle:intro /\n\
 		/ voicingStrategy : asNotated /\n\
 		Cmaj | Cmaj C7 |\n\
+	}\n\
+	]\n\
 \n\
 ");
 	sheet::compiler::DocumentConfigParser parser;

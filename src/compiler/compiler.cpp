@@ -106,7 +106,7 @@ namespace sheet {
 					ctx->rest(ev.duration);
 					styleRenderer.sheetRest(ev.duration);
 				}
-				else if (ev.metaCommand == SHEET_META__SET_STYLE) {
+				else if (ev.stringValue == SHEET_META__SET_STYLE) {
 					switchStyle(styleRenderer, ev);
 				}
 				else if (ev.type != Event::Chord) {
