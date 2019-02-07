@@ -56,6 +56,8 @@ namespace fmapp {
 		fm::Ticks elapsed() const { return MidiProvider::millisToTicks(elapsedMillis_); }
 		void reset();
 		void send(const fm::midi::Event &ev);
+		inline fm::BPM bpm() const { return MidiProvider::bpm(); }
+		void bpm(fm::BPM bpm);
 	private:
 		const OutputInfo * getOutputInfo() const;
 		void initOutputMap();
@@ -90,6 +92,14 @@ namespace fmapp {
 	MidiplayerClient<TBackend, TMidiProvider, TTimer>::MidiplayerClient()
 	{
 		initOutputMap();
+	}
+
+	template<class TBackend, class TMidiProvider, class TTimer>
+	void MidiplayerClient<TBackend, TMidiProvider, TTimer>::bpm(fm::BPM bpm)
+	{
+		auto elapsedTicks = elapsed();
+		MidiProvider::bpm(bpm);
+		elapsedMillis_ = MidiProvider::ticksToMillis(elapsedTicks);
 	}
 
 	template<class TBackend, class TMidiProvider, class TTimer>
@@ -172,7 +182,7 @@ namespace fmapp {
 		using namespace fm;
 		if (ev.metaEventType() == midi::Tempo) {
 			auto metaIntValue = midi::Event::MetaGetIntValue(ev.metaData(), ev.metaDataSize());
-			MidiProvider::bpm(midi::MicrosecondsPerMinute/(double)metaIntValue);
+			bpm(midi::MicrosecondsPerMinute/(double)metaIntValue);
 		}
 		if (ev.metaEventType() == midi::CustomMetaEvent) {
 			auto customEvent = midi::Event::MetaGetCustomData(ev.metaData(), ev.metaDataSize());

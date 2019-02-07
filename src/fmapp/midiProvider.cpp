@@ -77,7 +77,7 @@ namespace fmapp {
 	{
 		trackEventIts_.clear();
 	}
-
+	
 	void MidiProvider::seek(Millis millis, const TrackOffsets &offsets)
 	{
 		trackEventIts_.clear();

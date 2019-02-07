@@ -257,6 +257,7 @@ void play(sheet::DocumentPtr document, fm::midi::MidiPtr midi, MidiOutputId midi
 	}
 	std::cout << std::endl;
 	player.stop();
+	player.panic();
 
 #ifdef SHEET_USE_BOOST_TIMER
 	fmapp::BoostTimer::io_stop();

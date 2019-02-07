@@ -38,9 +38,9 @@ namespace fmapp {
 		inline Millis ticksToMillis(fm::Ticks ticks) const {
 			return MINUTE * ONE_SECOND_MILLIS * ticks / (bpm() * fm::PPQ);
 		}
-		inline fm::BPM bpm() const { return std::max(bpm_, 1.0); }
-		void bpm(fm::BPM bpm) { bpm_ = bpm; }
 	protected:
+		inline fm::BPM bpm() const { return std::max(bpm_, 1.0); }
+		void bpm(fm::BPM bpm) { bpm_ = bpm; }	
 		void seek(Millis millis, const TrackOffsets &offsets);
 	private:
 		fm::midi::MidiPtr midi_ = nullptr;
