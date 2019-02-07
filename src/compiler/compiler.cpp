@@ -9,6 +9,8 @@
 #include "styleRenderer.h"
 #include "metaCommands.h"
 #include "error.hpp"
+#include <sheet/tools.h>
+
 namespace sheet {
 
 	namespace compiler {
@@ -79,6 +81,17 @@ namespace sheet {
 					++it;
 				}
 			}
+			template<class TContainer>
+			Track * getFirstSheetTrack(TContainer &c) {
+				auto sheetTrackIt = 
+					std::find_if(c.begin(), c.end(), [](const auto &x) {  
+						return getFirstMetaValueBy(SHEET_META__TRACK_META_KEY_TYPE, x.trackInfos) == SHEET_META__TRACK_META_VALUE_TYPE_SHEET;
+					});
+				if (sheetTrackIt == c.end()) {
+					return nullptr;
+				}
+				return &(*sheetTrackIt);
+			} 
 		}
 
 		void Compiler::switchStyle(StyleRenderer &styleRenderer, const Event &metaEvent)
@@ -95,29 +108,34 @@ namespace sheet {
 
 		void Compiler::renderChordTrack() 
 		{
-			// auto ctx = context();
-			// determineChordLengths(document_->sheetDef.chords.begin(), document_->sheetDef.chords.end());
-			// StyleRenderer styleRenderer(ctx);
-			// for (auto &ev : document_->sheetDef.chords) {
-			// 	ctx->setChordTrackTarget(); // target will be lost after calling addEvent
-			// 	if (ev.type == Event::Rest) {
-			// 		auto meta = ctx->voiceMetaData(ctx->chordVoiceId());
-			// 		ev.duration = meta->barLength * ev.multiplicator;
-			// 		ctx->rest(ev.duration);
-			// 		styleRenderer.sheetRest(ev.duration);
-			// 	}
-			// 	else if (ev.stringValue == SHEET_META__SET_STYLE) {
-			// 		switchStyle(styleRenderer, ev);
-			// 	}
-			// 	else if (ev.type != Event::Chord) {
-			// 		ctx->addEvent(ev);
-			// 	} else {
-			// 		auto meta = ctx->voiceMetaData(ctx->chordVoiceId());
-			// 		ev.duration = meta->barLength * ev.multiplicator;	
-			// 		ctx->addEvent(ev);
-			// 		styleRenderer.render(ev.duration);
-			// 	}
-			// }
+			auto ctx = context();
+			Track * sheetTrack = getFirstSheetTrack(document_->sheetDef.tracks);
+			if (!sheetTrack || sheetTrack->voices.empty()) {
+				return;
+			}
+			auto &sheetEvents = sheetTrack->voices.begin()->events; 
+			determineChordLengths(sheetEvents.begin(), sheetEvents.end());
+			StyleRenderer styleRenderer(ctx);
+			for (auto &ev : sheetEvents) {
+				ctx->setChordTrackTarget(); // target will be lost after calling addEvent
+				if (ev.type == Event::Rest) {
+					auto meta = ctx->voiceMetaData(ctx->chordVoiceId());
+					ev.duration = meta->barLength * ev.multiplicator;
+					ctx->rest(ev.duration);
+					styleRenderer.sheetRest(ev.duration);
+				}
+				else if (ev.stringValue == SHEET_META__SET_STYLE) {
+					switchStyle(styleRenderer, ev);
+				}
+				else if (ev.type != Event::Chord) {
+					ctx->addEvent(ev);
+				} else {
+					auto meta = ctx->voiceMetaData(ctx->chordVoiceId());
+					ev.duration = meta->barLength * ev.multiplicator;	
+					ctx->addEvent(ev);
+					styleRenderer.render(ev.duration);
+				}
+			}
 		}
 	}
 }

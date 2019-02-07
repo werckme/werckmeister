@@ -18,7 +18,7 @@ instrumentDef: guitar  SC1 4 8 21;
 instrumentConf: piano volume 100 pan 50;
 instrumentConf: lead volume 90;
 instrumentConf: bass volume 90;
-instrumentConf: drums volume 86;
+instrumentConf: drums volume 100;
 instrumentConf: guitar volume 70;
 
 
@@ -38,12 +38,17 @@ instrument: lead;
 }
 ]
 
-/style: quickstep normal/
-A-7 | D-7 | G7 | Cmaj7 C7 |
-Fmaj7 | B07 | E7b9 | A-7 A7 |
-D-7 | G7 | Cmaj7 | E-7 A7 |
-D-7 | G7 | Cmaj7 | B07 E7 |
-A-7 | D-7 | G7 | Cmaj7 C7 |
-Fmaj7 | B07 | E7b9 | A-7 A7 |
-D-7 | G7 | E-7 | A7 |
-D-7 | G7 | C6 | B07 E7 |
+[
+type: sheet;
+{
+    /style: quickstep normal/
+    A-7 | D-7 | G7 | Cmaj7 C7 |
+    Fmaj7 | B07 | E7b9 | A-7 A7 |
+    D-7 | G7 | Cmaj7 | E-7 A7 |
+    D-7 | G7 | Cmaj7 | B07 E7 |
+    A-7 | D-7 | G7 | Cmaj7 C7 |
+    Fmaj7 | B07 | E7b9 | A-7 A7 |
+    D-7 | G7 | E-7 | A7 |
+    D-7 | G7 | C6 | B07 E7 |
+}
+]

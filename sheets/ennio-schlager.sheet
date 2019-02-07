@@ -25,11 +25,15 @@ instrument: guitar2;
 }
 ]
 
+[
+type: sheet;
+{
+    /style: countryschlager1 normal/
 
-/style: countryschlager1 normal/
+    C | C | C | C | Ees | Ees | Ees | Ees | Aes | Aes | Aes | Aes | G7 | G7 | G7 | G7 | G7 | C | C | Cmin |
 
-C | C | C | C | Ees | Ees | Ees | Ees | Aes | Aes | Aes | Aes | G7 | G7 | G7 | G7 | G7 | C | C | Cmin |
+    /style: countryschlager1 ende/
 
-/style: countryschlager1 ende/
-
-Cmin |
+    Cmin |
+}
+]

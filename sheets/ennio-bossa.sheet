@@ -33,11 +33,16 @@ instrument: vibra;
 }
 ]
 
-/style: bossanova normal/
+[
+type: sheet;
+{
+    /style: bossanova normal/
 
-Cmaj7 | Cmaj7 | Cmaj7 | Cmaj7 | Eesmaj7 | Eesmaj7 | Eesmaj7 | Eesmaj7 | Aesmaj7 
-| Aesmaj7 | Aesmaj7 | Aesmaj7 | G7 | G7 | G7 | G7 | G7 | C | C | Cmin |
+    Cmaj7 | Cmaj7 | Cmaj7 | Cmaj7 | Eesmaj7 | Eesmaj7 | Eesmaj7 | Eesmaj7 | Aesmaj7 
+    | Aesmaj7 | Aesmaj7 | Aesmaj7 | G7 | G7 | G7 | G7 | G7 | C | C | Cmin |
 
-/style: countryschlager1 ende/
+    /style: countryschlager1 ende/
 
-Cmin |
+    Cmin |
+}
+]

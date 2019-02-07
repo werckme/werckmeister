@@ -15,21 +15,26 @@ instrumentDef: bass SC1 8 0 33;
 instrumentDef: drums SC1 9 0 32;
 instrumentDef: slide SC1 2 0 102;
 
-/style: ido normal/
+[
+type: sheet;
+{
+    /style: ido normal/
 
-C7 | C7 | Emin7 | A B | Cmin | Cmin | Ces9 | G7 Gesmin | 
+    C7 | C7 | Emin7 | A B | Cmin | Cmin | Ces9 | G7 Gesmin | 
 
-/style: ido fill1/
+    /style: ido fill1/
 
-G7 Gmin7 | 
+    G7 Gmin7 | 
 
-/style: ido normal2/
+    /style: ido normal2/
 
-F | F | E | E | F7 | F7 | Aes7 | B A | B A | 
+    F | F | E | E | F7 | F7 | Aes7 | B A | B A | 
 
-/style: ido normal/
+    /style: ido normal/
 
-Cmin | Cmin | Fis | Fis | Cmin | Cmin | D | Eesmin7 | D | Eesmin7 | D Eesmin7 | D Eesmin7 | Emin | Emin | E9 | Emin11 |
+    Cmin | Cmin | Fis | Fis | Cmin | Cmin | D | Eesmin7 | D | Eesmin7 | D Eesmin7 | D Eesmin7 | Emin | Emin | E9 | Emin11 |
 
-/style: ido ende/
-Cmin |
+    /style: ido ende/
+    Cmin |
+}
+]

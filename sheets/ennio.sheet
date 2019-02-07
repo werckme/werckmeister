@@ -18,8 +18,13 @@ instrument: piano;
 }
 ]
 
-/style: ennio normal/
+[
+type: sheet;
+{
+    /style: ennio normal/
 
-Cmaj7 | Cmaj7 | Cmaj7 | Cmaj7 | Cmaj7 | Cmaj7 | Eesmaj7 | Eesmaj7 | 
-Eesmaj7 | Eesmaj7 | Aesmaj7 | Aesmaj7 | Aesmaj7 | Aesmaj7 | G7 
-| G7 | G7 | G7 | G7 | C | C | Cmin | Cmin | 
+    Cmaj7 | Cmaj7 | Cmaj7 | Cmaj7 | Cmaj7 | Cmaj7 | Eesmaj7 | Eesmaj7 | 
+    Eesmaj7 | Eesmaj7 | Aesmaj7 | Aesmaj7 | Aesmaj7 | Aesmaj7 | G7 
+    | G7 | G7 | G7 | G7 | C | C | Cmin | Cmin | 
+}
+]

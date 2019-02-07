@@ -1,23 +1,26 @@
 -- document configs
 @load "./chords/default.chords";
-@load "./styles/simpleJazz.style";
+@load "./styles/countryschlager1.style";
 @load "./pitchmaps/defaultMidiDrumMap.pitchmap";
 
-tempo: 120;
+tempo: 140;
 device: SC1 midi 2;
 
 --          instrument dv ch cc pc
-instrumentDef: piano   SC1 2 0 0;
-instrumentDef: lead    SC1 3 0 0;
+instrumentDef: piano   SC1 2 0 90;
+instrumentDef: slide   SC1 2 0 16;
+instrumentDef: lead    SC1 3 0 30;
 instrumentDef: guitar    SC1 4 0 36;
-instrumentDef: bass    SC1 7 0 32;
+instrumentDef: bass    SC1 7 0 87;
 instrumentDef: drums   SC1 9 0 32;
 
 
-instrumentConf: piano volume 100 pan 80;
-instrumentConf: lead volume 100;
-instrumentConf: bass volume 90;
-instrumentConf: drums volume 86;
+instrumentConf: piano volume 50 pan 80;
+instrumentConf: lead volume 60;
+instrumentConf: bass volume 60;
+instrumentConf: drums volume 80;
+instrumentConf: guitar volume 60;
+
 
 
 [
@@ -33,10 +36,15 @@ instrument: lead;
 }
 ]
 
-/style: simpleJazz normal/
-r | A-7 | D7 | Gmaj7 | Cmaj7 | Fis07 | B7 | E- | E- |
--- wiederholung
-A-7 | D7 | Gmaj7 | Cmaj7 | Fis07 | 
--- 2.
-B7 | E- | E- | Fis07 | B7b9 | E- | E- | A-7 | D7 | Gmaj7 | Gmaj7 |
-Fis07 | B7b9 | E-7 Ees7 | D-7 Des7 | Cmaj7 | B7b9 | E- |
+[
+type: sheet;
+{
+    /style: countryschlager1 normal/
+    r | A-7 | D7 | Gmaj7 | Cmaj7 | Fis07 | B7 | E- | E- |
+    -- wiederholung
+    A-7 | D7 | Gmaj7 | Cmaj7 | Fis07 | 
+    -- 2.
+    B7 | E- | E- | Fis07 | B7b9 | E- | E- | A-7 | D7 | Gmaj7 | Gmaj7 |
+    Fis07 | B7b9 | E-7 Ees7 | D-7 Des7 | Cmaj7 | B7b9 | E- |
+}
+]
