@@ -81,11 +81,10 @@ namespace sheet {
 			}
 
 			template<>
-			bool renderEvent<Event::Chord>(AContext * ctx, const Event *ev)
+			bool renderEvent<Event::Chord>(AContext * ctx, const Event *chordEv)
 			{
-				auto chordEv = static_cast<const ChordEvent*>(ev);
 				ctx->setChord(*chordEv);
-				ctx->seek(ev->duration);
+				ctx->seek(chordEv->duration);
 				return true;
 			}
 			template<>
@@ -621,12 +620,12 @@ namespace sheet {
 			}
 			return meta->voicingStrategy;
 		}
-		void AContext::setChord(const ChordEvent &chord)
+		void AContext::setChord(const Event &chord)
 		{
 			currentChord_ = chord;
 			currentChordDef_ = styleDefServer()->getChord(currentChord_.chordDefName());
 			if (currentChordDef_ == nullptr) {
-				FM_THROW(Exception, "chord not found: " + fm::to_string(currentChord_.chordName));
+				FM_THROW(Exception, "chord not found: " + fm::to_string(currentChord_.stringValue));
 			}
 		}
 	}

@@ -16,7 +16,6 @@ namespace sheet {
 
 			void append(DocumentPtr doc, const SheetDef &sheetDef)
 			{
-				append(doc->sheetDef.chords, sheetDef.chords);
 				append(doc->sheetDef.sheetInfos, sheetDef.sheetInfos);
 				append(doc->sheetDef.tracks, sheetDef.tracks);
 			}

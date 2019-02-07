@@ -12,7 +12,7 @@ namespace sheet {
     public:
 		typedef VoicingStrategy Base;
         virtual ~DirectVoicingStrategy() = default;
-		virtual Pitches get(const ChordEvent &chord, const ChordDef &def, const Degrees &degreeIntervals, const TimeInfo&) override;
+		virtual Pitches get(const Event &chord, const ChordDef &def, const Degrees &degreeIntervals, const TimeInfo&) override;
     };
 }
 

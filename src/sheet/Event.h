@@ -86,16 +86,6 @@ namespace sheet {
 			return type == Rest || type == Note || type == Degree || type == TiedNote || type == Chord;
 		}
 	};
-
-	struct ChordEvent : Event {
-		fm::String chordName;
-		typedef fm::String Options;
-		typedef std::tuple<PitchDef::Pitch, Options> ChordElements;
-		typedef long double Multiplicator;
-		ChordElements chordElements() const { return ChordElements(); }
-		fm::String chordDefName() const { return fm::String(); }
-		Multiplicator multiplicator = 1; // to multiplicate with bar length e.g.: | C(1) | C(0.5) C(0.5) |
-	};
 }
 
 #endif

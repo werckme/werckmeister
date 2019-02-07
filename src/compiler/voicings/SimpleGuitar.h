@@ -21,7 +21,7 @@ namespace sheet {
         typedef std::multimap<Degree, Octave> OctaveMap; 
 		typedef DirectVoicingStrategy Base;
         virtual ~SimpleGuitar() = default;
-		virtual Pitches get(const ChordEvent &chord, const ChordDef &def, const Degrees &degreeIntervals, const TimeInfo&) override;
+		virtual Pitches get(const Event &chord, const ChordDef &def, const Degrees &degreeIntervals, const TimeInfo&) override;
         OctaveMap createOctaveMap(const ChordDef &def) const;
         virtual void setArguments(const Event::Args &args) override;
         bool lowerRange = false;

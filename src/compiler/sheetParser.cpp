@@ -41,7 +41,6 @@ BOOST_FUSION_ADAPT_STRUCT(
 	(sheet::Event::Duration, duration)
 	(fm::String, stringValue)
 	(sheet::Event::Args, metaArgs)
-	(fm::String, chordName)
 )
 
 BOOST_FUSION_ADAPT_STRUCT(
@@ -66,7 +65,6 @@ BOOST_FUSION_ADAPT_STRUCT(
 	sheet::SheetDef,
 	(sheet::SheetDef::SheetInfos, sheetInfos)
 	(sheet::SheetDef::Tracks, tracks)
-	(sheet::SheetDef::Events, chords)
 )
 
 
@@ -179,14 +177,6 @@ namespace sheet {
 							)
 					)
 					|
-
-	// 					sheet::Event,
-	// (sheet::Event::Type, type)
-	// (sheet::Event::Pitches, pitches)
-	// (sheet::Event::Duration, duration)
-	// (fm::String, stringValue)
-	// (sheet::Event::Args, metaArgs)
-	// (fm::String, chordName)
 					(
 						attr(Event::Chord)
 						>> attr(PitchDef())

@@ -16,11 +16,9 @@ namespace sheet {
 
 	struct SheetDef {
 		typedef std::vector<Track> Tracks;
-		typedef std::vector<ChordEvent> Events;
 		typedef std::vector<SheetInfo> SheetInfos;
 		SheetInfos sheetInfos;
 		Tracks tracks;
-		Events chords;
 	};
 
 }

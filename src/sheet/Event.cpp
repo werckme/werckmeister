@@ -27,7 +27,7 @@ namespace sheet {
 		of a struct. May be there is a solution with sematic actions etc. But in sake of moving forward,
 		I decided to parse on the fly.
 	*/
-	ChordEvent::ChordElements Event::chordElements() const
+	Event::ChordElements Event::chordElements() const
 	{
 		PitchDef::Pitch pitch = 0;
 		auto nameLower = stringValue;

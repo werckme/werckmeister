@@ -108,7 +108,7 @@ namespace sheet {
 			virtual IStyleDefServer::Style currentStyle();
 			virtual void currentStyle(const IStyleDefServer::Style &style);
 			virtual VoicingStrategyPtr currentVoicingStrategy();
-			virtual const ChordEvent * currentChord() const { return &currentChord_; }
+			virtual const Event * currentChord() const { return &currentChord_; }
 			virtual fm::Expression getExpression(const fm::String &str) const;
 			virtual ASpielanweisungPtr spielanweisung();
 			virtual AInstrumentDef * getInstrumentDef(const fm::String &uname) = 0;
@@ -158,7 +158,7 @@ namespace sheet {
 			virtual void seek(fm::Ticks duration);
 			virtual void newBar();
 			virtual void rest(fm::Ticks duration);
-			virtual void setChord(const ChordEvent &ev);
+			virtual void setChord(const Event &ev);
 			virtual void addEvent(const Event &ev);
 			virtual void stopTying();
 			virtual fm::Ticks barPos() const;
@@ -171,7 +171,7 @@ namespace sheet {
 			virtual TrackMetaDataPtr createTrackMetaData() = 0;
 			virtual TrackId createMasterTrack();
 		private:
-			ChordEvent currentChord_;
+			Event currentChord_;
 			VoicingStrategyPtr defaultVoiceStrategy_;
 			IStyleDefServer::ConstChordValueType currentChordDef_ = nullptr;
 			IStyleDefServer::Style currentStyle_;
