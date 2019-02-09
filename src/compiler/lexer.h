@@ -52,9 +52,9 @@ namespace sheet {
 
 			ASheetTokenizer()
 				: documentConfig(FM_STRING("\\s*@.+?;"))     // define tokens
-				, comment(FM_STRING("^\\s*--.+$"))
 				, eol(FM_STRING("\\s*\n"))
 				, any(FM_STRING("."))
+				, comment(FM_STRING("^\\s*--.+$"))
 				, chordDef(FM_STRING("^.+$"))
 				, pitchDef(FM_STRING("^.+$"))
 				, beginSection(FM_STRING("\\s*section\\s+[a-zA-Z0-9]+"))

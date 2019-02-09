@@ -71,7 +71,7 @@ namespace sheet {
 				using boost::spirit::ascii::space;
 				typedef _PitchmapParser<fm::String::const_iterator> PitchmapParserType;
 				PitchmapParserType g;
-				bool r = phrase_parse(defStr.begin(), defStr.end(), g, space, def);
+				phrase_parse(defStr.begin(), defStr.end(), g, space, def);
 			}
 		}
 

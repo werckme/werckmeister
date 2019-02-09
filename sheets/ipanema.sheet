@@ -1,12 +1,12 @@
 -- document configs
 @load "./chords/default.chords";
 @load "./styles/bossanova.style";
---@load "./pitchmaps/defaultMidiDrumMap.pitchmap";
-@load "./pitchmaps/battery3.tight.pitchmap";
+@load "./pitchmaps/defaultMidiDrumMap.pitchmap";
+--@load "./pitchmaps/battery3.tight.pitchmap";
 
 tempo: 140;
 device: SC1 midi 2;
-device: BT midi 8;
+--device: BT midi 8;
 
 --             instrument dv ch cc pc
 instrumentDef: piano      SC1 2 0 0;
@@ -16,10 +16,10 @@ instrumentDef: drums   SC1 9 0 32;
 instrumentDef: guitar  SC1 6 0 24;
 
 instrumentConf: guitar volume 80 pan 20;
-instrumentConf: piano volume 90 pan 80;
-instrumentConf: lead volume 70;
-instrumentConf: bass volume 90;
-instrumentConf: drums volume 100;
+instrumentConf: piano volume 70 pan 80;
+instrumentConf: lead volume 80;
+instrumentConf: bass volume 70;
+instrumentConf: drums volume 80;
 
 [
 instrument: lead;

@@ -1,4 +1,3 @@
--- document configs
 @load "./chords/default.chords";
 @load "./styles/quickstep.style";
 @load "./pitchmaps/defaultMidiDrumMap.pitchmap";

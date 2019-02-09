@@ -1,33 +1,7 @@
--- document configs
 @load "./chords/default.chords";
-@load "./pitchmaps/defaultMidiDrumMap.pitchmap";
-
-
-device: SC1 midi 1;
-
---           instrument dv ch cc pc
-instrumentDef: piano   SC1 3  0  0;
-instrumentDef: bass    SC1 4  0  35;
-
-instrumentConf: piano volume 100;
-instrumentConf: bass volume 90;
-tempo: 180;
-
 
 [
-type: style;
-name: scratch;
-part: normal;
-instrument: piano;
 {
-    I2. VII4 |
-}
-]
-
-[
-type: sheet;
-{
-    /style: scratch normal/
-    A7 | G7 | Ges7 | F7 | E7 | Es7 |
+    c d e f | 
 }
 ]
