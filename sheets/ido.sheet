@@ -1,4 +1,3 @@
--- WORKAROUND COMMENT
 @load "./styles/purdie.style";
 @load "./chords/default.chords";
 @load "./styles/ido.style";

@@ -1,4 +1,3 @@
--- document configs
 @load "./chords/default.chords";
 @load "./styles/simpleJazz.style";
 @load "./pitchmaps/defaultMidiDrumMap.pitchmap";
@@ -13,9 +12,9 @@ instrumentDef: bass    SC1 7 0 32;
 instrumentDef: drums   SC1 9 0 32;
 
 
-instrumentConf: piano volume 50 pan 80;
-instrumentConf: lead volume 60;
-instrumentConf: bass volume 60;
+instrumentConf: piano volume 80;
+instrumentConf: lead volume 100;
+instrumentConf: bass volume 80;
 instrumentConf: drums volume 80;
 
 

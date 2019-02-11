@@ -1,5 +1,26 @@
 @load "./chords/default.chords";
 
+
+
+[
+type: style;
+name: x;
+part: y;
+{
+    <I III>1 | 
+}
+{
+    <I, VII,>1 |
+}
+]
+
+[
+type: sheet;
+{
+    C7 | C9 | Dmin7 |
+}
+]
+
 [
 {
     c d e f | 

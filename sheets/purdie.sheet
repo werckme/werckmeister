@@ -1,4 +1,3 @@
--- TODO: when removing this line, the resulting midi is empty
 @load "./chords/default.chords";
 @load "./pitchmaps/battery3.tight.pitchmap";
 --@load "./pitchmaps/defaultMidiDrumMap.pitchmap";

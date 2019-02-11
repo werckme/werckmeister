@@ -1,4 +1,3 @@
--- document configs
 @load "./chords/default.chords";
 @load "./styles/bossanova.style";
 @load "./pitchmaps/defaultMidiDrumMap.pitchmap";

@@ -8,11 +8,14 @@
 #include <boost/spirit/include/phoenix_algorithm.hpp>
 #include <boost/spirit/include/phoenix_core.hpp>
 #include <boost/bind.hpp>
+#include <boost/algorithm/string.hpp>
 #include <vector>
 #include <fm/common.hpp>
 #include <exception>
 
 #include <iostream>
+
+#define BEGIN_DOCUMENT_CONFIG_LINE_CHAR '@'
 
 namespace sheet {
 
@@ -153,19 +156,24 @@ namespace sheet {
 		private:
 			void onLine_(CharType const *begin, CharType const *end)
 			{
-				tracks << Base::withoutComment(begin, end) << std::endl;
+				auto line = Base::withoutComment(begin, end);
+				boost::algorithm::trim(line);
+				if (line[0] == BEGIN_DOCUMENT_CONFIG_LINE_CHAR) {
+					documentConfigs.push_back(line);
+					return;
+				}
+				tracks << line << std::endl;
 			}
 		};
 
 		template <typename Lexer>
 		SheetDefTokenizer<Lexer>::SheetDefTokenizer()
 		{
-			auto addConfigs = boost::bind(&Base::add, this, _1, _2, boost::ref(documentConfigs));
 			auto onLine = boost::bind(&SheetDefTokenizer::onLine_, this, _1, _2);
 			this->self
-				= (Base::documentConfig[addConfigs]
-					| Base::comment
-					| Base::line[onLine])
+				= 
+				  Base::line[onLine]
+				| Base::comment
 				| Base::eol
 				| Base::any
 				;
