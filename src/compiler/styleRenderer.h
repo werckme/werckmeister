@@ -29,7 +29,29 @@ namespace sheet {
             void switchStyle(const IStyleDefServer::Style &current, const IStyleDefServer::Style &next);
             AContextPtr context() const { return this->ctx_; }
         private:
+            void remberPosition(const Voice &voice, 
+                const Event &ev, 
+                Voice::Events::const_iterator it,
+                fm::Ticks originalEventDuration
+            );
+            Voice::Events::const_iterator skipEvents(Voice::Events::const_iterator it, Voice::Events::const_iterator end, int n);
+            Voice::Events::const_iterator continueOnRemeberedPosition(const Voice &voice);       
+            inline bool allWritten(fm::Ticks totalDuration, fm::Ticks written) const 
+            {
+                return (totalDuration - written) <= AContext::TickTolerance;
+            }
+            inline bool hasRemberedPosition(const VoiceMetaData &meta) const {
+                return meta.idxLastWrittenEvent >= 0;
+            }
             void setTargetCreateIfNotExists(const Track &track, const Voice &voice);
+            /**
+             * @return the written duration
+             */
+            fm::Ticks renderVoice(const Voice &voice, 
+                Voice::Events::const_iterator begin, 
+                fm::Ticks totalDuration, 
+                fm::Ticks alreadyWritten
+            );
             typedef std::unordered_map<const void*, AContext::Id> PtrIdMap;
 			PtrIdMap ptrIdMap_;
             AContextPtr ctx_;

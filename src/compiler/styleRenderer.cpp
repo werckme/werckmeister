@@ -1,4 +1,5 @@
 #include "styleRenderer.h"
+#include "error.hpp"
 
 namespace sheet {
     namespace compiler {
@@ -67,6 +68,71 @@ namespace sheet {
 			}
 		}
 
+		void StyleRenderer::remberPosition(const Voice &voice, 
+			const Event &ev, 
+			Voice::Events::const_iterator it,
+			fm::Ticks originalEventDuration)
+		{
+			auto meta = ctx_->voiceMetaData();
+			bool hasRemainings = ev.duration != originalEventDuration;
+			if (hasRemainings) {
+				meta->remainingTime = originalEventDuration - ev.duration;
+			}
+			meta->idxLastWrittenEvent = it - voice.events.begin() + 1;
+		}
+
+		Voice::Events::const_iterator StyleRenderer::skipEvents(Voice::Events::const_iterator it, Voice::Events::const_iterator end, int n)
+		{
+			it += n;
+			if (it->type == Event::EOB) {
+				// happens: | r1 |  ->  | A B |
+				// after a half rest the next event would be a new bar
+				// its length check would produce a message
+				auto meta = ctx_->voiceMetaData();
+				++it;
+				meta->barPosition = 0;
+			}
+			return it;
+		}
+
+		Voice::Events::const_iterator StyleRenderer::continueOnRemeberedPosition(const Voice &voice)
+		{
+			auto it = voice.events.begin();
+			auto meta = ctx_->voiceMetaData();
+			it = skipEvents(it, voice.events.end(), meta->idxLastWrittenEvent);
+			meta->idxLastWrittenEvent = -1;
+			return it;
+		}
+
+		fm::Ticks StyleRenderer::renderVoice(const Voice &voice, 
+			Voice::Events::const_iterator it, 
+			fm::Ticks duration,
+			fm::Ticks written)
+		{
+			auto meta = ctx_->voiceMetaData();
+			for (; it < voice.events.end(); ++it) // loop voice events
+			{
+				auto ev = *it;
+				auto currentPos = meta->position;
+				auto originalDuration = ev.duration;
+				if (ev.isTimeConsuming() && meta->remainingTime > 0) {
+					if (ev.duration == 0) {
+						ev.duration = meta->lastEventDuration;
+					}
+					ev.duration = ev.duration + meta->remainingTime;
+					meta->remainingTime = 0;
+				}
+				ev.duration = std::min(ev.duration, duration - written);
+				ctx_->addEvent(ev);
+				written += meta->position - currentPos;
+				if (allWritten(duration, written)) {
+					remberPosition(voice, ev, it, originalDuration);
+					break;
+				}
+			}
+			return written;
+		}
+
         void StyleRenderer::render(fm::Ticks duration)
         {
             const auto &styleTracks = ctx_->currentStyle().tracks;
@@ -81,46 +147,15 @@ namespace sheet {
 					setTargetCreateIfNotExists(*track, voice);
 					auto meta = ctx_->voiceMetaData();
 					fm::Ticks writtenDuration = 0;
-					while ((duration - writtenDuration) > AContext::TickTolerance) { // loop until enough events are written
+					while (!allWritten(duration, writtenDuration)) { // loop until enough events are written
 						auto it = voice.events.begin();
-						if (meta->idxLastWrittenEvent >= 0) { // continue rendering
-							it += meta->idxLastWrittenEvent;
-							meta->idxLastWrittenEvent = -1;
-							if (it->type == Event::EOB) {
-								// happens: | r1 |  ->  | A B |
-								// after a half rest the next event would be a new bar
-								// its length check would produce a message
-								++it;
-								meta->barPosition = 0;
-							}
+						if (hasRemberedPosition(*meta)) { // continue rendering
+							it = continueOnRemeberedPosition(voice);
 						}
 						else if (meta->eventOffset > 0) { // skip events (for upbeat)
 							it += meta->eventOffset;
 						}
-						for (; it < voice.events.end(); ++it) // loop voice events
-						{
-							auto ev = *it;
-							auto currentPos = meta->position;
-							auto originalDuration = ev.duration;
-							if (ev.isTimeConsuming() && meta->remainingTime > 0) {
-								if (ev.duration == 0) {
-									ev.duration = meta->lastEventDuration;
-								}
-								ev.duration = ev.duration + meta->remainingTime;
-								meta->remainingTime = 0;
-							}
-							ev.duration = std::min(ev.duration, duration - writtenDuration);
-							ctx_->addEvent(ev);
-							writtenDuration += meta->position - currentPos;
-							if ((duration - writtenDuration) <= AContext::TickTolerance) {
-								bool hasRemainings = ev.duration != originalDuration;
-								if (hasRemainings) {
-									meta->remainingTime = originalDuration - ev.duration;
-								}
-								meta->idxLastWrittenEvent = it - voice.events.begin() + 1;
-								break;
-							}
-						}
+						writtenDuration = renderVoice(voice, it, duration, writtenDuration);
 					}
 				}
 			}

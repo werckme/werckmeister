@@ -1,16 +1,12 @@
 @load "./chords/default.chords";
 
 
-
 [
 type: style;
 name: x;
 part: y;
 {
-    <I III>1 | 
-}
-{
-    <I, VII,>1 |
+    /signature: 5 4/
 }
 ]
 
@@ -18,11 +14,5 @@ part: y;
 type: sheet;
 {
     C7 | C9 | Dmin7 |
-}
-]
-
-[
-{
-    c d e f | 
 }
 ]
