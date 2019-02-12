@@ -5,9 +5,6 @@
 #include <vector>
 #include "Event.h"
 
-
-
-
 namespace sheet {
 
 	struct Voice {

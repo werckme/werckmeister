@@ -4,10 +4,14 @@
 #include <fm/common.hpp>
 #include <fm/exception.hpp>
 #include <algorithm>
-
+#include <vector>
 
 namespace sheet {
     class Event;
+    namespace toolsimpl {
+        const std::vector<fm::String> & getMetaArgs(const Event &metaEvent);
+        const fm::String & getMetaCommand(const Event &metaEvent);
+    }
     namespace {
         struct MissingArgument {};
         template<typename TArg, typename TArgs>
@@ -31,9 +35,9 @@ namespace sheet {
     TArg getArgument(const Event &metaEvent, int idx, TArg *defaultValue = nullptr) 
     {
         try {
-            return __getArgument<TArg>(metaEvent.metaArgs, idx, defaultValue);
+            return __getArgument<TArg>(toolsimpl::getMetaArgs(metaEvent), idx, defaultValue);
         } catch(const MissingArgument&) {
-            FM_THROW(fm::Exception, "missing argument for '" + fm::to_string(metaEvent.stringValue) + "'");
+            FM_THROW(fm::Exception, "missing argument for '" + fm::to_string( toolsimpl::getMetaCommand(metaEvent) ) + "'");
         }
     }
 
@@ -106,6 +110,15 @@ namespace sheet {
             ++idx;
         }
         return std::make_pair(false, defaultValue);
+    }
+
+    template <typename TEventContainer>
+    bool hasAnyTimeConsumingEvents(const TEventContainer &events) 
+    {
+        return std::find_if(
+                events.begin(), 
+                events.end(), 
+                [](const auto &x) { return x.isTimeConsuming(); }) != events.end();
     }
 
 }

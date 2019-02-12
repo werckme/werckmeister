@@ -1,5 +1,6 @@
 #include "styleRenderer.h"
 #include "error.hpp"
+#include <sheet/tools.h>
 
 namespace sheet {
     namespace compiler {
@@ -141,7 +142,7 @@ namespace sheet {
 			{
 				for (const auto &voice : track->voices)
 				{
-					if (voice.events.empty()) {
+					if (voice.events.empty() || !hasAnyTimeConsumingEvents(voice.events)) {
 						continue;
 					}
 					setTargetCreateIfNotExists(*track, voice);
