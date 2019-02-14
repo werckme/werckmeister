@@ -18,7 +18,6 @@ def createKey(trackIdx, event, absTicks):
 
 def addEvent(trackIdx, container, event, absTicks):
     key = createKey(trackIdx, event, absTicks)
-    #print(key, event)
     if key in container:
         raise RuntimeError("event(%s, time=%f) duplicate" % (str(event), fticks_2_seconds(absTicks)))
     container.add(key)
@@ -27,10 +26,10 @@ def get_events(midifile):
     for trackIdx, track in enumerate(midifile.tracks):
         absTicks = 0
         for event in track:
-            if not event.type in _acceptedEventTypes:
-                continue
-            yield trackIdx, event, absTicks
-            absTicks += event.time
+            if hasattr(event, 'time'):
+                absTicks += event.time            
+            if event.type in _acceptedEventTypes:
+                yield trackIdx, event, absTicks
 
 def compare(file1, file2):
     global fticks_2_seconds
