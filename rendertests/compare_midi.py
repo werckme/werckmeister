@@ -14,7 +14,7 @@ _acceptedEventTypes = ['note_on', 'note_off']
 fticks_2_seconds = None
 
 def createKey(trackIdx, event, absTicks):
-    return (trackIdx, event.type, event.channel, event.note, event.velocity, absTicks)
+    return (event.type, event.channel, event.note, event.velocity, absTicks)
 
 def addEvent(trackIdx, container, event, absTicks):
     key = createKey(trackIdx, event, absTicks)

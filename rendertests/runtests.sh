@@ -1,6 +1,6 @@
 compiler=../build/sheetc
 refdir=./references
-for x in ../sheets/*.sheet
+for x in ./tests/*.sheet
 do
   file=$(basename $x).mid
   $compiler $x

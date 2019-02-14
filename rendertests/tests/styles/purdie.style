@@ -1,0 +1,107 @@
+[
+type: style;
+name: purdie;
+part: normal;
+instrument: drums;     
+{
+    \p"ht"8t r8t !pp"ht"8t    "ht"8t r8t !pp"ht"8t    "ht"8t r8t !pp"ht"8t   "ht"8t r8t !pp"ht"8t |
+    \p"ht"8t r8t !pp"ht"8t    "ht"8t r8t !pp"ht"8t    "ht"8t r8t !pp"ht"8t   "ht"8t r8t !pp"ht"8t |
+    \p"ht"8t r8t !pp"ht"8t    "ht"8t r8t !pp"ht"8t    "ht"8t r8t !pp"ht"8t   "ht"8t r8t !pp"ht"8t |
+    \p"ho"8t r8t !pp"ht"8t    "ht"8t r8t !pp"ht"8t    "ht"8t r8t !pp"ht"8t   "ht"8t r8t !pp"ht"8t |
+
+    \p"ht"8t r8t !pp"ht"8t    "ht"8t r8t !pp"ht"8t    "ht"8t r8t !pp"ht"8t   "ht"8t r8t !pp"ht"8t |
+    \p"ht"8t r8t !pp"ht"8t    "ht"8t r8t !pp"ht"8t    "ht"8t r8t !pp"ht"8t   "ht"8t r8t !pp"ht"8t |
+    \p"ht"8t r8t !pp"ht"8t    "ht"8t r8t !pp"ht"8t    "ht"8t r8t !pp"ht"8t   r8t !pp"ho"8t !pp"ht"8t |
+    \p"ht"8t r8t !pp"ht"8t    "ht"8t r8t !pp"ht"8t    "ht"8t r8t !pp"ht"8t   "ht"8t r8t !pp"ht"8t |
+
+    \p"ht"8t r8t !pp"ht"8t    "ht"8t r8t !pp"ht"8t    "ht"8t r8t !pp"ht"8t   "ht"8t r8t !pp"ht"8t |
+    \p"ht"8t r8t !pp"ht"8t    "ht"8t r8t !pp"ht"8t    "ht"8t r8t !pp"ht"8t   "ht"8t r8t !pp"ht"8t |
+    \p"ht"8t r8t !pp"ht"8t    "ht"8t r8t !pp"ht"8t    "ht"8t r8t !pp"ht"8t   "ht"8t r8t !pp"ht"8t |
+    \f"ho"8t "ht"8t "bd"8t    \f"ho"8t "ht"8t r8t     "ht"8t r8t !pp"ht"8t   "ht"8t r8t !pp"ht"8t |
+}
+{
+    r8t !pppp"sng"8t r8t    r8t !pppp"sng"8t r8t    \ff"sn"8t !pppp"sng"8t r8t   r8t !pppp"sng"8t r8t |
+    r8t !pppp"sng"8t r8t    r8t !pppp"sng"8t r8t    \ff"sn"8t !pppp"sng"8t r8t   r8t !pppp"sng"8t r8t |    
+    r8t !pppp"sng"8t r8t    r8t !pppp"sng"8t r8t    \ff"sn"8t !pppp"sng"8t r8t   r8t !ppp"sn"8t !pp"sn"8t |
+    r8t !pppp"sng"8t r8t    r8t !pppp"sng"8t r8t    \ff"sn"8t !pppp"sng"8t r8t   r8t !pppp"sng"8t r8t |
+
+    r8t !pppp"sng"8t r8t    r8t !pppp"sng"8t r8t    \ff"sn"8t !pppp"sng"8t r8t   r8t !pppp"sng"8t r8t |
+    r8t !pppp"sng"8t r8t    r8t !pppp"sng"8t r8t    \ff"sn"8t !pppp"sng"8t r8t   r8t !pppp"sng"8t r8t |    
+    r8t !pppp"sng"8t r8t    r8t !pppp"sng"8t r8t    \ff"sn"8t !pppp"sng"8t r8t   r4t r8t              |   
+    r8t !pppp"sng"8t r8t    r8t !pppp"sng"8t r8t    \ff"sn"8t !pppp"sng"8t r8t   r8t !pppp"sng"8t r8t |
+
+    r8t !pppp"sng"8t r8t    r8t !pppp"sng"8t r8t    \ff"sn"8t !pppp"sng"8t r8t   r8t !pppp"sng"8t r8t |
+    r8t !pppp"sng"8t r8t    r8t !pppp"sng"8t r8t    \ff"sn"8t !pppp"sng"8t r8t   r8t !pppp"sng"8t r8t |    
+    r8t !pppp"sng"8t r8t    r8t !pppp"sng"8t r8t    \ff"sn"8t !pppp"sng"8t r8t   r8t !ppp"sn"8t !pp"sn"8t |
+    r8t !pppp"sng"8t r8t    r8t !pppp"sng"8t r8t    \ff"sn"8t !pppp"sng"8t r8t   r8t !pppp"sng"8t r8t |   
+}
+{
+    "bd"4t r8t r4t "bd"8t r4t r8t "bd"4t r8t |
+}
+]
+
+[
+type: style;
+name: purdie;
+part: normal;
+instrument: rhythm1; 
+{
+    /voicingStrategy: simpleGuitar/
+    I4t r8t <III VII I' IV>4t I,,8t r4t <V, II, IV, I,,>8t r4t r8t |
+    I4t r8t <III VII I' IV>4t I,,8t r4t <V, II, IV, I,,>8t r4t r8t |
+    I4t r8t <III VII I' IV>4t I,,8t r4t <V, II, IV, I,,>8t r4t r8t |
+    I4t r8t <III VII I' IV>4t I,,8t r4t <I II III IV V VI VII >2t  |
+}
+]
+
+[
+type: style;
+name: purdie;
+part: normal;
+instrument: bass; 
+{
+    I,,8t I,,8t r8t r4t I,,8t r4t r8t V,,,4t VII,,,8t |
+    I,,8t I,,8t r8t r4t I,,8t r4t r8t V,,,4t VII,,,8t |
+    I,,8t I,,8t r8t r4t I,,8t r4t r8t V,,,4t VII,,,8t |
+    I,,8t I,,8t r8t r4t I,,8t r4t r8t V,,,4t~ V,,,8t |
+}
+] 
+
+
+[
+type: style;
+name: purdie;
+part: ende;
+instrument: drums; 
+{
+    \f"cy"1  |
+}
+{
+    "bd"1 |
+}
+] 
+
+[
+type: style;
+name: purdie;
+part: ende;
+instrument: rhythm1; 
+{
+    /voicingStrategy: simpleGuitar/
+    \p 
+    /doOnce: arpeggio up/
+    <I II III IV V VI VII >8~
+    <I II III IV V VI VII >2.~ <I II III IV V VI VII >8 |
+}
+]
+
+[
+type: style;
+name: purdie;
+part: ende;
+instrument: bass; 
+{
+    I,,1 |
+
+}
+] 

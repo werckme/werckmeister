@@ -1,0 +1,55 @@
+[
+type: style;
+name: bossanova;
+part: normal;
+instrument: drums;
+{
+    "ht"8 !f"ht" "ht" !f"ht"   "ht" "ht" "ht" !f"ht" |
+}    
+{
+    \fff
+    r4 "ss"8 r4 "ss"8 r4 | "ss"4. "ss"8 r4 "ss" |
+}    
+{
+    "bd"4. "bd"8 "bd"4. "bd"8 |
+}      
+]
+
+[
+type: style;
+name: bossanova;
+part: normal;
+instrument: guitar; 
+{
+    /voicingStrategy: simpleGuitar/
+    \f
+    <I II III IV V VI VII>4 <I II III IV V VI VII>4 r8 <I II III IV V VI VII>8 r8 <I II III IV V VI VII>8  |
+    r8 <I II III IV V VI VII>8 r8 <I II III IV V VI VII>8 r4 <I II III IV V VI VII>4 |
+    <I II III IV V VI VII>4 <I II III IV V VI VII>4 r8 <I II III IV V VI VII>8 r8 <I II III IV V VI VII>8  |
+    r4 r8 <I II III IV V VI VII>8 r8 <I II III IV V VI VII>4. |
+}    
+] 
+
+[
+type: style;
+name: bossanova;
+part: normal;
+instrument: piano; 
+{
+    <VII, VII>4 <III, V,>8 <V, V>8 r8 <III, V,>8 r8 <V, V> | r8 <III, V,>8 r8 <V, V> r8 <III, V,> r8 <VII, VII> |
+}    
+] 
+
+[
+type: style;
+name: bossanova;
+part: normal;
+instrument: bass; 
+{
+    \fff
+    I,,4. V,,8 V,,4. I,,8  |
+    I,,4. V,,8 V,,4 I,,4  |
+    I,,4. V,,8 V,,4. I,,8  |
+    I,,4. V,,8 V,,4 I,,8 V,,8  |
+}    
+] 

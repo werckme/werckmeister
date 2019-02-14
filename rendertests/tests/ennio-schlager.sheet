@@ -1,0 +1,38 @@
+@load "./chords/default.chords";
+@load "./pitchmaps/defaultMidiDrumMap.pitchmap";
+@load "./styles/countryschlager1.style";
+
+device: SC1 midi 2;
+
+tempo: 130;
+--           instrument device ch cc pc
+instrumentDef: piano   SC1 2 0 0;
+instrumentDef: guitar  SC1 3 0 25;
+instrumentDef: guitar2 SC1 4 0 26;
+instrumentDef: bass    SC1 5 0 33;
+instrumentDef: slide   SC1 6 8 26;
+instrumentDef: drums   SC1 9 0 32;
+
+[
+instrument: guitar2;
+{
+    \ffff    
+    c2 d | /modOnce: bend from 0/ e2~ e2 | r2 c4 d4 | e4 e g c | /modOnce: bend from 40/dis2 dis4 d | c2 bes4 a 
+    | g2  g4 a | bes c' bes a | as2 as4 bes | c' as,4 as,4  bes,~ | <bes, c> as as bes | c' c' es'8 d' c' d' 
+    | b2 b, | r1 | r4 b4 b4 c' | d' d' d' d' | d' d' e'8 d' c' b | c'1 
+
+}
+]
+
+[
+type: sheet;
+{
+    /style: countryschlager1 normal/
+
+    C | C | C | C | Es | Es | Es | Es | Aes | Aes | Aes | Aes | G7 | G7 | G7 | G7 | G7 | C | C | Cmin |
+
+    /style: countryschlager1 ende/
+
+    Cmin |
+}
+]

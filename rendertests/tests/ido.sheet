@@ -1,0 +1,39 @@
+@load "./styles/purdie.style";
+@load "./chords/default.chords";
+@load "./styles/ido.style";
+@load "./pitchmaps/defaultMidiDrumMap.pitchmap";
+--@load "./pitchmaps/battery3.tight.pitchmap";
+
+device: SC1 midi 2 offset 20;
+--device: BT midi 8;
+
+tempo: 145;
+instrumentDef: organ SC1 2 0 18;
+instrumentDef: guitar SC1 3 0 37;
+instrumentDef: bass SC1 8 0 33;
+instrumentDef: drums SC1 9 0 32;
+instrumentDef: slide SC1 2 0 102;
+
+[
+type: sheet;
+{
+    /style: ido normal/
+
+    C7 | C7 | Emin7 | A B | Cmin | Cmin | Ces9 | G7 Gesmin | 
+
+    /style: ido fill1/
+
+    G7 Gmin7 | 
+
+    /style: ido normal2/
+
+    F | F | E | E | F7 | F7 | Aes7 | B A | B A | 
+
+    /style: ido normal/
+
+    Cmin | Cmin | Fis | Fis | Cmin | Cmin | D | Esmin7 | D | Esmin7 | D Esmin7 | D Esmin7 | Emin | Emin | E9 | Emin11 |
+
+    /style: ido ende/
+    Cmin |
+}
+]

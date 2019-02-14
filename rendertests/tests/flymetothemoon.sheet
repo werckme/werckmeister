@@ -1,0 +1,53 @@
+@load "./chords/default.chords";
+@load "./styles/quickstep.style";
+@load "./pitchmaps/defaultMidiDrumMap.pitchmap";
+
+tempo: 180;
+device: SC1 midi 1;
+
+
+--          instrument dv ch cc pc
+instrumentDef: piano   SC1 2 0 0;
+instrumentDef: lead    SC1 3 0 26;
+instrumentDef: bass    SC1 7 0 32;
+instrumentDef: drums   SC1 9 0 32;
+instrumentDef: guitar  SC1 4 8 21;
+
+
+instrumentConf: piano volume 100 pan 50;
+instrumentConf: lead volume 90;
+instrumentConf: bass volume 90;
+instrumentConf: drums volume 100;
+instrumentConf: guitar volume 70;
+
+
+[
+instrument: lead;
+{
+    \ffff
+    c'4. b8 a4 g8 f~  | f8 g4. a4 c' | b4. a8 g4 f8 e~ | e1 |
+    a4. g8 f4 e8 d~ | d e4. f4 a | gis4. f8 e4 d8 c~ | c2 r4 cis |
+    d8 a4 a8~ a2~ | a4 c'2 b4 | g1~ | g2. b,4 | 
+    c8 f4 f8~f2~ | f4 a2 g4 | f4. e8~ e2~ | e2 r2 |
+
+    c'4. b8 a4 g8 f~  | f8 g4. a4 c' | b4. a8 g4 f8 e~ | e1 |
+    a4. g8 f4 e8 d~ | d e4. f4 a | gis4. f8 e4 d8 c~ | c2 r4 cis |
+    d8 a4 a8~ a2~ | a4 c'2 b4 | g1~ | g2. gis4 | 
+    a8 c4 c8~ c2~ | c2 c4 d | c1 |
+}
+]
+
+[
+type: sheet;
+{
+    /style: quickstep normal/
+    A-7 | D-7 | G7 | Cmaj7 C7 |
+    Fmaj7 | B07 | E7b9 | A-7 A7 |
+    D-7 | G7 | Cmaj7 | E-7 A7 |
+    D-7 | G7 | Cmaj7 | B07 E7 |
+    A-7 | D-7 | G7 | Cmaj7 C7 |
+    Fmaj7 | B07 | E7b9 | A-7 A7 |
+    D-7 | G7 | E-7 | A7 |
+    D-7 | G7 | C6 | B07 E7 |
+}
+]

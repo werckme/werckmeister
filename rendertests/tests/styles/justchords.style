@@ -1,0 +1,91 @@
+[
+type: style;
+name: justchords;
+part: normal;
+instrument: piano; 
+{
+    /voicingStrategy: simpleGuitar/
+    <I II III IV V VI VII>1 |
+}   
+] 
+
+[
+type: style;
+name: justchords;
+part: guitar;
+instrument: guitar;
+{
+    /voicingStrategy: simpleGuitar/
+    \f
+    <I II III IV V VI VII>8 <I II III IV V VI VII>8 r8 
+    <I II III IV V VI VII>4  <I II III IV V VI VII>8 <I II III IV V VI VII>8 <I II III IV V VI VII>8 |
+}
+]
+
+[
+type: style;
+name: justchords;
+part: arpeggio;
+instrument: piano; 
+{
+    /doOnce: arpeggio up/
+    <I II III IV V VI VII>2
+    /doOnce: arpeggio down/
+    <I II III IV V VI VII>2
+    |
+}   
+] 
+
+[
+type: style;
+name: justchords;
+part: arpeggioUp;
+instrument: piano; 
+{
+    /do: arpeggio up/
+    <I II III IV V VI VII>2
+    <I II III IV V VI VII>2
+    |
+}   
+] 
+
+[
+type: style;
+name: justchords;
+part: arpeggioT;
+instrument: piano; 
+{
+    /doOnce: arpeggio up/
+    <I II III IV V VI VII>2t
+    /doOnce: arpeggio down/
+    <I II III IV V VI VII>2t
+    <I II III IV V VI VII>2t
+
+    |
+}   
+] 
+
+[
+type: style;
+name: justchords;
+part: bending;
+instrument: piano; 
+{
+    /modOnce: bend from 1/
+    <I II III IV V VI VII>16~
+    <I II III IV V VI VII>2
+    /modOnce: bend to 40/
+    <I II III IV V VI VII>4.~
+    <I II III IV V VI VII>16
+    |
+}   
+] 
+
+[
+type: style;
+name: justchords;
+part: empty;
+{
+    r1 |
+}   
+] 
