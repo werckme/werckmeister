@@ -1,3 +1,6 @@
+pwd=$(pwd)
+cwd="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+cd $cwd
 compiler=../build/sheetc
 refdir=./references
 for x in ./tests/*.sheet
@@ -11,3 +14,4 @@ do
     rm $file
   fi
 done
+cd $pwd
