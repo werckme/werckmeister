@@ -2,6 +2,28 @@
 type: style;
 name: simpleJazz;
 part: normal;
+instrument: drums; 
+{
+    \ffff
+    r8 "hf" r "hf" r "hf" r "hf" |
+}
+{
+    \fff
+    "rdbell"8 !ff"rdbell"8 "rdbell"8 !ff"rdbell"8    "rdbell"8 !ff"rdbell"8 "rdbell"8 !ff"rdbell"8  |
+}
+{
+    \f
+    "bd"1 |
+    r2 r4 "bd" |
+    "bd"2 r4 "bd" |
+}        
+] 
+
+
+[
+type: style;
+name: simpleJazz;
+part: normal;
 instrument: piano; 
 {
     /voicingStrategy: simpleGuitar/
