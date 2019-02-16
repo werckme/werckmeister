@@ -3,17 +3,18 @@
 
 [
 type: style;
-name: x;
-part: y;
+name: i29;
+part: normal; 
 {
-    /signature: 5 4/
-
-}
+    <I II III IV V VI VII>2. <I II III IV V VI VII>4  |
+    <I II III IV V VI VII>1  |
+}   
 ]
 
 [
 type: sheet;
 {
-    C7 | C9 | Dmin7 |
+    A-7 | D-7 | G7 | Cmaj7 C7 |
+    Fmaj7 | B07 | E7b9 |
 }
 ]

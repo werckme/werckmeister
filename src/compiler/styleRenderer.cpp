@@ -2,6 +2,10 @@
 #include "error.hpp"
 #include <sheet/tools.h>
 
+#include <iostream>
+
+#define DEBUGX(x) 
+
 namespace sheet {
     namespace compiler {
 
@@ -84,14 +88,21 @@ namespace sheet {
 
 		Voice::Events::const_iterator StyleRenderer::skipEvents(Voice::Events::const_iterator it, Voice::Events::const_iterator end, int n)
 		{
+			auto original = it;
 			it += n;
 			if (it->type == Event::EOB) {
 				// happens: | r1 |  ->  | A B |
 				// after a half rest the next event would be a new bar
 				// its length check would produce a message
 				auto meta = ctx_->voiceMetaData();
-				++it;
-				meta->barPosition = 0;
+				
+					++it;
+					meta->barPosition = 0;
+					meta->remainingTime = 0;
+					DEBUGX(std::cout << "bar reset" << std::endl);
+			}
+			if (it >= end) {
+				return original;
 			}
 			return it;
 		}
@@ -110,9 +121,14 @@ namespace sheet {
 			fm::Ticks duration,
 			fm::Ticks written)
 		{
+			DEBUGX(static int c = 10);
+			DEBUGX(std::cout << "-----------------------------------------------------" << std::endl);
+			DEBUGX(std::cout << "c \t|\t cPos" << "\t|\t" << "bPos" << "\t|\t" << "d" << std::endl);
+			DEBUGX(std::cout << "-----------------------------------------------------" << std::endl);
 			auto meta = ctx_->voiceMetaData();
 			for (; it < voice.events.end(); ++it) // loop voice events
 			{
+				bool isLastEvent = (it+1) == voice.events.end();
 				auto ev = *it;
 				auto currentPos = meta->position;
 				auto originalDuration = ev.duration;
@@ -124,9 +140,11 @@ namespace sheet {
 					meta->remainingTime = 0;
 				}
 				ev.duration = std::min(ev.duration, duration - written);
+				DEBUGX(std::cout << c++ << "," << it - voice.events.begin() << "\t|\t" << currentPos << "\t|\t" << meta->barPosition << "\t|\t" << fm::to_string(ev.toString()) << std::endl);
 				ctx_->addEvent(ev);
 				written += meta->position - currentPos;
-				if (allWritten(duration, written)) {
+				if (allWritten(duration, written) && !isLastEvent) {
+					DEBUGX(std::cout << "full" << std::endl);
 					remberPosition(voice, ev, it, originalDuration);
 					break;
 				}

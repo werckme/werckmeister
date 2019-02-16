@@ -77,4 +77,25 @@ namespace sheet {
 			FM_THROW(fm::Exception, "lowercase chords are not allowed: " + fm::to_string(stringValue));
 		}
 	}
+
+	fm::String Event::toString() const 
+	{
+		fm::StringStream ss;
+		switch (type)
+		{
+			case Rest: ss << "Rest"; break;
+			case Degree: ss << "Degree"; break; 
+			case TiedDegree: ss << "TiedDegree"; break;
+			case Note: ss << "Note"; break;
+			case TiedNote: ss << "TiedNote"; break;
+			case Chord: ss << "Chord"; break;
+			case EOB: ss << "EOB"; break; 
+			case Meta: ss << "Meta"; break;
+			case Expression: ss << "Expression"; break;
+			case Unknown: 
+			default:	ss << "Unknown"; break;
+		}
+		ss << "(" << duration << ")";
+		return ss.str();
+	}
 }
