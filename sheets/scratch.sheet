@@ -1,20 +1,23 @@
 @load "./chords/default.chords";
+@load "./styles/countryschlager1.style";
+@load "./pitchmaps/defaultMidiDrumMap.pitchmap";
 
+device: SC1 midi 2;
 
-[
-type: style;
-name: i29;
-part: normal; 
-{
-    <I II III IV V VI VII>2. <I II III IV V VI VII>4  |
-    <I II III IV V VI VII>1  |
-}   
-]
+tempo: 130;
+--           instrument device ch cc pc
+instrumentDef: piano   SC1 2 0 0;
+instrumentDef: guitar  SC1 3 0 25;
+instrumentDef: guitar2 SC1 4 0 26;
+instrumentDef: bass    SC1 5 0 33;
+instrumentDef: slide   SC1 6 8 26;
+instrumentDef: drums   SC1 9 0 32;
+
 
 [
 type: sheet;
 {
-    A-7 | D-7 | G7 | Cmaj7 C7 |
-    Fmaj7 | B07 | E7b9 |
+    /style: countryschlager1 normal/
+    C D E | C D E |  C D E | 
 }
 ]

@@ -1,0 +1,23 @@
+[
+type: style;
+name: simpleJazz34;
+part: normal;
+instrument: piano; 
+{
+    /signature: 3 4/
+    /voicingStrategy: simpleGuitar/
+    <I II III IV V VI VII>1  |
+}   
+]
+
+[
+type: style;
+name: simpleJazz34;
+part: normal;
+instrument: bass; 
+{
+    /signature: 3 4/
+    \ff
+    I,,4 III,, V,, |
+}   
+] 

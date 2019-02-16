@@ -1,0 +1,64 @@
+@load "./chords/default.chords";
+@load "./styles/simpleJazz34.style";
+@load "./pitchmaps/defaultMidiDrumMap.pitchmap";
+
+tempo: 100;
+device: SC1 midi 2;
+
+--          instrument dv ch cc pc
+instrumentDef: piano   SC1 2 0 0;
+instrumentDef: lead    SC1 3 0 11;
+instrumentDef: bass    SC1 7 0 32;
+instrumentDef: drums   SC1 9 0 32;
+
+
+instrumentConf: piano volume 80;
+instrumentConf: lead volume 100;
+instrumentConf: bass volume 80;
+instrumentConf: drums volume 80;
+
+
+
+[
+instrument: lead;
+{
+    /signature: 3 4/
+    \fff
+    g2.     | g'2 f'4  | e'2 c'4   | g2.       | d'4 e' f' | g'2 d'4  |
+    e'2 c'4 | g2.      | d'4 e' f' | e'2 d'4   | e'2 g'4   | c''2 a'4 |
+    g'2 f'4 | e'2 d'4  | g'2.~     | g'2.      | -- :|
+    g2.     | g'2 f'4  | e'2 c'4   | g2.       | d'4 e' f' | g'2 d'4  |
+    e'2 c'4 | g2.      | d'4 e' f' | e'2 d'4   | e'2 g'4   | c''2 a'4 |
+    g'2 f'4 | e'2 d'4  | c'2.~     | c'2 r4    |
+    d'2.    | a'2.     | g'2.      | c'2.      | d'4 e' f' |
+    g'2 a'4 | b'2 g'4  | e'2.      | fis'2.    | c''2.     |
+    b'2 g'4 | e'2.     | a'2 g'4   | f'2 e'4   | d'2 c'4   | b2. |
+    g2.     | g'2 f'4  | e'2 c'4   | g2.       | d'4 e' f' |
+    e'2 d'4 | e'2 c'4  | g2.       | d'4 e' f' | e'2 d'4   |
+    e'2 g'4 | c''2 a'4 | g'2 f'4   | e'2 d'4   | c'2.~     | c'2.|
+}
+]
+
+[
+type: sheet;
+{
+    /signature: 3 4/
+    /style: simpleJazz34 normal/
+    D-7 | G7 | Cmaj7 | Fmaj7 | B07 | E7 |
+    A-7 | Es7 | D-7 | G7 | E-7 | A-7 |
+    D-7 | G7  | E-7 | A7 | -- :|
+    D-7 | G7 | Cmaj7 | Fmaj7 | B07 | E7 |
+    A-7 | Es7 | D-7 | G7 | E-7 | A-7 |
+    D-7 | G7  | Cmaj7 | A7 |
+    -- 96
+    D7  | G7  | E-7 | A-7 | D-7 |
+    G7  | Cmaj7 | Fmaj7 | Fis07 | B7b9 |
+    E-7 | A7 | D-7 --A7 fails with 3/4 see https://github.com/SambaGodschynski/fraumueller/issues/5
+    | D-7 --A7 
+    | D-7 --As7 
+    | G7 |
+    D-7 | G7 | Cmaj7 | Fmaj7 | B07 |
+    E7 | A-7 | Es7 | D-7 | G7 | 
+    E-7 | A-7 | D-7 | G7 | Cmaj7 | Cmaj7 |
+}
+]

@@ -1,0 +1,39 @@
+@load "./chords/default.chords";
+@load "./styles/simpleJazz.style";
+@load "./pitchmaps/defaultMidiDrumMap.pitchmap";
+
+tempo: 140;
+device: SC1 midi 2;
+
+--          instrument dv ch cc pc
+instrumentDef: piano   SC1 2 0 0;
+instrumentDef: lead    SC1 3 0 0;
+instrumentDef: bass    SC1 7 0 32;
+instrumentDef: drums   SC1 9 0 32;
+
+
+instrumentConf: piano volume 80;
+instrumentConf: lead volume 100;
+instrumentConf: bass volume 80;
+instrumentConf: drums volume 80;
+
+
+
+[
+instrument: lead;
+{
+    \fff
+    bes'8 d' c' bes   es' cis' d' f' | r4 r8 es' r f' es'4 | r8 d' es' d' c' a bes d' | 
+    c'8 g bes a r4 r8 bes8~ | bes4 g8 bes d' bes r e' | r es' r ges~ges bes c' d' |
+    f'4 r8 b r as'4 fis'8 | g' es' bes g d' f' r e | -- :|
+}
+]
+
+[
+type: sheet;
+{
+    Bes6 | C-7 F7 | Bes6 G-7 |
+    C-7 F7 | F-7 Bes9 | Es9 As9 |
+    D-7 G7 | C-7 F7 | --:|
+}
+]
