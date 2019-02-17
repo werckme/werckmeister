@@ -145,6 +145,15 @@ namespace sheet {
 			addEvent(tempoEvent, masterTrackId());
 		}
 
+		void MidiContext::metaSetSignature(int upper, int lower)
+		{
+			Base::metaSetSignature(upper, lower);
+			auto meta = voiceMetaData<MidiContext::VoiceMetaData>();
+			auto sigEvent = fm::midi::Event::MetaSignature(upper, lower);
+			sigEvent.absPosition(currentPosition());
+			addEvent(sigEvent, masterTrackId());
+		}
+
 		void MidiContext::metaSetChannel(int channel)
 		{
 			auto meta = trackMetaData<MidiContext::TrackMetaData>();

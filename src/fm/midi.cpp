@@ -4,6 +4,7 @@
 #include <fstream>
 #include <algorithm>
 #include <fm/exception.hpp>
+#include <math.h>
 
 namespace fm {
 	namespace midi {
@@ -261,6 +262,15 @@ namespace fm {
 			auto ev = Event();
 			auto bytes = MetaCreateIntData(static_cast<int>(MicrosecondsPerMinute / bpm));
 			ev.metaData(Tempo, bytes.data(), bytes.size());
+			return ev;
+		}
+	 	Event Event::MetaSignature(Byte nominator, Byte denominator, Byte clocksBetweenMetronomeClick, Byte nth32PerQuarter)
+		{
+			auto ev = Event();
+			static const double log2 = 0.6931471805599453;
+			denominator = static_cast<Byte>( log(denominator) / log2);
+			std::vector<Byte> bytes = {nominator, denominator, clocksBetweenMetronomeClick, nth32PerQuarter };
+			ev.metaData(TimeSignature, bytes.data(), bytes.size());
 			return ev;
 		}
 		Event Event::MetaInstrument(const std::string &name)

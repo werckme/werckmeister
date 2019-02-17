@@ -46,6 +46,7 @@ namespace sheet {
 			virtual void processMeta(const fm::String &command, const std::vector<fm::String> &args) override;
 			virtual void metaSetVolume(int volume) override;
 			virtual void metaSetPan(int val) override;
+			virtual void metaSetSignature(int upper, int lower) override;
 			/**
 			 * sends a custom meta event containing a device name
 			 */
