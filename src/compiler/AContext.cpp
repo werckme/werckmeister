@@ -279,20 +279,17 @@ namespace sheet {
 					meta->waitForTieBuffer.insert({ pitch, meta->lastEventDuration });
 					startEvent(pitch, meta->position);
 				}
-			}
-			else if (meta->pendingTie()) {
-				auto it = meta->waitForTieBuffer.find(pitch);
-				if (it == meta->waitForTieBuffer.end()) {
-					stopTying();
-					return;
-				}
-				stopEvent(pitch, meta->position + meta->lastEventDuration);
-				meta->waitForTieBuffer.erase(it);
 				return;
 			}
-			else {
-				addEvent(pitch, meta->position, meta->lastEventDuration);
+			if (meta->pendingTie()) {
+				auto it = meta->waitForTieBuffer.find(pitch);
+				if (it != meta->waitForTieBuffer.end()) {
+					stopEvent(pitch, meta->position + meta->lastEventDuration);
+					meta->waitForTieBuffer.erase(it);
+					return;
+				}
 			}
+			addEvent(pitch, meta->position, meta->lastEventDuration);
 		}
 
 		void AContext::stopTying()

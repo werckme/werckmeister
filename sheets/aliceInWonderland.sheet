@@ -2,7 +2,7 @@
 @load "./styles/simpleJazz34.style";
 @load "./pitchmaps/defaultMidiDrumMap.pitchmap";
 
-tempo: 100;
+tempo: 150;
 device: SC1 midi 2;
 
 --          instrument dv ch cc pc

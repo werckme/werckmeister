@@ -9,7 +9,7 @@ instrument: drums;
 }
 {
     \fff
-    "rdbell"8 !ff"rdbell"8 "rdbell"8 !ff"rdbell"8    "rdbell"8 !ff"rdbell"8 "rdbell"8 !ff"rdbell"8  |
+    "rdbell"8 !ff"rdbell"16 "rdbell"8 !ff"rdbell"16   "rdbell"8 !ff"rdbell"16 "rdbell"8 !ff"rdbell"16 "rdbell"8 !ff"rdbell"8|
 }
 {
     \f
