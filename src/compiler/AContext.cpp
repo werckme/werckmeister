@@ -265,6 +265,15 @@ namespace sheet {
 			return *result;
 		}
 
+		fm::Ticks AContext::getImlplicitDuration(const Event &ev) const
+		{
+			if (ev.duration > 0) {
+				return ev.duration;
+			}
+			auto meta = voiceMetaData();
+			return meta->lastEventDuration;
+		}
+
 		void AContext::addEvent(const PitchDef &rawPitch, fm::Ticks duration, bool tying)
 		{
 			using namespace fm;

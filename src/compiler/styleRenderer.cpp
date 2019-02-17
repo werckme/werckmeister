@@ -4,7 +4,7 @@
 
 #include <iostream>
 
-#define DEBUGX(x) 
+#define DEBUGX(x)
 
 namespace sheet {
     namespace compiler {
@@ -131,17 +131,16 @@ namespace sheet {
 				bool isLastEvent = (it+1) == voice.events.end();
 				auto ev = *it;
 				auto currentPos = meta->position;
+				ev.duration = ctx_->getImlplicitDuration(ev);
 				auto originalDuration = ev.duration;
 				if (ev.isTimeConsuming() && meta->remainingTime > 0) {
-					if (ev.duration == 0) {
-						ev.duration = meta->lastEventDuration;
-					}
 					ev.duration = ev.duration + meta->remainingTime;
 					meta->remainingTime = 0;
 				}
 				ev.duration = std::min(ev.duration, duration - written);
-				DEBUGX(std::cout << c++ << "," << it - voice.events.begin() << "\t|\t" << currentPos << "\t|\t" << meta->barPosition << "\t|\t" << fm::to_string(ev.toString()) << std::endl);
+				DEBUGX(std::cout << c++ << "," << it - voice.events.begin() << "\t|\t" << currentPos << "\t|\t" << meta->barPosition << "\t|\t" << fm::to_string(ev.toString()) << ":" << meta->lastEventDuration << std::endl);
 				ctx_->addEvent(ev);
+				meta->lastEventDuration = originalDuration;
 				written += meta->position - currentPos;
 				if (allWritten(duration, written) && !isLastEvent) {
 					DEBUGX(std::cout << "full" << std::endl);

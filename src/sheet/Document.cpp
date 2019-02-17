@@ -78,7 +78,7 @@ namespace sheet {
 		}
 	}
 
-	const Document::Styles & Document::styles()
+	Document::Styles & Document::styles()
 	{
 		if (!styles_) {
 			createStylesMap();

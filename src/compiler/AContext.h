@@ -113,6 +113,12 @@ namespace sheet {
 			virtual ASpielanweisungPtr spielanweisung();
 			virtual AInstrumentDef * getInstrumentDef(const fm::String &uname) = 0;
 			virtual fm::Ticks currentPosition() const;
+			/**
+			 * @return the duration of an event. which can be the events duration,
+			 * or if that is zero, the duration of the last valid duration in a track/voice 
+			 * will be returned
+			 */
+			fm::Ticks getImlplicitDuration(const Event &ev) const;
 			/////// meta commands
 			virtual void setMeta(const Event &metaEvent);
 			virtual void processMeta(const fm::String &command, const std::vector<fm::String> &args);

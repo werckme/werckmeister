@@ -33,7 +33,7 @@ namespace sheet {
 		 * creates an absolute path from a path relative to the document.
 		 **/
 		fm::String getAbsolutePath(const fm::String &path);
-		const Styles & styles();
+		Styles & styles();
 	private:
 		Parts * findParts(const fm::String &styleName);
 		StyleType * findStyle(const fm::String &partName, Parts &parts);

@@ -10,31 +10,34 @@ instrumentDef: bass    SC1 5 0 33;
 
 [
 type: style;
-name: simpleJazz44;
+name: simpleJazz34;
 part: normal;
 instrument: piano; 
 {
+    /signature: 3 4/
     /voicingStrategy: simpleGuitar/
-    <I II III IV V VI VII>4 <I II III IV V VI VII>4 <I II III IV V VI VII>4 <I II III IV V VI VII>4  |
+    <I II III IV V VI VII>4 <I II III IV V VI VII>4 <I II III IV V VI VII>4  |
 }   
 ]
 
 
 [
 type: style;
-name: simpleJazz44;
+name: simpleJazz34;
 part: normal;
 instrument: bass; 
 {
+    /signature: 3 4/
     \ff
-    I,,4 III,,4 V,,4 I,,4 |
+    I,,4 III,, V,, |
 }   
 ] 
 
 [
 type: sheet;
 {
-    /style: simpleJazz44 normal/
-    G A B | C D | C D |
+    /signature: 3 4/
+    /style: simpleJazz34 normal/
+    C D | C D | G A B | F G | F G | C E F |
 }
 ]
