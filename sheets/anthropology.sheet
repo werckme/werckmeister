@@ -1,5 +1,5 @@
 @load "./chords/default.chords";
-@load "./styles/simpleJazz.style";
+@load "./styles/bossanova.style";
 @load "./pitchmaps/defaultMidiDrumMap.pitchmap";
 --@load "./pitchmaps/battery3.tight.pitchmap";
 
@@ -9,7 +9,7 @@ device: SC1 midi 2 offset 20;
 
 --          instrument dv ch cc pc
 instrumentDef: piano   SC1 2 0 0;
-instrumentDef: lead    SC1 3 1 17;
+instrumentDef: lead    SC1 3 1 11;
 instrumentDef: bass    SC1 7 0 32;
 instrumentDef: drums   SC1 9 0 32;
 instrumentDef: guitar  SC1 8 0 25;
@@ -43,7 +43,7 @@ instrument: lead;
 [
 type: sheet;
 {
-    /style: simpleJazz normal/
+    /style: bossanova normal/
     Bes6 | C-7 F7 | Bes6 G-7 |
     C-7 F7 | F-7 Bes7 | Es7 As7 |
     D-7 G7 | C-7 F7 | --:|
