@@ -4,7 +4,7 @@
 
 #include <iostream>
 
-#define DEBUGX(x)
+#define DEBUGX(x) 
 
 namespace sheet {
     namespace compiler {
@@ -79,9 +79,9 @@ namespace sheet {
 			fm::Ticks originalEventDuration)
 		{
 			auto meta = ctx_->voiceMetaData();
-			bool hasRemainings = ev.duration != originalEventDuration;
+			bool hasRemainings = ev.duration < originalEventDuration;
 			if (hasRemainings) {
-				meta->remainingTime = originalEventDuration - ev.duration;
+				meta->remainingTime += originalEventDuration - ev.duration;
 			}
 			meta->idxLastWrittenEvent = it - voice.events.begin() + 1;
 		}
@@ -131,16 +131,23 @@ namespace sheet {
 				bool isLastEvent = (it+1) == voice.events.end();
 				auto ev = *it;
 				auto currentPos = meta->position;
-				ev.duration = ctx_->getImlplicitDuration(ev);
-				auto originalDuration = ev.duration;
+				auto originalDuration = ctx_->getImlplicitDuration(ev);
+				if (ev.isTimeConsuming()) {
+					ev.duration = originalDuration;
+				}
 				if (ev.isTimeConsuming() && meta->remainingTime > 0) {
 					ev.duration = ev.duration + meta->remainingTime;
-					meta->remainingTime = 0;
+					ev.duration = std::min(ev.duration, duration - written);
+					// still remainings? keep it
+					meta->remainingTime = std::max(fm::Ticks(0.0), meta->remainingTime - (ev.duration - originalDuration));
+				} else {
+					ev.duration = std::min(ev.duration, duration - written);
 				}
-				ev.duration = std::min(ev.duration, duration - written);
 				DEBUGX(std::cout << c++ << "," << it - voice.events.begin() << "\t|\t" << currentPos << "\t|\t" << meta->barPosition << "\t|\t" << fm::to_string(ev.toString()) << ":" << meta->lastEventDuration << std::endl);
 				ctx_->addEvent(ev);
-				meta->lastEventDuration = originalDuration;
+				if (ev.isTimeConsuming()) {
+					meta->lastEventDuration = originalDuration;
+				}
 				written += meta->position - currentPos;
 				if (allWritten(duration, written) && !isLastEvent) {
 					DEBUGX(std::cout << "full" << std::endl);

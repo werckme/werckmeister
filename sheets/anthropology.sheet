@@ -1,9 +1,9 @@
 @load "./chords/default.chords";
-@load "./styles/bossanova.style";
+@load "./styles/simpleJazz.style";
 @load "./pitchmaps/defaultMidiDrumMap.pitchmap";
 --@load "./pitchmaps/battery3.tight.pitchmap";
 
-tempo: 160;
+tempo: 165;
 device: SC1 midi 2 offset 20;
 --device: BT midi 8;
 
@@ -43,7 +43,7 @@ instrument: lead;
 [
 type: sheet;
 {
-    /style: bossanova normal/
+    /style: simpleJazz normal/
     Bes6 | C-7 F7 | Bes6 G-7 |
     C-7 F7 | F-7 Bes7 | Es7 As7 |
     D-7 G7 | C-7 F7 | --:|

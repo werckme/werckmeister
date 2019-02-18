@@ -392,6 +392,7 @@ namespace sheet {
 			else if (!fm::compareTolerant(meta->barPosition, meta->barLength, fm::Ticks(TickTolerance))) {
 				auto errorInQuaters = -(meta->barLength - meta->barPosition) / fm::PPQ;
 				warn("bar check error (" + std::to_string( errorInQuaters )+ ")");
+				seek(-(meta->barPosition - meta->barLength));
 			}
 			meta->barPosition = 0;
 			++(meta->barCount);
