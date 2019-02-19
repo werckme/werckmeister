@@ -17,6 +17,7 @@
 #include "error.hpp"
 #include <sstream>
 #include "parserSymbols.h"
+#include "parserPositionIt.h"
 
 BOOST_FUSION_ADAPT_STRUCT(
 	sheet::Voice,
@@ -36,12 +37,24 @@ BOOST_FUSION_ADAPT_STRUCT(
 
 BOOST_FUSION_ADAPT_STRUCT(
 	sheet::Event,
+	(unsigned int, sourcePositionBegin)
 	(sheet::Event::Type, type)
 	(sheet::Event::Pitches, pitches)
 	(sheet::Event::Duration, duration)
 	(fm::String, stringValue)
 	(sheet::Event::Args, metaArgs)
 )
+
+namespace {
+	enum EventFields {
+		EvSourcePosBegin,
+		EvType,
+		EvPitches,
+		EvDuration,
+		EvStringValue,
+		EvMetaArgs
+	};
+}
 
 BOOST_FUSION_ADAPT_STRUCT(
 	sheet::TrackInfo,
@@ -158,27 +171,27 @@ namespace sheet {
 					pitchOrAlias_ %= pitch_ | alias_;
 					event_ %= 
 					(
-						attr(Event::Note) 
+						current_pos_.current_pos >> attr(Event::Note)
 						>> (pitchOrAlias_ | ("<" >> +pitchOrAlias_ >> ">"))
 						>> (durationSymbols_ | attr(Event::NoDuration))  
 						>> -(
-								lit("~")[at_c<0>(_val) = Event::TiedNote] 
-								| (lit("`")[at_c<0>(_val) = Event::Meta][at_c<3>(_val) = FM_STRING("vorschlag")])
+								lit("~")[at_c<EvType>(_val) = Event::TiedNote] 
+								| (lit("`")[at_c<EvType>(_val) = Event::Meta][at_c<EvStringValue>(_val) = FM_STRING("vorschlag")])
 							)
 					)
 					|
 					(
-						attr(Event::Degree) 
+						current_pos_.current_pos >>  attr(Event::Degree) 
 						>> (degree_ | ("<" >> +degree_ >> ">"))
 						>> (durationSymbols_ | attr(Event::NoDuration))  
 						>> -(
-								lit("~")[at_c<0>(_val) = Event::TiedDegree] 
-								| (lit("`")[at_c<0>(_val) = Event::Meta][at_c<3>(_val) = FM_STRING("vorschlag")])
+								lit("~")[at_c<EvType>(_val) = Event::TiedDegree] 
+								| (lit("`")[at_c<EvType>(_val) = Event::Meta][at_c<EvStringValue>(_val) = FM_STRING("vorschlag")])
 							)
 					)
 					|
 					(
-						attr(Event::Chord)
+						current_pos_.current_pos >> attr(Event::Chord)
 						>> attr(PitchDef())
 						>> attr(Event::NoDuration) 
 						>> lexeme[
@@ -188,7 +201,7 @@ namespace sheet {
 					)
 					|
 					(
-						"\\" 
+						current_pos_.current_pos >> "\\" 
 						>> attr(Event::Meta) 
 						>> attr(PitchDef()) 
 						>> attr(Event::NoDuration) 
@@ -197,7 +210,7 @@ namespace sheet {
 					)
 					| 
 					(
-						"!" 
+						current_pos_.current_pos >> "!" 
 						>> attr(Event::Meta) 
 						>> attr(PitchDef()) 
 						>> attr(Event::NoDuration) 
@@ -206,20 +219,20 @@ namespace sheet {
 					)
 					| 
 					(
-						"r" 
+						current_pos_.current_pos >> "r" 
 						>> attr(Event::Rest) 
 						>> attr(PitchDef()) 
 						>> (durationSymbols_ | attr(Event::NoDuration)))
 					| 
 					(
-						"|" 
+						current_pos_.current_pos >> "|"
 						>> attr(Event::EOB) 
 						>> attr(PitchDef()) 
 						>> attr(Event::NoDuration)
 					)
 					| 
 					(
-						"/" 
+						current_pos_.current_pos >>  "/" 
 						>> attr(Event::Meta) 
 						>> attr(PitchDef()) 
 						>> attr(Event::NoDuration) 
@@ -233,7 +246,7 @@ namespace sheet {
 
 					createTrackRules(track, voice, trackInfo_);
 					createSheetInfoRules(sheetInfo_);
-					start %= *sheetInfo_ >> *track;
+					start %= current_pos_.save_start_pos >> *sheetInfo_ >> *track;
 
 					auto onError = boost::bind(&handler::errorHandler<Iterator>, _1);
 					on_error<fail>(start, onError);
@@ -250,6 +263,7 @@ namespace sheet {
 				qi::rule<Iterator, Event(), ascii::space_type> event_;
 				qi::rule<Iterator, SheetInfo(), ascii::space_type> sheetInfo_;
 				qi::rule<Iterator, TrackInfo(), ascii::space_type> trackInfo_;
+				CurrentPos<Iterator> current_pos_;
 			};
 
 
@@ -257,6 +271,7 @@ namespace sheet {
 			{
 				using boost::spirit::ascii::space;
 				typedef _SheetParser<fm::String::const_iterator> SheetParserType;
+				
 				SheetParserType g;
 				phrase_parse(defStr.begin(), defStr.end(), g, space, def);
 			}

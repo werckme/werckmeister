@@ -70,6 +70,10 @@ namespace sheet {
 		typedef fm::String Options;
 		typedef std::tuple<PitchDef::Pitch, Options> ChordElements;
 		typedef long double Multiplicator;
+		/**
+		 * where in the source is begins this event 
+		 */
+		unsigned int sourcePositionBegin = 0;
 		ChordElements chordElements() const;
 		fm::String chordDefName() const;
 		Multiplicator multiplicator = 1; // to multiplicate with bar length e.g.: | C(1) | C(0.5) C(0.5) |		

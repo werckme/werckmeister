@@ -157,8 +157,8 @@ namespace sheet {
 			void onLine_(CharType const *begin, CharType const *end)
 			{
 				auto line = Base::withoutComment(begin, end);
-				boost::algorithm::trim(line);
-				if (line[0] == BEGIN_DOCUMENT_CONFIG_LINE_CHAR) {
+				auto linecopy = boost::algorithm::trim_copy(line);
+				if (linecopy[0] == BEGIN_DOCUMENT_CONFIG_LINE_CHAR) {
 					documentConfigs.push_back(line);
 					return;
 				}

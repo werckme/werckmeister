@@ -779,3 +779,34 @@ BOOST_AUTO_TEST_CASE(test_tied_degree_failed)
 	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[2], sheet::Event::Degree, fm::degrees::I, 0, 1.0_N1));
 	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[3], sheet::Event::EOB));
 }
+
+BOOST_AUTO_TEST_CASE(test_event_positions)
+{
+	using namespace fm;
+	using sheet::PitchDef;
+	fm::String text = FM_STRING("[\n\
+	{\n\
+		/ soundselect: 0 0 /\n\
+		/ channel : 1 /\n\
+		c4 d4 e4 f4 | \n\
+	}\n\
+]\n\
+");
+	sheet::compiler::SheetDefParser parser;
+	auto defs = parser.parse(text);
+	int idx = 0;
+	auto ch = text[defs.tracks[0].voices[0].events[idx++].sourcePositionBegin];
+	BOOST_CHECK( ch == '/' );
+	ch = text[defs.tracks[0].voices[0].events[idx++].sourcePositionBegin];
+	BOOST_CHECK( ch == '/' );
+	ch = text[defs.tracks[0].voices[0].events[idx++].sourcePositionBegin];
+	BOOST_CHECK( ch == 'c' );
+	ch = text[defs.tracks[0].voices[0].events[idx++].sourcePositionBegin];
+	BOOST_CHECK( ch == 'd' );
+	ch = text[defs.tracks[0].voices[0].events[idx++].sourcePositionBegin];
+	BOOST_CHECK( ch == 'e' );
+	ch = text[defs.tracks[0].voices[0].events[idx++].sourcePositionBegin];
+	BOOST_CHECK( ch == 'f' );
+	ch = text[defs.tracks[0].voices[0].events[idx++].sourcePositionBegin];
+	BOOST_CHECK( ch == '|' );	
+}
