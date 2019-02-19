@@ -1,0 +1,47 @@
+#ifndef SHEET_PARSER_POSITION_IT
+#define SHEET_PARSER_POSITION_IT
+
+#include <boost/spirit/include/phoenix.hpp>
+#include <boost/spirit/include/qi.hpp>
+#include <boost/spirit/repository/include/qi_iter_pos.hpp>
+#include <string>
+
+
+
+namespace sheet {
+	namespace compiler {
+
+        /**
+         * source @see http://marko-editor.com/articles/position_tracking/
+         */
+        template<typename Iterator>
+        struct CurrentPos {
+            CurrentPos() {
+                namespace phx = boost::phoenix;
+                namespace qi = boost::spirit::qi;
+
+                save_start_pos = qi::omit[boost::spirit::repository::qi::iter_pos[
+                        phx::bind(&CurrentPos::setStartPos, this, qi::_1)]];
+                current_pos = boost::spirit::repository::qi::iter_pos[
+                        qi::_val = phx::bind(&CurrentPos::getCurrentPos, this, qi::_1)];
+            }
+
+            boost::spirit::qi::rule<Iterator> save_start_pos;
+            boost::spirit::qi::rule<Iterator, std::size_t()> current_pos;
+
+            private:
+            void setStartPos(const Iterator &iterator) {
+                start_pos_ = iterator;
+            }
+
+            std::size_t getCurrentPos(const Iterator &iterator) {
+                return std::distance(start_pos_, iterator);
+            }
+
+            Iterator start_pos_;
+        };
+
+    }
+}
+
+#endif
