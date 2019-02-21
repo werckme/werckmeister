@@ -152,17 +152,12 @@ namespace sheet {
 			typedef ASheetTokenizer<Lexer> Base;
 			SheetDefTokenizer();
 			typename Base::Tokens documentConfigs;
-			StringStream tracks;
+			StringStream lines;
 		private:
 			void onLine_(CharType const *begin, CharType const *end)
 			{
 				auto line = Base::withoutComment(begin, end);
-				auto linecopy = boost::algorithm::trim_copy(line);
-				if (linecopy[0] == BEGIN_DOCUMENT_CONFIG_LINE_CHAR) {
-					documentConfigs.push_back(line);
-					return;
-				}
-				tracks << line << std::endl;
+				lines << line << std::endl;
 			}
 		};
 

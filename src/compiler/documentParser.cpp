@@ -71,7 +71,7 @@ namespace sheet {
 
 			void processUsings(DocumentPtr doc)
 			{
-				for (const auto &x : doc->documentConfig.usings)
+				for (const auto &x : doc->sheetDef.documentConfig.usings)
 				{
 					auto path = boost::filesystem::path(x);
 					auto ext = path.extension().string();
@@ -95,15 +95,9 @@ namespace sheet {
 
 			auto res = std::make_shared<Document>();
 			res->path = boost::filesystem::system_complete(path).wstring();
-
-			{
-				DocumentConfigParser configParser;
-				res->documentConfig = configParser.parse(first, last);
-			}
-			{
-				SheetDefParser sheetParser;
-				res->sheetDef = sheetParser.parse(first, last);
-			}
+			
+			SheetDefParser sheetParser;
+			res->sheetDef = sheetParser.parse(first, last);
 
 			processUsings(res);
 			return res;

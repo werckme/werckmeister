@@ -102,12 +102,8 @@ BOOST_AUTO_TEST_CASE(test_sheetDefLexer)
 	LexerType::iterator_type iter = sheetDefToken.begin(first, last);
 	LexerType::iterator_type end = sheetDefToken.end();
 	boost::spirit::lex::tokenize(first, last, sheetDefToken);
-	BOOST_CHECK(sheetDefToken.documentConfigs.size() == 2);
-	for (const auto &x : sheetDefToken.documentConfigs) {
-	//	FM_COUT << x << std::endl;
-	}
-	auto tracks = sheetDefToken.tracks.str();
-	BOOST_CHECK(tracks.length() > 0);
-//	FM_COUT << std::endl << std::endl << tracks << std::endl;
+	auto lines = sheetDefToken.lines.str();
+	BOOST_CHECK(lines.length() > 0);
+//	FM_COUT << std::endl << std::endl << lines << std::endl;
 }
 

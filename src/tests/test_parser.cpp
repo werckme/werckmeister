@@ -114,8 +114,6 @@ BOOST_AUTO_TEST_CASE(test_SheetDefParser)
 	using namespace fm;
 	using sheet::PitchDef;
 	fm::String text = FM_STRING("\
-		@use anything; \n\
-		@or not; \n\
 	--some useless comment\n\
 [--a track\n\
 	{\n\
@@ -171,8 +169,6 @@ BOOST_AUTO_TEST_CASE(test_SheetDefParser_mixed_with_absolute_notes)
 	using namespace fm;
 	using sheet::PitchDef;
 	fm::String text = FM_STRING("\
-		@use anything; \n\
-		@or not; \n\
 	--some useless comment\n\
 [--a track\n\
 	{\n\
@@ -251,8 +247,6 @@ BOOST_AUTO_TEST_CASE(test_SheetDefParser_fail)
 	using namespace fm;
 	using sheet::PitchDef;
 	fm::String text = FM_STRING("\
-		@use anything; \n\
-		@or not; \n\
 	--some useless comment\n\
 [--a track\n\
 	{\n\

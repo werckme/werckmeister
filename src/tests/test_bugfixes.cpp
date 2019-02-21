@@ -103,11 +103,7 @@ BOOST_AUTO_TEST_CASE(issue_8_ausgabe_hat_leange_0)
 	LexerType::iterator_type iter = sheetDefToken.begin(first, last);
 	LexerType::iterator_type end = sheetDefToken.end();
 	boost::spirit::lex::tokenize(first, last, sheetDefToken);
-	BOOST_CHECK(sheetDefToken.documentConfigs.size() == 2);
-	// for (const auto &x : sheetDefToken.documentConfigs) {
-	// 	FM_COUT << x << std::endl;
-	// }
-	auto tracks = sheetDefToken.tracks.str();
+	auto tracks = sheetDefToken.lines.str();
 	BOOST_CHECK(tracks.length() > 0);
 	//FM_COUT << std::endl << std::endl << tracks << std::endl;
 }

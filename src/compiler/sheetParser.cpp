@@ -18,6 +18,12 @@
 #include <sstream>
 #include "parserSymbols.h"
 #include "parserPositionIt.h"
+#include "sheet/DocumentConfig.h"
+
+BOOST_FUSION_ADAPT_STRUCT(
+	sheet::DocumentConfig,
+	(sheet::DocumentConfig::Usings, usings)
+)
 
 BOOST_FUSION_ADAPT_STRUCT(
 	sheet::Voice,
@@ -76,6 +82,7 @@ BOOST_FUSION_ADAPT_STRUCT(
 
 BOOST_FUSION_ADAPT_STRUCT(
 	sheet::SheetDef,
+	(sheet::DocumentConfig, documentConfig)
 	(sheet::SheetDef::SheetInfos, sheetInfos)
 	(sheet::SheetDef::Tracks, tracks)
 )
@@ -141,8 +148,24 @@ namespace sheet {
 			struct _SheetParser : public ASheetParser,
 							      qi::grammar<Iterator, SheetDef(), ascii::space_type>
 			{
+				void initDocumentConfigParser()
+				{
+					using qi::int_;
+					using qi::lit;
+					using qi::double_;
+					using qi::lexeme;
+					using ascii::char_;
+					using qi::on_error;
+					using qi::fail;
+					quoted_string.name("quoted string");
 
-				_SheetParser() : _SheetParser::base_type(start, "sheet")
+					quoted_string %= lexeme['"' > +(char_ - '"') > '"'];
+					using_ %= "@load" > quoted_string > ";";
+					usings_ %= *using_;
+					documentConfig_ %= usings_;
+				}
+
+				void initSheetParser()
 				{
 					using qi::int_;
 					using qi::lit;
@@ -246,7 +269,20 @@ namespace sheet {
 
 					createTrackRules(track, voice, trackInfo_);
 					createSheetInfoRules(sheetInfo_);
-					start %= current_pos_.save_start_pos >> *sheetInfo_ >> *track;
+				}
+
+				_SheetParser() : _SheetParser::base_type(start, "sheet")
+				{
+					using qi::on_error;
+					using qi::fail;
+					using qi::attr;
+					initSheetParser();
+					initDocumentConfigParser();
+
+					start %= current_pos_.save_start_pos 
+							>> (documentConfig_ | attr(DocumentConfig()))
+							>> *sheetInfo_ 
+							>> *track;
 
 					auto onError = boost::bind(&handler::errorHandler<Iterator>, _1);
 					on_error<fail>(start, onError);
@@ -263,6 +299,10 @@ namespace sheet {
 				qi::rule<Iterator, Event(), ascii::space_type> event_;
 				qi::rule<Iterator, SheetInfo(), ascii::space_type> sheetInfo_;
 				qi::rule<Iterator, TrackInfo(), ascii::space_type> trackInfo_;
+				qi::rule<Iterator, DocumentConfig(), ascii::space_type> documentConfig_;
+				qi::rule<Iterator, fm::String(), ascii::space_type> quoted_string;
+				qi::rule<Iterator, fm::String(), ascii::space_type> using_;
+				qi::rule<Iterator, DocumentConfig::Usings, ascii::space_type> usings_;
 				CurrentPos<Iterator> current_pos_;
 			};
 
@@ -280,13 +320,12 @@ namespace sheet {
 
 		SheetDef SheetDefParser::parse(fm::CharType const* first, fm::CharType const* last)
 		{
-
 			SheetDef result;
 			SheetDefTokenizer<LexerType> sheetDefTok;
 			LexerType::iterator_type iter = sheetDefTok.begin(first, last);
 			LexerType::iterator_type end = sheetDefTok.end();
 			boost::spirit::lex::tokenize(first, last, sheetDefTok);
-			_parse(sheetDefTok.tracks.str(), result);
+			_parse(sheetDefTok.lines.str(), result);
 			return result;
 		}
 	}

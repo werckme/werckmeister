@@ -2,7 +2,6 @@
 #define SHEET_DOCUMENT_HPP
 
 #include <fm/common.hpp>
-#include "DocumentConfig.h"
 #include "ChordDef.h"
 #include "SheetDef.h"
 #include "Pitchmap.h"
@@ -22,7 +21,6 @@ namespace sheet {
 		typedef std::unordered_map<PartName, Style> Parts;
 		typedef std::unordered_map<StyleName, Parts> Styles;
 		fm::String path;
-		DocumentConfig documentConfig;
 		SheetDef sheetDef;
 		ChordDefs chordDefs;
 		PitchmapDefs pitchmapDefs;

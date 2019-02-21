@@ -5,6 +5,7 @@
 #include "Track.h"
 #include "Event.h"
 #include <vector>
+#include "DocumentConfig.h"
 
 namespace sheet {
 
@@ -17,6 +18,7 @@ namespace sheet {
 	struct SheetDef {
 		typedef std::vector<Track> Tracks;
 		typedef std::vector<SheetInfo> SheetInfos;
+		DocumentConfig documentConfig;
 		SheetInfos sheetInfos;
 		Tracks tracks;
 	};
