@@ -779,8 +779,12 @@ BOOST_AUTO_TEST_CASE(test_event_positions)
 	using namespace fm;
 	using sheet::PitchDef;
 	fm::String text = FM_STRING("[\n\
+	-- a comment \n\
+	-- a comment \n\
+\n\
+	-- a comment \n\
 	{\n\
-		/ soundselect: 0 0 /\n\
+		/ soundselect: 0 0/ -- another comment\n\
 		/ channel : 1 /\n\
 		c4 d4 e4 f4 | \n\
 	}\n\

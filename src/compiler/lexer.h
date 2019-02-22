@@ -39,18 +39,29 @@ namespace sheet {
 				container.push_back(StringType(begin, end));
 			}
 
-			StringType withoutComment(CharType const *begin, CharType const *end)
+			/**
+			 *  overrides a comment char with an space.
+			 * we do so because we don't want to change the original char positions
+			 * of any events
+			 * @see https://github.com/SambaGodschynski/fraumueller/issues/47
+			 */
+			void removeComments(StringType &line)
 			{
-				auto it = begin;
+				auto it = line.begin();
+				auto end = line.end();
+				bool clearing = false;
 				while (it != end) {
 					if (*it == '-') {
 						if ((it + 1) != end && *(it + 1) == '-') {
-							break;
+							clearing = true;
 						}
+					}
+					if (clearing) {
+						*it = ' ';
 					}
 					++it;
 				}
-				return StringType(begin, it);
+				
 			}
 
 			ASheetTokenizer()
@@ -156,7 +167,8 @@ namespace sheet {
 		private:
 			void onLine_(CharType const *begin, CharType const *end)
 			{
-				auto line = Base::withoutComment(begin, end);
+				StringType line(begin, end);
+				Base::removeComments(line);
 				lines << line << std::endl;
 			}
 		};
@@ -168,8 +180,6 @@ namespace sheet {
 			this->self
 				= 
 				  Base::line[onLine]
-				| Base::comment
-				| Base::eol
 				| Base::any
 				;
 		}

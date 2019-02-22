@@ -76,12 +76,14 @@ BOOST_AUTO_TEST_CASE(test_sheetDefLexer)
 @using 'Chords1.chdef';\n\
 @using 'simplePianoStyle.style';\n\
 \n\
-	[\n\
+	[-- xyz\n\
 	{\n\
 		/ soundselect: 0 0 /\n\
 			/ channel : 1 /\n\
 			c4 d4 e4 f4 | c4 d4 e4 f4 |\n\
 	}\n\
+\n\
+\n\
 	{\n\
 		f4 f4 f4 f4 | h4 h4 h4 h4 |\n\
 	}\n\
@@ -104,6 +106,6 @@ BOOST_AUTO_TEST_CASE(test_sheetDefLexer)
 	boost::spirit::lex::tokenize(first, last, sheetDefToken);
 	auto lines = sheetDefToken.lines.str();
 	BOOST_CHECK(lines.length() > 0);
-//	FM_COUT << std::endl << std::endl << lines << std::endl;
+	//FM_COUT << std::endl << std::endl << lines << std::endl;
 }
 
