@@ -128,4 +128,38 @@ namespace sheet {
 		}
 		return &(it->second);
 	}
+
+	Event::SourceId Document::addSource(const Path &path)
+	{
+		auto sourceId = findSourceId(path);
+		if (sourceId != Event::UndefinedSource) {
+			return sourceId;
+		}
+		sourceId = getNextSourceId();
+		sources.insert({sourceId, path});
+		return sourceId;
+	}
+
+	Document::Path Document::findSourcePath(Event::SourceId id) const
+	{
+		auto it = sources.left.find(id);
+		if (it == sources.left.end()) {
+			return nullptr;
+		}
+		return it->second;
+	}
+
+	Event::SourceId Document::findSourceId(const Path &path) const
+	{
+		auto it = sources.right.find(path);
+		if (it == sources.right.end()) {
+			return Event::UndefinedSource;
+		}
+		return it->second;
+	}
+
+	Event::SourceId Document::getNextSourceId() const
+	{
+		return sources.size() + 1;
+	}
 }

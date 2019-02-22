@@ -50,6 +50,7 @@ namespace sheet {
 	struct Event {
 		enum {
 			NoDuration = 0,
+			UndefinedSource = 0
 		};
 		enum Type { 
 			Unknown,
@@ -70,6 +71,8 @@ namespace sheet {
 		typedef fm::String Options;
 		typedef std::tuple<PitchDef::Pitch, Options> ChordElements;
 		typedef long double Multiplicator;
+		typedef unsigned int SourceId;
+		SourceId sourceId = UndefinedSource;
 		/**
 		 * where in the source is begins this event 
 		 */

@@ -44,6 +44,7 @@ BOOST_FUSION_ADAPT_STRUCT(
 BOOST_FUSION_ADAPT_STRUCT(
 	sheet::Event,
 	(unsigned int, sourcePositionBegin)
+	(sheet::Event::SourceId, sourceId)
 	(sheet::Event::Type, type)
 	(sheet::Event::Pitches, pitches)
 	(sheet::Event::Duration, duration)
@@ -54,6 +55,7 @@ BOOST_FUSION_ADAPT_STRUCT(
 namespace {
 	enum EventFields {
 		EvSourcePosBegin,
+		EvSourceId,
 		EvType,
 		EvPitches,
 		EvDuration,
@@ -194,7 +196,9 @@ namespace sheet {
 					pitchOrAlias_ %= pitch_ | alias_;
 					event_ %= 
 					(
-						current_pos_.current_pos >> attr(Event::Note)
+						current_pos_.current_pos 
+						>> attr(sourceId_)
+						>> attr(Event::Note)
 						>> (pitchOrAlias_ | ("<" >> +pitchOrAlias_ >> ">"))
 						>> (durationSymbols_ | attr(Event::NoDuration))  
 						>> -(
@@ -204,7 +208,9 @@ namespace sheet {
 					)
 					|
 					(
-						current_pos_.current_pos >>  attr(Event::Degree) 
+						current_pos_.current_pos 
+						>> attr(sourceId_)
+						>>  attr(Event::Degree) 
 						>> (degree_ | ("<" >> +degree_ >> ">"))
 						>> (durationSymbols_ | attr(Event::NoDuration))  
 						>> -(
@@ -214,7 +220,9 @@ namespace sheet {
 					)
 					|
 					(
-						current_pos_.current_pos >> attr(Event::Chord)
+						current_pos_.current_pos 
+						>> attr(sourceId_)
+						>> attr(Event::Chord)
 						>> attr(PitchDef())
 						>> attr(Event::NoDuration) 
 						>> lexeme[
@@ -224,7 +232,9 @@ namespace sheet {
 					)
 					|
 					(
-						current_pos_.current_pos >> "\\" 
+						current_pos_.current_pos 
+						>> attr(sourceId_)
+						>> "\\" 
 						>> attr(Event::Meta) 
 						>> attr(PitchDef()) 
 						>> attr(Event::NoDuration) 
@@ -233,7 +243,9 @@ namespace sheet {
 					)
 					| 
 					(
-						current_pos_.current_pos >> "!" 
+						current_pos_.current_pos 
+						>> attr(sourceId_)
+						>> "!" 
 						>> attr(Event::Meta) 
 						>> attr(PitchDef()) 
 						>> attr(Event::NoDuration) 
@@ -242,20 +254,26 @@ namespace sheet {
 					)
 					| 
 					(
-						current_pos_.current_pos >> "r" 
+						current_pos_.current_pos 
+						>> attr(sourceId_)
+						>> "r" 
 						>> attr(Event::Rest) 
 						>> attr(PitchDef()) 
 						>> (durationSymbols_ | attr(Event::NoDuration)))
 					| 
 					(
-						current_pos_.current_pos >> "|"
+						current_pos_.current_pos 
+						>> attr(sourceId_)
+						>> "|"
 						>> attr(Event::EOB) 
 						>> attr(PitchDef()) 
 						>> attr(Event::NoDuration)
 					)
 					| 
 					(
-						current_pos_.current_pos >>  "/" 
+						current_pos_.current_pos 
+						>> attr(sourceId_)
+						>>  "/" 
 						>> attr(Event::Meta) 
 						>> attr(PitchDef()) 
 						>> attr(Event::NoDuration) 
@@ -271,7 +289,9 @@ namespace sheet {
 					createSheetInfoRules(sheetInfo_);
 				}
 
-				_SheetParser() : _SheetParser::base_type(start, "sheet")
+				_SheetParser(Event::SourceId sourceId = Event::UndefinedSource) : 
+					 _SheetParser::base_type(start, "sheet")
+					,sourceId_(sourceId)
 				{
 					using qi::on_error;
 					using qi::fail;
@@ -288,6 +308,8 @@ namespace sheet {
 					on_error<fail>(start, onError);
 
 				}
+			private:
+				Event::SourceId sourceId_ = Event::UndefinedSource;
 				qi::rule<Iterator, PitchDef(), ascii::space_type> degree_;
 				qi::rule<Iterator, SheetDef(), ascii::space_type> start;
 				qi::rule<Iterator, PitchDef(), ascii::space_type> pitch_;
@@ -307,25 +329,25 @@ namespace sheet {
 			};
 
 
-			void _parse(const fm::String &defStr, SheetDef &def)
+			void _parse(const fm::String &defStr, SheetDef &def, Event::SourceId sourceId)
 			{
 				using boost::spirit::ascii::space;
 				typedef _SheetParser<fm::String::const_iterator> SheetParserType;
 				
-				SheetParserType g;
+				SheetParserType g(sourceId);
 				phrase_parse(defStr.begin(), defStr.end(), g, space, def);
 			}
 		}
 
 
-		SheetDef SheetDefParser::parse(fm::CharType const* first, fm::CharType const* last)
+		SheetDef SheetDefParser::parse(fm::CharType const* first, fm::CharType const* last, Event::SourceId sourceId)
 		{
 			SheetDef result;
 			SheetDefTokenizer<LexerType> sheetDefTok;
 			LexerType::iterator_type iter = sheetDefTok.begin(first, last);
 			LexerType::iterator_type end = sheetDefTok.end();
 			boost::spirit::lex::tokenize(first, last, sheetDefTok);
-			_parse(sheetDefTok.lines.str(), result);
+			_parse(sheetDefTok.lines.str(), result, sourceId);
 			return result;
 		}
 	}

@@ -53,13 +53,14 @@ namespace sheet {
 			void useStyleDef(DocumentPtr doc, const fm::String &path)
 			{
 				auto apath = getAbsolutePath(doc, path);
+				auto sourceId = doc->addSource(apath);
 				auto filestream = fm::getWerckmeister().openResource(apath);
 				fm::StreamBuffIterator begin(*filestream);
 				fm::StreamBuffIterator end;
 				fm::String documentText(begin, end);
 				SheetDefParser sheetDefParser;
 				auto name = boost::filesystem::path(path).stem().wstring();
-				auto sheetDef = sheetDefParser.parse(documentText);
+				auto sheetDef = sheetDefParser.parse(documentText, sourceId);
 				append(doc, sheetDef);
 			}
 			typedef std::function<void(DocumentPtr, const fm::String&)> ExtHandler;
@@ -95,9 +96,9 @@ namespace sheet {
 
 			auto res = std::make_shared<Document>();
 			res->path = boost::filesystem::system_complete(path).wstring();
-			
+			auto sourceId = res->addSource(res->path);
 			SheetDefParser sheetParser;
-			res->sheetDef = sheetParser.parse(first, last);
+			res->sheetDef = sheetParser.parse(first, last, sourceId);
 
 			processUsings(res);
 			return res;

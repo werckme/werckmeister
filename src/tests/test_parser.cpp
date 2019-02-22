@@ -808,3 +808,23 @@ BOOST_AUTO_TEST_CASE(test_event_positions)
 	ch = text[defs.tracks[0].voices[0].events[idx++].sourcePositionBegin];
 	BOOST_CHECK( ch == '|' );	
 }
+
+BOOST_AUTO_TEST_CASE(test_source_id)
+{
+	using namespace fm;
+	using sheet::PitchDef;
+	fm::String text = FM_STRING("[\n\
+	{\n\
+		/ soundselect: 0 0/ -- another comment\n\
+		/ channel : 1 /\n\
+		c4 d4 e4 f4 | \n\
+	}\n\
+]\n\
+");
+	sheet::compiler::SheetDefParser parser;
+	auto defs = parser.parse(text, 101);
+	for(const auto &event : defs.tracks[0].voices[0].events) {
+		BOOST_CHECK( event.sourceId == 101 );
+	}
+	
+}

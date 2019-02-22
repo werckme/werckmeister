@@ -8,6 +8,7 @@
 #include <unordered_map>
 #include "sheet/StyleDefServer.h"
 #include <memory>
+#include <boost/bimap.hpp>
 
 namespace sheet {
 	class Document : public IStyleDefServer {
@@ -20,10 +21,13 @@ namespace sheet {
 		typedef IStyleDefServer::Style Style;
 		typedef std::unordered_map<PartName, Style> Parts;
 		typedef std::unordered_map<StyleName, Parts> Styles;
+		typedef fm::String Path;
+		typedef boost::bimap<Event::SourceId, Path> Sources;
 		fm::String path;
 		SheetDef sheetDef;
 		ChordDefs chordDefs;
 		PitchmapDefs pitchmapDefs;
+		Sources sources;
 		StyleType getStyle(const fm::String &name, const fm::String &part = FM_STRING("?")) override;
 		IStyleDefServer::ConstChordValueType getChord(const fm::String &name) override;
 		IStyleDefServer::ConstPitchDefValueType getAlias(fm::String alias) override;
@@ -32,11 +36,15 @@ namespace sheet {
 		 **/
 		fm::String getAbsolutePath(const fm::String &path);
 		Styles & styles();
+		Event::SourceId addSource(const Path &path);
+		Path findSourcePath(Event::SourceId id) const;
+		Event::SourceId findSourceId(const Path &path) const;
 	private:
 		Parts * findParts(const fm::String &styleName);
 		StyleType * findStyle(const fm::String &partName, Parts &parts);
 		std::unique_ptr<Styles> styles_;
 		void createStylesMap();
+		Event::SourceId getNextSourceId() const;
 	};
 }
 

@@ -52,6 +52,7 @@ SET (SRC_FETZER_TESTS
     tests/longString1.cpp
     tests/test_bugfixes.cpp
     tests/testhelper.cpp
+    tests/test_document.cpp
 )
 
 ## PLAYER

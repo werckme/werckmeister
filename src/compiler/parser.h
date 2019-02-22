@@ -35,11 +35,11 @@ namespace sheet {
 
 		struct SheetDefParser {
 
-			SheetDef parse(fm::CharType const* first, fm::CharType const* last);
-			SheetDef parse(const fm::String &str)
+			SheetDef parse(fm::CharType const* first, fm::CharType const* last, Event::SourceId sourceId = Event::UndefinedSource);
+			SheetDef parse(const fm::String &str, Event::SourceId sourceId = Event::UndefinedSource)
 			{
 				fm::CharType const* cstr = str.c_str();
-				return parse(cstr, cstr + str.length());
+				return parse(cstr, cstr + str.length(), sourceId);
 			}
 		};
 		struct DocumentConfigParser {
