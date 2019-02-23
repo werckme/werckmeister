@@ -36,13 +36,6 @@
 typedef int MidiOutputId;
 typedef std::unordered_map<fm::String, time_t> Timestamps;
 
-void onCompilerError(const std::exception &ex) {
-	std::cout << ex.what() << std::endl;
-}
-
-void onCompilerError() {
-	std::cout << "unkown error" << std::endl;
-}
 
 struct Settings {
 	typedef boost::program_options::variables_map Variables;
@@ -179,7 +172,7 @@ void printElapsedTime(fm::Ticks elapsed)
 
 	std::string strOut = "[" + str(format("%.3f") % (elapsed / (double)fm::PPQ)) + "]";
 	static std::string lastOutput;
-	for (size_t i=0; i<lastOutput.size(); ++i) {
+	for (std::size_t i=0; i<lastOutput.size(); ++i) {
 		std::cout << "\b";
 	}
 	std::cout 
@@ -196,14 +189,19 @@ void updatePlayer(fmapp::Midiplayer &player, const std::string &inputfile)
 	try {
 		player.midi(sheet::processFile(inputfile));
 	}
+	catch (const fm::Exception &ex)
+	{
+		sheet::onCompilerError(ex);
+		throw;
+	}
 	catch (const std::exception &ex)
 	{
-		onCompilerError(ex);
+		sheet::onCompilerError(ex);
 		throw;
 	}
 	catch (...)
 	{
-		onCompilerError();
+		sheet::onCompilerError();
 		throw;
 	}
 	player.play(pos);
@@ -314,13 +312,17 @@ int main(int argc, const char** argv)
 
 		return 0;
 	}
+	catch (const fm::Exception &ex)
+	{
+		sheet::onCompilerError(ex);
+	}
 	catch (const std::exception &ex)
 	{
-		onCompilerError(ex);
+		sheet::onCompilerError(ex);
 	}
 	catch (...)
 	{
-		onCompilerError();
+		sheet::onCompilerError();
 	}
 	return -1;
 }

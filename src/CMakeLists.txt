@@ -6,6 +6,7 @@ SET (SRC_FETZER_LIB
     fm/werckmeister.cpp
     fm/midi.cpp
     fm/common.cpp
+    fm/exception.cpp
     fm/config/configServer.cpp
     compiler/compiler.cpp
     compiler/chordDefParser.cpp
@@ -25,6 +26,7 @@ SET (SRC_FETZER_LIB
     compiler/voicings/SimpleGuitar.cpp
     compiler/metaData.cpp
     compiler/styleRenderer.cpp
+    compiler/error.cpp
     sheet/Event.cpp
     sheet/Document.cpp
     sheet/ChordDef.cpp

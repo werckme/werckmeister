@@ -121,6 +121,9 @@ namespace sheet {
 			fm::Ticks getImlplicitDuration(const Event &ev) const;
 			/////// meta commands
 			virtual void setMeta(const Event &metaEvent);
+			/**
+			 * @throw if command not handled
+			 */
 			virtual void processMeta(const fm::String &command, const std::vector<fm::String> &args);
 			
 			/**

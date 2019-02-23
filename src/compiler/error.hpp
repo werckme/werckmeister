@@ -7,9 +7,14 @@
 #include <boost/spirit/home/support/info.hpp>
 #include <fm/exception.hpp>
 #include <string>
+#include <boost/exception/info.hpp>
 
 namespace sheet {
+	struct Event;
+	class Document;
 	namespace compiler {
+		typedef boost::error_info<struct tag_sheet_event, Event> ex_sheet_event;
+		typedef boost::error_info<struct tag_sheet_document, std::shared_ptr<Document>> ex_sheet_document;
 		class Exception : public fm::Exception
 		{
 		typedef fm::Exception Base;
@@ -19,6 +24,7 @@ namespace sheet {
 				: Base(what_, filename, line)
 			{}
 			virtual ~Exception() throw () = default;
+			virtual std::string toString() const override;
 		};
 
 		namespace handler {

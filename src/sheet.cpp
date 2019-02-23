@@ -37,4 +37,17 @@ namespace sheet {
         auto doc = docparser.parse(fm::to_wstring(file));
         return doc;
     }
+
+    void onCompilerError(const fm::Exception &ex)
+    {
+        std::cerr << ex.toString() << std::endl;
+    }
+
+    void onCompilerError(const std::exception &ex) {
+	    std::cerr << ex.what() << std::endl;
+    }
+
+    void onCompilerError() {
+        std::cerr << "unkown error" << std::endl;
+    }
 }

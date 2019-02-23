@@ -331,7 +331,14 @@ namespace sheet {
 		{
 			auto meta = voiceMetaData();
 			++(meta->eventCount);
-			_addEvent(this, &ev);
+			try {
+				_addEvent(this, &ev);
+			} catch(fm::Exception &ex) {
+				ex << ex_sheet_event(ev);
+				throw;
+			} catch(...) {
+				throw;
+			}
 		}
 
 		void AContext::addEvent(const Event::Pitches &pitches, fm::Ticks duration, bool tying)
@@ -409,47 +416,68 @@ namespace sheet {
 		void AContext::processMeta(const fm::String &command, const std::vector<fm::String> &args)
 		{
 			try {
+				if (command == SHEET_META__TRACK_META_KEY_TYPE
+				|| command == SHEET_META__TRACK_META_KEY_NAME
+				|| command == SHEET_META__TRACK_META_KEY_PART) 
+				{
+					return;
+				}
+							
 				if (command == SHEET_META__SET_STYLE) {
 					metaSetStyle(getArgument<fm::String>(args, 0), getArgument<fm::String>(args, 1));
+					return;
 				}
 				if (command == SHEET_META__SET_EXPRESSION) {
 					metaSetExpression(getArgument<fm::String>(args, 0));
+					return;
 				}
 				if (command == SHEET_META__SET_SINGLE_EXPRESSION) {
 					metaSetSingleExpression(getArgument<fm::String>(args, 0));
+					return;
 				}
 				if (command == SHEET_META__SET_TEMPO) { 
 					metaSetTempo(getArgument<fm::BPM>(args, 0));
+					return;
 				}
 				if (command == SHEET_META__SET_VOICING_STRATEGY) {
 					metaSetVoicingStrategy(getArgument<fm::String>(args, 0), args);
+					return;
 				}
 				if (command == SHEET_META__SET_SPIELANWEISUNG) {
 					metaSetSpielanweisung(getArgument<fm::String>(args, 0), args);
+					return;
 				}	
 				if (command == SHEET_META__SET_SPIELANWEISUNG_ONCE) {
 					metaSetSpielanweisungOnce(getArgument<fm::String>(args, 0), args);
+					return;
 				}	
 				if (command == SHEET_META__SET_MOD) {
 					metaSetModification(getArgument<fm::String>(args, 0), args);
+					return;
 				}	
 				if (command == SHEET_META__SET_MOD_ONCE) {
 					metaSetModificationOnce(getArgument<fm::String>(args, 0), args);
+					return;
 				}
 				if (command == SHEET_META__SET_SIGNATURE) {
 					metaSetSignature(getArgument<int>(args, 0), getArgument<int>(args, 1));
+					return;
 				}
 				if (command == SHEET_META__SET_DEVICE) {
 					metaAddDevice(getArgument<fm::String>(args, 0), args);
+					return;
 				}	
 				if (command == SHEET_META__SET_VOLUME) {
 					metaSetVolume(getArgument<int>(args, 0));
+					return;
 				}
 				if (command == SHEET_META__SET_PAN) {
 					metaSetPan(getArgument<int>(args, 0));
+					return;
 				}
 				if (command == SHEET_META__INSTRUMENT) {
 					metaSetInstrument(getArgument<fm::String>(args, 0));
+					return;
 				}
 			} catch(const std::exception &ex) {
 				FM_THROW(Exception, "failed to process " + fm::to_string(command)
@@ -457,7 +485,8 @@ namespace sheet {
 			}	
 			catch(...) {
 				FM_THROW(Exception, "failed to process " + fm::to_string(command));
-			}												
+			}
+			FM_THROW(Exception, "command not found: " + fm::to_string(command));								
 		}
 		void AContext::setMeta(const Event &metaEvent)
 		{

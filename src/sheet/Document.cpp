@@ -144,7 +144,7 @@ namespace sheet {
 	{
 		auto it = sources.left.find(id);
 		if (it == sources.left.end()) {
-			return nullptr;
+			return Document::Path();
 		}
 		return it->second;
 	}

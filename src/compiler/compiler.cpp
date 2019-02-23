@@ -20,14 +20,21 @@ namespace sheet {
 		}
 		void Compiler::compile(DocumentPtr document)
 		{
-			this->document_ = document;
-			auto ctx = context();
-			ctx->processMeta(document->sheetDef.sheetInfos, 
-				[](const auto &x) { return x.name; }, 
-				[](const auto &x) { return x.args; }
-			);
-			renderChordTrack();
-			renderTracks();
+			try {
+				this->document_ = document;
+				auto ctx = context();
+				ctx->processMeta(document->sheetDef.sheetInfos, 
+					[](const auto &x) { return x.name; }, 
+					[](const auto &x) { return x.args; }
+				);
+				renderChordTrack();
+				renderTracks();
+			} catch (fm::Exception &ex) {
+				ex << ex_sheet_document(document);
+				throw;
+			} catch(...) {
+				throw;
+			}
 		}
 
 		void Compiler::renderTracks()

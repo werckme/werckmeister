@@ -251,7 +251,7 @@ namespace sheet {
 			if (instrumentDef == nullptr) {
 				FM_THROW(Exception, "instrumentDef not found: " + fm::to_string(uname));
 			}
-			for (size_t idx = 1; idx < args.size(); idx+=2) {
+			for (std::size_t idx = 1; idx < args.size(); idx+=2) {
 				auto propertyName = getArgument<fm::String>(args, idx);
 				if (propertyName == SHEET_META__SET_INSTRUMENT_CONFIG_VOLUME) {
 					instrumentDef->volume = getArgument<int>(args, idx+1);
@@ -327,17 +327,18 @@ namespace sheet {
 
 		void MidiContext::processMeta(const fm::String &command, const std::vector<fm::String> &args)
 		{
-			Base::processMeta(command, args);
 			try {
 				if (command == SHEET_META__MIDI_CHANNEL) {
 					metaSetChannel(getArgument<int>(args, 0));
+					return;
 				}
 				if (command == SHEET_META__MIDI_SOUNDSELECT) {
 					metaSoundSelect(getArgument<int>(args, 0), getArgument<int>(args, 1));
+					return;
 				}
 				if (command == SHEET_META__MIDI_INSTRUMENT_DEF) {
 					auto name = getArgument<fm::String>(args, 0);
-					size_t numArgs = args.size();
+					std::size_t numArgs = args.size();
 					if (numArgs == 4) {
 						metaInstrument(getArgument<fm::String>(args, 0), getArgument<int>(args, 1), getArgument<int>(args, 2), getArgument<int>(args, 3));
 						return;
@@ -350,6 +351,7 @@ namespace sheet {
 				}
 				if (command == SHEET_META__SET_INSTRUMENT_CONFIG) {
 					metaSetInstrumentConfig(getArgument<fm::String>(args, 0), args);
+					return;
 				}
 			} catch(const std::exception &ex) {
 				FM_THROW(Exception, "failed to process " + fm::to_string(command)
@@ -357,7 +359,8 @@ namespace sheet {
 			}	
 			catch(...) {
 				FM_THROW(Exception, "failed to process " + fm::to_string(command));
-			}	   
+			}
+			Base::processMeta(command, args);	
 		}
 		AContext::TrackId MidiContext::createMasterTrack()
 		{

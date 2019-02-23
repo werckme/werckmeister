@@ -96,13 +96,17 @@ int main(int argc, const char** argv)
 		saveMidi(midi, outfile);
 		return 0;
 	}
+	catch (const fm::Exception &ex)
+	{
+		sheet::onCompilerError(ex);
+	}
 	catch (const std::exception &ex)
 	{
-		std::cout << ex.what() << std::endl;
+		sheet::onCompilerError(ex);
 	}
 	catch (...)
 	{
-		std::cout << "unkown error" << std::endl;
+		sheet::onCompilerError();
 	}
 	return -1;
 }
