@@ -11,16 +11,18 @@ namespace sheet {
 	namespace compiler {
 
 		namespace {
-			LineAndPosition<fm::String> _lineAndPos(const fm::String &file, int sourcePos)
+			auto _lineAndPos(const fm::String &file, int sourcePos)
 			{
 				try {
 					auto source = fm::getWerckmeister().openResource(file);
 					fm::StreamBuffIterator end;
 					fm::StreamBuffIterator begin(*source.get());
 					fm::String sourceStr(begin, end);
-					return getLineAndPosition(sourceStr, sourcePos, false);
+					auto result = getLineAndPosition(sourceStr, sourcePos, false);
+					auto lineNr = getNumberOfLines(sourceStr, sourcePos);
+					return std::make_tuple(std::get<0>(result), std::get<1>(result), lineNr);
 				} catch(...) {
-					return LineAndPosition<fm::String>(fm::String(), -1);
+					return std::make_tuple(fm::String(), -1, -1);
 				}
 			}
 		}
@@ -37,10 +39,11 @@ namespace sheet {
 			auto sheetfile = document->findSourcePath(ev->sourceId);
 			fm::String errorLine;
 			int errorPosition = -1;
-			std::tie(errorLine, errorPosition) = _lineAndPos(sheetfile, ev->sourcePositionBegin);
+			int lineNr = -1;
+			std::tie(errorLine, errorPosition, lineNr) = _lineAndPos(sheetfile, ev->sourcePositionBegin);
 			fm::String arrowLine(errorPosition, ' ');
 			arrowLine += FM_STRING("^~~~~");
-			ss << FM_STRING("in file ") << sheetfile << FM_STRING(":") << std::endl
+			ss << FM_STRING("in file ") << sheetfile << FM_STRING(":") << lineNr + 1 << std::endl
 			   << fm::to_wstring(msg_)   << std::endl
 			   << errorLine << std:: endl
 			   << arrowLine;

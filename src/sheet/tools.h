@@ -15,6 +15,7 @@ namespace sheet {
         const fm::String & getMetaCommand(const Event &metaEvent);
     }
     namespace {
+        constexpr fm::String::value_type newline = fm::String::value_type('\n');
         struct MissingArgument {};
         template<typename TArg, typename TArgs>
         TArg __getArgument(const TArgs &args, int idx, TArg *defaultValue) 
@@ -126,6 +127,29 @@ namespace sheet {
     template <typename TString>
     using LineAndPosition = std::tuple<TString, int>;
 
+
+    /**
+     * @return the number of lines until a position
+     */ 
+    template<typename TIterator>
+    int getNumberOfLines(TIterator begin, TIterator end, int position)
+    {
+        if (begin + position >= end) {
+            return -1;
+        }
+        return std::count_if(begin, begin + position, [](const auto &x) { return x == newline; });
+    }
+    
+    /**
+     * @return the number of lines until a position
+     */ 
+    template<typename TString>
+    int getNumberOfLines(const TString &str, int position)
+    {
+        return getNumberOfLines(str.begin(), str.end(), position);
+    }
+
+
     /**
      * @return the line at a given position
      */ 
@@ -133,7 +157,6 @@ namespace sheet {
     LineAndPosition<TString> getLineAndPosition(TIterator begin, 
         TIterator end, int sourcePosition, bool trim = true)
     {
-        constexpr fm::String::value_type newline = fm::String::value_type('\n');
         if (sourcePosition >= (end - begin)) {
             return LineAndPosition<TString>(TString(), -1);
         }
