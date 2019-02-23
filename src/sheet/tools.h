@@ -5,6 +5,8 @@
 #include <fm/exception.hpp>
 #include <algorithm>
 #include <vector>
+#include <tuple>
+#include <boost/algorithm/string.hpp>
 
 namespace sheet {
     class Event;
@@ -119,6 +121,59 @@ namespace sheet {
                 events.begin(), 
                 events.end(), 
                 [](const auto &x) { return x.isTimeConsuming(); }) != events.end();
+    }
+
+    template <typename TString>
+    using LineAndPosition = std::tuple<TString, int>;
+
+    /**
+     * @return the line at a given position
+     */ 
+    template<typename TIterator, typename TString>
+    LineAndPosition<TString> getLineAndPosition(TIterator begin, 
+        TIterator end, int sourcePosition, bool trim = true)
+    {
+        constexpr fm::String::value_type newline = fm::String::value_type('\n');
+        if (sourcePosition >= (end - begin)) {
+            return LineAndPosition<TString>(TString(), -1);
+        }
+        auto it = begin, 
+             start = begin;
+
+        // find begin of line
+        it = begin + sourcePosition;
+        while(it-- >= begin) {
+            if (*it == newline) {
+                start = it+1;
+                break;
+            }
+        }
+        // find end of line
+        it = begin + sourcePosition;
+        while(it++ < end) {
+            if (*it == newline) {
+                end = it;
+                break;
+            }
+        }
+        int position = sourcePosition - (start - begin);
+        auto line = TString(start, end);
+        if (trim) {
+            int diff = line.length();
+            boost::trim(line);
+            diff = diff - line.length();
+            position = std::max(-1, position - diff);
+        }
+        return LineAndPosition<TString>(line, position);
+    }
+
+    /**
+     * @return the line at a given position
+     */ 
+    template<typename TString>
+    inline LineAndPosition<TString> getLineAndPosition(const TString &source, int sourcePosition, bool trim = true)
+    {
+        return getLineAndPosition<typename TString::const_iterator, TString>(source.begin(), source.end(), sourcePosition, trim);
     }
 
 }
