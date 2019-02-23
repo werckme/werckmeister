@@ -36,7 +36,6 @@ name: bossanova;
 part: normal;
 instrument: piano; 
 {
-    /x:y/
     <VII, VII>4 <III, V,>8 <V, V>8 r8 <III, V,>8 r8 <V, V> | r8 <III, V,>8 r8 <V, V> r8 <III, V,> r8 <VII, VII> |
 }    
 ] 
