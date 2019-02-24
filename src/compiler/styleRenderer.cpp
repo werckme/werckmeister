@@ -1,8 +1,8 @@
 #include "styleRenderer.h"
 #include "error.hpp"
 #include <sheet/tools.h>
-
 #include <iostream>
+#include <boost/exception/get_error_info.hpp>
 
 #define DEBUGX(x) 
 
@@ -51,10 +51,18 @@ namespace sheet {
 			}
 			ctx_->setTarget(trackId, voiceId);
 			if (trackIsNew) {
-				ctx_->processMeta(track.trackInfos, 
-					[](const auto &x) { return x.name; }, 
-					[](const auto &x) { return x.args; }
-				);
+				try {
+					ctx_->processMeta(track.trackInfos, 
+						[](const auto &x) { return x.name; }, 
+						[](const auto &x) { return x.args; }
+					);
+				} catch (fm::Exception &ex) {
+					if (int *objectIdx = boost::get_error_info<ex_at_object_idx>(ex)) {
+						// exception has index on which object the exception occured
+						ex << ex_sheet_source_info(track.trackInfos[*objectIdx]);
+					}
+					throw;
+				}
 			}
 		}
 

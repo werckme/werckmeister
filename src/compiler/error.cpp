@@ -29,22 +29,22 @@ namespace sheet {
 
 		std::string Exception::toString() const
 		{
-			const Event *ev = boost::get_error_info<ex_sheet_event>(*this);
+			const auto *sourceInf = boost::get_error_info<ex_sheet_source_info>(*this);
 			const std::shared_ptr<Document> * rawDocumentPtr = boost::get_error_info<ex_sheet_document>(*this);
-			if (!ev || !rawDocumentPtr || ev->sourceId == Event::UndefinedSource) {
+			if (!sourceInf || !rawDocumentPtr || sourceInf->sourceId == Event::UndefinedSource) {
 				return Base::toString();
 			}
 			auto document = *rawDocumentPtr;
 			fm::StringStream ss;
-			auto sheetfile = document->findSourcePath(ev->sourceId);
+			auto sheetfile = document->findSourcePath(sourceInf->sourceId);
 			fm::String errorLine;
 			int errorPosition = -1;
 			int lineNr = -1;
-			std::tie(errorLine, errorPosition, lineNr) = _lineAndPos(sheetfile, ev->sourcePositionBegin);
+			std::tie(errorLine, errorPosition, lineNr) = _lineAndPos(sheetfile, sourceInf->sourcePositionBegin);
 			fm::String arrowLine(errorPosition, ' ');
 			arrowLine += FM_STRING("^~~~~");
-			ss << FM_STRING("in file ") << sheetfile << FM_STRING(":") << lineNr + 1 << std::endl
-			   << fm::to_wstring(msg_)   << std::endl
+			ss << fm::to_wstring(msg_)   << std::endl
+			   << FM_STRING("in file ") << sheetfile << FM_STRING(":") << lineNr + 1 << std::endl
 			   << errorLine << std:: endl
 			   << arrowLine;
 			return fm::to_string(ss.str());

@@ -8,12 +8,13 @@
 #include <fm/exception.hpp>
 #include <string>
 #include <boost/exception/info.hpp>
+#include <sheet/ASheetObject.hpp>
 
 namespace sheet {
-	struct Event;
 	class Document;
 	namespace compiler {
-		typedef boost::error_info<struct tag_sheet_event, Event> ex_sheet_event;
+		typedef boost::error_info<struct tag_at_object_idx, int> ex_at_object_idx;
+		typedef boost::error_info<struct tag_sheet_event, ASheetObjectWithSourceInfo> ex_sheet_source_info;
 		typedef boost::error_info<struct tag_sheet_document, std::shared_ptr<Document>> ex_sheet_document;
 		class Exception : public fm::Exception
 		{

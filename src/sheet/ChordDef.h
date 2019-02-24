@@ -5,10 +5,11 @@
 #include <fm/units.hpp>
 #include <set>
 #include "Interval.h"
+#include "ASheetObject.hpp"
 
 namespace sheet {
 
-    struct ChordDef {
+    struct ChordDef : public ASheetObject {
         typedef std::set<ChordOption> Intervals;
         fm::String name;
 		Intervals intervals;

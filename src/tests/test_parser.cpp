@@ -778,9 +778,11 @@ BOOST_AUTO_TEST_CASE(test_event_positions)
 {
 	using namespace fm;
 	using sheet::PitchDef;
-	fm::String text = FM_STRING("[\n\
+	fm::String text = FM_STRING("\n\
+[\n\
 	-- a comment \n\
 	-- a comment \n\
+	trackInfo: xyz; \n\
 \n\
 	-- a comment \n\
 	{\n\
@@ -807,6 +809,8 @@ BOOST_AUTO_TEST_CASE(test_event_positions)
 	BOOST_CHECK( ch == 'f' );
 	ch = text[defs.tracks[0].voices[0].events[idx++].sourcePositionBegin];
 	BOOST_CHECK( ch == '|' );	
+	ch = text[defs.tracks[0].trackInfos[0].sourcePositionBegin];
+	BOOST_CHECK( ch == 't' );	
 }
 
 BOOST_AUTO_TEST_CASE(test_source_id)

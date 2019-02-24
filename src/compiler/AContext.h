@@ -16,6 +16,7 @@
 #include <list>
 #include "forward.hpp"
 #include "metaData.h"
+#include "error.hpp"
 
 namespace sheet {
     namespace compiler {
@@ -201,10 +202,17 @@ namespace sheet {
 						std::function<fm::String(const typename TContainer::value_type&)> fcommand, 
 						std::function<std::vector<fm::String>(const typename TContainer::value_type&)> fargs)
 		{
+			int idx = 0;
 			for(const auto &x : container) {
 				fm::String command = fcommand(x);
 				std::vector<fm::String> args = fargs(x);
-				processMeta(command, args);
+				try {
+					processMeta(command, args);
+					idx++;
+				} catch(fm::Exception &ex) {
+					ex << ex_at_object_idx(idx);
+					throw;
+				}
 			}
 		}
     }

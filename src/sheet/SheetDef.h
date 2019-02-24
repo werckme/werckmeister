@@ -6,10 +6,11 @@
 #include "Event.h"
 #include <vector>
 #include "DocumentConfig.h"
+#include "ASheetObject.hpp"
 
 namespace sheet {
 
-	struct SheetInfo {
+	struct SheetInfo : public ASheetObjectWithSourceInfo {
 		typedef std::vector<fm::String> Args;
 		fm::String name;
 		Args args;

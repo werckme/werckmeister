@@ -9,6 +9,7 @@
 #include <tuple>
 #include <functional>
 #include <fm/exception.hpp>
+#include "ASheetObject.hpp"
 
 namespace sheet {
 
@@ -47,10 +48,10 @@ namespace sheet {
 
 	struct AliasPitch : public PitchDef {};
 
-	struct Event {
+	struct Event : public ASheetObjectWithSourceInfo {
+		typedef ASheetObjectWithSourceInfo Base;
 		enum {
 			NoDuration = 0,
-			UndefinedSource = 0
 		};
 		enum Type { 
 			Unknown,
@@ -71,12 +72,7 @@ namespace sheet {
 		typedef fm::String Options;
 		typedef std::tuple<PitchDef::Pitch, Options> ChordElements;
 		typedef long double Multiplicator;
-		typedef unsigned int SourceId;
-		SourceId sourceId = UndefinedSource;
-		/**
-		 * where in the source is begins this event 
-		 */
-		unsigned int sourcePositionBegin = 0;
+		
 		ChordElements chordElements() const;
 		fm::String chordDefName() const;
 		Multiplicator multiplicator = 1; // to multiplicate with bar length e.g.: | C(1) | C(0.5) C(0.5) |		

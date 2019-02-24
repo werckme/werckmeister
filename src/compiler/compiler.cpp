@@ -10,6 +10,7 @@
 #include "metaCommands.h"
 #include "error.hpp"
 #include <sheet/tools.h>
+#include <boost/exception/get_error_info.hpp>
 
 namespace sheet {
 
@@ -20,13 +21,24 @@ namespace sheet {
 		}
 		void Compiler::compile(DocumentPtr document)
 		{
+			this->document_ = document;
+			auto ctx = context();
+
 			try {
-				this->document_ = document;
-				auto ctx = context();
 				ctx->processMeta(document->sheetDef.sheetInfos, 
 					[](const auto &x) { return x.name; }, 
 					[](const auto &x) { return x.args; }
 				);
+			} catch (fm::Exception &ex) {
+				if (int *objectIdx = boost::get_error_info<ex_at_object_idx>(ex)) {
+					// exception has index on which object the exception occured
+					ex << ex_sheet_source_info(document->sheetDef.sheetInfos[*objectIdx]);
+				}
+				ex << ex_sheet_document(document);
+				throw;
+			}
+
+			try {
 				renderChordTrack();
 				renderTracks();
 			} catch (fm::Exception &ex) {

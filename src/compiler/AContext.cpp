@@ -334,9 +334,7 @@ namespace sheet {
 			try {
 				_addEvent(this, &ev);
 			} catch(fm::Exception &ex) {
-				ex << ex_sheet_event(ev);
-				throw;
-			} catch(...) {
+				ex << ex_sheet_source_info(ev);
 				throw;
 			}
 		}
@@ -416,9 +414,11 @@ namespace sheet {
 		void AContext::processMeta(const fm::String &command, const std::vector<fm::String> &args)
 		{
 			try {
-				if (command == SHEET_META__TRACK_META_KEY_TYPE
+				if (command == SHEET_META__TRACK_META_KEY_TYPE /*handled elsewhere*/
 				|| command == SHEET_META__TRACK_META_KEY_NAME
-				|| command == SHEET_META__TRACK_META_KEY_PART) 
+				|| command == SHEET_META__TRACK_META_KEY_PART
+				|| command == SHEET_META__SET_VORSCHLAG
+				|| command == SHEET_META__SET_UPBEAT) 
 				{
 					return;
 				}
@@ -481,7 +481,7 @@ namespace sheet {
 				}
 			} catch(const std::exception &ex) {
 				FM_THROW(Exception, "failed to process " + fm::to_string(command)
-									+"\n" + ex.what());
+									+": " + ex.what());
 			}	
 			catch(...) {
 				FM_THROW(Exception, "failed to process " + fm::to_string(command));

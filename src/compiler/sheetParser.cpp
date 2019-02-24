@@ -44,7 +44,7 @@ BOOST_FUSION_ADAPT_STRUCT(
 BOOST_FUSION_ADAPT_STRUCT(
 	sheet::Event,
 	(unsigned int, sourcePositionBegin)
-	(sheet::Event::SourceId, sourceId)
+	(sheet::ASheetObjectWithSourceInfo::SourceId, sourceId)
 	(sheet::Event::Type, type)
 	(sheet::Event::Pitches, pitches)
 	(sheet::Event::Duration, duration)
@@ -66,6 +66,8 @@ namespace {
 
 BOOST_FUSION_ADAPT_STRUCT(
 	sheet::TrackInfo,
+	(unsigned int, sourcePositionBegin)
+	(sheet::ASheetObjectWithSourceInfo::SourceId, sourceId)
 	(fm::String, name)
 	(sheet::Event::Args, args)
 )
@@ -78,6 +80,8 @@ BOOST_FUSION_ADAPT_STRUCT(
 
 BOOST_FUSION_ADAPT_STRUCT(
 	sheet::SheetInfo,
+	(unsigned int, sourcePositionBegin)
+	(sheet::ASheetObjectWithSourceInfo::SourceId, sourceId)
 	(fm::String, name)
 	(sheet::Event::Args, args)
 )
@@ -104,22 +108,21 @@ namespace sheet {
 		namespace {
 			namespace qi = boost::spirit::qi;
 			namespace ascii = boost::spirit::ascii;
-		
-			struct ASheetParser
+			///////////////////////////////////////////////////////////////////
+			template <typename Iterator>
+			struct _SheetParser : qi::grammar<Iterator, SheetDef(), ascii::space_type>
 			{
-				virtual ~ASheetParser() = default;
-				ASheetParser()
-				{
-				}
-
 				template<class SheetInfoRules>
 				void createSheetInfoRules(SheetInfoRules &sheetInfo) const
 				{
 					using qi::lexeme;
 					using ascii::char_;
 					using qi::eol;
+					using qi::attr;
 					sheetInfo %= 
-						+char_("a-zA-Z") 
+						current_pos_.current_pos 
+						>> attr(sourceId_)
+						>> +char_("a-zA-Z") 
 						>> ":" 
 						>> +(lexeme[+char_("a-zA-Z0-9")])
 						>> ";";
@@ -131,8 +134,11 @@ namespace sheet {
 					using qi::lexeme;
 					using ascii::char_;
 					using qi::eol;
-					trackInfo %= 
-						+char_("a-zA-Z") 
+					using qi::attr;
+					trackInfo %=
+						current_pos_.current_pos 
+						>> attr(sourceId_)
+						>> +char_("a-zA-Z") 
 						>> ":" 
 						>> +(lexeme[+char_("a-zA-Z0-9")])
 						>> ";";
@@ -144,12 +150,6 @@ namespace sheet {
 					createTrackInfoRules(trackInfo);
 					track %= "[" > *trackInfo > +voice > "]";
 				}
-			};
-			///////////////////////////////////////////////////////////////////
-			template <typename Iterator>
-			struct _SheetParser : public ASheetParser,
-							      qi::grammar<Iterator, SheetDef(), ascii::space_type>
-			{
 				void initDocumentConfigParser()
 				{
 					using qi::int_;
