@@ -19,17 +19,12 @@ namespace sheet {
             CurrentPos() {
                 namespace phx = boost::phoenix;
                 namespace qi = boost::spirit::qi;
-
-                save_start_pos = qi::omit[boost::spirit::repository::qi::iter_pos[
-                        phx::bind(&CurrentPos::setStartPos, this, qi::_1)]];
                 current_pos = boost::spirit::repository::qi::iter_pos[
                         qi::_val = phx::bind(&CurrentPos::getCurrentPos, this, qi::_1)];
             }
 
-            boost::spirit::qi::rule<Iterator> save_start_pos;
             boost::spirit::qi::rule<Iterator, std::size_t()> current_pos;
 
-            private:
             void setStartPos(const Iterator &iterator) {
                 start_pos_ = iterator;
             }
@@ -37,7 +32,7 @@ namespace sheet {
             std::size_t getCurrentPos(const Iterator &iterator) {
                 return std::distance(start_pos_, iterator);
             }
-
+        private:
             Iterator start_pos_;
         };
 

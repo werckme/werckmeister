@@ -1,8 +1,8 @@
-@load "./chords/default.chords";
 
-[
-{
-    /stylex: simpleJazz44 normal/
-    c d e f | g1 |
-}
-]
+
+
+
+
+[{
+ /x:y/
+}]

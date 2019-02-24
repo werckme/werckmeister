@@ -19,6 +19,7 @@
 #include "parserSymbols.h"
 #include "parserPositionIt.h"
 #include "sheet/DocumentConfig.h"
+#include <sheet/tools.h>
 
 BOOST_FUSION_ADAPT_STRUCT(
 	sheet::DocumentConfig,
@@ -289,7 +290,7 @@ namespace sheet {
 					createSheetInfoRules(sheetInfo_);
 				}
 
-				_SheetParser(Event::SourceId sourceId = Event::UndefinedSource) : 
+				_SheetParser(Iterator begin, Event::SourceId sourceId = Event::UndefinedSource) : 
 					 _SheetParser::base_type(start, "sheet")
 					,sourceId_(sourceId)
 				{
@@ -298,9 +299,8 @@ namespace sheet {
 					using qi::attr;
 					initSheetParser();
 					initDocumentConfigParser();
-
-					start %= current_pos_.save_start_pos 
-							>> (documentConfig_ | attr(DocumentConfig()))
+					current_pos_.setStartPos(begin);
+					start %= (documentConfig_ | attr(DocumentConfig()))
 							>> *sheetInfo_ 
 							>> *track;
 
@@ -329,13 +329,13 @@ namespace sheet {
 			};
 
 
-			void _parse(const fm::String &defStr, SheetDef &def, Event::SourceId sourceId)
+			void _parse(const fm::String &source, SheetDef &def, Event::SourceId sourceId)
 			{
 				using boost::spirit::ascii::space;
 				typedef _SheetParser<fm::String::const_iterator> SheetParserType;
 				
-				SheetParserType g(sourceId);
-				phrase_parse(defStr.begin(), defStr.end(), g, space, def);
+				SheetParserType g(source.begin(), sourceId);
+				phrase_parse(source.begin(), source.end(), g, space, def);
 			}
 		}
 
@@ -343,11 +343,9 @@ namespace sheet {
 		SheetDef SheetDefParser::parse(fm::CharType const* first, fm::CharType const* last, Event::SourceId sourceId)
 		{
 			SheetDef result;
-			SheetDefTokenizer<LexerType> sheetDefTok;
-			LexerType::iterator_type iter = sheetDefTok.begin(first, last);
-			LexerType::iterator_type end = sheetDefTok.end();
-			boost::spirit::lex::tokenize(first, last, sheetDefTok);
-			_parse(sheetDefTok.lines.str(), result, sourceId);
+			fm::String source(first, last);
+			removeComments(source.begin(), source.end());
+			_parse(source, result, sourceId);
 			return result;
 		}
 	}

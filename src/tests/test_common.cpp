@@ -161,6 +161,48 @@ BOOST_AUTO_TEST_CASE(test_get_line_and_position_3)
 	BOOST_CHECK( line == expected );
 }
 
+BOOST_AUTO_TEST_CASE(remove_comments_0)
+{
+	fm::String source = FM_STRING("");
+	fm::String excpected = FM_STRING("");
+	sheet::removeComments(source.begin(), source.end());
+	BOOST_CHECK(source == excpected);
+
+}
+BOOST_AUTO_TEST_CASE(remove_comments_1)
+{
+	fm::String source = FM_STRING("--abc");
+	fm::String excpected = FM_STRING("     ");
+	sheet::removeComments(source.begin(), source.end());
+	BOOST_CHECK(source == excpected);
+}
+
+BOOST_AUTO_TEST_CASE(remove_comments_2)
+{
+	fm::String source = FM_STRING("abc--def");
+	fm::String excpected = FM_STRING("abc     ");
+	sheet::removeComments(source.begin(), source.end());
+	BOOST_CHECK(source == excpected);
+}
+BOOST_AUTO_TEST_CASE(remove_comments_3)
+{
+	fm::String source = FM_STRING("\n\
+	\n\
+	\n\
+	abc\n\
+	-- abc\n\
+	def");
+	fm::String excpected = FM_STRING("\n\
+	\n\
+	\n\
+	abc\n\
+	      \n\
+	def");
+	sheet::removeComments(source.begin(), source.end());
+	BOOST_CHECK(source == excpected);
+	//std::wcout << source << std::endl;
+}
+
 #if 0
 BOOST_AUTO_TEST_CASE(test_sconv)
 {

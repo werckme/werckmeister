@@ -14,5 +14,4 @@ namespace sheet {
             return metaEvent.stringValue;
         }
     }
-
 }

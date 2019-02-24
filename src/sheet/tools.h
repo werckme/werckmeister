@@ -179,7 +179,7 @@ namespace sheet {
                 break;
             }
         }
-        int position = sourcePosition - (start - begin);
+        int position = sourcePosition - std::distance(begin, start);
         auto line = TString(start, end);
         if (trim) {
             int diff = line.length();
@@ -199,6 +199,29 @@ namespace sheet {
         return getLineAndPosition<typename TString::const_iterator, TString>(source.begin(), source.end(), sourcePosition, trim);
     }
 
+    /**
+     *  replaces a comment sequence with an spaces.
+     */
+    template<typename TIterator>
+    void removeComments(TIterator begin, TIterator end)
+    {
+        auto it = begin;
+        bool clearing = false;
+        while (it != end) {
+            if (*it == newline) {
+                clearing = false;
+            }
+            if (*it == '-') {
+                if ((it + 1) != end && *(it + 1) == '-') {
+                    clearing = true;
+                }
+            }
+            if (clearing) {
+                *it = ' ';
+            }
+            ++it;
+        }
+    }
 }
 
 #endif

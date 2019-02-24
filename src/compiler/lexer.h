@@ -39,31 +39,6 @@ namespace sheet {
 				container.push_back(StringType(begin, end));
 			}
 
-			/**
-			 *  overrides a comment char with an space.
-			 * we do so because we don't want to change the original char positions
-			 * of any events
-			 * @see https://github.com/SambaGodschynski/fraumueller/issues/47
-			 */
-			void removeComments(StringType &line)
-			{
-				auto it = line.begin();
-				auto end = line.end();
-				bool clearing = false;
-				while (it != end) {
-					if (*it == '-') {
-						if ((it + 1) != end && *(it + 1) == '-') {
-							clearing = true;
-						}
-					}
-					if (clearing) {
-						*it = ' ';
-					}
-					++it;
-				}
-				
-			}
-
 			ASheetTokenizer()
 				: documentConfig(FM_STRING("\\s*@.+?;"))     // define tokens
 				, eol(FM_STRING("\\s*\n"))
@@ -151,35 +126,6 @@ namespace sheet {
 			this->self
 				= (Base::documentConfig[addConfigs] | Base::comment)
 				| Base::eol
-				| Base::any
-				;
-		}
-
-
-		/////////////////////////////////////////////////////////////////////////////
-		template <typename Lexer>
-		struct SheetDefTokenizer : public ASheetTokenizer<Lexer>
-		{
-			typedef ASheetTokenizer<Lexer> Base;
-			SheetDefTokenizer();
-			typename Base::Tokens documentConfigs;
-			StringStream lines;
-		private:
-			void onLine_(CharType const *begin, CharType const *end)
-			{
-				StringType line(begin, end);
-				Base::removeComments(line);
-				lines << line << std::endl;
-			}
-		};
-
-		template <typename Lexer>
-		SheetDefTokenizer<Lexer>::SheetDefTokenizer()
-		{
-			auto onLine = boost::bind(&SheetDefTokenizer::onLine_, this, _1, _2);
-			this->self
-				= 
-				  Base::line[onLine]
 				| Base::any
 				;
 		}

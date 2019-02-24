@@ -778,7 +778,10 @@ BOOST_AUTO_TEST_CASE(test_event_positions)
 {
 	using namespace fm;
 	using sheet::PitchDef;
-	fm::String text = FM_STRING("\n\
+	fm::String text = FM_STRING("\
+\n\
+\n\
+sheetInfo: xyz; \n\
 [\n\
 	-- a comment \n\
 	-- a comment \n\
@@ -810,7 +813,16 @@ BOOST_AUTO_TEST_CASE(test_event_positions)
 	ch = text[defs.tracks[0].voices[0].events[idx++].sourcePositionBegin];
 	BOOST_CHECK( ch == '|' );	
 	ch = text[defs.tracks[0].trackInfos[0].sourcePositionBegin];
-	BOOST_CHECK( ch == 't' );	
+	BOOST_CHECK( ch == 't' );
+	ch = text[defs.sheetInfos[0].sourcePositionBegin];
+	BOOST_CHECK( ch == 's' );	
+
+	// for(const auto &x : defs.tracks[0].voices[0].events) {
+	// 	text[x.sourcePositionBegin] = 'X';
+	// }
+	// text[defs.tracks[0].trackInfos[0].sourcePositionBegin] = 'X';
+	// text[defs.sheetInfos[0].sourcePositionBegin] = 'X';
+	// std::wcout << text << std::endl;
 }
 
 BOOST_AUTO_TEST_CASE(test_source_id)
