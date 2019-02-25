@@ -1,0 +1,40 @@
+[
+type: style;
+name: piko;
+part: normal;
+instrument: drums;
+{
+   \f
+     !p"ho2"8     "ht"8.      "ht"16 "ht"8.     "ht"16 "ht"8.     "ht"16 "ht"8   |
+}
+{
+    !ff"sn"8 r8 !pppp"sng"16  !pp"sng"  r8 !p"sng"16 r16    r8 !p"sng"16 r16   !f"sn"8    |
+}
+{
+    "bd"8 r4. "bd"8 r8 r16 "bd"8. |
+
+}
+]
+
+[
+instrument: bass;
+type: style;
+name: piko;
+part: normal;
+{
+    I,,4. III,,8 V,,4 V,,8 I,8  |
+}
+]
+
+[
+instrument: piano;
+type: style;
+name: piko;
+part: normal;
+{
+    /voicingStrategy: simpleGuitar/
+    !f<I II III VI V VI VII>16 r16. !p<I II III VI V VI VII>16 r8 
+    r1 |
+    <VII, VII>4 <III, V,>8 <V, V>8 r8 <III, V,>8 r8 <V, V> 
+}
+]

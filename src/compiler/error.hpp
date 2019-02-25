@@ -9,6 +9,7 @@
 #include <string>
 #include <boost/exception/info.hpp>
 #include <sheet/ASheetObject.hpp>
+#include <algorithm>
 
 namespace sheet {
 	class Document;
@@ -30,6 +31,8 @@ namespace sheet {
 
 		namespace handler {
 
+			void errorHandler(const std::string &source, const std::string &what, int errorPos);
+
 			template<class Iterator>
 			void errorHandler(const boost::fusion::vector<
 				Iterator,
@@ -38,14 +41,12 @@ namespace sheet {
 				boost::spirit::info> &args)
 			{
 				using boost::fusion::at_c;
-				// auto first = at_c<0>(args);
+				auto first = at_c<0>(args);
 				auto last = at_c<1>(args);
 				auto errPos = at_c<2>(args);
 				auto what = at_c<3>(args);
-				auto w = std::string(errPos, last);
-				std::stringstream ss;
-				ss << "an error occured around line: " << w << " :: " << what.tag;
-				throw Exception(ss.str());
+				auto source = std::string(first, last);
+				errorHandler(source, what.tag, errPos - first);
 			}
 		}
 

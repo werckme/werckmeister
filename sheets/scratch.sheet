@@ -1,8 +1,50 @@
+@load "./pitchmaps/battery3.tight.pitchmap";
+@load "./chords/default.chords";
+
+tempo: 150;
+device: SC1 midi 2 offset 20;
+device: BT  midi 8;
+
+--             instrument dv ch cc pc
+instrumentDef: piano      SC1 0 0  0;
+instrumentDef: lead       SC1 1 0  11;
+instrumentDef: rhythm1   SC1 2 0  7;
+instrumentDef: bass       SC1 3 0  33;
+instrumentDef: fx         SC1 4 35 80;
+instrumentDef: drums      BT 9 2  32;
+instrumentConf: drums volume 100;
+instrumentConf: bass volume 100;
 
 
+[
+type: style;
+instrument: drums;
+name: x;
+part: x;
+{
+    r8. !f"ht"16. !ff"ht"16. r8. !p"ht"16. r64 !fff"ht"16.  |
+}
+{
+    r2. |
+    "sn"1 |
+}
+{
+    "bd"2 "bd"4 |
+}
+]
 
+[
+type: sheet;
+{
+    /signature: 6 8/
+    C7 | C7 | C7 | C7 |
+    C7 | C7 | C7 | C7 |
+    C7 | C7 | C7 | C7 |
+    C7 | C7 | C7 | C7 |
+    C7 | C7 | C7 | C7 |
+    C7 | C7 | C7 | C7 |
+    C7 | C7 | C7 | C7 |
+    C7 | C7 | C7 | C7 |
 
-
-[{
- /x:y/
-}]
+}
+]

@@ -49,5 +49,17 @@ namespace sheet {
 			   << arrowLine;
 			return fm::to_string(ss.str());
 		}
+		
+		namespace handler {
+
+			void errorHandler(const std::string &source, const std::string &what, int errorPos)
+			{
+				std::string line;
+				int linePos = 0;
+				std::tie(line, linePos) = getLineAndPosition<std::string>(source, errorPos, false);
+				throw Exception( line );
+			}
+
+		}
 	}
 }

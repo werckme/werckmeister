@@ -4,7 +4,7 @@
 #include <iostream>
 #include <boost/exception/get_error_info.hpp>
 
-#define DEBUGX(x) 
+#define DEBUGX(x)
 
 namespace sheet {
     namespace compiler {
