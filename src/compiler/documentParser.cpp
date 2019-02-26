@@ -98,9 +98,13 @@ namespace sheet {
 			res->path = boost::filesystem::system_complete(path).wstring();
 			auto sourceId = res->addSource(res->path);
 			SheetDefParser sheetParser;
-			res->sheetDef = sheetParser.parse(first, last, sourceId);
-
-			processUsings(res);
+			try {
+				res->sheetDef = sheetParser.parse(first, last, sourceId);
+				processUsings(res);
+			} catch(fm::Exception &ex) {
+				ex << ex_sheet_document(res);
+				throw;
+			}
 			return res;
 		}
 	}

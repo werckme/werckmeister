@@ -284,7 +284,7 @@ namespace sheet {
 					events %= *event_;
 
 
-					voice %= "{" >> events >> "}";
+					voice %= "{" > events > "}";
 
 					createTrackRules(track, voice, trackInfo_);
 					createSheetInfoRules(sheetInfo_);
@@ -304,7 +304,7 @@ namespace sheet {
 							>> *sheetInfo_ 
 							>> *track;
 
-					auto onError = boost::bind(&handler::errorHandler<Iterator>, _1);
+					auto onError = boost::bind(&handler::errorHandler<Iterator>, _1, sourceId_);
 					on_error<fail>(start, onError);
 
 				}

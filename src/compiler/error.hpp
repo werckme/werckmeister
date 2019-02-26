@@ -31,7 +31,27 @@ namespace sheet {
 
 		namespace handler {
 
-			void errorHandler(const std::string &source, const std::string &what, int errorPos);
+			void errorHandler(const std::string &source, 
+				const std::string &what, 
+				int errorPos, 
+				ASheetObjectWithSourceInfo::SourceId sourceId);
+
+			template<class Iterator>
+			void errorHandler(const boost::fusion::vector<
+				Iterator,
+				Iterator,
+				Iterator,
+				boost::spirit::info> &args, 
+				ASheetObjectWithSourceInfo::SourceId sourceId)
+			{
+				using boost::fusion::at_c;
+				auto first = at_c<0>(args);
+				auto last = at_c<1>(args);
+				auto errPos = at_c<2>(args);
+				auto what = at_c<3>(args);
+				auto source = std::string(first, last);
+				errorHandler(source, what.tag, errPos - first, sourceId);
+			}
 
 			template<class Iterator>
 			void errorHandler(const boost::fusion::vector<
@@ -41,12 +61,14 @@ namespace sheet {
 				boost::spirit::info> &args)
 			{
 				using boost::fusion::at_c;
-				auto first = at_c<0>(args);
+				// auto first = at_c<0>(args);
 				auto last = at_c<1>(args);
 				auto errPos = at_c<2>(args);
 				auto what = at_c<3>(args);
-				auto source = std::string(first, last);
-				errorHandler(source, what.tag, errPos - first);
+				auto w = std::string(errPos, last);
+				std::stringstream ss;
+				ss << "an error occured around line: " << w << " :: " << what.tag;
+				throw Exception(ss.str());
 			}
 		}
 

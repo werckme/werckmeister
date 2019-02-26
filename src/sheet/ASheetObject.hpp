@@ -1,7 +1,7 @@
 #ifndef ASHEET_OBJECT_H
 #define ASHEET_OBJECT_H
 
-
+#include <climits>
 
 namespace sheet {
     class ASheetObject {
@@ -10,15 +10,18 @@ namespace sheet {
     class ASheetObjectWithSourceInfo {
     public:
 		enum {
-			UndefinedSource = 0
+			UndefinedSource = 0,
+			UndefinedPosition = INT_MAX
 		};
         typedef unsigned int SourceId;
         SourceId sourceId = UndefinedSource;
 		/**
 		 * where in the source is begins this object 
 		 */
-		unsigned int sourcePositionBegin = 0;
+		unsigned int sourcePositionBegin = UndefinedPosition;
     };
+
+    class ParserSourceInfo : public ASheetObjectWithSourceInfo {};
 }
 
 #endif

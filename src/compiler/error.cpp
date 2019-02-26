@@ -11,8 +11,11 @@ namespace sheet {
 	namespace compiler {
 
 		namespace {
-			auto _lineAndPos(const fm::String &file, int sourcePos)
+			auto _lineAndPos(const fm::String &file, unsigned int sourcePos)
 			{
+				if (sourcePos == ASheetObjectWithSourceInfo::UndefinedPosition) {
+					sourcePos = 0;
+				}
 				try {
 					auto source = fm::getWerckmeister().openResource(file);
 					fm::StreamBuffIterator end;
@@ -52,12 +55,18 @@ namespace sheet {
 		
 		namespace handler {
 
-			void errorHandler(const std::string &source, const std::string &what, int errorPos)
+			void errorHandler(const std::string &source, 
+				const std::string &what, 
+				int errorPos, 
+				ASheetObjectWithSourceInfo::SourceId sourceId)
 			{
 				std::string line;
 				int linePos = 0;
 				std::tie(line, linePos) = getLineAndPosition<std::string>(source, errorPos, false);
-				throw Exception( line );
+				auto sourceInfo = ParserSourceInfo();
+				sourceInfo.sourceId = sourceId;
+				sourceInfo.sourcePositionBegin = errorPos;
+				throw Exception( "syntax error" ) <<  ex_sheet_source_info(sourceInfo);
 			}
 
 		}
