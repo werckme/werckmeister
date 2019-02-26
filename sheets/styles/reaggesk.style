@@ -1,0 +1,38 @@
+[
+type: style;
+instrument: drums;
+name: reaggesk;
+part: normal;
+{
+    r8. !f"ht"16. !ff"ht"16. r8. !p"ht"16. r64 !fff"ht"16.  |
+}
+{
+    r2. |
+    "sn"1 | 
+}
+{
+    "bd"2 "bd"4 |
+}
+]
+
+[
+type: style;
+instrument: bass;
+name: reaggesk;
+part: normal;
+{
+    I,,8. !pV,,,32 r16 V,,,16. r8 r64 !ffVII,,,32 r64 r8 III,,,16  |
+    I,,8. !pV,,,32 r16 V,,,16. r8 r64 !ffVII,,,32 r64 III,,,8 r16  |
+}
+]
+
+[
+type: style;
+instrument: rhythm1;
+name: reaggesk;
+part: normal;
+{
+    /voicingStrategy: simpleGuitar/
+    r8. !f<I, III VII,>32 r16 !f<I, III VII,>16. r8. !p<I, III VII,>16. r64 r16.  |
+}
+]
