@@ -493,6 +493,9 @@ namespace sheet {
 			if (metaEvent.stringValue.empty()) {
 				throwContextException("invalid meta command ");
 			}
+			if (metaEventHandler && metaEventHandler(metaEvent)) {
+				return;
+			}
 			if (metaEvent.stringValue == SHEET_META__SET_UPBEAT) { 
 				metaSetUpbeat(metaEvent);
 			}

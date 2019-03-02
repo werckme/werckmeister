@@ -27,6 +27,27 @@ namespace sheet {
 			ctx_->currentStyle(next);
 		}
 
+		void StyleRenderer::seekTo(fm::Ticks ticks)
+		{
+			const auto &styleTracks = ctx_->currentStyle().tracks;
+			for (const auto &track : styleTracks)
+			{
+				for (const auto &voice : track->voices)
+				{
+					if (voice.events.empty() || !hasAnyTimeConsumingEvents(voice.events)) {
+						continue;
+					}
+					auto it = ptrIdMap_.find(&voice);
+					if (it == ptrIdMap_.end()) {
+						continue;
+					}
+					auto meta = ctx_->voiceMetaData(it->second);
+					meta->lastEventDuration = 0;
+					meta->idxLastWrittenEvent = -1; // TODO: set correct event index
+				}
+			}
+		}
+
         void StyleRenderer::setTargetCreateIfNotExists(const Track &track, const Voice &voice)
 		{
 			AContext::TrackId trackId;

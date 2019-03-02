@@ -46,8 +46,8 @@ namespace sheet {
 			std::tie(errorLine, errorPosition, lineNr) = _lineAndPos(sheetfile, sourceInf->sourcePositionBegin);
 			fm::String arrowLine(errorPosition, ' ');
 			arrowLine += FM_STRING("^~~~~");
-			ss << fm::to_wstring(msg_)   << std::endl
-			   << FM_STRING("in file ") << sheetfile << FM_STRING(":") << lineNr + 1 << std::endl
+			ss << FM_STRING("in file ") << sheetfile << FM_STRING(":") << lineNr + 1 << std::endl
+			   << fm::to_wstring(msg_) << std::endl
 			   << errorLine << std:: endl
 			   << arrowLine;
 			return fm::to_string(ss.str());
