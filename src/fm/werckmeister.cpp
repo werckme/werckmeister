@@ -12,11 +12,11 @@
 #include "compiler/voicings/SimpleGuitar.h"
 #include "compiler/voicingStrategies.h"
 #include "compiler/voicings/VoicingStrategy.h"
+#include "compiler/voicings/Lua.h"
 #include "compiler/spielanweisung/Normal.h"
 #include "compiler/spielanweisung/Arpeggio.h"
 #include "compiler/spielanweisung/Vorschlag.h"
 #include "compiler/spielanweisung/spielanweisungen.h"
-#include "compiler/spielanweisung/Lua.h"
 #include "compiler/modification/modifications.h"
 #include "compiler/modification/Bend.h"
 #include <fm/exception.hpp>
@@ -82,7 +82,10 @@ namespace fm {
 	{
 		const fm::String *scriptPath = findScriptPathByName(name);
 		if (scriptPath != nullptr) {
-			
+			auto anw = std::make_shared<sheet::compiler::LuaVoicingStrategy>(*scriptPath);
+			if (anw->canExecute()) {
+				return anw;
+			}
 		}
 		if (name == SHEET_VOICING_STRATEGY_SIMPLE_GUITAR) {
 			return std::make_shared<sheet::SimpleGuitar>();
@@ -95,13 +98,6 @@ namespace fm {
 
 	sheet::compiler::ASpielanweisungPtr Werckmeister::getSpielanweisung(const fm::String &name)
 	{
-		const fm::String *scriptPath = findScriptPathByName(name);
-		if (scriptPath != nullptr) {
-			auto anw = std::make_shared<sheet::compiler::LuaSpielanweisung>(*scriptPath);
-			if (anw->canExecute()) {
-				return anw;
-			}
-		}
 		if (name == SHEET_SPIELANWEISUNG_NORMAL) {
 			return std::make_shared<sheet::compiler::Normal>(); 
 		}
@@ -115,11 +111,7 @@ namespace fm {
 	}
 
 	sheet::compiler::AModificationPtr Werckmeister::getModification(const fm::String &name)
-	{
-		const fm::String *scriptPath = findScriptPathByName(name);
-		if (scriptPath != nullptr) {
-			
-		}		
+	{	
 		if (name == SHEET_MOD_BEND) {
 			return std::make_shared<sheet::compiler::Bend>();  
 		}

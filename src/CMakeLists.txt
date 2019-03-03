@@ -24,14 +24,16 @@ SET (SRC_FETZER_LIB
     compiler/modification/Bend.cpp
     compiler/voicings/DirectVoicingStrategy.cpp
     compiler/voicings/SimpleGuitar.cpp
+    compiler/voicings/Lua.cpp
     compiler/metaData.cpp
     compiler/styleRenderer.cpp
     compiler/error.cpp
     sheet/Event.cpp
     sheet/Document.cpp
     sheet/ChordDef.cpp
-    sheet/lua/LuaMidiContext.cpp
+    sheet/tools.cpp
     sheet/lua/ALuaObject.cpp
+    sheet/lua/ALuaScript.cpp
 )
 
 

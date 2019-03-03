@@ -1,6 +1,7 @@
 @load "./pitchmaps/battery3.tight.pitchmap";
 @load "./chords/default.chords";
 @load "./styles/reaggesk.style";
+@load "./voicings/simple.lua";
 
 tempo: 150;
 device: SC1 midi 2 offset 20;
