@@ -1,4 +1,5 @@
 #include "SimpleGuitar.h"
+#include "sheet/tools.h"
 
 namespace sheet {
 
@@ -51,7 +52,7 @@ namespace sheet {
 		});
 	}
 
-	SimpleGuitar::Pitches SimpleGuitar::get(const ChordEvent &chord, const ChordDef &def, const Degrees &degreeIntervals, const TimeInfo& timeInfo)
+	SimpleGuitar::Pitches SimpleGuitar::get(const Event &chord, const ChordDef &def, const Degrees &degreeIntervals, const TimeInfo& timeInfo)
 	{
 		if (degreeIntervals.size() < 3) {
 			return Base::get(chord, def, degreeIntervals, timeInfo);

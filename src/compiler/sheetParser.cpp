@@ -16,7 +16,15 @@
 #include <fm/units.hpp>
 #include "error.hpp"
 #include <sstream>
-#include "sheet/parserSymbols.h"
+#include "parserSymbols.h"
+#include "parserPositionIt.h"
+#include "sheet/DocumentConfig.h"
+#include <sheet/tools.h>
+
+BOOST_FUSION_ADAPT_STRUCT(
+	sheet::DocumentConfig,
+	(sheet::DocumentConfig::Usings, usings)
+)
 
 BOOST_FUSION_ADAPT_STRUCT(
 	sheet::Voice,
@@ -36,37 +44,56 @@ BOOST_FUSION_ADAPT_STRUCT(
 
 BOOST_FUSION_ADAPT_STRUCT(
 	sheet::Event,
+	(unsigned int, sourcePositionBegin)
+	(sheet::ASheetObjectWithSourceInfo::SourceId, sourceId)
 	(sheet::Event::Type, type)
 	(sheet::Event::Pitches, pitches)
 	(sheet::Event::Duration, duration)
-	(fm::String, metaCommand)
+	(fm::String, stringValue)
 	(sheet::Event::Args, metaArgs)
 )
 
+namespace {
+	enum EventFields {
+		EvSourcePosBegin,
+		EvSourceId,
+		EvType,
+		EvPitches,
+		EvDuration,
+		EvStringValue,
+		EvMetaArgs
+	};
+}
+
 BOOST_FUSION_ADAPT_STRUCT(
-	sheet::ChordEvent,
-	(sheet::Event::Type, type)
-	(fm::String, chordName)
-	(fm::String, metaCommand)
-	(sheet::Event::Args, metaArgs)
+	sheet::TrackInfo,
+	(unsigned int, sourcePositionBegin)
+	(sheet::ASheetObjectWithSourceInfo::SourceId, sourceId)
+	(fm::String, name)
+	(sheet::Event::Args, args)
 )
 
 BOOST_FUSION_ADAPT_STRUCT(
 	sheet::Track,
+	(sheet::Track::TrackInfos, trackInfos)
 	(sheet::Track::Voices, voices)
 )
 
 BOOST_FUSION_ADAPT_STRUCT(
-	sheet::Section,
+	sheet::SheetInfo,
+	(unsigned int, sourcePositionBegin)
+	(sheet::ASheetObjectWithSourceInfo::SourceId, sourceId)
 	(fm::String, name)
-	(sheet::Section::Tracks, tracks)
+	(sheet::Event::Args, args)
 )
 
 BOOST_FUSION_ADAPT_STRUCT(
 	sheet::SheetDef,
+	(sheet::DocumentConfig, documentConfig)
+	(sheet::SheetDef::SheetInfos, sheetInfos)
 	(sheet::SheetDef::Tracks, tracks)
-	(sheet::SheetDef::Events, chords)
 )
+
 
 namespace sheet {
 	namespace compiler {
@@ -77,113 +104,72 @@ namespace sheet {
 			OctaveSymbols octaveSymbols_;
 			DurationSymbols durationSymbols_;
 			ExpressionSymbols expressionSymbols_;
+			const std::string ALLOWED_META_ARGUMENT = "a-zA-Z0-9."; 
 		}
 
 		namespace {
 			namespace qi = boost::spirit::qi;
 			namespace ascii = boost::spirit::ascii;
-
-			template <typename Iterator>
-			struct ASheetParser
-			{
-
-				ASheetParser()
-				{
-					using qi::int_;
-					using qi::lit;
-					using qi::_val;
-					using qi::double_;
-					using qi::lexeme;
-					using ascii::char_;
-					using qi::attr;
-					using qi::on_error;
-					using qi::fail;
-
-				}
-
-
-			};
-			///////////////////////////////////////////////////////////////////
-			template <typename Iterator>
-			struct _SectionParser : qi::grammar<Iterator, Section(), ascii::space_type>
-			{
-
-				virtual void x() {}
-
-				_SectionParser() : _SectionParser::base_type(start, "section")
-				{
-					using qi::int_;
-					using qi::lit;
-					using qi::_val;
-					using qi::double_;
-					using qi::lexeme;
-					using ascii::char_;
-					using qi::attr;
-					using qi::on_error;
-					using qi::fail;
-					using boost::phoenix::at_c;
-
-					event_.name("event");
-					track.name("track");
-					voice.name("voice");
-					events.name("events");
-
-					pitch_.name("pitch");
-					pitch_ %= degreeSymbols_ >> (octaveSymbols_ | attr(PitchDef::DefaultOctave));
-
-					absolutePitch_.name("absolute pitch");
-					absolutePitch_ %= pitchSymbols_ >> (octaveSymbols_ | attr(PitchDef::DefaultOctave));
-
-					alias_ %= lexeme['"' >> +(char_ - '"') >> '"'];
-
-					event_ %= 
-						  (attr(Event::Degree) >> (pitch_ | ("<" >> +pitch_ >> ">")) 				 >> (durationSymbols_ | attr(Event::NoDuration))  >> -(lit("~")[at_c<0>(_val) = Event::TiedDegree] | (lit("`")[at_c<0>(_val) = Event::Meta][at_c<3>(_val) = FM_STRING("vorschlag")])))
-						| (attr(Event::Note)   >> (absolutePitch_ | ("<" >> +absolutePitch_ >> ">")) >> (durationSymbols_ | attr(Event::NoDuration))  >> -(lit("~")[at_c<0>(_val) = Event::TiedNote] | (lit("`")[at_c<0>(_val) = Event::Meta][at_c<3>(_val) = FM_STRING("vorschlag")])))
-						| (attr(Event::Note)   >> (alias_ | ("<" >> +alias_ >> ">")) 				 >> (durationSymbols_ | attr(Event::NoDuration))  >> -(lit("~")[at_c<0>(_val) = Event::TiedNote] | (lit("`")[at_c<0>(_val) = Event::Meta][at_c<3>(_val) = FM_STRING("vorschlag")])))
-						| ("\\" >> attr(Event::Meta) >> attr(PitchDef()) >> attr(Event::NoDuration) >> attr("expression") >> expressionSymbols_)
-						| ("!" >> attr(Event::Meta) >> attr(PitchDef()) >> attr(Event::NoDuration) >> attr("singleExpression") >> expressionSymbols_)
-						| ("r" >> attr(Event::Rest) >> attr(PitchDef()) >> (durationSymbols_ | attr(Event::NoDuration)))
-						| ("|" >> attr(Event::EOB) >> attr(PitchDef()) >> attr(Event::NoDuration))
-						| ("/" >> attr(Event::Meta) >> attr(PitchDef()) >> attr(Event::NoDuration) >> +char_("a-zA-Z") >> ":" >> +(lexeme[+char_("a-zA-Z0-9")]) >> "/")
-						;
-
-					track %= "[" > +voice > "]";
-					events %= *event_;
-					voice %= "{" >> events >> "}";
-
-					start.name("section");
-					sectionName.name("section name");
-
-					sectionName %= "section" > *char_("a-zA-Z0-9");
-					start %= sectionName > +track > "end";
-
-					auto onError = boost::bind(&handler::errorHandler<Iterator>, _1);
-					on_error<fail>(start, onError);
-				}
-				qi::rule<Iterator, Section(), ascii::space_type> start;
-				qi::rule<Iterator, fm::String(), ascii::space_type> sectionName;
-				qi::rule<Iterator, AliasPitch(), ascii::space_type> alias_;
-				qi::rule<Iterator, PitchDef(), ascii::space_type> pitch_;
-				qi::rule<Iterator, PitchDef(), ascii::space_type> absolutePitch_;
-				qi::rule<Iterator, Track(), ascii::space_type> track;
-				qi::rule<Iterator, Voice(), ascii::space_type> voice;
-				qi::rule<Iterator, Voice::Events(), ascii::space_type> events;
-				qi::rule<Iterator, Event(), ascii::space_type> event_;
-			};
-
-			void _parse(const fm::String &defStr, Section &def)
-			{
-				using boost::spirit::ascii::space;
-				typedef _SectionParser<fm::String::const_iterator> SectionParserType;
-				SectionParserType g;
-				phrase_parse(defStr.begin(), defStr.end(), g, space, def);
-			}
 			///////////////////////////////////////////////////////////////////
 			template <typename Iterator>
 			struct _SheetParser : qi::grammar<Iterator, SheetDef(), ascii::space_type>
 			{
+				template<class SheetInfoRules>
+				void createSheetInfoRules(SheetInfoRules &sheetInfo) const
+				{
+					using qi::lexeme;
+					using ascii::char_;
+					using qi::eol;
+					using qi::attr;
+					sheetInfo %= 
+						current_pos_.current_pos 
+						>> attr(sourceId_)
+						>> +char_("a-zA-Z") 
+						>> ":" 
+						>> +(lexeme[+char_(ALLOWED_META_ARGUMENT)])
+						> ";";
+				}
 
-				_SheetParser() : _SheetParser::base_type(start, "sheet")
+				template<class TrackInfoRules>
+				void createTrackInfoRules(TrackInfoRules &trackInfo) const
+				{
+					using qi::lexeme;
+					using ascii::char_;
+					using qi::eol;
+					using qi::attr;
+					trackInfo %=
+						current_pos_.current_pos 
+						>> attr(sourceId_)
+						>> +char_("a-zA-Z") 
+						>> ":" 
+						>> +(lexeme[+char_(ALLOWED_META_ARGUMENT)])
+						>> ";";
+				}
+
+				template<class TrackRules, class VoiceRules, class TrackInfoRules>
+				void createTrackRules(TrackRules &track, VoiceRules &voice, TrackInfoRules &trackInfo) const
+				{
+					createTrackInfoRules(trackInfo);
+					track %= "[" > *trackInfo > +voice > "]";
+				}
+				void initDocumentConfigParser()
+				{
+					using qi::int_;
+					using qi::lit;
+					using qi::double_;
+					using qi::lexeme;
+					using ascii::char_;
+					using qi::on_error;
+					using qi::fail;
+					quoted_string.name("quoted string");
+
+					quoted_string %= lexeme['"' > +(char_ - '"') > '"'];
+					using_ %= "@load" > quoted_string > ";";
+					usings_ %= *using_;
+					documentConfig_ %= usings_;
+				}
+
+				void initSheetParser()
 				{
 					using qi::int_;
 					using qi::lit;
@@ -202,85 +188,165 @@ namespace sheet {
 					track.name("track");
 					voice.name("voice");
 					events.name("events");
-
 					pitch_.name("pitch");
+					degree_.name("pitch");
+
+					degree_ %= degreeSymbols_ >> (octaveSymbols_ | attr(PitchDef::DefaultOctave));
+
 					pitch_ %= pitchSymbols_ >> (octaveSymbols_ | attr(PitchDef::DefaultOctave));
-
 					alias_ %= lexeme['"' >> +(char_ - '"') >> '"'];
-
-					event_ %= (attr(Event::Note) >> (pitch_ | ("<" >> +pitch_ >> ">")) >> (durationSymbols_ | attr(Event::NoDuration)) >> -( lit("~")[at_c<0>(_val) = Event::TiedNote] | (lit("`")[at_c<0>(_val) = Event::Meta][at_c<3>(_val) = FM_STRING("vorschlag")])  ))
-						| (attr(Event::Note) >> (alias_ | ("<" >> +alias_ >> ">")) >> (durationSymbols_ | attr(Event::NoDuration)) >> -(lit("~")[at_c<0>(_val) = Event::TiedNote] | (lit("`")[at_c<0>(_val) = Event::Meta][at_c<3>(_val) = FM_STRING("vorschlag")]) ))
-						| ("\\" >> attr(Event::Meta) >> attr(PitchDef()) >> attr(Event::NoDuration) >> attr("expression") >> expressionSymbols_)
-						| ("!" >> attr(Event::Meta) >> attr(PitchDef()) >> attr(Event::NoDuration) >> attr("singleExpression") >> expressionSymbols_)
-						| ("r" >> attr(Event::Rest) >> attr(PitchDef()) >> (durationSymbols_ | attr(Event::NoDuration)))
-						| ("|" >> attr(Event::EOB) >> attr(PitchDef()) >> attr(Event::NoDuration))
-						| ("/" >> attr(Event::Meta) >> attr(PitchDef()) >> attr(Event::NoDuration) >> +char_("a-zA-Z") >> ":" >> +(lexeme[+char_("a-zA-Z0-9")]) >> "/")
-						;
+					pitchOrAlias_ %= pitch_ | alias_;
+					event_ %= 
+					(
+						current_pos_.current_pos 
+						>> attr(sourceId_)
+						>> attr(Event::Note)
+						>> (pitchOrAlias_ | ("<" >> +pitchOrAlias_ >> ">"))
+						>> (durationSymbols_ | attr(Event::NoDuration))  
+						>> -(
+								lit("~")[at_c<EvType>(_val) = Event::TiedNote] 
+								| (lit("`")[at_c<EvType>(_val) = Event::Meta][at_c<EvStringValue>(_val) = FM_STRING("vorschlag")])
+							)
+					)
+					|
+					(
+						current_pos_.current_pos 
+						>> attr(sourceId_)
+						>>  attr(Event::Degree) 
+						>> (degree_ | ("<" >> +degree_ >> ">"))
+						>> (durationSymbols_ | attr(Event::NoDuration))  
+						>> -(
+								lit("~")[at_c<EvType>(_val) = Event::TiedDegree] 
+								| (lit("`")[at_c<EvType>(_val) = Event::Meta][at_c<EvStringValue>(_val) = FM_STRING("vorschlag")])
+							)
+					)
+					|
+					(
+						current_pos_.current_pos 
+						>> attr(sourceId_)
+						>> attr(Event::Chord)
+						>> attr(PitchDef())
+						>> attr(Event::NoDuration) 
+						>> lexeme[
+							char_("a-gA-G")
+							> *char_(ChordDefParser::ALLOWED_CHORD_SYMBOLS_REGEX)
+						]
+					)
+					|
+					(
+						current_pos_.current_pos 
+						>> attr(sourceId_)
+						>> "\\" 
+						>> attr(Event::Meta) 
+						>> attr(PitchDef()) 
+						>> attr(Event::NoDuration) 
+						>> attr("expression") 
+						>> expressionSymbols_
+					)
+					| 
+					(
+						current_pos_.current_pos 
+						>> attr(sourceId_)
+						>> "!" 
+						>> attr(Event::Meta) 
+						>> attr(PitchDef()) 
+						>> attr(Event::NoDuration) 
+						>> attr("singleExpression") 
+						>> expressionSymbols_
+					)
+					| 
+					(
+						current_pos_.current_pos 
+						>> attr(sourceId_)
+						>> "r" 
+						>> attr(Event::Rest) 
+						>> attr(PitchDef()) 
+						>> (durationSymbols_ | attr(Event::NoDuration)))
+					| 
+					(
+						current_pos_.current_pos 
+						>> attr(sourceId_)
+						>> "|"
+						>> attr(Event::EOB) 
+						>> attr(PitchDef()) 
+						>> attr(Event::NoDuration)
+					)
+					| 
+					(
+						current_pos_.current_pos 
+						>> attr(sourceId_)
+						>>  "/" 
+						>> attr(Event::Meta) 
+						>> attr(PitchDef()) 
+						>> attr(Event::NoDuration) 
+						>> +char_("a-zA-Z") >> ":" >> +(lexeme[+char_(ALLOWED_META_ARGUMENT)]) >> "/"
+					)
+					;
 					events %= *event_;
 
-					chord_ %= (attr(Event::Chord) >> lexeme[char_("a-gA-G") > *char_(ChordDefParser::ALLOWED_CHORD_SYMBOLS_REGEX)])
-						| ("r" >> attr(Event::Rest) >> attr(""))
-						| ("|" >> attr(Event::EOB) >> attr(""))
-						| ("/" >> attr(Event::Meta) >> attr("") >> +char_("a-zA-Z") >> ":" >> +(lexeme[+char_("a-zA-Z0-9")]) >> "/")
-						;
-					chords_ %= *chord_;
 
-					track %= "[" > +voice > "]";
-					voice %= "{" >> events >> "}";
+					voice %= "{" > events > "}";
 
-					start %= *track >> chords_;
+					createTrackRules(track, voice, trackInfo_);
+					createSheetInfoRules(sheetInfo_);
+				}
 
-					auto onError = boost::bind(&handler::errorHandler<Iterator>, _1);
+				_SheetParser(Iterator begin, Event::SourceId sourceId = Event::UndefinedSource) : 
+					 _SheetParser::base_type(start, "sheet")
+					,sourceId_(sourceId)
+				{
+					using qi::on_error;
+					using qi::fail;
+					using qi::attr;
+					initSheetParser();
+					initDocumentConfigParser();
+					current_pos_.setStartPos(begin);
+					start %= (documentConfig_ | attr(DocumentConfig()))
+							>> *sheetInfo_ 
+							>> *track;
+
+					auto onError = boost::bind(&handler::errorHandler<Iterator>, _1, sourceId_);
 					on_error<fail>(start, onError);
 
 				}
+			private:
+				Event::SourceId sourceId_ = Event::UndefinedSource;
+				qi::rule<Iterator, PitchDef(), ascii::space_type> degree_;
 				qi::rule<Iterator, SheetDef(), ascii::space_type> start;
 				qi::rule<Iterator, PitchDef(), ascii::space_type> pitch_;
+				qi::rule<Iterator, PitchDef(), ascii::space_type> pitchOrAlias_;
 				qi::rule<Iterator, Track(), ascii::space_type> track;
 				qi::rule<Iterator, AliasPitch(), ascii::space_type> alias_;
 				qi::rule<Iterator, Voice(), ascii::space_type> voice;
 				qi::rule<Iterator, Voice::Events(), ascii::space_type> events;
 				qi::rule<Iterator, Event(), ascii::space_type> event_;
-
-				qi::rule<Iterator, SheetDef::Events(), ascii::space_type> chords_;
-				qi::rule<Iterator, ChordEvent(), ascii::space_type> chord_;
+				qi::rule<Iterator, SheetInfo(), ascii::space_type> sheetInfo_;
+				qi::rule<Iterator, TrackInfo(), ascii::space_type> trackInfo_;
+				qi::rule<Iterator, DocumentConfig(), ascii::space_type> documentConfig_;
+				qi::rule<Iterator, fm::String(), ascii::space_type> quoted_string;
+				qi::rule<Iterator, fm::String(), ascii::space_type> using_;
+				qi::rule<Iterator, DocumentConfig::Usings, ascii::space_type> usings_;
+				CurrentPos<Iterator> current_pos_;
 			};
 
 
-			void _parse(const fm::String &defStr, SheetDef &def)
+			void _parse(const fm::String &source, SheetDef &def, Event::SourceId sourceId)
 			{
 				using boost::spirit::ascii::space;
 				typedef _SheetParser<fm::String::const_iterator> SheetParserType;
-				SheetParserType g;
-				phrase_parse(defStr.begin(), defStr.end(), g, space, def);
+				
+				SheetParserType g(source.begin(), sourceId);
+				phrase_parse(source.begin(), source.end(), g, space, def);
 			}
 		}
 
 
-		StyleDef StyleDefParser::parse(fm::CharType const* first, fm::CharType const* last)
+		SheetDef SheetDefParser::parse(fm::CharType const* first, fm::CharType const* last, Event::SourceId sourceId)
 		{
-			StyleDef result;
-			StyleDefTokenizer<LexerType> styleDefTok;
-			LexerType::iterator_type iter = styleDefTok.begin(first, last);
-			LexerType::iterator_type end = styleDefTok.end();
-			boost::spirit::lex::tokenize(first, last, styleDefTok);
-			for (const auto& defStr : styleDefTok.sections) {
-				Section sec;
-				_parse(defStr, sec);
-				result.sections.push_back(sec);
-			}
-			return result;
-		}
-
-		SheetDef SheetDefParser::parse(fm::CharType const* first, fm::CharType const* last)
-		{
-
 			SheetDef result;
-			SheetDefTokenizer<LexerType> sheetDefTok;
-			LexerType::iterator_type iter = sheetDefTok.begin(first, last);
-			LexerType::iterator_type end = sheetDefTok.end();
-			boost::spirit::lex::tokenize(first, last, sheetDefTok);
-			_parse(sheetDefTok.tracks.str(), result);
+			fm::String source(first, last);
+			removeComments(source.begin(), source.end());
+			_parse(source, result, sourceId);
 			return result;
 		}
 	}

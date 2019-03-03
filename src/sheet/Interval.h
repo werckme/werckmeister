@@ -3,9 +3,10 @@
 
 #include <fm/units.hpp>
 #include <climits>
+#include "ASheetObject.hpp"
 
 namespace sheet {
-    struct Interval {
+    struct Interval : public ASheetObject {
 		enum { INVALID_VALUE = INT_MAX };
         int value;
 		bool operator <(const Interval &b) const { return value < b.value; }

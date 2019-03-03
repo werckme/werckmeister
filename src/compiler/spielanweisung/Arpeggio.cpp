@@ -1,6 +1,7 @@
 #include "Arpeggio.h"
 #include "compiler/AContext.h"
 #include <algorithm>
+#include "sheet/tools.h"
 
 namespace sheet {
     namespace compiler {

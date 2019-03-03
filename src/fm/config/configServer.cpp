@@ -1,5 +1,6 @@
 #include "configServer.h"
-#include <exception>
+#include <fm/exception.hpp>
+#include <sheet/tools.h>
 
 namespace fm {
     
@@ -25,18 +26,22 @@ namespace fm {
     {
         DeviceConfig cf;
         if (args.empty()) {
-            throw std::runtime_error("missing device type argument");
+            FM_THROW(Exception, "missing device type argument");
         }
         auto type = args.at(0);
         if (type == FM_STRING("midi")) {
             if (args.size() < 2) {
-                throw std::runtime_error("missing deviceid argument");
+                FM_THROW(Exception, "missing deviceid argument");
             }
             cf.type = DeviceConfig::Midi;
             cf.deviceId = fm::to_string(args.at(1));
         }
+        auto offsetValue = sheet::getArgValueFor<int>(FM_STRING("offset"), args);
+        if (offsetValue.first) { // offset in ms
+            cf.offsetMillis = offsetValue.second;
+        }
         if (cf.type == DeviceConfig::Undefinded) {
-            throw std::runtime_error("no config for " + fm::to_string(name) + ", " + fm::to_string(type));
+            FM_THROW(Exception, "no config for " + fm::to_string(name) + ", " + fm::to_string(type));
         }
         return cf;
     }

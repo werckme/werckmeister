@@ -6,11 +6,20 @@
 #include <functional>
 #include "fm/common.hpp"
 #include "fm/werckmeister.hpp"
+#include "error.hpp"
+#include <sheet/tools.h>
 
 namespace sheet {
 	namespace compiler {
 
 		namespace {
+
+			void append(DocumentPtr doc, const SheetDef &sheetDef)
+			{
+				append(doc->sheetDef.sheetInfos, sheetDef.sheetInfos);
+				append(doc->sheetDef.tracks, sheetDef.tracks);
+			}
+
 			fm::String getAbsolutePath(DocumentPtr doc, const fm::String &path)
 			{
 				return doc->getAbsolutePath(path);
@@ -49,13 +58,15 @@ namespace sheet {
 			void useStyleDef(DocumentPtr doc, const fm::String &path)
 			{
 				auto apath = getAbsolutePath(doc, path);
+				auto sourceId = doc->addSource(apath);
 				auto filestream = fm::getWerckmeister().openResource(apath);
 				fm::StreamBuffIterator begin(*filestream);
 				fm::StreamBuffIterator end;
 				fm::String documentText(begin, end);
-				StyleDefParser styleDefParser;
+				SheetDefParser sheetDefParser;
 				auto name = boost::filesystem::path(path).stem().wstring();
-				doc->styleDefs[name] = styleDefParser.parse(documentText);
+				auto sheetDef = sheetDefParser.parse(documentText, sourceId);
+				append(doc, sheetDef);
 			}
 			typedef std::function<void(DocumentPtr, const fm::String&)> ExtHandler;
 			std::unordered_map <std::string, ExtHandler> exthandlers({
@@ -67,13 +78,13 @@ namespace sheet {
 
 			void processUsings(DocumentPtr doc)
 			{
-				for (const auto &x : doc->documentConfig.usings)
+				for (const auto &x : doc->sheetDef.documentConfig.usings)
 				{
 					auto path = boost::filesystem::path(x);
 					auto ext = path.extension().string();
 					auto it = exthandlers.find(ext);
 					if (it == exthandlers.end()) {
-						throw std::runtime_error("unsupported file type: " + fm::to_string(x));
+						FM_THROW(Exception, "unsupported file type: " + fm::to_string(x));
 					}
 					it->second(doc, x);
 				}
@@ -91,52 +102,16 @@ namespace sheet {
 
 			auto res = std::make_shared<Document>();
 			res->path = boost::filesystem::system_complete(path).wstring();
-
-			{
-				DocumentConfigParser configParser;
-				res->documentConfig = configParser.parse(first, last);
+			auto sourceId = res->addSource(res->path);
+			SheetDefParser sheetParser;
+			try {
+				res->sheetDef = sheetParser.parse(first, last, sourceId);
+				processUsings(res);
+			} catch(fm::Exception &ex) {
+				ex << ex_sheet_document(res);
+				throw;
 			}
-			{
-				SheetDefParser sheetParser;
-				res->sheetDef = sheetParser.parse(first, last);
-			}
-
-			processUsings(res);
 			return res;
-		}
-
-		DocumentPtr DocumentParser::parseString(const fm::String &sheetText, const Usings &optUsings)
-		{
-			fm::StringStream ss;
-			ss << "-- BUG LINE" << std::endl;
-			for (const auto &using_ : optUsings) {
-				ss << "@load \""<< using_ << "\";" << std::endl;
-			}
-			for (int i=0; i<10; ++i) {
-				ss << sheetText << "|" << std::endl;
-			}
-			fm::String documentText(ss.str());
-			const fm::String::value_type *first = documentText.c_str();
-			const fm::String::value_type *last = first + documentText.length();
-
-			auto res = std::make_shared<Document>();
-			res->path = boost::filesystem::system_complete(".").wstring();
-
-			{
-				DocumentConfigParser configParser;
-				res->documentConfig = configParser.parse(first, last);
-			}
-			{
-				SheetDefParser sheetParser;
-				res->sheetDef = sheetParser.parse(first, last);
-			}
-
-			processUsings(res);
-			return res;
-		}
-		DocumentPtr DocumentParser::parseString(const fm::String &sheetText)
-		{
-			return parseString(sheetText, Usings());
 		}
 	}
 }

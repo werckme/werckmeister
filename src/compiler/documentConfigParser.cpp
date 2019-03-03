@@ -59,7 +59,7 @@ namespace sheet {
 				using boost::spirit::ascii::space;
 				typedef _ConfigParser<fm::String::const_iterator> ChordParserType;
 				ChordParserType g;
-				bool r = phrase_parse(defStr.begin(), defStr.end(), g, space, conf);
+				phrase_parse(defStr.begin(), defStr.end(), g, space, conf);
 			}
 		}
 

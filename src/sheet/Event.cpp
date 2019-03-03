@@ -4,6 +4,7 @@
 #include <boost/algorithm/string.hpp>
 #include <unordered_map>
 #include <locale>
+#include <fm/exception.hpp>
 
 namespace sheet {
 
@@ -23,26 +24,26 @@ namespace sheet {
 		failed to get a proper parser to working which can parse
 		a chordname and the options in one step. The problem was that it is needed to
 		have the two parser elements in one lexeme. But this seems to consume only one property
-		of a struct. May be there is a solution with sematic actions etc. But in sake of make process,
+		of a struct. May be there is a solution with sematic actions etc. But in sake of moving forward,
 		I decided to parse on the fly.
 	*/
-	ChordEvent::ChordElements ChordEvent::chordElements() const
+	Event::ChordElements Event::chordElements() const
 	{
 		PitchDef::Pitch pitch = 0;
-		auto nameLower = chordName;
+		auto nameLower = stringValue;
 		if (nameLower.length() == 0) {
-			throw std::runtime_error("empty chord");
+			FM_THROW(fm::Exception, "empty chord");
 		}
 		boost::algorithm::to_lower(nameLower);
 		fm::String::const_iterator it = nameLower.begin();
 		auto pitchIt = _name2pitch.find(*it);
 		if (pitchIt == _name2pitch.end()) {
-			throw std::runtime_error("ivalid chord: " + fm::to_string(chordName));
+			FM_THROW(fm::Exception, "ivalid chord: " + fm::to_string(stringValue));
 		}
 		pitch = pitchIt->second;
 		++it;
 		// check for is or es
-		if (nameLower.length() == 2) {
+		if (nameLower.length() >= 2) {
 			if (pitch == fm::notes::E && *(it) == FM_CHAR('s')) {
 				pitch -= 1;
 				it += 1;
@@ -51,9 +52,7 @@ namespace sheet {
 				pitch -= 1;
 				it += 1;
 			}
-		}
-		if (nameLower.length() >= 3) {
-			if (*(it) == FM_CHAR('i') && *(it + 1) == FM_CHAR('s')) {
+			else if (*(it) == FM_CHAR('i') && *(it + 1) == FM_CHAR('s')) {
 				pitch += 1;
 				it += 2;
 			}
@@ -63,19 +62,40 @@ namespace sheet {
 			}
 		}
 		auto idxOptionsStart = it - nameLower.begin();
-		return std::make_tuple(pitch, Options(chordName.begin() + idxOptionsStart,  chordName.end()));
+		return std::make_tuple(pitch, Options(stringValue.begin() + idxOptionsStart,  stringValue.end()));
 	}
 
-	fm::String ChordEvent::chordDefName() const 
+	fm::String Event::chordDefName() const 
 	{
 		std::locale loc;
 		auto elements = chordElements();
-		fm::String::const_iterator it = chordName.begin();
+		fm::String::const_iterator it = stringValue.begin();
 		if (std::isupper(*it, loc)) {
 			return FM_STRING("X") + std::get<1>(elements);
 		}
 		else {
-			return FM_STRING("x") + std::get<1>(elements);
+			FM_THROW(fm::Exception, "lowercase chords are not allowed: " + fm::to_string(stringValue));
 		}
+	}
+
+	fm::String Event::toString() const 
+	{
+		fm::StringStream ss;
+		switch (type)
+		{
+			case Rest: ss << "Rest"; break;
+			case Degree: ss << "Degree"; break; 
+			case TiedDegree: ss << "TiedDegree"; break;
+			case Note: ss << "Note"; break;
+			case TiedNote: ss << "TiedNote"; break;
+			case Chord: ss << "Chord"; break;
+			case EOB: ss << "EOB"; break; 
+			case Meta: ss << "Meta"; break;
+			case Expression: ss << "Expression"; break;
+			case Unknown: 
+			default:	ss << "Unknown"; break;
+		}
+		ss << "(" << duration << ")";
+		return ss.str();
 	}
 }

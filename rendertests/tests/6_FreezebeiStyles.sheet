@@ -1,0 +1,19 @@
+@load "./chords/default.chords";
+
+
+[
+type: style;
+name: x;
+part: y;
+{
+    /signature: 5 4/
+
+}
+]
+
+[
+type: sheet;
+{
+    C7 | C9 | Dmin7 |
+}
+]

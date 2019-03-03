@@ -19,6 +19,7 @@
 #include "compiler/spielanweisung/Lua.h"
 #include "compiler/modification/modifications.h"
 #include "compiler/modification/Bend.h"
+#include <fm/exception.hpp>
 
 
 namespace fm {
@@ -43,11 +44,14 @@ namespace fm {
 
 	Werckmeister::ResourceStream Werckmeister::openResourceImpl(const fm::String &path)
 	{
+		if (path.empty()) {
+			FM_THROW(Exception, "tried to load an empty path");
+		}
 		auto fpath = boost::filesystem::system_complete(path);
 		auto absolute = fpath.string();
 		if (!boost::filesystem::exists(path))
 		{
-			throw std::runtime_error("resource not found: " + fpath.string());
+			FM_THROW(Exception, "resource not found: " + fpath.string());
 		}
 		auto result = std::make_unique<StreamType>(absolute.c_str());
 		return result;
@@ -86,7 +90,7 @@ namespace fm {
 		if (name == SHEET_VOICING_STRATEGY_AS_NOTATED) {
 			return std::make_shared<sheet::DirectVoicingStrategy>();
 		}
-		throw std::runtime_error("voicing strategy not found: " + fm::to_string(name));
+		FM_THROW(Exception, "voicing strategy not found: " + fm::to_string(name));
 	}
 
 	sheet::compiler::ASpielanweisungPtr Werckmeister::getSpielanweisung(const fm::String &name)
@@ -107,7 +111,7 @@ namespace fm {
 		if (name == SHEET_SPIELANWEISUNG_VORSCHLAG) {
 			return std::make_shared<sheet::compiler::Vorschlag>(); 
 		}		
-		throw std::runtime_error("spielanweisung not found: " + fm::to_string(name));
+		FM_THROW(Exception, "spielanweisung not found: " + fm::to_string(name));
 	}
 
 	sheet::compiler::AModificationPtr Werckmeister::getModification(const fm::String &name)
@@ -119,7 +123,7 @@ namespace fm {
 		if (name == SHEET_MOD_BEND) {
 			return std::make_shared<sheet::compiler::Bend>();  
 		}
-		throw std::runtime_error("modification not found: " + fm::to_string(name));
+		FM_THROW(Exception, "modification not found: " + fm::to_string(name));
 	}
 
 	void Werckmeister::registerLuaScript(const fm::String &path)

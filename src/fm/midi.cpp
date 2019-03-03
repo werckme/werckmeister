@@ -3,6 +3,8 @@
 #include <cstring>
 #include <fstream>
 #include <algorithm>
+#include <fm/exception.hpp>
+#include <math.h>
 
 namespace fm {
 	namespace midi {
@@ -23,7 +25,7 @@ namespace fm {
 			if (value <= 0x0FFFFFFF) {
 				return 4;
 			}
-			throw std::runtime_error("invalid tick length");
+			FM_THROW(fm::Exception, "invalid tick length");
 		}
 		size_t variableLengthWrite(MidiLong value, Byte *outval, size_t size)
 		{
@@ -32,7 +34,7 @@ namespace fm {
 				return 0;
 			}
 			if (size == 0) {
-				throw std::runtime_error("buffer too small");
+				FM_THROW(fm::Exception, "buffer too small");
 			}
 			if (value < 128) {
 				outval[0] = static_cast<Byte>(value);
@@ -48,7 +50,7 @@ namespace fm {
 			int c = 0;
 			while (true) {
 				if (c >= (int)size) {
-					throw std::runtime_error("buffer too small");
+					FM_THROW(fm::Exception, "buffer too small");
 				}
 				outval[c++] = (Byte)buffer;
 				if (buffer & 0x80) {
@@ -70,10 +72,10 @@ namespace fm {
 				value &= 0x7F;
 				do {
 					if (idx >= 4) {
-						throw std::runtime_error("invalid midi stream");
+						FM_THROW(fm::Exception, "invalid midi stream");
 					}
 					if (idx >= (int)maxSize) {
-						throw std::runtime_error("buffer too small");
+						FM_THROW(fm::Exception, "buffer too small");
 					}
 					c = inval[idx++];
 					value = (value << 7) + (c & 0x7F);
@@ -98,7 +100,7 @@ namespace fm {
 		size_t Event::read(Ticks deltaOffset, const Byte *bytes, size_t maxByteSize)
 		{
 			if (maxByteSize < MinEventSize) {
-				throw std::runtime_error("buffer to small");
+				FM_THROW(fm::Exception, "buffer to small");
 			}
 			size_t c = 0;
 			absPosition(variableLengthRead(bytes, maxByteSize, &c) + deltaOffset);
@@ -134,10 +136,10 @@ namespace fm {
 			bytes+=vlengthBytes;
 
 			if ((maxByteSize-vlengthBytes-metaTypeByteSize) < _metaDataSize) {
-				throw std::runtime_error("buffer to small");
+				FM_THROW(fm::Exception, "buffer to small");
 			}
 			if (_metaDataSize >= MaxVarLength) {
-				throw std::runtime_error("meta data bytes overflow");
+				FM_THROW(fm::Exception, "meta data bytes overflow");
 			}
 			_metaData = Bytes(new Byte[_metaDataSize]);
 			::memcpy(_metaData.get(), bytes, _metaDataSize);
@@ -147,7 +149,7 @@ namespace fm {
 		{
 			size_t length = byteSize(deltaOffset);
 			if (length > maxByteSize) {
-				throw std::runtime_error("buffer to small");
+				FM_THROW(fm::Exception, "buffer to small");
 			}
 			auto relOff = relDelta(deltaOffset);
 			size_t c = variableLengthWrite(relOff, bytes, maxByteSize);
@@ -164,13 +166,13 @@ namespace fm {
 		size_t Event::writePayloadDefault(Byte *bytes, size_t maxByteSize) const
 		{
 			if (maxByteSize < 2) {
-				throw std::runtime_error("buffer to small");
+				FM_THROW(fm::Exception, "buffer to small");
 			}
 			(*bytes++) = (eventType() << 4) | channel();
 			(*bytes++) = parameter1();
 			if (payloadSize() > 2) {
 				if (maxByteSize < 3) {
-					throw std::runtime_error("buffer to small");
+					FM_THROW(fm::Exception, "buffer to small");
 				}
 				(*bytes++) = parameter2();
 				return 3;
@@ -181,7 +183,7 @@ namespace fm {
 		size_t Event::writePayloadMeta(Byte *bytes, size_t maxByteSize) const
 		{
 			if (maxByteSize < payloadSize()) {
-				throw std::runtime_error("buffer to small");
+				FM_THROW(fm::Exception, "buffer to small");
 			}
 			(*bytes++) = eventType();
 			(*bytes++) = metaEventType();
@@ -262,6 +264,15 @@ namespace fm {
 			ev.metaData(Tempo, bytes.data(), bytes.size());
 			return ev;
 		}
+	 	Event Event::MetaSignature(Byte nominator, Byte denominator, Byte clocksBetweenMetronomeClick, Byte nth32PerQuarter)
+		{
+			auto ev = Event();
+			static const double log2 = 0.6931471805599453;
+			denominator = static_cast<Byte>( log(denominator) / log2);
+			std::vector<Byte> bytes = {nominator, denominator, clocksBetweenMetronomeClick, nth32PerQuarter };
+			ev.metaData(TimeSignature, bytes.data(), bytes.size());
+			return ev;
+		}
 		Event Event::MetaInstrument(const std::string &name)
 		{
 			auto ev = Event();
@@ -279,7 +290,7 @@ namespace fm {
 		void Event::metaData(MetaEventType type, Byte *data, size_t numBytes)
 		{
 			if (numBytes >= MaxVarLength) {
-				throw std::runtime_error("meta data bytes overflow");
+				FM_THROW(fm::Exception, "meta data bytes overflow");
 			}
 			eventType(MetaEvent);
 			_metaEventType = type;
@@ -301,7 +312,7 @@ namespace fm {
 		int Event::MetaGetIntValue(const Byte *data, size_t length)
 		{
 			if (length > sizeof(int)) {
-				throw std::runtime_error("to many bytes for meta data int value");
+				FM_THROW(fm::Exception, "to many bytes for meta data int value");
 			}
 			int result = 0;
 			size_t idx = 0;
@@ -325,7 +336,7 @@ namespace fm {
 		Event Event::MetaCustom(const CustomMetaData &custom)
 		{
 			if (custom.type == CustomMetaData::Undefined) {
-				throw std::runtime_error("invalid meta custom data");
+				FM_THROW(fm::Exception, "invalid meta custom data");
 			}
 			std::vector<Byte> bff(custom.data.size() + 1);
 			bff[0] = static_cast<Byte>(custom.type);
@@ -337,7 +348,7 @@ namespace fm {
 		CustomMetaData Event::MetaGetCustomData(const Byte *data, size_t length)
 		{
 			if (length == 0) {
-				throw std::runtime_error("invalid meta custom data");
+				FM_THROW(fm::Exception, "invalid meta custom data");
 			}
 			CustomMetaData result;
 			result.type = static_cast<CustomMetaData::Type>(data[0]);
@@ -455,7 +466,7 @@ namespace fm {
 		size_t EventContainer::write(Byte *bff, size_t maxByteSize) const
 		{
 			if (maxByteSize < byteSize()) {
-				throw std::runtime_error("buffer to small");
+				FM_THROW(fm::Exception, "buffer to small");
 			}
 			size_t written = 0;
 			Ticks offset = 0;
@@ -497,13 +508,13 @@ namespace fm {
 
 		size_t Track::read(const Byte *, size_t length)
 		{
-			throw std::runtime_error("not yet implemented");
+			FM_THROW(fm::Exception, "not yet implemented");
 		}
 		size_t Track::write(Byte *bff, size_t maxByteSize) const
 		{
 			size_t wrote = 0;
 			if (maxByteSize < byteSize()) {
-				throw std::runtime_error("buffer to small");
+				FM_THROW(fm::Exception, "buffer to small");
 			}
 			Header header;
 			header.chunkSize = static_cast<DWord>(events().byteSize());
@@ -536,13 +547,13 @@ namespace fm {
 		}
 		size_t Midi::read(const Byte *, size_t length)
 		{
-			throw std::runtime_error("not yet implemented");
+			FM_THROW(fm::Exception, "not yet implemented");
 		}
 		size_t Midi::write(Byte *bff, size_t maxByteSize) const
 		{
 			size_t wrote = 0;
 			if (maxByteSize < byteSize()) {
-				throw std::runtime_error("buffer to small");
+				FM_THROW(fm::Exception, "buffer to small");
 			}
 			Header header;
 			header.timeDivision = static_cast<Word>(0x7FFF) & static_cast<Word>(_ppq);

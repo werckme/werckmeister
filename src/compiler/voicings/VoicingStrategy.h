@@ -13,7 +13,7 @@ namespace sheet {
         struct TimeInfo {};
 		typedef Event::Pitches Degrees;
 		typedef Degrees Pitches;
-		virtual Pitches get(const ChordEvent &chord, const ChordDef &def, const Degrees &degreeIntervals, const TimeInfo&) = 0;
+		virtual Pitches get(const Event &chord, const ChordDef &def, const Degrees &degreeIntervals, const TimeInfo&) = 0;
         virtual ~VoicingStrategy() = default;
         virtual void setArguments(const Event::Args &args) {}
     };

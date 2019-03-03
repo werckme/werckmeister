@@ -5,24 +5,53 @@
 #include <boost/fusion/include/vector.hpp>
 #include <boost/fusion/include/at_c.hpp>
 #include <boost/spirit/home/support/info.hpp>
+#include <fm/exception.hpp>
+#include <string>
+#include <boost/exception/info.hpp>
+#include <sheet/ASheetObject.hpp>
+#include <algorithm>
 
 namespace sheet {
+	class Document;
 	namespace compiler {
-		class Exception : public std::exception
+		typedef boost::error_info<struct tag_at_object_idx, int> ex_at_object_idx;
+		typedef boost::error_info<struct tag_sheet_event, ASheetObjectWithSourceInfo> ex_sheet_source_info;
+		typedef boost::error_info<struct tag_sheet_document, std::shared_ptr<Document>> ex_sheet_document;
+		class Exception : public fm::Exception
 		{
+		typedef fm::Exception Base;
 		public:
-			explicit Exception(const std::string& what_) : msg_(what_)
+			explicit Exception(const std::string& what_) : Base(what_) {} 
+			explicit Exception(const std::string& what_, const char *filename, int line) 
+				: Base(what_, filename, line)
 			{}
-			virtual ~Exception() throw () {}
-			virtual const char* what() const throw () {
-				return msg_.c_str();
-			}
-
-		protected:
-			std::string msg_;
+			virtual ~Exception() throw () = default;
+			virtual std::string toString() const override;
 		};
 
 		namespace handler {
+
+			void errorHandler(const std::string &source, 
+				const std::string &what, 
+				int errorPos, 
+				ASheetObjectWithSourceInfo::SourceId sourceId);
+
+			template<class Iterator>
+			void errorHandler(const boost::fusion::vector<
+				Iterator,
+				Iterator,
+				Iterator,
+				boost::spirit::info> &args, 
+				ASheetObjectWithSourceInfo::SourceId sourceId)
+			{
+				using boost::fusion::at_c;
+				auto first = at_c<0>(args);
+				auto last = at_c<1>(args);
+				auto errPos = at_c<2>(args);
+				auto what = at_c<3>(args);
+				auto source = std::string(first, last);
+				errorHandler(source, what.tag, errPos - first, sourceId);
+			}
 
 			template<class Iterator>
 			void errorHandler(const boost::fusion::vector<

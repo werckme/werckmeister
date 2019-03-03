@@ -3,7 +3,7 @@
 #include <fm/midi.hpp>
 #include <fm/werckmeister.hpp>
 #include <iterator>
-
+#include <sheet/tools.h>
 
 BOOST_AUTO_TEST_CASE(test_endswap)
 {
@@ -43,6 +43,164 @@ BOOST_AUTO_TEST_CASE(test_resource_loader)
 	fm::StreamBuffIterator it(*resource.get());
 	fm::String res(it, eos);
 	BOOST_CHECK(res.length() > 0);
+}
+
+// BOOST_AUTO_TEST_CASE(test_get_line_and_position_0)
+// {
+// 	fm::String line;
+// 	int position = -1;
+// 	std::tie(line, position) = sheet::getLineAndPosition(fm::String(FM_STRING("")), 0, false);
+// 	BOOST_CHECK(line.length() == 0);
+// 	BOOST_CHECK(position == -1);
+
+// 	std::tie(line, position) = sheet::getLineAndPosition(fm::String(FM_STRING(" ")), 0, false);
+// 	BOOST_CHECK(line.length() == 1);
+// 	BOOST_CHECK(position == 0);
+
+// 	std::tie(line, position) = sheet::getLineAndPosition(fm::String(FM_STRING(" ")), 0);
+// 	BOOST_CHECK(line.length() == 0);
+// 	BOOST_CHECK(position == -1);
+// }
+
+BOOST_AUTO_TEST_CASE(test_get_line_and_position_1)
+{
+	fm::String source = FM_STRING("-- document configs\n\
+@using 'Chords1.chdef';\n\
+@using 'simplePianoStyle.style';\n\
+\n\
+	[-- xyz\n\
+	{\n\
+		/ soundselect: 0 0 /\n\
+			/ channel : 1 /\n\
+			c4 d4 e4 f4 | c4 d4 e4 f4 |\n\
+	}\n\
+\n\
+\n\
+	{\n\
+		f4 f4 f4 f4 | h4 h4 h4 h4 |\n\
+	}\n\
+	]\n\
+	[{\n\
+		/ style: simplePianoStyle:intro /\n\
+			/ voicingStrategy : asNotated /\n\
+			Cmaj | Cmaj C7 |\n\
+	}]\n\
+		[{}]");
+	
+	fm::String line;
+	int position = -1;
+	std::tie(line, position) = sheet::getLineAndPosition<fm::String>(source, 149);
+	line[position] = 'X';
+	fm::String expected = FM_STRING("c4 d4 e4 f4 | X4 d4 e4 f4 |");
+	BOOST_CHECK( line == expected );
+}
+
+BOOST_AUTO_TEST_CASE(test_get_line_and_position_2)
+{
+	fm::String source = FM_STRING("-- document configs\n\
+@using 'Chords1.chdef';\n\
+@using 'simplePianoStyle.style';\n\
+\n\
+	[-- xyz\n\
+	{\n\
+		/ soundselect: 0 0 /\n\
+			/ channel : 1 /\n\
+			c4 d4 e4 f4 | c4 d4 e4 f4 |\n\
+	}\n\
+\n\
+\n\
+	{\n\
+		f4 f4 f4 f4 | h4 h4 h4 h4 |\n\
+	}\n\
+	]\n\
+	[{\n\
+		/ style: simplePianoStyle:intro /\n\
+			/ voicingStrategy : asNotated /\n\
+			Cmaj | Cmaj C7 |\n\
+	}]\n\
+		[{}]");
+	
+	fm::String line;
+	int position = -1;
+	std::tie(line, position) = sheet::getLineAndPosition(source, 0);
+	line[position] = 'X';
+	fm::String expected = FM_STRING("X- document configs");
+	BOOST_CHECK( line == expected );
+}
+
+BOOST_AUTO_TEST_CASE(test_get_line_and_position_3)
+{
+	fm::String source = FM_STRING("-- document configs\n\
+@using 'Chords1.chdef';\n\
+@using 'simplePianoStyle.style';\n\
+\n\
+	[-- xyz\n\
+	{\n\
+		/ soundselect: 0 0 /\n\
+			/ channel : 1 /\n\
+			c4 d4 e4 f4 | c4 d4 e4 f4 |\n\
+	}\n\
+\n\
+\n\
+	{\n\
+		f4 f4 f4 f4 | h4 h4 h4 h4 |\n\
+	}\n\
+	]\n\
+	[{\n\
+		/ style: simplePianoStyle:intro /\n\
+			/ voicingStrategy : asNotated /\n\
+			Cmaj | Cmaj C7 |\n\
+	}]\n\
+		[{}]");
+	
+	fm::String line;
+	int position = -1;
+	std::tie(line, position) = sheet::getLineAndPosition(source, source.length()-1);
+	line[position] = 'X';
+	fm::String expected = FM_STRING("[{}X");
+	BOOST_CHECK( line == expected );
+}
+
+BOOST_AUTO_TEST_CASE(remove_comments_0)
+{
+	fm::String source = FM_STRING("");
+	fm::String excpected = FM_STRING("");
+	sheet::removeComments(source.begin(), source.end());
+	BOOST_CHECK(source == excpected);
+
+}
+BOOST_AUTO_TEST_CASE(remove_comments_1)
+{
+	fm::String source = FM_STRING("--abc");
+	fm::String excpected = FM_STRING("     ");
+	sheet::removeComments(source.begin(), source.end());
+	BOOST_CHECK(source == excpected);
+}
+
+BOOST_AUTO_TEST_CASE(remove_comments_2)
+{
+	fm::String source = FM_STRING("abc--def");
+	fm::String excpected = FM_STRING("abc     ");
+	sheet::removeComments(source.begin(), source.end());
+	BOOST_CHECK(source == excpected);
+}
+BOOST_AUTO_TEST_CASE(remove_comments_3)
+{
+	fm::String source = FM_STRING("\n\
+	\n\
+	\n\
+	abc\n\
+	-- abc\n\
+	def");
+	fm::String excpected = FM_STRING("\n\
+	\n\
+	\n\
+	abc\n\
+	      \n\
+	def");
+	sheet::removeComments(source.begin(), source.end());
+	BOOST_CHECK(source == excpected);
+	//std::wcout << source << std::endl;
 }
 
 #if 0

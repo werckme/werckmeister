@@ -1,0 +1,46 @@
+@load "./chords/default.chords";
+@load "./styles/simpleJazz.style";
+@load "./pitchmaps/defaultMidiDrumMap.pitchmap";
+
+tempo: 140;
+device: SC1 midi 2;
+
+--          instrument dv ch cc pc
+instrumentDef: piano   SC1 2 0 0;
+instrumentDef: lead    SC1 3 0 0;
+instrumentDef: bass    SC1 7 0 32;
+instrumentDef: drums   SC1 9 0 32;
+
+
+instrumentConf: piano volume 80;
+instrumentConf: lead volume 100;
+instrumentConf: bass volume 80;
+instrumentConf: drums volume 80;
+
+
+
+[
+instrument: lead;
+{
+    \fff
+    r4 e fis g | c'1~ | c'4 d e fis | b2 b2~ | b4 c d e | a1~ | a4 b, cis dis | g1 |
+    -- wiederholung
+    r4 e fis g | c'1~ | c'4 d e fis | b2 b2~ | b4 c d e | a1~ | 
+    -- 2.
+    a4 fis a g | e1~ | e4 r dis e | fis b, fis2~ | fis4 fis e fis | g1~ | g4 g fis g | a1~ |
+    a4 d d' c' | b1~ | b4 r ais b | c' c' a a | fis2. c'4 | b2 b2~ | b2. e4 | a2. g4 | fis2 g4 b, | e1 |
+}
+]
+
+[
+type: sheet;
+{
+    /style: simpleJazz normal/
+    r | A-7 | D7 | Gmaj7 | Cmaj7 | Fis07 | B7 | E- | E- |
+    -- wiederholung
+    A-7 | D7 | Gmaj7 | Cmaj7 | Fis07 | 
+    -- 2.
+    B7 | E- | E- | Fis07 | B7b9 | E- | E- | A-7 | D7 | Gmaj7 | Gmaj7 |
+    Fis07 | B7b9 | E-7 Es7 | D-7 Des7 | Cmaj7 | B7b9 | E- |
+}
+]

@@ -1,6 +1,5 @@
 #include "AContext.h"
-#include <exception>
-#include <exception>
+#include "error.hpp"
 #include <fm/werckmeister.hpp>
 #include <algorithm>
 #include <fm/common.hpp>
@@ -10,18 +9,15 @@
 #include "modification/AModification.h"
 #include <fm/literals.hpp>
 #include <fm/config/configServer.h>
-
-namespace {
-	const fm::Ticks TickTolerance = 0.5; // rounding errors e.g. for triplets
-}
+#include <sheet/Track.h>
+#include "sheet/tools.h"
 
 namespace sheet {
 
 	namespace compiler {
 		using namespace fm;
-		const Ticks AContext::DefaultDuration = 1.0_N4;
-		const Ticks AContext::DefaultBarLength = 4 * 1.0_N4;
 		const double AContext::PitchbendMiddle = 0.5;
+		const Ticks AContext::TickTolerance = 0.5;
 		namespace {
 			template<int EventType>
 			bool renderEvent(AContext * ctx, const Event *ev)
@@ -85,11 +81,10 @@ namespace sheet {
 			}
 
 			template<>
-			bool renderEvent<Event::Chord>(AContext * ctx, const Event *ev)
+			bool renderEvent<Event::Chord>(AContext * ctx, const Event *chordEv)
 			{
-				auto chordEv = static_cast<const ChordEvent*>(ev);
 				ctx->setChord(*chordEv);
-				ctx->seek(ev->duration);
+				ctx->seek(chordEv->duration);
 				return true;
 			}
 			template<>
@@ -136,9 +131,15 @@ namespace sheet {
 		{
 		}
 
+		AContext::TrackId AContext::createMasterTrack()
+		{
+			this->masterTrackId_ = createTrack();
+			return this->masterTrackId_;
+		}
+
 		ASpielanweisungPtr AContext::spielanweisung()
 		{
-			auto meta = voiceMetaData(voice());
+			auto meta = voiceMetaData();
 			if (!defaultSpielanweisung_) {
 				defaultSpielanweisung_ = fm::getWerckmeister().getDefaultSpielanweisung();
 			}
@@ -165,7 +166,7 @@ namespace sheet {
 		AContext::IStyleDefServerPtr AContext::styleDefServer() const
 		{
 			if (!styleDefServer_) {
-				throw std::runtime_error("no styledef server set");
+				FM_THROW(Exception, "no styledef server set");
 			}
 			return styleDefServer_;
 		}
@@ -176,21 +177,16 @@ namespace sheet {
 
 		AContext::TrackId AContext::track() const
 		{
-			if (trackId_ == INVALID_TRACK_ID) {
-				throw std::runtime_error("no track set");
-			}
 			return trackId_;
 		}
 		AContext::VoiceId AContext::voice() const
 		{
-			if (voiceId_ == INVALID_VOICE_ID) {
-				throw std::runtime_error("no voice set");
-			}
 			return voiceId_;
 		}
 
 		void AContext::setTrack(TrackId trackId)
 		{
+			this->voiceId_ = INVALID_VOICE_ID;
 			this->trackId_ = trackId;
 		}
 
@@ -202,6 +198,8 @@ namespace sheet {
 		AContext::TrackId AContext::createTrack()
 		{
 			auto tid = createTrackImpl();
+			auto meta = createTrackMetaData();
+			trackMetaDataMap_[tid] = meta;
 			return tid;
 		}
 		AContext::VoiceId AContext::createVoice()
@@ -216,15 +214,43 @@ namespace sheet {
 		{
 			auto it = voiceMetaDataMap_.find(voiceid);
 			if (it == voiceMetaDataMap_.end()) {
-				throw std::runtime_error("no meta data found for voiceid: " + std::to_string(voiceid));
+				return nullptr;
 			}
 			return it->second;
 		}
 
+		AContext::VoiceMetaDataPtr AContext::voiceMetaData() const
+		{
+			return voiceMetaData(voice());
+		}
+
+		AContext::TrackMetaDataPtr AContext::trackMetaData(TrackId trackid) const
+		{
+			auto it = trackMetaDataMap_.find(trackid);
+			if (it == trackMetaDataMap_.end()) {
+				return nullptr;
+			}
+			return it->second;
+		}
+
+		AContext::TrackMetaDataPtr AContext::trackMetaData() const
+		{
+			return trackMetaData(track());
+		}
+
 		void AContext::throwContextException(const std::string &msg)
 		{
-			auto meta = voiceMetaData(voice());
-			throw std::runtime_error(msg + " at voice " + std::to_string(voice()) + " bar: " + std::to_string(meta->position / meta->barLength));
+			auto meta = voiceMetaData();
+			FM_THROW(Exception, msg + " at voice " + std::to_string(voice()) + " bar: " + std::to_string(meta->position / meta->barLength));
+		}
+
+		fm::Ticks AContext::currentPosition() const
+		{
+			auto voiceMeta = voiceMetaData();
+			if (!voiceMeta) {
+				return 0;
+			}
+			return voiceMeta->position;
 		}
 
 		PitchDef AContext::resolvePitch(const PitchDef &pitch) const
@@ -234,16 +260,25 @@ namespace sheet {
 			}
 			const PitchDef *result = styleDefServer()->getAlias(pitch.alias);
 			if (result == nullptr) {
-				throw std::runtime_error("could not resolve alias: " + fm::to_string(pitch.alias));
+				FM_THROW(Exception, "could not resolve alias: " + fm::to_string(pitch.alias));
 			}
 			return *result;
+		}
+
+		fm::Ticks AContext::getImlplicitDuration(const Event &ev) const
+		{
+			if (ev.duration > 0) {
+				return ev.duration;
+			}
+			auto meta = voiceMetaData();
+			return meta->lastEventDuration;
 		}
 
 		void AContext::addEvent(const PitchDef &rawPitch, fm::Ticks duration, bool tying)
 		{
 			using namespace fm;
 			PitchDef pitch = resolvePitch(rawPitch);
-			auto meta = voiceMetaData(voice());
+			auto meta = voiceMetaData();
 			if (duration > 0) {
 				meta->lastEventDuration = duration;
 			}
@@ -253,25 +288,22 @@ namespace sheet {
 					meta->waitForTieBuffer.insert({ pitch, meta->lastEventDuration });
 					startEvent(pitch, meta->position);
 				}
-			}
-			else if (meta->pendingTie()) {
-				auto it = meta->waitForTieBuffer.find(pitch);
-				if (it == meta->waitForTieBuffer.end()) {
-					stopTying();
-					return;
-				}
-				stopEvent(pitch, meta->position + meta->lastEventDuration);
-				meta->waitForTieBuffer.erase(it);
 				return;
 			}
-			else {
-				addEvent(pitch, meta->position, meta->lastEventDuration);
+			if (meta->pendingTie()) {
+				auto it = meta->waitForTieBuffer.find(pitch);
+				if (it != meta->waitForTieBuffer.end()) {
+					stopEvent(pitch, meta->position + meta->lastEventDuration);
+					meta->waitForTieBuffer.erase(it);
+					return;
+				}
 			}
+			addEvent(pitch, meta->position, meta->lastEventDuration);
 		}
 
 		void AContext::stopTying()
 		{
-			auto meta = voiceMetaData(voice());
+			auto meta = voiceMetaData();
 			for(auto tied : meta->startedEvents){
 				stopEvent(tied, meta->position + meta->lastEventDuration);
 			}
@@ -279,32 +311,37 @@ namespace sheet {
 
 		void AContext::startEvent(const PitchDef &pitch, fm::Ticks absolutePosition)
 		{
-			auto meta = voiceMetaData(voice());
+			auto meta = voiceMetaData();
 			meta->startedEvents.insert(pitch);
 		}
 
 		void AContext::stopEvent(const PitchDef &pitch, fm::Ticks absolutePosition)
 		{
-			auto meta = voiceMetaData(voice());
+			auto meta = voiceMetaData();
 			meta->startedEvents.erase(pitch);
 		}
 
 		fm::Ticks AContext::barPos() const
 		{
-			auto meta = voiceMetaData(voice());
+			auto meta = voiceMetaData();
 			return meta->barPosition;
 		}
 
 		void AContext::addEvent(const Event &ev)
 		{
-			auto meta = voiceMetaData(voice());
+			auto meta = voiceMetaData();
 			++(meta->eventCount);
-			_addEvent(this, &ev);
+			try {
+				_addEvent(this, &ev);
+			} catch(fm::Exception &ex) {
+				ex << ex_sheet_source_info(ev);
+				throw;
+			}
 		}
 
 		void AContext::addEvent(const Event::Pitches &pitches, fm::Ticks duration, bool tying)
 		{
-			auto meta = voiceMetaData(voice());
+			auto meta = voiceMetaData();
 			auto tmpExpression = meta->expression;
 
 			if (meta->singleExpression != fm::expression::Default) {
@@ -329,22 +366,30 @@ namespace sheet {
 
 		void AContext::seek(fm::Ticks duration)
 		{
-			auto meta = voiceMetaData(voice());
+			auto meta = voiceMetaData();
 			meta->position += duration;
 			meta->barPosition += duration;
 		}
 
 		void AContext::warn(const std::string &msg)
 		{
-			auto meta = voiceMetaData(voice());
-			auto voiceName = meta->uname.empty() ? std::to_string(voice()) : fm::to_string(meta->uname);
-			std::string warning(msg + " at '" + voiceName + "', bar: " + std::to_string(meta->position / meta->barLength));
+			auto tmeta = trackMetaData();
+			auto vmeta = voiceMetaData();
+			std::string voiceName;
+			fm::Ticks pos = 0;
+			if (tmeta) {
+				voiceName = tmeta->instrument.empty() ? std::to_string(voice()) : fm::to_string(tmeta->instrument);
+			}
+			if (vmeta) {
+				pos = vmeta->position / vmeta->barLength;
+			}
+			std::string warning(msg + " at '" + voiceName + "', bar: " + std::to_string(pos));
 			warnings.push_back(warning);
 		}
 
 		void AContext::newBar()
 		{
-			auto meta = voiceMetaData(voice());
+			auto meta = voiceMetaData();
 			if (meta->isUpbeat) {
 				meta->isUpbeat = false;
 				meta->eventOffset = meta->eventCount;
@@ -352,6 +397,7 @@ namespace sheet {
 			else if (!fm::compareTolerant(meta->barPosition, meta->barLength, fm::Ticks(TickTolerance))) {
 				auto errorInQuaters = -(meta->barLength - meta->barPosition) / fm::PPQ;
 				warn("bar check error (" + std::to_string( errorInQuaters )+ ")");
+				seek(-(meta->barPosition - meta->barLength));
 			}
 			meta->barPosition = 0;
 			++(meta->barCount);
@@ -359,84 +405,122 @@ namespace sheet {
 
 		void AContext::rest(fm::Ticks duration)
 		{
-			auto meta = voiceMetaData(voice());
+			auto meta = voiceMetaData();
 			if (duration != 0) {
 				meta->lastEventDuration = duration;
 			}
 			seek(meta->lastEventDuration);
 		}
-
+		void AContext::processMeta(const fm::String &command, const std::vector<fm::String> &args)
+		{
+			try {
+				if (command == SHEET_META__TRACK_META_KEY_TYPE /*handled elsewhere*/
+				|| command == SHEET_META__TRACK_META_KEY_NAME
+				|| command == SHEET_META__TRACK_META_KEY_PART
+				|| command == SHEET_META__SET_VORSCHLAG
+				|| command == SHEET_META__SET_UPBEAT) 
+				{
+					return;
+				}
+							
+				if (command == SHEET_META__SET_STYLE) {
+					metaSetStyle(getArgument<fm::String>(args, 0), getArgument<fm::String>(args, 1));
+					return;
+				}
+				if (command == SHEET_META__SET_EXPRESSION) {
+					metaSetExpression(getArgument<fm::String>(args, 0));
+					return;
+				}
+				if (command == SHEET_META__SET_SINGLE_EXPRESSION) {
+					metaSetSingleExpression(getArgument<fm::String>(args, 0));
+					return;
+				}
+				if (command == SHEET_META__SET_TEMPO) { 
+					metaSetTempo(getArgument<fm::BPM>(args, 0));
+					return;
+				}
+				if (command == SHEET_META__SET_VOICING_STRATEGY) {
+					metaSetVoicingStrategy(getArgument<fm::String>(args, 0), args);
+					return;
+				}
+				if (command == SHEET_META__SET_SPIELANWEISUNG) {
+					metaSetSpielanweisung(getArgument<fm::String>(args, 0), args);
+					return;
+				}	
+				if (command == SHEET_META__SET_SPIELANWEISUNG_ONCE) {
+					metaSetSpielanweisungOnce(getArgument<fm::String>(args, 0), args);
+					return;
+				}	
+				if (command == SHEET_META__SET_MOD) {
+					metaSetModification(getArgument<fm::String>(args, 0), args);
+					return;
+				}	
+				if (command == SHEET_META__SET_MOD_ONCE) {
+					metaSetModificationOnce(getArgument<fm::String>(args, 0), args);
+					return;
+				}
+				if (command == SHEET_META__SET_SIGNATURE) {
+					metaSetSignature(getArgument<int>(args, 0), getArgument<int>(args, 1));
+					return;
+				}
+				if (command == SHEET_META__SET_DEVICE) {
+					metaAddDevice(getArgument<fm::String>(args, 0), args);
+					return;
+				}	
+				if (command == SHEET_META__SET_VOLUME) {
+					metaSetVolume(getArgument<int>(args, 0));
+					return;
+				}
+				if (command == SHEET_META__SET_PAN) {
+					metaSetPan(getArgument<int>(args, 0));
+					return;
+				}
+				if (command == SHEET_META__INSTRUMENT) {
+					metaSetInstrument(getArgument<fm::String>(args, 0));
+					return;
+				}
+			} catch(const std::exception &ex) {
+				FM_THROW(Exception, "failed to process " + fm::to_string(command)
+									+": " + ex.what());
+			}	
+			catch(...) {
+				FM_THROW(Exception, "failed to process " + fm::to_string(command));
+			}
+			FM_THROW(Exception, "command not found: " + fm::to_string(command));								
+		}
 		void AContext::setMeta(const Event &metaEvent)
 		{
-			if (metaEvent.metaCommand.empty()) {
+			if (metaEvent.stringValue.empty()) {
 				throwContextException("invalid meta command ");
 			}
-			if (metaEvent.metaCommand == SHEET_META__SET_UNAME) {
-				metaSetUname(getArgument<fm::String>(metaEvent, 0));
+			if (metaEventHandler && metaEventHandler(metaEvent)) {
+				return;
 			}
-			if (metaEvent.metaCommand == SHEET_META__SET_STYLE) {
-				metaSetStyle(getArgument<fm::String>(metaEvent, 0), getArgument<fm::String>(metaEvent, 1));
-			}
-			if (metaEvent.metaCommand == SHEET_META__SET_EXPRESSION) {
-				metaSetExpression(getArgument<fm::String>(metaEvent, 0));
-			}
-			if (metaEvent.metaCommand == SHEET_META__SET_SINGLE_EXPRESSION) {
-				metaSetSingleExpression(getArgument<fm::String>(metaEvent, 0));
-			}
-			if (metaEvent.metaCommand == SHEET_META__SET_TEMPO) { 
-				metaSetTempo(getArgument<fm::BPM>(metaEvent, 0));
-			}
-			if (metaEvent.metaCommand == SHEET_META__SET_UPBEAT) { 
+			if (metaEvent.stringValue == SHEET_META__SET_UPBEAT) { 
 				metaSetUpbeat(metaEvent);
 			}
-			if (metaEvent.metaCommand == SHEET_META__SET_VOICING_STRATEGY) {
-				metaSetVoicingStrategy(getArgument<fm::String>(metaEvent, 0), metaEvent.metaArgs);
-			}
-			if (metaEvent.metaCommand == SHEET_META__SET_SPIELANWEISUNG) {
-				metaSetSpielanweisung(getArgument<fm::String>(metaEvent, 0), metaEvent.metaArgs);
-			}	
-			if (metaEvent.metaCommand == SHEET_META__SET_SPIELANWEISUNG_ONCE) {
-				metaSetSpielanweisungOnce(getArgument<fm::String>(metaEvent, 0), metaEvent.metaArgs);
-			}	
-			if (metaEvent.metaCommand == SHEET_META__SET_MOD) {
-				metaSetModification(getArgument<fm::String>(metaEvent, 0), metaEvent.metaArgs);
-			}	
-			if (metaEvent.metaCommand == SHEET_META__SET_MOD_ONCE) {
-				metaSetModificationOnce(getArgument<fm::String>(metaEvent, 0), metaEvent.metaArgs);
-			}
-			if (metaEvent.metaCommand == SHEET_META__SET_SIGNATURE) {
-				metaSetSignature(getArgument<int>(metaEvent, 0), getArgument<int>(metaEvent, 1));
-			}
-			if (metaEvent.metaCommand == SHEET_META__SET_DEVICE) {
-				metaAddDevice(getArgument<fm::String>(metaEvent, 0), metaEvent.metaArgs);
-			}
-			if (metaEvent.metaCommand == SHEET_META__SET_VORSCHLAG) {
+			if (metaEvent.stringValue == SHEET_META__SET_VORSCHLAG) {
 				metaAddVorschlag(metaEvent);
-			}		
-			if (metaEvent.metaCommand == SHEET_META__SET_VOLUME) {
-				metaSetVolume(getArgument<int>(metaEvent, 0));
 			}
-			if (metaEvent.metaCommand == SHEET_META__SET_PAN) {
-				metaSetPan(getArgument<int>(metaEvent, 0));
-			}																					
+			processMeta(metaEvent.stringValue, metaEvent.metaArgs);				
 		}
 
 		void AContext::metaSetVolume(int volume)
 		{
-			auto meta = voiceMetaData(voice());
+			auto meta = voiceMetaData();
 			meta->volume = std::max(std::min(volume, 100), 0);
 		}
 
 		void AContext::metaSetPan(int val)
 		{
-			auto meta = voiceMetaData(voice());
+			auto meta = voiceMetaData();
 			meta->pan = std::max(std::min(val, 100), 0);
 		}		
 
 		void AContext::metaAddVorschlag(const Event &ev)
 		{
 			auto &wm = fm::getWerckmeister();
-			auto meta = voiceMetaData(voice());
+			auto meta = voiceMetaData();
 			meta->spielanweisungOnce = wm.getSpielanweisung(SHEET_SPIELANWEISUNG_VORSCHLAG);
 			auto vorschlag = std::dynamic_pointer_cast<Vorschlag>(meta->spielanweisungOnce);
 			vorschlag->vorschlagNote = ev;
@@ -446,7 +530,7 @@ namespace sheet {
 		{
 			auto &cs = getConfigServer();
 			if (args.size() < 2) {
-				throw std::runtime_error("not enough arguments for device config");
+				FM_THROW(Exception, "not enough arguments for device config");
 			}
 			std::vector<fm::String> deviceArgs(args.begin() + 1, args.end());
 			auto device = cs.createDeviceConfig(name, deviceArgs);
@@ -456,7 +540,7 @@ namespace sheet {
 		void AContext::metaSetVoicingStrategy(const fm::String &name, const Event::Args &args)
 		{
 			auto &wm = fm::getWerckmeister();
-			auto meta = voiceMetaData(voice());
+			auto meta = voiceMetaData();
 			meta->voicingStrategy = wm.getVoicingStrategy(name);
 			meta->voicingStrategy->setArguments(args);
 		}
@@ -464,7 +548,7 @@ namespace sheet {
 		void AContext::metaSetSpielanweisung(const fm::String &name, const Event::Args &args)
 		{
 			auto &wm = fm::getWerckmeister();
-			auto meta = voiceMetaData(voice());
+			auto meta = voiceMetaData();
 			meta->spielanweisung = wm.getSpielanweisung(name);
 			meta->spielanweisung->setArguments(args);
 		}
@@ -472,7 +556,7 @@ namespace sheet {
 		void AContext::metaSetSpielanweisungOnce(const fm::String &name, const Event::Args &args)
 		{
 			auto &wm = fm::getWerckmeister();
-			auto meta = voiceMetaData(voice());
+			auto meta = voiceMetaData();
 			meta->spielanweisungOnce = wm.getSpielanweisung(name);
 			meta->spielanweisungOnce->setArguments(args);
 		}
@@ -480,7 +564,7 @@ namespace sheet {
 		void AContext::metaSetModification(const fm::String &name, const Event::Args &args)
 		{
 			auto &wm = fm::getWerckmeister();
-			auto meta = voiceMetaData(voice());
+			auto meta = voiceMetaData();
 			auto mod = wm.getModification(name);
 			meta->modifications.push_back(mod);
 			mod->setArguments(args);
@@ -489,30 +573,19 @@ namespace sheet {
 		void AContext::metaSetModificationOnce(const fm::String &name, const Event::Args &args)
 		{
 			auto &wm = fm::getWerckmeister();
-			auto meta = voiceMetaData(voice());
+			auto meta = voiceMetaData();
 			auto mod = wm.getModification(name);
 			meta->modificationsOnce.push_back(mod);
 			mod->setArguments(args);
 		}
 
-		void AContext::metaSetUname(const fm::String &uname)
+		void AContext::metaSetStyle(const fm::String &file, const fm::String &part)
 		{
-			auto meta = voiceMetaData(voice());
-			meta->uname = uname;
-		}
-
-		void AContext::metaSetStyle(const fm::String &file, const fm::String &section)
-		{
-			auto style = styleDefServer_->getStyle(file, section);
-			if (!style) {
-				throw std::runtime_error("style not found: " + fm::to_string(file) + " " + fm::to_string(section));
-			}
-			switchStyle(currentStyleDef_, style);
 		}
 
 		void AContext::metaSetExpression(const fm::String &value)
 		{
-			auto meta = voiceMetaData(voice());
+			auto meta = voiceMetaData();
 			auto expr = getExpression(value);
 			if (expr == fm::expression::Default) {
 				return;
@@ -522,7 +595,7 @@ namespace sheet {
 
 		void AContext::metaSetSingleExpression(const fm::String &value)
 		{
-			auto meta = voiceMetaData(voice());
+			auto meta = voiceMetaData();
 			auto expr = getExpression(value);
 			if (expr == fm::expression::Default) {
 				return;
@@ -532,7 +605,7 @@ namespace sheet {
 
 		void AContext::metaSetUpbeat(const Event &event) 
 		{
-			auto meta = voiceMetaData(voice());
+			auto meta = voiceMetaData();
 			if (meta->position > 0) {
 				throwContextException("upbeat only allowed on begin of track");
 			}
@@ -542,26 +615,8 @@ namespace sheet {
 		void AContext::metaSetSignature(int upper, int lower)
 		{
 			using namespace fm;
-			auto meta = voiceMetaData(voice());
+			auto meta = voiceMetaData();
 			meta->barLength = (1.0_N1 / (fm::Ticks)lower) * (fm::Ticks)upper;
-		}
-
-		void AContext::switchStyle(IStyleDefServer::ConstStyleValueType current, IStyleDefServer::ConstStyleValueType next)
-		{
-			if (next == nullptr || current == next) {
-				return;
-			}
-			// set position for new track
-			auto chordMeta = voiceMetaData(chordVoice_);
-			for (const auto &track : *next) {
-				for (const auto &voice : track.voices)
-				{
-					setTarget(track, voice);
-					auto meta = voiceMetaData(this->voice());
-					meta->position = chordMeta->position;
-				}
-			}
-			currentStyleDef_ = next;
 		}
 
 		void AContext::setChordTrackTarget()
@@ -582,16 +637,20 @@ namespace sheet {
 			}
 			return currentChordDef_;
 		}
-		IStyleDefServer::ConstStyleValueType AContext::currentStyle()
+		IStyleDefServer::Style AContext::currentStyle()
 		{
-			if (!currentStyleDef_) {
-				currentStyleDef_ = styleDefServer()->getStyle(FM_STRING("?"));
+			if (currentStyle_.empty()) {
+				currentStyle_ = styleDefServer()->getStyle(FM_STRING("?"));
 			}
-			return currentStyleDef_;
+			return currentStyle_;
+		}
+		void AContext::currentStyle(const IStyleDefServer::Style &style)
+		{
+			currentStyle_ = style;
 		}
 		VoicingStrategyPtr AContext::currentVoicingStrategy()
 		{
-			auto meta = voiceMetaData(voice());
+			auto meta = voiceMetaData();
 			if (!defaultVoiceStrategy_) {
 				defaultVoiceStrategy_ = fm::getWerckmeister().getDefaultVoicingStrategy();
 			}
@@ -600,107 +659,12 @@ namespace sheet {
 			}
 			return meta->voicingStrategy;
 		}
-		void AContext::setChord(const ChordEvent &chord)
+		void AContext::setChord(const Event &chord)
 		{
 			currentChord_ = chord;
 			currentChordDef_ = styleDefServer()->getChord(currentChord_.chordDefName());
 			if (currentChordDef_ == nullptr) {
-				throw std::runtime_error("chord not found: " + fm::to_string(currentChord_.chordName));
-			}
-		}
-
-		void AContext::setTarget(const Track &track, const Voice &voice)
-		{
-			TrackId trackId;
-			VoiceId voiceId;
-			auto it = ptrIdMap_.find(&track);
-			if (it == ptrIdMap_.end()) {
-				trackId = createTrack();
-				ptrIdMap_[&track] = trackId;
-			}
-			else {
-				trackId = it->second;
-			}
-			it = ptrIdMap_.find(&voice);
-			if (it == ptrIdMap_.end()) {
-				voiceId = createVoice();
-				ptrIdMap_[&voice] = voiceId;
-			}
-			else {
-				voiceId = it->second;
-			}
-			setTarget(trackId, voiceId);
-		}
-		void AContext::styleRest(fm::Ticks duration)
-		{
-			auto styleTracks = currentStyle();
-
-			for (const auto &track : *styleTracks)
-			{
-				for (const auto &voice : track.voices)
-				{
-					setTarget(track, voice);
-					auto meta = voiceMetaData(this->voice());
-					rest(duration);
-				}
-			}
-		}
-		void AContext::renderStyle(fm::Ticks duration)
-		{
-			auto styleTracks = currentStyle();
-
-			for (const auto &track : *styleTracks)
-			{
-				for (const auto &voice : track.voices)
-				{
-					if (voice.events.empty()) {
-						continue;
-					}
-					setTarget(track, voice);
-					auto meta = voiceMetaData(this->voice());
-					fm::Ticks writtenDuration = 0;
-					while ((duration - writtenDuration) > TickTolerance) { // loop until enough events are written
-						auto it = voice.events.begin();
-						if (meta->idxLastWrittenEvent >= 0) { // continue rendering
-							it += meta->idxLastWrittenEvent;
-							meta->idxLastWrittenEvent = -1;
-							if (it->type == Event::EOB) {
-								// happens: | r1 |  ->  | A B |
-								// after a half rest the next event would be a new bar
-								// its length check would produce a message
-								++it;
-								meta->barPosition = 0;
-							}
-						}
-						else if (meta->eventOffset > 0) { // skip events (for upbeat)
-							it += meta->eventOffset;
-						}
-						for (; it != voice.events.end(); ++it) // loop voice events
-						{
-							auto ev = *it;
-							auto currentPos = meta->position;
-							auto originalDuration = ev.duration;
-							if (ev.isTimeConsuming() && meta->remainingTime > 0) {
-								if (ev.duration == 0) {
-									ev.duration = meta->lastEventDuration;
-								}
-								ev.duration = ev.duration + meta->remainingTime;
-								meta->remainingTime = 0;
-							}
-							ev.duration = std::min(ev.duration, duration - writtenDuration);
-							addEvent(ev);
-							writtenDuration += meta->position - currentPos;
-							if ((duration - writtenDuration) <= TickTolerance) {
-								bool hasRemainings = ev.duration != originalDuration;
-								if (hasRemainings) {
-									meta->remainingTime = originalDuration - ev.duration;
-								}
-								meta->idxLastWrittenEvent = it - voice.events.begin() + 1;
-								break;
-							}
-						}
-					}
-				}
+				FM_THROW(Exception, "chord not found: " + fm::to_string(currentChord_.stringValue));
 			}
 		}
 	}

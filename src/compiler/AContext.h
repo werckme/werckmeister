@@ -15,6 +15,8 @@
 #include "metaCommands.h"
 #include <list>
 #include "forward.hpp"
+#include "metaData.h"
+#include "error.hpp"
 
 namespace sheet {
     namespace compiler {
@@ -23,58 +25,28 @@ namespace sheet {
 		};
         class AContext {
         public:
+			struct Capabilities {
+				bool canSeek = false;
+			};
+
 			AContext();
 			static const double PitchbendMiddle;
-			static const fm::Ticks DefaultDuration;
-			static const fm::Ticks DefaultBarLength;
 			enum { INVALID_TRACK_ID = -1, INVALID_VOICE_ID = -1, MAX_VOLUME = 100, MAX_PAN = 100 };
+			/**
+			 * for rounding errors e.g. for triplets
+			 */
+			static const fm::Ticks TickTolerance;
 			typedef int Id;
 			typedef Id TrackId;
 			typedef Id VoiceId;
 			typedef IStyleDefServer* IStyleDefServerPtr;
 			typedef std::list<std::string> Warnings;
 			typedef std::unordered_map<fm::String, fm::Expression> ExpressionMap;
-			typedef std::set<PitchDef> PitchDefSet;
-			struct VoiceMetaData {
-				typedef std::map<PitchDef, fm::Ticks> WaitForTieBuffer;
-				typedef std::list<ASpielanweisungPtr> Spielanweisungen;
-				typedef std::list<AModificationPtr> Modifications;
-				fm::Ticks position = 0;
-				/**
-				 * last note duration
-				 */
-				fm::Ticks lastEventDuration = DefaultDuration; 
-				fm::Ticks barLength = DefaultBarLength;
-				fm::Ticks barPosition = 0;
-				int barCount = 0;
-				long long eventCount = 0;
-				long long eventOffset = 0;
-				bool isUpbeat = false;
-				fm::Expression expression = fm::expression::FF;
-				fm::Expression singleExpression = fm::expression::Default;
-				WaitForTieBuffer waitForTieBuffer;
-				/*
-					used for continue style track rendering after chord change
-				*/
-				int idxLastWrittenEvent = -1;
-				/*
-					from a aborted style rendering
-				*/
-				fm::Ticks remainingTime = 0;
-				fm::String uname;
-				VoicingStrategyPtr voicingStrategy = nullptr;
-				virtual ~VoiceMetaData() = default;
-				bool pendingTie() const { return !waitForTieBuffer.empty(); }
-				ASpielanweisungPtr spielanweisung;
-				ASpielanweisungPtr spielanweisungOnce; // played once
-				Modifications modifications;
-				Modifications modificationsOnce; // played once		
-				PitchDefSet startedEvents;
-				int volume = 100;	
-				int pan = 50;
-			};
 			typedef std::shared_ptr<VoiceMetaData> VoiceMetaDataPtr;
+			typedef std::shared_ptr<TrackMetaData> TrackMetaDataPtr;
 			typedef std::unordered_map<VoiceId, VoiceMetaDataPtr> VoiceMetaDataMap;
+			typedef std::unordered_map<TrackId, TrackMetaDataPtr> TrackMetaDataMap;
+			typedef std::function<bool(const Event&)> MetaEventHandler;
 			virtual void setTrack(TrackId trackId);
 			virtual void setVoice(VoiceId voice);
 			TrackId track() const;
@@ -83,6 +55,13 @@ namespace sheet {
 			 */
 			VoiceId voice() const;
 			TrackId chordTrackId() const { return chordTrack_; }
+			TrackId masterTrackId() 
+			{ 
+				if (masterTrackId_ == INVALID_TRACK_ID) {
+					this->createMasterTrack();
+				}
+				return masterTrackId_; 
+			}
 			VoiceId chordVoiceId() const { return chordVoice_; }
 			inline void setTarget(TrackId trackId, VoiceId voiceId)
 			{
@@ -91,29 +70,82 @@ namespace sheet {
 			}
 			virtual void addEvent(const PitchDef &pitch, fm::Ticks absolutePosition, fm::Ticks duration) = 0;
 			virtual ~AContext() {};
+			/**
+			 * creates a track and returns an id.
+			 */
 			virtual TrackId createTrack();
+			/**
+			 * creates a vocie and returns an id.
+			 */			
 			virtual VoiceId createVoice();
 			virtual void setChordTrackTarget();
+			/**
+			 * @return the metdata for the current voice  
+			 */
+			VoiceMetaDataPtr voiceMetaData() const;
 			VoiceMetaDataPtr voiceMetaData(VoiceId voiceid) const;
 			template<typename TVoiceMeta>
 			std::shared_ptr<TVoiceMeta> voiceMetaData(VoiceId voiceid) const 
 			{
 				return std::dynamic_pointer_cast<TVoiceMeta>(voiceMetaData(voiceid));
 			}
+			template<typename TVoiceMeta>
+			std::shared_ptr<TVoiceMeta> voiceMetaData() const 
+			{
+				return std::dynamic_pointer_cast<TVoiceMeta>(voiceMetaData());
+			}
+			/**
+			 * @return the metdata for the current track  
+			 */
+			TrackMetaDataPtr trackMetaData() const;
+			TrackMetaDataPtr trackMetaData(TrackId trackid) const;
+			template<typename TTrackMeta>
+			std::shared_ptr<TTrackMeta> trackMetaData(TrackId trackid) const 
+			{
+				return std::dynamic_pointer_cast<TTrackMeta>(trackMetaData(trackid));
+			}
+			template<typename TTrackMeta>
+			std::shared_ptr<TTrackMeta> trackMetaData() const 
+			{
+				return std::dynamic_pointer_cast<TTrackMeta>(trackMetaData());
+			}					
 			virtual void throwContextException(const std::string &msg);
 			virtual void warn(const std::string &msg);
 			IStyleDefServerPtr styleDefServer() const;
 			void styleDefServer(IStyleDefServerPtr server);
 			virtual IStyleDefServer::ConstChordValueType currentChordDef();
-			virtual IStyleDefServer::ConstStyleValueType currentStyle();
+			virtual IStyleDefServer::Style currentStyle();
+			virtual void currentStyle(const IStyleDefServer::Style &style);
 			virtual VoicingStrategyPtr currentVoicingStrategy();
-			virtual const ChordEvent * currentChord() const { return &currentChord_; }
+			virtual const Event * currentChord() const { return &currentChord_; }
 			virtual fm::Expression getExpression(const fm::String &str) const;
 			virtual ASpielanweisungPtr spielanweisung();
 			virtual AInstrumentDef * getInstrumentDef(const fm::String &uname) = 0;
+			virtual fm::Ticks currentPosition() const;
+			/**
+			 * @return the duration of an event. which can be the events duration,
+			 * or if that is zero, the duration of the last valid duration in a track/voice 
+			 * will be returned
+			 */
+			fm::Ticks getImlplicitDuration(const Event &ev) const;
 			/////// meta commands
 			virtual void setMeta(const Event &metaEvent);
-			virtual void metaSetUname(const fm::String &uname);
+			/**
+			 * @throw if command not handled
+			 */
+			virtual void processMeta(const fm::String &command, const std::vector<fm::String> &args);
+			
+			/**
+			 * processed a cointainer of meta commands
+			 * @arg the container
+			 * @arg a function which returns the command of an container value_type object
+			 * @arg a function which returns the args of an container value_type object
+			 */
+			template<class TContainer>
+			void processMeta(const TContainer &container, 
+							std::function<fm::String(const typename TContainer::value_type&)> fcommand, 
+							std::function<std::vector<fm::String>(const typename TContainer::value_type&)> fargs);
+			virtual void metaSetInstrument(const fm::String &uname) {}
 			virtual void metaSetStyle(const fm::String &file, const fm::String &section);
 			virtual void metaSetExpression(const fm::String &value);
 			virtual void metaSetSingleExpression(const fm::String &value);
@@ -144,34 +176,60 @@ namespace sheet {
 			virtual void seek(fm::Ticks duration);
 			virtual void newBar();
 			virtual void rest(fm::Ticks duration);
-			virtual void setChord(const ChordEvent &ev);
-			virtual void renderStyle(fm::Ticks duration);
-			virtual void styleRest(fm::Ticks duration);
+			virtual void setChord(const Event &ev);
 			virtual void addEvent(const Event &ev);
 			virtual void stopTying();
 			virtual fm::Ticks barPos() const;
 			Warnings warnings;
+			/**
+			 * MetaEventHandler: bool (Event& metaEvent)
+			 * if a MetaEventHandler returns true, a meta event will be marked as processed,
+			 * if false the event will be marked as not processed.
+			 */
+			MetaEventHandler metaEventHandler;
+			Capabilities capabilities;
 		protected:
 			PitchDef resolvePitch(const PitchDef &pitch) const;
 			virtual TrackId createTrackImpl() = 0;
 			virtual VoiceId createVoiceImpl() = 0;
 			virtual VoiceMetaDataPtr createVoiceMetaData() = 0;
-			virtual void switchStyle(IStyleDefServer::ConstStyleValueType current, IStyleDefServer::ConstStyleValueType next);
+			virtual TrackMetaDataPtr createTrackMetaData() = 0;
+			virtual TrackId createMasterTrack();
 		private:
-			typedef std::unordered_map<const void*, Id> PtrIdMap;
-			PtrIdMap ptrIdMap_;
-			void setTarget(const Track &track, const Voice &voice);
-			ChordEvent currentChord_;
+			Event currentChord_;
 			VoicingStrategyPtr defaultVoiceStrategy_;
 			IStyleDefServer::ConstChordValueType currentChordDef_ = nullptr;
-			IStyleDefServer::ConstStyleValueType currentStyleDef_ = nullptr;
-			TrackId trackId_ = INVALID_TRACK_ID, chordTrack_ = INVALID_TRACK_ID;
+			IStyleDefServer::Style currentStyle_;
+			TrackId trackId_ = INVALID_TRACK_ID, 
+				 chordTrack_ = INVALID_TRACK_ID,
+				 masterTrackId_ = INVALID_TRACK_ID;
 			VoiceId voiceId_ = INVALID_VOICE_ID, chordVoice_ = INVALID_VOICE_ID;
 			VoiceMetaDataMap voiceMetaDataMap_;
+			TrackMetaDataMap trackMetaDataMap_;
 			IStyleDefServerPtr styleDefServer_ = nullptr;
 			ExpressionMap expressionMap_;
 			ASpielanweisungPtr defaultSpielanweisung_;
-        };	
+        };
+
+		///////////////////////////////////////////////////////////////////////
+		template<class TContainer>
+		void AContext::processMeta(const TContainer &container, 
+						std::function<fm::String(const typename TContainer::value_type&)> fcommand, 
+						std::function<std::vector<fm::String>(const typename TContainer::value_type&)> fargs)
+		{
+			int idx = 0;
+			for(const auto &x : container) {
+				fm::String command = fcommand(x);
+				std::vector<fm::String> args = fargs(x);
+				try {
+					processMeta(command, args);
+					idx++;
+				} catch(fm::Exception &ex) {
+					ex << ex_at_object_idx(idx);
+					throw;
+				}
+			}
+		}
     }
 }
 

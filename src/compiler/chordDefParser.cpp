@@ -8,7 +8,7 @@
 #include <boost/fusion/include/adapt_struct.hpp>
 #include <boost/fusion/include/io.hpp>
 #include "error.hpp"
-#include "sheet/parserSymbols.h"
+#include "parserSymbols.h"
 
 
 BOOST_FUSION_ADAPT_STRUCT(
@@ -54,7 +54,7 @@ namespace sheet {
 					chordName.name("chord name");
 					intervals.name("intervals");
 
-					chordName %= char_("Xx") > *char_(ChordDefParser::ALLOWED_CHORD_SYMBOLS_REGEX);
+					chordName %= char_("X") > *char_(ChordDefParser::ALLOWED_CHORD_SYMBOLS_REGEX);
 					interval %= degreeSymbols_ > '=' > int_ ;
 					intervals %= +(interval);
 					start %= chordName > ':' > intervals;
@@ -74,7 +74,7 @@ namespace sheet {
 				using boost::spirit::ascii::space;
 				typedef _SectionParser<fm::String::const_iterator> ChordParserType;
 				ChordParserType g;
-				bool r = phrase_parse(defStr.begin(), defStr.end(), g, space, def);
+				phrase_parse(defStr.begin(), defStr.end(), g, space, def);
 			}
 		}
 

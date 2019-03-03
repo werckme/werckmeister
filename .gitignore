@@ -1,3 +1,4 @@
+rendertests/*.mid
 src/fm/config.hpp
 cefapp/third_party/
 third_party

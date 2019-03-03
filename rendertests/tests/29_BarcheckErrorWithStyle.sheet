@@ -1,0 +1,20 @@
+@load "./chords/default.chords";
+
+
+[
+type: style;
+name: i29;
+part: normal; 
+{
+    <I II III IV V VI VII>2. <I II III IV V VI VII>4  |
+    <I II III IV V VI VII>1  |
+}   
+]
+
+[
+type: sheet;
+{
+    A-7 | D-7 | G7 | Cmaj7 C7 |
+    Fmaj7 | B07 | E7b9 |
+}
+]

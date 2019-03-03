@@ -1,0 +1,20 @@
+@load "./chords/default.chords";
+
+[
+type: style;
+name: simpleJazz44;
+part: normal;
+{
+    /voicingStrategy: simpleGuitar/
+    <I II III IV V VI VII>4 <I II III IV V VI VII>4 <I II III IV V VI VII>4 <I II III IV V VI VII>4  |
+}   
+]
+
+[
+type: sheet;
+{
+    /style: simpleJazz44 normal/
+    G A B | 
+    C D | C D | F G F G | A B C | D | E | F G |
+}
+]

@@ -4,7 +4,11 @@
 "ss": cis,, -- sidestick
 "hc": dis,, -- handclap
 "ht": fis,, -- hihat closed
+"hf": gis,, -- hihat foot
 "ho": bes,, -- hihat open
+"ho1": bes,, -- hihat half open1
+"ho2": bes,, -- hihat half open2
+"ho2": bes,, -- hihat half open3
 "cy": cis,
 "hto": c,
 "hto1": c,

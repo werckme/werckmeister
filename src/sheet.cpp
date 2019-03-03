@@ -38,10 +38,16 @@ namespace sheet {
         return doc;
     }
 
-    sheet::DocumentPtr createDocumentByString(const fm::String &sheetText, const std::vector<fm::String> &usings)
+    void onCompilerError(const fm::Exception &ex)
     {
-        sheet::compiler::DocumentParser docparser;
-        auto doc = docparser.parseString(sheetText, usings);
-        return doc;
+        std::cerr << ex.toString() << std::endl;
+    }
+
+    void onCompilerError(const std::exception &ex) {
+	    std::cerr << ex.what() << std::endl;
+    }
+
+    void onCompilerError() {
+        std::cerr << "unkown error" << std::endl;
     }
 }

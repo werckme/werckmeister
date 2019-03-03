@@ -1,0 +1,61 @@
+@load "./chords/default.chords";
+@load "./styles/rumba.style";
+@load "./pitchmaps/defaultMidiDrumMap.pitchmap";
+--@load "./pitchmaps/battery3.tight.pitchmap";
+
+tempo: 130;
+device: SC1 midi 2;
+--device: BT midi 8;
+
+--             instrument dv ch cc pc
+instrumentDef: piano      SC1 2 0 0;
+instrumentDef: lead     SC1 3 0 11;
+instrumentDef: bass    SC1 7 8 33;
+instrumentDef: drums   SC1 9 0 32;
+instrumentDef: guitar  SC1 6 0 24;
+
+instrumentConf: guitar volume 56;
+instrumentConf: piano volume 70 pan 80;
+instrumentConf: lead volume 80;
+instrumentConf: bass volume 70;
+instrumentConf: drums volume 80;
+
+
+
+[
+instrument: lead;
+{
+    \ffff
+    r2. g4 | g'4. f'8 es' d' r c'~ | c'2~ c'8 bes r as~ | as2~ as8 g' r f'~ | f'2. r4 |
+    f'4. es'8 d' c' r bes~ | bes2~ bes8 as r g~ | g2~ g8 f' r es'~ | es'2. r4  |
+    es'4. des'8 c' bes r as~ | as2~ as8 ges r ges~ | ges4. f8 bes4. as8 | as2. r4 |
+    as4 g8 bes~ bes4. as8 | as4 g8 bes~ bes4. as8 | g1~ | g2 r4 g | -- :|
+    g'4. f'8 es' d' r c'~ | c'2~ c'8 bes r as~ | as2~ as8 g' r f'~ | f'2. r4 |
+    f'4. es'8 d' c' r bes~ | bes2~ bes8 as r g~ | g2~ g8 f' r es'~ | es'2. r4  |
+    es'4. des'8 c' bes r as~ | as2~ as8 ges r ges~ | ges4. f8 bes4. as8 | as2. r4 |
+    as4 g8 bes~ bes4. as8 | as4 g8 bes~ bes4. as8 |
+    -- coda
+    g1 | r1 | as4 g8 bes~bes4. as8 | as4 g8 bes~bes4. as8 |
+    g1 | r1 | as4 g8 bes~bes4. as8 | as4 g8 es'~es'4 b4  |
+    d'1 |
+}  
+]
+
+[
+type: sheet;
+{
+    /style: rumba normal/
+    r | C- | C- | F-7 | Bes7 |
+    D07 | G7#5#9 | C- | C- |
+    Es-7 | As7 | Desmaj7 | Desmaj7 |
+    D07 | G7#5#9 | C- | D07 G7#5 | --:|
+    C- | C- | F-7 | Bes7 |
+    D07 | G7#5#9 | C- | C- |
+    Es-7 | As7 | Desmaj7 | Desmaj7 |
+    D07 | G7#5#9 |
+    -- coda
+    C- | A7#9 | D07 | G7#5#9 |
+    C- | A7#9 | D07 | G7#5 |
+    C- |
+}
+]

@@ -1,0 +1,23 @@
+[
+type: style;
+name: simpleJazz;
+part: normal;
+instrument: piano; 
+{
+    /voicingStrategy: simpleGuitar/
+    <I II III IV V VI VII>1  |
+    <I II III IV V VI VII>2. <I II III IV V VI VII>4  |
+    <I II III IV V VI VII>1  |
+}   
+]
+
+[
+type: style;
+name: simpleJazz;
+part: normal;
+instrument: bass; 
+{
+    \ff
+    I,,4 III,, V,, I,, |
+}   
+] 

@@ -1,0 +1,59 @@
+@load "./chords/default.chords";
+@load "./styles/simpleJazz.style";
+@load "./pitchmaps/defaultMidiDrumMap.pitchmap";
+--@load "./pitchmaps/battery3.tight.pitchmap";
+
+tempo: 165;
+device: SC1 midi 2 offset 20;
+--device: BT midi 8;
+
+--          instrument dv ch cc pc
+instrumentDef: piano   SC1 2 0 0;
+instrumentDef: lead    SC1 3 1 11;
+instrumentDef: bass    SC1 7 0 32;
+instrumentDef: drums   SC1 9 0 32;
+instrumentDef: guitar  SC1 8 0 25;
+
+instrumentConf: piano volume 80;
+instrumentConf: lead volume 80;
+instrumentConf: bass volume 100;
+instrumentConf: drums volume 70;
+instrumentConf: guitar volume 80;
+
+
+
+[
+instrument: lead;
+{
+    \fff
+    bes'8 d' c' bes   es' cis' d' f' | r4 r8 es' r f' es'4 | r8 d' es' d' c' a bes d' | 
+    c'8 g bes a r4 r8 bes8~ | bes4 g8 bes d' bes r e' | r es' r ges~ges bes c' d' |
+    f'4 r8 b r as'4 fis'8 | g' es' bes g d' f' r e | -- :|
+    bes'8 d' c' bes   es' cis' d' f' | r4 r8 es' r f' es'4 | r8 d' es' d' c' a bes d' | 
+    c'8 g bes a r4 r8 bes8~ | bes4 g8 bes d' bes r e' | r es' r ges~ges bes c' d' |
+    es' f'16 es' d'8 f' r d' es' g | c' g bes c' r4 r8 fis'~ |
+    fis'4 g'8 gis' a' fis' g' a'   | fis' d' r4 r4 r8 e'8 | f' e' d' b e' d' b a | r4 r8 a' r a' r a'~ |
+    a' g' e' d'~ d'4. a8 | c'16t d' c' g8 bes c' r4 r8 es'~ | es'4 d'8 c' b d' c' a | c'4 bes8 a r4 r8 f |
+    bes'8 d' c' bes   es' cis' d' f' | r4 r8 es' r f' es'4 | r8 d' es' d' c' a bes d' |
+    c'8 g bes a r4 r8 bes8~ | bes4 g8 bes d' bes r e' | r es' r ges~ges bes c' d' |
+    es' f'16 es' d'8 f' r d' es' g | c' bes a bes r2 |
+}
+]
+
+[
+type: sheet;
+{
+    /style: simpleJazz normal/
+    Bes6 | C-7 F7 | Bes6 G-7 |
+    C-7 F7 | F-7 Bes7 | Es7 As7 |
+    D-7 G7 | C-7 F7 | --:|
+    Bes6 | C-7 F7 | Bes6 G-7 |
+    C-7 F7 | F-7 Bes7 | Es7 As7 |
+    C-7 F7 | Bes6 |
+    D7 | D7 | G7 | G7 |
+    C7 | C7 | F7 | F7 |
+    Bes6 | C-7 F7 | Bes6 G-7 | C-7 F7 |
+    F-7 Bes7 | Es7 As7 | C-7 F7 | Bes6 |
+
+}
+]

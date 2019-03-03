@@ -8,6 +8,8 @@
 #include <set>
 #include <tuple>
 #include <functional>
+#include <fm/exception.hpp>
+#include "ASheetObject.hpp"
 
 namespace sheet {
 
@@ -46,7 +48,8 @@ namespace sheet {
 
 	struct AliasPitch : public PitchDef {};
 
-	struct Event {
+	struct Event : public ASheetObjectWithSourceInfo {
+		typedef ASheetObjectWithSourceInfo Base;
 		enum {
 			NoDuration = 0,
 		};
@@ -66,68 +69,28 @@ namespace sheet {
 		typedef fm::Ticks Duration;
 		typedef std::set<PitchDef> Pitches;
 		typedef std::vector<fm::String> Args;
+		typedef fm::String Options;
+		typedef std::tuple<PitchDef::Pitch, Options> ChordElements;
+		typedef long double Multiplicator;
+		
+		ChordElements chordElements() const;
+		fm::String chordDefName() const;
+		Multiplicator multiplicator = 1; // to multiplicate with bar length e.g.: | C(1) | C(0.5) C(0.5) |		
 		Pitches pitches;
 		Type type = Unknown;
 		Duration duration = NoDuration;
-		fm::String metaCommand;
+		/**
+		 *  can be for instance a meta event command or a chordname
+		 */
+		fm::String stringValue;
 		Args metaArgs;
 
 		bool isTimeConsuming() const {
 			return type == Rest || type == Note || type == Degree || type == TiedNote || type == Chord;
 		}
+
+		fm::String toString() const;
 	};
-
-	struct ChordEvent : Event {
-		fm::String chordName;
-		typedef fm::String Options;
-		typedef std::tuple<PitchDef::Pitch, Options> ChordElements;
-		typedef long double Multiplicator;
-		ChordElements chordElements() const;
-		fm::String chordDefName() const;
-		Multiplicator multiplicator = 1; // to multiplicate with bar length e.g.: | C(1) | C(0.5) C(0.5) |
-	};
-
-
-	///////////////////////////////////////////////////////////////////////////
-			namespace {
-			struct MissingArgument {};
-			template<typename TArg>
-			TArg __getArgument(const Event::Args &args, int idx, TArg *defaultValue) 
-			{
-				if (idx >= (int)args.size()) {
-					if (defaultValue) {
-						return *defaultValue;
-					}
-					throw MissingArgument();
-				}
-				TArg result;
-				fm::StringStream ss;
-				ss << args[idx];
-				ss >> result;
-				return result;
-			}		
-		}
-		
-		template<typename TArg>
-		TArg getArgument(const Event &metaEvent, int idx, TArg *defaultValue = nullptr) 
-		{
-			try {
-				return __getArgument<TArg>(metaEvent.metaArgs, idx, defaultValue);
-			} catch(const MissingArgument&) {
-				throw std::runtime_error("missing argument for '" + fm::to_string(metaEvent.metaCommand) + "'");
-			}
-		}
-
-		template<typename TArg>
-		TArg getArgument(const Event::Args &args, int idx, TArg *defaultValue = nullptr) 
-		{
-			try {
-				return __getArgument<TArg>(args, idx, defaultValue);
-			} catch(const MissingArgument&) {
-				throw std::runtime_error("missing meta argumnet");
-			}
-		}	
-
 }
 
 #endif

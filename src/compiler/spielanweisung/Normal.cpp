@@ -6,7 +6,7 @@ namespace sheet {
 
         void Normal::addEvent(AContext *ctx, const Event::Pitches &pitches, fm::Ticks duration, bool tying)
         {
-            auto meta = ctx->voiceMetaData(ctx->voice());
+            auto meta = ctx->voiceMetaData();
 			for (const auto &pitch : pitches)
 			{
 				ctx->addEvent(pitch, duration, tying);

@@ -6,6 +6,7 @@ SET (SRC_FETZER_LIB
     fm/werckmeister.cpp
     fm/midi.cpp
     fm/common.cpp
+    fm/exception.cpp
     fm/config/configServer.cpp
     compiler/compiler.cpp
     compiler/chordDefParser.cpp
@@ -19,15 +20,16 @@ SET (SRC_FETZER_LIB
     compiler/spielanweisung/ASpielanweisung.cpp
     compiler/spielanweisung/Arpeggio.cpp
     compiler/spielanweisung/Vorschlag.cpp
-    compiler/spielanweisung/Lua.cpp
     compiler/modification/AModification.cpp
     compiler/modification/Bend.cpp
     compiler/voicings/DirectVoicingStrategy.cpp
     compiler/voicings/SimpleGuitar.cpp
+    compiler/metaData.cpp
+    compiler/styleRenderer.cpp
+    compiler/error.cpp
     sheet/Event.cpp
     sheet/Document.cpp
     sheet/ChordDef.cpp
-    sheet/lua/ALuaScript.cpp
     sheet/lua/LuaMidiContext.cpp
     sheet/lua/ALuaObject.cpp
 )
@@ -51,6 +53,9 @@ SET (SRC_FETZER_TESTS
     tests/test_lexer.cpp
     tests/test_parser.cpp
     tests/longString1.cpp
+    tests/test_bugfixes.cpp
+    tests/testhelper.cpp
+    tests/test_document.cpp
 )
 
 ## PLAYER

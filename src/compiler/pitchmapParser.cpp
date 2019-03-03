@@ -7,7 +7,7 @@
 #include <boost/spirit/include/phoenix_object.hpp>
 #include <boost/fusion/include/adapt_struct.hpp>
 #include <boost/fusion/include/io.hpp>
-#include "sheet/parserSymbols.h"
+#include "parserSymbols.h"
 #include "error.hpp"
 
 BOOST_FUSION_ADAPT_STRUCT(
@@ -71,7 +71,7 @@ namespace sheet {
 				using boost::spirit::ascii::space;
 				typedef _PitchmapParser<fm::String::const_iterator> PitchmapParserType;
 				PitchmapParserType g;
-				bool r = phrase_parse(defStr.begin(), defStr.end(), g, space, def);
+				phrase_parse(defStr.begin(), defStr.end(), g, space, def);
 			}
 		}
 

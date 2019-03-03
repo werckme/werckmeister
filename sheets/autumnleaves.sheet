@@ -1,11 +1,29 @@
--- document configs
 @load "./chords/default.chords";
 @load "./styles/simpleJazz.style";
-@load "./pitchmaps/defaultMidiDrumMap.pitchmap";
+--@load "./pitchmaps/defaultMidiDrumMap.pitchmap";
+@load "./pitchmaps/battery3.tight.pitchmap";
+
+tempo: 140;
+device: SC1 midi 2 offset 20;
+device: BT midi 8;
+
+--          instrument dv ch cc pc
+instrumentDef: piano   SC1 2 0 0;
+instrumentDef: lead    SC1 3 0 0;
+instrumentDef: bass    SC1 7 0 32;
+instrumentDef: drums   BT 9 0 32;
+
+
+instrumentConf: piano volume 80;
+instrumentConf: lead volume 100;
+instrumentConf: bass volume 80;
+instrumentConf: drums volume 90;
+
+
 
 [
+instrument: lead;
 {
-    /uname: lead/
     \fff
     r4 e fis g | c'1~ | c'4 d e fis | b2 b2~ | b4 c d e | a1~ | a4 b, cis dis | g1 |
     -- wiederholung
@@ -16,25 +34,15 @@
 }
 ]
 
-/tempo: 120/
-/device: SC1 midi 1/
-
---           uname ch cc pc
-/instrument: piano      SC1 2 0 0/
-/instrument: lead     SC1 3 0 0/
-/instrument: bass    SC1 7 0 32/
-/instrument: drums   SC1 9 0 32/
-
-
-/instrumentConf: piano volume 90 pan 80/
-/instrumentConf: lead volume 100/
-/instrumentConf: bass volume 90/
-/instrumentConf: drums volume 86/
-
-/style: simpleJazz normal/
-r | A-7 | D7 | Gmaj7 | Cmaj7 | Fis07 | B7 | E- | E- |
--- wiederholung
-A-7 | D7 | Gmaj7 | Cmaj7 | Fis07 | 
--- 2.
-B7 | E- | E- | Fis07 | B7b9 | E- | E- | A-7 | D7 | Gmaj7 | Gmaj7 |
-Fis07 | B7b9 | E-7 Ees7 | D-7 Des7 | Cmaj7 | B7b9 | E- |
+[
+type: sheet;
+{
+    /style: simpleJazz normal/
+    r | A-7 | D7 | Gmaj7 | Cmaj7 | Fis07 | B7 | E- | E- |
+    -- wiederholung
+    A-7 | D7 | Gmaj7 | Cmaj7 | Fis07 | 
+    -- 2.
+    B7 | E- | E- | Fis07 | B7b9 | E- | E- | A-7 | D7 | Gmaj7 | Gmaj7 |
+    Fis07 | B7b9 | E-7 Es7 | D-7 Des7 | Cmaj7 | B7b9 | E- |
+}
+]

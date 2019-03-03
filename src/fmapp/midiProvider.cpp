@@ -2,6 +2,17 @@
 
 namespace fmapp {
 
+	namespace {
+		template<class TOffsetMap, typename TId>
+		int getOffset(const TOffsetMap &map, const TId &id) {
+			auto it = map.find(id);
+			if (it == map.end()) {
+				return 0;
+			}
+			return it->second;
+		}
+	}
+
 	void MidiProvider::midi(fm::midi::MidiPtr midi)
 	{
 		midi_ = midi;
@@ -12,9 +23,12 @@ namespace fmapp {
 		return midi_;
 	}
 
-	void MidiProvider::getEvents(fm::Ticks at, Events &out)
+	void MidiProvider::getEvents(Millis millis, Events &out, const TrackOffsets &offsets)
 	{
 		for (auto track : midi_->tracks()) {
+			auto trackId = reinterpret_cast<TrackId>(track.get());
+			auto offset = getOffset(offsets, trackId);
+			auto at = millisToTicks(millis - offset);
 			auto end = track->events().end();
 			EventIt &it = *getEventIt(track);
 			while (it != end) {
@@ -24,7 +38,7 @@ namespace fmapp {
 				}
 				Event ev;
 				ev.event = *it;
-				ev.trackId = reinterpret_cast<TrackId>(track.get()); 
+				ev.trackId = trackId;
 				out.push_back(ev);
 				++it;
 			}
@@ -63,15 +77,14 @@ namespace fmapp {
 	{
 		trackEventIts_.clear();
 	}
-
-	void MidiProvider::seek(fm::Ticks ticks)
+	
+	void MidiProvider::seek(Millis millis, const TrackOffsets &offsets)
 	{
 		trackEventIts_.clear();
 		Events events;
-		if (ticks > 0) {
-			// reset iterators
-			ticks -= 1;
-			getEvents(ticks, events);
+		if (millis > 0) {
+			millis = std::max(millis-ticksToMillis(1), Millis(0.0));
+			getEvents(millis, events, offsets);
 		}
 	}
 

@@ -5,14 +5,23 @@
 #include "Track.h"
 #include "Event.h"
 #include <vector>
+#include "DocumentConfig.h"
+#include "ASheetObject.hpp"
 
 namespace sheet {
 
+	struct SheetInfo : public ASheetObjectWithSourceInfo {
+		typedef std::vector<fm::String> Args;
+		fm::String name;
+		Args args;
+	};
+
 	struct SheetDef {
 		typedef std::vector<Track> Tracks;
-		typedef std::vector<ChordEvent> Events;
+		typedef std::vector<SheetInfo> SheetInfos;
+		DocumentConfig documentConfig;
+		SheetInfos sheetInfos;
 		Tracks tracks;
-		Events chords;
 	};
 
 }

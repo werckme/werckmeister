@@ -1,0 +1,30 @@
+@load "./chords/default.chords";
+@load "./pitchmaps/defaultMidiDrumMap.pitchmap";
+@load "./styles/ennio.style";
+
+device: SC1 midi 2;
+
+tempo: 130;
+--          instrument dv ch cc pc
+instrumentDef: piano   SC1 2 0 3;
+
+[
+instrument: piano;
+{
+    /channel: 5/
+    \fffff
+    r1 | r1 |c2 d | e1 | r2 c4 d4 | e4 e g c | dis2 dis4 d | c2 bes4 a | g2  g4 a | bes c' bes a | as2 as4 bes | 
+    c' as,4 as,4  bes,~ | <bes, c> as as bes | c' c' es'8 d' c' d' | b2 b, | r1 | r4 b4 b4 c' | d' d' d' d' | d' d' e'8 d' c' b | c'1 |
+}
+]
+
+[
+type: sheet;
+{
+    /style: ennio normal/
+
+    Cmaj7 | Cmaj7 | Cmaj7 | Cmaj7 | Cmaj7 | Cmaj7 | Esmaj7 | Esmaj7 | 
+    Esmaj7 | Esmaj7 | Aesmaj7 | Aesmaj7 | Aesmaj7 | Aesmaj7 | G7 
+    | G7 | G7 | G7 | G7 | C | C | Cmin | Cmin | 
+}
+]
