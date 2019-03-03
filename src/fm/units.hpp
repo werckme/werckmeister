@@ -1,6 +1,5 @@
 #ifndef FM_UNITS_HPP
 #define FM_UNITS_HPP
-
 namespace fm {
 	typedef long double Ticks;
 	typedef int Pitch;

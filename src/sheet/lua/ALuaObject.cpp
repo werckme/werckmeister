@@ -10,11 +10,13 @@ namespace sheet {
         {
             return std::to_string(reinterpret_cast<long long>(this));
         }
-
+        
         void ALuaObject::push(lua_State *L, const luaL_Reg *functions, size_t numFunctions)
         {
             lua_createtable(L, 0, numFunctions);
-            luaL_setfuncs(L, functions, 0);
+            if (numFunctions > 0) {
+                luaL_setfuncs(L, functions, 0);
+            }
             int top = lua_gettop(L);
             lua_pushstring(L, LUA_OBJECT_REF_TABLE_KEY);
             lua_pushstring(L, refId().c_str());

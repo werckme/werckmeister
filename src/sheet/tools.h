@@ -222,6 +222,8 @@ namespace sheet {
             ++it;
         }
     }
+
+    fm::String pitchToString(fm::Pitch pitch);
 }
 
 #endif
