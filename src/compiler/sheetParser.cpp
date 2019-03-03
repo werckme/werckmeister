@@ -127,7 +127,7 @@ namespace sheet {
 						>> +char_("a-zA-Z") 
 						>> ":" 
 						>> +(lexeme[+char_(ALLOWED_META_ARGUMENT)])
-						>> ";";
+						> ";";
 				}
 
 				template<class TrackInfoRules>
