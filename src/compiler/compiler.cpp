@@ -58,23 +58,26 @@ namespace sheet {
 
 		bool Compiler::metaEventHandler(const Event &metaEvent)
 		{
-			if (metaEvent.stringValue == SHEET_META__STYLE_SEEK_TO) {
-				styleSeekTo(getArgument<fm::Ticks>(metaEvent.metaArgs, 0));
+			if (metaEvent.stringValue == SHEET_META__STYLE_POSITION) {
+				stylePosition(getArgument<fm::String>(metaEvent.metaArgs, 0));
 				return true;
 			}
 			return false;
 		}
 
-		void Compiler::styleSeekTo(fm::Ticks ticks)
+		void Compiler::stylePosition(const fm::String &cmd)
 		{
+			if (cmd != SHEET_META__STYLE_POSITION_CMD) {
+				FM_THROW(Exception, "unsupported stylePosition command: " + fm::to_string(cmd));
+			}
 			auto ctx = context();
 			if (!ctx->capabilities.canSeek) {
-				FM_THROW(Exception, "track type does not support seeking");
+				FM_THROW(Exception, "track type does not support stylePosition");
 			}
 			if (currentStyleRenderer_ == nullptr) {
-				throw std::runtime_error("style renderer = null");
+				FM_THROW(fm::Exception, "style renderer = null");
 			}
-			currentStyleRenderer_->seekTo(ticks);
+			currentStyleRenderer_->seekTo(0);
 		}
 
 		void Compiler::renderTracks()

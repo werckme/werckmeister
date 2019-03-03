@@ -28,7 +28,7 @@ namespace sheet {
             void sheetRest(fm::Ticks duration);
             void switchStyle(const IStyleDefServer::Style &current, const IStyleDefServer::Style &next);
             AContextPtr context() const { return this->ctx_; }
-            void seekTo(fm::Ticks ticks);
+            void seekTo(double quarterNotes);
         private:
             void remberPosition(const Voice &voice, 
                 const Event &ev, 

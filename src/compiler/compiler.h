@@ -26,7 +26,7 @@ namespace sheet {
 			DocumentPtr document_;
 			void switchStyle(StyleRenderer &styleRenderer, const Event &metaEvent);
 			//// Meta Event Handler
-			void styleSeekTo(fm::Ticks ticks);
+			void stylePosition(const fm::String &cmd);
 			StyleRenderer *currentStyleRenderer_ = nullptr;
 		};
 	}

@@ -7,6 +7,22 @@
 #define DEBUGX(x)
 
 namespace sheet {
+	namespace {
+		template <class EventContainer>
+		int _getIndexOf(const EventContainer &events, fm::Ticks absPosition)
+		{
+			fm::Ticks pos = 0;
+			int idx = -1;
+			for (const auto &ev : events) {
+				++idx;
+				if (pos >= absPosition) {
+					return idx;
+				}
+				pos += ev.duration; 
+			}
+			return -1;
+		}
+	}
     namespace compiler {
 
 		void StyleRenderer::switchStyle(const IStyleDefServer::Style &current, const IStyleDefServer::Style &next)
@@ -27,8 +43,11 @@ namespace sheet {
 			ctx_->currentStyle(next);
 		}
 
-		void StyleRenderer::seekTo(fm::Ticks ticks)
+		void StyleRenderer::seekTo(double quarterNotes)
 		{
+			if (quarterNotes != 0) {
+				FM_THROW(Exception, "only seeking to 0 is supported");
+			}
 			const auto &styleTracks = ctx_->currentStyle().tracks;
 			for (const auto &track : styleTracks)
 			{
@@ -43,7 +62,7 @@ namespace sheet {
 					}
 					auto meta = ctx_->voiceMetaData(it->second);
 					meta->lastEventDuration = 0;
-					meta->idxLastWrittenEvent = -1; // TODO: set correct event index
+					meta->idxLastWrittenEvent = -1;
 				}
 			}
 		}
