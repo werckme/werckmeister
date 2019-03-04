@@ -19,6 +19,8 @@ namespace sheet {
             virtual bool canExecute() const override;
             virtual Pitches get(const Event &chord, const ChordDef &def, const Degrees &degreeIntervals, const TimeInfo&) override;
         private:
+            Pitches popPitches(lua_State *L);
+            PitchDef popPitch(lua_State *L);
         };
     }
 }

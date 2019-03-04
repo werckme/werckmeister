@@ -20,6 +20,7 @@ namespace sheet {
             virtual bool hasFunction(const std::string &name) const;
             virtual bool canExecute() const = 0;
             virtual void call(size_t numArgs, size_t numResult);
+            virtual void addPackagePath(const fm::String &path);
         protected:
             void error (const std::string &msg);
             lua_State *L = nullptr;

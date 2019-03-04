@@ -2,6 +2,7 @@
 #include <lua.hpp>
 #include <sheet/lua/ALuaObject.h>
 #include <sheet/tools.h>
+#include <compiler/error.hpp>
 
 namespace sheet {
     namespace compiler {
@@ -32,16 +33,15 @@ namespace sheet {
                 lua_pushstring(L, "strBase");
                 lua_pushstring(L, strBase.c_str());
                 lua_settable(L, top);
+                top = lua_gettop(L);
+                lua_pushstring(L, "rootPitch");
+                lua_pushinteger(L, base);
+                lua_settable(L, top);                
             }
             void LuaChord::pushChordDegree(lua_State *L, const ChordOption &chordOption)
             {
-                lua_createtable(L, 2, 0);
                 auto top = lua_gettop(L);
-                lua_pushstring(L, "degree");
                 lua_pushinteger(L, chordOption.degree);
-                lua_settable(L, top);
-                top = lua_gettop(L);
-                lua_pushstring(L, "semitone");
                 lua_pushinteger(L, chordOption.value);
                 lua_settable(L, top);
             }
@@ -50,12 +50,8 @@ namespace sheet {
                 auto top = lua_gettop(L);
                 lua_pushstring(L, "degrees");
                 lua_createtable(L, chordDef->intervals.size(), 0);
-                int idx = 1;
                 for (const auto &chordOption : chordDef->intervals) {
-                    auto stop = lua_gettop(L);
-                    lua_pushinteger(L, idx++);
                     pushChordDegree(L, chordOption);
-                    lua_settable(L, stop);
                 }
                 lua_settable(L, top);
             }
@@ -105,43 +101,48 @@ namespace sheet {
             }
         }
         namespace luaPitches {
+            const char * LuaPitchKeyPitch = "pitch";
+            const char * LuaPitchKeyOctave = "octave";
             struct LuaPitches : lua::ALuaObject {
                 typedef lua::ALuaObject Base;
-                const VoicingStrategy::Degrees *degrees;
-                LuaPitches(const VoicingStrategy::Degrees *degrees)
-                    : degrees(degrees)
+                const ChordDef *chordDef;
+                const Event *chordEvent;
+                const LuaVoicingStrategy::Degrees *degrees;
+                LuaPitches(const ChordDef *chordDef, const Event *chordEvent, const VoicingStrategy::Degrees *degrees)
+                    : chordDef(chordDef), chordEvent(chordEvent), degrees(degrees)
                 {}
                 void push(lua_State *L);
                 void pushDegrees(lua_State *L);
-                void pushDegree(lua_State *L, const PitchDef &def);
+                void pushPitch(lua_State *L, PitchDef::Pitch pitch, PitchDef::Octave octave);
             };
 
-            void LuaPitches::pushDegree(lua_State *L, const PitchDef &def)
+            void LuaPitches::pushPitch(lua_State *L, PitchDef::Pitch pitch, PitchDef::Octave octave)
             {
                 lua_createtable(L, 2, 0);
                 auto top = lua_gettop(L);
-                lua_pushstring(L, "degree");
-                lua_pushinteger(L, def.pitch);
+                lua_pushstring(L, LuaPitchKeyPitch);
+                lua_pushinteger(L, pitch);
                 lua_settable(L, top);
                 top = lua_gettop(L);
-                lua_pushstring(L, "octave");
-                lua_pushinteger(L, def.octave);
+                lua_pushstring(L, LuaPitchKeyOctave);
+                lua_pushinteger(L, octave);
                 lua_settable(L, top);
             }
 
             void LuaPitches::pushDegrees(lua_State *L)
             {
-                auto top = lua_gettop(L);
-                lua_pushstring(L, "degrees");
-                std::size_t idx = 1;
-                lua_createtable(L, degrees->size(), 0);
-                for(const auto &degree : *degrees) {
-                    auto stop = lua_gettop(L);
-                    lua_pushinteger(L, idx++);
-                    pushDegree(L, degree);
-                    lua_settable(L, stop);
-                }
-                lua_settable(L, top);
+                auto chordElements = chordEvent->chordElements();
+		        auto root = std::get<0>(chordElements);
+                for (const auto& degree : *degrees) {
+			        auto interval = chordDef->getIntervalBy(degree.pitch);
+			        if (!interval.valid()) {
+				        continue;
+			        }
+                    auto top = lua_gettop(L);
+                    lua_pushinteger(L, degree.pitch);
+                    pushPitch(L, root + interval.value, degree.octave);
+                    lua_settable(L, top);
+		        }
             }
             
             void LuaPitches::push(lua_State *L)
@@ -164,18 +165,50 @@ namespace sheet {
             return LuaBase::hasFunction(LUA_VOICING_STRATEGY_FENTRY);
         }
 
+        PitchDef LuaVoicingStrategy::popPitch(lua_State *L)
+        {
+            PitchDef result;
+            lua_pushstring(L, luaPitches::LuaPitchKeyOctave);
+            lua_gettable(L, -2);
+            result.octave = lua_tointeger(L, -1);
+            lua_pop(L, 1);
+            lua_pushstring(L, luaPitches::LuaPitchKeyPitch);
+            lua_gettable(L, -2);
+            result.pitch = lua_tointeger(L, -1);
+            lua_pop(L, 1);         
+            return result;
+        }
+
+        LuaVoicingStrategy::Pitches LuaVoicingStrategy::popPitches(lua_State *L) 
+        {
+            LuaVoicingStrategy::Pitches result;
+            if (!lua_istable(L, -1)) {
+                FM_THROW(Exception, "lua result is not a table");
+            }
+            lua_pushnil(L);
+            while (lua_next(L, -2) != 0) {
+                if (!lua_istable(L, -1)) {
+                    lua_pop(L, 1);
+                    continue;
+                }
+                result.insert(popPitch(L));
+                lua_pop(L, 1);
+            }
+            return result;
+        }
+
         LuaVoicingStrategy::Pitches LuaVoicingStrategy::get(const Event &chord, 
             const ChordDef &def, 
             const Degrees &degreeIntervals, 
-            const TimeInfo&)
+            const TimeInfo& t)
         {
             lua_getglobal(L, LUA_VOICING_STRATEGY_FENTRY);
             luaChord::LuaChord luaChord(&def, &chord);
             luaChord.push(L);
-            luaPitches::LuaPitches luaPitches(&degreeIntervals);
+            luaPitches::LuaPitches luaPitches(&def, &chord, &degreeIntervals);
             luaPitches.push(L);
-            call(2, 0);
-            return Pitches();
+            call(2, 1);
+            return popPitches(L);
         }
     }
 }

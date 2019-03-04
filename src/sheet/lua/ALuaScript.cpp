@@ -2,6 +2,7 @@
 #include <lua.hpp>
 #include <exception>
 #include <sstream>
+#include <boost/filesystem.hpp>
 
 namespace sheet {
     
@@ -11,9 +12,19 @@ namespace sheet {
         {
             L= luaL_newstate();
             luaL_openlibs(L);
+            std::string pathcommand("package.path = package.path .. ';");
+            auto dir = boost::filesystem::path(path).parent_path().wstring();
+            addPackagePath(dir);
             if (luaL_dofile(L, fm::to_string(path).c_str())) {
                 error(std::string(lua_tostring(L, -1)));
             }
+        }
+
+        void ALuaScript::addPackagePath(const fm::String &path)
+        {
+            std::string pathcommand("package.path = package.path .. ';");
+            pathcommand += fm::to_string(path) + "/?.lua'";            
+            luaL_dostring(L, pathcommand.c_str());
         }
 
         ALuaScript::~ALuaScript()
@@ -38,9 +49,9 @@ namespace sheet {
             throw std::runtime_error(ss.str());
         }
 
-        void ALuaScript::call(size_t numArgs, size_t numResult)
+        void ALuaScript::call(std::size_t numArgs, std::size_t numResult)
         {
-            if (lua_pcall(L, numArgs, numArgs, 0)) {
+            if (lua_pcall(L, numArgs, numResult, 0)) {
                 error(std::string(lua_tostring(L, -1)));
             }
         }

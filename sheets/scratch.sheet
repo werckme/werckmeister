@@ -19,6 +19,9 @@ instrumentConf: bass volume 100;
 instrumentConf: rhythm1 volume 70;
 instrumentConf: piano volume 70;
 
+
+
+
 [
 type: sheet;
 {
