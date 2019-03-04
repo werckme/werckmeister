@@ -1,6 +1,9 @@
 https://codepen.io/kazzkiq/pen/xGXaKR/
 https://www.pluginboutique.com/products/3933-Scaler
 
+luaL_dostring(L, "package.path = package.path .. ';?.lua'");
+luaL_dostring(L, "package.cpath = package.cpath .. ';?.dll'");
+
 #Eine Scriptsprache für Sheetnotation angelehnt an Lilypond
 
  - ChordDefs: Definiere Akkorde
