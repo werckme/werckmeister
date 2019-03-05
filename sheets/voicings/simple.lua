@@ -1,6 +1,18 @@
+require "com"
 local inspect = require "inspect"
 
-function solve(chord, degreeAndPitches)
-    --print(inspect(degreeAndPitches))
-    return degreeAndPitches
+function createPitch(chord, interval)
+    return { ["pitch"]= chord.rootPitch + interval.interval , ["octave"]=interval.octave }
+end
+
+function solve(chord, intervals)
+    pitches = {}
+    for degree, interval in pairs(intervals)
+    do
+        if isnumber(degree)
+        then
+            pitches[degree] = createPitch(chord, interval)
+        end
+    end
+    return pitches
 end

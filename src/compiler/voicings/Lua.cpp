@@ -103,6 +103,8 @@ namespace sheet {
         namespace luaPitches {
             const char * LuaPitchKeyPitch = "pitch";
             const char * LuaPitchKeyOctave = "octave";
+            const char * LuaPitchKeyRoot = "root";
+            const char * LuaPitchKeyInterval = "interval";            
             struct LuaPitches : lua::ALuaObject {
                 typedef lua::ALuaObject Base;
                 const ChordDef *chordDef;
@@ -113,20 +115,24 @@ namespace sheet {
                 {}
                 void push(lua_State *L);
                 void pushDegrees(lua_State *L);
-                void pushPitch(lua_State *L, PitchDef::Pitch pitch, PitchDef::Octave octave);
+                void pushPitch(lua_State *L, PitchDef::Pitch root, int interval,  PitchDef::Octave octave);
             };
 
-            void LuaPitches::pushPitch(lua_State *L, PitchDef::Pitch pitch, PitchDef::Octave octave)
+            void LuaPitches::pushPitch(lua_State *L, PitchDef::Pitch root, int interval, PitchDef::Octave octave)
             {
                 lua_createtable(L, 2, 0);
                 auto top = lua_gettop(L);
-                lua_pushstring(L, LuaPitchKeyPitch);
-                lua_pushinteger(L, pitch);
-                lua_settable(L, top);
-                top = lua_gettop(L);
                 lua_pushstring(L, LuaPitchKeyOctave);
                 lua_pushinteger(L, octave);
                 lua_settable(L, top);
+                top = lua_gettop(L);
+                lua_pushstring(L, LuaPitchKeyRoot);
+                lua_pushinteger(L, root);
+                lua_settable(L, top);       
+                top = lua_gettop(L);
+                lua_pushstring(L, LuaPitchKeyInterval);
+                lua_pushinteger(L, interval);
+                lua_settable(L, top);         
             }
 
             void LuaPitches::pushDegrees(lua_State *L)
@@ -140,7 +146,7 @@ namespace sheet {
 			        }
                     auto top = lua_gettop(L);
                     lua_pushinteger(L, degree.pitch);
-                    pushPitch(L, root + interval.value, degree.octave);
+                    pushPitch(L, root, interval.value, degree.octave);
                     lua_settable(L, top);
 		        }
             }
