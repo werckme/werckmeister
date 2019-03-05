@@ -1,8 +1,16 @@
 https://codepen.io/kazzkiq/pen/xGXaKR/
 https://www.pluginboutique.com/products/3933-Scaler
 
-luaL_dostring(L, "package.path = package.path .. ';?.lua'");
-luaL_dostring(L, "package.cpath = package.cpath .. ';?.dll'");
+
+-- degree index dosen't matter no more
+default = { 
+     { ["pitch"]=pitches[1].pitch, ["octave"]=-1 }
+    ,{ ["pitch"]=pitches[5].pitch, ["octave"]=-1 }
+    ,{ ["pitch"]=pitches[1].pitch, ["octave"]= 0 }
+    ,{ ["pitch"]=pitches[3].pitch, ["octave"]= 0 }
+    ,{ ["pitch"]=pitches[5].pitch, ["octave"]= 0 }
+    ,{ ["pitch"]=pitches[1].pitch, ["octave"]= 0 }
+}
 
 #Eine Scriptsprache für Sheetnotation angelehnt an Lilypond
 
