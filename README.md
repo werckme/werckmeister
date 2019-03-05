@@ -1,7 +1,7 @@
 https://codepen.io/kazzkiq/pen/xGXaKR/
 https://www.pluginboutique.com/products/3933-Scaler
 
-
+```
 -- degree index dosen't matter no more
 default = { 
      { ["pitch"]=pitches[1].pitch, ["octave"]=-1 }
@@ -11,6 +11,7 @@ default = {
     ,{ ["pitch"]=pitches[5].pitch, ["octave"]= 0 }
     ,{ ["pitch"]=pitches[1].pitch, ["octave"]= 0 }
 }
+```
 
 #Eine Scriptsprache für Sheetnotation angelehnt an Lilypond
 
