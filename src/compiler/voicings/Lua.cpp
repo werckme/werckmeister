@@ -145,7 +145,7 @@ namespace sheet {
 				        continue;
 			        }
                     auto top = lua_gettop(L);
-                    lua_pushinteger(L, degree.pitch);
+                    lua_pushinteger(L, getDegreeValue(degree.pitch));
                     pushPitch(L, root, interval.value, degree.octave);
                     lua_settable(L, top);
 		        }

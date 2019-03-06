@@ -3,6 +3,11 @@ local inspect = require "inspect"
 
 
 function createPitch(chord, interval, octave)
+    if interval == nil
+    then
+        print("warning: missing interval for: " .. chord.strBase .. chord.strOptions)
+        return { ["pitch"]= 0, ["octave"]=0 }
+    end
     return { ["pitch"]= chord.rootPitch + (interval.interval % 12), ["octave"]=octave }
 end
 
