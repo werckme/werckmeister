@@ -9,7 +9,7 @@ device: BT  midi 8;
 instrumentDef: piano      SC1 0 0  0;
 instrumentDef: lead       SC1 1 0  11;
 instrumentDef: rhythm1   SC1 2 0  7;
-instrumentDef: bass       SC1 3 0  36;
+instrumentDef: bass       SC1 3 0  0;
 instrumentDef: fx         SC1 4 35 80;
 instrumentDef: drums      BT 9 2  32;
 instrumentConf: drums volume 100;
@@ -29,12 +29,19 @@ part: normal;
 ]
 
 [
+type: style;
+instrument: bass;
+name: reaggesk;
+part: normal;
+{
+    /voicingStrategy: voicelead/
+    I,,,1 |
+}
+]
+
+[
 type: sheet;
 {
-    C7 | C7 | Gmaj7 | Gmaj7 |
-    B07 | B07 | D-7 | D-7 F7 |
-    /stylePosition: reset/
-    C7 | C7 | Gmaj7 | Gmaj7 |
-    B07 | B07 | D-7 | D-7 F7 |
+    C | G | C | F |
 }
 ]

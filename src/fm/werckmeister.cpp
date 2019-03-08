@@ -80,20 +80,26 @@ namespace fm {
 
 	sheet::VoicingStrategyPtr Werckmeister::getVoicingStrategy(const fm::String &name)
 	{
+		sheet::VoicingStrategyPtr result;
 		const fm::String *scriptPath = findScriptPathByName(name);
 		if (scriptPath != nullptr) {
 			auto anw = std::make_shared<sheet::compiler::LuaVoicingStrategy>(*scriptPath);
 			if (anw->canExecute()) {
-				return anw;
+				anw->name(name);
+				result = anw;
 			}
 		}
 		if (name == SHEET_VOICING_STRATEGY_SIMPLE_GUITAR) {
-			return std::make_shared<sheet::SimpleGuitar>();
+			result = std::make_shared<sheet::SimpleGuitar>();
 		}
 		if (name == SHEET_VOICING_STRATEGY_AS_NOTATED) {
-			return std::make_shared<sheet::DirectVoicingStrategy>();
+			result = std::make_shared<sheet::DirectVoicingStrategy>();
 		}
-		FM_THROW(Exception, "voicing strategy not found: " + fm::to_string(name));
+		if (!result) {
+			FM_THROW(Exception, "voicing strategy not found: " + fm::to_string(name));
+		}
+		result->name(name);
+		return result;
 	}
 
 	sheet::compiler::ASpielanweisungPtr Werckmeister::getSpielanweisung(const fm::String &name)

@@ -5,7 +5,7 @@ function createPitch(chord, interval)
 end
 
 function solve(chord, intervals)
-    pitches = {}
+    local pitches = {}
     for degree, interval in pairs(intervals)
     do
         if isnumber(degree)
