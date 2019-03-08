@@ -1,7 +1,6 @@
 @load "./pitchmaps/battery3.tight.pitchmap";
 @load "./chords/default.chords";
-@load "./styles/reaggesk.style";
-
+@load "./voicings/voicelead.lua";
 tempo: 150;
 device: SC1 midi 2 offset 20;
 device: BT  midi 8;
@@ -18,12 +17,20 @@ instrumentConf: bass volume 100;
 instrumentConf: rhythm1 volume 70;
 instrumentConf: piano volume 70;
 
-
+[
+type: style;
+instrument: piano;
+name: reaggesk;
+part: normal;
+{
+    /voicingStrategy: voicelead/
+    <I II III IV V VI VII>1 |
+}
+]
 
 [
 type: sheet;
 {
-    /signature: 6 8/
     C7 | C7 | Gmaj7 | Gmaj7 |
     B07 | B07 | D-7 | D-7 F7 |
     /stylePosition: reset/
