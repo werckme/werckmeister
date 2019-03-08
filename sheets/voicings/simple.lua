@@ -1,5 +1,4 @@
-require "com"
-local inspect = require "inspect"
+require "com/com"
 
 function createPitch(chord, interval)
     return { ["pitch"]= chord.rootPitch + interval.interval , ["octave"]=interval.octave }

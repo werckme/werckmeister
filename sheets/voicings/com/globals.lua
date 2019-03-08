@@ -25,6 +25,3 @@ AIS = 10
 BES = 10
 B   = 11
 CES = 11
-
-function istable(t) return type(t) == 'table' end
-function isnumber(t) return type(t) == 'number' end

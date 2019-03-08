@@ -1,8 +1,8 @@
 require "com/com"
 require "com/globals"
-require "solvers/guitar"
+require "solvers/voicelead"
 
-local solver = GuitarSolver:new()
+local solver = VoiceLeadSolver:new()
 
 function solve(chord, intervals, args)
     return solver:solve(chord, intervals, args)
