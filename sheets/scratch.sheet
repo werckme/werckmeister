@@ -1,8 +1,6 @@
 @load "./pitchmaps/battery3.tight.pitchmap";
 @load "./chords/default.chords";
---@load "./styles/reaggesk.style";
-@load "./voicings/guitar.lua";
-@load "./voicings/simple.lua";
+@load "./styles/reaggesk.style";
 
 tempo: 150;
 device: SC1 midi 2 offset 20;
@@ -21,36 +19,15 @@ instrumentConf: rhythm1 volume 70;
 instrumentConf: piano volume 70;
 
 
-[
-type: style;
-name: x;
-part: x;
-instrument: rhythm1;
-{
-    /voicingStrategy: simple/
-    /doOnce: arpeggio/
-    <Ib IIb IIIb IVb Vb VIb VIIb>4
-    <I II III IV V VI VII>2. |
-}
-]
-
 
 [
 type: sheet;
 {
-    C | C7 | Ces-7 | G9 | Fes9 | A11 | Ges11 | B13 | Aes13 |
+    /signature: 6 8/
+    C7 | C7 | Gmaj7 | Gmaj7 |
+    B07 | B07 | D-7 | D-7 F7 |
+    /stylePosition: reset/
+    C7 | C7 | Gmaj7 | Gmaj7 |
+    B07 | B07 | D-7 | D-7 F7 |
 }
 ]
-
-
---[
---type: sheet;
---{
---    /signature: 6 8/
---    C7 | C7 | Gmaj7 | Gmaj7 |
---    B07 | B07 | D-7 | D-7 F7 |
---    /stylePosition: reset/
---    C7 | C7 | Gmaj7 | Gmaj7 |
---    B07 | B07 | D-7 | D-7 F7 |
---}
---]

@@ -1,3 +1,5 @@
+@load "../voicings/guitar.lua";
+
 [
 type: style;
 instrument: drums;
@@ -44,7 +46,7 @@ instrument: piano;
 name: reaggesk;
 part: normal;
 {
-    /voicingStrategy: simpleGuitar/
+    /voicingStrategy: guitar/
     <I II III IV V VI VII>2. |
     r2. |
 }

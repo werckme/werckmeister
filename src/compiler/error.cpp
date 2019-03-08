@@ -30,27 +30,55 @@ namespace sheet {
 			}
 		}
 
-		std::string Exception::toString() const
+		std::stringstream & Exception::strWhere(std::stringstream &ss, const std::string filename, int line) const
 		{
-			const auto *sourceInf = boost::get_error_info<ex_sheet_source_info>(*this);
-			const std::shared_ptr<Document> * rawDocumentPtr = boost::get_error_info<ex_sheet_document>(*this);
-			if (!sourceInf || !rawDocumentPtr || sourceInf->sourceId == Event::UndefinedSource) {
-				return Base::toString();
-			}
-			auto document = *rawDocumentPtr;
-			fm::StringStream ss;
+			ss << "in file " << filename;
+			if (line > 0) {
+				ss << ":" << line;
+			} 
+			return ss;
+		}
+
+		std::stringstream & Exception::strWhat(std::stringstream &ss, const std::string &what) const
+		{
+			ss << what;
+			return ss;
+		}
+
+		std::stringstream & Exception::strSheetError(std::stringstream &ss, 
+			const std::shared_ptr<Document> document, 
+			const ASheetObjectWithSourceInfo* sourceInf) const
+		{
 			auto sheetfile = document->findSourcePath(sourceInf->sourceId);
 			fm::String errorLine;
 			int errorPosition = -1;
 			int lineNr = -1;
 			std::tie(errorLine, errorPosition, lineNr) = _lineAndPos(sheetfile, sourceInf->sourcePositionBegin);
-			fm::String arrowLine(errorPosition, ' ');
-			arrowLine += FM_STRING("^~~~~");
-			ss << FM_STRING("in file ") << sheetfile << FM_STRING(":") << lineNr + 1 << std::endl
-			   << fm::to_wstring(msg_) << std::endl
-			   << errorLine << std:: endl
+			std::string arrowLine(errorPosition, ' ');
+			arrowLine += "^~~~~";
+			strWhere(ss, fm::to_string(sheetfile), lineNr) << std::endl;
+			strWhat(ss, msg_) << std::endl
+			   << fm::to_string(errorLine) << std::endl
 			   << arrowLine;
-			return fm::to_string(ss.str());
+			return ss;
+		}
+
+		std::string Exception::toString() const
+		{
+			std::stringstream ss;
+			const auto *sourceInf 							 = boost::get_error_info<ex_sheet_source_info>(*this);
+			const std::shared_ptr<Document> * rawDocumentPtr = boost::get_error_info<ex_sheet_document>(*this);
+			const fm::String *sourceFile 					 = boost::get_error_info<ex_error_source_file>(*this);
+			if (sourceInf && rawDocumentPtr && sourceInf->sourceId != Event::UndefinedSource) {
+				strSheetError(ss, *rawDocumentPtr, sourceInf);
+				return ss.str();
+			}
+			if (sourceFile) {
+				strWhere(ss, fm::to_string(*sourceFile)) << std::endl;
+				strWhat(ss, msg_) << std::endl;
+				return ss.str();
+			}
+			return Base::toString();
 		}
 		
 		namespace handler {
