@@ -3,7 +3,7 @@ require "com/globals"
 
 GuitarSolver = ASolver:new()
 
-function GuitarSolver:getAbsolutePitch(interval, chord)
+function GuitarSolver:intervalToPitch(interval, chord)
     return chord.rootPitch + (interval.interval % 12)
 end
 
