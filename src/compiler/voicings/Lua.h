@@ -18,9 +18,13 @@ namespace sheet {
             virtual ~LuaVoicingStrategy() = default;
             virtual bool canExecute() const override;
             virtual Pitches get(const Event &chord, const ChordDef &def, const Degrees &degreeIntervals, const TimeInfo&) override;
+            virtual void setArguments(const Event::Args &args);
+        protected:
+            void pushArgs(const Event::Args &args);
         private:
             Pitches popPitches(lua_State *L);
             PitchDef popPitch(lua_State *L);
+            Event::Args args_;
         };
     }
 }

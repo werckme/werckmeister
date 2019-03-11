@@ -213,8 +213,29 @@ namespace sheet {
             luaChord.push(L);
             luaPitches::LuaPitches luaPitches(&def, &chord, &degreeIntervals);
             luaPitches.push(L);
-            call(2, 1);
+            pushArgs(this->args_);
+            call(3, 1);
             return popPitches(L);
+        }
+
+        void LuaVoicingStrategy::pushArgs(const Event::Args &args)
+        {
+            lua_createtable(L, 0, 0);
+            if (args.size() == 1) { // first arg is the script name
+                return;
+            }
+            auto top = lua_gettop(L);
+            auto it = args.begin() + 1;
+            for(; it < args.end(); ++it) {
+                lua_pushinteger(L, it - args.begin());
+                lua_pushstring(L, fm::to_string(*it).c_str());
+                lua_settable(L, top);
+            }
+        }
+
+        void LuaVoicingStrategy::setArguments(const Event::Args &args)
+        {
+            this->args_ = args;
         }
     }
 }

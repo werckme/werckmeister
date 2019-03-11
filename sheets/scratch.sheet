@@ -24,7 +24,7 @@ instrument: piano;
 name: reaggesk;
 part: normal;
 {
-    /voicingStrategy: voicelead/
+    /voicingStrategy: voicelead register bass /
     <I II III IV V VI VII>1 |
 }
 ]
@@ -33,6 +33,6 @@ part: normal;
 [
 type: sheet;
 {
-    Cmaj7 | Gmaj7 | C7 | F7 | D-7 | C | B07 |
+    Cmaj7 | Gmaj7 | C7 | F7 | D-7 | C | B07 | E-7 | Ces7 | 
 }
 ]
