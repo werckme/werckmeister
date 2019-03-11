@@ -1,17 +1,8 @@
 require "com/com"
+require "solvers/simple"
 
-function createPitch(chord, interval)
-    return { ["pitch"]= chord.rootPitch + interval.interval , ["octave"]=interval.octave }
-end
+local solver = Simple:new()
 
-function solve(chord, intervals)
-    local pitches = {}
-    for degree, interval in pairs(intervals)
-    do
-        if isnumber(degree)
-        then
-            pitches[degree] = createPitch(chord, interval)
-        end
-    end
-    return pitches
+function solve(chord, intervals, args)
+    return solver:solve(chord, intervals, args)
 end

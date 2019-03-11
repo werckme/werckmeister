@@ -1,5 +1,7 @@
 local _inspect = require "com/inspect"
 
+local MidiSchluesselCOffset = 60;
+
 function istable(t) return type(t) == 'table' end
 function isnumber(t) return type(t) == 'number' end
 function inspect(x) return _inspect(x) end
@@ -30,5 +32,9 @@ function tokeyvalue(args)
         result[ args[i] ] = args[i+1]
     end
     return result
+end
+
+function toMidiPitch(pitch)
+    return MidiSchluesselCOffset + pitch.pitch + (pitch.octave * 12)
 end
     

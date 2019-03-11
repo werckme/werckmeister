@@ -1,8 +1,9 @@
 @load "./pitchmaps/battery3.tight.pitchmap";
 @load "./chords/default.chords";
 @load "./voicings/voicelead.lua";
+@load "./voicings/simple.lua";
 @load "./voicings/guitar.lua";
-tempo: 150;
+tempo: 190;
 device: SC1 midi 2;
 
 
@@ -24,7 +25,8 @@ instrument: piano;
 name: reaggesk;
 part: normal;
 {
-    /voicingStrategy: voicelead register bass /
+    /voicingStrategy: simple / --range alto /
+    --<I, VII>1
     <I II III IV V VI VII>1 |
 }
 ]
@@ -33,6 +35,7 @@ part: normal;
 [
 type: sheet;
 {
-    Cmaj7 | Gmaj7 | C7 | F7 | D-7 | C | B07 | E-7 | Ces7 | 
+    C7 | F7 | B07 | E-7   | A-7 | D-7  | Gmaj7 | 
+    C7 | F7 | Bes7 | Ees7 | As7 | Des7 | Ges7  | B7 | E7 | A7 | D7 | G7 | C7    
 }
 ]

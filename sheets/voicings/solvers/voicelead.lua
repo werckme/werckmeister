@@ -40,7 +40,6 @@ function VoiceLeadSolver:adjustOctaves(pitches, reference)
 end
 
 function VoiceLeadSolver:_solveImpl(chord, intervals, args)
-    dump(args)
     local pitches = {}
     for degree, interval in pairs(intervals)
     do

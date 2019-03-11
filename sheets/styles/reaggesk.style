@@ -1,5 +1,6 @@
 @load "../voicings/guitar.lua";
 @load "../voicings/voicelead.lua";
+@load "../voicings/simple.lua";
 
 [
 type: style;
@@ -25,6 +26,7 @@ instrument: bass;
 name: reaggesk;
 part: normal;
 {
+    /voicingStrategy: simple range contrabass/
     I,,8. !pV,,,32 r16 V,,,16. r8 r64 !ffVII,,,32 r64 r8 III,,,16  |
     I,,8. !pV,,,32 r16 V,,,16. r8 r64 !ffVII,,,32 r64 III,,,8 r16  |
 }
@@ -47,7 +49,9 @@ instrument: piano;
 name: reaggesk;
 part: normal;
 {
-    /voicingStrategy: simpleGuitar/
+    /voicingStrategy: voicelead range alto/
+    <I II III IV V VI VII>2. |
+    r2 !f<I II III IV V VI VII>8 r8 |
     <I II III IV V VI VII>2. |
     r2. |
 }

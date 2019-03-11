@@ -35,3 +35,8 @@ x = tokeyvalue({"a", 100, "b", 200, "c", 300})
 assert(x.a == 100)
 assert(x.b == 200)
 assert(x.c == 300)
+
+
+assert( toMidiPitch({pitch=0, octave=0}) == 60)
+assert( toMidiPitch({pitch=0, octave=1}) == 72)
+assert( toMidiPitch({pitch=1, octave=1}) == 73)
