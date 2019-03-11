@@ -21,3 +21,14 @@ function relpitchdiff(x, y)
     end
     return -(x-y)
 end
+
+-- [a, 1, b, 2, c, 3] => {a=1, b=2, c=3}
+function tokeyvalue(args)
+    assert(#args % 2 == 0)
+    local result = {}
+    for i=1, #args, 2 do
+        result[ args[i] ] = args[i+1]
+    end
+    return result
+end
+    

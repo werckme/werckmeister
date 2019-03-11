@@ -47,7 +47,7 @@ instrument: piano;
 name: reaggesk;
 part: normal;
 {
-    /voicingStrategy: voicelead/
+    /voicingStrategy: simpleGuitar/
     <I II III IV V VI VII>2. |
     r2. |
 }

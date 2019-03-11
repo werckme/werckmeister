@@ -29,3 +29,9 @@ testpitchdiff(11,  9,  -2)
 testpitchdiff(11,  1,   2)
 testpitchdiff( 1, 11,  -2)
 testpitchdiff( 12, 24,  0)
+
+
+x = tokeyvalue({"a", 100, "b", 200, "c", 300})
+assert(x.a == 100)
+assert(x.b == 200)
+assert(x.c == 300)
