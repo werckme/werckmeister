@@ -72,9 +72,9 @@ function ASolver:_keepRange(pitches, range)
         end
     end
     if up > down then
-        self:_transpose(pitches, -math.ceil(mindiff/12) + 1)
+        self:_transpose(pitches, -math.ceil(mindiff/12))
     end
     if up < down then
-        self:_transpose(pitches, -math.ceil(maxdiff/12) - 1)
+        self:_transpose(pitches, -math.ceil(maxdiff/12))
     end
 end
