@@ -25,9 +25,8 @@ instrument: piano;
 name: reaggesk;
 part: normal;
 {
-    /voicingStrategy: guitar range mezzosoprano /
-    --<I, VII>1
-    <I II III IV V VI VII>1 |
+    /voicingStrategy: voicelead range mezzosoprano /
+    <VII, VII>2 <III, V,>2  | 
 }
 ]
 
@@ -35,7 +34,6 @@ part: normal;
 [
 type: sheet;
 {
-    C7 | F7 | B07 | E-7   | A-7 | D-7  | Gmaj7 | FO7 |
-    C7 | F7 | Bes7 | Ees7 | As7 | Des7 | Ges7  | B7 | E7 | A7 | D7 | G7 | C7    
+  C |
 }
 ]

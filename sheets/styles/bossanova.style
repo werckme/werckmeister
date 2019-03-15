@@ -1,4 +1,5 @@
 @load "../voicings/voicelead.lua";
+@load "../voicings/simple.lua";
 
 [
 type: style;
@@ -38,7 +39,7 @@ name: bossanova;
 part: normal;
 instrument: piano; 
 {
-    /voicingStrategy: voicelead range tenor/
+   -- /voicingStrategy: simple range tenor/
     <VII, VII>4 <III, V,>8 <V, V>8 r8 <III, V,>8 r8 <V, V> | r8 <III, V,>8 r8 <V, V> r8 <III, V,> r8 <VII, VII> |
 }    
 ] 

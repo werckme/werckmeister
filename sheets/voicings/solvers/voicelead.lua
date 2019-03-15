@@ -19,6 +19,9 @@ function VoiceLeadSolver:getPitchWithMinDistance(pitch, pitches)
 end
 
 function VoiceLeadSolver:toPitchNextTo(pitch, targetPitch)
+    if targetPitch == nil then
+        return pitch
+    end
     local diff = pitch.pitch - targetPitch.pitch
     pitch.octave = targetPitch.octave
     --print(pitch.pitch, targetPitch.pitch, diff)

@@ -9,7 +9,7 @@ device: BT  midi 8;
 --             instrument dv ch cc pc
 instrumentDef: piano      SC1 0 0  0;
 instrumentDef: lead       SC1 1 0  11;
-instrumentDef: rhythm1   SC1 2 0  7;
+instrumentDef: rhythm1    SC1 2 0  7;
 instrumentDef: bass       SC1 3 0  36;
 instrumentDef: fx         SC1 4 35 80;
 instrumentDef: drums      BT 9 2  32;
