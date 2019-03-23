@@ -10,6 +10,8 @@
 #include <boost/exception/info.hpp>
 #include <sheet/ASheetObject.hpp>
 #include <algorithm>
+#include <sstream>
+#include <fm/common.hpp>
 
 namespace sheet {
 	class Document;
@@ -17,6 +19,7 @@ namespace sheet {
 		typedef boost::error_info<struct tag_at_object_idx, int> ex_at_object_idx;
 		typedef boost::error_info<struct tag_sheet_event, ASheetObjectWithSourceInfo> ex_sheet_source_info;
 		typedef boost::error_info<struct tag_sheet_document, std::shared_ptr<Document>> ex_sheet_document;
+		typedef boost::error_info<struct tag_error_source_file, fm::String> ex_error_source_file;
 		class Exception : public fm::Exception
 		{
 		typedef fm::Exception Base;
@@ -27,6 +30,10 @@ namespace sheet {
 			{}
 			virtual ~Exception() throw () = default;
 			virtual std::string toString() const override;
+		protected:
+			std::stringstream & strWhere(std::stringstream &ss, const std::string filename, int line = -1) const;
+			std::stringstream & strWhat(std::stringstream &ss, const std::string &what) const;
+			std::stringstream & strSheetError(std::stringstream &ss, const std::shared_ptr<Document>, const ASheetObjectWithSourceInfo*) const;
 		};
 
 		namespace handler {

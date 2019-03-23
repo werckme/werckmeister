@@ -1,10 +1,13 @@
+@load "../voicings/guitar.lua";
+@load "../voicings/voicelead.lua";
+
 [
 type: style;
 name: countryschlager1;
 part: normal;
 instrument: guitar; 
 {
-    /voicingStrategy: simpleGuitar/
+    /voicingStrategy: guitar range mezzosoprano/
     \f
     <I II III IV V VI VII>8 <I II III IV V VI VII>8 r8 
     <I II III IV V VI VII>4  <I II III IV V VI VII>8 <I II III IV V VI VII>8 <I II III IV V VI VII>8 |

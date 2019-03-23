@@ -493,6 +493,9 @@ namespace sheet {
 			if (metaEvent.stringValue.empty()) {
 				throwContextException("invalid meta command ");
 			}
+			if (metaEventHandler && metaEventHandler(metaEvent)) {
+				return;
+			}
 			if (metaEvent.stringValue == SHEET_META__SET_UPBEAT) { 
 				metaSetUpbeat(metaEvent);
 			}
@@ -536,8 +539,11 @@ namespace sheet {
 
 		void AContext::metaSetVoicingStrategy(const fm::String &name, const Event::Args &args)
 		{
-			auto &wm = fm::getWerckmeister();
 			auto meta = voiceMetaData();
+			if (meta->voicingStrategy && meta->voicingStrategy->name() == name) {
+				return;
+			}
+			auto &wm = fm::getWerckmeister();
 			meta->voicingStrategy = wm.getVoicingStrategy(name);
 			meta->voicingStrategy->setArguments(args);
 		}

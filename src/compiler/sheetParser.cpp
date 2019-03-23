@@ -104,6 +104,7 @@ namespace sheet {
 			OctaveSymbols octaveSymbols_;
 			DurationSymbols durationSymbols_;
 			ExpressionSymbols expressionSymbols_;
+			const std::string ALLOWED_META_ARGUMENT = "a-zA-Z0-9."; 
 		}
 
 		namespace {
@@ -125,8 +126,8 @@ namespace sheet {
 						>> attr(sourceId_)
 						>> +char_("a-zA-Z") 
 						>> ":" 
-						>> +(lexeme[+char_("a-zA-Z0-9")])
-						>> ";";
+						>> +(lexeme[+char_(ALLOWED_META_ARGUMENT)])
+						> ";";
 				}
 
 				template<class TrackInfoRules>
@@ -141,7 +142,7 @@ namespace sheet {
 						>> attr(sourceId_)
 						>> +char_("a-zA-Z") 
 						>> ":" 
-						>> +(lexeme[+char_("a-zA-Z0-9")])
+						>> +(lexeme[+char_(ALLOWED_META_ARGUMENT)])
 						>> ";";
 				}
 
@@ -278,7 +279,7 @@ namespace sheet {
 						>> attr(Event::Meta) 
 						>> attr(PitchDef()) 
 						>> attr(Event::NoDuration) 
-						>> +char_("a-zA-Z") >> ":" >> +(lexeme[+char_("a-zA-Z0-9")]) >> "/"
+						>> +char_("a-zA-Z") >> ":" >> +(lexeme[+char_(ALLOWED_META_ARGUMENT)]) >> "/"
 					)
 					;
 					events %= *event_;

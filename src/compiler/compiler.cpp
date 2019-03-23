@@ -11,12 +11,17 @@
 #include "error.hpp"
 #include <sheet/tools.h>
 #include <boost/exception/get_error_info.hpp>
+#include <sheet/tools.h>
+#include <functional>
 
 namespace sheet {
 
 	namespace compiler {
 
 		Compiler::Compiler() 
+		{
+		}
+		Compiler::~Compiler() 
 		{
 		}
 		void Compiler::compile(DocumentPtr document)
@@ -39,8 +44,10 @@ namespace sheet {
 			}
 
 			try {
+				ctx->metaEventHandler = std::bind(&Compiler::metaEventHandler, this, std::placeholders::_1);
 				renderChordTrack();
 				renderTracks();
+				ctx->metaEventHandler = AContext::MetaEventHandler();
 			} catch (fm::Exception &ex) {
 				ex << ex_sheet_document(document);
 				throw;
@@ -49,9 +56,34 @@ namespace sheet {
 			}
 		}
 
+		bool Compiler::metaEventHandler(const Event &metaEvent)
+		{
+			if (metaEvent.stringValue == SHEET_META__STYLE_POSITION) {
+				stylePosition(getArgument<fm::String>(metaEvent.metaArgs, 0));
+				return true;
+			}
+			return false;
+		}
+
+		void Compiler::stylePosition(const fm::String &cmd)
+		{
+			if (cmd != SHEET_META__STYLE_POSITION_CMD) {
+				FM_THROW(Exception, "unsupported stylePosition command: " + fm::to_string(cmd));
+			}
+			auto ctx = context();
+			if (!ctx->capabilities.canSeek) {
+				FM_THROW(Exception, "track type does not support stylePosition");
+			}
+			if (currentStyleRenderer_ == nullptr) {
+				FM_THROW(fm::Exception, "style renderer = null");
+			}
+			currentStyleRenderer_->seekTo(0);
+		}
+
 		void Compiler::renderTracks()
 		{
 			auto ctx = context();
+			ctx->capabilities.canSeek = false;
 			for (const auto &track : document_->sheetDef.tracks)
 			{
 				fm::String type = getFirstMetaValueBy(SHEET_META__TRACK_META_KEY_TYPE, track.trackInfos);
@@ -128,6 +160,7 @@ namespace sheet {
 		void Compiler::renderChordTrack() 
 		{
 			auto ctx = context();
+			ctx->capabilities.canSeek = true;
 			Track * sheetTrack = getFirstSheetTrack(document_->sheetDef.tracks);
 			if (!sheetTrack || sheetTrack->voices.empty()) {
 				return;
@@ -135,6 +168,7 @@ namespace sheet {
 			auto &sheetEvents = sheetTrack->voices.begin()->events; 
 			determineChordLengths(sheetEvents.begin(), sheetEvents.end());
 			StyleRenderer styleRenderer(ctx);
+			currentStyleRenderer_ = &styleRenderer;
 			for (auto &ev : sheetEvents) {
 				ctx->setChordTrackTarget(); // target will be lost after calling addEvent
 				if (ev.type == Event::Rest) {
@@ -155,6 +189,7 @@ namespace sheet {
 					styleRenderer.render(ev.duration);
 				}
 			}
+			currentStyleRenderer_ = nullptr;
 		}
 	}
 }

@@ -25,6 +25,10 @@ namespace sheet {
 		};
         class AContext {
         public:
+			struct Capabilities {
+				bool canSeek = false;
+			};
+
 			AContext();
 			static const double PitchbendMiddle;
 			enum { INVALID_TRACK_ID = -1, INVALID_VOICE_ID = -1, MAX_VOLUME = 100, MAX_PAN = 100 };
@@ -42,9 +46,13 @@ namespace sheet {
 			typedef std::shared_ptr<TrackMetaData> TrackMetaDataPtr;
 			typedef std::unordered_map<VoiceId, VoiceMetaDataPtr> VoiceMetaDataMap;
 			typedef std::unordered_map<TrackId, TrackMetaDataPtr> TrackMetaDataMap;
+			typedef std::function<bool(const Event&)> MetaEventHandler;
 			virtual void setTrack(TrackId trackId);
 			virtual void setVoice(VoiceId voice);
 			TrackId track() const;
+			/**
+			 * @return the current voiceId
+			 */
 			VoiceId voice() const;
 			TrackId chordTrackId() const { return chordTrack_; }
 			TrackId masterTrackId() 
@@ -173,6 +181,13 @@ namespace sheet {
 			virtual void stopTying();
 			virtual fm::Ticks barPos() const;
 			Warnings warnings;
+			/**
+			 * MetaEventHandler: bool (Event& metaEvent)
+			 * if a MetaEventHandler returns true, a meta event will be marked as processed,
+			 * if false the event will be marked as not processed.
+			 */
+			MetaEventHandler metaEventHandler;
+			Capabilities capabilities;
 		protected:
 			PitchDef resolvePitch(const PitchDef &pitch) const;
 			virtual TrackId createTrackImpl() = 0;

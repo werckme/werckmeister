@@ -1,7 +1,7 @@
 @load "./chords/default.chords";
 @load "./styles/reaggesk.style";
-@load "./pitchmaps/defaultMidiDrumMap.pitchmap";
 @load "./pitchmaps/battery3.tight.pitchmap";
+@load "./voicings/guitar.lua";
 
 tempo: 150;
 device: SC1 midi 2 offset 20;
@@ -9,24 +9,24 @@ device: BT  midi 8;
 
 --          instrument dv ch cc pc
 instrumentDef: piano   SC1 2 0 0;
-instrumentDef: lead    SC1 3 0 13;
-instrumentDef: bass    SC1 7 0 32;
+instrumentDef: lead    SC1 3 1 22;
+instrumentDef: bass    SC1 7 0 36;
 instrumentDef: drums   BT 9 0 32;
-instrumentDef: rhythm1   SC1 2 0  7;
+instrumentDef: rhythm1   SC1 4 0 7;
 
 
 instrumentConf: piano volume 80;
-instrumentConf: lead volume 70;
+instrumentConf: lead volume 80;
 instrumentConf: bass volume 100;
 instrumentConf: drums volume 80;
-instrumentConf: rhythm1 volume 70;
+instrumentConf: rhythm1 volume 55;
 
 
 [
 instrument: lead;
 {
     /signature: 3 4/
-    \fff
+    \f
     g2.     | g'2 f'4  | e'2 c'4   | g2.       | d'4 e' f' | g'2 d'4  |
     e'2 c'4 | g2.      | d'4 e' f' | e'2 d'4   | e'2 g'4   | c''2 a'4 |
     g'2 f'4 | e'2 d'4  | g'2.~     | g'2.      | -- :|
@@ -55,7 +55,7 @@ type: sheet;
     -- 96
     D7  | G7  | E-7 | A-7 | D-7 |
     G7  | Cmaj7 | Fmaj7 | Fis07 | B7b9 |
-    E-7 | A7 | D-7 A7 | D-7 A7 | D-7 As7 | G7 |
+    E-7 | A7 | D-7 A7 | D-7 A7 | D-7 As7 | /stylePosition: reset/ G7 |
     D-7 | G7 | Cmaj7 | Fmaj7 | B07 |
     E7 | A-7 | Es7 | D-7 | G7 | 
     E-7 | A-7 | D-7 | G7 | Cmaj7 | Cmaj7 |

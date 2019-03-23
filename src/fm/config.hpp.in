@@ -7,6 +7,7 @@
 #define CHORD_DEF_EXTENSION  ".chords"
 #define STYLE_DEF_EXTENSION ".style"
 #define PITCHMAP_DEF_EXTENSION ".pitchmap"
+#define LUA_DEF_EXTENSION ".lua"
 
 #define FM_CHARSET "@FM_CHARSET@"
 

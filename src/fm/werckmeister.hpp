@@ -8,6 +8,7 @@
 #include <memory>
 #include "fm/common.hpp"
 #include "forward.hpp"
+#include <map>
 
 #if defined(__GNUC__) || defined(__GNUG__)
 #pragma GCC diagnostic push
@@ -42,9 +43,13 @@ namespace fm {
 		sheet::compiler::AModificationPtr getModification(const fm::String &name);		
 		sheet::VoicingStrategyPtr getDefaultVoicingStrategy();
 		sheet::VoicingStrategyPtr getVoicingStrategy(const fm::String &name);
+		void registerLuaScript(const fm::String &path);
 	private:
+		typedef std::unordered_map<fm::String, fm::String> ScriptMap;
+		ScriptMap _scriptMap;
 		ResourceStream openResourceImpl(const fm::String &path);
 	public:
+		const fm::String * findScriptPathByName(const fm::String &name) const;
 		ResourceStream openResource(const std::string &path)
 		{
 			return openResourceImpl(fm::to_wstring(path));

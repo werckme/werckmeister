@@ -12,6 +12,7 @@
 #include "compiler/voicings/SimpleGuitar.h"
 #include "compiler/voicingStrategies.h"
 #include "compiler/voicings/VoicingStrategy.h"
+#include "compiler/voicings/Lua.h"
 #include "compiler/spielanweisung/Normal.h"
 #include "compiler/spielanweisung/Arpeggio.h"
 #include "compiler/spielanweisung/Vorschlag.h"
@@ -19,6 +20,7 @@
 #include "compiler/modification/modifications.h"
 #include "compiler/modification/Bend.h"
 #include <fm/exception.hpp>
+
 
 namespace fm {
     
@@ -78,13 +80,26 @@ namespace fm {
 
 	sheet::VoicingStrategyPtr Werckmeister::getVoicingStrategy(const fm::String &name)
 	{
+		sheet::VoicingStrategyPtr result;
+		const fm::String *scriptPath = findScriptPathByName(name);
+		if (scriptPath != nullptr) {
+			auto anw = std::make_shared<sheet::compiler::LuaVoicingStrategy>(*scriptPath);
+			if (anw->canExecute()) {
+				anw->name(name);
+				result = anw;
+			}
+		}
 		if (name == SHEET_VOICING_STRATEGY_SIMPLE_GUITAR) {
-			return std::make_shared<sheet::SimpleGuitar>();
+			result = std::make_shared<sheet::SimpleGuitar>();
 		}
 		if (name == SHEET_VOICING_STRATEGY_AS_NOTATED) {
-			return std::make_shared<sheet::DirectVoicingStrategy>();
+			result = std::make_shared<sheet::DirectVoicingStrategy>();
 		}
-		FM_THROW(Exception, "voicing strategy not found: " + fm::to_string(name));
+		if (!result) {
+			FM_THROW(Exception, "voicing strategy not found: " + fm::to_string(name));
+		}
+		result->name(name);
+		return result;
 	}
 
 	sheet::compiler::ASpielanweisungPtr Werckmeister::getSpielanweisung(const fm::String &name)
@@ -102,11 +117,26 @@ namespace fm {
 	}
 
 	sheet::compiler::AModificationPtr Werckmeister::getModification(const fm::String &name)
-	{
+	{	
 		if (name == SHEET_MOD_BEND) {
 			return std::make_shared<sheet::compiler::Bend>();  
 		}
 		FM_THROW(Exception, "modification not found: " + fm::to_string(name));
+	}
+
+	void Werckmeister::registerLuaScript(const fm::String &path)
+	{
+		auto name = boost::filesystem::path(path).filename().stem().wstring();
+		_scriptMap[name] = path;
+	}
+
+	const fm::String * Werckmeister::findScriptPathByName(const fm::String &name) const
+	{
+		auto it = _scriptMap.find(name);
+		if (it == _scriptMap.end()) {
+			return nullptr;
+		}
+		return &it->second;
 	}
 
 	Werckmeister::~Werckmeister() = default;

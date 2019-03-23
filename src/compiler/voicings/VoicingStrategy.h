@@ -4,7 +4,7 @@
 #include "sheet/ChordDef.h"
 #include "sheet/Event.h"
 #include <memory>
-
+#include <fm/common.hpp>
 
 namespace sheet {
 
@@ -16,6 +16,10 @@ namespace sheet {
 		virtual Pitches get(const Event &chord, const ChordDef &def, const Degrees &degreeIntervals, const TimeInfo&) = 0;
         virtual ~VoicingStrategy() = default;
         virtual void setArguments(const Event::Args &args) {}
+        fm::String name() const { return name_; }
+        void name(const fm::String &name) { name_ = name; }
+    private:
+        fm::String name_;
     };
     typedef std::shared_ptr<VoicingStrategy> VoicingStrategyPtr;
 }

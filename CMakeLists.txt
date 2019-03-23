@@ -24,8 +24,6 @@ IF(UNIX)
 #  SET(Boost_USE_STATIC_LIBS ON)
 #  set(Boost_USE_MULTITHREADED ON)
 #  set(Boost_USE_STATIC_RUNTIME ON)
-
-
 ENDIF(UNIX)
 
 IF(WIN32)
@@ -44,6 +42,7 @@ find_package(Boost COMPONENTS unit_test_framework filesystem program_options loc
 INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(src/)
 INCLUDE_DIRECTORIES(src/ext)
+INCLUDE_DIRECTORIES(submodules/lua/src)
 
 if(WIN32)
   INCLUDE_DIRECTORIES(submodules)
@@ -51,6 +50,7 @@ if(WIN32)
 endif(WIN32)
 
 add_subdirectory(src)
+add_subdirectory(submodules/lua)
 
 configure_file("${PROJECT_SOURCE_DIR}/src/fm/config.hpp.in" "${PROJECT_SOURCE_DIR}/src/fm/config.hpp")
 
