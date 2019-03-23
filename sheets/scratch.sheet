@@ -3,8 +3,11 @@
 @load "./styles/reaggesk.style";
 
 tempo: 150;
-device: SC1 midi 2 offset 20;
-device: BT  midi 8;
+--device: SC1 midi 1 offset 20;
+--device: BT  midi 2;
+
+device: SC1 midi 1;
+device: BT  midi 2;
 
 --             instrument dv ch cc pc
 instrumentDef: piano      SC1 0 0  0;
