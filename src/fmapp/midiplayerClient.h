@@ -58,9 +58,9 @@ namespace fmapp {
 		void send(const fm::midi::Event &ev);
 		inline fm::BPM bpm() const { return MidiProvider::bpm(); }
 		void bpm(fm::BPM bpm);
+		void updateOutputMapping(const fm::ConfigServer::Devices &devices);
 	private:
 		const OutputInfo * getOutputInfo() const;
-		void initOutputMap();
 		void handleMetaEvent(const fm::midi::Event &ev);
 		void changeDevice(const std::string &deviceId);
 		typedef std::recursive_mutex Lock;
@@ -91,7 +91,6 @@ namespace fmapp {
 	template<class TBackend, class TMidiProvider, class TTimer>
 	MidiplayerClient<TBackend, TMidiProvider, TTimer>::MidiplayerClient()
 	{
-		initOutputMap();
 	}
 
 	template<class TBackend, class TMidiProvider, class TTimer>
@@ -103,11 +102,11 @@ namespace fmapp {
 	}
 
 	template<class TBackend, class TMidiProvider, class TTimer>
-	void MidiplayerClient<TBackend, TMidiProvider, TTimer>::initOutputMap()
+	void MidiplayerClient<TBackend, TMidiProvider, TTimer>::updateOutputMapping(const fm::ConfigServer::Devices &devices)
 	{
-		auto &cs = fm::getConfigServer();
+		outputMap_.clear();
 		auto outputs = getOutputs();
-		for(const auto &x : cs.getDevices()) {
+		for(const auto &x : devices) {
 			auto name = fm::to_string(x.first);
 			auto id = x.second.deviceId;
 			auto it = std::find_if(outputs.begin(), outputs.end(), [id](const auto &x) { return x.id == id; });

@@ -3,37 +3,22 @@
 @load "./voicings/voicelead.lua";
 @load "./voicings/simple.lua";
 @load "./voicings/guitar.lua";
-tempo: 190;
+
 device: SC1 midi 2;
-
-
---             instrument dv ch cc pc
-instrumentDef: piano      SC1 0 0  0;
-instrumentDef: lead       SC1 1 0  11;
-instrumentDef: rhythm1    SC1 2 0  7;
-instrumentDef: bass       SC1 3 0  0;
-instrumentDef: fx         SC1 4 35 80;
-instrumentDef: drums      SC1 9 2  32;
-instrumentConf: drums volume 100;
-instrumentConf: bass volume 80;
-instrumentConf: rhythm1 volume 70;
-instrumentConf: piano volume 70;
+instrumentDef: lead      SC1 2 0 0;
 
 [
-type: style;
-instrument: piano;
-name: reaggesk;
-part: normal;
+instrument: lead;
 {
-    /voicingStrategy: voicelead range mezzosoprano /
-    <VII, VII>2 <III, V,>2  | 
+  c4 d e f | g a b c' | c' b a g | f e d c |
+}
+]
+
+[
+instrument: lead;
+{
+  c,2. c,4 | e,1 | f,2. f,4 | d,1 |
 }
 ]
 
 
-[
-type: sheet;
-{
-  C |
-}
-]
