@@ -95,6 +95,40 @@ BOOST_AUTO_TEST_CASE(test_get_line_and_position_1)
 	BOOST_CHECK( line == expected );
 }
 
+
+BOOST_AUTO_TEST_CASE(test_get_line_and_position_12)
+{
+	std::string source = "-- document configs\n\
+@using 'Chords1.chdef';\n\
+@using 'simplePianoStyle.style';\n\
+\n\
+	[-- xyz\n\
+	{\n\
+		/ soundselect: 0 0 /\n\
+			/ channel : 1 /\n\
+			c4 d4 e4 f4 | c4 d4 e4 f4 |\n\
+	}\n\
+\n\
+\n\
+	{\n\
+		f4 f4 f4 f4 | h4 h4 h4 h4 |\n\
+	}\n\
+	]\n\
+	[{\n\
+		/ style: simplePianoStyle:intro /\n\
+			/ voicingStrategy : asNotated /\n\
+			Cmaj | Cmaj C7 |\n\
+	}]\n\
+		[{}]";
+	
+	std::string line;
+	int position = -1;
+	std::tie(line, position) = sheet::getLineAndPosition<std::string>(source, 149);
+	line[position] = 'X';
+	std::string expected = "c4 d4 e4 f4 | X4 d4 e4 f4 |";
+	BOOST_CHECK( line == expected );
+}
+
 BOOST_AUTO_TEST_CASE(test_get_line_and_position_2)
 {
 	fm::String source = FM_STRING("-- document configs\n\
@@ -203,6 +237,73 @@ BOOST_AUTO_TEST_CASE(remove_comments_3)
 	//std::wcout << source << std::endl;
 }
 
+
+BOOST_AUTO_TEST_CASE(position_to_row_and_column)
+{
+		fm::String source = FM_STRING("12345678901234567890\n\
+12345678901234567890\n\
+12345\n\
+12\n\
+1");
+
+	BOOST_CHECK(sheet::getRowAndColumn(source.begin(), source.end(), 0) == sheet::RowAndColumn(0, 0));
+	BOOST_CHECK(sheet::getRowAndColumn(source.begin(), source.end(), 4) == sheet::RowAndColumn(0, 4));
+	BOOST_CHECK(sheet::getRowAndColumn(source.begin(), source.end(), 19) == sheet::RowAndColumn(0, 19));
+	BOOST_CHECK(sheet::getRowAndColumn(source.begin(), source.end(), 20) == sheet::RowAndColumn(1, 0));
+	BOOST_CHECK(sheet::getRowAndColumn(source.begin(), source.end(), 39) == sheet::RowAndColumn(1, 19));
+	BOOST_CHECK(sheet::getRowAndColumn(source.begin(), source.end(), 40) == sheet::RowAndColumn(2, 0));
+	BOOST_CHECK(sheet::getRowAndColumn(source.begin(), source.end(), 44) == sheet::RowAndColumn(2, 4));
+	BOOST_CHECK(sheet::getRowAndColumn(source.begin(), source.end(), 45) == sheet::RowAndColumn(3, 0));
+	BOOST_CHECK(sheet::getRowAndColumn(source.begin(), source.end(), 46) == sheet::RowAndColumn(3, 1));
+	BOOST_CHECK(sheet::getRowAndColumn(source.begin(), source.end(), 47) == sheet::RowAndColumn(4, 0));
+	BOOST_CHECK(sheet::getRowAndColumn(source.begin(), source.end(), 48) == sheet::InvalidRowAndColumn);
+}
+
+BOOST_AUTO_TEST_CASE(position_to_row_and_column_2)
+{
+		std::string source = "12345678901234567890\n\
+12345678901234567890\n\
+12345\n\
+12\n\
+1";
+
+	BOOST_CHECK(sheet::getRowAndColumn(source.begin(), source.end(), 0) == sheet::RowAndColumn(0, 0));
+	BOOST_CHECK(sheet::getRowAndColumn(source.begin(), source.end(), 4) == sheet::RowAndColumn(0, 4));
+	BOOST_CHECK(sheet::getRowAndColumn(source.begin(), source.end(), 19) == sheet::RowAndColumn(0, 19));
+	BOOST_CHECK(sheet::getRowAndColumn(source.begin(), source.end(), 20) == sheet::RowAndColumn(1, 0));
+	BOOST_CHECK(sheet::getRowAndColumn(source.begin(), source.end(), 39) == sheet::RowAndColumn(1, 19));
+	BOOST_CHECK(sheet::getRowAndColumn(source.begin(), source.end(), 40) == sheet::RowAndColumn(2, 0));
+	BOOST_CHECK(sheet::getRowAndColumn(source.begin(), source.end(), 44) == sheet::RowAndColumn(2, 4));
+	BOOST_CHECK(sheet::getRowAndColumn(source.begin(), source.end(), 45) == sheet::RowAndColumn(3, 0));
+	BOOST_CHECK(sheet::getRowAndColumn(source.begin(), source.end(), 46) == sheet::RowAndColumn(3, 1));
+	BOOST_CHECK(sheet::getRowAndColumn(source.begin(), source.end(), 47) == sheet::RowAndColumn(4, 0));
+	BOOST_CHECK(sheet::getRowAndColumn(source.begin(), source.end(), 48) == sheet::InvalidRowAndColumn);
+}
+
+
+BOOST_AUTO_TEST_CASE(positions_to_rows_and_columns)
+{
+		fm::String source = FM_STRING("12345678901234567890\n\
+12345678901234567890\n\
+12345\n\
+12\n\
+1");
+
+	std::vector<int> positions = { 48, 0, 47, 4, 46, 19, 45, 20, 44, 39, 40 };
+	auto result = sheet::getRowsAndColumns(source.begin(), source.end(), positions);
+	BOOST_CHECK(result [0] == sheet::RowAndColumn(0, 0));
+	BOOST_CHECK(result [1] == sheet::RowAndColumn(0, 4));
+	BOOST_CHECK(result [2] == sheet::RowAndColumn(0, 19));
+	BOOST_CHECK(result [3] == sheet::RowAndColumn(1, 0));
+	BOOST_CHECK(result [4] == sheet::RowAndColumn(1, 19));
+	BOOST_CHECK(result [5] == sheet::RowAndColumn(2, 0));
+	BOOST_CHECK(result [6] == sheet::RowAndColumn(2, 4));
+	BOOST_CHECK(result [7] == sheet::RowAndColumn(3, 0));
+	BOOST_CHECK(result [8] == sheet::RowAndColumn(3, 1));
+	BOOST_CHECK(result [9] == sheet::RowAndColumn(4, 0));
+}
+
+
 #if 0
 BOOST_AUTO_TEST_CASE(test_sconv)
 {
@@ -213,3 +314,5 @@ BOOST_AUTO_TEST_CASE(test_sconv)
 	BOOST_CHECK("äöüÄÖÜ?§" == str);
 }
 #endif
+
+
