@@ -60,37 +60,31 @@ SET (SRC_FETZER_TESTS
     tests/test_document.cpp
 )
 
-## PLAYER
-SET (SRC_SHEET_PLAYER
+## FMAPP
+SET (SRC_SHEET_FMAPP
     fmapp/boostTimer.cpp
     fmapp/rtmidiBackend.cpp
     fmapp/midiplayer.cpp
     fmapp/midiProvider.cpp
-    sheetplayer_main.cpp 
-    sheet.cpp
 )
 
 ## PLAYER
-SET (SRC_SHEET_TESTER
-    fmapp/boostTimer.cpp
-    fmapp/rtmidiBackend.cpp
-    fmapp/midiplayer.cpp
-    fmapp/midiProvider.cpp
-    sheettest_main.cpp
+SET (SRC_SHEET_PLAYER
+    sheetplayer_main.cpp 
     sheet.cpp
 )
 
 if (WIN32)
   SET(SRC_SHEET_PLAYER ${SRC_SHEET_PLAYER}  fmapp/os_win.cpp)
-  SET(SRC_SHEET_TESTER ${SRC_SHEET_TESTER}  fmapp/os_win.cpp)
 endif(WIN32)
 
 if (UNIX)
   SET(SRC_SHEET_PLAYER ${SRC_SHEET_PLAYER}  fmapp/os_linux.cpp)
-  SET(SRC_SHEET_TESTER ${SRC_SHEET_TESTER}  fmapp/os_linux.cpp)
 endif(UNIX)
 
 SET (SHEET_LIBS ${SHEET_LIBS} sheet ${Boost_LIBRARIES} lua)
+
+add_library(fmapp ${SRC_SHEET_FMAPP})
 
 add_executable(rehearse ${SRC_FETZER_TESTS})
 target_link_libraries (rehearse ${SHEET_LIBS})
@@ -106,4 +100,4 @@ if (UNIX)
 endif(UNIX)
 
 add_executable(sheetp ${SRC_SHEET_PLAYER})
-target_link_libraries (sheetp ${SHEET_LIBS} ${LIBS_PLAYER})
+target_link_libraries (sheetp ${SHEET_LIBS} ${LIBS_PLAYER} fmapp)
