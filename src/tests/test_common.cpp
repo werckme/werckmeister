@@ -280,6 +280,12 @@ BOOST_AUTO_TEST_CASE(position_to_row_and_column_2)
 	BOOST_CHECK(sheet::getRowAndColumn(source.begin(), source.end(), 48) == sheet::InvalidRowAndColumn);
 }
 
+BOOST_AUTO_TEST_CASE(position_to_row_and_column_3)
+{
+	std::string source;
+	BOOST_CHECK(sheet::getRowAndColumn(source.begin(), source.end(), 0) == sheet::InvalidRowAndColumn);
+}
+
 
 BOOST_AUTO_TEST_CASE(positions_to_rows_and_columns)
 {

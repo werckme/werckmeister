@@ -259,10 +259,10 @@ namespace sheet {
     std::vector<RowAndColumn> getRowsAndColumns(TIterator begin, TIterator end, const std::vector<int> &_positions)
     {
         std::vector<RowAndColumn> result;
-        auto positions = _positions;
-        if (begin == end) {
+        if (begin == end || _positions.empty()) {
             return result;
         }
+        auto positions = _positions;
         std::sort(positions.begin(), positions.end());
         auto it = begin;
         int row = 0;
