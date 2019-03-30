@@ -26,15 +26,3 @@ BOOST_AUTO_TEST_CASE(test_source_manager_find_by_path)
 	BOOST_CHECK(doc.findSourceId(FM_STRING("b")) == id2);
 	BOOST_CHECK(doc.findSourceId(FM_STRING("c")) == id3);
 }
-
-BOOST_AUTO_TEST_CASE(test_source_manager_find_by_id)
-{
-	using namespace sheet;
-	Document doc;
-	auto id1 = doc.addSource(FM_STRING("a"));
-	auto id2 = doc.addSource(FM_STRING("b"));
-	auto id3 = doc.addSource(FM_STRING("c"));
-	BOOST_CHECK(doc.findSourcePath(id1) == FM_STRING("a"));
-	BOOST_CHECK(doc.findSourcePath(id2) == FM_STRING("b"));
-	BOOST_CHECK(doc.findSourcePath(id3) == FM_STRING("c"));
-}

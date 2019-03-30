@@ -273,6 +273,7 @@ namespace sheet {
             if (*it == NewLine<TIterator>::value()) {
                 ++row;
                 column = 0;
+                ++position;
                 continue;
             }
             if (*currentPosition == position) {
