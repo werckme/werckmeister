@@ -24,6 +24,7 @@ namespace sheet {
 		typedef fm::String Path;
 		typedef boost::bimap<Event::SourceId, Path> Sources;
 		fm::String path;
+		Event::SourceId sourceId;
 		SheetDef sheetDef;
 		ChordDefs chordDefs;
 		PitchmapDefs pitchmapDefs;

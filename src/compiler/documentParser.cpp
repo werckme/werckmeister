@@ -147,6 +147,7 @@ namespace sheet {
 			auto res = std::make_shared<Document>();
 			res->path = boost::filesystem::system_complete(path).wstring();
 			auto sourceId = res->addSource(res->path);
+			res->sourceId = sourceId;
 			SheetDefParser sheetParser;
 			try {
 				res->sheetDef = sheetParser.parse(first, last, sourceId);
