@@ -57,6 +57,19 @@ namespace fm {
 		return result;
 	}
 
+	void Werckmeister::saveResource(const std::wstring &path, const fm::String &dataAsStr)
+	{
+		if (path.empty()) {
+			FM_THROW(Exception, "tried to load an empty path");
+		}
+		auto fpath = boost::filesystem::system_complete(path);
+		auto absolute = fpath.string();
+		std::wfstream file(absolute, std::fstream::out | std::ios::trunc);
+		file.write(dataAsStr.data(), dataAsStr.size());
+		file.flush();
+		file.close();
+	}
+
 	sheet::compiler::CompilerPtr Werckmeister::createCompiler()
 	{
 		return std::make_shared<sheet::compiler::Compiler>();

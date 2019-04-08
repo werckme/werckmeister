@@ -58,6 +58,11 @@ namespace fm {
 		{
 			return openResourceImpl(path);
 		}
+		void saveResource(const std::wstring &path, const fm::String &data);
+		void saveResource(const std::string &path, const fm::String &data)
+		{
+			saveResource(fm::to_wstring(path), data);
+		}
     };
     Werckmeister & getWerckmeister();
 }
