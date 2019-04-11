@@ -311,7 +311,11 @@ namespace sheet {
 
 		void MidiContext::setMidiInstrumentDef(const fm::String &uname, const MidiInstrumentDef &def)
 		{
+			if (midiInstrumentDefs_.find(uname) != midiInstrumentDefs_.end()) {
+				FM_THROW(Exception, "instrument " + fm::to_string(uname) + " already defined");
+			}
 			midiInstrumentDefs_.insert({ uname, def });
+			midiInstrumentDefs_[uname].id = midiInstrumentDefs_.size();
 		}
 
 		void MidiContext::metaInstrument(const fm::String &uname, int channel, int cc, int pc)
@@ -325,7 +329,7 @@ namespace sheet {
 			def.channel = channel;
 			def.cc = cc;
 			def.pc = pc;
-			def.deviceName = deviceName;
+			def.deviceName = deviceName;		
 			setMidiInstrumentDef(uname, def);
 		}
 
