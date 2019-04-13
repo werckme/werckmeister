@@ -20,7 +20,7 @@
 #include "compiler/modification/modifications.h"
 #include "compiler/modification/Bend.h"
 #include <fm/exception.hpp>
-
+#include <sheet/Document.h>
 
 namespace fm {
     
@@ -150,6 +150,11 @@ namespace fm {
 			return nullptr;
 		}
 		return &it->second;
+	}
+
+	sheet::DocumentPtr Werckmeister::createDocument() 
+	{
+		return std::make_shared<sheet::Document>();
 	}
 
 	Werckmeister::~Werckmeister() = default;

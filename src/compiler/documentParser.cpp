@@ -135,7 +135,7 @@ namespace sheet {
 			}						
 		}
 
-		DocumentPtr DocumentParser::parse(const fm::String path)
+		DocumentPtr DocumentParser::parse(const fm::String path, DocumentPtr input)
 		{
 			auto filestream = fm::getWerckmeister().openResource(path);
 			fm::StreamBuffIterator begin(*filestream);
@@ -144,7 +144,7 @@ namespace sheet {
 			const fm::String::value_type *first = documentText.c_str();
 			const fm::String::value_type *last = first + documentText.length();
 
-			auto res = std::make_shared<Document>();
+			auto res = !!input ? input : fm::getWerckmeister().createDocument();
 			res->path = boost::filesystem::system_complete(path).wstring();
 			auto sourceId = res->addSource(res->path);
 			res->sourceId = sourceId;

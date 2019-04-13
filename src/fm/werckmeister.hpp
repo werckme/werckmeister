@@ -43,6 +43,7 @@ namespace fm {
 		sheet::compiler::AModificationPtr getModification(const fm::String &name);		
 		sheet::VoicingStrategyPtr getDefaultVoicingStrategy();
 		sheet::VoicingStrategyPtr getVoicingStrategy(const fm::String &name);
+		sheet::DocumentPtr createDocument();
 		void registerLuaScript(const fm::String &path);
 	private:
 		typedef std::unordered_map<fm::String, fm::String> ScriptMap;
