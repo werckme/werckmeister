@@ -54,7 +54,7 @@ namespace sheet {
 
 		struct DocumentParser {
 			typedef std::vector<fm::String> Usings;
-			DocumentPtr parse(const fm::String path);
+			DocumentPtr parse(const fm::String path, DocumentPtr input = nullptr);
 		};
 	}
 }

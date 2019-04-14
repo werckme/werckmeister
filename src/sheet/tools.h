@@ -9,13 +9,40 @@
 #include <boost/algorithm/string.hpp>
 
 namespace sheet {
-    struct Event;
+    class Event;
+
+    
+
+    template<class TString>
+    struct NewLine {
+        static const auto value() { return fm::String::value_type('\n'); }
+    };
+
+    template<>
+    struct NewLine<fm::String> {
+        static const auto value() { return fm::String::value_type('\n'); }
+    };
+
+    template<>
+    struct NewLine<std::string> {
+        static const auto value() { return std::string::value_type('\n'); }
+    };
+
+    template<>
+    struct NewLine<fm::String::const_iterator> {
+        static const auto value() { return fm::String::value_type('\n'); }
+    };
+
+    template<>
+    struct NewLine<std::string::const_iterator> {
+        static const auto value() { return std::string::value_type('\n'); }
+    };
+
     namespace toolsimpl {
         const std::vector<fm::String> & getMetaArgs(const Event &metaEvent);
         const fm::String & getMetaCommand(const Event &metaEvent);
     }
     namespace {
-        constexpr fm::String::value_type newline = fm::String::value_type('\n');
         struct MissingArgument {};
         template<typename TArg, typename TArgs>
         TArg __getArgument(const TArgs &args, int idx, TArg *defaultValue) 
@@ -137,7 +164,7 @@ namespace sheet {
         if (begin + position >= end) {
             return -1;
         }
-        return std::count_if(begin, begin + position, [](const auto &x) { return x == newline; });
+        return std::count_if(begin, begin + position, [](const auto &x) { return x == NewLine<TIterator>::value(); });
     }
     
     /**
@@ -166,7 +193,7 @@ namespace sheet {
         // find begin of line
         it = begin + sourcePosition;
         while(it-- >= begin) {
-            if (*it == newline) {
+            if (*it == NewLine<TString>::value()) {
                 start = it+1;
                 break;
             }
@@ -174,7 +201,7 @@ namespace sheet {
         // find end of line
         it = begin + sourcePosition;
         while(it++ < end) {
-            if (*it == newline) {
+            if (*it == NewLine<TString>::value()) {
                 end = it;
                 break;
             }
@@ -208,7 +235,7 @@ namespace sheet {
         auto it = begin;
         bool clearing = false;
         while (it != end) {
-            if (*it == newline) {
+            if (*it == NewLine<TIterator>::value()) {
                 clearing = false;
             }
             if (*it == '-') {
@@ -224,6 +251,53 @@ namespace sheet {
     }
 
     fm::String pitchToString(fm::Pitch pitch);
+
+    typedef std::tuple<int, int> RowAndColumn;
+    extern RowAndColumn InvalidRowAndColumn;
+
+    template<class TIterator>
+    std::vector<RowAndColumn> getRowsAndColumns(TIterator begin, TIterator end, const std::vector<int> &_positions)
+    {
+        std::vector<RowAndColumn> result;
+        if (begin == end || _positions.empty()) {
+            return result;
+        }
+        auto positions = _positions;
+        std::sort(positions.begin(), positions.end());
+        auto it = begin;
+        int row = 0;
+        int column = 0;
+        int position = 0;
+        auto currentPosition = positions.begin();
+        for (;it != end; ++it) {
+            if (*it == NewLine<TIterator>::value()) {
+                ++row;
+                column = 0;
+                ++position;
+                continue;
+            }
+            if (*currentPosition == position) {
+                result.push_back(RowAndColumn(row, column));
+                ++currentPosition;
+                if (currentPosition == positions.end()) {
+                    break;
+                }
+            }
+            ++column;
+            ++position;
+        }
+        return result;
+    }
+
+    template<class TIterator>
+    RowAndColumn getRowAndColumn(TIterator begin, TIterator end, int position)
+    {
+        auto rowsAndColumns = getRowsAndColumns(begin, end, {position} );
+        if (rowsAndColumns.empty()) {
+            return InvalidRowAndColumn;
+        }
+        return *(rowsAndColumns.begin());
+    }
 }
 
 #endif

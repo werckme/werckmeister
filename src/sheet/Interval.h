@@ -13,11 +13,11 @@ namespace sheet {
 		bool valid() const { return value != INVALID_VALUE; }
     };
 
-	struct ChordOption : public Interval {
+	struct DegreeDef : public Interval {
 		fm::Pitch degree;
-		bool operator <(const ChordOption &b) const { return degree < b.degree; }
-		static ChordOption invalid() {
-			ChordOption res;
+		bool operator <(const DegreeDef &b) const { return degree < b.degree; }
+		static DegreeDef invalid() {
+			DegreeDef res;
 			res.value = INVALID_VALUE;
 			return res;
 		}

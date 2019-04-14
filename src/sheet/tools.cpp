@@ -3,6 +3,8 @@
 
 namespace sheet {
 
+    RowAndColumn InvalidRowAndColumn = RowAndColumn(-1, -1);
+
     namespace toolsimpl {
 
         const std::vector<fm::String> & getMetaArgs(const Event &metaEvent)

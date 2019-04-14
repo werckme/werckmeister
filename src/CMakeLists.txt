@@ -82,7 +82,7 @@ if (UNIX)
   SET(SRC_SHEET_PLAYER ${SRC_SHEET_PLAYER}  fmapp/os_linux.cpp)
 endif(UNIX)
 
-SET (SHEET_LIBS ${SHEET_LIBS} sheet ${Boost_LIBRARIES} lua)
+SET (SHEET_LIBS ${SHEET_LIBS} sheet lua ${Boost_LIBRARIES})
 
 add_library(fmapp ${SRC_SHEET_FMAPP})
 
