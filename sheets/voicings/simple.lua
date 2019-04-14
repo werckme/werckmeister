@@ -3,6 +3,6 @@ require "solvers/simple"
 
 local solver = Simple:new()
 
-function solve(chord, intervals, args)
-    return solver:solve(chord, intervals, args)
+function solve(chord, degrees, args)
+    return solver:solve(chord, degrees, args)
 end

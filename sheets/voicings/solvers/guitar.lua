@@ -7,8 +7,8 @@ function GuitarSolver:intervalToPitch(interval, chord)
     return chord.rootPitch + (interval.interval % 12)
 end
 
-function GuitarSolver:_solveImpl(chord, intervals, args)
-    local i = intervals
+function GuitarSolver:_solveImpl(chord, degrees, args)
+    local i = degrees
     if chord:has7() and chord:has9() and chord:has11() and chord:has13()
     then
         return {

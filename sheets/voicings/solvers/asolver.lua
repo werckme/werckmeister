@@ -26,16 +26,16 @@ function ASolver:getAbsolutePitch(pitch)
     return pitch.pitch + (pitch.octave * 12)
 end
 
-function ASolver:solve(chord, intervals, args)
+function ASolver:solve(chord, degrees, args)
     args = tokeyvalue(args)
-    local result = self:_solveImpl(chord, intervals, args)
+    local result = self:_solveImpl(chord, degrees, args)
     if args.range ~=nil then
         self:_keepRange(result, args.range)
     end
     return result
 end
 
-function ASolver:_solveImpl(chord, intervals, args)
+function ASolver:_solveImpl(chord, degrees, args)
     error("this is an abstract function")
 end
 

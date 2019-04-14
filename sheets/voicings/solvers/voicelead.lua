@@ -42,9 +42,9 @@ function VoiceLeadSolver:adjustOctaves(pitches, reference)
     return pitches
 end
 
-function VoiceLeadSolver:_solveImpl(chord, intervals, args)
+function VoiceLeadSolver:_solveImpl(chord, degrees, args)
     local pitches = {}
-    for degree, interval in pairs(intervals)
+    for degree, interval in pairs(degrees)
     do
         if isnumber(degree)
         then

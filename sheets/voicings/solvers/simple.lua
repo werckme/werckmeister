@@ -7,10 +7,10 @@ function Simple:intervalToPitch(interval, chord)
     return chord.rootPitch + interval.interval
 end
 
-function Simple:_solveImpl(chord, intervals, args)
+function Simple:_solveImpl(chord, degrees, args)
     local pitches = {}
 
-    for degree, interval in pairs(intervals)
+    for degree, interval in pairs(degrees)
     do
         if isnumber(degree)
         then
