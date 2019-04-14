@@ -3,6 +3,7 @@
 #include <sheet/lua/ALuaObject.h>
 #include <sheet/tools.h>
 #include <compiler/error.hpp>
+#include <algorithm>
 
 namespace sheet {
     namespace compiler {
@@ -115,6 +116,7 @@ namespace sheet {
                 {}
                 void push(lua_State *L);
                 void pushDegrees(lua_State *L);
+                void pushDegrees(lua_State *L, PitchDef::Pitch root, int degreeValue, const std::vector<PitchDef> &degrees);
                 void pushDegree(lua_State *L, PitchDef::Pitch root, int degreeValue,  PitchDef::Octave octave);
             };
 
@@ -133,20 +135,46 @@ namespace sheet {
 
             void LuaPitches::pushDegrees(lua_State *L)
             {
+                if (degrees->empty()) {
+                    return;
+                }
                 auto chordElements = chordEvent->chordElements();
 		        auto root = std::get<0>(chordElements);
-                for (const auto& degree : *degrees) {
-			        auto degreeDef = chordDef->getDegreeDef(degree.pitch);
-			        if (!degreeDef.valid()) {
-				        continue;
-			        }
-                    auto top = lua_gettop(L);
-                    lua_pushinteger(L, getDegreeValue(degree.pitch));
-                    pushDegree(L, root, degreeDef.value, degree.octave);
-                    lua_settable(L, top);
+                std::vector<PitchDef> orderedByPitch(degrees->begin(), degrees->end());
+                auto degreeComp = [](const PitchDef &a, const PitchDef &b){ return getDegreeValue(a.pitch) < getDegreeValue(b.pitch); };
+                std::sort(orderedByPitch.begin(), orderedByPitch.end(), degreeComp);
+                auto it = orderedByPitch.begin();
+                while (it < orderedByPitch.end())  {
+                    // <I I'> => I=[{I}, {I'}]
+                    // II => II=[{II}] 
+                    auto degreeValue = getDegreeValue(it->pitch);
+                    auto grouped = std::equal_range(orderedByPitch.begin(), orderedByPitch.end(), *it, degreeComp); 
+                    std::vector<PitchDef> degreesRanged(grouped.first, grouped.second);
+                    pushDegrees(L, root, degreeValue, degreesRanged);
+                    it = grouped.second; // it++
 		        }
             }
             
+            void LuaPitches::pushDegrees(lua_State *L, PitchDef::Pitch root, int degreeValue, const std::vector<PitchDef> &degrees_)
+            {
+                auto luaStackMainTable = lua_gettop(L);
+                lua_pushinteger(L, degreeValue);
+                lua_createtable(L, degrees_.size(), 0);
+                auto luaStackDegrees = lua_gettop(L);
+                int degreeIndex = 1;
+                for (const auto &degree : degrees_) {
+                    auto degreeDef = chordDef->getDegreeDef(degree.pitch);
+                    if (!degreeDef.valid()) {
+                            continue;
+                    }
+                    lua_pushinteger(L, degreeIndex++);
+                    pushDegree(L, root, degreeDef.value, degree.octave);
+                    lua_settable(L, luaStackDegrees);
+                }
+                lua_settable(L, luaStackMainTable);
+
+            }
+
             void LuaPitches::push(lua_State *L)
             {
                 Base::push(L, NULL, 0);
