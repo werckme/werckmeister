@@ -14,7 +14,7 @@ namespace sheet {
 		return static_cast<fm::degrees::Flag>((degree) >> 8);
 	}
 
-	ChordOption ChordDef::getIntervalBy(fm::Pitch degree) const
+	DegreeDef ChordDef::getDegreeDef(fm::Pitch degree) const
 	{
 		Intervals::const_iterator it = 
 			std::find_if(intervals.begin(), intervals.end(), [degree](const auto &x) 
@@ -22,7 +22,7 @@ namespace sheet {
 				return getDegreeValue(x.degree) == getDegreeValue(degree); 
 			});
 		if (it == intervals.end()) {
-			return ChordOption::invalid();
+			return DegreeDef::invalid();
 		}
 		auto res = *it;
 		if (getFlag(degree) == fm::degrees::Sharp) {
@@ -36,19 +36,19 @@ namespace sheet {
 
 	bool has7(const ChordDef &def)
 	{
-		return std::any_of(def.intervals.begin(), def.intervals.end(), [](const auto &chordOption){ return chordOption.degree == fm::degrees::VII; });
+		return std::any_of(def.intervals.begin(), def.intervals.end(), [](const auto &DegreeDef){ return DegreeDef.degree == fm::degrees::VII; });
 	}
 	bool has9(const ChordDef &def)
 	{
-		return std::any_of(def.intervals.begin(), def.intervals.end(), [](const auto &chordOption){ return chordOption.degree == fm::degrees::II; });
+		return std::any_of(def.intervals.begin(), def.intervals.end(), [](const auto &DegreeDef){ return DegreeDef.degree == fm::degrees::II; });
 	}
 	bool has11(const ChordDef &def)
 	{
-		return std::any_of(def.intervals.begin(), def.intervals.end(), [](const auto &chordOption){ return chordOption.degree == fm::degrees::IV; });
+		return std::any_of(def.intervals.begin(), def.intervals.end(), [](const auto &DegreeDef){ return DegreeDef.degree == fm::degrees::IV; });
 	}
 	bool has13(const ChordDef &def)
 	{
-		return std::any_of(def.intervals.begin(), def.intervals.end(), [](const auto &chordOption){ return chordOption.degree == fm::degrees::VI; });
+		return std::any_of(def.intervals.begin(), def.intervals.end(), [](const auto &DegreeDef){ return DegreeDef.degree == fm::degrees::VI; });
 	}
 
 }

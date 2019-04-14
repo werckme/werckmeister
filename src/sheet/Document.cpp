@@ -20,7 +20,7 @@ namespace sheet {
 		}
 	}
 
-	fm::String Document::getAbsolutePath(const fm::String &path)
+	fm::String Document::getAbsolutePath(const fm::String &path) const
 	{
 		auto a = boost::filesystem::path(this->path).parent_path();
 		auto b = boost::filesystem::path(path);
@@ -129,8 +129,9 @@ namespace sheet {
 		return &(it->second);
 	}
 
-	Event::SourceId Document::addSource(const Path &path)
+	Event::SourceId Document::addSource(const Path &_path)
 	{
+		auto path = getAbsolutePath(_path);
 		auto sourceId = findSourceId(path);
 		if (sourceId != Event::UndefinedSource) {
 			return sourceId;
@@ -151,7 +152,7 @@ namespace sheet {
 
 	Event::SourceId Document::findSourceId(const Path &path) const
 	{
-		auto it = sources.right.find(path);
+		auto it = sources.right.find(getAbsolutePath(path));
 		if (it == sources.right.end()) {
 			return Event::UndefinedSource;
 		}

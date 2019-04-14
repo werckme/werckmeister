@@ -12,7 +12,7 @@
 
 
 BOOST_FUSION_ADAPT_STRUCT(
-	sheet::ChordOption,
+	sheet::DegreeDef,
 	(fm::Pitch, degree)
 	(int, value)
 )
@@ -62,7 +62,7 @@ namespace sheet {
 					auto onError = boost::bind(&handler::errorHandler<Iterator>, _1);
 					on_error<fail>(start, onError);
 				}
-				qi::rule<Iterator, ChordOption(), ascii::space_type> interval;
+				qi::rule<Iterator, DegreeDef(), ascii::space_type> interval;
 				qi::rule<Iterator, Intervals(), ascii::space_type> intervals;
 				qi::rule<Iterator, fm::String(), ascii::space_type> chordName;
 				qi::rule<Iterator, ChordDef(), ascii::space_type> start;

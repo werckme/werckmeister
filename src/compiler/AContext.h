@@ -17,12 +17,10 @@
 #include "forward.hpp"
 #include "metaData.h"
 #include "error.hpp"
+#include "instrument.h"
 
 namespace sheet {
     namespace compiler {
-		struct AInstrumentDef {
-			fm::String uname;
-		};
         class AContext {
         public:
 			struct Capabilities {

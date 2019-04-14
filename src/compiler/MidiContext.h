@@ -9,20 +9,11 @@
 
 namespace sheet {
     namespace compiler {
-		struct MidiInstrumentDef : AInstrumentDef {
-			fm::String deviceName;
-			int channel = 0;
-			int cc = 0;
-			int pc = 0;
-			int volume = 100;
-			int pan = 50;
-		};
         class MidiContext : public AContext {
 		public:
 			typedef AContext Base;
 			typedef std::unordered_map<fm::String, MidiInstrumentDef> MidiInstrumentDefs;
 			typedef std::vector<MidiInstrumentDef> InstrumentDefContainer;
-			InstrumentDefContainer instrumentDefs = InstrumentDefContainer(1);
 			struct VoiceMetaData : sheet::compiler::VoiceMetaData {};
 			struct TrackMetaData : sheet::compiler::TrackMetaData {
 				MidiInstrumentDef instrument;
@@ -53,10 +44,12 @@ namespace sheet {
 			virtual void addDeviceChangeEvent(const fm::String &deviceName, fm::Ticks position);
 			virtual AInstrumentDef * getInstrumentDef(const fm::String &uname) override;
 			MidiInstrumentDef * getMidiInstrumentDef(const fm::String &uname);
+			const MidiInstrumentDefs & midiInstrumentDefs() const { return this->midiInstrumentDefs_; }
 		protected:
 			virtual Base::VoiceMetaDataPtr createVoiceMetaData() override;
 			virtual Base::TrackMetaDataPtr createTrackMetaData() override;
 			void setMidiInstrumentDef(const fm::String &uname, const MidiInstrumentDef &def);
+			InstrumentDefContainer getInstruments() const;
 			virtual TrackId createMasterTrack() override;
 		private:
 			MidiInstrumentDefs midiInstrumentDefs_;

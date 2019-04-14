@@ -46,13 +46,17 @@ namespace sheet {
 				FM_THROW(Exception, "meta data = null");
 			}
 			const auto &instrumentDef = trackMeta->instrument;
-			midi_->tracks().at(track())->events().addNote(
-				instrumentDef.channel, 
+			auto event = fm::midi::Event::NoteOn(instrumentDef.channel, 
 				absolutePosition, 
 				getAbsolutePitch(pitch), 
-				getAbsoluteVelocity( voiceConfig->expression ),
-				duration);
-			
+				getAbsoluteVelocity(voiceConfig->expression)
+			);
+			addEvent(event, track());
+			event = fm::midi::Event::NoteOff(instrumentDef.channel, 
+				absolutePosition + duration, 
+				getAbsolutePitch(pitch)
+			);
+			addEvent(event, track());
 		}
 
 		void MidiContext::startEvent(const PitchDef &pitch, fm::Ticks absolutePosition)
@@ -70,7 +74,7 @@ namespace sheet {
 				getAbsolutePitch(pitch), 
 				getAbsoluteVelocity(voiceConfig->expression)
 			);
-			midi_->tracks().at(track())->events().add(event);
+			addEvent(event, track());
 		}
 
 		
@@ -87,7 +91,7 @@ namespace sheet {
 				absolutePosition, 
 				getAbsolutePitch(pitch)
 			);
-			midi_->tracks().at(track())->events().add(event);
+			addEvent(event, track());
 		}
 
 		void MidiContext::addEvent(const fm::midi::Event &ev, TrackId trackId)
@@ -110,7 +114,7 @@ namespace sheet {
 			}			
 			const auto &instrumentDef = trackMeta->instrument;
 			auto event = fm::midi::Event::PitchBend(instrumentDef.channel, absolutePosition, value);
-			midi_->tracks().at(track())->events().add(event);
+			addEvent(event, track());
 		}
 
 		MidiContext::Base::TrackId MidiContext::createTrackImpl()
@@ -307,7 +311,11 @@ namespace sheet {
 
 		void MidiContext::setMidiInstrumentDef(const fm::String &uname, const MidiInstrumentDef &def)
 		{
+			if (midiInstrumentDefs_.find(uname) != midiInstrumentDefs_.end()) {
+				FM_THROW(Exception, "instrument " + fm::to_string(uname) + " already defined");
+			}
 			midiInstrumentDefs_.insert({ uname, def });
+			midiInstrumentDefs_[uname].id = midiInstrumentDefs_.size();
 		}
 
 		void MidiContext::metaInstrument(const fm::String &uname, int channel, int cc, int pc)
@@ -321,7 +329,7 @@ namespace sheet {
 			def.channel = channel;
 			def.cc = cc;
 			def.pc = pc;
-			def.deviceName = deviceName;
+			def.deviceName = deviceName;		
 			setMidiInstrumentDef(uname, def);
 		}
 

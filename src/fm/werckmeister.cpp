@@ -20,7 +20,7 @@
 #include "compiler/modification/modifications.h"
 #include "compiler/modification/Bend.h"
 #include <fm/exception.hpp>
-
+#include <sheet/Document.h>
 
 namespace fm {
     
@@ -55,6 +55,19 @@ namespace fm {
 		}
 		auto result = std::make_unique<StreamType>(absolute.c_str());
 		return result;
+	}
+
+	void Werckmeister::saveResource(const std::wstring &path, const fm::String &dataAsStr)
+	{
+		if (path.empty()) {
+			FM_THROW(Exception, "tried to load an empty path");
+		}
+		auto fpath = boost::filesystem::system_complete(path);
+		auto absolute = fpath.string();
+		std::wfstream file(absolute, std::fstream::out | std::ios::trunc);
+		file.write(dataAsStr.data(), dataAsStr.size());
+		file.flush();
+		file.close();
 	}
 
 	sheet::compiler::CompilerPtr Werckmeister::createCompiler()
@@ -137,6 +150,11 @@ namespace fm {
 			return nullptr;
 		}
 		return &it->second;
+	}
+
+	sheet::DocumentPtr Werckmeister::createDocument() 
+	{
+		return std::make_shared<sheet::Document>();
 	}
 
 	Werckmeister::~Werckmeister() = default;

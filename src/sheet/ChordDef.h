@@ -10,10 +10,10 @@
 namespace sheet {
 
     struct ChordDef : public ASheetObject {
-        typedef std::set<ChordOption> Intervals;
+        typedef std::set<DegreeDef> Intervals;
         fm::String name;
 		Intervals intervals;
-		ChordOption getIntervalBy(fm::Pitch degree) const;
+		DegreeDef getDegreeDef(fm::Pitch degree) const;
 	};
 
     bool has7(const ChordDef &def);

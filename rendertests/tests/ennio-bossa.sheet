@@ -14,7 +14,6 @@ instrumentDef: bass    SC1 5 0 33;
 instrumentDef: drums   SC1 9 0 32;
 instrumentDef: slide   SC1 0 0 0;
 
-instrumentDef: guitar  SC1 6 0 24;
 instrumentConf: guitar volume 80 pan 20;
 instrumentConf: piano volume 90 pan 80;
 instrumentConf: bass volume 90;

@@ -23,6 +23,7 @@
 #include "fmapp/boostTimer.h"
 #include <boost/format.hpp>
 #include <map>
+#include <fm/config/configServer.h>
 
 #define ARG_HELP "help"
 #define ARG_INPUT "input"
@@ -210,6 +211,8 @@ void updatePlayer(fmapp::Midiplayer &player, const std::string &inputfile)
 
 void play(sheet::DocumentPtr document, fm::midi::MidiPtr midi, MidiOutputId midiOutput, fm::Ticks begin, fm::Ticks end, const Settings &settings) {
 	auto &player = fmapp::getMidiplayer();
+	player.updateOutputMapping(fm::getConfigServer().getDevices());
+
 	auto output = findOutput(midiOutput);
 	player.setOutput(output);
 	player.midi(midi);
@@ -268,7 +271,6 @@ void play(sheet::DocumentPtr document, fm::midi::MidiPtr midi, MidiOutputId midi
 int main(int argc, const char** argv)
 {
 	try {
-
 		Settings settings(argc, argv);
 				
 		if (settings.help()) {

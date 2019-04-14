@@ -8,7 +8,7 @@ namespace sheet {
 		auto root = std::get<0>(chordElements);
 		PitchDef x;
 		for (const auto& degree : degreeIntervals) {
-			auto interval = def.getIntervalBy(degree.pitch);
+			auto interval = def.getDegreeDef(degree.pitch);
 			if (!interval.valid()) {
 				continue;
 			}

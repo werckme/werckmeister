@@ -55,12 +55,13 @@ namespace fmapp {
 		void stop();
 		fm::Ticks elapsed() const { return MidiProvider::millisToTicks(elapsedMillis_); }
 		void reset();
-		void send(const fm::midi::Event &ev);
+		void send(const fm::midi::Event &ev, const Output *output = nullptr);
 		inline fm::BPM bpm() const { return MidiProvider::bpm(); }
 		void bpm(fm::BPM bpm);
+		void updateOutputMapping(const fm::ConfigServer::Devices &devices);
+		OutputInfo getOutputInfo(const std::string &deviceName) const;
 	private:
 		const OutputInfo * getOutputInfo() const;
-		void initOutputMap();
 		void handleMetaEvent(const fm::midi::Event &ev);
 		void changeDevice(const std::string &deviceId);
 		typedef std::recursive_mutex Lock;
@@ -91,7 +92,6 @@ namespace fmapp {
 	template<class TBackend, class TMidiProvider, class TTimer>
 	MidiplayerClient<TBackend, TMidiProvider, TTimer>::MidiplayerClient()
 	{
-		initOutputMap();
 	}
 
 	template<class TBackend, class TMidiProvider, class TTimer>
@@ -103,11 +103,11 @@ namespace fmapp {
 	}
 
 	template<class TBackend, class TMidiProvider, class TTimer>
-	void MidiplayerClient<TBackend, TMidiProvider, TTimer>::initOutputMap()
+	void MidiplayerClient<TBackend, TMidiProvider, TTimer>::updateOutputMapping(const fm::ConfigServer::Devices &devices)
 	{
-		auto &cs = fm::getConfigServer();
+		outputMap_.clear();
 		auto outputs = getOutputs();
-		for(const auto &x : cs.getDevices()) {
+		for(const auto &x : devices) {
 			auto name = fm::to_string(x.first);
 			auto id = x.second.deviceId;
 			auto it = std::find_if(outputs.begin(), outputs.end(), [id](const auto &x) { return x.id == id; });
@@ -119,6 +119,17 @@ namespace fmapp {
 			inf.offset = x.second.offsetMillis;
 			outputMap_[name] = inf;
 		}
+	}
+
+	template<class TBackend, class TMidiProvider, class TTimer>
+	typename MidiplayerClient<TBackend, TMidiProvider, TTimer>::OutputInfo
+	MidiplayerClient<TBackend, TMidiProvider, TTimer>::getOutputInfo(const std::string &deviceName) const
+	{
+		auto it = outputMap_.find(deviceName);
+		if (it == outputMap_.end()) {
+			return OutputInfo();
+		}
+		return it->second;
 	}
 
 	template<class TBackend, class TMidiProvider, class TTimer>
@@ -194,14 +205,17 @@ namespace fmapp {
 	}
 
 	template<class TBackend, class TMidiProvider, class TTimer>
-	void MidiplayerClient<TBackend, TMidiProvider, TTimer>::send(const fm::midi::Event &ev)
+	void MidiplayerClient<TBackend, TMidiProvider, TTimer>::send(const fm::midi::Event &ev, const Output *output)
 	{
 		if (ev.eventType() == fm::midi::MetaEvent) {
 			this->handleMetaEvent(ev);
 			return;
 		}
-		auto outputInfo = getOutputInfo();
-		Backend::send(ev, &outputInfo->output);
+		if (output == nullptr) {
+			auto outputInfo = getOutputInfo();
+			output = &outputInfo->output;
+		}
+		Backend::send(ev, output);
 	}
 
 	template<class TBackend, class TMidiProvider, class TTimer>

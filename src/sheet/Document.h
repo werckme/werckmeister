@@ -24,6 +24,7 @@ namespace sheet {
 		typedef fm::String Path;
 		typedef boost::bimap<Event::SourceId, Path> Sources;
 		fm::String path;
+		Event::SourceId sourceId;
 		SheetDef sheetDef;
 		ChordDefs chordDefs;
 		PitchmapDefs pitchmapDefs;
@@ -34,7 +35,7 @@ namespace sheet {
 		/**
 		 * creates an absolute path from a path relative to the document.
 		 **/
-		fm::String getAbsolutePath(const fm::String &path);
+		fm::String getAbsolutePath(const fm::String &path) const;
 		Styles & styles();
 		Event::SourceId addSource(const Path &path);
 		Path findSourcePath(Event::SourceId id) const;

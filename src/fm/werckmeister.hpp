@@ -43,6 +43,7 @@ namespace fm {
 		sheet::compiler::AModificationPtr getModification(const fm::String &name);		
 		sheet::VoicingStrategyPtr getDefaultVoicingStrategy();
 		sheet::VoicingStrategyPtr getVoicingStrategy(const fm::String &name);
+		sheet::DocumentPtr createDocument();
 		void registerLuaScript(const fm::String &path);
 	private:
 		typedef std::unordered_map<fm::String, fm::String> ScriptMap;
@@ -57,6 +58,11 @@ namespace fm {
 		ResourceStream openResource(const std::wstring &path)
 		{
 			return openResourceImpl(path);
+		}
+		void saveResource(const std::wstring &path, const fm::String &data);
+		void saveResource(const std::string &path, const fm::String &data)
+		{
+			saveResource(fm::to_wstring(path), data);
 		}
     };
     Werckmeister & getWerckmeister();
