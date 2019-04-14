@@ -17,7 +17,7 @@ namespace sheet {
                 void push(lua_State *L);
                 void pushChordName(lua_State *L);
                 void pushChordDegrees(lua_State *L);
-                void pushChordDegree(lua_State *L, const ChordOption &chordOption);
+                void pushChordDegree(lua_State *L, const DegreeDef &DegreeDef);
             };
             void LuaChord::pushChordName(lua_State *L)
             {
@@ -38,11 +38,11 @@ namespace sheet {
                 lua_pushinteger(L, base);
                 lua_settable(L, top);                
             }
-            void LuaChord::pushChordDegree(lua_State *L, const ChordOption &chordOption)
+            void LuaChord::pushChordDegree(lua_State *L, const DegreeDef &DegreeDef)
             {
                 auto top = lua_gettop(L);
-                lua_pushinteger(L, chordOption.degree);
-                lua_pushinteger(L, chordOption.value);
+                lua_pushinteger(L, DegreeDef.degree);
+                lua_pushinteger(L, DegreeDef.value);
                 lua_settable(L, top);
             }
             void LuaChord::pushChordDegrees(lua_State *L)
@@ -50,8 +50,8 @@ namespace sheet {
                 auto top = lua_gettop(L);
                 lua_pushstring(L, "degrees");
                 lua_createtable(L, chordDef->intervals.size(), 0);
-                for (const auto &chordOption : chordDef->intervals) {
-                    pushChordDegree(L, chordOption);
+                for (const auto &DegreeDef : chordDef->intervals) {
+                    pushChordDegree(L, DegreeDef);
                 }
                 lua_settable(L, top);
             }
@@ -115,20 +115,16 @@ namespace sheet {
                 {}
                 void push(lua_State *L);
                 void pushDegrees(lua_State *L);
-                void pushPitch(lua_State *L, PitchDef::Pitch root, int interval,  PitchDef::Octave octave);
+                void pushDegree(lua_State *L, PitchDef::Pitch root, int interval,  PitchDef::Octave octave);
             };
 
-            void LuaPitches::pushPitch(lua_State *L, PitchDef::Pitch root, int interval, PitchDef::Octave octave)
+            void LuaPitches::pushDegree(lua_State *L, PitchDef::Pitch root, int interval, PitchDef::Octave octave)
             {
                 lua_createtable(L, 2, 0);
                 auto top = lua_gettop(L);
                 lua_pushstring(L, LuaPitchKeyOctave);
                 lua_pushinteger(L, octave);
                 lua_settable(L, top);
-                top = lua_gettop(L);
-                lua_pushstring(L, LuaPitchKeyRoot);
-                lua_pushinteger(L, root);
-                lua_settable(L, top);       
                 top = lua_gettop(L);
                 lua_pushstring(L, LuaPitchKeyInterval);
                 lua_pushinteger(L, interval);
@@ -140,13 +136,13 @@ namespace sheet {
                 auto chordElements = chordEvent->chordElements();
 		        auto root = std::get<0>(chordElements);
                 for (const auto& degree : *degrees) {
-			        auto interval = chordDef->getIntervalBy(degree.pitch);
-			        if (!interval.valid()) {
+			        auto degreeDef = chordDef->getDegreeDef(degree.pitch);
+			        if (!degreeDef.valid()) {
 				        continue;
 			        }
                     auto top = lua_gettop(L);
                     lua_pushinteger(L, getDegreeValue(degree.pitch));
-                    pushPitch(L, root, interval.value, degree.octave);
+                    pushDegree(L, root, degreeDef.value, degree.octave);
                     lua_settable(L, top);
 		        }
             }

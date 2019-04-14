@@ -68,7 +68,7 @@ namespace sheet {
 			transpose = -1;
 		}
 		for (const auto& degree : degreeIntervals) {
-			auto interval = def.getIntervalBy(degree.pitch);
+			auto interval = def.getDegreeDef(degree.pitch);
 			if (!interval.valid()) {
 				continue;
 			}
