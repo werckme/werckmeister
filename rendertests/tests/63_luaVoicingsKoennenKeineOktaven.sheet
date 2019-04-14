@@ -1,5 +1,5 @@
 @load "./chords/default.chords";
-@load "./voicings/voicelead.lua";
+@load "./voicings/simple.lua";
 
 device: SC1 midi 2;
 
@@ -12,8 +12,8 @@ name: x;
 part: x;
 instrument: piano; 
 {  
-    /voicingStrategy: voicelead range alto/
-    <I III  VII>1  |
+    /voicingStrategy: simple/
+    <I I'>1  |
 }   
 ]
 
@@ -21,6 +21,6 @@ instrument: piano;
 [
 type: sheet;
 {
-    C | F | C | G | C-7 | D | G7 | C |
+    C |
 }
 ]

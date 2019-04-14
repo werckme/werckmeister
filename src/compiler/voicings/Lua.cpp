@@ -105,7 +105,7 @@ namespace sheet {
             const char * LuaPitchKeyPitch = "pitch";
             const char * LuaPitchKeyOctave = "octave";
             const char * LuaPitchKeyRoot = "root";
-            const char * LuaPitchKeyInterval = "interval";            
+            const char * LuaPitchKeyDegreeValue = "degreeValue";            
             struct LuaPitches : lua::ALuaObject {
                 typedef lua::ALuaObject Base;
                 const ChordDef *chordDef;
@@ -128,7 +128,7 @@ namespace sheet {
                 lua_pushinteger(L, octave);
                 lua_settable(L, top);
                 top = lua_gettop(L);
-                lua_pushstring(L, LuaPitchKeyInterval);
+                lua_pushstring(L, LuaPitchKeyDegreeValue);
                 lua_pushinteger(L, degreeValue);
                 lua_settable(L, top);         
             }
