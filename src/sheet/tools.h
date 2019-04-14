@@ -9,7 +9,7 @@
 #include <boost/algorithm/string.hpp>
 
 namespace sheet {
-    class Event;
+    struct Event;
 
     
 
