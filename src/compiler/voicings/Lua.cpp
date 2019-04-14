@@ -115,10 +115,10 @@ namespace sheet {
                 {}
                 void push(lua_State *L);
                 void pushDegrees(lua_State *L);
-                void pushDegree(lua_State *L, PitchDef::Pitch root, int interval,  PitchDef::Octave octave);
+                void pushDegree(lua_State *L, PitchDef::Pitch root, int degreeValue,  PitchDef::Octave octave);
             };
 
-            void LuaPitches::pushDegree(lua_State *L, PitchDef::Pitch root, int interval, PitchDef::Octave octave)
+            void LuaPitches::pushDegree(lua_State *L, PitchDef::Pitch root, int degreeValue, PitchDef::Octave octave)
             {
                 lua_createtable(L, 2, 0);
                 auto top = lua_gettop(L);
@@ -127,7 +127,7 @@ namespace sheet {
                 lua_settable(L, top);
                 top = lua_gettop(L);
                 lua_pushstring(L, LuaPitchKeyInterval);
-                lua_pushinteger(L, interval);
+                lua_pushinteger(L, degreeValue);
                 lua_settable(L, top);         
             }
 
