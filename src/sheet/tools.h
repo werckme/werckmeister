@@ -9,7 +9,7 @@
 #include <boost/algorithm/string.hpp>
 
 namespace sheet {
-    class Event;
+    struct Event;
     namespace toolsimpl {
         const std::vector<fm::String> & getMetaArgs(const Event &metaEvent);
         const fm::String & getMetaCommand(const Event &metaEvent);
