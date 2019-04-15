@@ -15,12 +15,12 @@ namespace sheet {
 	namespace compiler {
 
 		namespace {
-			typedef std::function<void(DocumentPtr, const fm::String&)> ExtHandler;
+			typedef std::function<void(DocumentPtr, const fm::String&, Event::SourceId)> ExtHandler;
 			typedef std::set<std::string> Extensions;
-			void useChordDef(DocumentPtr doc, const fm::String &path);
-			void usePitchmapDef(DocumentPtr doc, const fm::String &path);
-			void useLuaScript(DocumentPtr doc, const fm::String &path);
-			void useStyleDef(DocumentPtr doc, const fm::String &path);
+			void useChordDef(DocumentPtr doc, const fm::String &path, Event::SourceId);
+			void usePitchmapDef(DocumentPtr doc, const fm::String &path, Event::SourceId);
+			void useLuaScript(DocumentPtr doc, const fm::String &path, Event::SourceId);
+			void useStyleDef(DocumentPtr doc, const fm::String &path, Event::SourceId);
 			void processUsings(DocumentPtr doc, 
 				const sheet::DocumentConfig &documentConfig, 
 				const Extensions &allowedExtendions,
@@ -59,7 +59,7 @@ namespace sheet {
 				return boost::filesystem::system_complete(x).wstring();
 			}
 
-			void useChordDef(DocumentPtr doc, const fm::String &path)
+			void useChordDef(DocumentPtr doc, const fm::String &path, Event::SourceId sourceId)
 			{
 				auto filestream = fm::getWerckmeister().openResource(path);
 				fm::StreamBuffIterator begin(*filestream);
@@ -71,7 +71,7 @@ namespace sheet {
 					doc->chordDefs[x.name] = x;
 				}
 			}
-			void usePitchmapDef(DocumentPtr doc, const fm::String &path)
+			void usePitchmapDef(DocumentPtr doc, const fm::String &path, Event::SourceId sourceId)
 			{
 				
 				auto filestream = fm::getWerckmeister().openResource(path);
@@ -84,16 +84,16 @@ namespace sheet {
 					doc->pitchmapDefs[x.name] = x.pitch;
 				}
 			}
-			void useLuaScript(DocumentPtr doc, const fm::String &path)
+			void useLuaScript(DocumentPtr doc, const fm::String &path, Event::SourceId sourceId)
 			{
 				auto &wm = fm::getWerckmeister();
 				wm.registerLuaScript(path);
 			}
 
-			void useStyleDef(DocumentPtr doc, const fm::String &path)
+			void useStyleDef(DocumentPtr doc, const fm::String &path, Event::SourceId sourceId)
 			{
 				try {
-					auto sourceId = doc->addSource(path);
+					
 					auto filestream = fm::getWerckmeister().openResource(path);
 					fm::StreamBuffIterator begin(*filestream);
 					fm::StreamBuffIterator end;
@@ -130,7 +130,8 @@ namespace sheet {
 					} else {
 						absolutePath = getAbsolutePath(doc, x);
 					}
-					it->second(doc, absolutePath);
+					auto sourceId = doc->addSource(absolutePath);
+					it->second(doc, absolutePath, sourceId);
 				}
 			}						
 		}
