@@ -1,3 +1,5 @@
+@load "../voicings/voicelead.lua";
+
 [
 type: style;
 name: simpleJazz;
@@ -26,7 +28,7 @@ name: simpleJazz;
 part: normal;
 instrument: piano; 
 {
-    /voicingStrategy: simpleGuitar/
+    /voicingStrategy: voicelead range bass/
     <I II III IV V VI VII>1  |
     <I II III IV V VI VII>2. <I II III IV V VI VII>4  |
     <I II III IV V VI VII>1  |
