@@ -4,6 +4,7 @@
 #include <sheet/tools.h>
 #include <compiler/metaCommands.h>
 #include <compiler/error.hpp>
+#include <functional>
 
 namespace sheet {
 	namespace {
@@ -136,7 +137,7 @@ namespace sheet {
 		if (sourceId != Event::UndefinedSource) {
 			return sourceId;
 		}
-		sourceId = getNextSourceId();
+		sourceId = std::hash<Path>{}(path);
 		sources.insert({sourceId, path});
 		return sourceId;
 	}
@@ -157,10 +158,5 @@ namespace sheet {
 			return Event::UndefinedSource;
 		}
 		return it->second;
-	}
-
-	Event::SourceId Document::getNextSourceId() const
-	{
-		return sources.size() + 1;
 	}
 }

@@ -45,7 +45,6 @@ namespace sheet {
 		StyleType * findStyle(const fm::String &partName, Parts &parts);
 		std::unique_ptr<Styles> styles_;
 		void createStylesMap();
-		Event::SourceId getNextSourceId() const;
 	};
 }
 
