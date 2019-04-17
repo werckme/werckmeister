@@ -1,3 +1,5 @@
+@load "../voicings/voicelead.lua";
+
 [
 type: style;
 name: purdie;

@@ -5,10 +5,10 @@
 tempo: 180;
 device: SC1 midi 2;
 instrumentDef: piano SC1 3 0 0;
-instrumentDef: lead SC1 4 0 0;
+
 
 [
-instrument: lead;
+instrument: piano;
 {
     \fff
     r4.  fis8 b c' fis b| c'4.   fis8 b c' r4 | r4.  fis8 b c' fis b | c' fis b c' r2     |
