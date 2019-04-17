@@ -54,6 +54,10 @@ function VoiceLeadSolver:_solveImpl(chord, degrees, args)
             end
         end
     end
+    if #pitches < 3
+    then
+        return pitches
+    end
     if self.previous ~= nil 
     then
         pitches = self:adjustOctaves(pitches, self.previous)
