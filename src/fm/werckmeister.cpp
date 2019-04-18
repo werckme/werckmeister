@@ -139,6 +139,10 @@ namespace fm {
 
 	void Werckmeister::registerLuaScript(const fm::String &path)
 	{
+		auto fpath = boost::filesystem::system_complete(path);
+		if(!boost::filesystem::exists(fpath)) {
+			FM_THROW(Exception, "file does not exists " + fm::to_string(path));
+		}
 		auto name = boost::filesystem::path(path).filename().stem().wstring();
 		_scriptMap[name] = path;
 	}
