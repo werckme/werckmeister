@@ -25,7 +25,7 @@ namespace sheet {
 	{
 		auto a = boost::filesystem::path(this->path).parent_path();
 		auto b = boost::filesystem::path(path);
-		auto x = boost::filesystem::absolute(b, a);
+		auto x = boost::filesystem::canonical(b, a);
 		return boost::filesystem::system_complete(x).wstring();
 	}
 
