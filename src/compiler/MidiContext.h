@@ -51,6 +51,8 @@ namespace sheet {
 			void setMidiInstrumentDef(const fm::String &uname, const MidiInstrumentDef &def);
 			InstrumentDefContainer getInstruments() const;
 			virtual TrackId createMasterTrack() override;
+			static int getAbsolutePitch(const PitchDef &pitch);
+			static int getAbsoluteVelocity(fm::Expression expression);
 		private:
 			MidiInstrumentDefs midiInstrumentDefs_;
 			fm::midi::MidiPtr midi_;

@@ -27,6 +27,7 @@ namespace fm {
         ~ConfigServer();
         DeviceConfig createDeviceConfig(const fm::String &name, std::vector<fm::String> &args);
         void addDevice(const fm::String &name, const DeviceConfig &config);
+        void clear();
         const DeviceConfig * getDevice(const fm::String &name) const;
         const Devices & getDevices() const { return devices; }
     private:

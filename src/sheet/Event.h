@@ -88,6 +88,14 @@ namespace sheet {
 		bool isTimeConsuming() const {
 			return type == Rest || type == Note || type == Degree || type == TiedNote || type == Chord || type == TiedDegree;
 		}
+		
+		bool isAbsoluteNote() const {
+			return type == Note || type == TiedNote;
+		}
+
+		bool isRelativeDegree() const {
+			return type == Degree || type == TiedDegree;
+		}
 
 		fm::String toString() const;
 	};

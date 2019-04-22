@@ -46,6 +46,11 @@ namespace fm {
         return cf;
     }
 
+    void ConfigServer::clear()
+    {
+        this->devices.clear();
+    }
+
     ConfigServer::~ConfigServer() = default;
     ConfigServer::ConfigServer() = default;
 }
