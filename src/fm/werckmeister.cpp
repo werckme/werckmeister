@@ -60,7 +60,7 @@ namespace fm {
 	void Werckmeister::saveResource(const std::wstring &path, const fm::String &dataAsStr)
 	{
 		if (path.empty()) {
-			FM_THROW(Exception, "tried to load an empty path");
+			FM_THROW(Exception, "tried to save an empty path");
 		}
 		auto fpath = boost::filesystem::system_complete(path);
 		auto absolute = fpath.string();
