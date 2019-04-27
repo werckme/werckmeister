@@ -5,6 +5,7 @@
 #include <compiler/metaCommands.h>
 #include <compiler/error.hpp>
 #include <functional>
+#include <fm/werckmeister.hpp>
 
 namespace sheet {
 	namespace {
@@ -23,10 +24,8 @@ namespace sheet {
 
 	fm::String Document::getAbsolutePath(const fm::String &path) const
 	{
-		auto a = boost::filesystem::path(this->path).parent_path();
-		auto b = boost::filesystem::path(path);
-		auto x = boost::filesystem::canonical(b, a);
-		return boost::filesystem::system_complete(x).wstring();
+		sheet::ConstDocumentPtr thisPtr = shared_from_this();
+		return fm::getWerckmeister().resolvePath(path, thisPtr);
 	}
 
 	Document::Parts * Document::findParts(const fm::String &styleName)

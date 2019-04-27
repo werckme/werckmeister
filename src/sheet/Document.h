@@ -9,9 +9,10 @@
 #include "sheet/StyleDefServer.h"
 #include <memory>
 #include <boost/bimap.hpp>
+#include <memory>
 
 namespace sheet {
-	class Document : public IStyleDefServer {
+	class Document: public std::enable_shared_from_this<Document>, public IStyleDefServer {
 	public:
 		typedef IStyleDefServer::Style StyleType;
 		typedef std::unordered_map<fm::String, ChordDef> ChordDefs;
@@ -32,14 +33,12 @@ namespace sheet {
 		StyleType getStyle(const fm::String &name, const fm::String &part = FM_STRING("?")) override;
 		IStyleDefServer::ConstChordValueType getChord(const fm::String &name) override;
 		IStyleDefServer::ConstPitchDefValueType getAlias(fm::String alias) override;
-		/**
-		 * creates an absolute path from a path relative to the document.
-		 **/
-		fm::String getAbsolutePath(const fm::String &path) const;
 		Styles & styles();
 		Event::SourceId addSource(const Path &path);
 		Path findSourcePath(Event::SourceId id) const;
 		Event::SourceId findSourceId(const Path &path) const;
+	protected:
+		fm::String getAbsolutePath(const fm::String &path) const;
 	private:
 		Parts * findParts(const fm::String &styleName);
 		StyleType * findStyle(const fm::String &partName, Parts &parts);

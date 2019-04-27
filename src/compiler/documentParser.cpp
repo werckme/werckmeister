@@ -46,19 +46,6 @@ namespace sheet {
 				append(doc->sheetDef.tracks, sheetDef.tracks);
 			}
 
-			fm::String getAbsolutePath(DocumentPtr doc, const fm::String &path)
-			{
-				return doc->getAbsolutePath(path);
-			}
-
-			fm::String getAbsolutePath(fm::String base, const fm::String &path)
-			{
-				auto a = boost::filesystem::path(base).parent_path();
-				auto b = boost::filesystem::path(path);
-				auto x = boost::filesystem::canonical(b, a);
-				return boost::filesystem::system_complete(x).wstring();
-			}
-
 			void useChordDef(DocumentPtr doc, const fm::String &path, Event::SourceId sourceId)
 			{
 				auto filestream = fm::getWerckmeister().openResource(path);
@@ -125,11 +112,7 @@ namespace sheet {
 						FM_THROW(Exception, "document type not allowed: " + fm::to_string(x));
 					}
 					fm::String absolutePath;
-					if (!sourcePath.empty()) {
-						absolutePath = getAbsolutePath(sourcePath, x);
-					} else {
-						absolutePath = getAbsolutePath(doc, x);
-					}
+					absolutePath = fm::getWerckmeister().resolvePath(x, doc, sourcePath);
 					auto sourceId = doc->addSource(absolutePath);
 					it->second(doc, absolutePath, sourceId);
 				}

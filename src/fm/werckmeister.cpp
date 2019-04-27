@@ -158,7 +158,31 @@ namespace fm {
 
 	sheet::DocumentPtr Werckmeister::createDocument() 
 	{
-		return std::make_shared<sheet::Document>();
+		auto ptr = std::make_shared<sheet::Document>();
+		return ptr;
+	}
+
+	fm::String Werckmeister::resolvePath(const fm::String &strRelPath, sheet::ConstDocumentPtr doc, const fm::String &sourcePath) const
+	{
+		auto rel = boost::filesystem::path(strRelPath);
+		if (rel.is_absolute()) {
+			return strRelPath;
+		}
+		boost::filesystem::path base;
+		if (!sourcePath.empty()) {
+			base = boost::filesystem::path(sourcePath);
+		} else {
+			if (!doc) {
+				// nothing we can do from here
+				return strRelPath;
+			}
+			base = boost::filesystem::path(doc->path);
+		}
+		if (!boost::filesystem::is_directory(base)) {
+			base = base.parent_path();
+		}
+		auto x = boost::filesystem::canonical(rel, base);
+		return boost::filesystem::system_complete(x).wstring();
 	}
 
 	Werckmeister::~Werckmeister() = default;
