@@ -10,6 +10,7 @@
  * https://github.com/SambaGodschynski/werckmeister/issues/71
  * https://github.com/SambaGodschynski/werckmeister/issues/67
  * https://github.com/SambaGodschynski/werckmeister/issues/68
-## Windows- Mac version
-## Documentation
-## Präsentation
+## Misc
+ * Windows- Mac version
+ * Documentation
+ * Präsentation
