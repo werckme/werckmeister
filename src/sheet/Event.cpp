@@ -52,11 +52,11 @@ namespace sheet {
 				pitch -= 1;
 				it += 1;
 			}
-			else if (*(it) == FM_CHAR('i') && *(it + 1) == FM_CHAR('s')) {
+			else if (nameLower.length() > 2 && *(it) == FM_CHAR('i') && *(it + 1) == FM_CHAR('s')) {
 				pitch += 1;
 				it += 2;
 			}
-			else if (*(it) == FM_CHAR('e') && *(it + 1) == FM_CHAR('s')) {
+			else if (nameLower.length() > 2 && *(it) == FM_CHAR('e') && *(it + 1) == FM_CHAR('s')) {
 				pitch -= 1;
 				it += 2;
 			}

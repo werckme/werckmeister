@@ -192,19 +192,21 @@ namespace sheet {
 
         // find begin of line
         it = begin + sourcePosition;
-        while(it-- >= begin) {
+        while(it > begin) {
             if (*it == NewLine<TString>::value()) {
-                start = it+1;
+                start = it;
                 break;
             }
+			--it;
         }
         // find end of line
         it = begin + sourcePosition;
-        while(it++ < end) {
+        while(it < end) {
             if (*it == NewLine<TString>::value()) {
                 end = it;
                 break;
             }
+			it++;
         }
         int position = sourcePosition - std::distance(begin, start);
         auto line = TString(start, end);
