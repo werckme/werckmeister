@@ -36,16 +36,8 @@ SET (SRC_FETZER_LIB
     sheet/lua/ALuaScript.cpp
 )
 
-
-if (WIN32)
-    SET(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /MT")
-    SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /MTd")
-endif(WIN32)
 add_definitions( -DGIT_VERSION="${GIT_VERSION}" )
-
 add_library(sheet ${SRC_FETZER_LIB})
-
-
 
 ## TESTS
 SET (SRC_FETZER_TESTS
