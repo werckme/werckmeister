@@ -4,6 +4,8 @@
 #include <sheet/tools.h>
 #include <compiler/metaCommands.h>
 #include <compiler/error.hpp>
+#include <functional>
+#include <fm/werckmeister.hpp>
 
 namespace sheet {
 	namespace {
@@ -22,10 +24,8 @@ namespace sheet {
 
 	fm::String Document::getAbsolutePath(const fm::String &path) const
 	{
-		auto a = boost::filesystem::path(this->path).parent_path();
-		auto b = boost::filesystem::path(path);
-		auto x = boost::filesystem::absolute(b, a);
-		return boost::filesystem::system_complete(x).wstring();
+		sheet::ConstDocumentPtr thisPtr = shared_from_this();
+		return fm::getWerckmeister().resolvePath(path, thisPtr);
 	}
 
 	Document::Parts * Document::findParts(const fm::String &styleName)
@@ -136,7 +136,7 @@ namespace sheet {
 		if (sourceId != Event::UndefinedSource) {
 			return sourceId;
 		}
-		sourceId = getNextSourceId();
+		sourceId = std::hash<Path>{}(path);
 		sources.insert({sourceId, path});
 		return sourceId;
 	}
@@ -157,10 +157,5 @@ namespace sheet {
 			return Event::UndefinedSource;
 		}
 		return it->second;
-	}
-
-	Event::SourceId Document::getNextSourceId() const
-	{
-		return sources.size() + 1;
 	}
 }

@@ -50,6 +50,7 @@ namespace fm {
 		ScriptMap _scriptMap;
 		ResourceStream openResourceImpl(const fm::String &path);
 	public:
+		fm::String resolvePath(const fm::String &relPath, sheet::ConstDocumentPtr, const fm::String &sourcePath = FM_STRING("")) const;
 		const fm::String * findScriptPathByName(const fm::String &name) const;
 		ResourceStream openResource(const std::string &path)
 		{

@@ -20,21 +20,22 @@ namespace sheet {
 				}
 			}
 
-			int getAbsolutePitch(const PitchDef &pitch)
-			{
-				return MidiSchluesselCOffset + pitch.pitch + (pitch.octave * fm::NotesPerOctave);
-			}
-
-			int getAbsoluteVelocity(fm::Expression expression)
-			{
-				float expr = static_cast<float>(expression);
-				return static_cast<int>(::ceil((expr) * 127.0f / 10.0f));
-			}
-
 			int getChannel(const MidiContext::TrackMetaData &meta)
 			{
 				return meta.instrument.channel;
 			}
+		}
+
+
+		int MidiContext::getAbsolutePitch(const PitchDef &pitch)
+		{
+			return MidiSchluesselCOffset + pitch.pitch + (pitch.octave * fm::NotesPerOctave);
+		}
+
+		int MidiContext::getAbsoluteVelocity(fm::Expression expression)
+		{
+			float expr = static_cast<float>(expression);
+			return static_cast<int>(::ceil((expr) * 127.0f / 10.0f));
 		}
 
 		void MidiContext::addEvent(const PitchDef &pitch, fm::Ticks absolutePosition, fm::Ticks duration)

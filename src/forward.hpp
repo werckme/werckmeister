@@ -22,6 +22,7 @@ namespace sheet {
 	}
 	class Document;
 	typedef std::shared_ptr<Document> DocumentPtr;
+	typedef std::shared_ptr<const Document> ConstDocumentPtr;
 	class VoicingStrategy;
 	typedef std::shared_ptr<VoicingStrategy> VoicingStrategyPtr;
 }

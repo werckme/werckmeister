@@ -60,7 +60,7 @@ namespace fm {
 	void Werckmeister::saveResource(const std::wstring &path, const fm::String &dataAsStr)
 	{
 		if (path.empty()) {
-			FM_THROW(Exception, "tried to load an empty path");
+			FM_THROW(Exception, "tried to save an empty path");
 		}
 		auto fpath = boost::filesystem::system_complete(path);
 		auto absolute = fpath.string();
@@ -139,6 +139,10 @@ namespace fm {
 
 	void Werckmeister::registerLuaScript(const fm::String &path)
 	{
+		auto fpath = boost::filesystem::system_complete(path);
+		if(!boost::filesystem::exists(fpath)) {
+			FM_THROW(Exception, "file does not exists " + fm::to_string(path));
+		}
 		auto name = boost::filesystem::path(path).filename().stem().wstring();
 		_scriptMap[name] = path;
 	}
@@ -154,7 +158,31 @@ namespace fm {
 
 	sheet::DocumentPtr Werckmeister::createDocument() 
 	{
-		return std::make_shared<sheet::Document>();
+		auto ptr = std::make_shared<sheet::Document>();
+		return ptr;
+	}
+
+	fm::String Werckmeister::resolvePath(const fm::String &strRelPath, sheet::ConstDocumentPtr doc, const fm::String &sourcePath) const
+	{
+		auto rel = boost::filesystem::path(strRelPath);
+		if (rel.is_absolute()) {
+			return strRelPath;
+		}
+		boost::filesystem::path base;
+		if (!sourcePath.empty()) {
+			base = boost::filesystem::path(sourcePath);
+		} else {
+			if (!doc) {
+				// nothing we can do from here
+				return strRelPath;
+			}
+			base = boost::filesystem::path(doc->path);
+		}
+		if (!boost::filesystem::is_directory(base)) {
+			base = base.parent_path();
+		}
+		auto x = boost::filesystem::canonical(rel, base);
+		return boost::filesystem::system_complete(x).wstring();
 	}
 
 	Werckmeister::~Werckmeister() = default;
