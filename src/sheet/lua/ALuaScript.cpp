@@ -13,7 +13,7 @@ namespace sheet {
             L= luaL_newstate();
             luaL_openlibs(L);
             std::string pathcommand("package.path = package.path .. ';");
-            auto dir = boost::filesystem::path(path).parent_path().wstring();
+            auto dir = boost::filesystem::path(path).parent_path().generic_wstring();
             addPackagePath(dir);
             if (luaL_dofile(L, fm::to_string(path).c_str())) {
                 error(std::string(lua_tostring(L, -1)));
