@@ -3,6 +3,8 @@
 @load "./pitchmaps/defaultMidiDrumMap.pitchmap";
 --@load "./pitchmaps/battery3.tight.pitchmap";
 
+-- Antônio Carlos Jobim
+
 tempo: 140;
 device: SC1 midi 2;
 --device: BT midi 8;

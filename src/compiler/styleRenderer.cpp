@@ -191,7 +191,7 @@ namespace sheet {
 				} else {
 					ev.duration = std::min(ev.duration, duration - written);
 				}
-				DEBUGX(std::cout << c++ << "," << it - voice.events.begin() << "\t|\t" << currentPos << "\t|\t" << meta->barPosition << "\t|\t" << fm::to_string(ev.toString()) << ":" << meta->lastEventDuration << std::endl);
+				DEBUGX(std::cout << c++ << "," << it - voice.events.begin() << "\t|\t" << currentPos << "\t|\t" << meta->barPosition << "\t|\t" << ev.toString() << ":" << meta->lastEventDuration << std::endl);
 				ctx_->addEvent(ev);
 				if (ev.isTimeConsuming()) {
 					meta->lastEventDuration = originalDuration;

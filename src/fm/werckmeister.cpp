@@ -57,14 +57,14 @@ namespace fm {
 		return result;
 	}
 
-	void Werckmeister::saveResource(const std::wstring &path, const fm::String &dataAsStr)
+	void Werckmeister::saveResource(const fm::String &path, const fm::String &dataAsStr)
 	{
 		if (path.empty()) {
 			FM_THROW(Exception, "tried to save an empty path");
 		}
 		auto fpath = boost::filesystem::system_complete(path);
 		auto absolute = fpath.string();
-		std::wfstream file(absolute, std::fstream::out | std::ios::trunc);
+		std::fstream file(absolute, std::fstream::out | std::ios::trunc);
 		file.write(dataAsStr.data(), dataAsStr.size());
 		file.flush();
 		file.close();
@@ -109,7 +109,7 @@ namespace fm {
 			result = std::make_shared<sheet::DirectVoicingStrategy>();
 		}
 		if (!result) {
-			FM_THROW(Exception, "voicing strategy not found: " + fm::to_string(name));
+			FM_THROW(Exception, "voicing strategy not found: " + name);
 		}
 		result->name(name);
 		return result;
@@ -126,7 +126,7 @@ namespace fm {
 		if (name == SHEET_SPIELANWEISUNG_VORSCHLAG) {
 			return std::make_shared<sheet::compiler::Vorschlag>(); 
 		}		
-		FM_THROW(Exception, "spielanweisung not found: " + fm::to_string(name));
+		FM_THROW(Exception, "spielanweisung not found: " + name);
 	}
 
 	sheet::compiler::AModificationPtr Werckmeister::getModification(const fm::String &name)
@@ -134,16 +134,16 @@ namespace fm {
 		if (name == SHEET_MOD_BEND) {
 			return std::make_shared<sheet::compiler::Bend>();  
 		}
-		FM_THROW(Exception, "modification not found: " + fm::to_string(name));
+		FM_THROW(Exception, "modification not found: " + name);
 	}
 
 	void Werckmeister::registerLuaScript(const fm::String &path)
 	{
 		auto fpath = boost::filesystem::system_complete(path);
 		if(!boost::filesystem::exists(fpath)) {
-			FM_THROW(Exception, "file does not exists " + fm::to_string(path));
+			FM_THROW(Exception, "file does not exists " + path);
 		}
-		auto name = boost::filesystem::path(path).filename().stem().wstring();
+		auto name = boost::filesystem::path(path).filename().stem().string();
 		_scriptMap[name] = path;
 	}
 
@@ -182,7 +182,7 @@ namespace fm {
 			base = base.parent_path();
 		}
 		auto x = boost::filesystem::canonical(rel, base);
-		return boost::filesystem::system_complete(x).wstring();
+		return boost::filesystem::system_complete(x).string();
 	}
 
 	Werckmeister::~Werckmeister() = default;

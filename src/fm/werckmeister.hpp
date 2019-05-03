@@ -27,7 +27,7 @@ namespace fm {
         Werckmeister() {}
 		Werckmeister(const Werckmeister&&) = delete;
 		Werckmeister& operator=(const Werckmeister&&) = delete;
-		typedef std::wifstream StreamType;
+		typedef std::ifstream StreamType;
 		typedef std::unique_ptr<StreamType> ResourceStream;
 
         /*
@@ -54,17 +54,9 @@ namespace fm {
 		const fm::String * findScriptPathByName(const fm::String &name) const;
 		ResourceStream openResource(const std::string &path)
 		{
-			return openResourceImpl(fm::to_wstring(path));
-		}
-		ResourceStream openResource(const std::wstring &path)
-		{
 			return openResourceImpl(path);
 		}
-		void saveResource(const std::wstring &path, const fm::String &data);
-		void saveResource(const std::string &path, const fm::String &data)
-		{
-			saveResource(fm::to_wstring(path), data);
-		}
+		void saveResource(const fm::String &path, const fm::String &data);
     };
     Werckmeister & getWerckmeister();
 }

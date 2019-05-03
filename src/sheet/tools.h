@@ -24,18 +24,8 @@ namespace sheet {
     };
 
     template<>
-    struct NewLine<std::string> {
-        static const auto value() { return std::string::value_type('\n'); }
-    };
-
-    template<>
     struct NewLine<fm::String::const_iterator> {
         static const auto value() { return fm::String::value_type('\n'); }
-    };
-
-    template<>
-    struct NewLine<std::string::const_iterator> {
-        static const auto value() { return std::string::value_type('\n'); }
     };
 
     namespace toolsimpl {
@@ -67,7 +57,7 @@ namespace sheet {
         try {
             return __getArgument<TArg>(toolsimpl::getMetaArgs(metaEvent), idx, defaultValue);
         } catch(const MissingArgument&) {
-            FM_THROW(fm::Exception, "missing argument for '" + fm::to_string( toolsimpl::getMetaCommand(metaEvent) ) + "'");
+            FM_THROW(fm::Exception, "missing argument for '" + toolsimpl::getMetaCommand(metaEvent) + "'");
         }
     }
 
@@ -89,7 +79,7 @@ namespace sheet {
                                [name](const auto &x) { return x.name == name; });
         if (it == container.end()) {
             if (required) {
-                FM_THROW(fm::Exception, "no value for meta key: " + fm::to_string(name));
+                FM_THROW(fm::Exception, "no value for meta key: " + name);
             }
             return typename TMetaInfoContainer::value_type::Args();
         }

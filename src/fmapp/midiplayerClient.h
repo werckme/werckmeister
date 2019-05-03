@@ -108,7 +108,7 @@ namespace fmapp {
 		outputMap_.clear();
 		auto outputs = getOutputs();
 		for(const auto &x : devices) {
-			auto name = fm::to_string(x.first);
+			auto name = x.first;
 			auto id = x.second.deviceId;
 			auto it = std::find_if(outputs.begin(), outputs.end(), [id](const auto &x) { return x.id == id; });
 			if (it==outputs.end()) {

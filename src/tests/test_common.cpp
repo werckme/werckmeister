@@ -264,7 +264,7 @@ BOOST_AUTO_TEST_CASE(test_sconv)
 	std::wstring wstr = fm::to_wstring("äöüÄÖÜ?§");
 	BOOST_CHECK(L"äöüÄÖÜ?§" == wstr);
 
-	std::string str = fm::to_string(L"äöüÄÖÜ?§");
+	std::string str = L"äöüÄÖÜ?§";
 	BOOST_CHECK("äöüÄÖÜ?§" == str);
 }
 #endif

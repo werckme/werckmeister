@@ -1,9 +1,9 @@
 #ifndef FM_COMMON_HPP
 #define FM_COMMON_HPP
 
-#define FM_STRING(str) L##str
-#define FM_CHAR(str) L##str
-#define FM_COUT std::wcout
+#define FM_STRING(str) str
+#define FM_CHAR(str) str
+#define FM_COUT std::cout
 
 #include <string>
 #include <sstream>
@@ -16,10 +16,10 @@
 
 namespace fm {
 	typedef unsigned char Byte;
-	typedef wchar_t CharType;
+	typedef char CharType;
 	typedef std::string UId;
-    typedef std::wstring String;
-    typedef std::wstringstream StringStream;
+    typedef std::string String;
+    typedef std::stringstream StringStream;
 	typedef std::istreambuf_iterator<String::value_type> StreamBuffIterator;
 	bool isLittleEndian();
 
@@ -47,7 +47,7 @@ namespace fm {
 	}
 	UId generateUid();
 
-	std::string to_string(const fm::String &str);
+	std::string to_string(const std::wstring &str);
 
 	std::wstring to_wstring(const std::string &str);
 

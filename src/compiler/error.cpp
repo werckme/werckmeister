@@ -56,9 +56,9 @@ namespace sheet {
 			std::tie(errorLine, errorPosition, lineNr) = _lineAndPos(sheetfile, sourceInf->sourcePositionBegin);
 			std::string arrowLine(errorPosition, ' ');
 			arrowLine += "^~~~~";
-			strWhere(ss, fm::to_string(sheetfile), lineNr+1) << std::endl;
+			strWhere(ss, sheetfile, lineNr+1) << std::endl;
 			strWhat(ss, msg_) << std::endl
-			   << fm::to_string(errorLine) << std::endl
+			   << errorLine << std::endl
 			   << arrowLine;
 			return ss;
 		}
@@ -74,7 +74,7 @@ namespace sheet {
 				return ss.str();
 			}
 			if (sourceFile) {
-				strWhere(ss, fm::to_string(*sourceFile)) << std::endl;
+				strWhere(ss, *sourceFile) << std::endl;
 				strWhat(ss, msg_) << std::endl;
 				return ss.str();
 			}

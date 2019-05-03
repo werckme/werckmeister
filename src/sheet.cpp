@@ -34,7 +34,7 @@ namespace sheet {
 	sheet::DocumentPtr createDocument(const std::string &file)
     {
         sheet::compiler::DocumentParser docparser;
-        auto doc = docparser.parse(fm::to_wstring(file));
+        auto doc = docparser.parse(file);
         return doc;
     }
 

@@ -68,7 +68,7 @@ namespace sheet {
 		void Compiler::stylePosition(const fm::String &cmd)
 		{
 			if (cmd != SHEET_META__STYLE_POSITION_CMD) {
-				FM_THROW(Exception, "unsupported stylePosition command: " + fm::to_string(cmd));
+				FM_THROW(Exception, "unsupported stylePosition command: " + cmd);
 			}
 			auto ctx = context();
 			if (!ctx->capabilities.canSeek) {
@@ -152,7 +152,7 @@ namespace sheet {
 			auto ctx = styleRenderer.context();
 			auto style = ctx->styleDefServer()->getStyle(file, part);
 			if (style.empty()) {
-				FM_THROW(Exception, "style not found: " + fm::to_string(file) + " " + fm::to_string(part));
+				FM_THROW(Exception, "style not found: " + file + " " + part);
 			}
 			styleRenderer.switchStyle(ctx->currentStyle(), style);
 		}

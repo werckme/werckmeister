@@ -33,7 +33,7 @@ namespace fm {
         return boost::uuids::to_string(u);
 	}
 
-	std::string to_string(const fm::String &str)
+	std::string to_string(const std::wstring &str)
 	{
 		return boost::locale::conv::from_utf(str, FM_CHARSET);
 	}

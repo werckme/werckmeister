@@ -13,9 +13,9 @@ namespace sheet {
             L= luaL_newstate();
             luaL_openlibs(L);
             std::string pathcommand("package.path = package.path .. ';");
-            auto dir = boost::filesystem::path(path).parent_path().generic_wstring();
+            auto dir = boost::filesystem::path(path).parent_path().generic_string();
             addPackagePath(dir);
-            if (luaL_dofile(L, fm::to_string(path).c_str())) {
+            if (luaL_dofile(L, path.c_str())) {
                 error(std::string(lua_tostring(L, -1)));
             }
         }
@@ -23,7 +23,7 @@ namespace sheet {
         void ALuaScript::addPackagePath(const fm::String &path)
         {
             std::string pathcommand("package.path = package.path .. ';");
-            pathcommand += fm::to_string(path) + "/?.lua'";            
+            pathcommand += path + "/?.lua'";            
             luaL_dostring(L, pathcommand.c_str());
         }
 
@@ -44,7 +44,7 @@ namespace sheet {
         void ALuaScript::error(const std::string &msg)
         {
             std::stringstream ss;
-            ss << fm::to_string(_path) << ": ";
+            ss << _path << ": ";
             ss << msg;
             throw std::runtime_error(ss.str());
         }

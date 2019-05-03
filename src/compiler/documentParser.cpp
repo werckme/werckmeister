@@ -106,10 +106,10 @@ namespace sheet {
 					auto ext = path.extension().string();
 					auto it = exthandlers.find(ext);
 					if (it == exthandlers.end()) {
-						FM_THROW(Exception, "unsupported file type: " + fm::to_string(x));
+						FM_THROW(Exception, "unsupported file type: " + x);
 					}
 					if (allowedExtendions.find(ext) == allowedExtendions.end()) {
-						FM_THROW(Exception, "document type not allowed: " + fm::to_string(x));
+						FM_THROW(Exception, "document type not allowed: " + x);
 					}
 					fm::String absolutePath;
 					absolutePath = fm::getWerckmeister().resolvePath(x, doc, sourcePath);
@@ -129,7 +129,7 @@ namespace sheet {
 			const fm::String::value_type *last = first + documentText.length();
 
 			auto res = !!input ? input : fm::getWerckmeister().createDocument();
-			res->path = boost::filesystem::system_complete(path).wstring();
+			res->path = boost::filesystem::system_complete(path).string();
 			auto sourceId = res->addSource(res->path);
 			res->sourceId = sourceId;
 			SheetDefParser sheetParser;

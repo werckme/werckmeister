@@ -250,11 +250,11 @@ namespace sheet {
 		void MidiContext::metaSetInstrumentConfig(const fm::String &uname, const Event::Args &args)
 		{
 			if (args.size() < 3 || args.size() % 2 == 0) {
-				FM_THROW(Exception, "not enough values for " + fm::to_string(SHEET_META__SET_INSTRUMENT_CONFIG) +  ": " + fm::to_string(uname));
+				FM_THROW(Exception, "not enough values for " + fm::String(SHEET_META__SET_INSTRUMENT_CONFIG) +  ": " + uname);
 			}
 			auto instrumentDef = getMidiInstrumentDef(uname);
 			if (instrumentDef == nullptr) {
-				FM_THROW(Exception, "instrumentDef not found: " + fm::to_string(uname));
+				FM_THROW(Exception, "instrumentDef not found: " + uname);
 			}
 			for (std::size_t idx = 1; idx < args.size(); idx+=2) {
 				auto propertyName = getArgument<fm::String>(args, idx);
@@ -264,7 +264,7 @@ namespace sheet {
 				else if (propertyName == SHEET_META__SET_INSTRUMENT_CONFIG_PAN) {
 					instrumentDef->pan = getArgument<int>(args, idx+1);
 				} else {
-					FM_THROW(Exception, "instrumentDef config not found: " + fm::to_string(uname) + ", " + fm::to_string(propertyName));
+					FM_THROW(Exception, "instrumentDef config not found: " + uname + ", " + propertyName);
 				}
 			}
 		}
@@ -272,14 +272,14 @@ namespace sheet {
 		void MidiContext::metaSetInstrument(const fm::String &uname)
 		{
 			// send instrumentDef name meta event
-			auto trackName = fm::midi::Event::MetaTrack(fm::to_string(uname));
+			auto trackName = fm::midi::Event::MetaTrack(uname);
 			trackName.absPosition(0);
 			addEvent(trackName); 
 			// find instrumentDef defs and assign them to the meta data of the voice
 			Base::metaSetInstrument(uname);
 			auto instrumentDef = getMidiInstrumentDef(uname);
 			if (instrumentDef == nullptr) {
-				FM_THROW(Exception, "instrument " + fm::to_string(uname) + " not found");
+				FM_THROW(Exception, "instrument " + uname + " not found");
 			}
 			auto meta = trackMetaData<MidiContext::TrackMetaData>();
 			if (!meta) {
@@ -303,7 +303,7 @@ namespace sheet {
 			}
 			fm::midi::CustomMetaData cdata;
 			cdata.type = fm::midi::CustomMetaData::SetDevice;
-			std::string ndeviceName = fm::to_string(deviceName);
+			std::string ndeviceName = deviceName;
 			cdata.data = fm::midi::CustomMetaData::Data(ndeviceName.begin(), ndeviceName.end());
 			auto ev = fm::midi::Event::MetaCustom(cdata);
 			ev.absPosition(position);
@@ -313,7 +313,7 @@ namespace sheet {
 		void MidiContext::setMidiInstrumentDef(const fm::String &uname, const MidiInstrumentDef &def)
 		{
 			if (midiInstrumentDefs_.find(uname) != midiInstrumentDefs_.end()) {
-				FM_THROW(Exception, "instrument " + fm::to_string(uname) + " already defined");
+				FM_THROW(Exception, "instrument " + uname + " already defined");
 			}
 			midiInstrumentDefs_.insert({ uname, def });
 			midiInstrumentDefs_[uname].id = midiInstrumentDefs_.size();
@@ -356,18 +356,18 @@ namespace sheet {
 						metaInstrument(getArgument<fm::String>(args, 0), getArgument<fm::String>(args, 1),getArgument<int>(args, 2), getArgument<int>(args, 3), getArgument<int>(args, 4));					
 						return;
 					}
-					FM_THROW(Exception, "invalid number of arguments for instrumentDef: " + fm::to_string(name) );
+					FM_THROW(Exception, "invalid number of arguments for instrumentDef: " + name );
 				}
 				if (command == SHEET_META__SET_INSTRUMENT_CONFIG) {
 					metaSetInstrumentConfig(getArgument<fm::String>(args, 0), args);
 					return;
 				}
 			} catch(const std::exception &ex) {
-				FM_THROW(Exception, "failed to process " + fm::to_string(command)
+				FM_THROW(Exception, "failed to process " + command
 									+"\n" + ex.what());
 			}	
 			catch(...) {
-				FM_THROW(Exception, "failed to process " + fm::to_string(command));
+				FM_THROW(Exception, "failed to process " + command);
 			}
 			Base::processMeta(command, args);	
 		}

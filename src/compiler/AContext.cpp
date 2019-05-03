@@ -260,7 +260,7 @@ namespace sheet {
 			}
 			const PitchDef *result = styleDefServer()->getAlias(pitch.alias);
 			if (result == nullptr) {
-				FM_THROW(Exception, "could not resolve alias: " + fm::to_string(pitch.alias));
+				FM_THROW(Exception, "could not resolve alias: " + pitch.alias);
 			}
 			return *result;
 		}
@@ -378,7 +378,7 @@ namespace sheet {
 			std::string voiceName;
 			fm::Ticks pos = 0;
 			if (tmeta) {
-				voiceName = tmeta->instrument.empty() ? std::to_string(voice()) : fm::to_string(tmeta->instrument);
+				voiceName = tmeta->instrument.empty() ? std::to_string(voice()) : tmeta->instrument;
 			}
 			if (vmeta) {
 				pos = vmeta->position / vmeta->barLength;
@@ -480,13 +480,13 @@ namespace sheet {
 					return;
 				}
 			} catch(const std::exception &ex) {
-				FM_THROW(Exception, "failed to process " + fm::to_string(command)
+				FM_THROW(Exception, "failed to process " + command
 									+": " + ex.what());
 			}	
 			catch(...) {
-				FM_THROW(Exception, "failed to process " + fm::to_string(command));
+				FM_THROW(Exception, "failed to process " + command);
 			}
-			FM_THROW(Exception, "command not found: " + fm::to_string(command));								
+			FM_THROW(Exception, "command not found: " + command);								
 		}
 		void AContext::setMeta(const Event &metaEvent)
 		{
@@ -667,7 +667,7 @@ namespace sheet {
 			currentChord_ = chord;
 			currentChordDef_ = styleDefServer()->getChord(currentChord_.chordDefName());
 			if (currentChordDef_ == nullptr) {
-				FM_THROW(Exception, "chord not found: " + fm::to_string(currentChord_.stringValue));
+				FM_THROW(Exception, "chord not found: " + currentChord_.stringValue);
 			}
 		}
 	}

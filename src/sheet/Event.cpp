@@ -38,7 +38,7 @@ namespace sheet {
 		fm::String::const_iterator it = nameLower.begin();
 		auto pitchIt = _name2pitch.find(*it);
 		if (pitchIt == _name2pitch.end()) {
-			FM_THROW(fm::Exception, "ivalid chord: " + fm::to_string(stringValue));
+			FM_THROW(fm::Exception, "ivalid chord: " + stringValue);
 		}
 		pitch = pitchIt->second;
 		++it;
@@ -74,7 +74,7 @@ namespace sheet {
 			return FM_STRING("X") + std::get<1>(elements);
 		}
 		else {
-			FM_THROW(fm::Exception, "lowercase chords are not allowed: " + fm::to_string(stringValue));
+			FM_THROW(fm::Exception, "lowercase chords are not allowed: " + stringValue);
 		}
 	}
 

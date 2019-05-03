@@ -24,8 +24,8 @@ namespace sheet {
             {
                 auto chordElements = chordEvent->chordElements();
                 auto base = std::get<0>(chordElements);
-                auto options = fm::to_string(std::get<1>(chordElements));
-                auto strBase = fm::to_string(pitchToString(base));
+                auto options = std::get<1>(chordElements);
+                auto strBase = pitchToString(base);
                 int top = lua_gettop(L);
                 lua_pushstring(L, "strOptions");
                 lua_pushstring(L, options.c_str());
@@ -252,7 +252,7 @@ namespace sheet {
             auto it = args.begin() + 1;
             for(; it < args.end(); ++it) {
                 lua_pushinteger(L, it - args.begin());
-                lua_pushstring(L, fm::to_string(*it).c_str());
+                lua_pushstring(L, it->c_str());
                 lua_settable(L, top);
             }
         }
