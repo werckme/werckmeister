@@ -3,6 +3,7 @@
 #include "config.hpp"
 #include <type_traits>
 #include <boost/filesystem.hpp>
+#include <boost/algorithm/string/join.hpp>
 #include <exception>
 #include <fstream>
 #include "compiler/compiler.h"
@@ -164,25 +165,42 @@ namespace fm {
 
 	fm::String Werckmeister::resolvePath(const fm::String &strRelPath, sheet::ConstDocumentPtr doc, const fm::String &sourcePath) const
 	{
+		std::list<fm::String> searchPaths(_searchPaths.begin(), _searchPaths.end());
+		
 		auto rel = boost::filesystem::path(strRelPath);
 		if (rel.is_absolute()) {
 			return strRelPath;
 		}
-		boost::filesystem::path base;
+		if (doc) {
+			searchPaths.push_front(doc->path);
+		}
 		if (!sourcePath.empty()) {
-			base = boost::filesystem::path(sourcePath);
-		} else {
-			if (!doc) {
-				// nothing we can do from here
-				return strRelPath;
+			searchPaths.push_front(sourcePath);
+		}
+		for (const auto &searchPath : searchPaths) {
+			auto base = boost::filesystem::path(searchPath);
+			if (!boost::filesystem::is_directory(base)) {
+				base = base.parent_path();
 			}
-			base = boost::filesystem::path(doc->path);
+			auto x = boost::filesystem::absolute(rel, base);
+			if (!boost::filesystem::exists(x)) {
+				continue;
+			}
+			x = boost::filesystem::canonical(rel, base);
+			return boost::filesystem::system_complete(x).string();
 		}
-		if (!boost::filesystem::is_directory(base)) {
-			base = base.parent_path();
-		}
-		auto x = boost::filesystem::canonical(rel, base);
-		return boost::filesystem::system_complete(x).string();
+		auto strSearchPaths = boost::algorithm::join(searchPaths, "\n");
+		FM_THROW(Exception, fm::String("could not resolve " + strRelPath + "\nsearched here:\n" + strSearchPaths));
+	}
+
+	const Werckmeister::Paths & Werckmeister::searchPaths() const
+	{
+		return _searchPaths;
+	}
+
+	void Werckmeister::addSearchPath(const fm::String &path)
+	{
+		_searchPaths.push_back(path);
 	}
 
 	Werckmeister::~Werckmeister() = default;

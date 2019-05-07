@@ -9,6 +9,7 @@
 #include "fm/common.hpp"
 #include "forward.hpp"
 #include <map>
+#include <vector>
 
 #if defined(__GNUC__) || defined(__GNUG__)
 #pragma GCC diagnostic push
@@ -29,7 +30,7 @@ namespace fm {
 		Werckmeister& operator=(const Werckmeister&&) = delete;
 		typedef std::ifstream StreamType;
 		typedef std::unique_ptr<StreamType> ResourceStream;
-
+		typedef std::vector<fm::String> Paths;
         /*
             creates a default sheet. if werk parameter set, it will added to the werk after creation.
         */
@@ -45,10 +46,14 @@ namespace fm {
 		sheet::VoicingStrategyPtr getVoicingStrategy(const fm::String &name);
 		sheet::DocumentPtr createDocument();
 		void registerLuaScript(const fm::String &path);
+		const Paths & searchPaths() const;
+		void addSearchPath(const fm::String &path);
+
 	private:
 		typedef std::unordered_map<fm::String, fm::String> ScriptMap;
 		ScriptMap _scriptMap;
 		ResourceStream openResourceImpl(const fm::String &path);
+		Paths _searchPaths;
 	public:
 		fm::String resolvePath(const fm::String &relPath, sheet::ConstDocumentPtr, const fm::String &sourcePath = FM_STRING("")) const;
 		const fm::String * findScriptPathByName(const fm::String &name) const;
