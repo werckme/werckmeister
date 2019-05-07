@@ -1,9 +1,9 @@
 ## Offene Features
- * create new Resources
+ * ~~create new Resources~~
  * Menu->insert-> Pitchbend, ...
- * SPA integration
+ * ~~SPA integration~~
  * export to midi
- * Search Paths
+ * ~~Search Paths~~
  
 ## Offene Bugs
  * https://github.com/SambaGodschynski/werckmeister-editor/issues/12
