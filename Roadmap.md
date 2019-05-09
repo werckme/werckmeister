@@ -7,7 +7,7 @@
  
 ## Offene Bugs
  * https://github.com/SambaGodschynski/werckmeister-editor/issues/12
- * https://github.com/SambaGodschynski/werckmeister/issues/71
+ * ~~https://github.com/SambaGodschynski/werckmeister/issues/71~~
  * https://github.com/SambaGodschynski/werckmeister/issues/67
  * https://github.com/SambaGodschynski/werckmeister/issues/68
 ## Misc
