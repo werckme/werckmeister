@@ -2,7 +2,7 @@
  * ~~create new Resources~~
  * Menu->insert-> Pitchbend, ...
  * ~~SPA integration~~
- * export to midi
+ * ~~export to midi~~
  * ~~Search Paths~~
  
 ## Offene Bugs
