@@ -119,7 +119,7 @@ namespace sheet {
 			}						
 		}
 
-		DocumentPtr DocumentParser::parse(const fm::String path, DocumentPtr input)
+		DocumentPtr DocumentParser::parse(const fm::String &path, DocumentPtr input)
 		{
 			auto filestream = fm::getWerckmeister().openResource(path);
 			fm::StreamBuffIterator begin(*filestream);
@@ -136,6 +136,24 @@ namespace sheet {
 			try {
 				res->sheetDef = sheetParser.parse(first, last, sourceId);
 				processUsings(res, res->sheetDef.documentConfig, AllSupportedExtensions);
+			} catch(fm::Exception &ex) {
+				ex << ex_sheet_document(res);
+				throw;
+			}
+			return res;
+		}
+
+		DocumentPtr DocumentParser::parseString(const fm::String &documentText)
+		{
+			const fm::String::value_type *first = documentText.c_str();
+			const fm::String::value_type *last = first + documentText.length();
+
+			auto res = fm::getWerckmeister().createDocument();
+			res->sourceId = 0;
+			SheetDefParser sheetParser;
+			try {
+				res->sheetDef = sheetParser.parse(first, last, 0);
+				//processUsings(res, res->sheetDef.documentConfig, AllSupportedExtensions);
 			} catch(fm::Exception &ex) {
 				ex << ex_sheet_document(res);
 				throw;
