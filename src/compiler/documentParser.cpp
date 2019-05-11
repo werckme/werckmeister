@@ -121,7 +121,8 @@ namespace sheet {
 
 		DocumentPtr DocumentParser::parse(const fm::String &path, DocumentPtr input)
 		{
-			auto filestream = fm::getWerckmeister().openResource(path);
+			auto &wm = fm::getWerckmeister();
+			auto filestream = wm.openResource(path);
 			fm::StreamBuffIterator begin(*filestream);
 			fm::StreamBuffIterator end;
 			fm::String documentText(begin, end);
@@ -129,7 +130,7 @@ namespace sheet {
 			const fm::String::value_type *last = first + documentText.length();
 
 			auto res = !!input ? input : fm::getWerckmeister().createDocument();
-			res->path = boost::filesystem::system_complete(path).string();
+			res->path = wm.absolutePath(path);
 			auto sourceId = res->addSource(res->path);
 			res->sourceId = sourceId;
 			SheetDefParser sheetParser;

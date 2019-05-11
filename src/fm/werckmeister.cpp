@@ -43,10 +43,13 @@ namespace fm {
 	}
 
 
-	Werckmeister::ResourceStream Werckmeister::openResourceImpl(const fm::String &path)
+	Werckmeister::ResourceStream Werckmeister::openResourceImpl(const Path &path)
 	{
 		if (path.empty()) {
 			FM_THROW(Exception, "tried to load an empty path");
+		}
+		if (isVirtualFilePath(path)) {
+			return openVirtualFile(path);
 		}
 		auto fpath = boost::filesystem::system_complete(path);
 		auto absolute = fpath.string();
@@ -54,14 +57,18 @@ namespace fm {
 		{
 			FM_THROW(Exception, "resource not found: " + fpath.string());
 		}
-		auto result = std::make_unique<StreamType>(absolute.c_str());
+		auto result = std::make_unique<std::ifstream>(absolute.c_str());
 		return result;
 	}
 
-	void Werckmeister::saveResource(const fm::String &path, const fm::String &dataAsStr)
+	void Werckmeister::saveResource(const Path &path, const fm::String &dataAsStr)
 	{
 		if (path.empty()) {
 			FM_THROW(Exception, "tried to save an empty path");
+		}
+		if (isVirtualFilePath(path)) {
+			updateVirtualFile(path, dataAsStr);
+			return;
 		}
 		auto fpath = boost::filesystem::system_complete(path);
 		auto absolute = fpath.string();
@@ -69,6 +76,44 @@ namespace fm {
 		file.write(dataAsStr.data(), dataAsStr.size());
 		file.flush();
 		file.close();
+	}
+
+	Werckmeister::ResourceStream Werckmeister::openVirtualFile(const Path &path) 
+	{
+		auto data = getVirtualFileData(path);
+		if (!data) {
+			FM_THROW(Exception, "virtual file not found: " + path);
+		}
+		auto result = std::make_unique<std::stringstream>();
+		result->write(data->data(), data->size());
+		return result;
+	}
+
+	void Werckmeister::updateVirtualFile(const Path &path, const String &data)
+	{
+		virtualFiles_[path] = data;
+	}
+
+	bool Werckmeister::isVirtualFilePath(const Path &path) const
+	{
+		return virtualFiles_.find(path) != virtualFiles_.end();
+	}
+
+
+	Path Werckmeister::createVirtualFile()
+	{
+		auto path = "\\\\\\virtual-file-" + std::to_string(virtualFiles_.size() + 1);
+		virtualFiles_[path] = "";
+		return path;
+	}
+
+	const String * Werckmeister::getVirtualFileData(const Path &path) const
+	{
+		auto it = virtualFiles_.find(path);
+		if (it==virtualFiles_.end()) {
+			return nullptr;	
+		}
+		return &(it->second);
 	}
 
 	sheet::compiler::CompilerPtr Werckmeister::createCompiler()
@@ -95,7 +140,7 @@ namespace fm {
 	sheet::VoicingStrategyPtr Werckmeister::getVoicingStrategy(const fm::String &name)
 	{
 		sheet::VoicingStrategyPtr result;
-		const fm::String *scriptPath = findScriptPathByName(name);
+		const Path *scriptPath = findScriptPathByName(name);
 		if (scriptPath != nullptr) {
 			auto anw = std::make_shared<sheet::compiler::LuaVoicingStrategy>(*scriptPath);
 			if (anw->canExecute()) {
@@ -138,7 +183,7 @@ namespace fm {
 		FM_THROW(Exception, "modification not found: " + name);
 	}
 
-	void Werckmeister::registerLuaScript(const fm::String &path)
+	void Werckmeister::registerLuaScript(const Path &path)
 	{
 		auto fpath = boost::filesystem::system_complete(path);
 		if(!boost::filesystem::exists(fpath)) {
@@ -148,7 +193,7 @@ namespace fm {
 		_scriptMap[name] = path;
 	}
 
-	const fm::String * Werckmeister::findScriptPathByName(const fm::String &name) const
+	const Path * Werckmeister::findScriptPathByName(const fm::String &name) const
 	{
 		auto it = _scriptMap.find(name);
 		if (it == _scriptMap.end()) {
@@ -163,9 +208,12 @@ namespace fm {
 		return ptr;
 	}
 
-	fm::String Werckmeister::resolvePath(const fm::String &strRelPath, sheet::ConstDocumentPtr doc, const fm::String &sourcePath) const
+	Path Werckmeister::resolvePath(const Path &strRelPath, sheet::ConstDocumentPtr doc, const Path &sourcePath) const
 	{
-		std::list<fm::String> searchPaths(_searchPaths.begin(), _searchPaths.end());
+		if (isVirtualFilePath(strRelPath)) {
+			return strRelPath;
+		}
+		std::list<Path> searchPaths(_searchPaths.begin(), _searchPaths.end());
 		
 		auto rel = boost::filesystem::path(strRelPath);
 		if (rel.is_absolute()) {
@@ -193,12 +241,20 @@ namespace fm {
 		FM_THROW(Exception, fm::String("could not resolve " + strRelPath + "\nsearched here:\n" + strSearchPaths));
 	}
 
+	Path Werckmeister::absolutePath(const Path &relPath) const
+	{
+		if (isVirtualFilePath(relPath)) {
+			return relPath;
+		}
+		return boost::filesystem::system_complete(relPath).string();
+	}
+
 	const Werckmeister::Paths & Werckmeister::searchPaths() const
 	{
 		return _searchPaths;
 	}
 
-	void Werckmeister::addSearchPath(const fm::String &path)
+	void Werckmeister::addSearchPath(const Path &path)
 	{
 		_searchPaths.push_back(path);
 	}

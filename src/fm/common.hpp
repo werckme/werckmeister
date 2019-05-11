@@ -19,6 +19,7 @@ namespace fm {
 	typedef char CharType;
 	typedef std::string UId;
     typedef std::string String;
+	typedef String Path;
     typedef std::stringstream StringStream;
 	typedef std::istreambuf_iterator<String::value_type> StreamBuffIterator;
 	bool isLittleEndian();

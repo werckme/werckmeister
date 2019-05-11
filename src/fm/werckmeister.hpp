@@ -28,9 +28,9 @@ namespace fm {
         Werckmeister() {}
 		Werckmeister(const Werckmeister&&) = delete;
 		Werckmeister& operator=(const Werckmeister&&) = delete;
-		typedef std::ifstream StreamType;
+		typedef std::istream StreamType;
 		typedef std::unique_ptr<StreamType> ResourceStream;
-		typedef std::vector<fm::String> Paths;
+		typedef std::vector<Path> Paths;
         /*
             creates a default sheet. if werk parameter set, it will added to the werk after creation.
         */
@@ -40,28 +40,36 @@ namespace fm {
 		sheet::compiler::CompilerPtr createCompiler();
 		sheet::compiler::AContextPtr createContext();
 		sheet::compiler::ASpielanweisungPtr getDefaultSpielanweisung();
-		sheet::compiler::ASpielanweisungPtr getSpielanweisung(const fm::String &name);
-		sheet::compiler::AModificationPtr getModification(const fm::String &name);		
+		sheet::compiler::ASpielanweisungPtr getSpielanweisung(const String &name);
+		sheet::compiler::AModificationPtr getModification(const String &name);		
 		sheet::VoicingStrategyPtr getDefaultVoicingStrategy();
-		sheet::VoicingStrategyPtr getVoicingStrategy(const fm::String &name);
+		sheet::VoicingStrategyPtr getVoicingStrategy(const String &name);
 		sheet::DocumentPtr createDocument();
-		void registerLuaScript(const fm::String &path);
+		void registerLuaScript(const Path &path);
 		const Paths & searchPaths() const;
-		void addSearchPath(const fm::String &path);
+		void addSearchPath(const Path &path);
+		Path createVirtualFile();
+		const String * getVirtualFileData(const Path &path) const;
+		void updateVirtualFile(const Path &path, const String &data);
+		bool isVirtualFilePath(const Path &path) const;
+		ResourceStream openVirtualFile(const Path &path);
 
 	private:
-		typedef std::unordered_map<fm::String, fm::String> ScriptMap;
+		typedef std::unordered_map<fm::String, Path> ScriptMap;
+		typedef std::unordered_map<Path, String> VirtualFiles;
+		VirtualFiles virtualFiles_;
 		ScriptMap _scriptMap;
-		ResourceStream openResourceImpl(const fm::String &path);
+		ResourceStream openResourceImpl(const Path &path);
 		Paths _searchPaths;
 	public:
-		fm::String resolvePath(const fm::String &relPath, sheet::ConstDocumentPtr, const fm::String &sourcePath = FM_STRING("")) const;
-		const fm::String * findScriptPathByName(const fm::String &name) const;
+		Path resolvePath(const Path &relPath, sheet::ConstDocumentPtr, const Path &sourcePath = FM_STRING("")) const;
+		Path absolutePath(const Path &relPath) const;
+		const Path * findScriptPathByName(const fm::String &name) const;
 		ResourceStream openResource(const std::string &path)
 		{
 			return openResourceImpl(path);
 		}
-		void saveResource(const fm::String &path, const fm::String &data);
+		void saveResource(const Path &path, const fm::String &data);
     };
     Werckmeister & getWerckmeister();
 }
