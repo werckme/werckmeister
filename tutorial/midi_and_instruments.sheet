@@ -1,0 +1,10 @@
+-- at first we need to define at least one midi device.
+-- for example:
+device MyDevice midi 0;
+
+
+[
+{
+    c4 d e f | g a b c' |
+}
+]
