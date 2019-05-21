@@ -1,21 +1,22 @@
+--------------------------------------------------------------------------------
 -- 1. at first we need to define at least one midi device
 -- for example:
 --     name     type   port number
 device MyDevice midi      0;
 -- (see: def://config/device)
--- (press: help->List Midi Devices to get the right port number
-
+-- (PRO TIP: press: help->List Midi Devices, to get the right port number
+--------------------------------------------------------------------------------
 -- 2. now let's define an instrument
 -- (see: def://config/instrumentDef)
 
 --             instrument   device channel cc  pc
 instrumentDef: piano        MyDevice  2    0   0;
-
--- 3. do some setup
+--------------------------------------------------------------------------------
+-- 3. do some optional setup
 instrumentConf: piano volume 80;
 -- (see: def://config/instrumentConf)
-
--- 4. and finally a little track which uses our new instrument:
+--------------------------------------------------------------------------------
+-- 4. and finally here is a little track which uses our new instrument:
 [
 instrument: piano;
 {
@@ -24,6 +25,6 @@ instrument: piano;
 ]
 
 
-------------------------------------------------------
+--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 -- back: werck://help/tutorial
 -- next: 
