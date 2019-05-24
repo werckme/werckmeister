@@ -37,6 +37,7 @@ namespace sheet {
 		Event::SourceId addSource(const Path &path);
 		Path findSourcePath(Event::SourceId id) const;
 		Event::SourceId findSourceId(const Path &path) const;
+		static Event::SourceId getSourceId(const Path &path);
 	protected:
 		fm::String getAbsolutePath(const fm::String &path) const;
 	private:
