@@ -64,6 +64,7 @@ namespace fm {
 	public:
 		Path resolvePath(const Path &relPath, sheet::ConstDocumentPtr, const Path &sourcePath = FM_STRING("")) const;
 		Path absolutePath(const Path &relPath) const;
+		bool fileExists(const Path &path) const;
 		const Path * findScriptPathByName(const fm::String &name) const;
 		ResourceStream openResource(const std::string &path)
 		{

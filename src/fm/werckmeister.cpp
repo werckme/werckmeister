@@ -99,6 +99,10 @@ namespace fm {
 		return virtualFiles_.find(path) != virtualFiles_.end();
 	}
 
+	bool Werckmeister::fileExists(const Path &path) const
+	{
+		return isVirtualFilePath(path) || boost::filesystem::exists(path);
+	}
 
 	Path Werckmeister::createVirtualFile()
 	{
