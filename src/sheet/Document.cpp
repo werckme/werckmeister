@@ -136,7 +136,7 @@ namespace sheet {
 		if (sourceId != Event::UndefinedSource) {
 			return sourceId;
 		}
-		sourceId = std::hash<Path>{}(path);
+		sourceId = getSourceId(path);
 		sources.insert({sourceId, path});
 		return sourceId;
 	}
@@ -157,5 +157,10 @@ namespace sheet {
 			return Event::UndefinedSource;
 		}
 		return it->second;
+	}
+
+	Event::SourceId Document::getSourceId(const Path &path)
+	{
+		return std::hash<Path>{}(path);
 	}
 }
