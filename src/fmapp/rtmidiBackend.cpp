@@ -1,4 +1,5 @@
 #include "rtmidiBackend.h"
+#include <algorithm>
 
 namespace fmapp {
 
@@ -6,7 +7,7 @@ namespace fmapp {
 	{
 		auto defaultOutput = std::make_unique<RtMidiOut>();
 		auto nOutputs = defaultOutput->getPortCount();
-		midiOuts.resize(nOutputs);
+        midiOuts.resize( std::max((int)nOutputs, (int)1));
 		midiOuts[0].swap(defaultOutput);
 	}
 

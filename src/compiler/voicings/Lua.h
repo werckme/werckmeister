@@ -18,7 +18,7 @@ namespace sheet {
             virtual ~LuaVoicingStrategy() = default;
             virtual bool canExecute() const override;
             virtual Pitches get(const Event &chord, const ChordDef &def, const Degrees &degreeIntervals, const TimeInfo&) override;
-            virtual void setArguments(const Event::Args &args);
+            virtual void setArguments(const Event::Args &args) override;
         protected:
             void pushArgs(const Event::Args &args);
         private:
