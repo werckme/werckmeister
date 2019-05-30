@@ -51,7 +51,13 @@ INCLUDE_DIRECTORIES(submodules/lua/src)
 if(WIN32)
   INCLUDE_DIRECTORIES(submodules)
   add_subdirectory(submodules/rtmidi) #rtmidi needs /MT or /MTd for windows
-endif(WIN32)
+endif()
+
+if(APPLE)
+  INCLUDE_DIRECTORIES(submodules)
+  add_subdirectory(submodules/rtmidi) #rtmidi needs /MT or /MTd for windows
+endif()
+
 
 add_subdirectory(src)
 add_subdirectory(submodules/lua)

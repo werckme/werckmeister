@@ -57,7 +57,7 @@ namespace fm {
 		{
 			FM_THROW(Exception, "resource not found: " + fpath.string());
 		}
-		auto result = std::make_unique<std::ifstream>(absolute.c_str());
+		Werckmeister::ResourceStream result = std::make_unique<std::ifstream>(absolute.c_str());
 		return result;
 	}
 
@@ -84,8 +84,9 @@ namespace fm {
 		if (!data) {
 			FM_THROW(Exception, "virtual file not found: " + path);
 		}
-		auto result = std::make_unique<std::stringstream>();
-		result->write(data->data(), data->size());
+		Werckmeister::ResourceStream result = std::make_unique<std::stringstream>();
+		std::stringstream *ss = dynamic_cast<std::stringstream*>(result.get());
+		ss->write(data->data(), data->size());
 		return result;
 	}
 
