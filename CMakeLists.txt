@@ -41,7 +41,22 @@ IF(WIN32)
   SET(CMAKE_C_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /MTd")
 ENDIF(WIN32)
 
+
+IF(APPLE)
+  SET(Boost_USE_STATIC_LIBS ON)
+ENDIF(APPLE)
+
 find_package(Boost COMPONENTS unit_test_framework filesystem program_options locale REQUIRED)
+
+IF(APPLE)
+  SET(Boost_LIBRARIES ${Boost_LIBRARIES}
+      /usr/local/opt/icu4c/lib/libicudata.a 
+      /usr/local/opt/icu4c/lib/libicui18n.a 
+      /usr/local/opt/icu4c/lib/libicutu.a 
+      /usr/local/opt/icu4c/lib/libicuuc.a 
+      /usr/local/opt/icu4c/lib/libicuio.a 
+      iconv)
+ENDIF(APPLE)
 
 INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(src/)
