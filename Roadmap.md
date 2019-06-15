@@ -1,6 +1,6 @@
 ## Offene Features
  * ~~create new Resources~~
- * ~~Menu->insert-> Pitchbend, ...
+ * ~~Menu->insert-> Pitchbend, ...~~
  * ~~SPA integration~~
  * ~~export to midi~~
  * ~~Search Paths~~
@@ -11,6 +11,6 @@
  * ~~https://github.com/SambaGodschynski/werckmeister/issues/67~~
  * ~~https://github.com/SambaGodschynski/werckmeister/issues/68~~
 ## Misc
- * ~~Windows- Mac version
+ * ~~Windows- Mac version~~
  * Documentation
  * Präsentation
