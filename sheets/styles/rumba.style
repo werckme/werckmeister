@@ -1,7 +1,6 @@
 [
 type: style;
-name: rumba;
-part: normal;
+name: rumba.normal;
 instrument: drums; 
 {
     \f
@@ -15,8 +14,7 @@ instrument: drums;
 
 [
 type: style;
-name: rumba;
-part: normal;
+name: rumba.normal;
 instrument: guitar; 
 {
     /voicingStrategy: simpleGuitar/
@@ -33,8 +31,7 @@ instrument: guitar;
 
 [
 type: style;
-name: rumba;
-part: normal;
+name: rumba.normal;
 instrument: piano; 
 {
     \ff
@@ -49,8 +46,7 @@ instrument: piano;
 
 [
 type: style;
-name: rumba;
-part: normal;
+name: rumba.normal;
 instrument: bass; 
 {
     \fff

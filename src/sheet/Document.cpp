@@ -28,20 +28,11 @@ namespace sheet {
 		return fm::getWerckmeister().resolvePath(path, thisPtr);
 	}
 
-	Document::Parts * Document::findParts(const fm::String &styleName)
+	Document::Style * Document::findStyle(const fm::String &styleName)
 	{
 		Styles &styles = *styles_;
 		Styles::iterator it = styles.find(styleName);
 		if (it == styles.end()) {
-			return nullptr;
-		}
-		return &(it->second);
-	}
-
-	Document::StyleType * Document::findStyle(const fm::String &partName, Parts &parts)
-	{
-		Parts::iterator it = parts.find(partName);
-		if (it == parts.end()) {
 			return nullptr;
 		}
 		return &(it->second);
@@ -59,20 +50,11 @@ namespace sheet {
 			fm::String styleName = getFirstMetaValueBy(SHEET_META__TRACK_META_KEY_NAME, track.trackInfos);
 			if (styleName.empty()) {
 				FM_THROW(compiler::Exception, "missing 'name' for style track");
-			}		
-			fm::String partName = getFirstMetaValueBy(SHEET_META__TRACK_META_KEY_PART, track.trackInfos);
-			if (partName.empty()) {
-				FM_THROW(compiler::Exception, "missing 'part' name for style track");
-			}				
-			Parts *parts = findParts(styleName);
-			if (parts == nullptr) {
-				styles[styleName] = Parts();
-				parts = &styles[styleName];
-			}
-			auto style = findStyle(partName, *parts);
+			}					
+			auto style = findStyle(styleName);
 			if (style == nullptr) {
-				(*parts)[partName] = Style(styleName, partName);
-				style = &(*parts)[partName];
+				styles[styleName] = Style(styleName);
+				style = &(styles[styleName]);
 			}
 			style->tracks.push_back(&track);
 		}
@@ -86,7 +68,7 @@ namespace sheet {
 		return *styles_;
 	}
 
-	Document::StyleType Document::getStyle(const fm::String &name, const fm::String &part)
+	Document::StyleType Document::getStyle(const fm::String &name)
 	{
 		const Styles &styles = this->styles();
 		// find style by name
@@ -94,13 +76,7 @@ namespace sheet {
 		if (it == styles.end()) {
 			return StyleType();
 		}
-		// find track by name
-		const auto& partContainer = it->second;
-		Parts::const_iterator partIt = _findByName(part, partContainer);
-		if (partIt == partContainer.end()) {
-			return StyleType();
-		}
-		return partIt->second;
+		return it->second;
 	}
 
 	IStyleDefServer::ConstChordValueType Document::getChord(const fm::String &name)

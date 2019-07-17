@@ -13,14 +13,13 @@ namespace sheet {
 		struct Style
 		{
 			Style() = default;
-			Style(const fm::String &name, const fm::String &part) : name(name), part(part) {}
+			Style(const fm::String &name) : name(name) {}
 			Tracks tracks;
 			bool empty() const { return tracks.empty(); }
 			fm::String name;
-			fm::String part;
 			bool operator==(const Style &b) const 
 			{
-				return name == b.name && part == b.part;
+				return name == b.name;
 			}
 			bool operator!=(const Style &b)	const { return !(*this == b); }
 		};
@@ -28,7 +27,7 @@ namespace sheet {
 		typedef const ChordDef* ConstChordValueType;
 		typedef const PitchDef* ConstPitchDefValueType;
         ~IStyleDefServer() = default;
-		virtual Style getStyle(const fm::String &name, const fm::String &part = FM_STRING("?")) = 0;
+		virtual Style getStyle(const fm::String &name) = 0;
 		virtual ConstChordValueType getChord(const fm::String &name) = 0;
 		virtual ConstPitchDefValueType getAlias(fm::String alias) = 0;
     };

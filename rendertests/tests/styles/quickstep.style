@@ -1,7 +1,6 @@
 [
 type: style;
-name: quickstep;
-part: normal;
+name: quickstep.normal;
 instrument: drums;
 {
     !p"ho"4 "ht"8 "ht" !p"ho"4 "ht"8 "ht" |
@@ -16,8 +15,7 @@ instrument: drums;
 
 [
 type: style;
-name: quickstep;
-part: normal;
+name: quickstep.normal;
 instrument: bass;
 {
     I,,4 V,, III,, VII,, |
@@ -28,8 +26,7 @@ instrument: bass;
 
 [
 type: style;
-name: quickstep;
-part: normal;
+name: quickstep.normal;
 instrument: guitar;
 {
     /voicingStrategy: simpleGuitar lowerRange/
@@ -42,8 +39,7 @@ instrument: guitar;
 
 [
 type: style;
-name: quickstep;
-part: normal;
+name: quickstep.normal;
 instrument: piano;
 {
     r4 <I II III IV V VI VII> r <I II III IV V VI VII> |

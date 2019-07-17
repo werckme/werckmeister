@@ -3,8 +3,7 @@
 
 [
 type: style;
-name: bossanova;
-part: normal;
+name: bossanova.normal;
 instrument: drums;
 {
     "ht"8 !f"ht" "ht" !f"ht"   "ht" "ht" "ht" !f"ht" |
@@ -20,8 +19,7 @@ instrument: drums;
 
 [
 type: style;
-name: bossanova;
-part: normal;
+name: bossanova.normal;
 instrument: guitar; 
 {
     /voicingStrategy: simpleGuitar/
@@ -35,8 +33,7 @@ instrument: guitar;
 
 [
 type: style;
-name: bossanova;
-part: normal;
+name: bossanova.normal;
 instrument: piano; 
 {
    -- /voicingStrategy: simple range tenor/
@@ -46,8 +43,7 @@ instrument: piano;
 
 [
 type: style;
-name: bossanova;
-part: normal;
+name: bossanova.normal;
 instrument: bass; 
 {
     \fff

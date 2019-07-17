@@ -1,7 +1,6 @@
 [
 type: style;
-name: simpleJazz;
-part: normal;
+name: simpleJazz.normal;
 instrument: piano; 
 {
     /voicingStrategy: simpleGuitar/
@@ -13,8 +12,7 @@ instrument: piano;
 
 [
 type: style;
-name: simpleJazz;
-part: normal;
+name: simpleJazz.normal;
 instrument: bass; 
 {
     \ff

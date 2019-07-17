@@ -147,12 +147,11 @@ namespace sheet {
 
 		void Compiler::switchStyle(StyleRenderer &styleRenderer, const Event &metaEvent)
 		{
-			auto file = getArgument<fm::String>(metaEvent, 0);
-			auto part = getArgument<fm::String>(metaEvent, 1);
+			auto styleName = getArgument<fm::String>(metaEvent, 0);
 			auto ctx = styleRenderer.context();
-			auto style = ctx->styleDefServer()->getStyle(file, part);
+			auto style = ctx->styleDefServer()->getStyle(styleName);
 			if (style.empty()) {
-				FM_THROW(Exception, "style not found: " + file + " " + part);
+				FM_THROW(Exception, "style not found: " + styleName);
 			}
 			styleRenderer.switchStyle(ctx->currentStyle(), style);
 		}

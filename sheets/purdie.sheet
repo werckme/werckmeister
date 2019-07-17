@@ -5,8 +5,8 @@
 
 
 tempo: 160;
-device: SC1 midi 1; -- offset 20;
-device: BT  midi 2;
+device: SC1 midi 1 offset 20;
+device: BT  midi 8;
 
 --             instrument dv ch cc pc
 instrumentDef: piano      SC1 0 0  0;
@@ -30,7 +30,7 @@ instrument: fx;
 [
 type: sheet;
 {
-    /style: purdie normal/
+    /style: purdie.normal/
 
     C     | G   | F9  Gmaj7 | C    |
     C     | G   | F9  Gmaj7 | C7#9 |
@@ -42,7 +42,7 @@ type: sheet;
     Amin7 | G   | F9 Gmaj7 | C7    |
     Amin9 | G   | F11      | C |
     C | C | C | C7#9 |
-    /style: purdie ende/
+    /style: purdie.ende/
     /tempo: 80/ 
     C7#9 |
 }

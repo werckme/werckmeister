@@ -20,7 +20,7 @@ instrument: piano;
 [
 type: sheet;
 {
-    /style: ennio normal/
+    /style: ennio.normal/
 
     Cmaj7 | Cmaj7 | Cmaj7 | Cmaj7 | Cmaj7 | Cmaj7 | Esmaj7 | Esmaj7 | 
     Esmaj7 | Esmaj7 | Aesmaj7 | Aesmaj7 | Aesmaj7 | Aesmaj7 | G7 

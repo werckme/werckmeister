@@ -2,8 +2,7 @@
 
 [
 type: style;
-name: purdie;
-part: normal;
+name: purdie.normal;
 instrument: drums;     
 {
     \p"ht"8t r8t !pp"ht"8t    "ht"8t r8t !pp"ht"8t    "ht"8t r8t !pp"ht"8t   "ht"8t r8t !pp"ht"8t |
@@ -44,8 +43,7 @@ instrument: drums;
 
 [
 type: style;
-name: purdie;
-part: normal;
+name: purdie.normal;
 instrument: rhythm1; 
 {
     /voicingStrategy: simpleGuitar/
@@ -58,8 +56,7 @@ instrument: rhythm1;
 
 [
 type: style;
-name: purdie;
-part: normal;
+name: purdie.normal;
 instrument: bass; 
 {
     I,,8t I,,8t r8t r4t I,,8t r4t r8t V,,,4t VII,,,8t |
@@ -72,8 +69,7 @@ instrument: bass;
 
 [
 type: style;
-name: purdie;
-part: ende;
+name: purdie.ende;
 instrument: drums; 
 {
     \f"cy"1  |
@@ -85,8 +81,7 @@ instrument: drums;
 
 [
 type: style;
-name: purdie;
-part: ende;
+name: purdie.ende;
 instrument: rhythm1; 
 {
     /voicingStrategy: simpleGuitar/
@@ -99,8 +94,7 @@ instrument: rhythm1;
 
 [
 type: style;
-name: purdie;
-part: ende;
+name: purdie.ende;
 instrument: bass; 
 {
     I,,1 |

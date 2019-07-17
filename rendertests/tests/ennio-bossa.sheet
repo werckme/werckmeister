@@ -34,12 +34,12 @@ instrument: vibra;
 [
 type: sheet;
 {
-    /style: bossanova normal/
+    /style: bossanova.normal/
 
     Cmaj7 | Cmaj7 | Cmaj7 | Cmaj7 | Esmaj7 | Esmaj7 | Esmaj7 | Esmaj7 | Aesmaj7 
     | Aesmaj7 | Aesmaj7 | Aesmaj7 | G7 | G7 | G7 | G7 | G7 | C | C | Cmin |
 
-    /style: countryschlager1 ende/
+    /style: countryschlager1.ende/
 
     Cmin |
 }

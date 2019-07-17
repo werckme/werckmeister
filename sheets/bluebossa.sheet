@@ -44,7 +44,7 @@ instrument: lead;
 [
 type: sheet;
 {
-    /style: rumba normal/
+    /style: rumba.normal/
     r | C- | C- | F-7 | Bes7 |
     D07 | G7#5#9 | C- | C- |
     Es-7 | As7 | Desmaj7 | Desmaj7 |

@@ -1,7 +1,6 @@
 [
 type: style;
-name: simpleJazz34;
-part: normal;
+name: simpleJazz34.normal;
 instrument: piano; 
 {
     /signature: 3 4/
@@ -12,8 +11,7 @@ instrument: piano;
 
 [
 type: style;
-name: simpleJazz34;
-part: normal;
+name: simpleJazz34.normal;
 instrument: bass; 
 {
     /signature: 3 4/

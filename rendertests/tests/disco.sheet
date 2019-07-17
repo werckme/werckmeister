@@ -17,16 +17,16 @@ instrumentConf: bass volume 85;
 [
 type: sheet;
 {
-    /style: simpleDisco normal/
+    /style: simpleDisco.normal/
     C | C | Cmin | Ces7 | E | D | G | F | A B | 
 
-    /style: simpleDisco solo/
+    /style: simpleDisco.solo/
 
     C | C | 
-    /style: simpleDisco solo2/  
+    /style: simpleDisco.solo2/  
     C | C |
 
-    /style: simpleDisco normal/
+    /style: simpleDisco.normal/
 
     C | C | Cmin | Ces7 | E | D | G | F | A B | 
 }

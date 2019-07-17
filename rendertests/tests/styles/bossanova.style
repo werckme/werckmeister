@@ -1,7 +1,6 @@
 [
 type: style;
-name: bossanova;
-part: normal;
+name: bossanova.normal;
 instrument: drums;
 {
     "ht"8 !f"ht" "ht" !f"ht"   "ht" "ht" "ht" !f"ht" |
@@ -17,8 +16,7 @@ instrument: drums;
 
 [
 type: style;
-name: bossanova;
-part: normal;
+name: bossanova.normal;
 instrument: guitar; 
 {
     /voicingStrategy: simpleGuitar/
@@ -32,8 +30,7 @@ instrument: guitar;
 
 [
 type: style;
-name: bossanova;
-part: normal;
+name: bossanova.normal;
 instrument: piano; 
 {
     <VII, VII>4 <III, V,>8 <V, V>8 r8 <III, V,>8 r8 <V, V> | r8 <III, V,>8 r8 <V, V> r8 <III, V,> r8 <VII, VII> |
@@ -42,8 +39,7 @@ instrument: piano;
 
 [
 type: style;
-name: bossanova;
-part: normal;
+name: bossanova.normal;
 instrument: bass; 
 {
     \fff

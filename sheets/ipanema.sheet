@@ -44,7 +44,7 @@ instrument: lead;
 [
 type: sheet;
 {
-    /style: bossanova normal/
+    /style: bossanova.normal/
     Fmaj7 | Fmaj7 | G7 | G7 |
     G-7 | Ges7 | Fmaj7 | Ges7 |
     Fmaj7 | Fmaj7 | G7 | G7 |

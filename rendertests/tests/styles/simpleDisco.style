@@ -1,7 +1,6 @@
 [
 type: style;
-name: simpleDisco;
-part: normal;
+name: simpleDisco.normal;
 instrument: piano;
 { 
     \fff <I II III IV V VI VII>2. r16  \ff<I II III IV V VI VII>16 r8 |
@@ -10,8 +9,7 @@ instrument: piano;
 
 [
 type: style;
-name: simpleDisco;
-part: normal;
+name: simpleDisco.normal;
 instrument: bass;
 {
     \ffff
@@ -21,8 +19,7 @@ instrument: bass;
 
 [
 type: style;
-name: simpleDisco;
-part: normal;
+name: simpleDisco.normal;
 instrument: drums;
 {
     r8 "ht"16 "ht"16 !ffff"sn"8 "ht"16 "ht"16 r8 "ht"16 "ht"16 !ffff"sn"8 "ht"16 "ht"16 |
@@ -37,8 +34,7 @@ instrument: drums;
 
 [
 type: style;
-name: simpleDisco;
-part: solo;
+name: simpleDisco.solo;
 instrument: bass;
 {
     I,,8 I,16 I,16  I,,8 I,16 I,16  I,,8 I,16 I,16  I,,8 I,16 I,16 |
@@ -47,8 +43,7 @@ instrument: bass;
 
 [
 type: style;
-name: simpleDisco;
-part: solo;
+name: simpleDisco.solo;
 instrument: drums;
 {
     "bd"4 "bd" "bd" "bd" |
@@ -58,8 +53,7 @@ instrument: drums;
 
 [
 type: style;
-name: simpleDisco;
-part: solo2;
+name: simpleDisco.solo2;
 instrument: bass;
 {
     \fff
@@ -69,8 +63,7 @@ instrument: bass;
 
 [
 type: style;
-name: simpleDisco;
-part: solo2;
+name: simpleDisco.solo2;
 instrument: drums;
 {
     "cy"8 "ht"16 "ht"16 !ffff"sn"8 "ht"16 "ht"16 r8 "ht"16 "ht"16 !ffff"sn"8 "ht"16 "ht"16 |

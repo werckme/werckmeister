@@ -1,26 +1,39 @@
 @load "./chords/default.chords";
 @load "./voicings/voicelead.lua";
 
-device: SC1 midi 2;
+device: SC1 midi 1;
 
 tempo: 130;
 instrumentDef: piano   SC1 2 0 0;
+instrumentDef: bass    SC1 3 0 26;
 
 [
 type: style;
-name: x;
-part: x;
+name: x.y;
 instrument: piano; 
 {  
     /voicingStrategy: voicelead range alto/
-    <I III  VII>1  |
+    <I III V VII>2. I,4  |
 }   
 ]
 
 
 [
+type: style;
+name: x.z;
+instrument: piano; 
+{  
+    /voicingStrategy: voicelead range alto/
+    <I III V VII>8 <I III V VII>8 <I III V VII>8 <I III V VII>8 <I III V VII>8 <I III V VII>8 <I III V VII>8 <I III V VII>8  |
+}   
+]
+
+[
 type: sheet;
 {
-    C | F | C | G | C-7 | D | G7 | C |
+    /style: x.y/
+    C | F | C | G | C-7 | 
+    /style: x.z/
+    D | G7 | C |
 }
 ]

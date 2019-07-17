@@ -2,8 +2,7 @@
 
 [
 type: style;
-name: simpleJazz;
-part: normal;
+name: simpleJazz.normal;
 instrument: drums; 
 {
     \ffff
@@ -24,11 +23,10 @@ instrument: drums;
 
 [
 type: style;
-name: simpleJazz;
-part: normal;
+name: simpleJazz.normal;
 instrument: piano; 
 {
-    /voicingStrategy: voicelead range bass/
+    --/voicingStrategy: voicelead range bass/
     <I II III IV V VI VII>1  |
     <I II III IV V VI VII>2. <I II III IV V VI VII>4  |
     <I II III IV V VI VII>1  |
@@ -37,8 +35,7 @@ instrument: piano;
 
 [
 type: style;
-name: simpleJazz;
-part: normal;
+name: simpleJazz.normal;
 instrument: bass; 
 {
     \ff

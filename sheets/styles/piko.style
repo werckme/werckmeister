@@ -1,7 +1,6 @@
 [
 type: style;
-name: piko;
-part: normal;
+name: piko.normal;
 instrument: drums;
 {
    \f
@@ -19,8 +18,7 @@ instrument: drums;
 [
 instrument: bass;
 type: style;
-name: piko;
-part: normal;
+name: piko.normal;
 {
     I,,4. III,,8 V,,4 V,,8 I,8  |
 }
@@ -29,8 +27,7 @@ part: normal;
 [
 instrument: piano;
 type: style;
-name: piko;
-part: normal;
+name: piko.normal;
 {
     /voicingStrategy: simpleGuitar/
     !f<I II III VI V VI VII>16 r16. !p<I II III VI V VI VII>16 r8 

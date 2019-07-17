@@ -1,7 +1,6 @@
 [
 type: style;
-name: countryschlager1;
-part: normal;
+name: countryschlager1.normal;
 instrument: guitar; 
 {
     /voicingStrategy: simpleGuitar/
@@ -13,8 +12,7 @@ instrument: guitar;
 
 [
 type: style;
-name: countryschlager1;
-part: normal;
+name: countryschlager1.normal;
 instrument: slide; 
 {
     \f
@@ -33,8 +31,7 @@ instrument: slide;
 
 [
 type: style;
-name: countryschlager1;
-part: normal;
+name: countryschlager1.normal;
 instrument: bass; 
 {
     I,,4. I,,8 V,,,4. V,,,8 |
@@ -43,8 +40,7 @@ instrument: bass;
 
 [
 type: style;
-name: countryschlager1;
-part: normal;
+name: countryschlager1.normal;
 instrument: drums;
 {
     "ht"8 !f"ht"8 "ht"8 !f"ht"8 "ht"8 !f"ht"8 "ht"8 !f"ht"8 |
@@ -61,8 +57,7 @@ instrument: drums;
 
 [
 type: style;
-name: countryschlager1;
-part: ende;
+name: countryschlager1.ende;
 instrument: guitar; 
 {
     <I II III IV V VI VII>1  |
@@ -71,8 +66,7 @@ instrument: guitar;
 
 [
 type: style;
-name: countryschlager1;
-part: ende;
+name: countryschlager1.ende;
 instrument: bass; 
 {
     I,,1 |
@@ -81,8 +75,7 @@ instrument: bass;
 
 [
 type: style;
-name: countryschlager1;
-part: ende;
+name: countryschlager1.ende;
 instrument: drums;
 {
     "cy"1 |
@@ -94,8 +87,7 @@ instrument: drums;
 
 [
 type: style;
-name: countryschlager1;
-part: ende;
+name: countryschlager1.ende;
 instrument: slide; 
 {
     \f

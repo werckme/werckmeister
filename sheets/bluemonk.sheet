@@ -31,8 +31,7 @@ type: sheet;
 
 [
 type: style;
-name: chords;
-part: chords;
+name: chords.chords;
 instrument: piano;
 {
     /voicingStrategy: voicelead range bass/

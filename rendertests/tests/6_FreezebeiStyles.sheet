@@ -3,8 +3,7 @@
 
 [
 type: style;
-name: x;
-part: y;
+name: x.y;
 {
     /signature: 5 4/
 

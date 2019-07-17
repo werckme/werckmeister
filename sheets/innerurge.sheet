@@ -40,7 +40,6 @@ type: sheet;
 [
 type: style;
 name: chords;
-part: chords;
 instrument: piano;
 {
     /voicingStrategy: simple range baritone/

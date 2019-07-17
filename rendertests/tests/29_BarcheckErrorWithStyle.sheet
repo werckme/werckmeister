@@ -3,8 +3,7 @@
 
 [
 type: style;
-name: i29;
-part: normal; 
+name: i29.normal; 
 {
     <I II III IV V VI VII>2. <I II III IV V VI VII>4  |
     <I II III IV V VI VII>1  |

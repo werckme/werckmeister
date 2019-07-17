@@ -37,7 +37,7 @@ instrument: lead;
 [
 type: sheet;
 {
-    /style: simpleJazz normal/
+    /style: simpleJazz.normal/
     r | A-7 | D7 | Gmaj7 | Cmaj7 | Fis07 | B7 | E- | E- |
     -- wiederholung
     A-7 | D7 | Gmaj7 | Cmaj7 | Fis07 | 

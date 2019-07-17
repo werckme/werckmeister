@@ -20,8 +20,7 @@ namespace sheet {
 		typedef fm::String StyleName;
 		typedef fm::String PartName;
 		typedef IStyleDefServer::Style Style;
-		typedef std::unordered_map<PartName, Style> Parts;
-		typedef std::unordered_map<StyleName, Parts> Styles;
+		typedef std::unordered_map<StyleName, Style> Styles;
 		typedef fm::String Path;
 		typedef boost::bimap<Event::SourceId, Path> Sources;
 		fm::String path;
@@ -30,7 +29,7 @@ namespace sheet {
 		ChordDefs chordDefs;
 		PitchmapDefs pitchmapDefs;
 		Sources sources;
-		StyleType getStyle(const fm::String &name, const fm::String &part = FM_STRING("?")) override;
+		StyleType getStyle(const fm::String &name) override;
 		IStyleDefServer::ConstChordValueType getChord(const fm::String &name) override;
 		IStyleDefServer::ConstPitchDefValueType getAlias(fm::String alias) override;
 		Styles & styles();
@@ -41,8 +40,7 @@ namespace sheet {
 	protected:
 		fm::String getAbsolutePath(const fm::String &path) const;
 	private:
-		Parts * findParts(const fm::String &styleName);
-		StyleType * findStyle(const fm::String &partName, Parts &parts);
+		StyleType * findStyle(const fm::String &styleName);
 		std::unique_ptr<Styles> styles_;
 		void createStylesMap();
 	};

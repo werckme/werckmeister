@@ -1,7 +1,6 @@
 [
 type: style;
-name: ennio;
-part: normal;
+name: ennio.normal;
 instrument: piano; 
 {
     !ffffI,,4 <II, III, IV, V, VI, VII,> <II, III, IV, V, VI, VII,> !fffV,,, |

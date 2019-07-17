@@ -43,7 +43,7 @@ instrument: lead;
 [
 type: sheet;
 {
-    /style: simpleJazz normal/
+    /style: simpleJazz.normal/
     Bes6 | C-7 F7 | Bes6 G-7 |
     C-7 F7 | F-7 Bes7 | Es7 As7 |
     D-7 G7 | C-7 F7 | --:|
