@@ -416,7 +416,6 @@ namespace sheet {
 			try {
 				if (command == SHEET_META__TRACK_META_KEY_TYPE /*handled elsewhere*/
 				|| command == SHEET_META__TRACK_META_KEY_NAME
-				|| command == SHEET_META__TRACK_META_KEY_PART
 				|| command == SHEET_META__SET_VORSCHLAG
 				|| command == SHEET_META__SET_UPBEAT) 
 				{
@@ -486,7 +485,7 @@ namespace sheet {
 			catch(...) {
 				FM_THROW(Exception, "failed to process " + command);
 			}
-			FM_THROW(Exception, "command not found: " + command);								
+			FM_THROW(Exception, "invalid command: " + command);								
 		}
 		void AContext::setMeta(const Event &metaEvent)
 		{
