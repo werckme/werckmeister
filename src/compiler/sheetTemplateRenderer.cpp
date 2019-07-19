@@ -25,22 +25,24 @@ namespace sheet {
 	}
     namespace compiler {
 
-		void SheetTemplateRenderer::switchSheetTemplate(const ISheetTemplateDefServer::SheetTemplate &current, const ISheetTemplateDefServer::SheetTemplate &next)
+		void SheetTemplateRenderer::switchSheetTemplates(const AContext::SheetTemplates &templates)
 		{
-			if (next.empty() || current == next) {
-				return;
-			}
 			// set position for new track
 			auto chordMeta = ctx_->voiceMetaData();
-			for (auto track : next.tracks) {
-				for (const auto &voice : track->voices)
-				{
-					setTargetCreateIfNotExists(*track, voice);
-					auto meta = ctx_->voiceMetaData();
-					meta->position = chordMeta->position;
+			for (const auto &next : templates) {
+				if (next.empty()) {
+					continue;
+				}
+				for (auto track : next.tracks) {
+					for (const auto &voice : track->voices)
+					{
+						setTargetCreateIfNotExists(*track, voice);
+						auto meta = ctx_->voiceMetaData();
+						meta->position = chordMeta->position;
+					}
 				}
 			}
-			ctx_->currentSheetTemplate(next);
+			ctx_->currentSheetTemplate(templates);
 		}
 
 		void SheetTemplateRenderer::seekTo(double quarterNotes)
@@ -48,21 +50,24 @@ namespace sheet {
 			if (quarterNotes != 0) {
 				FM_THROW(Exception, "only seeking to 0 is supported");
 			}
-			const auto &sheetTemplateTracks = ctx_->currentSheetTemplate().tracks;
-			for (const auto &track : sheetTemplateTracks)
-			{
-				for (const auto &voice : track->voices)
+			
+			for (const auto &tmpl : ctx_->currentSheetTemplates()) {
+				const auto &sheetTemplateTracks = tmpl.tracks;
+				for (const auto &track : sheetTemplateTracks)
 				{
-					if (voice.events.empty() || !hasAnyTimeConsumingEvents(voice.events)) {
-						continue;
+					for (const auto &voice : track->voices)
+					{
+						if (voice.events.empty() || !hasAnyTimeConsumingEvents(voice.events)) {
+							continue;
+						}
+						auto it = ptrIdMap_.find(&voice);
+						if (it == ptrIdMap_.end()) {
+							continue;
+						}
+						auto meta = ctx_->voiceMetaData(it->second);
+						meta->lastEventDuration = 0;
+						meta->idxLastWrittenEvent = -1;
 					}
-					auto it = ptrIdMap_.find(&voice);
-					if (it == ptrIdMap_.end()) {
-						continue;
-					}
-					auto meta = ctx_->voiceMetaData(it->second);
-					meta->lastEventDuration = 0;
-					meta->idxLastWrittenEvent = -1;
 				}
 			}
 		}
@@ -108,15 +113,15 @@ namespace sheet {
 
         void SheetTemplateRenderer::sheetRest(fm::Ticks duration)
 		{
-			const auto &sheetTemplateTracks = ctx_->currentSheetTemplate().tracks;
-
-			for (const auto &track : sheetTemplateTracks)
-			{
-				for (const auto &voice : track->voices)
-				{
-					setTargetCreateIfNotExists(*track, voice);
-					auto meta = ctx_->voiceMetaData();
-					ctx_->rest(duration);
+			for (const auto &tmpl : ctx_->currentSheetTemplates()) {
+				const auto &sheetTemplateTracks = tmpl.tracks;
+				for (const auto &track : sheetTemplateTracks) {
+					for (const auto &voice : track->voices)
+					{
+						setTargetCreateIfNotExists(*track, voice);
+						auto meta = ctx_->voiceMetaData();
+						ctx_->rest(duration);
+					}
 				}
 			}
 		}
@@ -208,27 +213,28 @@ namespace sheet {
 
         void SheetTemplateRenderer::render(fm::Ticks duration)
         {
-            const auto &sheetTemplateTracks = ctx_->currentSheetTemplate().tracks;
-
-			for (const auto &track : sheetTemplateTracks)
-			{
-				for (const auto &voice : track->voices)
+			for (const auto &tmpl : ctx_->currentSheetTemplates()) {
+				const auto &sheetTemplateTracks = tmpl.tracks;;
+				for (const auto &track : sheetTemplateTracks)
 				{
-					if (voice.events.empty() || !hasAnyTimeConsumingEvents(voice.events)) {
-						continue;
-					}
-					setTargetCreateIfNotExists(*track, voice);
-					auto meta = ctx_->voiceMetaData();
-					fm::Ticks writtenDuration = 0;
-					while (!allWritten(duration, writtenDuration)) { // loop until enough events are written
-						auto it = voice.events.begin();
-						if (hasRemberedPosition(*meta)) { // continue rendering
-							it = continueOnRemeberedPosition(voice);
+					for (const auto &voice : track->voices)
+					{
+						if (voice.events.empty() || !hasAnyTimeConsumingEvents(voice.events)) {
+							continue;
 						}
-						else if (meta->eventOffset > 0) { // skip events (for upbeat)
-							it += meta->eventOffset;
+						setTargetCreateIfNotExists(*track, voice);
+						auto meta = ctx_->voiceMetaData();
+						fm::Ticks writtenDuration = 0;
+						while (!allWritten(duration, writtenDuration)) { // loop until enough events are written
+							auto it = voice.events.begin();
+							if (hasRemberedPosition(*meta)) { // continue rendering
+								it = continueOnRemeberedPosition(voice);
+							}
+							else if (meta->eventOffset > 0) { // skip events (for upbeat)
+								it += meta->eventOffset;
+							}
+							writtenDuration = renderVoice(voice, it, duration, writtenDuration);
 						}
-						writtenDuration = renderVoice(voice, it, duration, writtenDuration);
 					}
 				}
 			}

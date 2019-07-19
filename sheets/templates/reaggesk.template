@@ -16,6 +16,7 @@ name: reaggesk.normal;
 }
 {
     "bd"2 "bd"4 |
+    r2    "bd"4 |
 }
 ]
 
@@ -30,15 +31,15 @@ name: reaggesk.normal;
 }
 ]
 
-[
-type: template;
-instrument: rhythm1;
-name: reaggesk.normal;
-{
-    /voicingStrategy: simpleGuitar/
-    r8. !f<I, III VII,>32 r16 !f<I, III VII,>16. r8. !p<I, III VII,>16. r64 r16.  |
-}
-]
+--  [
+--  type: template;
+--  instrument: rhythm1;
+--  name: reaggesk.normal;
+--  {
+    --  /voicingStrategy: simpleGuitar/
+    --  r8. !f<I, III VII,>32 r16 !f<I, III VII,>16. r8. !p<I, III VII,>16. r64 r16.  |
+--  }
+--  ]
 
 [
 type: template;

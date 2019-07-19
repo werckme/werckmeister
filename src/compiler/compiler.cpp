@@ -147,13 +147,17 @@ namespace sheet {
 
 		void Compiler::switchSheetTemplate(SheetTemplateRenderer &sheetTemplateRenderer, const Event &metaEvent)
 		{
-			auto sheetTemplateName = getArgument<fm::String>(metaEvent, 0);
 			auto ctx = sheetTemplateRenderer.context();
-			auto sheetTemplate = ctx->sheetTemplateDefServer()->getSheetTemplate(sheetTemplateName);
-			if (sheetTemplate.empty()) {
-				FM_THROW(Exception, "sheetTemplate not found: " + sheetTemplateName);
+			AContext::SheetTemplates templates;
+			for (size_t idx=0; idx < metaEvent.metaArgs.size(); ++idx) {
+				auto sheetTemplateName = getArgument<fm::String>(metaEvent, idx);
+				auto sheetTemplate = ctx->sheetTemplateDefServer()->getSheetTemplate(sheetTemplateName);
+				if (sheetTemplate.empty()) {
+					FM_THROW(Exception, "sheetTemplate not found: " + sheetTemplateName);
+				}
+				templates.push_back(sheetTemplate);
 			}
-			sheetTemplateRenderer.switchSheetTemplate(ctx->currentSheetTemplate(), sheetTemplate);
+			sheetTemplateRenderer.switchSheetTemplates(templates);
 		}
 
 		void Compiler::renderChordTrack() 

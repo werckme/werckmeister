@@ -112,8 +112,9 @@ namespace sheet {
 			ISheetTemplateDefServerPtr sheetTemplateDefServer() const;
 			void sheetTemplateDefServer(ISheetTemplateDefServerPtr server);
 			virtual ISheetTemplateDefServer::ConstChordValueType currentChordDef();
-			virtual ISheetTemplateDefServer::SheetTemplate currentSheetTemplate();
-			virtual void currentSheetTemplate(const ISheetTemplateDefServer::SheetTemplate &sheetTemplate);
+			typedef std::vector<ISheetTemplateDefServer::SheetTemplate> SheetTemplates;
+			virtual const SheetTemplates & currentSheetTemplates();
+			virtual void currentSheetTemplate(const SheetTemplates &sheetTemplate);
 			virtual VoicingStrategyPtr currentVoicingStrategy();
 			virtual const Event * currentChord() const { return &currentChord_; }
 			virtual fm::Expression getExpression(const fm::String &str) const;
@@ -197,7 +198,7 @@ namespace sheet {
 			Event currentChord_;
 			VoicingStrategyPtr defaultVoiceStrategy_;
 			ISheetTemplateDefServer::ConstChordValueType currentChordDef_ = nullptr;
-			ISheetTemplateDefServer::SheetTemplate currentSheetTemplate_;
+			SheetTemplates currentSheetTemplates_;
 			TrackId trackId_ = INVALID_TRACK_ID, 
 				 chordTrack_ = INVALID_TRACK_ID,
 				 masterTrackId_ = INVALID_TRACK_ID;

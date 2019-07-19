@@ -9,7 +9,7 @@ instrumentDef: bass    SC1 3 0 26;
 
 [
 type: template;
-name: x.y;
+name: x;
 instrument: piano; 
 {  
     /voicingStrategy: voicelead range alto/
@@ -20,20 +20,20 @@ instrument: piano;
 
 [
 type: template;
-name: x.z;
+name: y;
 instrument: piano; 
 {  
-    /voicingStrategy: voicelead range alto/
-    <I III V VII>8 <I III V VII>8 <I III V VII>8 <I III V VII>8 <I III V VII>8 <I III V VII>8 <I III V VII>8 <I III V VII>8  |
+    I,,,1  |
 }   
 ]
 
 [
 type: sheet;
 {
-    /template: x.y/
+    /template: x y/
     C | F | C | G | C-7 | 
-    /template: x.z/
-    D | G7 | C |
+    D | 
+    /template: y x/
+    G7 | C |
 }
 ]

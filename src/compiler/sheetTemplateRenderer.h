@@ -26,7 +26,7 @@ namespace sheet {
             virtual ~SheetTemplateRenderer() = default;
             void render(fm::Ticks duration);
             void sheetRest(fm::Ticks duration);
-            void switchSheetTemplate(const ISheetTemplateDefServer::SheetTemplate &current, const ISheetTemplateDefServer::SheetTemplate &next);
+            void switchSheetTemplates(const AContext::SheetTemplates &next);
             AContextPtr context() const { return this->ctx_; }
             void seekTo(double quarterNotes);
         private:

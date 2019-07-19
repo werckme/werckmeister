@@ -639,16 +639,17 @@ namespace sheet {
 			}
 			return currentChordDef_;
 		}
-		ISheetTemplateDefServer::SheetTemplate AContext::currentSheetTemplate()
+		const AContext::SheetTemplates & AContext::currentSheetTemplates()
 		{
-			if (currentSheetTemplate_.empty()) {
-				currentSheetTemplate_ = sheetTemplateDefServer()->getSheetTemplate(FM_STRING("?"));
+			if (currentSheetTemplates_.empty()) {
+				auto defaultTemplate = sheetTemplateDefServer()->getSheetTemplate(FM_STRING("?"));
+				currentSheetTemplates_.push_back(defaultTemplate);
 			}
-			return currentSheetTemplate_;
+			return currentSheetTemplates_;
 		}
-		void AContext::currentSheetTemplate(const ISheetTemplateDefServer::SheetTemplate &sheetTemplate)
+		void AContext::currentSheetTemplate(const SheetTemplates &sheetTemplate)
 		{
-			currentSheetTemplate_ = sheetTemplate;
+			currentSheetTemplates_ = sheetTemplate;
 		}
 		VoicingStrategyPtr AContext::currentVoicingStrategy()
 		{
