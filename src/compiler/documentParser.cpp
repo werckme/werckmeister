@@ -20,7 +20,7 @@ namespace sheet {
 			void useChordDef(DocumentPtr doc, const fm::String &path, Event::SourceId);
 			void usePitchmapDef(DocumentPtr doc, const fm::String &path, Event::SourceId);
 			void useLuaScript(DocumentPtr doc, const fm::String &path, Event::SourceId);
-			void useStyleDef(DocumentPtr doc, const fm::String &path, Event::SourceId);
+			void useSheetTemplateDef(DocumentPtr doc, const fm::String &path, Event::SourceId);
 			void processUsings(DocumentPtr doc, 
 				const sheet::DocumentConfig &documentConfig, 
 				const Extensions &allowedExtendions,
@@ -28,14 +28,14 @@ namespace sheet {
 			
 			std::unordered_map <std::string, ExtHandler> exthandlers({
 				{ CHORD_DEF_EXTENSION , &useChordDef },
-				{ STYLE_DEF_EXTENSION , &useStyleDef },
+				{ SHEET_TEMPLATE_DEF_EXTENSION , &useSheetTemplateDef },
 				{ PITCHMAP_DEF_EXTENSION , &usePitchmapDef },
 				{ LUA_DEF_EXTENSION , &useLuaScript }
 			});
 			
 			const Extensions AllSupportedExtensions = {
 				CHORD_DEF_EXTENSION,
-				STYLE_DEF_EXTENSION,
+				SHEET_TEMPLATE_DEF_EXTENSION,
 				PITCHMAP_DEF_EXTENSION,
 				LUA_DEF_EXTENSION
 			};
@@ -77,7 +77,7 @@ namespace sheet {
 				wm.registerLuaScript(path);
 			}
 
-			void useStyleDef(DocumentPtr doc, const fm::String &path, Event::SourceId sourceId)
+			void useSheetTemplateDef(DocumentPtr doc, const fm::String &path, Event::SourceId sourceId)
 			{
 				try {
 					

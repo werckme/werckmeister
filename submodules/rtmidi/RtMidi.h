@@ -103,7 +103,7 @@ class RTMIDI_DLL_PUBLIC RtMidiError : public std::exception
   //! Returns the thrown error message string.
   virtual const std::string& getMessage(void) const throw() { return message_; }
 
-  //! Returns the thrown error message as a c-style string.
+  //! Returns the thrown error message as a c-sheetTemplate string.
   virtual const char* what( void ) const throw() { return message_.c_str(); }
 
  protected:

@@ -6,21 +6,21 @@
 #include "SheetDef.h"
 #include "Pitchmap.h"
 #include <unordered_map>
-#include "sheet/StyleDefServer.h"
+#include "sheet/SheetTemplateDefServer.h"
 #include <memory>
 #include <boost/bimap.hpp>
 #include <memory>
 
 namespace sheet {
-	class Document: public std::enable_shared_from_this<Document>, public IStyleDefServer {
+	class Document: public std::enable_shared_from_this<Document>, public ISheetTemplateDefServer {
 	public:
-		typedef IStyleDefServer::Style StyleType;
+		typedef ISheetTemplateDefServer::SheetTemplate SheetTemplateType;
 		typedef std::unordered_map<fm::String, ChordDef> ChordDefs;
 		typedef std::unordered_map<fm::String, PitchDef> PitchmapDefs;
-		typedef fm::String StyleName;
+		typedef fm::String SheetTemplateName;
 		typedef fm::String PartName;
-		typedef IStyleDefServer::Style Style;
-		typedef std::unordered_map<StyleName, Style> Styles;
+		typedef ISheetTemplateDefServer::SheetTemplate SheetTemplate;
+		typedef std::unordered_map<SheetTemplateName, SheetTemplate> SheetTemplates;
 		typedef fm::String Path;
 		typedef boost::bimap<Event::SourceId, Path> Sources;
 		fm::String path;
@@ -29,10 +29,10 @@ namespace sheet {
 		ChordDefs chordDefs;
 		PitchmapDefs pitchmapDefs;
 		Sources sources;
-		StyleType getStyle(const fm::String &name) override;
-		IStyleDefServer::ConstChordValueType getChord(const fm::String &name) override;
-		IStyleDefServer::ConstPitchDefValueType getAlias(fm::String alias) override;
-		Styles & styles();
+		SheetTemplateType getSheetTemplate(const fm::String &name) override;
+		ISheetTemplateDefServer::ConstChordValueType getChord(const fm::String &name) override;
+		ISheetTemplateDefServer::ConstPitchDefValueType getAlias(fm::String alias) override;
+		SheetTemplates & sheetTemplates();
 		Event::SourceId addSource(const Path &path);
 		Path findSourcePath(Event::SourceId id) const;
 		Event::SourceId findSourceId(const Path &path) const;
@@ -40,9 +40,9 @@ namespace sheet {
 	protected:
 		fm::String getAbsolutePath(const fm::String &path) const;
 	private:
-		StyleType * findStyle(const fm::String &styleName);
-		std::unique_ptr<Styles> styles_;
-		void createStylesMap();
+		SheetTemplateType * findSheetTemplate(const fm::String &sheetTemplateName);
+		std::unique_ptr<SheetTemplates> sheetTemplates_;
+		void createSheetTemplatesMap();
 	};
 }
 

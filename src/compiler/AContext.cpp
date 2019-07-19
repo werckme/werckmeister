@@ -163,16 +163,16 @@ namespace sheet {
 			return it->second;
 		}
 
-		AContext::IStyleDefServerPtr AContext::styleDefServer() const
+		AContext::ISheetTemplateDefServerPtr AContext::sheetTemplateDefServer() const
 		{
-			if (!styleDefServer_) {
-				FM_THROW(Exception, "no styledef server set");
+			if (!sheetTemplateDefServer_) {
+				FM_THROW(Exception, "no sheetTemplatedef server set");
 			}
-			return styleDefServer_;
+			return sheetTemplateDefServer_;
 		}
-		void AContext::styleDefServer(IStyleDefServerPtr server)
+		void AContext::sheetTemplateDefServer(ISheetTemplateDefServerPtr server)
 		{
-			styleDefServer_ = server;
+			sheetTemplateDefServer_ = server;
 		}
 
 		AContext::TrackId AContext::track() const
@@ -258,7 +258,7 @@ namespace sheet {
 			if (pitch.alias.empty()) {
 				return pitch;
 			}
-			const PitchDef *result = styleDefServer()->getAlias(pitch.alias);
+			const PitchDef *result = sheetTemplateDefServer()->getAlias(pitch.alias);
 			if (result == nullptr) {
 				FM_THROW(Exception, "could not resolve alias: " + pitch.alias);
 			}
@@ -422,8 +422,8 @@ namespace sheet {
 					return;
 				}
 							
-				if (command == SHEET_META__SET_STYLE) {
-					metaSetStyle(getArgument<fm::String>(args, 0), getArgument<fm::String>(args, 1));
+				if (command == SHEET_META__SET_SHEET_TEMPLATE) {
+					metaSetSheetTemplate(getArgument<fm::String>(args, 0), getArgument<fm::String>(args, 1));
 					return;
 				}
 				if (command == SHEET_META__SET_EXPRESSION) {
@@ -581,7 +581,7 @@ namespace sheet {
 			mod->setArguments(args);
 		}
 
-		void AContext::metaSetStyle(const fm::String &file, const fm::String &part)
+		void AContext::metaSetSheetTemplate(const fm::String &file, const fm::String &part)
 		{
 		}
 
@@ -631,24 +631,24 @@ namespace sheet {
 		}
 
 		/////////////////////////////////////////////////////////////////////////////
-		// Stylerendering
-		IStyleDefServer::ConstChordValueType AContext::currentChordDef()
+		// SheetTemplaterendering
+		ISheetTemplateDefServer::ConstChordValueType AContext::currentChordDef()
 		{
 			if (!currentChordDef_) {
-				currentChordDef_ = styleDefServer()->getChord(FM_STRING("?"));
+				currentChordDef_ = sheetTemplateDefServer()->getChord(FM_STRING("?"));
 			}
 			return currentChordDef_;
 		}
-		IStyleDefServer::Style AContext::currentStyle()
+		ISheetTemplateDefServer::SheetTemplate AContext::currentSheetTemplate()
 		{
-			if (currentStyle_.empty()) {
-				currentStyle_ = styleDefServer()->getStyle(FM_STRING("?"));
+			if (currentSheetTemplate_.empty()) {
+				currentSheetTemplate_ = sheetTemplateDefServer()->getSheetTemplate(FM_STRING("?"));
 			}
-			return currentStyle_;
+			return currentSheetTemplate_;
 		}
-		void AContext::currentStyle(const IStyleDefServer::Style &style)
+		void AContext::currentSheetTemplate(const ISheetTemplateDefServer::SheetTemplate &sheetTemplate)
 		{
-			currentStyle_ = style;
+			currentSheetTemplate_ = sheetTemplate;
 		}
 		VoicingStrategyPtr AContext::currentVoicingStrategy()
 		{
@@ -664,7 +664,7 @@ namespace sheet {
 		void AContext::setChord(const Event &chord)
 		{
 			currentChord_ = chord;
-			currentChordDef_ = styleDefServer()->getChord(currentChord_.chordDefName());
+			currentChordDef_ = sheetTemplateDefServer()->getChord(currentChord_.chordDefName());
 			if (currentChordDef_ == nullptr) {
 				FM_THROW(Exception, "chord not found: " + currentChord_.stringValue);
 			}

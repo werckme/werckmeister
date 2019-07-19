@@ -285,7 +285,7 @@ BOOST_AUTO_TEST_CASE(test_sheetDefParser)
 [\n\
 type: sheet;\n\
 {\n\
-	/ style : simplePianoStyle Intro / \n\
+	/ sheetTemplate : simplePianoSheetTemplate Intro / \n\
 	/ voicingStrategy : asNotated / \n\
 	Cmaj | Cmaj C7 | r G | Ais B | Cismaj79 r Ai \n\
 }\n\
@@ -324,7 +324,7 @@ type: sheet;\n\
 	const auto &chords = defs.tracks[1].voices[0].events;
 
 	BOOST_CHECK(chords.size() == 16);
-	BOOST_CHECK(checkMetaEvent(chords[0], FM_STRING("style"), sheet::Event::Args({ FM_STRING("simplePianoStyle"), FM_STRING("Intro") })));
+	BOOST_CHECK(checkMetaEvent(chords[0], FM_STRING("sheetTemplate"), sheet::Event::Args({ FM_STRING("simplePianoSheetTemplate"), FM_STRING("Intro") })));
 	BOOST_CHECK(checkMetaEvent(chords[1], FM_STRING("voicingStrategy"), sheet::Event::Args({ FM_STRING("asNotated") })));
 	BOOST_CHECK(checkChord(chords[2], FM_STRING("Cmaj")));
 	BOOST_CHECK(checkNote(chords[3], sheet::Event::EOB));
@@ -584,10 +584,10 @@ BOOST_AUTO_TEST_CASE(test_documentConfigParser)
 	fm::String text = FM_STRING("\
 @load \"Chords1.chords\"; \n\
 @load \"Chords.chords\"; \n\
-@load \"simplePianoStyle.style\"; \n\
+@load \"simplePianoSheetTemplate.sheetTemplate\"; \n\
 @load \"chords/Chords1.chords\"; \n\
 @load \"chords/Chords.chords\"; \n\
-@load \"styles/simplePianoStyle.style\"; \n\
+@load \"sheetTemplates/simplePianoSheetTemplate.sheetTemplate\"; \n\
 @load \"C:\\drivers\\Intel Rapid Storage Technology Driver\"; \n\
 \n\
 	[\n\
@@ -602,7 +602,7 @@ BOOST_AUTO_TEST_CASE(test_documentConfigParser)
 	]\n\
     [\n\
 	{\n\
-		/ style: simplePianoStyle:intro /\n\
+		/ sheetTemplate: simplePianoSheetTemplate:intro /\n\
 		/ voicingStrategy : asNotated /\n\
 		Cmaj | Cmaj C7 |\n\
 	}\n\
@@ -615,10 +615,10 @@ BOOST_AUTO_TEST_CASE(test_documentConfigParser)
 	auto it = defs.usings.begin();
 	BOOST_CHECK(*(it++) == FM_STRING("Chords1.chords"));
 	BOOST_CHECK(*(it++) == FM_STRING("Chords.chords"));
-	BOOST_CHECK(*(it++) == FM_STRING("simplePianoStyle.style"));
+	BOOST_CHECK(*(it++) == FM_STRING("simplePianoSheetTemplate.sheetTemplate"));
 	BOOST_CHECK(*(it++) == FM_STRING("chords/Chords1.chords"));
 	BOOST_CHECK(*(it++) == FM_STRING("chords/Chords.chords"));
-	BOOST_CHECK(*(it++) == FM_STRING("styles/simplePianoStyle.style"));
+	BOOST_CHECK(*(it++) == FM_STRING("sheetTemplates/simplePianoSheetTemplate.sheetTemplate"));
 	BOOST_CHECK(*(it++) == FM_STRING("C:\\drivers\\Intel Rapid Storage Technology Driver"));
 
 }
@@ -640,7 +640,7 @@ BOOST_AUTO_TEST_CASE(test_documentConfigParser_empty)
 	]\n\
     [\n\
 	{\n\
-		/ style: simplePianoStyle:intro /\n\
+		/ sheetTemplate: simplePianoSheetTemplate:intro /\n\
 		/ voicingStrategy : asNotated /\n\
 		Cmaj | Cmaj C7 |\n\
 	}\n\

@@ -9,7 +9,7 @@
 #include <map>
 #include <unordered_map>
 #include "sheet/ChordDef.h"
-#include "sheet/StyleDefServer.h"
+#include "sheet/SheetTemplateDefServer.h"
 #include "compiler/voicings/VoicingStrategy.h"
 #include <fm/common.hpp>
 #include "metaCommands.h"
@@ -37,7 +37,7 @@ namespace sheet {
 			typedef int Id;
 			typedef Id TrackId;
 			typedef Id VoiceId;
-			typedef IStyleDefServer* IStyleDefServerPtr;
+			typedef ISheetTemplateDefServer* ISheetTemplateDefServerPtr;
 			typedef std::list<std::string> Warnings;
 			typedef std::unordered_map<fm::String, fm::Expression> ExpressionMap;
 			typedef std::shared_ptr<VoiceMetaData> VoiceMetaDataPtr;
@@ -109,11 +109,11 @@ namespace sheet {
 			}					
 			virtual void throwContextException(const std::string &msg);
 			virtual void warn(const std::string &msg);
-			IStyleDefServerPtr styleDefServer() const;
-			void styleDefServer(IStyleDefServerPtr server);
-			virtual IStyleDefServer::ConstChordValueType currentChordDef();
-			virtual IStyleDefServer::Style currentStyle();
-			virtual void currentStyle(const IStyleDefServer::Style &style);
+			ISheetTemplateDefServerPtr sheetTemplateDefServer() const;
+			void sheetTemplateDefServer(ISheetTemplateDefServerPtr server);
+			virtual ISheetTemplateDefServer::ConstChordValueType currentChordDef();
+			virtual ISheetTemplateDefServer::SheetTemplate currentSheetTemplate();
+			virtual void currentSheetTemplate(const ISheetTemplateDefServer::SheetTemplate &sheetTemplate);
 			virtual VoicingStrategyPtr currentVoicingStrategy();
 			virtual const Event * currentChord() const { return &currentChord_; }
 			virtual fm::Expression getExpression(const fm::String &str) const;
@@ -144,7 +144,7 @@ namespace sheet {
 							std::function<fm::String(const typename TContainer::value_type&)> fcommand, 
 							std::function<std::vector<fm::String>(const typename TContainer::value_type&)> fargs);
 			virtual void metaSetInstrument(const fm::String &uname) {}
-			virtual void metaSetStyle(const fm::String &file, const fm::String &section);
+			virtual void metaSetSheetTemplate(const fm::String &file, const fm::String &section);
 			virtual void metaSetExpression(const fm::String &value);
 			virtual void metaSetSingleExpression(const fm::String &value);
 			virtual void metaSetTempo(double bpm) {}
@@ -196,15 +196,15 @@ namespace sheet {
 		private:
 			Event currentChord_;
 			VoicingStrategyPtr defaultVoiceStrategy_;
-			IStyleDefServer::ConstChordValueType currentChordDef_ = nullptr;
-			IStyleDefServer::Style currentStyle_;
+			ISheetTemplateDefServer::ConstChordValueType currentChordDef_ = nullptr;
+			ISheetTemplateDefServer::SheetTemplate currentSheetTemplate_;
 			TrackId trackId_ = INVALID_TRACK_ID, 
 				 chordTrack_ = INVALID_TRACK_ID,
 				 masterTrackId_ = INVALID_TRACK_ID;
 			VoiceId voiceId_ = INVALID_VOICE_ID, chordVoice_ = INVALID_VOICE_ID;
 			VoiceMetaDataMap voiceMetaDataMap_;
 			TrackMetaDataMap trackMetaDataMap_;
-			IStyleDefServerPtr styleDefServer_ = nullptr;
+			ISheetTemplateDefServerPtr sheetTemplateDefServer_ = nullptr;
 			ExpressionMap expressionMap_;
 			ASpielanweisungPtr defaultSpielanweisung_;
         };

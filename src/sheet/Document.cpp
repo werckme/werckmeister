@@ -28,58 +28,58 @@ namespace sheet {
 		return fm::getWerckmeister().resolvePath(path, thisPtr);
 	}
 
-	Document::Style * Document::findStyle(const fm::String &styleName)
+	Document::SheetTemplate * Document::findSheetTemplate(const fm::String &sheetTemplateName)
 	{
-		Styles &styles = *styles_;
-		Styles::iterator it = styles.find(styleName);
-		if (it == styles.end()) {
+		SheetTemplates &sheetTemplates = *sheetTemplates_;
+		SheetTemplates::iterator it = sheetTemplates.find(sheetTemplateName);
+		if (it == sheetTemplates.end()) {
 			return nullptr;
 		}
 		return &(it->second);
 	}
 
-	void Document::createStylesMap()
+	void Document::createSheetTemplatesMap()
 	{
-		styles_ = std::make_unique<Styles>();
-		Styles &styles = *styles_;
+		sheetTemplates_ = std::make_unique<SheetTemplates>();
+		SheetTemplates &sheetTemplates = *sheetTemplates_;
 		for(const auto &track : this->sheetDef.tracks) {
 			fm::String type = getFirstMetaValueBy(SHEET_META__TRACK_META_KEY_TYPE, track.trackInfos);
-			if (type != SHEET_META__TRACK_META_VALUE_TYPE_STYLE) {
+			if (type != SHEET_META__TRACK_META_VALUE_TYPE_SHEET_TEMPLATE) {
 				continue;
 			}
-			fm::String styleName = getFirstMetaValueBy(SHEET_META__TRACK_META_KEY_NAME, track.trackInfos);
-			if (styleName.empty()) {
-				FM_THROW(compiler::Exception, "missing 'name' for style track");
+			fm::String sheetTemplateName = getFirstMetaValueBy(SHEET_META__TRACK_META_KEY_NAME, track.trackInfos);
+			if (sheetTemplateName.empty()) {
+				FM_THROW(compiler::Exception, "missing 'name' for sheetTemplate track");
 			}					
-			auto style = findStyle(styleName);
-			if (style == nullptr) {
-				styles[styleName] = Style(styleName);
-				style = &(styles[styleName]);
+			auto sheetTemplate = findSheetTemplate(sheetTemplateName);
+			if (sheetTemplate == nullptr) {
+				sheetTemplates[sheetTemplateName] = SheetTemplate(sheetTemplateName);
+				sheetTemplate = &(sheetTemplates[sheetTemplateName]);
 			}
-			style->tracks.push_back(&track);
+			sheetTemplate->tracks.push_back(&track);
 		}
 	}
 
-	Document::Styles & Document::styles()
+	Document::SheetTemplates & Document::sheetTemplates()
 	{
-		if (!styles_) {
-			createStylesMap();
+		if (!sheetTemplates_) {
+			createSheetTemplatesMap();
 		}
-		return *styles_;
+		return *sheetTemplates_;
 	}
 
-	Document::StyleType Document::getStyle(const fm::String &name)
+	Document::SheetTemplateType Document::getSheetTemplate(const fm::String &name)
 	{
-		const Styles &styles = this->styles();
-		// find style by name
-		Styles::const_iterator it = _findByName(name, styles);
-		if (it == styles.end()) {
-			return StyleType();
+		const SheetTemplates &sheetTemplates = this->sheetTemplates();
+		// find sheetTemplate by name
+		SheetTemplates::const_iterator it = _findByName(name, sheetTemplates);
+		if (it == sheetTemplates.end()) {
+			return SheetTemplateType();
 		}
 		return it->second;
 	}
 
-	IStyleDefServer::ConstChordValueType Document::getChord(const fm::String &name)
+	ISheetTemplateDefServer::ConstChordValueType Document::getChord(const fm::String &name)
 	{
 		ChordDefs::const_iterator it;
 		if (name == FM_STRING("?")) {
@@ -94,7 +94,7 @@ namespace sheet {
 		return &(it->second);
 	}
 
-	IStyleDefServer::ConstPitchDefValueType Document::getAlias(fm::String alias)
+	ISheetTemplateDefServer::ConstPitchDefValueType Document::getAlias(fm::String alias)
 	{
 		PitchmapDefs::const_iterator it;
 		it = pitchmapDefs.find(alias);

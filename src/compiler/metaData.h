@@ -9,7 +9,7 @@
 #include <map>
 #include <unordered_map>
 #include "sheet/ChordDef.h"
-#include "sheet/StyleDefServer.h"
+#include "sheet/SheetTemplateDefServer.h"
 #include "compiler/voicings/VoicingStrategy.h"
 #include <fm/common.hpp>
 #include <list>
@@ -44,11 +44,11 @@ namespace sheet {
             fm::Expression singleExpression = fm::expression::Default;
             WaitForTieBuffer waitForTieBuffer;
             /*
-                used for continue style track rendering after chord change
+                used for continue sheetTemplate track rendering after chord change
             */
             int idxLastWrittenEvent = -1;
             /*
-                from a aborted style rendering
+                from a aborted sheetTemplate rendering
             */
             fm::Ticks remainingTime = 0;
             VoicingStrategyPtr voicingStrategy = nullptr;

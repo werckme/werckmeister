@@ -26,7 +26,7 @@ SET (SRC_FETZER_LIB
     compiler/voicings/SimpleGuitar.cpp
     compiler/voicings/Lua.cpp
     compiler/metaData.cpp
-    compiler/styleRenderer.cpp
+    compiler/sheetTemplateRenderer.cpp
     compiler/error.cpp
     sheet/Event.cpp
     sheet/Document.cpp

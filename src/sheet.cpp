@@ -21,7 +21,7 @@ namespace sheet {
         auto context = std::dynamic_pointer_cast<sheet::compiler::MidiContext>( wm.createContext() );
         auto midi = wm.createMidi();
         context->midi(midi);
-        context->styleDefServer(doc.get());
+        context->sheetTemplateDefServer(doc.get());
         auto compiler = wm.createCompiler();
         compiler->context(context);
         compiler->compile(doc);

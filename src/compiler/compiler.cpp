@@ -6,7 +6,7 @@
 #include <type_traits>
 #include <algorithm>
 #include <list>
-#include "styleRenderer.h"
+#include "sheetTemplateRenderer.h"
 #include "metaCommands.h"
 #include "error.hpp"
 #include <sheet/tools.h>
@@ -58,26 +58,26 @@ namespace sheet {
 
 		bool Compiler::metaEventHandler(const Event &metaEvent)
 		{
-			if (metaEvent.stringValue == SHEET_META__STYLE_POSITION) {
-				stylePosition(getArgument<fm::String>(metaEvent.metaArgs, 0));
+			if (metaEvent.stringValue == SHEET_META__SHEET_TEMPLATE_POSITION) {
+				sheetTemplatePosition(getArgument<fm::String>(metaEvent.metaArgs, 0));
 				return true;
 			}
 			return false;
 		}
 
-		void Compiler::stylePosition(const fm::String &cmd)
+		void Compiler::sheetTemplatePosition(const fm::String &cmd)
 		{
-			if (cmd != SHEET_META__STYLE_POSITION_CMD) {
-				FM_THROW(Exception, "unsupported stylePosition command: " + cmd);
+			if (cmd != SHEET_META__SHEET_TEMPLATE_POSITION_CMD) {
+				FM_THROW(Exception, "unsupported sheetTemplatePosition command: " + cmd);
 			}
 			auto ctx = context();
 			if (!ctx->capabilities.canSeek) {
-				FM_THROW(Exception, "track type does not support stylePosition");
+				FM_THROW(Exception, "track type does not support sheetTemplatePosition");
 			}
-			if (currentStyleRenderer_ == nullptr) {
-				FM_THROW(fm::Exception, "style renderer = null");
+			if (currentSheetTemplateRenderer_ == nullptr) {
+				FM_THROW(fm::Exception, "sheetTemplate renderer = null");
 			}
-			currentStyleRenderer_->seekTo(0);
+			currentSheetTemplateRenderer_->seekTo(0);
 		}
 
 		void Compiler::renderTracks()
@@ -145,15 +145,15 @@ namespace sheet {
 			} 
 		}
 
-		void Compiler::switchStyle(StyleRenderer &styleRenderer, const Event &metaEvent)
+		void Compiler::switchSheetTemplate(SheetTemplateRenderer &sheetTemplateRenderer, const Event &metaEvent)
 		{
-			auto styleName = getArgument<fm::String>(metaEvent, 0);
-			auto ctx = styleRenderer.context();
-			auto style = ctx->styleDefServer()->getStyle(styleName);
-			if (style.empty()) {
-				FM_THROW(Exception, "style not found: " + styleName);
+			auto sheetTemplateName = getArgument<fm::String>(metaEvent, 0);
+			auto ctx = sheetTemplateRenderer.context();
+			auto sheetTemplate = ctx->sheetTemplateDefServer()->getSheetTemplate(sheetTemplateName);
+			if (sheetTemplate.empty()) {
+				FM_THROW(Exception, "sheetTemplate not found: " + sheetTemplateName);
 			}
-			styleRenderer.switchStyle(ctx->currentStyle(), style);
+			sheetTemplateRenderer.switchSheetTemplate(ctx->currentSheetTemplate(), sheetTemplate);
 		}
 
 		void Compiler::renderChordTrack() 
@@ -166,18 +166,18 @@ namespace sheet {
 			}
 			auto &sheetEvents = sheetTrack->voices.begin()->events; 
 			determineChordLengths(sheetEvents.begin(), sheetEvents.end());
-			StyleRenderer styleRenderer(ctx);
-			currentStyleRenderer_ = &styleRenderer;
+			SheetTemplateRenderer sheetTemplateRenderer(ctx);
+			currentSheetTemplateRenderer_ = &sheetTemplateRenderer;
 			for (auto &ev : sheetEvents) {
 				ctx->setChordTrackTarget(); // target will be lost after calling addEvent
 				if (ev.type == Event::Rest) {
 					auto meta = ctx->voiceMetaData(ctx->chordVoiceId());
 					ev.duration = meta->barLength * ev.multiplicator;
 					ctx->rest(ev.duration);
-					styleRenderer.sheetRest(ev.duration);
+					sheetTemplateRenderer.sheetRest(ev.duration);
 				}
-				else if (ev.stringValue == SHEET_META__SET_STYLE) {
-					switchStyle(styleRenderer, ev);
+				else if (ev.stringValue == SHEET_META__SET_SHEET_TEMPLATE) {
+					switchSheetTemplate(sheetTemplateRenderer, ev);
 				}
 				else if (ev.type != Event::Chord) {
 					ctx->addEvent(ev);
@@ -185,10 +185,10 @@ namespace sheet {
 					auto meta = ctx->voiceMetaData(ctx->chordVoiceId());
 					ev.duration = meta->barLength * ev.multiplicator;	
 					ctx->addEvent(ev);
-					styleRenderer.render(ev.duration);
+					sheetTemplateRenderer.render(ev.duration);
 				}
 			}
-			currentStyleRenderer_ = nullptr;
+			currentSheetTemplateRenderer_ = nullptr;
 		}
 	}
 }
