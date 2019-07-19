@@ -1,0 +1,36 @@
+[
+type: template;
+name: drums.disco.normal;
+instrument: drums;
+{
+    r8 "ht"16 "ht"16 !ffff"sn"8 "ht"16 "ht"16 r8 "ht"16 "ht"16 !ffff"sn"8 "ht"16 "ht"16 |
+    r8 "ht"16 "ht"16 !ffff"sn"8 "ht"16 "ht"16 r8 "ht"16 "ht"16 !ffff"sn"8 !ffff<"sn" "ht">16 !fffff"sn"16 |
+    "cy"8 "ht"16 "ht"16 !ffff"sn"8 "ht"16 "ht"16 r8 "ht"16 "ht"16 !ffff"sn"8 "ht"16 "ht"16 |
+    r8 "ht"16 "ht"16 !ffff"sn"8 "ht"16 "ht"16 r8 "ht"16 "ht"16 !ffff"sn"8 <"sn" "ht">16 !fffff"sn"16 |
+}   
+{
+    "bd"4 "bd" "bd" "bd" |
+}   
+] 
+
+[
+type: template;
+name: drums.disco.solo;
+instrument: drums;
+{
+    "bd"4 "bd" "bd" "bd" |
+}   
+] 
+
+[
+type: template;
+name: drums.disco.solo2;
+instrument: drums;
+{
+    "cy"8 "ht"16 "ht"16 !ffff"sn"8 "ht"16 "ht"16 r8 "ht"16 "ht"16 !ffff"sn"8 "ht"16 "ht"16 |
+    r8 "ht"16 "ht"16 !ffff"sn"8 "ht"16 "ht"16 r8 "ht"16 "ht"16 !ffff"sn"8 <"sn" "ht">16 !fffff"sn"16 |
+}   
+{
+    "bd"4 "bd" "bd" "bd" |
+}   
+] 

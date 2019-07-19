@@ -1,0 +1,9 @@
+[
+type: template;
+name: bass.disco.normal;
+instrument: bass;
+{
+    \ffff
+    I,,8 I,16 I,16  I,,8 I,16 I,16  I,,8 I,16 I,16  I,,8 I,16 I,16 |
+}   
+]

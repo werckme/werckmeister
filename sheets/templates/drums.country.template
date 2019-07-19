@@ -1,0 +1,28 @@
+[
+type: template;
+name: drums.country.normal;
+instrument: drums;
+{
+    "ht"8 !f"ht"8 "ht"8 !f"ht"8 "ht"8 !f"ht"8 "ht"8 !f"ht"8 |
+}    
+{
+    r4 "sn" r "sn" |
+}
+{
+    "bd"4. "bd"8 "bd"4. "bd"8 |
+    "bd"4. "bd"8 "bd"4. "bd"8 |
+    "bd"4. "bd"8 "bd"8 !f"bd"8 r8 "bd"8 |
+}      
+] 
+
+[
+type: template;
+name: drums.country.ende;
+instrument: drums;
+{
+    "cy"1 |
+}    
+{
+    "bd"1|
+}      
+]

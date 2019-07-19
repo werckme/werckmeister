@@ -1,0 +1,8 @@
+[
+type: template;
+name: piano.disco.normal;
+instrument: piano;
+{ 
+    \fff <I II III IV V VI VII>2. r16  \ff<I II III IV V VI VII>16 r8 |
+}   
+]

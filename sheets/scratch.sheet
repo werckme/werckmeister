@@ -1,39 +1,54 @@
 @load "./chords/default.chords";
 @load "./voicings/voicelead.lua";
+@load "./templates/piano.bossanova.template";
+@load "./templates/piano.disco.template";
+@load "./templates/drums.bossanova.template";
+@load "./templates/drums.disco.template";
+@load "./templates/guitar.bossanova.template";
+@load "./templates/drums.country.template";
+@load "./templates/bass.bossanova.template";
+@load "./templates/bass.country.template";
+@load "./templates/bass.disco.template";
+@load "./templates/guitar.country.template";
+@load "./pitchmaps/defaultMidiDrumMap.pitchmap";
 
 device: SC1 midi 1;
 
 tempo: 130;
 instrumentDef: piano   SC1 2 0 0;
 instrumentDef: bass    SC1 3 0 26;
+instrumentDef: drums   SC1 9 0 0;
+instrumentDef: guitar   SC1 4 0 26;
 
-[
-type: template;
-name: x;
-instrument: piano; 
-{  
-    /voicingStrategy: voicelead range alto/
-    <I III V VII>2. I,4  |
-}   
-]
-
-
-[
-type: template;
-name: y;
-instrument: piano; 
-{  
-    I,,,1  |
-}   
-]
+instrumentConf: guitar volume 70;
 
 [
 type: sheet;
 {
-    /template: x y/
-    C | F | C | G | C-7 | 
-    D | 
-    /template: y x/
+    /
+    template: 
+        piano.bossanova.normal
+        drums.disco.normal
+        bass.bossanova.normal
+        guitar.bossanova.normal
+    /
+    C | F | C | G | 
+    /
+    template: 
+        piano.disco.normal
+        drums.disco.normal
+        bass.disco.normal
+        guitar.bossanova.normal
+    /
+    C-7 | 
+    D |
+    /
+    template: 
+        piano.bossanova.normal
+        drums.disco.normal
+        bass.bossanova.normal
+        guitar.bossanova.normal
+    / 
     G7 | C |
 }
 ]
