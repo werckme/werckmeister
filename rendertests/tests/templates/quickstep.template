@@ -1,5 +1,5 @@
 [
-type: style;
+type: template;
 name: quickstep.normal;
 instrument: drums;
 {
@@ -14,7 +14,7 @@ instrument: drums;
 ]
 
 [
-type: style;
+type: template;
 name: quickstep.normal;
 instrument: bass;
 {
@@ -25,7 +25,7 @@ instrument: bass;
 ]
 
 [
-type: style;
+type: template;
 name: quickstep.normal;
 instrument: guitar;
 {
@@ -38,7 +38,7 @@ instrument: guitar;
 ]
 
 [
-type: style;
+type: template;
 name: quickstep.normal;
 instrument: piano;
 {

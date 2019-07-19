@@ -29,7 +29,7 @@ type: sheet;
 
 
 [
-type: style;
+type: template;
 name: chords;
 instrument: piano;
 {

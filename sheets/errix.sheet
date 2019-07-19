@@ -1,6 +1,6 @@
 @load "./pitchmaps/battery3.tight.pitchmap";
 @load "./chords/default.chords";
-@load "./styles/reaggesk.style";
+@load "./templates/reaggesk.template";
 
 tempo: 150;
 device: SC1 midi 2 offset 20;
@@ -26,7 +26,7 @@ type: sheet;
     /signature: 6 8/
     C7 | C7 | Gmaj7 | Gmaj7 |
     B07 | B07 | D-7 | D-7 F7 |
-    /stylePosition: reset/
+    /templatePosition: reset/
     C7 | C7 | Gmaj7 | Gmaj7 |
     B07 | B07 | D-7 | D-7 F7 |
 }

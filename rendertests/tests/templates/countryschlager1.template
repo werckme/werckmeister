@@ -1,5 +1,5 @@
 [
-type: style;
+type: template;
 name: countryschlager1.normal;
 instrument: guitar; 
 {
@@ -11,7 +11,7 @@ instrument: guitar;
 ]
 
 [
-type: style;
+type: template;
 name: countryschlager1.normal;
 instrument: slide; 
 {
@@ -30,7 +30,7 @@ instrument: slide;
 ]  
 
 [
-type: style;
+type: template;
 name: countryschlager1.normal;
 instrument: bass; 
 {
@@ -39,7 +39,7 @@ instrument: bass;
 ] 
 
 [
-type: style;
+type: template;
 name: countryschlager1.normal;
 instrument: drums;
 {
@@ -56,7 +56,7 @@ instrument: drums;
 ] 
 
 [
-type: style;
+type: template;
 name: countryschlager1.ende;
 instrument: guitar; 
 {
@@ -65,7 +65,7 @@ instrument: guitar;
 ] 
 
 [
-type: style;
+type: template;
 name: countryschlager1.ende;
 instrument: bass; 
 {
@@ -74,7 +74,7 @@ instrument: bass;
 ] 
 
 [
-type: style;
+type: template;
 name: countryschlager1.ende;
 instrument: drums;
 {
@@ -86,7 +86,7 @@ instrument: drums;
 ]
 
 [
-type: style;
+type: template;
 name: countryschlager1.ende;
 instrument: slide; 
 {

@@ -7,7 +7,7 @@ tempo: 130;
 instrumentDef: piano   SC1 2 0 0;
 
 [
-type: style;
+type: template;
 name: x.x;
 instrument: piano; 
 {  

@@ -2,7 +2,7 @@
 @load "../voicings/simple.lua";
 
 [
-type: style;
+type: template;
 name: bossanova.normal;
 instrument: drums;
 {
@@ -18,7 +18,7 @@ instrument: drums;
 ]
 
 [
-type: style;
+type: template;
 name: bossanova.normal;
 instrument: guitar; 
 {
@@ -32,7 +32,7 @@ instrument: guitar;
 ] 
 
 [
-type: style;
+type: template;
 name: bossanova.normal;
 instrument: piano; 
 {
@@ -42,7 +42,7 @@ instrument: piano;
 ] 
 
 [
-type: style;
+type: template;
 name: bossanova.normal;
 instrument: bass; 
 {

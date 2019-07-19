@@ -1,5 +1,5 @@
 @load "./chords/default.chords";
-@load "./styles/rumba.style";
+@load "./templates/rumba.template";
 @load "./pitchmaps/defaultMidiDrumMap.pitchmap";
 --@load "./pitchmaps/battery3.tight.pitchmap";
 
@@ -44,7 +44,7 @@ instrument: lead;
 [
 type: sheet;
 {
-    /style: rumba.normal/
+    /template: rumba.normal/
     r | C- | C- | F-7 | Bes7 |
     D07 | G7#5#9 | C- | C- |
     Es-7 | As7 | Desmaj7 | Desmaj7 |

@@ -1,8 +1,5 @@
-@load "../voicings/voicelead.lua";
-@load "../voicings/simple.lua";
-
 [
-type: style;
+type: template;
 name: bossanova.normal;
 instrument: drums;
 {
@@ -18,7 +15,7 @@ instrument: drums;
 ]
 
 [
-type: style;
+type: template;
 name: bossanova.normal;
 instrument: guitar; 
 {
@@ -32,17 +29,16 @@ instrument: guitar;
 ] 
 
 [
-type: style;
+type: template;
 name: bossanova.normal;
 instrument: piano; 
 {
-   -- /voicingStrategy: simple range tenor/
     <VII, VII>4 <III, V,>8 <V, V>8 r8 <III, V,>8 r8 <V, V> | r8 <III, V,>8 r8 <V, V> r8 <III, V,> r8 <VII, VII> |
 }    
 ] 
 
 [
-type: style;
+type: template;
 name: bossanova.normal;
 instrument: bass; 
 {

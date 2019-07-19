@@ -2,7 +2,7 @@
 
 
 [
-type: style;
+type: template;
 name: i29.normal; 
 {
     <I II III IV V VI VII>2. <I II III IV V VI VII>4  |

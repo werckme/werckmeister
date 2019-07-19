@@ -1,5 +1,5 @@
 [
-type: style;
+type: template;
 name: piko.normal;
 instrument: drums;
 {
@@ -17,7 +17,7 @@ instrument: drums;
 
 [
 instrument: bass;
-type: style;
+type: template;
 name: piko.normal;
 {
     I,,4. III,,8 V,,4 V,,8 I,8  |
@@ -26,7 +26,7 @@ name: piko.normal;
 
 [
 instrument: piano;
-type: style;
+type: template;
 name: piko.normal;
 {
     /voicingStrategy: simpleGuitar/

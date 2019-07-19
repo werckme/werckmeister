@@ -1,5 +1,7 @@
+@load "../voicings/voicelead.lua";
+
 [
-type: style;
+type: template;
 name: purdie.normal;
 instrument: drums;     
 {
@@ -40,7 +42,7 @@ instrument: drums;
 ]
 
 [
-type: style;
+type: template;
 name: purdie.normal;
 instrument: rhythm1; 
 {
@@ -53,7 +55,7 @@ instrument: rhythm1;
 ]
 
 [
-type: style;
+type: template;
 name: purdie.normal;
 instrument: bass; 
 {
@@ -66,7 +68,7 @@ instrument: bass;
 
 
 [
-type: style;
+type: template;
 name: purdie.ende;
 instrument: drums; 
 {
@@ -78,7 +80,7 @@ instrument: drums;
 ] 
 
 [
-type: style;
+type: template;
 name: purdie.ende;
 instrument: rhythm1; 
 {
@@ -91,7 +93,7 @@ instrument: rhythm1;
 ]
 
 [
-type: style;
+type: template;
 name: purdie.ende;
 instrument: bass; 
 {

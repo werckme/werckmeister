@@ -1,5 +1,5 @@
 @load "./chords/default.chords";
-@load "./styles/simpleJazz.style";
+@load "./templates/simpleJazz.template";
 @load "./pitchmaps/defaultMidiDrumMap.pitchmap";
 --@load "./pitchmaps/battery3.tight.pitchmap";
 
@@ -39,7 +39,7 @@ instrument: lead;
 [
 type: sheet;
 {
-    /style: simpleJazz.normal/
+    /template: simpleJazz.normal/
     G-7 | A7#9 | D-7 D07 | C-7  F7b9 |
     Besmaj7#11 | A7#9 | D-7 |
     E7#5 | A-7 | D-7 |

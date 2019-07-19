@@ -1,7 +1,7 @@
 @load "./chords/default.chords";
 @load "./pitchmaps/battery3.tight.pitchmap";
 --@load "./pitchmaps/defaultMidiDrumMap.pitchmap";
-@load "./styles/purdie.style";
+@load "./templates/purdie.template";
 
 
 tempo: 160;
@@ -30,7 +30,7 @@ instrument: fx;
 [
 type: sheet;
 {
-    /style: purdie.normal/
+    /template: purdie.normal/
 
     C     | G   | F9  Gmaj7 | C    |
     C     | G   | F9  Gmaj7 | C7#9 |
@@ -42,7 +42,7 @@ type: sheet;
     Amin7 | G   | F9 Gmaj7 | C7    |
     Amin9 | G   | F11      | C |
     C | C | C | C7#9 |
-    /style: purdie.ende/
+    /template: purdie.ende/
     /tempo: 80/ 
     C7#9 |
 }

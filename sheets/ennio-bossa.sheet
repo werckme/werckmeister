@@ -1,7 +1,7 @@
 @load "./chords/default.chords";
 @load "./pitchmaps/defaultMidiDrumMap.pitchmap";
-@load "./styles/bossanova.style";
-@load "./styles/countryschlager1.style";
+@load "./templates/bossanova.template";
+@load "./templates/countryschlager1.template";
  
 device: SC1 midi 2;
 
@@ -33,12 +33,12 @@ instrument: vibra;
 [
 type: sheet;
 {
-    /style: bossanova.normal/
+    /template: bossanova.normal/
 
     Cmaj7 | Cmaj7 | Cmaj7 | Cmaj7 | Esmaj7 | Esmaj7 | Esmaj7 | Esmaj7 | Aesmaj7 
     | Aesmaj7 | Aesmaj7 | Aesmaj7 | G7 | G7 | G7 | G7 | G7 | C | C | Cmin |
 
-    /style: countryschlager1.ende/
+    /template: countryschlager1.ende/
 
     Cmin |
 }

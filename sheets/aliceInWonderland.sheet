@@ -1,5 +1,5 @@
 @load "./chords/default.chords";
-@load "./styles/reaggesk.style";
+@load "./templates/reaggesk.template";
 @load "./pitchmaps/battery3.tight.pitchmap";
 @load "./voicings/guitar.lua";
 
@@ -55,7 +55,7 @@ type: sheet;
     -- 96
     D7  | G7  | E-7 | A-7 | D-7 |
     G7  | Cmaj7 | Fmaj7 | Fis07 | B7b9 |
-    E-7 | A7 | D-7 A7 | D-7 A7 | D-7 As7 | /stylePosition: reset/ G7 |
+    E-7 | A7 | D-7 A7 | D-7 A7 | D-7 As7 | /templatePosition: reset/ G7 |
     D-7 | G7 | Cmaj7 | Fmaj7 | B07 |
     E7 | A-7 | Es7 | D-7 | G7 | 
     E-7 | A-7 | D-7 | G7 | Cmaj7 | Cmaj7 |

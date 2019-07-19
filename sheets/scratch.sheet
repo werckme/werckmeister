@@ -8,7 +8,7 @@ instrumentDef: piano   SC1 2 0 0;
 instrumentDef: bass    SC1 3 0 26;
 
 [
-type: style;
+type: template;
 name: x.y;
 instrument: piano; 
 {  
@@ -19,7 +19,7 @@ instrument: piano;
 
 
 [
-type: style;
+type: template;
 name: x.z;
 instrument: piano; 
 {  
@@ -31,9 +31,9 @@ instrument: piano;
 [
 type: sheet;
 {
-    /style: x.y/
+    /template: x.y/
     C | F | C | G | C-7 | 
-    /style: x.z/
+    /template: x.z/
     D | G7 | C |
 }
 ]

@@ -1,5 +1,5 @@
 [
-type: style;
+type: template;
 name: justchords.normal;
 instrument: piano; 
 {
@@ -9,7 +9,7 @@ instrument: piano;
 ] 
 
 [
-type: style;
+type: template;
 name: justchords.guitar;
 instrument: guitar;
 {
@@ -21,7 +21,7 @@ instrument: guitar;
 ]
 
 [
-type: style;
+type: template;
 name: justchords.arpeggio;
 instrument: piano; 
 {
@@ -34,7 +34,7 @@ instrument: piano;
 ] 
 
 [
-type: style;
+type: template;
 name: justchords.arpeggioUp;
 instrument: piano; 
 {
@@ -46,7 +46,7 @@ instrument: piano;
 ] 
 
 [
-type: style;
+type: template;
 name: justchords.arpeggioT;
 instrument: piano; 
 {
@@ -61,7 +61,7 @@ instrument: piano;
 ] 
 
 [
-type: style;
+type: template;
 name: justchords.bending;
 instrument: piano; 
 {
@@ -76,7 +76,7 @@ instrument: piano;
 ] 
 
 [
-type: style;
+type: template;
 name: justchords.empty;
 {
     r1 |

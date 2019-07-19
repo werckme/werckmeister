@@ -1,5 +1,5 @@
 [
-type: style;
+type: template;
 name: simpleDisco.normal;
 instrument: piano;
 { 
@@ -8,7 +8,7 @@ instrument: piano;
 ]
 
 [
-type: style;
+type: template;
 name: simpleDisco.normal;
 instrument: bass;
 {
@@ -18,7 +18,7 @@ instrument: bass;
 ]
 
 [
-type: style;
+type: template;
 name: simpleDisco.normal;
 instrument: drums;
 {
@@ -33,7 +33,7 @@ instrument: drums;
 ] 
 
 [
-type: style;
+type: template;
 name: simpleDisco.solo;
 instrument: bass;
 {
@@ -42,7 +42,7 @@ instrument: bass;
 ]
 
 [
-type: style;
+type: template;
 name: simpleDisco.solo;
 instrument: drums;
 {
@@ -52,7 +52,7 @@ instrument: drums;
 
 
 [
-type: style;
+type: template;
 name: simpleDisco.solo2;
 instrument: bass;
 {
@@ -62,7 +62,7 @@ instrument: bass;
 ]
 
 [
-type: style;
+type: template;
 name: simpleDisco.solo2;
 instrument: drums;
 {

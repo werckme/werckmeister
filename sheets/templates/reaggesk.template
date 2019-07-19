@@ -3,7 +3,7 @@
 @load "../voicings/simple.lua";
 
 [
-type: style;
+type: template;
 instrument: drums;
 name: reaggesk.normal;
 {
@@ -20,7 +20,7 @@ name: reaggesk.normal;
 ]
 
 [
-type: style;
+type: template;
 instrument: bass;
 name: reaggesk.normal;
 {
@@ -31,7 +31,7 @@ name: reaggesk.normal;
 ]
 
 [
-type: style;
+type: template;
 instrument: rhythm1;
 name: reaggesk.normal;
 {
@@ -41,7 +41,7 @@ name: reaggesk.normal;
 ]
 
 [
-type: style;
+type: template;
 instrument: piano;
 name: reaggesk.normal;
 {

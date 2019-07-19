@@ -5,7 +5,7 @@
 
 #define SHEET_VERSION "@GIT_VERSION@"
 #define CHORD_DEF_EXTENSION  ".chords"
-#define SHEET_TEMPLATE_DEF_EXTENSION ".stmpl"
+#define SHEET_TEMPLATE_DEF_EXTENSION ".template"
 #define PITCHMAP_DEF_EXTENSION ".pitchmap"
 #define LUA_DEF_EXTENSION ".lua"
 

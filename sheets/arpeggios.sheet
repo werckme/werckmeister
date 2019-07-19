@@ -1,6 +1,6 @@
 @load "./chords/default.chords";
---@load "./styles/simpleDisco.style";
-@load "./styles/justchords.style";
+--@load "./templates/simpleDisco.template";
+@load "./templates/justchords.template";
 @load "./pitchmaps/defaultMidiDrumMap.pitchmap";
 
 device: SC1 midi 1;
@@ -11,25 +11,25 @@ instrumentDef: piano      SC1 2 0 104;
 [
 type: sheet;
 {
-    /style: justchords.empty/
+    /template: justchords.empty/
     C |
 
-    /style: justchords.bending/
+    /template: justchords.bending/
     C Cmin |
 
-    /style: justchords.arpeggio/
+    /template: justchords.arpeggio/
     C Cmin | D D7 | D9 D | B7 Bmaj7 | Fmin E | C D | 
-    /style: justchords.arpeggioT/
+    /template: justchords.arpeggioT/
     C11 Cmin |
-    /style: justchords.arpeggio/
+    /template: justchords.arpeggio/
     D7#9 D | Aes7 Aesmaj7 | Ges11 | C D | 
-    /style: justchords.arpeggioT/
+    /template: justchords.arpeggioT/
     E | 
-    /style: justchords.arpeggioUp/
+    /template: justchords.arpeggioUp/
     E7 Emin | Fis11 | Des11 | G13 |
-    /style: justchords.arpeggioT/
+    /template: justchords.arpeggioT/
     Cmaj7 |
-    /style: justchords.bending/
+    /template: justchords.bending/
     C13 |
 }
 ]

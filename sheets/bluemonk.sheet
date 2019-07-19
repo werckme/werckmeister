@@ -30,7 +30,7 @@ type: sheet;
 
 
 [
-type: style;
+type: template;
 name: chords.chords;
 instrument: piano;
 {

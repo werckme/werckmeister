@@ -1,6 +1,6 @@
-@load "./styles/purdie.style";
+@load "./templates/purdie.template";
 @load "./chords/default.chords";
-@load "./styles/ido.style";
+@load "./templates/ido.template";
 @load "./pitchmaps/defaultMidiDrumMap.pitchmap";
 --@load "./pitchmaps/battery3.tight.pitchmap";
 
@@ -17,23 +17,23 @@ instrumentDef: slide SC1 2 0 102;
 [
 type: sheet;
 {
-    /style: ido.normal/
+    /template: ido.normal/
 
     C7 | C7 | Emin7 | A B | Cmin | Cmin | Ces9 | G7 Gesmin | 
 
-    /style: ido.fill1/
+    /template: ido.fill1/
 
     G7 Gmin7 | 
 
-    /style: ido.normal2/
+    /template: ido.normal2/
 
     F | F | E | E | F7 | F7 | Aes7 | B A | B A | 
 
-    /style: ido.normal/
+    /template: ido.normal/
 
     Cmin | Cmin | Fis | Fis | Cmin | Cmin | D | Esmin7 | D | Esmin7 | D Esmin7 | D Esmin7 | Emin | Emin | E9 | Emin11 |
 
-    /style: ido.ende/
+    /template: ido.ende/
     Cmin |
 }
 ]

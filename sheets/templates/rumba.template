@@ -1,5 +1,5 @@
 [
-type: style;
+type: template;
 name: rumba.normal;
 instrument: drums; 
 {
@@ -13,7 +13,7 @@ instrument: drums;
 ]
 
 [
-type: style;
+type: template;
 name: rumba.normal;
 instrument: guitar; 
 {
@@ -30,7 +30,7 @@ instrument: guitar;
 ]
 
 [
-type: style;
+type: template;
 name: rumba.normal;
 instrument: piano; 
 {
@@ -45,7 +45,7 @@ instrument: piano;
 ] 
 
 [
-type: style;
+type: template;
 name: rumba.normal;
 instrument: bass; 
 {

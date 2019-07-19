@@ -1,7 +1,7 @@
 @load "../voicings/voicelead.lua";
 
 [
-type: style;
+type: template;
 name: simpleJazz.normal;
 instrument: drums; 
 {
@@ -22,7 +22,7 @@ instrument: drums;
 
 
 [
-type: style;
+type: template;
 name: simpleJazz.normal;
 instrument: piano; 
 {
@@ -34,7 +34,7 @@ instrument: piano;
 ]
 
 [
-type: style;
+type: template;
 name: simpleJazz.normal;
 instrument: bass; 
 {

@@ -1,6 +1,6 @@
 @load "./chords/default.chords";
 @load "./pitchmaps/defaultMidiDrumMap.pitchmap";
-@load "./styles/countryschlager1.style";
+@load "./templates/countryschlager1.template";
 
 device: SC1 midi 2;
 
@@ -27,11 +27,11 @@ instrument: guitar2;
 [
 type: sheet;
 {
-    /style: countryschlager1.normal/
+    /template: countryschlager1.normal/
 
     C | C | C | C | Es | Es | Es | Es | Aes | Aes | Aes | Aes | G7 | G7 | G7 | G7 | G7 | C | C | Cmin |
 
-    /style: countryschlager1.ende/
+    /template: countryschlager1.ende/
 
     Cmin |
 }

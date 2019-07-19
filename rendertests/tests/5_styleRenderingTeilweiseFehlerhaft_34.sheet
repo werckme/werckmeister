@@ -9,7 +9,7 @@ instrumentDef: piano   SC1 2 0 0;
 instrumentDef: bass    SC1 5 0 33;
 
 [
-type: style;
+type: template;
 name: simpleJazz34.normal;
 instrument: piano; 
 {
@@ -21,7 +21,7 @@ instrument: piano;
 
 
 [
-type: style;
+type: template;
 name: simpleJazz34.normal;
 instrument: bass; 
 {
@@ -35,7 +35,7 @@ instrument: bass;
 type: sheet;
 {
     /signature: 3 4/
-    /style: simpleJazz34.normal/
+    /template: simpleJazz34.normal/
     C D | C D | G A B | F G | F G | C E F |
 }
 ]

@@ -1,7 +1,7 @@
 @load "./chords/default.chords";
 
 [
-type: style;
+type: template;
 name: simpleJazz44.normal;
 {
     /voicingStrategy: simpleGuitar/
@@ -12,7 +12,7 @@ name: simpleJazz44.normal;
 [
 type: sheet;
 {
-    /style: simpleJazz44.normal/
+    /template: simpleJazz44.normal/
     G A B | 
     C D | C D | F G F G | A B C | D | E | F G |
 }

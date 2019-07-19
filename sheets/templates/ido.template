@@ -1,5 +1,5 @@
 [
-type: style;
+type: template;
 name: ido.normal;
 instrument: guitar; 
 {
@@ -10,7 +10,7 @@ instrument: guitar;
 ]
 
 [
-type: style;
+type: template;
 name: ido.normal;
 instrument: bass; 
 {
@@ -19,7 +19,7 @@ instrument: bass;
 ]
 
 [
-type: style;
+type: template;
 name: ido.normal;
 instrument: drums;
 {
@@ -37,7 +37,7 @@ instrument: drums;
 
 
 [
-type: style;
+type: template;
 name: ido.fill1;
 instrument: guitar; 
 {
@@ -48,7 +48,7 @@ instrument: guitar;
 ]
 
 [
-type: style;
+type: template;
 name: ido.fill1;
 instrument: bass; 
 {
@@ -57,7 +57,7 @@ instrument: bass;
 ]
 
 [
-type: style;
+type: template;
 name: ido.fill1;
 instrument: drums;
 {
@@ -82,7 +82,7 @@ instrument: drums;
 
 
 [
-type: style;
+type: template;
 name: ido.normal2;
 instrument: guitar; 
 {
@@ -93,7 +93,7 @@ instrument: guitar;
 ]
 
 [
-type: style;
+type: template;
 name: ido.normal2;
 instrument: bass; 
 {
@@ -102,7 +102,7 @@ instrument: bass;
 ] 
 
 [
-type: style;
+type: template;
 name: ido.normal2;
 instrument: drums;
 {
@@ -131,7 +131,7 @@ instrument: drums;
 
 
 [
-type: style;
+type: template;
 name: ido.ende;
 instrument: guitar; 
 {
@@ -140,7 +140,7 @@ instrument: guitar;
 ] 
 
 [
-type: style;
+type: template;
 name: ido.ende;
 instrument: bass; 
 {
@@ -149,7 +149,7 @@ instrument: bass;
 ] 
 
 [
-type: style;
+type: template;
 name: ido.ende;
 instrument: drums;
 {

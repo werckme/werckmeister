@@ -1,6 +1,6 @@
 @load "./chords/default.chords";
 @load "./pitchmaps/defaultMidiDrumMap.pitchmap";
-@load "./styles/ennio.style";
+@load "./templates/ennio.template";
 
 device: SC1 midi 2;
 
@@ -20,7 +20,7 @@ instrument: piano;
 [
 type: sheet;
 {
-    /style: ennio.normal/
+    /template: ennio.normal/
 
     Cmaj7 | Cmaj7 | Cmaj7 | Cmaj7 | Cmaj7 | Cmaj7 | Esmaj7 | Esmaj7 | 
     Esmaj7 | Esmaj7 | Aesmaj7 | Aesmaj7 | Aesmaj7 | Aesmaj7 | G7 

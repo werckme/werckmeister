@@ -1,5 +1,5 @@
 @load "./chords/default.chords";
-@load "./styles/bossanova.style";
+@load "./templates/bossanova.template";
 @load "./pitchmaps/defaultMidiDrumMap.pitchmap";
 --@load "./pitchmaps/battery3.tight.pitchmap";
 
@@ -42,7 +42,7 @@ instrument: lead;
 [
 type: sheet;
 {
-    /style: bossanova.normal/
+    /template: bossanova.normal/
     Fmaj7 | Fmaj7 | G7 | G7 |
     G-7 | Ges7 | Fmaj7 | Ges7 |
     Fmaj7 | Fmaj7 | G7 | G7 |

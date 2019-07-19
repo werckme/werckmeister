@@ -1,5 +1,5 @@
 [
-type: style;
+type: template;
 name: simpleJazz34.normal;
 instrument: piano; 
 {
@@ -10,7 +10,7 @@ instrument: piano;
 ]
 
 [
-type: style;
+type: template;
 name: simpleJazz34.normal;
 instrument: bass; 
 {

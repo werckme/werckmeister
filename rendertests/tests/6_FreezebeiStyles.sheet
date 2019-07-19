@@ -2,7 +2,7 @@
 
 
 [
-type: style;
+type: template;
 name: x.y;
 {
     /signature: 5 4/
