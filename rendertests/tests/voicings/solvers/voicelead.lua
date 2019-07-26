@@ -44,12 +44,19 @@ end
 
 function VoiceLeadSolver:_solveImpl(chord, degrees, args)
     local pitches = {}
-    for degree, degreeDef in pairs(degrees)
+    for degree, degreeDefs in pairs(degrees)
     do
         if isnumber(degree)
         then
-            pitches[degree] = self:createPitch(chord, degreeDef, degreeDef.octave)
+            for idx, degreeDef in pairs(degreeDefs)
+            do
+                table.insert(pitches, self:createPitch(chord, degreeDef, degreeDef.octave))
+            end
         end
+    end
+    if #pitches < 3
+    then
+        return pitches
     end
     if self.previous ~= nil 
     then

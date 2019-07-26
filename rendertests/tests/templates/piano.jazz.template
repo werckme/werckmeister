@@ -1,0 +1,18 @@
+@load "./voicings/simple.lua";
+
+[
+type: template;
+name: piano.jazz.normal;
+instrument: piano;
+{
+    /voicingStrategy: simple range baritone/
+     I,,2. r8 V,,8 |
+     <I II III IV V VI VII>2. V,,,4|
+     I,,2. r8 V,,8 |
+     <I II III IV V VI VII>2. !pV,,,8 <I II III IV V VI VII>8|
+    
+
+}
+]
+
+

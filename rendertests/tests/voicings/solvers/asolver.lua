@@ -9,11 +9,19 @@ function ASolver:new(o)
     return o
 end
 
+function ASolver:getDefaultDegreeDef(degreeValue, degrees)
+    local default = degrees[degreeValue]
+    if default == nil 
+    then
+        return nil
+    end
+    return default[1]
+end
+
 function ASolver:createPitch(chord, degreeDef, octave)
     if degreeDef == nil
     then
-        print("warning: missing degreeDef for: " .. chord.strBase .. chord.strOptions)
-        return { ["pitch"]= 0, ["octave"]=0 }
+        return nil
     end
     return { ["pitch"]= self:degreeToPitch(degreeDef, chord), ["octave"]=octave }
 end

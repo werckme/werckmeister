@@ -1,0 +1,22 @@
+@load "../voicings/guitar.lua";
+
+[
+type: template;
+name: guitar.country.normal;
+instrument: guitar; 
+{
+    /voicingStrategy: guitar range mezzosoprano/
+    \f
+    <I II III IV V VI VII>8 <I II III IV V VI VII>8 r8 
+    <I II III IV V VI VII>4  <I II III IV V VI VII>8 <I II III IV V VI VII>8 <I II III IV V VI VII>8 |
+}   
+]
+
+[
+type: template;
+name: guitar.country.ende;
+instrument: guitar; 
+{
+    <I II III IV V VI VII>1  |
+}   
+] 

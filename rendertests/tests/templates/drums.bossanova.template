@@ -1,0 +1,15 @@
+[
+type: template;
+name: drums.bossanova.normal;
+instrument: drums;
+{
+    "ht"8 !f"ht" "ht" !f"ht"   "ht" "ht" "ht" !f"ht" |
+}    
+{
+    \fff
+    r4 "ss"8 r4 "ss"8 r4 | "ss"4. "ss"8 r4 "ss" |
+}    
+{
+    "bd"4. "bd"8 "bd"4. "bd"8 |
+}      
+]
