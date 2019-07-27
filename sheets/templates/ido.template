@@ -1,9 +1,11 @@
+@load "../voicings/simple.lua";
+
 [
 type: template;
 name: ido.normal;
 instrument: guitar; 
 {
-    /voicingStrategy: simpleGuitar higherRange/
+    /voicingStrategy: simpleGuitar/
     \f
     <I II III IV V VI VII>4. <I II III IV V VI VII>4 <I II III IV V VI VII>4 <I II III IV V VI VII>8  |
 }   

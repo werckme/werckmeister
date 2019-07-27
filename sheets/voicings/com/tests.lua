@@ -1,4 +1,5 @@
 require "com/com"
+require "com/globals"
 
 function testpitchdiff(a, b, expected)
     local diff = relpitchdiff(a, b)
@@ -37,6 +38,7 @@ assert(x.b == 200)
 assert(x.c == 300)
 
 
-assert( toMidiPitch({pitch=0, octave=0}) == 60)
-assert( toMidiPitch({pitch=0, octave=1}) == 72)
-assert( toMidiPitch({pitch=1, octave=1}) == 73)
+assert( toMidiPitch({pitch=C,   octave=0}) == 60)
+assert( toMidiPitch({pitch=C,   octave=1}) == 72)
+assert( toMidiPitch({pitch=CIS, octave=1}) == 73)
+assert( toMidiPitch({pitch=C,   octave=-1}) == 48)

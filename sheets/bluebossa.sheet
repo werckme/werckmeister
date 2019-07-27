@@ -46,16 +46,16 @@ type: sheet;
 {
     /template: rumba.normal/
     r | C- | C- | F-7 | Bes7 |
-    D07 | G7#5#9 | C- | C- |
+    D-7b5 | G7#5#9 | C- | C- |
     Es-7 | As7 | Desmaj7 | Desmaj7 |
-    D07 | G7#5#9 | C- | D07 G7#5 | --:|
+    D-7b5 | G7#5#9 | C- | D-7b5 G7#5 | --:|
     C- | C- | F-7 | Bes7 |
-    D07 | G7#5#9 | C- | C- |
+    D-7b5 | G7#5#9 | C- | C- |
     Es-7 | As7 | Desmaj7 | Desmaj7 |
-    D07 | G7#5#9 |
+    D-7b5 | G7#5#9 |
     -- coda
-    C- | A7#9 | D07 | G7#5#9 |
-    C- | A7#9 | D07 | G7#5 |
+    C- | A7#9 | D-7b5 | G7#5#9 |
+    C- | A7#9 | D-7b5 | G7#5 |
     C- |
 }
 ]

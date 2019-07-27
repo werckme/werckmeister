@@ -25,9 +25,9 @@ type: sheet;
 {
     /signature: 6 8/
     C7 | C7 | Gmaj7 | Gmaj7 |
-    B07 | B07 | D-7 | D-7 F7 |
+    B-7b5 | B-7b5 | D-7 | D-7 F7 |
     /templatePosition: reset/
     C7 | C7 | Gmaj7 | Gmaj7 |
-    B07 | B07 | D-7 | D-7 F7 |
+    B-7b5 | B-7b5 | D-7 | D-7 F7 |
 }
 ]

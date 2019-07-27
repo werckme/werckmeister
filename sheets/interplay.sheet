@@ -1,5 +1,6 @@
 @load "./chords/default.chords";
 @load "./voicings/voicelead.lua";
+@load "./voicings/simple.lua";
 
 tempo: 120;
 device: SC1 midi 2;
@@ -22,8 +23,8 @@ type: sheet;
 {
     F-7 | Bes-7 | F-7   | 
     F7  | Bes-7 | Bes-7 |
-    F-7 | As7   | G07   |
-    C7  | F-7  D07 | Desmaj7  Gesmaj7 |
+    F-7 | As7   | G-7b5   |
+    C7  | F-7  D-7b5 | Desmaj7  Gesmaj7 |
 }
 ]
 
@@ -33,7 +34,7 @@ type: template;
 name: chords;
 instrument: piano;
 {
-    /voicingStrategy: voicelead range baritone/
+    /voicingStrategy: voicelead range tenor/
     \ff
     I,,4 r8  <I II III IV V VI VII>8  r4 !fV,,,4|
 

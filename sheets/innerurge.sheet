@@ -27,7 +27,7 @@ instrument: piano;
 [
 type: sheet;
 {
-      Fis07    |   Fis07      |   Fis07      |   Fis07     |
+      Fis-7b5  |   Fis-7b5    |   Fis-7b5    |   Fis-7b5   |
       Fmaj7b5  |   Fmaj7b5    |   Fmaj7b5    |   Fmaj7b5   |
       Esmaj7b5 |   Esmaj7b5   |   Esmaj7b5   |   Esmaj7b5  |
       Desmaj7b5|   Desmaj7b5  |   Desmaj7b5  |   Desmaj7b5 |

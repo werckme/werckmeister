@@ -1,4 +1,6 @@
 require "config"
+require "com/com"
+
 ASolver = {}
 
 
@@ -37,8 +39,8 @@ end
 function ASolver:solve(chord, degrees, args)
     args = tokeyvalue(args)
     local result = self:_solveImpl(chord, degrees, args)
-    if args.range ~=nil then
-        self:_keepRange(result, args.range)
+    if args.strRange ~=nil then
+        self:_keepRange(result, args.strRange)
     end
     return result
 end
@@ -53,36 +55,38 @@ function ASolver:_transpose(pitches, numOctaves)
     end
 end
 
-function ASolver:_keepRange(pitches, range)
-    local orange = PitchRanges[range]
-    if orange == nil then
-        error("range " .. range .. " not defined")
+function ASolver:_keepRange(pitches, strRange)
+    local destinationRange = PitchRanges[strRange]
+    if destinationRange == nil then
+        error("strRange " .. strRange .. " not defined")
     end
-    local up = 0
-    local down = 0
+    local nbUnder = 0
+    local nbOver = 0
     local mindiff = math.maxinteger
     local maxdiff = math.mininteger
     for i, pitch in pairs(pitches) do
         local midipitch = toMidiPitch(pitch)
-        if midipitch > orange.max then
-            diff = midipitch - orange.max
+        if midipitch > destinationRange.max then
+            local diff = midipitch - destinationRange.max
             if diff > maxdiff then
                 maxdiff = diff
             end
-            down = down + 1
+            nbOver = nbOver + 1
         end
-        if midipitch < orange.min then
-            diff = midipitch - orange.min
+        if midipitch < destinationRange.min then
+            local diff = destinationRange.min - midipitch
             if diff < mindiff then
                 mindiff = diff
             end
-            up = up + 1
+            nbUnder = nbUnder + 1
         end
     end
-    if up > down then
-        self:_transpose(pitches, -math.ceil(mindiff/12))
+    if nbUnder > nbOver then
+        local octaves = math.ceil(mindiff/12)
+        self:_transpose(pitches, octaves)
     end
-    if up < down then
-        self:_transpose(pitches, -math.ceil(maxdiff/12))
+    if nbUnder < nbOver then
+        local octaves = -math.ceil(maxdiff/12)
+        self:_transpose(pitches, octaves)
     end
 end

@@ -1,79 +1,36 @@
 @load "./chords/default.chords";
+@load "./voicings/guitar.lua";
 @load "./voicings/voicelead.lua";
-@load "./templates/piano.bossanova.template";
-@load "./templates/piano.disco.template";
-@load "./templates/piano.jazz.template";
-@load "./templates/drums.bossanova.template";
-@load "./templates/drums.disco.template";
-@load "./templates/guitar.bossanova.template";
-@load "./templates/drums.country.template";
-@load "./templates/bass.bossanova.template";
-@load "./templates/bass.country.template";
-@load "./templates/bass.disco.template";
-@load "./templates/guitar.country.template";
-@load "./pitchmaps/defaultMidiDrumMap.pitchmap";
+@load "./voicings/simple.lua";
 
 device: SC1 midi 1;
 
-tempo: 130;
+tempo: 400;
+instrumentDef: lead   SC1 2 0 0;
 instrumentDef: piano   SC1 2 0 0;
 instrumentDef: bass    SC1 3 0 26;
 instrumentDef: drums   SC1 9 0 0;
 instrumentDef: guitar   SC1 4 0 26;
-
 instrumentConf: guitar volume 70;
 
 [
+type: template;
+name: myTrack;
+instrument: piano;
+{
+   /voicingStrategy: voicelead range baritone/
+    --/doOnce: arpeggio/
+    --<I II III IV V VI VII>2
+    <I II III IV V VI VII>1 |
+    
+}
+]
+
+-- https://www.scales-chords.com/chord/piano/C7b9
+[
 type: sheet;
 {
-    /
-    template 
-    : 
-        piano.bossanova.normal
-        drums.country.normal
-        bass.bossanova.normal
-        guitar.bossanova.normal
-    /
-
-    C | F | 
-    
-    /
-    template: 
-        piano.bossanova.normal
-        drums.bossanova.normal
-        bass.bossanova.normal
-        guitar.country.normal
-    /
-    
-    C | G | 
-    
-    /
-    template: 
-        piano.disco.normal
-        drums.country.normal
-        bass.country.normal
-        guitar.bossanova.normal
-    /
-    
-    C-7 | 
-    /
-    template: 
-        piano.disco.normal
-        drums.disco.normal
-        bass.disco.normal
-        guitar.bossanova.normal
-    /
-    
-    D |
-    
-    /
-    template: 
-        piano.bossanova.normal
-        drums.bossanova.normal
-        bass.country.normal
-        guitar.country.normal
-    / 
-    
-    G7 | C |
+    C | B | A | G | F | E | D | C | B | A | G | F | E | D | C |
+    C | D | E | F | G | A | B | C | D | E | F | G | A | B | C |
 }
 ]

@@ -1,7 +1,7 @@
-require "solvers/asolver"
+require "solvers/simple"
 require "com/globals"
 
-VoiceLeadSolver = ASolver:new()
+VoiceLeadSolver = Simple:new()
 
 function VoiceLeadSolver:getPitchWithMinDistance(pitch, pitches)
     local min = math.maxinteger
@@ -18,6 +18,8 @@ function VoiceLeadSolver:getPitchWithMinDistance(pitch, pitches)
     return minPitch
 end
 
+-- changes the octave of pitch, so that the interval
+-- between pitch and targetPitch is minimal
 function VoiceLeadSolver:toPitchNextTo(pitch, targetPitch)
     if targetPitch == nil then
         return pitch
@@ -34,6 +36,8 @@ function VoiceLeadSolver:toPitchNextTo(pitch, targetPitch)
     return pitch
 end
 
+
+-- compare pitches with a reference and adjust octaves
 function VoiceLeadSolver:adjustOctaves(pitches, reference)
     for i, pitch in pairs(pitches) do
         local min = self:getPitchWithMinDistance(pitch, reference) 
@@ -43,18 +47,8 @@ function VoiceLeadSolver:adjustOctaves(pitches, reference)
 end
 
 function VoiceLeadSolver:_solveImpl(chord, degrees, args)
-    local pitches = {}
-    for degree, degreeDefs in pairs(degrees)
-    do
-        if isnumber(degree)
-        then
-            for idx, degreeDef in pairs(degreeDefs)
-            do
-                table.insert(pitches, self:createPitch(chord, degreeDef, degreeDef.octave))
-            end
-        end
-    end
-    if #pitches < 3
+    local pitches = Simple:_solveImpl(chord, degrees, args)
+    if #pitches < 2
     then
         return pitches
     end
@@ -62,6 +56,15 @@ function VoiceLeadSolver:_solveImpl(chord, degrees, args)
     then
         pitches = self:adjustOctaves(pitches, self.previous)
     end
-    self.previous = pitches
     return pitches
+end
+
+function VoiceLeadSolver:solve(chord, degrees, args)
+    args = tokeyvalue(args)
+    local result = self:_solveImpl(chord, degrees, args)
+    if args.range ~=nil then
+        self:_keepRange(result, args.range)
+    end
+    self.previous = result
+    return result
 end
