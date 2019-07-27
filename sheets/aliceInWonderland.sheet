@@ -46,17 +46,17 @@ instrument: lead;
 type: sheet;
 {
     /signature: 3 4/
-    D-7 | G7 | Cmaj7 | Fmaj7 | B07 | E7 |
+    D-7 | G7 | Cmaj7 | Fmaj7 | B-7b5 | E7 |
     A-7 | Es7 | D-7 | G7 | E-7 | A-7 |
     D-7 | G7  | E-7 | A7 | -- :|
-    D-7 | G7 | Cmaj7 | Fmaj7 | B07 | E7 |
+    D-7 | G7 | Cmaj7 | Fmaj7 | B-7b5 | E7 |
     A-7 | Es7 | D-7 | G7 | E-7 | A-7 |
     D-7 | G7  | Cmaj7 | A7 |
     -- 96
     D7  | G7  | E-7 | A-7 | D-7 |
-    G7  | Cmaj7 | Fmaj7 | Fis07 | B7b9 |
+    G7  | Cmaj7 | Fmaj7 | Fis-7b5 | B7b9 |
     E-7 | A7 | D-7 A7 | D-7 A7 | D-7 As7 | /templatePosition: reset/ G7 |
-    D-7 | G7 | Cmaj7 | Fmaj7 | B07 |
+    D-7 | G7 | Cmaj7 | Fmaj7 | B-7b5 |
     E7 | A-7 | Es7 | D-7 | G7 | 
     E-7 | A-7 | D-7 | G7 | Cmaj7 | Cmaj7 |
 }

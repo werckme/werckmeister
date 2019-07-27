@@ -7,9 +7,11 @@ device: SC1 midi 2;
 instrumentDef: piano SC1 3 0 0;
 
 
+
 [
 instrument: piano;
 {
+    \fff
     f4. c'4 as f8 | bes8 c'~  c'8t g es f4 r8 as  |  g8 f bes as des' c' as f |
     des f  g8t es f r4 f'~ | f'4.  c'8 bes4  des'8 f' | c' bes~ bes8t es' f' bes4 r8 des'8  |  
     es' f' c' des' bes f'  c'8t as' f'~ | f' des' bes  c' as f  r4 c'~ | c'  bes~  bes8 g c'4~ |
@@ -34,10 +36,14 @@ type: template;
 name: chords;
 instrument: piano;
 {
-    /voicingStrategy: voicelead range tenor/
+    /voicingStrategy: voicelead range baritone/
     \ff
-    I,,4 r8  <I II III IV V VI VII>8  r4 !fV,,,4|
-
+    r4.      <I II III IV V VI VII>8    r2        |
+}
+{
+    /voicingStrategy: simple range contrabass/
+    \ff
+    I,,4 r8  r8                       r4 !fV,,,4  |
 }
 ]
 
