@@ -256,17 +256,15 @@ namespace sheet {
 			if (instrumentDef == nullptr) {
 				FM_THROW(Exception, "instrumentDef not found: " + uname);
 			}
-			for (std::size_t idx = 1; idx < args.size(); idx+=2) {
-				auto propertyName = getArgument<fm::String>(args, idx);
-				if (propertyName == SHEET_META__SET_INSTRUMENT_CONFIG_VOLUME) {
-					instrumentDef->volume = getArgument<int>(args, idx+1);
-				} 
-				else if (propertyName == SHEET_META__SET_INSTRUMENT_CONFIG_PAN) {
-					instrumentDef->pan = getArgument<int>(args, idx+1);
-				} else {
-					FM_THROW(Exception, "instrumentDef config not found: " + uname + ", " + propertyName);
-				}
+			auto argsExceptFirst = Event::Args(args.begin() + 1, args.end());
+			auto intValue = sheet::getArgValueFor<int>(SHEET_META__SET_INSTRUMENT_CONFIG_VOLUME, argsExceptFirst);
+			if (intValue.first) {
+				instrumentDef->volume = intValue.second;
 			}
+			intValue = sheet::getArgValueFor<int>(SHEET_META__SET_INSTRUMENT_CONFIG_PAN, argsExceptFirst);
+			if (intValue.first) {
+				instrumentDef->pan = intValue.second;
+			}			
 		}
 
 		void MidiContext::metaSetInstrument(const fm::String &uname)
