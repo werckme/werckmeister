@@ -120,6 +120,7 @@ namespace sheet {
 			virtual fm::Expression getExpression(const fm::String &str) const;
 			virtual ASpielanweisungPtr spielanweisung();
 			virtual AInstrumentDef * getInstrumentDef(const fm::String &uname) = 0;
+			virtual AInstrumentDef * currentInstrumentDef() = 0;
 			virtual fm::Ticks currentPosition() const;
 			/**
 			 * @return the duration of an event. which can be the events duration,

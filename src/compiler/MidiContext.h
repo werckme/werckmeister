@@ -44,6 +44,7 @@ namespace sheet {
 			virtual void addDeviceChangeEvent(const fm::String &deviceName, fm::Ticks position);
 			virtual AInstrumentDef * getInstrumentDef(const fm::String &uname) override;
 			MidiInstrumentDef * getMidiInstrumentDef(const fm::String &uname);
+			virtual AInstrumentDef * currentInstrumentDef() override;
 			const MidiInstrumentDefs & midiInstrumentDefs() const { return this->midiInstrumentDefs_; }
 		protected:
 			virtual Base::VoiceMetaDataPtr createVoiceMetaData() override;

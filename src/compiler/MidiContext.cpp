@@ -4,6 +4,8 @@
 #include <math.h>
 #include "error.hpp"
 #include "sheet/tools.h"
+#include <algorithm>
+#include <fm/werckmeister.hpp>
 
 #define SHEET_MASTER_TRACKNAME "master track"
 
@@ -201,6 +203,12 @@ namespace sheet {
 			return getMidiInstrumentDef(uname);
 		}
 
+		AInstrumentDef * MidiContext::currentInstrumentDef()
+		{
+			auto trackMeta = trackMetaData<MidiContext::TrackMetaData>();
+			return &trackMeta->instrument;
+		}
+
 		void MidiContext::metaSetVolume(int volume)
 		{
 			Base::metaSetVolume(volume);
@@ -256,7 +264,9 @@ namespace sheet {
 			if (instrumentDef == nullptr) {
 				FM_THROW(Exception, "instrumentDef not found: " + uname);
 			}
-			auto argsExceptFirst = Event::Args(args.begin() + 1, args.end());
+			auto argsBegin = args.begin() + 1;
+			auto argsEnd = args.end();
+			auto argsExceptFirst = Event::Args(argsBegin, argsEnd);
 			auto intValue = sheet::getArgValueFor<int>(SHEET_META__SET_INSTRUMENT_CONFIG_VOLUME, argsExceptFirst);
 			if (intValue.first) {
 				instrumentDef->volume = intValue.second;
@@ -264,7 +274,18 @@ namespace sheet {
 			intValue = sheet::getArgValueFor<int>(SHEET_META__SET_INSTRUMENT_CONFIG_PAN, argsExceptFirst);
 			if (intValue.first) {
 				instrumentDef->pan = intValue.second;
-			}			
+			}
+			auto argIt = std::find(argsBegin, argsEnd, SHEET_META__SET_VOICING_STRATEGY);
+			if (argIt != argsEnd) {
+				auto &wm = fm::getWerckmeister();
+				auto itName = argIt + 1;
+				if (itName == argsEnd) {
+					FM_THROW(Exception, fm::String("missing argument for ") + SHEET_META__SET_VOICING_STRATEGY);
+				}
+				instrumentDef->voicingStrategy = wm.getVoicingStrategy(*itName);
+				instrumentDef->voicingStrategy->setArguments(Event::Args(itName, argsEnd));
+			}
+
 		}
 
 		void MidiContext::metaSetInstrument(const fm::String &uname)

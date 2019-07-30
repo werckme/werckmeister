@@ -2,11 +2,13 @@
 #define COMPILER_MIDI_INSTRUMENT_H
 
 #include <fm/common.hpp>
+#include "compiler/voicings/VoicingStrategy.h"
 
 namespace sheet {
     namespace compiler {
 		struct AInstrumentDef {
 			fm::String uname;
+			VoicingStrategyPtr voicingStrategy;
 		};
         struct MidiInstrumentDef : AInstrumentDef {
             int id = 0;

@@ -657,10 +657,14 @@ namespace sheet {
 			if (!defaultVoiceStrategy_) {
 				defaultVoiceStrategy_ = fm::getWerckmeister().getDefaultVoicingStrategy();
 			}
-			if (!meta->voicingStrategy) {
-				return defaultVoiceStrategy_;
+			if (meta->voicingStrategy) { // first voice setup
+				return meta->voicingStrategy;
 			}
-			return meta->voicingStrategy;
+			auto currentInstrument = currentInstrumentDef();
+			if (currentInstrument && currentInstrument->voicingStrategy) { // then instrument config
+				return currentInstrument->voicingStrategy;
+			}
+			return defaultVoiceStrategy_;
 		}
 		void AContext::setChord(const Event &chord)
 		{
