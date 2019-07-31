@@ -13,8 +13,8 @@ namespace sheet {
 			VoicingStrategyPtr voicingStrategy;
 		};
         struct MidiInstrumentDef : AInstrumentDef {
-			typedef std::unordered_map<fm::Expression, int> ExpressionOverride;
-			ExpressionOverride expressionOverride;
+			typedef std::unordered_map<fm::Expression, int> VelocityOverride;
+			VelocityOverride velocityOverride;
             int id = 0;
 			fm::String deviceName;
 			int channel = 0;

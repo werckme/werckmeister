@@ -195,6 +195,7 @@ namespace sheet {
 			virtual VoiceMetaDataPtr createVoiceMetaData() = 0;
 			virtual TrackMetaDataPtr createTrackMetaData() = 0;
 			virtual TrackId createMasterTrack();
+			ExpressionMap expressionMap_;
 		private:
 			Event currentChord_;
 			VoicingStrategyPtr defaultVoiceStrategy_;
@@ -207,7 +208,6 @@ namespace sheet {
 			VoiceMetaDataMap voiceMetaDataMap_;
 			TrackMetaDataMap trackMetaDataMap_;
 			ISheetTemplateDefServerPtr sheetTemplateDefServer_ = nullptr;
-			ExpressionMap expressionMap_;
 			ASpielanweisungPtr defaultSpielanweisung_;
         };
 

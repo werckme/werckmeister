@@ -36,6 +36,12 @@ namespace sheet {
 
 		int MidiContext::getAbsoluteVelocity(fm::Expression expression)
 		{
+			auto trackMeta = trackMetaData<MidiContext::TrackMetaData>();
+			const auto &instrumentDef = trackMeta->instrument;
+			auto velOverride = instrumentDef.velocityOverride.find(expression);
+			if (velOverride != instrumentDef.velocityOverride.end()) {
+				return (velOverride->second * 127) / 100;
+			}
 			float expr = static_cast<float>(expression);
 			return static_cast<int>(::ceil((expr) * 127.0f / 10.0f));
 		} 
@@ -270,6 +276,7 @@ namespace sheet {
 			instrumentDef->volume = sheet::getArgValueFor<int>(SHEET_META__SET_INSTRUMENT_CONFIG_VOLUME, argsExceptFirst, instrumentDef->volume);
 			instrumentDef->pan = sheet::getArgValueFor<int>(SHEET_META__SET_INSTRUMENT_CONFIG_PAN, argsExceptFirst, instrumentDef->pan);
 			auto argIt = std::find(argsBegin, argsEnd, SHEET_META__SET_VOICING_STRATEGY);
+			// assign voicingStrategy
 			if (argIt != argsEnd) {
 				auto &wm = fm::getWerckmeister();
 				auto itName = argIt + 1;
@@ -279,7 +286,21 @@ namespace sheet {
 				instrumentDef->voicingStrategy = wm.getVoicingStrategy(*itName);
 				instrumentDef->voicingStrategy->setArguments(Event::Args(itName, argsEnd));
 			}
-
+			// velocity overrides
+			auto assignIfSet = [&argsExceptFirst, instrumentDef, this](const fm::String &expression){
+				auto foundValue = sheet::getArgValueFor<int>(expression, argsExceptFirst);
+				if (!foundValue.first) {
+					return;
+				}
+				if (foundValue.second < 0 || foundValue.second > 100) {
+					FM_THROW(Exception, "invalid value for: " + expression);
+				}
+				auto exprValue = getExpression(expression);
+				instrumentDef->velocityOverride[exprValue] = foundValue.second;
+			};
+			for(const auto &keyValue : expressionMap_) {
+				assignIfSet(keyValue.first);
+			}
 		}
 
 		void MidiContext::metaSetInstrument(const fm::String &uname)
