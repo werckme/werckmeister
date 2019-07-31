@@ -6,6 +6,10 @@ tempo: 120;
 device: SC1 midi 2;
 instrumentDef: piano SC1 3 0 0;
 
+instrumentConf: piano
+    f 65
+;
+
 
 
 [
@@ -38,7 +42,7 @@ instrument: piano;
 {
     /voicingStrategy: voicelead range baritone/
     \ff
-    r4.      <I II III IV V VI VII>8    r2        |
+    r4.      !f<I II III IV V VI VII>8    r2      |
 }
 {
     /voicingStrategy: simple range contrabass/
