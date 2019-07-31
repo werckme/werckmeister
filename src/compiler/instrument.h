@@ -2,7 +2,9 @@
 #define COMPILER_MIDI_INSTRUMENT_H
 
 #include <fm/common.hpp>
+#include <fm/units.hpp>
 #include "compiler/voicings/VoicingStrategy.h"
+#include <unordered_map>
 
 namespace sheet {
     namespace compiler {
@@ -11,6 +13,8 @@ namespace sheet {
 			VoicingStrategyPtr voicingStrategy;
 		};
         struct MidiInstrumentDef : AInstrumentDef {
+			typedef std::unordered_map<fm::Expression, int> ExpressionOverride;
+			ExpressionOverride expressionOverride;
             int id = 0;
 			fm::String deviceName;
 			int channel = 0;

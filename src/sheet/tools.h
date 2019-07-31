@@ -132,6 +132,21 @@ namespace sheet {
         return std::make_pair(false, defaultValue);
     }
 
+    /**
+     * returns a value from an argument list such as:
+     * key1 value1 key2 value2 ...
+     * @return theValue or default value
+     **/
+    template <typename TValue, class TContainer>
+    TValue getArgValueFor(const typename TContainer::value_type &key, const TContainer &container, const TValue &defaultValue)
+    {
+        auto result = getArgValueFor<TValue>(key, container);
+        if (!result.first) {
+            return defaultValue;
+        }
+        return result.second;
+    }
+
     template <typename TEventContainer>
     bool hasAnyTimeConsumingEvents(const TEventContainer &events) 
     {

@@ -38,7 +38,7 @@ namespace sheet {
 		{
 			float expr = static_cast<float>(expression);
 			return static_cast<int>(::ceil((expr) * 127.0f / 10.0f));
-		}
+		} 
 
 		void MidiContext::addEvent(const PitchDef &pitch, fm::Ticks absolutePosition, fm::Ticks duration)
 		{
@@ -267,14 +267,8 @@ namespace sheet {
 			auto argsBegin = args.begin() + 1;
 			auto argsEnd = args.end();
 			auto argsExceptFirst = Event::Args(argsBegin, argsEnd);
-			auto intValue = sheet::getArgValueFor<int>(SHEET_META__SET_INSTRUMENT_CONFIG_VOLUME, argsExceptFirst);
-			if (intValue.first) {
-				instrumentDef->volume = intValue.second;
-			}
-			intValue = sheet::getArgValueFor<int>(SHEET_META__SET_INSTRUMENT_CONFIG_PAN, argsExceptFirst);
-			if (intValue.first) {
-				instrumentDef->pan = intValue.second;
-			}
+			instrumentDef->volume = sheet::getArgValueFor<int>(SHEET_META__SET_INSTRUMENT_CONFIG_VOLUME, argsExceptFirst, instrumentDef->volume);
+			instrumentDef->pan = sheet::getArgValueFor<int>(SHEET_META__SET_INSTRUMENT_CONFIG_PAN, argsExceptFirst, instrumentDef->pan);
 			auto argIt = std::find(argsBegin, argsEnd, SHEET_META__SET_VOICING_STRATEGY);
 			if (argIt != argsEnd) {
 				auto &wm = fm::getWerckmeister();
