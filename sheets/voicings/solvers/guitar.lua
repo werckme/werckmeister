@@ -1,6 +1,13 @@
 require "solvers/asolver"
 require "com/globals"
 
+-- https://www.8notes.com 
+--ChordMatrix = {
+--    ["1234567"] = nil,
+--    ["1010100"] = [I, V, I, III, I]
+--}
+
+
 GuitarSolver = ASolver:new()
 
 function GuitarSolver:degreeToPitch(degreeDef, chord)
