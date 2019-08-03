@@ -22,10 +22,15 @@ X9: 		I=0     II=2    III=4 			V=7 			VII=10
 Xb9: 		I=0     II=1    III=4 			V=7 			
 Xmin9: 		I=0     II=2	III=3 			V=7 			VII=10
 X-9: 		I=0     II=2	III=3 			V=7 			VII=10
+Xminadd9:	I=0     II=2	III=3 			V=7 			
+X-add9:		I=0     II=2	III=3 			V=7 			
+
+
 Xmaj9: 		I=0     II=2	III=4 			V=7 			VII=11
 -- II=3 and III=3 was intended
-X7#9: 		I=0     II=3	III=3  			V=7 			VII=10
-X7b9:       I=0     II=1    III=4 			V=7 			VII=11
+X7#9: 		I=0     II=3	III=4  			V=7 			VII=10
+X7b9:       I=0     II=1    III=4 			V=7 			VII=10
+Xmaj7b9:    I=0     II=1    III=4 			V=7 			VII=11
 ------------------------------------------------------------------
 X11: 		I=0         	III=4 	IV=5	V=7 			VII=10
 Xb11: 		I=0         	III=3 	IV=4	V=7 			

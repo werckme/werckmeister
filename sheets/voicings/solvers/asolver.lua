@@ -39,8 +39,8 @@ end
 function ASolver:solve(chord, degrees, args)
     args = tokeyvalue(args)
     local result = self:_solveImpl(chord, degrees, args)
-    if args.strRange ~=nil then
-        self:_keepRange(result, args.strRange)
+    if args.range ~=nil then
+        self:_keepRange(result, args.range)
     end
     return result
 end

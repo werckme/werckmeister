@@ -1,11 +1,10 @@
 @load "./chords/default.chords";
 @load "./templates/simpleJazz.template";
---@load "./pitchmaps/defaultMidiDrumMap.pitchmap";
-@load "./pitchmaps/battery3.tight.pitchmap";
+@load "./pitchmaps/defaultMidiDrumMap.pitchmap";
 
 tempo: 140;
-device: SC1 midi 2 offset 20;
-device: BT midi 8;
+device: SC1 midi 2;
+device: BT midi 2;
 
 --          instrument dv ch cc pc
 instrumentDef: piano   SC1 2 0 0;
@@ -15,7 +14,7 @@ instrumentDef: drums   BT 9 0 32;
 
 
 instrumentConf: piano volume 80;
-instrumentConf: lead volume 100;
+instrumentConf: lead volume 0;
 instrumentConf: bass volume 80;
 instrumentConf: drums volume 90;
 

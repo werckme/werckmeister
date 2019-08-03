@@ -4,7 +4,7 @@ local MidiSchluesselCOffset = 60;
 
 function istable(t) return type(t) == 'table' end
 function isnumber(t) return type(t) == 'number' end
-function inspect(x) return _inspect(x) end
+function inspect(x) return print(_inspect(x)) end
 function dump(x) print(inspect(x)) end
 
 -- returns the minimum amount of semitones between the relative pitches x and y.

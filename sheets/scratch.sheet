@@ -3,7 +3,7 @@
 @load "./voicings/voicelead.lua";
 @load "./voicings/simple.lua";
 
-device: SC1 midi 1;
+device: SC1 midi 2;
 
 tempo: 100;
 instrumentDef: piano   SC1 3 0 0;
@@ -11,17 +11,28 @@ instrumentDef: bass    SC1 4 0 16;
 instrumentDef: guitar    SC1 4 0 27;
 
 instrumentConf: piano 
-    voicingStrategy voicelead range tenor
     volume 100
-    pan 0 
-    fff 100
-    p 10
+    voicingStrategy guitar range baritone
 ;
 
 
+
 [
-instrument: piano;
+type: template;
+name: myTemplate;
+instrument: piano; 
 {
-    !fffc4 d e f | !pg1
-}
-]
+    --/doOnce: arpeggio/
+    <I II III IV V VI VII>1
+}   
+] 
+
+[
+type: sheet;
+{
+    D7#9  D7b9  | E-add9
+}   
+] 
+
+
+
