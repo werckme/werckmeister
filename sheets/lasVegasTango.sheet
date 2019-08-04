@@ -1,0 +1,110 @@
+@load "./chords/default.chords";
+@load "voicings/voicelead.lua";
+@load "voicings/guitar.lua";
+@load "./pitchmaps/defaultMidiDrumMap.pitchmap";
+
+tempo: 85;
+-- midi device(s)
+--      name  type id
+device: OUT1  midi 1;
+-- instrument(s)
+--             name  device ch cc pc
+instrumentDef: bass    OUT1  2 0 32;
+instrumentDef: drums   OUT1  9 0 32;
+instrumentDef: piano   OUT1  3 0 0;
+instrumentDef: brass   OUT1  4 4 61;
+instrumentConf: piano
+    voicingStrategy voicelead range tenor
+;
+instrumentConf: brass
+    volume 0
+    voicingStrategy guitar range baritone
+;
+
+-- track(s)
+[
+instrument: piano;
+{
+   r4 g8 g a b4 b16 a | b1~ | b4 g8 g a b b16 a |
+   b1~                | b4 b8 b d'8 e'4 e'16 d' | e'1~  | e'4 g8 g a b4 b16 a |
+   b1~                | b4 b8 b d' e'4 e'16 d'  | e'1~  | e'4 g8 g a b4 b16 a |
+   b1~                | b4 g8 g a b4 b16 a      | --repeat
+                        b1~ | b4 g8 g a b b16 a |
+   b1~                | b4 b8 b d'8 e'4 e'16 d' | e'1~  | e'4 g8 g a b4 b16 a |
+   b1~                | b4 b8 b d' e'4 e'16 d'  | e'1~  | e'4 g8 g a b4 b16 a |
+   b1~                | b1                      |
+}
+]
+
+[
+type: sheet;
+{
+    E-7 | E-7 |
+    E-7 | E-7 | A-7 | A-7 |
+    E-7 | E-7 | A-7 | A-7 |
+    E-7 | E-7 | --repeat
+          E-7 | E-7 |
+    E-7 | E-7 | A-7 | A-7 |
+    E-7 | E-7 | A-7 | A-7 |
+    E-7 | E-7 |
+}   
+] 
+
+[
+type: template;
+name: myTemplate;
+instrument: piano; 
+{
+    \p
+    <I II III IV V VI VII>1 |
+}
+] 
+
+[
+type: template;
+name: myTemplate;
+instrument: brass; 
+{
+    \p
+    <I II III IV V VI VII>1~ | <I II III IV V VI VII>1
+}
+] 
+
+[
+type: template;
+name: myTemplate;
+instrument: bass; 
+{
+    \ff
+    I,,,4. V,,8  /modOnce: bend from 20/I,8~  I,8 V,,8~ /modOnce: bend to 20/ V,, |
+    I,,,4. V,,8  /modOnce: bend from 20/I,8~  I,8 V,,8  /modOnce: bend to 20/ V,, |
+    I,,,4. V,,8  /modOnce: bend from 20/I,8~  I,8 V,,8~ /modOnce: bend to 20/ V,, |
+    I,,,4. V,,8  /modOnce: bend from 20/I,8~  I,8 V,,8  Vb,, |
+}
+] 
+
+[
+type: template;
+name: myTemplate;
+instrument: drums; 
+{
+    \p
+    r8 "rdbell"16. "rdbell"32 "rdbell" r r16 "rdbell"8    "rdbell"8   r  "rdbell"       r          |
+    r8 "rdbell"16. "rdbell"32 "rdbell" r r16 "rdbell"8    "rdbell"8   r  "rdbell" "rdbell"8 |
+}
+{
+    \p
+    r2. r8 "ss"8 |
+}
+{
+    \p
+    r8 "ht"8
+}
+{
+    \p
+    "bd"1 |
+}
+] 
+
+
+
