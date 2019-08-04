@@ -4,7 +4,7 @@
 @load "./pitchmaps/defaultMidiDrumMap.pitchmap";
 --@load "./pitchmaps/battery3.tight.pitchmap";
 
-device: SC1 midi 2 offset 20;
+device: SC1 midi 1 offset 20;
 --device: BT midi 8;
 
 tempo: 145;

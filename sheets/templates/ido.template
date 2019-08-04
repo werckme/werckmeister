@@ -1,11 +1,12 @@
 @load "../voicings/simple.lua";
+@load "../voicings/guitar.lua";
 
 [
 type: template;
 name: ido.normal;
 instrument: guitar; 
 {
-    /voicingStrategy: simpleGuitar/
+    /voicingStrategy: guitar/
     \f
     <I II III IV V VI VII>4. <I II III IV V VI VII>4 <I II III IV V VI VII>4 <I II III IV V VI VII>8  |
 }   

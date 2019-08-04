@@ -3,16 +3,16 @@
 @load "./voicings/voicelead.lua";
 @load "./voicings/simple.lua";
 
-device: SC1 midi 2;
+device: SC1 midi 1;
 
-tempo: 100;
+tempo: 120;
 instrumentDef: piano   SC1 3 0 0;
 instrumentDef: bass    SC1 4 0 16;
 instrumentDef: guitar    SC1 4 0 27;
 
 instrumentConf: piano 
     volume 100
-    voicingStrategy guitar range baritone
+    voicingStrategy guitar
 ;
 
 
@@ -22,16 +22,16 @@ type: template;
 name: myTemplate;
 instrument: piano; 
 {
-    --/doOnce: arpeggio/
+    /doOnce: arpeggio/
     <I II III IV V VI VII>1
 }   
 ] 
 
-[
+[ 
 type: sheet;
 {
-    D7#9  D7b9  | E-add9
-}   
+    C/V   
+}      
 ] 
 
 

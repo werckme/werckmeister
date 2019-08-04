@@ -7,9 +7,17 @@ require "com/globals"
 VoicingMatrix = {
     ["1234567"] = nil,
     ["1010100"] = {I, V, I, III, I},            -- base
+    ["1100100"] = {I, V, I, II },               -- sus2
+    ["1001100"] = {I, V, I, IV, V },            -- sus4
+    ["1001101"] = {I, V, VII, IV, V },          -- 7sus4
+    ["1101101"] = {I, IV, VII, II, V },         -- 9sus4
+    ["1010110"] = {I, VI, III, V },             -- 6
     ["1010101"] = {I, V, VII, III, I},          -- 7
     ["1110101"] = {I, III, VII, II },           -- 9
-    ["1110100"] = {I, V, II, III },           -- add9
+    ["1110100"] = {I, V, II, III },             -- add9
+    ["1011101"] = {I, IV, VII, III },           -- 11
+    ["1010111"] = {I, V, VII, III, VI },        -- 13
+    ["1010100/5"] = {V, I, III, V },             -- /V
 }
 
 
@@ -17,17 +25,26 @@ VoicingMatrix = {
 -- e.g.: Xmaj's degrees are defined as I III V
 --                1234567
 -- as bitstring = 1010100
-function chordToBitString(chord)
+-- if chord is a slash chord, the degree value will be appended as number.
+-- e.g.: X/V = 1010100/5
+function chordToHashString(chord)
     bits = {}
+    slashAppendings = {}
     local degree = chord.degrees
     for i=1, 7 do
         if degree[i] == nil then
             bits[i] = 0
         else
             bits[i] = 1
+            if chord.degrees[i] < 0 then
+                table.insert(slashAppendings, i)
+            end
         end
     end
-    return table.concat(bits)
+    if #slashAppendings == 0 then
+        return table.concat(bits)
+    end
+    return table.concat(bits) .. "/" .. table.concat(slashAppendings)
 end
 
 GuitarSolver = ASolver:new()
@@ -39,7 +56,7 @@ end
 function GuitarSolver:_solveImpl(chord, degrees, args)
     
     local d = function(degreeValue) return self:getDefaultDegreeDef(degreeValue, degrees) end
-    local strDegrees = chordToBitString(chord)
+    local strDegrees = chordToHashString(chord)
     local voicing = VoicingMatrix[strDegrees]
     if voicing == nil then
         error("no voicing found defined for " .. chord.strBase .. chord.strOptions)
@@ -48,7 +65,7 @@ function GuitarSolver:_solveImpl(chord, degrees, args)
     local octave = -1
     local lastDegree = -1
     for idx, degree in pairs(voicing) do
-        if degree < lastDegree then 
+        if degree <= lastDegree then 
             octave = octave + 1
         end
         lastDegree = degree
