@@ -9,15 +9,19 @@ VoicingMatrix = {
     ["1010100"] = {I, V, I, III, I},            -- base
     ["1100100"] = {I, V, I, II },               -- sus2
     ["1001100"] = {I, V, I, IV, V },            -- sus4
-    ["1001101"] = {I, V, VII, IV, V },          -- 7sus4
-    ["1101101"] = {I, IV, VII, II, V },         -- 9sus4
-    ["1010110"] = {I, VI, III, V },             -- 6
+    ["1001101"] = {I, V, VII, IV, V},           -- 7sus4
+    ["1101101"] = {I, IV, VII, II, V},          -- 9sus4
+    ["1010110"] = {I, VI, III, V},              -- 6
     ["1010101"] = {I, V, VII, III, I},          -- 7
-    ["1110101"] = {I, III, VII, II },           -- 9
-    ["1110100"] = {I, V, II, III },             -- add9
-    ["1011101"] = {I, IV, VII, III },           -- 11
-    ["1010111"] = {I, V, VII, III, VI },        -- 13
-    ["1010100/5"] = {V, I, III, V },             -- /V
+    ["1110101"] = {I, III, VII, II},            -- 9
+    ["1110100"] = {I, V, II, III},              -- add9
+    ["1011101"] = {I, IV, VII, III},            -- 11
+    ["1010111"] = {I, V, VII, III, VI},         -- 13
+    ["1010101/7"] = {VII, V, I, III},           -- /7
+    ["1010100/5"] = {V, I, III, V},             -- /5
+    ["1011100/4"] = {IV, V, I, III},            -- /4
+    ["1010100/3"] = {III, V, I, III},           -- /3
+    ["1110100/2"] = {II, V, I, III},            -- /2
 }
 
 
@@ -59,7 +63,7 @@ function GuitarSolver:_solveImpl(chord, degrees, args)
     local strDegrees = chordToHashString(chord)
     local voicing = VoicingMatrix[strDegrees]
     if voicing == nil then
-        error("no voicing found defined for " .. chord.strBase .. chord.strOptions)
+        error("no voicing found defined for " .. chord.strBase .. chord.strOptions .. " " .. strDegrees)
     end
     local result = {}
     local octave = -1

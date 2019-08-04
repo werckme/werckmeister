@@ -12,7 +12,7 @@ instrumentDef: guitar    SC1 4 0 27;
 
 instrumentConf: piano 
     volume 100
-    voicingStrategy guitar
+    voicingStrategy guitar range tenor
 ;
 
 
@@ -20,7 +20,7 @@ instrumentConf: piano
 [
 type: template;
 name: myTemplate;
-instrument: piano; 
+instrument: piano;  
 {
     /doOnce: arpeggio/
     <I II III IV V VI VII>1
@@ -30,7 +30,8 @@ instrument: piano;
 [ 
 type: sheet;
 {
-    C/V   
+    Bes/5 | C/4 |
+    C-/7
 }      
 ] 
 
