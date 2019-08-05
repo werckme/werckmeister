@@ -30,6 +30,7 @@ X-7b5:  	I=0     		III=3 			V=6 			VII=10
 Xmaj7#11: 	I=0     		III=4 	IV=6	     			VII=11
 X7b5: 		I=0     		III=4 			V=6 			VII=10
 X7#5: 		I=0     		III=4 			V=8 			VII=10
+X07: 		I=0     		III=3 			V=6 			VII=9
 -- II=3 and III=3 was intended
 X7#5#9:		I=0     II=3    III=3          	V=8 			VII=10
 ------------------------------------------------------------------

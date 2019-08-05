@@ -3,7 +3,7 @@
 @load "voicings/guitar.lua";
 @load "./pitchmaps/defaultMidiDrumMap.pitchmap";
 
-tempo: 85;
+tempo: 90;
 -- midi device(s)
 --      name  type id
 device: OUT1  midi 1;
@@ -53,7 +53,7 @@ type: sheet;
 [
 type: template;
 name: myTemplate;
-instrument: piano; 
+instrument: brass; 
 {
     \p
     <I II III IV V VI VII>1 |
@@ -94,7 +94,7 @@ instrument: drums;
 }
 {
     \p
-    r2. r8 "ss"8 |
+    r2 "ss"4 r8 "ss"8 |
 }
 {
     \p
