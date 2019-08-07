@@ -4,6 +4,7 @@
 #include <sheet/tools.h>
 #include <compiler/error.hpp>
 #include <algorithm>
+#include <compiler/lua/luaTimeInfo.h>
 
 namespace sheet {
     namespace compiler {
@@ -238,7 +239,8 @@ namespace sheet {
             luaPitches::LuaPitches luaPitches(&def, &chord, &degreeIntervals);
             luaPitches.push(L);
             pushArgs(this->args_);
-            call(3, 1);
+            lua::LuaTimeInfo(t).push(L);
+            call(4, 1);
             return popPitches(L);
         }
 

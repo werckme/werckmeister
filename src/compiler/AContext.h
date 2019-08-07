@@ -18,6 +18,7 @@
 #include "metaData.h"
 #include "error.hpp"
 #include "instrument.h"
+#include "timeInfo.h"
 
 namespace sheet {
     namespace compiler {
@@ -122,6 +123,7 @@ namespace sheet {
 			virtual AInstrumentDef * getInstrumentDef(const fm::String &uname) = 0;
 			virtual AInstrumentDef * currentInstrumentDef() = 0;
 			virtual fm::Ticks currentPosition() const;
+			TimeInfo getTimeInfo() const;
 			/**
 			 * @return the duration of an event. which can be the events duration,
 			 * or if that is zero, the duration of the last valid duration in a track/voice 

@@ -38,7 +38,7 @@ namespace sheet {
 				auto chordDef = ctx->currentChordDef();
 				auto chord = ctx->currentChord();
 				auto voicingStratgy = ctx->currentVoicingStrategy();
-				auto pitches = voicingStratgy->get(*chord, *chordDef, ev->pitches, VoicingStrategy::TimeInfo());
+				auto pitches = voicingStratgy->get(*chord, *chordDef, ev->pitches, ctx->getTimeInfo());
 
 				ctx->addEvent(pitches, ev->duration);
 
@@ -51,7 +51,7 @@ namespace sheet {
 				auto chordDef = ctx->currentChordDef();
 				auto chord = ctx->currentChord();
 				auto voicingStratgy = ctx->currentVoicingStrategy();
-				auto pitches = voicingStratgy->get(*chord, *chordDef, ev->pitches, VoicingStrategy::TimeInfo());
+				auto pitches = voicingStratgy->get(*chord, *chordDef, ev->pitches, ctx->getTimeInfo());
 
 				ctx->addEvent(pitches, ev->duration, true);
 
@@ -618,6 +618,8 @@ namespace sheet {
 		{
 			using namespace fm;
 			auto meta = voiceMetaData();
+			meta->signatureNumerator = upper;
+			meta->signatureDenominator = lower;
 			meta->barLength = (1.0_N1 / (fm::Ticks)lower) * (fm::Ticks)upper;
 		}
 
@@ -628,6 +630,16 @@ namespace sheet {
 				chordVoice_ = createVoice();
 			}
 			setTarget(chordTrack_, chordVoice_);
+		}
+
+		TimeInfo AContext::getTimeInfo() const
+		{
+			TimeInfo result;
+			auto meta = voiceMetaData();
+			result.quarterPosition = meta->position / (double)fm::PPQ;
+			result.signatureNumerator = meta->signatureNumerator;
+			result.sinatureDenominator = meta->signatureDenominator;
+			return result;
 		}
 
 		/////////////////////////////////////////////////////////////////////////////
