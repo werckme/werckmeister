@@ -1,0 +1,30 @@
+@load "./chords/default.chords";
+device: SC1 midi 2;
+
+tempo: 130;
+--          instrument dv ch cc pc
+instrumentDef: piano   SC1 2 0 16;
+
+
+[
+type: template;
+name: x;
+instrument: piano;
+{
+    I,,4~ I,,4~ I,,4~ I,,4~ |
+}
+]
+
+[
+instrument: piano;
+{
+    e1~ | e1~ | e1 |
+}
+]
+
+[
+type: sheet;
+{
+    C | C | C 
+}
+]
