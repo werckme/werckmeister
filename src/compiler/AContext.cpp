@@ -28,7 +28,7 @@ namespace sheet {
 			template<>
 			bool renderEvent<Event::Note>(AContext * ctx, const Event *ev)
 			{
-				ctx->addEvent(ev->pitches, ev->duration);
+				ctx->renderEvent(*ev);
 				return true;
 			}
 
@@ -39,8 +39,9 @@ namespace sheet {
 				auto chord = ctx->currentChord();
 				auto voicingStratgy = ctx->currentVoicingStrategy();
 				auto pitches = voicingStratgy->get(*chord, *chordDef, ev->pitches, ctx->getTimeInfo());
-
-				ctx->addEvent(pitches, ev->duration);
+				Event copy = *ev;
+				copy.pitches.swap(pitches);
+				ctx->renderEvent(copy);
 
 				return true;
 			}
@@ -52,8 +53,9 @@ namespace sheet {
 				auto chord = ctx->currentChord();
 				auto voicingStratgy = ctx->currentVoicingStrategy();
 				auto pitches = voicingStratgy->get(*chord, *chordDef, ev->pitches, ctx->getTimeInfo());
-
-				ctx->addEvent(pitches, ev->duration, true);
+				Event copy = *ev;
+				copy.pitches.swap(pitches);
+				ctx->renderEvent(copy);
 
 				return true;
 			}
@@ -62,7 +64,7 @@ namespace sheet {
 			bool renderEvent<Event::TiedNote>(AContext * ctx, const Event *ev)
 			{
 
-				ctx->addEvent(ev->pitches, ev->duration, true);
+				ctx->renderEvent(*ev);
 				return true;
 			}
 
@@ -301,14 +303,6 @@ namespace sheet {
 			addEvent(pitch, meta->position, meta->lastEventDuration);
 		}
 
-		void AContext::stopTying()
-		{
-			auto meta = voiceMetaData();
-			for(auto tied : meta->startedEvents){
-				stopEvent(tied, meta->position + meta->lastEventDuration);
-			}
-		}
-
 		void AContext::startEvent(const PitchDef &pitch, fm::Ticks absolutePosition)
 		{
 			auto meta = voiceMetaData();
@@ -339,8 +333,9 @@ namespace sheet {
 			}
 		}
 
-		void AContext::addEvent(const Event::Pitches &pitches, fm::Ticks duration, bool tying)
+		void AContext::renderEvent(const Event &_ev)
 		{
+			Event ev = _ev;
 			auto meta = voiceMetaData();
 			auto tmpExpression = meta->expression;
 
@@ -349,18 +344,15 @@ namespace sheet {
 				meta->expression = meta->singleExpression;
 				meta->singleExpression = fm::expression::Default;
 			}
-			if (duration == 0) {
-				duration = meta->lastEventDuration;
-			}
 			for (auto mod : meta->modifications) {
-				mod->addModificationEvents(this, meta->position, duration);
+				mod->addModificationEvents(this, meta->position, ev.duration);
 			}
 			for (auto mod : meta->modificationsOnce) {
-				mod->addModificationEvents(this, meta->position, duration);
+				mod->addModificationEvents(this, meta->position, ev.duration);
 			}			
 			meta->modificationsOnce.clear();
 			auto sanweis = spielanweisung();
-			sanweis->addEvent(this, pitches, duration, tying);
+			sanweis->addEvent(this, ev.pitches, ev.duration, ev.isTying());
 			meta->expression = tmpExpression;
 		}
 

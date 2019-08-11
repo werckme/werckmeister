@@ -97,6 +97,10 @@ namespace sheet {
 			return type == Degree || type == TiedDegree;
 		}
 
+		bool isTying() const {
+			return type == TiedNote || type == TiedDegree;
+		}
+
 		fm::String toString() const;
 	};
 }

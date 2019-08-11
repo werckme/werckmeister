@@ -1,39 +1,21 @@
 @load "./chords/default.chords";
-@load "./voicings/guitar.lua";
-@load "./voicings/voicelead.lua";
-@load "./voicings/simple.lua";
+@load "./pitchmaps/defaultMidiDrumMap.pitchmap";
+@load "./templates/ennio.template";
 
-device: SC1 midi 1;
+device: SC1 midi 2;
 
-tempo: 120;
-instrumentDef: piano   SC1 3 0 0;
-instrumentDef: bass    SC1 4 0 16;
-instrumentDef: guitar    SC1 4 0 27;
-
-instrumentConf: piano 
-    volume 100
-    voicingStrategy guitar range tenor
-;
-
+tempo: 130;
+--          instrument dv ch cc pc
+instrumentDef: piano   SC1 2 0 17;
 
 
 [
-type: template;
-name: myTemplate;
-instrument: piano;  
+instrument: piano;
 {
-    /doOnce: arpeggio/
-    <I II III IV V VI VII>1
-}   
-] 
-
-[ 
-type: sheet;
+   --r2. d4~ | d1~ | d |
+   r2. c4~ | <c cis>1~ | <c cis e>1~ | <c cis e fis>
+}
 {
-    Bes/5 | C/4 |
-    C-/7
-}      
-] 
-
-
-
+    \p
+}
+]

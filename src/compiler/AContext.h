@@ -67,7 +67,6 @@ namespace sheet {
 				setTrack(trackId);
 				setVoice(voiceId);
 			}
-			virtual void addEvent(const PitchDef &pitch, fm::Ticks absolutePosition, fm::Ticks duration) = 0;
 			virtual ~AContext() {};
 			/**
 			 * creates a track and returns an id.
@@ -164,8 +163,9 @@ namespace sheet {
 			virtual void metaSetVolume(int volume);
 			virtual void metaSetPan(int val);
 			/////// actual context stuff
-			virtual void addEvent(const Event::Pitches &pitches, fm::Ticks duration, bool tying = false);
+			virtual void renderEvent(const Event &ev);
 			virtual void addEvent(const PitchDef &pitch, fm::Ticks duration, bool tying = false);
+			virtual void addEvent(const PitchDef &pitch, fm::Ticks absolutePosition, fm::Ticks duration) = 0;
 			/*
 			 * value = 0..1
 			 */
@@ -180,7 +180,6 @@ namespace sheet {
 			virtual void rest(fm::Ticks duration);
 			virtual void setChord(const Event &ev);
 			virtual void addEvent(const Event &ev);
-			virtual void stopTying();
 			virtual fm::Ticks barPos() const;
 			Warnings warnings;
 			/**

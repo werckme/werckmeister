@@ -13,6 +13,7 @@
 #include <boost/exception/get_error_info.hpp>
 #include <sheet/tools.h>
 #include <functional>
+#include "preprocessor.h"
 
 namespace sheet {
 
@@ -84,7 +85,8 @@ namespace sheet {
 		{
 			auto ctx = context();
 			ctx->capabilities.canSeek = false;
-			for (const auto &track : document_->sheetDef.tracks)
+			Preprocessor preprocessor;
+			for (auto &track : document_->sheetDef.tracks)
 			{
 				fm::String type = getFirstMetaValueBy(SHEET_META__TRACK_META_KEY_TYPE, track.trackInfos);
 				if (!type.empty()) { // do not render tracks with a specific type
@@ -96,7 +98,7 @@ namespace sheet {
 					[](const auto &x) { return x.name; }, 
 					[](const auto &x) { return x.args; }
 				);
-				
+				preprocessor.process(track);
 				for (const auto &voice : track.voices)
 				{
 					auto voiceId = ctx->createVoice();

@@ -16,6 +16,7 @@ SET (SRC_FETZER_LIB
     compiler/pitchmapParser.cpp
     compiler/MidiContext.cpp
     compiler/AContext.cpp
+    compiler/preprocessor.cpp
     compiler/spielanweisung/Normal.cpp
     compiler/spielanweisung/ASpielanweisung.cpp
     compiler/spielanweisung/Arpeggio.cpp

@@ -6,6 +6,7 @@
 #include <compiler/error.hpp>
 #include <functional>
 #include <fm/werckmeister.hpp>
+#include <compiler/preprocessor.h>
 
 namespace sheet {
 	namespace {
@@ -42,7 +43,8 @@ namespace sheet {
 	{
 		sheetTemplates_ = std::make_unique<SheetTemplates>();
 		SheetTemplates &sheetTemplates = *sheetTemplates_;
-		for(const auto &track : this->sheetDef.tracks) {
+		compiler::Preprocessor preprocessor;
+		for(auto &track : this->sheetDef.tracks) {
 			fm::String type = getFirstMetaValueBy(SHEET_META__TRACK_META_KEY_TYPE, track.trackInfos);
 			if (type != SHEET_META__TRACK_META_VALUE_TYPE_SHEET_TEMPLATE) {
 				continue;
@@ -56,6 +58,7 @@ namespace sheet {
 				sheetTemplates[sheetTemplateName] = SheetTemplate(sheetTemplateName);
 				sheetTemplate = &(sheetTemplates[sheetTemplateName]);
 			}
+			preprocessor.process(track);
 			sheetTemplate->tracks.push_back(&track);
 		}
 	}
