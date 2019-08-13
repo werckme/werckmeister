@@ -123,12 +123,6 @@ namespace sheet {
 			virtual AInstrumentDef * currentInstrumentDef() = 0;
 			virtual fm::Ticks currentPosition() const;
 			TimeInfo getTimeInfo() const;
-			/**
-			 * @return the duration of an event. which can be the events duration,
-			 * or if that is zero, the duration of the last valid duration in a track/voice 
-			 * will be returned
-			 */
-			fm::Ticks getImlplicitDuration(const Event &ev) const;
 			/////// meta commands
 			virtual void setMeta(const Event &metaEvent);
 			/**

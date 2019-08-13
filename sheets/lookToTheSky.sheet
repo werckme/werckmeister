@@ -14,6 +14,7 @@ instrumentDef: bass   OUT1  3 0 32;
 instrumentDef: lead   OUT1  4 0 0;
 instrumentConf: piano
     volume 80
+    f 70
     voicingStrategy guitar
 ;
     
@@ -36,6 +37,9 @@ instrument: lead;
 instrument: piano;
 type: sheet;
 {
+    /template: bass.bossanova.normal
+               myTemplate
+    /
     Esmaj7 | Esmaj7 | Es-7 | As7    |
     Esmaj7 | Esmaj7 | G-7  | C7b9   |
     F-7    | F-7    | As-7 | Des7   |
@@ -49,7 +53,7 @@ type: template;
 name: myTemplate;
 instrument: piano; 
 {
-    
+    \f
     <I II III IV V VI VII>1 |
 }
 ] 

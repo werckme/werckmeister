@@ -1,5 +1,5 @@
 @load "./chords/default.chords";
-@load "./templates/simpleJazz.template";
+@load "./templates/bossanova.template";
 @load "./pitchmaps/defaultMidiDrumMap.pitchmap";
 
 tempo: 140;
@@ -8,15 +8,17 @@ device: BT midi 2;
 
 --          instrument dv ch cc pc
 instrumentDef: piano   SC1 2 0 0;
-instrumentDef: lead    SC1 3 0 0;
+instrumentDef: lead    SC1 3 0 11;
+instrumentDef: guitar  SC1 5 0 24;
 instrumentDef: bass    SC1 7 0 32;
 instrumentDef: drums   BT 9 0 32;
 
 
-instrumentConf: piano volume 80;
-instrumentConf: lead volume 0;
+instrumentConf: piano volume 80 pan 30;
+instrumentConf: lead volume 95;
 instrumentConf: bass volume 80;
 instrumentConf: drums volume 90;
+instrumentConf: guitar volume 80 pan 80;
 
 
 
@@ -36,7 +38,7 @@ instrument: lead;
 [
 type: sheet;
 {
-    /template: simpleJazz.normal/
+    /template: bossanova.normal/
     r | A-7 | D7 | Gmaj7 | Cmaj7 | Fis-7b5 | B7 | E- | E- |
     -- wiederholung
     A-7 | D7 | Gmaj7 | Cmaj7 | Fis-7b5  | 

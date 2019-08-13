@@ -17,6 +17,7 @@ SET (SRC_FETZER_LIB
     compiler/MidiContext.cpp
     compiler/AContext.cpp
     compiler/preprocessor.cpp
+    compiler/sheetEventRenderer.cpp
     compiler/spielanweisung/Normal.cpp
     compiler/spielanweisung/ASpielanweisung.cpp
     compiler/spielanweisung/Arpeggio.cpp

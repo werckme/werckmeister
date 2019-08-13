@@ -184,7 +184,7 @@ namespace sheet {
 				bool isLastEvent = (it+1) == voice.events.end();
 				auto ev = *it;
 				auto currentPos = meta->position;
-				auto originalDuration = ctx_->getImlplicitDuration(ev);
+				auto originalDuration = ev.duration;
 				if (ev.isTimeConsuming()) {
 					ev.duration = originalDuration;
 				}
