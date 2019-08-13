@@ -5,7 +5,7 @@ require "com/globals"
 -- https://www.oolimo.de/gitarrenakkorde/find
 -- https://www.scales-chords.com/chord/piano/
 VoicingMatrix = {
-    ["1234567"] = nil,
+    ["1234567/bass"] = nil,
     ["1010100"] = {I, V, I, III, I},            -- base
     ["1100100"] = {I, V, I, II },               -- sus2
     ["1001100"] = {I, V, I, IV, V },            -- sus4

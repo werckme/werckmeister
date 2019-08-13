@@ -3,6 +3,7 @@
 #include <sheet/tools.h>
 #include <iostream>
 #include <boost/exception/get_error_info.hpp>
+#include "sheetEventRenderer.h"
 
 #define DEBUGX(x)
 
@@ -24,6 +25,16 @@ namespace sheet {
 		}
 	}
     namespace compiler {
+
+		SheetTemplateRenderer::SheetTemplateRenderer(AContextPtr ctx) : ctx_(ctx) 
+		{
+			this->sheetEventRenderer = new SheetEventRenderer(ctx);
+		}
+
+		SheetTemplateRenderer::~SheetTemplateRenderer() 
+		{
+			delete sheetEventRenderer;
+		}
 
 		void SheetTemplateRenderer::switchSheetTemplates(const AContext::SheetTemplates &templates)
 		{
@@ -197,7 +208,7 @@ namespace sheet {
 					ev.duration = std::min(ev.duration, duration - written);
 				}
 				DEBUGX(std::cout << c++ << "," << it - voice.events.begin() << "\t|\t" << currentPos << "\t|\t" << meta->barPosition << "\t|\t" << ev.toString() << ":" << meta->lastEventDuration << std::endl);
-				ctx_->addEvent(ev);
+				sheetEventRenderer->addEvent(ev);
 				if (ev.isTimeConsuming()) {
 					meta->lastEventDuration = originalDuration;
 				}

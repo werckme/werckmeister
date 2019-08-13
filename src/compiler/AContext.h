@@ -157,7 +157,6 @@ namespace sheet {
 			virtual void metaSetVolume(int volume);
 			virtual void metaSetPan(int val);
 			/////// actual context stuff
-			virtual void renderEvent(const Event &ev);
 			virtual void addEvent(const PitchDef &pitch, fm::Ticks duration, bool tying = false);
 			virtual void addEvent(const PitchDef &pitch, fm::Ticks absolutePosition, fm::Ticks duration) = 0;
 			/*
@@ -173,7 +172,6 @@ namespace sheet {
 			virtual void newBar();
 			virtual void rest(fm::Ticks duration);
 			virtual void setChord(const Event &ev);
-			virtual void addEvent(const Event &ev);
 			virtual fm::Ticks barPos() const;
 			Warnings warnings;
 			/**

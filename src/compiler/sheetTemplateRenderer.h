@@ -20,10 +20,11 @@
 
 namespace sheet {
     namespace compiler {
+        class SheetEventRenderer;
         class SheetTemplateRenderer {
         public:
-            SheetTemplateRenderer(AContextPtr ctx) : ctx_(ctx) {}
-            virtual ~SheetTemplateRenderer() = default;
+            SheetTemplateRenderer(AContextPtr ctx);
+            virtual ~SheetTemplateRenderer();
             void render(fm::Ticks duration);
             void sheetRest(fm::Ticks duration);
             void switchSheetTemplates(const AContext::SheetTemplates &next);
@@ -54,6 +55,7 @@ namespace sheet {
                 fm::Ticks alreadyWritten
             );
             typedef std::unordered_map<const void*, AContext::Id> PtrIdMap;
+            SheetEventRenderer *sheetEventRenderer;
 			PtrIdMap ptrIdMap_;
             AContextPtr ctx_;
         };

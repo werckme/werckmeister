@@ -14,6 +14,7 @@
 #include <sheet/tools.h>
 #include <functional>
 #include "preprocessor.h"
+#include "sheetEventRenderer.h"
 
 namespace sheet {
 
@@ -86,6 +87,7 @@ namespace sheet {
 			auto ctx = context();
 			ctx->capabilities.canSeek = false;
 			Preprocessor preprocessor;
+			SheetEventRenderer renderer(ctx);
 			for (auto &track : document_->sheetDef.tracks)
 			{
 				fm::String type = getFirstMetaValueBy(SHEET_META__TRACK_META_KEY_TYPE, track.trackInfos);
@@ -105,7 +107,7 @@ namespace sheet {
 					ctx->setTarget(trackId, voiceId);
 					for (const auto &ev : voice.events)
 					{
-						ctx->addEvent(ev);
+						renderer.addEvent(ev);
 					}
 				}
 			}
@@ -173,6 +175,7 @@ namespace sheet {
 			auto &sheetEvents = sheetTrack->voices.begin()->events; 
 			determineChordLengths(sheetEvents.begin(), sheetEvents.end());
 			SheetTemplateRenderer sheetTemplateRenderer(ctx);
+			SheetEventRenderer sheetEventRenderer(ctx);
 			currentSheetTemplateRenderer_ = &sheetTemplateRenderer;
 			for (auto &ev : sheetEvents) {
 				ctx->setChordTrackTarget(); // target will be lost after calling addEvent
@@ -186,11 +189,11 @@ namespace sheet {
 					switchSheetTemplate(sheetTemplateRenderer, ev);
 				}
 				else if (ev.type != Event::Chord) {
-					ctx->addEvent(ev);
+					sheetEventRenderer.addEvent(ev);
 				} else {
 					auto meta = ctx->voiceMetaData(ctx->chordVoiceId());
 					ev.duration = meta->barLength * ev.multiplicator;	
-					ctx->addEvent(ev);
+					sheetEventRenderer.addEvent(ev);
 					sheetTemplateRenderer.render(ev.duration);
 				}
 			}

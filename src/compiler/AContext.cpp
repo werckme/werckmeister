@@ -18,105 +18,7 @@ namespace sheet {
 		using namespace fm;
 		const double AContext::PitchbendMiddle = 0.5;
 		const Ticks AContext::TickTolerance = 0.5;
-		namespace {
-			template<int EventType>
-			bool renderEvent(AContext * ctx, const Event *ev)
-			{
-				return false;
-			}
-
-			template<>
-			bool renderEvent<Event::Note>(AContext * ctx, const Event *ev)
-			{
-				ctx->renderEvent(*ev);
-				return true;
-			}
-
-			template<>
-			bool renderEvent<Event::Degree>(AContext * ctx, const Event *ev)
-			{
-				auto chordDef = ctx->currentChordDef();
-				auto chord = ctx->currentChord();
-				auto voicingStratgy = ctx->currentVoicingStrategy();
-				auto pitches = voicingStratgy->get(*chord, *chordDef, ev->pitches, ctx->getTimeInfo());
-				Event copy = *ev;
-				copy.pitches.swap(pitches);
-				ctx->renderEvent(copy);
-
-				return true;
-			}
-
-			template<>
-			bool renderEvent<Event::TiedDegree>(AContext * ctx, const Event *ev)
-			{
-				auto chordDef = ctx->currentChordDef();
-				auto chord = ctx->currentChord();
-				auto voicingStratgy = ctx->currentVoicingStrategy();
-				auto pitches = voicingStratgy->get(*chord, *chordDef, ev->pitches, ctx->getTimeInfo());
-				Event copy = *ev;
-				copy.pitches.swap(pitches);
-				ctx->renderEvent(copy);
-
-				return true;
-			}
-
-			template<>
-			bool renderEvent<Event::TiedNote>(AContext * ctx, const Event *ev)
-			{
-
-				ctx->renderEvent(*ev);
-				return true;
-			}
-
-			template<>
-			bool renderEvent<Event::EOB>(AContext * ctx, const Event *ev)
-			{
-				ctx->newBar();
-				return true;
-			}
-
-			template<>
-			bool renderEvent<Event::Rest>(AContext * ctx, const Event *ev)
-			{
-				ctx->rest(ev->duration);
-				return true;
-			}
-
-			template<>
-			bool renderEvent<Event::Chord>(AContext * ctx, const Event *chordEv)
-			{
-				ctx->setChord(*chordEv);
-				ctx->seek(chordEv->duration);
-				return true;
-			}
-			template<>
-			bool renderEvent<Event::Meta>(AContext * ctx, const Event *ev)
-			{
-				ctx->setMeta(*ev);
-				return true;
-			}
-			//////////////////////////////////////////////////
-			template <int EventId>
-			bool renderEventUnrolled(AContext * ctx, const Event *ev)
-			{
-				if (ev->type == EventId) {
-					return renderEvent<EventId>(ctx, ev);
-				}
-				return renderEventUnrolled<EventId + 1>(ctx, ev);
-			}
-			template <>
-			bool renderEventUnrolled<Event::NumEvents>(AContext * ctx, const Event *ev)
-			{
-				return false;
-			}
-
-			void _addEvent(AContext * ctx, const Event *ev)
-			{
-				renderEventUnrolled<0>(ctx, ev);
-			}
-		}
-
-
+		
 		AContext::AContext() 
 			: expressionMap_({
 				{FM_STRING("ppppp"), fm::expression::PPPPP},
@@ -310,41 +212,6 @@ namespace sheet {
 		{
 			auto meta = voiceMetaData();
 			return meta->barPosition;
-		}
-
-		void AContext::addEvent(const Event &ev)
-		{
-			auto meta = voiceMetaData();
-			++(meta->eventCount);
-			try {
-				_addEvent(this, &ev);
-			} catch(fm::Exception &ex) {
-				ex << ex_sheet_source_info(ev);
-				throw;
-			}
-		}
-
-		void AContext::renderEvent(const Event &_ev)
-		{
-			Event ev = _ev;
-			auto meta = voiceMetaData();
-			auto tmpExpression = meta->expression;
-
-			if (meta->singleExpression != fm::expression::Default) {
-				tmpExpression = meta->expression;
-				meta->expression = meta->singleExpression;
-				meta->singleExpression = fm::expression::Default;
-			}
-			for (auto mod : meta->modifications) {
-				mod->addModificationEvents(this, meta->position, ev.duration);
-			}
-			for (auto mod : meta->modificationsOnce) {
-				mod->addModificationEvents(this, meta->position, ev.duration);
-			}			
-			meta->modificationsOnce.clear();
-			auto sanweis = spielanweisung();
-			sanweis->addEvent(this, ev.pitches, ev.duration, ev.isTying());
-			meta->expression = tmpExpression;
 		}
 
 		void AContext::seek(fm::Ticks duration)

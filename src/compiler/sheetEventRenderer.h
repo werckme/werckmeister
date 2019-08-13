@@ -10,8 +10,10 @@ namespace sheet {
         public:
             SheetEventRenderer(AContextPtr ctx) : ctx_(ctx) {}
             virtual ~SheetEventRenderer() = default;
-            void render(const Event &event);
+            void addEvent(const Event &event);
             AContextPtr context() const { return this->ctx_; }
+            void renderEvent(const Event &_ev);
+        protected:
         private:
             AContextPtr ctx_;
         };
