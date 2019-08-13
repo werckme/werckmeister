@@ -46,7 +46,7 @@ namespace sheet {
 			return static_cast<int>(::ceil((expr) * 127.0f / 10.0f));
 		} 
 
-		void MidiContext::addEvent(const PitchDef &pitch, fm::Ticks absolutePosition, fm::Ticks duration)
+		void MidiContext::renderPitch(const PitchDef &pitch, fm::Ticks absolutePosition, fm::Ticks duration)
 		{
 			_checkMidi(midi_);
 			auto voiceConfig = voiceMetaData<MidiContext::VoiceMetaData>();

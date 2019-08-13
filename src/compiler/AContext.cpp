@@ -169,7 +169,7 @@ namespace sheet {
 			return *result;
 		}
 
-		void AContext::addEvent(const PitchDef &rawPitch, fm::Ticks duration, bool tying)
+		void AContext::renderPitch(const PitchDef &rawPitch, fm::Ticks duration, bool tying)
 		{
 			using namespace fm;
 			PitchDef pitch = resolvePitch(rawPitch);
@@ -193,7 +193,7 @@ namespace sheet {
 					return;
 				}
 			}
-			addEvent(pitch, meta->position, meta->lastEventDuration);
+			renderPitch(pitch, meta->position, meta->lastEventDuration);
 		}
 
 		void AContext::startEvent(const PitchDef &pitch, fm::Ticks absolutePosition)

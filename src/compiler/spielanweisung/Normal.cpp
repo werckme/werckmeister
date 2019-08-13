@@ -9,7 +9,7 @@ namespace sheet {
             auto meta = ctx->voiceMetaData();
 			for (const auto &pitch : pitches)
 			{
-				ctx->addEvent(pitch, duration, tying);
+				ctx->renderPitch(pitch, duration, tying);
 			}
 			ctx->seek(duration);
         }

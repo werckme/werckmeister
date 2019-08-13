@@ -157,8 +157,8 @@ namespace sheet {
 			virtual void metaSetVolume(int volume);
 			virtual void metaSetPan(int val);
 			/////// actual context stuff
-			virtual void addEvent(const PitchDef &pitch, fm::Ticks duration, bool tying = false);
-			virtual void addEvent(const PitchDef &pitch, fm::Ticks absolutePosition, fm::Ticks duration) = 0;
+			virtual void renderPitch(const PitchDef &pitch, fm::Ticks duration, bool tying = false);
+			virtual void renderPitch(const PitchDef &pitch, fm::Ticks absolutePosition, fm::Ticks duration) = 0;
 			/*
 			 * value = 0..1
 			 */
