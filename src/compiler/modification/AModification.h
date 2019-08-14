@@ -12,7 +12,7 @@ namespace sheet {
             AModification() = default;
         public:
             virtual ~AModification() = default;
-            virtual void addModificationEvents(AContext *ctx, fm::Ticks absPosition, fm::Ticks duration) = 0;
+            virtual void perform(AContext *ctx, const Event &ev) = 0;
             virtual void setArguments(const Event::Args &args) {}
         };
     }

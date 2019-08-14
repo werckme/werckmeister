@@ -12,7 +12,7 @@ namespace sheet {
             typedef Normal Base;
             Vorschlag() = default;
             virtual ~Vorschlag() = default;
-            virtual void addEvent(AContext *ctx, const Event::Pitches &pitches, fm::Ticks duration, bool tying = false) override;
+            virtual void perform(AContext *ctx, const Event &ev) override;
             Event vorschlagNote;
         };
     }

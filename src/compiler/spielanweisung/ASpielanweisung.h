@@ -3,17 +3,16 @@
 
 #include <fm/units.hpp>
 #include "sheet/Event.h"
+#include <compiler/modification/AModification.h>
 
 namespace sheet {
     namespace compiler {
         class AContext;
-        class ASpielanweisung {
+        class ASpielanweisung : public AModification {
         protected:
             ASpielanweisung() = default;
         public:
             virtual ~ASpielanweisung() = default;
-            virtual void addEvent(AContext *ctx, const Event::Pitches &pitches, fm::Ticks duration, bool tying = false) = 0;
-            virtual void setArguments(const Event::Args &args) {}
         };
     }
 }

@@ -6,8 +6,11 @@
 namespace sheet {
     namespace compiler {
 
-        void Arpeggio::addEvent(AContext *ctx, const Event::Pitches &pitches, fm::Ticks duration, bool tying)
+        void Arpeggio::perform(AContext *ctx, const Event &ev)
         {
+			const auto& pitches = ev.pitches;
+			auto duration = ev.duration;
+			auto tying = ev.isTying(); 
 			if (pitches.empty()) {
 				return;
 			}

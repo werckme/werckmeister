@@ -4,8 +4,11 @@
 namespace sheet {
     namespace compiler {
 
-        void Normal::addEvent(AContext *ctx, const Event::Pitches &pitches, fm::Ticks duration, bool tying)
+        void Normal::perform(AContext *ctx, const Event &ev)
         {
+            const auto& pitches = ev.pitches;
+			auto duration = ev.duration;
+			auto tying = ev.isTying(); 
             auto meta = ctx->voiceMetaData();
 			for (const auto &pitch : pitches)
 			{

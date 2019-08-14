@@ -133,14 +133,14 @@ namespace sheet {
 				meta->singleExpression = fm::expression::Default;
 			}
 			for (auto mod : meta->modifications) {
-				mod->addModificationEvents(ctx_.get(), meta->position, ev.duration);
+				mod->perform(ctx_.get(), ev);
 			}
 			for (auto mod : meta->modificationsOnce) {
-				mod->addModificationEvents(ctx_.get(), meta->position, ev.duration);
+				mod->perform(ctx_.get(), ev);
 			}			
 			meta->modificationsOnce.clear();
 			auto sanweis = ctx_->spielanweisung();
-			sanweis->addEvent(ctx_.get(), ev.pitches, ev.duration, ev.isTying());
+			sanweis->perform(ctx_.get(), ev);
 			meta->expression = tmpExpression;
 		}
     }

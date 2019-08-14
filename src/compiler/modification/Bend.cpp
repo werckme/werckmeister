@@ -7,10 +7,10 @@
 namespace sheet {
     namespace compiler {
 
-        void Bend::addModificationEvents(AContext *ctx, fm::Ticks absPosition, fm::Ticks duration)
+        void Bend::perform(AContext *ctx, const Event &ev)
         {
             using namespace fm;
-            if (duration == 0) {
+            if (ev.duration == 0) {
                 return;
             }
             double b = 0.5;
@@ -20,13 +20,13 @@ namespace sheet {
                 e = 0.5;
             }
             double c = e - b;
-            double d = static_cast<double>(duration);
-            
-			for (double t=0; t<duration; t+=static_cast<double>( 1.0_N64 )) {
+            double d = static_cast<double>(ev.duration);
+            auto absPosition = ctx->voiceMetaData()->position;
+			for (double t=0; t<ev.duration; t+=static_cast<double>( 1.0_N64 )) {
                 double x = c*t/d + b;
                 ctx->addPitchbendEvent(x, absPosition + static_cast<fm::Ticks>(t));
             }
-            ctx->addPitchbendEvent(0.5, absPosition + duration + 1);
+            ctx->addPitchbendEvent(0.5, absPosition + ev.duration + 1);
         }
 
         void Bend::setArguments(const Event::Args &args)
