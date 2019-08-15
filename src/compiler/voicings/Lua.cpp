@@ -196,6 +196,13 @@ namespace sheet {
             return LuaBase::hasFunction(LUA_VOICING_STRATEGY_FENTRY);
         }
 
+        void LuaVoicingStrategy::assertCanExecute() const 
+        {
+            if (!canExecute()) {
+                FM_THROW(Exception, fm::String("missing '") + LUA_VOICING_STRATEGY_FENTRY + "' function");
+            }
+        }
+        
         PitchDef LuaVoicingStrategy::popPitch(lua_State *L)
         {
             PitchDef result;

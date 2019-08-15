@@ -19,6 +19,7 @@ namespace sheet {
             virtual ~ALuaScript();
             virtual bool hasFunction(const std::string &name) const;
             virtual bool canExecute() const = 0;
+            virtual void assertCanExecute() const = 0;
             virtual void call(size_t numArgs, size_t numResult);
             virtual void addPackagePath(const fm::String &path);
         protected:

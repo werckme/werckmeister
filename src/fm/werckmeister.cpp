@@ -149,9 +149,15 @@ namespace fm {
 		const Path *scriptPath = findScriptPathByName(name);
 		if (scriptPath != nullptr) {
 			auto anw = std::make_shared<sheet::compiler::LuaVoicingStrategy>(*scriptPath);
-			if (anw->canExecute()) {
-				result = anw;
+			try {
+				anw->assertCanExecute();
+			} catch (const Exception &ex) {
+				fm::StringStream ss;
+				ss << "'" << *scriptPath << "'" << ": failed to execute script:" << std::endl;
+				ss << "  "  << ex.what();
+				FM_THROW(Exception, ss.str());
 			}
+			result = anw;
 		}
 		if (name == SHEET_VOICING_STRATEGY_SIMPLE_GUITAR) {
 			result = std::make_shared<sheet::SimpleGuitar>();
@@ -189,9 +195,15 @@ namespace fm {
 		const Path *scriptPath = findScriptPathByName(name);
 		if (scriptPath != nullptr) {
 			auto anw = std::make_shared<sheet::compiler::LuaModification>(*scriptPath);
-			if (anw->canExecute()) {
-				return anw;
+			try {
+				anw->assertCanExecute();
+			} catch (const Exception &ex) {
+				fm::StringStream ss;
+				ss << "'" << *scriptPath << "'" << ": failed to execute script:" << std::endl;
+				ss << "  "  << ex.what();
+				FM_THROW(Exception, ss.str());
 			}
+			return anw;
 		}
 		if (name == SHEET_MOD_BEND) {
 			return std::make_shared<sheet::compiler::Bend>();  

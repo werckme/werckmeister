@@ -22,6 +22,13 @@ namespace sheet {
             return LuaBase::hasFunction(LUA_MODIFICATION_FENTRY);
         }
 
+        void LuaModification::assertCanExecute() const 
+        {
+            if (!canExecute()) {
+                FM_THROW(Exception, fm::String("missing '") + LUA_MODIFICATION_FENTRY + "' function");
+            }
+        }
+
         void LuaModification::pushArgs(const Event::Args &args)
         {
             lua_createtable(L, 0, 0);

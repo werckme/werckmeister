@@ -17,6 +17,7 @@ namespace sheet {
             LuaModification(const fm::String &path);
             virtual ~LuaModification() = default;
             virtual bool canExecute() const override;
+            virtual void assertCanExecute() const override;
             virtual void setArguments(const Event::Args &args) override;
             virtual void perform(AContext *ctx, const Event &ev) override;
         protected:

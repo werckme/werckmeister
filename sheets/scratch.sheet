@@ -1,5 +1,5 @@
 @load "./chords/default.chords";
-@load "./voicings/simple.lua";
+@load "./mods/doNothing.lua";
 
 device: SC1 midi 2;
 
@@ -7,19 +7,9 @@ tempo: 130;
 instrumentDef: piano   SC1 2 0 0;
 
 [
-type: template;
-name: x.x;
 instrument: piano; 
-{  
-    /voicingStrategy: simple/
-    <I I'>1  |
-}   
-]
-
-
-[
-type: sheet;
 {
-    C |
-}
+    /mod: doNothing/  
+    c d e f | g1 | 
+}   
 ]
