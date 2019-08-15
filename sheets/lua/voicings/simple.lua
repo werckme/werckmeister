@@ -1,4 +1,4 @@
-require "com/com"
+require "lua/com/com"
 require "solvers/simple"
 
 local solver = Simple:new()

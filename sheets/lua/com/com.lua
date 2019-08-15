@@ -1,4 +1,4 @@
-local _inspect = require "com/inspect"
+local _inspect = require "lua/com/inspect"
 
 local MidiSchluesselCOffset = 60;
 

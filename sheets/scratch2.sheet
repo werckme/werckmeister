@@ -1,4 +1,4 @@
-@load "voicings/simple.lua";
+@load "lua/voicings/simple.lua";
 
 
 [

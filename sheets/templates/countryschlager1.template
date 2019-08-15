@@ -1,12 +1,12 @@
-@load "../voicings/guitar.lua";
-@load "../voicings/voicelead.lua";
+@load "lua/voicings/guitar.lua";
+@load "lua/voicings/voicelead.lua";
 
 [
 type: template;
 name: countryschlager1.normal;
 instrument: guitar; 
 {
-    /voicingStrategy: guitar range mezzosoprano/
+    /voicingStrategy: guitar range tenor/
     \f
     <I II III IV V VI VII>8 <I II III IV V VI VII>8 r8 
     <I II III IV V VI VII>4  <I II III IV V VI VII>8 <I II III IV V VI VII>8 <I II III IV V VI VII>8 |

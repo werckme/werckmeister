@@ -27,6 +27,7 @@ namespace sheet {
             lua_State *L = nullptr;
         private:
             const fm::String &_path;
+            void addSearchPaths();
         };
     }
 }

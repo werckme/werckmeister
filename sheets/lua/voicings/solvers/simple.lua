@@ -1,5 +1,5 @@
-require "solvers/asolver"
-require "com/globals"
+require "lua/voicings/solvers/asolver"
+require "lua/com/globals"
 
 Simple = ASolver:new()
 

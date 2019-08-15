@@ -1,5 +1,5 @@
 require "config"
-require "com/com"
+require "lua/com/com"
 
 ASolver = {}
 

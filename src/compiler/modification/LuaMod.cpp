@@ -51,7 +51,14 @@ namespace sheet {
 
         void LuaModification::perform(AContext *ctx, const Event &ev)
         {
-
+            lua_getglobal(L, LUA_MODIFICATION_FENTRY);
+            // luaChord::LuaChord luaChord(&def, &chord);
+            // luaChord.push(L);
+            // luaPitches::LuaPitches luaPitches(&def, &chord, &degreeIntervals);
+            // luaPitches.push(L);
+            pushArgs(this->args_);
+            //lua::LuaTimeInfo(t).push(L);
+            call(1, 0);
         }
     }
 }

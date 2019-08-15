@@ -1,5 +1,5 @@
-require "solvers/simple"
-require "com/globals"
+require "simple"
+require "lua/com/globals"
 
 VoiceLeadSolver = Simple:new()
 

@@ -1,5 +1,5 @@
-require "com/com"
-require "com/globals"
+require "lua/com/com"
+require "lua/com/globals"
 require "solvers/guitar"
 
 local solver = GuitarSolver:new()

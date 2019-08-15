@@ -1,6 +1,6 @@
 @load "./chords/default.chords";
-@load "./voicings/voicelead.lua";
-@load "./voicings/guitar.lua";
+@load "lua/voicings/voicelead.lua";
+@load "lua/voicings/guitar.lua";
 @load "./templates/bass.bossanova.template";
 
 tempo: 115;

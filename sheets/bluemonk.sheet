@@ -1,5 +1,5 @@
 @load "./chords/default.chords";
-@load "./voicings/voicelead.lua";
+@load "lua/voicings/voicelead.lua";
 
 tempo: 120;
 device: SC1 midi 2;

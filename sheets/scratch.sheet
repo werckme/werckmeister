@@ -1,5 +1,5 @@
 @load "./chords/default.chords";
-@load "./mods/doNothing.lua";
+@load "lua/mods/doNothing.lua";
 
 device: SC1 midi 2;
 

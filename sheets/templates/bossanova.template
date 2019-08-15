@@ -1,5 +1,5 @@
-@load "../voicings/voicelead.lua";
-@load "../voicings/simple.lua";
+@load "lua/voicings/voicelead.lua";
+@load "lua/voicings/simple.lua";
 
 [
 type: template;

@@ -123,6 +123,8 @@ namespace sheet {
 		{
 			auto &wm = fm::getWerckmeister();
 			auto filestream = wm.openResource(path);
+			auto directory = boost::filesystem::path(path).parent_path().generic_string();
+			wm.addSearchPath(directory);
 			fm::StreamBuffIterator begin(*filestream);
 			fm::StreamBuffIterator end;
 			fm::String documentText(begin, end);

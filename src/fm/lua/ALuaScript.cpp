@@ -3,7 +3,7 @@
 #include <exception>
 #include <sstream>
 #include <boost/filesystem.hpp>
-
+#include <fm/werckmeister.hpp>
 namespace sheet {
     
     namespace lua {
@@ -15,8 +15,17 @@ namespace sheet {
             std::string pathcommand("package.path = package.path .. ';");
             auto dir = boost::filesystem::path(path).parent_path().generic_string();
             addPackagePath(dir);
+            addSearchPaths();
             if (luaL_dofile(L, path.c_str())) {
                 error(std::string(lua_tostring(L, -1)));
+            }
+        }
+
+        void ALuaScript::addSearchPaths()
+        {
+            auto paths = fm::getWerckmeister().searchPaths();
+            for (const auto &path : paths) {
+                addPackagePath(path);
             }
         }
 
