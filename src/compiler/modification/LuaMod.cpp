@@ -5,9 +5,67 @@
 #include <compiler/error.hpp>
 #include <algorithm>
 #include <compiler/lua/luaTimeInfo.h>
+#include <compiler/AContext.h>
 
 namespace sheet {
     namespace compiler {
+        struct LuaEvent : lua::ALuaObject {
+            typedef lua::ALuaObject Base;
+            const Event *event;
+            LuaEvent(const Event *event)
+                : event(event)
+            {}
+            void push(lua_State *L);
+            void pushPitches(lua_State *L);
+            const char *getTypename() const;
+        };
+        void LuaEvent::push(lua_State *L)
+        {
+            lua_createtable(L, 2, 0);
+            auto top = lua_gettop(L);
+            // type
+            lua_pushstring(L, "type");
+            lua_pushstring(L, getTypename());
+            lua_settable(L, top);
+            // pitches
+            lua_pushstring(L, "pitches");
+            pushPitches(L);
+            lua_settable(L, top);          
+        }
+        void LuaEvent::pushPitches(lua_State *L)
+        {
+            lua_createtable(L, event->pitches.size(), 0);
+            auto top = lua_gettop(L);
+            int count = 1;
+            for(const auto &pitch : event->pitches) {
+                lua_pushnumber(L, count++);
+                lua_createtable(L, event->pitches.size(), 0);
+                auto objecttop = lua_gettop(L);
+                // pitch
+                lua_pushstring(L, "pitch");
+                lua_pushnumber(L, pitch.pitch);
+                lua_settable(L, objecttop);
+                // octave
+                lua_pushstring(L, "octave");
+                lua_pushnumber(L, pitch.octave);
+                lua_settable(L, objecttop);     
+                // offset
+                lua_pushstring(L, "offset");
+                lua_pushnumber(L, 0);
+                lua_settable(L, objecttop); 
+                // 
+                lua_settable(L, top);                           
+            }
+        }
+        const char * LuaEvent::getTypename() const
+        {
+            switch (event->type)
+            {
+            case Event::Note: return "note";
+            default: return "unknown";
+            }
+            return nullptr;
+        }
     }
 }
 
@@ -52,13 +110,10 @@ namespace sheet {
         void LuaModification::perform(AContext *ctx, const Event &ev)
         {
             lua_getglobal(L, LUA_MODIFICATION_FENTRY);
-            // luaChord::LuaChord luaChord(&def, &chord);
-            // luaChord.push(L);
-            // luaPitches::LuaPitches luaPitches(&def, &chord, &degreeIntervals);
-            // luaPitches.push(L);
+            LuaEvent(&ev).push(L);
             pushArgs(this->args_);
-            //lua::LuaTimeInfo(t).push(L);
-            call(1, 0);
+            lua::LuaTimeInfo(ctx->getTimeInfo()).push(L);
+            call(3, 0);
         }
     }
 }

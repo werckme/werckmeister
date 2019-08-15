@@ -1,5 +1,5 @@
 require "lua/com/com"
 
-function perform(args)
-    inspect(args)
+function perform(event, args, timeinfo)
+    inspect(event)
 end

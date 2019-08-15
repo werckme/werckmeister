@@ -10,6 +10,6 @@ instrumentDef: piano   SC1 2 0 0;
 instrument: piano; 
 {
     /mod: doNothing/  
-    c d e f | g1 | 
+    <c d e f>1 | g1 | 
 }   
 ]
