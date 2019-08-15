@@ -19,6 +19,7 @@
 #include "compiler/spielanweisung/Vorschlag.h"
 #include "compiler/spielanweisung/spielanweisungen.h"
 #include "compiler/modification/modifications.h"
+#include "compiler/modification/LuaMod.h"
 #include "compiler/modification/Bend.h"
 #include <fm/exception.hpp>
 #include <sheet/Document.h>
@@ -132,7 +133,7 @@ namespace fm {
 		return midiContext;
 	}
 
-	sheet::compiler::ASpielanweisungPtr Werckmeister::getDefaultSpielanweisung()
+	sheet::compiler::AModificationPtr Werckmeister::getDefaultSpielanweisung()
 	{
 		return getSpielanweisung(SHEET_SPIELANWEISUNG_NORMAL);
 	}
@@ -149,7 +150,6 @@ namespace fm {
 		if (scriptPath != nullptr) {
 			auto anw = std::make_shared<sheet::compiler::LuaVoicingStrategy>(*scriptPath);
 			if (anw->canExecute()) {
-				anw->name(name);
 				result = anw;
 			}
 		}
@@ -166,7 +166,7 @@ namespace fm {
 		return result;
 	}
 
-	sheet::compiler::ASpielanweisungPtr Werckmeister::getSpielanweisung(const fm::String &name)
+	sheet::compiler::AModificationPtr Werckmeister::getSpielanweisung(const fm::String &name)
 	{
 		if (name == SHEET_SPIELANWEISUNG_NORMAL) {
 			return std::make_shared<sheet::compiler::Normal>(); 
@@ -176,12 +176,23 @@ namespace fm {
 		}
 		if (name == SHEET_SPIELANWEISUNG_VORSCHLAG) {
 			return std::make_shared<sheet::compiler::Vorschlag>(); 
-		}		
+		}
+		auto mod = getModification(name);
+		if (mod) {
+			return mod;
+		}
 		FM_THROW(Exception, "spielanweisung not found: " + name);
 	}
 
 	sheet::compiler::AModificationPtr Werckmeister::getModification(const fm::String &name)
 	{	
+		const Path *scriptPath = findScriptPathByName(name);
+		if (scriptPath != nullptr) {
+			auto anw = std::make_shared<sheet::compiler::LuaModification>(*scriptPath);
+			if (anw->canExecute()) {
+				return anw;
+			}
+		}
 		if (name == SHEET_MOD_BEND) {
 			return std::make_shared<sheet::compiler::Bend>();  
 		}

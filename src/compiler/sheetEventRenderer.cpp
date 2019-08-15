@@ -31,7 +31,6 @@ namespace sheet {
 				Event copy = *ev;
 				copy.pitches.swap(pitches);
 				renderer->renderEvent(copy);
-
 				return true;
 			}
 

@@ -56,8 +56,8 @@ namespace sheet {
             VoicingStrategyPtr voicingStrategy = nullptr;
             virtual ~VoiceMetaData() = default;
             bool pendingTie() const { return !waitForTieBuffer.empty(); }
-            ASpielanweisungPtr spielanweisung;
-            ASpielanweisungPtr spielanweisungOnce; // played once
+            AModificationPtr spielanweisung;
+            AModificationPtr spielanweisungOnce; // played once
             Modifications modifications;
             Modifications modificationsOnce; // played once		
             PitchDefSet startedEvents;

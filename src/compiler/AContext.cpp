@@ -41,7 +41,7 @@ namespace sheet {
 			return this->masterTrackId_;
 		}
 
-		ASpielanweisungPtr AContext::spielanweisung()
+		AModificationPtr AContext::spielanweisung()
 		{
 			auto meta = voiceMetaData();
 			if (!defaultSpielanweisung_) {

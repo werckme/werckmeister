@@ -1,8 +1,8 @@
-#ifndef SPIELANWEISUNG_LUA_SCRIPT_HPP
-#define SPIELANWEISUNG_LUA_SCRIPT_HPP
+#ifndef VOICINGS_LUA_SCRIPT_HPP
+#define VOICINGS_LUA_SCRIPT_HPP
 
 #include "VoicingStrategy.h"
-#include <sheet/lua/ALuaScript.h>
+#include <fm/lua/ALuaScript.h>
 #include <fm/common.hpp>
 #include <forward.hpp>
 

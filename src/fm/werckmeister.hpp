@@ -39,8 +39,8 @@ namespace fm {
         const char * version() const;
 		sheet::compiler::CompilerPtr createCompiler();
 		sheet::compiler::AContextPtr createContext();
-		sheet::compiler::ASpielanweisungPtr getDefaultSpielanweisung();
-		sheet::compiler::ASpielanweisungPtr getSpielanweisung(const String &name);
+		sheet::compiler::AModificationPtr getDefaultSpielanweisung();
+		sheet::compiler::AModificationPtr getSpielanweisung(const String &name);
 		sheet::compiler::AModificationPtr getModification(const String &name);		
 		sheet::VoicingStrategyPtr getDefaultVoicingStrategy();
 		sheet::VoicingStrategyPtr getVoicingStrategy(const String &name);

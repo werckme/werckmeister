@@ -1,5 +1,5 @@
-#ifndef ALUAOBJECT_H
-#define ALUAOBJECT_H
+#ifndef FM_ALUAOBJECT_H
+#define FM_ALUAOBJECT_H
 
 #define LUA_OBJECT_REF_TABLE_KEY "__luaobjectref"
 

@@ -118,7 +118,7 @@ namespace sheet {
 			virtual VoicingStrategyPtr currentVoicingStrategy();
 			virtual const Event * currentChord() const { return &currentChord_; }
 			virtual fm::Expression getExpression(const fm::String &str) const;
-			virtual ASpielanweisungPtr spielanweisung();
+			virtual AModificationPtr spielanweisung();
 			virtual AInstrumentDef * getInstrumentDef(const fm::String &uname) = 0;
 			virtual AInstrumentDef * currentInstrumentDef() = 0;
 			virtual fm::Ticks currentPosition() const;
@@ -201,7 +201,7 @@ namespace sheet {
 			VoiceMetaDataMap voiceMetaDataMap_;
 			TrackMetaDataMap trackMetaDataMap_;
 			ISheetTemplateDefServerPtr sheetTemplateDefServer_ = nullptr;
-			ASpielanweisungPtr defaultSpielanweisung_;
+			AModificationPtr defaultSpielanweisung_;
         };
 
 		///////////////////////////////////////////////////////////////////////

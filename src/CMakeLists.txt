@@ -8,6 +8,8 @@ SET (SRC_FETZER_LIB
     fm/common.cpp
     fm/exception.cpp
     fm/config/configServer.cpp
+    fm/lua/ALuaObject.cpp
+    fm/lua/ALuaScript.cpp
     compiler/compiler.cpp
     compiler/chordDefParser.cpp
     compiler/sheetParser.cpp
@@ -24,6 +26,7 @@ SET (SRC_FETZER_LIB
     compiler/spielanweisung/Vorschlag.cpp
     compiler/modification/AModification.cpp
     compiler/modification/Bend.cpp
+    compiler/modification/LuaMod.cpp
     compiler/voicings/DirectVoicingStrategy.cpp
     compiler/voicings/SimpleGuitar.cpp
     compiler/voicings/Lua.cpp
@@ -35,8 +38,6 @@ SET (SRC_FETZER_LIB
     sheet/Document.cpp
     sheet/ChordDef.cpp
     sheet/tools.cpp
-    sheet/lua/ALuaObject.cpp
-    sheet/lua/ALuaScript.cpp
 )
 
 add_definitions( -DGIT_VERSION="${GIT_VERSION}" )
@@ -94,7 +95,7 @@ if (APPLE)
     SET(LIBS_PLAYER ${LIBS_PLAYER} rtmidi_static)
 elseif(UNIX)
     SET(LIBS_PLAYER ${LIBS_PLAYER} rtmidi pthread)
-endif(UNIX)
+endif(APPLE)
 
 add_executable(sheetp ${SRC_SHEET_PLAYER})
 target_link_libraries (sheetp ${SHEET_LIBS} ${LIBS_PLAYER} fmapp)
