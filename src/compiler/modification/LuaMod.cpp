@@ -12,8 +12,9 @@ namespace sheet {
         struct LuaEvent : lua::ALuaObject {
             typedef lua::ALuaObject Base;
             const Event *event;
-            LuaEvent(const Event *event)
-                : event(event)
+            AContext *ctx;
+            LuaEvent(const Event *event, AContext *ctx)
+                : event(event), ctx(ctx)
             {}
             void push(lua_State *L);
             void pushPitches(lua_State *L);
@@ -28,7 +29,7 @@ namespace sheet {
             lua_pushstring(L, getTypename());
             lua_settable(L, top);
             // pitches
-            lua_pushstring(L, "pitches");
+            lua_pushstring(L, "notes");
             pushPitches(L);
             lua_settable(L, top);          
         }
@@ -53,7 +54,10 @@ namespace sheet {
                 lua_pushstring(L, "offset");
                 lua_pushnumber(L, 0);
                 lua_settable(L, objecttop); 
-                // 
+                // velocity
+                lua_pushstring(L, "velocity");
+                lua_pushnumber(L, event->velocity);
+                lua_settable(L, objecttop);                 
                 lua_settable(L, top);                           
             }
         }
@@ -110,7 +114,7 @@ namespace sheet {
         void LuaModification::perform(AContext *ctx, const Event &ev)
         {
             lua_getglobal(L, LUA_MODIFICATION_FENTRY);
-            LuaEvent(&ev).push(L);
+            LuaEvent(&ev, ctx).push(L);
             pushArgs(this->args_);
             lua::LuaTimeInfo(ctx->getTimeInfo()).push(L);
             call(3, 0);

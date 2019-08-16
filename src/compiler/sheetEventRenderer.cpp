@@ -131,6 +131,7 @@ namespace sheet {
 				meta->expression = meta->singleExpression;
 				meta->singleExpression = fm::expression::Default;
 			}
+			ev.velocity = ctx_->velocity();
 			for (auto mod : meta->modifications) {
 				mod->perform(ctx_.get(), ev);
 			}

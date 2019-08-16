@@ -22,10 +22,10 @@ namespace sheet {
 			fm::midi::MidiPtr midi() const { return midi_; }
 			virtual TrackId createTrackImpl() override;
 			virtual VoiceId createVoiceImpl() override;
-			virtual void renderPitch(const PitchDef &pitch, fm::Ticks absolutePosition, fm::Ticks duration) override;
+			virtual void renderPitch(const PitchDef &pitch, fm::Ticks absolutePosition, double velocity, fm::Ticks duration) override;
 			virtual void addEvent(const fm::midi::Event &ev, TrackId trackId = INVALID_TRACK_ID);
 			virtual void addPitchbendEvent(double value, fm::Ticks absolutePosition) override;
-			virtual void startEvent(const PitchDef &pitch, fm::Ticks absolutePosition) override;
+			virtual void startEvent(const PitchDef &pitch, fm::Ticks absolutePosition, double velocity) override;
 			virtual void stopEvent(const PitchDef &pitch, fm::Ticks absolutePosition) override;
 			virtual void metaSetChannel(int channel);
 			virtual void metaSoundSelect(int cc, int pc);
@@ -53,7 +53,7 @@ namespace sheet {
 			InstrumentDefContainer getInstruments() const;
 			virtual TrackId createMasterTrack() override;
 			int getAbsolutePitch(const PitchDef &pitch);
-			int getAbsoluteVelocity(fm::Expression expression);
+			int toMidiVelocity(double velocity);
 		private:
 			MidiInstrumentDefs midiInstrumentDefs_;
 			fm::midi::MidiPtr midi_;

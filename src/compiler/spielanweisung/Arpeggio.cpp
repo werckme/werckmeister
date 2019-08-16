@@ -26,7 +26,7 @@ namespace sheet {
 			auto arpduration = duration / pitches.size();
 			for (const auto &pitch : pitchesCopy)
 			{
-				ctx->renderPitch(pitch, duration, tying);
+				ctx->renderPitch(pitch, duration, ev.velocity, tying);
 				ctx->seek(arpduration);
 			}
 			auto roundingError = duration - (arpduration * pitches.size());

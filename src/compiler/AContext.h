@@ -157,13 +157,13 @@ namespace sheet {
 			virtual void metaSetVolume(int volume);
 			virtual void metaSetPan(int val);
 			/////// actual context stuff
-			virtual void renderPitch(const PitchDef &pitch, fm::Ticks duration, bool tying = false);
-			virtual void renderPitch(const PitchDef &pitch, fm::Ticks absolutePosition, fm::Ticks duration) = 0;
+			virtual void renderPitch(const PitchDef &pitch, fm::Ticks duration, double velocity, bool tying);
+			virtual void renderPitch(const PitchDef &pitch, fm::Ticks absolutePosition, double velocity, fm::Ticks duration) = 0;
 			/*
 			 * value = 0..1
 			 */
 			virtual void addPitchbendEvent(double value, fm::Ticks absolutePosition) = 0;			
-			virtual void startEvent(const PitchDef &pitch, fm::Ticks absolutePosition);
+			virtual void startEvent(const PitchDef &pitch, fm::Ticks absolutePosition, double velocity);
 			virtual void stopEvent(const PitchDef &pitch, fm::Ticks absolutePosition);
 			/**
 			 * if duration == 0 the last event duration will be used
@@ -181,6 +181,10 @@ namespace sheet {
 			 */
 			MetaEventHandler metaEventHandler;
 			Capabilities capabilities;
+            /**
+             * @return the current velocity value between 0..1
+             */
+            virtual double velocity();			
 		protected:
 			PitchDef resolvePitch(const PitchDef &pitch) const;
 			virtual TrackId createTrackImpl() = 0;

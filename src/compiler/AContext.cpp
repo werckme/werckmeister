@@ -169,7 +169,19 @@ namespace sheet {
 			return *result;
 		}
 
-		void AContext::renderPitch(const PitchDef &rawPitch, fm::Ticks duration, bool tying)
+		double AContext::velocity()
+		{
+			auto instrument = currentInstrumentDef();
+			auto expression = voiceMetaData()->expression;
+			auto velOverride = instrument->velocityOverride.find(expression);
+			if (velOverride != instrument->velocityOverride.end()) {
+				return velOverride->second / 100.;
+			}
+			double expr = static_cast<double>(expression);
+			return  expr / 10.;
+		}
+
+		void AContext::renderPitch(const PitchDef &rawPitch, fm::Ticks duration, double velocity, bool tying)
 		{
 			using namespace fm;
 			PitchDef pitch = resolvePitch(rawPitch);
@@ -181,7 +193,7 @@ namespace sheet {
 				auto alreadyTying = meta->waitForTieBuffer.find(pitch) != meta->waitForTieBuffer.end();
 				if (!alreadyTying) {
 					meta->waitForTieBuffer.insert({ pitch, meta->lastEventDuration });
-					startEvent(pitch, meta->position);
+					startEvent(pitch, meta->position, velocity);
 				}
 				return;
 			}
@@ -193,10 +205,10 @@ namespace sheet {
 					return;
 				}
 			}
-			renderPitch(pitch, meta->position, meta->lastEventDuration);
+			renderPitch(pitch, meta->position, velocity, meta->lastEventDuration);
 		}
 
-		void AContext::startEvent(const PitchDef &pitch, fm::Ticks absolutePosition)
+		void AContext::startEvent(const PitchDef &pitch, fm::Ticks absolutePosition, double velocity)
 		{
 			auto meta = voiceMetaData();
 			meta->startedEvents.insert(pitch);

@@ -84,7 +84,10 @@ namespace sheet {
 		 */
 		fm::String stringValue;
 		Args metaArgs;
-
+		/**
+		 * the event velocity value in a range 0..1, will be set during rendering
+		 */
+		double velocity = 0;
 		bool isTimeConsuming() const {
 			return type == Rest || type == Note || type == Degree || type == TiedNote || type == Chord || type == TiedDegree;
 		}

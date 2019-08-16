@@ -34,19 +34,13 @@ namespace sheet {
 			return MidiSchluesselCOffset + pitch.pitch + (pitch.octave * fm::NotesPerOctave);
 		}
 
-		int MidiContext::getAbsoluteVelocity(fm::Expression expression)
+		int MidiContext::toMidiVelocity(double velocity)
 		{
-			auto trackMeta = trackMetaData<MidiContext::TrackMetaData>();
-			const auto &instrumentDef = trackMeta->instrument;
-			auto velOverride = instrumentDef.velocityOverride.find(expression);
-			if (velOverride != instrumentDef.velocityOverride.end()) {
-				return (velOverride->second * 127) / 100;
-			}
-			float expr = static_cast<float>(expression);
-			return static_cast<int>(::ceil((expr) * 127.0f / 10.0f));
+			int result = static_cast<int>(::ceil( velocity * 127.0 ));
+			return std::min(127, std::max(0, result));
 		} 
 
-		void MidiContext::renderPitch(const PitchDef &pitch, fm::Ticks absolutePosition, fm::Ticks duration)
+		void MidiContext::renderPitch(const PitchDef &pitch, fm::Ticks absolutePosition, double velocity, fm::Ticks duration)
 		{
 			_checkMidi(midi_);
 			auto voiceConfig = voiceMetaData<MidiContext::VoiceMetaData>();
@@ -58,7 +52,7 @@ namespace sheet {
 			auto event = fm::midi::Event::NoteOn(instrumentDef.channel, 
 				absolutePosition, 
 				getAbsolutePitch(pitch), 
-				getAbsoluteVelocity(voiceConfig->expression)
+				toMidiVelocity(velocity)
 			);
 			addEvent(event, track());
 			event = fm::midi::Event::NoteOff(instrumentDef.channel, 
@@ -68,9 +62,9 @@ namespace sheet {
 			addEvent(event, track());
 		}
 
-		void MidiContext::startEvent(const PitchDef &pitch, fm::Ticks absolutePosition)
+		void MidiContext::startEvent(const PitchDef &pitch, fm::Ticks absolutePosition, double velocity)
 		{
-			Base::startEvent(pitch, absolutePosition);
+			Base::startEvent(pitch, absolutePosition, velocity);
 			_checkMidi(midi_);
 			auto voiceConfig = voiceMetaData<MidiContext::VoiceMetaData>();
 			auto trackMeta = trackMetaData<MidiContext::TrackMetaData>();
@@ -81,7 +75,7 @@ namespace sheet {
 			auto event = fm::midi::Event::NoteOn(instrumentDef.channel, 
 				absolutePosition, 
 				getAbsolutePitch(pitch), 
-				getAbsoluteVelocity(voiceConfig->expression)
+				toMidiVelocity(velocity)
 			);
 			addEvent(event, track());
 		}

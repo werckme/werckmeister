@@ -11,10 +11,10 @@ namespace sheet {
 		struct AInstrumentDef {
 			fm::String uname;
 			VoicingStrategyPtr voicingStrategy;
-		};
-        struct MidiInstrumentDef : AInstrumentDef {
 			typedef std::unordered_map<fm::Expression, int> VelocityOverride;
 			VelocityOverride velocityOverride;
+		};
+        struct MidiInstrumentDef : AInstrumentDef {
             int id = 0;
 			fm::String deviceName;
 			int channel = 0;
