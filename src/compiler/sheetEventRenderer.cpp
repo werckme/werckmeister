@@ -29,6 +29,7 @@ namespace sheet {
 				auto voicingStratgy = ctx->currentVoicingStrategy();
 				auto pitches = voicingStratgy->get(*chord, *chordDef, ev->pitches, ctx->getTimeInfo());
 				Event copy = *ev;
+				copy.type = Event::Note;
 				copy.pitches.swap(pitches);
 				renderer->renderEvent(copy);
 				return true;
@@ -43,6 +44,7 @@ namespace sheet {
 				auto voicingStratgy = ctx->currentVoicingStrategy();
 				auto pitches = voicingStratgy->get(*chord, *chordDef, ev->pitches, ctx->getTimeInfo());
 				Event copy = *ev;
+				copy.type = Event::TiedNote;
 				copy.pitches.swap(pitches);
 				renderer->renderEvent(copy);
 

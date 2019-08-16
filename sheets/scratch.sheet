@@ -1,5 +1,5 @@
 @load "./chords/default.chords";
-@load "lua/mods/doNothing.lua";
+@load "lua/mods/doNothingSpecial.lua";
 
 device: SC1 midi 2;
 
@@ -9,7 +9,17 @@ instrumentDef: piano   SC1 2 0 0;
 [
 instrument: piano; 
 {
-    /mod: doNothing/  
-    <c d e f>1 | g1 | 
+    /do: doNothingSpecial/  
+    g4. e8 e d4 g8~  | g4 e8 e4 e8 d g~ | g4 e e d8 g~ | g8 g e e4 e8 d f~ |
+    f8 d4 d4 d8 c e~ | e c4 c4 c8 bes,4 | r4 c2.~ | c1 |
+    g4. e8 e d4 g8~  | g4 e8 e4 e8 d g~ | g4 e e d8 g~ | g8 g e e4 e8 d f~ |
+    f8 d4 d4 d8 c e~ | e c4 c4 c8 bes,4 | 
+    r4 c2.~ | c2. r4 | f1~ | f4t ges f es f es |
+    des4. es8~ es2~  | es2. r8 gis~ | gis1~ | gis4t a gis fis gis fis |
+    e4. fis8~ fis2~  | fis2. r8 a~ | a1~ | a4t bes a g a g |
+    f4. g8~g2~ | g2 r4t a bes | c' c d e f g | gis2. a4 | 
+    bes4t bes, c d e f | fis1 | g4. e8 e d4 g8~ | g4 e8 e4 e8 d g~ |
+    g4 e e d8 g~ | g8 g e e4 e8 d a~ | a4. f8 f f d c' | c'4. e8 e4t e d |
+    e1~ | e4 r2. |
 }   
 ]

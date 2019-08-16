@@ -22,6 +22,8 @@ namespace sheet {
             virtual void perform(AContext *ctx, const Event &ev) override;
         protected:
             void pushArgs(const Event::Args &args);
+            void performResult(AContext *ctx, const Event &ev);
+            void performNoteResult(AContext *ctx);
         private:
             Event::Args args_;
         };

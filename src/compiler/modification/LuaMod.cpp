@@ -6,6 +6,18 @@
 #include <algorithm>
 #include <compiler/lua/luaTimeInfo.h>
 #include <compiler/AContext.h>
+#include <fm/lua/luaHelper.h>
+
+static const char * LUA_EVENT_TYPE_NOTE = "note";
+static const char * LUA_EVENT_TYPE_UNKNOWN = "unknown";
+static const char * LUA_EVENT_PROPETRY_VELOCITY = "velocity";
+static const char * LUA_EVENT_PROPETRY_DURATION = "duration";
+static const char * LUA_EVENT_PROPETRY_TYING = "isTied";
+static const char * LUA_EVENT_PROPETRY_OFFSET = "offset";
+static const char * LUA_EVENT_PROPETRY_PITCHES = "pitches";
+static const char * LUA_EVENT_PROPETRY_TYPE = "type";
+static const char * LUA_EVENT_PITCH_PROPETRY_PITCH = "pitch";
+static const char * LUA_EVENT_PITCH_PROPETRY_OCTAVE = "octave";
 
 namespace sheet {
     namespace compiler {
@@ -25,13 +37,20 @@ namespace sheet {
             lua_createtable(L, 2, 0);
             auto top = lua_gettop(L);
             // type
-            lua_pushstring(L, "type");
-            lua_pushstring(L, getTypename());
-            lua_settable(L, top);
+            sheet::lua::setTableValue(L, LUA_EVENT_PROPETRY_TYPE, top, getTypename());
             // pitches
-            lua_pushstring(L, "notes");
+            lua_pushstring(L, LUA_EVENT_PROPETRY_PITCHES);
             pushPitches(L);
-            lua_settable(L, top);          
+            lua_settable(L, top);
+            // offset
+            sheet::lua::setTableValue(L, LUA_EVENT_PROPETRY_OFFSET, top, 0);            
+            // velocity
+            sheet::lua::setTableValue(L, LUA_EVENT_PROPETRY_VELOCITY, top, event->velocity);      
+            // duration
+            sheet::lua::setTableValue(L, LUA_EVENT_PROPETRY_DURATION, top, event->duration / fm::PPQ);
+            // is tied
+            sheet::lua::setTableValue(L, LUA_EVENT_PROPETRY_TYING, top, event->isTying());
+                             
         }
         void LuaEvent::pushPitches(lua_State *L)
         {
@@ -43,30 +62,23 @@ namespace sheet {
                 lua_createtable(L, event->pitches.size(), 0);
                 auto objecttop = lua_gettop(L);
                 // pitch
-                lua_pushstring(L, "pitch");
+                lua_pushstring(L, LUA_EVENT_PITCH_PROPETRY_PITCH);
                 lua_pushnumber(L, pitch.pitch);
                 lua_settable(L, objecttop);
                 // octave
-                lua_pushstring(L, "octave");
+                lua_pushstring(L, LUA_EVENT_PITCH_PROPETRY_OCTAVE);
                 lua_pushnumber(L, pitch.octave);
-                lua_settable(L, objecttop);     
-                // offset
-                lua_pushstring(L, "offset");
-                lua_pushnumber(L, 0);
-                lua_settable(L, objecttop); 
-                // velocity
-                lua_pushstring(L, "velocity");
-                lua_pushnumber(L, event->velocity);
-                lua_settable(L, objecttop);                 
-                lua_settable(L, top);                           
+                lua_settable(L, objecttop);  
+                lua_settable(L, top);                                
             }
         }
         const char * LuaEvent::getTypename() const
         {
             switch (event->type)
             {
-            case Event::Note: return "note";
-            default: return "unknown";
+            case Event::TiedNote:
+            case Event::Note: return LUA_EVENT_TYPE_NOTE;
+            default: return LUA_EVENT_TYPE_UNKNOWN;
             }
             return nullptr;
         }
@@ -106,6 +118,62 @@ namespace sheet {
             }
         }
 
+        void LuaModification::performNoteResult(AContext *ctx)
+        {
+            double velocity = 0;
+            sheet::lua::getTableValue(L, LUA_EVENT_PROPETRY_VELOCITY, velocity);
+            fm::Ticks offset = 0;
+            sheet::lua::getTableValue(L, LUA_EVENT_PROPETRY_OFFSET, offset);
+            offset *= fm::PPQ;
+            fm::Ticks duration = 0;
+            sheet::lua::getTableValue(L, LUA_EVENT_PROPETRY_DURATION, duration);
+            bool isTied = false;
+            sheet::lua::getTableValue(L, LUA_EVENT_PROPETRY_TYING, isTied);
+            duration *= fm::PPQ;            
+            lua_pushstring(L, LUA_EVENT_PROPETRY_PITCHES);
+            lua_gettable(L, -2);
+            if (!lua_istable(L, -1)) {
+                FM_THROW(Exception, "missing pitches");
+            }
+            lua_pushnil(L);
+            ctx->seek(offset);
+            while (lua_next(L, -2) != 0) {
+                int pitch = 0;
+                sheet::lua::getTableValue(L, LUA_EVENT_PITCH_PROPETRY_PITCH, pitch);
+                int octave = 0;
+                sheet::lua::getTableValue(L, LUA_EVENT_PITCH_PROPETRY_OCTAVE, octave);
+                lua_pop(L, 1);
+                sheet::PitchDef pitchDef;
+                pitchDef.pitch = pitch;
+                pitchDef.octave = octave;
+                ctx->renderPitch(pitchDef, duration, velocity, isTied);   
+            }
+            ctx->seek(-offset);
+            lua_pop(L, 1);
+        }
+
+        void LuaModification::performResult(AContext *ctx, const Event &ev) {
+            if (!lua_istable(L, -1)) {
+                FM_THROW(Exception, "lua result is not a table");
+            }
+            lua_pushnil(L);
+            while (lua_next(L, -2) != 0) { // every events
+                if (!lua_istable(L, -1)) {
+                    lua_pop(L, 1);
+                    continue;
+                }
+                
+                PitchDef result;
+                fm::String type;
+                sheet::lua::getTableValue(L, LUA_EVENT_PROPETRY_TYPE, type);
+                if (type == LUA_EVENT_TYPE_NOTE) {
+                    performNoteResult(ctx);
+                }
+                lua_pop(L, 1);
+            }
+            ctx->seek(ev.duration);
+        }
+
         void LuaModification::setArguments(const Event::Args &args)
         {
             this->args_ = args;
@@ -117,7 +185,8 @@ namespace sheet {
             LuaEvent(&ev, ctx).push(L);
             pushArgs(this->args_);
             lua::LuaTimeInfo(ctx->getTimeInfo()).push(L);
-            call(3, 0);
+            call(3, 1);
+            performResult(ctx, ev);
         }
     }
 }
