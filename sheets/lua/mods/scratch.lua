@@ -12,8 +12,8 @@ function perform(event, args, timeinfo)
         return { event }
     end
     local copy = deepcopy(event)
-    offset(copy.pitches, 0, -2)
-    copy.offset = 8
+    offset(copy.pitches, 1, 0)
+    copy.offset = 0.5
     copy.velocity = copy.velocity * 0.9
     event.duration = event.duration / 2
     local result = { event, copy }
