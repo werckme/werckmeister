@@ -5,7 +5,7 @@
 
 device: SC1 midi 2;
 
-tempo: 130;
+tempo: 100;
 instrumentDef: drums   SC1 9 0 0;
 
 [
@@ -16,11 +16,12 @@ instrument: drums;
 
 }
 {
-    /do: swing/
-    "ht"8 "ht"8   "ht"8 "ht"8   "ht"8 "ht"8   "ht"8 "ht"8 |
+    /do: swing grid 16 offset 100/
+    "ht"8 "ht"8   "ht"8 "ht"8   "ht"16 "ht"16 "ht"8   "ht"8 "ht"8 |
+    "ht"16 "ht"16   "ht"16 "ht"16  "ht"16 "ht"16   "ht"16 "ht"16  "ht"16 "ht"16   "ht"16 "ht"16  "ht"16 "ht"16   "ht"16 "ht"16 |
 }
 {
-    "bd"4          "sn"4         "bd"4         "sn"4 |
+    "bd"4           "sn"4            "bd"4               "sn"4 |
 }
 ]
 
