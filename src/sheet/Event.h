@@ -60,6 +60,8 @@ namespace sheet {
 			TiedDegree,
 			Note,
 			TiedNote,
+			Repeat,
+			TiedRepeat,
 			Chord,
 			EOB, // End of Bar aka. Bar Line
 			Meta,

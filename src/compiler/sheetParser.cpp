@@ -224,6 +224,19 @@ namespace sheet {
 					(
 						current_pos_.current_pos 
 						>> attr(sourceId_)
+						>> attr(Event::Repeat) 
+						>> "x"
+						>> attr(PitchDef())
+						>> (durationSymbols_ | attr(Event::NoDuration))  
+						>> -(
+								lit("~")[at_c<EvType>(_val) = Event::TiedRepeat] 
+								| (lit("`")[at_c<EvType>(_val) = Event::Meta][at_c<EvStringValue>(_val) = FM_STRING("vorschlag")])
+							)
+					)					
+					|
+					(
+						current_pos_.current_pos 
+						>> attr(sourceId_)
 						>> attr(Event::Chord)
 						>> attr(PitchDef())
 						>> attr(Event::NoDuration) 
