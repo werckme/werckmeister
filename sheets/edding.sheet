@@ -1,0 +1,45 @@
+@load "./chords/default.chords";
+@load "lua/mods/myArpeggio.lua";
+@load "lua/voicings/voicelead.lua";
+
+device: SC1 midi 2;
+
+tempo: 130;
+instrumentDef: piano   SC1 2 0 0;
+instrumentConf: piano
+    voicingStrategy voicelead
+;
+
+[
+type: template;
+name: x;
+instrument: piano; 
+{
+    /doOnce: myArpeggio style legato direction up/  
+    \fff
+    <I II III V VI VII>8~<I II III V VI VII>2. ~<I II III V VI VII>8 |
+    \p
+    /doOnce: myArpeggio style legato direction up/  
+    <I II III IV V VI VII>4~ <I II III IV V VI VII>2 r4  |
+}   
+]
+
+[
+type: template;
+name: y;
+instrument: piano; 
+{ 
+    \p
+    <I II III IV V VI VII>1
+}   
+]
+
+[
+type: sheet;
+{
+    /template: x/
+    C-7 | E-7 | C-7 | E-7 | C-7 | Gmaj7 | Bmaj7 | 
+    /template: y/
+    Ces7 | 
+}   
+]

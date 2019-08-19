@@ -18,6 +18,7 @@ static const char * LUA_EVENT_PROPETRY_PITCHES = "pitches";
 static const char * LUA_EVENT_PROPETRY_TYPE = "type";
 static const char * LUA_EVENT_PITCH_PROPETRY_PITCH = "pitch";
 static const char * LUA_EVENT_PITCH_PROPETRY_OCTAVE = "octave";
+static const char * LUA_EVENT_PITCH_PROPETRY_ALIAS = "alias";
 
 namespace sheet {
     namespace compiler {
@@ -61,15 +62,21 @@ namespace sheet {
                 lua_pushnumber(L, count++);
                 lua_createtable(L, event->pitches.size(), 0);
                 auto objecttop = lua_gettop(L);
+                auto resolved = ctx->resolvePitch(pitch);
                 // pitch
                 lua_pushstring(L, LUA_EVENT_PITCH_PROPETRY_PITCH);
-                lua_pushnumber(L, pitch.pitch);
+                lua_pushnumber(L, resolved.pitch);
                 lua_settable(L, objecttop);
                 // octave
                 lua_pushstring(L, LUA_EVENT_PITCH_PROPETRY_OCTAVE);
-                lua_pushnumber(L, pitch.octave);
+                lua_pushnumber(L, resolved.octave);
                 lua_settable(L, objecttop);  
-                lua_settable(L, top);                                
+                // alias
+                lua_pushstring(L, LUA_EVENT_PITCH_PROPETRY_ALIAS);
+                lua_pushstring(L, pitch.alias.c_str());
+                lua_settable(L, objecttop);  
+                // iterate
+                lua_settable(L, top);
             }
         }
         const char * LuaEvent::getTypename() const

@@ -184,9 +184,12 @@ namespace sheet {
             /**
              * @return the current velocity value between 0..1
              */
-            virtual double velocity();			
+            virtual double velocity();
+			/**
+			 * resolve pitches alias if exists
+			 */		
+			PitchDef resolvePitch(const PitchDef &pitch) const;						
 		protected:
-			PitchDef resolvePitch(const PitchDef &pitch) const;
 			virtual TrackId createTrackImpl() = 0;
 			virtual VoiceId createVoiceImpl() = 0;
 			virtual VoiceMetaDataPtr createVoiceMetaData() = 0;
