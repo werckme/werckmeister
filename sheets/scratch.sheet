@@ -16,11 +16,10 @@ instrument: drums;
 
 }
 {
-    --/do: swing/
-    --"ht"8 "ht"8   "ht"8 "ht"8   "ht"8 "ht"8   "ht"8 "ht"8 |
+    /do: swing/
+    "ht"8 "ht"8   "ht"8 "ht"8   "ht"8 "ht"8   "ht"8 "ht"8 |
 }
 {
-    /do: swing/
     "bd"4          "sn"4         "bd"4         "sn"4 |
 }
 ]

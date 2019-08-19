@@ -6,7 +6,6 @@ function isAccent(timeinfo)
 end
 
 function perform(event, args, timeinfo)
-    inspect(event)
     if isAccent(timeinfo) then
         event.offset = 0.2
     end
