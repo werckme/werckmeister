@@ -8,6 +8,7 @@ namespace sheet {
 	namespace compiler {
         /**
          * sets implicite duration to every event with duration = 0.
+		 * sets x shortcut e.g.: c1 x x x
          */
 		class Preprocessor {
 		public:

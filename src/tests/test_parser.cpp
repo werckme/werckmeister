@@ -936,3 +936,27 @@ BOOST_AUTO_TEST_CASE(test_x_vorschlag_repeat)
 	BOOST_CHECK(defs.tracks[0].voices.size() == 1);
 	BOOST_CHECK(defs.tracks[0].voices[0].events.size() == 6);
 }
+
+BOOST_AUTO_TEST_CASE(test_x_repeat_degree_2)
+{
+	using namespace fm;
+	using sheet::PitchDef;
+	fm::String text = FM_STRING("\
+		[\n\
+			{\n\
+				I4xxx|x1 \n\
+			}\n\
+		] \n\
+");
+	sheet::compiler::SheetDefParser parser;
+	auto defs = parser.parse(text);
+	BOOST_CHECK(defs.tracks.size() == 1);
+	BOOST_CHECK(defs.tracks[0].voices.size() == 1);
+	BOOST_CHECK(defs.tracks[0].voices[0].events.size() == 6);
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[0], sheet::Event::Degree, fm::degrees::I, 0, 1.0_N4));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[1], sheet::Event::Repeat, sheet::PitchDef::NoPitch, 0, 0));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[2], sheet::Event::Repeat, sheet::PitchDef::NoPitch, 0, 0));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[3], sheet::Event::Repeat, sheet::PitchDef::NoPitch, 0, 0));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[4], sheet::Event::EOB));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[5], sheet::Event::Repeat, sheet::PitchDef::NoPitch, 0, 4.0_N4));
+}
