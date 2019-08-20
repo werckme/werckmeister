@@ -29,7 +29,7 @@ namespace sheet {
 				{
 					auto &ev = *it;
 					if (ev.isTimeConsuming()) {
-						if (!ev.isRepeat()) {
+						if (!ev.isRepeat() && ev.type != Event::Rest) {
 							lastNoRepeat = ev;
 						}	
 						if (ev.isRepeat())  {

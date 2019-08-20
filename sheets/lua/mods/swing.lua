@@ -26,7 +26,7 @@ function perform(event, args, timeinfo)
     args = tokeyvalue(args)
     if isLaidBack(timeinfo, args) then
         event.offset = offset(args)
-        event.velocity = event.velocity * 0.5
+        event.velocity = event.velocity 
     end
     return { event }
 end

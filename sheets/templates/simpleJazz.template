@@ -26,7 +26,6 @@ type: template;
 name: simpleJazz.normal;
 instrument: piano; 
 {
-    --/voicingStrategy: voicelead range bass/
     <I II III IV V VI VII>1  |
     <I II III IV V VI VII>2. <I II III IV V VI VII>4  |
     <I II III IV V VI VII>1  |

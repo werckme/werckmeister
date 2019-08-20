@@ -6,7 +6,7 @@
 
 device: SC1 midi 2;
 
-tempo: 130;
+tempo: 160;
 instrumentDef: drums   SC1 9 0 0;
 instrumentDef: rhythm   SC1 1 8 16;
 instrumentDef: bass   SC1 2 8 26;
@@ -87,6 +87,12 @@ instrument: lead;
 {
     \ffff
     /do: swing grid 8 offset 60/
+    r4 e fis g | c'1~ | c'4 d e fis | b2 b2~ | b4 c d e | a1~ | a4 b, cis dis | g1 |
+    -- wiederholung
+    r4 e fis g | c'1~ | c'4 d e fis | b2 b2~ | b4 c d e | a1~ | 
+    -- 2.
+    a4 fis a g | e1~ | e4 r dis e | fis b, fis2~ | fis4 fis e fis | g1~ | g4 g fis g | a1~ |
+    a4 d d' c' | b1~ | b4 r ais b | c' c' a a | fis2. c'4 | b2 b2~ | b2. e4 | a2. g4 | fis2 g4 b, | e1 |
 }
 ]
 
@@ -94,6 +100,11 @@ instrument: lead;
 [
 type: sheet;
 {
-    C | C | Cmin | Ces7 | E | D | G | F | A B | 
+    r | A-7 | D7 | Gmaj7 | Cmaj7 | Fis-7b5 | B7 | E- | E- |
+    -- wiederholung
+    A-7 | D7 | Gmaj7 | Cmaj7 | Fis-7b5  | 
+    -- 2.
+    B7 | E- | E- | Fis-7b5  | B7b9 | E- | E- | A-7 | D7 | Gmaj7 | Gmaj7 |
+    Fis-7b5  | B7b9 | E-7 Es7 | D-7 Des7 | Cmaj7 | B7b9 | E- |
 }
 ]

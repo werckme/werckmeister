@@ -1,0 +1,34 @@
+@load "chords/default.chords";
+@load "pitchmaps/defaultMidiDrumMap.pitchmap";
+@load "lua/mods/swing.lua";
+@load "lua/voicings/voicelead.lua";
+
+device: SC1 midi 2;
+
+tempo: 100;
+instrumentDef: drums   SC1 9 0 0;
+
+[
+type: template;
+name: x;
+instrument: drums; 
+{
+
+}
+{
+    /do: swing grid 16 offset 100/
+    "ht"8 x x x    x16 x x8  x x |
+    x16x xx  xx xx  xx xx  xx xx   |
+}
+{
+    "bd"4           "sn"4            "bd"4               "sn"4 |
+}
+]
+
+[
+type: sheet;
+{
+    /template: x/
+    C-7 | E-7 | C-7 | E-7 | C-7 | Gmaj7 | Bmaj7 | 
+}   
+]

@@ -87,6 +87,10 @@ instrument: lead;
 {
     \ffff
     /do: swing grid 8 offset 60/
+    f4. c'4 as f8 | bes8 c'~  c'8t g es f4 r8 as  |  g8 f bes as des' c' as f |
+    des f  g8t es f r4 f'~ | f'4.  c'8 bes4  des'8 f' | c' bes~ bes8t es' f' bes4 r8 des'8  |  
+    es' f' c' des' bes f'  c'8t as' f'~ | f' des' bes  c' as f  r4 c'~ | c'  bes~  bes8 g c'4~ |
+    c'8 des'~ des'8t bes g  c'4  r8  d'8~ | d'8 c'  as8t f c  des f as  c' g f | bes as f  g as f r2 |
 }
 ]
 
@@ -94,6 +98,9 @@ instrument: lead;
 [
 type: sheet;
 {
-    C | C | Cmin | Ces7 | E | D | G | F | A B | 
+    F-7 | Bes-7 | F-7   | 
+    F7  | Bes-7 | Bes-7 |
+    F-7 | As7   | G-7b5   |
+    C7  | F-7  D-7b5 | Desmaj7  Gesmaj7 |
 }
 ]
