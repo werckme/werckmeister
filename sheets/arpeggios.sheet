@@ -2,11 +2,15 @@
 --@load "./templates/simpleDisco.template";
 @load "./templates/justchords.template";
 @load "./pitchmaps/defaultMidiDrumMap.pitchmap";
+@load "lua/voicings/voicelead.lua";
 
 device: SC1 midi 1;
 --           instrument   dv ch cc pc
 instrumentDef: piano      SC1 2 0 104;
 
+instrumentConf: piano
+    voicingStrategy voicelead
+;
 
 [
 type: sheet;

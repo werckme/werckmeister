@@ -87,7 +87,7 @@ namespace sheet {
 			auto ctx = context();
 			ctx->capabilities.canSeek = false;
 			Preprocessor preprocessor;
-			SheetEventRenderer renderer(ctx.get());
+			auto renderer = sheetEventRenderer();
 			for (auto &track : document_->sheetDef.tracks)
 			{
 				fm::String type = getFirstMetaValueBy(SHEET_META__TRACK_META_KEY_TYPE, track.trackInfos);
@@ -107,7 +107,7 @@ namespace sheet {
 					ctx->setTarget(trackId, voiceId);
 					for (const auto &ev : voice.events)
 					{
-						renderer.addEvent(ev);
+						renderer->addEvent(ev);
 					}
 				}
 			}
@@ -181,7 +181,7 @@ namespace sheet {
 				if (ev.type == Event::Rest) {
 					auto meta = ctx->voiceMetaData(ctx->chordVoiceId());
 					ev.duration = meta->barLength * ev.multiplicator;
-					ctx->rest(ev.duration);
+					ctx->rest(ev.duration); 
 					sheetTemplateRenderer.sheetRest(ev.duration);
 				}
 				else if (ev.stringValue == SHEET_META__SET_SHEET_TEMPLATE) {
