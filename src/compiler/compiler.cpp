@@ -87,7 +87,7 @@ namespace sheet {
 			auto ctx = context();
 			ctx->capabilities.canSeek = false;
 			Preprocessor preprocessor;
-			SheetEventRenderer renderer(ctx);
+			SheetEventRenderer renderer(ctx.get());
 			for (auto &track : document_->sheetDef.tracks)
 			{
 				fm::String type = getFirstMetaValueBy(SHEET_META__TRACK_META_KEY_TYPE, track.trackInfos);
@@ -174,8 +174,8 @@ namespace sheet {
 			}
 			auto &sheetEvents = sheetTrack->voices.begin()->events; 
 			determineChordLengths(sheetEvents.begin(), sheetEvents.end());
-			SheetTemplateRenderer sheetTemplateRenderer(ctx);
-			SheetEventRenderer sheetEventRenderer(ctx);
+			SheetTemplateRenderer sheetTemplateRenderer(ctx.get());
+			SheetEventRenderer sheetEventRenderer(ctx.get());
 			currentSheetTemplateRenderer_ = &sheetTemplateRenderer;
 			for (auto &ev : sheetEvents) {
 				ctx->setChordTrackTarget(); // target will be lost after calling addEvent

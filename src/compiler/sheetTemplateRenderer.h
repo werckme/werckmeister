@@ -23,12 +23,12 @@ namespace sheet {
         class SheetEventRenderer;
         class SheetTemplateRenderer {
         public:
-            SheetTemplateRenderer(AContextPtr ctx);
+            SheetTemplateRenderer(AContext* ctx);
             virtual ~SheetTemplateRenderer();
             void render(fm::Ticks duration);
             void sheetRest(fm::Ticks duration);
             void switchSheetTemplates(const AContext::SheetTemplates &next);
-            AContextPtr context() const { return this->ctx_; }
+            AContext* context() const { return this->ctx_; }
             void seekTo(double quarterNotes);
         private:
             void remberPosition(const Voice &voice, 
@@ -57,7 +57,7 @@ namespace sheet {
             typedef std::unordered_map<const void*, AContext::Id> PtrIdMap;
             SheetEventRenderer *sheetEventRenderer;
 			PtrIdMap ptrIdMap_;
-            AContextPtr ctx_;
+            AContext* ctx_;
         };
     }
 }

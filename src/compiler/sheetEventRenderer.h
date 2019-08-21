@@ -8,14 +8,14 @@ namespace sheet {
     namespace compiler {
         class SheetEventRenderer {
         public:
-            SheetEventRenderer(AContextPtr ctx) : ctx_(ctx) {}
+            SheetEventRenderer(AContext *ctx) : ctx_(ctx) {}
             virtual ~SheetEventRenderer() = default;
             void addEvent(const Event &event);
-            AContextPtr context() const { return this->ctx_; }
+            AContext* context() const { return this->ctx_; }
             void renderEvent(const Event &_ev);
         protected:
         private:
-            AContextPtr ctx_;
+            AContext* ctx_;
         };
     }
 }

@@ -26,7 +26,7 @@ namespace sheet {
 	}
     namespace compiler {
 
-		SheetTemplateRenderer::SheetTemplateRenderer(AContextPtr ctx) : ctx_(ctx) 
+		SheetTemplateRenderer::SheetTemplateRenderer(AContext* ctx) : ctx_(ctx) 
 		{
 			this->sheetEventRenderer = new SheetEventRenderer(ctx);
 		}

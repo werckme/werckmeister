@@ -23,7 +23,7 @@ namespace sheet {
 			template<>
 			bool renderEvent<Event::Degree>(SheetEventRenderer* renderer, const Event *ev)
 			{
-                 auto ctx = renderer->context().get();
+                 auto ctx = renderer->context();
 				auto chordDef = ctx->currentChordDef();
 				auto chord = ctx->currentChord();
 				auto voicingStratgy = ctx->currentVoicingStrategy();
@@ -38,7 +38,7 @@ namespace sheet {
 			template<>
 			bool renderEvent<Event::TiedDegree>(SheetEventRenderer* renderer, const Event *ev)
 			{
-                auto ctx = renderer->context().get();
+                auto ctx = renderer->context();
 				auto chordDef = ctx->currentChordDef();
 				auto chord = ctx->currentChord();
 				auto voicingStratgy = ctx->currentVoicingStrategy();
@@ -61,7 +61,7 @@ namespace sheet {
 			template<>
 			bool renderEvent<Event::EOB>(SheetEventRenderer* renderer, const Event *ev)
 			{
-                auto ctx = renderer->context().get();
+                auto ctx = renderer->context();
 				ctx->newBar();
 				return true;
 			}
@@ -69,7 +69,7 @@ namespace sheet {
 			template<>
 			bool renderEvent<Event::Rest>(SheetEventRenderer* renderer, const Event *ev)
 			{
-                auto ctx = renderer->context().get();
+                auto ctx = renderer->context();
 				ctx->rest(ev->duration);
 				return true;
 			}
@@ -77,7 +77,7 @@ namespace sheet {
 			template<>
 			bool renderEvent<Event::Chord>(SheetEventRenderer* renderer, const Event *chordEv)
 			{
-                auto ctx = renderer->context().get();
+                auto ctx = renderer->context();
 				ctx->setChord(*chordEv);
 				ctx->seek(chordEv->duration);
 				return true;
@@ -85,7 +85,7 @@ namespace sheet {
 			template<>
 			bool renderEvent<Event::Meta>(SheetEventRenderer* renderer, const Event *ev)
 			{
-                auto ctx = renderer->context().get();
+                auto ctx = renderer->context();
 				ctx->setMeta(*ev);
 				return true;
 			}
@@ -135,14 +135,14 @@ namespace sheet {
 			}
 			ev.velocity = ctx_->velocity();
 			for (auto mod : meta->modifications) {
-				mod->perform(ctx_.get(), ev);
+				mod->perform(ctx_, ev);
 			}
 			for (auto mod : meta->modificationsOnce) {
-				mod->perform(ctx_.get(), ev);
+				mod->perform(ctx_, ev);
 			}			
 			meta->modificationsOnce.clear();
 			auto sanweis = ctx_->spielanweisung();
-			sanweis->perform(ctx_.get(), ev);
+			sanweis->perform(ctx_, ev);
 			meta->expression = tmpExpression;
 		}
     }
