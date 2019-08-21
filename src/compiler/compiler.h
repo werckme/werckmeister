@@ -8,6 +8,8 @@ namespace sheet {
 	struct Event;
 	namespace compiler {
 		class SheetTemplateRenderer;
+		class SheetEventRenderer;
+		typedef std::shared_ptr<SheetEventRenderer> SheetEventRendererPtr;
 		class Compiler {
 		public:
 			Compiler();
@@ -17,6 +19,8 @@ namespace sheet {
 			AContextPtr context() const { return context_; }
 			void compile(DocumentPtr document);
 			~Compiler();
+			SheetEventRendererPtr sheetEventRenderer();
+			void sheetEventRenderer(SheetEventRendererPtr);
 		protected:
 			void renderTracks();
 			void renderChordTrack();
@@ -28,6 +32,7 @@ namespace sheet {
 			//// Meta Event Handler
 			void sheetTemplatePosition(const fm::String &cmd);
 			SheetTemplateRenderer *currentSheetTemplateRenderer_ = nullptr;
+			SheetEventRendererPtr sheetEventRenderer_;
 		};
 	}
 }

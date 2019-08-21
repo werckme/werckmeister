@@ -23,7 +23,7 @@ namespace sheet {
         class SheetEventRenderer;
         class SheetTemplateRenderer {
         public:
-            SheetTemplateRenderer(AContext* ctx);
+            SheetTemplateRenderer(AContext* ctx, SheetEventRenderer *renderer);
             virtual ~SheetTemplateRenderer();
             void render(fm::Ticks duration);
             void sheetRest(fm::Ticks duration);
@@ -55,9 +55,9 @@ namespace sheet {
                 fm::Ticks alreadyWritten
             );
             typedef std::unordered_map<const void*, AContext::Id> PtrIdMap;
+            AContext* ctx_;
             SheetEventRenderer *sheetEventRenderer;
 			PtrIdMap ptrIdMap_;
-            AContext* ctx_;
         };
     }
 }

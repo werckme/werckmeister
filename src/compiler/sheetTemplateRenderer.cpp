@@ -26,14 +26,14 @@ namespace sheet {
 	}
     namespace compiler {
 
-		SheetTemplateRenderer::SheetTemplateRenderer(AContext* ctx) : ctx_(ctx) 
+		SheetTemplateRenderer::SheetTemplateRenderer(AContext* ctx, SheetEventRenderer *renderer) : 
+			ctx_(ctx) 
+			, sheetEventRenderer(renderer)
 		{
-			this->sheetEventRenderer = new SheetEventRenderer(ctx);
 		}
 
 		SheetTemplateRenderer::~SheetTemplateRenderer() 
 		{
-			delete sheetEventRenderer;
 		}
 
 		void SheetTemplateRenderer::switchSheetTemplates(const AContext::SheetTemplates &templates)

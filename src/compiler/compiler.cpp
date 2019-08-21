@@ -174,8 +174,7 @@ namespace sheet {
 			}
 			auto &sheetEvents = sheetTrack->voices.begin()->events; 
 			determineChordLengths(sheetEvents.begin(), sheetEvents.end());
-			SheetTemplateRenderer sheetTemplateRenderer(ctx.get());
-			SheetEventRenderer sheetEventRenderer(ctx.get());
+			SheetTemplateRenderer sheetTemplateRenderer(ctx.get(), sheetEventRenderer().get());
 			currentSheetTemplateRenderer_ = &sheetTemplateRenderer;
 			for (auto &ev : sheetEvents) {
 				ctx->setChordTrackTarget(); // target will be lost after calling addEvent
@@ -189,15 +188,27 @@ namespace sheet {
 					switchSheetTemplate(sheetTemplateRenderer, ev);
 				}
 				else if (ev.type != Event::Chord) {
-					sheetEventRenderer.addEvent(ev);
+					sheetEventRenderer()->addEvent(ev);
 				} else {
 					auto meta = ctx->voiceMetaData(ctx->chordVoiceId());
 					ev.duration = meta->barLength * ev.multiplicator;	
-					sheetEventRenderer.addEvent(ev);
+					sheetEventRenderer()->addEvent(ev);
 					sheetTemplateRenderer.render(ev.duration);
 				}
 			}
 			currentSheetTemplateRenderer_ = nullptr;
+		}
+
+		SheetEventRendererPtr Compiler::sheetEventRenderer()
+		{
+			if (!this->sheetEventRenderer_) {
+				this->sheetEventRenderer_ = std::make_shared<SheetEventRenderer>(context().get());
+			}
+			return this->sheetEventRenderer_;
+		}
+		void Compiler::sheetEventRenderer(SheetEventRendererPtr renderer)
+		{
+			this->sheetEventRenderer_ = renderer;
 		}
 	}
 }
