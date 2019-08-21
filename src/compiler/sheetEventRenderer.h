@@ -10,9 +10,9 @@ namespace sheet {
         public:
             SheetEventRenderer(AContext *ctx) : ctx_(ctx) {}
             virtual ~SheetEventRenderer() = default;
-            void addEvent(const Event &event);
             AContext* context() const { return this->ctx_; }
-            void renderEvent(const Event &_ev);
+            virtual void addEvent(const Event &event);
+            virtual void renderEvent(const Event &_ev);
         protected:
         private:
             AContext* ctx_;
