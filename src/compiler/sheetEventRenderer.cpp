@@ -142,11 +142,14 @@ namespace sheet {
 			}			
 			meta->modificationsOnce.clear();
 			auto sanweis = ctx_->spielanweisung();
-			sanweis->perform(ctx_, events);
+			if (sanweis) {
+				sanweis->perform(ctx_, events);
+			}
 			meta->expression = tmpExpression;
 			for (const auto &event : events) {
 				renderEventPitches(event);
 			}
+			ctx_->seek(ev.duration);
 		}
 
 		void SheetEventRenderer::renderEventPitches(const Event &ev)
@@ -161,7 +164,7 @@ namespace sheet {
 			{
 				ctx->renderPitch(pitch, duration, ev.velocity, tying);
 			}
-			ctx->seek(duration - ev.offset);
+			ctx->seek(-ev.offset);
 		}
     }
 }

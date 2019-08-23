@@ -1,13 +1,14 @@
 require "lua/com/com"
 require "events"
 
-function perform(event, args, timeinfo)
+function perform(eventsOrigin, args, timeinfo)
+    local event = eventsOrigin[1]
+    local events = { }
     args = tokeyvalue(args)
     local comparer = pitchCompare
     if args.direction == "down" then
         comparer = pitchCompareReversed
     end
-    local events = { }
     local duration = event.duration / #event.pitches
     table.sort( event.pitches, comparer)
     for i, pitch in pairs(event.pitches) do

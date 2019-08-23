@@ -10,7 +10,7 @@
 #include <functional>
 #include <fm/exception.hpp>
 #include "ASheetObject.hpp"
-
+#include "error.h"
 namespace sheet {
 
 	namespace {
@@ -121,13 +121,7 @@ namespace sheet {
 			return type == TiedNote || type == TiedDegree;
 		}
 
-		void isTied(bool val) {
-			if (val) {
-				type = (type == Note) ? TiedNote : TiedDegree;
-			} else {
-				type = (type == TiedNote) ? Note : Degree;
-			}
-		}
+		void isTied(bool val);
 
 		bool isPitchBend() const {
 			return type == PitchBend;

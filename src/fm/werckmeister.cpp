@@ -14,7 +14,6 @@
 #include "compiler/voicingStrategies.h"
 #include "compiler/voicings/VoicingStrategy.h"
 #include "compiler/voicings/Lua.h"
-#include "compiler/spielanweisung/Normal.h"
 #include "compiler/spielanweisung/Arpeggio.h"
 #include "compiler/spielanweisung/Vorschlag.h"
 #include "compiler/spielanweisung/spielanweisungen.h"
@@ -133,11 +132,6 @@ namespace fm {
 		return midiContext;
 	}
 
-	sheet::compiler::AModificationPtr Werckmeister::getDefaultSpielanweisung()
-	{
-		return getSpielanweisung(SHEET_SPIELANWEISUNG_NORMAL);
-	}
-
 	sheet::VoicingStrategyPtr Werckmeister::getDefaultVoicingStrategy()
 	{
 		return getVoicingStrategy(SHEET_VOICING_STRATEGY_DEFAULT);
@@ -174,9 +168,6 @@ namespace fm {
 
 	sheet::compiler::AModificationPtr Werckmeister::getSpielanweisung(const fm::String &name)
 	{
-		if (name == SHEET_SPIELANWEISUNG_NORMAL) {
-			return std::make_shared<sheet::compiler::Normal>(); 
-		}
 		if (name == SHEET_SPIELANWEISUNG_ARPEGGIO) {
 			return std::make_shared<sheet::compiler::Arpeggio>(); 
 		}

@@ -98,4 +98,15 @@ namespace sheet {
 		ss << "(" << duration << ")";
 		return ss.str();
 	}
+
+	void Event::isTied(bool val) {
+		if (type!=Note && type!=Degree && type != TiedNote && type != TiedDegree) {
+			throw std::runtime_error("set isTied property failed: event is not a note nor a degree type");
+		}
+		if (val) {
+			type = (type == Note) ? TiedNote : TiedDegree;
+		} else {
+			type = (type == TiedNote) ? Note : Degree;
+		}
+	}
 }

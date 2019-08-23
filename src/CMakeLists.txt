@@ -23,7 +23,6 @@ SET (SRC_FETZER_LIB
     compiler/spielanweisung/ASpielanweisung.cpp
     compiler/spielanweisung/Arpeggio.cpp
     compiler/spielanweisung/Vorschlag.cpp
-    compiler/spielanweisung/Normal.cpp
     compiler/modification/AModification.cpp
     compiler/modification/Bend.cpp
     compiler/modification/LuaMod.cpp

@@ -44,16 +44,10 @@ namespace sheet {
 		AModificationPtr AContext::spielanweisung()
 		{
 			auto meta = voiceMetaData();
-			if (!defaultSpielanweisung_) {
-				defaultSpielanweisung_ = fm::getWerckmeister().getDefaultSpielanweisung();
-			}
 			if (meta->spielanweisungOnce) {
 				auto tmp = meta->spielanweisungOnce;
 				meta->spielanweisungOnce.reset();
 				return tmp;
-			}
-			if (!meta->spielanweisung) {
-				return defaultSpielanweisung_;
 			}
 			return meta->spielanweisung;
 		}

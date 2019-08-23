@@ -3,7 +3,7 @@
 
 #include <fm/units.hpp>
 #include "sheet/Event.h"
-#include <vector>
+#include <list>
 
 namespace sheet {
     namespace compiler {
@@ -12,7 +12,7 @@ namespace sheet {
         protected:
             AModification() = default;
         public:
-            typedef std::vector<Event> Events;
+            typedef std::list<Event> Events;
             virtual ~AModification() = default;
             virtual void perform(AContext *ctx, Events &events) = 0;
             virtual void setArguments(const Event::Args &args) {}

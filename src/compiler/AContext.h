@@ -208,7 +208,6 @@ namespace sheet {
 			VoiceMetaDataMap voiceMetaDataMap_;
 			TrackMetaDataMap trackMetaDataMap_;
 			ISheetTemplateDefServerPtr sheetTemplateDefServer_ = nullptr;
-			AModificationPtr defaultSpielanweisung_;
         };
 
 		///////////////////////////////////////////////////////////////////////

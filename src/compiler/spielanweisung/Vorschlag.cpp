@@ -8,13 +8,16 @@ namespace sheet {
         const fm::Ticks Vorschlag::defaultDuration = 1.0_N64;
         void Vorschlag::perform(AContext *ctx, Events &events)
         {
-            // auto meta = ctx->voiceMetaData();
-            // auto vorschlagDuration = vorschlagNote.duration != Event::NoDuration ? vorschlagNote.duration : defaultDuration;
-            // ctx->seek(-vorschlagDuration);
-            // auto preservedLastEventDuration = meta->lastEventDuration;
-            // Base::perform(ctx, vorschlagNote);
-            // meta->lastEventDuration = preservedLastEventDuration;
-            // Base::perform(ctx, ev);
+            if (events.empty()) {
+                return;
+            }
+            Event &mainNote = events.front();
+            auto vorschlagCopy = vorschlagNote;
+            vorschlagCopy.type = Event::Note;
+            vorschlagCopy.duration = vorschlagNote.duration != Event::NoDuration ? vorschlagNote.duration : defaultDuration;
+            vorschlagCopy.velocity = ctx->velocity();
+            events.push_front(vorschlagCopy);
+            mainNote.duration -= vorschlagCopy.duration; 
         }
     }
 }
