@@ -17,7 +17,8 @@ namespace sheet {
             vorschlagCopy.duration = vorschlagNote.duration != Event::NoDuration ? vorschlagNote.duration : defaultDuration;
             vorschlagCopy.velocity = ctx->velocity();
             events.push_front(vorschlagCopy);
-            mainNote.duration -= vorschlagCopy.duration; 
+            mainNote.duration -= vorschlagCopy.duration;
+            mainNote.offset = vorschlagCopy.duration;
         }
     }
 }

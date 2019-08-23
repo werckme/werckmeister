@@ -1,0 +1,42 @@
+@load "chords/default.chords";
+
+device: SC1 midi 2;
+
+tempo: 130;
+instrumentDef: lead    SC1 3 0 0;
+
+
+
+[
+instrument: lead;
+{
+    \ffff
+    cis`c4 c c c | cis8`c4 c c c
+}
+]
+
+[
+type: template;
+name: x;
+instrument: lead;
+{
+    \ffff
+    I,4 I, I,  I,`I, | I, I, I,  I,8`I,
+}
+]
+
+
+
+[
+type: sheet;
+name: x;
+instrument: lead;
+{
+    C | C 
+}
+]
+
+
+
+
+
