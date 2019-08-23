@@ -1,0 +1,35 @@
+@load "lua/mods/swing.lua";
+
+
+[
+type: template;
+name: drums.reggae.normal;
+instrument: drums; 
+{
+
+}
+{
+    /do: swing grid 8 offset 50/
+    !f"ht"4     x8 x                "ht"4        x8 x|
+    !f"ht"4     "ht"8t x x          x r8t "ht"8t x8 x|
+    !f"ht"4     !pp"ho1"4           "ht"4        x8 x|
+    !f"ht"4     !p"ho2"4             r2              |
+    
+    !f"ht"4     x8 x                "ht"4        x8 x|
+    !f"ht"4     "ht"8t x x          x r8t "ht"8t x8 x|
+    !f"ht"4     !pp"ho1"4           "ht"4        x8 x|
+    !f"ht"4     "ht"8t r "ht"       x r8t "ht"8t x8 x|    
+}
+{
+    /do: swing grid 8 offset 100/
+    r           r         "bd"4           r |
+    r           r         "sn"4           r |
+    r           r         "bd"4           r |
+    r   "hto1"4.        "hto1"8       "mto1"8t r "mto1"   |
+    
+    r4          r         "bd"4           r |
+    r           r         "sn"4           r |
+    r           r         "bd"4           r |
+    r           r         "sn"4           r |
+}
+]

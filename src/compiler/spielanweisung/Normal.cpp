@@ -4,17 +4,17 @@
 namespace sheet {
     namespace compiler {
 
-        void Normal::perform(AContext *ctx, const Event &ev)
+        void Normal::perform(AContext *ctx, Events &events)
         {
-            const auto& pitches = ev.pitches;
-			auto duration = ev.duration;
-			auto tying = ev.isTying(); 
-            auto meta = ctx->voiceMetaData();
-			for (const auto &pitch : pitches)
-			{
-				ctx->renderPitch(pitch, duration, ev.velocity, tying);
-			}
-			ctx->seek(duration);
+            // const auto& pitches = ev.pitches;
+			// auto duration = ev.duration;
+			// auto tying = ev.isTying(); 
+            // auto meta = ctx->voiceMetaData();
+			// for (const auto &pitch : pitches)
+			// {
+			// 	ctx->renderPitch(pitch, duration, ev.velocity, tying);
+			// }
+			// ctx->seek(duration);
         }
 
     }

@@ -13,6 +13,7 @@ namespace sheet {
             AContext* context() const { return this->ctx_; }
             virtual void addEvent(const Event &event);
             virtual void renderEvent(const Event &_ev);
+            virtual void renderEventPitches(const Event &ev);
         protected:
         private:
             AContext* ctx_;

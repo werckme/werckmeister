@@ -9,6 +9,8 @@
 #include <fm/lua/luaHelper.h>
 
 static const char * LUA_EVENT_TYPE_NOTE = "note";
+static const char * LUA_EVENT_TYPE_DEGREE = "degree";
+static const char * LUA_EVENT_TYPE_PITCHBEND = "pitchBend";
 static const char * LUA_EVENT_TYPE_UNKNOWN = "unknown";
 static const char * LUA_EVENT_PROPETRY_VELOCITY = "velocity";
 static const char * LUA_EVENT_PROPETRY_DURATION = "duration";
@@ -16,6 +18,7 @@ static const char * LUA_EVENT_PROPETRY_TYING = "isTied";
 static const char * LUA_EVENT_PROPETRY_OFFSET = "offset";
 static const char * LUA_EVENT_PROPETRY_PITCHES = "pitches";
 static const char * LUA_EVENT_PROPETRY_TYPE = "type";
+static const char * LUA_EVENT_PROPETRY_PITCHBENDVALUE = "pitchBendValue";
 static const char * LUA_EVENT_PITCH_PROPETRY_PITCH = "pitch";
 static const char * LUA_EVENT_PITCH_PROPETRY_OCTAVE = "octave";
 static const char * LUA_EVENT_PITCH_PROPETRY_ALIAS = "alias";
@@ -50,7 +53,7 @@ namespace sheet {
             // duration
             sheet::lua::setTableValue(L, LUA_EVENT_PROPETRY_DURATION, top, event->duration / fm::PPQ);
             // is tied
-            sheet::lua::setTableValue(L, LUA_EVENT_PROPETRY_TYING, top, event->isTying());
+            sheet::lua::setTableValue(L, LUA_EVENT_PROPETRY_TYING, top, event->isTied());
                              
         }
         void LuaEvent::pushPitches(lua_State *L)
@@ -83,8 +86,9 @@ namespace sheet {
         {
             switch (event->type)
             {
-            case Event::TiedNote:
+            case Event::TiedNote: return LUA_EVENT_TYPE_DEGREE;
             case Event::Note: return LUA_EVENT_TYPE_NOTE;
+            case Event::PitchBend: return LUA_EVENT_TYPE_PITCHBEND;
             default: return LUA_EVENT_TYPE_UNKNOWN;
             }
             return nullptr;
@@ -125,25 +129,22 @@ namespace sheet {
             }
         }
 
-        void LuaModification::performNoteResult(AContext *ctx)
+        void LuaModification::popNoteEvent(Event &event)
         {
-            double velocity = 0;
-            sheet::lua::getTableValue(L, LUA_EVENT_PROPETRY_VELOCITY, velocity);
-            fm::Ticks offset = 0;
-            sheet::lua::getTableValue(L, LUA_EVENT_PROPETRY_OFFSET, offset);
-            offset *= fm::PPQ;
-            fm::Ticks duration = 0;
-            sheet::lua::getTableValue(L, LUA_EVENT_PROPETRY_DURATION, duration);
+            sheet::lua::getTableValue(L, LUA_EVENT_PROPETRY_VELOCITY, event.velocity);
+            sheet::lua::getTableValue(L, LUA_EVENT_PROPETRY_OFFSET, event.offset);
+            event.offset *= fm::PPQ;
+            sheet::lua::getTableValue(L, LUA_EVENT_PROPETRY_DURATION, event.duration);
             bool isTied = false;
             sheet::lua::getTableValue(L, LUA_EVENT_PROPETRY_TYING, isTied);
-            duration *= fm::PPQ;            
+            event.isTied(isTied);
+            event.duration *= fm::PPQ;            
             lua_pushstring(L, LUA_EVENT_PROPETRY_PITCHES);
             lua_gettable(L, -2);
             if (!lua_istable(L, -1)) {
                 FM_THROW(Exception, "missing pitches");
             }
             lua_pushnil(L);
-            ctx->seek(offset);
             while (lua_next(L, -2) != 0) {
                 int pitch = 0;
                 sheet::lua::getTableValue(L, LUA_EVENT_PITCH_PROPETRY_PITCH, pitch);
@@ -153,13 +154,21 @@ namespace sheet {
                 sheet::PitchDef pitchDef;
                 pitchDef.pitch = pitch;
                 pitchDef.octave = octave;
-                ctx->renderPitch(pitchDef, duration, velocity, isTied);   
+                event.pitches.insert(pitchDef);
             }
-            ctx->seek(-offset);
             lua_pop(L, 1);
         }
 
-        void LuaModification::performResult(AContext *ctx, const Event &ev) {
+        void LuaModification::popPitchBendEvent(Event &event)
+        {
+            sheet::lua::getTableValue(L, LUA_EVENT_PROPETRY_PITCHBENDVALUE, event.pitchBendValue);
+            lua_pop(L, 1);
+        }
+
+
+        AModification::Events LuaModification::popEvents() 
+        {
+            Events result;
             if (!lua_istable(L, -1)) {
                 FM_THROW(Exception, "lua result is not a table");
             }
@@ -169,16 +178,23 @@ namespace sheet {
                     lua_pop(L, 1);
                     continue;
                 }
-                
-                PitchDef result;
                 fm::String type;
                 sheet::lua::getTableValue(L, LUA_EVENT_PROPETRY_TYPE, type);
-                if (type == LUA_EVENT_TYPE_NOTE) {
-                    performNoteResult(ctx);
+                if (type == LUA_EVENT_TYPE_NOTE || type == LUA_EVENT_TYPE_DEGREE) {
+                    Event event;
+                    event.type = (type == LUA_EVENT_TYPE_NOTE) ? Event::Note : Event::Degree;
+                    popNoteEvent(event);
+                    result.push_back(event);
                 }
+                if (type == LUA_EVENT_TYPE_PITCHBEND) {
+                    Event event;
+                    event.type = Event::PitchBend;
+                    popPitchBendEvent(event);
+                    result.push_back(event);
+                }                
                 lua_pop(L, 1);
             }
-            ctx->seek(ev.duration);
+            return result;
         }
 
         void LuaModification::setArguments(const Event::Args &args)
@@ -186,14 +202,27 @@ namespace sheet {
             this->args_ = args;
         }
 
-        void LuaModification::perform(AContext *ctx, const Event &ev)
+        void LuaModification::perform(AContext *ctx, Events &events)
         {
             lua_getglobal(L, LUA_MODIFICATION_FENTRY);
-            LuaEvent(&ev, ctx).push(L);
+            pushEvents(ctx, events);
             pushArgs(this->args_);
             lua::LuaTimeInfo(ctx->getTimeInfo()).push(L);
             call(3, 1);
-            performResult(ctx, ev);
+            auto processedEvents = popEvents();
+            events.swap(processedEvents);
+        }
+
+        void LuaModification::pushEvents(AContext *ctx, const Events &events)
+        {
+            lua_createtable(L, events.size(), 0);
+            auto top = lua_gettop(L);
+            int luaTableIndex = 1;
+            for (const auto &event : events) {
+                lua_pushinteger(L, luaTableIndex++);
+                LuaEvent(&event, ctx).push(L);
+                lua_settable(L, top);
+            }
         }
     }
 }

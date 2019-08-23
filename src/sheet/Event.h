@@ -66,6 +66,7 @@ namespace sheet {
 			EOB, // End of Bar aka. Bar Line
 			Meta,
 			Expression,
+			PitchBend,
 			NumEvents
 		};
 		typedef fm::Ticks Duration;
@@ -90,6 +91,8 @@ namespace sheet {
 		 * the event velocity value in a range 0..1, will be set during rendering
 		 */
 		double velocity = 0;
+		fm::Ticks offset = 0;
+		double pitchBendValue = 0;
 		bool isTimeConsuming() const {
 			return type == Rest 
 				|| type == Note 
@@ -114,8 +117,20 @@ namespace sheet {
 			return type == Degree || type == TiedDegree;
 		}
 
-		bool isTying() const {
+		bool isTied() const {
 			return type == TiedNote || type == TiedDegree;
+		}
+
+		void isTied(bool val) {
+			if (val) {
+				type = (type == Note) ? TiedNote : TiedDegree;
+			} else {
+				type = (type == TiedNote) ? Note : Degree;
+			}
+		}
+
+		bool isPitchBend() const {
+			return type == PitchBend;
 		}
 
 		fm::String toString() const;

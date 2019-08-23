@@ -15,7 +15,7 @@ instrumentDef: lead   OUT1  4 0 0;
 instrumentConf: piano
     volume 80
     f 70
-    voicingStrategy guitar
+    voicingStrategy voicelead
 ;
     
 instrumentConf: bass
@@ -54,6 +54,6 @@ name: myTemplate;
 instrument: piano; 
 {
     \f
-    <I II III IV V VI VII>1 |
+    <I II III IV V VI VII>1
 }
 ] 

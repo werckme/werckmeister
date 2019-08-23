@@ -22,11 +22,13 @@ function offset(args)
     return offset * max
 end
 
-function perform(event, args, timeinfo)
+function perform(events, args, timeinfo)
     args = tokeyvalue(args)
-    if isLaidBack(timeinfo, args) then
-        event.offset = offset(args)
-        event.velocity = event.velocity 
+    for i, event in pairs(events) do
+        if isLaidBack(timeinfo, args) then
+            event.offset = offset(args)
+            event.velocity = event.velocity 
+        end
     end
-    return { event }
+    return events
 end

@@ -3,20 +3,23 @@
 @load "lua/mods/swing.lua";
 @load "lua/voicings/voicelead.lua";
 @load "lua/voicings/guitar.lua";
+@load "templates/drums.reggae.template";
+@load "templates/bass.reggae.template";
+@load "templates/rhythm.reggae.template";
 
 device: SC1 midi 2;
 
 tempo: 130;
 instrumentDef: drums   SC1 9 0 0;
-instrumentDef: rhythm   SC1 1 8 16;
-instrumentDef: bass   SC1 2 8 26;
-instrumentDef: lead   SC1 3 0 0;
+instrumentDef: rhythm  SC1 1 16 28;
+instrumentDef: bass    SC1 2 8 26;
+instrumentDef: lead    SC1 3 0 0;
 instrumentDef: piano   SC1 4 0 0;
 
 instrumentConf: rhythm
     voicingStrategy voicelead 
     pan 60
-    volume 80;
+    volume 75;
 
 instrumentConf: lead
     pan 40
@@ -27,18 +30,6 @@ instrumentConf: piano
     pan 40
     volume 80;   
 
-[
-type: template;
-name: x;
-instrument: rhythm;
-{
-    \f
-    /do: swing grid 8 offset 40/
-    r4  <I II III IV V VI VII>32 r16.  <I II III IV V VI VII>16 r  
-    r4  <I II III IV V VI VII>32 r16.  <I II III IV V VI VII>16 r |
-
-}
-]
 
 [
 type: template;
@@ -48,37 +39,6 @@ instrument: piano;
     \f
     <I II III IV V VI VII>1~ | x
 
-}
-]
-
-[
-type: template;
-name: x;
-instrument: bass;
-{
-    /do: swing grid 8 offset 30/
-    I,,16 r16  I,,8   r2        V,,,4    |
-    I,,16 r16    r8   I,,8 r4.  V,,,4    |
-    I,,16 r16  I,,8   r2        V,,,4    |
-    I,,16 r16  I,,8   r2        V,,,4    |
-}
-]
-
-[
-type: template;
-name: x;
-instrument: drums; 
-{
-
-}
-{
-    /do: swing grid 8 offset 50/
-    !f"ht"4     x8 x         "ht"4        x8 x|
-    !f"ht"4     "ht"8t x x   x r8t "ht"8t x8 x|
-}
-{
-    r           r         "bd"4           r |
-    r           r         "sn"4           r |
 }
 ]
 
@@ -94,6 +54,24 @@ instrument: lead;
 [
 type: sheet;
 {
-    C | C | Cmin | Ces7 | E | D | G | F | A B | 
+    /template: 
+        x
+        drums.reggae.normal
+        bass.reggae.normal
+    /
+    C | C | Cmin | Ces7 | E | E-7 | Gmaj7 | F | A | A |
+    C | C | Cmin | Ces7 | E | E-7 | Gmaj7 | F | A | A | 
+    C | C | Cmin | Ces7 | E | E-7 | Gmaj7 | F | A | A |
+    C | C | Cmin | Ces7 | E | E-7 | Gmaj7 | F | A | A |
+    C | C | Cmin | Ces7 | E | E-7 | Gmaj7 | F | A | A |
+    C | C | Cmin | Ces7 | E | E-7 | Gmaj7 | F | A | A |
+    C | C | Cmin | Ces7 | E | E-7 | Gmaj7 | F | A | A |
+    C | C | Cmin | Ces7 | E | E-7 | Gmaj7 | F | A | A |
+    C | C | Cmin | Ces7 | E | E-7 | Gmaj7 | F | A | A |
 }
 ]
+
+
+
+
+

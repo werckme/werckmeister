@@ -2,6 +2,8 @@
 @load "./templates/simpleJazz.template";
 @load "./pitchmaps/defaultMidiDrumMap.pitchmap";
 --@load "./pitchmaps/battery3.tight.pitchmap";
+@load "lua/voicings/voicelead.lua";
+@load "lua/voicings/guitar.lua";
 
 tempo: 100;
 device: SC1 midi 2 offset 20;
@@ -14,10 +16,15 @@ instrumentDef: bass    SC1 7 0 32;
 instrumentDef: drums   SC1 9 0 32;
 
 
-instrumentConf: piano volume 80;
-instrumentConf: lead volume 100;
+instrumentConf: piano 
+    --voicingStrategy guitar
+    volume 80
+;
+instrumentConf: lead volume 80;
 instrumentConf: bass volume 80;
-instrumentConf: drums volume 90;
+instrumentConf: drums volume 80;
+
+
 
 
 
@@ -35,7 +42,7 @@ instrument: lead;
     f'2. cis'4 | e'2. d'4 | c'2. bes4 | a1 | 
 }
 ]
-
+ 
 [
 type: sheet;
 {

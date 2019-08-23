@@ -1,47 +1,38 @@
-@load "lua/voicings/simple.lua";
+@load "chords/default.chords";
+@load "pitchmaps/defaultMidiDrumMap.pitchmap";
+@load "lua/mods/swing.lua";
+@load "lua/voicings/voicelead.lua";
+@load "lua/voicings/guitar.lua";
+
+device: SC1 midi 2;
+
+tempo: 130;
+instrumentDef: drums   SC1 9 0 0;
+instrumentDef: rhythm  SC1 1 16 28;
+instrumentDef: bass    SC1 2 8 26;
+instrumentDef: lead    SC1 3 0 0;
+instrumentDef: piano   SC1 4 0 0;
 
 
 [
 type: template;
-name: bossanova.normal;
-instrument: guitar; 
+name: x;
+instrument: lead;
 {
-    /voicingStrategy: simpleGuitar/
-    \f
-    <I II III IV V VI VII>4 <I II III IV V VI VII>4 r8 <I II III IV V VI VII>8 r8 <I II III IV V VI VII>8  |
-    r8 <I II III IV V VI VII>8 r8 <I II III IV V VI VII>8 r4 <I II III IV V VI VII>4 |
-    <I II III IV V VI VII>4 <I II III IV V VI VII>4 r8 <I II III IV V VI VII>8 r8 <I II III IV V VI VII>8  |
-    r4 r8 <I II III IV V VI VII>8 r8 <I II III IV V VI VII>4. |
-}    
-] 
-
-[
-type: template;
-name: bossanova.normal;
-instrument: piano; 
-{
-    /voicingStrategy: simple range tenor/
-    <VII, VII>4 <III, V,>8 <V, V>8 r8 <III, V,>8 r8 <V, V> | r8 <III, V,>8 r8 <V, V> r8 <III, V,> r8 <VII, VII> |
-}    
-] 
-
-[
-type: template;
-name: bossanova.normal;
-instrument: bass; 
-{
-    \fff
-    I,,4. V,,8 V,,4. I,,8  |
-    I,,4. V,,8 V,,4 I,,4  |
-    I,,4. V,,8 V,,4. I,,8  |
-    I,,4. V,,8 V,,4 I,,8 V,,8  |
-}    
-] 
-
+    \ffff
+    /do: swing grid 8 offset 60/
+    <c f>8 x~x~x~x~x~xx |
+}
+]
 
 [
 type: sheet;
 {
     C |
-}    
-] 
+}
+]
+
+
+
+
+

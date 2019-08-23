@@ -127,23 +127,41 @@ namespace sheet {
 			Event ev = _ev;
 			auto meta = ctx_->voiceMetaData();
 			auto tmpExpression = meta->expression;
-
 			if (meta->singleExpression != fm::expression::Default) {
 				tmpExpression = meta->expression;
 				meta->expression = meta->singleExpression;
 				meta->singleExpression = fm::expression::Default;
 			}
 			ev.velocity = ctx_->velocity();
+			AModification::Events events = { ev };
 			for (auto mod : meta->modifications) {
-				mod->perform(ctx_, ev);
+				mod->perform(ctx_, events);
 			}
 			for (auto mod : meta->modificationsOnce) {
-				mod->perform(ctx_, ev);
+				mod->perform(ctx_, events);
 			}			
 			meta->modificationsOnce.clear();
 			auto sanweis = ctx_->spielanweisung();
-			sanweis->perform(ctx_, ev);
+			sanweis->perform(ctx_, events);
 			meta->expression = tmpExpression;
+			for (const auto &event : events) {
+				renderEventPitches(event);
+			}
+		}
+
+		void SheetEventRenderer::renderEventPitches(const Event &ev)
+		{
+			auto ctx = context();
+			ctx->seek(ev.offset);
+			const auto& pitches = ev.pitches;
+			auto duration = ev.duration;
+			auto tying = ev.isTied(); 
+            auto meta = ctx->voiceMetaData();
+			for (const auto &pitch : pitches)
+			{
+				ctx->renderPitch(pitch, duration, ev.velocity, tying);
+			}
+			ctx->seek(duration - ev.offset);
 		}
     }
 }

@@ -1,0 +1,14 @@
+@load "lua/mods/swing.lua";
+
+[
+type: template;
+name: bass.reggae.normal;
+instrument: bass;
+{
+    /do: swing grid 8 offset 30/
+    I,,16 r16  I,,8   r2        V,,,4    |
+    I,,16 r16    r8   I,,8 r4.  V,,,4    |
+    I,,16 r16  I,,8   r2        V,,,4    |
+    I,,16 r16  I,,8   r2        V,,,4    |
+}
+]
