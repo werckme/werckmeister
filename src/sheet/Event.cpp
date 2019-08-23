@@ -104,9 +104,9 @@ namespace sheet {
 			throw std::runtime_error("set isTied property failed: event is not a note nor a degree type");
 		}
 		if (val) {
-			type = (type == Note) ? TiedNote : TiedDegree;
+			type = isAbsoluteNote() ? TiedNote : TiedDegree;
 		} else {
-			type = (type == TiedNote) ? Note : Degree;
+			type = isAbsoluteNote() ? Note : Degree;
 		}
 	}
 }

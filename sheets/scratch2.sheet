@@ -1,6 +1,7 @@
 @load "chords/default.chords";
 @load "pitchmaps/defaultMidiDrumMap.pitchmap";
-@load "lua/mods/myArpeggio.lua";
+@load "lua/mods/staccato.lua";
+@load "lua/mods/swing.lua";
 @load "lua/voicings/voicelead.lua";
 @load "lua/voicings/guitar.lua";
 
@@ -18,8 +19,9 @@ instrumentDef: piano   SC1 4 0 0;
 instrument: lead;
 {
     \ffff
-    /modOnce: bend to 100/
-    c1 |
+    /do: swing/
+    /mod: staccato/
+    c8 xxxxxxx |
 }
 ]
 

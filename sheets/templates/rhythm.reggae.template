@@ -1,4 +1,5 @@
 @load "lua/mods/swing.lua";
+@load "lua/mods/staccato.lua";
 
 [
 type: template;
@@ -7,8 +8,9 @@ instrument: rhythm;
 {
     \f
     /do: swing grid 8 offset 40/
-    r4  <I II III IV V VI VII>32 r16.  <I II III IV V VI VII>16 r  
-    r4  <I II III IV V VI VII>32 r16.  <I II III IV V VI VII>16 r |
+    /mod: staccato/
+    r4   <I II III IV V VI VII>8  <I II III IV V VI VII>8 
+    r4   <I II III IV V VI VII>8  <I II III IV V VI VII>8 |
 
 }
 ]
