@@ -59,6 +59,13 @@ namespace sheet {
 			}
 
 			template<>
+			bool renderEvent<Event::PitchBend>(SheetEventRenderer* renderer, const Event *ev)
+			{
+				renderer->renderPitchBendEvent(*ev);
+				return true;
+			}
+
+			template<>
 			bool renderEvent<Event::EOB>(SheetEventRenderer* renderer, const Event *ev)
 			{
                 auto ctx = renderer->context();
@@ -147,7 +154,11 @@ namespace sheet {
 			}
 			meta->expression = tmpExpression;
 			for (const auto &event : events) {
-				renderEventPitches(event);
+				if (event.isPitchBend()) {
+					renderPitchBendEvent(event);
+				} else {
+					renderEventPitches(event);
+				}
 			}
 			ctx_->seek(ev.duration);
 		}
@@ -165,6 +176,14 @@ namespace sheet {
 				ctx->renderPitch(pitch, duration, ev.velocity, tying);
 			}
 			ctx->seek(-ev.offset);
+		}
+
+		void SheetEventRenderer::renderPitchBendEvent(const Event &pitchBendEvent)
+		{
+			auto ctx = context();
+            auto meta = ctx->voiceMetaData();
+			auto position = meta->position + static_cast<fm::Ticks>(pitchBendEvent.offset);
+			ctx->renderPitchbend(pitchBendEvent.pitchBendValue, position);
 		}
     }
 }

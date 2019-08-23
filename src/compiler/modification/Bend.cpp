@@ -9,24 +9,36 @@ namespace sheet {
 
         void Bend::perform(AContext *ctx, Events &events)
         {
-            // using namespace fm;
-            // if (ev.duration == 0) {
-            //     return;
-            // }
-            // double b = 0.5;
-            // double e = value;
-            // if (mode==From) {
-            //     b = value;
-            //     e = 0.5;
-            // }
-            // double c = e - b;
-            // double d = static_cast<double>(ev.duration);
-            // auto absPosition = ctx->voiceMetaData()->position;
-			// for (double t=0; t<ev.duration; t+=static_cast<double>( 1.0_N64 )) {
-            //     double x = c*t/d + b;
-            //     ctx->addPitchbendEvent(x, absPosition + static_cast<fm::Ticks>(t));
-            // }
-            // ctx->addPitchbendEvent(0.5, absPosition + ev.duration + 1);
+            using namespace fm;
+            if (events.empty()) {
+                return;
+            }
+            const auto &ev = events.front();
+            if (ev.duration == 0) {
+                return;
+            }
+            double b = 0.5;
+            double e = value;
+            if (mode==From) {
+                b = value;
+                e = 0.5;
+            }
+            double c = e - b;
+            double d = static_cast<double>(ev.duration);
+			for (double t=0; t<ev.duration; t+=static_cast<double>( 1.0_N64 )) {
+                double x = c*t/d + b;
+                Event pitchBendEvent;
+                pitchBendEvent.type = Event::PitchBend;
+                pitchBendEvent.pitchBendValue = x;
+                pitchBendEvent.offset = t;
+                events.push_back(pitchBendEvent);
+            }
+            Event finalResetPitchBend;
+            finalResetPitchBend.type = Event::PitchBend;
+            finalResetPitchBend.pitchBendValue = 0.5;
+            finalResetPitchBend.offset = ev.duration + 1;
+            events.push_back(finalResetPitchBend);
+            // swap result
         }
 
         void Bend::setArguments(const Event::Args &args)

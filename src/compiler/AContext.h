@@ -160,9 +160,9 @@ namespace sheet {
 			virtual void renderPitch(const PitchDef &pitch, fm::Ticks duration, double velocity, bool tying);
 			virtual void renderPitch(const PitchDef &pitch, fm::Ticks absolutePosition, double velocity, fm::Ticks duration) = 0;
 			/*
-			 * value = 0..1
+			 * value = 0..1, 0.5 is the middle position => no bending
 			 */
-			virtual void addPitchbendEvent(double value, fm::Ticks absolutePosition) = 0;			
+			virtual void renderPitchbend(double value, fm::Ticks absolutePosition) = 0;			
 			virtual void startEvent(const PitchDef &pitch, fm::Ticks absolutePosition, double velocity);
 			virtual void stopEvent(const PitchDef &pitch, fm::Ticks absolutePosition);
 			/**

@@ -15,17 +15,11 @@ instrumentDef: piano   SC1 4 0 0;
 
 
 [
---type: template;
-name: x;
 instrument: lead;
 {
     \ffff
-    /do: myArpeggio/
-    --c8 xxxxxxx 
-    <c e g bes cis'>1 |
-}
-{
-    --c4xxxx
+    /modOnce: bend to 100/
+    c1 |
 }
 ]
 

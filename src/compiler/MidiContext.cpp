@@ -108,7 +108,7 @@ namespace sheet {
 			midi_->tracks().at(trackId)->events().add(ev);
 		}
 
-		void MidiContext::addPitchbendEvent(double value, fm::Ticks absolutePosition) 
+		void MidiContext::renderPitchbend(double value, fm::Ticks absolutePosition) 
 		{
 			_checkMidi(midi_);
 			auto trackMeta = trackMetaData<MidiContext::TrackMetaData>();
