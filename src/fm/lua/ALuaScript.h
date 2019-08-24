@@ -22,6 +22,7 @@ namespace sheet {
             virtual void assertCanExecute() const = 0;
             virtual void call(size_t numArgs, size_t numResult);
             virtual void addPackagePath(const fm::String &path);
+            const fm::String & path() const { return _path; }
         protected:
             void error (const std::string &msg);
             lua_State *L = nullptr;

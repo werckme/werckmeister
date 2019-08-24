@@ -29,6 +29,7 @@ namespace sheet {
             typedef std::map<PitchDef, fm::Ticks> WaitForTieBuffer;
             typedef std::list<ASpielanweisungPtr> Spielanweisungen;
             typedef std::list<AModificationPtr> Modifications;
+            typedef std::unordered_map<fm::String, AModificationPtr> ModificationCache;
             fm::Ticks position = 0;
             /**
              * last note duration
@@ -59,7 +60,8 @@ namespace sheet {
             AModificationPtr spielanweisung;
             AModificationPtr spielanweisungOnce; // played once
             Modifications modifications;
-            Modifications modificationsOnce; // played once		
+            Modifications modificationsOnce; // played once
+            ModificationCache modificationCache;
             PitchDefSet startedEvents;
             int volume = 100;	
             int pan = 50;            

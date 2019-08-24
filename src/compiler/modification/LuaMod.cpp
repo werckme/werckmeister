@@ -47,7 +47,7 @@ namespace sheet {
             pushPitches(L);
             lua_settable(L, top);
             // offset
-            sheet::lua::setTableValue(L, LUA_EVENT_PROPETRY_OFFSET, top, 0);            
+            sheet::lua::setTableValue(L, LUA_EVENT_PROPETRY_OFFSET, top, event->offset / fm::PPQ);            
             // velocity
             sheet::lua::setTableValue(L, LUA_EVENT_PROPETRY_VELOCITY, top, event->velocity);      
             // duration

@@ -1,9 +1,9 @@
 @load "chords/default.chords";
 @load "pitchmaps/defaultMidiDrumMap.pitchmap";
-@load "lua/mods/staccato.lua";
 @load "lua/mods/swing.lua";
+@load "lua/mods/staccato.lua";
 @load "lua/voicings/voicelead.lua";
-@load "lua/voicings/guitar.lua";
+
 
 device: SC1 midi 2;
 
@@ -14,18 +14,67 @@ instrumentDef: bass    SC1 2 8 26;
 instrumentDef: lead    SC1 3 0 0;
 instrumentDef: piano   SC1 4 0 0;
 
+instrumentConf: rhythm
+    voicingStrategy voicelead 
+    pan 60
+    volume 75;
 
 [
-instrument: lead;
+type: template;
+name: x;
+instrument: rhythm;
 {
-    \ffff
-    /do: swing/
-    /mod: staccato/
-    c8 xxxxxxx |
+    \f
+    /do: swing grid 8 offset 40/
+    r4   /modOnce: staccato amount 100/ <I II III IV V VI VII>8  /modOnce: staccato amount 40/ <I II III IV V VI VII>8 
+    r4   /modOnce: staccato amount 100/ <I II III IV V VI VII>8  /modOnce: staccato amount 40/ <I II III IV V VI VII>8  
+    |
+
 }
 ]
 
 
+[
+type: sheet;
+{
+    C | C | Cmin | Ces7 | E | E-7 | Gmaj7 | F | A | A |
+    C | C | Cmin | Ces7 | E | E-7 | Gmaj7 | F | A | A | 
+    C | C | Cmin | Ces7 | E | E-7 | Gmaj7 | F | A | A |
+    C | C | Cmin | Ces7 | E | E-7 | Gmaj7 | F | A | A |
+    C | C | Cmin | Ces7 | E | E-7 | Gmaj7 | F | A | A |
+    C | C | Cmin | Ces7 | E | E-7 | Gmaj7 | F | A | A |
+    C | C | Cmin | Ces7 | E | E-7 | Gmaj7 | F | A | A |
+    C | C | Cmin | Ces7 | E | E-7 | Gmaj7 | F | A | A |
+    C | C | Cmin | Ces7 | E | E-7 | Gmaj7 | F | A | A |
+    C | C | Cmin | Ces7 | E | E-7 | Gmaj7 | F | A | A |
+    C | C | Cmin | Ces7 | E | E-7 | Gmaj7 | F | A | A | 
+    C | C | Cmin | Ces7 | E | E-7 | Gmaj7 | F | A | A |
+    C | C | Cmin | Ces7 | E | E-7 | Gmaj7 | F | A | A |
+    C | C | Cmin | Ces7 | E | E-7 | Gmaj7 | F | A | A |
+    C | C | Cmin | Ces7 | E | E-7 | Gmaj7 | F | A | A |
+    C | C | Cmin | Ces7 | E | E-7 | Gmaj7 | F | A | A |
+    C | C | Cmin | Ces7 | E | E-7 | Gmaj7 | F | A | A |
+    C | C | Cmin | Ces7 | E | E-7 | Gmaj7 | F | A | A |  
+    C | C | Cmin | Ces7 | E | E-7 | Gmaj7 | F | A | A |
+    C | C | Cmin | Ces7 | E | E-7 | Gmaj7 | F | A | A | 
+    C | C | Cmin | Ces7 | E | E-7 | Gmaj7 | F | A | A |
+    C | C | Cmin | Ces7 | E | E-7 | Gmaj7 | F | A | A |
+    C | C | Cmin | Ces7 | E | E-7 | Gmaj7 | F | A | A |
+    C | C | Cmin | Ces7 | E | E-7 | Gmaj7 | F | A | A |
+    C | C | Cmin | Ces7 | E | E-7 | Gmaj7 | F | A | A |
+    C | C | Cmin | Ces7 | E | E-7 | Gmaj7 | F | A | A |
+    C | C | Cmin | Ces7 | E | E-7 | Gmaj7 | F | A | A |
+    C | C | Cmin | Ces7 | E | E-7 | Gmaj7 | F | A | A |
+    C | C | Cmin | Ces7 | E | E-7 | Gmaj7 | F | A | A | 
+    C | C | Cmin | Ces7 | E | E-7 | Gmaj7 | F | A | A |
+    C | C | Cmin | Ces7 | E | E-7 | Gmaj7 | F | A | A |
+    C | C | Cmin | Ces7 | E | E-7 | Gmaj7 | F | A | A |
+    C | C | Cmin | Ces7 | E | E-7 | Gmaj7 | F | A | A |
+    C | C | Cmin | Ces7 | E | E-7 | Gmaj7 | F | A | A |
+    C | C | Cmin | Ces7 | E | E-7 | Gmaj7 | F | A | A |
+    C | C | Cmin | Ces7 | E | E-7 | Gmaj7 | F | A | A |        
+}
+]
 
 
 
