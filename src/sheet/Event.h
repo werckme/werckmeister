@@ -10,7 +10,7 @@
 #include <functional>
 #include <fm/exception.hpp>
 #include "ASheetObject.hpp"
-#include "error.h"
+
 namespace sheet {
 
 	namespace {
