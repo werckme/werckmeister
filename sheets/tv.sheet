@@ -1,0 +1,98 @@
+@load "chords/default.chords";
+@load "pitchmaps/defaultMidiDrumMap.pitchmap";
+@load "lua/voicings/voicelead.lua";
+@load "lua/voicings/guitar.lua";
+@load "lua/mods/swing.lua";
+@load "templates/drums.disco.template";
+@load "templates/bass.disco.template";
+@load "templates/rhythm.country.template";
+@load "templates/drums.country.template";
+@load "templates/bass.country.template";
+
+
+device: SC1 midi 2;
+
+tempo: 73;
+instrumentDef: piano   SC1 0 0 0;
+instrumentDef: lead    SC1 1 0 12;
+instrumentDef: rhythm  SC1 2 8 4;
+instrumentDef: bass  SC1 3 0 26;
+instrumentDef: drums  SC1 9 0 0;
+
+instrumentConf: rhythm
+    volume 80;   
+
+instrumentConf: piano
+    volume 70;  
+
+instrumentConf: lead 
+    volume 100;   
+
+instrumentConf: rhythm
+    voicingStrategy voicelead range tenor
+    pan 40
+    volume 100;   
+
+[
+type: template;
+name: x;
+instrument: piano;
+{
+    /signature: 2 4/
+    <I V>4 x |
+}
+]
+
+[
+instrument: lead;
+{
+    /signature: 2 4/
+    \fff
+    r2     | d'8. x16 x32 x x8 r16 | c'16 f d b,   g c' x32 x b e | c8. f'32 c' e'16 e x32 b, g, a, |
+    c'8 x16 x32 x  e' g g, e b c' r16 | b8. d'16t g' b  g16 e g | g'8 xxx | 
+    -- repeat
+            d'8. x16 x32 x x8 r16 | c'16 f d b,   g c' x32 x b e | c8. f'32 c' e'16 e x32 b, g, a, |
+    c'8 x16 x32 x  e' g g, e b c' r16 | b8. d'16t g' b  g16 e g | g'8 xxx |
+}
+]
+
+
+[
+type: sheet;
+{
+    /signature: 2 4/
+    /template:  
+        x
+        drums.country.normal
+        bass.country.normal
+        rhythm.country.normal
+    / 
+    G | G | G7 | G6 | G | G | G7 | 
+    /template:  
+        x
+        drums.country.ende
+        bass.country.ende
+        rhythm.country.ende
+    / 
+    G6 | 
+    /template:  
+        x
+        drums.country.cymbal
+        bass.country.normal
+        rhythm.country.normal
+    / 
+    G | 
+    /template:  
+        x
+        drums.disco.normal
+        bass.country.normal
+        rhythm.country.normal
+    / 
+    G | G7 | G6 | G | G | G7 | G6 | G | 
+}
+]
+
+
+
+
+

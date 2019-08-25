@@ -81,13 +81,16 @@ instrument: lead;
 [
 type: sheet;
 {
-    /template:
-        drums.reggae.normal
-        x
-    /
+    /template: drums.reggae.normal x/
     F-7 | Bes-7 | F-7   | 
-    F7  | Bes-7 | Bes-7 |
-    F-7 | As7   | G-7b5   |
+    /template: drums.reggae.fill1 x/
+    F7  | 
+    /template: drums.reggae.normal x/
+    Bes-7 | Bes-7 | F-7 | 
+    /template: drums.reggae.fill2 x/
+    As7   | 
+     /template: drums.reggae.normal x/
+    G-7b5   |
     C7  | F-7  D-7b5 | Desmaj7  Gesmaj7 |
 }
 ]

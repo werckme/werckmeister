@@ -1,4 +1,4 @@
-@load "../voicings/guitar.lua";
+@load "lua/voicings/guitar.lua";
 
 [
 type: template;

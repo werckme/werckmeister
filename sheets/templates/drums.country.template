@@ -17,6 +17,21 @@ instrument: drums;
 
 [
 type: template;
+name: drums.country.cymbal;
+instrument: drums;
+{
+    "cy"4 "ht"8 !f"ht"8 "ht"8 !f"ht"8 "ht"8 !f"ht"8 |
+}    
+{
+    r4 "sn" r "sn" |
+}
+{
+    "bd"4. "bd"8 "bd"4. "bd"8 |
+}      
+] 
+
+[
+type: template;
 name: drums.country.ende;
 instrument: drums;
 {
