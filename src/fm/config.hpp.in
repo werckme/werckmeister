@@ -14,6 +14,7 @@
 namespace fm {
     const Ticks PPQ = @FM_PPQ@;
 	const int NotesPerOctave = 12;
+    const double DefaultTempo = 120.0;
 }
 
 #endif

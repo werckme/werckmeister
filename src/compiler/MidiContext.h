@@ -6,6 +6,7 @@
 #include <fm/midi.hpp>
 #include <map>
 #include <vector>
+#include <fm/config.hpp>
 
 namespace sheet {
     namespace compiler {
@@ -57,7 +58,7 @@ namespace sheet {
 		private:
 			MidiInstrumentDefs midiInstrumentDefs_;
 			fm::midi::MidiPtr midi_;
-			
+			double masterTempo_ = fm::DefaultTempo;			
         };
     }
 }

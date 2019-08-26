@@ -189,6 +189,8 @@ namespace sheet {
 			DEBUGX(std::cout << "c \t|\t cPos" << "\t|\t" << "bPos" << "\t|\t" << "d" << std::endl);
 			DEBUGX(std::cout << "-----------------------------------------------------" << std::endl);
 			auto meta = ctx_->voiceMetaData();
+			auto chordVoiceMeta = ctx_->voiceMetaData(ctx_->chordVoiceId());
+			meta->tempoFactor = chordVoiceMeta->tempoFactor;
 			for (; it < voice.events.end(); ++it) // loop voice events
 			{
 				bool isLastEvent = (it+1) == voice.events.end();

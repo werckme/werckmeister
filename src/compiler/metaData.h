@@ -35,6 +35,7 @@ namespace sheet {
             int signatureNumerator = 4;
             int signatureDenominator = 4;
             fm::Ticks barPosition = 0;
+            double tempoFactor = 1;
             int barCount = 0;
             long long eventCount = 0;
             long long eventOffset = 0;

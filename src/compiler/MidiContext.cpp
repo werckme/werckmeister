@@ -105,6 +105,13 @@ namespace sheet {
 			if (trackId == INVALID_TRACK_ID) {
 				FM_THROW(Exception, "failed to add an event without related track");
 			}
+			auto voiceConfig = voiceMetaData<MidiContext::VoiceMetaData>();
+			if (voiceConfig && voiceConfig->tempoFactor != 1) {
+				auto evCopy = ev;
+				evCopy.absPosition(evCopy.absPosition() * voiceConfig->tempoFactor);
+				midi_->tracks().at(trackId)->events().add(evCopy);
+				return;
+			}
 			midi_->tracks().at(trackId)->events().add(ev);
 		}
 
@@ -147,9 +154,17 @@ namespace sheet {
 		{
 			Base::metaSetTempo(bpm);
 			auto meta = voiceMetaData<MidiContext::VoiceMetaData>();
-			auto tempoEvent = fm::midi::Event::MetaTempo(bpm);
-			tempoEvent.absPosition(currentPosition());
-			addEvent(tempoEvent, masterTrackId());
+			bool isMasterTempoValue = !meta;
+			if (isMasterTempoValue) {
+				// set global tempo
+				auto tempoEvent = fm::midi::Event::MetaTempo(bpm);
+				tempoEvent.absPosition(currentPosition());
+				masterTempo_ = bpm;
+				addEvent(tempoEvent, masterTrackId());
+			} else {
+				meta->tempoFactor = masterTempo_ / bpm;
+			}
+
 		}
 
 		void MidiContext::metaSetSignature(int upper, int lower)

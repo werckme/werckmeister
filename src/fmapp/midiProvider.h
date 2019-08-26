@@ -48,7 +48,7 @@ namespace fmapp {
 		typedef std::unordered_map<fm::midi::TrackPtr, EventIt> TrackEventIts;
 		TrackEventIts trackEventIts_;
 		EventIt* getEventIt(fm::midi::TrackPtr trackPtr);
-		fm::BPM bpm_ = 120.0;
+		fm::BPM bpm_ = fm::DefaultTempo;
 	};
 
 }

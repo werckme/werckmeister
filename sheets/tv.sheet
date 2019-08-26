@@ -12,7 +12,7 @@
 
 device: SC1 midi 2;
 
-tempo: 73;
+tempo: 60;
 instrumentDef: piano   SC1 0 0 0;
 instrumentDef: lead    SC1 1 0 12;
 instrumentDef: rhythm  SC1 2 8 4;
@@ -61,6 +61,7 @@ instrument: lead;
 type: sheet;
 {
     /signature: 2 4/
+    /tempo: 120/ 
     /template:  
         x
         drums.country.normal

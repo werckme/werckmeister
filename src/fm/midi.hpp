@@ -12,6 +12,7 @@
 #include <memory>
 #include <boost/shared_array.hpp>
 #include <string>
+#include <fm/config.hpp>
 
 namespace fm {
 	namespace midi {
@@ -235,7 +236,7 @@ namespace fm {
 			BPM bpm() const { return bpm_; }
 			void bpm(BPM bpm) { bpm_ = bpm; }
 		private:
-			BPM bpm_ = 120;
+			BPM bpm_ = fm::DefaultTempo;
 			Ticks _ppq = 0;
 			TrackContainer _container;
 		};
