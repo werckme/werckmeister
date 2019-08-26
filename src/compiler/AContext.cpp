@@ -180,13 +180,10 @@ namespace sheet {
 			using namespace fm;
 			PitchDef pitch = resolvePitch(rawPitch);
 			auto meta = voiceMetaData();
-			if (duration > 0) {
-				meta->lastEventDuration = duration;
-			}
 			if (tying) {
 				auto alreadyTying = meta->waitForTieBuffer.find(pitch) != meta->waitForTieBuffer.end();
 				if (!alreadyTying) {
-					meta->waitForTieBuffer.insert({ pitch, meta->lastEventDuration });
+					meta->waitForTieBuffer.insert({ pitch, duration });
 					startEvent(pitch, meta->position, velocity);
 				}
 				return;
@@ -194,12 +191,12 @@ namespace sheet {
 			if (meta->pendingTie()) {
 				auto it = meta->waitForTieBuffer.find(pitch);
 				if (it != meta->waitForTieBuffer.end()) {
-					stopEvent(pitch, meta->position + meta->lastEventDuration);
+					stopEvent(pitch, meta->position + duration);
 					meta->waitForTieBuffer.erase(it);
 					return;
 				}
 			}
-			renderPitch(pitch, meta->position, velocity, meta->lastEventDuration);
+			renderPitch(pitch, meta->position, velocity, duration);
 		}
 
 		void AContext::startEvent(const PitchDef &pitch, fm::Ticks absolutePosition, double velocity)
@@ -262,10 +259,7 @@ namespace sheet {
 		void AContext::rest(fm::Ticks duration)
 		{
 			auto meta = voiceMetaData();
-			if (duration != 0) {
-				meta->lastEventDuration = duration;
-			}
-			seek(meta->lastEventDuration);
+			seek(duration);
 		}
 		void AContext::processMeta(const fm::String &command, const std::vector<fm::String> &args)
 		{

@@ -31,10 +31,6 @@ namespace sheet {
             typedef std::list<AModificationPtr> Modifications;
             typedef std::unordered_map<fm::String, AModificationPtr> ModificationCache;
             fm::Ticks position = 0;
-            /**
-             * last note duration
-             */
-            fm::Ticks lastEventDuration = DefaultDuration; 
             fm::Ticks barLength = DefaultBarLength;
             int signatureNumerator = 4;
             int signatureDenominator = 4;

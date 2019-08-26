@@ -76,7 +76,6 @@ namespace sheet {
 							continue;
 						}
 						auto meta = ctx_->voiceMetaData(it->second);
-						meta->lastEventDuration = 0;
 						meta->idxLastWrittenEvent = -1;
 					}
 				}
@@ -209,9 +208,6 @@ namespace sheet {
 				}
 				DEBUGX(std::cout << c++ << "," << it - voice.events.begin() << "\t|\t" << currentPos << "\t|\t" << meta->barPosition << "\t|\t" << ev.toString() << ":" << meta->lastEventDuration << std::endl);
 				sheetEventRenderer->addEvent(ev);
-				if (ev.isTimeConsuming()) {
-					meta->lastEventDuration = originalDuration;
-				}
 				written += meta->position - currentPos;
 				if (allWritten(duration, written) && !isLastEvent) {
 					DEBUGX(std::cout << "full" << std::endl);
