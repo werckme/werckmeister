@@ -162,7 +162,11 @@ namespace sheet {
 				masterTempo_ = bpm;
 				addEvent(tempoEvent, masterTrackId());
 			} else {
+				auto oldFactor = meta->tempoFactor;
 				meta->tempoFactor = masterTempo_ / bpm;
+				auto fixPosition = meta->tempoFactor / oldFactor;
+				meta->position /= fixPosition; 
+				meta->barPosition /= fixPosition; 
 			}
 
 		}
