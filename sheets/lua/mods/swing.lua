@@ -31,7 +31,7 @@ function perform(events, args, timeinfo)
     for i, event in pairs(events) do
         if isLaidBack(timeinfo, args) then
             event.offset = offset(args)
-            event.velocity = event.velocity * 0.5
+            event.velocity = event.velocity
         end
     end
     return events
