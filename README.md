@@ -1,212 +1,75 @@
-https://codepen.io/kazzkiq/pen/xGXaKR/
-https://www.pluginboutique.com/products/3933-Scaler
+# Werckmeister's Music Protoyping Tool
 
+## What it wants to be
+* a fast and easy way to create sheet music
+* that tool in your toolchain, between the initial idea and the details work with your favourite Sequencer/DAW
+* a sequencer which can be used without a Graphical User Interface
+* a tool which relies on human readable files
+
+
+## What it doesn't want to be
+* a replacement for your favourite Sequencer/DAW
+* a score writer
+* a programming language
+
+## Editor
+There is an editor for sheet files: https://github.com/SambaGodschynski/werckmeister-editor
+
+
+## Syntax
+The syntax is loosely inspired by the [lilypond](http://lilypond.org) notaion syntax. 	So a note is written by letter followed by a number for its duration. If a note has no duration, the last given duration will be used.
+e.g.:
 ```
--- degree index dosen't matter no more
-default = { 
-     { ["pitch"]=pitches[1].pitch, ["octave"]=-1 }
-    ,{ ["pitch"]=pitches[5].pitch, ["octave"]=-1 }
-    ,{ ["pitch"]=pitches[1].pitch, ["octave"]= 0 }
-    ,{ ["pitch"]=pitches[3].pitch, ["octave"]= 0 }
-    ,{ ["pitch"]=pitches[5].pitch, ["octave"]= 0 }
-    ,{ ["pitch"]=pitches[1].pitch, ["octave"]= 0 }
+[ -- a track
+{ -- a voice
+    c4 d e f | g1
 }
-```
-
-#Eine Scriptsprache für Sheetnotation angelehnt an Lilypond
-
- - ChordDefs: Definiere Akkorde
- - Styles: Rhythmen und Begleitung notiert Relativ zu Tonleiterstufen
- - Sheet: Leadsheet-Dokument verwendet unter Angabe styles, Akkorden und Melodien
-
-#Beispiele
-## ChordDefs
-
-```
-Xmaj: 1 5 8
-X7: 1 5 8 10
-Xmaj7: 1 5 8 11
-X/V: -6 1 5 8 --quinte im bass
-```
-
-## pitch aliases
-```
--- file defaultMidiDrumMap.pitchmap
-"bd": c,,
-"sn": e, 
-```
-
-## Styles
-```
--- file: simplePianoStyle.style
-
-section intro -- section
-[ -- track 1 begin
-  /name: piano / -- meta informationen
-  /soundselect: 0 0/
-  /channel: 1/
-  { I4 II4 III4 IV4 | } -- a separate voice / similar to lilypond
-  { I,4 II,4 III,4 IV,4 } 
-] -- track 1 end
-[
-  /name: bass /
-  /soundselect: 0 0/
-  /channel: 2/
-   I4 I'4 III4 I'4
+{ -- a  further voice
+    b1~ | b1
+}
 ]
-end
-
-section normal
-[ -- track 1 begin
-  /name: piano / -- meta informationen
-  /soundselect: 0 0/
-  /channel: 1/
-  /signature: 4|4/
-  { I4 II4 III4 IV4 | } -- a separate voice / similar to lilypond
-  { I8 <III V VII>2.. |}    
-] -- track 1 end
-[
-   /name: bass /
-   I4 I'4 III4 I'4
-]
-end
-
 ```
 
-## Sheet
+ 
+# How to build 
+## Dependencies
+- boost library
+- rtmidi
 
-```
--- document configs
-@load 'Chords1.chdef';
-@load 'simplePianoStyle.style';
+## preparations
+### Mac
+ - install homebrew
+ - `brew install boost` (assuming that is also installing icu4c to /usr/local/opt/icu4c
+## prerequisites
+if your boost library is not located in a common path (e.g. "/usr/local/lib") make sure that the 
+environment variable "BOOST_ROOT" is set. (see https://cmake.org/cmake/help/v3.15/module/FindBoost.html)
+## run cmake
+- make a `build` directory
+- cd into it
+### *Nix
+- run `cmake ..`
+- run `make`
+### Windows
+- run `cmake --help' 
+- look for your "generator" e.g. "Visual Studio 12 2013"
+- run `cmake .. -G "Visual Studio 12 2013"`
+- open the generated sln file with Visual Studio
+- Start Building
+## after build
+there should be at least 3 files:
+- `sheetp` -> a cli "*.sheet"-file compiler
+- `sheetp` -> a cli "*.sheet"-file player
+- `rehearse` -> run the unit tests
 
--- instrumentDef definitions
---           instrument ch cc pc
-/instrumentDef: bass 3 3 87/
-/instrumentDef: drums 10 0 17/
+# Compiler
+run `./sheetc asheetfile.sheet` to compile a sheet file into a MIDI file.
 
--- definitions with the same name will create unisono events
-/instrumentDef: piano 0 0 0/
-/instrumentDef: pinao 3 3 3/
+# Player
+run `./sheetp asheetfile.sheet`.
 
-[
-{ 
-  /soundselect: 0 0/ 
-  /channel: 1/
-  c4 d4 e4 f4 | c4 d4 e4 f4 | 
-}
-{ 
-  f4 f4 f4 f4 | h4 h4 h4 h4 | 
-}
-] 
--- the sheet, no voices here
-/style: simplePianoStyle:intro/
-/voicingStrategy: asNotated/
-Cmaj | Cmaj C7 |
+There are several optional arguments:
+- `--watch` -> on the fly change detection/recompile
+- `--begin` -> start from a specific quarter position
+- `--loop` -> play as loop
+- `--list` -> lists your detected MIDI devices
 
-
-```
-
-## Voicing Strategy
-#Direct
-#SimpleGuitar
- Voicing I V I III: Basis
- 	 I V VII III: 7
-	 I III VII II V: 9
-	 I IV VII II V: 11
-	 I IV VII III VI: 13
-
- Min/Max Octavraum
- Keine Prüfung ob wirklich spielbar
-
-## Meta Commands
-# expressions
-
-\fff --set all to fff
-!fff --set only next note to fff
-
-/dynamicsTarget: volume/
-/dynamicsRemap: ffff 127/
-/dynamicsRemap: ff 57/
-
- c,,4\ffff
-
-/dynamicsTarget: velocity/
- c,,4\ffff
-
-# channel
-/channelVolume: 10 127/
-
-#rhythmik
-/upbeat: 8/ -- auftakt 1 8tel
-
-## TODO:
-andere Taktarten als 4/4
-
-## TODO: weitere Lilypond Ausdrücke
-
-Arpeggios
-
-# Dynamik
-Absolute Dynamikbezeichnung wird mit Befehlen nach den Noten angezeigt, etwa c4\ff. Die vordefinierten Befehle lauten: \ppppp, \pppp, \ppp, \pp, \p, \mp, \mf, \f, \ff, \fff, \ffff, fffff, \fp, \sf, \sff, \sp, \spp, \sfz, and \rfz. 
-
-# Crescendo
-Eine Crescendo-Klammer wird mit dem Befehl \< begonnen und mit \!, einem absoluten Dynamikbefehl oder einer weiteren Crescendo- oder Decrescendo-Klammer beendet. Ein Decrescendo beginnt mit \> und wird auch beendet mit \!, einem absoluten Dynamikbefehl oder einem weiteren Crescendo oder Decrescendo. \cr und \decr können anstelle von \< und \> benutzt werden.
-
-# Espressivo
-Der \espressivo-Befehl kann eingesetzt werden, um crescendo und decrescendo für die selbe Note anzuzeigen
-
-
-## next features
-
-### device config:
-  ```
-  -- device: name type [arg1 ... argn]
-  /device: orch1 vst2 "c:\plugins\gpo.dll" "./violins.preset"/
-  /device: roland1 midi 0 / -- 0 is the device number, as displayed with 'sheetp --list'
-
-  /instrumentDef: piano orch1 nChanel nCC nPC/
-
-  ```
-
-
-## Nice to have
-- setStyle rename to switchStyle
-- /setStyle: samba normal [startAtBar 3]/ 
-- device vst support
-- Lyrics:
-```
-  /mode: lyrics/
-  "easy"4 "easy" "easy meat"2 |
-```
-  - compiler baut midi+srt file
-
-- soundselect generic midisequences
-  /soundSelect: cc 0 pc 1/
-
-- Stufen optionen
-VII#?II?I -- wenn vorhanden, entweder VII# oder II oder I
-
-
-### Paralleles abspielen verschiedener Styles
-
-{
-  /style: disco normal/
-  /exclude: all/
-  /include: bass/
-  C | C | E |
-}
-{
-  /style: latin normal/
-  /include: all/
-  /exclude: bass/
-  C | C | E |
-}
-
-
-## Cool DAW-Editor
-all character based 
-sophisticated highligting such as position or markers
-
-## Misc
-- http://www.guitarcats.com/realbook-jazz-standards/
