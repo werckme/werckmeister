@@ -41,7 +41,7 @@ e.g.:
  - install homebrew
  - `brew install boost` (assuming that is also installing icu4c to /usr/local/opt/icu4c
 ## prerequisites
-if your boost library is not located in a common path (e.g. "/usr/local/lib") make sure that the 
+if your boost library is not located at a common path (e.g. "/usr/local/lib") make sure that the 
 environment variable "BOOST_ROOT" is set. (see https://cmake.org/cmake/help/v3.15/module/FindBoost.html)
 ## run cmake
 - make a `build` directory
@@ -56,10 +56,10 @@ environment variable "BOOST_ROOT" is set. (see https://cmake.org/cmake/help/v3.1
 - open the generated sln file with Visual Studio
 - Start Building
 ## after build
-there should be at least 3 files:
-- `sheetp` -> a cli "*.sheet"-file compiler
-- `sheetp` -> a cli "*.sheet"-file player
-- `rehearse` -> run the unit tests
+there should be at least 3 executables:
+- `sheetc` -> a cli ".sheet"-file compiler
+- `sheetp` -> a cli ".sheet"-file player
+- `rehearse` -> runs the unit tests
 
 # Compiler
 run `./sheetc asheetfile.sheet` to compile a sheet file into a MIDI file.
