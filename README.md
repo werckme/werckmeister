@@ -23,7 +23,7 @@
 ## preparations
 ### Mac
  - install homebrew
- - brew install boost (assuming that is also installing icu4c to /usr/local/opt/icu4c
+ - `brew install boost` (assuming that is also installing icu4c to /usr/local/opt/icu4c
 ## prerequisites
 if your boost library is not located in a common path (e.g. "/usr/local/lib") make sure that the 
 environment variable "BOOST_ROOT" is set. (see https://cmake.org/cmake/help/v3.15/module/FindBoost.html)
@@ -54,4 +54,5 @@ You have several arguments to pass:
 - `--watch` -> detect changes on the related sheet files and recompile on the fly
 - `--begin` -> start from a specific quarter position
 - `--loop` -> play as loop
+- `--list` -> lists your detected MIDI devices
 
