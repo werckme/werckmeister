@@ -3,7 +3,7 @@
 
 [
 type: template;
-name: x;
+name: rhythm.reggae.normal;
 instrument: rhythm;
 {
     \f

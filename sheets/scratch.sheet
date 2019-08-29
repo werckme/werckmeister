@@ -54,15 +54,15 @@ instrument: lead;
 [
 type: sheet;
 {
-    /template: x drums.reggae.normal bass.reggae.normal/
+    /template: x rhythm.reggae.normal drums.reggae.normal bass.reggae.normal/
     C | C | Cmin | 
-    /template: x drums.reggae.fill1 bass.reggae.normal/
+    /template: x rhythm.reggae.normal drums.reggae.fill1 bass.reggae.normal/
     Ces7 | 
-    /template: x drums.reggae.normal bass.reggae.normal/
+    /template: x rhythm.reggae.normal drums.reggae.normal bass.reggae.normal/
     E | E-7 | Gmaj7 | F | A | 
-    /template: x drums.reggae.fill2 bass.reggae.normal/
+    /template: x rhythm.reggae.normal drums.reggae.fill2 bass.reggae.normal/
     A |
-    /template: x drums.reggae.normal bass.reggae.normal/
+    /template: x rhythm.reggae.normal drums.reggae.normal bass.reggae.normal/
     C | C | Cmin | Ces7 | E | E-7 | Gmaj7 | F | A | A | 
     C | C | Cmin | Ces7 | E | E-7 | Gmaj7 | F | A | A |
     C | C | Cmin | Ces7 | E | E-7 | Gmaj7 | F | A | A |
