@@ -50,7 +50,7 @@ run `./sheetc asheetfile.sheet` to compile a sheet file into a MIDI file.
 
 # Player
 run `./sheetp asheetfile.sheet`.
-You have several arguments to pass:
+There are several optional arguments:
 - `--watch` -> detect changes on the related sheet files and recompile on the fly
 - `--begin` -> start from a specific quarter position
 - `--loop` -> play as loop
