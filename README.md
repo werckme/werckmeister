@@ -11,9 +11,16 @@
 * a replacement for your favourite Sequencer/DAW
 * a score writer
 * a programming language
- 
- 
- 
+
+## Editor
+There is an editor for sheet files: https://github.com/SambaGodschynski/werckmeister-editor
+
+
+## Syntax
+The syntax is loosely inspired by the [lilypond](http://lilypond.org) notaion syntax. 	So a note is written by letter followed by a number for its duration. If a note has no duration, the last given duration will be used.
+```
+c4 d e f | g1
+```
  
 # How to build 
 ## Dependencies
