@@ -18,9 +18,18 @@ There is an editor for sheet files: https://github.com/SambaGodschynski/werckmei
 
 ## Syntax
 The syntax is loosely inspired by the [lilypond](http://lilypond.org) notaion syntax. 	So a note is written by letter followed by a number for its duration. If a note has no duration, the last given duration will be used.
+e.g.:
 ```
-c4 d e f | g1
+[ -- a track
+{ -- a voice
+    c4 d e f | g1
+}
+{ -- a  further voice
+    b1~ | b1
+}
+]
 ```
+
  
 # How to build 
 ## Dependencies
