@@ -1,5 +1,7 @@
 # Werckmeister's Protoyper For Music 
 
+![the editor](https://raw.githubusercontent.com/SambaGodschynski/werckmeister-editor/master/assets/sheet-example.png)
+
 ## What it wants to be
 * a fast and easy way to create sheet music
 * that tool in your toolchain, between the initial idea and the details work with your favourite Sequencer/DAW
