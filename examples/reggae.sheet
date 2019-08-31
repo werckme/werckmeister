@@ -1,0 +1,80 @@
+@load "chords/default.chords";
+@load "pitchmaps/defaultMidiDrumMap.pitchmap";
+@load "lua/mods/swing.lua";
+@load "lua/voicings/voicelead.lua";
+@load "lua/voicings/guitar.lua";
+@load "templates/drums.reggae.template";
+@load "templates/bass.reggae.template";
+@load "templates/rhythm.reggae.template";
+
+device: SC1 midi 2;
+
+tempo: 130;
+instrumentDef: drums   SC1 9 0 0;
+instrumentDef: rhythm  SC1 1 16 28;
+instrumentDef: bass    SC1 2 8 26;
+instrumentDef: lead    SC1 3 0 0;
+instrumentDef: piano   SC1 4 0 0;
+
+instrumentConf: rhythm
+    voicingStrategy voicelead 
+    pan 60
+    volume 75;
+
+instrumentConf: lead
+    pan 40
+    volume 80;
+
+instrumentConf: piano
+    voicingStrategy voicelead 
+    pan 40
+    volume 80;   
+
+
+[
+type: template;
+name: x;
+instrument: piano;
+{
+    \f
+    <I II III IV V VI VII>1~ | x
+
+}
+]
+
+[
+instrument: lead;
+{
+    \ffff
+    /do: swing grid 8 offset 60/
+}
+]
+
+
+[
+type: sheet;
+{
+    /template: x rhythm.reggae.normal drums.reggae.normal bass.reggae.normal/
+    C | C | Cmin | 
+    /template: x rhythm.reggae.normal drums.reggae.fill1 bass.reggae.normal/
+    Ces7 | 
+    /template: x rhythm.reggae.normal drums.reggae.normal bass.reggae.normal/
+    E | E-7 | Gmaj7 | F | A | 
+    /template: x rhythm.reggae.normal drums.reggae.fill2 bass.reggae.normal/
+    A |
+    /template: x rhythm.reggae.normal drums.reggae.normal bass.reggae.normal/
+    C | C | Cmin | Ces7 | E | E-7 | Gmaj7 | F | A | A | 
+    C | C | Cmin | Ces7 | E | E-7 | Gmaj7 | F | A | A |
+    C | C | Cmin | Ces7 | E | E-7 | Gmaj7 | F | A | A |
+    C | C | Cmin | Ces7 | E | E-7 | Gmaj7 | F | A | A |
+    C | C | Cmin | Ces7 | E | E-7 | Gmaj7 | F | A | A |
+    C | C | Cmin | Ces7 | E | E-7 | Gmaj7 | F | A | A |
+    C | C | Cmin | Ces7 | E | E-7 | Gmaj7 | F | A | A |
+    C | C | Cmin | Ces7 | E | E-7 | Gmaj7 | F | A | A |
+}
+]
+
+
+
+
+

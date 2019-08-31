@@ -273,7 +273,7 @@ namespace sheet {
 				}
 							
 				if (command == SHEET_META__SET_SHEET_TEMPLATE) {
-					metaSetSheetTemplate(getArgument<fm::String>(args, 0), getArgument<fm::String>(args, 1));
+					metaSetSheetTemplate(args);
 					return;
 				}
 				if (command == SHEET_META__SET_EXPRESSION) {
@@ -431,7 +431,7 @@ namespace sheet {
 			mod->setArguments(args);
 		}
 
-		void AContext::metaSetSheetTemplate(const fm::String &file, const fm::String &part)
+		void AContext::metaSetSheetTemplate(const Event::Args &)
 		{
 		}
 

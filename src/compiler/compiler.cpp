@@ -79,7 +79,7 @@ namespace sheet {
 			if (currentSheetTemplateRenderer_ == nullptr) {
 				FM_THROW(fm::Exception, "sheetTemplate renderer = null");
 			}
-			currentSheetTemplateRenderer_->seekTo(0);
+			FM_THROW(fm::Exception, fm::String(SHEET_META__SHEET_TEMPLATE_POSITION_CMD) + " not implemented");
 		}
 
 		void Compiler::renderTracks()
@@ -114,18 +114,22 @@ namespace sheet {
 		}
 
 		namespace {
-			template<typename TIt>
-			void determineChordLengths(TIt begin, TIt end) {
+			void preprocessSheetTrack(Track* sheetTrack, AContext *ctx) {
 				using namespace fm;
-				typedef Event::Multiplicator Multiplicator;
-				auto it = begin;
+				auto voice = sheetTrack->voices.begin(); 
+				auto it = voice->events.begin();
+				auto end = voice->events.end();
 				std::list<Event*> barEvents;
+				ctx->setChordTrackTarget();
 				while (it != end) {
+					if (it->type == Event::Meta) {
+						ctx->setMeta(*it);
+					}
 					if (it->type == Event::EOB) {
-						int c = barEvents.size();
-						if (c > 0) {
-							std::for_each(barEvents.begin(), barEvents.end(), [c](Event *ev) { 
-								ev->multiplicator = 1.0 / (Multiplicator)c; 
+						int nbOfEventsPerBar = barEvents.size();
+						if (nbOfEventsPerBar > 0) {
+							std::for_each(barEvents.begin(), barEvents.end(), [nbOfEventsPerBar, ctx](Event *ev) { 
+								ev->duration = ctx->voiceMetaData()->barLength / nbOfEventsPerBar;
 							});
 						}
 						barEvents.clear();
@@ -149,20 +153,6 @@ namespace sheet {
 			} 
 		}
 
-		void Compiler::switchSheetTemplate(SheetTemplateRenderer &sheetTemplateRenderer, const Event &metaEvent)
-		{
-			auto ctx = sheetTemplateRenderer.context();
-			AContext::SheetTemplates templates;
-			for (size_t idx=0; idx < metaEvent.metaArgs.size(); ++idx) {
-				auto sheetTemplateName = getArgument<fm::String>(metaEvent, idx);
-				auto sheetTemplate = ctx->sheetTemplateDefServer()->getSheetTemplate(sheetTemplateName);
-				if (sheetTemplate.empty()) {
-					FM_THROW(Exception, "sheetTemplate not found: " + sheetTemplateName);
-				}
-				templates.push_back(sheetTemplate);
-			}
-			sheetTemplateRenderer.switchSheetTemplates(templates);
-		}
 
 		void Compiler::renderChordTrack() 
 		{
@@ -172,31 +162,9 @@ namespace sheet {
 			if (!sheetTrack || sheetTrack->voices.empty()) {
 				return;
 			}
-			auto &sheetEvents = sheetTrack->voices.begin()->events; 
-			determineChordLengths(sheetEvents.begin(), sheetEvents.end());
+			preprocessSheetTrack(sheetTrack, ctx.get());
 			SheetTemplateRenderer sheetTemplateRenderer(ctx.get(), sheetEventRenderer().get());
-			currentSheetTemplateRenderer_ = &sheetTemplateRenderer;
-			for (auto &ev : sheetEvents) {
-				ctx->setChordTrackTarget(); // target will be lost after calling addEvent
-				if (ev.type == Event::Rest) {
-					auto meta = ctx->voiceMetaData(ctx->chordVoiceId());
-					ev.duration = meta->barLength * ev.multiplicator;
-					ctx->rest(ev.duration); 
-					sheetTemplateRenderer.sheetRest(ev.duration);
-				}
-				else if (ev.stringValue == SHEET_META__SET_SHEET_TEMPLATE) {
-					switchSheetTemplate(sheetTemplateRenderer, ev);
-				}
-				else if (ev.type != Event::Chord) {
-					sheetEventRenderer()->addEvent(ev);
-				} else {
-					auto meta = ctx->voiceMetaData(ctx->chordVoiceId());
-					ev.duration = meta->barLength * ev.multiplicator;	
-					sheetEventRenderer()->addEvent(ev);
-					sheetTemplateRenderer.render(ev.duration);
-				}
-			}
-			currentSheetTemplateRenderer_ = nullptr;
+			sheetTemplateRenderer.render(sheetTrack);
 		}
 
 		SheetEventRendererPtr Compiler::sheetEventRenderer()

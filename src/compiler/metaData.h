@@ -36,7 +36,6 @@ namespace sheet {
             int signatureDenominator = 4;
             fm::Ticks barPosition = 0;
             double tempoFactor = 1;
-            double tempoPositionOffset = 1;
             int barCount = 0;
             long long eventCount = 0;
             long long eventOffset = 0;
@@ -44,14 +43,6 @@ namespace sheet {
             fm::Expression expression = fm::expression::FF;
             fm::Expression singleExpression = fm::expression::Default;
             WaitForTieBuffer waitForTieBuffer;
-            /*
-                used for continue sheetTemplate track rendering after chord change
-            */
-            int idxLastWrittenEvent = -1;
-            /*
-                from a aborted sheetTemplate rendering
-            */
-            fm::Ticks remainingTime = 0;
             VoicingStrategyPtr voicingStrategy = nullptr;
             virtual ~VoiceMetaData() = default;
             bool pendingTie() const { return !waitForTieBuffer.empty(); }

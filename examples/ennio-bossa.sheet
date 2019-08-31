@@ -13,7 +13,7 @@ instrumentDef: vibra   SC1 4 0 11;
 instrumentDef: bass    SC1 5 0 33;
 instrumentDef: drums   SC1 9 0 32;
 instrumentDef: slide   SC1 0 0 0;
-instrumentConf: guitar volume 0 pan 20;
+instrumentConf: guitar volume 100 pan 20;
 instrumentConf: piano volume 90 pan 80;
 instrumentConf: bass volume 80;
 instrumentConf: drums volume 70;

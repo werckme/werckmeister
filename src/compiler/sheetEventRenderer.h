@@ -12,9 +12,9 @@ namespace sheet {
             virtual ~SheetEventRenderer() = default;
             AContext* context() const { return this->ctx_; }
             virtual void addEvent(const Event &event);
-            virtual void renderEvent(const Event &_ev);
-            virtual void renderEventPitches(const Event &noteEvent);
-            virtual void renderPitchBendEvent(const Event &pitchBendEvent);
+            virtual void __renderEvent__(const Event &_ev);
+            virtual void __renderEventPitches__(const Event &noteEvent);
+            virtual void __renderPitchBendEvent__(const Event &pitchBendEvent);
         protected:
         private:
             AContext* ctx_;

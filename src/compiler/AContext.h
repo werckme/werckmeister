@@ -141,7 +141,7 @@ namespace sheet {
 							std::function<fm::String(const typename TContainer::value_type&)> fcommand, 
 							std::function<std::vector<fm::String>(const typename TContainer::value_type&)> fargs);
 			virtual void metaSetInstrument(const fm::String &uname) {}
-			virtual void metaSetSheetTemplate(const fm::String &file, const fm::String &section);
+			virtual void metaSetSheetTemplate(const Event::Args &args);
 			virtual void metaSetExpression(const fm::String &value);
 			virtual void metaSetSingleExpression(const fm::String &value);
 			virtual void metaSetTempo(double bpm) {}

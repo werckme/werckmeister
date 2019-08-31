@@ -4,26 +4,12 @@
 #include <iostream>
 #include <boost/exception/get_error_info.hpp>
 #include "sheetEventRenderer.h"
+#include <algorithm>
+#include <numeric>
 
 #define DEBUGX(x)
 
 namespace sheet {
-	namespace {
-		template <class EventContainer>
-		int _getIndexOf(const EventContainer &events, fm::Ticks absPosition)
-		{
-			fm::Ticks pos = 0;
-			int idx = -1;
-			for (const auto &ev : events) {
-				++idx;
-				if (pos >= absPosition) {
-					return idx;
-				}
-				pos += ev.duration; 
-			}
-			return -1;
-		}
-	}
     namespace compiler {
 
 		SheetTemplateRenderer::SheetTemplateRenderer(AContext* ctx, SheetEventRenderer *renderer) : 
@@ -34,52 +20,6 @@ namespace sheet {
 
 		SheetTemplateRenderer::~SheetTemplateRenderer() 
 		{
-		}
-
-		void SheetTemplateRenderer::switchSheetTemplates(const AContext::SheetTemplates &templates)
-		{
-			// set position for new track
-			auto chordMeta = ctx_->voiceMetaData();
-			for (const auto &next : templates) {
-				if (next.empty()) {
-					continue;
-				}
-				for (auto track : next.tracks) {
-					for (const auto &voice : track->voices)
-					{
-						setTargetCreateIfNotExists(*track, voice);
-						auto meta = ctx_->voiceMetaData();
-						meta->position = chordMeta->position;
-					}
-				}
-			}
-			ctx_->currentSheetTemplate(templates);
-		}
-
-		void SheetTemplateRenderer::seekTo(double quarterNotes)
-		{
-			if (quarterNotes != 0) {
-				FM_THROW(Exception, "only seeking to 0 is supported");
-			}
-			
-			for (const auto &tmpl : ctx_->currentSheetTemplates()) {
-				const auto &sheetTemplateTracks = tmpl.tracks;
-				for (const auto &track : sheetTemplateTracks)
-				{
-					for (const auto &voice : track->voices)
-					{
-						if (voice.events.empty() || !hasAnyTimeConsumingEvents(voice.events)) {
-							continue;
-						}
-						auto it = ptrIdMap_.find(&voice);
-						if (it == ptrIdMap_.end()) {
-							continue;
-						}
-						auto meta = ctx_->voiceMetaData(it->second);
-						meta->idxLastWrittenEvent = -1;
-					}
-				}
-			}
 		}
 
         void SheetTemplateRenderer::setTargetCreateIfNotExists(const Track &track, const Voice &voice)
@@ -121,132 +61,112 @@ namespace sheet {
 			}
 		}
 
-        void SheetTemplateRenderer::sheetRest(fm::Ticks duration)
-		{
-			for (const auto &tmpl : ctx_->currentSheetTemplates()) {
-				const auto &sheetTemplateTracks = tmpl.tracks;
-				for (const auto &track : sheetTemplateTracks) {
-					for (const auto &voice : track->voices)
-					{
-						setTargetCreateIfNotExists(*track, voice);
-						auto meta = ctx_->voiceMetaData();
-						ctx_->rest(duration);
-					}
-				}
-			}
-		}
-
-		void SheetTemplateRenderer::remberPosition(const Voice &voice, 
-			const Event &ev, 
-			Voice::Events::const_iterator it,
-			fm::Ticks originalEventDuration)
-		{
-			auto meta = ctx_->voiceMetaData();
-			bool hasRemainings = ev.duration < originalEventDuration;
-			if (hasRemainings) {
-				meta->remainingTime += originalEventDuration - ev.duration;
-			}
-			meta->idxLastWrittenEvent = it - voice.events.begin() + 1;
-		}
-
-		Voice::Events::const_iterator SheetTemplateRenderer::skipEvents(Voice::Events::const_iterator it, Voice::Events::const_iterator end, int n)
-		{
-			auto original = it;
-			it += n;
-			if (it->type == Event::EOB) {
-				// happens: | r1 |  ->  | A B |
-				// after a half rest the next event would be a new bar
-				// its length check would produce a message
-				auto meta = ctx_->voiceMetaData();
-				
-					++it;
-					meta->barPosition = 0;
-					meta->remainingTime = 0;
-					DEBUGX(std::cout << "bar reset" << std::endl);
-			}
-			if (it >= end) {
-				return original;
-			}
-			return it;
-		}
-
-		Voice::Events::const_iterator SheetTemplateRenderer::continueOnRemeberedPosition(const Voice &voice)
-		{
-			auto it = voice.events.begin();
-			auto meta = ctx_->voiceMetaData();
-			it = skipEvents(it, voice.events.end(), meta->idxLastWrittenEvent);
-			meta->idxLastWrittenEvent = -1;
-			return it;
-		}
-
-		fm::Ticks SheetTemplateRenderer::renderVoice(const Voice &voice, 
-			Voice::Events::const_iterator it, 
-			fm::Ticks duration,
-			fm::Ticks written)
-		{
-			DEBUGX(static int c = 10);
-			DEBUGX(std::cout << "-----------------------------------------------------" << std::endl);
-			DEBUGX(std::cout << "c \t|\t cPos" << "\t|\t" << "bPos" << "\t|\t" << "d" << std::endl);
-			DEBUGX(std::cout << "-----------------------------------------------------" << std::endl);
-			auto meta = ctx_->voiceMetaData();
-			auto chordVoiceMeta = ctx_->voiceMetaData(ctx_->chordVoiceId());
-			meta->tempoFactor = chordVoiceMeta->tempoFactor;
-			for (; it < voice.events.end(); ++it) // loop voice events
+		namespace {
+			struct TemplatesAndItsChords {
+				typedef std::vector<Event*> Chords;
+				typedef AContext::SheetTemplates Templates;
+				Chords chords;
+				Templates templates;
+			};
+			AContext::SheetTemplates __getTemplates(SheetTemplateRenderer &sheetTemplateRenderer, const Event &metaEvent)
 			{
-				bool isLastEvent = (it+1) == voice.events.end();
-				auto ev = *it;
-				auto currentPos = meta->position;
-				auto originalDuration = ev.duration;
-				if (ev.isTimeConsuming()) {
-					ev.duration = originalDuration;
+				auto ctx = sheetTemplateRenderer.context();
+				AContext::SheetTemplates templates;
+				for (size_t idx=0; idx < metaEvent.metaArgs.size(); ++idx) {
+					auto sheetTemplateName = getArgument<fm::String>(metaEvent, idx);
+					auto sheetTemplate = ctx->sheetTemplateDefServer()->getSheetTemplate(sheetTemplateName);
+					if (sheetTemplate.empty()) {
+						FM_THROW(Exception, "sheetTemplate not found: " + sheetTemplateName);
+					}
+					templates.push_back(sheetTemplate);
 				}
-				if (ev.isTimeConsuming() && meta->remainingTime > 0) {
-					ev.duration = ev.duration + meta->remainingTime;
-					ev.duration = std::min(ev.duration, duration - written);
-					// still remainings? keep it
-					meta->remainingTime = std::max(fm::Ticks(0.0), meta->remainingTime - (ev.duration - originalDuration));
-				} else {
-					ev.duration = std::min(ev.duration, duration - written);
-				}
-				DEBUGX(std::cout << c++ << "," << it - voice.events.begin() << "\t|\t" << currentPos << "\t|\t" << meta->barPosition << "\t|\t" << ev.toString() << ":" << meta->lastEventDuration << std::endl);
-				sheetEventRenderer->addEvent(ev);
-				written += meta->position - currentPos;
-				if (allWritten(duration, written) && !isLastEvent) {
-					DEBUGX(std::cout << "full" << std::endl);
-					remberPosition(voice, ev, it, originalDuration);
-					break;
-				}
+				return templates;
 			}
-			return written;
+			std::list<TemplatesAndItsChords> __collectChordsPerTemplate(SheetTemplateRenderer &sheetTemplateRenderer, Track * sheetTrack)
+			{
+				auto ctx = sheetTemplateRenderer.context();
+				std::list<TemplatesAndItsChords> templatesAndItsChords;
+				templatesAndItsChords.emplace_back(TemplatesAndItsChords());
+				templatesAndItsChords.back().templates = ctx->currentSheetTemplates();
+
+				auto &sheetEvents = sheetTrack->voices.begin()->events;
+				for (auto &ev : sheetEvents) {
+					if (ev.stringValue == SHEET_META__SET_SHEET_TEMPLATE) {
+						templatesAndItsChords.emplace_back(TemplatesAndItsChords());
+						templatesAndItsChords.back().templates = __getTemplates(sheetTemplateRenderer, ev);
+					}
+					if (ev.isTimeConsuming()) {
+						templatesAndItsChords.back().chords.push_back(&ev);
+					}
+				}
+				return templatesAndItsChords;
+			}
+
+			void __degreeToAbsoluteNote(AContext *ctx, const Event &chordEvent, const Event &degreeEvent, Event &target) {
+				auto chordDef = ctx->sheetTemplateDefServer()->getChord(chordEvent.chordDefName());
+				if (chordDef == nullptr) {
+					FM_THROW(Exception, "chord not found: " + chordEvent.stringValue);
+				}									
+				auto voicingStratgy = ctx->currentVoicingStrategy();
+				auto pitches = voicingStratgy->get(chordEvent, *chordDef, degreeEvent.pitches, ctx->getTimeInfo());
+				target = degreeEvent;
+				target.type = Event::Note;
+				target.isTied(degreeEvent.isTied());
+				target.pitches.swap(pitches);
+			}
 		}
 
-        void SheetTemplateRenderer::render(fm::Ticks duration)
-        {
-			for (const auto &tmpl : ctx_->currentSheetTemplates()) {
-				const auto &sheetTemplateTracks = tmpl.tracks;;
-				for (const auto &track : sheetTemplateTracks)
-				{
-					for (const auto &voice : track->voices)
+		void SheetTemplateRenderer::render(Track * sheetTrack)
+		{
+			auto templatesAndItsChords = __collectChordsPerTemplate(*this, sheetTrack);
+			const TemplatesAndItsChords *previousTemplateAndChords = nullptr;
+			for(auto const &templateAndChords : templatesAndItsChords) {
+				if (templateAndChords.chords.empty()) {
+					continue;
+				}
+				fm::Ticks previousDuration = 0;
+				if (previousTemplateAndChords != nullptr) {
+					const auto &chords = previousTemplateAndChords->chords;
+					std::for_each(chords.begin(), chords.end(), [&previousDuration](const Event *ev) {
+						previousDuration += ev->duration;
+					});
+				}
+				previousTemplateAndChords = &templateAndChords;
+				for (const auto &tmpl : templateAndChords.templates) {
+					const auto &sheetTemplateTracks = tmpl.tracks;
+					for (const auto &track : sheetTemplateTracks)
 					{
-						if (voice.events.empty() || !hasAnyTimeConsumingEvents(voice.events)) {
-							continue;
-						}
-						setTargetCreateIfNotExists(*track, voice);
-						auto meta = ctx_->voiceMetaData();
-						fm::Ticks writtenDuration = 0;
-						while (!allWritten(duration, writtenDuration)) { // loop until enough events are written
-							auto it = voice.events.begin();
-							if (hasRemberedPosition(*meta)) { // continue rendering
-								it = continueOnRemeberedPosition(voice);
+						for (const auto &voice : track->voices)
+						{
+							size_t chordIdx = 0;
+							size_t degreeEventIdx = 0;
+							fm::Ticks writtenTicks = 0;
+							setTargetCreateIfNotExists(*track, voice);
+							ctx_->seek(previousDuration);
+							while(true) { // iterate events
+								const Event &degreeEvent = voice.events.at(degreeEventIdx);
+								const Event *chordEvent = templateAndChords.chords.at(chordIdx);
+								Event copy;
+								if (degreeEvent.isRelativeDegree()) {
+									__degreeToAbsoluteNote(ctx_, *chordEvent, degreeEvent, copy);
+								} else {
+									copy = degreeEvent;
+								}
+								sheetEventRenderer->addEvent(copy);
+								writtenTicks += copy.duration;
+								if (writtenTicks >= chordEvent->duration) {
+									if (chordIdx +1 >= templateAndChords.chords.size()) {
+										break;
+									}
+									++chordIdx;
+									writtenTicks = 0;
+								}
+								degreeEventIdx = (degreeEventIdx + 1) % voice.events.size();
 							}
-							else if (meta->eventOffset > 0) { // skip events (for upbeat)
-								it += meta->eventOffset;
-							}
-							writtenDuration = renderVoice(voice, it, duration, writtenDuration);
 						}
 					}
 				}
 			}
-        }
+		}
     }
 }
