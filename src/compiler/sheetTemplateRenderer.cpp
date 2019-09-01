@@ -120,11 +120,11 @@ namespace sheet {
 		{
 			auto templatesAndItsChords = __collectChordsPerTemplate(*this, sheetTrack);
 			const TemplatesAndItsChords *previousTemplateAndChords = nullptr;
+			fm::Ticks previousDuration = 0;
 			for(auto const &templateAndChords : templatesAndItsChords) {
 				if (templateAndChords.chords.empty()) {
 					continue;
 				}
-				fm::Ticks previousDuration = 0;
 				if (previousTemplateAndChords != nullptr) {
 					const auto &chords = previousTemplateAndChords->chords;
 					std::for_each(chords.begin(), chords.end(), [&previousDuration](const Event *ev) {
@@ -141,8 +141,9 @@ namespace sheet {
 							size_t chordIdx = 0;
 							size_t degreeEventIdx = 0;
 							fm::Ticks writtenTicks = 0;
+							fm::Ticks writtenTicksPerVoice = 0;
 							setTargetCreateIfNotExists(*track, voice);
-							ctx_->seek(previousDuration);
+							ctx_->voiceMetaData()->position = previousDuration;
 							while(true) { // iterate events
 								const Event &degreeEvent = voice.events.at(degreeEventIdx);
 								const Event *chordEvent = templateAndChords.chords.at(chordIdx);
@@ -154,14 +155,24 @@ namespace sheet {
 								}
 								sheetEventRenderer->addEvent(copy);
 								writtenTicks += copy.duration;
+								writtenTicksPerVoice += copy.duration;
 								if (writtenTicks >= chordEvent->duration) {
 									if (chordIdx +1 >= templateAndChords.chords.size()) {
+										// no more chords
 										break;
 									}
+									// switch to next chord
 									++chordIdx;
 									writtenTicks = 0;
 								}
-								degreeEventIdx = (degreeEventIdx + 1) % voice.events.size();
+								++degreeEventIdx;
+								if (degreeEventIdx >= voice.events.size()) {
+									if (writtenTicksPerVoice==0) {
+										// no time consuming events here
+										break;
+									}
+									degreeEventIdx = 0;
+								}
 							}
 						}
 					}
