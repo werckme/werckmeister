@@ -180,8 +180,8 @@ namespace sheet {
 									++degreeEventIdx;
 								}  
 
-								writtenTicks += copy.duration * sheetMeta->tempoFactor;
-								writtenTicksPerVoice += copy.duration * sheetMeta->tempoFactor;
+								writtenTicks += copy.duration;
+								writtenTicksPerVoice += copy.duration;
 								
 								if (writtenTicks >= chordEvent->duration) {
 									if (chordIdx +1 >= templateAndChords.chords.size()) {

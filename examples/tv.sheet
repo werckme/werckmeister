@@ -70,11 +70,11 @@ instrument: drums;
 
 }
 {
-    /do: swing grid 8 offset 50/
+    --/do: swing grid 8 offset 50/
     !f"ht"4     !p"ho2"4             r2      |
 }
 {
-    /do: swing grid 8 offset 50/
+    --/do: swing grid 8 offset 50/
     r   "hto1"64`"hto1"4.       "mto1"8       !ffff"mto1"8. !fff"lto1" r16   |
 }
 ]
@@ -128,7 +128,7 @@ instrument: lead;
 [
 type: sheet;
 {
-    --/tempo: 146/ 
+    /tempo: 146/ 
     /signature: 2 4/
     /template:  
         x
@@ -197,7 +197,7 @@ type: sheet;
     Bes7 | A-7 | G |  -- :|
     -- |:
     Bes7 | A-7 | G | D7 | F | A-7 | D7 | D7 | F |
-    A-7 |  G7  | G7
+    A-7 |  G7  | G7 |
   
 }
 ]
