@@ -102,7 +102,7 @@ namespace sheet {
 				return templatesAndItsChords;
 			}
 
-			void __degreeToAbsoluteNote(AContext *ctx, const Event &chordEvent, const Event &degreeEvent, Event &target) {
+			Event & __degreeToAbsoluteNote(AContext *ctx, const Event &chordEvent, const Event &degreeEvent, Event &target) {
 				auto chordDef = ctx->sheetTemplateDefServer()->getChord(chordEvent.chordDefName());
 				if (chordDef == nullptr) {
 					FM_THROW(Exception, "chord not found: " + chordEvent.stringValue);
@@ -113,11 +113,13 @@ namespace sheet {
 				target.type = Event::Note;
 				target.isTied(degreeEvent.isTied());
 				target.pitches.swap(pitches);
+				return target;
 			}
 		}
 
 		void SheetTemplateRenderer::render(Track * sheetTrack)
 		{
+			auto sheetMeta = ctx_->voiceMetaData(ctx_->chordVoiceId());
 			auto templatesAndItsChords = __collectChordsPerTemplate(*this, sheetTrack);
 			const TemplatesAndItsChords *previousTemplateAndChords = nullptr;
 			fm::Ticks previousDuration = 0;
@@ -138,24 +140,49 @@ namespace sheet {
 					{
 						for (const auto &voice : track->voices)
 						{
+							if (voice.events.empty()) {
+								continue;
+							}
 							size_t chordIdx = 0;
 							size_t degreeEventIdx = 0;
 							fm::Ticks writtenTicks = 0;
 							fm::Ticks writtenTicksPerVoice = 0;
+							fm::Ticks leftOver = 0;
 							setTargetCreateIfNotExists(*track, voice);
 							ctx_->voiceMetaData()->position = previousDuration;
+							ctx_->voiceMetaData()->barPosition = 0;
+							ctx_->voiceMetaData()->tempoFactor = sheetMeta->tempoFactor;
 							while(true) { // iterate events
 								const Event &degreeEvent = voice.events.at(degreeEventIdx);
 								const Event *chordEvent = templateAndChords.chords.at(chordIdx);
 								Event copy;
-								if (degreeEvent.isRelativeDegree()) {
-									__degreeToAbsoluteNote(ctx_, *chordEvent, degreeEvent, copy);
-								} else {
+								if(chordEvent->type == Event::Rest) 
+								{
 									copy = degreeEvent;
-								}
-								sheetEventRenderer->addEvent(copy);
-								writtenTicks += copy.duration;
-								writtenTicksPerVoice += copy.duration;
+									copy.type = Event::Rest;
+									copy.duration = chordEvent->duration;
+									sheetEventRenderer->addEvent(copy);
+									ctx_->newBar();
+								} 
+								else
+								{
+									copy = degreeEvent.isRelativeDegree() ? 
+										__degreeToAbsoluteNote(ctx_, *chordEvent, degreeEvent, copy) 
+										: degreeEvent;
+									if (leftOver > 0) {
+										copy.duration += leftOver;
+									}
+									leftOver = writtenTicks + copy.duration - chordEvent->duration;
+									if (leftOver > 0) {
+										copy.duration -= leftOver;
+									}
+									sheetEventRenderer->addEvent(copy);
+									++degreeEventIdx;
+								}  
+
+								writtenTicks += copy.duration * sheetMeta->tempoFactor;
+								writtenTicksPerVoice += copy.duration * sheetMeta->tempoFactor;
+								
 								if (writtenTicks >= chordEvent->duration) {
 									if (chordIdx +1 >= templateAndChords.chords.size()) {
 										// no more chords
@@ -165,13 +192,17 @@ namespace sheet {
 									++chordIdx;
 									writtenTicks = 0;
 								}
-								++degreeEventIdx;
+
 								if (degreeEventIdx >= voice.events.size()) {
 									if (writtenTicksPerVoice==0) {
 										// no time consuming events here
 										break;
 									}
 									degreeEventIdx = 0;
+									if (copy.type != Event::EOB) {
+										// implicite new bar at end of voice
+										ctx_->newBar(); 
+									}
 								}
 							}
 						}

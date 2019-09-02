@@ -37,7 +37,7 @@ name: x;
 instrument: piano;
 {
     \f
-    <I II III IV V VI VII>1~ | x
+    <I II III IV V VI VII>1~ | x |
 
 }
 ]
@@ -59,18 +59,8 @@ type: sheet;
     /template: x rhythm.reggae.normal drums.reggae.fill1 bass.reggae.normal/
     Ces7 | 
     /template: x rhythm.reggae.normal drums.reggae.normal bass.reggae.normal/
-    E | E-7 | Gmaj7 | F | A | 
-    /template: x rhythm.reggae.normal drums.reggae.fill2 bass.reggae.normal/
-    A |
-    /template: x rhythm.reggae.normal drums.reggae.normal bass.reggae.normal/
-    C | C | Cmin | Ces7 | E | E-7 | Gmaj7 | F | A | A | 
-    C | C | Cmin | Ces7 | E | E-7 | Gmaj7 | F | A | A |
-    C | C | Cmin | Ces7 | E | E-7 | Gmaj7 | F | A | A |
-    C | C | Cmin | Ces7 | E | E-7 | Gmaj7 | F | A | A |
-    C | C | Cmin | Ces7 | E | E-7 | Gmaj7 | F | A | A |
-    C | C | Cmin | Ces7 | E | E-7 | Gmaj7 | F | A | A |
-    C | C | Cmin | Ces7 | E | E-7 | Gmaj7 | F | A | A |
-    C | C | Cmin | Ces7 | E | E-7 | Gmaj7 | F | A | A |
+    E | E-7 | Gmaj7 | F | A |
+
 }
 ]
 

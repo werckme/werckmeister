@@ -1,50 +1,48 @@
-@load "chords/default.chords";
-@load "pitchmaps/defaultMidiDrumMap.pitchmap";
+@load "./templates/purdie.template";
+@load "./chords/default.chords";
+@load "lua/voicings/guitar.lua";
+@load "./pitchmaps/defaultMidiDrumMap.pitchmap";
+--@load "./pitchmaps/battery3.tight.pitchmap";
 
+device: SC1 midi 1 offset 20;
+--device: BT midi 8;
 
-device: SC1 midi 2;
-
-tempo: 130;
-
-instrumentDef: piano   SC1 4 0 0;
+tempo: 145;
+instrumentDef: organ SC1 2 0 18;
+instrumentDef: guitar SC1 3 0 37;
+instrumentDef: bass SC1 8 0 33;
+instrumentDef: drums SC1 9 0 32;
+instrumentDef: slide SC1 2 0 102;
 
 
 [
 type: template;
-name: x;
-instrument: piano;
+name: ido.normal;
+instrument: guitar; 
 {
-    I4 III r2 | VII4 V III I |
-}
-{
-    I,,1 |
-}
+    /voicingStrategy: guitar/
+    \f
+    <I II III IV V VI VII>4. <I II III IV V VI VII>4 <I II III IV V VI VII>4 <I II III IV V VI VII>8  |
+}   
 ]
 
 [
 type: template;
-name: y;
-instrument: piano;
+name: ido.normal;
+instrument: drums; 
 {
-    <I III V VII>1 |
-}
-{
-    I,,1 |
-}
+    \f
+    "bd"4 x x x |
+}   
 ]
-
 
 [
 type: sheet;
 {
-    /template: x/
-    C7 | D-7 | 
-    /template: y/
-    Fis7 | Fis-7 |
+    /template: ido.normal/
+
+     r | C7 | Emin7 | 
+     A B | Cmin | Cmin | Ces9 | G7 Gesmin | 
+ 
 }
 ]
-
-
-
-
-
