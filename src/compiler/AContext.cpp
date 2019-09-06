@@ -492,15 +492,7 @@ namespace sheet {
 			return result;
 		}
 
-		/////////////////////////////////////////////////////////////////////////////
-		// SheetTemplaterendering
-		ISheetTemplateDefServer::ConstChordValueType AContext::currentChordDef()
-		{
-			if (!currentChordDef_) {
-				currentChordDef_ = sheetTemplateDefServer()->getChord(FM_STRING("?"));
-			}
-			return currentChordDef_;
-		}
+
 		const AContext::SheetTemplates & AContext::currentSheetTemplates()
 		{
 			if (currentSheetTemplates_.empty()) {
@@ -527,14 +519,6 @@ namespace sheet {
 				return currentInstrument->voicingStrategy;
 			}
 			return defaultVoiceStrategy_;
-		}
-		void AContext::setChord(const Event &chord)
-		{
-			currentChord_ = chord;
-			currentChordDef_ = sheetTemplateDefServer()->getChord(currentChord_.chordDefName());
-			if (currentChordDef_ == nullptr) {
-				FM_THROW(Exception, "chord not found: " + currentChord_.stringValue);
-			}
 		}
 	}
 }

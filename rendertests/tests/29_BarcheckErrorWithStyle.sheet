@@ -1,9 +1,12 @@
 @load "./chords/default.chords";
 
+device: SC1 midi 2;
+instrumentDef: piano   SC1 2 0 0;
 
 [
 type: template;
-name: i29.normal; 
+name: i29.normal;
+instrument: piano; 
 {
     <I II III IV V VI VII>2. <I II III IV V VI VII>4  |
     <I II III IV V VI VII>1  |
@@ -12,6 +15,7 @@ name: i29.normal;
 
 [
 type: sheet;
+instrument: piano; 
 {
     A-7 | D-7 | G7 | Cmaj7 C7 |
     Fmaj7 | B07 | E7b9 |

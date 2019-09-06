@@ -70,11 +70,11 @@ instrument: drums;
 
 }
 {
-    --/do: swing grid 8 offset 50/
+    /do: swing grid 8 offset 50/
     !f"ht"4     !p"ho2"4             r2      |
 }
 {
-    --/do: swing grid 8 offset 50/
+    /do: swing grid 8 offset 50/
     r   "hto1"64`"hto1"4.       "mto1"8       !ffff"mto1"8. !fff"lto1" r16   |
 }
 ]
@@ -129,7 +129,8 @@ instrument: lead;
 type: sheet;
 {
     /tempo: 146/ 
-    /signature: 2 4/
+    /signature: 4 4/
+    
     /template:  
         x
         drums.country.normal
@@ -137,7 +138,6 @@ type: sheet;
         rhythm.bossanova.normal
     / 
     G | G | G | G    | G   | G7 | G6 | G | G | G7 |
-
     /template:  
         x
         drums.disco.normal
@@ -166,7 +166,6 @@ type: sheet;
     /  
 
     A-7 |  
-    
     /template:  
         x
         drums.reggae.fill1
@@ -175,7 +174,8 @@ type: sheet;
     /  
     
     
-    G7  | G |
+    G7  | 
+    G |
 
 
 

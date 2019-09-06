@@ -8,7 +8,6 @@
 #include <fm/literals.hpp>
 #include <map>
 #include <unordered_map>
-#include "sheet/ChordDef.h"
 #include "sheet/SheetTemplateDefServer.h"
 #include "compiler/voicings/VoicingStrategy.h"
 #include <fm/common.hpp>
@@ -111,12 +110,10 @@ namespace sheet {
 			virtual void warn(const std::string &msg);
 			ISheetTemplateDefServerPtr sheetTemplateDefServer() const;
 			void sheetTemplateDefServer(ISheetTemplateDefServerPtr server);
-			virtual ISheetTemplateDefServer::ConstChordValueType currentChordDef();
 			typedef std::vector<ISheetTemplateDefServer::SheetTemplate> SheetTemplates;
 			virtual const SheetTemplates & currentSheetTemplates();
 			virtual void currentSheetTemplate(const SheetTemplates &sheetTemplate);
 			virtual VoicingStrategyPtr currentVoicingStrategy();
-			virtual const Event * currentChord() const { return &currentChord_; }
 			virtual fm::Expression getExpression(const fm::String &str) const;
 			virtual AModificationPtr spielanweisung();
 			virtual AInstrumentDef * getInstrumentDef(const fm::String &uname) = 0;
@@ -171,7 +168,6 @@ namespace sheet {
 			virtual void seek(fm::Ticks duration);
 			virtual void newBar();
 			virtual void rest(fm::Ticks duration);
-			virtual void setChord(const Event &ev);
 			virtual fm::Ticks barPos() const;
 			Warnings warnings;
 			/**
@@ -197,9 +193,7 @@ namespace sheet {
 			virtual TrackId createMasterTrack();
 			ExpressionMap expressionMap_;
 		private:
-			Event currentChord_;
 			VoicingStrategyPtr defaultVoiceStrategy_;
-			ISheetTemplateDefServer::ConstChordValueType currentChordDef_ = nullptr;
 			SheetTemplates currentSheetTemplates_;
 			TrackId trackId_ = INVALID_TRACK_ID, 
 				 chordTrack_ = INVALID_TRACK_ID,

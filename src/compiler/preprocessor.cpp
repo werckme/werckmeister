@@ -20,10 +20,22 @@ namespace sheet {
         {
             for (auto &voice : track.voices)
 			{
+				if (voice.events.empty()) {
+					continue;
+				}
 				Event lastNoRepeat;
 				lastNoRepeat.type = Event::Unknown;
 				auto it = voice.events.begin();
 				auto end = voice.events.end();
+				auto lastEvent = end - 1;
+				if (lastEvent->type != Event::EOB) {
+					Event eob;
+					eob.type = Event::EOB;
+					voice.events.push_back(eob);
+					it = voice.events.begin();
+					end = voice.events.end();
+					lastEvent = end - 1;
+				}
 				fm::Ticks lastDuration = VoiceMetaData::DefaultDuration;
 				for (; it!=end; ++it)
 				{

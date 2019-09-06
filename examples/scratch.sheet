@@ -1,48 +1,83 @@
-@load "./templates/purdie.template";
-@load "./chords/default.chords";
-@load "lua/voicings/guitar.lua";
 @load "./pitchmaps/defaultMidiDrumMap.pitchmap";
---@load "./pitchmaps/battery3.tight.pitchmap";
+@load "./chords/default.chords";
 
-device: SC1 midi 1 offset 20;
---device: BT midi 8;
+tempo: 150;
+device: SC1 midi 1;
 
-tempo: 145;
-instrumentDef: organ SC1 2 0 18;
-instrumentDef: guitar SC1 3 0 37;
-instrumentDef: bass SC1 8 0 33;
-instrumentDef: drums SC1 9 0 32;
-instrumentDef: slide SC1 2 0 102;
 
+--             instrument dv ch cc pc
+instrumentDef: piano      SC1 0 0  0;
+instrumentDef: lead       SC1 1 0  11;
+instrumentDef: rhythm1    SC1 2 0  7;
+instrumentDef: bass       SC1 3 0  36;
+instrumentDef: fx         SC1 4 35 80;
+instrumentDef: drums      SC1 9 2  32;
+instrumentConf: drums volume 85;
+instrumentConf: bass volume 100;
+instrumentConf: rhythm1 volume 70;
+instrumentConf: piano volume 70;
 
 [
 type: template;
-name: ido.normal;
-instrument: guitar; 
+instrument: drums;
+name: reaggesk.normal;
 {
-    /voicingStrategy: guitar/
-    \f
-    <I II III IV V VI VII>4. <I II III IV V VI VII>4 <I II III IV V VI VII>4 <I II III IV V VI VII>8  |
-}   
+    /signature: 6 8/
+    r8. !f"ht"16. !ff"ht"16. r8. !p"ht"16. r64 !fff"ht"16.  |
+    r8. !f"ht"16. !ff"ht"16. !pp"ht"8 !f"ht"16 !p"ht"16. r64 !fff"ht"16.  |
+}
+{
+    /signature: 6 8/
+    r2. |
+    "sn"1 | 
+}
+{
+    /signature: 6 8/
+    "bd"2 "bd"4 |
+}
 ]
 
 [
 type: template;
-name: ido.normal;
-instrument: drums; 
+instrument: bass;
+name: reaggesk.normal;
 {
-    \f
-    "bd"4 x x x |
-}   
+    /signature: 6 8/
+    I,,8. !pV,,,32 r16 V,,,16. r8 r64 !ffVII,,,32 r64 r8 III,,,16  |
+    I,,8. !pV,,,32 r16 V,,,16. r8 r64 !ffVII,,,32 r64 III,,,8 r16  |
+}
+]
+
+[
+type: template;
+instrument: rhythm1;
+name: reaggesk.normal;
+{
+    /signature: 6 8/
+    /voicingStrategy: simpleGuitar/
+    r8. !f<I, III VII,>32 r16 !f<I, III VII,>16. r8. !p<I, III VII,>16. r64 r16.  |
+}
+]
+
+[
+type: template;
+instrument: piano;
+name: reaggesk.normal;
+{
+    /signature: 6 8/
+    /voicingStrategy: simpleGuitar/
+    <I II III IV V VI VII>2. |
+    r2. |
+}
 ]
 
 [
 type: sheet;
 {
-    /template: ido.normal/
-
-     r | C7 | Emin7 | 
-     A B | Cmin | Cmin | Ces9 | G7 Gesmin | 
- 
+    /signature: 6 8/
+    C7 | C7 | Gmaj7 | Gmaj7 |
+    B07 | B07 | D-7 | D-7 F7 |
+    C7 | C7 | Gmaj7 | Gmaj7 |
+    B07 | B07 | D-7 | D-7 F7 |
 }
 ]

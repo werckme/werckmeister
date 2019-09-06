@@ -9,6 +9,7 @@ namespace sheet {
         /**
          * sets implicite duration to every event with duration = 0.
 		 * sets x shortcut e.g.: c1 x x x
+		 * set implicit EOB
          */
 		class Preprocessor {
 		public:

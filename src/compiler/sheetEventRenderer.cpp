@@ -65,9 +65,6 @@ namespace sheet {
 			template<>
 			bool renderEvent<Event::Chord>(SheetEventRenderer* renderer, const Event *chordEv)
 			{
-                auto ctx = renderer->context();
-				ctx->setChord(*chordEv);
-				ctx->seek(chordEv->duration);
 				return true;
 			}
 			template<>
