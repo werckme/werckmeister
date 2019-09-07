@@ -42,14 +42,6 @@ instrument: piano;
 }
 ]
 
-[
-instrument: lead;
-{
-    \ffff
-    /do: swing grid 8 offset 60/
-}
-]
-
 
 [
 type: sheet;
