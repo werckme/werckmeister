@@ -267,7 +267,8 @@ namespace sheet {
 				if (command == SHEET_META__TRACK_META_KEY_TYPE /*handled elsewhere*/
 				|| command == SHEET_META__TRACK_META_KEY_NAME
 				|| command == SHEET_META__SET_VORSCHLAG
-				|| command == SHEET_META__SET_UPBEAT) 
+				|| command == SHEET_META__SET_UPBEAT
+				|| command == SHEET_META__SHEET_TEMPLATE_POSITION) 
 				{
 					return;
 				}

@@ -1,8 +1,14 @@
 @load "./chords/default.chords";
 
+tempo: 120;
+device: SC1 midi 1;
+
+instrumentDef: piano      SC1 0 0  0;
+
 [
 type: template;
 name: simpleJazz44.normal;
+instrument: piano;
 {
     /voicingStrategy: simpleGuitar/
     <I II III IV V VI VII>4 <I II III IV V VI VII>4 <I II III IV V VI VII>4 <I II III IV V VI VII>4  |

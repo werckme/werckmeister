@@ -51,6 +51,10 @@ namespace sheet {
 				renderTracks();
 				ctx->metaEventHandler = AContext::MetaEventHandler();
 			} catch (fm::Exception &ex) {
+				if (int *objectIdx = boost::get_error_info<ex_at_object_idx>(ex)) {
+					// exception has index on which object the exception occured
+					ex << ex_sheet_source_info(document->sheetDef.sheetInfos[*objectIdx]);
+				}				
 				ex << ex_sheet_document(document);
 				throw;
 			} catch(...) {
@@ -60,26 +64,7 @@ namespace sheet {
 
 		bool Compiler::metaEventHandler(const Event &metaEvent)
 		{
-			if (metaEvent.stringValue == SHEET_META__SHEET_TEMPLATE_POSITION) {
-				sheetTemplatePosition(getArgument<fm::String>(metaEvent.metaArgs, 0));
-				return true;
-			}
 			return false;
-		}
-
-		void Compiler::sheetTemplatePosition(const fm::String &cmd)
-		{
-			if (cmd != SHEET_META__SHEET_TEMPLATE_POSITION_CMD) {
-				FM_THROW(Exception, "unsupported sheetTemplatePosition command: " + cmd);
-			}
-			auto ctx = context();
-			if (!ctx->capabilities.canSeek) {
-				FM_THROW(Exception, "track type does not support sheetTemplatePosition");
-			}
-			if (currentSheetTemplateRenderer_ == nullptr) {
-				FM_THROW(fm::Exception, "sheetTemplate renderer = null");
-			}
-			FM_THROW(fm::Exception, fm::String(SHEET_META__SHEET_TEMPLATE_POSITION_CMD) + " not implemented");
 		}
 
 		void Compiler::renderTracks()

@@ -76,6 +76,7 @@ namespace sheet {
 				DegreeEventServer(const Voice::Events *degrees);
 				const Event * nextEvent();
 				bool hasTimeConsumingEvents() const;
+				void seek(fm::Ticks);
 
 			};
 			DegreeEventServer::DegreeEventServer(const Voice::Events *degrees)
@@ -90,7 +91,7 @@ namespace sheet {
 			const Event * DegreeEventServer::nextEvent()
 			{
 				if (it_ == degrees_->end()) {
-					it_ = degrees_->begin();
+					seek(0);
 				}
 				return &(*it_++);
 			}
@@ -100,6 +101,13 @@ namespace sheet {
 					return ev.isTimeConsuming();
 				});
 			}
+			void DegreeEventServer::seek(fm::Ticks ticks)
+			{
+				if (ticks != 0) {
+					FM_THROW(Exception, "missing implementation for seeking to value != 0");
+				}
+				it_ = degrees_->begin();
+			}			
 			AContext::SheetTemplates __getTemplates(SheetTemplateRenderer &sheetTemplateRenderer, const Event &metaEvent)
 			{
 				auto ctx = sheetTemplateRenderer.context();
@@ -147,15 +155,48 @@ namespace sheet {
 				target.pitches.swap(pitches);
 				return target;
 			}
+
+			void __handleTemplatePositionCmd(const Event &metaEvent, DegreeEventServer &eventServer)
+			{
+				try {
+					const auto &args = metaEvent.metaArgs;
+					if (args.empty()) {
+						FM_THROW(Exception, fm::String("no args for: ") + SHEET_META__SHEET_TEMPLATE_POSITION);
+					}
+					auto arg = args.front();
+					if (arg == SHEET_META__SHEET_TEMPLATE_POSITION_CMD_RESET) {
+						eventServer.seek(0);
+					} else {
+						FM_THROW(Exception, fm::String("invalid arg for: ") + SHEET_META__SHEET_TEMPLATE_POSITION + ": " + arg);
+					}
+				} catch (fm::Exception &ex) {
+					ex << ex_sheet_source_info(metaEvent);
+					throw;
+				}
+			}
+
 			typedef std::list<const Event*> Chords;
-			void __renderOneChordBar(AContext *ctx, 
+			fm::Ticks __renderOneChordBar(AContext *ctx, 
 				SheetEventRenderer *sheetEventRenderer, 
 				DegreeEventServer &eventServer, 
 				const Chords &chords) 
 			{
 				fm::Ticks leftover = 0;
+				fm::Ticks written = 0;
 				for(const Event *chord : chords) {
 					using namespace fm;
+					if (chord->type == Event::Meta) {
+						if (chord->stringValue == SHEET_META__SHEET_TEMPLATE_POSITION) {
+							__handleTemplatePositionCmd(*chord, eventServer);
+							continue;
+						}
+						auto voiceId = ctx->voice();
+						auto trackId = ctx->track();
+						ctx->setChordTrackTarget();
+						sheetEventRenderer->addEvent(*chord);
+						ctx->setTarget(trackId, voiceId);
+						continue;
+					}
 					fm::Ticks ticksToWrite = chord->duration;
 					while(ticksToWrite > 1.0_N128) {
 						const Event &degree = *(eventServer.nextEvent());
@@ -163,18 +204,25 @@ namespace sheet {
 						copy = degree.isRelativeDegree() ? 
 							__degreeToAbsoluteNote(ctx, *chord, degree, copy) 
 										: degree;
-						if (copy.isTimeConsuming() && leftover > 0) {
+						bool eventIsAbleToAddLeftover = copy.isTimeConsuming();
+						if (eventIsAbleToAddLeftover && leftover > 0) {
 							copy.duration += leftover;
 							leftover = 0;
 						}
-						if (copy.isTimeConsuming() && ticksToWrite - copy.duration < 0) {
+						if (eventIsAbleToAddLeftover && ticksToWrite - copy.duration < 0) {
 							leftover = copy.duration - ticksToWrite;
 							copy.duration = ticksToWrite;
 						}
+						if (copy.type == Event::EOB) {
+							// eob will be handled elsewhere
+							continue;
+						}
 						sheetEventRenderer->addEvent(copy);
-						ticksToWrite -= copy.duration;		
+						ticksToWrite -= copy.duration;	
+						written += copy.duration;	
 					}
-				}	
+				}
+				return written;	
 			}
 		}
 
@@ -217,10 +265,11 @@ namespace sheet {
 								if (chord->type == Event::EOB) {
 									ctx_->voiceMetaData()->tempoFactor = sheetMeta->tempoFactor;
 									__renderOneChordBar(ctx_, sheetEventRenderer, eventServer, chordsPerBar);
+									ctx_->newBar();
 									chordsPerBar.clear();
 									continue;
 								}
-								if (chord->type == Event::Chord) {
+								if (chord->type == Event::Chord || chord->type == Event::Meta) {
 									chordsPerBar.push_back(chord);
 								}
 							}

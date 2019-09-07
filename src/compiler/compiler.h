@@ -28,8 +28,6 @@ namespace sheet {
 			bool metaEventHandler(const Event &metaEvent);
 			AContextPtr context_;
 			DocumentPtr document_;
-			//// Meta Event Handler
-			void sheetTemplatePosition(const fm::String &cmd);
 			SheetTemplateRenderer *currentSheetTemplateRenderer_ = nullptr;
 			SheetEventRendererPtr sheetEventRenderer_;
 		};
