@@ -128,8 +128,8 @@ instrument: lead;
 [
 type: sheet;
 {
-    --/tempo: 146/ 
-    ---/signature: 4 4/
+    /tempo: 146/ 
+    /signature: 4 4/
     
     /template:  
         x

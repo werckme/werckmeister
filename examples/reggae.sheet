@@ -42,6 +42,13 @@ instrument: piano;
 }
 ]
 
+[
+instrument: lead;
+{
+    \fff
+}
+]
+
 
 [
 type: sheet;

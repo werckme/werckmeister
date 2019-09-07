@@ -22,14 +22,17 @@ type: template;
 instrument: drums;
 name: reaggesk.normal;
 {
+    /signature: 6 8/
     r8. !f"ht"16. !ff"ht"16. r8. !p"ht"16. r64 !fff"ht"16.  |
     r8. !f"ht"16. !ff"ht"16. !pp"ht"8 !f"ht"16 !p"ht"16. r64 !fff"ht"16.  |
 }
 {
+    /signature: 6 8/
     r2. |
     "sn"1 | 
 }
 {
+    /signature: 6 8/
     "bd"2 "bd"4 |
 }
 ]
@@ -39,6 +42,7 @@ type: template;
 instrument: bass;
 name: reaggesk.normal;
 {
+    /signature: 6 8/
     I,,8. !pV,,,32 r16 V,,,16. r8 r64 !ffVII,,,32 r64 r8 III,,,16  |
     I,,8. !pV,,,32 r16 V,,,16. r8 r64 !ffVII,,,32 r64 III,,,8 r16  |
 }
@@ -49,6 +53,7 @@ type: template;
 instrument: rhythm1;
 name: reaggesk.normal;
 {
+    /signature: 6 8/
     /voicingStrategy: simpleGuitar/
     r8. !f<I, III VII,>32 r16 !f<I, III VII,>16. r8. !p<I, III VII,>16. r64 r16.  |
 }
@@ -59,6 +64,7 @@ type: template;
 instrument: piano;
 name: reaggesk.normal;
 {
+    /signature: 6 8/
     /voicingStrategy: simpleGuitar/
     <I II III IV V VI VII>2. |
     r2. |

@@ -28,6 +28,7 @@ namespace sheet {
 				auto it = voice.events.begin();
 				auto end = voice.events.end();
 				auto lastEvent = end - 1;
+				bool hasTimeConsumingEvents = false;
 				if (lastEvent->type != Event::EOB) {
 					Event eob;
 					eob.type = Event::EOB;
@@ -41,6 +42,7 @@ namespace sheet {
 				{
 					auto &ev = *it;
 					if (ev.isTimeConsuming()) {
+						hasTimeConsumingEvents = true;
 						if (!ev.isRepeat() && ev.type != Event::Rest) {
 							lastNoRepeat = ev;
 						}	
@@ -57,6 +59,10 @@ namespace sheet {
 							lastDuration = ev.duration;
 						}
 					}
+				}
+				if (!hasTimeConsumingEvents) {
+					// no need to do anything
+					voice.events.clear();
 				}
 			}
         }

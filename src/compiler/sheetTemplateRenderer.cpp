@@ -185,6 +185,10 @@ namespace sheet {
 				fm::Ticks written = 0;
 				for(const Event *chord : chords) {
 					using namespace fm;
+					if (chord->type == Event::Rest) {
+						ctx->seek(chord->duration);
+						continue;
+					}
 					if (chord->type == Event::Meta) {
 						if (chord->stringValue == SHEET_META__SHEET_TEMPLATE_POSITION) {
 							__handleTemplatePositionCmd(*chord, eventServer);
@@ -204,12 +208,12 @@ namespace sheet {
 						copy = degree.isRelativeDegree() ? 
 							__degreeToAbsoluteNote(ctx, *chord, degree, copy) 
 										: degree;
-						bool eventIsAbleToAddLeftover = copy.isTimeConsuming();
-						if (eventIsAbleToAddLeftover && leftover > 0) {
+						bool isTimeConsuming = copy.isTimeConsuming();
+						if (isTimeConsuming && leftover > 0) {
 							copy.duration += leftover;
 							leftover = 0;
 						}
-						if (eventIsAbleToAddLeftover && ticksToWrite - copy.duration < 0) {
+						if (isTimeConsuming && ticksToWrite - copy.duration < 0) {
 							leftover = copy.duration - ticksToWrite;
 							copy.duration = ticksToWrite;
 						}
@@ -218,8 +222,10 @@ namespace sheet {
 							continue;
 						}
 						sheetEventRenderer->addEvent(copy);
-						ticksToWrite -= copy.duration;	
-						written += copy.duration;	
+						if (isTimeConsuming) {
+							ticksToWrite -= copy.duration;	
+							written += copy.duration;	
+						}
 					}
 				}
 				return written;	
@@ -269,7 +275,10 @@ namespace sheet {
 									chordsPerBar.clear();
 									continue;
 								}
-								if (chord->type == Event::Chord || chord->type == Event::Meta) {
+								if (chord->type == Event::Chord 
+									|| chord->type == Event::Meta
+									|| chord->type == Event::Rest) 
+								{
 									chordsPerBar.push_back(chord);
 								}
 							}

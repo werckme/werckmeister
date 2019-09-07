@@ -1,7 +1,6 @@
 @load "./pitchmaps/defaultMidiDrumMap.pitchmap";
 @load "./chords/default.chords";
-
-tempo: 150;
+@load "lua/mods/swing.lua";
 device: SC1 midi 1;
 
 
@@ -17,68 +16,22 @@ instrumentConf: bass volume 100;
 instrumentConf: rhythm1 volume 70;
 instrumentConf: piano volume 70;
 
-[
-type: template;
-instrument: drums;
-name: reaggesk.normal;
-{
-    /signature: 6 8/
-    r8. !f"ht"16. !ff"ht"16. r8. !p"ht"16. r64 !fff"ht"16.  |
-    r8. !f"ht"16. !ff"ht"16. !pp"ht"8 !f"ht"16 !p"ht"16. r64 !fff"ht"16.  |
-}
-{
-    /signature: 6 8/
-    r2. |
-    "sn"1 | 
-}
-{
-    /signature: 6 8/
-    "bd"2 "bd"4 |
-}
-]
+
 
 [
 type: template;
-instrument: bass;
-name: reaggesk.normal;
+name: drums.reggae.fill1;
+instrument: drums; 
 {
-    /signature: 6 8/
-    I,,8. !pV,,,32 r16 V,,,16. r8 r64 !ffVII,,,32 r64 r8 III,,,16  |
-    I,,8. !pV,,,32 r16 V,,,16. r8 r64 !ffVII,,,32 r64 III,,,8 r16  |
+    /do: swing grid 8 offset 50/
+    r   "hto1"64`"hto1"4.       "mto1"8       "mto1"8t r "mto1"   |
 }
 ]
 
-[
-type: template;
-instrument: rhythm1;
-name: reaggesk.normal;
-{
-    /signature: 6 8/
-    /voicingStrategy: simpleGuitar/
-    r8. !f<I, III VII,>32 r16 !f<I, III VII,>16. r8. !p<I, III VII,>16. r64 r16.  |
-}
-]
-
-[
-type: template;
-instrument: piano;
-name: reaggesk.normal;
-{
-    /signature: 6 8/
-    /voicingStrategy: simpleGuitar/
-    <I II III IV V VI VII>2. |
-    r2. |
-}
-]
 
 [
 type: sheet;
 {
-    /signature: 6 8/
-    C7 | C7 | Gmaj7 | Gmaj7 |
-    B07 | B07 | D-7 | D-7 F7 |
-    /templatePosition: reset/
-    C7 | C7 | Gmaj7 | Gmaj7 |
-    B07 | B07 | D-7 | D-7 F7 |
+    r | C7 | 
 }
 ]
