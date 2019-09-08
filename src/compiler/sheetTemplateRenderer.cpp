@@ -175,6 +175,30 @@ namespace sheet {
 				}
 			}
 
+			bool __executeChordMetaEventRenderedVoice(const Event &metaEvent)
+			{
+				return metaEvent.stringValue == SHEET_META__SET_TEMPO;
+			}
+
+			void __handleChordMeta(AContext *ctx,
+			const Event &metaEvent, 
+			SheetEventRenderer *sheetEventRenderer,
+			DegreeEventServer &eventServer)
+			{
+				if (metaEvent.stringValue == SHEET_META__SHEET_TEMPLATE_POSITION) {
+					__handleTemplatePositionCmd(metaEvent, eventServer);
+					return;
+				}
+				auto voiceId = ctx->voice();
+				auto trackId = ctx->track();
+				ctx->setChordTrackTarget();
+				sheetEventRenderer->addEvent(metaEvent);
+				ctx->setTarget(trackId, voiceId);
+				if (__executeChordMetaEventRenderedVoice(metaEvent)) {
+					sheetEventRenderer->addEvent(metaEvent);
+				}
+			}			
+
 			typedef std::list<const Event*> Chords;
 			fm::Ticks __renderOneChordBar(AContext *ctx, 
 				SheetEventRenderer *sheetEventRenderer, 
@@ -190,15 +214,7 @@ namespace sheet {
 						continue;
 					}
 					if (chord->type == Event::Meta) {
-						if (chord->stringValue == SHEET_META__SHEET_TEMPLATE_POSITION) {
-							__handleTemplatePositionCmd(*chord, eventServer);
-							continue;
-						}
-						auto voiceId = ctx->voice();
-						auto trackId = ctx->track();
-						ctx->setChordTrackTarget();
-						sheetEventRenderer->addEvent(*chord);
-						ctx->setTarget(trackId, voiceId);
+						__handleChordMeta(ctx, *chord, sheetEventRenderer, eventServer);
 						continue;
 					}
 					fm::Ticks ticksToWrite = chord->duration;
@@ -269,7 +285,6 @@ namespace sheet {
 							for (const auto &chord : templateAndChords.chords)
 							{
 								if (chord->type == Event::EOB) {
-									ctx_->voiceMetaData()->tempoFactor = sheetMeta->tempoFactor;
 									__renderOneChordBar(ctx_, sheetEventRenderer, eventServer, chordsPerBar);
 									ctx_->newBar();
 									chordsPerBar.clear();
