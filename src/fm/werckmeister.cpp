@@ -132,6 +132,13 @@ namespace fm {
 		return midiContext;
 	}
 
+	sheet::compiler::AContextPtr Werckmeister::createTempContext()
+	{
+		auto tmpContext = createContext();
+		std::dynamic_pointer_cast<sheet::compiler::MidiContext>(tmpContext)->midi(createMidi());
+		return tmpContext;
+	}	
+
 	sheet::VoicingStrategyPtr Werckmeister::getDefaultVoicingStrategy()
 	{
 		return getVoicingStrategy(SHEET_VOICING_STRATEGY_DEFAULT);
@@ -277,6 +284,7 @@ namespace fm {
 	{
 		_searchPaths.push_back(path);
 	}
+
 
 	Werckmeister::~Werckmeister() = default;
 }

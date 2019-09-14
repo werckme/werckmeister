@@ -6,8 +6,9 @@
 #include "sheetEventRenderer.h"
 #include <algorithm>
 #include <functional>
+#include <fm/werckmeister.hpp>
 
-#define DEBUGX(x)
+#define DEBUGX(x) x
 
 namespace sheet {
     namespace compiler {
@@ -67,6 +68,8 @@ namespace sheet {
 				typedef AContext::SheetTemplates Templates;
 				Chords chords;
 				Templates templates;
+				fm::Ticks offset = 0;
+				double tempoFactor = 1;
 			};
 			class DegreeEventServer {
 				const Voice::Events *degrees_;
@@ -128,15 +131,32 @@ namespace sheet {
 				std::list<TemplatesAndItsChords> templatesAndItsChords;
 				templatesAndItsChords.emplace_back(TemplatesAndItsChords());
 				templatesAndItsChords.back().templates = ctx->currentSheetTemplates();
-
+				auto &wm = fm::getWerckmeister();
+				auto tmpContext = wm.createTempContext();
+				tmpContext->setChordTrackTarget();
 				auto &sheetEvents = sheetTrack->voices.begin()->events;
 				for (auto &ev : sheetEvents) {
 					if (ev.stringValue == SHEET_META__SET_SHEET_TEMPLATE) {
+						// new template
 						templatesAndItsChords.emplace_back(TemplatesAndItsChords());
-						templatesAndItsChords.back().templates = __getTemplates(sheetTemplateRenderer, ev);
+						auto &newTemplateAndChords = templatesAndItsChords.back();
+						newTemplateAndChords.templates = __getTemplates(sheetTemplateRenderer, ev);
+						newTemplateAndChords.offset = tmpContext->currentPosition();
+						newTemplateAndChords.tempoFactor = tmpContext->voiceMetaData()->tempoFactor;
+						
 					}
 					else {
-						templatesAndItsChords.back().chords.push_back(&ev);
+						// add any other event
+						auto &currentTemplateAndChords = templatesAndItsChords.back();
+						currentTemplateAndChords.chords.push_back(&ev);
+						if (ev.type == Event::Meta) {
+							tmpContext->setMeta(ev);
+							currentTemplateAndChords.tempoFactor = tmpContext->voiceMetaData()->tempoFactor;
+							currentTemplateAndChords.offset = tmpContext->currentPosition();
+						}
+						if (ev.isTimeConsuming()) {
+							tmpContext->seek(ev.duration);
+						}
 					}
 				}
 				return templatesAndItsChords;
@@ -195,7 +215,7 @@ namespace sheet {
 				sheetEventRenderer->addEvent(metaEvent);
 				ctx->setTarget(trackId, voiceId);
 				if (__executeChordMetaEventRenderedVoice(metaEvent)) {
-					sheetEventRenderer->addEvent(metaEvent);
+					//sheetEventRenderer->addEvent(metaEvent);
 				}
 			}			
 
@@ -252,19 +272,10 @@ namespace sheet {
 		{
 			auto sheetMeta = ctx_->voiceMetaData(ctx_->chordVoiceId());
 			auto templatesAndItsChords = __collectChordsPerTemplate(*this, sheetTrack);
-			const TemplatesAndItsChords *previousTemplateAndChords = nullptr;
-			fm::Ticks previousDuration = 0;
 			for(auto const &templateAndChords : templatesAndItsChords) {
 				if (templateAndChords.chords.empty()) {
 					continue;
 				}
-				if (previousTemplateAndChords != nullptr) {
-					const auto &chords = previousTemplateAndChords->chords;
-					std::for_each(chords.begin(), chords.end(), [&previousDuration](const Event *ev) {
-						previousDuration += ev->duration;
-					});
-				}
-				previousTemplateAndChords = &templateAndChords;
 				for (const auto &tmpl : templateAndChords.templates) {
 					const auto &sheetTemplateTracks = tmpl.tracks;
 					for (const auto &track : sheetTemplateTracks)
@@ -275,12 +286,19 @@ namespace sheet {
 								continue;
 							}
 							DegreeEventServer eventServer(&(voice.events));
-							if (!eventServer.hasTimeConsumingEvents()) {
-								continue;
-							}
 							setTargetCreateIfNotExists(*track, voice);
-							ctx_->voiceMetaData()->position = previousDuration;
+							ctx_->voiceMetaData()->position = templateAndChords.offset;
+							ctx_->voiceMetaData()->tempoFactor = templateAndChords.tempoFactor;
 							ctx_->voiceMetaData()->barPosition = 0;
+
+							DEBUGX(
+								auto trackname = getMetaValuesBy("name", track->trackInfos).front();
+								auto position = ctx_->voiceMetaData()->position;
+								auto tempofac = ctx_->voiceMetaData()->tempoFactor;
+								std::cout << trackname << " ; " << position << " ; " << tempofac << std::endl;
+							)
+
+
 							Chords chordsPerBar;
 							for (const auto &chord : templateAndChords.chords)
 							{

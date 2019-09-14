@@ -151,6 +151,16 @@ namespace sheet {
 			return voiceMeta->position;
 		}
 
+		fm::Ticks AContext::maxPosition() const
+		{
+			fm::Ticks position = 0;
+			for (const auto &keyValue : voiceMetaDataMap_) {
+				const auto &meta = keyValue.second;
+				position = std::max(position, meta->position);
+			}
+			return position;
+		}
+
 		PitchDef AContext::resolvePitch(const PitchDef &pitch) const
 		{
 			if (pitch.alias.empty()) {

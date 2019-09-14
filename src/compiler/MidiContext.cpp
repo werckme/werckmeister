@@ -106,9 +106,10 @@ namespace sheet {
 				FM_THROW(Exception, "failed to add an event without related track");
 			}
 			auto voiceConfig = voiceMetaData<MidiContext::VoiceMetaData>();
-			if (voiceConfig && voiceConfig->tempoFactor != 1) {
+			if (voiceConfig) // && voiceConfig->tempoFactor != 1) 
+			{
 				auto evCopy = ev;
-				evCopy.absPosition(evCopy.absPosition() * voiceConfig->tempoFactor);
+				evCopy.absPosition(evCopy.absPosition() * voiceConfig->tempoFactor + voiceConfig->positionOffset);
 				midi_->tracks().at(trackId)->events().add(evCopy);
 				return;
 			}
@@ -164,9 +165,10 @@ namespace sheet {
 			} else {
 				auto oldFactor = meta->tempoFactor;
 				meta->tempoFactor = masterTempo_ / bpm;
-				auto fixPosition = meta->tempoFactor / oldFactor;
-				meta->position /= fixPosition; 
-				meta->barPosition /= fixPosition; 
+				// update offset, to fix position after tempo change
+				auto fixQuotient = meta->tempoFactor / oldFactor;
+				meta->position /= fixQuotient;
+				meta->barPosition /= fixQuotient;
 			}
 
 		}

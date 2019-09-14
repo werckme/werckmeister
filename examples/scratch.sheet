@@ -1,21 +1,65 @@
-@load "./pitchmaps/defaultMidiDrumMap.pitchmap";
-@load "./chords/default.chords";
+@load "chords/default.chords";
+@load "pitchmaps/defaultMidiDrumMap.pitchmap";
+@load "lua/voicings/voicelead.lua";
+@load "lua/voicings/guitar.lua";
 @load "lua/mods/swing.lua";
-device: SC1 midi 1;
+@load "lua/mods/staccato.lua";
+@load "templates/drums.disco.template";
+@load "templates/bass.disco.template";
+@load "templates/bass.bossanova.template";
+@load "templates/rhythm.country.template";
+@load "templates/rhythm.bossanova.template";
+@load "templates/rhythm.reggae.template";
+@load "templates/drums.country.template";
+@load "templates/bass.country.template";
 
 
---             instrument dv ch cc pc
-instrumentDef: piano      SC1 0 0  0;
-instrumentDef: lead       SC1 1 0  11;
-instrumentDef: rhythm1    SC1 2 0  7;
-instrumentDef: bass       SC1 3 0  36;
-instrumentDef: fx         SC1 4 35 80;
-instrumentDef: drums      SC1 9 2  32;
-instrumentConf: drums volume 85;
-instrumentConf: bass volume 100;
-instrumentConf: rhythm1 volume 70;
-instrumentConf: piano volume 70;
+device: SC1 midi 2;
 
+tempo: 73;
+instrumentDef: piano      SC1 0 0 0;
+instrumentDef: lead       SC1 1 0 105;
+instrumentDef: rhythm     SC1 3 0 28;
+instrumentDef: bass       SC1 4 0 26;
+instrumentDef: bell       SC1 5 0 14;
+instrumentDef: drums      SC1 9 0 0;
+
+instrumentConf: rhythm
+    volume 70;   
+
+instrumentConf: piano
+    volume 70;  
+
+instrumentConf: lead 
+    volume 90;   
+
+
+instrumentConf: rhythm
+    voicingStrategy voicelead range tenor
+    pan 40
+    volume 100;   
+
+[
+type: template;
+name: x;
+instrument: piano;
+{
+    /signature: 4 4/
+    <I V>4 x |
+}
+]
+
+
+[
+type: template;
+name: x;
+instrument: bell;
+{
+    /signature: 4 4/
+    /doOnce: bend from 70/
+    I4 | r | r | r
+}
+]
 
 
 [
@@ -23,15 +67,109 @@ type: template;
 name: drums.reggae.fill1;
 instrument: drums; 
 {
+
+}
+{
+    /signature: 4 4/
     /do: swing grid 8 offset 50/
-    r   "hto1"64`"hto1"4.       "mto1"8       "mto1"8t r "mto1"   |
+    !f"ht"4     !p"ho2"4             r2      |
+}
+{
+    /signature: 4 4/
+    /do: swing grid 8 offset 50/
+    r   "hto1"64`"hto1"4.       "mto1"8       !ffff"mto1"8. !fff"lto1" r16   |
+}
+]
+
+
+[
+instrument: lead;
+{
+    /signature: 2 4/
+    /mod: staccato amount 90/
+    /do: swing grid 8 offset 15/
+    \fff
+    r2 | r2 | r2 | r2  | d'8. x16 x32 x x8 r16 | c'16 f d b,   g c' x32 x b e | c8. f'32 c' e'16 e x32 b, g, a, |
+    c'8 x16 x32 x  e' g g, e b c' r16 | b8. d'16t g' b  g16 e g | g'8 xxx | 
+    -- repeat
+            d'8. x16 x32 x x8 r16 | c'16 f d b,   g c' x32 x b e | c8. f'32 c' e'16 e x32 b, g, a, |
+    c'8 x16 x32 x  e' g g, e b c' r16 | b8. d'16t g' b  g16 e g | g'8 xxx |
+
+    -- |:
+    bes'8. x16  d'32 g d d' f' g' d' x   | a'8. x16  cis'32 g d c' e' fis' c' x |
+    g'8n5 d' bes a g  f16. g32 f16 g32 x | -- :|
+    -- |:
+    bes'8. x16  d'32 g d d' f' g' d' x   | a'8. x16  cis'32 g d c' e' fis' c' x |
+    g'8n5 d' bes a g   f32 a b d' g' d g b | d'32 a b a bes f fis e  d8. a32 x  |
+    a8t xx bes8.  c32 x | c'8. bes16 a x g32 xxx | d'8 d8. r16 d'16txx |
+    d'8 d8. r16 x32 x x16~ | d8t a x  bes8. c32 x | c'8. bes16 a x g32 xxx |
+    g'8 g8. r16 g' x | g'8 g8. r16 g32 x x16 |
+
+
+
+    d'8. x16 x32 x x8 r16 | c'16 f d b,   g c' x32 x b e | c8. f'32 c' e'16 e x32 b, g, a, |
+    c'8 x16 x32 x  e' g g, e b c' r16 | b8. d'16t g' b  g16 e g | g'8 xxx | 
+    -- repeat
+            d'8. x16 x32 x x8 r16 | c'16 f d b,   g c' x32 x b e | c8. f'32 c' e'16 e x32 b, g, a, |
+    c'8 x16 x32 x  e' g g, e b c' r16 | b8. d'16t g' b  g16 e g | g'8 xxx |
+
+    -- |:
+    bes'8. x16  d'32 g d d' f' g' d' x   | a'8. x16  cis'32 g d c' e' fis' c' x |
+    g'8n5 d' bes a g  f16. g32 f16 g32 x | -- :|
+    -- |:
+    bes'8. x16  d'32 g d d' f' g' d' x   | a'8. x16  cis'32 g d c' e' fis' c' x |
+    g'8n5 d' bes a g   f32 a b d' g' d g b | d'32 a b a bes f fis e  d8. a32 x  |
+    a8t xx bes8.  c32 x | c'8. bes16 a x g32 xxx | d'8 d8. r16 d'16txx |
+    d'8 d8. r16 x32 x x16~ | d8t a x  bes8. c32 x | c'8. bes16 a x g32 xxx |
+    g'8 g8. r16 g' x | g'8 g8. r16 g32 x x16 |
+
 }
 ]
 
 
 [
 type: sheet;
-{
-    r | C7 | 
+{    
+    /template:  
+        x
+        drums.country.normal
+        bass.country.normal
+        rhythm.bossanova.normal
+    /
+    /tempo: 146/ 
+    /signature: 4 4/ 
+    G | G | G | G    | G   | G7 | G6 | G | G | G7 |
+
+
+    G    | G   | G7 | G6 | G | G |
+    -- |:   
+    Bes7 | A-7 | G |  -- :|
+    -- |:
+    Bes7 | A-7 | G | D7 | F | A-7 | D7 | D7 | F |
+
+
+    A-7 | 
+    
+    G7  | 
+    G |
+
+    G   | G7 | G6 | G | G | G7 |
+
+   
+
+
+    G    | G   | G7 | G6 | G | G |
+    -- |:
+   
+    Bes7 | A-7 | G |  -- :|
+    -- |:
+    Bes7 | A-7 | G | D7 | F | A-7 | D7 | D7 | F |
+    A-7 |  G7  | G7 |
+  
 }
 ]
+
+
+
+
+

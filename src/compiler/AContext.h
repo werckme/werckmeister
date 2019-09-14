@@ -119,6 +119,7 @@ namespace sheet {
 			virtual AInstrumentDef * getInstrumentDef(const fm::String &uname) = 0;
 			virtual AInstrumentDef * currentInstrumentDef() = 0;
 			virtual fm::Ticks currentPosition() const;
+			virtual fm::Ticks maxPosition() const;
 			TimeInfo getTimeInfo() const;
 			/////// meta commands
 			virtual void setMeta(const Event &metaEvent);

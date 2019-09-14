@@ -15,7 +15,9 @@ namespace sheet {
 			typedef AContext Base;
 			typedef std::unordered_map<fm::String, MidiInstrumentDef> MidiInstrumentDefs;
 			typedef std::vector<MidiInstrumentDef> InstrumentDefContainer;
-			struct VoiceMetaData : sheet::compiler::VoiceMetaData {};
+			struct VoiceMetaData : sheet::compiler::VoiceMetaData {
+				fm::Ticks positionOffset = 0;
+			};
 			struct TrackMetaData : sheet::compiler::TrackMetaData {
 				MidiInstrumentDef instrument;
 			};
