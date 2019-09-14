@@ -295,7 +295,19 @@ namespace sheet {
 					metaSetSingleExpression(getArgument<fm::String>(args, 0));
 					return;
 				}
-				if (command == SHEET_META__SET_TEMPO) { 
+				if (command == SHEET_META__SET_TEMPO) {
+					if (args.front() == SHEET_META__SET_TEMPO_VALUE_HALF) {
+						metaSetTempo(masterTempo() * 0.5);
+						return;
+					}
+					if (args.front() == SHEET_META__SET_TEMPO_VALUE_DOUBLE) {
+						metaSetTempo(masterTempo() * 2);
+						return;
+					}
+					if (args.front() == SHEET_META__SET_TEMPO_VALUE_NORMAL) {
+						metaSetTempo(masterTempo());
+						return;
+					}					
 					metaSetTempo(getArgument<fm::BPM>(args, 0));
 					return;
 				}

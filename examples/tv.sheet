@@ -75,12 +75,12 @@ instrument: drums;
 {
     /signature: 4 4/
     --/do: swing grid 8 offset 50/
-    !f"ht"4     !p"ho2"4             r2      |
+    !f"cy"1      |
 }
 {
     /signature: 4 4/
     --/do: swing grid 8 offset 50/
-    r   "hto1"64`"hto1"4.       "mto1"8       !ffff"mto1"8. !fff"lto1" r16   |
+    "bd"   "hto1"64`"hto1"4.       "mto1"8       !ffff"mto1"8. !fff"lto1" r16   |
 }
 ]
 
@@ -133,7 +133,7 @@ instrument: lead;
 [
 type: sheet;
 {    
-    /tempo: 146/ 
+    /tempo: double/ 
     /signature: 4 4/  
     ----------    
     /template:  
@@ -177,7 +177,7 @@ type: sheet;
         bass.country.normal
         rhythm.bossanova.normal
     /
-    /tempo: 73/
+    /tempo: normal/
     G7  |
     ----------
     /template:  
@@ -186,7 +186,7 @@ type: sheet;
         bass.bossanova.normal
         rhythm.country.normal
     /
-    /tempo: 146/
+    /tempo: double/
     G   | G7 | G6 | G | G | G7 |
     ----------
     /template:  
