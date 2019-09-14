@@ -60,7 +60,6 @@ namespace sheet {
 		private:
 			MidiInstrumentDefs midiInstrumentDefs_;
 			fm::midi::MidiPtr midi_;
-			double masterTempo_ = fm::DefaultTempo;			
         };
     }
 }

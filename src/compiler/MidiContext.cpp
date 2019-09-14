@@ -160,11 +160,11 @@ namespace sheet {
 				// set global tempo
 				auto tempoEvent = fm::midi::Event::MetaTempo(bpm);
 				tempoEvent.absPosition(currentPosition());
-				masterTempo_ = bpm;
+				masterTempo(bpm);
 				addEvent(tempoEvent, masterTrackId());
 			} else {
 				auto oldFactor = meta->tempoFactor;
-				meta->tempoFactor = masterTempo_ / bpm;
+				meta->tempoFactor = masterTempo() / bpm;
 				// update offset, to fix position after tempo change
 				auto fixQuotient = meta->tempoFactor / oldFactor;
 				meta->position /= fixQuotient;

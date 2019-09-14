@@ -8,7 +8,7 @@
 #include <functional>
 #include <fm/werckmeister.hpp>
 
-#define DEBUGX(x) x
+#define DEBUGX(x)
 
 namespace sheet {
     namespace compiler {
@@ -78,7 +78,6 @@ namespace sheet {
 			public:
 				DegreeEventServer(const Voice::Events *degrees);
 				const Event * nextEvent();
-				bool hasTimeConsumingEvents() const;
 				void seek(fm::Ticks);
 
 			};
@@ -97,12 +96,6 @@ namespace sheet {
 					seek(0);
 				}
 				return &(*it_++);
-			}
-			bool DegreeEventServer::hasTimeConsumingEvents() const
-			{
-				return std::any_of(degrees_->begin(), degrees_->end(), [](const Event &ev) { 
-					return ev.isTimeConsuming();
-				});
 			}
 			void DegreeEventServer::seek(fm::Ticks ticks)
 			{
@@ -133,6 +126,7 @@ namespace sheet {
 				templatesAndItsChords.back().templates = ctx->currentSheetTemplates();
 				auto &wm = fm::getWerckmeister();
 				auto tmpContext = wm.createTempContext();
+				tmpContext->masterTempo(ctx->masterTempo());
 				tmpContext->setChordTrackTarget();
 				auto &sheetEvents = sheetTrack->voices.begin()->events;
 				for (auto &ev : sheetEvents) {

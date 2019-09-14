@@ -170,6 +170,11 @@ namespace sheet {
 			virtual void newBar();
 			virtual void rest(fm::Ticks duration);
 			virtual fm::Ticks barPos() const;
+			/**
+			 * the documents master tempo
+			 */
+			virtual double masterTempo() const { return masterTempo_; }
+			virtual void masterTempo(double val) { this->masterTempo_ = val; }			
 			Warnings warnings;
 			/**
 			 * MetaEventHandler: bool (Event& metaEvent)
@@ -194,6 +199,7 @@ namespace sheet {
 			virtual TrackId createMasterTrack();
 			ExpressionMap expressionMap_;
 		private:
+			double masterTempo_ = fm::DefaultTempo;			
 			VoicingStrategyPtr defaultVoiceStrategy_;
 			SheetTemplates currentSheetTemplates_;
 			TrackId trackId_ = INVALID_TRACK_ID, 

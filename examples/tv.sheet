@@ -1,6 +1,7 @@
 @load "chords/default.chords";
 @load "pitchmaps/defaultMidiDrumMap.pitchmap";
 @load "lua/voicings/voicelead.lua";
+@load "lua/voicings/simple.lua";
 @load "lua/voicings/guitar.lua";
 @load "lua/mods/swing.lua";
 @load "lua/mods/staccato.lua";
@@ -9,6 +10,7 @@
 @load "templates/bass.bossanova.template";
 @load "templates/rhythm.country.template";
 @load "templates/rhythm.bossanova.template";
+@load "templates/drums.bossanova.template";
 @load "templates/rhythm.reggae.template";
 @load "templates/drums.country.template";
 @load "templates/bass.country.template";
@@ -16,7 +18,7 @@
 
 device: SC1 midi 2;
 
-tempo:  120;
+tempo:  73;
 instrumentDef: piano      SC1 0 0 0;
 instrumentDef: lead       SC1 1 0 105;
 instrumentDef: rhythm     SC1 3 0 28;
@@ -26,6 +28,10 @@ instrumentDef: drums      SC1 9 0 0;
 
 instrumentConf: rhythm
     volume 70;   
+
+instrumentConf: bass
+    voicingStrategy simple range contrabass
+;   
 
 instrumentConf: piano
     volume 70;  
@@ -45,7 +51,7 @@ name: x;
 instrument: piano;
 {
     /signature: 4 4/
-    <I V>4 x |
+   -- <I V>4 x |
 }
 ]
 
@@ -64,16 +70,16 @@ instrument: bell;
 
 [
 type: template;
-name: drums.reggae.fill1;
+name: drums.fill1;
 instrument: drums; 
 {
     /signature: 4 4/
-    /do: swing grid 8 offset 50/
+    --/do: swing grid 8 offset 50/
     !f"ht"4     !p"ho2"4             r2      |
 }
 {
     /signature: 4 4/
-    /do: swing grid 8 offset 50/
+    --/do: swing grid 8 offset 50/
     r   "hto1"64`"hto1"4.       "mto1"8       !ffff"mto1"8. !fff"lto1" r16   |
 }
 ]
@@ -127,79 +133,129 @@ instrument: lead;
 [
 type: sheet;
 {    
-    /tempo: 240/ 
+    /tempo: 146/ 
+    /signature: 4 4/  
+    ----------    
     /template:  
         x
         drums.country.normal
         bass.country.normal
         rhythm.bossanova.normal
-    /  
-    
-    /signature: 4 4/    
+    /   
     G | G | G | G    | G   | G7 | G6 | G | G | G7 |
+    ----------
     /template:  
         x
         drums.disco.normal
         bass.country.normal
         rhythm.bossanova.normal
     / 
-   /tempo: 120/   
-
     G    | G   | G7 | G6 | G | G |
     -- |:
+    ----------
     /template:  
         x
         drums.country.normal
         bass.country.normal
         rhythm.bossanova.normal
-    /
-
-    /tempo: 240/   
-
+    /     
     Bes7 | A-7 | G |  -- :|
     -- |:
     Bes7 | A-7 | G | D7 | F | A-7 | D7 | D7 | F |
-
+    ----------
     /template:  
         x
         drums.disco.normal
         bass.country.normal
         rhythm.bossanova.normal
     /  
-
     A-7 |  
+    ----------
     /template:  
         x
-        drums.reggae.fill1
+        drums.fill1
         bass.country.normal
         rhythm.bossanova.normal
-    /  
-    
-    
-    G7  | 
-    G |
-
-
-
+    /
+    /tempo: 73/
+    G7  |
+    ----------
     /template:  
         x
         drums.disco.normal
         bass.bossanova.normal
         rhythm.country.normal
-    /  
-
+    /
+    /tempo: 146/
     G   | G7 | G6 | G | G | G7 |
-
-   
-
-
+    ----------
+    /template:  
+        x
+        drums.country.normal
+        bass.bossanova.normal
+        rhythm.country.normal
+    /
     G    | G   | G7 | G6 | G | G |
     -- |:
-   
-    Bes7 | A-7 | G |  -- :|
+    ----------
+    /template:  
+        x
+        drums.disco.normal
+        bass.disco.normal
+        rhythm.bossanova.normal
+    /    
+    Bes7 | A-7 | 
+    ----------
+    /template:  
+        x
+        drums.bossanova.normal
+        bass.bossanova.normal
+        rhythm.bossanova.normal
+    /        
+    G |  -- :|
+    /template:  
+        x
+        drums.disco.normal
+        bass.disco.normal
+        rhythm.bossanova.normal
+    /    
     -- |:
-    Bes7 | A-7 | G | D7 | F | A-7 | D7 | D7 | F |
-    A-7 |  G7  | G7 |
+    Bes7 | A-7 | 
+
+    /template:  
+        x
+        drums.country.normal
+        bass.country.normal
+        rhythm.bossanova.normal
+    /      
+
+    G | D7 | F | A-7 | 
+    
+    /template:  
+        x
+        drums.bossanova.normal
+        bass.bossanova.normal
+        rhythm.bossanova.normal
+    /       
+
+    D7 | D7 | 
+    
+    /template:  
+        x
+        drums.country.normal
+        bass.bossanova.normal
+        rhythm.country.normal
+    /       
+    
+    F | A-7 |  
+    
+    /template:  
+        x
+        drums.bossanova.normal
+        bass.bossanova.normal
+        rhythm.bossanova.normal
+    /        
+    G7  | G7 |
   
 }
 ]
