@@ -1,10 +1,10 @@
 @load "chords/default.chords";
-@load "pitchmaps/battery3.tight.pitchmap";
+@load "pitchmaps/defaultMidiDrumMap.pitchmap";
 @load "lua/mods/swing.lua";
 @load "lua/voicings/voicelead.lua";
 
 device: SC1 midi 2;
-device: BC midi 8;
+device: BC midi 2;
 
 tempo: 100;
 instrumentDef: drums   BC 9 0 0;
@@ -47,7 +47,11 @@ instrument: drums;
 [
 type: sheet;
 {
+    /template: x/
+    C-7 | E-7 | C-7 | E-7 |
     /template: x2/
-    C-7 | E-7 | C-7 | E-7 | C-7 | Gmaj7 | Bmaj7 | 
+    C-7 | 
+    /template: x/
+    Gmaj7 | Bmaj7 | 
 }   
 ]

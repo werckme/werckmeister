@@ -141,12 +141,15 @@ namespace sheet {
 					}
 					else {
 						// add any other event
+						bool isTempoEvent = ev.stringValue == SHEET_META__SET_TEMPO;
 						auto &currentTemplateAndChords = templatesAndItsChords.back();
 						currentTemplateAndChords.chords.push_back(&ev);
 						if (ev.type == Event::Meta) {
 							tmpContext->setMeta(ev);
-							currentTemplateAndChords.tempoFactor = tmpContext->voiceMetaData()->tempoFactor;
-							currentTemplateAndChords.offset = tmpContext->currentPosition();
+							if (isTempoEvent) {
+								currentTemplateAndChords.tempoFactor = tmpContext->voiceMetaData()->tempoFactor;
+								currentTemplateAndChords.offset = tmpContext->currentPosition();
+							}
 						}
 						if (ev.isTimeConsuming()) {
 							tmpContext->seek(ev.duration);

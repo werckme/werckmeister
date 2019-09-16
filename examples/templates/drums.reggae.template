@@ -52,6 +52,6 @@ instrument: drums;
 }
 {
     /do: swing grid 16 offset 50/
-   "mto1"32`!f"hto1"8t x x  "hto1"4  r2  |
+   "bo1"32`!f"bo2"8t x x  "hto1"4  r2  |
 }
 ]

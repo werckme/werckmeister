@@ -21,6 +21,7 @@ device: SC1 midi 2;
 tempo:  73;
 instrumentDef: piano      SC1 0 0 0;
 instrumentDef: lead       SC1 1 0 105;
+instrumentDef: sitar      SC1 6 0 104;
 instrumentDef: rhythm     SC1 3 0 28;
 instrumentDef: bass       SC1 4 0 26;
 instrumentDef: bell       SC1 5 0 14;
@@ -39,6 +40,13 @@ instrumentConf: piano
 instrumentConf: lead 
     volume 90;   
 
+instrumentConf: sitar
+    pan 40
+    volume 70;  
+
+instrumentConf: bell
+    pan 60
+    volume 90;   
 
 instrumentConf: rhythm
     voicingStrategy voicelead range tenor
@@ -48,10 +56,10 @@ instrumentConf: rhythm
 [
 type: template;
 name: x;
-instrument: piano;
+instrument: sitar;
 {
     /signature: 4 4/
-   -- <I V>4 x |
+    r | I,,1| r | r | r 
 }
 ]
 
@@ -74,12 +82,13 @@ name: drums.fill1;
 instrument: drums; 
 {
     /signature: 4 4/
-    --/do: swing grid 8 offset 50/
-    !f"cy"1      |
+    /do: swing grid 8 offset 5/
+    \ffff
+    "cy"8 "ho"  r "ho"  r "ho"  r "ho"   |
 }
 {
     /signature: 4 4/
-    --/do: swing grid 8 offset 50/
+    /do: swing grid 8 offset 5/
     "bd"   "hto1"64`"hto1"4.       "mto1"8       !ffff"mto1"8. !fff"lto1" r16   |
 }
 ]
@@ -182,8 +191,8 @@ type: sheet;
     ----------
     /template:  
         x
-        drums.disco.normal
-        bass.bossanova.normal
+        drums.country.normal
+        bass.country.normal
         rhythm.country.normal
     /
     /tempo: double/
@@ -201,7 +210,7 @@ type: sheet;
     /template:  
         x
         drums.disco.normal
-        bass.disco.normal
+        bass.country.normal
         rhythm.bossanova.normal
     /    
     Bes7 | A-7 | 
@@ -216,7 +225,7 @@ type: sheet;
     /template:  
         x
         drums.disco.normal
-        bass.disco.normal
+        bass.country.normal
         rhythm.bossanova.normal
     /    
     -- |:
