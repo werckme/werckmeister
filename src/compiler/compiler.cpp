@@ -106,24 +106,36 @@ namespace sheet {
 				auto end = voice->events.end();
 				std::list<Event*> barEvents;
 				ctx->setChordTrackTarget();
+				auto processEob = [&barEvents, ctx]() {
+					int nbOfEventsPerBar = barEvents.size();
+					if (nbOfEventsPerBar > 0) {
+						std::for_each(barEvents.begin(), barEvents.end(), [nbOfEventsPerBar, ctx](Event *ev) {
+							auto barLength = ctx->voiceMetaData()->barLength;
+							ev->duration = barLength / nbOfEventsPerBar;
+						});
+					}
+					barEvents.clear();
+				};
 				while (it != end) {
 					if (it->type == Event::Meta) {
 						ctx->setMeta(*it);
 					}
 					if (it->type == Event::EOB) {
-						int nbOfEventsPerBar = barEvents.size();
-						if (nbOfEventsPerBar > 0) {
-							std::for_each(barEvents.begin(), barEvents.end(), [nbOfEventsPerBar, ctx](Event *ev) { 
-								ev->duration = ctx->voiceMetaData()->barLength / nbOfEventsPerBar;
-							});
-						}
-						barEvents.clear();
+						processEob();
 					}
 					if (it->isTimeConsuming()) {
 						barEvents.push_back(&(*it));
 					}
 					++it;
 				}
+				if (barEvents.empty()) {
+					return;
+				}
+				// add implicit eob
+				Event eob;
+				eob.type = Event::EOB;
+				processEob(); // first process bar events
+				voice->events.push_back(eob); // then modify source container
 			}
 			template<class TContainer>
 			Track * getFirstSheetTrack(TContainer &c) {
