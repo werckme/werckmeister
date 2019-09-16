@@ -11,7 +11,6 @@
 @load "templates/rhythm.country.template";
 @load "templates/rhythm.bossanova.template";
 @load "templates/drums.bossanova.template";
-@load "templates/rhythm.reggae.template";
 @load "templates/drums.country.template";
 @load "templates/bass.country.template";
 

@@ -1,0 +1,21 @@
+@load "lua/voicings/guitar.lua";
+
+[
+type: template;
+name: rhythm.country.normal;
+instrument: rhythm; 
+{
+    \f
+    <I II III IV V VI VII>8 <I II III IV V VI VII>8 r8 
+    <I II III IV V VI VII>4  <I II III IV V VI VII>8 <I II III IV V VI VII>8 <I II III IV V VI VII>8 |
+}   
+]
+
+[
+type: template;
+name: rhythm.country.ende;
+instrument: rhythm; 
+{
+    <I II III IV V VI VII>1  |
+}   
+] 
