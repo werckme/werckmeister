@@ -42,7 +42,7 @@ instrumentConf: lead
 
 instrumentConf: sitar
     pan 40
-    volume 70;  
+    volume 60;  
 
 instrumentConf: bell
     pan 60
@@ -82,14 +82,11 @@ name: drums.fill1;
 instrument: drums; 
 {
     /signature: 4 4/
-    /do: swing grid 8 offset 5/
-    \ffff
-    "cy"8 "ho"  r "ho"  r "ho"  r "ho"   |
+    "cy"8  r "ho"  r "ho"  r "ho" r   |
 }
 {
     /signature: 4 4/
-    /do: swing grid 8 offset 5/
-    "bd"   "hto1"64`"hto1"4.       "mto1"8       !ffff"mto1"8. !fff"lto1" r16   |
+    "bd"   !ffff"hto1"64`"hto2"4.       "mto1"8       !ffff"mto2"8. !fff"lto1" r16   |
 }
 ]
 
