@@ -1,0 +1,40 @@
+@load "./chords/default.chords";
+device: SC1 midi 2;
+
+tempo: 120;
+instrumentDef: drums   SC1 9 0 0;
+instrumentDef: rhythm  SC1 1 16 28;
+instrumentDef: bass    SC1 2 8 26;
+instrumentDef: lead    SC1 3 0 0;
+instrumentDef: piano   SC1 4 0 0;
+
+instrumentConf: rhythm
+    pan 60
+    volume 75;
+
+[
+type: template;
+name: x;
+instrument: rhythm;
+{
+    I III V I' | 
+}
+]
+
+[
+type: sheet;
+{
+    /template: x/
+    /tempo: 60/
+    C | 
+    /tempo: 120/
+    C | 
+    /tempo: 70/
+    C |
+    /tempo: 150/
+    C | 
+}
+]
+
+
+

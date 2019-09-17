@@ -130,7 +130,9 @@ namespace sheet {
 				tmpContext->setChordTrackTarget();
 				auto &sheetEvents = sheetTrack->voices.begin()->events;
 				for (auto &ev : sheetEvents) {
-					if (ev.stringValue == SHEET_META__SET_SHEET_TEMPLATE) {
+					bool isTempoEvent = ev.stringValue == SHEET_META__SET_TEMPO;
+					bool isTemplateEvent = ev.stringValue == SHEET_META__SET_SHEET_TEMPLATE;
+					if (isTemplateEvent) {
 						// new template
 						templatesAndItsChords.emplace_back(TemplatesAndItsChords());
 						auto &newTemplateAndChords = templatesAndItsChords.back();
@@ -141,14 +143,16 @@ namespace sheet {
 					}
 					else {
 						// add any other event
-						bool isTempoEvent = ev.stringValue == SHEET_META__SET_TEMPO;
 						auto &currentTemplateAndChords = templatesAndItsChords.back();
 						currentTemplateAndChords.chords.push_back(&ev);
 						if (ev.type == Event::Meta) {
 							tmpContext->setMeta(ev);
 							if (isTempoEvent) {
-								currentTemplateAndChords.tempoFactor = tmpContext->voiceMetaData()->tempoFactor;
-								currentTemplateAndChords.offset = tmpContext->currentPosition();
+								templatesAndItsChords.emplace_back(TemplatesAndItsChords());
+								auto &newTemplateAndChords = templatesAndItsChords.back();
+								newTemplateAndChords.templates = currentTemplateAndChords.templates;								
+								newTemplateAndChords.tempoFactor = tmpContext->voiceMetaData()->tempoFactor;
+								newTemplateAndChords.offset = tmpContext->currentPosition();
 							}
 						}
 						if (ev.isTimeConsuming()) {
@@ -192,11 +196,6 @@ namespace sheet {
 				}
 			}
 
-			bool __executeChordMetaEventRenderedVoice(const Event &metaEvent)
-			{
-				return metaEvent.stringValue == SHEET_META__SET_TEMPO;
-			}
-
 			void __handleChordMeta(AContext *ctx,
 			const Event &metaEvent, 
 			SheetEventRenderer *sheetEventRenderer,
@@ -211,9 +210,6 @@ namespace sheet {
 				ctx->setChordTrackTarget();
 				sheetEventRenderer->addEvent(metaEvent);
 				ctx->setTarget(trackId, voiceId);
-				if (__executeChordMetaEventRenderedVoice(metaEvent)) {
-					//sheetEventRenderer->addEvent(metaEvent);
-				}
 			}			
 
 			typedef std::list<const Event*> Chords;
