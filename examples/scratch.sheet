@@ -13,6 +13,7 @@
 @load "templates/drums.country.template";
 @load "templates/bass.country.template";
 
+-- comment
 
 device: SC1 midi 2;
 
@@ -40,10 +41,12 @@ instrumentConf: rhythm
     volume 100;   
 
 [
+-- comment
 type: template;
 name: x;
 instrument: piano;
 {
+-- comment
     /signature: 4 4/
     <I V>4 x |
 }
