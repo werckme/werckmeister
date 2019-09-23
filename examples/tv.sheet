@@ -21,7 +21,7 @@ device: SC1 midi 2;
 tempo:  73;
 instrumentDef: piano      SC1 0 0 0;
 instrumentDef: lead       SC1 1 0 105;
-instrumentDef: lead2      SC1 2 0 24;
+instrumentDef: lead2      SC1 2 0 25;
 instrumentDef: sitar      SC1 6 0 104;
 instrumentDef: rhythm     SC1 3 0 28;
 instrumentDef: bass       SC1 4 0 26;
@@ -118,7 +118,7 @@ instrument: lead;
     /instrument: lead2/
     bes'8. x16  d'32 g d d' f' g' d' x   | a'8. x16  cis'32 g d c' e' fis' c' x |
     g'8n5 d' bes a g  f32 a b d' g' d g b |
-    /instrument: lead/ d'32 a b a bes f fis e  d8. a32 x  | 
+    /instrument: lead lead2/ d'32 a b a bes f fis e  d8. a32 x  | 
     a8t xx bes8.  c32 x | c'8. bes16 a x g32 xxx | d'8 d8. r16 d'16txx |
     d'8 d8. r16 x32 x x16~ | d8t a x  bes8. c32 x | c'8. bes16 a x g32 xxx |
     g'8 g8. r16 g' x | g'8 g8. r16 g32 x x16 |
