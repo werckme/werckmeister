@@ -57,7 +57,7 @@ instrumentConf: bell
 instrumentConf: rhythm
     voicingStrategy voicelead range tenor
     pan 40
-    volume 100;   
+    volume 90;   
 
 [
 type: template;
@@ -65,7 +65,7 @@ name: x;
 instrument: sitar;
 {
     /signature: 4 4/
-    --r | r | r | I,,1 | r 
+    r | r | r | I,,1 | r 
 }
 ]
 
