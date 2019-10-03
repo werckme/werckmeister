@@ -1,11 +1,13 @@
 @load "lua/voicings/guitar.lua";
 @load "lua/voicings/voicelead.lua";
+@load "lua/mods/guitarStroke.lua";
 
 [
 type: template;
 name: countryschlager1.normal;
 instrument: guitar; 
 {
+    /do:  guitarStroke/
     /voicingStrategy: guitar range tenor/
     \f
     <I II III IV V VI VII>8 <I II III IV V VI VII>8 r8 
@@ -63,6 +65,7 @@ type: template;
 name: countryschlager1.ende;
 instrument: guitar; 
 {
+    /do:  guitarStroke value 8/
     <I II III IV V VI VII>1  |
 }   
 ] 

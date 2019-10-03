@@ -1,35 +1,30 @@
 @load "chords/default.chords";
 @load "pitchmaps/defaultMidiDrumMap.pitchmap";
 @load "lua/mods/swing.lua";
-@load "lua/mods/staccato.lua";
+@load "lua/mods/guitarStroke.lua";
 @load "lua/voicings/voicelead.lua";
-
+@load "templates/rhythm.country.template";
 
 device: SC1 midi 2;
 
 tempo: 120;
 instrumentDef: drums   SC1 9 0 0;
-instrumentDef: rhythm  SC1 1 16 28;
+instrumentDef: rhythm  SC1 1 0 28;
 instrumentDef: bass    SC1 2 8 26;
 instrumentDef: lead    SC1 3 0 0;
 instrumentDef: piano   SC1 4 0 0;
 
 instrumentConf: rhythm
-    voicingStrategy voicelead 
+    voicingStrategy voicelead range bass
+    mod guitarStroke
     pan 60
     volume 75;
 
 [
-instrument: rhythm;
+type: sheet;
 {
-    /tempo: 60/
-    c d e f | 
-    /tempo: 120/
-    c d e f |
-    /tempo: 70/
-    c d e f |
-    /tempo: 150/
-    c d e f | g1
+    /template: rhythm.country.normal/
+    C7 | 
 }
 ]
 

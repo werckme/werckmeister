@@ -13,6 +13,22 @@ instrumentDef: bass    SC1 5 0 33;
 instrumentDef: slide   SC1 6 8 26;
 instrumentDef: drums   SC1 9 0 32;
 
+instrumentConf: guitar
+    volume 100
+;
+
+instrumentConf: guitar2
+    volume 90
+;
+
+instrumentConf: drums
+    volume 100
+;
+
+instrumentConf: bass
+    volume 100
+;
+
 [
 instrument: guitar2;
 {

@@ -132,6 +132,40 @@ namespace sheet {
         return std::make_pair(false, defaultValue);
     }
 
+
+    /**
+     * returns {
+     *      keyword1: [value1, value2]
+     *      keyword2: [value3, value4] 
+     * }
+     * for: "keyword1 value1 value2 keyword2 value3 value4"
+     * 
+     * {   
+     *      "": [value0]
+     *      keyword1: [value1, value2]
+     *      keyword2: [value3, value4] 
+     * }
+     * for: "value0 keyword1 value1 value2 keyword2 value3 value4"
+     **/
+    template<class TArgContainer, class TKeywordContainer>
+    std::multimap<fm::String, fm::String> 
+    mapArgumentsByKeywords(const TArgContainer &args, const TKeywordContainer &keywords)
+    {
+        std::multimap<fm::String, fm::String> result;
+        auto it = args.begin();
+        auto end = args.end();
+        fm::String keyword = "";
+        for(; it!=end; ++it) {
+            bool isKeyword = std::find(keywords.begin(), keywords.end(), *it) != keywords.end();
+            if (isKeyword) {
+                keyword = *it;
+                continue;
+            }
+            result.emplace(std::make_pair(keyword, *it));
+        }
+        return result;
+    }
+
     /**
      * returns a value from an argument list such as:
      * key1 value1 key2 value2 ...

@@ -119,17 +119,23 @@ namespace sheet {
 			}
 			ev.velocity = ctx_->velocity();
 			AModification::Events events = { ev };
+			auto sanweis = ctx_->spielanweisung();
+			if (sanweis) {
+				sanweis->perform(ctx_, events);
+			}			
 			for (auto mod : meta->modifications) {
 				mod->perform(ctx_, events);
 			}
 			for (auto mod : meta->modificationsOnce) {
 				mod->perform(ctx_, events);
-			}			
-			meta->modificationsOnce.clear();
-			auto sanweis = ctx_->spielanweisung();
-			if (sanweis) {
-				sanweis->perform(ctx_, events);
 			}
+			auto instrument = ctx_->currentInstrumentDef();
+			if (instrument && !instrument->modifications.empty()) {
+				for (auto mod : instrument->modifications) {
+					mod->perform(ctx_, events);
+				}						
+			}
+			meta->modificationsOnce.clear();
 			meta->expression = tmpExpression;
 			for (const auto &event : events) {
 				if (event.isPitchBend()) {

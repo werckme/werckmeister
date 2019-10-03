@@ -6,6 +6,7 @@
 #include "sheet/tools.h"
 #include <algorithm>
 #include <fm/werckmeister.hpp>
+#include "modification/AModification.h"
 
 #define SHEET_MASTER_TRACKNAME "master track"
 
@@ -278,6 +279,12 @@ namespace sheet {
 
 		void MidiContext::metaSetInstrumentConfig(const fm::String &uname, const Event::Args &args)
 		{
+			static const std::vector<fm::String> keywords = {
+				SHEET_META__SET_INSTRUMENT_CONFIG_VOLUME,
+				SHEET_META__SET_INSTRUMENT_CONFIG_PAN,
+				SHEET_META__SET_VOICING_STRATEGY,
+				SHEET_META__SET_MOD
+			}; 			
 			if (args.size() < 3 || args.size() % 2 == 0) {
 				FM_THROW(Exception, "not enough values for " + fm::String(SHEET_META__SET_INSTRUMENT_CONFIG) +  ": " + uname);
 			}
@@ -290,17 +297,26 @@ namespace sheet {
 			auto argsExceptFirst = Event::Args(argsBegin, argsEnd);
 			instrumentDef->volume = sheet::getArgValueFor<int>(SHEET_META__SET_INSTRUMENT_CONFIG_VOLUME, argsExceptFirst, instrumentDef->volume);
 			instrumentDef->pan = sheet::getArgValueFor<int>(SHEET_META__SET_INSTRUMENT_CONFIG_PAN, argsExceptFirst, instrumentDef->pan);
-			auto argIt = std::find(argsBegin, argsEnd, SHEET_META__SET_VOICING_STRATEGY);
+			auto argsMappedByKeyword = mapArgumentsByKeywords(args, keywords);
+			auto range = argsMappedByKeyword.equal_range(SHEET_META__SET_VOICING_STRATEGY);
 			// assign voicingStrategy
-			if (argIt != argsEnd) {
+			if (range.first != range.second) {
 				auto &wm = fm::getWerckmeister();
-				auto itName = argIt + 1;
-				if (itName == argsEnd) {
-					FM_THROW(Exception, fm::String("missing argument for ") + SHEET_META__SET_VOICING_STRATEGY);
-				}
-				instrumentDef->voicingStrategy = wm.getVoicingStrategy(*itName);
-				instrumentDef->voicingStrategy->setArguments(Event::Args(itName, argsEnd));
+				instrumentDef->voicingStrategy = wm.getVoicingStrategy(range.first->second);
+				std::vector<fm::String> subArgs;
+				std::transform(range.first, range.second, std::back_inserter(subArgs), [](const auto &x) { return x.second; });
+				instrumentDef->voicingStrategy->setArguments(subArgs);
 			}
+			// mod
+			range = argsMappedByKeyword.equal_range(SHEET_META__SET_MOD);
+			if (range.first != range.second) {
+				auto &wm = fm::getWerckmeister();
+				auto mod = wm.getModification(range.first->second);
+				std::vector<fm::String> subArgs;
+				std::transform(range.first, range.second, std::back_inserter(subArgs), [](const auto &x) { return x.second; });
+				mod->setArguments(subArgs);
+				instrumentDef->modifications.push_back(mod);
+			}		
 			// velocity overrides
 			auto assignIfSet = [&argsExceptFirst, instrumentDef, this](const fm::String &expression){
 				auto foundValue = sheet::getArgValueFor<int>(expression, argsExceptFirst);

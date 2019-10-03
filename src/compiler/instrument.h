@@ -11,6 +11,8 @@ namespace sheet {
 		struct AInstrumentDef {
 			fm::String uname;
 			VoicingStrategyPtr voicingStrategy;
+			typedef std::list<AModificationPtr> Modifications;
+			Modifications modifications;			
 			typedef std::unordered_map<fm::Expression, int> VelocityOverride;
 			VelocityOverride velocityOverride;
 		};

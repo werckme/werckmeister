@@ -1,6 +1,7 @@
 @load "chords/default.chords";
 @load "pitchmaps/defaultMidiDrumMap.pitchmap";
 @load "lua/mods/swing.lua";
+@load "lua/mods/guitarStroke.lua";
 @load "lua/voicings/voicelead.lua";
 @load "lua/voicings/guitar.lua";
 @load "templates/drums.reggae.template";
@@ -17,6 +18,7 @@ instrumentDef: lead    SC1 3 0 0;
 instrumentDef: piano   SC1 4 0 0;
 
 instrumentConf: rhythm
+    mod guitarStroke
     voicingStrategy voicelead 
     pan 60
     volume 75;

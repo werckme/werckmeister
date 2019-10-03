@@ -16,6 +16,7 @@ type: template;
 name: rhythm.country.ende;
 instrument: rhythm; 
 {
-    <I II III IV V VI VII>1  |
+    /doOnce: arpeggio/
+    <I II III IV V VI VII>4~ <I II III IV V VI VII>2.  |
 }   
 ] 

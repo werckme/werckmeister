@@ -1,5 +1,7 @@
 @load "lua/voicings/voicelead.lua";
 @load "lua/voicings/simple.lua";
+@load "lua/voicings/guitar.lua";
+@load "lua/mods/guitarStroke.lua";
 
 [
 type: template;
@@ -22,7 +24,8 @@ type: template;
 name: bossanova.normal;
 instrument: guitar; 
 {
-    /voicingStrategy: simpleGuitar/
+    /do: guitarStroke value 32/
+    /voicingStrategy: guitar/
     \f
     <I II III IV V VI VII>4 <I II III IV V VI VII>4 r8 <I II III IV V VI VII>8 r8 <I II III IV V VI VII>8  |
     r8 <I II III IV V VI VII>8 r8 <I II III IV V VI VII>8 r4 <I II III IV V VI VII>4 |

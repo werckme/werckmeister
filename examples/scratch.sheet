@@ -1,74 +1,71 @@
 @load "chords/default.chords";
 @load "pitchmaps/defaultMidiDrumMap.pitchmap";
-@load "lua/voicings/voicelead.lua";
-@load "lua/voicings/guitar.lua";
 @load "lua/mods/swing.lua";
-@load "lua/mods/staccato.lua";
+@load "lua/voicings/simple.lua";
 @load "lua/mods/guitarStroke.lua";
 
--- comment
 device: SC1 midi 2;
+device: BC midi 2;
 
 tempo: 120;
-instrumentDef: rhythm     SC1 1 0 25;
+instrumentDef: drums   BC 9 0 0;
+instrumentDef: bass   BC 0 0 33;
+instrumentDef: guitar   BC 1 0 27;
 
+instrumentConf: bass   volume 0;
 
-instrumentConf: rhythm
-    voicingStrategy guitar range tenor
-    volume 80;   
+instrumentConf: guitar  
+    voicingStrategy simple range bass
+    mod guitarStroke value 32 mode single direction down
+    volume 90
+;
 
 [
 type: template;
-name: rhythm;
-instrument: rhythm;
+name: x;
+instrument: drums; 
 {
-    /do: guitarStroke/
-    <I II III IV V VI VII>8 
-    <I II III IV V VI VII>8 r4 
+
+}
+{
+    /do: swing grid 8 offset 100/
+    "ht"8 r  "ht" r  "ht"  r "ht" r  |
     
-    <I II III IV V VI VII>8 
-    <I II III IV V VI VII>8 
-    
-    <I II III IV V VI VII>8 
-    <I II III IV V VI VII>8 
-    
-     |
+}
+{
+    /do: swing grid 8 offset 60/
+    "bd"4      r8 "bd"            "sn"4               r4 |
 }
 ]
 
+[
+type: template;
+name: x;    
+instrument: bass;
+{
+    /do: swing grid 8 offset 80/
+    I,,8 x  xx  xx  xx  |
+}
+]
 
-
-
-
+[
+type: template;
+name: x;    
+instrument: guitar;
+{
+    /do: swing grid 8 offset 90/
+    <I, V,>8 x <I, VI,> x <I, V,>8 x <I, VI,> x 
+    <I, V,>8 x <I, VI,> x <I, V,>8 x <I, VI,> x 
+    <I, V,>8 x <I, VI,> x <I, V,>8 x <I, VI,> x 
+    <I, V,>8 x <I, VI,> x <I, VI#,>8 x <I, VI,> x  |
+}
+]
 
 
 [
 type: sheet;
-{    
-    
-    G | G | G | G    | G   | G7 | G6 | G | G | G7 |
-
-    G    | G   | G7 | G6 | G | G |
-    -- |:   
-    Bes7 | A-7 | G |  -- :|
-    -- |:
-    Bes7 | A-7 | G | D7 | F | A-7 | D7 | D7 | F |
-    A-7 | 
-    
-    G7  | 
-    G |
-    G   | G7 | G6 | G | G | G7 |
-    G    | G   | G7 | G6 | G | G |
-    -- |:
-    Bes7 | A-7 | G |  -- :|
-    -- |:
-    Bes7 | A-7 | G | D7 | F | A-7 | D7 | D7 | F |
-    A-7 |  G7  | G7 |
-  
-}
+{
+    /template: x/
+     G6 | G6 | G6 | G6    | C6  | C6 | G6 | G6 | D6 | C6 | G6 | G6 |
+}   
 ]
-
-
-
-
-
