@@ -4,6 +4,7 @@
 @load "lua/voicings/voicelead.lua";
 @load "lua/voicings/guitar.lua";
 @load "templates/drums.reggae.template";
+@load "templates/bass.reggae.template";
 
 device: SC1 midi 2;
 
@@ -52,20 +53,7 @@ instrument: piano;
 }
 ]
 
-[
-type: template;
-name: x;
-instrument: bass;
-{
-    /do: swing grid 8 offset 30/
-    I,,16 r16  I,,8   r2        V,,,4    |
-    I,,16 r16    r8   I,,8 r4.  V,,,4    |
-    I,,16 r16  I,,8   r2        V,,,4    |
-    I,,16 r16  I,,8   r2        V,,,4    |
 
-
-}
-]
 
 [
 instrument: lead;
@@ -84,6 +72,7 @@ type: sheet;
     /template:
         x
         drums.reggae.normal
+        bass.reggae.normal
     /
     Cmaj7 | Cmaj7 | Cmaj7 | Cmaj7 | Esmaj7 | Esmaj7 | Esmaj7 | Esmaj7 | Aesmaj7 
     | Aesmaj7 | Aesmaj7 | Aesmaj7 | G7 | G7 | G7 | G7 | G7 | C | C | Cmin |

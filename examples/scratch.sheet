@@ -1,6 +1,7 @@
 @load "chords/default.chords";
 @load "pitchmaps/defaultMidiDrumMap.pitchmap";
 @load "lua/mods/swing.lua";
+@load "lua/mods/staccato.lua";
 @load "lua/voicings/simple.lua";
 @load "lua/mods/guitarStroke.lua";
 
@@ -12,7 +13,10 @@ instrumentDef: drums   BC 9 0 0;
 instrumentDef: bass   BC 0 0 33;
 instrumentDef: guitar   BC 1 0 27;
 
-instrumentConf: bass   volume 0;
+instrumentConf: bass   
+    mod staccato
+    volume 95
+;
 
 instrumentConf: guitar  
     voicingStrategy simple range bass
@@ -33,8 +37,8 @@ instrument: drums;
     
 }
 {
-    /do: swing grid 8 offset 60/
-    "bd"4      r8 "bd"            "sn"4               r4 |
+    /do: swing grid 8 offset 100/
+    "bd"8 "bd"   r8   "bd"8      "sn"4        r4 |
 }
 ]
 
@@ -44,7 +48,7 @@ name: x;
 instrument: bass;
 {
     /do: swing grid 8 offset 80/
-    I,,8 x  xx  xx  xx  |
+    I,,8 I,,   x   I,,      I,,4        x |
 }
 ]
 
