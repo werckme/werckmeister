@@ -35,6 +35,7 @@ BOOST_FUSION_ADAPT_STRUCT(
 	sheet::PitchDef,
 	(sheet::PitchDef::Pitch, pitch)
 	(sheet::PitchDef::Octave, octave)
+	(bool, forceDegree)
 )
 
 BOOST_FUSION_ADAPT_STRUCT(
@@ -191,13 +192,13 @@ namespace sheet {
 					pitch_.name("pitch");
 					degree_.name("pitch");
 
-					degree_ %= degreeSymbols_ >> (octaveSymbols_ | attr(PitchDef::DefaultOctave));
+					degree_ %= (degreeSymbols_ >> (octaveSymbols_ | attr(PitchDef::DefaultOctave)) >> attr(false));
 
 					pitch_ %= pitchSymbols_ >> (octaveSymbols_ | attr(PitchDef::DefaultOctave));
 					alias_ %= lexeme['"' >> +(char_ - '"') >> '"'];
 					pitchOrAlias_ %= pitch_ | alias_;
 					event_ %= 
-					(
+					( // NOTE
 						current_pos_.current_pos 
 						>> attr(sourceId_)
 						>> attr(Event::Note)
@@ -209,10 +210,10 @@ namespace sheet {
 							)
 					)
 					|
-					(
+					( // DEGREE
 						current_pos_.current_pos 
 						>> attr(sourceId_)
-						>>  attr(Event::Degree) 
+						>> attr(Event::Degree) 
 						>> (degree_ | ("<" >> +degree_ >> ">"))
 						>> (durationSymbols_ | attr(Event::NoDuration))  
 						>> -(
@@ -221,7 +222,7 @@ namespace sheet {
 							)
 					)
 					|
-					(
+					( // REPEAT SHORTCUT (x)
 						current_pos_.current_pos 
 						>> attr(sourceId_)
 						>> attr(Event::Repeat) 
@@ -234,7 +235,7 @@ namespace sheet {
 							)
 					)					
 					|
-					(
+					( // CHORD
 						current_pos_.current_pos 
 						>> attr(sourceId_)
 						>> attr(Event::Chord)
@@ -246,7 +247,7 @@ namespace sheet {
 						]
 					)
 					|
-					(
+					( // EXPRESSIONS
 						current_pos_.current_pos 
 						>> attr(sourceId_)
 						>> "\\" 
@@ -257,7 +258,7 @@ namespace sheet {
 						>> expressionSymbols_
 					)
 					| 
-					(
+					( // EXPRESSION PERFORMED ONCE
 						current_pos_.current_pos 
 						>> attr(sourceId_)
 						>> "!" 
@@ -268,7 +269,7 @@ namespace sheet {
 						>> expressionSymbols_
 					)
 					| 
-					(
+					( // REST
 						current_pos_.current_pos 
 						>> attr(sourceId_)
 						>> "r" 
@@ -276,7 +277,7 @@ namespace sheet {
 						>> attr(PitchDef()) 
 						>> (durationSymbols_ | attr(Event::NoDuration)))
 					| 
-					(
+					( // END OF BAR
 						current_pos_.current_pos 
 						>> attr(sourceId_)
 						>> "|"
@@ -285,7 +286,7 @@ namespace sheet {
 						>> attr(Event::NoDuration)
 					)
 					| 
-					(
+					( // META COMMANDS
 						current_pos_.current_pos 
 						>> attr(sourceId_)
 						>>  "/" 

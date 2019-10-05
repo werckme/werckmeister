@@ -1,7 +1,6 @@
 @load "chords/default.chords";
 @load "pitchmaps/defaultMidiDrumMap.pitchmap";
 @load "lua/mods/swing.lua";
-@load "lua/mods/staccato.lua";
 @load "lua/voicings/simple.lua";
 @load "lua/mods/guitarStroke.lua";
 
@@ -13,15 +12,12 @@ instrumentDef: drums   BC 9 0 0;
 instrumentDef: bass   BC 0 0 33;
 instrumentDef: guitar   BC 1 0 27;
 
-instrumentConf: bass   
-    mod staccato
-    volume 95
-;
+instrumentConf: bass   volume 0;
 
 instrumentConf: guitar  
     voicingStrategy simple range bass
     mod guitarStroke value 32 mode single direction down
-    volume 80
+    volume 90
 ;
 
 [
@@ -32,14 +28,13 @@ instrument: drums;
 
 }
 {
-    /do: swing grid 8 offset 80/
+    /do: swing grid 8 offset 100/
     "ht"8 r  "ht" r  "ht"  r "ht" r  |
     
 }
 {
-    /do: swing grid 8 offset 80/
-    \p
-    "bd"8 x   r   "bd"8      !fff"sn"8 r      "bd"8 x |
+    /do: swing grid 8 offset 60/
+    "bd"4      r8 "bd"            "sn"4               r4 |
 }
 ]
 
@@ -49,7 +44,7 @@ name: x;
 instrument: bass;
 {
     /do: swing grid 8 offset 80/
-    I,,8 x  x  x  x  x  x x |
+    I,,8 x  xx  xx  xx  |
 }
 ]
 
@@ -59,10 +54,10 @@ name: x;
 instrument: guitar;
 {
     /do: swing grid 8 offset 90/
-    <I, V,>8 x <I, VI,> x <I, V,>8 x <I, VI,> x 
-    <I, V,>8 x <I, VI,> x <I, V,>8 x <I, VI,> x 
-    <I, V,>8 x <I, VI,> x <I, V,>8 x <I, VI,> x 
-    <I, V,>8 x <I, VI,> x <I, VI#,>8 x <I, VI,> x  |
+    <I, V,>8 x <I, V##,> x <I, V,>8 x <I, V##,> x 
+    <I, V,>8 x <I, V##,> x <I, V,>8 x <I, V##,> x 
+    <I, V,>8 x <I, V##,> x <I, V,>8 x <I, V##,> x 
+    <I, V,>8 x <I, V##,> x <I, V###,>8 x <I, V##,> x  |
 }
 ]
 
@@ -71,6 +66,6 @@ instrument: guitar;
 type: sheet;
 {
     /template: x/
-     G6 | G6 | G6 | G6    | C6  | C6 | G6 | G6 | D6 | C6 | G6 | D6 |
+     Gmaj7 | G7 | G7 | G7    | C7  | C7 | G7 | G7 | D7 | C7 | G7 | G7 |
 }   
 ]

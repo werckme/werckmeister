@@ -32,7 +32,11 @@ namespace fm {
 		enum Flag {
 			Normal,
 			Sharp,
-			Flat
+			Flat,
+			DoubleSharp,
+			DoubleFlat,
+			TrippleSharp,
+			TrippleFlat,			
 		};
 
 		enum Degree {
@@ -60,6 +64,38 @@ namespace fm {
 			Ves = (Flat << 8) | 5,
 			VIes = (Flat << 8) | 6,
 			VIIes = (Flat << 8) | 7,
+
+			Iisis = (DoubleSharp << 8) | 1,
+			IIisis = (DoubleSharp << 8) | 2,
+			IIIisis = (DoubleSharp << 8) | 3,
+			IVisis = (DoubleSharp << 8) | 4,
+			Visis = (DoubleSharp << 8) | 5,
+			VIisis = (DoubleSharp << 8) | 6,
+			VIIisis = (DoubleSharp << 8) | 7,
+
+			Ieses = (DoubleFlat << 8) | 1,
+			IIeses = (DoubleFlat << 8) | 2,
+			IIIeses = (DoubleFlat << 8) | 3,
+			IVeses = (DoubleFlat << 8) | 4,
+			Veses = (DoubleFlat << 8) | 5,
+			VIeses = (DoubleFlat << 8) | 6,
+			VIIeses = (DoubleFlat << 8) | 7,
+
+			Iisisis = (TrippleSharp << 8) | 1,
+			IIisisis = (TrippleSharp << 8) | 2,
+			IIIisisis = (TrippleSharp << 8) | 3,
+			IVisisis = (TrippleSharp << 8) | 4,
+			Visisis = (TrippleSharp << 8) | 5,
+			VIisisis = (TrippleSharp << 8) | 6,
+			VIIisisis = (TrippleSharp << 8) | 7,
+
+			Ieseses = (TrippleFlat << 8) | 1,
+			IIeseses = (TrippleFlat << 8) | 2,
+			IIIeseses = (TrippleFlat << 8) | 3,
+			IVeseses = (TrippleFlat << 8) | 4,
+			Veseses = (TrippleFlat << 8) | 5,
+			VIeseses = (TrippleFlat << 8) | 6,
+			VIIeseses = (TrippleFlat << 8) | 7,
 		};
 	}
 	namespace expression {

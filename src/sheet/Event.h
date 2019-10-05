@@ -27,6 +27,7 @@ namespace sheet {
 		Pitch pitch = NoPitch;
 		Octave octave = DefaultOctave;
 		fm::String alias;
+		bool forceDegree = false;
 		PitchDef(const fm::String &alias) : alias(alias) {}
 		PitchDef(Pitch p = NoPitch, Octave o = DefaultOctave) : pitch(p), octave(o) {}
 		int id() const 

@@ -39,9 +39,9 @@ BOOST_AUTO_TEST_CASE(test_endswap)
 BOOST_AUTO_TEST_CASE(test_resource_loader)
 {
 #ifdef WIN32
-	auto resource = fm::getWerckmeister().openResource(FM_STRING("../../sheets/chords/default.chords"));
+	auto resource = fm::getWerckmeister().openResource(FM_STRING("../../examples/chords/default.chords"));
 #else
-	auto resource = fm::getWerckmeister().openResource(FM_STRING("../sheets/chords/default.chords"));
+	auto resource = fm::getWerckmeister().openResource(FM_STRING("../examples/chords/default.chords"));
 #endif
 	fm::StreamBuffIterator eos;
 	fm::StreamBuffIterator it(*resource.get());

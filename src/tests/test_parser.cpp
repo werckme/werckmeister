@@ -960,3 +960,23 @@ BOOST_AUTO_TEST_CASE(test_x_repeat_degree_2)
 	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[4], sheet::Event::EOB));
 	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[5], sheet::Event::Repeat, sheet::PitchDef::NoPitch, 0, 4.0_N4));
 }
+
+
+
+BOOST_AUTO_TEST_CASE(test_degree_accendentials)
+{
+	using namespace fm;
+	using sheet::PitchDef;
+	fm::String text = FM_STRING("\
+[\n\
+	{\n\
+		I4 I# I## I### Ib Ibb Ibbb I#4 I##4 I###4 Ib4 Ibb4 Ibbb4 \n\
+	}\n\
+] \n\
+");
+	sheet::compiler::SheetDefParser parser;
+	auto defs = parser.parse(text);
+	BOOST_CHECK(defs.tracks.size() == 1);
+	BOOST_CHECK(defs.tracks[0].voices.size() == 1);
+	BOOST_CHECK(defs.tracks[0].voices[0].events.size() == 13);
+}

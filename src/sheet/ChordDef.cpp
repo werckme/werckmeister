@@ -1,5 +1,6 @@
 #include "ChordDef.h"
 #include <algorithm>
+#include <sheet/Event.h>
 
 namespace sheet {
 
@@ -14,24 +15,38 @@ namespace sheet {
 		return static_cast<fm::degrees::Flag>((degree) >> 8);
 	}
 
-	DegreeDef ChordDef::getDegreeDef(fm::Pitch degree) const
+	DegreeDef ChordDef::getDegreeDef(const PitchDef &eventPitch) const
 	{
+		DegreeDef resultDegree;
+		auto degreeValue = eventPitch.pitch;
 		Intervals::const_iterator it = 
-			std::find_if(intervals.begin(), intervals.end(), [degree](const auto &x) 
+			std::find_if(intervals.begin(), intervals.end(), [degreeValue](const auto &x) 
 			{ 
-				return getDegreeValue(x.degree) == getDegreeValue(degree); 
+				return getDegreeValue(x.degree) == getDegreeValue(degreeValue); 
 			});
 		if (it == intervals.end()) {
 			return DegreeDef::invalid();
 		}
-		auto res = *it;
-		if (getFlag(degree) == fm::degrees::Sharp) {
-			res.value += 1;
+		resultDegree = *it;
+		if (getFlag(degreeValue) == fm::degrees::Sharp) {
+			resultDegree.value += 1;
 		}
-		if (getFlag(degree) == fm::degrees::Flat) {
-			res.value -= 1;
+		if (getFlag(degreeValue) == fm::degrees::DoubleSharp) {
+			resultDegree.value += 2;
+		}	
+		if (getFlag(degreeValue) == fm::degrees::TrippleSharp) {
+			resultDegree.value += 3;
+		}				
+		if (getFlag(degreeValue) == fm::degrees::Flat) {
+			resultDegree.value -= 1;
 		}
-		return res;
+		if (getFlag(degreeValue) == fm::degrees::DoubleFlat) {
+			resultDegree.value -= 2;
+		}	
+		if (getFlag(degreeValue) == fm::degrees::TrippleFlat) {
+			resultDegree.value -= 3;
+		}				
+		return resultDegree;
 	}
 
 	bool has7(const ChordDef &def)
