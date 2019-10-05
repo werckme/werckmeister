@@ -54,10 +54,10 @@ name: x;
 instrument: guitar;
 {
     /do: swing grid 8 offset 90/
-    <I, V,>8 x <I, !VI,> x <I, V,>8 x <I, !VI,> x 
-    <I, V,>8 x <I, !VI,> x <I, V,>8 x <I, !VI,> x 
-    <I, V,>8 x <I, !VI,> x <I, V,>8 x <I, !VI,> x 
-    <I, V,>8 x <I, !VI,> x <I, !VI#,>8 x <I, !VI,> x  |
+    <I, V,>8 x <I, V##,> x <I, V,>8 x <I, V##,> x 
+    <I, V,>8 x <I, V##,> x <I, V,>8 x <I, V##,> x 
+    <I, V,>8 x <I, V##,> x <I, V,>8 x <I, V##,> x 
+    <I, V,>8 x <I, V##,> x <I, V###,>8 x <I, V##,> x  |
 }
 ]
 
@@ -66,6 +66,6 @@ instrument: guitar;
 type: sheet;
 {
     /template: x/
-     G7 | G7 | G7 | G7    | C7  | C7 | G7 | G7 | D7 | C7 | G7 | G7 |
+     Gmaj7 | G7 | G7 | G7    | C7  | C7 | G7 | G7 | D7 | C7 | G7 | G7 |
 }   
 ]

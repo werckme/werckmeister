@@ -38,6 +38,38 @@ namespace sheet {
 				("Vb", fm::degrees::Ves)
 				("VIb", fm::degrees::VIes)
 				("VIIb", fm::degrees::VIIes)
+
+				("I##", fm::degrees::Iisis)
+				("II##", fm::degrees::IIisis)
+				("III##", fm::degrees::IIIisis)
+				("IV##", fm::degrees::IVisis)
+				("V##", fm::degrees::Visis)
+				("VI##", fm::degrees::VIisis)
+				("VII##", fm::degrees::VIIisis)
+
+				("Ibb", fm::degrees::Ieses)
+				("IIbb", fm::degrees::IIeses)
+				("IIIbb", fm::degrees::IIIeses)
+				("IVbb", fm::degrees::IVeses)
+				("Vbb", fm::degrees::Veses)
+				("VIbb", fm::degrees::VIeses)
+				("VIIbb", fm::degrees::VIIeses)
+
+				("I###", fm::degrees::Iisisis)
+				("II###", fm::degrees::IIisisis)
+				("III###", fm::degrees::IIIisisis)
+				("IV###", fm::degrees::IVisisis)
+				("V###", fm::degrees::Visisis)
+				("VI###", fm::degrees::VIisisis)
+				("VII###", fm::degrees::VIIisisis)
+
+				("Ibbb", fm::degrees::Ieseses)
+				("IIbbb", fm::degrees::IIeseses)
+				("IIIbbb", fm::degrees::IIIeseses)
+				("IVbbb", fm::degrees::IVeseses)
+				("Vbbb", fm::degrees::Veseses)
+				("VIbbb", fm::degrees::VIeseses)
+				("VIIbbb", fm::degrees::VIIeseses)				
 				;
 			}
 		};

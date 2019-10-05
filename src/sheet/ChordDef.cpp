@@ -18,30 +18,34 @@ namespace sheet {
 	DegreeDef ChordDef::getDegreeDef(const PitchDef &eventPitch) const
 	{
 		DegreeDef resultDegree;
-		auto rawEventDegree = eventPitch.pitch;
-		if (eventPitch.forceDegree) 
-		{
-			resultDegree.value = getDegreeValue(rawEventDegree);
-		} 
-		else 
-		{
-			Intervals::const_iterator it = 
-				std::find_if(intervals.begin(), intervals.end(), [rawEventDegree](const auto &x) 
-				{ 
-					return getDegreeValue(x.degree) == getDegreeValue(rawEventDegree); 
-				});
-			if (it == intervals.end()) {
-				return DegreeDef::invalid();
-			}
-			resultDegree = *it;
+		auto degreeValue = eventPitch.pitch;
+		Intervals::const_iterator it = 
+			std::find_if(intervals.begin(), intervals.end(), [degreeValue](const auto &x) 
+			{ 
+				return getDegreeValue(x.degree) == getDegreeValue(degreeValue); 
+			});
+		if (it == intervals.end()) {
+			return DegreeDef::invalid();
 		}
-		
-		if (getFlag(rawEventDegree) == fm::degrees::Sharp) {
+		resultDegree = *it;
+		if (getFlag(degreeValue) == fm::degrees::Sharp) {
 			resultDegree.value += 1;
 		}
-		if (getFlag(rawEventDegree) == fm::degrees::Flat) {
+		if (getFlag(degreeValue) == fm::degrees::DoubleSharp) {
+			resultDegree.value += 2;
+		}	
+		if (getFlag(degreeValue) == fm::degrees::TrippleSharp) {
+			resultDegree.value += 3;
+		}				
+		if (getFlag(degreeValue) == fm::degrees::Flat) {
 			resultDegree.value -= 1;
 		}
+		if (getFlag(degreeValue) == fm::degrees::DoubleFlat) {
+			resultDegree.value -= 2;
+		}	
+		if (getFlag(degreeValue) == fm::degrees::TrippleFlat) {
+			resultDegree.value -= 3;
+		}				
 		return resultDegree;
 	}
 
