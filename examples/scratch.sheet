@@ -21,7 +21,7 @@ instrumentConf: bass
 instrumentConf: guitar  
     voicingStrategy simple range bass
     mod guitarStroke value 32 mode single direction down
-    volume 90
+    volume 80
 ;
 
 [
@@ -32,13 +32,14 @@ instrument: drums;
 
 }
 {
-    /do: swing grid 8 offset 100/
+    /do: swing grid 8 offset 80/
     "ht"8 r  "ht" r  "ht"  r "ht" r  |
     
 }
 {
-    /do: swing grid 8 offset 100/
-    "bd"8 "bd"   r8   "bd"8      "sn"4        r4 |
+    /do: swing grid 8 offset 80/
+    \p
+    "bd"8 x   r   "bd"8      !fff"sn"8 r      "bd"8 x |
 }
 ]
 
@@ -48,7 +49,7 @@ name: x;
 instrument: bass;
 {
     /do: swing grid 8 offset 80/
-    I,,8 I,,   x   I,,      I,,4        x |
+    I,,8 x  x  x  x  x  x x |
 }
 ]
 
@@ -70,6 +71,6 @@ instrument: guitar;
 type: sheet;
 {
     /template: x/
-     G6 | G6 | G6 | G6    | C6  | C6 | G6 | G6 | D6 | C6 | G6 | G6 |
+     G6 | G6 | G6 | G6    | C6  | C6 | G6 | G6 | D6 | C6 | G6 | D6 |
 }   
 ]
