@@ -960,3 +960,49 @@ BOOST_AUTO_TEST_CASE(test_x_repeat_degree_2)
 	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[4], sheet::Event::EOB));
 	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[5], sheet::Event::Repeat, sheet::PitchDef::NoPitch, 0, 4.0_N4));
 }
+
+
+BOOST_AUTO_TEST_CASE(test_force_degree)
+{
+	using namespace fm;
+	using sheet::PitchDef;
+	fm::String text = FM_STRING("\
+		[\n\
+			{\n\
+				!VI <I II !IV> V\n\
+			}\n\
+		] \n\
+");
+	sheet::compiler::SheetDefParser parser;
+	auto defs = parser.parse(text);
+	BOOST_CHECK(defs.tracks.size() == 1);
+	BOOST_CHECK(defs.tracks[0].voices.size() == 1);
+	BOOST_CHECK(defs.tracks[0].voices[0].events.size() == 3);
+
+	auto event = defs.tracks[0].voices[0].events[0];
+	BOOST_CHECK(event.type == sheet::Event::Degree);
+	BOOST_CHECK(event.pitches.size() == 1);
+	auto pitchIt = event.pitches.begin();
+	BOOST_CHECK(sheet::getDegreeValue(pitchIt->pitch) == fm::degrees::VI);
+	BOOST_CHECK(pitchIt->forceDegree == true);
+
+	event = defs.tracks[0].voices[0].events[1];
+	BOOST_CHECK(event.type == sheet::Event::Degree);
+	BOOST_CHECK(event.pitches.size() == 3);
+	pitchIt = event.pitches.begin();
+	BOOST_CHECK(sheet::getDegreeValue(pitchIt->pitch) == fm::degrees::I);
+	BOOST_CHECK(pitchIt->forceDegree == false);
+	++pitchIt;
+	BOOST_CHECK(sheet::getDegreeValue(pitchIt->pitch) == fm::degrees::II);
+	BOOST_CHECK(pitchIt->forceDegree == false);
+	++pitchIt;
+	BOOST_CHECK(sheet::getDegreeValue(pitchIt->pitch) == fm::degrees::IV);
+	BOOST_CHECK(pitchIt->forceDegree == true);
+
+	event = defs.tracks[0].voices[0].events[2];
+	BOOST_CHECK(event.type == sheet::Event::Degree);
+	BOOST_CHECK(event.pitches.size() == 1);
+	pitchIt = event.pitches.begin();
+	BOOST_CHECK(sheet::getDegreeValue(pitchIt->pitch) == fm::degrees::V);
+	BOOST_CHECK(pitchIt->forceDegree == false);
+}
