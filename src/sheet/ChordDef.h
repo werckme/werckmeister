@@ -8,12 +8,12 @@
 #include "ASheetObject.hpp"
 
 namespace sheet {
-
+    struct PitchDef;
     struct ChordDef : public ASheetObject {
         typedef std::set<DegreeDef> Intervals;
         fm::String name;
 		Intervals intervals;
-		DegreeDef getDegreeDef(fm::Pitch degree) const;
+		DegreeDef getDegreeDef(const PitchDef &eventPitch) const;
 	};
 
     bool has7(const ChordDef &def);

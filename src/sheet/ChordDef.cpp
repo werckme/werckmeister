@@ -1,5 +1,6 @@
 #include "ChordDef.h"
 #include <algorithm>
+#include <sheet/Event.h>
 
 namespace sheet {
 
@@ -14,24 +15,34 @@ namespace sheet {
 		return static_cast<fm::degrees::Flag>((degree) >> 8);
 	}
 
-	DegreeDef ChordDef::getDegreeDef(fm::Pitch degree) const
+	DegreeDef ChordDef::getDegreeDef(const PitchDef &eventPitch) const
 	{
-		Intervals::const_iterator it = 
-			std::find_if(intervals.begin(), intervals.end(), [degree](const auto &x) 
-			{ 
-				return getDegreeValue(x.degree) == getDegreeValue(degree); 
-			});
-		if (it == intervals.end()) {
-			return DegreeDef::invalid();
+		DegreeDef resultDegree;
+		auto rawEventDegree = eventPitch.pitch;
+		if (eventPitch.forceDegree) 
+		{
+			resultDegree.value = getDegreeValue(rawEventDegree);
+		} 
+		else 
+		{
+			Intervals::const_iterator it = 
+				std::find_if(intervals.begin(), intervals.end(), [rawEventDegree](const auto &x) 
+				{ 
+					return getDegreeValue(x.degree) == getDegreeValue(rawEventDegree); 
+				});
+			if (it == intervals.end()) {
+				return DegreeDef::invalid();
+			}
+			resultDegree = *it;
 		}
-		auto res = *it;
-		if (getFlag(degree) == fm::degrees::Sharp) {
-			res.value += 1;
+		
+		if (getFlag(rawEventDegree) == fm::degrees::Sharp) {
+			resultDegree.value += 1;
 		}
-		if (getFlag(degree) == fm::degrees::Flat) {
-			res.value -= 1;
+		if (getFlag(rawEventDegree) == fm::degrees::Flat) {
+			resultDegree.value -= 1;
 		}
-		return res;
+		return resultDegree;
 	}
 
 	bool has7(const ChordDef &def)

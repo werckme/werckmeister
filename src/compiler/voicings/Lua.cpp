@@ -164,7 +164,7 @@ namespace sheet {
                 auto luaStackDegrees = lua_gettop(L);
                 int degreeIndex = 1;
                 for (const auto &degree : degrees_) {
-                    auto degreeDef = chordDef->getDegreeDef(degree.pitch);
+                    auto degreeDef = chordDef->getDegreeDef(degree);
                     if (!degreeDef.valid()) {
                             continue;
                     }
