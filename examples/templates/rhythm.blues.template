@@ -1,0 +1,12 @@
+[
+type: template;
+name: rhythm.blues.normal;    
+instrument: rhythm;
+{
+    /do: swing grid 8 offset 60/
+    <I, V,>8 x <I, V##,> x <I, V,>8 x <I, V##,> x 
+    <I, V,>8 x <I, V##,> x <I, V,>8 x <I, V##,> x 
+    <I, V,>8 x <I, V##,> x <I, V,>8 x <I, V##,> x 
+    <I, V,>8 x <I, V##,> x <I, V###,>8 x <I, V##,> x  |
+}
+]

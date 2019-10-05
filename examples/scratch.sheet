@@ -1,71 +1,64 @@
 @load "chords/default.chords";
 @load "pitchmaps/defaultMidiDrumMap.pitchmap";
 @load "lua/mods/swing.lua";
+@load "lua/mods/staccato.lua";
 @load "lua/voicings/simple.lua";
+@load "lua/voicings/voicelead.lua";
 @load "lua/mods/guitarStroke.lua";
-
+@load "templates/drums.blues.template";
+@load "templates/bass.blues.template";
+@load "templates/rhythm.blues.template";
 device: SC1 midi 2;
 device: BC midi 2;
 
 tempo: 120;
 instrumentDef: drums   BC 9 0 0;
-instrumentDef: bass   BC 0 0 33;
-instrumentDef: guitar   BC 1 0 27;
+instrumentDef: bass   BC 0 0 34;
+instrumentDef: rhythm   BC 1 0 27;
+instrumentDef: organ   BC 2 35 17;
 
-instrumentConf: bass   volume 0;
+instrumentConf: bass   
+    voicingStrategy simple range contrabass
+    volume 100
+;
 
-instrumentConf: guitar  
+instrumentConf: rhythm  
     voicingStrategy simple range bass
     mod guitarStroke value 32 mode single direction down
+    volume 80
+;
+
+instrumentConf: organ  
+    mod staccato value 90
+    voicingStrategy simple range tenor
+    volume 63
+;
+
+instrumentConf: drums  
     volume 90
 ;
 
 [
 type: template;
-name: x;
-instrument: drums; 
-{
-
-}
-{
-    /do: swing grid 8 offset 100/
-    "ht"8 r  "ht" r  "ht"  r "ht" r  |
-    
-}
+name: x;    
+instrument: organ;
 {
     /do: swing grid 8 offset 60/
-    "bd"4      r8 "bd"            "sn"4               r4 |
+    <I II III IV V VI VIII>2. <I II III IV V VI VIII>4 |
 }
 ]
-
-[
-type: template;
-name: x;    
-instrument: bass;
-{
-    /do: swing grid 8 offset 80/
-    I,,8 x  xx  xx  xx  |
-}
-]
-
-[
-type: template;
-name: x;    
-instrument: guitar;
-{
-    /do: swing grid 8 offset 90/
-    <I, V,>8 x <I, V##,> x <I, V,>8 x <I, V##,> x 
-    <I, V,>8 x <I, V##,> x <I, V,>8 x <I, V##,> x 
-    <I, V,>8 x <I, V##,> x <I, V,>8 x <I, V##,> x 
-    <I, V,>8 x <I, V##,> x <I, V###,>8 x <I, V##,> x  |
-}
-]
-
 
 [
 type: sheet;
 {
-    /template: x/
-     Gmaj7 | G7 | G7 | G7    | C7  | C7 | G7 | G7 | D7 | C7 | G7 | G7 |
+    /template: 
+        x 
+        drums.blues.normal
+        bass.blues.normal
+        rhythm.blues.normal
+    /
+    G7 | G7 | G7 | G7    | C7  | C7 | G7 | G7 | D7 | C7 | G7 | D7 |
+    G7 | G7 | G7 | G7    | C7  | C7 | G7 | G7 | D7 | C7 | G7 | D7 |
+    G7 | G7 | G7 | G7    | C7  | C7 | G7 | G7 | D7 | C7 | G7 | D7 |
 }   
 ]
