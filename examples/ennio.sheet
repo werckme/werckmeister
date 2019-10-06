@@ -6,7 +6,7 @@ device: SC1 midi 2;
 
 tempo: 130;
 --          instrument dv ch cc pc
-instrumentDef: piano   SC1 2 0 0;
+instrumentDef: piano   SC1 2 0 3;
 
 [
 instrument: piano;

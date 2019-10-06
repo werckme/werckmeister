@@ -9,18 +9,28 @@
 "ho1": bes,,    -- hihat half open1
 "ho2": bes,,    -- hihat half open2
 "ho2": bes,,    -- hihat half open3
-"cy": cis,
-"hto": c,
+"cy": cis,      -- crash cymal
+"spl": g,       -- splash cymal
+"hto": c,       -- high tom 
 "hto1": c,
 "hto2": d,
-"mto": b,,
+"mto": b,,      -- middle tom
 "mto1": b,,
 "mto2": a,,
-"lto": g,,
+"lto": g,,      -- low tom
 "lto1": g,,
 "lto2": f,,
 "rdbell": b,
-"mtr": as'
-"otr": a'
-"bo1": b,     --bongo 1
-"bo2": c     -- bongo 2
+"mtr": as'    -- muted triangle
+"otr": a'     -- open triangle
+"bo1": c      --bongo 1
+"bo2": cis    --bongo 2
+"tim1": f     --timbale 1
+"tim2": fis   --timbale 2
+"ago1": g     --agogo 1
+"ago2": gis   --agogo 2
+"cui1": fis'  -- cuica 1
+"cui2": g'    -- cuica 2
+"cwb": gis,   -- cowbell
+"cla": dis'   -- claves
+

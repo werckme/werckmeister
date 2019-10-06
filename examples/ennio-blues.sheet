@@ -1,0 +1,82 @@
+@load "chords/default.chords";
+@load "pitchmaps/defaultMidiDrumMap.pitchmap";
+@load "lua/mods/swing.lua";
+@load "lua/mods/staccato.lua";
+@load "lua/voicings/simple.lua";
+@load "lua/voicings/voicelead.lua";
+@load "lua/mods/guitarStroke.lua";
+@load "templates/drums.blues.template";
+@load "templates/bass.blues.template";
+@load "templates/rhythm.blues.template";
+device: SC1 midi 2;
+device: BC midi 2;
+
+tempo: 120;
+instrumentDef: drums   BC 9 0 0;
+instrumentDef: bass   BC 0 0 34;
+instrumentDef: rhythm   BC 1 0 27;
+instrumentDef: organ   BC 2 35 17;
+instrumentDef: lead   BC 3 8 22;
+
+instrumentConf: bass   
+    voicingStrategy simple range contrabass
+    volume 100
+;
+
+instrumentConf: rhythm  
+    voicingStrategy simple range bass
+    mod guitarStroke value 32 mode single direction down
+    volume 75
+;
+
+instrumentConf: organ  
+    mod staccato value 90
+    voicingStrategy simple range tenor
+    volume 63
+;
+
+instrumentConf: drums  
+    volume 90
+;
+
+instrumentConf: lead  
+    volume 85
+;
+
+
+[
+instrument: lead;
+{
+    \ffff
+    /do: swing grid 8 offset 60/
+    r1 | r1 |
+    c2 d | /modOnce: bend from 30/ e2~ e2 | r2 c4 d4 | e4 e g c | /modOnce: bend from 40/dis2 dis4 d | c2 bes4 a 
+    | g2  g4 a | bes c' bes a | as2 as4 bes | c' as,4 as,4  bes,~ | <bes, c> as as bes | c' c' es'8 d' c' d' 
+    | b2 b, | r1 | r4 b4 b4 c' | d' d' d' d' | d' d' e'8 d' c' b | c'1 
+}
+]
+
+[
+type: template;
+name: x;    
+instrument: organ;
+{
+    /do: swing grid 8 offset 60/
+    <I II III IV V VI VIII>2. <I II III IV V VI VIII>4 |
+}
+]
+
+[
+type: sheet;
+{
+    /template: 
+        x 
+        drums.blues.normal
+        bass.blues.normal
+        rhythm.blues.normal
+    /
+    Cmaj7 | Cmaj7 | Cmaj7 | Cmaj7 | Cmaj7 | Cmaj7 | Esmaj7 | Esmaj7 | 
+    Esmaj7 | Esmaj7 | Aesmaj7 | Aesmaj7 | Aesmaj7 | Aesmaj7 | G7 
+    | G7 | G7 | G7 | G7 | C | C | Cmin | Cmin | 
+}   
+]

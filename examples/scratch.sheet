@@ -3,19 +3,21 @@
 @load "lua/mods/swing.lua";
 @load "lua/mods/staccato.lua";
 @load "lua/voicings/simple.lua";
+@load "lua/voicings/guitar.lua";
 @load "lua/voicings/voicelead.lua";
 @load "lua/mods/guitarStroke.lua";
-@load "templates/drums.blues.template";
-@load "templates/bass.blues.template";
-@load "templates/rhythm.blues.template";
+@load "templates/drums.soca.template";
+@load "templates/bass.soca.template";
+@load "templates/rhythm.soca.template";
+
 device: SC1 midi 2;
 device: BC midi 2;
 
-tempo: 120;
+tempo: 100;
 instrumentDef: drums   BC 9 0 0;
 instrumentDef: bass   BC 0 0 34;
-instrumentDef: rhythm   BC 1 0 27;
-instrumentDef: organ   BC 2 35 17;
+instrumentDef: rhythm2   BC 2 0 21;
+instrumentDef: rhythm   BC 3 0 25;
 
 instrumentConf: bass   
     voicingStrategy simple range contrabass
@@ -23,42 +25,43 @@ instrumentConf: bass
 ;
 
 instrumentConf: rhythm  
-    voicingStrategy simple range bass
-    mod guitarStroke value 32 mode single direction down
-    volume 80
+    voicingStrategy guitar range tenor
+    mod guitarStroke value 128
+    volume 60
 ;
 
-instrumentConf: organ  
+instrumentConf: rhythm2  
     mod staccato value 90
     voicingStrategy simple range tenor
-    volume 63
+    volume 70
 ;
 
 instrumentConf: drums  
-    volume 90
+    volume 80
 ;
 
-[
-type: template;
-name: x;    
-instrument: organ;
-{
-    /do: swing grid 8 offset 60/
-    <I II III IV V VI VIII>2. <I II III IV V VI VIII>4 |
-}
-]
+
+
 
 [
 type: sheet;
 {
     /template: 
-        x 
-        drums.blues.normal
-        bass.blues.normal
-        rhythm.blues.normal
+        drums.soca.normal
+        bass.soca.normal
+        rhythm.soca.normal
+        rhythm2.soca.normal
     /
-    G7 | G7 | G7 | G7    | C7  | C7 | G7 | G7 | D7 | C7 | G7 | D7 |
-    G7 | G7 | G7 | G7    | C7  | C7 | G7 | G7 | D7 | C7 | G7 | D7 |
-    G7 | G7 | G7 | G7    | C7  | C7 | G7 | G7 | D7 | C7 | G7 | D7 |
+    Fmaj7 | Fmaj7 | G7 | G7 |
+    G-7 | Ges7 | Fmaj7 | Ges7 |
+    Fmaj7 | Fmaj7 | G7 | G7 |
+    G-7 | Ges7 | 
+    Fmaj7 | Fmaj7 | Gesmaj7 | Gesmaj7 |
+    B7 | B7 | Fis-7 | Fis-7 |
+    D7 | D7 | G-7 | G-7 |
+    Es7 | Es7 | A-7 | D7b9 |
+    G-7 | C7b9 | Fmaj7 | Fmaj7 |
+    G7 | G7 | G-7 | Ges7 |
+    Fmaj7 | Ges9 |
 }   
 ]

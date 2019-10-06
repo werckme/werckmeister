@@ -7,12 +7,12 @@ instrument: drums;
 }
 {
     \ff
-    "ht"8t !fx  "ht"    !fx  "ht"  !fx    !fx  "ht"  !fx    !fx  "ht"  !fx     |
+    "ht"8t !px  "ht"     x  !p"ht"  x     x  !p"ht"  x     x  !p"ht"  x     |
     
 }
 {
     /do: swing grid 8 offset 60/
     \f
-    "bd"8 x     !fff"sn" "bd"  "bd"8 x    !ff"sn" "bd"8 |
+    "bd"8 x     !fff"sn" "bd"  "bd"8 x    !fff"sn" "bd"8 |
 }
 ]

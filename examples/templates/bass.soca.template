@@ -1,0 +1,9 @@
+[
+type: template;
+name: bass.soca.normal;
+instrument: bass;
+{
+    r8 r16 I,,32 r32 I,,8  I,,16 r 
+    r8 r16 I,,32 r32  r16 I,,32 r  V,,, r I,, r  |
+}
+]

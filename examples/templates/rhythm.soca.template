@@ -1,0 +1,36 @@
+[
+type: template;
+name: rhythm.soca.normal;
+instrument: rhythm; 
+{
+    r16 !p<I II III IV V VI VII> !fx !ffx     !pI  !p<I II III IV V VI VII> !fx !ffx
+    !ppI!p<I II III IV V VI VII> !fx !ffx     !pI  !p<I II III IV V VI VII> !fx !px| 
+}
+] 
+
+
+[
+type: template;
+name: rhythm2.soca.normal;
+instrument: rhythm2;
+{
+    <I II III IV V VI VII>16 r r   
+    <I II III IV V VI VII>16 r r 
+    <I II III IV V VI VII>16 r r r  
+    <I II III IV V VI VII>16 r r 
+    <I II III IV V VI VII>16 r r
+}
+]
+
+[
+type: template;
+name: rhythm2.soca.bridge;
+instrument: rhythm2;
+{
+    <I II III IV V VI VII>16 r r   
+    <I II III IV V VI VII>16 r r 
+    <I II III IV V VI VII>16 r r r  
+    <I II III IV V VI VII>8  r16 
+    <I II III IV V VI VII>16 r r
+}
+]

@@ -141,11 +141,11 @@ namespace sheet {
      * for: "keyword1 value1 value2 keyword2 value3 value4"
      * 
      * {   
-     *      "": [value0]
-     *      keyword1: [value1, value2]
-     *      keyword2: [value3, value4] 
+     *      "": [[value0]]
+     *      keyword1: [[value1, value2], [value3, value4]]
+     *      keyword2: [[value4, value5]]
      * }
-     * for: "value0 keyword1 value1 value2 keyword2 value3 value4"
+     * for: "value0 keyword1 value1 value2 keyword 1 value2 value3 keyword2 value4 value5"
      **/
     template<class TArgContainer, class TKeywordContainer>
     std::multimap<fm::String, fm::String> 

@@ -9,6 +9,7 @@
 #include <boost/spirit/include/lex_lexertl.hpp>
 #include "fm/common.hpp"
 #include "testhelper.h"
+#include <sheet/tools.h>
 
 BOOST_AUTO_TEST_CASE(issue_9_As_und_Es_werden_nicht_erkannt)
 {
@@ -68,4 +69,29 @@ type: sheet;\n\
 	BOOST_CHECK(std::get<1>(chordelements) == FM_STRING("7"));
 	BOOST_CHECK(chords[5].chordDefName() == FM_STRING("X7"));
 
+}
+
+BOOST_AUTO_TEST_CASE(issue_100_mod_gt_1_in_instrument_config_fails)
+{
+	/*
+	instrumentConf: organ  
+    mod staccato
+    mod swing 
+    volume 63
+;
+	*/
+	std::vector<fm::String> args = {
+		"organ", 
+		"mod", "staccato", 
+		"mod", "swing",
+		"volume", "63"
+	};
+	std::vector<fm::String> keywords = {"mod", "volume"};
+	auto keywordsAndValues = sheet::mapArgumentsByKeywords(args, keywords);
+	BOOST_CHECK(keywordsAndValues.size() == 4);
+	BOOST_CHECK(keywordsAndValues.count("") == 1);
+	// auto it = keywordsAndValues.equal_range("").first;
+	// BOOST_CHECK((it++)->second == "value1");
+	// BOOST_CHECK((it++)->second == "value2");	
+	// BOOST_CHECK((it)->second == "value3");	
 }
