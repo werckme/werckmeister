@@ -34,5 +34,5 @@ namespace sheet {
 			case fm::notes::B   :  return FM_STRING("B");
             default : return FM_STRING("?"); 
         }
-    }
+    }    
 }

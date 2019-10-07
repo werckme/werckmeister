@@ -264,16 +264,18 @@ BOOST_AUTO_TEST_CASE(test_map_arguments_by_keyword)
 	};
 	std::vector<fm::String> keywords = {"keyword1", "keyword2"};
 	auto keywordsAndValues = sheet::mapArgumentsByKeywords(args, keywords);
-	BOOST_CHECK(keywordsAndValues.size() == 5);
-	BOOST_CHECK(keywordsAndValues.count("keyword1") == 2);
-	BOOST_CHECK(keywordsAndValues.count("keyword2") == 3);
-	auto it = keywordsAndValues.equal_range("keyword1").first;
-	BOOST_CHECK((it++)->second == "value1");
-	BOOST_CHECK((it)->second == "value2");
-	it = keywordsAndValues.equal_range("keyword2").first;
-	BOOST_CHECK((it++)->second == "value3");
-	BOOST_CHECK((it++)->second == "value4");	
-	BOOST_CHECK((it)->second == "value5");	
+	BOOST_CHECK(keywordsAndValues.size() == 2);
+	BOOST_CHECK(keywordsAndValues.count("keyword1") == 1);
+	BOOST_CHECK(keywordsAndValues.count("keyword2") == 1);
+	auto argContainerIt = keywordsAndValues.equal_range("keyword1").first;
+	auto it = argContainerIt->second.begin();
+	BOOST_CHECK(*(it++) == "value1");
+	BOOST_CHECK(*it == "value2");
+	argContainerIt = keywordsAndValues.equal_range("keyword2").first;
+	it = argContainerIt->second.begin();
+	BOOST_CHECK(*(it++) == "value3");
+	BOOST_CHECK(*(it++) == "value4");	
+	BOOST_CHECK(*(it) == "value5");	
 }
 
 BOOST_AUTO_TEST_CASE(test_map_arguments_by_keyword_2)
@@ -281,12 +283,32 @@ BOOST_AUTO_TEST_CASE(test_map_arguments_by_keyword_2)
 	std::vector<fm::String> args = {"value1", "value2", "value3"};
 	std::vector<fm::String> keywords = {"keyword1", "keyword2"};
 	auto keywordsAndValues = sheet::mapArgumentsByKeywords(args, keywords);
-	BOOST_CHECK(keywordsAndValues.size() == 3);
-	BOOST_CHECK(keywordsAndValues.count("") == 3);
-	auto it = keywordsAndValues.equal_range("").first;
-	BOOST_CHECK((it++)->second == "value1");
-	BOOST_CHECK((it++)->second == "value2");	
-	BOOST_CHECK((it)->second == "value3");	
+	BOOST_CHECK(keywordsAndValues.size() == 1);
+	BOOST_CHECK(keywordsAndValues.count("") == 1);
+	auto argsIt = keywordsAndValues.equal_range("").first;
+	auto it = argsIt->second.begin();
+	BOOST_CHECK(*(it++) == "value1");
+	BOOST_CHECK(*(it++) == "value2");	
+	BOOST_CHECK(*(it) == "value3");	
+}
+
+BOOST_AUTO_TEST_CASE(test_map_arguments_by_keyword_3)
+{
+	std::vector<fm::String> args = {
+		"keyword1", "value1", "value2", 
+		"keyword1", "value3"
+	};
+	std::vector<fm::String> keywords = {"keyword1", "keyword2"};
+	auto keywordsAndValues = sheet::mapArgumentsByKeywords(args, keywords);
+	BOOST_CHECK(keywordsAndValues.size() == 2);
+	BOOST_CHECK(keywordsAndValues.count("keyword1") == 2);
+	auto argsIt = keywordsAndValues.equal_range("keyword1").first;
+	auto it = argsIt->second.begin();
+	BOOST_CHECK(*(it++) == "value1");
+	BOOST_CHECK(*(it++) == "value2");
+	++argsIt;
+	it = argsIt->second.begin();
+	BOOST_CHECK(*(it) == "value3");	
 }
 
 #if 0

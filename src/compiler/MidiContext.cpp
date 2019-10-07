@@ -298,24 +298,34 @@ namespace sheet {
 			instrumentDef->volume = sheet::getArgValueFor<int>(SHEET_META__SET_INSTRUMENT_CONFIG_VOLUME, argsExceptFirst, instrumentDef->volume);
 			instrumentDef->pan = sheet::getArgValueFor<int>(SHEET_META__SET_INSTRUMENT_CONFIG_PAN, argsExceptFirst, instrumentDef->pan);
 			auto argsMappedByKeyword = mapArgumentsByKeywords(args, keywords);
-			auto range = argsMappedByKeyword.equal_range(SHEET_META__SET_VOICING_STRATEGY);
-			// assign voicingStrategy
-			if (range.first != range.second) {
+			auto argsRange = argsMappedByKeyword.equal_range(SHEET_META__SET_VOICING_STRATEGY);
+			// assign voicingStrategies
+			if (argsRange.first != argsRange.second) {
 				auto &wm = fm::getWerckmeister();
-				instrumentDef->voicingStrategy = wm.getVoicingStrategy(range.first->second);
-				std::vector<fm::String> subArgs;
-				std::transform(range.first, range.second, std::back_inserter(subArgs), [](const auto &x) { return x.second; });
-				instrumentDef->voicingStrategy->setArguments(subArgs);
+				auto it = argsRange.first;
+				for (; it != argsRange.second; ++it) {
+					const auto &args = it->second;
+					if (args.empty()) {
+						FM_THROW(Exception, fm::String("missing arguments for: ") + SHEET_META__SET_VOICING_STRATEGY);
+					}
+					instrumentDef->voicingStrategy = wm.getVoicingStrategy(args.front());
+					instrumentDef->voicingStrategy->setArguments(args);
+				}
 			}
-			// mod
-			range = argsMappedByKeyword.equal_range(SHEET_META__SET_MOD);
-			if (range.first != range.second) {
+			// mods
+			argsRange = argsMappedByKeyword.equal_range(SHEET_META__SET_MOD);
+			if (argsRange.first != argsRange.second) {
 				auto &wm = fm::getWerckmeister();
-				auto mod = wm.getModification(range.first->second);
-				std::vector<fm::String> subArgs;
-				std::transform(range.first, range.second, std::back_inserter(subArgs), [](const auto &x) { return x.second; });
-				mod->setArguments(subArgs);
-				instrumentDef->modifications.push_back(mod);
+				auto it = argsRange.first;
+				for (; it != argsRange.second; ++it) {
+					const auto &args = it->second;
+					if (args.empty()) {
+						FM_THROW(Exception, fm::String("missing arguments for: ") + SHEET_META__SET_MOD);
+					}					
+					auto mod = wm.getModification(args.front());
+					mod->setArguments(args);
+					instrumentDef->modifications.push_back(mod);
+				}				
 			}		
 			// velocity overrides
 			auto assignIfSet = [&argsExceptFirst, instrumentDef, this](const fm::String &expression){

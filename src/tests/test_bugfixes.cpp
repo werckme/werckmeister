@@ -90,8 +90,21 @@ BOOST_AUTO_TEST_CASE(issue_100_mod_gt_1_in_instrument_config_fails)
 	auto keywordsAndValues = sheet::mapArgumentsByKeywords(args, keywords);
 	BOOST_CHECK(keywordsAndValues.size() == 4);
 	BOOST_CHECK(keywordsAndValues.count("") == 1);
-	// auto it = keywordsAndValues.equal_range("").first;
-	// BOOST_CHECK((it++)->second == "value1");
-	// BOOST_CHECK((it++)->second == "value2");	
-	// BOOST_CHECK((it)->second == "value3");	
+
+	auto argsIt = keywordsAndValues.equal_range("").first;
+	auto it = argsIt->second.begin();
+	BOOST_CHECK(*it == "organ");
+
+	argsIt = keywordsAndValues.equal_range("mod").first;
+	it = argsIt->second.begin();
+	BOOST_CHECK(*it++ == "staccato");
+
+	++argsIt;
+	it = argsIt->second.begin();
+	BOOST_CHECK(*it++ == "swing");
+
+	argsIt = keywordsAndValues.equal_range("volume").first;
+	it = argsIt->second.begin();
+	BOOST_CHECK(*it++ == "63");
+
 }

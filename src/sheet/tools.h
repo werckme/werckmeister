@@ -148,20 +148,28 @@ namespace sheet {
      * for: "value0 keyword1 value1 value2 keyword 1 value2 value3 keyword2 value4 value5"
      **/
     template<class TArgContainer, class TKeywordContainer>
-    std::multimap<fm::String, fm::String> 
+    std::multimap<fm::String, std::vector<fm::String>> 
     mapArgumentsByKeywords(const TArgContainer &args, const TKeywordContainer &keywords)
     {
-        std::multimap<fm::String, fm::String> result;
+        std::multimap<fm::String, std::vector<fm::String>> result;
         auto it = args.begin();
         auto end = args.end();
         fm::String keyword = "";
+        bool defaultKeywordCreated = false;
         for(; it!=end; ++it) {
             bool isKeyword = std::find(keywords.begin(), keywords.end(), *it) != keywords.end();
             if (isKeyword) {
                 keyword = *it;
+                result.emplace(std::make_pair(keyword, TArgContainer()));
                 continue;
             }
-            result.emplace(std::make_pair(keyword, *it));
+            if (keyword == "" && !defaultKeywordCreated) {
+                result.emplace(std::make_pair(keyword, TArgContainer()));
+                defaultKeywordCreated = true;
+            }
+            auto mapIt = result.upper_bound(keyword);
+            --mapIt;
+            mapIt->second.push_back(*it);
         }
         return result;
     }

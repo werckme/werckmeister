@@ -13,7 +13,7 @@
 device: SC1 midi 2;
 device: BC midi 2;
 
-tempo: 100;
+tempo: 120;
 instrumentDef: drums   BC 9 0 0;
 instrumentDef: bass   BC 0 0 34;
 instrumentDef: rhythm2   BC 2 0 21;
@@ -25,8 +25,8 @@ instrumentConf: bass
 ;
 
 instrumentConf: rhythm  
-    voicingStrategy guitar range tenor
-    mod guitarStroke value 128
+    voicingStrategy guitar range mezzosoprano
+    mod guitarStroke value 64
     volume 60
 ;
 
@@ -57,6 +57,13 @@ type: sheet;
     Fmaj7 | Fmaj7 | G7 | G7 |
     G-7 | Ges7 | 
     Fmaj7 | Fmaj7 | Gesmaj7 | Gesmaj7 |
+    /template: 
+        drums.soca.bridge
+        bass.soca.normal
+        rhythm.soca.normal
+        rhythm2.soca.bridge
+    /
+
     B7 | B7 | Fis-7 | Fis-7 |
     D7 | D7 | G-7 | G-7 |
     Es7 | Es7 | A-7 | D7b9 |
