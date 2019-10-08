@@ -1,0 +1,36 @@
+@load "chords/default.chords";
+@load "pitchmaps/defaultMidiDrumMap.pitchmap";
+@load "lua/mods/staccato.lua";
+device: SC1 midi 2;
+
+tempo: 120;
+instrumentDef: organ   SC1 2 35 17;
+
+instrumentConf: organ  
+    volume 63
+;
+
+
+[
+type: template;
+name: x;    
+instrument: organ;
+{
+    /mod: staccato amount 100/
+    <I II III IV V VI VIII>2. <I II III IV V VI VIII>4 |
+}
+]
+
+[
+type: sheet;
+{
+    /template: 
+        x 
+    /
+    G7 | G7 | 
+    G7 | G7 | 
+    G7 | G7 | 
+    G7 | G7 | 
+    G7 | G7 | 
+}   
+]

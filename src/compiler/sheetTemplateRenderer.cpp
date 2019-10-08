@@ -76,6 +76,8 @@ namespace sheet {
 				Voice::Events::const_iterator it_;
 				void degrees(const Voice::Events *degrees);
 			public:
+				typedef std::function<void()> OnLoop;
+				OnLoop onLoop;			
 				DegreeEventServer(const Voice::Events *degrees);
 				const Event * nextEvent();
 				void seek(fm::Ticks);
@@ -101,6 +103,9 @@ namespace sheet {
 			{
 				if (ticks != 0) {
 					FM_THROW(Exception, "missing implementation for seeking to value != 0");
+				}
+				if (onLoop) {
+					onLoop();
 				}
 				it_ = degrees_->begin();
 			}			
@@ -279,6 +284,10 @@ namespace sheet {
 								continue;
 							}
 							DegreeEventServer eventServer(&(voice.events));
+							eventServer.onLoop = [this]() {
+								// clear mods: https://github.com/SambaGodschynski/werckmeister/issues/99
+								ctx_->voiceMetaData()->modifications.clear();
+							};
 							setTargetCreateIfNotExists(*track, voice);
 							ctx_->voiceMetaData()->position = templateAndChords.offset;
 							ctx_->voiceMetaData()->tempoFactor = templateAndChords.tempoFactor;

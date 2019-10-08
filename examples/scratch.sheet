@@ -18,7 +18,7 @@ instrumentDef: drums   BC 9 0 0;
 instrumentDef: bass   BC 0 0 34;
 instrumentDef: rhythm2   BC 2 0 21;
 instrumentDef: rhythm   BC 3 0 25;
-
+instrumentDef: lead     SC1 3 0 11;
 instrumentConf: bass   
     voicingStrategy simple range contrabass
     volume 100

@@ -32,7 +32,7 @@ instrument: drums;
 }
 {
     \fff
-    !ffff"mtr"8 "otr" !ffff"mtr" "otr" !ffff"mtr"8 "otr" !ffff"mtr" "otr" |
+    "mtr"16 x "otr"8 "mtr"16 x "otr"8 "mtr"16 x "otr"8 "mtr"16 x "otr"8 |
 }
 {
     \p
