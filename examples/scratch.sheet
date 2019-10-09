@@ -10,6 +10,10 @@
 @load "templates/bass.soca.template";
 @load "templates/rhythm.soca.template";
 
+@load "templates/drums.blues.template";
+@load "templates/bass.blues.template";
+@load "templates/rhythm.blues.template";
+
 device: SC1 midi 2;
 device: BC midi 2;
 

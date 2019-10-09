@@ -24,7 +24,7 @@ instrumentConf: bass
 ;
 
 instrumentConf: rhythm  
-    voicingStrategy simple range bass
+    voicingStrategy simple range tenor
     mod guitarStroke value 32 mode single direction down
     volume 75
 ;
