@@ -61,6 +61,7 @@ SET (SRC_SHEET_FMAPP
     fmapp/rtmidiBackend.cpp
     fmapp/midiplayer.cpp
     fmapp/midiProvider.cpp
+    fmapp/udpSender.cpp
 )
 
 ## PLAYER

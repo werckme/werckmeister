@@ -24,6 +24,7 @@
 #include <boost/format.hpp>
 #include <map>
 #include <fm/config/configServer.h>
+#include <fmapp/udpSender.hpp>
 
 #define ARG_HELP "help"
 #define ARG_INPUT "input"
@@ -33,10 +34,15 @@
 #define ARG_BEGIN "begin"
 #define ARG_END "end"
 #define ARG_WATCH "watch"
+#define ARG_UDP "funkfeuer"
+#define ARG_NOSTDOUT "nostdout"
 
 typedef int MidiOutputId;
 typedef std::unordered_map<fm::String, time_t> Timestamps;
 
+namespace {
+	std::unique_ptr<funk::UdpSender> funkfeuer;
+}
 
 struct Settings {
 	typedef boost::program_options::variables_map Variables;
@@ -57,6 +63,8 @@ struct Settings {
 			(ARG_END, po::value<double>(), "estop postition in quarter notes. E.g.: 1.2")
 			(ARG_MIDI_OUTPUT, po::value<MidiOutputId>(), "select midi device (default = 0)")
 			(ARG_WATCH, "checks the input file for changes and recompiles if any")
+			(ARG_UDP, po::value<std::string>(), "activates an udp sender, which sends sheet info periodically to to given host")
+			(ARG_NOSTDOUT, "no output on stdout")
 			;
 		po::positional_options_description p;
 		p.add(ARG_INPUT, -1);
@@ -112,6 +120,18 @@ struct Settings {
 
 	bool watch() const {
 		return !!variables.count(ARG_WATCH);
+	}
+
+	bool udp() const {
+		return !!variables.count(ARG_UDP);
+	}
+
+	auto getUdpHostname() const {
+		return variables[ARG_UDP].as<std::string>();
+	}
+
+	bool nostdout() const {
+		return !!variables.count(ARG_NOSTDOUT);
 	}
 
 };
@@ -209,6 +229,16 @@ void updatePlayer(fmapp::Midiplayer &player, const std::string &inputfile)
 
 }
 
+void sendFunkfeuerIfNeccessary(const fmapp::Midiplayer &player, fm::Ticks elapsed)
+{
+	if (!funkfeuer) {
+		return;
+	}
+	elapsed /= (double)fm::PPQ;
+	std::string data = std::to_string(elapsed);
+	funkfeuer->send(std::vector<fm::Byte>(data.begin(), data.end()));
+}
+
 void play(sheet::DocumentPtr document, fm::midi::MidiPtr midi, MidiOutputId midiOutput, fm::Ticks begin, fm::Ticks end, const Settings &settings) {
 	auto &player = fmapp::getMidiplayer();
 	player.updateOutputMapping(fm::getConfigServer().getDevices());
@@ -219,6 +249,7 @@ void play(sheet::DocumentPtr document, fm::midi::MidiPtr midi, MidiOutputId midi
 	player.play(begin);
 	bool playing = true;
 	bool watch = settings.watch();
+	bool stdout_ = !settings.nostdout();
 	Timestamps timestamps;
 	hasChanges(document, timestamps);	// init timestamps
 	auto inputfile = settings.getInput();
@@ -236,7 +267,10 @@ void play(sheet::DocumentPtr document, fm::midi::MidiPtr midi, MidiOutputId midi
 
 	while (playing) {
 		auto elapsed = player.elapsed();
-		printElapsedTime(elapsed);
+		if (stdout_) {
+			printElapsedTime(elapsed);
+		}
+		sendFunkfeuerIfNeccessary(player, elapsed);
 		std::this_thread::sleep_for( std::chrono::milliseconds(10) );
 		if (watch) {
 			if (hasChanges(document, timestamps)) {
@@ -267,6 +301,12 @@ void play(sheet::DocumentPtr document, fm::midi::MidiPtr midi, MidiOutputId midi
 
 	player.Backend:: tearDown();
 }
+
+void startSender() {
+
+}
+
+
 
 int main(int argc, const char** argv)
 {
@@ -309,8 +349,17 @@ int main(int argc, const char** argv)
 			throw std::runtime_error("invalid begin/end range");
 		}
 
+		if (settings.udp()) {
+			funkfeuer = std::make_unique<funk::UdpSender>(settings.getUdpHostname());
+			funkfeuer->start();
+		}
 
 		play(doc, midi, midi_out, begin, end, settings);
+
+		if (funkfeuer) {
+			funkfeuer->stop();
+			funkfeuer.reset();
+		}
 
 		return 0;
 	}
