@@ -10,6 +10,7 @@
 #include "forward.hpp"
 #include <map>
 #include <vector>
+#include <functional>
 
 #if defined(__GNUC__) || defined(__GNUG__)
 #pragma GCC diagnostic push
@@ -31,6 +32,7 @@ namespace fm {
 		typedef std::istream StreamType;
 		typedef std::unique_ptr<StreamType> ResourceStream;
 		typedef std::vector<Path> Paths;
+		typedef std::function<sheet::compiler::AContextPtr()> CreateContextFunction;
         /*
             creates a default sheet. if werk parameter set, it will added to the werk after creation.
         */
@@ -53,7 +55,8 @@ namespace fm {
 		void updateVirtualFile(const Path &path, const String &data);
 		bool isVirtualFilePath(const Path &path) const;
 		ResourceStream openVirtualFile(const Path &path);
-
+		const CreateContextFunction & createContextHandler() const;
+		void createContextHandler(const CreateContextFunction &createContextHandler);
 	private:
 		typedef std::unordered_map<fm::String, Path> ScriptMap;
 		typedef std::unordered_map<Path, String> VirtualFiles;
@@ -61,6 +64,7 @@ namespace fm {
 		ScriptMap _scriptMap;
 		ResourceStream openResourceImpl(const Path &path);
 		Paths _searchPaths;
+		CreateContextFunction _createContextHandler;
 	public:
 		Path resolvePath(const Path &relPath, sheet::ConstDocumentPtr, const Path &sourcePath = FM_STRING("")) const;
 		Path absolutePath(const Path &relPath) const;

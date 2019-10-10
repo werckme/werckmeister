@@ -17,22 +17,9 @@ instrumentConf: organ
     volume 63
 ;
 
-
 [
-type: template;
-name: x;    
 instrument: organ;
 {
-    <I II III IV V VI VIII>8 x x x x x x x |
+    c d e f | g a b c |
 }
-]
-
-[
-type: sheet;
-{
-    /template: 
-        x 
-    /
-    G7 | G7 | 
-}   
 ]

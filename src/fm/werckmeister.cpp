@@ -128,6 +128,9 @@ namespace fm {
 
 	sheet::compiler::AContextPtr Werckmeister::createContext()
 	{
+		if (this->_createContextHandler) {
+			return _createContextHandler();
+		}
 		auto midiContext = std::make_shared<sheet::compiler::MidiContext>();
 		return midiContext;
 	}
@@ -285,6 +288,15 @@ namespace fm {
 		_searchPaths.push_back(path);
 	}
 
+	const Werckmeister::CreateContextFunction & Werckmeister::createContextHandler() const
+	{
+		return this->_createContextHandler;
+	}
+
+	void Werckmeister::createContextHandler(const CreateContextFunction &createContextHandler)
+	{
+		this->_createContextHandler = createContextHandler;
+	}
 
 	Werckmeister::~Werckmeister() = default;
 }

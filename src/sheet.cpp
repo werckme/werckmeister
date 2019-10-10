@@ -5,6 +5,7 @@
 #include "compiler/parser.h"
 #include "compiler/MidiContext.h"
 #include "sheet.h"
+#include "compiler/sheetEventRenderer.h"
 #include <iostream>
 
 namespace sheet {
@@ -19,10 +20,15 @@ namespace sheet {
     {
         auto &wm = fm::getWerckmeister();
         auto context = std::dynamic_pointer_cast<sheet::compiler::MidiContext>( wm.createContext() );
+        // there is one case where context and event renderer is one object -> MidiAndTimeline
+        auto eventRenderer = std::dynamic_pointer_cast<sheet::compiler::SheetEventRenderer>( context );
         auto midi = wm.createMidi();
         context->midi(midi);
         context->sheetTemplateDefServer(doc.get());
         auto compiler = wm.createCompiler();
+        if (eventRenderer) {
+            compiler->sheetEventRenderer(eventRenderer);
+        }
         compiler->context(context);
         compiler->compile(doc);
 		for (const auto &warning : context->warnings) {

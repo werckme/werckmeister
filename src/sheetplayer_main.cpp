@@ -26,6 +26,8 @@
 #include <fm/config/configServer.h>
 #include <fmapp/udpSender.hpp>
 #include "fmapp/jsonWriter.hpp"
+#include "fmapp/MidiAndTimeline.hpp"
+#include <set>
 
 #define ARG_HELP "help"
 #define ARG_INPUT "input"
@@ -44,6 +46,7 @@ typedef std::unordered_map<fm::String, time_t> Timestamps;
 namespace {
 	std::unique_ptr<funk::UdpSender> funkfeuer;
 	fmapp::JsonWriter jsonWriter;
+	fmapp::EventTimeline timeline;
 }
 
 struct Settings {
@@ -231,20 +234,33 @@ void updatePlayer(fmapp::Midiplayer &player, const std::string &inputfile)
 
 }
 
-void sendFunkfeuerIfNeccessary(const fmapp::Midiplayer &player, fm::Ticks elapsed)
+fmapp::EventTimeline::const_iterator lastEvent;
+
+void sendFunkfeuerIfNeccessary(sheet::DocumentPtr document, fm::Ticks elapsed)
 {
 	if (!funkfeuer) {
 		return;
 	}
-	elapsed /= (double)fm::PPQ;
-	std::string data = jsonWriter.write(elapsed);
+	auto elapsedQuarter = elapsed / (double)fm::PPQ;
+	std::string data = jsonWriter.write(elapsedQuarter);
 	funkfeuer->send(std::vector<fm::Byte>(data.begin(), data.end()));
+
+	auto ev = timeline.find(elapsed);
+	if (ev == lastEvent || ev == timeline.end()) {
+		return;
+	}
+	lastEvent = ev;
+	for (const auto &x : ev->second) {
+		if (x.pitches.empty()) {
+			continue;
+		}
+		std::cout << x.position << " " << std::flush;
+	}
 }
 
 void play(sheet::DocumentPtr document, fm::midi::MidiPtr midi, MidiOutputId midiOutput, fm::Ticks begin, fm::Ticks end, const Settings &settings) {
 	auto &player = fmapp::getMidiplayer();
 	player.updateOutputMapping(fm::getConfigServer().getDevices());
-
 	auto output = findOutput(midiOutput);
 	player.setOutput(output);
 	player.midi(midi);
@@ -260,7 +276,7 @@ void play(sheet::DocumentPtr document, fm::midi::MidiPtr midi, MidiOutputId midi
 		playing = false;
 		player.panic();
 	});
-	
+
 #ifdef SHEET_USE_BOOST_TIMER
 	std::thread boost_asio_([] {
 		fmapp::BoostTimer::io_run();
@@ -272,7 +288,7 @@ void play(sheet::DocumentPtr document, fm::midi::MidiPtr midi, MidiOutputId midi
 		if (stdout_) {
 			printElapsedTime(elapsed);
 		}
-		sendFunkfeuerIfNeccessary(player, elapsed);
+		sendFunkfeuerIfNeccessary(document, elapsed);
 		std::this_thread::sleep_for( std::chrono::milliseconds(10) );
 		if (watch) {
 			if (hasChanges(document, timestamps)) {
@@ -333,6 +349,17 @@ int main(int argc, const char** argv)
 			midi_out = settings.deviceId();
 		}
 
+		if (settings.udp()) {
+			funkfeuer = std::make_unique<funk::UdpSender>(settings.getUdpHostname());
+			funkfeuer->start();
+			auto &wm = fm::getWerckmeister();
+			wm.createContextHandler([](){
+				auto context = std::make_shared<fmapp::MidiAndTimelineContext>();
+				context->intervalContainer(&timeline);
+				return context;
+			});
+		}
+
 		std::string infile = settings.getInput();
 		auto doc = sheet::createDocument(infile);
 		auto midi = sheet::processFile(doc);
@@ -349,11 +376,6 @@ int main(int argc, const char** argv)
 
 		if (begin >= end) {
 			throw std::runtime_error("invalid begin/end range");
-		}
-
-		if (settings.udp()) {
-			funkfeuer = std::make_unique<funk::UdpSender>(settings.getUdpHostname());
-			funkfeuer->start();
 		}
 
 		play(doc, midi, midi_out, begin, end, settings);
