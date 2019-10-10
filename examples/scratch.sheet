@@ -9,10 +9,8 @@
 @load "templates/drums.soca.template";
 @load "templates/bass.soca.template";
 @load "templates/rhythm.soca.template";
+@load "templates/piano.bossanova.template";
 
-@load "templates/drums.blues.template";
-@load "templates/bass.blues.template";
-@load "templates/rhythm.blues.template";
 
 device: SC1 midi 2;
 device: BC midi 2;
@@ -23,9 +21,15 @@ instrumentDef: bass   BC 0 0 34;
 instrumentDef: rhythm2   BC 2 0 21;
 instrumentDef: rhythm   BC 3 0 25;
 instrumentDef: lead     SC1 3 0 11;
+instrumentDef: piano   BC 4 0 0;
+
 instrumentConf: bass   
     voicingStrategy simple range contrabass
     volume 100
+;
+
+instrumentConf: piano   
+    volume 60
 ;
 
 instrumentConf: rhythm  
@@ -66,6 +70,7 @@ type: sheet;
         bass.soca.normal
         rhythm.soca.normal
         rhythm2.soca.bridge
+        piano.bossanova.normal
     /
 
     B7 | B7 | Fis-7 | Fis-7 |

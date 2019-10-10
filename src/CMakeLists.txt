@@ -62,6 +62,7 @@ SET (SRC_SHEET_FMAPP
     fmapp/midiplayer.cpp
     fmapp/midiProvider.cpp
     fmapp/udpSender.cpp
+    fmapp/jsonWriter.cpp
 )
 
 ## PLAYER

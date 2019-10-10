@@ -50,7 +50,9 @@ Instead of writing absolute notes, you use relative degrees. For example `I4` me
   - filesystem 
   - program_options 
   - locale
+  - asio
 - rtmidi
+- rapidjson
 
 ## Prerequisites
 - install the [boost](https://boost.org) library

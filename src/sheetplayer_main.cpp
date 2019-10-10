@@ -25,6 +25,7 @@
 #include <map>
 #include <fm/config/configServer.h>
 #include <fmapp/udpSender.hpp>
+#include "fmapp/jsonWriter.hpp"
 
 #define ARG_HELP "help"
 #define ARG_INPUT "input"
@@ -42,6 +43,7 @@ typedef std::unordered_map<fm::String, time_t> Timestamps;
 
 namespace {
 	std::unique_ptr<funk::UdpSender> funkfeuer;
+	fmapp::JsonWriter jsonWriter;
 }
 
 struct Settings {
@@ -235,7 +237,7 @@ void sendFunkfeuerIfNeccessary(const fmapp::Midiplayer &player, fm::Ticks elapse
 		return;
 	}
 	elapsed /= (double)fm::PPQ;
-	std::string data = std::to_string(elapsed);
+	std::string data = jsonWriter.write(elapsed);
 	funkfeuer->send(std::vector<fm::Byte>(data.begin(), data.end()));
 }
 
