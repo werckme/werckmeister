@@ -248,20 +248,22 @@ void sendFunkfeuerIfNeccessary(sheet::DocumentPtr document, fm::Ticks elapsed)
 		return;
 	}
 	auto elapsedQuarter = elapsed / (double)fm::PPQ;
-	std::string bff = jsonWriter.funkfeuerToJSON(elapsedQuarter);
+	auto ev = timeline.find(elapsed);
+	if (ev == lastEvent || ev == timeline.end()) {
+		std::string bff = jsonWriter.funkfeuerToJSON(elapsedQuarter);
+		funkfeuer->send(bff.data(), bff.size());
+		return;
+	}
+	lastEvent = ev;
+	std::list<fmapp::EventInfo> eventInfos;
+	for (const auto &x : ev->second) {
+		if (x.pitches.empty()) {
+			continue;
+		}
+		eventInfos.push_back(x);
+	}
+	std::string bff = jsonWriter.funkfeuerToJSON(elapsedQuarter, eventInfos);
 	funkfeuer->send(bff.data(), bff.size());
-
-	// auto ev = timeline.find(elapsed);
-	// if (ev == lastEvent || ev == timeline.end()) {
-	// 	return;
-	// }
-	// lastEvent = ev;
-	// for (const auto &x : ev->second) {
-	// 	if (x.pitches.empty()) {
-	// 		continue;
-	// 	}
-	// 	std::cout << x.position << " " << std::flush;
-	// }
 }
 
 std::string getDocumentsInfoJSON(sheet::DocumentPtr document)

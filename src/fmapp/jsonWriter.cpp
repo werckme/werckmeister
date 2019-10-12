@@ -3,6 +3,7 @@
 #include <rapidjson/writer.h>
 #include <rapidjson/stringbuffer.h>
 #include <sheet/Document.h>
+#include <fmapp/MidiAndTimeline.hpp>
 
 namespace {
     std::string toString(const rapidjson::Document &doc) 
@@ -23,6 +24,26 @@ namespace fmapp {
         rapidjson::Value elapsed;
         elapsed.SetDouble(elapsedTime);
         doc.AddMember("sheetTime", elapsed, doc.GetAllocator());
+        return toString(doc);
+    }
+
+    std::string JsonWriter::funkfeuerToJSON(fm::Ticks elapsedTime, const std::list<EventInfo> &eventInfos)
+    {
+        rapidjson::Document doc;
+        doc.SetObject();
+        rapidjson::Value elapsed;
+        elapsed.SetDouble(elapsedTime);
+        doc.AddMember("sheetTime", elapsed, doc.GetAllocator());
+        rapidjson::Value array(rapidjson::kArrayType);
+        for (const auto &eventInfo : eventInfos) {
+            rapidjson::Value object(rapidjson::kObjectType);
+            rapidjson::Value position(eventInfo.position);
+            object.AddMember("position", position, doc.GetAllocator());
+            rapidjson::Value sourceId(eventInfo.sourceId);
+            object.AddMember("sourceId", sourceId, doc.GetAllocator());
+            array.PushBack(object, doc.GetAllocator());
+        }
+        doc.AddMember("events", array, doc.GetAllocator());
         return toString(doc);
     }
 
