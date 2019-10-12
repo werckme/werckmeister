@@ -19,6 +19,7 @@ namespace sheet {
 		 * where in the source is begins this object 
 		 */
 		unsigned int sourcePositionBegin = UndefinedPosition;
+    unsigned int sourcePositionEnd = UndefinedPosition;
     };
 
     class ParserSourceInfo : public ASheetObjectWithSourceInfo {};

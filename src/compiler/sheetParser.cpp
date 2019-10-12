@@ -52,6 +52,7 @@ BOOST_FUSION_ADAPT_STRUCT(
 	(sheet::Event::Duration, duration)
 	(fm::String, stringValue)
 	(sheet::Event::Args, metaArgs)
+	(unsigned int, sourcePositionEnd)
 )
 
 namespace {
@@ -204,10 +205,14 @@ namespace sheet {
 						>> attr(Event::Note)
 						>> (pitchOrAlias_ | ("<" >> +pitchOrAlias_ >> ">"))
 						>> (durationSymbols_ | attr(Event::NoDuration))  
+						>> attr("")
+						>> attr(Event::Args())
+						>> current_pos_.current_pos
 						>> -(
 								lit("~")[at_c<EvType>(_val) = Event::TiedNote] 
 								| (lit("`")[at_c<EvType>(_val) = Event::Meta][at_c<EvStringValue>(_val) = FM_STRING("vorschlag")])
 							)
+						
 					)
 					|
 					( // DEGREE
@@ -216,6 +221,9 @@ namespace sheet {
 						>> attr(Event::Degree) 
 						>> (degree_ | ("<" >> +degree_ >> ">"))
 						>> (durationSymbols_ | attr(Event::NoDuration))  
+						>> attr("")
+						>> attr(Event::Args())
+						>> current_pos_.current_pos						
 						>> -(
 								lit("~")[at_c<EvType>(_val) = Event::TiedDegree] 
 								| (lit("`")[at_c<EvType>(_val) = Event::Meta][at_c<EvStringValue>(_val) = FM_STRING("vorschlag")])
@@ -228,7 +236,10 @@ namespace sheet {
 						>> attr(Event::Repeat) 
 						>> "x"
 						>> attr(PitchDef())
-						>> (durationSymbols_ | attr(Event::NoDuration))  
+						>> (durationSymbols_ | attr(Event::NoDuration))
+						>> attr("")
+						>> attr(Event::Args())
+						>> current_pos_.current_pos						
 						>> -(
 								lit("~")[at_c<EvType>(_val) = Event::TiedRepeat] 
 								| (lit("`")[at_c<EvType>(_val) = Event::Meta][at_c<EvStringValue>(_val) = FM_STRING("vorschlag")])
@@ -240,11 +251,13 @@ namespace sheet {
 						>> attr(sourceId_)
 						>> attr(Event::Chord)
 						>> attr(PitchDef())
-						>> attr(Event::NoDuration) 
+						>> attr(Event::NoDuration)					
 						>> lexeme[
 							char_("a-gA-G")
 							> *char_(ChordDefParser::ALLOWED_CHORD_SYMBOLS_REGEX)
 						]
+						>> attr(Event::Args())
+						>> current_pos_.current_pos	
 					)
 					|
 					( // EXPRESSIONS

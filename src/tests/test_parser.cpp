@@ -794,6 +794,17 @@ sheetInfo: xyz; \n\
 		/ channel : 1 /\n\
 		c4 d4 e4 f4 | \n\
 	}\n\
+	{\n\
+		/ soundselect: 0 0/ -- another comment\n\
+		/ channel : 1 /\n\
+		I4 II4 III4 IV4 | \n\
+	}\n\
+	{\n\
+		\"bd\"4 \"sn\"4 \"hc\"4 \"bd\"4 | \n\
+	}\n\
+	{\n\
+		C C-7 | Cmaj7 \n\
+	}\n\
 ]\n\
 ");
 	sheet::compiler::SheetDefParser parser;
@@ -817,13 +828,6 @@ sheetInfo: xyz; \n\
 	BOOST_CHECK( ch == 't' );
 	ch = text[defs.sheetInfos[0].sourcePositionBegin];
 	BOOST_CHECK( ch == 's' );	
-
-	// for(const auto &x : defs.tracks[0].voices[0].events) {
-	// 	text[x.sourcePositionBegin] = 'X';
-	// }
-	// text[defs.tracks[0].trackInfos[0].sourcePositionBegin] = 'X';
-	// text[defs.sheetInfos[0].sourcePositionBegin] = 'X';
-	// std::wcout << text << std::endl;
 }
 
 BOOST_AUTO_TEST_CASE(test_source_id)
