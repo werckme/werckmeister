@@ -43,7 +43,7 @@ namespace fmapp {
             object.AddMember("sourceId", sourceId, doc.GetAllocator());
             array.PushBack(object, doc.GetAllocator());
         }
-        doc.AddMember("events", array, doc.GetAllocator());
+        doc.AddMember("sheetEventInfos", array, doc.GetAllocator());
         return toString(doc);
     }
 
