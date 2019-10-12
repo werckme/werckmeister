@@ -39,6 +39,7 @@
 #define ARG_WATCH "watch"
 #define ARG_UDP "funkfeuer"
 #define ARG_NOSTDOUT "nostdout"
+#define ARG_SORUCES_JSON "sources"
 
 typedef int MidiOutputId;
 typedef std::unordered_map<fm::String, time_t> Timestamps;
@@ -70,6 +71,7 @@ struct Settings {
 			(ARG_WATCH, "checks the input file for changes and recompiles if any")
 			(ARG_UDP, po::value<std::string>(), "activates an udp sender, which sends sheet info periodically to to given host")
 			(ARG_NOSTDOUT, "no output on stdout")
+			(ARG_SORUCES_JSON, "prints the used sources as json")
 			;
 		po::positional_options_description p;
 		p.add(ARG_INPUT, -1);
@@ -137,6 +139,10 @@ struct Settings {
 
 	bool nostdout() const {
 		return !!variables.count(ARG_NOSTDOUT);
+	}
+
+	bool sourcesJSON() const {
+		return !!variables.count(ARG_SORUCES_JSON);
 	}
 
 };
@@ -242,23 +248,28 @@ void sendFunkfeuerIfNeccessary(sheet::DocumentPtr document, fm::Ticks elapsed)
 		return;
 	}
 	auto elapsedQuarter = elapsed / (double)fm::PPQ;
-	std::string data = jsonWriter.write(elapsedQuarter);
-	funkfeuer->send(std::vector<fm::Byte>(data.begin(), data.end()));
+	std::string bff = jsonWriter.funkfeuerToJSON(elapsedQuarter);
+	funkfeuer->send(bff.data(), bff.size());
 
-	auto ev = timeline.find(elapsed);
-	if (ev == lastEvent || ev == timeline.end()) {
-		return;
-	}
-	lastEvent = ev;
-	for (const auto &x : ev->second) {
-		if (x.pitches.empty()) {
-			continue;
-		}
-		std::cout << x.position << " " << std::flush;
-	}
+	// auto ev = timeline.find(elapsed);
+	// if (ev == lastEvent || ev == timeline.end()) {
+	// 	return;
+	// }
+	// lastEvent = ev;
+	// for (const auto &x : ev->second) {
+	// 	if (x.pitches.empty()) {
+	// 		continue;
+	// 	}
+	// 	std::cout << x.position << " " << std::flush;
+	// }
 }
 
-void play(sheet::DocumentPtr document, fm::midi::MidiPtr midi, MidiOutputId midiOutput, fm::Ticks begin, fm::Ticks end, const Settings &settings) {
+std::string getDocumentsInfoJSON(sheet::DocumentPtr document)
+{
+	return jsonWriter.documentInfosToJSON(*document);
+}
+void play(sheet::DocumentPtr document, fm::midi::MidiPtr midi, MidiOutputId midiOutput, fm::Ticks begin, fm::Ticks end, const Settings &settings) 
+{
 	auto &player = fmapp::getMidiplayer();
 	player.updateOutputMapping(fm::getConfigServer().getDevices());
 	auto output = findOutput(midiOutput);
@@ -331,25 +342,29 @@ int main(int argc, const char** argv)
 	try {
 		Settings settings(argc, argv);
 				
-		if (settings.help()) {
+		if (settings.help()) 
+		{
 			std::cout << settings.optionsDescription << "\n";
 			return 1;
 		}
 		
-		if (settings.listDevices()) {
+		if (settings.listDevices()) 
+		{
 			return listDevices();
 		}
 
-		if (!settings.input()) {
+		if (!settings.input()) 
+		{
 			throw std::runtime_error("missing input file");
 		}
 
 		int midi_out = 0;
-		if (settings.device()) {
+		if (settings.device()) 
+		{
 			midi_out = settings.deviceId();
 		}
-
-		if (settings.udp()) {
+		if (settings.udp()) 
+		{
 			funkfeuer = std::make_unique<funk::UdpSender>(settings.getUdpHostname());
 			funkfeuer->start();
 			auto &wm = fm::getWerckmeister();
@@ -366,20 +381,28 @@ int main(int argc, const char** argv)
 		fm::Ticks begin = 0;
 
 		auto end = midi->duration();
-		if (settings.begin()) {
+		if (settings.begin()) 
+		{
 			begin = fm::Ticks((double)fm::PPQ * settings.getBegin());
 		}
 
-		if (settings.end()) {
+		if (settings.end()) 
+		{
 			end = fm::Ticks((double)fm::PPQ * settings.getEnd());
 		}
 
-		if (begin >= end) {
+		if (begin >= end) 
+		{
 			throw std::runtime_error("invalid begin/end range");
 		}
-
-		play(doc, midi, midi_out, begin, end, settings);
-
+		if (settings.sourcesJSON()) 
+		{
+			std:: cout << getDocumentsInfoJSON(doc) << std::endl;
+		} 
+		else 
+		{
+			play(doc, midi, midi_out, begin, end, settings);
+		}
 		if (funkfeuer) {
 			funkfeuer->stop();
 			funkfeuer.reset();

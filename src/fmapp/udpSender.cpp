@@ -22,22 +22,14 @@ namespace funk {
 	{
 		_socket->close();
 	}
-	void UdpSender::send(const Bytes &bytes) 
+	void UdpSender::send(const char *bytes, size_t length) 
 	{
 		if (!_socket || !_socket->is_open()) {
 			throw std::runtime_error("tried to send via a closed socked");
 		}
 		namespace pc = boost::asio::placeholders;
-		BytesPtr message(new Bytes(bytes));
-		_socket->async_send_to(boost::asio::buffer(*message)
-			, _endpoint
-			, boost::bind(&UdpSender::onSend, this, pc::error, message, pc::bytes_transferred)
-		);
-	}
-	void UdpSender::onSend(const ErrorCode &error, BytesPtr bytes, std::size_t numBytes)
-	{
-		// bytes container will be released after exiting scope
-	}
+		_socket->send_to(boost::asio::buffer(bytes, length), _endpoint);
+	}	
 	std::tuple<UdpSender::Host, UdpSender::Port> 
 	UdpSender::getHostInfo(const std::string &str) const
 	{

@@ -14,16 +14,14 @@ namespace funk {
 	 */ 
 	class UdpSender : boost::noncopyable {
 		public:
-			typedef std::vector<fm::Byte> Bytes;
 			void start();
 			void stop();
-			void send(const Bytes &bytes);
+			void send(const char *bytes, size_t length);
 		private:
 			typedef std::string Host;
 			typedef std::string Port;
 			std::tuple<Host, Port> getHostInfo(const std::string &str) const;
 			typedef boost::asio::ip::udp::socket Socket;
-			typedef std::shared_ptr<Bytes> BytesPtr;
 			typedef std::unique_ptr<Socket> SocketPtr;
 			typedef boost::asio::ip::udp::endpoint Endpoint;
 			typedef std::unique_ptr<Endpoint> EndpointPtr;
@@ -33,7 +31,6 @@ namespace funk {
 			SocketPtr _socket;
 			Endpoint _endpoint;
 		protected:
-			void onSend(const ErrorCode &error, BytesPtr bytes, std::size_t numBytes);
 		public:
 			UdpSender(const std::string &host);
 	};

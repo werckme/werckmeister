@@ -5,6 +5,10 @@
 #include <forward.hpp>
 #include <memory>
 
+namespace sheet {
+    class Document;
+}
+
 namespace fmapp {
 
     /**
@@ -15,7 +19,8 @@ namespace fmapp {
             JsonWriter() = default;
             JsonWriter(const JsonWriter&) = delete;
             JsonWriter& operator= (const JsonWriter&) = delete;
-            std::string write(fm::Ticks elapsedTime);
+            std::string funkfeuerToJSON(fm::Ticks elapsedTime);
+            std::string documentInfosToJSON(const sheet::Document &document);
     };
 }
 
