@@ -23,8 +23,6 @@ namespace fmapp {
         rapidjson::Value elapsed;
         elapsed.SetDouble(elapsedTime);
         doc.AddMember("sheetTime", elapsed, doc.GetAllocator());
-        rapidjson::Value type("funkfeuer");
-        doc.AddMember("type", type, doc.GetAllocator());
         return toString(doc);
     }
 
@@ -33,8 +31,6 @@ namespace fmapp {
         rapidjson::Document doc;
         doc.SetObject();
         rapidjson::Value array(rapidjson::kArrayType);
-        rapidjson::Value type("documentInfos");
-        doc.AddMember("type", type, doc.GetAllocator());
         for (const auto &source : document.sources.left) {
             rapidjson::Value object(rapidjson::kObjectType);
             rapidjson::Value sourceId(source.first);

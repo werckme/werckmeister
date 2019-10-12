@@ -38,7 +38,7 @@
 #define ARG_END "end"
 #define ARG_WATCH "watch"
 #define ARG_UDP "funkfeuer"
-#define ARG_NOSTDOUT "nostdout"
+#define ARG_NOSTDOUT "notime"
 #define ARG_SORUCES_JSON "sources"
 
 typedef int MidiOutputId;
@@ -70,7 +70,7 @@ struct Settings {
 			(ARG_MIDI_OUTPUT, po::value<MidiOutputId>(), "select midi device (default = 0)")
 			(ARG_WATCH, "checks the input file for changes and recompiles if any")
 			(ARG_UDP, po::value<std::string>(), "activates an udp sender, which sends sheet info periodically to to given host")
-			(ARG_NOSTDOUT, "no output on stdout")
+			(ARG_NOSTDOUT, "disable printing time on stdout")
 			(ARG_SORUCES_JSON, "prints the used sources as json")
 			;
 		po::positional_options_description p;
