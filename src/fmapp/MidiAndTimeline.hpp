@@ -9,6 +9,7 @@
 #include <vector>
 #include <memory>
 #include <boost/icl/interval_map.hpp>
+#include <sheet/ASheetObject.hpp>
 
 namespace fmapp {
     /*
@@ -38,7 +39,8 @@ namespace fmapp {
 
     typedef int SourceId;
     struct EventInfo {
-        int position = -1;
+        int beginPosition = -1;
+        int endPosition = -1;
         SourceId sourceId = -1;
         int eventNr = -1;
         int row = -1;
@@ -46,8 +48,8 @@ namespace fmapp {
         std::vector<int> pitches;
         int channel = -1;
         int instrumentId = -1;
-        bool operator<(const EventInfo &b) const { return this->position < b.position;  }
-        bool operator==(const EventInfo &b) const { return this->position == b.position;  }
+        bool operator<(const EventInfo &b) const { return this->beginPosition < b.beginPosition;  }
+        bool operator==(const EventInfo &b) const { return this->beginPosition == b.beginPosition;  }
     };
 
     typedef std::vector<EventInfo> EventInfos;
@@ -80,7 +82,10 @@ namespace fmapp {
         this->currentEventInfo_ = std::make_shared<EventInfo>();
         Renderer::addEvent(ev);
         auto evEndPos = meta->position;
-		currentEventInfo_->position = ev.sourcePositionBegin;
+		currentEventInfo_->beginPosition = ev.sourcePositionBegin;
+        if (ev.sourcePositionEnd != sheet::ASheetObjectWithSourceInfo::UndefinedPosition) {
+            currentEventInfo_->endPosition = ev.sourcePositionEnd;
+        }
 		currentEventInfo_->sourceId = ev.sourceId;
 		currentEventInfo_->eventNr = intervalContainer_->size();
         TSet value = { *currentEventInfo_ };

@@ -37,8 +37,12 @@ namespace fmapp {
         rapidjson::Value array(rapidjson::kArrayType);
         for (const auto &eventInfo : eventInfos) {
             rapidjson::Value object(rapidjson::kObjectType);
-            rapidjson::Value position(eventInfo.position);
-            object.AddMember("position", position, doc.GetAllocator());
+            rapidjson::Value beginPosition(eventInfo.beginPosition);
+            object.AddMember("beginPosition", beginPosition, doc.GetAllocator());
+            if (eventInfo.endPosition > 0) {
+                rapidjson::Value endPosition(eventInfo.endPosition);
+                object.AddMember("endPosition", endPosition, doc.GetAllocator());
+            }
             rapidjson::Value sourceId(eventInfo.sourceId);
             object.AddMember("sourceId", sourceId, doc.GetAllocator());
             array.PushBack(object, doc.GetAllocator());
