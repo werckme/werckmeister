@@ -775,6 +775,8 @@ BOOST_AUTO_TEST_CASE(test_tied_degree_failed)
 	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[3], sheet::Event::EOB));
 }
 
+
+
 BOOST_AUTO_TEST_CASE(test_event_positions)
 {
 	using namespace fm;
@@ -794,40 +796,80 @@ sheetInfo: xyz; \n\
 		/ channel : 1 /\n\
 		c4 d4 e4 f4 | \n\
 	}\n\
-	{\n\
-		/ soundselect: 0 0/ -- another comment\n\
-		/ channel : 1 /\n\
-		I4 II4 III4 IV4 | \n\
-	}\n\
-	{\n\
-		\"bd\"4 \"sn\"4 \"hc\"4 \"bd\"4 | \n\
-	}\n\
-	{\n\
-		C C-7 | Cmaj7 \n\
-	}\n\
 ]\n\
 ");
 	sheet::compiler::SheetDefParser parser;
 	auto defs = parser.parse(text);
+
+	// VOICE 1
 	int idx = 0;
 	auto ch = text[defs.tracks[0].voices[0].events[idx++].sourcePositionBegin];
 	BOOST_CHECK( ch == '/' );
 	ch = text[defs.tracks[0].voices[0].events[idx++].sourcePositionBegin];
 	BOOST_CHECK( ch == '/' );
-	ch = text[defs.tracks[0].voices[0].events[idx++].sourcePositionBegin];
-	BOOST_CHECK( ch == 'c' );
-	ch = text[defs.tracks[0].voices[0].events[idx++].sourcePositionBegin];
+	auto event = defs.tracks[0].voices[0].events[idx++];
+	BOOST_CHECK( text[event.sourcePositionBegin] == 'c' );
+
+	event = defs.tracks[0].voices[0].events[idx++];
+	ch = text[event.sourcePositionBegin];
 	BOOST_CHECK( ch == 'd' );
-	ch = text[defs.tracks[0].voices[0].events[idx++].sourcePositionBegin];
+
+	event = defs.tracks[0].voices[0].events[idx++];
+	ch = text[event.sourcePositionBegin];
 	BOOST_CHECK( ch == 'e' );
-	ch = text[defs.tracks[0].voices[0].events[idx++].sourcePositionBegin];
+
+	event = defs.tracks[0].voices[0].events[idx++];
+	ch = text[event.sourcePositionBegin];
 	BOOST_CHECK( ch == 'f' );
+
+	// TRACK & DOCUMENT
 	ch = text[defs.tracks[0].voices[0].events[idx++].sourcePositionBegin];
 	BOOST_CHECK( ch == '|' );	
 	ch = text[defs.tracks[0].trackInfos[0].sourcePositionBegin];
 	BOOST_CHECK( ch == 't' );
 	ch = text[defs.sheetInfos[0].sourcePositionBegin];
 	BOOST_CHECK( ch == 's' );	
+}
+
+BOOST_AUTO_TEST_CASE(test_event_positions2)
+{
+	using namespace fm;
+	using sheet::PitchDef;
+	fm::String text = FM_STRING("\
+\n\
+\n\
+sheetInfo: xyz; \n\
+[\n\
+	-- a comment \n\
+	-- a comment \n\
+	trackInfo: xyz; \n\
+\n\
+	-- a comment \n\
+	{\n\
+		c4 d4 r16 f4 \"bd\"32 x xx I <c d e>8 <I II II>16 \n\
+	}\n\
+]\n\
+");
+	sheet::compiler::SheetDefParser parser;
+	auto defs = parser.parse(text);
+
+	// VOICE 2
+	size_t idx = 0;
+	auto event = defs.tracks[0].voices[0].events[idx++];
+	BOOST_CHECK( text[event.sourcePositionBegin] == 'c' );
+	//BOOST_CHECK( (event.sourcePositionEnd - event.sourcePositionBegin) == 3 );
+	BOOST_CHECK( text[event.sourcePositionEnd] == 'd' );
+
+	event = defs.tracks[0].voices[0].events[idx++];
+	//BOOST_CHECK( text[event.sourcePositionBegin] == 'I' );
+	//BOOST_CHECK( (event.sourcePositionEnd - event.sourcePositionBegin) == 3 );
+	//BOOST_CHECK( text[event.sourcePositionEnd] == 'V' );
+
+	event = defs.tracks[0].voices[0].events[idx++];
+	BOOST_CHECK( text[event.sourcePositionBegin] == 'r' );
+	//BOOST_CHECK( (event.sourcePositionEnd - event.sourcePositionBegin) == 3 );
+	BOOST_CHECK( text[event.sourcePositionEnd] == 'f' );
+
 }
 
 BOOST_AUTO_TEST_CASE(test_source_id)

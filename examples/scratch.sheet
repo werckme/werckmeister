@@ -15,7 +15,7 @@
 device: SC1 midi 2;
 device: BC midi 2;
 
-tempo: 20;
+tempo: 100;
 instrumentDef: drums   BC 9 0 0;
 instrumentDef: bass   BC 0 0 34;
 instrumentDef: rhythm2   BC 2 0 21;
