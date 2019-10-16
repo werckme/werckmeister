@@ -289,6 +289,9 @@ namespace sheet {
 						>> attr(Event::Rest) 
 						>> attr(PitchDef()) 
 						>> (durationSymbols_ | attr(Event::NoDuration)))
+						>> attr("")
+						>> attr(Event::Args())
+						>> current_pos_.current_pos	
 					| 
 					( // END OF BAR
 						current_pos_.current_pos 
