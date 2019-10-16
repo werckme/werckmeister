@@ -4,7 +4,7 @@
 #include <fm/common.hpp>
 #include <forward.hpp>
 #include <memory>
-#include <list>
+#include <vector>
 
 namespace sheet {
     class Document;
@@ -21,7 +21,7 @@ namespace fmapp {
             JsonWriter(const JsonWriter&) = delete;
             JsonWriter& operator= (const JsonWriter&) = delete;
             std::string funkfeuerToJSON(fm::Ticks elapsedTime);
-            std::string funkfeuerToJSON(fm::Ticks elapsedTime, const std::list<EventInfo> &eventInfos);
+            std::string funkfeuerToJSON(fm::Ticks elapsedTime, const std::vector<EventInfo> &eventInfos);
             std::string documentInfosToJSON(const sheet::Document &document);
     };
 }

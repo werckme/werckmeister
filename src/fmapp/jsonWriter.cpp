@@ -27,7 +27,7 @@ namespace fmapp {
         return toString(doc);
     }
 
-    std::string JsonWriter::funkfeuerToJSON(fm::Ticks elapsedTime, const std::list<EventInfo> &eventInfos)
+    std::string JsonWriter::funkfeuerToJSON(fm::Ticks elapsedTime, const std::vector<EventInfo> &eventInfos)
     {
         rapidjson::Document doc;
         doc.SetObject();

@@ -41,10 +41,8 @@ namespace fmapp {
     struct EventInfo {
         int beginPosition = -1;
         int endPosition = -1;
-        SourceId sourceId = -1;
+        sheet::Event::SourceId sourceId = sheet::Event::UndefinedSource;
         int eventNr = -1;
-        int row = -1;
-        int column = -1;
         std::vector<int> pitches;
         int channel = -1;
         int instrumentId = -1;

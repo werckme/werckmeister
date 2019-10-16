@@ -28,6 +28,7 @@
 #include "fmapp/jsonWriter.hpp"
 #include "fmapp/MidiAndTimeline.hpp"
 #include <set>
+#include <sheet/tools.h>
 
 #define ARG_HELP "help"
 #define ARG_INPUT "input"
@@ -43,6 +44,7 @@
 
 typedef int MidiOutputId;
 typedef std::unordered_map<fm::String, time_t> Timestamps;
+typedef std::vector<fmapp::EventInfo> EventInfos;
 
 namespace {
 	std::unique_ptr<funk::UdpSender> funkfeuer;
@@ -255,7 +257,8 @@ void sendFunkfeuerIfNeccessary(sheet::DocumentPtr document, fm::Ticks elapsed)
 		return;
 	}
 	lastEvent = ev;
-	std::list<fmapp::EventInfo> eventInfos;
+	EventInfos eventInfos;
+	eventInfos.reserve(ev->second.size());
 	for (const auto &x : ev->second) {
 		if (x.pitches.empty()) {
 			continue;
