@@ -63,7 +63,8 @@ namespace {
 		EvPitches,
 		EvDuration,
 		EvStringValue,
-		EvMetaArgs
+		EvMetaArgs,
+		EvSourcePosEnd
 	};
 }
 
@@ -175,6 +176,7 @@ namespace sheet {
 				{
 					using qi::int_;
 					using qi::lit;
+					using qi::space;
 					using qi::_val;
 					using qi::double_;
 					using qi::lexeme;
@@ -212,7 +214,6 @@ namespace sheet {
 								lit("~")[at_c<EvType>(_val) = Event::TiedNote] 
 								| (lit("`")[at_c<EvType>(_val) = Event::Meta][at_c<EvStringValue>(_val) = FM_STRING("vorschlag")])
 							)
-						
 					)
 					|
 					( // DEGREE
@@ -288,10 +289,11 @@ namespace sheet {
 						>> "r" 
 						>> attr(Event::Rest) 
 						>> attr(PitchDef()) 
-						>> (durationSymbols_ | attr(Event::NoDuration)))
+						>> (durationSymbols_ | attr(Event::NoDuration))
 						>> attr("")
 						>> attr(Event::Args())
 						>> current_pos_.current_pos	
+					)
 					| 
 					( // END OF BAR
 						current_pos_.current_pos 
