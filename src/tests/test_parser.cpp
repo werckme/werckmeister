@@ -846,7 +846,7 @@ sheetInfo: xyz; \n\
 \n\
 	-- a comment \n\
 	{\n\
-		c4 d4 r16 f4 \"bd\"32 x xx I <c d e>8 <I II II>16 \n\
+		c4 d4 r r f4 \"bd\"32 x xx I <c d e>8 <I II II>16 \n\
 	}\n\
 ]\n\
 ");
@@ -868,7 +868,7 @@ sheetInfo: xyz; \n\
 	event = defs.tracks[0].voices[0].events[idx++];
 	BOOST_CHECK( text[event.sourcePositionBegin] == 'r' );
 	//BOOST_CHECK( (event.sourcePositionEnd - event.sourcePositionBegin) == 3 );
-	BOOST_CHECK( text[event.sourcePositionEnd] == 'f' );
+	BOOST_CHECK( text[event.sourcePositionEnd] == 'r' );
 
 }
 

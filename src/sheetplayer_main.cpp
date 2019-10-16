@@ -260,9 +260,6 @@ void sendFunkfeuerIfNeccessary(sheet::DocumentPtr document, fm::Ticks elapsed)
 	EventInfos eventInfos;
 	eventInfos.reserve(ev->second.size());
 	for (const auto &x : ev->second) {
-		if (x.pitches.empty()) {
-			continue;
-		}
 		eventInfos.push_back(x);
 	}
 	std::string bff = jsonWriter.funkfeuerToJSON(elapsedQuarter, eventInfos);
