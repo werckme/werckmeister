@@ -74,7 +74,6 @@ namespace fmapp {
             Renderer::addEvent(ev);
             return;
         }
-
         auto meta = voiceMetaData();
         auto evStartPos = meta->position;
         this->currentEventInfo_ = std::make_shared<EventInfo>();

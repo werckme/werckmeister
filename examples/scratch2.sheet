@@ -18,8 +18,31 @@ instrumentConf: organ
 ;
 
 [
+type: template;
 instrument: organ;
+name: x;
 {
-    c d e f | g a b c |
+    I1 | I1 |
+}
+]
+
+[
+type: template;
+instrument: organ;
+name: y;
+{
+    <I II III IV V VI VII>1 | <I II III IV V VI VII>1 |
+}
+]
+
+[
+type: sheet;
+{
+    /template: x y/
+    C | F |
+    /template: x y/
+    C | F |
+    C | F |
+   
 }
 ]
