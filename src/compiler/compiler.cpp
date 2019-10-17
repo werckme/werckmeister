@@ -99,6 +99,23 @@ namespace sheet {
 		}
 
 		namespace {
+			void consumeChords(Track* sheetTrack, SheetEventRenderer *sheetEventRenderer, AContext *ctx) 
+			{
+				using namespace fm;
+				auto voice = sheetTrack->voices.begin(); 
+				std::list<Event*> barEvents;
+				ctx->setChordTrackTarget();
+				auto voiceMetaData = ctx->voiceMetaData();
+				// since we process the chord track a second time, we reset all vital values
+				voiceMetaData->barPosition = 0;
+				voiceMetaData->position =  0;
+				voiceMetaData->tempoFactor = 1;
+				voiceMetaData->signatureNumerator = 4;
+				voiceMetaData->signatureDenominator = 4;
+				for (const auto &ev : voice->events) {
+					sheetEventRenderer->addEvent(ev);
+				}
+			}
 			void preprocessSheetTrack(Track* sheetTrack, AContext *ctx) {
 				using namespace fm;
 				auto voice = sheetTrack->voices.begin(); 
@@ -119,7 +136,7 @@ namespace sheet {
 				while (it != end) {
 					if (it->type == Event::Meta) {
 						ctx->setMeta(*it);
-					}
+					}					
 					if (it->type == Event::EOB) {
 						processEob();
 					}
@@ -160,6 +177,7 @@ namespace sheet {
 				return;
 			}
 			preprocessSheetTrack(sheetTrack, ctx.get());
+			consumeChords(sheetTrack, sheetEventRenderer().get(), ctx.get());
 			SheetTemplateRenderer sheetTemplateRenderer(ctx.get(), sheetEventRenderer().get());
 			sheetTemplateRenderer.render(sheetTrack);
 		}

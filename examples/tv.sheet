@@ -32,7 +32,7 @@ instrumentConf: rhythm
     voicingStrategy guitar range baritone
     mod guitarStroke 
     pan 40
-    volume 75;   
+    volume 80;   
 
 instrumentConf: bass
     voicingStrategy simple range contrabass

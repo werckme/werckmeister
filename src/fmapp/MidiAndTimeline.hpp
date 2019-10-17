@@ -75,10 +75,10 @@ namespace fmapp {
             return;
         }
         auto meta = voiceMetaData();
-        auto evStartPos = meta->position;
+        auto evStartPos = meta->position * meta->tempoFactor;
         this->currentEventInfo_ = std::make_shared<EventInfo>();
         Renderer::addEvent(ev);
-        auto evEndPos = meta->position;
+        auto evEndPos = meta->position * meta->tempoFactor;
 		currentEventInfo_->beginPosition = ev.sourcePositionBegin;
         if (ev.sourcePositionEnd != sheet::ASheetObjectWithSourceInfo::UndefinedPosition) {
             currentEventInfo_->endPosition = ev.sourcePositionEnd;

@@ -201,21 +201,21 @@ namespace sheet {
 				}
 			}
 
-			void __handleChord(AContext *ctx,
-			const Event &event, 
+			void __handleChordMeta(AContext *ctx,
+			const Event &metaEvent, 
 			SheetEventRenderer *sheetEventRenderer,
 			DegreeEventServer &eventServer)
 			{
-				if (event.stringValue == SHEET_META__SHEET_TEMPLATE_POSITION) {
-					__handleTemplatePositionCmd(event, eventServer);
+				if (metaEvent.stringValue == SHEET_META__SHEET_TEMPLATE_POSITION) {
+					__handleTemplatePositionCmd(metaEvent, eventServer);
 					return;
 				}
 				auto voiceId = ctx->voice();
 				auto trackId = ctx->track();
 				ctx->setChordTrackTarget();
-				sheetEventRenderer->addEvent(event);
+				sheetEventRenderer->addEvent(metaEvent);
 				ctx->setTarget(trackId, voiceId);
-			}			
+			}		
 
 			typedef std::list<const Event*> Chords;
 			fm::Ticks __renderOneBar(AContext *ctx, 
@@ -230,8 +230,10 @@ namespace sheet {
 					if (chord->type == Event::Rest) {
 						ctx->seek(chord->duration);
 						continue;
-					} else {
-						__handleChord(ctx, *chord, sheetEventRenderer, eventServer);
+					}
+					if (chord->type == Event::Meta) {
+						__handleChordMeta(ctx, *chord, sheetEventRenderer, eventServer);
+						continue;
 					}
 					fm::Ticks ticksToWrite = chord->duration;
 					while(ticksToWrite > 1.0_N128) {

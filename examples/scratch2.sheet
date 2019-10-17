@@ -40,7 +40,7 @@ type: sheet;
 {
     /template: x y/
     C | F |
-    /template: x y/
+    --/template: x y/
     C | F |
     C | F |
    

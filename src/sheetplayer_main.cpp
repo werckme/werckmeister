@@ -41,6 +41,7 @@
 #define ARG_UDP "funkfeuer"
 #define ARG_NOSTDOUT "notime"
 #define ARG_SORUCES_JSON "sources"
+#define ARGS_PRINT_EVENTINFOS_JSON "print-events"
 
 typedef int MidiOutputId;
 typedef std::unordered_map<fm::String, time_t> Timestamps;
@@ -74,6 +75,7 @@ struct Settings {
 			(ARG_UDP, po::value<std::string>(), "activates an udp sender, which sends sheet info periodically to to given host")
 			(ARG_NOSTDOUT, "disable printing time on stdout")
 			(ARG_SORUCES_JSON, "prints the used sources as json")
+			(ARGS_PRINT_EVENTINFOS_JSON, "prints the sheet events as json")
 			;
 		po::positional_options_description p;
 		p.add(ARG_INPUT, -1);
@@ -145,6 +147,10 @@ struct Settings {
 
 	bool sourcesJSON() const {
 		return !!variables.count(ARG_SORUCES_JSON);
+	}
+
+	bool eventInfosJSON() const {
+		return !!variables.count(ARGS_PRINT_EVENTINFOS_JSON);
 	}
 
 };
@@ -266,6 +272,23 @@ void sendFunkfeuerIfNeccessary(sheet::DocumentPtr document, fm::Ticks elapsed)
 	funkfeuer->send(bff.data(), bff.size());
 }
 
+std::string eventInfosAsJson(sheet::DocumentPtr document) 
+{
+	std::stringstream ss;
+	ss << "[" << std::endl;
+	for (const auto &timelineEntry : timeline) {
+		EventInfos eventInfos;
+		fm::Ticks eventsBeginTime = timelineEntry.first.lower() / (double)fm::PPQ;
+		eventInfos.reserve(timelineEntry.second.size());
+		for (const auto &x : timelineEntry.second) {
+			eventInfos.push_back(x);
+		}
+		ss << jsonWriter.funkfeuerToJSON(eventsBeginTime, eventInfos) << ", ";
+	}
+	ss << "]";
+	return ss.str();
+}
+
 std::string getDocumentsInfoJSON(sheet::DocumentPtr document)
 {
 	return jsonWriter.documentInfosToJSON(*document);
@@ -343,7 +366,7 @@ int main(int argc, const char** argv)
 {
 	try {
 		Settings settings(argc, argv);
-				
+		bool needsTimeline = settings.udp() || settings.eventInfosJSON();
 		if (settings.help()) 
 		{
 			std::cout << settings.optionsDescription << "\n";
@@ -369,6 +392,8 @@ int main(int argc, const char** argv)
 		{
 			funkfeuer = std::make_unique<funk::UdpSender>(settings.getUdpHostname());
 			funkfeuer->start();
+		}
+		if (needsTimeline) {
 			auto &wm = fm::getWerckmeister();
 			wm.createContextHandler([](){
 				auto context = std::make_shared<fmapp::MidiAndTimelineContext>();
@@ -400,7 +425,11 @@ int main(int argc, const char** argv)
 		if (settings.sourcesJSON()) 
 		{
 			std:: cout << getDocumentsInfoJSON(doc) << std::endl;
-		} 
+		}
+		else if(settings.eventInfosJSON())
+		{
+			std::cout << eventInfosAsJson(doc) << std::endl;
+		}
 		else 
 		{
 			play(doc, midi, midi_out, begin, end, settings);
