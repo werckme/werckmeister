@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 2.8.12.1)
 execute_process(COMMAND git --work-tree=. log --pretty=format:%h -n 1
               OUTPUT_VARIABLE GIT_VERSION)
 # Project name.
-project(sheet)
+project(werckmeister)
 
 # PROJECT CONFIG
 set(FM_CHARSET "ISO-8859-1")
