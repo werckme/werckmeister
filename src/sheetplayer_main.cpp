@@ -51,6 +51,8 @@ namespace {
 	std::unique_ptr<funk::UdpSender> funkfeuer;
 	fmapp::JsonWriter jsonWriter;
 	fmapp::EventTimeline timeline;
+	fmapp::EventTimeline::const_iterator lastTimelineEvent = timeline.end();
+
 }
 
 struct Settings {
@@ -248,7 +250,6 @@ void updatePlayer(fmapp::Midiplayer &player, const std::string &inputfile)
 
 }
 
-fmapp::EventTimeline::const_iterator lastEvent;
 
 void sendFunkfeuerIfNeccessary(sheet::DocumentPtr document, fm::Ticks elapsed)
 {
@@ -257,12 +258,12 @@ void sendFunkfeuerIfNeccessary(sheet::DocumentPtr document, fm::Ticks elapsed)
 	}
 	auto elapsedQuarter = elapsed / (double)fm::PPQ;
 	auto ev = timeline.find(elapsed);
-	if (ev == lastEvent || ev == timeline.end()) {
+	if (ev == lastTimelineEvent || ev == timeline.end()) {
 		std::string bff = jsonWriter.funkfeuerToJSON(elapsedQuarter);
 		funkfeuer->send(bff.data(), bff.size());
 		return;
 	}
-	lastEvent = ev;
+	lastTimelineEvent = ev;
 	EventInfos eventInfos;
 	eventInfos.reserve(ev->second.size());
 	for (const auto &x : ev->second) {
