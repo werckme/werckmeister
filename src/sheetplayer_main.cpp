@@ -49,6 +49,8 @@
 #define WIN32_SIGINT_WORKAROUND_FILE "keepalive"
 #endif
 
+#define UPDATE_THREAD_SLEEPTIME 70
+
 typedef int MidiOutputId;
 typedef std::unordered_map<fm::String, time_t> Timestamps;
 typedef std::vector<fmapp::EventInfo> EventInfos;
@@ -370,7 +372,7 @@ void play(sheet::DocumentPtr document, fm::midi::MidiPtr midi, MidiOutputId midi
 			printElapsedTime(elapsed);
 		}
 		sendFunkfeuerIfNeccessary(document, elapsed);
-		std::this_thread::sleep_for( std::chrono::milliseconds(10) );
+		std::this_thread::sleep_for( std::chrono::milliseconds(UPDATE_THREAD_SLEEPTIME) );
 #ifdef SIGINT_WORKAROUND
 		if (settings.sigintWorkaround() && !checkSigIntWorkaround()) {
 			playing = false;
