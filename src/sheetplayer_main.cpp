@@ -44,7 +44,7 @@
 #define ARGS_PRINT_EVENTINFOS_JSON "print-events"
 #define ARGS_WIN32_SIGINT_WORKAROUND "win32-sigint-workaround"
 
-#ifdef WIN32ss
+#ifdef WIN32
 #define SIGINT_WORKAROUND 
 #define WIN32_SIGINT_WORKAROUND_FILE "keepalive"
 #endif
