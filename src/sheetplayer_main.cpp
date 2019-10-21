@@ -42,6 +42,12 @@
 #define ARG_NOSTDOUT "notime"
 #define ARG_SORUCES_JSON "sources"
 #define ARGS_PRINT_EVENTINFOS_JSON "print-events"
+#define ARGS_WIN32_SIGINT_WORKAROUND "win32-sigint-workaround"
+
+#ifdef WIN32ss
+#define SIGINT_WORKAROUND 
+#define WIN32_SIGINT_WORKAROUND_FILE "keepalive"
+#endif
 
 typedef int MidiOutputId;
 typedef std::unordered_map<fm::String, time_t> Timestamps;
@@ -54,6 +60,29 @@ namespace {
 	fmapp::EventTimeline::const_iterator lastTimelineEvent = timeline.end();
 
 }
+
+// https://github.com/SambaGodschynski/werckmeister/issues/101
+#ifdef SIGINT_WORKAROUND
+namespace {
+	void beginSigIntWorkaround()
+	{
+		std::fstream fs(WIN32_SIGINT_WORKAROUND_FILE, std::ios::out | std::ios::trunc);
+	}
+
+	bool checkSigIntWorkaround()
+	{
+		return boost::filesystem::exists(WIN32_SIGINT_WORKAROUND_FILE);
+	}
+
+	void endSigIntWorkaround()
+	{
+		if (!checkSigIntWorkaround()) {
+			return;
+		}
+		boost::filesystem::remove(WIN32_SIGINT_WORKAROUND_FILE);
+	}
+}
+#endif
 
 struct Settings {
 	typedef boost::program_options::variables_map Variables;
@@ -78,6 +107,11 @@ struct Settings {
 			(ARG_NOSTDOUT, "disable printing time on stdout")
 			(ARG_SORUCES_JSON, "prints the used sources as json")
 			(ARGS_PRINT_EVENTINFOS_JSON, "prints the sheet events as json")
+#ifdef SIGINT_WORKAROUND
+			(ARGS_WIN32_SIGINT_WORKAROUND, "uses a filebased workaround for the lack of a proper SIGINT signal handling in windows. \
+(a file 'keepalive' will be created before the player starts. If the file will be deleted while the player is running, the player will be stopped.)")
+
+#endif
 			;
 		po::positional_options_description p;
 		p.add(ARG_INPUT, -1);
@@ -153,6 +187,10 @@ struct Settings {
 
 	bool eventInfosJSON() const {
 		return !!variables.count(ARGS_PRINT_EVENTINFOS_JSON);
+	}
+
+	bool sigintWorkaround() const {
+		return !!variables.count(ARGS_WIN32_SIGINT_WORKAROUND);
 	}
 
 };
@@ -314,6 +352,12 @@ void play(sheet::DocumentPtr document, fm::midi::MidiPtr midi, MidiOutputId midi
 		player.panic();
 	});
 
+#ifdef SIGINT_WORKAROUND
+	if (settings.sigintWorkaround()) {
+		beginSigIntWorkaround();
+	}
+#endif
+
 #ifdef SHEET_USE_BOOST_TIMER
 	std::thread boost_asio_([] {
 		fmapp::BoostTimer::io_run();
@@ -327,6 +371,12 @@ void play(sheet::DocumentPtr document, fm::midi::MidiPtr midi, MidiOutputId midi
 		}
 		sendFunkfeuerIfNeccessary(document, elapsed);
 		std::this_thread::sleep_for( std::chrono::milliseconds(10) );
+#ifdef SIGINT_WORKAROUND
+		if (settings.sigintWorkaround() && !checkSigIntWorkaround()) {
+			playing = false;
+			player.panic();
+		}
+#endif
 		if (watch) {
 			if (hasChanges(document, timestamps)) {
 				try {
@@ -352,6 +402,12 @@ void play(sheet::DocumentPtr document, fm::midi::MidiPtr midi, MidiOutputId midi
 #ifdef SHEET_USE_BOOST_TIMER
 	fmapp::BoostTimer::io_stop();
 	boost_asio_.join();
+#endif
+
+#ifdef SIGINT_WORKAROUND
+	if (settings.sigintWorkaround()) {
+		endSigIntWorkaround();
+	}
 #endif
 
 	player.Backend:: tearDown();
