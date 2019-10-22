@@ -13,6 +13,7 @@ instrument: drums;
     "ht"16 x "ho"8 "ht"16 x "ho"8    "ht"16 x "ho"8 "ht"16 x "ho"8    |
 }
 {
+    \ffff
     r8. "sn"16 r8 "sn"    r8. "sn"16 r8 "sn"    |
 }
 {
@@ -48,8 +49,9 @@ instrument: drums;
     r4 r16 "cla" r8  "cla" r16 "cla"16 r4  |
 }
 {
+    \fffff
     r8. "sn"16 r8 "sn"    r8. "sn"16 r8 "sn"    |
-    r8. "sn"16 r8 "sn"    r4 r16 !f"sn" !fffx !ffffx   |
+    r8. "sn"16 r8 "sn"    r4 r16 !fff"sn" !ffffx !fffffx   |
 }
 {
     "bd"4 "bd"   "bd" "bd" |

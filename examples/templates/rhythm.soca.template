@@ -14,11 +14,11 @@ type: template;
 name: rhythm2.soca.normal;
 instrument: rhythm2;
 {
-    <I II III IV V VI VII>16 r r   
-    <I II III IV V VI VII>16 r r 
-    <I II III IV V VI VII>16 r r r  
-    <I II III IV V VI VII>16 r r 
-    <I II III IV V VI VII>16 r r
+    <I II III IV V VI VII>16 r8   
+    <I II III IV V VI VII>16 r8 
+    <I II III IV V VI VII>16 r8.  
+    <I II III IV V VI VII>16 r8 
+    <I II III IV V VI VII>16 r8
 }
 ]
 
@@ -27,10 +27,10 @@ type: template;
 name: rhythm2.soca.bridge;
 instrument: rhythm2;
 {
-    <I II III IV V VI VII>16 r r   
-    <I II III IV V VI VII>16 r r 
-    <I II III IV V VI VII>16 r r r  
+    <I II III IV V VI VII>16 r8   
+    <I II III IV V VI VII>16 r8 
+    <I II III IV V VI VII>16 r8.  
     <I II III IV V VI VII>8  r16 
-    <I II III IV V VI VII>16 r r
+    <I II III IV V VI VII>16 r8
 }
 ]

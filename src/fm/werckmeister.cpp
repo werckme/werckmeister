@@ -57,7 +57,7 @@ namespace fm {
 		{
 			FM_THROW(Exception, "resource not found: " + fpath.string());
 		}
-		Werckmeister::ResourceStream result = std::make_unique<std::ifstream>(absolute.c_str());
+		Werckmeister::ResourceStream result = std::make_unique<std::ifstream>(absolute.c_str(), std::ios_base::binary);
 		return result;
 	}
 

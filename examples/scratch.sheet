@@ -25,6 +25,7 @@ instrumentDef: piano   BC 4 0 0;
 
 instrumentConf: bass   
     voicingStrategy simple range contrabass
+    mod swing grid 16 offset 100
     volume 100
 ;
 
@@ -35,13 +36,14 @@ instrumentConf: piano
 instrumentConf: rhythm  
     voicingStrategy guitar range mezzosoprano
     mod guitarStroke value 64
-    volume 60
+    volume 70
 ;
 
 instrumentConf: rhythm2  
+    mod swing grid 16 offset 50
     mod staccato value 90
     voicingStrategy simple range tenor
-    volume 70
+    volume 80
 ;
 
 instrumentConf: drums  
