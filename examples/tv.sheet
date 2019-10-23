@@ -29,7 +29,7 @@ instrumentDef: bell       SC1 5 0 14;
 instrumentDef: drums      SC1 9 0 0;
 
 instrumentConf: rhythm
-    voicingStrategy guitar range baritone
+    voicingStrategy guitar range tenor
     mod guitarStroke 
     pan 40
     volume 80;   
@@ -127,7 +127,7 @@ instrument: lead;
     d'8. x16 x32 x x8 r16 | c'16 f d b,   g c' x32 x b e | c8. f'32 c' e'16 e x32 b, g, a, |
     c'8 x16 x32 x  e' g g, e b c' r16 | b8. d'16t g' b  g16 e g | g'8 xxx | 
     -- repeat
-            d'8. x16 x32 x x8 r16 | c'16 f d b,   g c' x32 x b e | c8. f'32 c' e'16 e x32 b, g, a, |
+    d'8. x16 x32 x x8 r16 | c'16 f d b,   g c' x32 x b e | c8. f'32 c' e'16 e x32 b, g, a, |
     c'8 x16 x32 x  e' g g, e b c' r16 | b8. d'16t g' b  g16 e g | g'8 xxx |
 
     -- |:
