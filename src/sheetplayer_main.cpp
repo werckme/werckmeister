@@ -40,9 +40,9 @@
 #define ARG_WATCH "watch"
 #define ARG_UDP "funkfeuer"
 #define ARG_NOSTDOUT "notime"
-#define ARG_SORUCES_JSON "sources"
-#define ARGS_PRINT_EVENTINFOS_JSON "print-events"
-#define ARGS_WIN32_SIGINT_WORKAROUND "win32-sigint-workaround"
+#define ARG_INFO "info"
+#define ARG_PRINT_EVENTINFOS_JSON "print-events"
+#define ARG_WIN32_SIGINT_WORKAROUND "win32-sigint-workaround"
 
 #ifdef WIN32
 #define SIGINT_WORKAROUND 
@@ -107,10 +107,10 @@ struct Settings {
 			(ARG_WATCH, "checks the input file for changes and recompiles if any")
 			(ARG_UDP, po::value<std::string>(), "activates an udp sender, which sends sheet info periodically to to given host")
 			(ARG_NOSTDOUT, "disable printing time on stdout")
-			(ARG_SORUCES_JSON, "prints the used sources as json")
-			(ARGS_PRINT_EVENTINFOS_JSON, "prints the sheet events as json")
+			(ARG_INFO, "prints sheet info as json")
+			(ARG_PRINT_EVENTINFOS_JSON, "prints the sheet events as json")
 #ifdef SIGINT_WORKAROUND
-			(ARGS_WIN32_SIGINT_WORKAROUND, "uses a filebased workaround for the lack of a proper SIGINT signal handling in windows. \
+			(ARG_WIN32_SIGINT_WORKAROUND, "uses a filebased workaround for the lack of a proper SIGINT signal handling in windows. \
 (a file 'keepalive' will be created before the player starts. If the file will be deleted while the player is running, the player will be stopped.)")
 
 #endif
@@ -184,15 +184,15 @@ struct Settings {
 	}
 
 	bool sourcesJSON() const {
-		return !!variables.count(ARG_SORUCES_JSON);
+		return !!variables.count(ARG_INFO);
 	}
 
 	bool eventInfosJSON() const {
-		return !!variables.count(ARGS_PRINT_EVENTINFOS_JSON);
+		return !!variables.count(ARG_PRINT_EVENTINFOS_JSON);
 	}
 
 	bool sigintWorkaround() const {
-		return !!variables.count(ARGS_WIN32_SIGINT_WORKAROUND);
+		return !!variables.count(ARG_WIN32_SIGINT_WORKAROUND);
 	}
 
 };
@@ -330,9 +330,9 @@ std::string eventInfosAsJson(sheet::DocumentPtr document)
 	return ss.str();
 }
 
-std::string getDocumentsInfoJSON(sheet::DocumentPtr document)
+std::string getDocumentsInfoJSON(sheet::DocumentPtr document, fm::Ticks duration)
 {
-	return jsonWriter.documentInfosToJSON(*document);
+	return jsonWriter.documentInfosToJSON(*document, duration / fm::PPQ);
 }
 void play(sheet::DocumentPtr document, fm::midi::MidiPtr midi, MidiOutputId midiOutput, fm::Ticks begin, fm::Ticks end, const Settings &settings) 
 {
@@ -483,7 +483,7 @@ int main(int argc, const char** argv)
 		}
 		if (settings.sourcesJSON()) 
 		{
-			std:: cout << getDocumentsInfoJSON(doc) << std::endl;
+			std:: cout << getDocumentsInfoJSON(doc, end) << std::endl;
 		}
 		else if(settings.eventInfosJSON())
 		{

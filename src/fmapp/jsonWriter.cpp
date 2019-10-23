@@ -51,11 +51,12 @@ namespace fmapp {
         return toString(doc);
     }
 
-    std::string JsonWriter::documentInfosToJSON(const sheet::Document &document)
+    std::string JsonWriter::documentInfosToJSON(const sheet::Document &document, fm::Ticks duration)
     {
         rapidjson::Document doc;
         doc.SetObject();
         rapidjson::Value array(rapidjson::kArrayType);
+        rapidjson::Value durationValue((double)duration);
         for (const auto &source : document.sources.left) {
             rapidjson::Value object(rapidjson::kObjectType);
             rapidjson::Value sourceId(source.first);
@@ -66,6 +67,7 @@ namespace fmapp {
             array.PushBack(object, doc.GetAllocator());
 	    }
         doc.AddMember("sources", array, doc.GetAllocator());
+        doc.AddMember("duration", durationValue, doc.GetAllocator());
         return toString(doc);
     }
 }
