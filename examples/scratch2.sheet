@@ -2,8 +2,8 @@
 @load "pitchmaps/defaultMidiDrumMap.pitchmap";
 @load "lua/mods/swing.lua";
 @load "lua/mods/staccato.lua";
-device: SC1 midi 2;
-device: BC midi 2;
+device: SC1 midi 1;
+device: BC midi 1;
 
 tempo: 120;
 instrumentDef: drums   BC 9 0 0;
@@ -20,6 +20,23 @@ instrumentConf: organ
 [
 instrument: organ;
 {
+    
+    c d e f | c d e f | c d e f | c d e f | 
+    c d e f | c d e f | c d e f | c d e f | 
+    c d e f | c d e f | c d e f | c d e f | 
+    c d e f | c d e f | c d e f | c d e f | 
+    c d e f | c d e f | c d e f | c d e f | 
+    c d e f | c d e f | c d e f | c d e f | 
+    c d e f | c d e f | c d e f | c d e f | 
+    c d e f | c d e f | c d e f | c d e f | 
+    c d e f | c d e f | c d e f | c d e f | 
+    c d e f | c d e f | c d e f | c d e f | 
+    c d e f | c d e f | c d e f | c d e f | 
+    c d e f | c d e f | c d e f | c d e f | 
+    c d e f | c d e f | c d e f | c d e f | 
+    c d e f | c d e f | c d e f | c d e f | 
+    c d e f | c d e f | c d e f | c d e f | 
+    c d e f | c d e f | c d e f | c d e f | 
     c d e f | c d e f | c d e f | c d e f | 
 }
 ]

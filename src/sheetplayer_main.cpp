@@ -274,6 +274,8 @@ void updatePlayer(fmapp::Midiplayer &player, const std::string &inputfile)
 	auto pos = player.elapsed();
 	player.stop();
 	try {
+		timeline.clear();
+		lastTimelineEvent = timeline.end();
 		player.midi(sheet::processFile(inputfile));
 	}
 	catch (const fm::Exception &ex)
