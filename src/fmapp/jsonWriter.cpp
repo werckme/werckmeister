@@ -17,7 +17,7 @@ namespace {
 
 
 namespace fmapp {
-    std::string JsonWriter::funkfeuerToJSON(fm::Ticks elapsedTime)
+    std::string JsonWriter::funkfeuerToJSON(fm::Ticks elapsedTime, unsigned long lastUpdateTimestamp)
     {
         rapidjson::Document doc;
         doc.SetObject();
@@ -27,13 +27,15 @@ namespace fmapp {
         return toString(doc);
     }
 
-    std::string JsonWriter::funkfeuerToJSON(fm::Ticks elapsedTime, const std::vector<EventInfo> &eventInfos)
+    std::string JsonWriter::funkfeuerToJSON(fm::Ticks elapsedTime, unsigned long lastUpdateTimestamp, const std::vector<EventInfo> &eventInfos)
     {
         rapidjson::Document doc;
         doc.SetObject();
         rapidjson::Value elapsed;
         elapsed.SetDouble(elapsedTime);
+        rapidjson::Value lastUpdate(lastUpdateTimestamp);
         doc.AddMember("sheetTime", elapsed, doc.GetAllocator());
+        doc.AddMember("lastUpdateTimestamp", lastUpdate, doc.GetAllocator());
         rapidjson::Value array(rapidjson::kArrayType);
         for (const auto &eventInfo : eventInfos) {
             rapidjson::Value object(rapidjson::kObjectType);

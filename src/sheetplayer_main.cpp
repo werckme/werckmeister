@@ -29,6 +29,7 @@
 #include "fmapp/MidiAndTimeline.hpp"
 #include <set>
 #include <sheet/tools.h>
+#include <time.h>
 
 #define ARG_HELP "help"
 #define ARG_INPUT "input"
@@ -60,7 +61,7 @@ namespace {
 	fmapp::JsonWriter jsonWriter;
 	fmapp::EventTimeline timeline;
 	fmapp::EventTimeline::const_iterator lastTimelineEvent = timeline.end();
-
+	unsigned long lastUpdateTimestamp = 0;
 }
 
 // https://github.com/SambaGodschynski/werckmeister/issues/101
@@ -197,6 +198,10 @@ struct Settings {
 
 };
 
+void updateLastChangedTimestamp() {
+	lastUpdateTimestamp = (unsigned long)time(NULL);
+}
+
 int listDevices() {
 	auto &player = fmapp::getMidiplayer();
 	auto outputs = player.getOutputs();
@@ -299,7 +304,7 @@ void sendFunkfeuerIfNeccessary(sheet::DocumentPtr document, fm::Ticks elapsed)
 	auto elapsedQuarter = elapsed / (double)fm::PPQ;
 	auto ev = timeline.find(elapsed);
 	if (ev == lastTimelineEvent || ev == timeline.end()) {
-		std::string bff = jsonWriter.funkfeuerToJSON(elapsedQuarter);
+		std::string bff = jsonWriter.funkfeuerToJSON(elapsedQuarter, lastUpdateTimestamp);
 		funkfeuer->send(bff.data(), bff.size());
 		return;
 	}
@@ -309,7 +314,7 @@ void sendFunkfeuerIfNeccessary(sheet::DocumentPtr document, fm::Ticks elapsed)
 	for (const auto &x : ev->second) {
 		eventInfos.push_back(x);
 	}
-	std::string bff = jsonWriter.funkfeuerToJSON(elapsedQuarter, eventInfos);
+	std::string bff = jsonWriter.funkfeuerToJSON(elapsedQuarter, lastUpdateTimestamp, eventInfos);
 	funkfeuer->send(bff.data(), bff.size());
 }
 
@@ -324,7 +329,7 @@ std::string eventInfosAsJson(sheet::DocumentPtr document)
 		for (const auto &x : timelineEntry.second) {
 			eventInfos.push_back(x);
 		}
-		ss << jsonWriter.funkfeuerToJSON(eventsBeginTime, eventInfos) << ", ";
+		ss << jsonWriter.funkfeuerToJSON(eventsBeginTime, lastUpdateTimestamp, eventInfos) << ", ";
 	}
 	ss << "]";
 	return ss.str();
@@ -347,6 +352,7 @@ void play(sheet::DocumentPtr document, fm::midi::MidiPtr midi, MidiOutputId midi
 	bool stdout_ = !settings.nostdout();
 	Timestamps timestamps;
 	hasChanges(document, timestamps);	// init timestamps
+	updateLastChangedTimestamp();
 	auto inputfile = settings.getInput();
 
 	fmapp::os::setSigtermHandler([&playing, &player]{
@@ -383,6 +389,7 @@ void play(sheet::DocumentPtr document, fm::midi::MidiPtr midi, MidiOutputId midi
 			if (hasChanges(document, timestamps)) {
 				try {
 					updatePlayer(player, inputfile);
+					updateLastChangedTimestamp();
 				} catch(...) {
 					player.panic();
 					break;

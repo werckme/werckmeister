@@ -20,8 +20,8 @@ namespace fmapp {
             JsonWriter() = default;
             JsonWriter(const JsonWriter&) = delete;
             JsonWriter& operator= (const JsonWriter&) = delete;
-            std::string funkfeuerToJSON(fm::Ticks elapsedTime);
-            std::string funkfeuerToJSON(fm::Ticks elapsedTime, const std::vector<EventInfo> &eventInfos);
+            std::string funkfeuerToJSON(fm::Ticks elapsedTime, unsigned long lastUpdateTimestamp);
+            std::string funkfeuerToJSON(fm::Ticks elapsedTime, unsigned long lastUpdateTimestamp, const std::vector<EventInfo> &eventInfos);
             std::string documentInfosToJSON(const sheet::Document &document, fm::Ticks duration);
     };
 }
