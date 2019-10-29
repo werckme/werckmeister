@@ -10,13 +10,13 @@
 
 namespace sheet {
 
-    fm::midi::MidiPtr processFile(const std::string &file)
+    fm::midi::MidiPtr processFile(const std::string &file, bool stdoutWarnings)
     {
         auto doc = createDocument(file);
-        return processFile(doc);
+        return processFile(doc, stdoutWarnings);
     }
 
-    fm::midi::MidiPtr processFile(sheet::DocumentPtr doc) 
+    fm::midi::MidiPtr processFile(sheet::DocumentPtr doc, bool stdoutWarnings) 
     {
         auto &wm = fm::getWerckmeister();
         auto context = std::dynamic_pointer_cast<sheet::compiler::MidiContext>( wm.createContext() );
@@ -31,9 +31,11 @@ namespace sheet {
         }
         compiler->context(context);
         compiler->compile(doc);
-		for (const auto &warning : context->warnings) {
-			std::cout << warning << std::endl;
-		}
+        if (stdoutWarnings) {
+            for (const auto &warning : context->warnings) {
+                std::cout << warning << std::endl;
+            }
+        }
         return midi;
     }
 

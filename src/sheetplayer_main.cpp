@@ -184,7 +184,7 @@ struct Settings {
 		return !!variables.count(ARG_NOSTDOUT);
 	}
 
-	bool sourcesJSON() const {
+	bool documentInfoJSON() const {
 		return !!variables.count(ARG_INFO);
 	}
 
@@ -472,7 +472,8 @@ int main(int argc, const char** argv)
 
 		std::string infile = settings.getInput();
 		auto doc = sheet::createDocument(infile);
-		auto midi = sheet::processFile(doc);
+		auto showWarnings = !settings.documentInfoJSON();
+		auto midi = sheet::processFile(doc, showWarnings);
 		fm::Ticks begin = 0;
 
 		auto end = midi->duration();
@@ -490,7 +491,7 @@ int main(int argc, const char** argv)
 		{
 			throw std::runtime_error("invalid begin/end range");
 		}
-		if (settings.sourcesJSON()) 
+		if (settings.documentInfoJSON()) 
 		{
 			std:: cout << getDocumentsInfoJSON(doc, end) << std::endl;
 		}

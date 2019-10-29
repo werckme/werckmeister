@@ -36,6 +36,7 @@ instrumentConf: rhythm
 
 instrumentConf: bass
     voicingStrategy simple range contrabass
+    volume 100
 ;   
 
 instrumentConf: piano
