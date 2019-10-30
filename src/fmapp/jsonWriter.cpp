@@ -33,7 +33,8 @@ namespace fmapp {
         doc.SetObject();
         rapidjson::Value elapsed;
         elapsed.SetDouble(elapsedTime);
-        rapidjson::Value lastUpdate(lastUpdateTimestamp);
+        rapidjson::Value lastUpdate;
+		lastUpdate.SetUint(lastUpdateTimestamp);
         doc.AddMember("sheetTime", elapsed, doc.GetAllocator());
         doc.AddMember("lastUpdateTimestamp", lastUpdate, doc.GetAllocator());
         rapidjson::Value array(rapidjson::kArrayType);
