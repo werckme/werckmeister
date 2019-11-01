@@ -20,23 +20,8 @@ instrumentConf: organ
 [
 instrument: organ;
 {
-    c d e f | c d e f | c d e f | c d e f | 
-    c d e f | c d e f | c d e f | c d e f | 
-    c d e f | c d e f | c d e f | c d e f | 
-    c d e f | c d e f | c d e f | c d e f | 
-    c d e f | c d e f | c d e f | c d e f | 
-    c d e f | c d e f | c d e f | c d e f | 
-    c d e f | c d e f | c d e f | c d e f | 
-    c d e f | c d e f | c d e f | c d e f | 
-    c d e f | c d e f | c d e f | c d e f | 
-    c d e f | c d e f | c d e f | c d e f | 
-    c d e f | c d e f | c d e f | c d e f | 
-    c d e f | c d e f | c d e f | c d e f | 
-    c d e f | c d e f | c d e f | c d e f | 
-    c d e f | c d e f | c d e f | c d e f | 
-    c d e f | c d e f | c d e f | c d e f | 
-    c d e f | c d e f | c d e f | c d e f | 
-    c d e f | c d e f | c d e f | c d e f | 
+    /mod: staccato/
+    (tag1)@d (tag1 tag2)@d e f | 
 }
 ]
 

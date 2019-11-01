@@ -20,6 +20,7 @@ static const char * LUA_EVENT_PROPETRY_PITCHES = "pitches";
 static const char * LUA_EVENT_PROPETRY_TYPE = "type";
 static const char * LUA_EVENT_PROPETRY_PITCHBENDVALUE = "pitchBendValue";
 static const char * LUA_EVENT_PITCH_PROPETRY_PITCH = "pitch";
+static const char * LUA_EVENT_PITCH_PROPETRY_TAGS = "tags";
 static const char * LUA_EVENT_PITCH_PROPETRY_OCTAVE = "octave";
 static const char * LUA_EVENT_PITCH_PROPETRY_ALIAS = "alias";
 
@@ -34,6 +35,7 @@ namespace sheet {
             {}
             void push(lua_State *L);
             void pushPitches(lua_State *L);
+			void pushTags(lua_State *L);
             const char *getTypename() const;
         };
         void LuaEvent::push(lua_State *L)
@@ -46,6 +48,10 @@ namespace sheet {
             lua_pushstring(L, LUA_EVENT_PROPETRY_PITCHES);
             pushPitches(L);
             lua_settable(L, top);
+			// tags
+			lua_pushstring(L, LUA_EVENT_PITCH_PROPETRY_TAGS);
+			pushTags(L);
+			lua_settable(L, top);
             // offset
             sheet::lua::setTableValue(L, LUA_EVENT_PROPETRY_OFFSET, top, event->offset / fm::PPQ);            
             // velocity
@@ -82,6 +88,17 @@ namespace sheet {
                 lua_settable(L, top);
             }
         }
+		void LuaEvent::pushTags(lua_State *L)
+		{
+			lua_createtable(L, event->tags.size(), 0);
+			auto top = lua_gettop(L);
+			int count = 1;
+			for (const auto &tag : event->tags) {
+				lua_pushnumber(L, count++);
+				lua_pushstring(L, tag.c_str());
+				lua_settable(L, top);
+			}
+		}
         const char * LuaEvent::getTypename() const
         {
             switch (event->type)
