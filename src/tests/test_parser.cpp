@@ -1034,7 +1034,7 @@ BOOST_AUTO_TEST_CASE(test_tags)
 	fm::String text = FM_STRING("\
 [\n\
 	{\n\
-		(tag1)@c4 (tag1 tag2)@d4 e4 f4 | c'4 d'4 e'4 f'4 |\n\
+		(tag1)@c4 (tag1 tag2)@d4 (tag1 tag2 tag3)@ e4 ( tag1 tag2 ) @ f4 | c'4 d'4 e'4 f'4 |\n\
 	}\n\
 ]\n\
 ");
@@ -1054,4 +1054,28 @@ BOOST_AUTO_TEST_CASE(test_tags)
 	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[8], sheet::Event::Note, 5, 1, 1.0_N4));
 	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[9], sheet::Event::EOB));
 
+	{
+		const auto &ev = defs.tracks[0].voices[0].events[0];
+		BOOST_CHECK(ev.tags.size() == 1);
+		BOOST_CHECK(ev.tags[0] == fm::String("tag1"));
+	}
+	{
+		const auto &ev = defs.tracks[0].voices[0].events[1];
+		BOOST_CHECK(ev.tags.size() == 2);
+		BOOST_CHECK(ev.tags[0] == fm::String("tag1"));
+		BOOST_CHECK(ev.tags[1] == fm::String("tag2"));
+	}
+	{
+		const auto &ev = defs.tracks[0].voices[0].events[2];
+		BOOST_CHECK(ev.tags.size() == 3);
+		BOOST_CHECK(ev.tags[0] == fm::String("tag1"));
+		BOOST_CHECK(ev.tags[1] == fm::String("tag2"));
+		BOOST_CHECK(ev.tags[2] == fm::String("tag3"));
+	}
+	{
+		const auto &ev = defs.tracks[0].voices[0].events[3];
+		BOOST_CHECK(ev.tags.size() == 2);
+		BOOST_CHECK(ev.tags[0] == fm::String("tag1"));
+		BOOST_CHECK(ev.tags[1] == fm::String("tag2"));
+	}
 }
