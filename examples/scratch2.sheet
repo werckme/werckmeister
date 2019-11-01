@@ -14,13 +14,12 @@ instrumentDef: organ   BC 2 35 17;
 instrumentConf: organ  
     mod staccato
     mod swing 
-    volume 63
+    volume 73
 ;
 
 [
 instrument: organ;
 {
-    
     c d e f | c d e f | c d e f | c d e f | 
     c d e f | c d e f | c d e f | c d e f | 
     c d e f | c d e f | c d e f | c d e f | 
