@@ -73,6 +73,7 @@ namespace sheet {
 		typedef fm::Ticks Duration;
 		typedef std::set<PitchDef> Pitches;
 		typedef std::vector<fm::String> Args;
+		typedef std::vector<fm::String> Tags;
 		typedef fm::String Options;
 		typedef std::tuple<PitchDef::Pitch, Options> ChordElements;
 		
@@ -86,6 +87,7 @@ namespace sheet {
 		 */
 		fm::String stringValue;
 		Args metaArgs;
+		Tags tags;
 		/**
 		 * the event velocity value in a range 0..1, will be set during rendering
 		 */

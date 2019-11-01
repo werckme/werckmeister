@@ -48,6 +48,7 @@ BOOST_FUSION_ADAPT_STRUCT(
 	(unsigned int, sourcePositionBegin)
 	(sheet::ASheetObjectWithSourceInfo::SourceId, sourceId)
 	(sheet::Event::Type, type)
+	(sheet::Event::Tags, tags)
 	(sheet::Event::Pitches, pitches)
 	(sheet::Event::Duration, duration)
 	(fm::String, stringValue)
@@ -60,6 +61,7 @@ namespace {
 		EvSourcePosBegin,
 		EvSourceId,
 		EvType,
+		EvTags,
 		EvPitches,
 		EvDuration,
 		EvStringValue,
@@ -108,6 +110,7 @@ namespace sheet {
 			DurationSymbols durationSymbols_;
 			ExpressionSymbols expressionSymbols_;
 			const std::string ALLOWED_META_ARGUMENT = "a-zA-Z0-9."; 
+			const std::string ALLOWED_TAG_ARGUMENT = "a-zA-Z0-9";
 		}
 
 		namespace {
@@ -205,6 +208,7 @@ namespace sheet {
 						current_pos_.current_pos 
 						>> attr(sourceId_)
 						>> attr(Event::Note)
+						>> (("(" >> +(lexeme[+char_(ALLOWED_TAG_ARGUMENT)]) >> ")" >> "@") | attr(Event::Tags()))
 						>> (pitchOrAlias_ | ("<" >> +pitchOrAlias_ >> ">"))
 						>> (durationSymbols_ | attr(Event::NoDuration))  
 						>> attr("")
@@ -219,7 +223,8 @@ namespace sheet {
 					( // DEGREE
 						current_pos_.current_pos 
 						>> attr(sourceId_)
-						>> attr(Event::Degree) 
+						>> attr(Event::Degree)
+						>> (("(" >> +(lexeme[+char_(ALLOWED_TAG_ARGUMENT)]) >> ")" >> "@") | attr(Event::Tags()))
 						>> (degree_ | ("<" >> +degree_ >> ">"))
 						>> (durationSymbols_ | attr(Event::NoDuration))  
 						>> attr("")
@@ -236,6 +241,7 @@ namespace sheet {
 						>> attr(sourceId_)
 						>> attr(Event::Repeat) 
 						>> "x"
+						>> attr(Event::Tags())
 						>> attr(PitchDef())
 						>> (durationSymbols_ | attr(Event::NoDuration))
 						>> attr("")
@@ -251,6 +257,7 @@ namespace sheet {
 						current_pos_.current_pos 
 						>> attr(sourceId_)
 						>> attr(Event::Chord)
+						>> attr(Event::Tags())
 						>> attr(PitchDef())
 						>> attr(Event::NoDuration)					
 						>> lexeme[
@@ -265,7 +272,8 @@ namespace sheet {
 						current_pos_.current_pos 
 						>> attr(sourceId_)
 						>> "\\" 
-						>> attr(Event::Meta) 
+						>> attr(Event::Meta)
+						>> attr(Event::Tags())
 						>> attr(PitchDef()) 
 						>> attr(Event::NoDuration) 
 						>> attr("expression") 
@@ -276,7 +284,8 @@ namespace sheet {
 						current_pos_.current_pos 
 						>> attr(sourceId_)
 						>> "!" 
-						>> attr(Event::Meta) 
+						>> attr(Event::Meta)
+						>> attr(Event::Tags())
 						>> attr(PitchDef()) 
 						>> attr(Event::NoDuration) 
 						>> attr("singleExpression") 
@@ -287,7 +296,8 @@ namespace sheet {
 						current_pos_.current_pos 
 						>> attr(sourceId_)
 						>> "r" 
-						>> attr(Event::Rest) 
+						>> attr(Event::Rest)
+						>> attr(Event::Tags())
 						>> attr(PitchDef()) 
 						>> (durationSymbols_ | attr(Event::NoDuration))
 						>> attr("")
@@ -299,7 +309,8 @@ namespace sheet {
 						current_pos_.current_pos 
 						>> attr(sourceId_)
 						>> "|"
-						>> attr(Event::EOB) 
+						>> attr(Event::EOB)
+						>> attr(Event::Tags())
 						>> attr(PitchDef()) 
 						>> attr(Event::NoDuration)
 					)
@@ -308,7 +319,8 @@ namespace sheet {
 						current_pos_.current_pos 
 						>> attr(sourceId_)
 						>>  "/" 
-						>> attr(Event::Meta) 
+						>> attr(Event::Meta)
+						>> attr(Event::Tags())
 						>> attr(PitchDef()) 
 						>> attr(Event::NoDuration) 
 						>> +char_("a-zA-Z") >> ":" >> +(lexeme[+char_(ALLOWED_META_ARGUMENT)]) >> "/"

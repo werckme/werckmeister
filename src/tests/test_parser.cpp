@@ -1026,3 +1026,32 @@ BOOST_AUTO_TEST_CASE(test_degree_accendentials)
 	BOOST_CHECK(defs.tracks[0].voices.size() == 1);
 	BOOST_CHECK(defs.tracks[0].voices[0].events.size() == 13);
 }
+
+BOOST_AUTO_TEST_CASE(test_tags)
+{
+	using namespace fm;
+	using sheet::PitchDef;
+	fm::String text = FM_STRING("\
+[\n\
+	{\n\
+		(tag1)@c4 (tag1 tag2)@d4 e4 f4 | c'4 d'4 e'4 f'4 |\n\
+	}\n\
+]\n\
+");
+	sheet::compiler::SheetDefParser parser;
+	auto defs = parser.parse(text);
+	BOOST_CHECK(defs.tracks.size() == 1);
+	BOOST_CHECK(defs.tracks[0].voices.size() == 1);
+	BOOST_CHECK(defs.tracks[0].voices[0].events.size() == 10);
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[0], sheet::Event::Note, 0, 0, 1.0_N4));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[1], sheet::Event::Note, 2, 0, 1.0_N4));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[2], sheet::Event::Note, 4, 0, 1.0_N4));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[3], sheet::Event::Note, 5, 0, 1.0_N4));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[4], sheet::Event::EOB));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[5], sheet::Event::Note, 0, 1, 1.0_N4));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[6], sheet::Event::Note, 2, 1, 1.0_N4));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[7], sheet::Event::Note, 4, 1, 1.0_N4));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[8], sheet::Event::Note, 5, 1, 1.0_N4));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[9], sheet::Event::EOB));
+
+}
