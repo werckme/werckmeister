@@ -1079,3 +1079,56 @@ BOOST_AUTO_TEST_CASE(test_tags)
 		BOOST_CHECK(ev.tags[1] == fm::String("tag2"));
 	}
 }
+
+BOOST_AUTO_TEST_CASE(test_tags_degree)
+{
+	using namespace fm;
+	using sheet::PitchDef;
+	fm::String text = FM_STRING("\
+[\n\
+	{\n\
+		(tag1)@I4 (tag1 tag2)@II4 (tag1 tag2 tag3)@ III4 ( tag1 tag2 ) @ IV4 | I'4 II'4 III'4 IV'4 |\n\
+	}\n\
+]\n\
+");
+	sheet::compiler::SheetDefParser parser;
+	auto defs = parser.parse(text);
+	BOOST_CHECK(defs.tracks.size() == 1);
+	BOOST_CHECK(defs.tracks[0].voices.size() == 1);
+	BOOST_CHECK(defs.tracks[0].voices[0].events.size() == 10);
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[0], sheet::Event::Degree, fm::degrees::I, 0, 1.0_N4));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[1], sheet::Event::Degree, fm::degrees::II, 0, 1.0_N4));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[2], sheet::Event::Degree, fm::degrees::III, 0, 1.0_N4));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[3], sheet::Event::Degree, fm::degrees::IV, 0, 1.0_N4));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[4], sheet::Event::EOB));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[5], sheet::Event::Degree, fm::degrees::I, 1, 1.0_N4));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[6], sheet::Event::Degree, fm::degrees::II, 1, 1.0_N4));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[7], sheet::Event::Degree, fm::degrees::III, 1, 1.0_N4));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[8], sheet::Event::Degree, fm::degrees::IV, 1, 1.0_N4));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[9], sheet::Event::EOB));
+
+	{
+		const auto &ev = defs.tracks[0].voices[0].events[0];
+		BOOST_CHECK(ev.tags.size() == 1);
+		BOOST_CHECK(ev.tags[0] == fm::String("tag1"));
+	}
+	{
+		const auto &ev = defs.tracks[0].voices[0].events[1];
+		BOOST_CHECK(ev.tags.size() == 2);
+		BOOST_CHECK(ev.tags[0] == fm::String("tag1"));
+		BOOST_CHECK(ev.tags[1] == fm::String("tag2"));
+	}
+	{
+		const auto &ev = defs.tracks[0].voices[0].events[2];
+		BOOST_CHECK(ev.tags.size() == 3);
+		BOOST_CHECK(ev.tags[0] == fm::String("tag1"));
+		BOOST_CHECK(ev.tags[1] == fm::String("tag2"));
+		BOOST_CHECK(ev.tags[2] == fm::String("tag3"));
+	}
+	{
+		const auto &ev = defs.tracks[0].voices[0].events[3];
+		BOOST_CHECK(ev.tags.size() == 2);
+		BOOST_CHECK(ev.tags[0] == fm::String("tag1"));
+		BOOST_CHECK(ev.tags[1] == fm::String("tag2"));
+	}
+}

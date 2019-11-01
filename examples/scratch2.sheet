@@ -2,26 +2,23 @@
 @load "pitchmaps/defaultMidiDrumMap.pitchmap";
 @load "lua/mods/swing.lua";
 @load "lua/mods/staccato.lua";
-device: SC1 midi 1;
 device: BC midi 1;
 
 tempo: 120;
 instrumentDef: drums   BC 9 0 0;
 instrumentDef: bass   BC 0 0 34;
 instrumentDef: rhythm   BC 1 0 27;
-instrumentDef: organ   BC 2 35 17;
+instrumentDef: organ   BC 2 0 0;
 
 instrumentConf: organ  
-    mod staccato
-    mod swing 
     volume 73
 ;
 
 [
 instrument: organ;
 {
-    /mod: staccato/
-    (tag1)@d (tag1 tag2)@d e f | 
+    /mod: staccato amount 100 forTag ghost/
+    c (ghost)@d  e f  | (ghost)@g f e d |
 }
 ]
 
