@@ -73,7 +73,7 @@ namespace sheet {
 		typedef fm::Ticks Duration;
 		typedef std::set<PitchDef> Pitches;
 		typedef std::vector<fm::String> Args;
-		typedef std::vector<fm::String> Tags;
+		typedef std::set<fm::String> Tags;
 		typedef fm::String Options;
 		typedef std::tuple<PitchDef::Pitch, Options> ChordElements;
 		

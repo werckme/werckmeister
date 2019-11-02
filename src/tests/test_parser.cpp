@@ -1057,26 +1057,26 @@ BOOST_AUTO_TEST_CASE(test_tags)
 	{
 		const auto &ev = defs.tracks[0].voices[0].events[0];
 		BOOST_CHECK(ev.tags.size() == 1);
-		BOOST_CHECK(ev.tags[0] == fm::String("tag1"));
+		BOOST_CHECK( ev.tags.find(fm::String("tag1")) != ev.tags.end() );
 	}
 	{
 		const auto &ev = defs.tracks[0].voices[0].events[1];
 		BOOST_CHECK(ev.tags.size() == 2);
-		BOOST_CHECK(ev.tags[0] == fm::String("tag1"));
-		BOOST_CHECK(ev.tags[1] == fm::String("tag2"));
+		BOOST_CHECK( ev.tags.find(fm::String("tag1")) != ev.tags.end() );
+		BOOST_CHECK( ev.tags.find(fm::String("tag2")) != ev.tags.end() );
 	}
 	{
 		const auto &ev = defs.tracks[0].voices[0].events[2];
 		BOOST_CHECK(ev.tags.size() == 3);
-		BOOST_CHECK(ev.tags[0] == fm::String("tag1"));
-		BOOST_CHECK(ev.tags[1] == fm::String("tag2"));
-		BOOST_CHECK(ev.tags[2] == fm::String("tag3"));
+		BOOST_CHECK( ev.tags.find(fm::String("tag1")) != ev.tags.end() );
+		BOOST_CHECK( ev.tags.find(fm::String("tag2")) != ev.tags.end() );
+		BOOST_CHECK( ev.tags.find(fm::String("tag3")) != ev.tags.end() );
 	}
 	{
 		const auto &ev = defs.tracks[0].voices[0].events[3];
 		BOOST_CHECK(ev.tags.size() == 2);
-		BOOST_CHECK(ev.tags[0] == fm::String("tag1"));
-		BOOST_CHECK(ev.tags[1] == fm::String("tag2"));
+		BOOST_CHECK( ev.tags.find(fm::String("tag1")) != ev.tags.end() );
+		BOOST_CHECK( ev.tags.find(fm::String("tag2")) != ev.tags.end() );
 	}
 }
 
@@ -1110,25 +1110,25 @@ BOOST_AUTO_TEST_CASE(test_tags_degree)
 	{
 		const auto &ev = defs.tracks[0].voices[0].events[0];
 		BOOST_CHECK(ev.tags.size() == 1);
-		BOOST_CHECK(ev.tags[0] == fm::String("tag1"));
+		BOOST_CHECK( ev.tags.find(fm::String("tag1")) != ev.tags.end() );
 	}
 	{
 		const auto &ev = defs.tracks[0].voices[0].events[1];
 		BOOST_CHECK(ev.tags.size() == 2);
-		BOOST_CHECK(ev.tags[0] == fm::String("tag1"));
-		BOOST_CHECK(ev.tags[1] == fm::String("tag2"));
+		BOOST_CHECK( ev.tags.find(fm::String("tag1")) != ev.tags.end() );
+		BOOST_CHECK( ev.tags.find(fm::String("tag2")) != ev.tags.end() );
 	}
 	{
 		const auto &ev = defs.tracks[0].voices[0].events[2];
 		BOOST_CHECK(ev.tags.size() == 3);
-		BOOST_CHECK(ev.tags[0] == fm::String("tag1"));
-		BOOST_CHECK(ev.tags[1] == fm::String("tag2"));
-		BOOST_CHECK(ev.tags[2] == fm::String("tag3"));
+		BOOST_CHECK( ev.tags.find(fm::String("tag1")) != ev.tags.end() );
+		BOOST_CHECK( ev.tags.find(fm::String("tag2")) != ev.tags.end() );
+		BOOST_CHECK( ev.tags.find(fm::String("tag3")) != ev.tags.end() );
 	}
 	{
 		const auto &ev = defs.tracks[0].voices[0].events[3];
 		BOOST_CHECK(ev.tags.size() == 2);
-		BOOST_CHECK(ev.tags[0] == fm::String("tag1"));
-		BOOST_CHECK(ev.tags[1] == fm::String("tag2"));
+		BOOST_CHECK( ev.tags.find(fm::String("tag1")) != ev.tags.end() );
+		BOOST_CHECK( ev.tags.find(fm::String("tag2")) != ev.tags.end() );
 	}
 }
