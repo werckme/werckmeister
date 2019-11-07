@@ -8,17 +8,26 @@ tempo: 120;
 instrumentDef: drums   BC 9 0 0;
 instrumentDef: bass   BC 0 0 34;
 instrumentDef: rhythm   BC 1 0 27;
-instrumentDef: organ   BC 2 0 0;
+instrumentDef: --comment
+organ   --comment
+BC 2 0 0;
 
+-- comment
 instrumentConf: organ  
-    volume 73
+    volume 73 --comment
 ;
 
 [
-instrument: organ;
+    --comment
+instrument: organ; --comment
 {
-    /mod: staccato amount 100 forTag ghost/
-    c (ghost)@d  e f  | (ghost)@g f e d |
+    --comment
+    /mod: staccato 
+    amount  --comment
+    100 
+    forTag 
+    ghost/ --comment
+    cis "ghost"@d  e f  | "ghost"@g f e d |
 }
 ]
 

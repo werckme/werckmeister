@@ -1034,7 +1034,7 @@ BOOST_AUTO_TEST_CASE(test_tags)
 	fm::String text = FM_STRING("\
 [\n\
 	{\n\
-		(tag1)@c4 (tag1 tag2)@d4 (tag1 tag2 tag3)@ e4 ( tag1 tag2 ) @ f4 | c'4 d'4 e'4 f'4 |\n\
+		\"tag1\"@c4 \"tag1 tag2\"@d4 \"tag1 tag2 tag3\"@ e4 \" tag1 tag2 \" @ f4 | c'4 d'4 e'4 f'4 |\n\
 	}\n\
 ]\n\
 ");
@@ -1087,7 +1087,7 @@ BOOST_AUTO_TEST_CASE(test_tags_degree)
 	fm::String text = FM_STRING("\
 [\n\
 	{\n\
-		(tag1)@I4 (tag1 tag2)@II4 (tag1 tag2 tag3)@ III4 ( tag1 tag2 ) @ IV4 | I'4 II'4 III'4 IV'4 |\n\
+		\"tag1\"@I4 \"tag1 tag2\"@II4 \"tag1 tag2 tag3\"@ III4 \" tag1 tag2 \" @ IV4 | I'4 II'4 III'4 IV'4 |\n\
 	}\n\
 ]\n\
 ");

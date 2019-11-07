@@ -208,7 +208,7 @@ namespace sheet {
 						current_pos_.current_pos 
 						>> attr(sourceId_)
 						>> attr(Event::Note)
-						>> (("(" >> +(lexeme[+char_(ALLOWED_TAG_ARGUMENT)]) >> ")" >> "@") | attr(Event::Tags()))
+						>> (("\"" >> +(lexeme[+char_(ALLOWED_TAG_ARGUMENT)]) >> "\"" >> "@") | attr(Event::Tags()))
 						>> (pitchOrAlias_ | ("<" >> +pitchOrAlias_ >> ">"))
 						>> (durationSymbols_ | attr(Event::NoDuration))  
 						>> attr("")
@@ -224,7 +224,7 @@ namespace sheet {
 						current_pos_.current_pos 
 						>> attr(sourceId_)
 						>> attr(Event::Degree)
-						>> (("(" >> +(lexeme[+char_(ALLOWED_TAG_ARGUMENT)]) >> ")" >> "@") | attr(Event::Tags()))
+						>> (("\"" >> +(lexeme[+char_(ALLOWED_TAG_ARGUMENT)]) >> "\"" >> "@") | attr(Event::Tags()))
 						>> (degree_ | ("<" >> +degree_ >> ">"))
 						>> (durationSymbols_ | attr(Event::NoDuration))  
 						>> attr("")
