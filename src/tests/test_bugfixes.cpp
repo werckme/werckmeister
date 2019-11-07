@@ -19,7 +19,7 @@ BOOST_AUTO_TEST_CASE(issue_9_As_und_Es_werden_nicht_erkannt)
 [\n\
 type: sheet;\n\
 {\n\
-	As Es As7 Es7 Ges Ges7 \n\
+	Ab Eb Ab7 Eb7 Gb Gb7 \n\
 }\n\
 ] \n\
 ");
@@ -31,12 +31,12 @@ type: sheet;\n\
 	
 	const auto &chords = defs.tracks[0].voices.begin()->events;
 
-	BOOST_CHECK(checkChord(chords[0], FM_STRING("As")));
-	BOOST_CHECK(checkChord(chords[1], FM_STRING("Es")));
-	BOOST_CHECK(checkChord(chords[2], FM_STRING("As7")));
-	BOOST_CHECK(checkChord(chords[3], FM_STRING("Es7")));
-	BOOST_CHECK(checkChord(chords[4], FM_STRING("Ges")));
-	BOOST_CHECK(checkChord(chords[5], FM_STRING("Ges7")));
+	BOOST_CHECK(checkChord(chords[0], FM_STRING("Ab")));
+	BOOST_CHECK(checkChord(chords[1], FM_STRING("Eb")));
+	BOOST_CHECK(checkChord(chords[2], FM_STRING("Ab7")));
+	BOOST_CHECK(checkChord(chords[3], FM_STRING("Eb7")));
+	BOOST_CHECK(checkChord(chords[4], FM_STRING("Gb")));
+	BOOST_CHECK(checkChord(chords[5], FM_STRING("Gb7")));
 
 
 	auto chordelements = chords[0].chordElements();
@@ -70,6 +70,44 @@ type: sheet;\n\
 	BOOST_CHECK(chords[5].chordDefName() == FM_STRING("X7"));
 
 }
+
+BOOST_AUTO_TEST_CASE(issue_87_asus_chords_will_not_be_recognized)
+{
+	using namespace fm;
+	using sheet::PitchDef;
+	fm::String text = FM_STRING("\
+[\n\
+type: sheet;\n\
+{\n\
+	Bsus2 Asus2 \n\
+}\n\
+] \n\
+");
+	sheet::compiler::SheetDefParser parser;
+	auto defs = parser.parse(text);
+	BOOST_CHECK(defs.tracks.size() == 1);
+	BOOST_CHECK(defs.tracks[0].voices.size() == 1);
+	BOOST_CHECK(defs.tracks[0].voices[0].events.size() == 2);
+	
+	const auto &chords = defs.tracks[0].voices.begin()->events;
+
+	BOOST_CHECK(checkChord(chords[0], FM_STRING("Bsus2")));
+	BOOST_CHECK(checkChord(chords[1], FM_STRING("Asus2")));
+
+
+	auto chordelements = chords[0].chordElements();
+	BOOST_CHECK(std::get<0>(chordelements) == fm::notes::B);
+	BOOST_CHECK(std::get<1>(chordelements) == FM_STRING("sus2"));
+	BOOST_CHECK(chords[0].chordDefName() == FM_STRING("Xsus2"));
+
+	chordelements = chords[1].chordElements();
+	BOOST_CHECK(std::get<0>(chordelements) == fm::notes::A);
+	BOOST_CHECK(std::get<1>(chordelements) == FM_STRING("sus2"));
+	BOOST_CHECK(chords[1].chordDefName() == FM_STRING("Xsus2"));
+
+
+}
+
 
 BOOST_AUTO_TEST_CASE(issue_100_mod_gt_1_in_instrument_config_fails)
 {

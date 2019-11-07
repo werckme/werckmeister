@@ -42,23 +42,15 @@ namespace sheet {
 		}
 		pitch = pitchIt->second;
 		++it;
-		// check for is or es
+		// check for sharp or flat
 		if (nameLower.length() >= 2) {
-			if (pitch == fm::notes::E && *(it) == FM_CHAR('s')) {
-				pitch -= 1;
-				it += 1;
-			}
-			else if (pitch == fm::notes::A && *(it) == FM_CHAR('s')) {
-				pitch -= 1;
-				it += 1;
-			}
-			else if (nameLower.length() > 2 && *(it) == FM_CHAR('i') && *(it + 1) == FM_CHAR('s')) {
+			if (*(it) == FM_CHAR('#')) {
 				pitch += 1;
-				it += 2;
+				it += 1;
 			}
-			else if (nameLower.length() > 2 && *(it) == FM_CHAR('e') && *(it + 1) == FM_CHAR('s')) {
+			else if (*(it) == FM_CHAR('b')) {
 				pitch -= 1;
-				it += 2;
+				it += 1;
 			}
 		}
 		auto idxOptionsStart = it - nameLower.begin();

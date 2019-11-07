@@ -287,7 +287,7 @@ type: sheet;\n\
 {\n\
 	/ sheetTemplate : simplePianoSheetTemplate Intro / \n\
 	/ voicingStrategy : asNotated / \n\
-	Cmaj | Cmaj C7 | r G | Ais B | Cismaj79 r Ai \n\
+	Cmaj | Cmaj C7 | r G | A# B | C#maj79 r Ai \n\
 }\n\
 ] \n\
 ");
@@ -334,10 +334,10 @@ type: sheet;\n\
 	BOOST_CHECK(checkNote(chords[7], sheet::Event::Rest));
 	BOOST_CHECK(checkChord(chords[8], FM_STRING("G")));
 	BOOST_CHECK(checkNote(chords[9], sheet::Event::EOB));
-	BOOST_CHECK(checkChord(chords[10], FM_STRING("Ais")));
+	BOOST_CHECK(checkChord(chords[10], FM_STRING("A#")));
 	BOOST_CHECK(checkChord(chords[11], FM_STRING("B")));
 	BOOST_CHECK(checkNote(chords[12], sheet::Event::EOB));
-	BOOST_CHECK(checkChord(chords[13], FM_STRING("Cismaj79")));
+	BOOST_CHECK(checkChord(chords[13], FM_STRING("C#maj79")));
 	BOOST_CHECK(checkNote(chords[14], sheet::Event::Rest));
 	BOOST_CHECK(checkChord(chords[15], FM_STRING("Ai")));
 

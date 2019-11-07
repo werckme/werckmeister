@@ -17,6 +17,16 @@ instrumentConf: organ
     volume 73 --comment
 ;
 
+
+[
+type: template;
+name: myTemplate;
+instrument: organ; 
+{
+    <I II III IV V VI VII>1 |
+}
+]
+
 [
 instrument: organ; 
 {
@@ -28,6 +38,15 @@ instrument: organ;
 
     g   a   b   c' | d'  e'  f#' g'  |
     d   e   f#  g  | a   b  c#'  d'  |
+}
+]
+
+[
+type: sheet;
+{   
+    C7   | C7  |
+    F7   | F7  |
+    Bb7  | Bb7 |
 }
 ]
 
