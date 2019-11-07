@@ -18,16 +18,16 @@ instrumentConf: organ
 ;
 
 [
-    --comment
-instrument: organ; --comment
+instrument: organ; 
 {
-    --comment
-    /mod: staccato 
-    amount  --comment
-    100 
-    forTag 
-    ghost/ --comment
-    c "ghost"@d  e f  | "ghost"@g f e d |
+    c   d   e   f  | g   a   b   c'  |
+    f   g   a   bb | c'  d'   e' f'  |
+    bb  c'  d'  eb'| f'  g' a'  bb'  |
+
+    -- ...
+
+    g   a   b   c' | d'  e'  f#' g'  |
+    d   e   f#  g  | a   b  c#'  d'  |
 }
 ]
 
