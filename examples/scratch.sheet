@@ -61,10 +61,10 @@ type: sheet;
         rhythm2.soca.normal
     /
     Fmaj7 | Fmaj7 | G7 | G7 |
-    G-7 | Ges7 | Fmaj7 | Ges7 |
+    G-7 | Gb7 | Fmaj7 | Gb7 |
     Fmaj7 | Fmaj7 | G7 | G7 |
-    G-7 | Ges7 | 
-    Fmaj7 | Fmaj7 | Gesmaj7 | Gesmaj7 |
+    G-7 | Gb7 | 
+    Fmaj7 | Fmaj7 | Gbmaj7 | Gbmaj7 |
     /template: 
         drums.soca.bridge
         bass.soca.normal
@@ -72,11 +72,11 @@ type: sheet;
         rhythm2.soca.bridge
     /
 
-    B7 | B7 | Fis-7 | Fis-7 |
+    B7 | B7 | F#-7 | F#-7 |
     D7 | D7 | G-7 | G-7 |
-    Es7 | Es7 | A-7 | D7b9 |
+    Eb7 | Eb7 | A-7 | D7b9 |
     G-7 | C7b9 | Fmaj7 | Fmaj7 |
-    G7 | G7 | G-7 | Ges7 |
-    Fmaj7 | Ges9 |
+    G7 | G7 | G-7 | Gb7 |
+    Fmaj7 | Gb9 |
 }   
 ]

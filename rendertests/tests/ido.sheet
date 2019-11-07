@@ -19,7 +19,7 @@ type: sheet;
 {
     /template: ido.normal/
 
-    C7 | C7 | Emin7 | A B | Cmin | Cmin | Ces9 | G7 Gesmin | 
+    C7 | C7 | Emin7 | A B | Cmin | Cmin | Cb9 | G7 Gbmin | 
 
     /template: ido.fill1/
 
@@ -27,11 +27,11 @@ type: sheet;
 
     /template: ido.normal2/
 
-    F | F | E | E | F7 | F7 | Aes7 | B A | B A | 
+    F | F | E | E | F7 | F7 | Ab7 | B A | B A | 
 
     /template: ido.normal/
 
-    Cmin | Cmin | Fis | Fis | Cmin | Cmin | D | Esmin7 | D | Esmin7 | D Esmin7 | D Esmin7 | Emin | Emin | E9 | Emin11 |
+    Cmin | Cmin | F# | F# | Cmin | Cmin | D | Ebmin7 | D | Ebmin7 | D Ebmin7 | D Ebmin7 | Emin | Emin | E9 | Emin11 |
 
     /template: ido.ende/
     Cmin |

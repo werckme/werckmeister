@@ -175,9 +175,9 @@ type: sheet;
         rhythm.bossanova.normal
     /     
     
-    Bes7 | A-7 | G |  -- :|
+    Bb7 | A-7 | G |  -- :|
     -- |:
-    Bes7 | A-7 | G | D7 | F | A-7 | D7 | D7 | F |
+    Bb7 | A-7 | G | D7 | F | A-7 | D7 | D7 | F |
     ----------
     /template:  
         x
@@ -220,7 +220,7 @@ type: sheet;
         bass.country.normal
         rhythm.bossanova.normal
     /    
-    Bes7 | A-7 | 
+    Bb7 | A-7 | 
     ----------
     /template:  
         x
@@ -236,7 +236,7 @@ type: sheet;
         rhythm.bossanova.normal
     /    
     -- |:
-    Bes7 | A-7 | 
+    Bb7 | A-7 | 
 
     /template:  
         x

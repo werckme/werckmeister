@@ -22,11 +22,11 @@ type: sheet;
     /template: justchords.arpeggioT/
     C11 Cmin |
     /template: justchords.arpeggio/
-    D7#9 D | Aes7 Aesmaj7 | Ges11 | C D | 
+    D7#9 D | Ab7 Abmaj7 | Gb11 | C D | 
     /template: justchords.arpeggioT/
     E | 
     /template: justchords.arpeggioUp/
-    E7 Emin | Fis11 | Des11 | G13 |
+    E7 Emin | F#11 | Db11 | G13 |
     /template: justchords.arpeggioT/
     Cmaj7 |
     /template: justchords.bending/

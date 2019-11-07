@@ -34,7 +34,7 @@ instrument: guitar2;
 {
     \ffff    
     c2 d | /modOnce: bend from 0/ e2~ e2 | r2 c4 d4 | e4 e g c | /modOnce: bend from 40/d#2 d#4 d | c2 bb4 a 
-    | g2  g4 a | bb c' bb a | ab2 ab4 bb | c' ab,4 ab,4  bb,~ | <bb, c> ab ab bb | c' c' es'8 d' c' d' 
+    | g2  g4 a | bb c' bb a | ab2 ab4 bb | c' ab,4 ab,4  bb,~ | <bb, c> ab ab bb | c' c' eb'8 d' c' d' 
     | b2 b, | r1 | r4 b4 b4 c' | d' d' d' d' | d' d' e'8 d' c' b | c'1 
 
 }
@@ -45,7 +45,7 @@ type: sheet;
 {
     /template: countryschlager1.normal/
 
-    C | C | C | C | Es | Es | Es | Es | Aes | Aes | Aes | Aes | G7 | G7 | G7 | G7 | G7 | C | C | Cmin |
+    C | C | C | C | Eb | Eb | Eb | Eb | Ab | Ab | Ab | Ab | G7 | G7 | G7 | G7 | G7 | C | C | Cmin |
 
     /template: countryschlager1.ende/
 

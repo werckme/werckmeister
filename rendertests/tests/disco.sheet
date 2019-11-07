@@ -18,7 +18,7 @@ instrumentConf: bass volume 85;
 type: sheet;
 {
     /template: simpleDisco.normal/
-    C | C | Cmin | Ces7 | E | D | G | F | A B | 
+    C | C | Cmin | Cb7 | E | D | G | F | A B | 
 
     /template: simpleDisco.solo/
 
@@ -28,6 +28,6 @@ type: sheet;
 
     /template: simpleDisco.normal/
 
-    C | C | Cmin | Ces7 | E | D | G | F | A B | 
+    C | C | Cmin | Cb7 | E | D | G | F | A B | 
 }
 ]

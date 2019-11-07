@@ -51,7 +51,7 @@ instrument: lead;
     /do: swing grid 8 offset 60/
     r1 | r1 |
     c2 d | /modOnce: bend from 30/ e2~ e2 | r2 c4 d4 | e4 e g c | /modOnce: bend from 40/d#2 d#4 d | c2 bb4 a 
-    | g2  g4 a | bb c' bb a | as2 as4 bb | c' as,4 as,4  bb,~ | <bb, c> as as bb | c' c' eb'8 d' c' d' 
+    | g2  g4 a | bb c' bb a | ab2 ab4 bb | c' ab,4 ab,4  bb,~ | <bb, c> ab ab bb | c' c' eb'8 d' c' d' 
     | b2 b, | r1 | r4 b4 b4 c' | d' d' d' d' | d' d' e'8 d' c' b | c'1 
 }
 ]
@@ -75,8 +75,8 @@ type: sheet;
         bass.blues.normal
         rhythm.blues.normal
     /
-    Cmaj7 | Cmaj7 | Cmaj7 | Cmaj7 | Cmaj7 | Cmaj7 | Esmaj7 | Esmaj7 | 
-    Esmaj7 | Esmaj7 | Aesmaj7 | Aesmaj7 | Aesmaj7 | Aesmaj7 | G7 
+    Cmaj7 | Cmaj7 | Cmaj7 | Cmaj7 | Cmaj7 | Cmaj7 | Ebmaj7 | Ebmaj7 | 
+    Ebmaj7 | Ebmaj7 | Abmaj7 | Abmaj7 | Abmaj7 | Abmaj7 | G7 
     | G7 | G7 | G7 | G7 | C | C | Cmin | Cmin | 
 }   
 ]

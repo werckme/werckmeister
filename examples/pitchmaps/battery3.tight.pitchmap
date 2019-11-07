@@ -4,7 +4,11 @@
 "ss": c#,, -- sidestick
 "hc": d#,, -- handclap
 "ht": f#,, -- hihat closed
+"hf": g#,, -- hihat foot
 "ho": bb,, -- hihat open
+"ho1": g'   -- hihat half open1
+"ho2": g#' -- hihat half open2
+"ho3": a'   -- hihat half open3
 "cy": c#,
 "hto": c,
 "hto1": c,
@@ -15,6 +19,6 @@
 "lto": g,,
 "lto1": g,,
 "lto2": f,,
-"rdbell": b,
+"rdbell": f#,
 "mtr": ab'
 "otr": a'

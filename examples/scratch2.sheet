@@ -27,7 +27,7 @@ instrument: organ; --comment
     100 
     forTag 
     ghost/ --comment
-    c "ghost"@d  e f  | "ghost"@g f e d |
+    c# "ghost"@d  e f  | "ghost"@g f e d |
 }
 ]
 

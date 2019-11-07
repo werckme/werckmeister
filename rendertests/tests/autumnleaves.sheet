@@ -36,11 +36,11 @@ instrument: lead;
 type: sheet;
 {
     /template: simpleJazz.normal/
-    r | A-7 | D7 | Gmaj7 | Cmaj7 | Fis07 | B7 | E- | E- |
+    r | A-7 | D7 | Gmaj7 | Cmaj7 | F#07 | B7 | E- | E- |
     -- wiederholung
-    A-7 | D7 | Gmaj7 | Cmaj7 | Fis07 | 
+    A-7 | D7 | Gmaj7 | Cmaj7 | F#07 | 
     -- 2.
-    B7 | E- | E- | Fis07 | B7b9 | E- | E- | A-7 | D7 | Gmaj7 | Gmaj7 |
-    Fis07 | B7b9 | E-7 Es7 | D-7 Des7 | Cmaj7 | B7b9 | E- |
+    B7 | E- | E- | F#07 | B7b9 | E- | E- | A-7 | D7 | Gmaj7 | Gmaj7 |
+    F#07 | B7b9 | E-7 Eb7 | D-7 Db7 | Cmaj7 | B7b9 | E- |
 }
 ]
