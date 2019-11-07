@@ -23,8 +23,8 @@ instrumentConf: drums volume 70;
 instrument: vibra;
 {
     \ff
-    c2 d | e2~ e2 | r2 c4 d4 | e4 e g c | dis2 dis4 d | c2 bes4 a 
-    | g2  g4 a | bes c' bes a | as2 as4 bes | c' as,4 as,4  bes,~ | <bes, c> as as bes | c' c' es'8 d' c' d' 
+    c2 d | e2~ e2 | r2 c4 d4 | e4 e g c | d#2 d#4 d | c2 bb4 a 
+    | g2  g4 a | bb c' bb a | ab2 ab4 bb | c' ab,4 ab,4  bb,~ | <bb, c> ab ab bb | c' c' eb'8 d' c' d' 
     | b2 b, | r1 | r4 b4 b4 c' | d' d' d' d' | d' d' e'8 d' c' b | c'1 
 
 }

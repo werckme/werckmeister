@@ -23,12 +23,12 @@ instrumentConf: drums volume 80;
 instrument: lead;
 {
     \fff
-    r4 e fis g | c'1~ | c'4 d e fis | b2 b2~ | b4 c d e | a1~ | a4 b, cis dis | g1 |
+    r4 e f# g | c'1~ | c'4 d e f# | b2 b2~ | b4 c d e | a1~ | a4 b, c# d# | g1 |
     -- wiederholung
-    r4 e fis g | c'1~ | c'4 d e fis | b2 b2~ | b4 c d e | a1~ | 
+    r4 e f# g | c'1~ | c'4 d e f# | b2 b2~ | b4 c d e | a1~ | 
     -- 2.
-    a4 fis a g | e1~ | e4 r dis e | fis b, fis2~ | fis4 fis e fis | g1~ | g4 g fis g | a1~ |
-    a4 d d' c' | b1~ | b4 r ais b | c' c' a a | fis2. c'4 | b2 b2~ | b2. e4 | a2. g4 | fis2 g4 b, | e1 |
+    a4 f# a g | e1~ | e4 r d# e | f# b, f#2~ | f#4 f# e f# | g1~ | g4 g f# g | a1~ |
+    a4 d d' c' | b1~ | b4 r a# b | c' c' a a | f#2. c'4 | b2 b2~ | b2. e4 | a2. g4 | f#2 g4 b, | e1 |
 }
 ]
 

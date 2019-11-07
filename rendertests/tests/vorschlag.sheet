@@ -11,7 +11,7 @@ instrumentDef: lead    SC1 3 0 0;
 instrument: lead;
 {
     \ffff
-    cis`c4 c c c | cis8`c4 c c c
+    c#`c4 c c c | c#8`c4 c c c
 }
 ]
 

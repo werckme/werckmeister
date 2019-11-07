@@ -1,11 +1,11 @@
 "bd": c,,
 "sn": d,,
-"sng": gis --snare ghost notes
-"ss": cis,, -- sidestick
-"hc": dis,, -- handclap
-"ht": fis,, -- hihat closed
-"ho": bes,, -- hihat open
-"cy": cis,
+"sng": g# --snare ghost notes
+"ss": c#,, -- sidestick
+"hc": d#,, -- handclap
+"ht": f#,, -- hihat closed
+"ho": bb,, -- hihat open
+"cy": c#,
 "hto": c,
 "hto1": c,
 "hto2": d,
@@ -16,5 +16,5 @@
 "lto1": g,,
 "lto2": f,,
 "rdbell": b,
-"mtr": as'
+"mtr": ab'
 "otr": a'

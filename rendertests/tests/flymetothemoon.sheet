@@ -26,13 +26,13 @@ instrument: lead;
 {
     \ffff
     c'4. b8 a4 g8 f~  | f8 g4. a4 c' | b4. a8 g4 f8 e~ | e1 |
-    a4. g8 f4 e8 d~ | d e4. f4 a | gis4. f8 e4 d8 c~ | c2 r4 cis |
+    a4. g8 f4 e8 d~ | d e4. f4 a | g#4. f8 e4 d8 c~ | c2 r4 c# |
     d8 a4 a8~ a2~ | a4 c'2 b4 | g1~ | g2. b,4 | 
     c8 f4 f8~f2~ | f4 a2 g4 | f4. e8~ e2~ | e2 r2 |
 
     c'4. b8 a4 g8 f~  | f8 g4. a4 c' | b4. a8 g4 f8 e~ | e1 |
-    a4. g8 f4 e8 d~ | d e4. f4 a | gis4. f8 e4 d8 c~ | c2 r4 cis |
-    d8 a4 a8~ a2~ | a4 c'2 b4 | g1~ | g2. gis4 | 
+    a4. g8 f4 e8 d~ | d e4. f4 a | g#4. f8 e4 d8 c~ | c2 r4 c# |
+    d8 a4 a8~ a2~ | a4 c'2 b4 | g1~ | g2. g#4 | 
     a8 c4 c8~ c2~ | c2 c4 d | c1 |
 }
 ]
