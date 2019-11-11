@@ -67,7 +67,7 @@ instrument: lead;
 ]
 
 [
-type: sheet;
+type: accomp;
 {
     /template:
         x

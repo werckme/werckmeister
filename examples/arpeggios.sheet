@@ -13,7 +13,7 @@ instrumentConf: piano
 ;
 
 [
-type: sheet;
+type: accomp;
 {
     /template: justchords.empty/
     C |

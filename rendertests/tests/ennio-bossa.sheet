@@ -32,7 +32,7 @@ instrument: vibra;
 ]
 
 [
-type: sheet;
+type: accomp;
 {
     /template: bossanova.normal/
 

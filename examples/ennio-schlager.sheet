@@ -41,7 +41,7 @@ instrument: guitar2;
 ]
 
 [
-type: sheet;
+type: accomp;
 {
     /template: countryschlager1.normal/
 

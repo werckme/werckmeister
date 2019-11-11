@@ -23,7 +23,7 @@ instrument: piano;
 ]
 
 [
-type: sheet;
+type: accomp;
 {
     /template: x/
     C | C | C 

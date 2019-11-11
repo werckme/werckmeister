@@ -11,7 +11,7 @@ name: x.y;
 ]
 
 [
-type: sheet;
+type: accomp;
 {
     C7 | C9 | Dmin7 |
 }

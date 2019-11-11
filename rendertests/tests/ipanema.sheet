@@ -40,7 +40,7 @@ instrument: lead;
 
 
 [
-type: sheet;
+type: accomp;
 {
     /template: bossanova.normal/
     Fmaj7 | Fmaj7 | G7 | G7 |

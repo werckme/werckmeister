@@ -52,7 +52,7 @@ instrumentConf: drums
 
 
 [
-type: sheet;
+type: accomp;
 {
     /template: 
         drums.soca.normal

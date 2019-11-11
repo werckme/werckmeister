@@ -35,7 +35,7 @@ instrument: piano;
 ]
 
 [
-type: sheet;
+type: accomp;
 {
     /template: x/
     C-7 | E-7 | C-7 | E-7 | C-7 | Gmaj7 | Bmaj7 | 

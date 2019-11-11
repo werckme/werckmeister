@@ -28,7 +28,7 @@ instrument: fx;
 ]
 
 [
-type: sheet;
+type: accomp;
 {
     /template: purdie.normal/
 

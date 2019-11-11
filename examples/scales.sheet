@@ -42,7 +42,7 @@ instrument: organ;
 ]
 
 [
-type: sheet;
+type: accomp;
 {   
     C7   | C7  |
     F7   | F7  |

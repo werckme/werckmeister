@@ -158,7 +158,7 @@ namespace sheet {
 			Track * getFirstSheetTrack(TContainer &c) {
 				auto sheetTrackIt = 
 					std::find_if(c.begin(), c.end(), [](const auto &x) {  
-						return getFirstMetaValueBy(SHEET_META__TRACK_META_KEY_TYPE, x.trackInfos) == SHEET_META__TRACK_META_VALUE_TYPE_SHEET;
+						return getFirstMetaValueBy(SHEET_META__TRACK_META_KEY_TYPE, x.trackInfos) == SHEET_META__TRACK_META_VALUE_TYPE_ACCOMP;
 					});
 				if (sheetTrackIt == c.end()) {
 					return nullptr;

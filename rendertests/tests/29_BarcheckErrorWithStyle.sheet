@@ -14,7 +14,7 @@ instrument: piano;
 ]
 
 [
-type: sheet;
+type: accomp;
 instrument: piano; 
 {
     A-7 | D-7 | G7 | Cmaj7 C7 |

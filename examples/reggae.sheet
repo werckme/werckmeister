@@ -53,7 +53,7 @@ instrument: lead;
 
 
 [
-type: sheet;
+type: accomp;
 {
     /template: x rhythm.reggae.normal drums.reggae.normal bass.reggae.normal/
     C | C | Cmin | 

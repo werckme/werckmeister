@@ -22,7 +22,7 @@ instrument: rhythm;
 ]
 
 [
-type: sheet;
+type: accomp;
 {
     /template: x/
     /tempo: 60/

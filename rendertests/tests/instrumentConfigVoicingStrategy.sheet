@@ -58,7 +58,7 @@ instrument: guitar;
 ]
 
 [
-type: sheet;
+type: accomp;
 {
     C | F | G7 | C |
 }

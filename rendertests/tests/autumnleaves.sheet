@@ -33,7 +33,7 @@ instrument: lead;
 ]
 
 [
-type: sheet;
+type: accomp;
 {
     /template: simpleJazz.normal/
     r | A-7 | D7 | Gmaj7 | Cmaj7 | F#07 | B7 | E- | E- |

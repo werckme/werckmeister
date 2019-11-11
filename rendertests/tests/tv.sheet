@@ -139,7 +139,7 @@ instrument: lead;
 
 
 [
-type: sheet;
+type: accomp;
 {    
     /tempo: double/ 
     /signature: 4 4/  

@@ -22,7 +22,7 @@ instrument: organ;
 ]
 
 [
-type: sheet;
+type: accomp;
 {
     /template: 
         x 

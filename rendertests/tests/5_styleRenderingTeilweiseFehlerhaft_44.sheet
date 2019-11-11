@@ -16,7 +16,7 @@ instrument: piano;
 ]
 
 [
-type: sheet;
+type: accomp;
 {
     /template: simpleJazz44.normal/
     G A B | 

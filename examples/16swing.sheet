@@ -45,7 +45,7 @@ instrument: drums;
 ]
 
 [
-type: sheet;
+type: accomp;
 {
     /template: x/
     C-7 | E-7 | C-7 | E-7 |

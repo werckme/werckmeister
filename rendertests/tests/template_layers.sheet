@@ -24,7 +24,7 @@ instrumentDef: guitar   SC1 4 0 26;
 instrumentConf: guitar volume 70;
 
 [
-type: sheet;
+type: accomp;
 {
     /
     template 

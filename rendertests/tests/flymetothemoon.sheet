@@ -38,7 +38,7 @@ instrument: lead;
 ]
 
 [
-type: sheet;
+type: accomp;
 {
     /template: quickstep.normal/
     A-7 | D-7 | G7 | Cmaj7 C7 |

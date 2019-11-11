@@ -15,7 +15,7 @@ instrumentConf: piano volume 100;
 instrumentConf: bass volume 85;
 
 [
-type: sheet;
+type: accomp;
 {
     /template: simpleDisco.normal/
     C | C | Cmin | Cb7 | E | D | G | F | A B | 
