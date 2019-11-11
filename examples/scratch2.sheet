@@ -1,33 +1,74 @@
 using "chords/default.chords";
 using "pitchmaps/defaultMidiDrumMap.pitchmap";
+using "templates/drums.clickclack.template";
 using "lua/mods/swing.lua";
 using "lua/mods/staccato.lua";
+using "lua/voicings/simple.lua";
 device: BC midi 1;
 
-tempo: 120;
-instrumentDef: drums   BC 9 0 0;
-instrumentDef: bass   BC 0 0 34;
+tempo: 150;
+instrumentDef: piano   BC 0 0 0;
+instrumentDef: drums   BC 9 0 8;
+instrumentDef: bass   BC 0 0 0;
 instrumentDef: rhythm   BC 1 0 27;
-instrumentDef: --comment
-organ   --comment
-BC 2 0 0;
 
--- comment
-instrumentConf: organ  
-    volume 73 --comment
+instrumentConf: drums
+    volume 100
+;
+
+instrumentConf: bass
+    mod swing grid 8 offset 20
+    volume 100
 ;
 
 [
-    --comment
-instrument: organ; --comment
+type: template;
+name: x;
+instrument: bass;
 {
-    --comment
-    /mod: staccato 
-    amount  --comment
-    100 
-    forTag 
-    ghost/ --comment
-    c# "ghost"@d  e f  | "ghost"@g f e d |
+    /mod: staccato amount 50 forTag x/ 
+    /signature: 3 4/
+    <IV,,,>4. <III,,,>8 "x"@<I,,,>4 |
+}
+]
+
+
+
+[
+type: accomp;
+{
+    /signature: 3 4/
+    /template:  drums.clickclack.normal/
+    A-11 | A-11 |
+    A-11 | A-11 |
+    A-11 | A-11 |
+    A-11 | A-11 |
+    A-11 | A-11 |
+    A-11 | A-11 |
+    A-11 | A-11 |
+    A-11 | A-11 |
+    A-11 | A-11 |
+    A-11 | A-11 |
+    A-11 | A-11 |
+    A-11 | A-11 |
+    A-11 | A-11 |
+    A-11 | A-11 |
+    A-11 | A-11 |
+    A-11 | A-11 |
+    A-11 | A-11 |
+    A-11 | A-11 |
+    A-11 | A-11 |
+    A-11 | A-11 |
+    A-11 | A-11 |
+    A-11 | A-11 |
+    A-11 | A-11 |
+    A-11 | A-11 |
+    A-11 | A-11 |
+    A-11 | A-11 |
+    A-11 | A-11 |
+    A-11 | A-11 |
+    A-11 | A-11 |
+    A-11 | A-11 |        
 }
 ]
 

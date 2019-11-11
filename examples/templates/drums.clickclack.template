@@ -1,0 +1,13 @@
+[
+type: template;
+name: drums.clickclack.normal;
+instrument: drums; 
+{
+    /signature: 3 4/
+    r8 "ht" r x r !ffffx    |   
+}
+{
+    /signature: 3 4/
+    "sn"8 "bd" x "sn" "bd" r
+}
+]
