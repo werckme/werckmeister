@@ -1,8 +1,8 @@
-@load "./templates/purdie.template";
-@load "./chords/default.chords";
-@load "./templates/ido.template";
-@load "./pitchmaps/defaultMidiDrumMap.pitchmap";
---@load "./pitchmaps/battery3.tight.pitchmap";
+using "./templates/purdie.template";
+using "./chords/default.chords";
+using "./templates/ido.template";
+using "./pitchmaps/defaultMidiDrumMap.pitchmap";
+--using "./pitchmaps/battery3.tight.pitchmap";
 
 device: SC1 midi 1 offset 20;
 --device: BT midi 8;

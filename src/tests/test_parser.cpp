@@ -582,35 +582,17 @@ BOOST_AUTO_TEST_CASE(test_documentConfigParser)
 {
 	using namespace fm;
 	fm::String text = FM_STRING("\
-@load \"Chords1.chords\"; \n\
-@load \"Chords.chords\"; \n\
-@load \"simplePianoSheetTemplate.sheetTemplate\"; \n\
-@load \"chords/Chords1.chords\"; \n\
-@load \"chords/Chords.chords\"; \n\
-@load \"sheetTemplates/simplePianoSheetTemplate.sheetTemplate\"; \n\
-@load \"C:\\drivers\\Intel Rapid Storage Technology Driver\"; \n\
-\n\
-	[\n\
-	{\n\
-		/ soundselect: 0 0 /\n\
-			/ channel : 1 /\n\
-			c4 d4 e4 f4 | c4 d4 e4 f4 |\n\
-	}\n\
-	{\n\
-		f4 f4 f4 f4 | h4 h4 h4 h4 |\n\
-	}\n\
-	]\n\
-    [\n\
-	{\n\
-		/ sheetTemplate: simplePianoSheetTemplate:intro /\n\
-		/ voicingStrategy : asNotated /\n\
-		Cmaj | Cmaj C7 |\n\
-	}\n\
-	]\n\
-\n\
+using \"Chords1.chords\"; \n\
+using \"Chords.chords\"; \n\
+using \"simplePianoSheetTemplate.sheetTemplate\"; \n\
+using \"chords/Chords1.chords\"; \n\
+using \"chords/Chords.chords\"; \n\
+using \"sheetTemplates/simplePianoSheetTemplate.sheetTemplate\"; \n\
+using \"C:\\drivers\\Intel Rapid Storage Technology Driver\"; \n\
 ");
-	sheet::compiler::DocumentConfigParser parser;
-	auto defs = parser.parse(text);
+	sheet::compiler::SheetDefParser parser;
+	auto doc = parser.parse(text);
+	const auto &defs = doc.documentConfig;
 	BOOST_CHECK(defs.usings.size() == 7);
 	auto it = defs.usings.begin();
 	BOOST_CHECK(*(it++) == FM_STRING("Chords1.chords"));
@@ -635,21 +617,21 @@ BOOST_AUTO_TEST_CASE(test_documentConfigParser_empty)
 			c4 d4 e4 f4 | c4 d4 e4 f4 |\n\
 	}\n\
 	{\n\
-		f4 f4 f4 f4 | h4 h4 h4 h4 |\n\
+		f4 f4 f4 f4 | b4 b4 b4 b4 |\n\
 	}\n\
 	]\n\
     [\n\
 	{\n\
-		/ sheetTemplate: simplePianoSheetTemplate:intro /\n\
+		/ sheetTemplate: simplePianoSheetTemplate intro /\n\
 		/ voicingStrategy : asNotated /\n\
 		Cmaj | Cmaj C7 |\n\
 	}\n\
 	]\n\
 \n\
 ");
-	sheet::compiler::DocumentConfigParser parser;
-	auto defs = parser.parse(text);
-	BOOST_CHECK(defs.usings.size() == 0);
+	sheet::compiler::SheetDefParser parser;
+	auto doc = parser.parse(text);
+	BOOST_CHECK(doc.documentConfig.usings.size() == 0);
 
 }
 

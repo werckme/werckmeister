@@ -1,7 +1,7 @@
-@load "./chords/default.chords";
-@load "./voicings/guitar.lua";
-@load "./voicings/voicelead.lua";
-@load "./voicings/simple.lua";
+using "./chords/default.chords";
+using "./voicings/guitar.lua";
+using "./voicings/voicelead.lua";
+using "./voicings/simple.lua";
 
 device: SC1 midi 1;
 

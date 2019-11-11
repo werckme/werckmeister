@@ -1,7 +1,7 @@
-@load "./chords/default.chords";
---@load "./templates/simpleDisco.template";
-@load "./templates/justchords.template";
-@load "./pitchmaps/defaultMidiDrumMap.pitchmap";
+using "./chords/default.chords";
+--using "./templates/simpleDisco.template";
+using "./templates/justchords.template";
+using "./pitchmaps/defaultMidiDrumMap.pitchmap";
 
 device: SC1 midi 1;
 --           instrument   dv ch cc pc

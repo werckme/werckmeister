@@ -1,8 +1,8 @@
-@load "./chords/default.chords";
---@load "./templates/simpleDisco.template";
-@load "./templates/justchords.template";
-@load "./pitchmaps/defaultMidiDrumMap.pitchmap";
-@load "lua/voicings/voicelead.lua";
+using "./chords/default.chords";
+--using "./templates/simpleDisco.template";
+using "./templates/justchords.template";
+using "./pitchmaps/defaultMidiDrumMap.pitchmap";
+using "lua/voicings/voicelead.lua";
 
 device: SC1 midi 1;
 --           instrument   dv ch cc pc

@@ -1,5 +1,5 @@
-@load "./chords/default.chords";
-@load "./pitchmaps/defaultMidiDrumMap.pitchmap";
+using "./chords/default.chords";
+using "./pitchmaps/defaultMidiDrumMap.pitchmap";
 
 device: SC1 midi 2;
 

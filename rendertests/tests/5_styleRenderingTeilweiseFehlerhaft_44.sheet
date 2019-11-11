@@ -1,4 +1,4 @@
-@load "./chords/default.chords";
+using "./chords/default.chords";
 
 tempo: 120;
 device: SC1 midi 1;

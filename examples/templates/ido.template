@@ -1,5 +1,5 @@
-@load "lua/voicings/simple.lua";
-@load "lua/voicings/guitar.lua";
+using "lua/voicings/simple.lua";
+using "lua/voicings/guitar.lua";
 
 [
 type: template;

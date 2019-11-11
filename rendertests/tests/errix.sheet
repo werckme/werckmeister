@@ -1,5 +1,5 @@
-@load "./pitchmaps/defaultMidiDrumMap.pitchmap";
-@load "./chords/default.chords";
+using "./pitchmaps/defaultMidiDrumMap.pitchmap";
+using "./chords/default.chords";
 
 tempo: 150;
 device: SC1 midi 1;

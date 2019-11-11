@@ -1,15 +1,19 @@
-@load "chords/default.chords";
-@load "pitchmaps/defaultMidiDrumMap.pitchmap";
-@load "lua/mods/swing.lua";
-@load "lua/mods/staccato.lua";
-@load "lua/voicings/simple.lua";
-@load "lua/voicings/guitar.lua";
-@load "lua/voicings/voicelead.lua";
-@load "lua/mods/guitarStroke.lua";
-@load "templates/drums.soca.template";
-@load "templates/bass.soca.template";
-@load "templates/rhythm.soca.template";
-@load "templates/piano.bossanova.template";
+
+
+
+
+using "chords/default.chords";
+using "pitchmaps/defaultMidiDrumMap.pitchmap";
+using "lua/mods/swing.lua";
+using "lua/mods/staccato.lua";
+using "lua/voicings/simple.lua";
+using "lua/voicings/guitar.lua";
+using "lua/voicings/voicelead.lua";
+using "lua/mods/guitarStroke.lua";
+using "templates/drums.soca.template";
+using "templates/bass.soca.template";
+using "templates/rhythm.soca.template";
+using "templates/piano.bossanova.template";
 
 
 device: SC1 midi 2;

@@ -1,4 +1,4 @@
-@load "lua/voicings/voicelead.lua";
+using "lua/voicings/voicelead.lua";
 
 [
 type: template;

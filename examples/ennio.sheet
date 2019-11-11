@@ -1,6 +1,6 @@
-@load "./chords/default.chords";
-@load "./pitchmaps/defaultMidiDrumMap.pitchmap";
-@load "./templates/ennio.template";
+using "./chords/default.chords";
+using "./pitchmaps/defaultMidiDrumMap.pitchmap";
+using "./templates/ennio.template";
 
 device: SC1 midi 2;
 

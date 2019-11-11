@@ -1,4 +1,4 @@
-@load "../voicings/simple.lua";
+using "../voicings/simple.lua";
 
 [
 type: template;

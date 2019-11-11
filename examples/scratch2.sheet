@@ -1,7 +1,7 @@
-@load "chords/default.chords";
-@load "pitchmaps/defaultMidiDrumMap.pitchmap";
-@load "lua/mods/swing.lua";
-@load "lua/mods/staccato.lua";
+using "chords/default.chords";
+using "pitchmaps/defaultMidiDrumMap.pitchmap";
+using "lua/mods/swing.lua";
+using "lua/mods/staccato.lua";
 device: BC midi 1;
 
 tempo: 120;

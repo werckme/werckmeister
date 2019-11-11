@@ -1,6 +1,6 @@
-@load "./chords/default.chords";
-@load "./templates/simpleDisco.template";
-@load "./pitchmaps/defaultMidiDrumMap.pitchmap";
+using "./chords/default.chords";
+using "./templates/simpleDisco.template";
+using "./pitchmaps/defaultMidiDrumMap.pitchmap";
 
 tempo: 125;
 

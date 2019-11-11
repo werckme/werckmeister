@@ -1,10 +1,10 @@
-@load "chords/default.chords";
-@load "pitchmaps/defaultMidiDrumMap.pitchmap";
-@load "lua/mods/swing.lua";
-@load "lua/voicings/voicelead.lua";
-@load "lua/voicings/guitar.lua";
-@load "templates/drums.reggae.template";
-@load "templates/bass.reggae.template";
+using "chords/default.chords";
+using "pitchmaps/defaultMidiDrumMap.pitchmap";
+using "lua/mods/swing.lua";
+using "lua/voicings/voicelead.lua";
+using "lua/voicings/guitar.lua";
+using "templates/drums.reggae.template";
+using "templates/bass.reggae.template";
 
 device: SC1 midi 2;
 

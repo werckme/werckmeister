@@ -1,6 +1,6 @@
-@load "./chords/default.chords";
-@load "lua/mods/myArpeggio.lua";
-@load "lua/voicings/voicelead.lua";
+using "./chords/default.chords";
+using "lua/mods/myArpeggio.lua";
+using "lua/voicings/voicelead.lua";
 
 device: SC1 midi 2;
 

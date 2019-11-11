@@ -42,15 +42,6 @@ namespace sheet {
 				return parse(cstr, cstr + str.length(), sourceId);
 			}
 		};
-		struct DocumentConfigParser {
-
-			DocumentConfig parse(fm::CharType const* first, fm::CharType const* last);
-			DocumentConfig parse(const fm::String &str)
-			{
-				fm::CharType const* cstr = str.c_str();
-				return parse(cstr, cstr + str.length());
-			}
-		};
 
 		struct DocumentParser {
 			typedef std::vector<fm::String> Usings;

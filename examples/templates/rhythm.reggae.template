@@ -1,5 +1,5 @@
-@load "lua/mods/swing.lua";
-@load "lua/mods/staccato.lua";
+using "lua/mods/swing.lua";
+using "lua/mods/staccato.lua";
 
 [
 type: template;

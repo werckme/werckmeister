@@ -1,6 +1,6 @@
-@load "./chords/default.chords";
-@load "./templates/simpleJazz.template";
-@load "./pitchmaps/defaultMidiDrumMap.pitchmap";
+using "./chords/default.chords";
+using "./templates/simpleJazz.template";
+using "./pitchmaps/defaultMidiDrumMap.pitchmap";
 
 tempo: 140;
 device: SC1 midi 2;

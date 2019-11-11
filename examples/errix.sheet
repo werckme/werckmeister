@@ -1,6 +1,6 @@
-@load "./pitchmaps/battery3.tight.pitchmap";
-@load "./chords/default.chords";
-@load "./templates/reaggesk.template";
+using "./pitchmaps/battery3.tight.pitchmap";
+using "./chords/default.chords";
+using "./templates/reaggesk.template";
 
 tempo: 150;
 device: SC1 midi 2; -- offset 20;

@@ -1,4 +1,4 @@
-@load "lua/mods/swing.lua";
+using "lua/mods/swing.lua";
 
 [
 type: template;

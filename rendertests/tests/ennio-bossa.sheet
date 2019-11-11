@@ -1,7 +1,7 @@
-@load "./chords/default.chords";
-@load "./pitchmaps/defaultMidiDrumMap.pitchmap";
-@load "./templates/bossanova.template";
-@load "./templates/countryschlager1.template";
+using "./chords/default.chords";
+using "./pitchmaps/defaultMidiDrumMap.pitchmap";
+using "./templates/bossanova.template";
+using "./templates/countryschlager1.template";
  
 device: SC1 midi 2;
 

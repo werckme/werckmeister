@@ -1,6 +1,6 @@
-@load "./chords/default.chords";
-@load "./templates/quickstep.template";
-@load "./pitchmaps/defaultMidiDrumMap.pitchmap";
+using "./chords/default.chords";
+using "./templates/quickstep.template";
+using "./pitchmaps/defaultMidiDrumMap.pitchmap";
 
 tempo: 180;
 device: SC1 midi 1;

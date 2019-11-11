@@ -1,7 +1,7 @@
-@load "./chords/default.chords";
-@load "./pitchmaps/battery3.tight.pitchmap";
---@load "./pitchmaps/defaultMidiDrumMap.pitchmap";
-@load "./templates/purdie.template";
+using "./chords/default.chords";
+using "./pitchmaps/battery3.tight.pitchmap";
+--using "./pitchmaps/defaultMidiDrumMap.pitchmap";
+using "./templates/purdie.template";
 
 
 tempo: 160;

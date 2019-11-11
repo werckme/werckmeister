@@ -170,7 +170,7 @@ namespace sheet {
 					quoted_string.name("quoted string");
 
 					quoted_string %= lexeme['"' > +(char_ - '"') > '"'];
-					using_ %= "@load" > quoted_string > ";";
+					using_ %= "using" > quoted_string > ";";
 					usings_ %= *using_;
 					documentConfig_ %= usings_;
 				}

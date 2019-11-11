@@ -1,13 +1,13 @@
-@load "chords/default.chords";
-@load "pitchmaps/defaultMidiDrumMap.pitchmap";
-@load "lua/mods/swing.lua";
-@load "lua/mods/staccato.lua";
-@load "lua/voicings/simple.lua";
-@load "lua/voicings/voicelead.lua";
-@load "lua/mods/guitarStroke.lua";
-@load "templates/drums.blues.template";
-@load "templates/bass.blues.template";
-@load "templates/rhythm.blues.template";
+using "chords/default.chords";
+using "pitchmaps/defaultMidiDrumMap.pitchmap";
+using "lua/mods/swing.lua";
+using "lua/mods/staccato.lua";
+using "lua/voicings/simple.lua";
+using "lua/voicings/voicelead.lua";
+using "lua/mods/guitarStroke.lua";
+using "templates/drums.blues.template";
+using "templates/bass.blues.template";
+using "templates/rhythm.blues.template";
 device: SC1 midi 2;
 device: BC midi 2;
 

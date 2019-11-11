@@ -1,5 +1,5 @@
-@load "./chords/default.chords";
-@load "./voicings/simple.lua";
+using "./chords/default.chords";
+using "./voicings/simple.lua";
 
 device: SC1 midi 2;
 

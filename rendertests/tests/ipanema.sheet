@@ -1,7 +1,7 @@
-@load "./chords/default.chords";
-@load "./templates/bossanova.template";
-@load "./pitchmaps/defaultMidiDrumMap.pitchmap";
---@load "./pitchmaps/battery3.tight.pitchmap";
+using "./chords/default.chords";
+using "./templates/bossanova.template";
+using "./pitchmaps/defaultMidiDrumMap.pitchmap";
+--using "./pitchmaps/battery3.tight.pitchmap";
 
 tempo: 140;
 device: SC1 midi 2;
