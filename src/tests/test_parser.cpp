@@ -1114,3 +1114,72 @@ BOOST_AUTO_TEST_CASE(test_tags_degree)
 		BOOST_CHECK( ev.tags.find(fm::String("tag2")) != ev.tags.end() );
 	}
 }
+
+
+BOOST_AUTO_TEST_CASE(test_ntolen)
+{
+	using namespace fm;
+	using sheet::PitchDef;
+	fm::String text = FM_STRING("\
+[\n\
+	{\n\
+		(c4 d16 e8)4 \n\
+	}\n\
+]\n\
+");
+	sheet::compiler::SheetDefParser parser;
+	auto defs = parser.parse(text);
+	BOOST_CHECK(defs.tracks.size() == 1);
+	BOOST_CHECK(defs.tracks[0].voices.size() == 1);
+	BOOST_CHECK(defs.tracks[0].voices[0].events.size() == 1);
+	const auto event = defs.tracks[0].voices[0].events[0];
+	BOOST_CHECK(event.type == sheet::Event::Group);
+	BOOST_CHECK(event.duration == 1.0_N4);
+	BOOST_CHECK(event.eventGroup.size() == 3);
+	BOOST_CHECK(checkNote(event.eventGroup[0], sheet::Event::Note, fm::notes::C, 0, 1.0_N4));
+	BOOST_CHECK(checkNote(event.eventGroup[1], sheet::Event::Note, fm::notes::D, 0, 1.0_N16));
+	BOOST_CHECK(checkNote(event.eventGroup[2], sheet::Event::Note, fm::notes::E, 0, 1.0_N8));
+}
+
+BOOST_AUTO_TEST_CASE(test_nested_ntolen)
+{
+	using namespace fm;
+	using sheet::PitchDef;
+	fm::String text = FM_STRING("\
+[\n\
+	{\n\
+		( (c d e)8 (f~ g a)16 (I~ II III)32 )4 \n\
+	}\n\
+]\n\
+");
+	sheet::compiler::SheetDefParser parser;
+	auto defs = parser.parse(text);
+	BOOST_CHECK(defs.tracks.size() == 1);
+	BOOST_CHECK(defs.tracks[0].voices.size() == 1);
+	BOOST_CHECK(defs.tracks[0].voices[0].events.size() == 1);
+	const auto &event = defs.tracks[0].voices[0].events[0];
+	BOOST_CHECK(event.type == sheet::Event::Group);
+	BOOST_CHECK(event.duration == 1.0_N4);
+	BOOST_CHECK(event.eventGroup.size() == 3);
+	
+	const auto &g1 = event.eventGroup[0];
+	BOOST_CHECK(g1.eventGroup.size() == 3);
+	BOOST_CHECK(g1.duration == 1.0_N8);
+	BOOST_CHECK(checkNote(g1.eventGroup[0], sheet::Event::Note, fm::notes::C, 0, sheet::Event::NoDuration));
+	BOOST_CHECK(checkNote(g1.eventGroup[1], sheet::Event::Note, fm::notes::D, 0, sheet::Event::NoDuration));
+	BOOST_CHECK(checkNote(g1.eventGroup[2], sheet::Event::Note, fm::notes::E, 0, sheet::Event::NoDuration));
+
+	const auto &g2 = event.eventGroup[1];
+	BOOST_CHECK(g2.eventGroup.size() == 3);
+	BOOST_CHECK(g2.duration == 1.0_N16);
+	BOOST_CHECK(checkNote(g2.eventGroup[0], sheet::Event::TiedNote, fm::notes::F, 0, sheet::Event::NoDuration));
+	BOOST_CHECK(checkNote(g2.eventGroup[1], sheet::Event::Note, fm::notes::G, 0, sheet::Event::NoDuration));
+	BOOST_CHECK(checkNote(g2.eventGroup[2], sheet::Event::Note, fm::notes::A, 0, sheet::Event::NoDuration));
+
+	const auto &g3 = event.eventGroup[2];
+	BOOST_CHECK(g3.eventGroup.size() == 3);
+	BOOST_CHECK(g3.duration == 1.0_N32);
+	BOOST_CHECK(checkNote(g3.eventGroup[0], sheet::Event::TiedDegree, fm::degrees::I, 0, sheet::Event::NoDuration));
+	BOOST_CHECK(checkNote(g3.eventGroup[1], sheet::Event::Degree, fm::degrees::II, 0, sheet::Event::NoDuration));
+	BOOST_CHECK(checkNote(g3.eventGroup[2], sheet::Event::Degree, fm::degrees::III, 0, sheet::Event::NoDuration));
+}

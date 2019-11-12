@@ -56,6 +56,15 @@ BOOST_FUSION_ADAPT_STRUCT(
 	(unsigned int, sourcePositionEnd)
 )
 
+BOOST_FUSION_ADAPT_STRUCT(
+	sheet::Grouped,
+//	(unsigned int, sourcePositionBegin)
+	(sheet::ASheetObjectWithSourceInfo::SourceId, sourceId)
+	(sheet::Event::EventGroup, eventGroup)
+	(sheet::Event::Duration, duration)
+//	(unsigned int, sourcePositionEnd)
+)
+
 namespace {
 	enum EventFields {
 		EvSourcePosBegin,
@@ -192,6 +201,7 @@ namespace sheet {
 					start.name("sheet");
 
 					event_.name("event");
+					groupedEvent_.name("eventGroup");
 					track.name("track");
 					voice.name("voice");
 					events.name("events");
@@ -326,7 +336,14 @@ namespace sheet {
 						>> +char_("a-zA-Z") >> ":" >> +(lexeme[+char_(ALLOWED_META_ARGUMENT)]) >> "/"
 					)
 					;
-					events %= *event_;
+
+					groupedEvent_ %= 
+						attr(sourceId_)
+						>> "(" > *( event_ | groupedEvent_ ) > ")"
+						>> (durationSymbols_ | attr(Event::NoDuration)) 
+					;
+
+					events %= *(event_ | groupedEvent_);
 
 
 					voice %= "{" > events > "}";
@@ -364,6 +381,7 @@ namespace sheet {
 				qi::rule<Iterator, Voice(), ascii::space_type> voice;
 				qi::rule<Iterator, Voice::Events(), ascii::space_type> events;
 				qi::rule<Iterator, Event(), ascii::space_type> event_;
+				qi::rule<Iterator, Grouped(), ascii::space_type> groupedEvent_;
 				qi::rule<Iterator, SheetInfo(), ascii::space_type> sheetInfo_;
 				qi::rule<Iterator, TrackInfo(), ascii::space_type> trackInfo_;
 				qi::rule<Iterator, DocumentConfig(), ascii::space_type> documentConfig_;

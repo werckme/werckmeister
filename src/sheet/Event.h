@@ -68,11 +68,13 @@ namespace sheet {
 			Meta,
 			Expression,
 			PitchBend,
+			Group,
 			NumEvents
 		};
 		typedef fm::Ticks Duration;
 		typedef std::set<PitchDef> Pitches;
 		typedef std::vector<fm::String> Args;
+		typedef std::vector<Event> EventGroup;
 		typedef std::set<fm::String> Tags;
 		typedef fm::String Options;
 		typedef std::tuple<PitchDef::Pitch, Options> ChordElements;
@@ -88,6 +90,7 @@ namespace sheet {
 		fm::String stringValue;
 		Args metaArgs;
 		Tags tags;
+		EventGroup eventGroup;
 		/**
 		 * the event velocity value in a range 0..1, will be set during rendering
 		 */
@@ -102,7 +105,8 @@ namespace sheet {
 				|| type == Chord 
 				|| type == TiedDegree
 				|| type == Repeat
-				|| type == TiedRepeat;
+				|| type == TiedRepeat
+				|| type == Group;
 		}
 		
 		bool isRepeat() const {
@@ -129,6 +133,12 @@ namespace sheet {
 		}
 
 		fm::String toString() const;
+	};
+
+	struct Grouped : public Event {
+		Grouped() {
+			this->type = Group;
+		}
 	};
 }
 
