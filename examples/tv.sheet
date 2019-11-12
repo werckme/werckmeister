@@ -31,7 +31,7 @@ instrumentDef: drums      SC1 9 0 0;
 instrumentConf: rhythm
     voicingStrategy guitar range tenor
     mod guitarStroke 
-    pan 80
+    pan 60
     volume 70;   
 
 instrumentConf: bass
@@ -43,7 +43,7 @@ instrumentConf: piano
     volume 70;  
 
 instrumentConf: lead 
-    pan 30
+    pan 50
     volume 90;   
 
 instrumentConf: lead2

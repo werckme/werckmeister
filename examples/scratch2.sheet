@@ -6,10 +6,10 @@ using "lua/mods/staccato.lua";
 using "lua/voicings/simple.lua";
 device: BC midi 1;
 
-tempo: 150;
+tempo: 145;
 instrumentDef: piano   BC 0 0 0;
 instrumentDef: drums   BC 9 0 8;
-instrumentDef: bass   BC 0 0 0;
+instrumentDef: bass   BC 2 3 34;
 instrumentDef: rhythm   BC 1 0 27;
 
 instrumentConf: drums
@@ -23,7 +23,18 @@ instrumentConf: bass
 
 [
 type: template;
-name: x;
+name: piano;
+instrument: piano;
+{
+    /mod: staccato amount 50 forTag x/ 
+    /signature: 3 4/
+    <IV,,,>4. <III,,,>8 "x"@<I,,,>4 |
+}
+]
+
+[
+type: template;
+name: bass;
 instrument: bass;
 {
     /mod: staccato amount 50 forTag x/ 
@@ -33,14 +44,15 @@ instrument: bass;
 ]
 
 
-
 [
 type: accomp;
 {
     /signature: 3 4/
-    /template:  drums.clickclack.normal/
+    /template:  piano/
     A-11 | A-11 |
+    /template:  piano bass/
     A-11 | A-11 |
+    /template:  piano bass drums.clickclack.normal/
     A-11 | A-11 |
     A-11 | A-11 |
     A-11 | A-11 |
