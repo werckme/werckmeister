@@ -169,13 +169,24 @@ namespace sheet {
 			}
 
 			Event & __degreeToAbsoluteNote(AContext *ctx, const Event &chordEvent, const Event &degreeEvent, Event &target) {
+				target = degreeEvent;
+				if (degreeEvent.type == Event::Group) {
+					target.type = Event::Group;
+					size_t index = 0;
+					for (const auto &groupedDegreeEvent : degreeEvent.eventGroup) {
+						__degreeToAbsoluteNote(ctx, chordEvent, groupedDegreeEvent, target.eventGroup[index++]);
+					}
+					return target;
+				}				
+				if (!degreeEvent.isRelativeDegree()) {
+					return target;
+				}				
 				auto chordDef = ctx->sheetTemplateDefServer()->getChord(chordEvent.chordDefName());
 				if (chordDef == nullptr) {
 					FM_THROW(Exception, "chord not found: " + chordEvent.stringValue);
 				}									
 				auto voicingStratgy = ctx->currentVoicingStrategy();
 				auto pitches = voicingStratgy->get(chordEvent, *chordDef, degreeEvent.pitches, ctx->getTimeInfo());
-				target = degreeEvent;
 				target.type = Event::Note;
 				target.isTied(degreeEvent.isTied());
 				target.pitches.swap(pitches);
@@ -239,9 +250,12 @@ namespace sheet {
 					while(ticksToWrite > 1.0_N128) {
 						const Event &degree = *(eventServer.nextEvent());
 						Event copy; 
-						copy = degree.isRelativeDegree() ? 
-							__degreeToAbsoluteNote(ctx, *chord, degree, copy) 
-										: degree;
+						copy = __degreeToAbsoluteNote(ctx, *chord, degree, copy);
+
+						// copy = degree.isRelativeDegree() ? 
+						// 	__degreeToAbsoluteNote(ctx, *chord, degree, copy) 
+						// 				: degree;						
+										
 						bool isTimeConsuming = copy.isTimeConsuming();
 						if (isTimeConsuming && leftover > 0) {
 							copy.duration += leftover;

@@ -74,6 +74,10 @@ namespace fmapp {
             Renderer::addEvent(ev);
             return;
         }
+        if (ev.type == sheet::Event::Group) {
+            Renderer::addEvent(ev);
+            return;
+        }
         auto meta = voiceMetaData();
         auto evStartPos = meta->position * meta->tempoFactor;
         this->currentEventInfo_ = std::make_shared<EventInfo>();
