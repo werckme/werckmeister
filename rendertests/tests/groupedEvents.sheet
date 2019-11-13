@@ -1,0 +1,42 @@
+using "./chords/default.chords";
+device: SC1 midi 2;
+
+tempo: 130;
+--          instrument dv ch cc pc
+instrumentDef: piano   SC1 2 0 0;
+
+
+[
+type: template;
+name: x;
+instrument: piano;
+{
+    I,,4 I,, I,, I,, |
+}
+]
+
+[
+type: template;
+name: y;
+instrument: piano;
+{
+    (I,,4 I,,4 I,,4)1 |
+}
+]
+
+[
+instrument: piano;
+{
+   -- (c d e)2 (c d e)4 (c2 d e f g)4 | ((ccc)4 (ddd)4 (eee)4)2  ((ccc)4 (ddd) (eee))2
+}
+]
+
+[
+type: accomp;
+{
+    /template: x/
+    C | C | 
+    /template: y/
+    C |
+}
+]

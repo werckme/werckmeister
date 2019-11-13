@@ -95,6 +95,29 @@ namespace sheet {
 			{
 				renderEventUnrolled<0>(renderer, ev);
 			}
+
+			template<>
+			bool renderEvent<Event::Group>(SheetEventRenderer* renderer, const Event *ev)
+			{
+				const fm::Ticks eventDuration = ev->duration;
+				if (eventDuration == 0) {
+					return true;
+				}
+				fm::Ticks totalGroupEventDuration = 0;
+				for (const auto &groupedEvent : ev->eventGroup) {
+					totalGroupEventDuration += groupedEvent.duration;
+				}
+				if (totalGroupEventDuration == 0) {
+					return true;
+				}
+				const fm::Ticks div = totalGroupEventDuration / eventDuration;
+				for (const auto &groupedEvent : ev->eventGroup) {
+					Event copy = groupedEvent;
+					copy.duration /= div;
+					renderer->addEvent(copy);
+				}
+				return true;
+			}
 		}
 
         void SheetEventRenderer::addEvent(const Event &ev)
