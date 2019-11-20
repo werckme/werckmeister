@@ -8,6 +8,7 @@ device: BC midi 1;
 
 tempo: 145;
 instrumentDef: piano   BC 0 0 0;
+instrumentDef: slide   BC 0 0 0;
 instrumentDef: drums   BC 9 0 8;
 instrumentDef: bass   BC 2 3 34;
 instrumentDef: rhythm   BC 1 0 27;
@@ -40,6 +41,15 @@ instrument: bass;
     /mod: staccato amount 50 forTag x/ 
     /signature: 3 4/
     <IV,,,>4. <III,,,>8 "x"@<I,,,>4 |
+}
+]
+
+[
+type: template;
+name: slide;
+instrument: slide;
+{
+    <I II III IV V VI VII>2 <I II III IV V VI VII>4 |
 }
 ]
 
