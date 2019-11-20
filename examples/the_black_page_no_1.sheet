@@ -42,7 +42,7 @@ instrumentConf: bass
 
 instrumentConf: piano
     voicingStrategy simple range tenor
-    volume 100;  
+    volume 80;  
 
 instrumentConf: lead 
     pan 50
@@ -82,11 +82,23 @@ instrument: lead;
     f#'4    f#32 bx a b8~  x16 c#`b  f#8~  x16  g#8  b,16 | (c32 bb f)8  eb'8  (db'16 r bb)8  c'8~ (c'8  eb'`ab db' gb' bb)2 | 
     eb'8.    db'32 f' c'2. | c'32 e' d' f'  e' g' f' d'   (a' c'' e')8 (e' f' e' d' a)8  (bb c'x d' x e' f')4 (a' gx d' fx e)4 |
     b2 ((b c#'x b d')  (f' ax bb c')  (e' a' bb' f' c' g))2 |  a4~ x16 a'8.~ x8 x~ x8. a16~ | x4 b'~ x16 c#'8.~ x8 e'~ |
-    x8. c#'16~ x4 ((b c'x a d') (eb' gx a f) (e gx fx bb))2 |  b1~ |
-
+    x8. c#'16~ x4 ((b c'x a d') (eb' gx a f) (e gx fx bb))2 |  b1~ | x4  a8~ x32 g f# c'  (d a g)8 (b gx a f#)8 (r b e a f#)4 |
+    (f#' e' b  d' e)4 (f#' e' b  d' e~)4 e2 | 
+    r8  (r f# g c' b)8  (f#' g' e' a' f#')8 g'32 f#'x e'  (d'' a'x b' c'' e'' b'x c'' d a')4 (b' e'x g'x  d'' f#'x  a' e' b)4 |
+    (a' c'x)2 g'2   |
+    ((r eb' bb' ab' e') (e' g' eb' bb ab') (c'' bb'x ab'x f'))2  (bb' gb'x ab' f' db'x eb' b ab' f')4 (f' eb' gb' e' db' eb' ab' db' gb' f eb)4 |
+    c'1 |
 }
 ]
 
+[
+type: template;
+name: x;
+instrument: bass;
+{
+    I,,2.  V,,,4 |
+}
+]
 
 [
 type: template;
@@ -109,6 +121,9 @@ type: accomp;
     D2   |  Gb2  |  Gb2  |
     Bb2  |  G2   |  Bb2  |
     G2   |  Bb2  |  C2   |
+    C2   |  C2   |  C2   |
+    C2   |  C#2   B2  |  
+    Ab2  |
 
 }
 ]
