@@ -71,6 +71,16 @@ void saveMidi(fm::midi::MidiPtr midi, const std::string &filename)
 }
 
 
+void printWarnings(const sheet::Warnings &warnings) 
+{
+	if (warnings.empty()) {
+		return;
+	}
+	for (const auto &warning : warnings) {
+		std::cout << warning << std::endl;
+	}
+}
+
 
 int main(int argc, const char** argv)
 {
@@ -87,7 +97,9 @@ int main(int argc, const char** argv)
 		}
 
 		std::string infile = settings.getInput();
-		auto midi = sheet::processFile(infile);
+		sheet::Warnings warnings;
+		auto midi = sheet::processFile(infile, warnings);
+		printWarnings(warnings);
 
 		std::string outfile = boost::filesystem::path(infile).filename().string() + ".mid";
 		if (settings.output()) {

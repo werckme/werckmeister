@@ -5,6 +5,7 @@
 #include <forward.hpp>
 #include <memory>
 #include <vector>
+#include <compiler/error.hpp>
 
 namespace sheet {
     class Document;
@@ -22,7 +23,8 @@ namespace fmapp {
             JsonWriter& operator= (const JsonWriter&) = delete;
             std::string funkfeuerToJSON(fm::Ticks elapsedTime, unsigned long lastUpdateTimestamp);
             std::string funkfeuerToJSON(fm::Ticks elapsedTime, unsigned long lastUpdateTimestamp, const std::vector<EventInfo> &eventInfos);
-            std::string documentInfosToJSON(const sheet::Document &document, fm::Ticks duration);
+            std::string documentInfosToJSON(const sheet::Document &document, fm::Ticks duration, const sheet::Warnings &warnings);
+            std::string exceptionToJSON(const std::exception &ex);
     };
 }
 

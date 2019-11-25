@@ -63,6 +63,11 @@ namespace sheet {
 			return ss;
 		}
 
+		const ASheetObjectWithSourceInfo * Exception::getSourceInfo() const
+		{
+			return boost::get_error_info<ex_sheet_source_info>(*this);
+		}
+
 		std::string Exception::toString() const
 		{
 			std::stringstream ss;

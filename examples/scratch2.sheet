@@ -4,16 +4,22 @@ using "templates/drums.clickclack.template";
 using "lua/mods/swing.lua";
 using "lua/mods/staccato.lua";
 using "lua/voicings/simple.lua";
+using "lua/voicings/guitar.lua";
 device: BC midi 1;
 
 tempo: 145;
 instrumentDef: piano   BC 0 0 0;
-instrumentDef: slide   BC 0 0 0;
+instrumentDef: slide   BC 3 8 26;
 instrumentDef: drums   BC 9 0 8;
 instrumentDef: bass   BC 2 3 34;
 instrumentDef: rhythm   BC 1 0 27;
 
 instrumentConf: drums
+    volume 100
+;
+
+instrumentConf: slide
+    voicingStrategy guitar
     volume 100
 ;
 
@@ -49,7 +55,13 @@ type: template;
 name: slide;
 instrument: slide;
 {
-    <I II III IV V VI VII>2 <I II III IV V VI VII>4 |
+    /signature: 3 4/
+    /modOnce: bend from 0/
+    <I II III IV V VI VII>2 
+    /modOnce: bend from 40/
+    <I II III IV V VI VII>4~ | x2.~ | x2. | r2. | r2. | r2. |
+
+    
 }
 ]
 
@@ -65,6 +77,7 @@ type: accomp;
     /template:  piano bass drums.clickclack.normal/
     A-11 | A-11 |
     A-11 | A-11 |
+    /template:  slide piano bass drums.clickclack.normal/
     A-11 | A-11 |
     A-11 | A-11 |
     A-11 | A-11 |

@@ -202,6 +202,16 @@ void updateLastChangedTimestamp() {
 	lastUpdateTimestamp = (unsigned long)time(NULL);
 }
 
+void printWarnings(const sheet::Warnings &warnings) 
+{
+	if (warnings.empty()) {
+		return;
+	}
+	for (const auto &warning : warnings) {
+		std::cout << warning << std::endl;
+	}
+}
+
 int listDevices() {
 	auto &player = fmapp::getMidiplayer();
 	auto outputs = player.getOutputs();
@@ -276,7 +286,9 @@ void updatePlayer(fmapp::Midiplayer &player, const std::string &inputfile)
 	try {
 		timeline.clear();
 		lastTimelineEvent = timeline.end();
-		player.midi(sheet::processFile(inputfile));
+		sheet::Warnings warnings;
+		player.midi(sheet::processFile(inputfile, warnings));
+		printWarnings(warnings);
 	}
 	catch (const fm::Exception &ex)
 	{
@@ -337,9 +349,9 @@ std::string eventInfosAsJson(sheet::DocumentPtr document)
 	return ss.str();
 }
 
-std::string getDocumentsInfoJSON(sheet::DocumentPtr document, fm::Ticks duration)
+std::string getDocumentsInfoJSON(sheet::DocumentPtr document, fm::Ticks duration, const sheet::Warnings &warnings)
 {
-	return jsonWriter.documentInfosToJSON(*document, duration / fm::PPQ);
+	return jsonWriter.documentInfosToJSON(*document, duration / fm::PPQ, warnings);
 }
 void play(sheet::DocumentPtr document, fm::midi::MidiPtr midi, MidiOutputId midiOutput, fm::Ticks begin, fm::Ticks end, const Settings &settings) 
 {
@@ -428,12 +440,12 @@ void startSender() {
 
 }
 
-
-
 int main(int argc, const char** argv)
 {
+	bool showDocumentInfo = false;
 	try {
 		Settings settings(argc, argv);
+		showDocumentInfo = settings.documentInfoJSON();
 		bool needsTimeline = settings.udp() || settings.eventInfosJSON();
 		if (settings.help()) 
 		{
@@ -469,11 +481,16 @@ int main(int argc, const char** argv)
 				return context;
 			});
 		}
-
+		
 		std::string infile = settings.getInput();
 		auto doc = sheet::createDocument(infile);
-		auto showWarnings = !settings.documentInfoJSON();
-		auto midi = sheet::processFile(doc, showWarnings);
+		auto showWarnings = !showDocumentInfo;
+		sheet::Warnings warnings;
+		auto midi = sheet::processFile(doc, warnings);
+		if (showWarnings) {
+			printWarnings(warnings);
+		}
+		
 		fm::Ticks begin = 0;
 
 		auto end = midi->duration();
@@ -491,9 +508,9 @@ int main(int argc, const char** argv)
 		{
 			throw std::runtime_error("invalid begin/end range");
 		}
-		if (settings.documentInfoJSON()) 
+		if (showDocumentInfo) 
 		{
-			std:: cout << getDocumentsInfoJSON(doc, end) << std::endl;
+			std::cout << getDocumentsInfoJSON(doc, end, warnings) << std::endl;
 		}
 		else if(settings.eventInfosJSON())
 		{
@@ -512,15 +529,27 @@ int main(int argc, const char** argv)
 	}
 	catch (const fm::Exception &ex)
 	{
-		sheet::onCompilerError(ex);
+		if (showDocumentInfo)  {
+			std::cout << jsonWriter.exceptionToJSON(ex) << std::endl;
+		} else {
+			sheet::onCompilerError(ex);
+		}
 	}
 	catch (const std::exception &ex)
 	{
-		sheet::onCompilerError(ex);
+		if (showDocumentInfo)  {
+			std::cout << jsonWriter.exceptionToJSON(ex) << std::endl;
+		} else {
+			sheet::onCompilerError(ex);
+		}
 	}
 	catch (...)
 	{
-		sheet::onCompilerError();
+		if (showDocumentInfo)  {
+			std:: cout << jsonWriter.exceptionToJSON(std::runtime_error("unknown error")) << std::endl;
+		} else {
+			sheet::onCompilerError();
+		}
 	}
 	return -1;
 }

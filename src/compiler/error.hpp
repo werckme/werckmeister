@@ -7,6 +7,7 @@
 #include <boost/spirit/home/support/info.hpp>
 #include <fm/exception.hpp>
 #include <string>
+#include <list>
 #include <boost/exception/info.hpp>
 #include <sheet/ASheetObject.hpp>
 #include <algorithm>
@@ -14,6 +15,7 @@
 #include <fm/common.hpp>
 
 namespace sheet {
+	typedef std::list<std::string> Warnings;
 	class Document;
 	namespace compiler {
 		typedef boost::error_info<struct tag_at_object_idx, int> ex_at_object_idx;
@@ -30,6 +32,7 @@ namespace sheet {
 			{}
 			virtual ~Exception() throw () = default;
 			virtual std::string toString() const override;
+			const ASheetObjectWithSourceInfo* getSourceInfo() const;
 		protected:
 			std::stringstream & strWhere(std::stringstream &ss, const std::string filename, int line = -1) const;
 			std::stringstream & strWhat(std::stringstream &ss, const std::string &what) const;

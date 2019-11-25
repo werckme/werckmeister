@@ -103,6 +103,15 @@ instrument: bass;
 [
 type: template;
 name: x;
+instrument: drums;
+{
+    r8 "ht" r8 "ht" r8 "ht" r8 "ht" |
+}
+]
+
+[
+type: template;
+name: x;
 instrument: piano;
 {
     <I II III IV V VI VII>1 |

@@ -38,7 +38,6 @@ namespace sheet {
 			typedef Id TrackId;
 			typedef Id VoiceId;
 			typedef ISheetTemplateDefServer* ISheetTemplateDefServerPtr;
-			typedef std::list<std::string> Warnings;
 			typedef std::unordered_map<fm::String, fm::Expression> ExpressionMap;
 			typedef std::shared_ptr<VoiceMetaData> VoiceMetaDataPtr;
 			typedef std::shared_ptr<TrackMetaData> TrackMetaDataPtr;
