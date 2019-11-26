@@ -11,6 +11,7 @@
 #include <fm/config/configServer.h>
 #include <sheet/Track.h>
 #include "sheet/tools.h"
+#include <sstream>
 
 namespace sheet {
 
@@ -239,14 +240,18 @@ namespace sheet {
 			auto tmeta = trackMetaData();
 			auto vmeta = voiceMetaData();
 			std::string voiceName;
-			fm::Ticks pos = 0;
-			if (tmeta) {
+			int pos = 0;
+			const auto currentInstrument = currentInstrumentDef();
+			if (currentInstrument) {
+				voiceName = currentInstrument->uname;
+			}
+			else if (tmeta) {
 				voiceName = tmeta->instrument.empty() ? std::to_string(voice()) : tmeta->instrument;
 			}
 			if (vmeta) {
-				pos = vmeta->position / vmeta->barLength;
+				pos = static_cast<int>(vmeta->position / vmeta->barLength) - 1;
 			}
-			std::string warning(msg + " at '" + voiceName + "', bar: " + std::to_string(pos));
+			std::string warning(msg + " - [" + voiceName + "] bar " + std::to_string(pos));
 			warnings.push_back(warning);
 		}
 
@@ -259,7 +264,9 @@ namespace sheet {
 			}
 			else if (!fm::compareTolerant(meta->barPosition, meta->barLength, fm::Ticks(TickTolerance))) {
 				auto errorInQuaters = -(meta->barLength - meta->barPosition) / fm::PPQ;
-				warn("bar check error (" + std::to_string( errorInQuaters )+ ")");
+				std::stringstream ss;
+				ss << "bar check error: " << errorInQuaters << " quarters";
+				warn(ss.str());
 				seek(-(meta->barPosition - meta->barLength));
 			}
 			meta->barPosition = 0;

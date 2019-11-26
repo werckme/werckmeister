@@ -24,7 +24,7 @@ instrumentDef: drums   BC 9 0 0;
 instrumentDef: bass   BC 0 0 34;
 instrumentDef: rhythm2   BC 2 0 21;
 instrumentDef: rhythm   BC 3 0 25;
-instrumentDef: lead     SC1 3 0 11;
+instrumentDef: lead     SC1 5 0 11;
 instrumentDef: piano   BC 4 0 0;
 
 instrumentConf: bass   
@@ -34,7 +34,11 @@ instrumentConf: bass
 ;
 
 instrumentConf: piano   
-    volume 60
+    volume 90
+;
+
+instrumentConf: lead   
+    volume 90
 ;
 
 instrumentConf: rhythm  
@@ -53,6 +57,14 @@ instrumentConf: rhythm2
 instrumentConf: drums  
     volume 80
 ;
+
+[
+instrument: lead;
+{
+    c d e f | c d e f | g1~ | g1 |
+    g | gb | f1 f1 |  f1 f1 |
+}
+]
 
 [
 type: accomp;

@@ -402,6 +402,7 @@ namespace sheet {
 		void MidiContext::metaInstrument(const fm::String &uname, const fm::String &deviceName, int channel, int cc, int pc)
 		{
 			MidiInstrumentDef def;
+			def.uname = uname;
 			def.channel = channel;
 			def.cc = cc;
 			def.pc = pc;
