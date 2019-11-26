@@ -61,8 +61,8 @@ instrumentConf: drums
 [
 instrument: lead;
 {
-    c d e f | c d e f | g1~ | g1 |
-    g | gb | f1 f1 |  f1 f1 |
+    c d e8   | c4 d e f | g1~ | g1 |
+    g | gb | f1 | 
 }
 ]
 

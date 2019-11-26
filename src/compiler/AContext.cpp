@@ -249,7 +249,7 @@ namespace sheet {
 				voiceName = tmeta->instrument.empty() ? std::to_string(voice()) : tmeta->instrument;
 			}
 			if (vmeta) {
-				pos = static_cast<int>(vmeta->position / vmeta->barLength) - 1;
+				pos = static_cast<int>(vmeta->position / vmeta->barLength);
 			}
 			std::string warning(msg + " - [" + voiceName + "] bar " + std::to_string(pos));
 			warnings.push_back(warning);
@@ -264,10 +264,10 @@ namespace sheet {
 			}
 			else if (!fm::compareTolerant(meta->barPosition, meta->barLength, fm::Ticks(TickTolerance))) {
 				auto errorInQuaters = -(meta->barLength - meta->barPosition) / fm::PPQ;
+				seek(-(meta->barPosition - meta->barLength));
 				std::stringstream ss;
 				ss << "bar check error: " << errorInQuaters << " quarters";
 				warn(ss.str());
-				seek(-(meta->barPosition - meta->barLength));
 			}
 			meta->barPosition = 0;
 			++(meta->barCount);
