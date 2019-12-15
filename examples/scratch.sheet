@@ -58,13 +58,15 @@ instrumentConf: drums
     volume 80
 ;
 
+
 [
-instrument: lead;
+instrument: piano; 
 {
-    c d e8   | c4 d e f | g1~ | g1 |
-    g | gb | f1 | 
-}
+    /mod: staccato amount 100/ 
+    (c)4 (cc,)4 (cxc,)4 (ccc,cc)4 | ((c'c,c')(c'c,c')(c'c,c'c,c'))2. c,,4~ | x1
+}   
 ]
+
 
 [
 type: accomp;
@@ -75,7 +77,7 @@ type: accomp;
         rhythm.soca.normal
         rhythm2.soca.normal
     /
-    Fmaj7 | Fmaj7 | G7 | G7 |
+    r| r | r | Fmaj7 | Fmaj7 | G7 | G7 |
     G-7 | Gb7 | Fmaj7 | Gb7 |
     Fmaj7 | Fmaj7 | G7 | G7 |
     G-7 | Gb7 | 
@@ -90,7 +92,15 @@ type: accomp;
     B7 | B7 | F#-7 | F#-7 |
     D7 | D7 | G-7 | G-7 |
     Eb7 | Eb7 | A-7 | D7b9 |
-    G-7 | C7b9 | Fmaj7 | Fmaj7 |
+    G-7 | C7b9 | 
+
+    /template: 
+        drums.soca.normal
+        bass.soca.normal
+        rhythm2.soca.normal
+    / 
+    
+    Fmaj7 | Fmaj7 |
     G7 | G7 | G-7 | Gb7 |
     Fmaj7 | Gb9 |
 }   

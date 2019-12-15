@@ -8,6 +8,7 @@
 #include "compiler/compiler.h"
 #include "compiler/parser.h"
 #include "compiler/MidiContext.h"
+#include "fmapp/json.hpp"
 #include <fstream>
 #include <fm/common.hpp>
 #include "sheet/Document.h"
@@ -16,7 +17,7 @@
 #define ARG_HELP "help"
 #define ARG_INPUT "input"
 #define ARG_OUTPUT "output"
-
+#define ARG_MODE "mode"
 
 struct Settings {
 	typedef boost::program_options::variables_map Variables;
@@ -32,6 +33,7 @@ struct Settings {
 			(ARG_HELP, "produce help message")
 			(ARG_INPUT, po::value<std::string>(), "input file")
 			(ARG_OUTPUT, po::value<std::string>(), "output file")
+			(ARG_MODE, po::value<std::string>(), "mode: normal or json; in JSON mode the input and output will be implemented using JSON strings")
 			;
 		po::positional_options_description p;
 		p.add(ARG_INPUT, -1);
@@ -61,6 +63,10 @@ struct Settings {
 		return variables[ARG_OUTPUT].as<std::string>();
 	}
 
+	bool isJsonMode() const {
+		return variables[ARG_MODE].as<std::string>() == "json";
+	}
+
 };
 
 void saveMidi(fm::midi::MidiPtr midi, const std::string &filename)
@@ -81,6 +87,14 @@ void printWarnings(const sheet::Warnings &warnings)
 	}
 }
 
+void prepareJSONMode(const std::string &jsonData) {
+	fmapp::JsonReader jsonReader;
+	auto vfiles = jsonReader.readVirtualFS(jsonData);
+	for(const auto &vfile : vfiles) {
+		std::cout << vfile.path <<  std::endl;
+		std::cout << "    " << vfile.data <<  std::endl;
+	}
+}
 
 int main(int argc, const char** argv)
 {
@@ -92,7 +106,11 @@ int main(int argc, const char** argv)
 			return 1;
 		}
 		
-		if (!settings.input()) {
+		if (settings.isJsonMode() && settings.input()) {
+			prepareJSONMode(settings.getInput());
+			return 0;
+		}
+		else if (!settings.input()) {
 			throw std::runtime_error("missing input file");
 		}
 

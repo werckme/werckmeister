@@ -1,4 +1,4 @@
-# Werckmeister's Protoyper For Music 
+# Werckmeister's protoyping for Music 
 
 ![the editor](https://raw.githubusercontent.com/SambaGodschynski/werckmeister-editor/master/assets/sheet-example.png)
 
