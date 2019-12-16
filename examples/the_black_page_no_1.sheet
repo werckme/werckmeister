@@ -62,13 +62,6 @@ instrumentConf: bell
 
 instrumentConf: drums
     volume 90;       
-
-
-
-
-
-
-
 [
 instrument: lead;
 {

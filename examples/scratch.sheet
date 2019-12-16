@@ -1,7 +1,3 @@
-
-
-
-
 using "chords/default.chords";
 using "pitchmaps/defaultMidiDrumMap.pitchmap";
 using "lua/mods/swing.lua";
@@ -63,7 +59,7 @@ instrumentConf: drums
 instrument: piano; 
 {
     /mod: staccato amount 100/ 
-    (c)4 (cc,)4 (cxc,)4 (ccc,cc)4 | ((c'c,c')(c'c,c')(c'c,c'c,c'))2. c,,4~ | x1
+    c4 c8c, (cxc,)4 (ccc,cc)4 | ((c'c,c')(c'c,c')(c'c,c'c,c'))2. c,,4~ | x1
 }   
 ]
 

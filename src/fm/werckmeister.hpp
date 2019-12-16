@@ -50,6 +50,7 @@ namespace fm {
 		void registerLuaScript(const Path &path);
 		const Paths & searchPaths() const;
 		void addSearchPath(const Path &path);
+		Path createVirtualFile(const Path &path, const fm::String &data = "");
 		Path createVirtualFile();
 		const String * getVirtualFileData(const Path &path) const;
 		void updateVirtualFile(const Path &path, const String &data);
@@ -69,6 +70,7 @@ namespace fm {
 		Path resolvePath(const Path &relPath, sheet::ConstDocumentPtr, const Path &sourcePath = FM_STRING("")) const;
 		Path absolutePath(const Path &relPath) const;
 		bool fileExists(const Path &path) const;
+		bool fileIsSheet(const Path &path) const;
 		const Path * findScriptPathByName(const fm::String &name) const;
 		ResourceStream openResource(const std::string &path)
 		{

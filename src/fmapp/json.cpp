@@ -5,6 +5,8 @@
 #include <sheet/Document.h>
 #include <fmapp/MidiAndTimeline.hpp>
 #include <compiler/error.hpp>
+#include <boost/beast/core/detail/base64.hpp>
+#include <fm/midi.hpp>
 
 namespace {
     std::string toString(const rapidjson::Document &doc) 
@@ -13,6 +15,20 @@ namespace {
         rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
         doc.Accept(writer);
         return buffer.GetString();
+    }
+
+    std::string midiToBase64(fm::midi::MidiPtr midi)
+    {
+        size_t nbytes = midi->byteSize();
+        size_t nBase64 = boost::beast::detail::base64::encoded_size(nbytes);
+        fm::Byte *bff = new fm::Byte[nbytes];
+        char *base64 = new char[nBase64];
+        midi->write(bff, nbytes);
+        boost::beast::detail::base64::encode(base64, bff, nbytes);
+        std::string result(base64, nBase64);
+        delete []bff;
+        delete []base64;
+        return result;
     }
 }
 
@@ -111,6 +127,16 @@ namespace fmapp {
         return toString(doc);
     }
 
+    std::string JsonWriter::midiToJSON(fm::midi::MidiPtr midi)
+    {
+        rapidjson::Document doc;
+        doc.SetObject();
+        rapidjson::Value midiData;
+        midiData.SetString(midiToBase64(midi).c_str(), doc.GetAllocator());
+        doc.AddMember("midiData", midiData, doc.GetAllocator());
+        return toString(doc);
+    }
+
     ///////////////////////////////////////////////////////////////////////////
 
     std::list<VirtualFileDto> JsonReader::readVirtualFS(const std::string & jsonData)
@@ -151,5 +177,4 @@ namespace fmapp {
         }
         return result;
     }
-
 }

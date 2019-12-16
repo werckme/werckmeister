@@ -107,8 +107,14 @@ namespace fm {
 
 	Path Werckmeister::createVirtualFile()
 	{
-		auto path = "\\\\\\virtual-file-" + std::to_string(virtualFiles_.size() + 1);
+		auto path = "_werckmeister_virtual-file-" + std::to_string(virtualFiles_.size() + 1);
 		virtualFiles_[path] = "";
+		return path;
+	}
+
+	Path Werckmeister::createVirtualFile(const Path &path, const std::string &data)
+	{
+		virtualFiles_[path] = data;
 		return path;
 	}
 
@@ -296,6 +302,11 @@ namespace fm {
 	void Werckmeister::createContextHandler(const CreateContextFunction &createContextHandler)
 	{
 		this->_createContextHandler = createContextHandler;
+	}
+
+	bool Werckmeister::fileIsSheet(const Path &path) const 
+	{
+		return boost::filesystem::extension(path) == ".sheet";
 	}
 
 	Werckmeister::~Werckmeister() = default;

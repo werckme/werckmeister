@@ -76,6 +76,11 @@ void saveMidi(fm::midi::MidiPtr midi, const std::string &filename)
 	fstream.flush();
 }
 
+void toJSONOutput(fm::midi::MidiPtr midi)
+{
+	fmapp::JsonWriter jsonWriter;
+	std::cout << jsonWriter.midiToJSON(midi);	
+}
 
 void printWarnings(const sheet::Warnings &warnings) 
 {
@@ -87,34 +92,42 @@ void printWarnings(const sheet::Warnings &warnings)
 	}
 }
 
-void prepareJSONMode(const std::string &jsonData) {
+fm::Path prepareJSONMode(const std::string &jsonData) {
+	auto &wm = fm::getWerckmeister();
 	fmapp::JsonReader jsonReader;
 	auto vfiles = jsonReader.readVirtualFS(jsonData);
+	fm::Path sheetPath;
 	for(const auto &vfile : vfiles) {
-		std::cout << vfile.path <<  std::endl;
-		std::cout << "    " << vfile.data <<  std::endl;
+		if (wm.fileIsSheet(vfile.path)) {
+			sheetPath = vfile.path;
+		}
+		wm.createVirtualFile(vfile.path, vfile.data);
 	}
+	return sheetPath;
 }
 
 int main(int argc, const char** argv)
 {
 	try {
 		Settings settings(argc, argv);
-		
+		std::string infile;
+
 		if (settings.help()) {
 			std::cout << settings.optionsDescription << "\n";
 			return 1;
 		}
 		
 		if (settings.isJsonMode() && settings.input()) {
-			prepareJSONMode(settings.getInput());
-			return 0;
+			infile = prepareJSONMode(settings.getInput());
 		}
 		else if (!settings.input()) {
 			throw std::runtime_error("missing input file");
 		}
 
-		std::string infile = settings.getInput();
+		if (infile.empty()) {
+			infile = settings.getInput();
+		}
+		
 		sheet::Warnings warnings;
 		auto midi = sheet::processFile(infile, warnings);
 		printWarnings(warnings);
@@ -123,7 +136,11 @@ int main(int argc, const char** argv)
 		if (settings.output()) {
 			outfile = settings.getOutput();
 		}
-		saveMidi(midi, outfile);
+		if (settings.isJsonMode()) {
+			toJSONOutput(midi);
+		} else {
+			saveMidi(midi, outfile);
+		}
 		return 0;
 	}
 	catch (const fm::Exception &ex)
