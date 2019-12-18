@@ -262,14 +262,18 @@ BOOST_AUTO_TEST_CASE(write_read_program_change)
 BOOST_AUTO_TEST_CASE(write_midi_event_container)
 {
 	using namespace fm;
+	midi::MidiConfig config;
 	midi::EventContainer events;
+	events.midiConfig(&config);
 	BOOST_CHECK(events.numEvents() == 0);
 }
 
 BOOST_AUTO_TEST_CASE(write_midi_event_container_write_fail)
 {
 	using namespace fm;
+	midi::MidiConfig config;
 	midi::EventContainer events;
+	events.midiConfig(&config);
 	events.add(midi::Event::NoteOn(0, 0, 24, 100));
 	events.add(midi::Event::NoteOn(0, 1.0_N4, 25, 100));
 	events.add(midi::Event::NoteOn(0, 2.0_N4, 26, 100));
@@ -281,7 +285,9 @@ BOOST_AUTO_TEST_CASE(write_midi_event_container_write_fail)
 BOOST_AUTO_TEST_CASE(write_midi_event_container_write)
 {
 	using namespace fm;
+	midi::MidiConfig config;
 	midi::EventContainer events;
+	events.midiConfig(&config);
 	events.add(midi::Event::NoteOn(0, 1, 24, 100));
 	events.add(midi::Event::NoteOn(0, 1, 48, 100));
 	events.add(midi::Event::NoteOn(1, 50, 25, 101));
@@ -308,7 +314,9 @@ BOOST_AUTO_TEST_CASE(write_midi_event_container_read_n_write)
 	size_t byteSize;
 	// write
 	{
+		midi::MidiConfig config;
 		midi::EventContainer events;
+		events.midiConfig(&config);
 		events.add(midi::Event::NoteOn(0, 0, 24, 101));
 		events.add(midi::Event::NoteOff(1, 1.0_N4, 25));
 		events.add(midi::Event::NoteOn(2, 2.0_N4, 26, 103));
@@ -320,7 +328,9 @@ BOOST_AUTO_TEST_CASE(write_midi_event_container_read_n_write)
 	}
 	// read
 	{
+		midi::MidiConfig config;
 		midi::EventContainer events;
+		events.midiConfig(&config);
 		BOOST_CHECK(events.read(bytes, byteSize));
 		BOOST_CHECK(events.numEvents() == 4);
 		std::vector<midi::Event> bff(events.numEvents());
@@ -348,7 +358,9 @@ BOOST_AUTO_TEST_CASE(write_midi_event_pc_cc_before_notes)
 	size_t byteSize;
 	// write
 	{
+		midi::MidiConfig config;
 		midi::EventContainer events;
+		events.midiConfig(&config);
 		events.addNote(0, 0, 100, 100, 1.0_N4);
 
 		auto cc0 = midi::Event();
@@ -374,7 +386,9 @@ BOOST_AUTO_TEST_CASE(write_midi_event_pc_cc_before_notes)
 	}
 	// read
 	{
+		midi::MidiConfig config;
 		midi::EventContainer events;
+		events.midiConfig(&config);
 		BOOST_CHECK(events.read(bytes, byteSize));
 		BOOST_CHECK(events.numEvents() == 4);
 		std::vector<midi::Event> bff(events.numEvents());
@@ -399,7 +413,9 @@ BOOST_AUTO_TEST_CASE(write_midi_event_track_write_fail)
 {
 	using namespace fm;
 	midi::Track track;
+	midi::MidiConfig config;
 	auto &events = track.events();
+	events.midiConfig(&config);
 	events.add(midi::Event::NoteOn(0, 0, 24, 100));
 	events.add(midi::Event::NoteOn(1, 50, 25, 101));
 	events.add(midi::Event::NoteOn(2, 100, 26, 102));
@@ -413,7 +429,9 @@ BOOST_AUTO_TEST_CASE(write_midi_event_track_write)
 {
 	using namespace fm;
 	midi::Track track;
+	midi::MidiConfig config;
 	auto &events = track.events();
+	events.midiConfig(&config);
 	events.add(midi::Event::NoteOn(0, 0, 24, 100));
 	events.add(midi::Event::NoteOn(1, 50, 25, 101));
 	events.add(midi::Event::NoteOn(2, 100, 26, 102));
@@ -440,6 +458,8 @@ BOOST_AUTO_TEST_CASE(write_midi_write_fail)
 	midi::Midi midi(PPQ);
 	midi::TrackPtr track = std::make_shared<midi::Track>();
 	auto &events = track->events();
+	midi::MidiConfig config;
+	events.midiConfig(&config);
 	events.add(midi::Event::NoteOn(0, 0, 24, 100));
 	events.add(midi::Event::NoteOn(1, 50, 25, 101));
 	events.add(midi::Event::NoteOn(2, 100, 26, 102));
@@ -457,6 +477,8 @@ BOOST_AUTO_TEST_CASE(write_midi_write)
 	{
 		midi::TrackPtr track = std::make_shared<midi::Track>();
 		auto &events = track->events();
+		midi::MidiConfig config;
+		events.midiConfig(&config);
 		events.add(midi::Event::NoteOn(0, 0, 24, 100));
 		events.add(midi::Event::NoteOn(1, 50, 25, 101));
 		events.add(midi::Event::NoteOn(2, 100, 26, 102));
@@ -465,6 +487,8 @@ BOOST_AUTO_TEST_CASE(write_midi_write)
 	{
 		midi::TrackPtr track = std::make_shared<midi::Track>();
 		auto &events = track->events();
+		midi::MidiConfig config;
+		events.midiConfig(&config);
 		events.add(midi::Event::NoteOn(3, 0, 48, 103));
 		events.add(midi::Event::NoteOn(4, 50, 50, 104));
 		events.add(midi::Event::NoteOn(5, 100, 52, 105));
@@ -522,6 +546,8 @@ BOOST_AUTO_TEST_CASE(write_midi_write_to_file)
 	{
 		midi::TrackPtr track = std::make_shared<midi::Track>();
 		auto &events = track->events();
+		midi::MidiConfig config;
+		events.midiConfig(&config);
 		events.addNote(0, 0, 48, 100, 1.0_N4);
 		events.addNote(0, 1.0_N4, 50, 100, 1.0_N4);
 		events.addNote(0, 2.0_N4, 52, 100, 1.0_N4);
@@ -531,6 +557,8 @@ BOOST_AUTO_TEST_CASE(write_midi_write_to_file)
 	{
 		midi::TrackPtr track = std::make_shared<midi::Track>();
 		auto &events = track->events();
+		midi::MidiConfig config;
+		events.midiConfig(&config);
 		events.addNote(0, 0, 24, 100, 1.0_N8);
 		events.addNote(0, 1.0_N8, 48, 100, 1.0_N8);
 		events.addNote(0, 2.0_N8, 24, 100, 1.0_N8);
@@ -555,6 +583,8 @@ BOOST_AUTO_TEST_CASE(event_container_from)
 	midi::Midi midi(PPQ);
 	midi::TrackPtr track = std::make_shared<midi::Track>();
 	auto &events = track->events();
+	midi::MidiConfig config;
+	events.midiConfig(&config);
 	events.add(midi::Event::NoteOn(0, 0, 24, 100));
 	events.add(midi::Event::NoteOn(1, 50, 25, 101));
 	events.add(midi::Event::NoteOn(3, 100, 26, 102));
