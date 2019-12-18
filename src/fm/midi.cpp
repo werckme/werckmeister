@@ -412,8 +412,18 @@ namespace fm {
 
 		///////////////////////////////////////////////////////////////////////////
 		// EventContainer
+		const MidiConfig * EventContainer::midiConfig() const
+		{
+			if (!this->_midiConfig) {
+				FM_THROW(fm::Exception, "midiconfig == null");
+			}
+			return this->_midiConfig;
+		}
 		void EventContainer::add(const Event &event)
 		{
+			if (midiConfig()->skipMetaEvents && event.eventType() == MetaEvent) {
+				return;
+			}
 			if (contains(event)) {
 				return;
 			}
@@ -584,11 +594,13 @@ namespace fm {
 		}
 		void Midi::addTrack(TrackPtr track)
 		{
+			track->events().midiConfig(&this->midiConfig);
 			_container.push_back(track);
 		}
 		TrackPtr Midi::createTrack() const
 		{
-			return std::make_shared<Track>();
+			auto result = std::make_shared<Track>();
+			return result;
 		}
 		void Midi::write(const char* filename) const
 		{

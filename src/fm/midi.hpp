@@ -26,6 +26,9 @@ namespace fm {
 			Data data;
 			Type type;
 		};
+		struct MidiConfig {
+			bool skipMetaEvents = false; 
+		};
 		class Track;
 		typedef std::shared_ptr<Track> TrackPtr;
 		class Midi;
@@ -180,7 +183,11 @@ namespace fm {
 			bool contains(const Event &event) const;
 			const TContainer & container() const { return _container; }
 			TContainer & container() { return _container; }
+			const MidiConfig * midiConfig() const;
+			void midiConfig (const MidiConfig *midiConfig) { this->_midiConfig = midiConfig; }
+			
 		private:
+			const MidiConfig *_midiConfig = nullptr;
 			TContainer _container;
 		};
 
@@ -235,6 +242,7 @@ namespace fm {
 			Ticks duration() const;
 			BPM bpm() const { return bpm_; }
 			void bpm(BPM bpm) { bpm_ = bpm; }
+			MidiConfig midiConfig;
 		private:
 			BPM bpm_ = fm::DefaultTempo;
 			Ticks _ppq = 0;

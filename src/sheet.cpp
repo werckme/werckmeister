@@ -10,19 +10,22 @@
 
 namespace sheet {
 
-    fm::midi::MidiPtr processFile(const std::string &file, sheet::Warnings &outWarnings)
+    fm::midi::MidiPtr processFile(const std::string &file, sheet::Warnings &outWarnings, const fm::midi::MidiConfig *midiConfig)
     {
         auto doc = createDocument(file);
-        return processFile(doc, outWarnings);
+        return processFile(doc, outWarnings, midiConfig);
     }
 
-    fm::midi::MidiPtr processFile(sheet::DocumentPtr doc, sheet::Warnings &outWarnings) 
+    fm::midi::MidiPtr processFile(sheet::DocumentPtr doc, sheet::Warnings &outWarnings, const fm::midi::MidiConfig *midiConfig) 
     {
         auto &wm = fm::getWerckmeister();
         auto context = std::dynamic_pointer_cast<sheet::compiler::MidiContext>( wm.createContext() );
         // there is one case where context and event renderer is one object -> MidiAndTimeline
         auto eventRenderer = std::dynamic_pointer_cast<sheet::compiler::SheetEventRenderer>( context );
         auto midi = wm.createMidi();
+        if (midiConfig) {
+            midi->midiConfig = *midiConfig;
+        }
         context->midi(midi);
         context->sheetTemplateDefServer(doc.get());
         auto compiler = wm.createCompiler();

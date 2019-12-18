@@ -18,6 +18,7 @@
 #define ARG_INPUT "input"
 #define ARG_OUTPUT "output"
 #define ARG_MODE "mode"
+#define ARG_NOMETA "nometa"
 
 struct Settings {
 	typedef boost::program_options::variables_map Variables;
@@ -34,6 +35,7 @@ struct Settings {
 			(ARG_INPUT, po::value<std::string>(), "input file")
 			(ARG_OUTPUT, po::value<std::string>(), "output file")
 			(ARG_MODE, po::value<std::string>(), "mode: normal or json; in JSON mode the input and output will be implemented using JSON strings")
+			(ARG_NOMETA, "dosen't render midi meta events like track name or tempo")
 			;
 		po::positional_options_description p;
 		p.add(ARG_INPUT, -1);
@@ -59,11 +61,18 @@ struct Settings {
 		return !!variables.count(ARG_OUTPUT);
 	}
 
+	bool noMeta() const {
+		return !!variables.count(ARG_NOMETA);
+	}
+
 	auto getOutput() const {
 		return variables[ARG_OUTPUT].as<std::string>();
 	}
 
 	bool isJsonMode() const {
+		if (variables.count(ARG_MODE) == 0) {
+			return false;
+		}
 		return variables[ARG_MODE].as<std::string>() == "json";
 	}
 
@@ -129,7 +138,9 @@ int main(int argc, const char** argv)
 		}
 		
 		sheet::Warnings warnings;
-		auto midi = sheet::processFile(infile, warnings);
+		fm::midi::MidiConfig midiConfig;
+		midiConfig.skipMetaEvents = settings.noMeta();
+		auto midi = sheet::processFile(infile, warnings, &midiConfig);
 		printWarnings(warnings);
 
 		std::string outfile = boost::filesystem::path(infile).filename().string() + ".mid";
