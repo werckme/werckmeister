@@ -85,10 +85,10 @@ void saveMidi(fm::midi::MidiPtr midi, const std::string &filename)
 	fstream.flush();
 }
 
-void toJSONOutput(fm::midi::MidiPtr midi)
+void toJSONOutput(sheet::DocumentPtr doc, fm::midi::MidiPtr midi, const sheet::Warnings &warnings)
 {
 	fmapp::JsonWriter jsonWriter;
-	std::cout << jsonWriter.midiToJSON(midi);
+	std::cout << jsonWriter.midiToJSON(*(doc.get()), midi, warnings);
 }
 
 void printWarnings(const sheet::Warnings &warnings)
@@ -117,8 +117,10 @@ fm::Path prepareJSONMode(const std::string &jsonData) {
 
 int main(int argc, const char** argv)
 {
+	bool jsonMode = false;
 	try {
 		Settings settings(argc, argv);
+		jsonMode = settings.isJsonMode();
 		std::string infile;
 
 		if (settings.help()) {
@@ -126,7 +128,7 @@ int main(int argc, const char** argv)
 			return 1;
 		}
 
-		if (settings.isJsonMode() && settings.input()) {
+		if (jsonMode && settings.input()) {
 			auto json = settings.getInput();
 			json = fmapp::base64Decode(json);
 			infile = prepareJSONMode(json);
@@ -142,15 +144,19 @@ int main(int argc, const char** argv)
 		sheet::Warnings warnings;
 		fm::midi::MidiConfig midiConfig;
 		midiConfig.skipMetaEvents = settings.noMeta();
-		auto midi = sheet::processFile(infile, warnings, &midiConfig);
-		printWarnings(warnings);
+		auto document = sheet::createDocument(infile);
+		auto midi = sheet::processFile(document, warnings, &midiConfig);
+
+		if (!jsonMode) {
+			printWarnings(warnings);
+		}
 
 		std::string outfile = boost::filesystem::path(infile).filename().string() + ".mid";
 		if (settings.output()) {
 			outfile = settings.getOutput();
 		}
-		if (settings.isJsonMode()) {
-			toJSONOutput(midi);
+		if (jsonMode) {
+			toJSONOutput(document, midi, warnings);
 		} else {
 			saveMidi(midi, outfile);
 		}
@@ -158,15 +164,34 @@ int main(int argc, const char** argv)
 	}
 	catch (const fm::Exception &ex)
 	{
-		sheet::onCompilerError(ex);
+		if (jsonMode) {
+			fmapp::JsonWriter json;
+			std::cout << json.exceptionToJSON(ex);
+
+		} else {
+			sheet::onCompilerError(ex);
+		}
 	}
 	catch (const std::exception &ex)
 	{
-		sheet::onCompilerError(ex);
+		if (jsonMode) {
+			fmapp::JsonWriter json;
+			std::cout << json.exceptionToJSON(ex);
+
+		} else {
+			sheet::onCompilerError(ex);
+		}
 	}
 	catch (...)
 	{
-		sheet::onCompilerError();
+		if (jsonMode) {
+			fmapp::JsonWriter json;
+			auto ex = std::runtime_error("unkown error");
+			std::cout << json.exceptionToJSON(ex);
+
+		} else {
+			sheet::onCompilerError();
+		}
 	}
 	return -1;
 }
