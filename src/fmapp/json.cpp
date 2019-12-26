@@ -158,8 +158,10 @@ namespace fmapp {
     {
         rapidjson::Document doc = documentInfosToJSONDoc(sheetDoc, midi->duration(), warnings);
         rapidjson::Value midiData;
+        rapidjson::Value bpm(midi->bpm());
         midiData.SetString(midiToBase64(midi).c_str(), doc.GetAllocator());
         doc.AddMember("midiData", midiData, doc.GetAllocator());
+        doc.AddMember("bpm", bpm, doc.GetAllocator());
         return toString(doc);
     }
 
