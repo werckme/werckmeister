@@ -34,7 +34,7 @@ struct Settings {
 			(ARG_HELP, "produce help message")
 			(ARG_INPUT, po::value<std::string>(), "input file")
 			(ARG_OUTPUT, po::value<std::string>(), "output file")
-			(ARG_MODE, po::value<std::string>(), "mode: normal or json; in JSON mode the input and output will be implemented using JSON strings")
+			(ARG_MODE, po::value<std::string>(), "mode: normal or json; in JSON mode the input and output will be implemented using JSON strings. The JSON has to be Base64 encoded.")
 			(ARG_NOMETA, "dosen't render midi meta events like track name or tempo")
 			;
 		po::positional_options_description p;
@@ -88,10 +88,10 @@ void saveMidi(fm::midi::MidiPtr midi, const std::string &filename)
 void toJSONOutput(fm::midi::MidiPtr midi)
 {
 	fmapp::JsonWriter jsonWriter;
-	std::cout << jsonWriter.midiToJSON(midi);	
+	std::cout << jsonWriter.midiToJSON(midi);
 }
 
-void printWarnings(const sheet::Warnings &warnings) 
+void printWarnings(const sheet::Warnings &warnings)
 {
 	if (warnings.empty()) {
 		return;
@@ -125,9 +125,11 @@ int main(int argc, const char** argv)
 			std::cout << settings.optionsDescription << "\n";
 			return 1;
 		}
-		
+
 		if (settings.isJsonMode() && settings.input()) {
-			infile = prepareJSONMode(settings.getInput());
+			auto json = settings.getInput();
+			json = fmapp::base64Decode(json);
+			infile = prepareJSONMode(json);
 		}
 		else if (!settings.input()) {
 			throw std::runtime_error("missing input file");
@@ -136,7 +138,7 @@ int main(int argc, const char** argv)
 		if (infile.empty()) {
 			infile = settings.getInput();
 		}
-		
+
 		sheet::Warnings warnings;
 		fm::midi::MidiConfig midiConfig;
 		midiConfig.skipMetaEvents = settings.noMeta();

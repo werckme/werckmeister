@@ -34,6 +34,27 @@ namespace {
 
 
 namespace fmapp {
+    std::string base64Encode(const std::string &data)
+    {
+        size_t nbytes = data.size();
+        size_t nBase64 = boost::beast::detail::base64::encoded_size(nbytes);
+        char *base64 = new char[nBase64];
+        boost::beast::detail::base64::encode(base64, data.c_str(), nbytes);
+        std::string result(base64, nBase64);
+        delete []base64;
+        return result;
+    }
+    std::string base64Decode(const std::string &base64)
+    {
+        size_t nBase64 = base64.size();
+        size_t nbytes = boost::beast::detail::base64::decoded_size(nBase64);
+        char *data = new char[nbytes];
+        boost::beast::detail::base64::decode(data, base64.c_str(), nBase64);
+        std::string result(data, nbytes);
+        delete []data;
+        return result;
+    }
+    ///////////////////////////////////////////////////////////////////////////
     std::string JsonWriter::funkfeuerToJSON(fm::Ticks elapsedTime, unsigned long lastUpdateTimestamp)
     {
         rapidjson::Document doc;

@@ -44,6 +44,8 @@ namespace fmapp {
             JsonReader& operator= (const JsonReader&) = delete;
             std::list<VirtualFileDto> readVirtualFS(const std::string & jsonData);
     };
+    std::string base64Encode(const std::string &);
+    std::string base64Decode(const std::string &);
 }
 
 #endif
