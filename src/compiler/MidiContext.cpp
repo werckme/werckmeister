@@ -163,6 +163,7 @@ namespace sheet {
 				tempoEvent.absPosition(currentPosition());
 				masterTempo(bpm);
 				addEvent(tempoEvent, masterTrackId());
+				midi_->bpm(bpm);
 			} else {
 				auto oldFactor = meta->tempoFactor;
 				meta->tempoFactor = masterTempo() / bpm;
