@@ -94,7 +94,7 @@ namespace fmapp {
         return toString(doc);
     }
 
-    std::string JsonWriter::funkfeuerToJSON(fm::Ticks elapsedTime, unsigned long lastUpdateTimestamp, const std::vector<EventInfo> &eventInfos)
+    std::string JsonWriter::funkfeuerToJSON(fm::Ticks elapsedTime, unsigned long lastUpdateTimestamp, const std::vector<EventInfo> &eventInfos, bool ignoreTimestamp)
     {
         rapidjson::Document doc;
         doc.SetObject();
@@ -103,7 +103,9 @@ namespace fmapp {
         rapidjson::Value lastUpdate;
 		lastUpdate.SetUint(lastUpdateTimestamp);
         doc.AddMember("sheetTime", elapsed, doc.GetAllocator());
-        doc.AddMember("lastUpdateTimestamp", lastUpdate, doc.GetAllocator());
+        if (ignoreTimestamp) {
+            doc.AddMember("lastUpdateTimestamp", lastUpdate, doc.GetAllocator());
+        }
         rapidjson::Value array(rapidjson::kArrayType);
         for (const auto &eventInfo : eventInfos) {
             rapidjson::Value object(rapidjson::kObjectType);

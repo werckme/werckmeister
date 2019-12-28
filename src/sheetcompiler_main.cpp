@@ -13,12 +13,17 @@
 #include <fm/common.hpp>
 #include "sheet/Document.h"
 #include "sheet.h"
+#include "fmapp/MidiAndTimeline.hpp"
 
 #define ARG_HELP "help"
 #define ARG_INPUT "input"
 #define ARG_OUTPUT "output"
 #define ARG_MODE "mode"
 #define ARG_NOMETA "nometa"
+
+namespace {
+	fmapp::EventTimeline timeline;
+}
 
 struct Settings {
 	typedef boost::program_options::variables_map Variables;
@@ -85,12 +90,6 @@ void saveMidi(fm::midi::MidiPtr midi, const std::string &filename)
 	fstream.flush();
 }
 
-void toJSONOutput(sheet::DocumentPtr doc, fm::midi::MidiPtr midi, const sheet::Warnings &warnings)
-{
-	fmapp::JsonWriter jsonWriter;
-	std::cout << jsonWriter.midiToJSON(*(doc.get()), midi, warnings);
-}
-
 void printWarnings(const sheet::Warnings &warnings)
 {
 	if (warnings.empty()) {
@@ -103,6 +102,7 @@ void printWarnings(const sheet::Warnings &warnings)
 
 fm::Path prepareJSONMode(const std::string &jsonData) {
 	auto &wm = fm::getWerckmeister();
+	// prepare vfs
 	fmapp::JsonReader jsonReader;
 	auto vfiles = jsonReader.readVirtualFS(jsonData);
 	fm::Path sheetPath;
@@ -112,8 +112,49 @@ fm::Path prepareJSONMode(const std::string &jsonData) {
 		}
 		wm.createVirtualFile(vfile.path, vfile.data);
 	}
+	// prepare timeline
+	wm.createContextHandler([](){
+		auto context = std::make_shared<fmapp::MidiAndTimelineContext>();
+		context->intervalContainer(&timeline);
+		return context;
+	});
 	return sheetPath;
 }
+
+std::string eventInfosAsJson(sheet::DocumentPtr document) 
+{
+	std::stringstream ss;
+	ss << "[" << std::endl;
+	fmapp::JsonWriter jsonWriter;
+	bool first = true;
+	for (const auto &timelineEntry : timeline) {
+		fmapp::EventInfos eventInfos;
+		fm::Ticks eventsBeginTime = timelineEntry.first.lower() / (double)fm::PPQ;
+		eventInfos.reserve(timelineEntry.second.size());
+		for (const auto &x : timelineEntry.second) {
+			eventInfos.push_back(x);
+		}
+		if (!first) {
+			ss << ", ";
+		}
+		ss << jsonWriter.funkfeuerToJSON(eventsBeginTime, 0, eventInfos, true); 
+		first = false;
+	}
+	ss << "]";
+	return ss.str();
+}
+
+void toJSONOutput(sheet::DocumentPtr doc, fm::midi::MidiPtr midi, const sheet::Warnings &warnings)
+{
+	fmapp::JsonWriter jsonWriter;
+	std::cout 
+	<< "{" 
+	<< "\"midi\": " << jsonWriter.midiToJSON(*(doc.get()), midi, warnings)
+	<< ", \"eventInfos\": " << eventInfosAsJson(doc)
+	<< "}" << std::endl
+	;
+}
+
 
 int main(int argc, const char** argv)
 {
