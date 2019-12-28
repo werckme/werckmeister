@@ -24,8 +24,8 @@ namespace {
         fm::Byte *bff = new fm::Byte[nbytes];
         char *base64 = new char[nBase64];
         midi->write(bff, nbytes);
-        boost::beast::detail::base64::encode(base64, bff, nbytes);
-        std::string result(base64, nBase64);
+        auto writtenBytes = boost::beast::detail::base64::encode(base64, bff, nbytes);
+        std::string result(base64, writtenBytes);
         delete []bff;
         delete []base64;
         return result;
@@ -68,8 +68,8 @@ namespace fmapp {
         size_t nbytes = data.size();
         size_t nBase64 = boost::beast::detail::base64::encoded_size(nbytes);
         char *base64 = new char[nBase64];
-        boost::beast::detail::base64::encode(base64, data.c_str(), nbytes);
-        std::string result(base64, nBase64);
+        auto writtenBytes = boost::beast::detail::base64::encode(base64, data.c_str(), nbytes);
+        std::string result(base64, writtenBytes);
         delete []base64;
         return result;
     }
@@ -78,8 +78,8 @@ namespace fmapp {
         size_t nBase64 = base64.size();
         size_t nbytes = boost::beast::detail::base64::decoded_size(nBase64);
         char *data = new char[nbytes];
-        boost::beast::detail::base64::decode(data, base64.c_str(), nBase64);
-        std::string result(data, nbytes);
+        auto writtenBytes = boost::beast::detail::base64::decode(data, base64.c_str(), nBase64);
+        std::string result(data, writtenBytes.first);
         delete []data;
         return result;
     }
