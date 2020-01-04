@@ -44,7 +44,7 @@ IF(APPLE)
   SET(Boost_USE_STATIC_LIBS ON)
 ENDIF(APPLE)
 
-find_package(Boost COMPONENTS unit_test_framework filesystem program_options locale REQUIRED)
+find_package(Boost COMPONENTS unit_test_framework filesystem program_options locale system REQUIRED)
 
 IF(APPLE)
   SET(Boost_LIBRARIES ${Boost_LIBRARIES}
