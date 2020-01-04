@@ -44,7 +44,7 @@
 #define ARG_INFO "info"
 #define ARG_PRINT_EVENTINFOS_JSON "print-events"
 #define ARG_WIN32_SIGINT_WORKAROUND "win32-sigint-workaround"
-
+#define ARG_VERSION "version"
 #ifdef WIN32
 #define SIGINT_WORKAROUND 
 #define WIN32_SIGINT_WORKAROUND_FILE "keepalive"
@@ -110,6 +110,7 @@ struct Settings {
 			(ARG_NOSTDOUT, "disable printing time on stdout")
 			(ARG_INFO, "prints sheet info as json")
 			(ARG_PRINT_EVENTINFOS_JSON, "prints the sheet events as json")
+			(ARG_VERSION, "prints the werckmeister version")
 #ifdef SIGINT_WORKAROUND
 			(ARG_WIN32_SIGINT_WORKAROUND, "uses a filebased workaround for the lack of a proper SIGINT signal handling in windows. \
 (a file 'keepalive' will be created before the player starts. If the file will be deleted while the player is running, the player will be stopped.)")
@@ -194,6 +195,10 @@ struct Settings {
 
 	bool sigintWorkaround() const {
 		return !!variables.count(ARG_WIN32_SIGINT_WORKAROUND);
+	}
+
+	bool version() const {
+		return !!variables.count(ARG_VERSION);
 	}
 
 };
@@ -450,9 +455,12 @@ int main(int argc, const char** argv)
 		if (settings.help()) 
 		{
 			std::cout << settings.optionsDescription << "\n";
-			return 1;
+			return 0;
 		}
-		
+		if (settings.version()) {
+			std:: cout << SHEET_VERSION << std::endl;
+			return 0;
+		}
 		if (settings.listDevices()) 
 		{
 			return listDevices();

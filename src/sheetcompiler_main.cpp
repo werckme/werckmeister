@@ -20,6 +20,7 @@
 #define ARG_OUTPUT "output"
 #define ARG_MODE "mode"
 #define ARG_NOMETA "nometa"
+#define ARG_VERSION "version"
 
 namespace {
 	fmapp::EventTimeline timeline;
@@ -41,6 +42,7 @@ struct Settings {
 			(ARG_OUTPUT, po::value<std::string>(), "output file")
 			(ARG_MODE, po::value<std::string>(), "mode: normal or json; in JSON mode the input and output will be implemented using JSON strings. The JSON has to be Base64 encoded.")
 			(ARG_NOMETA, "dosen't render midi meta events like track name or tempo")
+			(ARG_VERSION, "prints the werckmeister version")
 			;
 		po::positional_options_description p;
 		p.add(ARG_INPUT, -1);
@@ -79,6 +81,10 @@ struct Settings {
 			return false;
 		}
 		return variables[ARG_MODE].as<std::string>() == "json";
+	}
+
+	bool version() const {
+		return !!variables.count(ARG_VERSION);
 	}
 
 };
@@ -166,7 +172,12 @@ int main(int argc, const char** argv)
 
 		if (settings.help()) {
 			std::cout << settings.optionsDescription << "\n";
-			return 1;
+			return 0;
+		}
+
+		if (settings.version()) {
+			std:: cout << SHEET_VERSION << std::endl;
+			return 0;
 		}
 
 		if (jsonMode && settings.input()) {
