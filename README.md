@@ -40,8 +40,8 @@ Instead of writing absolute notes, you use relative degrees. For example `I4` me
 
 
 
-![an arpeggio template played with C7 and C-7](https://raw.githubusercontent.com/SambaGodschynski/werckmeister-editor/master/assets/example2.gif)
-<br>*an arpeggio template played (very slow) with C7 and C-7*
+![This template playes the Ist IIIrd Vth and the VIIth degree as quarter note. It will be played two bars. Starting with a C7 followed by a C minor 7 chord](https://raw.githubusercontent.com/SambaGodschynski/werckmeister-editor/master/assets/example2.gif)
+<br>*This template playes the Ist, IIIrd, Vth and the VIIth degree as quarter note. It will be used for two bars. Starting with a C7 followed by a C minor 7 chord.*
 
 # How to build 
 ## Dependencies
