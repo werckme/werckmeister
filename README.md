@@ -1,3 +1,5 @@
+<img src="https://raw.githubusercontent.com/SambaGodschynski/werckmeister/master/assets/Logo.png" style="height: 120px;">
+
 # Werckmeister's protoyping for Music 
 
 
