@@ -10,6 +10,7 @@ This is the idea behind Werckmeister. Of course it can not replace a band or a m
 
 Why text only and no GUI
 ------------------------
+### Don't be afraid, it's just text
 The motivation behind this decision cames with an experience which I had in the past with a professional scorewriter software I was using back in the early 2000.
 
 This software was a bit clunky but I've got used to it. At some point the developer discontinued the support for my version and I've got more and more problems to get the software running on a modern system. The other problem was, that my project files were written in a proprietary format. So I realized: **not I am the owner of my created music, the company behind the scorewriter software owns it
