@@ -1,4 +1,4 @@
-<img src="https://raw.githubusercontent.com/SambaGodschynski/werckmeister/master/assets/Logo.png" style="height: 120px;">
+<img src="https://raw.githubusercontent.com/SambaGodschynski/werckmeister/master/assets/Logo.png" style="height: 200px; display: block; margin: auto">
 
 # Werckmeister's protoyping for Music 
 

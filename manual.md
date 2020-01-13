@@ -1,3 +1,5 @@
+<img src="https://raw.githubusercontent.com/SambaGodschynski/werckmeister/master/assets/Logo.png" style="height: 200px; display: block; margin: auto">
+
 Werckmeister Manual
 ===================
 
@@ -10,19 +12,21 @@ This is the idea behind Werckmeister. Of course it can not replace a band or a m
 
 Why text only and no GUI
 ------------------------
-### Don't be afraid, it's just text
 The motivation behind this decision cames with an experience which I had in the past with a professional scorewriter software I was using back in the early 2000.
 
-This software was a bit clunky but I've got used to it. At some point the developer discontinued the support for my version and I've got more and more problems to get the software running on a modern system. The other problem was, that my project files were written in a proprietary format. So I realized: **not I am the owner of my created music, the company behind the scorewriter software owns it
+This software was a bit clunky but I've got used to it. At some point the developer discontinued the support for my version and I've got more and more problems to get the software running on a modern system. The other problem was, that my project files were written in a proprietary format. 
+
+So I realized: 
+<br>**not I am the owner of my written music, the company behind the scorewriter software owns it
  and if I want to continue using my projects I have to pay money.**
-<br>So I've came to the conclusion, that readable text files are the way to go.
+
+So I've came to the conclusion, that readable text files is my way to go.
 
 *What is so hard writing notes in a text edior such as `c d e f g` in comparison to an overloaded clunky editor software.
 <br>(actually notes in a score have a lot advantages in comparison to a text file regarding readability etc., but that aside)*
 
 I've discovered that [LilyPond](http://lilypond.org/) is a good way to write music using textfiles.
-But for me there was a problem: LilyPond's main purpose is make score visible. So the LilyPond language is designed to describe how notes have to look on paper in the first place.
-<br>Basically, I wanted the same but with the focus on how the notes sounds played by MIDI instruments.
+But for me there was a problem: LilyPond's main purpose is make score visible. So the LilyPond language is designed to describe how notes have to look on paper in the first place. Basically, I wanted the same but with the focus on how the notes sounds played by MIDI instruments.
 
 
 
@@ -44,7 +48,9 @@ Manual
 ======
 I am a composer and I want to ...
 --------------
-[... setup a piece](Setup-A-Piece)
+[... get an impression of what I have to face if I want to learn Werckmeister](#Don't-be-afraid,-it's-just-text)
+
+[... setup a piece](#Setup-A-Piece)
 
 [... write melodies](#Write-Melodies)
 
@@ -58,38 +64,114 @@ I am a composer and I want to ...
 
 [... write my own MIDI expression mods]()
 
-### Basics
-The Werckmeister language knows only a few statement types. It's all about tracks, voices and events. All others have just a cofiguration purpose.
-<br>A basic Werckmeister document will look like this:
+## Don't be afraid, it's just text
+The Werckmeister language knows only a few statement types. It's all about tracks, voices and events. That's it.
+<br>The remaining statment types are just for cofiguration purpose.
+
+A basic Werckmeister document will look like this:
 
 ```
--- document config statements:
-using "lua/mods/staccato.lua";
-device: SC1 midi 1;
-tempo: 130;
-instrumentDef: piano   SC1 2 0 0;
+-- CONFIG:
+-- 1) configure your MIDI device
+-- 2) define an instrument with the name piano
+-- 3) set the tempo
 
--- a track containing one voice with events
+-- 1)
+--      name         type portnumber
+device: MyMidiDevice midi 1;
+
+-- 2)
+--             name  device       ch pc cc  => (channel, programm change, control change)
+instrumentDef: piano MyMidiDevice 1  0  0;
+
+-- 3)
+tempo: 130;
+
+-- TRACKS, VOICES & EVENTS
+-- a track containing one voice with some note events
+-- the track is set up to use our piano instrument
 [
 instrument: piano;
 {
-    /mod: staccato/ -- a meta event
     c4 d e f | g1 --note events
 }
 ]
 ```
-#### Tracks
-#### Voices
-#### Events
-##### Note Events
-##### Meta Events
-##### Event Tags
+#### Tracks and Voices
 
-### Setup A Piece
+A track in Werckmeister has excactly the same meanig as it has in a MIDI file.
+It is related to an instrument and contains events.
+
+A track begins with a `[` and ends with a `]`.
+<br>It can have its own configuration most likely the instrument setup. 
+<br>These configuration statements a written between the beginning `[` and the beginning of the first voice (see the instrument statement in the examples below ).
+
+```
+-- a track with one voice
+
+[
+instrument: piano;
+{
+    c d e f | g a b c'
+}
+]
+```
+
+All events of a track a releated at least to one voice. A voice starts with `{` and ends with `}`.
+If you want to write polyphonic melody lines, add more voices to your track. 
+
+*insert image!*
+
+```
+-- a track with two voices
+
+[
+instrument: piano;
+{
+    c d e f | g a b c'
+}
+{
+    c,,1    | e,,1 
+}
+]
+
+```
+
+#### Events
+tbd.
+##### Note Events
+tbd.
+##### Meta Events
+tbd.
+
+## Setup A Piece
+tbd.
+#### Devices & Instruments
+tbd.
 #### Tempo
+tbd.
 ```
 tempo 120;
 [
+{
+    c d e f | g a b c'
+}
+]
+
+```
+
+```
+tempo 120;
+[
+{
+    /tempo: double/
+    c d e f | g a b c'
+}
+{
+    /signature: 3 4/
+    /tempo: 96/
+    c e f | g b c'
+}
 {
     c d e f | g a b c'
 }
@@ -115,7 +197,7 @@ With this you are able to setup different time signatures during a piece.
 #### Key Signatures
 key signatures are not supported.
 
-### Write Melodies
+## Write Melodies
 #### Notes
 The syntax is loosely inspired by the [lilypond](http://lilypond.org) notaion syntax. A note is just a letter followed by a number for its duration. If a note has no duration, the last given duration will be used.
 
@@ -128,27 +210,56 @@ the end of a bar is marked by a pipe: `|`
 <br>*a c major scale, played in two bars*
 
 #### Accidentals
+tbd.
+
 `c# d# f# g# | bb db' eb' gb'`
 
 #### Durations
+tbd.
+
 `c2 c4 c8 c16 c32 c64 c128 r`
 
 #### Octaves
+tbd.
+
 `c,,  e,,  g,, | c, e, g, | c e g | c' e' g' | c'' e'' g''`
 
-#### Intervals
+#### Intervals and Chords
+
+tbd.
+
+*insert image!*
+
 `<g,, c e g bb>4 <c, c eb g bb>2.`
 
 #### Augmentation Dots & Ties
+tbd.
+
+*insert image!*
+
 `c2. c4 | c2~ c4 c`
 
 #### Tuplets
+tbd.
+
+*insert image!*
+
 `(c8 c c)4   (c8 c c c c)4  (c8 c c c c c c)4  (c8 c c c c c c c c)4`
 
+*insert image!*
 
-### Define Accompanying Styles (templates)
+`b2 ((b c#'x b d')  (f' ax bb c')  (e' a' bb' f' c' g))2`
+
+
+## Define Accompanying Styles (templates)
+tbd.
+
 Instead of writing absolute notes, you use relative degrees. For example `I4` means the first degree as a quarter note.
 
 
 ![This template playes the Ist IIIrd Vth and the VIIth degree as quarter note. It will be played two bars. Starting with a C7 followed by a C minor 7 chord](https://raw.githubusercontent.com/SambaGodschynski/werckmeister/master/assets/example2.gif)
 <br>*This template playes the Ist, IIIrd, Vth and the VIIth degree as quarter note. It will be used for two bars. Starting with a C7 followed by a C minor 7 chord.*
+
+## Advanced techniques
+##### Event Tags
+##### Lua scripts
