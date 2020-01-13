@@ -3,7 +3,7 @@ Werckmeister Manual
 
 Vision
 ------
-Consider the beauty of lead sheet music: you write a melody and some chords. Thats it. 
+Consider the beauty of lead sheet music: you write a melody and some chords. Thats it.
 <br>Later you can tell your band (or whoever is crazy enough to play your music) in which style the piece has to be played. You can say, after 4 beats play it as a bossa nova or a blues or whatever.
 
 This is the idea behind Werckmeister. Of course it can not replace a band or a musician but it offers you a tool to write melodies and chords then you can define how to interpret the chords along your melody or even define your own interpretation templates.
@@ -58,10 +58,31 @@ I am a composer and I want to ...
 [... write my own MIDI expression mods]()
 
 ### Basics
+The Werckmeister language knows only a few statement types. It's all about tracks, voices and events. Statements which are not one of theese are for configration.
+<br>A basic Werckmeister document will look like this:
+
+```
+-- document config statements:
+using "lua/mods/staccato.lua";
+device: SC1 midi 1;
+tempo: 130;
+instrumentDef: piano   SC1 2 0 0;
+
+-- a track containing one voice with events
+[
+instrument: piano;
+{
+    /mod: staccato/ -- a meta event
+    c4 d e f | g1 --note events
+}
+]
+```
 #### Tracks
 #### Voices
-#### Meta Events
-#### Event Tags
+#### Events
+##### Note Events
+##### Meta Events
+##### Event Tags
 
 ### Setup A Piece
 #### Tempo
@@ -78,7 +99,7 @@ tempo 120;
 #### Time Signatures
 The time signature 4/4 by default.
 If you want to setup a different time signature than the default, you can achieve this by using the signature [meta event](#Meta-Events).
-With this you are able to setup different time signatures during a piece.  
+With this you are able to setup different time signatures during a piece.
 ```
 [
 {
@@ -100,7 +121,7 @@ The syntax is loosely inspired by the [lilypond](http://lilypond.org) notaion sy
 `c4 d e8 f`
 <br>*c and d will be played as quarter, e and f as eight notes*
 
-the end of a bar is marked by a pipe: `|` 
+the end of a bar is marked by a pipe: `|`
 
 `c d e f | g a b c'`
 <br>*a c major scale, played in two bars*
