@@ -59,7 +59,7 @@ I am a composer and I want to ...
 [... write my own MIDI expression mods]()
 
 ### Basics
-The Werckmeister language knows only a few statement types. It's all about tracks, voices and events. Statements which are not one of theese are for configration.
+The Werckmeister language knows only a few statement types. It's all about tracks, voices and events. All others have just a cofiguration purpose.
 <br>A basic Werckmeister document will look like this:
 
 ```
