@@ -103,11 +103,8 @@ A track in Werckmeister has excactly the same meanig as it has in a MIDI file.
 It is related to an instrument and contains events.
 
 A track begins with a `[` and ends with a `]`.
-<br>It can have its own configuration most likely the instrument setup. 
-<br>These configuration statements a written between the beginning `[` and the beginning of the first voice (see the instrument statement in the examples below ).
-
 ```
--- a track with one voice
+-- a track with one voice and an instrument setup
 
 [
 instrument: piano;
@@ -117,10 +114,14 @@ instrument: piano;
 ]
 ```
 
-All events of a track a releated at least to one voice. A voice starts with `{` and ends with `}`.
-If you want to write polyphonic melody lines, add more voices to your track. 
+All events of a track are releated at least to one voice. A voice starts with `{` and ends with `}`.
+If you want to write polyphonic melody lines, you can add more voices to your track. 
 
-*insert image!*
+
+
+![a polyphonic melody](https://raw.githubusercontent.com/SambaGodschynski/werckmeister/master/assets/poly.png)
+
+The melody above would be written like this:
 
 ```
 -- a track with two voices
@@ -128,10 +129,10 @@ If you want to write polyphonic melody lines, add more voices to your track.
 [
 instrument: piano;
 {
-    c d e f | g a b c'
+    g4 f#8 g a4 g
 }
 {
-    c,1    | e,1 
+    d4 d d d
 }
 ]
 
