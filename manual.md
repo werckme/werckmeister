@@ -46,7 +46,7 @@ But for me there was a problem: LilyPond's main purpose is make score visible. S
 
 Manual
 ======
-I am a composer and I want to ...
+I want to ...
 --------------
 [... get an impression of what I have to face if I want to learn Werckmeister](#Don't-be-afraid,-it's-just-text)
 
@@ -131,7 +131,7 @@ instrument: piano;
     c d e f | g a b c'
 }
 {
-    c,,1    | e,,1 
+    c,1    | e,1 
 }
 ]
 
