@@ -202,28 +202,39 @@ key signatures are not supported.
 #### Notes
 The syntax is loosely inspired by the [lilypond](http://lilypond.org) notaion syntax. A note is just a letter followed by a number for its duration. If a note has no duration, the last given duration will be used.
 
-`c4 d e8 f`
+```
+c4 d e8 f
+```
+
 <br>*c and d will be played as quarter, e and f as eight notes*
 
 the end of a bar is marked by a pipe: `|`
 
-`c d e f | g a b c'`
+```
+c d e f | g a b c'
+```
 <br>*a c major scale, played in two bars*
 
 #### Accidentals
 tbd.
 
-`c# d# f# g# | bb db' eb' gb'`
+```
+c# d# f# g# | bb db' eb' gb'
+```
 
 #### Durations
 tbd.
 
-`c2 c4 c8 c16 c32 c64 c128 r`
+```
+c2 c4 c8 c16 c32 c64 c128 r
+```
 
 #### Octaves
 tbd.
 
-`c,,  e,,  g,, | c, e, g, | c e g | c' e' g' | c'' e'' g''`
+```
+c,,  e,,  g,, | c, e, g, | c e g | c' e' g' | c'' e'' g''
+```
 
 #### Intervals and Chords
 
@@ -231,25 +242,41 @@ tbd.
 
 *insert image!*
 
-`<g,, c e g bb>4 <c, c eb g bb>2.`
+```
+<g,, c e g bb>4 <c, c eb g bb>2.
+```
 
 #### Augmentation Dots & Ties
 tbd.
 
 *insert image!*
 
-`c2. c4 | c2~ c4 c`
+```
+c2. c4 | c2~ c4 c
+```
 
 #### Tuplets
 tbd.
 
 *insert image!*
 
-`(c8 c c)4   (c8 c c c c)4  (c8 c c c c c c)4  (c8 c c c c c c c c)4`
+```
+(c8 c c)4   (c8 c c c c)4  (c8 c c c c c c)4  (c8 c c c c c c c c)4
+```
 
-*insert image!*
+##### Nested Tuplets
 
-`b2 ((b c#'x b d')  (f' ax bb c')  (e' a' bb' f' c' g))2`
+You are also able to write nested tuplets, as in the example below.
+
+![a example of nested tuplets](https://raw.githubusercontent.com/SambaGodschynski/werckmeister/master/assets/blackpages.png)
+
+```
+b2 ((b c#' c#' b d')  (f' a a bb c')  (e' a' bb' f' c' g))2
+```
+
+#### Pitchmaps
+
+tbd.
 
 
 ## Define Accompanying Styles (templates)
