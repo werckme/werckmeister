@@ -240,7 +240,7 @@ c,,  e,,  g,, | c, e, g, | c e g | c' e' g' | c'' e'' g''
 
 tbd.
 
-*insert image!*
+![two chords](https://raw.githubusercontent.com/SambaGodschynski/werckmeister/master/assets/chords.png)
 
 ```
 <g,, c e g bb>4 <c, c eb g bb>2.
@@ -249,7 +249,8 @@ tbd.
 #### Augmentation Dots & Ties
 tbd.
 
-*insert image!*
+![dots and ties](https://raw.githubusercontent.com/SambaGodschynski/werckmeister/master/assets/dotsties.png)
+
 
 ```
 c2. c4 | c2~ c4 c
@@ -258,7 +259,7 @@ c2. c4 | c2~ c4 c
 #### Tuplets
 tbd.
 
-*insert image!*
+![n-tole examples with 3,7 and 9](https://raw.githubusercontent.com/SambaGodschynski/werckmeister/master/assets/tuplets.png)
 
 ```
 (c8 c c)4   (c8 c c c c)4  (c8 c c c c c c)4  (c8 c c c c c c c c)4
