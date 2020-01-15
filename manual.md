@@ -6,7 +6,7 @@ Werckmeister Manual
 Vision
 ------
 Consider the beauty of lead sheet music: you write a melody and some chords. Thats it.
-<br>Later you can tell your band (or whoever is crazy enough to play your music) in which style the piece has to be played. You can say, after 4 beats play it as a bossa nova or a blues or whatever.
+<br>Later you can tell your band in which style the piece has to be played. You can say, after 4 beats play it as a bossa nova or a blues or whatever.
 
 This is the idea behind Werckmeister. Of course it can not replace a band or a musician but it offers you a tool to write melodies and chords then you can define how to interpret the chords along your melody or even define your own interpretation templates.
 
@@ -65,8 +65,8 @@ I want to ...
 [... write my own MIDI expression mods]()
 
 ## Don't be afraid, it's just text
-The Werckmeister language knows only a few statement types. It's all about tracks, voices and events. That's it.
-<br>The remaining statment types are just for cofiguration purpose.
+The Werckmeister language knows only a few statement types. It's all about tracks, voices, and events. That's it. 
+<br>The remaining statement types are just for configuration purposes.
 
 A basic Werckmeister document will look like this:
 
@@ -129,10 +129,10 @@ The melody above would be written like this:
 [
 instrument: piano;
 {
-    g4 f#8 g a4 g
+    g4  f#8 g  a4   g
 }
 {
-    d4 d d d
+    d4   d     d    d
 }
 ]
 
@@ -200,13 +200,15 @@ key signatures are not supported.
 
 ## Write Melodies
 #### Notes
-The syntax is loosely inspired by the [lilypond](http://lilypond.org) notaion syntax. A note is just a letter followed by a number for its duration. If a note has no duration, the last given duration will be used.
+The syntax is loosely inspired by the [lilypond](http://lilypond.org) notation syntax. A note is just a letter followed by a number for its duration.
+
+*If a note has no duration, the last given duration will be used.*
 
 ```
 c4 d e8 f
 ```
 
-<br>*c and d will be played as quarter, e and f as eight notes*
+<br>*c and d will be played as quarter notes, e and f as eighth notes*
 
 the end of a bar is marked by a pipe: `|`
 
@@ -215,39 +217,45 @@ c d e f | g a b c'
 ```
 <br>*a c major scale, played in two bars*
 
+#### Octaves
+
+Lower octaves are marked by a comma (`,`) after the note, upper octaves by a single quote (`'`).
+
+```
+c,,  e,,  g,, | c, e, g, | c e g | c' e' g' | c'' e'' g''
+```
+
 #### Accidentals
-tbd.
+
+`#` raises a pitch by a half step.
+<br> A `b` lowers it. 
 
 ```
 c# d# f# g# | bb db' eb' gb'
 ```
 
 #### Durations
-tbd.
+
+A numeric value after a note marks its duration.
 
 ```
 c2 c4 c8 c16 c32 c64 c128 r
 ```
 
-#### Octaves
-tbd.
-
-```
-c,,  e,,  g,, | c, e, g, | c e g | c' e' g' | c'' e'' g''
-```
-
 #### Intervals and Chords
 
-tbd.
+Notes that have to sound simultaneous are written in angle brackets. The duration is written after the brackets.
 
 ![two chords](https://raw.githubusercontent.com/SambaGodschynski/werckmeister/master/assets/chords.png)
 
 ```
-<g,, c e g bb>4 <c, c eb g bb>2.
+<g,, c e g bb>4   <c, c eb g bb>2.
 ```
 
 #### Augmentation Dots & Ties
-tbd.
+
+To write a augmentation dot (`.`) append a dot to a note duration value.
+<br>For ties use a tilde (`~`) instead. 
 
 ![dots and ties](https://raw.githubusercontent.com/SambaGodschynski/werckmeister/master/assets/dotsties.png)
 
@@ -257,7 +265,15 @@ c2. c4 | c2~ c4 c
 ```
 
 #### Tuplets
-tbd.
+
+To write tuplets of any kind you just have to write parentheses and a duration value. For example: `(c c c)4`.
+These three notes will now be played on time for one quarter.
+You don't have to mind how many notes with what duration you write.
+All notes in that parentheses fit their value.
+
+So it doesn't matter if you write `(c2 c2 c2)4` or `(c8 c8 c8)4` because you have three notes with equal durations to be played in the time of one quarter.
+
+*The relations between the notes are vital, not the absolute durations.*
 
 ![n-tole examples with 3,7 and 9](https://raw.githubusercontent.com/SambaGodschynski/werckmeister/master/assets/tuplets.png)
 
@@ -267,7 +283,7 @@ tbd.
 
 ##### Nested Tuplets
 
-You are also able to write nested tuplets, as in the example below.
+You are also able to write nested tuplets:
 
 ![a example of nested tuplets](https://raw.githubusercontent.com/SambaGodschynski/werckmeister/master/assets/blackpages.png)
 
