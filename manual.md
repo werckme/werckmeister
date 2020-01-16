@@ -54,15 +54,19 @@ I want to ...
 
 [... write melodies](#Write-Melodies)
 
-[... use different instruments]()
+[... write for drums](#Writing-for-drums)
 
-[... accomp my melodies]()
+[... use several instruments]()
 
-[... define my own accompanying styles (templates)](#Define-Accompanying-Styles-(templates))
+[... accomp my melodies](#Accomp-My-Melodies)
+
+[... setup my own chord symbols](#chords)
 
 [... use MIDI expression mods]()
 
 [... write my own MIDI expression mods]()
+
+
 
 ## Don't be afraid, it's just text
 The Werckmeister language knows only a few statement types. It's all about tracks, voices, and events. That's it. 
@@ -81,8 +85,9 @@ A basic Werckmeister document will look like this:
 device: MyMidiDevice midi 1;
 
 -- 2)
---             name  device       ch pc cc  => (channel, programm change, control change)
+--             name  device       ch pc cc
 instrumentDef: piano MyMidiDevice 1  0  0;
+-- (ch= channel, pc= programm change, cc= control change)
 
 -- 3)
 tempo: 130;
@@ -139,11 +144,37 @@ instrument: piano;
 ```
 
 #### Events
-tbd.
-##### Note Events
-tbd.
-##### Meta Events
-tbd.
+There are a few event types:
+
+**Note Events**
+<br>have a pitch and a duration, to be performed by a MIDI instrument.
+```
+c d e f g
+```
+
+**Degree Events**
+<br>have a relative pitch degree and a duration. In combination with a chord, degree events can be transformed into regular note events.
+```
+I II III IV V VI VII
+```
+
+**Chord Events**
+<br>Events which are related to a name. They also store the information which interval is used for a degree. These informations are stored in a [chord definiton file](#chords).
+```
+C7 D-7 E-7 F7 Gmaj7 A-7
+```
+
+
+**Meta Events**
+<br>Events to set up something or loading a mod script.
+<br>You can recognize meta events by its slashes at the beginning and the end.
+```
+/tempo: 100/ -- meta event: set tempo to 100
+c d e f
+/tempo: 50/
+a b c' 
+
+```
 
 ## Setup A Piece
 tbd.
@@ -215,7 +246,7 @@ the end of a bar is marked by a pipe: `|`
 ```
 c d e f | g a b c'
 ```
-<br>*a c major scale, played in two bars*
+
 
 #### Octaves
 
@@ -291,20 +322,93 @@ You are also able to write nested tuplets:
 b2 ((b c#' c#' b d')  (f' a a bb c')  (e' a' bb' f' c' g))2
 ```
 
+## Write for drums
 #### Pitchmaps
 
 tbd.
 
 
-## Define Accompanying Styles (templates)
-tbd.
+## Accomp My Melodies
 
-Instead of writing absolute notes, you use relative degrees. For example `I4` means the first degree as a quarter note.
+Imagine you give your bass player some chords, and he or she asks you to play these.
+<br>You would say something like: play the 1st degree on one and the 5th degree on four. 
 
+And this is exactly what you doing when writing style templates.
+<br>So in our example above you would write:
 
-![This template playes the Ist IIIrd Vth and the VIIth degree as quarter note. It will be played two bars. Starting with a C7 followed by a C minor 7 chord](https://raw.githubusercontent.com/SambaGodschynski/werckmeister/master/assets/example2.gif)
-<br>*This template playes the Ist, IIIrd, Vth and the VIIth degree as quarter note. It will be used for two bars. Starting with a C7 followed by a C minor 7 chord.*
+```
+-- make sure that you have a chord definition loaded
+using "chords/default.chords";
+
+device: MyDevice  midi 0;
+--             name  device       ch pc cc
+instrumentDef:bass  MyDevice      0  0  0;
+
+-- here is the template:
+[
+type: template;
+name: simpleBass;
+instrument: bass;
+{
+    I,,2. V,,4 |
+}
+]
+
+-- here are some chords:
+[
+type: accomp;
+{
+    /template: simpleBass/
+    C | F | G | C |
+}
+]
+
+```
+
+Instead of writing absolute notes, you use relative degrees. For example `I4` means the first degree as a quarter note. 
+
+*If a degree does not appear in a chord, the degree will not played.*
+
+There are the same rules as for writing absolute [notes](#Notes):
+
+such as:
+
+* use `#` or `b` for sharp or flat
+* to perform inervals use angle brackes. For example a triad: `<I II III>`
+* use `~` for tied and `.` for dotted notes
+* create tuplets using parantheses
+
+To spice up our example a bit, we add a second bar which plays an interval with I and III
+
+```
+-- make sure that you have a chord definition loaded
+using "chords/default.chords";
+
+device: MyDevice  midi 0;
+--             name  device       ch pc cc
+instrumentDef:bass  MyDevice      0  0  0;
+
+[
+type: template;
+name: simpleBass;
+instrument: bass;
+{
+    I,,2. V,,4 | <I,, III,>1
+}
+]
+
+[
+type: accomp;
+{
+    /template: simpleBass/
+    C | F | G | C |
+}
+]
+```
+
 
 ## Advanced techniques
+##### Chords
+##### Voicing strategies
 ##### Event Tags
 ##### Lua scripts
