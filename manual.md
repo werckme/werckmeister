@@ -70,12 +70,12 @@ I want to ...
 
 ## Don't be afraid, it's just text
 The Werckmeister language knows only a few statement types. It's all about tracks, voices, and events. That's it. 
-<br>The remaining statement types are just for configuration purposes.
+<br>The remaining statements are just for configuration purposes.
 
 A basic Werckmeister document will look like this:
 
 ```
--- CONFIG:
+-- CONFIG STUFF:
 -- 1) configure your MIDI device
 -- 2) define an instrument with the name piano
 -- 3) set the tempo
@@ -93,8 +93,8 @@ instrumentDef: piano MyMidiDevice 1  0  0;
 tempo: 130;
 
 -- TRACKS, VOICES & EVENTS
--- a track containing one voice with some note events
--- the track is set up to use our piano instrument
+-- now the actual musical statement, which is a track containing one voice with some note events
+-- (the track is set up to use our piano instrument from above)
 [
 instrument: piano;
 {
