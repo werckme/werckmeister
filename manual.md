@@ -297,14 +297,12 @@ c2. c4 | c2~ c4 c
 
 #### Tuplets
 
-To write tuplets of any kind you just have to write parentheses and a duration value. For example: `(c c c)4`.
-These three notes will now be played on time for one quarter.
-You don't have to mind how many notes with what duration you write.
-All notes in that parentheses fit their value.
+To write tuplets of any kind you just have to write notes encloded by parentheses followed by a duration value. For example: `(c c c)4`.
+These three notes will now be played in the time of one quarter.
 
-So it doesn't matter if you write `(c2 c2 c2)4` or `(c8 c8 c8)4` because you have three notes with equal durations to be played in the time of one quarter.
+It doesn't matter if you write `(c2 c2 c2)4` or `(c8 c8 c8)4` because you have three notes with equal durations to be played in the time of one quarter.
 
-*The relations between the notes are vital, not the absolute durations.*
+*The relations between the notes are vital, not their absolute durations.*
 
 ![n-tole examples with 3,7 and 9](https://raw.githubusercontent.com/SambaGodschynski/werckmeister/master/assets/tuplets.png)
 
