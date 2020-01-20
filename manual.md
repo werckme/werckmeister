@@ -70,12 +70,12 @@ I want to ...
 
 ## Don't be afraid, it's just text
 The Werckmeister language knows only a few statement types. It's all about tracks, voices, and events. That's it. 
-<br>The remaining statement types are just for configuration purposes.
+<br>The remaining statements are just for configuration purposes.
 
 A basic Werckmeister document will look like this:
 
 ```
--- CONFIG:
+-- CONFIG STUFF:
 -- 1) configure your MIDI device
 -- 2) define an instrument with the name piano
 -- 3) set the tempo
@@ -93,8 +93,8 @@ instrumentDef: piano MyMidiDevice 1  0  0;
 tempo: 130;
 
 -- TRACKS, VOICES & EVENTS
--- a track containing one voice with some note events
--- the track is set up to use our piano instrument
+-- now the actual musical statement, which is a track containing one voice with some note events
+-- (the track is set up to use our piano instrument from above)
 [
 instrument: piano;
 {
@@ -377,14 +377,12 @@ c2. c4 | c2~ c4 c
 
 #### Tuplets
 
-To write tuplets of any kind you just have to write parentheses and a duration value. For example: `(c c c)4`.
-These three notes will now be played on time for one quarter.
-You don't have to mind how many notes with what duration you write.
-All notes in that parentheses fit their value.
+To write tuplets of any kind you just have to write notes encloded by parentheses followed by a duration value. For example: `(c c c)4`.
+These three notes will now be played in the time of one quarter.
 
-So it doesn't matter if you write `(c2 c2 c2)4` or `(c8 c8 c8)4` because you have three notes with equal durations to be played in the time of one quarter.
+It doesn't matter if you write `(c2 c2 c2)4` or `(c8 c8 c8)4` because you have three notes with equal durations to be played in the time of one quarter.
 
-*The relations between the notes are vital, not the absolute durations.*
+*The relations between the notes are vital, not their absolute durations.*
 
 ![n-tole examples with 3,7 and 9](https://raw.githubusercontent.com/SambaGodschynski/werckmeister/master/assets/tuplets.png)
 
