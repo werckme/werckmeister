@@ -177,9 +177,89 @@ a b c'
 ```
 
 ## Setup A Piece
-tbd.
+#### Using 
+The first thing you want to do in a Werckmeister document, is to load include other files to your project. This may be chord definitions, accomp. templates or modulation scripts.
+
+To include a file use the `using` command.
+```
+using "./chords/default.chords";
+```
+
+The path of your file is written between double quotes (`"`).
+
+The path can be absolute or relative to the current document.
+*(It is recommended to use relative path values)*
+
 #### Devices & Instruments
+#### Adding a device
+
+To add a MIDI device to your project, use the device statement. With that statement, you have to choose a name and set a MIDI port for your new device.
+
+device statement format:
+
+`device: aName midi aMidiPort [offset millis]`
+
+To see which devices with what port are connected to your device run the player with the `--list` argument: 
+
+```
+sheetp --list
+```
+
+you will get a output like this:
+
+```
+0: Midi Through
+1: SC-8850 Part A
+2: SC-8850 Part B
+3: SC-8850 Part C
+4: SC-8850 Part D
+5: USB-Midi Port
+```
+
+where the first number means the port number.
+
+So lets say we want to add the `SC-8850 Part A` to our project, we write:
+
+```
+device: MyRoland midi 1;
+```
+
+To add a further MIDI port, for example a DX7 on the USB-Midi Port we add another line:
+```
+device: MyRoland midi 1;
+device: MyDX7 midi 5;
+```
+
+Imagine your USB-Midi Port is a bit cheap and laggy. Every signal to your USB-Midi port has a delay of about 20 milliseconds. We can compensate this by adding a 20 milliseconds delay to the `MyRoland` device, so that this device and your laggy USB-Midi Port should be in sync. We do this by using an optional `offset` argument.
+
+```
+device: MyRoland midi 1 offset 20;
+device: MyDX7 midi 5;
+```
+
+#### Adding instruments
+To adding instruments we using the `instrumentDef` statement, which is constructed like this:
+
+`instrumentDef: aInstrumentName aMidiDevice midiChannel midiControlChange midiProgramChange`
+
+Let's add an organ instrument which uses our Roland device from above:
+
+The Roland SC-8850 offers, for example, a `Farf Organ`. So if I want to use this instrument on channel 0, I have to send a `cc=19 pc=17` sequence to the channel on this device.   
+A suitable `instrumentDef` statement would be look as follows: 
+
+```
+--             name      device   ch  cc  pc
+instrumentDef: myFarfisa MyRoland 0   19   17;
+```
+
+
+#### Configuring instruments
 tbd.
+
+```
+instrumentConf: myFarfisa volume 80 pan 20;
+```
+
 #### Tempo
 tbd.
 ```
