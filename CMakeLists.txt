@@ -13,11 +13,8 @@ set(FM_CHARSET "ISO-8859-1")
 set(FM_PPQ 500)
 #END PROJECT CONFIG
 
-
-
 set(CMAKE_BINARY_DIR ${CMAKE_SOURCE_DIR}/build)
- 
-set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR})
+ set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR})
 set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR})
 
 IF(UNIX)
@@ -86,3 +83,40 @@ set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/LICENSE")
 set(CPACK_PACKAGE_VERSION_MAJOR "${WERCKMEISTER_VERSION_MAJOR}")
 set(CPACK_PACKAGE_VERSION_MINOR "${WERCKMEISTER_VERSION_MINOR}")
 include(CPack)
+
+
+SET (EXAMPLES_FOLDER ${PROJECT_SOURCE_DIR}/examples)
+
+file(GLOB WM_EXAMPLE_SHEETS
+    "${EXAMPLES_FOLDER}/*.sheet"
+)
+file(GLOB WM_CHORDS
+    "${EXAMPLES_FOLDER}/chords/*.chords"
+)
+file(GLOB WM_LUA
+    "${EXAMPLES_FOLDER}/lua/*.lua"
+)
+file(GLOB WM_LUA_COM
+    "${EXAMPLES_FOLDER}/lua/com/*.lua"
+)
+file(GLOB WM_LUA_MODS
+    "${EXAMPLES_FOLDER}/lua/mods/*.lua"
+)
+file(GLOB WM_LUA_VOICINGS
+    "${EXAMPLES_FOLDER}/lua/voicings/*.lua"
+)
+file(GLOB WM_PITCHMAPS
+    "${EXAMPLES_FOLDER}/pitchmaps/*.pitchmap"
+)
+file(GLOB WM_TEMPLATES
+    "${EXAMPLES_FOLDER}/templates/*.template"
+)
+
+install(FILES ${WM_EXAMPLE_SHEETS} DESTINATION shared/werckmeister)
+install(FILES ${WM_CHORDS}         DESTINATION shared/werckmeister/chords)
+install(FILES ${WM_LUA}            DESTINATION shared/werckmeister/lua)
+install(FILES ${WM_LUA_COM}        DESTINATION shared/werckmeister/lua/com)
+install(FILES ${WM_LUA_MODS}       DESTINATION shared/werckmeister/lua/mods)
+install(FILES ${WM_LUA_VOICINGS}   DESTINATION shared/werckmeister/lua/voicings)
+install(FILES ${WM_PITCHMAPS}      DESTINATION shared/werckmeister/pitchmaps)
+install(FILES ${WM_TEMPLATES}      DESTINATION shared/werckmeister/templates)
