@@ -5,6 +5,9 @@ execute_process(COMMAND git --work-tree=. log --pretty=format:%h -n 1
 # Project name.
 project(werckmeister)
 
+SET(WERCKMEISTER_VERSION_MAJOR 0)
+SET(WERCKMEISTER_VERSION_MINOR 1)
+
 # PROJECT CONFIG
 set(FM_CHARSET "ISO-8859-1")
 set(FM_PPQ 500)
@@ -78,3 +81,8 @@ add_subdirectory(submodules/lua)
 
 configure_file("${PROJECT_SOURCE_DIR}/src/fm/config.hpp.in" "${PROJECT_SOURCE_DIR}/src/fm/config.hpp")
 
+include(InstallRequiredSystemLibraries)
+set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/LICENSE")
+set(CPACK_PACKAGE_VERSION_MAJOR "${WERCKMEISTER_VERSION_MAJOR}")
+set(CPACK_PACKAGE_VERSION_MINOR "${WERCKMEISTER_VERSION_MINOR}")
+include(CPack)

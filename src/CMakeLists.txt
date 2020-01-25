@@ -99,3 +99,5 @@ endif(APPLE)
 
 add_executable(sheetp ${SRC_SHEET_PLAYER})
 target_link_libraries (sheetp ${SHEET_LIBS} ${LIBS_PLAYER} fmapp)
+
+install(TARGETS sheetp sheetc DESTINATION bin)
