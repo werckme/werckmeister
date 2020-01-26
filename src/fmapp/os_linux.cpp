@@ -1,9 +1,33 @@
 #include "os.hpp"
 #include <signal.h>
-//#include <unistd.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <sstream>
+#include <unistd.h>
+#include <boost/filesystem.hpp>
 
 namespace {
 	void signalCallback(int signal);
+	char * readlink_malloc (const char *filename)
+	{
+		// http://www.delorie.com/gnu/docs/glibc/libc_279.html
+		int size = 255;
+		char *buffer = NULL;
+
+		while (1) {
+			buffer = (char *) realloc (buffer, size);
+			int nchars = readlink (filename, buffer, size);
+			if (nchars < 0) {
+				free (buffer);
+				return NULL;
+			}
+			if (nchars < size) {
+				buffer[nchars] = 0;
+				return buffer;
+			}
+			size *= 2;
+		}
+	}
 }
 
 namespace fmapp {
