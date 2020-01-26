@@ -12,7 +12,6 @@ namespace sheet {
         {
             L= luaL_newstate();
             luaL_openlibs(L);
-            std::string pathcommand("package.path = package.path .. ';");
             auto dir = boost::filesystem::path(path).parent_path().generic_string();
             addPackagePath(dir);
             addSearchPaths();
@@ -25,14 +24,15 @@ namespace sheet {
         {
             auto paths = fm::getWerckmeister().searchPaths();
             for (const auto &path : paths) {
-                addPackagePath(path);
+                auto genericPath = boost::filesystem::path(path).generic_string();
+                addPackagePath(genericPath);
             }
         }
 
         void ALuaScript::addPackagePath(const fm::String &path)
         {
             std::string pathcommand("package.path = package.path .. ';");
-            pathcommand += path + "/?.lua'";            
+            pathcommand += path + "/?.lua'";
             luaL_dostring(L, pathcommand.c_str());
         }
 

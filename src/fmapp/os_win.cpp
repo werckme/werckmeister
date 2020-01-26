@@ -1,7 +1,8 @@
-#ifdef SHEET_OS_WINDOWS
 #include "os.hpp"
 #include "windows.h"
 #include "shlwapi.h"
+#include <boost/filesystem.hpp>
+
 
 namespace {
 	VOID CALLBACK WaitOrTimerCallback(PVOID lpParam, BOOLEAN TimerOrWaitFired);
@@ -50,6 +51,13 @@ namespace fmapp {
 			sigtermHandler_ = sigtermHandler;
 			::SetConsoleCtrlHandler(ConsoleHandler, TRUE);
 		}
+		fm::String getExecutablePath()
+		{
+			CHAR szFileName[MAX_PATH + 1];
+			GetModuleFileNameA(NULL, szFileName, MAX_PATH + 1);
+			auto strPath = fm::String(szFileName);
+			return boost::filesystem::path(strPath).parent_path().string();
+		}
 	}
 }
 
@@ -68,6 +76,3 @@ namespace {
 		return TRUE;
 	}
 }
-
-
-#endif

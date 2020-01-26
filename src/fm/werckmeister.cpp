@@ -248,19 +248,19 @@ namespace fm {
 		if (isVirtualFilePath(strRelPath)) {
 			return strRelPath;
 		}
-		std::list<Path> searchPaths(_searchPaths.begin(), _searchPaths.end());
+		std::list<Path> searchPathsCopy(_searchPaths.begin(), _searchPaths.end());
 		
 		auto rel = boost::filesystem::path(strRelPath);
 		if (rel.is_absolute()) {
 			return strRelPath;
 		}
 		if (doc) {
-			searchPaths.push_front(doc->path);
+			searchPathsCopy.push_front(doc->path);
 		}
 		if (!sourcePath.empty()) {
-			searchPaths.push_front(sourcePath);
+			searchPathsCopy.push_front(sourcePath);
 		}
-		for (const auto &searchPath : searchPaths) {
+		for (const auto &searchPath : searchPathsCopy) {
 			auto base = boost::filesystem::path(searchPath);
 			if (!boost::filesystem::is_directory(base)) {
 				base = base.parent_path();
@@ -272,7 +272,7 @@ namespace fm {
 			x = boost::filesystem::canonical(rel, base);
 			return boost::filesystem::system_complete(x).string();
 		}
-		auto strSearchPaths = boost::algorithm::join(searchPaths, "\n");
+		auto strSearchPaths = boost::algorithm::join(searchPathsCopy, "\n");
 		FM_THROW(Exception, fm::String("could not resolve " + strRelPath + "\nsearched here:\n" + strSearchPaths));
 	}
 
@@ -291,7 +291,7 @@ namespace fm {
 
 	void Werckmeister::addSearchPath(const Path &path)
 	{
-		_searchPaths.push_back(path);
+		_searchPaths.insert(path);
 	}
 
 	const Werckmeister::CreateContextFunction & Werckmeister::createContextHandler() const

@@ -10,6 +10,7 @@
 #include "forward.hpp"
 #include <map>
 #include <vector>
+#include <set>
 #include <functional>
 
 #if defined(__GNUC__) || defined(__GNUG__)
@@ -31,7 +32,7 @@ namespace fm {
 		Werckmeister& operator=(const Werckmeister&&) = delete;
 		typedef std::istream StreamType;
 		typedef std::unique_ptr<StreamType> ResourceStream;
-		typedef std::vector<Path> Paths;
+		typedef std::set<Path> Paths;
 		typedef std::function<sheet::compiler::AContextPtr()> CreateContextFunction;
         /*
             creates a default sheet. if werk parameter set, it will added to the werk after creation.

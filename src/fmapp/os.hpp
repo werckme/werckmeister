@@ -21,6 +21,7 @@ namespace fmapp {
 	
 		typedef std::function<void()> SigtermHandler;
 		void setSigtermHandler(const SigtermHandler&);
+		fm::String getExecutablePath();
 	}
 }
 

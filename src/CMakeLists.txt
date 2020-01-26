@@ -64,21 +64,22 @@ SET (SRC_SHEET_FMAPP
     fmapp/json.cpp
 )
 
+if (WIN32)
+  SET(SRC_SHEET_FMAPP ${SRC_SHEET_FMAPP}  fmapp/os_win.cpp)
+endif(WIN32)
+
+if (UNIX)
+  SET(SRC_SHEET_FMAPP ${SRC_SHEET_FMAPP}  fmapp/os_linux.cpp)
+endif(UNIX)
+
+
 ## PLAYER
 SET (SRC_SHEET_PLAYER
     sheetplayer_main.cpp 
     sheet.cpp
 )
 
-if (WIN32)
-  SET(SRC_SHEET_PLAYER ${SRC_SHEET_PLAYER}  fmapp/os_win.cpp)
-endif(WIN32)
-
-if (UNIX)
-  SET(SRC_SHEET_PLAYER ${SRC_SHEET_PLAYER}  fmapp/os_linux.cpp)
-endif(UNIX)
-
-SET (SHEET_LIBS ${SHEET_LIBS} sheet lua ${Boost_LIBRARIES})
+SET (SHEET_LIBS ${SHEET_LIBS} sheet fmapp lua ${Boost_LIBRARIES})
 
 add_library(fmapp ${SRC_SHEET_FMAPP})
 
@@ -98,6 +99,6 @@ elseif(UNIX)
 endif(APPLE)
 
 add_executable(sheetp ${SRC_SHEET_PLAYER})
-target_link_libraries (sheetp ${SHEET_LIBS} ${LIBS_PLAYER} fmapp)
+target_link_libraries (sheetp ${SHEET_LIBS} ${LIBS_PLAYER})
 
 install(TARGETS sheetp sheetc DESTINATION bin)

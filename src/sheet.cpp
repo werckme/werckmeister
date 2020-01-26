@@ -6,9 +6,26 @@
 #include "compiler/MidiContext.h"
 #include "sheet.h"
 #include "compiler/sheetEventRenderer.h"
+#include <fmapp/os.hpp>
 #include <iostream>
+#include <boost/filesystem.hpp>
 
 namespace sheet {
+
+    namespace {
+        void addSearchPaths() 
+        {
+            using boost::filesystem::path;
+            using boost::filesystem::system_complete;
+            auto &wm = fm::getWerckmeister();
+            auto execPath = path(fmapp::os::getExecutablePath());
+            wm.addSearchPath(execPath.string());
+            wm.addSearchPath(system_complete(execPath / path("../shared/werckmeister")).string());
+#ifndef WIN32
+            wm.addSearchPath((path("/usr/local/shared/werckmeister").string()));
+#endif
+        }
+    }
 
     fm::midi::MidiPtr processFile(const std::string &file, sheet::Warnings &outWarnings, const fm::midi::MidiConfig *midiConfig)
     {
@@ -40,6 +57,7 @@ namespace sheet {
 
 	sheet::DocumentPtr createDocument(const std::string &file)
     {
+        addSearchPaths();
         sheet::compiler::DocumentParser docparser;
         auto doc = docparser.parse(file);
         return doc;
