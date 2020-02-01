@@ -68,9 +68,11 @@ if (WIN32)
   SET(SRC_SHEET_FMAPP ${SRC_SHEET_FMAPP}  fmapp/os_win.cpp)
 endif(WIN32)
 
-if (UNIX)
+if (APPLE)
+  SET(SRC_SHEET_FMAPP ${SRC_SHEET_FMAPP}  fmapp/os_mac.cpp)
+elseif(UNIX)
   SET(SRC_SHEET_FMAPP ${SRC_SHEET_FMAPP}  fmapp/os_linux.cpp)
-endif(UNIX)
+endif(APPLE)
 
 
 ## PLAYER

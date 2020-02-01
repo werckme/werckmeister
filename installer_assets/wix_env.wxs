@@ -1,0 +1,12 @@
+<CPackWiXPatch>
+  <CPackWiXFragment Id="CM_CP_bin.sheetc.exe">
+    <Environment 
+      Id="PATH" 
+      Name="PATH" 
+      Value="[INSTALL_ROOT]\bin" 
+      Permanent="yes" 
+      Part="last" 
+      Action="set" 
+      System="yes" />
+  </CPackWiXFragment>
+</CPackWiXPatch>

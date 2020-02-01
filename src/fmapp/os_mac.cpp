@@ -5,6 +5,7 @@
 #include <sstream>
 #include <unistd.h>
 #include <boost/filesystem.hpp>
+#include <mach-o/dyld.h>
 
 namespace {
 	void signalCallback(int signal);
@@ -28,6 +29,22 @@ namespace {
 			size *= 2;
 		}
 	}
+        fm::String _getExecutablePath()
+        {
+        	char path[1024];
+                uint32_t size = sizeof(path);
+                if (_NSGetExecutablePath(&path[0], &size) == 0) {
+		  return fm::String(&path[0]);
+		}
+		char* dynamicStr = new char[size];
+		if (_NSGetExecutablePath(dynamicStr, &size) != 0) {
+		  delete dynamicStr[];
+		  throw std::runtime_error("get executable path failed");
+		}
+		std::string result(dynamicStr);
+		delete dynamicStr[];
+		return result;
+	}
 }
 
 namespace fmapp {
@@ -47,13 +64,8 @@ namespace fmapp {
 		}
 		fm::String getExecutablePath()
 		{
-			char *bff = readlink_malloc("/proc/self/exe");
-			if (bff == NULL) {
-				throw std::runtime_error("Error resolving symlink /proc/self/exe.");
-			}
-			auto result = boost::filesystem::path(bff);
-			free(bff);
-			return result.parent_path().string();
+		  
+		  return "";
 		}
 	}
 }
