@@ -38,11 +38,11 @@ namespace {
 		}
 		char* dynamicStr = new char[size];
 		if (_NSGetExecutablePath(dynamicStr, &size) != 0) {
-		  delete dynamicStr[];
+		  delete[] dynamicStr;
 		  throw std::runtime_error("get executable path failed");
 		}
 		std::string result(dynamicStr);
-		delete dynamicStr[];
+		delete[] dynamicStr;
 		return result;
 	}
 }
@@ -64,8 +64,8 @@ namespace fmapp {
 		}
 		fm::String getExecutablePath()
 		{
-		  
-		  return "";
+		  auto strPath = _getExecutablePath();
+		  return boost::filesystem::path(strPath).parent_path().string();
 		}
 	}
 }
