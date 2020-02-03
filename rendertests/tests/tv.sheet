@@ -88,7 +88,7 @@ instrument: drums;
 {
     /signature: 4 4/
     /do: swing grid 8 offset 5/
-    "bd"   "hto1"64`"hto1"4.       "mto1"8       !ffff"mto1"8. !fff"lto1" r16   |
+    "bd"   "hto1"64->"hto1"4.       "mto1"8       !ffff"mto1"8. !fff"lto1" r16   |
 }
 ]
 

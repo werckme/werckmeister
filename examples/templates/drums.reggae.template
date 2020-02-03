@@ -35,7 +35,7 @@ instrument: drums;
 }
 {
     /do: swing grid 8 offset 50/
-    r   "hto1"64`"hto1"4.       "mto1"8       "mto1"8t r "mto1"   |
+    r   "hto1"64->"hto1"4.       "mto1"8       "mto1"8t r "mto1"   |
 }
 ]
 
@@ -52,6 +52,6 @@ instrument: drums;
 }
 {
     /do: swing grid 16 offset 50/
-   !f"tim1"32`!p"tim2"8t x x  "hto1"4  r2  |
+   !f"tim1"32->!p"tim2"8t x x  "hto1"4  r2  |
 }
 ]

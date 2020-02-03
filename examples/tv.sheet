@@ -95,7 +95,7 @@ instrument: drums;
 }
 {
     /signature: 4 4/
-    "bd"   !ffff"hto1"64`"hto2"4.       "mto1"8       !ffff"mto2"8. !fff"lto1" r16   |
+    "bd"   !ffff"hto1"64->"hto2"4.       "mto1"8       !ffff"mto2"8. !fff"lto1" r16   |
 }
 ]
 
