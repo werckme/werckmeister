@@ -146,26 +146,26 @@ instrument: piano;
 #### Events
 There are a few event types:
 
-**Note Events**
+##### Note Events
 <br>have a pitch and a duration, to be performed by a MIDI instrument.
 ```
 c d e f g
 ```
 
-**Degree Events**
+##### Degree Events
 <br>have a relative pitch degree and a duration. In combination with a chord, degree events can be transformed into regular note events.
 ```
 I II III IV V VI VII
 ```
 
-**Chord Events**
+##### Chord Events
 <br>Events which are related to a name. They also store the information which interval is used for a degree. These informations are stored in a [chord definiton file](#chords).
 ```
 C7 D-7 E-7 F7 Gmaj7 A-7
 ```
 
 
-**Meta Events**
+##### Meta Events
 <br>Events to set up something or loading a mod script.
 <br>You can recognize meta events by its slashes at the beginning and the end.
 ```
@@ -254,14 +254,30 @@ instrumentDef: myFarfisa MyRoland 0   19   17;
 
 
 #### Configuring instruments
-tbd.
+With an instrument added there are further options to configure it.
+A config statement has as first argument the instrument name you want to configure followed by several optional config aruments.
+
+`instrumentConf: aInstrumentName [pan aValue] [volume aValue] [voicingStrategy aStrategyName] [mod aModName];`
+
+  option             |  value                  | purpose                         
+  ------------------ | ----------------------- | --------------------------------------
+  volume             | 0..100                  | set the volume
+  pan                | 0..100                  | set the pan, 0=left, 50=center, 100=right 
+  mod                | aName [option value]    | set a [mod](#Mods) 
+  voicingStrategy    | aName [option value]    | set a [voicingStrategy](#Voicing-strategies)  
+
+Now, as an example we set a volume value of 80 to our Farfisa organ, also we set the pan more to the left.
+
+*(the final result of these settings is strongly dependent by your actual MIDI device)* 
 
 ```
 instrumentConf: myFarfisa volume 80 pan 20;
 ```
 
 #### Tempo
-tbd.
+To set the tempo of your pice, write `tempo: aNumber`.
+
+
 ```
 tempo 120;
 [
@@ -269,27 +285,59 @@ tempo 120;
     c d e f | g a b c'
 }
 ]
-
 ```
 
+Sometimes you want to setup diffent tempi for for several voices.
+Then you have to add a tempo [Meta Event](#meta-events) to your voice.
+
+*since MIDI doesn't support simultaneous tempi, we achive this effect by streching or shrinking the note durations in relation to the main tempo (Augmentation/Diminution). As an simple example: on double time we pay eights instead of fourths.*
+
+Here we play four voices on one track, with four different tempo configurations:
+
+**There seems to be a bug on the webplayer (first notes are missing)**
 ```
-tempo 120;
+tempo: 120;
 [
 {
     /tempo: double/
-    c d e f | g a b c'
+    c d e f | g a b c' | c d e f | g a b c'
+}
+{
+    /tempo: half/
+    c, d, e, f |
 }
 {
     /signature: 3 4/
     /tempo: 96/
-    c e f | g b c'
+   c e f | g b c'
 }
 {
-    c d e f | g a b c'
+    c,, d,, e,, f,, | g,, a,, b,, c,
 }
 ]
 
 ```
+
+Also it is possible to change the tempo in between events:
+```
+tempo: 120;
+[
+{
+    /tempo: double/
+    c d e f | g a b c' |
+    /tempo: half/
+    c d e f | g a b c' |
+    /signature: 3 4/
+    /tempo: 96/
+    c d e | f g a |
+    /signature: 4 4/
+    /tempo: normal/
+    c d e f | g a b c' |
+}
+]
+
+```
+
 
 #### Time Signatures
 The time signature 4/4 by default.
@@ -488,5 +536,7 @@ type: accomp;
 ## Advanced techniques
 ##### Chords
 ##### Voicing strategies
+##### Mods
 ##### Event Tags
 ##### Lua scripts
+
