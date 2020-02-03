@@ -18,8 +18,8 @@ instrument: drums;
 }
 {
     /do: swing grid 16 offset 100/
-    "ht"8 x x x    x16 x x8  x x |
-    x16x xx  xx xx  xx xx  xx xx   |
+    "ht"8 & & &    &16 & &8  & & |
+    &16& &&  && &&  && &&  && &&   |
 }
 {
     "bd"4           "sn"4            "bd"4               "sn"4 |
@@ -37,7 +37,7 @@ instrument: drums;
 {
     /do: swing grid 16 offset 100/
     \ppp
-    r16 "sng"16 xxxxxxxxxxxxx
+    r16 "sng"16 &&&&&&&&&&&&&
 }
 {
     "bd"4           "sn"            "bd"4               "sn" |

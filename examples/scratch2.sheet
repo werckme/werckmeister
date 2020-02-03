@@ -35,7 +35,7 @@ instrument: piano;
 {
     /mod: staccato amount 50 forTag x/ 
     /signature: 3 4/
-    <IV,,,>4. <III,,,>8 "x"@<I,,,>4 |
+    <IV,,,>4. <III,,,>8 "&"@<I,,,>4 |
 }
 ]
 
@@ -59,7 +59,7 @@ instrument: slide;
     /modOnce: bend from 0/
     <I II III IV V VI VII>2 
     /modOnce: bend from 40/
-    <I II III IV V VI VII>4~ | x2.~ | x2. | r2. | r2. | r2. |
+    <I II III IV V VI VII>4~ | &2.~ | &2. | r2. | r2. | r2. |
 
     
 }

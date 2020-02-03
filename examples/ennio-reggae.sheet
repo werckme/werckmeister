@@ -48,7 +48,7 @@ name: x;
 instrument: piano;
 {
     \f
-    <I II III IV V VI VII>1~ | x 
+    <I II III IV V VI VII>1~ | & 
 
 }
 ]

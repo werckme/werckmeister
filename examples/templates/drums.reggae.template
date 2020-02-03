@@ -10,9 +10,9 @@ instrument: drums;
 }
 {
     /do: swing grid 8 offset 50/
-    !f"ht"4     x8 !px                "ht"4        x8 !px|
-    !f"ht"4     "ht"8t x x          "ht"4        x8 !px|
-    !f"ht"4     !pp"ho1"4           "ht"4        x8 !px|
+    !f"ht"4     &8 !p&                "ht"4        &8 !p&|
+    !f"ht"4     "ht"8t & &          "ht"4        &8 !p&|
+    !f"ht"4     !pp"ho1"4           "ht"4        &8 !p&|
 }
 {
     r           r         "bd"4           r |
@@ -52,6 +52,6 @@ instrument: drums;
 }
 {
     /do: swing grid 16 offset 50/
-   !f"tim1"32->!p"tim2"8t x x  "hto1"4  r2  |
+   !f"tim1"32->!p"tim2"8t & &  "hto1"4  r2  |
 }
 ]

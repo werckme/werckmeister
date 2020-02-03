@@ -250,7 +250,7 @@ namespace sheet {
 						current_pos_.current_pos 
 						>> attr(sourceId_)
 						>> attr(Event::Repeat) 
-						>> "x"
+						>> "&"
 						>> attr(Event::Tags())
 						>> attr(PitchDef())
 						>> (durationSymbols_ | attr(Event::NoDuration))
