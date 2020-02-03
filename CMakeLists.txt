@@ -22,7 +22,10 @@ IF(UNIX)
   SET (CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "-std=c++14 -Wall")
   add_definitions( -DSHEET_USE_BOOST_TIMER )
   add_definitions( -DSHEET_OS_UNIX )
-#  SET(Boost_USE_STATIC_LIBS ON)
+  if ($ENV{WM_USE_BOOST_STATIC})
+    message(STATUS "USE BOOST STATIC LIBS")
+    SET(Boost_USE_STATIC_LIBS ON)
+  endif($ENV{WM_USE_BOOST_STATIC})
 #  set(Boost_USE_MULTITHREADED ON)
 #  set(Boost_USE_STATIC_RUNTIME ON)
 ENDIF(UNIX)
@@ -56,6 +59,19 @@ IF(APPLE)
       /usr/local/opt/icu4c/lib/libicuio.a 
       iconv)
 ENDIF(APPLE)
+
+IF(UNIX)
+  if ($ENV{WM_USE_BOOST_STATIC})
+    SET(
+      Boost_LIBRARIES ${Boost_LIBRARIES}
+      /usr/lib/x86_64-linux-gnu/libicui18n.a 
+      /usr/lib/x86_64-linux-gnu/libicutu.a 
+      /usr/lib/x86_64-linux-gnu/libicuuc.a 
+      /usr/lib/x86_64-linux-gnu/libicuio.a
+      /usr/lib/x86_64-linux-gnu/libicudata.a  
+      dl)
+  endif ($ENV{WM_USE_BOOST_STATIC})
+ENDIF(UNIX)
 
 INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(src/)
