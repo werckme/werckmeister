@@ -23,15 +23,14 @@ type: template;
 name: x;    
 instrument: organ;
 {
-    <I II III IV V VI VIII>8 x x x x x x x |
+    <I II III IV V VI VIII>8 & & & & & & & |
 }
 ]
 
 [
 type: accomp;
 {
-    /template: 
-        x 
+    /template: x
     /
     G7 | G7 | 
 }   

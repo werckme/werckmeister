@@ -8,7 +8,7 @@ instrumentDef: piano   SC1 2 0 0;
 
 [
 type: template;
-name: x.x;
+name: x;
 instrument: piano; 
 {  
     /voicingStrategy: simple/

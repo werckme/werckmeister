@@ -20,7 +20,7 @@ type: template;
 name: y;
 instrument: piano;
 {
-    (I,, I,, I,,)2 (I,, I,, I,,) | ( (I,, I,, I,,)4 (I,, I,, I,,) (x x x) )1
+    (I,, I,, I,,)2 (I,, I,, I,,) | ( (I,, I,, I,,)4 (I,, I,, I,,) (& & &) )1
 }
 ]
 
