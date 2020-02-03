@@ -498,7 +498,7 @@ BOOST_AUTO_TEST_CASE(test_vorschlag)
 	fm::String text = FM_STRING("\
 [\n\
 	{\n\
-	 d'32`c'4 r2.|\n\
+	 d'32 -> c'4 r2.|\n\
 	}\n\
 ]\n\
 ");
@@ -522,7 +522,7 @@ BOOST_AUTO_TEST_CASE(test_alias_vorschlag)
 	fm::String text = FM_STRING("\
 [\n\
 	{\n\
-	 \"bd\"32`c'4 r2.|\n\
+	 \"bd\"32->c'4 r2.|\n\
 	}\n\
 ]\n\
 ");
@@ -548,7 +548,7 @@ BOOST_AUTO_TEST_CASE(test_SheetDefParser_vorschlag)
 	fm::String text = FM_STRING("\
 [\n\
 	{\n\
-		I#4`I4 I4 I4 I4 |\n\
+		I#4->I4 I4 I4 I4 |\n\
 	}\n\
 ] \n\
 ");
@@ -828,7 +828,7 @@ sheetInfo: xyz; \n\
 \n\
 	-- a comment \n\
 	{\n\
-		c4 d4 r r f4 \"bd\"32 x xx I <c d e>8 <I II II>16 \n\
+		c4 d4 r r f4 \"bd\"32 & && I <c d e>8 <I II II>16 \n\
 	}\n\
 ]\n\
 ");
@@ -882,7 +882,7 @@ BOOST_AUTO_TEST_CASE(test_x_repeat)
 	fm::String text = FM_STRING("\
 		[\n\
 			{\n\
-				c4 x x x | x1 \n\
+				c4 & & & | &1 \n\
 			}\n\
 		] \n\
 ");
@@ -906,7 +906,7 @@ BOOST_AUTO_TEST_CASE(test_x_repeat_degree)
 	fm::String text = FM_STRING("\
 		[\n\
 			{\n\
-				I4 x x x | x1 \n\
+				I4 & & & | &1 \n\
 			}\n\
 		] \n\
 ");
@@ -930,7 +930,7 @@ BOOST_AUTO_TEST_CASE(test_x_tied_repeat)
 	fm::String text = FM_STRING("\
 		[\n\
 			{\n\
-				c4 x~ x~ x~ | x1 \n\
+				c4 &~ &~ &~ | &1 \n\
 			}\n\
 		] \n\
 ");
@@ -954,7 +954,7 @@ BOOST_AUTO_TEST_CASE(test_x_vorschlag_repeat)
 	fm::String text = FM_STRING("\
 		[\n\
 			{\n\
-				c4 x`d4~ x~ | x1 \n\
+				c4 &->d4~ &~ | &1 \n\
 			}\n\
 		] \n\
 ");
@@ -972,7 +972,7 @@ BOOST_AUTO_TEST_CASE(test_x_repeat_degree_2)
 	fm::String text = FM_STRING("\
 		[\n\
 			{\n\
-				I4xxx|x1 \n\
+				I4&&&|&1 \n\
 			}\n\
 		] \n\
 ");

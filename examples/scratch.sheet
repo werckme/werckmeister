@@ -59,7 +59,7 @@ instrumentConf: drums
 instrument: piano; 
 {
     /mod: staccato amount 100/ 
-    c4 c8c, (cxc,)4 (ccc,cc)4 | ((c'c,c')(c'c,c')(c'c,c'c,c'))2. c,,4~ | x1
+    c4 c8c, (c&c,)4 (ccc,cc)4 | ((c'c,c')(c'c,c')(c'c,c'c,c'))2. c,,4~ | &1
 }   
 ]
 

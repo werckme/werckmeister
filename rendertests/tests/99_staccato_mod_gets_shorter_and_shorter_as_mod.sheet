@@ -24,8 +24,7 @@ instrument: organ;
 [
 type: accomp;
 {
-    /template: 
-        x 
+    /template: x
     /
     G7 | G7 | 
     G7 | G7 | 

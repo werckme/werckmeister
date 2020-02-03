@@ -11,14 +11,14 @@ type: template;
 name: x;
 instrument: piano;
 {
-    I,,4~ x~ x~ x~ |
+    I,,4~ &~ &~ &~ |
 }
 ]
 
 [
 instrument: piano;
 {
-    e'''4 x x x | x1~ | x1 |
+    e'''4 & & & | &1~ | &1 |
 }
 ]
 

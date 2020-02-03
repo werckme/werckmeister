@@ -3,14 +3,14 @@ type: template;
 name: drums.soca.normal;
 instrument: drums;
 {
-    "ago1"16 x  "ago2" x   "ago1" x  "ago2" x    "ago1"16 x  "ago2" x   "ago1" x  "ago2" x  |
+    "ago1"16 &  "ago2" &   "ago1" &  "ago2" &    "ago1"16 &  "ago2" &   "ago1" &  "ago2" &  |
 }
 {
-    "cwb"8 x x16 x r "cwb"   r16 "cwb" r "cwb"  "cwb" r  x  r | 
+    "cwb"8 & &16 & r "cwb"   r16 "cwb" r "cwb"  "cwb" r  &  r | 
 }
 {
     \p
-    "ht"16 x "ho"8 "ht"16 x "ho"8    "ht"16 x "ho"8 "ht"16 x "ho"8    |
+    "ht"16 & "ho"8 "ht"16 & "ho"8    "ht"16 & "ho"8 "ht"16 & "ho"8    |
 }
 {
     \ffff
@@ -26,23 +26,23 @@ type: template;
 name: drums.soca.bridge;
 instrument: drums;
 {
-    "ago1"16 x  "ago2" x   "ago1" x  "ago2" x    "ago1"16 x  "ago2" x   "ago1" x  "ago2" x  |
+    "ago1"16 &  "ago2" &   "ago1" &  "ago2" &    "ago1"16 &  "ago2" &   "ago1" &  "ago2" &  |
 }
 {
-    "cwb"8 x x16 x r "cwb"   r16 "cwb" r "cwb"  "cwb" r  x  r | 
+    "cwb"8 & &16 & r "cwb"   r16 "cwb" r "cwb"  "cwb" r  &  r | 
 }
 {
     \fff
-    "mtr"16 x "otr"8 "mtr"16 x "otr"8 "mtr"16 x "otr"8 "mtr"16 x "otr"8 |
+    "mtr"16 & "otr"8 "mtr"16 & "otr"8 "mtr"16 & "otr"8 "mtr"16 & "otr"8 |
 }
 {
     \p
-    !ff"spl"16 "ht" "ho"8 "ht"16 x "ho"8    "ht"16 x "ho"8 "ht"16 x "ho"8    |
-    "ht"16 x "ho"8 "ht"16 x "ho"8    "ht"16 x "ho"8 "ht"16 x "ho"8    |
+    !ff"spl"16 "ht" "ho"8 "ht"16 & "ho"8    "ht"16 & "ho"8 "ht"16 & "ho"8    |
+    "ht"16 & "ho"8 "ht"16 & "ho"8    "ht"16 & "ho"8 "ht"16 & "ho"8    |
 }
 {
     \f
-    r4 r16 "bo1" "bo2" x    r4 r16 "bo1" "bo2" x  |
+    r4 r16 "bo1" "bo2" &    r4 r16 "bo1" "bo2" &  |
 }
 {
     \pp
@@ -51,7 +51,7 @@ instrument: drums;
 {
     \fffff
     r8. "sn"16 r8 "sn"    r8. "sn"16 r8 "sn"    |
-    r8. "sn"16 r8 "sn"    r4 r16 !fff"sn" !ffffx !fffffx   |
+    r8. "sn"16 r8 "sn"    r4 r16 !fff"sn" !ffff& !fffff&   |
 }
 {
     "bd"4 "bd"   "bd" "bd" |

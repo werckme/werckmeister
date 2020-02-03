@@ -59,7 +59,7 @@ instrument: slide;
     /modOnce: bend from 0/
     <I II III IV V VI VII>2 
     /modOnce: bend from 40/
-    <I II III IV V VI VII>4~ | x2.~ | x2. | r2. | r2. | r2. |
+    <I II III IV V VI VII>4~ | &2.~ | &2. | r2. | r2. | r2. |
 
     
 }

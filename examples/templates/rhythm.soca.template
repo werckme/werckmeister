@@ -3,8 +3,8 @@ type: template;
 name: rhythm.soca.normal;
 instrument: rhythm; 
 {
-    r16 !p<I II III IV V VI VII> !fx !ffx     !pI  !p<I II III IV V VI VII> !fx !ffx
-    !ppI!p<I II III IV V VI VII> !fx !ffx     !pI  !p<I II III IV V VI VII> !fx !px| 
+    r16 !p<I II III IV V VI VII> !f& !ff&     !pI  !p<I II III IV V VI VII> !f& !ff&
+    !ppI!p<I II III IV V VI VII> !f& !ff&     !pI  !p<I II III IV V VI VII> !f& !p&| 
 }
 ] 
 

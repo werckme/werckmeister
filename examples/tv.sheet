@@ -95,7 +95,7 @@ instrument: drums;
 }
 {
     /signature: 4 4/
-    "bd"   !ffff"hto1"64`"hto2"4.       "mto1"8       !ffff"mto2"8. !fff"lto1" r16   |
+    "bd"   !ffff"hto1"64->"hto2"4.       "mto1"8       !ffff"mto2"8. !fff"lto1" r16   |
 }
 ]
 
@@ -107,39 +107,39 @@ instrument: lead;
     /mod: staccato amount 90/
     /do: swing grid 8 offset 15/
     \fff
-    r2 | r2 | r2 | r2  | d'8. x16 x32 x x8 r16 | c'16 f d b,   g c' x32 x b e | c8. f'32 c' e'16 e x32 b, g, a, |
-    c'8 x16 x32 x  e' g g, e b c' r16 | b8. (d' g' b)8  g16 e g | g'8 xxx | 
+    r2 | r2 | r2 | r2  | d'8. &16 &32 & &8 r16 | c'16 f d b,   g c' &32 & b e | c8. f'32 c' e'16 e &32 b, g, a, |
+    c'8 &16 &32 &  e' g g, e b c' r16 | b8. (d' g' b)8  g16 e g | g'8 &&& | 
     -- repeat
-            d'8. x16 x32 x x8 r16 | c'16 f d b,   g c' x32 x b e | c8. f'32 c' e'16 e x32 b, g, a, |
-    c'8 x16 x32 x  e' g g, e b c' r16 | b8. (d' g' b)8  g16 e g | g'8 xxx |
+            d'8. &16 &32 & &8 r16 | c'16 f d b,   g c' &32 & b e | c8. f'32 c' e'16 e &32 b, g, a, |
+    c'8 &16 &32 &  e' g g, e b c' r16 | b8. (d' g' b)8  g16 e g | g'8 &&& |
     -- |:
-    bb'8. x16  d'32 g d d' f' g' d' x   | a'8. x16  c#'32 g d c' e' f#' c' x |
-    (g'8 d' bb a g)4  f16. g32 f16 g32 x | -- :|
+    bb'8. &16  d'32 g d d' f' g' d' &   | a'8. &16  c#'32 g d c' e' f#' c' & |
+    (g'8 d' bb a g)4  f16. g32 f16 g32 & | -- :|
     -- |:
-    bb'8. x16  d'32 g d d' f' g' d' x   | a'8. x16  c#'32 g d c' e' f#' c' x |
+    bb'8. &16  d'32 g d d' f' g' d' &   | a'8. &16  c#'32 g d c' e' f#' c' & |
     (g'8 d' bb a g)4  f32 a b d' g' d g b |
-    d'32 a b a bb f f# e  d8. a32 x  | 
+    d'32 a b a bb f f# e  d8. a32 &  | 
     
-    (axx)4 bb8.  c32 x | c'8. bb16 a x g32 xxx | d'8 d8. r16 (d'xx)8 |
-    d'8 d8. r16 x32 x x16~ | (dax)4  bb8. c32 x | c'8. bb16 a x g32 xxx |
-    g'8 g8. r16 g' x | g'8 g8. r16 g32 x x16 |
+    (a&&)4 bb8.  c32 & | c'8. bb16 a & g32 &&& | d'8 d8. r16 (d'&&)8 |
+    d'8 d8. r16 &32 & &16~ | (da&)4  bb8. c32 & | c'8. bb16 a & g32 &&& |
+    g'8 g8. r16 g' & | g'8 g8. r16 g32 & &16 |
 
 
-    d'8. x16 x32 x x8 r16 | c'16 f d b,   g c' x32 x b e | c8. f'32 c' e'16 e x32 b, g, a, |
-    c'8 x16 x32 x  e' g g, e b c' r16 | b8. (d' g' b)8  g16 e g | g'8 xxx | 
+    d'8. &16 &32 & &8 r16 | c'16 f d b,   g c' &32 & b e | c8. f'32 c' e'16 e &32 b, g, a, |
+    c'8 &16 &32 &  e' g g, e b c' r16 | b8. (d' g' b)8  g16 e g | g'8 &&& | 
     -- repeat
-    d'8. x16 x32 x x8 r16 | c'16 f d b,   g c' x32 x b e | c8. f'32 c' e'16 e x32 b, g, a, |
-    c'8 x16 x32 x  e' g g, e b c' r16 | b8. (d' g' b)8  g16 e g | g'8 xxx |
+    d'8. &16 &32 & &8 r16 | c'16 f d b,   g c' &32 & b e | c8. f'32 c' e'16 e &32 b, g, a, |
+    c'8 &16 &32 &  e' g g, e b c' r16 | b8. (d' g' b)8  g16 e g | g'8 &&& |
 
     -- |:
-    bb'8. x16  d'32 g d d' f' g' d' x   | a'8. x16  c#'32 g d c' e' f#' c' x |
-    (g'8 d' bb a g)4  f16. g32 f16 g32 x | -- :|
+    bb'8. &16  d'32 g d d' f' g' d' &   | a'8. &16  c#'32 g d c' e' f#' c' & |
+    (g'8 d' bb a g)4  f16. g32 f16 g32 & | -- :|
     -- |:
-    bb'8. x16  d'32 g d d' f' g' d' x   | a'8. x16  c#'32 g d c' e' f#' c' x |
-    (g'8 d' bb a g)4   f32 a b d' g' d g b | d'32 a b a bb f f# e  d8. a32 x  |
-    (axx)4 bb8.  c32 x | c'8. bb16 a x g32 xxx | d'8 d8. r16 (d'xx)8 |
-    d'8 d8. r16 x32 x x16~ | (dax)4  bb8. c32 x | c'8. bb16 a x g32 xxx |
-    g'8 g8. r16 g' x | g'8 g8. r16 g32 x x16 |
+    bb'8. &16  d'32 g d d' f' g' d' &   | a'8. &16  c#'32 g d c' e' f#' c' & |
+    (g'8 d' bb a g)4   f32 a b d' g' d g b | d'32 a b a bb f f# e  d8. a32 &  |
+    (a&&)4 bb8.  c32 & | c'8. bb16 a & g32 &&& | d'8 d8. r16 (d'&&)8 |
+    d'8 d8. r16 &32 & &16~ | (da&)4  bb8. c32 & | c'8. bb16 a & g32 &&& |
+    g'8 g8. r16 g' & | g'8 g8. r16 g32 & &16 |
 
 }
 ]

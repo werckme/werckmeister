@@ -5,9 +5,9 @@ instrument: rhythm;
 {
     /do: swing grid 8 offset 60/
     -- V## as workaround to force the 6th, beacause not every chord contains it.
-    <I, V,>8 x <I, V##,> x <I, V,>8 x <I, V##,> x     |
-    <I, V,>8 x <I, V##,> x <I, V,>8 x <I, V##,> x     |
-    <I, V,>8 x <I, V##,> x <I, V,>8 x <I, V##,> x     |
-    <I, V,>8 x <I, V##,> x <I, V###,>8 x <I, V##,> x  |
+    <I, V,>8 & <I, V##,> & <I, V,>8 & <I, V##,> &     |
+    <I, V,>8 & <I, V##,> & <I, V,>8 & <I, V##,> &     |
+    <I, V,>8 & <I, V##,> & <I, V,>8 & <I, V##,> &     |
+    <I, V,>8 & <I, V##,> & <I, V###,>8 & <I, V##,> &  |
 }
 ]
