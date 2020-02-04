@@ -1,7 +1,8 @@
-<img src="https://raw.githubusercontent.com/SambaGodschynski/werckmeister/master/assets/Logo_med.png" style="display: block; margin: auto">
-
 Werckmeister
 ===================
+
+<img src="https://raw.githubusercontent.com/SambaGodschynski/werckmeister/master/assets/Logo_med.png" style="display: block; margin: auto">
+
 
 Vision
 ------
