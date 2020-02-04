@@ -1,6 +1,6 @@
 <img src="https://raw.githubusercontent.com/SambaGodschynski/werckmeister/master/assets/Logo_med.png" style="display: block; margin: auto">
 
-Werckmeister Manual
+Werckmeister
 ===================
 
 Vision
@@ -44,39 +44,22 @@ But for me there was a problem: LilyPond's main purpose is make score visible. S
 * a programming language
 
 
-Manual
-======
-I want to ...
---------------
-[... get an impression of what I have to face if I want to learn Werckmeister](#Don't-be-afraid,-it's-just-text)
+Getting Started
+============
 
-[... setup a piece](#Setup-A-Piece)
-
-[... write melodies](#Write-Melodies)
-
-[... write for drums](#Writing-for-drums)
-
-[... use several instruments]()
-
-[... accomp my melodies](#Accomp-My-Melodies)
-
-[... setup my own chord symbols](#chords)
-
-[... use MIDI expression mods]()
-
-[... write my own MIDI expression mods]()
-
-
-## Installation 
 Go to the page https://github.com/SambaGodschynski/werckmeister/releases and download the most recent version of Werckmeister.
 
-On Mac and on Linux you install the binaries by executing the installer script.
+On Mac and on Linux you have to install the binaries by executing the installer script.
 
 #### Mac
-`sudo sh werckmeister-x.x.x-Darwin.sh --prefix=/usr/local --exclude-subdir`
+```
+sudo sh werckmeister-x.x.x-Darwin.sh --prefix=/usr/local --exclude-subdir
+```
 
 #### Linux
-`sudo sh werckmeister-x.x.x-Linux.sh --prefix=/usr/local --exclude-subdir`
+```
+sudo sh werckmeister-x.x.x-Linux.sh --prefix=/usr/local --exclude-subdir
+```
 
 #### Windows
 Just execute the installer.
@@ -104,10 +87,57 @@ You should get an output like this:
 If not, please make sure that the werckmeister `bin` path of your installation is written into your `PATH` environment variable.
 
 ### Compiler
-run `sheetc asheetfile.sheet` to compile a sheet file into a MIDI file.
+Run `sheetc aSheetFile.sheet` to compile a sheet file into a MIDI file.
 
 ### Player
-run `sheetp asheetfile.sheet`.
+To playback a sheet file you can do this by executing `sheetp`.
+Just as with the compiler type in `sheetp` and then the file you want to playback.
+
+```
+sheetp aSheetFile.sheet
+```
+
+In order to get an sheet file played via MIDI, you have to configure set your MIDI ports. 
+
+Have a look [here](#Adding-a-device) to see how it's done.
+
+## Examples
+*(tbd): examples did not exists yet*
+
+To get a good impression of what is possible and how it can be achieved, it is recommended to have a look at the example sheets.
+
+To can find them in your installation folder under `shared/werckmeister/examples`. Or download them from the git sources: [tbd]().
+
+You should find the examples here:
+
+| System  | Location |
+| ------  | -------- |
+| Windows |  C:\Program Files (x86)\werckmeister 0.1.\share\werckmeister\examples  |
+| Mac |  /usr/local/share/werckmeister/examples  |
+| Linux |  /usr/local/share/werckmeister/examples  |
+*(it may differs to your machine, depending on where you installed werckmeister)*
+
+Manual
+======
+I want to ...
+--------------
+[... get an impression of what I have to face if I want to learn Werckmeister](#Don't-be-afraid,-it's-just-text)
+
+[... setup a piece](#Setup-A-Piece)
+
+[... write melodies](#Write-Melodies)
+
+[... write for drums](#Writing-for-drums)
+
+[... use several instruments]()
+
+[... accomp my melodies](#Accomp-My-Melodies)
+
+[... setup my own chord symbols](#chords)
+
+[... use MIDI expression mods]()
+
+[... write my own MIDI expression mods]()
 
 ## Don't be afraid, it's just text
 The Werckmeister language knows only a few statement types. It's all about tracks, voices, and events. That's it. 
@@ -402,7 +432,7 @@ key signatures are not supported.
 #### Notes
 The syntax is loosely inspired by the [lilypond](http://lilypond.org) notation syntax. A note is just a letter followed by a number for its duration.
 
-*If a note has no duration, the last given duration will be used.*
+*If a note has no duration, the last assigned duration will be used.*
 
 ```
 c4 d e8 f

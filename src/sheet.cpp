@@ -20,9 +20,9 @@ namespace sheet {
             auto &wm = fm::getWerckmeister();
             auto execPath = path(fmapp::os::getExecutablePath());
             wm.addSearchPath(execPath.string());
-            wm.addSearchPath(system_complete(execPath / path("../shared/werckmeister")).string());
+            wm.addSearchPath(system_complete(execPath / path("../share/werckmeister")).string());
 #ifndef WIN32
-            wm.addSearchPath((path("/usr/local/shared/werckmeister").string()));
+            wm.addSearchPath((path("/usr/local/share/werckmeister").string()));
 #endif
         }
     }

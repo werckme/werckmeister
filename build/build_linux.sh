@@ -1,3 +1,3 @@
-export WM_USE_BOOST_STATIC=1
+export WM_LINUX_LINK_STATIC=1
 cmake -DCMAKE_BUILD_TYPE=Release ..
 make

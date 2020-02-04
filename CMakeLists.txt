@@ -22,10 +22,10 @@ IF(UNIX)
   SET (CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "-std=c++14 -Wall")
   add_definitions( -DSHEET_USE_BOOST_TIMER )
   add_definitions( -DSHEET_OS_UNIX )
-  if ($ENV{WM_USE_BOOST_STATIC})
+  if ($ENV{WM_LINUX_LINK_STATIC})
     message(STATUS "USE BOOST STATIC LIBS")
     SET(Boost_USE_STATIC_LIBS ON)
-  endif($ENV{WM_USE_BOOST_STATIC})
+  endif($ENV{WM_LINUX_LINK_STATIC})
 #  set(Boost_USE_MULTITHREADED ON)
 #  set(Boost_USE_STATIC_RUNTIME ON)
 ENDIF(UNIX)
@@ -61,7 +61,7 @@ IF(APPLE)
 ENDIF(APPLE)
 
 IF(UNIX)
-  if ($ENV{WM_USE_BOOST_STATIC})
+  if ($ENV{WM_LINUX_LINK_STATIC})
     SET(
       Boost_LIBRARIES ${Boost_LIBRARIES}
       /usr/lib/x86_64-linux-gnu/libicui18n.a 
@@ -70,7 +70,7 @@ IF(UNIX)
       /usr/lib/x86_64-linux-gnu/libicuio.a
       /usr/lib/x86_64-linux-gnu/libicudata.a  
       dl)
-  endif ($ENV{WM_USE_BOOST_STATIC})
+  endif ($ENV{WM_LINUX_LINK_STATIC})
 ENDIF(UNIX)
 
 INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIRS})
@@ -82,12 +82,17 @@ INCLUDE_DIRECTORIES(submodules/rapidjson/include/)
 if(WIN32)
   INCLUDE_DIRECTORIES(submodules)
   add_subdirectory(submodules/rtmidi) #rtmidi needs /MT or /MTd for windows
-endif()
+endif(WIN32)
 
 if(APPLE)
   INCLUDE_DIRECTORIES(submodules)
   add_subdirectory(submodules/rtmidi) #rtmidi needs /MT or /MTd for windows
-endif()
+elseif(UNIX)
+  if($ENV{WM_LINUX_LINK_STATIC})
+    INCLUDE_DIRECTORIES(submodules)
+    add_subdirectory(submodules/rtmidi)
+  endif($ENV{WM_LINUX_LINK_STATIC})
+endif(APPLE)
 
 
 add_subdirectory(src)
@@ -110,11 +115,6 @@ endif(WIN32)
 include(CPack)
 
 
-SET (EXAMPLES_FOLDER ${PROJECT_SOURCE_DIR}/examples)
-
-file(GLOB WM_EXAMPLE_SHEETS
-    "${EXAMPLES_FOLDER}/*.sheet"
-)
 file(GLOB WM_CHORDS
     "${EXAMPLES_FOLDER}/chords/*.chords"
 )
@@ -140,12 +140,11 @@ file(GLOB WM_TEMPLATES
     "${EXAMPLES_FOLDER}/templates/*.template"
 )
 
-install(FILES ${WM_EXAMPLE_SHEETS}         DESTINATION shared/werckmeister)
-install(FILES ${WM_CHORDS}                 DESTINATION shared/werckmeister/chords)
-install(FILES ${WM_LUA}                    DESTINATION shared/werckmeister/lua)
-install(FILES ${WM_LUA_COM}                DESTINATION shared/werckmeister/lua/com)
-install(FILES ${WM_LUA_MODS}               DESTINATION shared/werckmeister/lua/mods)
-install(FILES ${WM_LUA_VOICINGS}           DESTINATION shared/werckmeister/lua/voicings)
-install(FILES ${WM_LUA_VOICINGS_SOVLERS}   DESTINATION shared/werckmeister/lua/voicings/solvers)
-install(FILES ${WM_PITCHMAPS}              DESTINATION shared/werckmeister/pitchmaps)
-install(FILES ${WM_TEMPLATES}              DESTINATION shared/werckmeister/templates)
+install(FILES ${WM_CHORDS}                 DESTINATION share/werckmeister/chords)
+install(FILES ${WM_LUA}                    DESTINATION share/werckmeister/lua)
+install(FILES ${WM_LUA_COM}                DESTINATION share/werckmeister/lua/com)
+install(FILES ${WM_LUA_MODS}               DESTINATION share/werckmeister/lua/mods)
+install(FILES ${WM_LUA_VOICINGS}           DESTINATION share/werckmeister/lua/voicings)
+install(FILES ${WM_LUA_VOICINGS_SOVLERS}   DESTINATION share/werckmeister/lua/voicings/solvers)
+install(FILES ${WM_PITCHMAPS}              DESTINATION share/werckmeister/pitchmaps)
+install(FILES ${WM_TEMPLATES}              DESTINATION share/werckmeister/templates)

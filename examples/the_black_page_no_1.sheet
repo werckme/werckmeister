@@ -19,7 +19,7 @@ using "lua/mods/guitarStroke.lua";
 
 device: SC1 midi 2;
 
-tempo: 60;
+tempo: 70;
 instrumentDef: piano      SC1 0 0 0;
 instrumentDef: lead       SC1 1 0 12;
 instrumentDef: lead2      SC1 2 0 25;
@@ -37,7 +37,7 @@ instrumentConf: rhythm
 
 instrumentConf: bass
     voicingStrategy simple range contrabass
-    volume 100
+    volume 65
 ;   
 
 instrumentConf: piano
