@@ -67,6 +67,47 @@ I want to ...
 [... write my own MIDI expression mods]()
 
 
+## Installation 
+Go to the page https://github.com/SambaGodschynski/werckmeister/releases and download the most recent version of Werckmeister.
+
+On Mac and on Linux you install the binaries by executing the installer script.
+
+#### Mac
+`sudo sh werckmeister-x.x.x-Darwin.sh --prefix=/usr/local --exclude-subdir`
+
+#### Linux
+`sudo sh werckmeister-x.x.x-Linux.sh --prefix=/usr/local --exclude-subdir`
+
+#### Windows
+Just execute the installer.
+
+### All done, what now?
+After the installation, two executables should be available:
+* `sheetc` a sheet file compiler  
+* `sheetp` a sheet file player
+
+Open a command line shell: `cmd` on windows or `terminal` on Mac.
+
+Type into the terminal:
+
+```
+sheetc --help
+```
+
+You should get an output like this:
+```
+  --help                produce help message
+  --input arg           input file
+  --output arg          output file
+  (...)
+```
+If not, please make sure that the werckmeister `bin` path of your installation is written into your `PATH` environment variable.
+
+### Compiler
+run `sheetc asheetfile.sheet` to compile a sheet file into a MIDI file.
+
+### Player
+run `sheetp asheetfile.sheet`.
 
 ## Don't be afraid, it's just text
 The Werckmeister language knows only a few statement types. It's all about tracks, voices, and events. That's it. 
