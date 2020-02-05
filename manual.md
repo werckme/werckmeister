@@ -3,6 +3,14 @@ Werckmeister
 
 <img src="https://raw.githubusercontent.com/SambaGodschynski/werckmeister/master/assets/Logo_med.png" style="display: block; margin: auto">
 
+```{name: Werckmeister, type:'full'}
+tempo 120;
+[
+{
+    c d e f | g a b c'
+}
+]
+```
 
 Vision
 ------
