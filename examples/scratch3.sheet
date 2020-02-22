@@ -1,0 +1,32 @@
+using "chords/default.chords";
+using "pitchmaps/battery3.tight.pitchmap";
+using "templates/drums.porcaro.samba.template";
+using "lua/mods/swing.lua";
+
+device: BC midi 3;
+
+tempo: 110;
+instrumentDef: drums   BC 9 0 0;
+
+  instrumentConf: drums
+      mod swing grid 16 offset 70;
+
+
+[
+type: accomp;
+{
+    /template: drums.porcaro.samba.1/
+    G-7 | Gb7 | Fmaj7 | Gb7 |
+    Fmaj7 | Fmaj7 | G7 | G7 |
+    G-7 | Gb7 | 
+    /template: drums.porcaro.samba.2/
+    Fmaj7 | Fmaj7 | Gbmaj7 | Gbmaj7 |
+    B7 | B7 | F#-7 | F#-7 |
+    D7 | D7 | G-7 | G-7 |
+    Eb7 | Eb7 | A-7 | D7b9 |
+    G-7 | C7b9 | 
+    Fmaj7 | Fmaj7 |
+    G7 | G7 | G-7 | Gb7 |
+    Fmaj7 | Gb9 |
+}   
+]
