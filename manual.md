@@ -3,41 +3,12 @@ Werckmeister
 
 <img src="https://raw.githubusercontent.com/SambaGodschynski/werckmeister/master/assets/Logo_med.png" style="display: block; margin: auto">
 
-```{name: Werckmeister, type:'full'}
-tempo 120;
-[
-{
-    c d e f | g a b c'
-}
-]
-```
-
 Vision
 ------
 Consider the beauty of lead sheet music: you write a melody and some chords. Thats it.
 <br>Later you can tell your band in which style the piece has to be played. You can say, after 4 beats play it as a bossa nova or a blues or whatever.
 
 This is the idea behind Werckmeister. Of course it can not replace a band or a musician but it offers you a tool to write melodies and chords then you can define how to interpret the chords along your melody or even define your own interpretation templates.
-
-Why text only and no GUI
-------------------------
-The motivation behind this decision cames with an experience which I had in the past with a professional scorewriter software I was using back in the early 2000.
-
-This software was a bit clunky but I've got used to it. At some point the developer discontinued the support for my version and I've got more and more problems to get the software running on a modern system. The other problem was, that my project files were written in a proprietary format. 
-
-So I realized: 
-<br>**not I am the owner of my written music, the company behind the scorewriter software owns it
- and if I want to continue using my projects I have to pay money.**
-
-So I've came to the conclusion, that readable text files is my way to go.
-
-*What is so hard writing notes in a text edior such as `c d e f g` in comparison to an overloaded clunky editor software.
-<br>(actually notes in a score have a lot advantages in comparison to a text file regarding readability etc., but that aside)*
-
-I've discovered that [LilyPond](http://lilypond.org/) is a good way to write music using textfiles.
-But for me there was a problem: LilyPond's main purpose is make score visible. So the LilyPond language is designed to describe how notes have to look on paper in the first place. Basically, I wanted the same but with the focus on how the notes sounds played by MIDI instruments.
-
-
 
 
 ## What it wants to be
@@ -52,28 +23,80 @@ But for me there was a problem: LilyPond's main purpose is make score visible. S
 * a scorewriter software
 * a programming language
 
+```language=Werckmeister
+using "chords/default.chords";
+tempo: 140;
+device: MyDevice  midi 0;
+instrumentDef:lead  MyDevice  0 0 0;
+instrumentDef:piano  MyDevice  0 0 0;
+instrumentDef:bass  MyDevice  0 0 0;
+
+[
+instrument: piano;
+{
+    \fff
+    r4 e f# g | c'1~ | c'4 d e f# | b2 b2~ | b4 c d e | a1~ | a4 b, c# d# | g1 |
+    -- wiederholung
+    r4 e f# g | c'1~ | c'4 d e f# | b2 b2~ | b4 c d e | a1~ | 
+    -- 2.
+    a4 f# a g | e1~ | e4 r d# e | f# b, f#2~ | f#4 f# e f# | g1~ | g4 g f# g | a1~ |
+    a4 d d' c' | b1~ | b4 r a# b | c' c' a a | f#2. c'4 | b2 b2~ | b2. e4 | a2. g4 | 
+    f#2 g4 b, | e1 
+}
+]
+[
+type: template;
+name: x;
+instrument: piano;
+{
+    \p
+    <III, V, VII, II>1 |
+}
+]
+[
+type: template;
+name: x;
+instrument: bass;
+{
+    \p
+    I,,2. V,,4 |
+}
+]
+
+[
+type: accomp;
+{   
+    r | A-7 | D7 | Gmaj7 | Cmaj7 | F#-7b5 | B7 | E- | E- |
+    -- wiederholung
+    A-7 | D7 | Gmaj7 | Cmaj7 | F#-7b5  | 
+    -- 2.
+    B7 | E- | E- | F#-7b5  | B7b9 | E- | E- | A-7 | D7 | Gmaj7 | Gmaj7 |
+    F#-7b5  | B7b9 | E-7 A7 | D-7 G7 | F#-7b5 | B7b9 | E- |
+}
+]
+```
 
 Getting Started
 ============
 
 Go to the page https://github.com/SambaGodschynski/werckmeister/releases and download the most recent version of Werckmeister.
 
-On Mac and on Linux you have to install the binaries by executing the installer script.
+On Mac and on Linux you can install the binaries by executing the installer script.
 
-#### Mac
+## Mac
 ```
 sudo sh werckmeister-x.x.x-Darwin.sh --prefix=/usr/local --exclude-subdir
 ```
 
-#### Linux
+## Linux
 ```
 sudo sh werckmeister-x.x.x-Linux.sh --prefix=/usr/local --exclude-subdir
 ```
 
-#### Windows
+## Windows
 Just execute the installer.
 
-### All done, what now?
+## All done, what now?
 After the installation, two executables should be available:
 * `sheetc` a sheet file compiler  
 * `sheetp` a sheet file player
@@ -91,14 +114,14 @@ You should get an output like this:
   --help                produce help message
   --input arg           input file
   --output arg          output file
-  (...)
+  ...
 ```
 If not, please make sure that the werckmeister `bin` path of your installation is written into your `PATH` environment variable.
 
-### Compiler
+## Compiler
 Run `sheetc aSheetFile.sheet` to compile a sheet file into a MIDI file.
 
-### Player
+## Player
 To playback a sheet file you can do this by executing `sheetp`.
 Just as with the compiler type in `sheetp` and then the file you want to playback.
 
@@ -130,7 +153,7 @@ Manual
 ======
 I want to ...
 --------------
-[... get an impression of what I have to face if I want to learn Werckmeister](#Don't-be-afraid,-it's-just-text)
+[... get an impression of what I have to face if I want to learn Werckmeister](#it's-just-text)
 
 [... setup a piece](#Setup-A-Piece)
 
@@ -148,13 +171,13 @@ I want to ...
 
 [... write my own MIDI expression mods]()
 
-## Don't be afraid, it's just text
+## It's just text
 The Werckmeister language knows only a few statement types. It's all about tracks, voices, and events. That's it. 
 <br>The remaining statements are just for configuration purposes.
 
 A basic Werckmeister document will look like this:
 
-```
+```language=Werckmeister
 -- CONFIG STUFF:
 -- 1) configure your MIDI device
 -- 2) define an instrument with the name piano
@@ -166,7 +189,7 @@ device: MyMidiDevice midi 1;
 
 -- 2)
 --             name  device       ch pc cc
-instrumentDef: piano MyMidiDevice 1  0  0;
+instrumentDef: piano MyMidiDevice 0  0  0;
 -- (ch= channel, pc= programm change, cc= control change)
 
 -- 3)
@@ -182,17 +205,16 @@ instrument: piano;
 }
 ]
 ```
-#### Tracks and Voices
+## Tracks and Voices
 
 A track in Werckmeister has excactly the same meanig as it has in a MIDI file.
 It is related to an instrument and contains events.
 
 A track begins with a `[` and ends with a `]`.
-```
+```language=Werckmeister,type=partial
 -- a track with one voice and an instrument setup
 
 [
-instrument: piano;
 {
     c d e f | g a b c'
 }
@@ -208,11 +230,10 @@ If you want to write polyphonic melody lines, you can add more voices to your tr
 
 The melody above would be written like this:
 
-```
+```language=Werckmeister,type=partial
 -- a track with two voices
 
 [
-instrument: piano;
 {
     g4  f#8 g  a4   g
 }
@@ -223,45 +244,46 @@ instrument: piano;
 
 ```
 
-#### Events
+## Events
 There are a few event types:
 
-##### Note Events
-<br>have a pitch and a duration, to be performed by a MIDI instrument.
-```
+### Note Events
+have a pitch and a duration, to be performed by a MIDI instrument.
+```language=Werckmeister,type=mute
 c d e f g
 ```
 
-##### Degree Events
-<br>have a relative pitch degree and a duration. In combination with a chord, degree events can be transformed into regular note events.
-```
+### Degree Events
+have a relative pitch degree and a duration. In combination with a chord, degree events can be transformed into regular note events.
+```language=Werckmeister,type=mute
 I II III IV V VI VII
 ```
 
-##### Chord Events
-<br>Events which are related to a name. They also store the information which interval is used for a degree. These informations are stored in a [chord definiton file](#chords).
-```
+### Chord Events
+Events which are related to a name. They also store the information which interval is used for a degree. These informations are stored in a [chord definiton file](#chords).
+```language=Werckmeister,type=mute
 C7 D-7 E-7 F7 Gmaj7 A-7
 ```
 
 
-##### Meta Events
-<br>Events to set up something or loading a mod script.
+### Meta Events
+Events to set up something or loading a mod script.
 <br>You can recognize meta events by its slashes at the beginning and the end.
-```
+```language=Werckmeister,type=single
 /tempo: 100/ -- meta event: set tempo to 100
-c d e f
+c d e f |
 /tempo: 50/
-a b c' 
+g a b c'
+
 
 ```
 
 ## Setup A Piece
-#### Using 
+### Using 
 The first thing you want to do in a Werckmeister document, is to load include other files to your project. This may be chord definitions, accomp. templates or modulation scripts.
 
 To include a file use the `using` command.
-```
+```language=Werckmeister,type=mute
 using "./chords/default.chords";
 ```
 
@@ -270,7 +292,7 @@ The path of your file is written between double quotes (`"`).
 The path can be absolute or relative to the current document.
 *(It is recommended to use relative path values)*
 
-#### Devices & Instruments
+### Devices & Instruments
 #### Adding a device
 
 To add a MIDI device to your project, use the device statement. With that statement, you have to choose a name and set a MIDI port for your new device.
@@ -300,19 +322,19 @@ where the first number means the port number.
 
 So lets say we want to add the `SC-8850 Part A` to our project, we write:
 
-```
+```language=Werckmeister,type=mute
 device: MyRoland midi 1;
 ```
 
 To add a further MIDI port, for example a DX7 on the USB-Midi Port we add another line:
-```
+```language=Werckmeister,type=mute
 device: MyRoland midi 1;
 device: MyDX7 midi 5;
 ```
 
 Imagine your USB-Midi Port is a bit cheap and laggy. Every signal to your USB-Midi port has a delay of about 20 milliseconds. We can compensate this by adding a 20 milliseconds delay to the `MyRoland` device, so that this device and your laggy USB-Midi Port should be in sync. We do this by using an optional `offset` argument.
 
-```
+```language=Werckmeister,type=mute
 device: MyRoland midi 1 offset 20;
 device: MyDX7 midi 5;
 ```
@@ -327,7 +349,7 @@ Let's add an organ instrument which uses our Roland device from above:
 The Roland SC-8850 offers, for example, a `Farf Organ`. So if I want to use this instrument on channel 0, I have to send a `cc=19 pc=17` sequence to the channel on this device.   
 A suitable `instrumentDef` statement would be look as follows: 
 
-```
+```language=Werckmeister,type=mute
 --             name      device   ch  cc  pc
 instrumentDef: myFarfisa MyRoland 0   19   17;
 ```
@@ -350,15 +372,15 @@ Now, as an example we set a volume value of 80 to our Farfisa organ, also we set
 
 *(the final result of these settings is strongly dependent by your actual MIDI device)* 
 
-```
+```language=Werckmeister,type=mute
 instrumentConf: myFarfisa volume 80 pan 20;
 ```
 
-#### Tempo
-To set the tempo of your pice, write `tempo: aNumber`.
+### Tempo
+To set the tempo of your piece, write `tempo: aNumber`.
 
 
-```
+```language=Werckmeister,type=partial
 tempo 120;
 [
 {
@@ -375,7 +397,7 @@ Then you have to add a tempo [Meta Event](#meta-events) to your voice.
 Here we play four voices on one track, with four different tempo configurations:
 
 **There seems to be a bug on the webplayer (first notes are missing)**
-```
+```language=Werckmeister,type=partial
 tempo: 120;
 [
 {
@@ -399,7 +421,7 @@ tempo: 120;
 ```
 
 Also it is possible to change the tempo in between events:
-```
+```language=Werckmeister,type=partial
 tempo: 120;
 [
 {
@@ -419,11 +441,11 @@ tempo: 120;
 ```
 
 
-#### Time Signatures
+### Time Signatures
 The time signature 4/4 by default.
 If you want to setup a different time signature than the default, you can achieve this by using the signature [meta event](#Meta-Events).
 With this you are able to setup different time signatures during a piece.
-```
+```language=Werckmeister,type=partial
 [
 {
     /signature: 3 4/
@@ -434,16 +456,16 @@ With this you are able to setup different time signatures during a piece.
 ]
 ```
 
-#### Key Signatures
+### Key Signatures
 key signatures are not supported.
 
 ## Write Melodies
-#### Notes
+### Notes
 The syntax is loosely inspired by the [lilypond](http://lilypond.org) notation syntax. A note is just a letter followed by a number for its duration.
 
 *If a note has no duration, the last assigned duration will be used.*
 
-```
+```language=Werckmeister,type=single
 c4 d e8 f
 ```
 
@@ -451,47 +473,47 @@ c4 d e8 f
 
 the end of a bar is marked by a pipe: `|`
 
-```
+```language=Werckmeister,type=single
 c d e f | g a b c'
 ```
 
 
-#### Octaves
+### Octaves
 
 Lower octaves are marked by a comma (`,`) after the note, upper octaves by a single quote (`'`).
 
-```
-c,,  e,,  g,, | c, e, g, | c e g | c' e' g' | c'' e'' g''
+```language=Werckmeister,type=single
+c,,  e,,  g,, b,, | c, e, g, b, | c e g b | c' e' g' b' | c'' e'' g'' b''
 ```
 
-#### Accidentals
+### Accidentals
 
 `#` raises a pitch by a half step.
 <br> A `b` lowers it. 
 
-```
+```language=Werckmeister,type=single
 c# d# f# g# | bb db' eb' gb'
 ```
 
-#### Durations
+### Durations
 
 A numeric value after a note marks its duration.
 
-```
+```language=Werckmeister,type=single
 c2 c4 c8 c16 c32 c64 c128 r
 ```
 
-#### Intervals and Chords
+### Intervals and Chords
 
 Notes that have to sound simultaneous are written in angle brackets. The duration is written after the brackets.
 
 ![two chords](https://raw.githubusercontent.com/SambaGodschynski/werckmeister/master/assets/chords.png)
 
-```
+```language=Werckmeister,type=single,tempo=80
 <g,, c e g bb>4   <c, c eb g bb>2.
 ```
 
-#### Augmentation Dots & Ties
+### Augmentation Dots & Ties
 
 To write a augmentation dot (`.`) append a dot to a note duration value.
 <br>For ties use a tilde (`~`) instead. 
@@ -499,11 +521,11 @@ To write a augmentation dot (`.`) append a dot to a note duration value.
 ![dots and ties](https://raw.githubusercontent.com/SambaGodschynski/werckmeister/master/assets/dotsties.png)
 
 
-```
+```language=Werckmeister,type=single
 c2. c4 | c2~ c4 c
 ```
 
-#### Tuplets
+### Tuplets
 
 To write tuplets of any kind you just have to write notes encloded by parentheses followed by a duration value. For example: `(c c c)4`.
 These three notes will now be played in the time of one quarter.
@@ -514,22 +536,22 @@ It doesn't matter if you write `(c2 c2 c2)4` or `(c8 c8 c8)4` because you have t
 
 ![n-tole examples with 3,7 and 9](https://raw.githubusercontent.com/SambaGodschynski/werckmeister/master/assets/tuplets.png)
 
-```
+```language=Werckmeister,type=single,tempo=60
 (c8 c c)4   (c8 c c c c)4  (c8 c c c c c c)4  (c8 c c c c c c c c)4
 ```
 
-##### Nested Tuplets
+### Nested Tuplets
 
 You are also able to write nested tuplets:
 
 ![a example of nested tuplets](https://raw.githubusercontent.com/SambaGodschynski/werckmeister/master/assets/blackpages.png)
 
-```
+```language=Werckmeister,type=single,tempo=60
 b2 ((b c#' c#' b d')  (f' a a bb c')  (e' a' bb' f' c' g))2
 ```
 
 ## Write for drums
-#### Pitchmaps
+### Pitchmaps
 
 tbd.
 
@@ -542,7 +564,7 @@ Imagine you give your bass player some chords, and he or she asks you to play th
 And this is exactly what you doing when writing style templates.
 <br>So in our example above you would write:
 
-```
+```language=Werckmeister,type=full
 -- make sure that you have a chord definition loaded
 using "chords/default.chords";
 
@@ -584,9 +606,9 @@ such as:
 * use `~` for tied and `.` for dotted notes
 * create tuplets using parantheses
 
-To spice up our example a bit, we add a second bar which plays an interval with I and III
+To spiece up our example a bit, we add a second bar which plays an interval with I and III
 
-```
+```language=Werckmeister,type=full
 -- make sure that you have a chord definition loaded
 using "chords/default.chords";
 
