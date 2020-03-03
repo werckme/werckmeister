@@ -11,7 +11,7 @@ Consider the beauty of lead sheet music: you write a melody and some chords. Tha
 
 This is the idea behind Werckmeister. Of course it can not replace a band or a musician but it offers you a tool to write melodies and chords then you can define how to interpret the chords along your melody or even define your own interpretation templates.
 
-Why text only and no GUI
+Why source code based?
 ------------------------
 The motivation behind this decision cames with an experience which I had in the past with a professional scorewriter software I was using back in the early 2000.
 
