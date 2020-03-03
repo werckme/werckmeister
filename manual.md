@@ -23,7 +23,7 @@ This is the idea behind Werckmeister. Of course it can not replace a band or a m
 * a scorewriter software
 * a programming language
 
-```language=Werckmeister
+```language=Werckmeister   
 using "chords/default.chords";
 tempo: 140;
 device: MyDevice  midi 0;
