@@ -1,5 +1,6 @@
 Werckmeister
 ===================
+## A Sheet Music Compiler
 
 <img src="https://raw.githubusercontent.com/SambaGodschynski/werckmeister/master/assets/Logo_med.png" style="display: block; margin: auto">
 
@@ -23,6 +24,15 @@ This is the idea behind Werckmeister. Of course it can not replace a band or a m
 * a scorewriter software
 * a programming language
 
+## Try it out
+
+### Autumn Leaves
+This is the jazz standard "Autumn Leaves" written in werckmeister notation.
+<br>Click play to start the song.
+
+For fun sake try to replace the bass template `I,,2. V,,4 |` 
+with this `I,,4 I,8 I,8   I,,4 I,8 I,8 |`.
+
 ```language=Werckmeister   
 using "chords/default.chords";
 tempo: 140;
@@ -31,6 +41,7 @@ instrumentDef:lead  MyDevice  0 0 0;
 instrumentDef:piano  MyDevice  0 0 0;
 instrumentDef:bass  MyDevice  0 0 0;
 
+-- melody track
 [
 instrument: piano;
 {
@@ -44,25 +55,8 @@ instrument: piano;
     f#2 g4 b, | e1 
 }
 ]
-[
-type: template;
-name: x;
-instrument: piano;
-{
-    \p
-    <III, V, VII, II>1 |
-}
-]
-[
-type: template;
-name: x;
-instrument: bass;
-{
-    \p
-    I,,2. V,,4 |
-}
-]
 
+-- accomp track
 [
 type: accomp;
 {   
@@ -74,12 +68,33 @@ type: accomp;
     F#-7b5  | B7b9 | E-7 A7 | D-7 G7 | F#-7b5 | B7b9 | E- |
 }
 ]
+
+-- the templates defines what the accomp track has to play
+[
+type: template;
+name: myAccomp;
+instrument: piano;
+{
+    \p
+    <III, V, VII, II>1 | 
+}
+]
+
+[
+type: template;
+name: myAccomp;
+instrument: bass;
+{
+    \p
+    I,,2. V,,4 |
+}
+]
 ```
 
 Getting Started
 ============
 
-Go to the page https://github.com/SambaGodschynski/werckmeister/releases and download the most recent version of Werckmeister.
+Go to the page https://github.com/werckme/werckmeister/releases and download the most recent version of Werckmeister.
 
 On Mac and on Linux you can install the binaries by executing the installer script.
 
@@ -153,23 +168,17 @@ Manual
 ======
 I want to ...
 --------------
-[... get an impression of what I have to face if I want to learn Werckmeister](#it's-just-text)
+[... get an impression of what I have to face if I want to learn Werckmeister](#its-just-text)
 
-[... setup a piece](#Setup-A-Piece)
+[... setup a piece](#setup-a-piece)
 
-[... write melodies](#Write-Melodies)
+[... write melodies](#write-melodies)
 
-[... write for drums](#Writing-for-drums)
+[... write for drums](#write-for-drums)
 
-[... use several instruments]()
-
-[... accomp my melodies](#Accomp-My-Melodies)
+[... accomp my melodies](#accomp-my-melodies)
 
 [... setup my own chord symbols](#chords)
-
-[... use MIDI expression mods]()
-
-[... write my own MIDI expression mods]()
 
 ## It's just text
 The Werckmeister language knows only a few statement types. It's all about tracks, voices, and events. That's it. 
@@ -515,7 +524,7 @@ Notes that have to sound simultaneous are written in angle brackets. The duratio
 
 ### Augmentation Dots & Ties
 
-To write a augmentation dot (`.`) append a dot to a note duration value.
+To write a augmentation dot (`.`) append a dot after a note duration value.
 <br>For ties use a tilde (`~`) instead. 
 
 ![dots and ties](https://raw.githubusercontent.com/SambaGodschynski/werckmeister/master/assets/dotsties.png)
@@ -558,7 +567,7 @@ tbd.
 
 ## Accomp My Melodies
 
-Imagine you give your bass player some chords, and he or she asks you to play these.
+Imagine you give your bass player some chords, and he or she asks you how to play these.
 <br>You would say something like: play the 1st degree on one and the 5th degree on four. 
 
 And this is exactly what you doing when writing style templates.
