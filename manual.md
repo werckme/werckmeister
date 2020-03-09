@@ -2,11 +2,9 @@ Werckmeister
 ===================
 ## A Sheet Music MIDI Compiler
 
-<img src="https://raw.githubusercontent.com/SambaGodschynski/werckmeister/master/assets/Logo_med.png" style="display: block; margin: auto">
-
 Werckmeister compiles sheet music source code into a MIDI file.
 
-<img src="https://raw.githubusercontent.com/SambaGodschynski/werckmeister/master/assets/flow.png" style="display: block; margin: auto">
+<img src="https://raw.githubusercontent.com/SambaGodschynski/werckmeister/master/assets/flow.png" style="width: 100%; max-width: 800px; display:block; margin:auto; background:white">
 
 Vision
 ------
