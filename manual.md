@@ -6,6 +6,8 @@ Werckmeister
 
 Werckmeister compiles sheet music source code into a MIDI file.
 
+<img src="https://raw.githubusercontent.com/SambaGodschynski/werckmeister/master/assets/flow.png" style="display: block; margin: auto">
+
 Vision
 ------
 Consider the beauty of lead sheet music: you write a melody and some chords. Thats it.
