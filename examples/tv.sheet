@@ -16,7 +16,7 @@ using "templates/drums.country.template";
 using "templates/bass.country.template";
 using "lua/mods/guitarStroke.lua";
 
-device: SC1 midi 2;
+device: SC1 midi 3;
 
 tempo:  73;
 instrumentDef: piano      SC1 0 0 0;

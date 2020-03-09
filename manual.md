@@ -1,8 +1,10 @@
 Werckmeister
 ===================
-## A Sheet Music Compiler
+## A Sheet Music MIDI Compiler
 
 <img src="https://raw.githubusercontent.com/SambaGodschynski/werckmeister/master/assets/Logo_med.png" style="display: block; margin: auto">
+
+Werckmeister compiles sheet music source code into a MIDI file.
 
 Vision
 ------
@@ -25,13 +27,18 @@ This is the idea behind Werckmeister. Of course it can not replace a band or a m
 * a programming language
 
 ## Try it out
-
 ### Autumn Leaves
 This is the jazz standard "Autumn Leaves" written in werckmeister notation.
 <br>Click play to start the song.
 
-For fun sake try to replace the bass template `I,,2. V,,4 |` 
-with this `I,,4 I,8 I,8   I,,4 I,8 I,8 |`.
+For fun sake try to replace the bass template 
+```
+I,,2. V,,4 |
+```
+with this 
+```
+I,,4 I,8 I,8   I,,4 I,8 I,8 |
+````
 
 ```language=Werckmeister   
 using "chords/default.chords";

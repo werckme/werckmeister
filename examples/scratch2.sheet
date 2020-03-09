@@ -5,7 +5,7 @@ using "lua/mods/swing.lua";
 using "lua/mods/staccato.lua";
 using "lua/voicings/simple.lua";
 using "lua/voicings/guitar.lua";
-device: BC midi 1;
+device: BC midi 3;
 
 tempo: 145;
 instrumentDef: piano   BC 0 0 0;
