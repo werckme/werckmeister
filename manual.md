@@ -8,8 +8,9 @@ Werckmeister compiles sheet music source code into a MIDI file.
 
 Vision
 ------
-Consider the beauty of lead sheet music: you write a melody and some chords. Thats it.
-<br>Later you can tell your band in which style the piece has to be played. You can say, after 4 beats play it as a bossa nova or a blues or whatever.
+Consider the beauty of lead sheet music: you write a melody and some chords, add some remarks, which instruments and which style.
+
+Thats it.
 
 This is the idea behind Werckmeister. Of course it can not replace a band or a musician but it offers you a tool to write melodies and chords then you can define how to interpret the chords along your melody or even define your own interpretation templates.
 
@@ -26,7 +27,8 @@ This is the idea behind Werckmeister. Of course it can not replace a band or a m
 * a scorewriter software
 * a programming language
 
-## Try it out
+## Try it out online
+**⇓⇓⇓⇓⇓⇓⇓⇓⇓⇓⇓⇓⇓⇓⇓⇓⇓**
 ### Autumn Leaves
 This is the jazz standard "Autumn Leaves" written in werckmeister notation.
 <br>Click play to start the song.
@@ -96,6 +98,13 @@ instrument: bass;
     I,,2. V,,4 |
 }
 ]
+
+
+
+
+
+
+
 ```
 
 Getting Started
