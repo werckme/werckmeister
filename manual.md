@@ -162,7 +162,7 @@ sheetp aSheetFile.sheet
 
 In order to get an sheet file played via MIDI, you have to configure set your MIDI ports. 
 
-Have a look [here](#Adding-a-device) to see how it's done.
+Have a look [here](/manual#adding-a-device) to see how it's done.
 
 ## Examples
 *(tbd): examples did not exists yet*
@@ -390,8 +390,8 @@ A config statement has as first argument the instrument name you want to configu
   ------------------ | ----------------------- | --------------------------------------
   volume             | 0..100                  | set the volume
   pan                | 0..100                  | set the pan, 0=left, 50=center, 100=right 
-  mod                | aName [option value]    | set a [mod](#Mods) 
-  voicingStrategy    | aName [option value]    | set a [voicingStrategy](#Voicing-strategies)  
+  mod                | aName [option value]    | set a [mod](#mods) 
+  voicingStrategy    | aName [option value]    | set a [voicingStrategy](#voicing-strategies)  
 
 Now, as an example we set a volume value of 80 to our Farfisa organ, also we set the pan more to the left.
 
@@ -622,7 +622,7 @@ Instead of writing absolute notes, you use relative degrees. For example `I4` me
 
 *If a degree does not appear in a chord, the degree will not played.*
 
-There are the same rules as for writing absolute [notes](#Notes):
+There are the same rules as for writing absolute [notes](#notes):
 
 such as:
 
@@ -661,6 +661,7 @@ type: accomp;
 
 
 ## Advanced techniques
+(tbd.)
 ##### Chords
 ##### Voicing strategies
 ##### Mods
