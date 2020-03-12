@@ -1,32 +1,16 @@
 <img src="https://raw.githubusercontent.com/SambaGodschynski/werckmeister/master/assets/Logo_med.png" style="display: block; margin: auto">
 
-# Werckmeister's protoyping for Music 
+## An open source Sheet Music MIDI Compiler
 
-
+Werckmeister compiles sheet music source code into a MIDI file.
 
 Vision
 ------
-Consider the beauty of lead sheet music: you write a melody and some chords. Thats it. 
-<br>Later you can tell your band (or whoever is crazy enough to play your music) in which style the piece has to be played. You can say, after 4 beats play it as a bossa nova or a blues or whatever.
+Consider the beauty of lead sheet music: you write a melody and some chords, add some remarks, which instruments and which style.
+
+Thats it.
 
 This is the idea behind Werckmeister. Of course it can not replace a band or a musician but it offers you a tool to write melodies and chords then you can define how to interpret the chords along your melody or even define your own interpretation templates.
-
-Why source code based?
-------------------------
-The motivation behind this decision cames with an experience which I had in the past with a professional scorewriter software I was using back in the early 2000.
-
-This software was a bit clunky but I've got used to it. At some point the developer discontinued the support for my version and I've got more and more problems to get the software running on a modern system. The other problem was, that my project files were written in a proprietary format. So I realized: **not I am the owner of my created music, the company behind the scorewriter software owns it
- and if I want to continue using my projects I have to pay money.**
-<br>So I've came to the conclusion, that readable text files are the way to go.
-
-*What is so hard writing notes in a text edior such as `c d e f g` in comparison to an overloaded clunky editor software.
-<br>(actually notes in a score have a lot advantages in comparison to a text file regarding readability etc., but that aside)*
-
-I've discovered that [LilyPond](http://lilypond.org/) is a good way to write music using textfiles.
-But for me there was a problem: LilyPond's main purpose is make score visible. So the LilyPond language is designed to describe how notes have to look on paper in the first place.
-<br>Basically, I wanted the same but with the focus on how the notes sounds played by MIDI instruments.
-
-
 
 
 ## What it wants to be

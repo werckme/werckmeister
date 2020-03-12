@@ -1,8 +1,9 @@
 Werckmeister
 ===================
-## A Sheet Music MIDI Compiler
+## An [open source](https://github.com/werckme/werckmeister) Sheet Music MIDI Compiler
 
 Werckmeister compiles sheet music source code into a MIDI file.
+
 
 <img src="https://raw.githubusercontent.com/SambaGodschynski/werckmeister/master/assets/flow.png" style="width: 100%; max-width: 800px; display:block; margin:auto; background:white">
 
