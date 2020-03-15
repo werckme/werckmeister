@@ -3,22 +3,29 @@ using "./pitchmaps/defaultMidiDrumMap.pitchmap";
 using "./templates/bossanova.template";
 using "./templates/countryschlager1.template";
  
-device: SC1 midi 2;
+-- setup your midi device:
+-- to get a list of your available MIDI devices 
+-- and their port numbers, execute "sheetp --list"
+--      name              type   portnumber
+device: MyDevice          midi       1;
 
-tempo: 130;
---           instrument device ch cc pc
-instrumentDef: piano   SC1 2 0 0;
-instrumentDef: guitar  SC1 3 0 25;
-instrumentDef: vibra   SC1 4 0 11;
-instrumentDef: bass    SC1 5 0 33;
-instrumentDef: drums   SC1 9 0 32;
-instrumentDef: slide   SC1 0 0 0;
+
+-- define your instruments:
+-- (ch= channel, pc= programm change, cc= control change)
+--             name       device   ch  cc  pc  
+instrumentDef: piano      MyDevice  2   0   0;
+instrumentDef: guitar     MyDevice  3   0  25;
+instrumentDef: vibra      MyDevice  4   0  11;
+instrumentDef: bass       MyDevice  5   0  33;
+instrumentDef: drums      MyDevice  9   0  32;
+instrumentDef: slide      MyDevice  0   0   0;
 instrumentConf: guitar volume 70 pan 20;
 instrumentConf: piano volume 90 pan 80;
 instrumentConf: vibra volume 85;
 instrumentConf: bass volume 70;
 instrumentConf: drums volume 70;
 
+tempo: 130;
 
 [
 instrument: vibra;

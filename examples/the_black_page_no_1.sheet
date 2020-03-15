@@ -1,39 +1,21 @@
 using "chords/default.chords";
 using "pitchmaps/defaultMidiDrumMap.pitchmap";
-using "lua/voicings/voicelead.lua";
 using "lua/voicings/simple.lua";
-using "lua/voicings/guitar.lua";
-using "lua/mods/swing.lua";
-using "lua/mods/staccato.lua";
-using "templates/drums.disco.template";
-using "templates/bass.disco.template";
-using "templates/bass.bossanova.template";
-using "templates/rhythm.country.template";
-using "templates/rhythm.bossanova.template";
-using "templates/drums.bossanova.template";
-using "templates/rhythm.reggae.template";
-using "templates/drums.country.template";
-using "templates/drums.reggae.template";
-using "templates/bass.country.template";
-using "lua/mods/guitarStroke.lua";
 
-device: SC1 midi 3;
 
-tempo: 60;
-instrumentDef: piano      SC1 0 0 0;
-instrumentDef: lead       SC1 1 0 12;
-instrumentDef: lead2      SC1 2 0 25;
-instrumentDef: sitar      SC1 6 0 104;
-instrumentDef: rhythm     SC1 3 0 25;
-instrumentDef: bass       SC1 4 0 26;
-instrumentDef: bell       SC1 5 0 14;
-instrumentDef: drums      SC1 9 0 0;
+-- setup your midi device:
+-- to get a list of your available MIDI devices 
+-- and their port numbers, execute "sheetp --list"
+--      name              type   portnumber
+device: MyDevice          midi       1;
 
-instrumentConf: rhythm
-    voicingStrategy guitar range tenor
-    mod guitarStroke 
-    pan 60
-    volume 70;   
+-- define your instruments:
+-- (ch= channel, pc= programm change, cc= control change)
+--             name       device   ch  cc  pc   
+instrumentDef: piano      MyDevice 0   0    0;
+instrumentDef: lead       MyDevice 1   0   12;
+instrumentDef: bass       MyDevice 2   0   26;
+instrumentDef: drums      MyDevice 9   0    0;
 
 instrumentConf: bass
     voicingStrategy simple range contrabass
@@ -48,20 +30,10 @@ instrumentConf: lead
     pan 50
     volume 100;   
 
-instrumentConf: lead2
-    pan 30
-    volume 90;   
 
-instrumentConf: sitar
-    pan 40
-    volume 60;  
 
-instrumentConf: bell
-    pan 60
-    volume 90;   
+tempo: 60;
 
-instrumentConf: drums
-    volume 90;       
 [
 instrument: lead;
 {
@@ -85,36 +57,9 @@ instrument: lead;
 ]
 
 [
-type: template;
-name: x;
-instrument: bass;
-{
-    I,,2.  V,,,4 |
-}
-]
-
-[
-type: template;
-name: x;
-instrument: drums;
-{
-    r8 "ht" r8 "ht" r8 "ht" r8 "ht" |
-}
-]
-
-[
-type: template;
-name: x;
-instrument: piano;
-{
-    <I II III IV V VI VII>1 |
-}
-]
-
-[
 type: accomp;
 {   
-    /template: x/
+    /template: myDefaultTemplate/
     G2   |  Bb2  |  G2   |
     Bb2  |  G2   |  Bb2  | 
     G2   |  Bb2  |  D2   | 
@@ -130,6 +75,36 @@ type: accomp;
 }
 ]
 
+-----------------------------------
+-- Accomp. Templates
+-----------------------------------
+
+[
+type: template;
+name: myDefaultTemplate;
+instrument: bass;
+{
+    I,,2.  V,,,4 |
+}
+]
+
+[
+type: template;
+name: myDefaultTemplate;
+instrument: drums;
+{
+    r8 "ht" r8 "ht" r8 "ht" r8 "ht" |
+}
+]
+
+[
+type: template;
+name: myDefaultTemplate;
+instrument: piano;
+{
+    <I II III IV V VI VII>1 |
+}
+]
 
 
 
