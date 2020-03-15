@@ -214,8 +214,8 @@ A basic Werckmeister document will look like this:
 device: MyMidiDevice midi 1;
 
 -- 2)
---             name  device       ch pc cc
-instrumentDef: piano MyMidiDevice 0  0  0;
+--             name  device       ch  cc pc
+instrumentDef: piano MyMidiDevice  0   0  0;
 -- (ch= channel, pc= programm change, cc= control change)
 
 -- 3)
@@ -376,8 +376,8 @@ The Roland SC-8850 offers, for example, a `Farf Organ`. So if I want to use this
 A suitable `instrumentDef` statement would be look as follows: 
 
 ```language=Werckmeister,type=mute
---             name      device   ch  cc  pc
-instrumentDef: myFarfisa MyRoland 0   19   17;
+--             name      device   ch   cc   pc
+instrumentDef: myFarfisa MyRoland  0   19   17;
 ```
 
 
