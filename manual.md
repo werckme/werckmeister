@@ -13,7 +13,7 @@ Consider the beauty of lead sheet music: you write a melody and some chords, add
 
 Thats it.
 
-This is the idea behind Werckmeister. Of course it can not replace a band or a musician but it offers you a tool to write melodies and chords then you can define how to interpret the chords along your melody or even define your own interpretation templates.
+This is the idea behind Werckmeister. Of course it can not replace a musician or a band. But it offers you a tool to write melodies and chords then you can define how to interpret the chords along your melody or even define your own interpretation templates.
 
 
 ## What it wants to be
