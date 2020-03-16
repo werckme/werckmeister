@@ -8,14 +8,20 @@ using "templates/drums.reggae.template";
 using "templates/bass.reggae.template";
 using "templates/rhythm.reggae.template";
 
-device: SC1 midi 2;
+-- setup your midi device:
+-- to get a list of your available MIDI devices 
+-- and their port numbers, execute "sheetp --list"
+--      name              type   portnumber
+device: MyDevice          midi       1;
 
-tempo: 130;
-instrumentDef: drums   SC1 9 0 0;
-instrumentDef: rhythm  SC1 1 16 28;
-instrumentDef: bass    SC1 2 8 26;
-instrumentDef: lead    SC1 3 0 0;
-instrumentDef: piano   SC1 4 0 0;
+-- define your instruments:
+-- (ch= channel, pc= programm change, cc= control change)
+--             name    device    ch  cc  pc 
+instrumentDef: drums   MyDevice   9   0   0;
+instrumentDef: rhythm  MyDevice   1  16  28;
+instrumentDef: bass    MyDevice   2   8  26;
+instrumentDef: lead    MyDevice   3   0   0;
+instrumentDef: piano   MyDevice   4   0   0;
 
 instrumentConf: rhythm
     mod guitarStroke
@@ -33,9 +39,31 @@ instrumentConf: piano
     volume 80;   
 
 
+tempo: 130;
+
+[
+type: accomp;
+{
+    /template: myTemplate rhythm.reggae.normal drums.reggae.normal bass.reggae.normal/
+    C | C | Cmin | 
+    /template: myTemplate rhythm.reggae.normal drums.reggae.fill1 bass.reggae.normal/
+    Cb7 | 
+    /template: myTemplate rhythm.reggae.normal drums.reggae.normal bass.reggae.normal/
+    E | E-7 | Gmaj7 | F | A |
+
+    /template: myTemplate rhythm.reggae.normal drums.reggae.normal bass.reggae.normal/
+    C | C | Cmin | 
+    /template: myTemplate rhythm.reggae.normal drums.reggae.fill2 bass.reggae.normal/
+    Cb7 | 
+    /template: myTemplate rhythm.reggae.normal drums.reggae.normal bass.reggae.normal/
+    E | E-7 | Gmaj7 | F | A |    
+
+}
+]
+
 [
 type: template;
-name: x;
+name: myTemplate;
 instrument: piano;
 {
     \f
@@ -43,35 +71,7 @@ instrument: piano;
 
 }
 ]
-
-[
-instrument: lead;
-{
-    \fff
-}
 ]
-
-
-[
-type: accomp;
-{
-    /template: x rhythm.reggae.normal drums.reggae.normal bass.reggae.normal/
-    C | C | Cmin | 
-    /template: x rhythm.reggae.normal drums.reggae.fill1 bass.reggae.normal/
-    Cb7 | 
-    /template: x rhythm.reggae.normal drums.reggae.normal bass.reggae.normal/
-    E | E-7 | Gmaj7 | F | A |
-
-    /template: x rhythm.reggae.normal drums.reggae.normal bass.reggae.normal/
-    C | C | Cmin | 
-    /template: x rhythm.reggae.normal drums.reggae.fill2 bass.reggae.normal/
-    Cb7 | 
-    /template: x rhythm.reggae.normal drums.reggae.normal bass.reggae.normal/
-    E | E-7 | Gmaj7 | F | A |    
-
-}
-]
-
 
 
 

@@ -6,14 +6,20 @@ using "lua/voicings/guitar.lua";
 using "templates/drums.reggae.template";
 using "templates/bass.reggae.template";
 
-device: SC1 midi 2;
+-- setup your midi device:
+-- to get a list of your available MIDI devices 
+-- and their port numbers, execute "sheetp --list"
+--      name              type   portnumber
+device: MyDevice          midi       1;
 
-tempo: 160;
-instrumentDef: drums   SC1 9 0 0;
-instrumentDef: rhythm   SC1 1 8 16;
-instrumentDef: bass   SC1 2 8 26;
-instrumentDef: lead   SC1 3 0 12;
-instrumentDef: piano   SC1 4 0 0;
+-- define your instruments:
+-- (ch= channel, pc= programm change, cc= control change)
+--             name       device    ch  cc  pc 
+instrumentDef: drums      MyDevice   9   0   0;
+instrumentDef: rhythm     MyDevice   1   8  16;
+instrumentDef: bass       MyDevice   2   8  26;
+instrumentDef: lead       MyDevice   3   0  12;
+instrumentDef: piano      MyDevice   4   0   0;
 
 instrumentConf: rhythm
     voicingStrategy voicelead 
@@ -29,30 +35,7 @@ instrumentConf: piano
     pan 40
     volume 80;   
 
-[
-type: template;
-name: x;
-instrument: rhythm;
-{
-    \f
-    /do: swing grid 8 offset 40/
-    r4  <I II III IV V VI VII>32 r16.  <I II III IV V VI VII>16 r  
-    r4  <I II III IV V VI VII>32 r16.  <I II III IV V VI VII>16 r |
-
-}
-]
-
-[
-type: template;
-name: x;
-instrument: piano;
-{
-    \f
-    <I II III IV V VI VII>1~ | & 
-
-}
-]
-
+tempo: 160;
 
 
 [
@@ -70,15 +53,38 @@ instrument: lead;
 type: accomp;
 {
     /template:
-        x
+        myTemplate
         drums.reggae.normal
         bass.reggae.normal
     /
     Cmaj7 | Cmaj7 | Cmaj7 | Cmaj7 | Ebmaj7 | Ebmaj7 | Ebmaj7 | Ebmaj7 | Abmaj7 
     | Abmaj7 | Abmaj7 | Abmaj7 | G7 | G7 | G7 | G7 | G7 | C | C | Cmin |
 }
+]
 
 
+-- further accomp templates
 
+[
+type: template;
+name: myTemplate;
+instrument: rhythm;
+{
+    \f
+    /do: swing grid 8 offset 40/
+    r4  <I II III IV V VI VII>32 r16.  <I II III IV V VI VII>16 r  
+    r4  <I II III IV V VI VII>32 r16.  <I II III IV V VI VII>16 r |
 
+}
+]
+
+[
+type: template;
+name: myTemplate;
+instrument: piano;
+{
+    \f
+    <I II III IV V VI VII>1~ | & 
+
+}
 ]

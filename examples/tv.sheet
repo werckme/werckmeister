@@ -1,6 +1,5 @@
 using "chords/default.chords";
 using "pitchmaps/defaultMidiDrumMap.pitchmap";
-using "lua/voicings/voicelead.lua";
 using "lua/voicings/simple.lua";
 using "lua/voicings/guitar.lua";
 using "lua/mods/swing.lua";
@@ -11,22 +10,28 @@ using "templates/bass.bossanova.template";
 using "templates/rhythm.country.template";
 using "templates/rhythm.bossanova.template";
 using "templates/drums.bossanova.template";
-using "templates/rhythm.reggae.template";
 using "templates/drums.country.template";
 using "templates/bass.country.template";
 using "lua/mods/guitarStroke.lua";
+ 
+-- setup your midi device:
+-- to get a list of your available MIDI devices 
+-- and their port numbers, execute "sheetp --list"
+--      name              type   portnumber
+device: MyDevice          midi       1;
 
-device: SC1 midi 3;
 
-tempo:  73;
-instrumentDef: piano      SC1 0 0 0;
-instrumentDef: lead       SC1 1 0 105;
-instrumentDef: lead2      SC1 2 0 25;
-instrumentDef: sitar      SC1 6 0 104;
-instrumentDef: rhythm     SC1 3 0 25;
-instrumentDef: bass       SC1 4 0 26;
-instrumentDef: bell       SC1 5 0 14;
-instrumentDef: drums      SC1 9 0 0;
+-- define your instruments:
+-- (ch= channel, pc= programm change, cc= control change)
+--             name       device    ch  cc  pc 
+instrumentDef: piano      MyDevice 0 0 0;
+instrumentDef: lead       MyDevice 1 0 105;
+instrumentDef: lead2      MyDevice 2 0 25;
+instrumentDef: sitar      MyDevice 6 0 104;
+instrumentDef: rhythm     MyDevice 3 0 25;
+instrumentDef: bass       MyDevice 4 0 26;
+instrumentDef: bell       MyDevice 5 0 14;
+instrumentDef: drums      MyDevice 9 0 0;
 
 instrumentConf: rhythm
     voicingStrategy guitar range tenor
@@ -62,43 +67,7 @@ instrumentConf: drums
     volume 90;       
 
 
-[
-type: template;
-name: x;
-instrument: sitar;
-{
-    /signature: 4 4/
-    r | r | r | I,,1 | r 
-}
-]
-
-
-[
-type: template;
-name: x;
-instrument: bell;
-{
-    /signature: 4 4/
-    /doOnce: bend from 70/
-    I1 | r | r | r
-}
-]
-
-
-[
-type: template;
-name: drums.fill1;
-instrument: drums; 
-{
-    /signature: 4 4/
-    "cy"8  r "ho"  r "ho"  r "ho" r   |
-}
-{
-    /signature: 4 4/
-    "bd"   !ffff"hto1"64->"hto2"4.       "mto1"8       !ffff"mto2"8. !fff"lto1" r16   |
-}
-]
-
+tempo:  73;
 
 [
 instrument: lead;
@@ -152,7 +121,7 @@ type: accomp;
     /signature: 4 4/  
     ----------    
     /template:  
-        x
+        myTemplate
         drums.country.normal
         bass.country.normal
         rhythm.bossanova.normal
@@ -160,7 +129,7 @@ type: accomp;
     G | G | G | G    | G   | G7 | G6 | G/5 | G | G7 |
     ----------
     /template:  
-        x
+        myTemplate
         drums.disco.normal
         bass.country.normal
         rhythm.bossanova.normal
@@ -169,7 +138,7 @@ type: accomp;
     -- |:
     ----------
     /template:  
-        x
+        myTemplate
         drums.country.normal
         bass.country.normal
         rhythm.bossanova.normal
@@ -180,7 +149,7 @@ type: accomp;
     Bb7 | A-7 | G | D7 | F | A-7 | D7 | D7 | F |
     ----------
     /template:  
-        x
+        myTemplate
         drums.disco.normal
         bass.country.normal
         rhythm.country.normal
@@ -188,7 +157,7 @@ type: accomp;
     A-7 |  
     ----------
     /template:  
-        x
+        myTemplate
         drums.fill1
         bass.country.normal
         rhythm.country.ende
@@ -197,7 +166,7 @@ type: accomp;
     G13  |
     ----------
     /template:  
-        x
+        myTemplate
         drums.country.normal
         bass.country.normal
         rhythm.country.normal
@@ -206,7 +175,7 @@ type: accomp;
     G   | G7 | G6 | G/5 | G | G7 |
     ----------
     /template:  
-        x
+        myTemplate
         drums.country.normal
         bass.country.normal
         rhythm.country.normal
@@ -215,7 +184,7 @@ type: accomp;
     -- |:
     ----------
     /template:  
-        x
+        myTemplate
         drums.disco.normal
         bass.country.normal
         rhythm.bossanova.normal
@@ -223,14 +192,14 @@ type: accomp;
     Bb7 | A-7 | 
     ----------
     /template:  
-        x
+        myTemplate
         drums.bossanova.normal
         bass.bossanova.normal
         rhythm.bossanova.normal
     /        
     G |  -- :|
     /template:  
-        x
+        myTemplate
         drums.disco.normal
         bass.country.normal
         rhythm.bossanova.normal
@@ -239,7 +208,7 @@ type: accomp;
     Bb7 | A-7 | 
 
     /template:  
-        x
+        myTemplate
         drums.country.normal
         bass.country.normal
         rhythm.bossanova.normal
@@ -248,7 +217,7 @@ type: accomp;
     G | D7 | F | A-7 | 
     
     /template:  
-        x
+        myTemplate
         drums.bossanova.normal
         bass.bossanova.normal
         rhythm.bossanova.normal
@@ -257,7 +226,7 @@ type: accomp;
     D7 | D7 | 
     
     /template:  
-        x
+        myTemplate
         drums.country.normal
         bass.bossanova.normal
         rhythm.country.normal
@@ -266,7 +235,7 @@ type: accomp;
     F | A-7 |  
     
     /template:  
-        x
+        myTemplate
         drums.bossanova.normal
         bass.bossanova.normal
         rhythm.bossanova.normal
@@ -283,7 +252,46 @@ type: accomp;
 }
 ]
 
+-------------------------------
+-- additional accomp. templates
+-------------------------------
 
+[
+type: template;
+name: myTemplate;
+instrument: sitar;
+{
+    /signature: 4 4/
+    r | r | r | I,,1 | r 
+}
+]
+
+
+[
+type: template;
+name: myTemplate;
+instrument: bell;
+{
+    /signature: 4 4/
+    /doOnce: bend from 70/
+    I1 | r | r | r
+}
+]
+
+
+[
+type: template;
+name: drums.fill1;
+instrument: drums; 
+{
+    /signature: 4 4/
+    "cy"8  r "ho"  r "ho"  r "ho" r   |
+}
+{
+    /signature: 4 4/
+    "bd"   !ffff"hto1"64->"hto2"4.       "mto1"8       !ffff"mto2"8. !fff"lto1" r16   |
+}
+]
 
 
 

@@ -166,17 +166,16 @@ In order to get an sheet file played via MIDI, you have to configure set your MI
 Have a look [here](/manual#adding-a-device) to see how it's done.
 
 ## Examples
-*(tbd): examples did not exists yet*
 
 To get a good impression of what is possible and how it can be achieved, it is recommended to have a look at the example sheets.
 
-To can find them in your installation folder under `shared/werckmeister/examples`. Or download them from the git sources: [tbd]().
+To can find them in your installation folder under `shared/werckmeister/examples`. Or download them from [here](https://github.com/werckme/werckmeister/tree/master/examples).
 
-You should find the examples here:
+You find the examples here:
 
 | System  | Location |
 | ------  | -------- |
-| Windows |  C:\Program Files (x86)\werckmeister 0.1.\share\werckmeister\examples  |
+| Windows |  C:\Program Files (x86)\werckmeister x.x.x\share\werckmeister\examples  |
 | Mac |  /usr/local/share/werckmeister/examples  |
 | Linux |  /usr/local/share/werckmeister/examples  |
 *(it may differs to your machine, depending on where you installed werckmeister)*
@@ -214,8 +213,8 @@ A basic Werckmeister document will look like this:
 device: MyMidiDevice midi 1;
 
 -- 2)
---             name  device       ch pc cc
-instrumentDef: piano MyMidiDevice 0  0  0;
+--             name  device       ch  cc pc
+instrumentDef: piano MyMidiDevice  0   0  0;
 -- (ch= channel, pc= programm change, cc= control change)
 
 -- 3)
@@ -376,8 +375,8 @@ The Roland SC-8850 offers, for example, a `Farf Organ`. So if I want to use this
 A suitable `instrumentDef` statement would be look as follows: 
 
 ```language=Werckmeister,type=mute
---             name      device   ch  cc  pc
-instrumentDef: myFarfisa MyRoland 0   19   17;
+--             name      device   ch   cc   pc
+instrumentDef: myFarfisa MyRoland  0   19   17;
 ```
 
 
