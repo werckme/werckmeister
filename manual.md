@@ -3,22 +3,25 @@ Werckmeister
 ## An [open source](https://github.com/werckme/werckmeister) Sheet Music MIDI Compiler
 
 Werckmeister compiles sheet music source code into a MIDI file.
+<br>It allows you to write sheet music a lá "Real Book" and Werckmeister compiles it into MIDI music.
 
+```language=Werckmeister,type=single,tempo=140
+   c'4   g8 g   a4 g~  |   g  b c'
+```
 
-<img src="https://raw.githubusercontent.com/SambaGodschynski/werckmeister/master/assets/flow.png" style="width: 100%; max-width: 800px; display:block; margin:auto; background:white">
+## Features
 
-Vision
-------
-Consider the beauty of lead sheet music: you write a melody and some chords, add some remarks, which instruments and which style.
-
-Thats it.
-
-This is the idea behind Werckmeister. Of course it can not replace a musician or a band. But it offers you a tool to write melodies and chords then you can define how to interpret the chords along your melody or even define your own interpretation templates.
-
+ * open source
+ * a fast sheet music MIDI compiler
+ * a sheet music player
+ * accompaniment template rendering engine
+ * Lua script extensions
+ * Lua modifications
+ * Lua voicing strategies
 
 ## What it wants to be
 * a fast and easy way to create lead sheet music
-* that tool in your toolchain, between the initial idea of an piece and developing the details in your favourite Sequencer/DAW
+* that tool in your toolchain, between the initial idea and polishing work with your favourite DAW
 * a way to create music without a Graphical User Interface
 * a tool which relies only on human readable files
 
@@ -28,8 +31,16 @@ This is the idea behind Werckmeister. Of course it can not replace a musician or
 * a scorewriter software
 * a programming language
 
+Vision
+------
+Consider the beauty of lead sheet music: you write a melody and some chords, add some remarks, which instruments and which style.
+
+Thats it.
+
+This is the idea behind Werckmeister. Of course it can not replace a musician or a band. But it offers you a tool to write melodies and chords then you can define how to interpret the chords along your melody or even define your own interpretation templates.
+
 ## Try it out online
-**⇓⇓⇓⇓⇓⇓⇓⇓⇓⇓⇓⇓⇓⇓⇓⇓⇓**
+
 ### Autumn Leaves
 This is the jazz standard "Autumn Leaves" written in werckmeister notation.
 <br>Click play to start the song.
