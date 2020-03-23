@@ -108,3 +108,9 @@ add_executable(sheetp ${SRC_SHEET_PLAYER})
 target_link_libraries (sheetp ${SHEET_LIBS} ${LIBS_PLAYER})
 
 install(TARGETS sheetp sheetc DESTINATION bin)
+
+# Win32 Kill Process Workaround
+if (WIN32) 
+    add_executable(win32-kill-sheetp-process win32_kill_process_main.cpp)
+    target_link_libraries (win32-kill-sheetp-process ${Boost_LIBRARIES})
+endif(WIN32)

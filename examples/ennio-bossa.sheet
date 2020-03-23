@@ -25,7 +25,7 @@ instrumentConf: vibra volume 85;
 instrumentConf: bass volume 70;
 instrumentConf: drums volume 70;
 
-tempo: 130;
+tempo: 30;
 
 [
 instrument: vibra;

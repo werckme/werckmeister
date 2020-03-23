@@ -46,8 +46,8 @@
 #define ARG_WIN32_SIGINT_WORKAROUND "win32-sigint-workaround"
 #define ARG_VERSION "version"
 #ifdef WIN32
-#define SIGINT_WORKAROUND 
-#define WIN32_SIGINT_WORKAROUND_FILE "keepalive"
+#include "fmapp/os_win_ipc_kill_handler.hpp"
+#define SIGINT_WORKAROUND
 #endif
 
 #define UPDATE_THREAD_SLEEPTIME 70
@@ -63,29 +63,6 @@ namespace {
 	fmapp::EventTimeline::const_iterator lastTimelineEvent = timeline.end();
 	unsigned long lastUpdateTimestamp = 0;
 }
-
-// https://github.com/SambaGodschynski/werckmeister/issues/101
-#ifdef SIGINT_WORKAROUND
-namespace {
-	void beginSigIntWorkaround()
-	{
-		std::fstream fs(WIN32_SIGINT_WORKAROUND_FILE, std::ios::out | std::ios::trunc);
-	}
-
-	bool checkSigIntWorkaround()
-	{
-		return boost::filesystem::exists(WIN32_SIGINT_WORKAROUND_FILE);
-	}
-
-	void endSigIntWorkaround()
-	{
-		if (!checkSigIntWorkaround()) {
-			return;
-		}
-		boost::filesystem::remove(WIN32_SIGINT_WORKAROUND_FILE);
-	}
-}
-#endif
 
 struct Settings {
 	typedef boost::program_options::variables_map Variables;
@@ -112,8 +89,8 @@ struct Settings {
 			(ARG_PRINT_EVENTINFOS_JSON, "prints the sheet events as json")
 			(ARG_VERSION, "prints the werckmeister version")
 #ifdef SIGINT_WORKAROUND
-			(ARG_WIN32_SIGINT_WORKAROUND, "uses a filebased workaround for the lack of a proper SIGINT signal handling in windows. \
-(a file 'keepalive' will be created before the player starts. If the file will be deleted while the player is running, the player will be stopped.)")
+			(ARG_WIN32_SIGINT_WORKAROUND, "uses a ipc workaround for the lack of a proper SIGINT signal handling in windows. \
+(an ipc handler will be created before the player starts. If the handler will receive a ipc message, called by a separate program, the player will be stopped.)")
 
 #endif
 			;
@@ -380,8 +357,9 @@ void play(sheet::DocumentPtr document, fm::midi::MidiPtr midi, MidiOutputId midi
 	});
 
 #ifdef SIGINT_WORKAROUND
+	std::unique_ptr<fmapp::os::InterProcessMessageQueue> ipcMessageQueue = nullptr;
 	if (settings.sigintWorkaround()) {
-		beginSigIntWorkaround();
+		ipcMessageQueue = std::make_unique<fmapp::os::InterProcessMessageQueue>();
 	}
 #endif
 
@@ -399,7 +377,7 @@ void play(sheet::DocumentPtr document, fm::midi::MidiPtr midi, MidiOutputId midi
 		sendFunkfeuerIfNeccessary(document, elapsed);
 		std::this_thread::sleep_for( std::chrono::milliseconds(UPDATE_THREAD_SLEEPTIME) );
 #ifdef SIGINT_WORKAROUND
-		if (settings.sigintWorkaround() && !checkSigIntWorkaround()) {
+		if (ipcMessageQueue && ipcMessageQueue->sigintReceived()) {
 			playing = false;
 			player.panic();
 		}
@@ -430,12 +408,6 @@ void play(sheet::DocumentPtr document, fm::midi::MidiPtr midi, MidiOutputId midi
 #ifdef SHEET_USE_BOOST_TIMER
 	fmapp::BoostTimer::io_stop();
 	boost_asio_.join();
-#endif
-
-#ifdef SIGINT_WORKAROUND
-	if (settings.sigintWorkaround()) {
-		endSigIntWorkaround();
-	}
 #endif
 
 	player.Backend:: tearDown();

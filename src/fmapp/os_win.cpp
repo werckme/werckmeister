@@ -1,8 +1,8 @@
 #include "os.hpp"
-#include "windows.h"
+#include <windows.h>
 #include "shlwapi.h"
 #include <boost/filesystem.hpp>
-
+#include <thread>
 
 namespace {
 	VOID CALLBACK WaitOrTimerCallback(PVOID lpParam, BOOLEAN TimerOrWaitFired);
