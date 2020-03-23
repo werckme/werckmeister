@@ -7,6 +7,7 @@
 #include <compiler/error.hpp>
 #include <boost/beast/core/detail/base64.hpp>
 #include <fm/midi.hpp>
+#include <process.h>
 
 namespace {
     std::string toString(const rapidjson::Document &doc) 
@@ -89,8 +90,11 @@ namespace fmapp {
         rapidjson::Document doc;
         doc.SetObject();
         rapidjson::Value elapsed;
+        rapidjson::Value pid;
         elapsed.SetDouble(elapsedTime);
+        pid.SetInt(::_getpid());
         doc.AddMember("sheetTime", elapsed, doc.GetAllocator());
+        doc.AddMember("pid", pid, doc.GetAllocator());
         return toString(doc);
     }
 

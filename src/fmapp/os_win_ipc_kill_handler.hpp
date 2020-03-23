@@ -1,7 +1,7 @@
 #ifndef OS_WIN_IPC_KILL_HANDLER_HPP
 
 #include <boost/interprocess/ipc/message_queue.hpp>
-#include <windows.h>
+#include <process.h>
 
 /*
     Thats why:
@@ -24,7 +24,7 @@ namespace fmapp {
             InterProcessMessageQueue() 
             {
                 using namespace boost::interprocess;
-                queueName = std::string("sheet_ipc_") + std::to_string(GetCurrentProcessId());
+                queueName = std::string("sheet_ipc_") + std::to_string(::_getpid());
                 message_queue::remove(queueName.c_str());
                 _queue = new message_queue
                 (	  create_only
@@ -34,7 +34,7 @@ namespace fmapp {
                 );
             }
 
-            InterProcessMessageQueue(DWORD pid)
+            InterProcessMessageQueue(int pid)
             {
                 using namespace boost::interprocess;
                 queueName = std::string("sheet_ipc_") + std::to_string(pid);

@@ -14,7 +14,7 @@ int main(int argc, char **argv) {
     }
     int pid = atoi(argv[1]);
     try {
-        fmapp::os::InterProcessMessageQueue queue(static_cast<DWORD>(pid));
+        fmapp::os::InterProcessMessageQueue queue(pid);
         queue.sendSigint();
     }
     catch (const boost::interprocess::interprocess_exception) 
