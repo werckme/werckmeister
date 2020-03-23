@@ -106,7 +106,10 @@ namespace fmapp {
         elapsed.SetDouble(elapsedTime);
         rapidjson::Value lastUpdate;
 		lastUpdate.SetUint(lastUpdateTimestamp);
+        rapidjson::Value pid;
+        pid.SetInt(::_getpid());
         doc.AddMember("sheetTime", elapsed, doc.GetAllocator());
+        doc.AddMember("pid", pid, doc.GetAllocator());
         if (!ignoreTimestamp) {
             doc.AddMember("lastUpdateTimestamp", lastUpdate, doc.GetAllocator());
         }

@@ -6,7 +6,7 @@ using "./templates/countryschlager1.template";
 -- to get a list of your available MIDI devices 
 -- and their port numbers, execute "sheetp --list"
 --      name              type   portnumber
-device: MyDevice          midi       1;
+device: MyDevice          midi       0;
 
 
 -- define your instruments:
