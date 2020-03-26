@@ -6,6 +6,7 @@
 #include <sheet/tools.h>
 #include <fm/werckmeister.hpp>
 #include <fm/common.hpp>
+#include <iostream>
 
 namespace sheet {
 	namespace compiler {
@@ -66,6 +67,17 @@ namespace sheet {
 		const ASheetObjectWithSourceInfo * Exception::getSourceInfo() const
 		{
 			return boost::get_error_info<ex_sheet_source_info>(*this);
+		}
+
+		const std::string Exception::getSourceFile() const
+		{
+			const auto *sourceInf 							 = boost::get_error_info<ex_sheet_source_info>(*this);
+			const std::shared_ptr<Document> * rawDocumentPtr = boost::get_error_info<ex_sheet_document>(*this);
+			if (!rawDocumentPtr) {
+				return "";
+			}
+			auto sheetfile = (*rawDocumentPtr)->findSourcePath(sourceInf->sourceId);
+			return sheetfile;
 		}
 
 		std::string Exception::toString() const

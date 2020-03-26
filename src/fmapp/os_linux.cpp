@@ -5,6 +5,8 @@
 #include <sstream>
 #include <unistd.h>
 #include <boost/filesystem.hpp>
+#include <sys/types.h>
+#include <unistd.h>
 
 namespace {
 	void signalCallback(int signal);
@@ -54,6 +56,10 @@ namespace fmapp {
 			auto result = boost::filesystem::path(bff);
 			free(bff);
 			return result.parent_path().string();
+		}
+		int getPId()
+		{
+			return static_cast<int>(::getpid());
 		}
 	}
 }

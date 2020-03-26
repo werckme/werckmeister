@@ -3,6 +3,7 @@
 #include "shlwapi.h"
 #include <boost/filesystem.hpp>
 #include <thread>
+#include <process.h>
 
 namespace {
 	VOID CALLBACK WaitOrTimerCallback(PVOID lpParam, BOOLEAN TimerOrWaitFired);
@@ -57,6 +58,9 @@ namespace fmapp {
 			GetModuleFileNameA(NULL, szFileName, MAX_PATH + 1);
 			auto strPath = fm::String(szFileName);
 			return boost::filesystem::path(strPath).parent_path().string();
+		}
+		int getPId() {
+			return ::_getpid();
 		}
 	}
 }

@@ -33,6 +33,7 @@ namespace sheet {
 			virtual ~Exception() throw () = default;
 			virtual std::string toString() const override;
 			const ASheetObjectWithSourceInfo* getSourceInfo() const;
+			const std::string getSourceFile() const;
 		protected:
 			std::stringstream & strWhere(std::stringstream &ss, const std::string filename, int line = -1) const;
 			std::stringstream & strWhat(std::stringstream &ss, const std::string &what) const;

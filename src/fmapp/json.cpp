@@ -7,7 +7,7 @@
 #include <compiler/error.hpp>
 #include <boost/beast/core/detail/base64.hpp>
 #include <fm/midi.hpp>
-#include <process.h>
+#include <fmapp/os.hpp>
 
 namespace {
     std::string toString(const rapidjson::Document &doc) 
@@ -92,7 +92,7 @@ namespace fmapp {
         rapidjson::Value elapsed;
         rapidjson::Value pid;
         elapsed.SetDouble(elapsedTime);
-        pid.SetInt(::_getpid());
+        pid.SetInt(fmapp::os::getPId());
         doc.AddMember("sheetTime", elapsed, doc.GetAllocator());
         doc.AddMember("pid", pid, doc.GetAllocator());
         return toString(doc);
@@ -107,7 +107,7 @@ namespace fmapp {
         rapidjson::Value lastUpdate;
 		lastUpdate.SetUint(lastUpdateTimestamp);
         rapidjson::Value pid;
-        pid.SetInt(::_getpid());
+        pid.SetInt(fmapp::os::getPId());
         doc.AddMember("sheetTime", elapsed, doc.GetAllocator());
         doc.AddMember("pid", pid, doc.GetAllocator());
         if (!ignoreTimestamp) {
@@ -142,19 +142,25 @@ namespace fmapp {
         rapidjson::Document doc;
         doc.SetObject();
         rapidjson::Value errorMessage;
-        const SheetException *fmex = dynamic_cast<const SheetException*>(&ex);
+        const SheetException *fmex                       = dynamic_cast<const SheetException*>(&ex);
         const sheet::ASheetObjectWithSourceInfo *docInfo = fmex ? fmex->getSourceInfo() : nullptr;
         if (fmex && docInfo) {
+            const auto sourceFile = fmex->getSourceFile(); 
             rapidjson::Value sourceId(docInfo->sourceId);
             rapidjson::Value positionBegin(docInfo->sourcePositionBegin);
             rapidjson::Value positionEnd(docInfo->sourcePositionEnd);
-            errorMessage.SetString(ex.what(), doc.GetAllocator());
+            errorMessage.SetString(fmex->what(), doc.GetAllocator());
             doc.AddMember("sourceId", sourceId, doc.GetAllocator());
             if (docInfo->sourcePositionBegin != sheet::ASheetObjectWithSourceInfo::UndefinedPosition) {
                 doc.AddMember("positionBegin", positionBegin, doc.GetAllocator());
             }
             if (docInfo->sourcePositionEnd != sheet::ASheetObjectWithSourceInfo::UndefinedPosition) {
                 doc.AddMember("positionEnd", positionEnd, doc.GetAllocator());
+            }
+            if (true) {
+                rapidjson::Value jsonSourceFile;
+                jsonSourceFile.SetString(sourceFile.c_str(), doc.GetAllocator());
+                doc.AddMember("sourceFile", jsonSourceFile, doc.GetAllocator());
             }
         } else {
             errorMessage.SetString(ex.what(), doc.GetAllocator());
