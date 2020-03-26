@@ -40,7 +40,8 @@ struct Settings {
 			(ARG_HELP, "produce help message")
 			(ARG_INPUT, po::value<std::string>(), "input file")
 			(ARG_OUTPUT, po::value<std::string>(), "output file")
-			(ARG_MODE, po::value<std::string>(), "mode: normal or json; in JSON mode the input and output will be implemented using JSON strings. The JSON has to be Base64 encoded.")
+			(ARG_MODE, po::value<std::string>(), "mode: normal | json | validate; in JSON mode the input and output will be implemented using JSON strings. The input JSON has to be Base64 encoded. \
+Validate mode checks for errors and returns the validation result as json object.")
 			(ARG_NOMETA, "dosen't render midi meta events like track name or tempo")
 			(ARG_VERSION, "prints the werckmeister version")
 			;
@@ -81,6 +82,13 @@ struct Settings {
 			return false;
 		}
 		return variables[ARG_MODE].as<std::string>() == "json";
+	}
+
+	bool isValidateMode() const {
+		if (variables.count(ARG_MODE) == 0) {
+			return false;
+		}
+		return variables[ARG_MODE].as<std::string>() == "validate";
 	}
 
 	bool version() const {
@@ -161,13 +169,21 @@ void toJSONOutput(sheet::DocumentPtr doc, fm::midi::MidiPtr midi, const sheet::W
 	;
 }
 
+std::string toValidationJSONOutput(sheet::DocumentPtr doc, fm::midi::MidiPtr midi, const sheet::Warnings& warnings)
+{
+	fmapp::JsonWriter jsonWriter;
+	return jsonWriter.documentInfosToJSON(*(doc.get()), midi->duration(), warnings);
+}
+
 
 int main(int argc, const char** argv)
 {
-	bool jsonMode = false;
+	bool jsonMode = false, 
+		 vaidateMode = false;
 	try {
 		Settings settings(argc, argv);
 		jsonMode = settings.isJsonMode();
+		vaidateMode = settings.isValidateMode();
 		std::string infile;
 
 		if (settings.help()) {
@@ -199,7 +215,7 @@ int main(int argc, const char** argv)
 		auto document = sheet::createDocument(infile);
 		auto midi = sheet::processFile(document, warnings, &midiConfig);
 
-		if (!jsonMode) {
+		if (!jsonMode && !vaidateMode) {
 			printWarnings(warnings);
 		}
 
@@ -210,13 +226,18 @@ int main(int argc, const char** argv)
 		if (jsonMode) {
 			toJSONOutput(document, midi, warnings);
 		} else {
-			saveMidi(midi, outfile);
+			if (vaidateMode) {
+				toValidationJSONOutput(document, midi, warnings);
+			}
+			else {
+				saveMidi(midi, outfile);
+			}
 		}
 		return 0;
 	}
 	catch (const fm::Exception &ex)
 	{
-		if (jsonMode) {
+		if (jsonMode || vaidateMode) {
 			fmapp::JsonWriter json;
 			std::cout << json.exceptionToJSON(ex);
 
@@ -226,7 +247,7 @@ int main(int argc, const char** argv)
 	}
 	catch (const std::exception &ex)
 	{
-		if (jsonMode) {
+		if (jsonMode || vaidateMode) {
 			fmapp::JsonWriter json;
 			std::cout << json.exceptionToJSON(ex);
 
@@ -236,7 +257,7 @@ int main(int argc, const char** argv)
 	}
 	catch (...)
 	{
-		if (jsonMode) {
+		if (jsonMode || vaidateMode) {
 			fmapp::JsonWriter json;
 			auto ex = std::runtime_error("unkown error");
 			std::cout << json.exceptionToJSON(ex);

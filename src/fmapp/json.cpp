@@ -174,6 +174,7 @@ namespace fmapp {
         return toString(doc);
     }
 
+
     ///////////////////////////////////////////////////////////////////////////
 
     std::list<VirtualFileDto> JsonReader::readVirtualFS(const std::string & jsonData)
