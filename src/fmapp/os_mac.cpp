@@ -67,6 +67,10 @@ namespace fmapp {
 		  auto strPath = _getExecutablePath();
 		  return boost::filesystem::path(strPath).parent_path().string();
 		}
+		int getPId()
+		{
+			return static_cast<int>(::getpid());
+		}
 	}
 }
 
