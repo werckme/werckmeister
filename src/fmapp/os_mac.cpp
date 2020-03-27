@@ -6,6 +6,8 @@
 #include <unistd.h>
 #include <boost/filesystem.hpp>
 #include <mach-o/dyld.h>
+#include <sys/types.h>
+#include <unistd.h>
 
 namespace {
 	void signalCallback(int signal);
