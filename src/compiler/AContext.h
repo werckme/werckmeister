@@ -224,7 +224,7 @@ namespace sheet {
 					processMeta(command, args);
 					idx++;
 				} catch(fm::Exception &ex) {
-					ex << ex_at_object_idx(idx);
+					ex << ex_sheet_source_info(x);
 					throw;
 				}
 			}

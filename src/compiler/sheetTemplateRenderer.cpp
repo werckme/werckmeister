@@ -53,10 +53,6 @@ namespace sheet {
 						[](const auto &x) { return x.args; }
 					);
 				} catch (fm::Exception &ex) {
-					if (int *objectIdx = boost::get_error_info<ex_at_object_idx>(ex)) {
-						// exception has index on which object the exception occured
-						ex << ex_sheet_source_info(track.trackInfos[*objectIdx]);
-					}
 					throw;
 				}
 			}

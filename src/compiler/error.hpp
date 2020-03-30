@@ -18,7 +18,6 @@ namespace sheet {
 	typedef std::list<std::string> Warnings;
 	class Document;
 	namespace compiler {
-		typedef boost::error_info<struct tag_at_object_idx, int> ex_at_object_idx;
 		typedef boost::error_info<struct tag_sheet_event, ASheetObjectWithSourceInfo> ex_sheet_source_info;
 		typedef boost::error_info<struct tag_sheet_document, std::shared_ptr<Document>> ex_sheet_document;
 		typedef boost::error_info<struct tag_error_source_file, fm::String> ex_error_source_file;
