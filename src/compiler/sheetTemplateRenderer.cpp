@@ -163,7 +163,7 @@ namespace sheet {
 						}
 					} catch(const Exception &ex) {
 						ex << ex_sheet_source_info(ev);
-						throw ex;
+						throw;
 					}
 				}
 				return templatesAndItsChords;

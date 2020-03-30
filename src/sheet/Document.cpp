@@ -7,6 +7,7 @@
 #include <functional>
 #include <fm/werckmeister.hpp>
 #include <compiler/preprocessor.h>
+#include <compiler/error.hpp>
 
 namespace sheet {
 	namespace {
@@ -45,21 +46,26 @@ namespace sheet {
 		SheetTemplates &sheetTemplates = *sheetTemplates_;
 		compiler::Preprocessor preprocessor;
 		for(auto &track : this->sheetDef.tracks) {
-			fm::String type = getFirstMetaValueBy(SHEET_META__TRACK_META_KEY_TYPE, track.trackInfos);
-			if (type != SHEET_META__TRACK_META_VALUE_TYPE_SHEET_TEMPLATE) {
-				continue;
+			try {
+				fm::String type = getFirstMetaValueBy(SHEET_META__TRACK_META_KEY_TYPE, track.trackInfos);
+				if (type != SHEET_META__TRACK_META_VALUE_TYPE_SHEET_TEMPLATE) {
+					continue;
+				}
+				fm::String sheetTemplateName = getFirstMetaValueBy(SHEET_META__TRACK_META_KEY_NAME, track.trackInfos);
+				if (sheetTemplateName.empty()) {
+					FM_THROW(compiler::Exception, "missing 'name' for sheetTemplate track");
+				}					
+				auto sheetTemplate = findSheetTemplate(sheetTemplateName);
+				if (sheetTemplate == nullptr) {
+					sheetTemplates[sheetTemplateName] = SheetTemplate(sheetTemplateName);
+					sheetTemplate = &(sheetTemplates[sheetTemplateName]);
+				}
+				preprocessor.process(track);
+				sheetTemplate->tracks.push_back(&track);
+			} catch(const fm::Exception &ex) {
+				ex << compiler::ex_sheet_source_info(track);
+				throw;
 			}
-			fm::String sheetTemplateName = getFirstMetaValueBy(SHEET_META__TRACK_META_KEY_NAME, track.trackInfos);
-			if (sheetTemplateName.empty()) {
-				FM_THROW(compiler::Exception, "missing 'name' for sheetTemplate track");
-			}					
-			auto sheetTemplate = findSheetTemplate(sheetTemplateName);
-			if (sheetTemplate == nullptr) {
-				sheetTemplates[sheetTemplateName] = SheetTemplate(sheetTemplateName);
-				sheetTemplate = &(sheetTemplates[sheetTemplateName]);
-			}
-			preprocessor.process(track);
-			sheetTemplate->tracks.push_back(&track);
 		}
 	}
 

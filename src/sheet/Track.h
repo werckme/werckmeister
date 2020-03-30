@@ -19,7 +19,7 @@ namespace sheet {
 		Args args;
 	};
 
-	struct Track  {
+	struct Track : ASheetObjectWithSourceInfo {
 		typedef ASheetObjectWithSourceInfo Base;
 		typedef std::vector<Voice> Voices;
 		typedef std::vector<TrackInfo> TrackInfos;

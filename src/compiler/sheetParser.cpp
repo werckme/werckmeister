@@ -58,11 +58,9 @@ BOOST_FUSION_ADAPT_STRUCT(
 
 BOOST_FUSION_ADAPT_STRUCT(
 	sheet::Grouped,
-//	(unsigned int, sourcePositionBegin)
 	(sheet::ASheetObjectWithSourceInfo::SourceId, sourceId)
 	(sheet::Event::EventGroup, eventGroup)
 	(sheet::Event::Duration, duration)
-//	(unsigned int, sourcePositionEnd)
 )
 
 namespace {
@@ -89,6 +87,8 @@ BOOST_FUSION_ADAPT_STRUCT(
 
 BOOST_FUSION_ADAPT_STRUCT(
 	sheet::Track,
+	(unsigned int, sourcePositionBegin)
+	(sheet::ASheetObjectWithSourceInfo::SourceId, sourceId)
 	(sheet::Track::TrackInfos, trackInfos)
 	(sheet::Track::Voices, voices)
 )
@@ -164,8 +164,9 @@ namespace sheet {
 				template<class TrackRules, class VoiceRules, class TrackInfoRules>
 				void createTrackRules(TrackRules &track, VoiceRules &voice, TrackInfoRules &trackInfo) const
 				{
+					using qi::attr;
 					createTrackInfoRules(trackInfo);
-					track %= "[" > *trackInfo > +voice > "]";
+					track %= "[" > current_pos_.current_pos > attr(sourceId_) > *trackInfo > +voice > "]";
 				}
 				void initDocumentConfigParser()
 				{
