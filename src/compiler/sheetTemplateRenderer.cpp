@@ -131,34 +131,39 @@ namespace sheet {
 				tmpContext->setChordTrackTarget();
 				auto &sheetEvents = sheetTrack->voices.begin()->events;
 				for (auto &ev : sheetEvents) {
-					bool isTempoEvent = ev.stringValue == SHEET_META__SET_TEMPO;
-					bool isTemplateEvent = ev.stringValue == SHEET_META__SET_SHEET_TEMPLATE;
-					if (isTemplateEvent) {
-						// new template
-						templatesAndItsChords.emplace_back(TemplatesAndItsChords());
-						auto &newTemplateAndChords = templatesAndItsChords.back();
-						newTemplateAndChords.templates = __getTemplates(sheetTemplateRenderer, ev);
-						newTemplateAndChords.offset = tmpContext->currentPosition();
-						newTemplateAndChords.tempoFactor = tmpContext->voiceMetaData()->tempoFactor;
-						
-					}
-					else {
-						// add any other event
-						auto &currentTemplateAndChords = templatesAndItsChords.back();
-						currentTemplateAndChords.chords.push_back(&ev);
-						if (ev.type == Event::Meta) {
-							tmpContext->setMeta(ev);
-							if (isTempoEvent) {
-								templatesAndItsChords.emplace_back(TemplatesAndItsChords());
-								auto &newTemplateAndChords = templatesAndItsChords.back();
-								newTemplateAndChords.templates = currentTemplateAndChords.templates;								
-								newTemplateAndChords.tempoFactor = tmpContext->voiceMetaData()->tempoFactor;
-								newTemplateAndChords.offset = tmpContext->currentPosition();
+					try {
+						bool isTempoEvent = ev.stringValue == SHEET_META__SET_TEMPO;
+						bool isTemplateEvent = ev.stringValue == SHEET_META__SET_SHEET_TEMPLATE;
+						if (isTemplateEvent) {
+							// new template
+							templatesAndItsChords.emplace_back(TemplatesAndItsChords());
+							auto &newTemplateAndChords = templatesAndItsChords.back();
+							newTemplateAndChords.templates = __getTemplates(sheetTemplateRenderer, ev);
+							newTemplateAndChords.offset = tmpContext->currentPosition();
+							newTemplateAndChords.tempoFactor = tmpContext->voiceMetaData()->tempoFactor;
+							
+						}
+						else {
+							// add any other event
+							auto &currentTemplateAndChords = templatesAndItsChords.back();
+							currentTemplateAndChords.chords.push_back(&ev);
+							if (ev.type == Event::Meta) {
+								tmpContext->setMeta(ev);
+								if (isTempoEvent) {
+									templatesAndItsChords.emplace_back(TemplatesAndItsChords());
+									auto &newTemplateAndChords = templatesAndItsChords.back();
+									newTemplateAndChords.templates = currentTemplateAndChords.templates;								
+									newTemplateAndChords.tempoFactor = tmpContext->voiceMetaData()->tempoFactor;
+									newTemplateAndChords.offset = tmpContext->currentPosition();
+								}
+							}
+							if (ev.isTimeConsuming()) {
+								tmpContext->seek(ev.duration);
 							}
 						}
-						if (ev.isTimeConsuming()) {
-							tmpContext->seek(ev.duration);
-						}
+					} catch(const Exception &ex) {
+						ex << ex_sheet_source_info(ev);
+						throw ex;
 					}
 				}
 				return templatesAndItsChords;
@@ -248,10 +253,6 @@ namespace sheet {
 						Event copy; 
 						copy = __degreeToAbsoluteNote(ctx, *chord, degree, copy);
 
-						// copy = degree.isRelativeDegree() ? 
-						// 	__degreeToAbsoluteNote(ctx, *chord, degree, copy) 
-						// 				: degree;						
-										
 						bool isTimeConsuming = copy.isTimeConsuming();
 						if (isTimeConsuming && leftover > 0) {
 							copy.duration += leftover;
