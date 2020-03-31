@@ -363,9 +363,15 @@ namespace sheet {
 					initSheetParser();
 					initDocumentConfigParser();
 					current_pos_.setStartPos(begin);
+
+					sheetInfo_.name("document config");
+					documentConfig_.name("document config");
+					track.name("track");
+
 					start %= (documentConfig_ | attr(DocumentConfig()))
-							>> *sheetInfo_ 
-							>> *track;
+							> *sheetInfo_ 
+							> *track
+							> boost::spirit::eoi;
 
 					auto onError = boost::bind(&handler::errorHandler<Iterator>, _1, sourceId_);
 					on_error<fail>(start, onError);
