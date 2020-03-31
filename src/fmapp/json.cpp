@@ -51,7 +51,7 @@ namespace {
         for (const auto &warning : warnings) {
             rapidjson::Value object(rapidjson::kObjectType);
             rapidjson::Value message;
-            message.SetString(warning.c_str(), doc.GetAllocator());
+            message.SetString(warning.message.c_str(), doc.GetAllocator());
             object.AddMember("message", message, doc.GetAllocator());
             warningsArray.PushBack(object, doc.GetAllocator());
         }

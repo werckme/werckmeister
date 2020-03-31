@@ -106,7 +106,7 @@ namespace sheet {
 				return std::dynamic_pointer_cast<TTrackMeta>(trackMetaData());
 			}					
 			virtual void throwContextException(const std::string &msg);
-			virtual void warn(const std::string &msg);
+			virtual void warn(const std::string &msg, const Event *event = nullptr);
 			ISheetTemplateDefServerPtr sheetTemplateDefServer() const;
 			void sheetTemplateDefServer(ISheetTemplateDefServerPtr server);
 			typedef std::vector<ISheetTemplateDefServer::SheetTemplate> SheetTemplates;
@@ -166,7 +166,7 @@ namespace sheet {
 			 * if duration == 0 the last event duration will be used
 			 */ 
 			virtual void seek(fm::Ticks duration);
-			virtual void newBar();
+			virtual void newBar(const Event &newBarEvent);
 			virtual void rest(fm::Ticks duration);
 			virtual fm::Ticks barPos() const;
 			/**

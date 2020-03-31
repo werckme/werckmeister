@@ -170,28 +170,33 @@ namespace sheet {
 			}
 
 			Event & __degreeToAbsoluteNote(AContext *ctx, const Event &chordEvent, const Event &degreeEvent, Event &target) {
-				target = degreeEvent;
-				if (degreeEvent.type == Event::Group) {
-					target.type = Event::Group;
-					size_t index = 0;
-					for (const auto &groupedDegreeEvent : degreeEvent.eventGroup) {
-						__degreeToAbsoluteNote(ctx, chordEvent, groupedDegreeEvent, target.eventGroup[index++]);
-					}
+				try {
+					target = degreeEvent;
+					if (degreeEvent.type == Event::Group) {
+						target.type = Event::Group;
+						size_t index = 0;
+						for (const auto &groupedDegreeEvent : degreeEvent.eventGroup) {
+							__degreeToAbsoluteNote(ctx, chordEvent, groupedDegreeEvent, target.eventGroup[index++]);
+						}
+						return target;
+					}				
+					if (!degreeEvent.isRelativeDegree()) {
+						return target;
+					}				
+					auto chordDef = ctx->sheetTemplateDefServer()->getChord(chordEvent.chordDefName());
+					if (chordDef == nullptr) {
+						FM_THROW(Exception, "chord not found: " + chordEvent.stringValue);
+					}									
+					auto voicingStratgy = ctx->currentVoicingStrategy();
+					auto pitches = voicingStratgy->get(chordEvent, *chordDef, degreeEvent.pitches, ctx->getTimeInfo());
+					target.type = Event::Note;
+					target.isTied(degreeEvent.isTied());
+					target.pitches.swap(pitches);
 					return target;
-				}				
-				if (!degreeEvent.isRelativeDegree()) {
-					return target;
-				}				
-				auto chordDef = ctx->sheetTemplateDefServer()->getChord(chordEvent.chordDefName());
-				if (chordDef == nullptr) {
-					FM_THROW(Exception, "chord not found: " + chordEvent.stringValue);
-				}									
-				auto voicingStratgy = ctx->currentVoicingStrategy();
-				auto pitches = voicingStratgy->get(chordEvent, *chordDef, degreeEvent.pitches, ctx->getTimeInfo());
-				target.type = Event::Note;
-				target.isTied(degreeEvent.isTied());
-				target.pitches.swap(pitches);
-				return target;
+				} catch(const Exception &ex) {
+					ex << ex_sheet_source_info(chordEvent);
+					throw;
+				}
 			}
 
 			void __handleTemplatePositionCmd(const Event &metaEvent, DegreeEventServer &eventServer)
@@ -317,7 +322,7 @@ namespace sheet {
 							{
 								if (chord->type == Event::EOB) {
 									__renderOneBar(ctx_, sheetEventRenderer, eventServer, chordsPerBar);
-									ctx_->newBar();
+									ctx_->newBar(*chord);
 									chordsPerBar.clear();
 									continue;
 								}

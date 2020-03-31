@@ -7,10 +7,11 @@
 #include <vector>
 #include <tuple>
 #include <boost/algorithm/string.hpp>
+#include <sheet/ASheetObject.hpp>
 
 namespace sheet {
     struct Event;
-
+    class Document;
     
 
     template<class TString>
@@ -347,6 +348,14 @@ namespace sheet {
         }
         return *(rowsAndColumns.begin());
     }
+    std::stringstream & documentMessageWhere(std::stringstream &ss, const std::string filename, int line=-1);
+    std::stringstream & documentMessageWhat(std::stringstream &ss, const std::string &what);
+    std::stringstream & documentMessage(std::stringstream &ss, 
+        const std::shared_ptr<Document>, 
+        ASheetObjectWithSourceInfo::SourceId,
+        unsigned int sourcePosition,
+        const std::string &message);
+
 }
 
 #endif

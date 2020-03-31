@@ -11,57 +11,11 @@
 namespace sheet {
 	namespace compiler {
 
-		namespace {
-			auto _lineAndPos(const fm::String &file, unsigned int sourcePos)
-			{
-				if (sourcePos == ASheetObjectWithSourceInfo::UndefinedPosition) {
-					sourcePos = 0;
-				}
-				try {
-					auto source = fm::getWerckmeister().openResource(file);
-					fm::StreamBuffIterator end;
-					fm::StreamBuffIterator begin(*source.get());
-					fm::String sourceStr(begin, end);
-					auto result = getLineAndPosition(sourceStr, sourcePos, false);
-					auto lineNr = getNumberOfLines(sourceStr, sourcePos);
-					return std::make_tuple(std::get<0>(result), std::get<1>(result), lineNr);
-				} catch(...) {
-					return std::make_tuple(fm::String(), -1, -1);
-				}
-			}
-		}
-
-		std::stringstream & Exception::strWhere(std::stringstream &ss, const std::string filename, int line) const
-		{
-			ss << "in file " << filename;
-			if (line > 0) {
-				ss << ":" << line;
-			} 
-			return ss;
-		}
-
-		std::stringstream & Exception::strWhat(std::stringstream &ss, const std::string &what) const
-		{
-			ss << what;
-			return ss;
-		}
-
 		std::stringstream & Exception::strSheetError(std::stringstream &ss, 
 			const std::shared_ptr<Document> document, 
 			const ASheetObjectWithSourceInfo* sourceInf) const
 		{
-			auto sheetfile = document->findSourcePath(sourceInf->sourceId);
-			fm::String errorLine;
-			int errorPosition = -1;
-			int lineNr = -1;
-			std::tie(errorLine, errorPosition, lineNr) = _lineAndPos(sheetfile, sourceInf->sourcePositionBegin);
-			std::string arrowLine(errorPosition, ' ');
-			arrowLine += "^~~~~";
-			strWhere(ss, sheetfile, lineNr+1) << std::endl;
-			strWhat(ss, msg_) << std::endl
-			   << errorLine << std::endl
-			   << arrowLine;
-			return ss;
+			return documentMessage(ss, document, sourceInf->sourceId, sourceInf->sourcePositionBegin, msg_);
 		}
 
 		const ASheetObjectWithSourceInfo * Exception::getSourceInfo() const
@@ -91,8 +45,8 @@ namespace sheet {
 				return ss.str();
 			}
 			if (sourceFile) {
-				strWhere(ss, *sourceFile) << std::endl;
-				strWhat(ss, msg_) << std::endl;
+				documentMessageWhere(ss, *sourceFile) << std::endl;
+				documentMessageWhat(ss, msg_) << std::endl;
 				return ss.str();
 			}
 			return Base::toString();

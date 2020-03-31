@@ -50,7 +50,7 @@ namespace sheet {
 			bool renderEvent<Event::EOB>(SheetEventRenderer* renderer, const Event *ev)
 			{
                 auto ctx = renderer->context();
-				ctx->newBar();
+				ctx->newBar(*ev);
 				return true;
 			}
 

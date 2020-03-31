@@ -13,9 +13,9 @@
 #include <algorithm>
 #include <sstream>
 #include <fm/common.hpp>
+#include "warning.hpp"
 
 namespace sheet {
-	typedef std::list<std::string> Warnings;
 	class Document;
 	namespace compiler {
 		typedef boost::error_info<struct tag_sheet_event, ASheetObjectWithSourceInfo> ex_sheet_source_info;
@@ -34,8 +34,6 @@ namespace sheet {
 			const ASheetObjectWithSourceInfo* getSourceInfo() const;
 			const std::string getSourceFile() const;
 		protected:
-			std::stringstream & strWhere(std::stringstream &ss, const std::string filename, int line = -1) const;
-			std::stringstream & strWhat(std::stringstream &ss, const std::string &what) const;
 			std::stringstream & strSheetError(std::stringstream &ss, const std::shared_ptr<Document>, const ASheetObjectWithSourceInfo*) const;
 		};
 

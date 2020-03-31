@@ -235,7 +235,7 @@ namespace sheet {
 			meta->barPosition += duration;
 		}
 
-		void AContext::warn(const std::string &msg)
+		void AContext::warn(const std::string &msg, const Event *event)
 		{
 			auto tmeta = trackMetaData();
 			auto vmeta = voiceMetaData();
@@ -251,11 +251,15 @@ namespace sheet {
 			if (vmeta) {
 				pos = static_cast<int>(vmeta->position / vmeta->barLength);
 			}
-			std::string warning(msg + " - [" + voiceName + "] bar " + std::to_string(pos));
-			warnings.push_back(warning);
+			Warning warning;
+			warning.message = msg;
+			if (!!event) {
+				warning.sourceObject = *event;
+			}
+			warnings.emplace_back(warning);
 		}
 
-		void AContext::newBar()
+		void AContext::newBar(const Event &newBarEvent)
 		{
 			auto meta = voiceMetaData();
 			if (meta->isUpbeat) {
@@ -267,7 +271,7 @@ namespace sheet {
 				seek(-(meta->barPosition - meta->barLength));
 				std::stringstream ss;
 				ss << "bar check error: " << errorInQuaters << " quarters";
-				warn(ss.str());
+				warn(ss.str(), &newBarEvent);
 			}
 			meta->barPosition = 0;
 			++(meta->barCount);

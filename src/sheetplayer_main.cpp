@@ -191,7 +191,7 @@ void printWarnings(const sheet::Warnings &warnings)
 		return;
 	}
 	for (const auto &warning : warnings) {
-		std::cout << warning << std::endl;
+		std::cout << warning.message << std::endl;
 	}
 }
 
