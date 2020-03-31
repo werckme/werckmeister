@@ -104,13 +104,13 @@ void saveMidi(fm::midi::MidiPtr midi, const std::string &filename)
 	fstream.flush();
 }
 
-void printWarnings(const sheet::Warnings &warnings)
+void printWarnings(sheet::DocumentPtr document, sheet::Warnings &warnings)
 {
 	if (warnings.empty()) {
 		return;
 	}
 	for (const auto &warning : warnings) {
-		std::cout << warning.message << std::endl;
+		std::cout << warning.toString(document) << std::endl;
 	}
 }
 
@@ -216,7 +216,7 @@ int main(int argc, const char** argv)
 		auto midi = sheet::processFile(document, warnings, &midiConfig);
 
 		if (!jsonMode && !vaidateMode) {
-			printWarnings(warnings);
+			printWarnings(document, warnings);
 		}
 
 		std::string outfile = boost::filesystem::path(infile).filename().string() + ".mid";

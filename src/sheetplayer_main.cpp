@@ -185,13 +185,13 @@ void updateLastChangedTimestamp() {
 	lastUpdateTimestamp = (unsigned long)time(NULL);
 }
 
-void printWarnings(const sheet::Warnings &warnings) 
+void printWarnings(const sheet::DocumentPtr document, sheet::Warnings &warnings)
 {
 	if (warnings.empty()) {
 		return;
 	}
 	for (const auto &warning : warnings) {
-		std::cout << warning.message << std::endl;
+		std::cout << warning.toString(document) << std::endl;
 	}
 }
 
@@ -270,8 +270,9 @@ void updatePlayer(fmapp::Midiplayer &player, const std::string &inputfile)
 		timeline.clear();
 		lastTimelineEvent = timeline.end();
 		sheet::Warnings warnings;
-		player.midi(sheet::processFile(inputfile, warnings));
-		printWarnings(warnings);
+		auto result = sheet::processFile(inputfile, warnings);
+		player.midi(result.first);
+		printWarnings(result.second, warnings);
 	}
 	catch (const fm::Exception &ex)
 	{
@@ -469,7 +470,7 @@ int main(int argc, const char** argv)
 		sheet::Warnings warnings;
 		auto midi = sheet::processFile(doc, warnings);
 		if (showWarnings) {
-			printWarnings(warnings);
+			printWarnings(doc, warnings);
 		}
 		
 		fm::Ticks begin = 0;

@@ -237,20 +237,6 @@ namespace sheet {
 
 		void AContext::warn(const std::string &msg, const Event *event)
 		{
-			auto tmeta = trackMetaData();
-			auto vmeta = voiceMetaData();
-			std::string voiceName;
-			int pos = 0;
-			const auto currentInstrument = currentInstrumentDef();
-			if (currentInstrument) {
-				voiceName = currentInstrument->uname;
-			}
-			else if (tmeta) {
-				voiceName = tmeta->instrument.empty() ? std::to_string(voice()) : tmeta->instrument;
-			}
-			if (vmeta) {
-				pos = static_cast<int>(vmeta->position / vmeta->barLength);
-			}
 			Warning warning;
 			warning.message = msg;
 			if (!!event) {
@@ -270,7 +256,8 @@ namespace sheet {
 				auto errorInQuaters = -(meta->barLength - meta->barPosition) / fm::PPQ;
 				seek(-(meta->barPosition - meta->barLength));
 				std::stringstream ss;
-				ss << "bar check error: " << errorInQuaters << " quarters";
+				std::string toLong = errorInQuaters > 0 ? "too long" : "too short";
+				ss << "bar is " << std::abs(errorInQuaters) << " quarter(s) " << toLong;
 				warn(ss.str(), &newBarEvent);
 			}
 			meta->barPosition = 0;

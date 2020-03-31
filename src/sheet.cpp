@@ -27,10 +27,10 @@ namespace sheet {
         }
     }
 
-    fm::midi::MidiPtr processFile(const std::string &file, sheet::Warnings &outWarnings, const fm::midi::MidiConfig *midiConfig)
+    std::pair<fm::midi::MidiPtr, sheet::DocumentPtr> processFile(const std::string &file, sheet::Warnings &outWarnings, const fm::midi::MidiConfig *midiConfig)
     {
         auto doc = createDocument(file);
-        return processFile(doc, outWarnings, midiConfig);
+        return std::make_pair(processFile(doc, outWarnings, midiConfig), doc);
     }
 
     fm::midi::MidiPtr processFile(sheet::DocumentPtr doc, sheet::Warnings &outWarnings, const fm::midi::MidiConfig *midiConfig) 

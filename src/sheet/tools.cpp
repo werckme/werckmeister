@@ -84,7 +84,7 @@ namespace sheet {
         int errorPosition = -1;
         int lineNr = -1;
         std::tie(errorLine, errorPosition, lineNr) = _lineAndPos(sheetfile, sourcePosition);
-        std::string arrowLine(errorPosition, ' ');
+        std::string arrowLine(std::max(errorPosition-1, 0), ' ');
         arrowLine += "^~~~~";
         documentMessageWhere(ss, sheetfile, lineNr+1) << std::endl;
         documentMessageWhat(ss, message) << std::endl

@@ -6,7 +6,7 @@
 #include <fm/midi.hpp>
 
 namespace sheet {
-	fm::midi::MidiPtr processFile(const std::string &file, sheet::Warnings &outWarnings, const fm::midi::MidiConfig *midiConfig = nullptr);
+	std::pair<fm::midi::MidiPtr, sheet::DocumentPtr> processFile(const std::string &file, sheet::Warnings &outWarnings, const fm::midi::MidiConfig *midiConfig = nullptr);
 	fm::midi::MidiPtr processFile(sheet::DocumentPtr document, sheet::Warnings &outWarnings, const fm::midi::MidiConfig *midiConfig = nullptr);
 	sheet::DocumentPtr createDocument(const std::string &file);
 	void onCompilerError(const fm::Exception &ex);
