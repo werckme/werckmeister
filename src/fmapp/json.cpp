@@ -32,14 +32,14 @@ namespace {
         return result;
     }
 
-    rapidjson::Document documentInfosToJSONDoc(const sheet::Document &sheetDoc, fm::Ticks duration, const sheet::Warnings &warnings)
+    rapidjson::Document documentInfosToJSONDoc(sheet::DocumentPtr sheetDoc, fm::Ticks duration, const sheet::Warnings &warnings)
     {
         rapidjson::Document doc;
         doc.SetObject();
         rapidjson::Value array(rapidjson::kArrayType);
         rapidjson::Value warningsArray(rapidjson::kArrayType);
         rapidjson::Value durationValue((double)duration);
-        for (const auto &source : sheetDoc.sources.left) {
+        for (const auto &source : sheetDoc->sources.left) {
             rapidjson::Value object(rapidjson::kObjectType);
             rapidjson::Value sourceId(source.first);
             object.AddMember("sourceId", sourceId, doc.GetAllocator());
@@ -51,8 +51,13 @@ namespace {
         for (const auto &warning : warnings) {
             rapidjson::Value object(rapidjson::kObjectType);
             rapidjson::Value message;
+            rapidjson::Value path;
+            path.SetString(warning.getSourceFile(sheetDoc).c_str(), doc.GetAllocator());
+            rapidjson::Value sourceId(warning.sourceObject.sourceId);
             message.SetString(warning.message.c_str(), doc.GetAllocator());
             object.AddMember("message", message, doc.GetAllocator());
+            object.AddMember("path", path, doc.GetAllocator());
+            object.AddMember("sourceId", sourceId, doc.GetAllocator());
             warningsArray.PushBack(object, doc.GetAllocator());
         }
         doc.AddMember("sources", array, doc.GetAllocator());
@@ -130,7 +135,7 @@ namespace fmapp {
         return toString(doc);
     }
 
-    std::string JsonWriter::documentInfosToJSON(const sheet::Document &document, fm::Ticks duration, const sheet::Warnings &warnings)
+    std::string JsonWriter::documentInfosToJSON(sheet::DocumentPtr document, fm::Ticks duration, const sheet::Warnings &warnings)
     {
         rapidjson::Document json = documentInfosToJSONDoc(document, duration, warnings);
         return toString(json);
@@ -169,7 +174,7 @@ namespace fmapp {
         return toString(doc);
     }
 
-    std::string JsonWriter::midiToJSON(const sheet::Document &sheetDoc, fm::midi::MidiPtr midi, const sheet::Warnings& warnings)
+    std::string JsonWriter::midiToJSON(sheet::DocumentPtr sheetDoc, fm::midi::MidiPtr midi, const sheet::Warnings& warnings)
     {
         rapidjson::Document doc = documentInfosToJSONDoc(sheetDoc, midi->duration(), warnings);
         rapidjson::Value midiData;

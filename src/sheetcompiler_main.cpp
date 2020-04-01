@@ -163,7 +163,7 @@ void toJSONOutput(sheet::DocumentPtr doc, fm::midi::MidiPtr midi, const sheet::W
 	fmapp::JsonWriter jsonWriter;
 	std::cout 
 	<< "{" 
-	<< "\"midi\": " << jsonWriter.midiToJSON(*(doc.get()), midi, warnings)
+	<< "\"midi\": " << jsonWriter.midiToJSON(doc, midi, warnings)
 	<< ", \"eventInfos\": " << eventInfosAsJson(doc)
 	<< "}" << std::endl
 	;
@@ -172,7 +172,7 @@ void toJSONOutput(sheet::DocumentPtr doc, fm::midi::MidiPtr midi, const sheet::W
 void toValidationJSONOutput(sheet::DocumentPtr doc, fm::midi::MidiPtr midi, const sheet::Warnings& warnings)
 {
 	fmapp::JsonWriter jsonWriter;
-	std::cout << jsonWriter.documentInfosToJSON(*(doc.get()), midi->duration(), warnings) << std::endl;
+	std::cout << jsonWriter.documentInfosToJSON(doc, midi->duration(), warnings) << std::endl;
 }
 
 

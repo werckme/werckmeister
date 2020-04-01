@@ -335,7 +335,7 @@ std::string eventInfosAsJson(sheet::DocumentPtr document)
 
 std::string getDocumentsInfoJSON(sheet::DocumentPtr document, fm::Ticks duration, const sheet::Warnings &warnings)
 {
-	return jsonWriter.documentInfosToJSON(*document, duration / fm::PPQ, warnings);
+	return jsonWriter.documentInfosToJSON(document, duration / fm::PPQ, warnings);
 }
 void play(sheet::DocumentPtr document, fm::midi::MidiPtr midi, MidiOutputId midiOutput, fm::Ticks begin, fm::Ticks end, const Settings &settings) 
 {
