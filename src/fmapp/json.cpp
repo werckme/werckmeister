@@ -56,7 +56,7 @@ namespace {
             rapidjson::Value sourceId(warning.sourceObject.sourceId);
             message.SetString(warning.message.c_str(), doc.GetAllocator());
             object.AddMember("message", message, doc.GetAllocator());
-            object.AddMember("path", path, doc.GetAllocator());
+            object.AddMember("sourceFile", path, doc.GetAllocator());
             object.AddMember("sourceId", sourceId, doc.GetAllocator());
             warningsArray.PushBack(object, doc.GetAllocator());
         }
