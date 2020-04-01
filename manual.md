@@ -397,12 +397,13 @@ A config statement has as first argument the instrument name you want to configu
 
 `instrumentConf: aInstrumentName [pan aValue] [volume aValue] [voicingStrategy aStrategyName] [mod aModName];`
 
-  option             |  value                  | purpose                         
-  ------------------ | ----------------------- | --------------------------------------
-  volume             | 0..100                  | set the volume
-  pan                | 0..100                  | set the pan, 0=left, 50=center, 100=right 
-  mod                | aName [option value]    | set a [mod](#mods) 
-  voicingStrategy    | aName [option value]    | set a [voicingStrategy](#voicing-strategies)  
+  option                            |  value                  | purpose                         
+  ----------------------------------| ----------------------- | --------------------------------------
+  volume                            | 0..100                  | set the volume
+  pan                               | 0..100                  | set the pan, 0=left, 50=center, 100=right 
+  mod                               | aName [option value]    | set a [mod](#mods) 
+  voicingStrategy                   | aName [option value]    | set a [voicingStrategy](#voicing-strategies)
+  dynamics expression (ppppp-fffff) | 0..100                  | overwrite default velocity mapping  
 
 Now, as an example we set a volume value of 80 to our Farfisa organ, also we set the pan more to the left.
 
