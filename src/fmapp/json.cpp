@@ -54,10 +54,12 @@ namespace {
             rapidjson::Value path;
             path.SetString(warning.getSourceFile(sheetDoc).c_str(), doc.GetAllocator());
             rapidjson::Value sourceId(warning.sourceObject.sourceId);
+            rapidjson::Value positionBegin(warning.sourceObject.sourcePositionBegin);
             message.SetString(warning.message.c_str(), doc.GetAllocator());
             object.AddMember("message", message, doc.GetAllocator());
             object.AddMember("sourceFile", path, doc.GetAllocator());
             object.AddMember("sourceId", sourceId, doc.GetAllocator());
+            object.AddMember("positionBegin", positionBegin, doc.GetAllocator());
             warningsArray.PushBack(object, doc.GetAllocator());
         }
         doc.AddMember("sources", array, doc.GetAllocator());
