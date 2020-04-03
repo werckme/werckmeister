@@ -191,17 +191,6 @@ You find the examples here:
 | Linux |  /usr/local/share/werckmeister/examples  |
 *(it may differs to your machine, depending on where you installed werckmeister)*
 
-## The Werckmeister Visual Studio Code Extension
-The recommended way to edit Werckmeister sheet files, is using Visual Studio Code with the
- Werckmeister extension. It supports playback right from the editor. With visual feedback and error/warning highlighting.
-
-Have a look [here](/code-extension).
-
-## Using Werckmeister along with a DAW
-All you need is to connect the `sheetp` player with the MIDI inputs of your DAW.
-
-On Windows there is some third party software for that purpose. In my opinion [loopMIDI](https://www.tobias-erichsen.de/software/loopmidi.html) does a pretty good job.
-
 Manual
 ======
 I want to ...
@@ -691,33 +680,3 @@ type: accomp;
 ##### Event Tags
 ##### Lua scripts
 
-Visual Studio Extension
-======
-
-## Features
-
-* MIDI Playback from source
-* Playback visualization
-* Syntax highlighting
-* Error & Warning highlighting
-* Start playback at random position
-
-**Playback visualization**
-<img src="https://raw.githubusercontent.com/werckme/werckmeister-codext/master/assets/features/playbackvis.gif">
-
-
-## Installation
-
-At first you need to install [Visual Studio Code](https://code.visualstudio.com/). You should find a version for MacOs, Windows and Linux.
-
-Then you click on the "Extension" button on the left sidebar and search for "Werckmeister".
-Select the Werckmeister extension and hit install. 
-
-Of course, you need also an installed Werckmeister compiler on your machine.
-
-With that Werckmeister installation, the Werckmeister compiler should be accessable system wide. So normally you have to do nothing.
-If Visual Studio Code is not able to execute the Werckmeister compiler you can set the correct installation path via the extension setup:
-
-*Preferences -> Settings -> Extensions -> Werckmeister Binary Directory*
-
-<img src="https://raw.githubusercontent.com/werckme/werckmeister-codext/master/assets/pathsetup.png">
