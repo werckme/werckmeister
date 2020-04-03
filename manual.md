@@ -691,7 +691,7 @@ type: accomp;
 ##### Event Tags
 ##### Lua scripts
 
-Visual Studio Extension
+Visual Studio Code Extension
 ======
 
 ## Features
@@ -709,12 +709,11 @@ Visual Studio Extension
 ## Installation
 
 At first you need to install [Visual Studio Code](https://code.visualstudio.com/). You should find a version for MacOs, Windows and Linux.
+Is the installation done, open Visual Studio Code. On the left sidebar you find a button which opens the extensions dialog.
+Open it and use the search input to find the Werckmeister extension. Select it and hit install.
 
-Then you click on the "Extension" button on the left sidebar and search for "Werckmeister".
-Select the Werckmeister extension and hit install. 
 
 Of course, you need also an installed Werckmeister compiler on your machine.
-
 With that Werckmeister installation, the Werckmeister compiler should be accessable system wide. So normally you have to do nothing.
 If Visual Studio Code is not able to execute the Werckmeister compiler you can set the correct installation path via the extension setup:
 
