@@ -6,4 +6,4 @@ for %%i in ("%~dp0.") do SET "CWD=%%~fi"
 
 cd %CWD%
 cmake .. -G "Visual Studio 14 2015"
-msbuild werckmeister.sln /p:Configuration=Release
+msbuild werckmeister.sln /p:Configuration=Release && cpack -G wix
