@@ -578,7 +578,7 @@ BOOST_AUTO_TEST_CASE(test_sheetDefParser_tie)
 	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[2], sheet::Event::Note, 0, 0, 1.0_N1));
 }
 
-BOOST_AUTO_TEST_CASE(test_documentConfigParser)
+BOOST_AUTO_TEST_CASE(test_documentUsingParser)
 {
 	using namespace fm;
 	fm::String text = FM_STRING("\
@@ -592,7 +592,7 @@ using \"C:\\drivers\\Intel Rapid Storage Technology Driver\"; \n\
 ");
 	sheet::compiler::SheetDefParser parser;
 	auto doc = parser.parse(text);
-	const auto &defs = doc.documentConfig;
+	const auto &defs = doc.documentUsing;
 	BOOST_CHECK(defs.usings.size() == 7);
 	auto it = defs.usings.begin();
 	BOOST_CHECK(*(it++) == FM_STRING("Chords1.chords"));
@@ -605,7 +605,7 @@ using \"C:\\drivers\\Intel Rapid Storage Technology Driver\"; \n\
 
 }
 
-BOOST_AUTO_TEST_CASE(test_documentConfigParser_empty)
+BOOST_AUTO_TEST_CASE(test_documentUsingParser_empty)
 {
 	using namespace fm;
 	fm::String text = FM_STRING("\
@@ -631,7 +631,7 @@ BOOST_AUTO_TEST_CASE(test_documentConfigParser_empty)
 ");
 	sheet::compiler::SheetDefParser parser;
 	auto doc = parser.parse(text);
-	BOOST_CHECK(doc.documentConfig.usings.size() == 0);
+	BOOST_CHECK(doc.documentUsing.usings.size() == 0);
 
 }
 

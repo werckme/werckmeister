@@ -235,7 +235,7 @@ bool hasChanges(sheet::DocumentPtr document, Timestamps &timestamps)
 	};
 	bool result = changed(document->path);
 	// check all files, even if a file has changed already
-	for(const auto &p : document->sheetDef.documentConfig.usings) {
+	for(const auto &p : document->sheetDef.documentUsing.usings) {
 		auto fullPath = fm::getWerckmeister().resolvePath(p, document);
 		result |= changed(fullPath);
 	}

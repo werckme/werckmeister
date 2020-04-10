@@ -18,12 +18,12 @@
 #include <sstream>
 #include "parserSymbols.h"
 #include "parserPositionIt.h"
-#include "sheet/DocumentConfig.h"
+#include "sheet/DocumentUsing.h"
 #include <sheet/tools.h>
 
 BOOST_FUSION_ADAPT_STRUCT(
-	sheet::DocumentConfig,
-	(sheet::DocumentConfig::Usings, usings)
+	sheet::DocumentUsing,
+	(sheet::DocumentUsing::Usings, usings)
 )
 
 BOOST_FUSION_ADAPT_STRUCT(
@@ -103,7 +103,7 @@ BOOST_FUSION_ADAPT_STRUCT(
 
 BOOST_FUSION_ADAPT_STRUCT(
 	sheet::SheetDef,
-	(sheet::DocumentConfig, documentConfig)
+	(sheet::DocumentUsing, documentUsing)
 	(sheet::SheetDef::SheetInfos, sheetInfos)
 	(sheet::SheetDef::Tracks, tracks)
 )
@@ -168,7 +168,7 @@ namespace sheet {
 					createTrackInfoRules(trackInfo);
 					track %= "[" > current_pos_.current_pos > attr(sourceId_) > *trackInfo > +voice > "]";
 				}
-				void initDocumentConfigParser()
+				void initDocumentUsingParser()
 				{
 					using qi::int_;
 					using qi::lit;
@@ -182,7 +182,7 @@ namespace sheet {
 					quoted_string %= lexeme['"' > +(char_ - '"') > '"'];
 					using_ %= "using" > quoted_string > ";";
 					usings_ %= *using_;
-					documentConfig_ %= usings_;
+					documentUsing_ %= usings_;
 				}
 
 				void initSheetParser()
@@ -361,14 +361,14 @@ namespace sheet {
 					using qi::fail;
 					using qi::attr;
 					initSheetParser();
-					initDocumentConfigParser();
+					initDocumentUsingParser();
 					current_pos_.setStartPos(begin);
 
 					sheetInfo_.name("document config");
-					documentConfig_.name("document config");
+					documentUsing_.name("document config");
 					track.name("track");
 
-					start %= (documentConfig_ | attr(DocumentConfig()))
+					start %= (documentUsing_ | attr(DocumentUsing()))
 							> *sheetInfo_ 
 							> *track
 							> boost::spirit::eoi;
@@ -391,10 +391,10 @@ namespace sheet {
 				qi::rule<Iterator, Grouped(), ascii::space_type> groupedEvent_;
 				qi::rule<Iterator, SheetInfo(), ascii::space_type> sheetInfo_;
 				qi::rule<Iterator, TrackInfo(), ascii::space_type> trackInfo_;
-				qi::rule<Iterator, DocumentConfig(), ascii::space_type> documentConfig_;
+				qi::rule<Iterator, DocumentUsing(), ascii::space_type> documentUsing_;
 				qi::rule<Iterator, fm::String(), ascii::space_type> quoted_string;
 				qi::rule<Iterator, fm::String(), ascii::space_type> using_;
-				qi::rule<Iterator, DocumentConfig::Usings, ascii::space_type> usings_;
+				qi::rule<Iterator, DocumentUsing::Usings, ascii::space_type> usings_;
 				CurrentPos<Iterator> current_pos_;
 			};
 
