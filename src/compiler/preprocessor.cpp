@@ -66,7 +66,9 @@ namespace sheet {
 				auto lastEvent = end - 1;
 				processData.hasTimeConsumingEvents = false;
 				if (lastEvent->type != Event::EOB) {
-					Event eob;
+					Event eob = *lastEvent;
+					eob.duration = 0;
+					eob.pitches.clear();
 					eob.type = Event::EOB;
 					voice.events.push_back(eob);
 					it = voice.events.begin();
