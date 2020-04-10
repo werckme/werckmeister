@@ -766,7 +766,7 @@ BOOST_AUTO_TEST_CASE(test_event_positions)
 	fm::String text = FM_STRING("\
 \n\
 \n\
-documentConfig: xyz; \n\
+sheetInfo: xyz; \n\
 [\n\
 	-- a comment \n\
 	-- a comment \n\
