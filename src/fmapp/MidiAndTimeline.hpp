@@ -1,7 +1,7 @@
 #ifndef FMAPP_TIMELINECONTEXT_H
 #define FMAPP_TIMELINECONTEXT_H
 
-#include <compiler/MidiContext.h>
+#include <compiler/context/MidiContext.h>
 #include <compiler/sheetEventRenderer.h>
 #include <forward.hpp>
 #include <fm/midi.hpp>

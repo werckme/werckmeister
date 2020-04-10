@@ -1,16 +1,16 @@
 #include "AContext.h"
-#include "error.hpp"
+#include <compiler/error.hpp>
 #include <fm/werckmeister.hpp>
 #include <algorithm>
 #include <fm/common.hpp>
-#include "spielanweisung/ASpielanweisung.h"
-#include "spielanweisung/spielanweisungen.h"
-#include "spielanweisung/Vorschlag.h"
-#include "modification/AModification.h"
+#include <compiler/spielanweisung/ASpielanweisung.h>
+#include <compiler/spielanweisung/spielanweisungen.h>
+#include <compiler/spielanweisung/Vorschlag.h>
+#include <compiler/modification/AModification.h>
 #include <fm/literals.hpp>
 #include <fm/config/configServer.h>
 #include <sheet/Track.h>
-#include "sheet/tools.h"
+#include <sheet/tools.h>
 #include <sstream>
 
 namespace sheet {

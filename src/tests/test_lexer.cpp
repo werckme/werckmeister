@@ -1,5 +1,5 @@
 #include <boost/test/unit_test.hpp>
-#include "compiler/lexer.h"
+#include "parser/lexer.h"
 #include <boost/spirit/include/lex_lexertl.hpp>
 #include <iostream>
 #include "fm/common.hpp"

@@ -7,7 +7,7 @@
 #include <exception>
 #include <fstream>
 #include "compiler/compiler.h"
-#include "compiler/MidiContext.h"
+#include <compiler/context/MidiContext.h>
 #include <memory>
 #include "compiler/voicings/DirectVoicingStrategy.h"
 #include "compiler/voicings/SimpleGuitar.h"

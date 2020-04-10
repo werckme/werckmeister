@@ -5,7 +5,7 @@
 #include <compiler/error.hpp>
 #include <algorithm>
 #include <compiler/lua/luaTimeInfo.h>
-#include <compiler/AContext.h>
+#include <compiler/context/AContext.h>
 #include <fm/lua/luaHelper.h>
 
 static const char * LUA_EVENT_TYPE_NOTE = "note";

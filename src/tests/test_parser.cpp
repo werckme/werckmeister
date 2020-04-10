@@ -1,6 +1,6 @@
 #include <boost/test/unit_test.hpp>
 #include <iostream>
-#include "compiler/parser.h"
+#include "parser/parser.h"
 #include "compiler/error.hpp"
 #include <fm/literals.hpp>
 #include <fm/units.hpp>

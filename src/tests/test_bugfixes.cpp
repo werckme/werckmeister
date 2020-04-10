@@ -1,11 +1,11 @@
 #include <boost/test/unit_test.hpp>
 #include <iostream>
-#include "compiler/parser.h"
+#include "parser/parser.h"
 #include "compiler/error.hpp"
 #include <fm/literals.hpp>
 #include <fm/units.hpp>
 
-#include "compiler/lexer.h"
+#include "parser/lexer.h"
 #include <boost/spirit/include/lex_lexertl.hpp>
 #include "fm/common.hpp"
 #include "testhelper.h"
