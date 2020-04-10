@@ -39,7 +39,6 @@ namespace sheet {
             int barCount = 0;
             long long eventCount = 0;
             long long eventOffset = 0;
-            bool isUpbeat = false;
             fm::Expression expression = fm::expression::FF;
             fm::Expression singleExpression = fm::expression::Default;
             WaitForTieBuffer waitForTieBuffer;

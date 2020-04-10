@@ -142,7 +142,6 @@ namespace sheet {
 			virtual void metaSetExpression(const fm::String &value);
 			virtual void metaSetSingleExpression(const fm::String &value);
 			virtual void metaSetTempo(double bpm) {}
-			virtual void metaSetUpbeat(const Event &event);
 			virtual void metaSetVoicingStrategy(const fm::String &name, const Event::Args &args);
 			virtual void metaSetSpielanweisung(const fm::String &name, const Event::Args &args);
 			virtual void metaSetSpielanweisungOnce(const fm::String &name, const Event::Args &args);
