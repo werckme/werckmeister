@@ -47,11 +47,11 @@ namespace sheet {
 		compiler::Preprocessor preprocessor;
 		for(auto &track : this->sheetDef.tracks) {
 			try {
-				fm::String type = getFirstMetaValueBy(SHEET_META__TRACK_META_KEY_TYPE, track.trackInfos);
+				fm::String type = getFirstMetaValueBy(SHEET_META__TRACK_META_KEY_TYPE, track.trackConfigs);
 				if (type != SHEET_META__TRACK_META_VALUE_TYPE_SHEET_TEMPLATE) {
 					continue;
 				}
-				fm::String sheetTemplateName = getFirstMetaValueBy(SHEET_META__TRACK_META_KEY_NAME, track.trackInfos);
+				fm::String sheetTemplateName = getFirstMetaValueBy(SHEET_META__TRACK_META_KEY_NAME, track.trackConfigs);
 				if (sheetTemplateName.empty()) {
 					FM_THROW(compiler::Exception, "missing 'name' for sheetTemplate track");
 				}					

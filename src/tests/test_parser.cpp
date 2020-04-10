@@ -678,21 +678,21 @@ command: 01 02 03; \n\
 	BOOST_CHECK(defs.tracks[0].voices.size() == 1);
 	BOOST_CHECK(defs.tracks[0].voices[0].events.size() == 12);
 
-	BOOST_CHECK(defs.tracks[0].trackInfos.size() == 3);
+	BOOST_CHECK(defs.tracks[0].trackConfigs.size() == 3);
 
-	BOOST_CHECK(defs.tracks[0].trackInfos[0].name == FM_STRING("type") );
-	BOOST_CHECK(defs.tracks[0].trackInfos[0].args.size() == 1 );
-	BOOST_CHECK(defs.tracks[0].trackInfos[0].args[0] == FM_STRING("notation") );
+	BOOST_CHECK(defs.tracks[0].trackConfigs[0].name == FM_STRING("type") );
+	BOOST_CHECK(defs.tracks[0].trackConfigs[0].args.size() == 1 );
+	BOOST_CHECK(defs.tracks[0].trackConfigs[0].args[0] == FM_STRING("notation") );
 
-	BOOST_CHECK(defs.tracks[0].trackInfos[1].name == FM_STRING("uname") );
-	BOOST_CHECK(defs.tracks[0].trackInfos[1].args.size() == 1 );
-	BOOST_CHECK(defs.tracks[0].trackInfos[1].args[0] == FM_STRING("bass") );
+	BOOST_CHECK(defs.tracks[0].trackConfigs[1].name == FM_STRING("uname") );
+	BOOST_CHECK(defs.tracks[0].trackConfigs[1].args.size() == 1 );
+	BOOST_CHECK(defs.tracks[0].trackConfigs[1].args[0] == FM_STRING("bass") );
 
-	BOOST_CHECK(defs.tracks[0].trackInfos[2].name == FM_STRING("command") );
-	BOOST_CHECK(defs.tracks[0].trackInfos[2].args.size() == 3 );
-	BOOST_CHECK(defs.tracks[0].trackInfos[2].args[0] == FM_STRING("01") );
-	BOOST_CHECK(defs.tracks[0].trackInfos[2].args[1] == FM_STRING("02") );
-	BOOST_CHECK(defs.tracks[0].trackInfos[2].args[2] == FM_STRING("03") );
+	BOOST_CHECK(defs.tracks[0].trackConfigs[2].name == FM_STRING("command") );
+	BOOST_CHECK(defs.tracks[0].trackConfigs[2].args.size() == 3 );
+	BOOST_CHECK(defs.tracks[0].trackConfigs[2].args[0] == FM_STRING("01") );
+	BOOST_CHECK(defs.tracks[0].trackConfigs[2].args[1] == FM_STRING("02") );
+	BOOST_CHECK(defs.tracks[0].trackConfigs[2].args[2] == FM_STRING("03") );
 }
 
 BOOST_AUTO_TEST_CASE(test_docmentInfo)
@@ -716,22 +716,22 @@ command: 01 02 03; \n\
 	BOOST_CHECK(defs.tracks[0].voices.size() == 1);
 	BOOST_CHECK(defs.tracks[0].voices[0].events.size() == 12);
 
-	BOOST_CHECK(defs.sheetInfos.size() == 2); 
+	BOOST_CHECK(defs.documentConfigs.size() == 2); 
 
-	BOOST_CHECK(defs.sheetInfos.size() == 2);
-	BOOST_CHECK(defs.sheetInfos[0].name == FM_STRING("instrumentDef") );
-	BOOST_CHECK(defs.sheetInfos[0].args.size() == 5);
-	BOOST_CHECK(defs.sheetInfos[0].args[0] == FM_STRING("drums"));
-	BOOST_CHECK(defs.sheetInfos[0].args[1] == FM_STRING("SC1"));
-	BOOST_CHECK(defs.sheetInfos[0].args[2] == FM_STRING("9"));
-	BOOST_CHECK(defs.sheetInfos[0].args[3] == FM_STRING("0"));
-	BOOST_CHECK(defs.sheetInfos[0].args[4] == FM_STRING("32"));
+	BOOST_CHECK(defs.documentConfigs.size() == 2);
+	BOOST_CHECK(defs.documentConfigs[0].name == FM_STRING("instrumentDef") );
+	BOOST_CHECK(defs.documentConfigs[0].args.size() == 5);
+	BOOST_CHECK(defs.documentConfigs[0].args[0] == FM_STRING("drums"));
+	BOOST_CHECK(defs.documentConfigs[0].args[1] == FM_STRING("SC1"));
+	BOOST_CHECK(defs.documentConfigs[0].args[2] == FM_STRING("9"));
+	BOOST_CHECK(defs.documentConfigs[0].args[3] == FM_STRING("0"));
+	BOOST_CHECK(defs.documentConfigs[0].args[4] == FM_STRING("32"));
 
-	BOOST_CHECK(defs.sheetInfos[1].name == FM_STRING("command") );
-	BOOST_CHECK(defs.sheetInfos[1].args.size() == 3);
-	BOOST_CHECK(defs.sheetInfos[1].args[0] == FM_STRING("01"));
-	BOOST_CHECK(defs.sheetInfos[1].args[1] == FM_STRING("02"));
-	BOOST_CHECK(defs.sheetInfos[1].args[2] == FM_STRING("03"));
+	BOOST_CHECK(defs.documentConfigs[1].name == FM_STRING("command") );
+	BOOST_CHECK(defs.documentConfigs[1].args.size() == 3);
+	BOOST_CHECK(defs.documentConfigs[1].args[0] == FM_STRING("01"));
+	BOOST_CHECK(defs.documentConfigs[1].args[1] == FM_STRING("02"));
+	BOOST_CHECK(defs.documentConfigs[1].args[2] == FM_STRING("03"));
 }
 
 BOOST_AUTO_TEST_CASE(test_tied_degree_failed)
@@ -766,11 +766,11 @@ BOOST_AUTO_TEST_CASE(test_event_positions)
 	fm::String text = FM_STRING("\
 \n\
 \n\
-sheetInfo: xyz; \n\
+documentConfig: xyz; \n\
 [\n\
 	-- a comment \n\
 	-- a comment \n\
-	trackInfo: xyz; \n\
+	trackConfig: xyz; \n\
 \n\
 	-- a comment \n\
 	{\n\
@@ -807,9 +807,9 @@ sheetInfo: xyz; \n\
 	// TRACK & DOCUMENT
 	ch = text[defs.tracks[0].voices[0].events[idx++].sourcePositionBegin];
 	BOOST_CHECK( ch == '|' );	
-	ch = text[defs.tracks[0].trackInfos[0].sourcePositionBegin];
+	ch = text[defs.tracks[0].trackConfigs[0].sourcePositionBegin];
 	BOOST_CHECK( ch == 't' );
-	ch = text[defs.sheetInfos[0].sourcePositionBegin];
+	ch = text[defs.documentConfigs[0].sourcePositionBegin];
 	BOOST_CHECK( ch == 's' );	
 }
 
@@ -820,11 +820,11 @@ BOOST_AUTO_TEST_CASE(test_event_positions2)
 	fm::String text = FM_STRING("\
 \n\
 \n\
-sheetInfo: xyz; \n\
+documentConfig: xyz; \n\
 [\n\
 	-- a comment \n\
 	-- a comment \n\
-	trackInfo: xyz; \n\
+	trackConfig: xyz; \n\
 \n\
 	-- a comment \n\
 	{\n\

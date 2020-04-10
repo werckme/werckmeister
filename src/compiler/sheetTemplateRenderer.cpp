@@ -48,7 +48,7 @@ namespace sheet {
 			ctx_->setTarget(trackId, voiceId);
 			if (trackIsNew) {
 				try {
-					ctx_->processMeta(track.trackInfos, 
+					ctx_->processMeta(track.trackConfigs, 
 						[](const auto &x) { return x.name; }, 
 						[](const auto &x) { return x.args; }
 					);
@@ -310,7 +310,7 @@ namespace sheet {
 							ctx_->voiceMetaData()->barPosition = 0;
 
 							DEBUGX(
-								auto trackname = getMetaValuesBy("name", track->trackInfos).front();
+								auto trackname = getMetaValuesBy("name", track->trackConfigs).front();
 								auto position = ctx_->voiceMetaData()->position;
 								auto tempofac = ctx_->voiceMetaData()->tempoFactor;
 								std::cout << trackname << " ; " << position << " ; " << tempofac << std::endl;

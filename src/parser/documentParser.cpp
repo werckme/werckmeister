@@ -42,7 +42,7 @@ namespace sheet {
 
 			void append(DocumentPtr doc, const SheetDef &sheetDef)
 			{
-				append(doc->sheetDef.sheetInfos, sheetDef.sheetInfos);
+				append(doc->sheetDef.documentConfigs, sheetDef.documentConfigs);
 				append(doc->sheetDef.tracks, sheetDef.tracks);
 			}
 

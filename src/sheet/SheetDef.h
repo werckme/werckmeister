@@ -10,7 +10,7 @@
 
 namespace sheet {
 
-	struct SheetInfo : public ASheetObjectWithSourceInfo {
+	struct DocumentConfig : public ASheetObjectWithSourceInfo {
 		typedef std::vector<fm::String> Args;
 		fm::String name;
 		Args args;
@@ -18,9 +18,9 @@ namespace sheet {
 
 	struct SheetDef {
 		typedef std::vector<Track> Tracks;
-		typedef std::vector<SheetInfo> SheetInfos;
+		typedef std::vector<DocumentConfig> DocumentConfigs;
 		DocumentUsing documentUsing;
-		SheetInfos sheetInfos;
+		DocumentConfigs documentConfigs;
 		Tracks tracks;
 	};
 

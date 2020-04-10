@@ -78,7 +78,7 @@ namespace {
 }
 
 BOOST_FUSION_ADAPT_STRUCT(
-	sheet::TrackInfo,
+	sheet::TrackConfig,
 	(unsigned int, sourcePositionBegin)
 	(sheet::ASheetObjectWithSourceInfo::SourceId, sourceId)
 	(fm::String, name)
@@ -89,12 +89,12 @@ BOOST_FUSION_ADAPT_STRUCT(
 	sheet::Track,
 	(unsigned int, sourcePositionBegin)
 	(sheet::ASheetObjectWithSourceInfo::SourceId, sourceId)
-	(sheet::Track::TrackInfos, trackInfos)
+	(sheet::Track::TrackConfigs, trackConfigs)
 	(sheet::Track::Voices, voices)
 )
 
 BOOST_FUSION_ADAPT_STRUCT(
-	sheet::SheetInfo,
+	sheet::DocumentConfig,
 	(unsigned int, sourcePositionBegin)
 	(sheet::ASheetObjectWithSourceInfo::SourceId, sourceId)
 	(fm::String, name)
@@ -104,7 +104,7 @@ BOOST_FUSION_ADAPT_STRUCT(
 BOOST_FUSION_ADAPT_STRUCT(
 	sheet::SheetDef,
 	(sheet::DocumentUsing, documentUsing)
-	(sheet::SheetDef::SheetInfos, sheetInfos)
+	(sheet::SheetDef::DocumentConfigs, documentConfigs)
 	(sheet::SheetDef::Tracks, tracks)
 )
 
@@ -129,14 +129,14 @@ namespace sheet {
 			template <typename Iterator>
 			struct _SheetParser : qi::grammar<Iterator, SheetDef(), ascii::space_type>
 			{
-				template<class SheetInfoRules>
-				void createSheetInfoRules(SheetInfoRules &sheetInfo) const
+				template<class DocumentConfigRules>
+				void createDocumentConfigRules(DocumentConfigRules &documentConfig) const
 				{
 					using qi::lexeme;
 					using ascii::char_;
 					using qi::eol;
 					using qi::attr;
-					sheetInfo %= 
+					documentConfig %= 
 						current_pos_.current_pos 
 						>> attr(sourceId_)
 						>> +char_("a-zA-Z") 
@@ -145,14 +145,14 @@ namespace sheet {
 						> ";";
 				}
 
-				template<class TrackInfoRules>
-				void createTrackInfoRules(TrackInfoRules &trackInfo) const
+				template<class TrackConfigRules>
+				void createTrackConfigRules(TrackConfigRules &trackConfig) const
 				{
 					using qi::lexeme;
 					using ascii::char_;
 					using qi::eol;
 					using qi::attr;
-					trackInfo %=
+					trackConfig %=
 						current_pos_.current_pos 
 						>> attr(sourceId_)
 						>> +char_("a-zA-Z") 
@@ -161,12 +161,12 @@ namespace sheet {
 						>> ";";
 				}
 
-				template<class TrackRules, class VoiceRules, class TrackInfoRules>
-				void createTrackRules(TrackRules &track, VoiceRules &voice, TrackInfoRules &trackInfo) const
+				template<class TrackRules, class VoiceRules, class TrackConfigRules>
+				void createTrackRules(TrackRules &track, VoiceRules &voice, TrackConfigRules &trackConfig) const
 				{
 					using qi::attr;
-					createTrackInfoRules(trackInfo);
-					track %= "[" > current_pos_.current_pos > attr(sourceId_) > *trackInfo > +voice > "]";
+					createTrackConfigRules(trackConfig);
+					track %= "[" > current_pos_.current_pos > attr(sourceId_) > *trackConfig > +voice > "]";
 				}
 				void initDocumentUsingParser()
 				{
@@ -349,8 +349,8 @@ namespace sheet {
 
 					voice %= "{" > events > "}";
 
-					createTrackRules(track, voice, trackInfo_);
-					createSheetInfoRules(sheetInfo_);
+					createTrackRules(track, voice, trackConfig_);
+					createDocumentConfigRules(documentConfig_);
 				}
 
 				_SheetParser(Iterator begin, Event::SourceId sourceId = Event::UndefinedSource) : 
@@ -364,12 +364,12 @@ namespace sheet {
 					initDocumentUsingParser();
 					current_pos_.setStartPos(begin);
 
-					sheetInfo_.name("document config");
+					documentConfig_.name("document config");
 					documentUsing_.name("document config");
 					track.name("track");
 
 					start %= (documentUsing_ | attr(DocumentUsing()))
-							> *sheetInfo_ 
+							> *documentConfig_ 
 							> *track
 							> boost::spirit::eoi;
 
@@ -389,8 +389,8 @@ namespace sheet {
 				qi::rule<Iterator, Voice::Events(), ascii::space_type> events;
 				qi::rule<Iterator, Event(), ascii::space_type> event_;
 				qi::rule<Iterator, Grouped(), ascii::space_type> groupedEvent_;
-				qi::rule<Iterator, SheetInfo(), ascii::space_type> sheetInfo_;
-				qi::rule<Iterator, TrackInfo(), ascii::space_type> trackInfo_;
+				qi::rule<Iterator, DocumentConfig(), ascii::space_type> documentConfig_;
+				qi::rule<Iterator, TrackConfig(), ascii::space_type> trackConfig_;
 				qi::rule<Iterator, DocumentUsing(), ascii::space_type> documentUsing_;
 				qi::rule<Iterator, fm::String(), ascii::space_type> quoted_string;
 				qi::rule<Iterator, fm::String(), ascii::space_type> using_;
