@@ -1,3 +1,8 @@
+-- werckmeister swing modification
+-- possible arguments: 
+-- grid: can be 8 or 16 (default is 8)
+-- offset: can be between 0 and 100 (default is 100)
+
 require "lua/com/com"
 
 function compareQuarters(a, b)
