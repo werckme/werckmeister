@@ -703,6 +703,7 @@ Visual Studio Code Extension
 * Start playback at random position
 
 **Playback visualization**
+
 <img src="https://raw.githubusercontent.com/werckme/werckmeister-codext/master/assets/features/playbackvis.gif">
 
 
