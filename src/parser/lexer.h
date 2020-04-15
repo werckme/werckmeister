@@ -40,7 +40,7 @@ namespace sheet {
 			}
 
 			ASheetTokenizer()
-				: documentConfig(FM_STRING("\\s*@.+?;"))     // define tokens
+				: documentUsing(FM_STRING("\\s*@.+?;"))     // define tokens
 				, eol(FM_STRING("\\s*\n"))
 				, any(FM_STRING("."))
 				, comment(FM_STRING("^\\s*--.+$"))
@@ -51,7 +51,7 @@ namespace sheet {
 				, endSection(FM_STRING("\\s*end"))
 			{
 			}
-			TokenDef documentConfig
+			TokenDef documentUsing
 				, eol
 				, any
 				, comment
@@ -70,17 +70,17 @@ namespace sheet {
 		{
 			typedef ASheetTokenizer<Lexer> Base;
 			ChordDefTokenizer();
-			typename Base::Tokens documentConfigs;
+			typename Base::Tokens documentUsings;
 			typename Base::Tokens chordDefs;
 		};
 
 		template <typename Lexer>
 		ChordDefTokenizer<Lexer>::ChordDefTokenizer()
 		{
-			auto addConfigs = boost::bind(&Base::add, this, _1, _2, boost::ref(documentConfigs));
+			auto addConfigs = boost::bind(&Base::add, this, _1, _2, boost::ref(documentUsings));
 			auto addDef = boost::bind(&Base::add, this, _1, _2, boost::ref(chordDefs));
 			this->self
-				= (Base::documentConfig[addConfigs] | Base::comment | Base::chordDef[addDef])
+				= (Base::documentUsing[addConfigs] | Base::comment | Base::chordDef[addDef])
 				| Base::eol
 				| Base::any
 				;
@@ -91,40 +91,40 @@ namespace sheet {
 		{
 			typedef ASheetTokenizer<Lexer> Base;
 			PitchmapTokenizer();
-			typename Base::Tokens documentConfigs;
+			typename Base::Tokens documentUsings;
 			typename Base::Tokens pitchdefs;
 		};
 
 		template <typename Lexer>
 		PitchmapTokenizer<Lexer>::PitchmapTokenizer()
 		{
-			auto addConfigs = boost::bind(&Base::add, this, _1, _2, boost::ref(documentConfigs));
+			auto addConfigs = boost::bind(&Base::add, this, _1, _2, boost::ref(documentUsings));
 			auto addDef = boost::bind(&Base::add, this, _1, _2, boost::ref(pitchdefs));
 			this->self
-				= (Base::documentConfig[addConfigs] | Base::comment | Base::pitchDef[addDef])
+				= (Base::documentUsing[addConfigs] | Base::comment | Base::pitchDef[addDef])
 				| Base::eol
 				| Base::any
 				;
 		}
 		/////////////////////////////////////////////////////////////////////////////
 		template <typename Lexer>
-		struct DocumentConfigTokenizer : public ASheetTokenizer<Lexer>
+		struct DocumentUsingTokenizer : public ASheetTokenizer<Lexer>
 		{
 			typedef ASheetTokenizer<Lexer> Base;
-			DocumentConfigTokenizer();
-			StringStream documentConfigs;
+			DocumentUsingTokenizer();
+			StringStream documentUsings;
 			void onDocDef(CharType const *begin, CharType const *end) 
 			{
-				documentConfigs << fm::String(begin, end) << std::endl;
+				documentUsings << fm::String(begin, end) << std::endl;
 			}
 		};
 
 		template <typename Lexer>
-		DocumentConfigTokenizer<Lexer>::DocumentConfigTokenizer()
+		DocumentUsingTokenizer<Lexer>::DocumentUsingTokenizer()
 		{
-			auto addConfigs = boost::bind(&DocumentConfigTokenizer::onDocDef, this, _1, _2);
+			auto addConfigs = boost::bind(&DocumentUsingTokenizer::onDocDef, this, _1, _2);
 			this->self
-				= (Base::documentConfig[addConfigs] | Base::comment)
+				= (Base::documentUsing[addConfigs] | Base::comment)
 				| Base::eol
 				| Base::any
 				;

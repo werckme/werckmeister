@@ -2,8 +2,8 @@
 #include <fm/common.hpp>
 #include "sheet/Document.h"
 #include "compiler/compiler.h"
-#include "compiler/parser.h"
-#include "compiler/MidiContext.h"
+#include "parser/parser.h"
+#include "compiler/context/MidiContext.h"
 #include "sheet.h"
 #include "compiler/sheetEventRenderer.h"
 #include <fmapp/os.hpp>

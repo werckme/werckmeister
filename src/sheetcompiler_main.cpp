@@ -5,9 +5,7 @@
 #include <string>
 #include <iostream>
 #include <exception>
-#include "compiler/compiler.h"
-#include "compiler/parser.h"
-#include "compiler/MidiContext.h"
+#include "compiler/context/MidiContext.h"
 #include "fmapp/json.hpp"
 #include <fstream>
 #include <fm/common.hpp>

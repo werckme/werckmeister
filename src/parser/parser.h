@@ -5,7 +5,7 @@
 #include "sheet/ChordDef.h"
 #include "sheet/SheetDef.h"
 #include "sheet/Pitchmap.h"
-#include "sheet/DocumentConfig.h"
+#include "sheet/DocumentUsing.h"
 #include "forward.hpp"
 
 namespace sheet {

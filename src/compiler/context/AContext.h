@@ -1,23 +1,23 @@
 #ifndef COMPILER_CONTEXT_H
 #define COMPILER_CONTEXT_H
 
-#include "sheet/Event.h"
+#include <sheet/Event.h>
 #include <memory>
 #include <unordered_map>
 #include <fm/units.hpp>
 #include <fm/literals.hpp>
 #include <map>
 #include <unordered_map>
-#include "sheet/SheetTemplateDefServer.h"
-#include "compiler/voicings/VoicingStrategy.h"
+#include <sheet/SheetTemplateDefServer.h>
+#include <compiler/voicings/VoicingStrategy.h>
 #include <fm/common.hpp>
-#include "metaCommands.h"
+#include <compiler/metaCommands.h>
 #include <list>
-#include "forward.hpp"
-#include "metaData.h"
-#include "error.hpp"
-#include "instrument.h"
-#include "timeInfo.h"
+#include <forward.hpp>
+#include <compiler/metaData.h>
+#include <compiler/error.hpp>
+#include <compiler/instrument.h>
+#include <compiler/timeInfo.h>
 
 namespace sheet {
     namespace compiler {
@@ -142,7 +142,6 @@ namespace sheet {
 			virtual void metaSetExpression(const fm::String &value);
 			virtual void metaSetSingleExpression(const fm::String &value);
 			virtual void metaSetTempo(double bpm) {}
-			virtual void metaSetUpbeat(const Event &event);
 			virtual void metaSetVoicingStrategy(const fm::String &name, const Event::Args &args);
 			virtual void metaSetSpielanweisung(const fm::String &name, const Event::Args &args);
 			virtual void metaSetSpielanweisungOnce(const fm::String &name, const Event::Args &args);

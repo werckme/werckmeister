@@ -1,5 +1,5 @@
 #include <boost/test/unit_test.hpp>
-#include "compiler/lexer.h"
+#include "parser/lexer.h"
 #include <boost/spirit/include/lex_lexertl.hpp>
 #include <iostream>
 #include "fm/common.hpp"
@@ -31,8 +31,8 @@ X7: I=1 III=5 V=8 VII=10 --as usual\n\
 	LexerType::iterator_type end = chordDefTok.end();
 
 	boost::spirit::lex::tokenize(first, last, chordDefTok);
-	BOOST_CHECK( chordDefTok.documentConfigs.size() == 3 );
-	//for (const auto &x : chordDefTok.documentConfigs) {
+	BOOST_CHECK( chordDefTok.documentUsings.size() == 3 );
+	//for (const auto &x : chordDefTok.documentUsings) {
 	//	FM_COUT << x << std::endl;
 	//}
 	BOOST_CHECK(chordDefTok.chordDefs.size() == 4);
@@ -58,8 +58,8 @@ BOOST_AUTO_TEST_CASE(test_pitchmap)
 	LexerType::iterator_type end = pitchmapTok.end();
 
 	boost::spirit::lex::tokenize(first, last, pitchmapTok);
-	BOOST_CHECK(pitchmapTok.documentConfigs.size() == 0);
-	//for (const auto &x : chordDefTok.documentConfigs) {
+	BOOST_CHECK(pitchmapTok.documentUsings.size() == 0);
+	//for (const auto &x : chordDefTok.documentUsings) {
 	//	FM_COUT << x << std::endl;
 	//}
 	BOOST_CHECK(pitchmapTok.pitchdefs.size() == 2);

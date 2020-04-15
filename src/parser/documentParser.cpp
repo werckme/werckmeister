@@ -22,7 +22,7 @@ namespace sheet {
 			void useLuaScript(DocumentPtr doc, const fm::String &path, Event::SourceId);
 			void useSheetTemplateDef(DocumentPtr doc, const fm::String &path, Event::SourceId);
 			void processUsings(DocumentPtr doc, 
-				const sheet::DocumentConfig &documentConfig, 
+				const sheet::DocumentUsing &documentUsing, 
 				const Extensions &allowedExtendions,
 				const fm::String &sourcePath = fm::String());
 			
@@ -42,7 +42,7 @@ namespace sheet {
 
 			void append(DocumentPtr doc, const SheetDef &sheetDef)
 			{
-				append(doc->sheetDef.sheetInfos, sheetDef.sheetInfos);
+				append(doc->sheetDef.documentConfigs, sheetDef.documentConfigs);
 				append(doc->sheetDef.tracks, sheetDef.tracks);
 			}
 
@@ -88,7 +88,7 @@ namespace sheet {
 					SheetDefParser sheetDefParser;
 					auto sheetDef = sheetDefParser.parse(documentText, sourceId);
 					append(doc, sheetDef);
-					processUsings(doc, sheetDef.documentConfig, {LUA_DEF_EXTENSION, PITCHMAP_DEF_EXTENSION}, path);
+					processUsings(doc, sheetDef.documentUsing, {LUA_DEF_EXTENSION, PITCHMAP_DEF_EXTENSION}, path);
 				} catch (Exception &ex) {
 					ex << ex_error_source_file(path);
 					throw;
@@ -96,11 +96,11 @@ namespace sheet {
 			}
 
 			void processUsings(DocumentPtr doc, 
-				const sheet::DocumentConfig &documentConfig,
+				const sheet::DocumentUsing &documentUsing,
 				const Extensions &allowedExtendions,
 				const fm::String &sourcePath)
 			{
-				for (const auto &x : documentConfig.usings)
+				for (const auto &x : documentUsing.usings)
 				{
 					auto path = boost::filesystem::path(x);
 					auto ext = path.extension().string();
@@ -138,7 +138,7 @@ namespace sheet {
 			SheetDefParser sheetParser;
 			try {
 				res->sheetDef = sheetParser.parse(first, last, sourceId);
-				processUsings(res, res->sheetDef.documentConfig, AllSupportedExtensions);
+				processUsings(res, res->sheetDef.documentUsing, AllSupportedExtensions);
 			} catch(fm::Exception &ex) {
 				ex << ex_sheet_document(res);
 				throw;
@@ -156,7 +156,7 @@ namespace sheet {
 			SheetDefParser sheetParser;
 			try {
 				res->sheetDef = sheetParser.parse(first, last, 0);
-				//processUsings(res, res->sheetDef.documentConfig, AllSupportedExtensions);
+				//processUsings(res, res->sheetDef.documentUsing, AllSupportedExtensions);
 			} catch(fm::Exception &ex) {
 				ex << ex_sheet_document(res);
 				throw;

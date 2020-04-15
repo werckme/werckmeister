@@ -5,7 +5,7 @@
 #include <fm/common.hpp>
 
 namespace sheet {
-	struct DocumentConfig {
+	struct DocumentUsing {
 		typedef fm::String Using;
 		typedef std::vector<Using> Usings;
 		Usings usings;

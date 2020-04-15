@@ -11,12 +11,12 @@ SET (SRC_FETZER_LIB
     fm/lua/ALuaObject.cpp
     fm/lua/ALuaScript.cpp
     compiler/compiler.cpp
-    compiler/chordDefParser.cpp
-    compiler/sheetParser.cpp
-    compiler/documentParser.cpp
-    compiler/pitchmapParser.cpp
-    compiler/MidiContext.cpp
-    compiler/AContext.cpp
+    parser/chordDefParser.cpp
+    parser/sheetParser.cpp
+    parser/documentParser.cpp
+    parser/pitchmapParser.cpp
+    compiler/context/MidiContext.cpp
+    compiler/context/AContext.cpp
     compiler/preprocessor.cpp
     compiler/sheetEventRenderer.cpp
     compiler/spielanweisung/ASpielanweisung.cpp

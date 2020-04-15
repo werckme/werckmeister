@@ -5,9 +5,7 @@
 #include <string>
 #include <iostream>
 #include <exception>
-#include "compiler/compiler.h"
-#include "compiler/parser.h"
-#include "compiler/MidiContext.h"
+#include "compiler/context/MidiContext.h"
 #include <fstream>
 #include <fm/common.hpp>
 #include "sheet/Document.h"
@@ -237,7 +235,7 @@ bool hasChanges(sheet::DocumentPtr document, Timestamps &timestamps)
 	};
 	bool result = changed(document->path);
 	// check all files, even if a file has changed already
-	for(const auto &p : document->sheetDef.documentConfig.usings) {
+	for(const auto &p : document->sheetDef.documentUsing.usings) {
 		auto fullPath = fm::getWerckmeister().resolvePath(p, document);
 		result |= changed(fullPath);
 	}

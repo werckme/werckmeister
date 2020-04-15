@@ -13,7 +13,7 @@ namespace sheet {
 		Events events;
 	};
 
-	struct TrackInfo : public ASheetObjectWithSourceInfo {
+	struct TrackConfig : public ASheetObjectWithSourceInfo {
 		typedef std::vector<fm::String> Args;
 		fm::String name;
 		Args args;
@@ -22,8 +22,8 @@ namespace sheet {
 	struct Track : ASheetObjectWithSourceInfo {
 		typedef ASheetObjectWithSourceInfo Base;
 		typedef std::vector<Voice> Voices;
-		typedef std::vector<TrackInfo> TrackInfos;
-		TrackInfos trackInfos;
+		typedef std::vector<TrackConfig> TrackConfigs;
+		TrackConfigs trackConfigs;
 		Voices voices;
 	};
 

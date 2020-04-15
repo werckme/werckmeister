@@ -2,7 +2,7 @@
 #define SHEET_HPP
 #include "forward.hpp"
 #include <fm/exception.hpp>
-#include <compiler/AContext.h>
+#include <compiler/context/AContext.h>
 #include <fm/midi.hpp>
 
 namespace sheet {

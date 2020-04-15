@@ -1,16 +1,16 @@
 #include "AContext.h"
-#include "error.hpp"
+#include <compiler/error.hpp>
 #include <fm/werckmeister.hpp>
 #include <algorithm>
 #include <fm/common.hpp>
-#include "spielanweisung/ASpielanweisung.h"
-#include "spielanweisung/spielanweisungen.h"
-#include "spielanweisung/Vorschlag.h"
-#include "modification/AModification.h"
+#include <compiler/spielanweisung/ASpielanweisung.h>
+#include <compiler/spielanweisung/spielanweisungen.h>
+#include <compiler/spielanweisung/Vorschlag.h>
+#include <compiler/modification/AModification.h>
 #include <fm/literals.hpp>
 #include <fm/config/configServer.h>
 #include <sheet/Track.h>
-#include "sheet/tools.h"
+#include <sheet/tools.h>
 #include <sstream>
 
 namespace sheet {
@@ -248,11 +248,7 @@ namespace sheet {
 		void AContext::newBar(const Event &newBarEvent)
 		{
 			auto meta = voiceMetaData();
-			if (meta->isUpbeat) {
-				meta->isUpbeat = false;
-				meta->eventOffset = meta->eventCount;
-			}
-			else if (!fm::compareTolerant(meta->barPosition, meta->barLength, fm::Ticks(TickTolerance))) {
+			if (!fm::compareTolerant(meta->barPosition, meta->barLength, fm::Ticks(TickTolerance))) {
 				auto errorInQuaters = -(meta->barLength - meta->barPosition) / fm::PPQ;
 				seek(-(meta->barPosition - meta->barLength));
 				std::stringstream ss;
@@ -275,7 +271,6 @@ namespace sheet {
 				if (command == SHEET_META__TRACK_META_KEY_TYPE /*handled elsewhere*/
 				|| command == SHEET_META__TRACK_META_KEY_NAME
 				|| command == SHEET_META__SET_VORSCHLAG
-				|| command == SHEET_META__SET_UPBEAT
 				|| command == SHEET_META__SHEET_TEMPLATE_POSITION) 
 				{
 					return;
@@ -365,9 +360,6 @@ namespace sheet {
 			}
 			if (metaEventHandler && metaEventHandler(metaEvent)) {
 				return;
-			}
-			if (metaEvent.stringValue == SHEET_META__SET_UPBEAT) { 
-				metaSetUpbeat(metaEvent);
 			}
 			if (metaEvent.stringValue == SHEET_META__SET_VORSCHLAG) {
 				metaAddVorschlag(metaEvent);
@@ -474,15 +466,6 @@ namespace sheet {
 				return;
 			}
 			meta->singleExpression = expr;
-		}
-
-		void AContext::metaSetUpbeat(const Event &event) 
-		{
-			auto meta = voiceMetaData();
-			if (meta->position > 0) {
-				throwContextException("upbeat only allowed on begin of track");
-			}
-			meta->isUpbeat = true;
 		}
 
 		void AContext::metaSetSignature(int upper, int lower)

@@ -2,11 +2,11 @@
 #include <fm/midi.hpp>
 #include <fm/config.hpp>
 #include <math.h>
-#include "error.hpp"
+#include <compiler/error.hpp>
 #include "sheet/tools.h"
 #include <algorithm>
 #include <fm/werckmeister.hpp>
-#include "modification/AModification.h"
+#include <compiler/modification/AModification.h>
 
 #define SHEET_MASTER_TRACKNAME "master track"
 

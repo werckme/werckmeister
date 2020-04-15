@@ -1,7 +1,7 @@
 #include "compiler.h"
 #include "sheet/Document.h"
 #include "sheet/tools.h"
-#include "AContext.h"
+#include "context/AContext.h"
 #include "sheet/Event.h"
 #include <type_traits>
 #include <algorithm>
@@ -32,7 +32,7 @@ namespace sheet {
 			auto ctx = context();
 
 			try {
-				ctx->processMeta(document->sheetDef.sheetInfos, 
+				ctx->processMeta(document->sheetDef.documentConfigs, 
 					[](const auto &x) { return x.name; }, 
 					[](const auto &x) { return x.args; }
 				);
@@ -67,13 +67,13 @@ namespace sheet {
 			auto renderer = sheetEventRenderer();
 			for (auto &track : document_->sheetDef.tracks)
 			{
-				fm::String type = getFirstMetaValueBy(SHEET_META__TRACK_META_KEY_TYPE, track.trackInfos);
+				fm::String type = getFirstMetaValueBy(SHEET_META__TRACK_META_KEY_TYPE, track.trackConfigs);
 				if (!type.empty()) { // do not render tracks with a specific type
 					continue;
 				}				
 				auto trackId = ctx->createTrack();
 				ctx->setTrack(trackId);
-				ctx->processMeta(track.trackInfos, 
+				ctx->processMeta(track.trackConfigs, 
 					[](const auto &x) { return x.name; }, 
 					[](const auto &x) { return x.args; }
 				);
@@ -150,7 +150,7 @@ namespace sheet {
 			Track * getFirstSheetTrack(TContainer &c) {
 				auto sheetTrackIt = 
 					std::find_if(c.begin(), c.end(), [](const auto &x) {  
-						return getFirstMetaValueBy(SHEET_META__TRACK_META_KEY_TYPE, x.trackInfos) == SHEET_META__TRACK_META_VALUE_TYPE_ACCOMP;
+						return getFirstMetaValueBy(SHEET_META__TRACK_META_KEY_TYPE, x.trackConfigs) == SHEET_META__TRACK_META_VALUE_TYPE_ACCOMP;
 					});
 				if (sheetTrackIt == c.end()) {
 					return nullptr;

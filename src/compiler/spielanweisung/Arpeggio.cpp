@@ -1,5 +1,5 @@
 #include "Arpeggio.h"
-#include "compiler/AContext.h"
+#include "compiler/context/AContext.h"
 #include <algorithm>
 #include "sheet/tools.h"
 
