@@ -1,0 +1,68 @@
+# Copyright (c) 2016 The Chromium Embedded Framework Authors. All rights
+# reserved. Use of this source code is governed by a BSD-style license that
+# can be found in the LICENSE file.
+
+# Download the Boost distribution for |version| to
+# |download_dir|. The |BOOST_ROOT| variable will be set in global scope pointing
+# to the extracted location.
+
+function(DownloadBOOST version download_dir)
+  # Specify the binary distribution type and download directory.
+  string(REPLACE "." "_" version_lodash ${version})
+  set(BOOST_DISTRIBUTION "boost_${version_lodash}")
+  set(BOOST_DOWNLOAD_DIR "${download_dir}")
+
+  # The location where we expect the extracted binary distribution.
+  set(BOOST_ROOT "${BOOST_DOWNLOAD_DIR}/${BOOST_DISTRIBUTION}" CACHE INTERNAL "BOOST_ROOT")
+
+  set(BOOST_PREFIX "${BOOST_ROOT}")
+  if(WIN32)
+    SET(SHELL "cmd /C")
+    SET(BOOST_BOOTSTRAP "bootstrap.bat")
+  else(WIN32)
+    SET(SHELL "sh")
+    SET(BOOST_BOOTSTRAP "bootstrap.sh")
+  endif(WIN32)
+
+  # Download and/or extract the binary distribution if necessary.
+  if(NOT IS_DIRECTORY "${BOOST_ROOT}")
+    set(BOOST_DOWNLOAD_FILENAME "${BOOST_DISTRIBUTION}.tar.gz")
+    set(BOOST_DOWNLOAD_PATH "${BOOST_DOWNLOAD_DIR}/${BOOST_DOWNLOAD_FILENAME}")
+    if(NOT EXISTS "${BOOST_DOWNLOAD_PATH}")
+      set(BOOST_DOWNLOAD_URL "https://dl.bintray.com/boostorg/release/${version}/source/${BOOST_DOWNLOAD_FILENAME}")
+
+      # Download the binary distribution and verify the hash.
+      message(STATUS "Downloading ${BOOST_DOWNLOAD_URL}...")
+      file(
+        DOWNLOAD "${BOOST_DOWNLOAD_URL}" "${BOOST_DOWNLOAD_PATH}"
+        SHOW_PROGRESS
+      )
+    endif()
+
+    # Extract the binary distribution.
+    message(STATUS "Extracting ${BOOST_DOWNLOAD_PATH}...")
+    execute_process(
+      COMMAND ${CMAKE_COMMAND} -E tar xzf "${BOOST_DOWNLOAD_DIR}/${BOOST_DOWNLOAD_FILENAME}"
+      WORKING_DIRECTORY ${BOOST_DOWNLOAD_DIR}
+    )
+
+    message(STATUS "Executing ${BOOST_BOOTSTRAP}...")
+    execute_process(
+      COMMAND ${SHELL} ${BOOST_BOOTSTRAP}
+      WORKING_DIRECTORY ${BOOST_ROOT}
+    )
+    message(STATUS "building boost...")
+    execute_process(
+      COMMAND "b2" 
+      "link=static" 
+      "runtime-link=static" 
+      "--with-filesystem" 
+      "--with-program_options" 
+      "--with-locale" 
+      "--with-system"
+      WORKING_DIRECTORY ${BOOST_ROOT}
+    )
+  
+  endif()
+
+endfunction()

@@ -1,3 +1,4 @@
+# WM_DOWNLOAD_EXTERNALS=1 WM_LINUX_LINK_STATIC=1 cmake ..
 cmake_minimum_required(VERSION 2.8.12.1)
 
 execute_process(COMMAND git --work-tree=. log --pretty=format:%h -n 1
@@ -12,6 +13,7 @@ SET(WERCKMEISTER_VERSION_PATCH 53)
 # PROJECT CONFIG
 set(FM_CHARSET "ISO-8859-1")
 set(FM_PPQ 500)
+set(BOOST_VERSION "1.72.0")
 #END PROJECT CONFIG
 
 set(CMAKE_BINARY_DIR ${CMAKE_SOURCE_DIR}/build)
@@ -48,7 +50,16 @@ IF(APPLE)
   SET(Boost_USE_STATIC_LIBS ON)
 ENDIF(APPLE)
 
+# Add this project's cmake/ directory to the module path.
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+
 SET(BOOST_PACKAGES unit_test_framework filesystem program_options locale system)
+
+if ($ENV{WM_DOWNLOAD_EXTERNALS})
+  #Download Boost
+  include(DownloadBoost)
+  DownloadBoost("${BOOST_VERSION}" "${CMAKE_SOURCE_DIR}/third_party/boost")
+endif ($ENV{WM_DOWNLOAD_EXTERNALS})
 
 find_package(Boost 1.66.0 COMPONENTS ${BOOST_PACKAGES} REQUIRED)
 
