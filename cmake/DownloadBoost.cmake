@@ -17,11 +17,9 @@ function(DownloadBOOST version download_dir)
 
   set(BOOST_PREFIX "${BOOST_ROOT}")
   if(WIN32)
-    SET(SHELL "cmd /C")
-    SET(BOOST_BOOTSTRAP "bootstrap.bat")
+    SET(BOOST_BOOTSTRAP "./bootstrap.bat")
   else(WIN32)
-    SET(SHELL "sh")
-    SET(BOOST_BOOTSTRAP "bootstrap.sh")
+    SET(BOOST_BOOTSTRAP "./bootstrap.sh")
   endif(WIN32)
 
   # Download and/or extract the binary distribution if necessary.
@@ -48,18 +46,19 @@ function(DownloadBOOST version download_dir)
 
     message(STATUS "Executing ${BOOST_BOOTSTRAP}...")
     execute_process(
-      COMMAND ${SHELL} ${BOOST_BOOTSTRAP}
+      COMMAND ${BOOST_BOOTSTRAP}
       WORKING_DIRECTORY ${BOOST_ROOT}
     )
     message(STATUS "building boost...")
     execute_process(
-      COMMAND "b2" 
+      COMMAND "./b2" 
       "link=static" 
       "runtime-link=static" 
       "--with-filesystem" 
       "--with-program_options" 
       "--with-locale" 
       "--with-system"
+      "--with-test"
       WORKING_DIRECTORY ${BOOST_ROOT}
     )
   
