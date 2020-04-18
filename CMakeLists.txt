@@ -34,7 +34,7 @@ ENDIF(UNIX)
 
 IF(WIN32)
   add_definitions( -DSHEET_USE_BOOST_TIMER )
-  #add_definitions( -DBOOST_ALL_NO_LIB )
+  add_definitions( -DBOOST_ALL_NO_LIB )
   add_definitions( -DSHEET_OS_WINDOWS )
   SET(Boost_USE_STATIC_LIBS ON)
   set(Boost_USE_MULTITHREADED ON)
