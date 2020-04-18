@@ -1,4 +1,4 @@
-name: Windows Build
+name: Linux Build
 
 on:
   push:
@@ -8,15 +8,18 @@ on:
 
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: macos-latest
 
     steps:
     - uses: actions/checkout@v2
     - name: configure
       run: cmake -DCMAKE_BUILD_TYPE=Release ..
-      working-directory: build
       env:
         WM_DOWNLOAD_EXTERNALS: 1
+      working-directory: build
     - name: build
       run: cmake --build .
+      working-directory: build
+    - name: pack
+      run: cpack
       working-directory: build
