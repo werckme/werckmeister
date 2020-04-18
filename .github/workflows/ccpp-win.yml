@@ -19,5 +19,5 @@ jobs:
         WM_DOWNLOAD_EXTERNALS: 1
         BOOST_ROOT: ""
     - name: build
-      run: cmake --build . --config=Release
+      run: cmake --build . --config Release
       working-directory: build
