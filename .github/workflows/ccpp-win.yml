@@ -21,5 +21,5 @@ jobs:
       run: cmake --build . --config Release
       working-directory: build
     - name: pack
-      run: \"C:\Program Files\CMake\bin\cpack\" -G WIX
+      run: C:/Program Files/CMake/bin/cpack -G WIX
       working-directory: build
