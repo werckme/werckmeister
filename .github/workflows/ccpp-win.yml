@@ -17,6 +17,7 @@ jobs:
       working-directory: build
       env:
         WM_DOWNLOAD_EXTERNALS: 1
+        BOOST_ROOT: ""
     - name: build
       run: cmake --build .
       working-directory: build
