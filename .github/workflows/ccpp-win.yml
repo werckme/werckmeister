@@ -16,5 +16,5 @@ jobs:
       run: cmake -DCMAKE_BUILD_TYPE=Release ..
       working-directory: build
     - name: build
-      run: msbuild werckmeister.sln /p:Configuration=Release
+      run: cmake --build .
       working-directory: build
