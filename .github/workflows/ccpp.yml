@@ -13,5 +13,5 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: configure
-      run: WM_LINUX_LINK_STATIC=1 cmake -DCMAKE_BUILD_TYPE=Release ..
+      run: WM_LINUX_LINK_STATIC=1 WM_DOWNLOAD_EXTERNALS=1 cmake -DCMAKE_BUILD_TYPE=Release ..
       working-directory: build
