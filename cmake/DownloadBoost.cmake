@@ -17,14 +17,18 @@ function(DownloadBOOST version download_dir)
 
   set(BOOST_PREFIX "${BOOST_ROOT}")
   if(WIN32)
-    SET(BOOST_BOOTSTRAP "./bootstrap.bat")
+    SET(FILE_EXT ".zip")
+    SET(BOOST_BOOTSTRAP "bootstrap.bat")
+    SET(BOOST_B2 "b2")
   else(WIN32)
+    SET(FILE_EXT ".tar.gz")
     SET(BOOST_BOOTSTRAP "./bootstrap.sh")
+    SET(BOOST_B2 "./b2")
   endif(WIN32)
 
   # Download and/or extract the binary distribution if necessary.
   if(NOT IS_DIRECTORY "${BOOST_ROOT}")
-    set(BOOST_DOWNLOAD_FILENAME "${BOOST_DISTRIBUTION}.tar.gz")
+    set(BOOST_DOWNLOAD_FILENAME "${BOOST_DISTRIBUTION}${FILE_EXT}")
     set(BOOST_DOWNLOAD_PATH "${BOOST_DOWNLOAD_DIR}/${BOOST_DOWNLOAD_FILENAME}")
     if(NOT EXISTS "${BOOST_DOWNLOAD_PATH}")
       set(BOOST_DOWNLOAD_URL "https://dl.bintray.com/boostorg/release/${version}/source/${BOOST_DOWNLOAD_FILENAME}")
@@ -51,7 +55,7 @@ function(DownloadBOOST version download_dir)
     )
     message(STATUS "building boost...")
     execute_process(
-      COMMAND "./b2" 
+      COMMAND ${BOOST_B2}
       "link=static" 
       "runtime-link=static" 
       "--with-filesystem" 
