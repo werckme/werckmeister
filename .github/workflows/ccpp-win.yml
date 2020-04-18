@@ -21,3 +21,6 @@ jobs:
     - name: build
       run: cmake --build . --config Release
       working-directory: build
+    - name: pack
+      run: cpack -G WIX
+      working-directory: build
