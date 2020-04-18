@@ -1,5 +1,5 @@
 # WM_DOWNLOAD_EXTERNALS=1 WM_LINUX_LINK_STATIC=1 cmake ..
-cmake_minimum_required(VERSION 2.8.12.1)
+cmake_minimum_required(VERSION 3.11)
 
 execute_process(COMMAND git --work-tree=. log --pretty=format:%h -n 1
               OUTPUT_VARIABLE GIT_VERSION)
@@ -34,7 +34,7 @@ ENDIF(UNIX)
 
 IF(WIN32)
   add_definitions( -DSHEET_USE_BOOST_TIMER )
-  add_definitions( -DBOOST_ALL_NO_LIB )
+  #add_definitions( -DBOOST_ALL_NO_LIB )
   add_definitions( -DSHEET_OS_WINDOWS )
   SET(Boost_USE_STATIC_LIBS ON)
   set(Boost_USE_MULTITHREADED ON)
