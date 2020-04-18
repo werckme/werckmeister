@@ -63,6 +63,7 @@ function(DownloadBOOST version download_dir)
       "--with-locale" 
       "--with-system"
       "--with-test"
+      "--with-date_time"
       WORKING_DIRECTORY ${BOOST_ROOT}
     )
   
