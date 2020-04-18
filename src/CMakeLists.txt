@@ -84,6 +84,10 @@ SET (SRC_SHEET_PLAYER
 
 SET (SHEET_LIBS ${SHEET_LIBS} sheet fmapp lua ${Boost_LIBRARIES})
 
+if(WIN32)
+    SET (SHEET_LIBS ${SHEET_LIBS} Bcrypt.lib)
+endif(WIN32)
+
 add_library(fmapp ${SRC_SHEET_FMAPP})
 
 add_executable(rehearse ${SRC_FETZER_TESTS})
