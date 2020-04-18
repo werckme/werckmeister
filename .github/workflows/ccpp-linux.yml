@@ -1,0 +1,17 @@
+name: Linux Build
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: configure
+      run: WM_LINUX_LINK_STATIC=1 WM_DOWNLOAD_EXTERNALS=1 cmake -DCMAKE_BUILD_TYPE=Release ..
+      working-directory: build
