@@ -1,20 +1,24 @@
-# name: Linux Build
+name: Linux Build
 
-# on:
-#   push:
-#     branches: [ master ]
-#   pull_request:
-#     branches: [ master ]
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
 
-# jobs:
-#   build:
-#     runs-on: ubuntu-latest
+jobs:
+  build:
+    runs-on: ubuntu-latest
 
-#     steps:
-#     - uses: actions/checkout@v2
-#     - name: configure
-#       run: cmake -DCMAKE_BUILD_TYPE=Release ..
-#       env:
-#         WM_DOWNLOAD_EXTERNALS: 1
-#         WM_LINUX_LINK_STATIC: 1
-#       working-directory: build
+    steps:
+    - uses: actions/checkout@v2
+    - name: install alsa
+      run: sudo apt-get install -y libasound2-dev    
+    - name: configure
+      run: cmake -DCMAKE_BUILD_TYPE=Release ..
+      env:
+        WM_DOWNLOAD_EXTERNALS: 1
+        WM_LINUX_LINK_STATIC: 1
+      working-directory: build
+    - name: build
+      run: cmake --build .      
