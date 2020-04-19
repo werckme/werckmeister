@@ -21,5 +21,9 @@ jobs:
       run: cmake --build . --config Release
       working-directory: build
     - name: pack
-      run: \"C:/Program Files/CMake/bin/cpack\" -G WIX
+      run: cmake --build . --config Release --target package
       working-directory: build
+    - uses: actions/upload-artifact@v1
+      with:
+        name: artifact
+        path: build/werckmeister-0.1.53-win32.msi
