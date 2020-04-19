@@ -1,5 +1,3 @@
-set(CMAKE_BUILD_TYPE Debug)
-
 ## lib
 SET (SRC_FETZER_LIB
     fm/literals.cpp
