@@ -1,4 +1,9 @@
+![Linux Build](https://github.com/werckme/werckmeister/workflows/Linux%20Build/badge.svg)
+![Windows Build](https://github.com/werckme/werckmeister/workflows/Windows%20Build/badge.svg)
+![Mac Build](https://github.com/werckme/werckmeister/workflows/Mac%20Build/badge.svg)
+
 <img src="https://raw.githubusercontent.com/SambaGodschynski/werckmeister/master/assets/Logo_med.png" style="display: block; margin: auto">
+
 
 ## An open source Sheet Music MIDI Compiler
 
