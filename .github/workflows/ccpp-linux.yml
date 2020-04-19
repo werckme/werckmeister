@@ -13,7 +13,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: install alsa
-      run: sudo apt-get install -y alsa-lib    
+      run: sudo apt-get install -y libasound2   
     - name: configure
       run: cmake -DCMAKE_BUILD_TYPE=Release ..
       env:
