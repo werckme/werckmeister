@@ -16,6 +16,9 @@ jobs:
       run: PATH=$PATH:/Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/usr/include cmake -DCMAKE_BUILD_TYPE=Release ..
       env:
         WM_DOWNLOAD_EXTERNALS: 1
+        HEADER_SEARCH_PATHS: /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/usr/include
+        C_INCLUDE_PATH: /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/usr/include
+        CPLUS_INCLUDE_PATH: /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/usr/include
       working-directory: build
     - name: build
       run: cmake --build .
