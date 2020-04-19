@@ -25,5 +25,5 @@ jobs:
       working-directory: build
     - uses: actions/upload-artifact@v1
       with:
-        name: werckmeister-${{ $GITHUB_WORKFLOW }}-${{ $GITHUB_SHA }}
+        name: werckmeister-${{ $(echo x) }}-${{ $GITHUB_SHA }}
         path: build/werckmeister-0.1.53-win64.msi
