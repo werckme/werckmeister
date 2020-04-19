@@ -1,2 +1,1 @@
-cmake -DCMAKE_BUILD_TYPE=Release ..
-make && cpack
+cmake -DCMAKE_BUILD_TYPE=Release 

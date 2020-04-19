@@ -54,7 +54,6 @@ function(DownloadBOOST version download_dir)
       WORKING_DIRECTORY ${BOOST_ROOT}
     )
     message(STATUS "building boost...")
-    execute_process(COMMAND cat bootstrap.log WORKING_DIRECTORY ${BOOST_ROOT})
     execute_process(
       COMMAND ${BOOST_B2}
       "link=static" 
