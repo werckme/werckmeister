@@ -12,11 +12,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: prepare
-      run: xcode-select --install
-      #run: sudo installer -pkg /Library/Developer/CommandLineTools/Packages/macOS_SDK_headers_for_macOS_10.14.pkg -target /
     - name: configure
-      run: cmake -DCMAKE_BUILD_TYPE=Release ..
+      run: PATH=$PATH:/Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/usr/include cmake -DCMAKE_BUILD_TYPE=Release ..
       env:
         WM_DOWNLOAD_EXTERNALS: 1
       working-directory: build
