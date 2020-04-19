@@ -26,4 +26,4 @@ jobs:
     - uses: actions/upload-artifact@v1
       with:
         name: artifact
-        path: build/werckmeister-0.1.53-win32.msi
+        path: build/werckmeister-0.1.53-win64.msi
