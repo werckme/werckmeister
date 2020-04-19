@@ -12,10 +12,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: select xcode
-      run: sudo xcode-select -switch /Applications/Xcode_11.4.app
     - name: configure
-      run: cmake -DCMAKE_BUILD_TYPE=Release ..
+      run: sudo xcode-select -switch /Applications/Xcode_11.4.app && cmake -DCMAKE_BUILD_TYPE=Release ..
       env:
         WM_DOWNLOAD_EXTERNALS: 1
       working-directory: build
