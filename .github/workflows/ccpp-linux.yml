@@ -21,4 +21,8 @@ jobs:
         WM_LINUX_LINK_STATIC: 1
       working-directory: build
     - name: build
-      run: cmake --build .      
+      run: cmake --build .
+      working-directory: build
+    - name: pack
+      run: cmake --build . --config Release --target package
+      working-directory: build
