@@ -1,0 +1,30 @@
+using "./chords/default.chords";
+using "./lua/mods/staccato.lua";
+using "./lua/mods/swing.lua";
+
+device: SC1 midi 5;
+instrumentDef: piano   SC1 2 0 0;
+
+
+[
+type: template;
+name: x;
+instrument: piano; 
+{
+    /mod: staccato amount 100 forTag x/ 
+    /do: swing offset 10/ 
+    
+    \ff
+    I,,4  III,,  V,,  "x"@III,,8  V,, |
+}
+]
+
+[
+type: accomp;
+instrument: piano; 
+{
+    A-7 | D-7 | G7 | Cmaj7 C7 |
+    Fmaj7 | B07 | E7b9 | 
+}
+]
+

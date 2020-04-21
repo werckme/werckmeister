@@ -174,7 +174,33 @@ namespace sheet {
                 event.pitches.insert(pitchDef);
             }
             lua_pop(L, 1);
+            // get tags
+            lua_pushstring(L, LUA_EVENT_PITCH_PROPETRY_TAGS);
+            lua_gettable(L, -2);
+            if (!lua_istable(L, -1)) {
+                FM_THROW(Exception, "missing pitches");
+                lua_pop(L, 1);
+            }
+            lua_pushnil(L);
+            while (lua_next(L, -2) != 0) {
+                std::string metaValue(lua_tostring(L, -1));
+                event.tags.emplace(metaValue);
+                lua_pop(L, 1);
+            }
+            lua_pop(L, 1);
         }
+
+        // void LuaEvent::pushTags(lua_State *L)
+		// {
+		// 	lua_createtable(L, event->tags.size(), 0);
+		// 	auto top = lua_gettop(L);
+		// 	int count = 1;
+		// 	for (const auto &tag : event->tags) {
+		// 		lua_pushnumber(L, count++);
+		// 		lua_pushstring(L, tag.c_str());
+		// 		lua_settable(L, top);
+		// 	}
+		// }
 
         void LuaModification::popPitchBendEvent(Event &event)
         {
