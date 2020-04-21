@@ -20,6 +20,9 @@ jobs:
     - name: build
       run: cmake --build . --config Release
       working-directory: build
+    - name: test
+      run: rehearse
+      working-directory: build/Release       
     - name: pack
       run: cmake --build . --config Release --target package
       working-directory: build
