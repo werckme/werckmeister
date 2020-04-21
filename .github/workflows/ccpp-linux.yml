@@ -24,7 +24,7 @@ jobs:
       run: cmake --build .
       working-directory: build
     - name: test
-      run: rehearse
+      run: ./rehearse
       working-directory: build      
     - name: pack
       run: cmake --build . --config Release --target package
