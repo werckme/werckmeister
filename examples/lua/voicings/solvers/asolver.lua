@@ -11,6 +11,8 @@ function ASolver:new(o)
     return o
 end
 
+-- returns the a degree def from the given degree def collection
+-- if more than one degree def defined, it will return the first one
 function ASolver:getDefaultDegreeDef(degreeValue, degrees)
     local default = degrees[degreeValue]
     if default == nil 
@@ -20,6 +22,7 @@ function ASolver:getDefaultDegreeDef(degreeValue, degrees)
     return default[1]
 end
 
+-- creates a absolute pitch using the given chord
 function ASolver:createPitch(chord, degreeDef, octave)
     if degreeDef == nil
     then
@@ -36,8 +39,36 @@ function ASolver:getAbsolutePitch(pitch)
     return pitch.pitch + (pitch.octave * 12)
 end
 
+function ASolver:_addImportantDegree(degrees, degreeVal, semitone)
+    if #(degrees[degreeVal]) > 0 then
+        return
+    end
+    local degrObj = {
+        degreeValue= semitone,
+        octave= 0
+    }
+    degrees[degreeVal] = {degrObj}
+end
+
+-- set important degrees if defined in args
+-- more informations about important degrees:
+-- https://github.com/werckme/werckmeister/issues/123
+function ASolver:_setImportantDegreesIfExists(args, degrees)
+    local degree = args["importantDegree"]
+    local degreeVal = DegreeStringValues[degree]
+    local semitone = MajorScaleSemitones[degree]
+    self:_addImportantDegree(degrees, degreeVal, semitone)
+end
+
+-- solves degrees into absolute pitches
+-- @param chord: the current cord informations
+-- @param degrees: the current degree event including the semitone informations from 
+--                 the chord definition eg.: { II= {degreeValue, octave} }
+--                 If the current chord has no information about a degree
+--                 the value is empty eg.: II= {} 
 function ASolver:solve(chord, degrees, args)
     args = tokeyvalue(args)
+    self:_setImportantDegreesIfExists(args, degrees)
     local result = self:_solveImpl(chord, degrees, args)
     if args.range ~=nil then
         self:_keepRange(result, args.range)

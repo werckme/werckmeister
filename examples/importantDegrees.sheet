@@ -1,0 +1,26 @@
+using "./chords/default.chords";
+using "./lua/voicings/simple.lua";
+device: SC1 midi 0;
+instrumentDef: piano   SC1 2 0 0;
+
+instrumentConf: piano 
+    voicingStrategy simple importantDegree IV;
+
+[
+type: template;
+name: x;
+instrument: piano; 
+{   
+    \ff
+    <II III IV V VI VII> |
+}
+]
+
+[
+type: accomp;
+instrument: piano; 
+{
+   C
+}
+]
+
