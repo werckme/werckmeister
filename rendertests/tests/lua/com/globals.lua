@@ -6,6 +6,26 @@ V   = 5
 VI  = 6
 VII = 7
 
+DegreeStringValues = {
+    I   = I,
+    II  = II,
+    III = III,
+    IV  = IV,
+    V   = V,
+    VI  = VI,
+    VII = VII
+}
+
+MajorScaleSemitones = {
+    I   = 0,
+    II  = 2,
+    III = 4,
+    IV  = 5,
+    V   = 7,
+    VI  = 9,
+    VII = 11
+}
+
 C   = 0
 CIS = 1
 DES = 1

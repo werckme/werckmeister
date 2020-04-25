@@ -1,7 +1,7 @@
 using "./chords/default.chords";
-using "./voicings/guitar.lua";
-using "./voicings/voicelead.lua";
-using "./voicings/simple.lua";
+using "./lua/voicings/guitar.lua";
+using "./lua/voicings/voicelead.lua";
+using "./lua/voicings/simple.lua";
 
 device: SC1 midi 1;
 

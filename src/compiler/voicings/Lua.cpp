@@ -106,7 +106,8 @@ namespace sheet {
             const char * LuaPitchKeyPitch = "pitch";
             const char * LuaPitchKeyOctave = "octave";
             const char * LuaPitchKeyRoot = "root";
-            const char * LuaPitchKeyDegreeValue = "degreeValue";            
+            const char * LuaPitchKeyDegreeValue = "degreeValue"; 
+            enum { NoDegreeValue= INT_MAX };           
             struct LuaPitches : lua::ALuaObject {
                 typedef lua::ALuaObject Base;
                 const ChordDef *chordDef;
@@ -128,6 +129,9 @@ namespace sheet {
                 lua_pushstring(L, LuaPitchKeyOctave);
                 lua_pushinteger(L, octave);
                 lua_settable(L, top);
+                if (degreeValue == NoDegreeValue) {
+                    return;
+                }
                 top = lua_gettop(L);
                 lua_pushstring(L, LuaPitchKeyDegreeValue);
                 lua_pushinteger(L, degreeValue);
@@ -166,7 +170,7 @@ namespace sheet {
                 for (const auto &degree : degrees_) {
                     auto degreeDef = chordDef->getDegreeDef(degree);
                     if (!degreeDef.valid()) {
-                            continue;
+                        degreeDef.value = NoDegreeValue;
                     }
                     lua_pushinteger(L, degreeIndex++);
                     pushDegree(L, root, degreeDef.value, degree.octave);

@@ -24,7 +24,7 @@ end
 
 -- creates a absolute pitch using the given chord
 function ASolver:createPitch(chord, degreeDef, octave)
-    if degreeDef == nil
+    if degreeDef == nil or degreeDef.degreeValue == nil
     then
         return nil
     end
@@ -40,13 +40,13 @@ function ASolver:getAbsolutePitch(pitch)
 end
 
 function ASolver:_addImportantDegree(degrees, degreeVal, semitone)
-    local degreeInfos = degrees[degreeVal];
-    if degreeInfos==nil or #degreeInfos > 0 then
+    local degreeInfo = self:getDefaultDegreeDef(degreeVal, degrees)
+    if degreeInfo==nil then
         return
     end
     local degrObj = {
         degreeValue= semitone,
-        octave= 0
+        octave= degreeInfo.octave
     }
     degrees[degreeVal] = {degrObj}
 end
