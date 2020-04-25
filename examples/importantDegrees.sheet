@@ -4,7 +4,7 @@ device: SC1 midi 1;
 instrumentDef: piano   SC1 2 0 0;
 
 instrumentConf: piano 
-    voicingStrategy simple importantDegree IV;
+    voicingStrategy simple importantDegrees "IV VI";
 
 [
 type: template;
@@ -12,7 +12,11 @@ name: x;
 instrument: piano; 
 {   
     \ff
-    <I IV>-> <I V VII>1 |
+    IV2 VI |
+}
+{   
+    \ff
+    I2 IV,, |
 }
 ]
 

@@ -141,7 +141,7 @@ namespace sheet {
 						>> attr(sourceId_)
 						>> +char_("a-zA-Z") 
 						>> ":" 
-						>> +(lexeme[+char_(ALLOWED_META_ARGUMENT)])
+						>> +(lexeme['"' > +(char_ - '"') > '"'] | lexeme[+char_(ALLOWED_META_ARGUMENT)])
 						> ";";
 				}
 
@@ -157,7 +157,7 @@ namespace sheet {
 						>> attr(sourceId_)
 						>> +char_("a-zA-Z") 
 						>> ":" 
-						>> +(lexeme[+char_(ALLOWED_META_ARGUMENT)])
+						>> +(lexeme['"' > +(char_ - '"') > '"'] | lexeme[+char_(ALLOWED_META_ARGUMENT)])
 						>> ";";
 				}
 
@@ -334,7 +334,7 @@ namespace sheet {
 						>> attr(Event::Tags())
 						>> attr(PitchDef()) 
 						>> attr(Event::NoDuration) 
-						>> +char_("a-zA-Z") >> ":" >> +(lexeme[+char_(ALLOWED_META_ARGUMENT)]) >> "/"
+						>> +char_("a-zA-Z") >> ":" >> +(lexeme['"' > +(char_ - '"') > '"'] | lexeme[+char_(ALLOWED_META_ARGUMENT)] ) >> "/"
 					)
 					;
 

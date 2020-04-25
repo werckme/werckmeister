@@ -55,13 +55,21 @@ end
 -- more informations about important degrees:
 -- https://github.com/werckme/werckmeister/issues/123
 function ASolver:_setImportantDegreesIfExists(args, degrees)
-    local degree = args["importantDegree"]
-    local degreeVal = DegreeStringValues[degree]
-    if degreeVal == nil then
-        return
+    local strDegree = args["importantDegree"]
+    if (strDegree == nil) then
+        strDegree = args["importantDegrees"]
+        if strDegree == nil then
+            return
+        end
     end
-    local semitone = MajorScaleSemitones[degree]
-    self:_addImportantDegree(degrees, degreeVal, semitone)
+    local strDegrees = split(strDegree, " ")
+    for i, degree in pairs(strDegrees) do   
+        local degreeVal = DegreeStringValues[degree]
+        if degreeVal ~= nil then
+            local semitone = MajorScaleSemitones[degree]
+            self:_addImportantDegree(degrees, degreeVal, semitone)
+        end
+    end
 end
 
 -- solves degrees into absolute pitches

@@ -1183,3 +1183,22 @@ BOOST_AUTO_TEST_CASE(test_nested_ntolen)
 	BOOST_CHECK(checkNote(g3.eventGroup[1], sheet::Event::Degree, fm::degrees::II, 0, sheet::Event::NoDuration));
 	BOOST_CHECK(checkNote(g3.eventGroup[2], sheet::Event::Degree, fm::degrees::III, 0, sheet::Event::NoDuration));
 }
+
+BOOST_AUTO_TEST_CASE(test_issue_102_delimiter_for_meta_args)
+{
+	using namespace fm;
+	using sheet::PitchDef;
+	fm::String text = FM_STRING("\
+	dconf: abc \"1 2 3\"; \n\
+	[\n\
+	tconf: abc 1 2 3; \n\
+	{\n\
+		/ metacommand: abc \"1 2 drei\"/\n\
+	}\n\
+]\n\
+");
+	sheet::compiler::SheetDefParser parser;
+	auto defs = parser.parse(text);
+	BOOST_CHECK(checkMetaEvent(defs.tracks[0].voices[0].events[0], FM_STRING("metacommand"), sheet::Event::Args({ FM_STRING("abc"), FM_STRING("1 2 drei") })));
+
+}
