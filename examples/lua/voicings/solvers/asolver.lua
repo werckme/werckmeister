@@ -40,7 +40,8 @@ function ASolver:getAbsolutePitch(pitch)
 end
 
 function ASolver:_addImportantDegree(degrees, degreeVal, semitone)
-    if #(degrees[degreeVal]) > 0 then
+    local degreeInfos = degrees[degreeVal];
+    if degreeInfos==nil or #degreeInfos > 0 then
         return
     end
     local degrObj = {
@@ -56,6 +57,9 @@ end
 function ASolver:_setImportantDegreesIfExists(args, degrees)
     local degree = args["importantDegree"]
     local degreeVal = DegreeStringValues[degree]
+    if degreeVal == nil then
+        return
+    end
     local semitone = MajorScaleSemitones[degree]
     self:_addImportantDegree(degrees, degreeVal, semitone)
 end

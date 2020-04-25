@@ -1,6 +1,6 @@
 using "./chords/default.chords";
 using "./lua/voicings/simple.lua";
-device: SC1 midi 0;
+device: SC1 midi 1;
 instrumentDef: piano   SC1 2 0 0;
 
 instrumentConf: piano 
@@ -12,7 +12,7 @@ name: x;
 instrument: piano; 
 {   
     \ff
-    <II III IV V VI VII> |
+    <I IV>-> <I V VII>1 |
 }
 ]
 
@@ -20,7 +20,7 @@ instrument: piano;
 type: accomp;
 instrument: piano; 
 {
-   C
+   C7
 }
 ]
 
