@@ -178,8 +178,8 @@ namespace sheet {
             lua_pushstring(L, LUA_EVENT_PITCH_PROPETRY_TAGS);
             lua_gettable(L, -2);
             if (!lua_istable(L, -1)) {
-                FM_THROW(Exception, "missing pitches");
                 lua_pop(L, 1);
+                return;
             }
             lua_pushnil(L);
             while (lua_next(L, -2) != 0) {
