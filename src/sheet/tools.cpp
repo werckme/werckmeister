@@ -29,7 +29,7 @@ namespace sheet {
 
     namespace toolsimpl {
 
-        const std::vector<fm::String> & getMetaArgs(const Event &metaEvent)
+        const std::vector<sheet::Argument> & getMetaArgs(const Event &metaEvent)
         {
             return metaEvent.metaArgs;
         }

@@ -125,7 +125,7 @@ namespace sheet {
 			/**
 			 * @throw if command not handled
 			 */
-			virtual void processMeta(const fm::String &command, const std::vector<fm::String> &args);
+			virtual void processMeta(const fm::String &command, const std::vector<sheet::Argument> &args);
 			
 			/**
 			 * processed a cointainer of meta commands
@@ -136,7 +136,7 @@ namespace sheet {
 			template<class TContainer>
 			void processMeta(const TContainer &container, 
 							std::function<fm::String(const typename TContainer::value_type&)> fcommand, 
-							std::function<std::vector<fm::String>(const typename TContainer::value_type&)> fargs);
+							std::function<std::vector<sheet::Argument>(const typename TContainer::value_type&)> fargs);
 			virtual void metaSetInstrument(const fm::String &uname) {}
 			virtual void metaSetSheetTemplate(const Event::Args &args);
 			virtual void metaSetExpression(const fm::String &value);
@@ -213,20 +213,21 @@ namespace sheet {
 		template<class TContainer>
 		void AContext::processMeta(const TContainer &container, 
 						std::function<fm::String(const typename TContainer::value_type&)> fcommand, 
-						std::function<std::vector<fm::String>(const typename TContainer::value_type&)> fargs)
+						std::function<std::vector<sheet::Argument>(const typename TContainer::value_type&)> fargs)
 		{
-			int idx = 0;
-			for(const auto &x : container) {
-				fm::String command = fcommand(x);
-				std::vector<fm::String> args = fargs(x);
-				try {
-					processMeta(command, args);
-					idx++;
-				} catch(fm::Exception &ex) {
-					ex << ex_sheet_source_info(x);
-					throw;
-				}
-			}
+			// #74 TODO
+			// int idx = 0;
+			// for(const auto &x : container) {
+			// 	fm::String command = fcommand(x);
+			// 	std::vector<fm::String> args = fargs(x);
+			// 	try {
+			// 		processMeta(command, args);
+			// 		idx++;
+			// 	} catch(fm::Exception &ex) {
+			// 		ex << ex_sheet_source_info(x);
+			// 		throw;
+			// 	}
+			// }
 		}
     }
 }

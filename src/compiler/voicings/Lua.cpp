@@ -257,17 +257,18 @@ namespace sheet {
 
         void LuaVoicingStrategy::pushArgs(const Event::Args &args)
         {
-            lua_createtable(L, 0, 0);
-            if (args.size() == 1) { // first arg is the script name
-                return;
-            }
-            auto top = lua_gettop(L);
-            auto it = args.begin() + 1;
-            for(; it < args.end(); ++it) {
-                lua_pushinteger(L, it - args.begin());
-                lua_pushstring(L, it->c_str());
-                lua_settable(L, top);
-            }
+            // #74 TODO
+            // lua_createtable(L, 0, 0);
+            // if (args.size() == 1) { // first arg is the script name
+            //     return;
+            // }
+            // auto top = lua_gettop(L);
+            // auto it = args.begin() + 1;
+            // for(; it < args.end(); ++it) {
+            //     lua_pushinteger(L, it - args.begin());
+            //     lua_pushstring(L, it->c_str());
+            //     lua_settable(L, top);
+            // }
         }
 
         void LuaVoicingStrategy::setArguments(const Event::Args &args)

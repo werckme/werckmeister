@@ -7,11 +7,12 @@
 #include <vector>
 #include "DocumentUsing.h"
 #include "ASheetObject.hpp"
+#include "Argument.h"
 
 namespace sheet {
 
 	struct DocumentConfig : public ASheetObjectWithSourceInfo {
-		typedef std::vector<fm::String> Args;
+		typedef std::vector<sheet::Argument> Args;
 		fm::String name;
 		Args args;
 	};

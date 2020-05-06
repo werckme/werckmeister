@@ -265,93 +265,94 @@ namespace sheet {
 			auto meta = voiceMetaData();
 			seek(duration);
 		}
-		void AContext::processMeta(const fm::String &command, const std::vector<fm::String> &args)
+		void AContext::processMeta(const fm::String &command, const std::vector<sheet::Argument> &args)
 		{
-			try {
-				if (command == SHEET_META__TRACK_META_KEY_TYPE /*handled elsewhere*/
-				|| command == SHEET_META__TRACK_META_KEY_NAME
-				|| command == SHEET_META__SET_VORSCHLAG
-				|| command == SHEET_META__SHEET_TEMPLATE_POSITION) 
-				{
-					return;
-				}
+			// #74 TODO
+			// try {
+			// 	if (command == SHEET_META__TRACK_META_KEY_TYPE /*handled elsewhere*/
+			// 	|| command == SHEET_META__TRACK_META_KEY_NAME
+			// 	|| command == SHEET_META__SET_VORSCHLAG
+			// 	|| command == SHEET_META__SHEET_TEMPLATE_POSITION) 
+			// 	{
+			// 		return;
+			// 	}
 							
-				if (command == SHEET_META__SET_SHEET_TEMPLATE) {
-					metaSetSheetTemplate(args);
-					return;
-				}
-				if (command == SHEET_META__SET_EXPRESSION) {
-					metaSetExpression(getArgument<fm::String>(args, 0));
-					return;
-				}
-				if (command == SHEET_META__SET_SINGLE_EXPRESSION) {
-					metaSetSingleExpression(getArgument<fm::String>(args, 0));
-					return;
-				}
-				if (command == SHEET_META__SET_TEMPO) {
-					if (args.front() == SHEET_META__SET_TEMPO_VALUE_HALF) {
-						metaSetTempo(masterTempo() * 0.5);
-						return;
-					}
-					if (args.front() == SHEET_META__SET_TEMPO_VALUE_DOUBLE) {
-						metaSetTempo(masterTempo() * 2);
-						return;
-					}
-					if (args.front() == SHEET_META__SET_TEMPO_VALUE_NORMAL) {
-						metaSetTempo(masterTempo());
-						return;
-					}					
-					metaSetTempo(getArgument<fm::BPM>(args, 0));
-					return;
-				}
-				if (command == SHEET_META__SET_VOICING_STRATEGY) {
-					metaSetVoicingStrategy(getArgument<fm::String>(args, 0), args);
-					return;
-				}
-				if (command == SHEET_META__SET_SPIELANWEISUNG) {
-					metaSetSpielanweisung(getArgument<fm::String>(args, 0), args);
-					return;
-				}	
-				if (command == SHEET_META__SET_SPIELANWEISUNG_ONCE) {
-					metaSetSpielanweisungOnce(getArgument<fm::String>(args, 0), args);
-					return;
-				}	
-				if (command == SHEET_META__SET_MOD) {
-					metaSetModification(getArgument<fm::String>(args, 0), args);
-					return;
-				}	
-				if (command == SHEET_META__SET_MOD_ONCE) {
-					metaSetModificationOnce(getArgument<fm::String>(args, 0), args);
-					return;
-				}
-				if (command == SHEET_META__SET_SIGNATURE) {
-					metaSetSignature(getArgument<int>(args, 0), getArgument<int>(args, 1));
-					return;
-				}
-				if (command == SHEET_META__SET_DEVICE) {
-					metaAddDevice(getArgument<fm::String>(args, 0), args);
-					return;
-				}	
-				if (command == SHEET_META__SET_VOLUME) {
-					metaSetVolume(getArgument<int>(args, 0));
-					return;
-				}
-				if (command == SHEET_META__SET_PAN) {
-					metaSetPan(getArgument<int>(args, 0));
-					return;
-				}
-				if (command == SHEET_META__INSTRUMENT) {
-					metaSetInstrument(getArgument<fm::String>(args, 0));
-					return;
-				}
-			} catch(const std::exception &ex) {
-				FM_THROW(Exception, "failed to process " + command
-									+": " + ex.what());
-			}	
-			catch(...) {
-				FM_THROW(Exception, "failed to process " + command);
-			}
-			FM_THROW(Exception, "invalid command: " + command);								
+			// 	if (command == SHEET_META__SET_SHEET_TEMPLATE) {
+			// 		metaSetSheetTemplate(args);
+			// 		return;
+			// 	}
+			// 	if (command == SHEET_META__SET_EXPRESSION) {
+			// 		metaSetExpression(getArgument<fm::String>(args, 0));
+			// 		return;
+			// 	}
+			// 	if (command == SHEET_META__SET_SINGLE_EXPRESSION) {
+			// 		metaSetSingleExpression(getArgument<fm::String>(args, 0));
+			// 		return;
+			// 	}
+			// 	if (command == SHEET_META__SET_TEMPO) {
+			// 		if (args.front() == SHEET_META__SET_TEMPO_VALUE_HALF) {
+			// 			metaSetTempo(masterTempo() * 0.5);
+			// 			return;
+			// 		}
+			// 		if (args.front() == SHEET_META__SET_TEMPO_VALUE_DOUBLE) {
+			// 			metaSetTempo(masterTempo() * 2);
+			// 			return;
+			// 		}
+			// 		if (args.front() == SHEET_META__SET_TEMPO_VALUE_NORMAL) {
+			// 			metaSetTempo(masterTempo());
+			// 			return;
+			// 		}					
+			// 		metaSetTempo(getArgument<fm::BPM>(args, 0));
+			// 		return;
+			// 	}
+			// 	if (command == SHEET_META__SET_VOICING_STRATEGY) {
+			// 		metaSetVoicingStrategy(getArgument<fm::String>(args, 0), args);
+			// 		return;
+			// 	}
+			// 	if (command == SHEET_META__SET_SPIELANWEISUNG) {
+			// 		metaSetSpielanweisung(getArgument<fm::String>(args, 0), args);
+			// 		return;
+			// 	}	
+			// 	if (command == SHEET_META__SET_SPIELANWEISUNG_ONCE) {
+			// 		metaSetSpielanweisungOnce(getArgument<fm::String>(args, 0), args);
+			// 		return;
+			// 	}	
+			// 	if (command == SHEET_META__SET_MOD) {
+			// 		metaSetModification(getArgument<fm::String>(args, 0), args);
+			// 		return;
+			// 	}	
+			// 	if (command == SHEET_META__SET_MOD_ONCE) {
+			// 		metaSetModificationOnce(getArgument<fm::String>(args, 0), args);
+			// 		return;
+			// 	}
+			// 	if (command == SHEET_META__SET_SIGNATURE) {
+			// 		metaSetSignature(getArgument<int>(args, 0), getArgument<int>(args, 1));
+			// 		return;
+			// 	}
+			// 	if (command == SHEET_META__SET_DEVICE) {
+			// 		metaAddDevice(getArgument<fm::String>(args, 0), args);
+			// 		return;
+			// 	}	
+			// 	if (command == SHEET_META__SET_VOLUME) {
+			// 		metaSetVolume(getArgument<int>(args, 0));
+			// 		return;
+			// 	}
+			// 	if (command == SHEET_META__SET_PAN) {
+			// 		metaSetPan(getArgument<int>(args, 0));
+			// 		return;
+			// 	}
+			// 	if (command == SHEET_META__INSTRUMENT) {
+			// 		metaSetInstrument(getArgument<fm::String>(args, 0));
+			// 		return;
+			// 	}
+			// } catch(const std::exception &ex) {
+			// 	FM_THROW(Exception, "failed to process " + command
+			// 						+": " + ex.what());
+			// }	
+			// catch(...) {
+			// 	FM_THROW(Exception, "failed to process " + command);
+			// }
+			// FM_THROW(Exception, "invalid command: " + command);								
 		}
 		void AContext::setMeta(const Event &metaEvent)
 		{
@@ -390,13 +391,14 @@ namespace sheet {
 
 		void AContext::metaAddDevice(const fm::String name, const Event::Args &args)
 		{
-			auto &cs = getConfigServer();
-			if (args.size() < 2) {
-				FM_THROW(Exception, "not enough arguments for device config");
-			}
-			std::vector<fm::String> deviceArgs(args.begin() + 1, args.end());
-			auto device = cs.createDeviceConfig(name, deviceArgs);
-			cs.addDevice(name, device);
+			// #74 TODO
+			// auto &cs = getConfigServer();
+			// if (args.size() < 2) {
+			// 	FM_THROW(Exception, "not enough arguments for device config");
+			// }
+			// std::vector<fm::String> deviceArgs(args.begin() + 1, args.end());
+			// auto device = cs.createDeviceConfig(name, deviceArgs);
+			// cs.addDevice(name, device);
 		}
 
 		void AContext::metaSetVoicingStrategy(const fm::String &name, const Event::Args &args)

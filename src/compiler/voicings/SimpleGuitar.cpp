@@ -86,14 +86,15 @@ namespace sheet {
 
 	void SimpleGuitar::setArguments(const Event::Args &args) 
 	{
-		if (args.size() > 1) {
-				auto optionStr = getArgument<fm::String>(args, 1);
-				if (optionStr == FM_STRING("lowerRange")) {
-					lowerRange = true;
-				}
-				if (optionStr == FM_STRING("higherRange")) {
-					lowerRange = false;
-				}
-			}
+		// #74 TODO
+		// if (args.size() > 1) {
+		// 		auto optionStr = getArgument<fm::String>(args, 1);
+		// 		if (optionStr == FM_STRING("lowerRange")) {
+		// 			lowerRange = true;
+		// 		}
+		// 		if (optionStr == FM_STRING("higherRange")) {
+		// 			lowerRange = false;
+		// 		}
+		// 	}
 	}
 }

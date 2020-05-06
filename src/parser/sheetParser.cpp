@@ -27,6 +27,11 @@ BOOST_FUSION_ADAPT_STRUCT(
 )
 
 BOOST_FUSION_ADAPT_STRUCT(
+	sheet::Argument,
+	(fm::String, value)
+)
+
+BOOST_FUSION_ADAPT_STRUCT(
 	sheet::Voice,
 	(sheet::Voice::Events, events)
 )
@@ -52,7 +57,7 @@ BOOST_FUSION_ADAPT_STRUCT(
 	(sheet::Event::Pitches, pitches)
 	(sheet::Event::Duration, duration)
 	(fm::String, stringValue)
-	(sheet::Event::Args, metaArgs)
+	//(sheet::Event::Args, metaArgs)
 	(unsigned int, sourcePositionEnd)
 )
 
@@ -82,7 +87,7 @@ BOOST_FUSION_ADAPT_STRUCT(
 	(unsigned int, sourcePositionBegin)
 	(sheet::ASheetObjectWithSourceInfo::SourceId, sourceId)
 	(fm::String, name)
-	(sheet::Event::Args, args)
+	//(sheet::Event::Args, args)
 )
 
 BOOST_FUSION_ADAPT_STRUCT(
@@ -129,6 +134,15 @@ namespace sheet {
 			template <typename Iterator>
 			struct _SheetParser : qi::grammar<Iterator, SheetDef(), ascii::space_type>
 			{
+
+				void initArgumentParser() 
+				{
+					using qi::attr;
+					using qi::lexeme;
+					using ascii::char_;
+					argument_ %= lexeme['"' > +(char_ - '"') > '"'] | lexeme["" > +char_(ALLOWED_META_ARGUMENT)];
+				}
+
 				template<class DocumentConfigRules>
 				void createDocumentConfigRules(DocumentConfigRules &documentConfig) const
 				{
@@ -141,7 +155,7 @@ namespace sheet {
 						>> attr(sourceId_)
 						>> +char_("a-zA-Z") 
 						>> ":" 
-						>> +(lexeme['"' > +(char_ - '"') > '"'] | lexeme[+char_(ALLOWED_META_ARGUMENT)])
+						>> +(argument_)
 						> ";";
 				}
 
@@ -185,6 +199,8 @@ namespace sheet {
 					documentUsing_ %= usings_;
 				}
 
+
+
 				void initSheetParser()
 				{
 					using qi::int_;
@@ -214,129 +230,129 @@ namespace sheet {
 					pitch_ %= pitchSymbols_ >> (octaveSymbols_ | attr(PitchDef::DefaultOctave));
 					alias_ %= lexeme['"' >> +(char_ - '"') >> '"'];
 					pitchOrAlias_ %= pitch_ | alias_;
-					event_ %= 
-					( // NOTE
-						current_pos_.current_pos 
-						>> attr(sourceId_)
-						>> attr(Event::Note)
-						>> (("\"" >> +(lexeme[+char_(ALLOWED_TAG_ARGUMENT)]) >> "\"" >> "@") | attr(Event::Tags()))
-						>> (pitchOrAlias_ | ("<" >> +pitchOrAlias_ >> ">"))
-						>> (durationSymbols_ | attr(Event::NoDuration))  
-						>> attr("")
-						>> attr(Event::Args())
-						>> current_pos_.current_pos
-						>> -(
-								lit("~")[at_c<EvType>(_val) = Event::TiedNote] 
-								| (lit("->")[at_c<EvType>(_val) = Event::Meta][at_c<EvStringValue>(_val) = FM_STRING("vorschlag")])
-							)
-					)
-					|
-					( // DEGREE
-						current_pos_.current_pos 
-						>> attr(sourceId_)
-						>> attr(Event::Degree)
-						>> (("\"" >> +(lexeme[+char_(ALLOWED_TAG_ARGUMENT)]) >> "\"" >> "@") | attr(Event::Tags()))
-						>> (degree_ | ("<" >> +degree_ >> ">"))
-						>> (durationSymbols_ | attr(Event::NoDuration))  
-						>> attr("")
-						>> attr(Event::Args())
-						>> current_pos_.current_pos						
-						>> -(
-								lit("~")[at_c<EvType>(_val) = Event::TiedDegree] 
-								| (lit("->")[at_c<EvType>(_val) = Event::Meta][at_c<EvStringValue>(_val) = FM_STRING("vorschlag")])
-							)
-					)
-					|
-					( // REPEAT SHORTCUT (x)
-						current_pos_.current_pos 
-						>> attr(sourceId_)
-						>> attr(Event::Repeat) 
-						>> "&"
-						>> attr(Event::Tags())
-						>> attr(PitchDef())
-						>> (durationSymbols_ | attr(Event::NoDuration))
-						>> attr("")
-						>> attr(Event::Args())
-						>> current_pos_.current_pos						
-						>> -(
-								lit("~")[at_c<EvType>(_val) = Event::TiedRepeat] 
-								| (lit("->")[at_c<EvType>(_val) = Event::Meta][at_c<EvStringValue>(_val) = FM_STRING("vorschlag")])
-							)
-					)					
-					|
-					( // CHORD
-						current_pos_.current_pos 
-						>> attr(sourceId_)
-						>> attr(Event::Chord)
-						>> attr(Event::Tags())
-						>> attr(PitchDef())
-						>> attr(Event::NoDuration)					
-						>> lexeme[
-							char_("a-gA-G")
-							> *char_(ChordDefParser::ALLOWED_CHORD_SYMBOLS_REGEX)
-						]
-						>> attr(Event::Args())
-						>> current_pos_.current_pos	
-					)
-					|
-					( // EXPRESSIONS
-						current_pos_.current_pos 
-						>> attr(sourceId_)
-						>> "\\" 
-						>> attr(Event::Meta)
-						>> attr(Event::Tags())
-						>> attr(PitchDef()) 
-						>> attr(Event::NoDuration) 
-						>> attr("expression") 
-						>> expressionSymbols_
-					)
-					| 
-					( // EXPRESSION PERFORMED ONCE
-						current_pos_.current_pos 
-						>> attr(sourceId_)
-						>> "!" 
-						>> attr(Event::Meta)
-						>> attr(Event::Tags())
-						>> attr(PitchDef()) 
-						>> attr(Event::NoDuration) 
-						>> attr("singleExpression") 
-						>> expressionSymbols_
-					)
-					| 
-					( // REST
-						current_pos_.current_pos 
-						>> attr(sourceId_)
-						>> "r" 
-						>> attr(Event::Rest)
-						>> attr(Event::Tags())
-						>> attr(PitchDef()) 
-						>> (durationSymbols_ | attr(Event::NoDuration))
-						>> attr("")
-						>> attr(Event::Args())
-						>> current_pos_.current_pos	
-					)
-					| 
-					( // END OF BAR
-						current_pos_.current_pos 
-						>> attr(sourceId_)
-						>> "|"
-						>> attr(Event::EOB)
-						>> attr(Event::Tags())
-						>> attr(PitchDef()) 
-						>> attr(Event::NoDuration)
-					)
-					| 
-					( // META COMMANDS
-						current_pos_.current_pos 
-						>> attr(sourceId_)
-						>>  "/" 
-						>> attr(Event::Meta)
-						>> attr(Event::Tags())
-						>> attr(PitchDef()) 
-						>> attr(Event::NoDuration) 
-						>> +char_("a-zA-Z") >> ":" >> +(lexeme['"' > +(char_ - '"') > '"'] | lexeme[+char_(ALLOWED_META_ARGUMENT)] ) >> "/"
-					)
-					;
+					// event_ %= 
+					// ( // NOTE
+					// 	current_pos_.current_pos 
+					// 	>> attr(sourceId_)
+					// 	>> attr(Event::Note)
+					// 	>> (("\"" >> +(lexeme[+char_(ALLOWED_TAG_ARGUMENT)]) >> "\"" >> "@") | attr(Event::Tags()))
+					// 	>> (pitchOrAlias_ | ("<" >> +pitchOrAlias_ >> ">"))
+					// 	>> (durationSymbols_ | attr(Event::NoDuration))  
+					// 	>> attr("")
+					// 	>> attr(Event::Args())
+					// 	>> current_pos_.current_pos
+					// 	>> -(
+					// 			lit("~")[at_c<EvType>(_val) = Event::TiedNote] 
+					// 			| (lit("->")[at_c<EvType>(_val) = Event::Meta][at_c<EvStringValue>(_val) = FM_STRING("vorschlag")])
+					// 		)
+					// )
+					// |
+					// ( // DEGREE
+					// 	current_pos_.current_pos 
+					// 	>> attr(sourceId_)
+					// 	>> attr(Event::Degree)
+					// 	>> (("\"" >> +(lexeme[+char_(ALLOWED_TAG_ARGUMENT)]) >> "\"" >> "@") | attr(Event::Tags()))
+					// 	>> (degree_ | ("<" >> +degree_ >> ">"))
+					// 	>> (durationSymbols_ | attr(Event::NoDuration))  
+					// 	>> attr("")
+					// 	>> attr(Event::Args())
+					// 	>> current_pos_.current_pos						
+					// 	>> -(
+					// 			lit("~")[at_c<EvType>(_val) = Event::TiedDegree] 
+					// 			| (lit("->")[at_c<EvType>(_val) = Event::Meta][at_c<EvStringValue>(_val) = FM_STRING("vorschlag")])
+					// 		)
+					// )
+					// |
+					// ( // REPEAT SHORTCUT (x)
+					// 	current_pos_.current_pos 
+					// 	>> attr(sourceId_)
+					// 	>> attr(Event::Repeat) 
+					// 	>> "&"
+					// 	>> attr(Event::Tags())
+					// 	>> attr(PitchDef())
+					// 	>> (durationSymbols_ | attr(Event::NoDuration))
+					// 	>> attr("")
+					// 	>> attr(Event::Args())
+					// 	>> current_pos_.current_pos						
+					// 	>> -(
+					// 			lit("~")[at_c<EvType>(_val) = Event::TiedRepeat] 
+					// 			| (lit("->")[at_c<EvType>(_val) = Event::Meta][at_c<EvStringValue>(_val) = FM_STRING("vorschlag")])
+					// 		)
+					// )					
+					// |
+					// ( // CHORD
+					// 	current_pos_.current_pos 
+					// 	>> attr(sourceId_)
+					// 	>> attr(Event::Chord)
+					// 	>> attr(Event::Tags())
+					// 	>> attr(PitchDef())
+					// 	>> attr(Event::NoDuration)					
+					// 	>> lexeme[
+					// 		char_("a-gA-G")
+					// 		> *char_(ChordDefParser::ALLOWED_CHORD_SYMBOLS_REGEX)
+					// 	]
+					// 	>> attr(Event::Args())
+					// 	>> current_pos_.current_pos	
+					// )
+					// |
+					// ( // EXPRESSIONS
+					// 	current_pos_.current_pos 
+					// 	>> attr(sourceId_)
+					// 	>> "\\" 
+					// 	>> attr(Event::Meta)
+					// 	>> attr(Event::Tags())
+					// 	>> attr(PitchDef()) 
+					// 	>> attr(Event::NoDuration) 
+					// 	>> attr("expression") 
+					// 	>> expressionSymbols_
+					// )
+					// | 
+					// ( // EXPRESSION PERFORMED ONCE
+					// 	current_pos_.current_pos 
+					// 	>> attr(sourceId_)
+					// 	>> "!" 
+					// 	>> attr(Event::Meta)
+					// 	>> attr(Event::Tags())
+					// 	>> attr(PitchDef()) 
+					// 	>> attr(Event::NoDuration) 
+					// 	>> attr("singleExpression") 
+					// 	>> expressionSymbols_
+					// )
+					// | 
+					// ( // REST
+					// 	current_pos_.current_pos 
+					// 	>> attr(sourceId_)
+					// 	>> "r" 
+					// 	>> attr(Event::Rest)
+					// 	>> attr(Event::Tags())
+					// 	>> attr(PitchDef()) 
+					// 	>> (durationSymbols_ | attr(Event::NoDuration))
+					// 	>> attr("")
+					// 	>> attr(Event::Args())
+					// 	>> current_pos_.current_pos	
+					// )
+					// | 
+					// ( // END OF BAR
+					// 	current_pos_.current_pos 
+					// 	>> attr(sourceId_)
+					// 	>> "|"
+					// 	>> attr(Event::EOB)
+					// 	>> attr(Event::Tags())
+					// 	>> attr(PitchDef()) 
+					// 	>> attr(Event::NoDuration)
+					// )
+					// | 
+					// ( // META COMMANDS
+					// 	current_pos_.current_pos 
+					// 	>> attr(sourceId_)
+					// 	>>  "/" 
+					// 	>> attr(Event::Meta)
+					// 	>> attr(Event::Tags())
+					// 	>> attr(PitchDef()) 
+					// 	>> attr(Event::NoDuration) 
+					// 	>> +char_("a-zA-Z") >> ":" >> +(lexeme['"' > +(char_ - '"') > '"'] | lexeme[+char_(ALLOWED_META_ARGUMENT)] ) >> "/"
+					// )
+					// ;
 
 					groupedEvent_ %= 
 						attr(sourceId_)
@@ -360,6 +376,7 @@ namespace sheet {
 					using qi::on_error;
 					using qi::fail;
 					using qi::attr;
+					initArgumentParser();
 					initSheetParser();
 					initDocumentUsingParser();
 					current_pos_.setStartPos(begin);
@@ -383,6 +400,7 @@ namespace sheet {
 				qi::rule<Iterator, SheetDef(), ascii::space_type> start;
 				qi::rule<Iterator, PitchDef(), ascii::space_type> pitch_;
 				qi::rule<Iterator, PitchDef(), ascii::space_type> pitchOrAlias_;
+				qi::rule<Iterator, Argument(), ascii::space_type> argument_;
 				qi::rule<Iterator, Track(), ascii::space_type> track;
 				qi::rule<Iterator, AliasPitch(), ascii::space_type> alias_;
 				qi::rule<Iterator, Voice(), ascii::space_type> voice;

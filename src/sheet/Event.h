@@ -10,6 +10,7 @@
 #include <functional>
 #include <fm/exception.hpp>
 #include "ASheetObject.hpp"
+#include "Argument.h"
 
 namespace sheet {
 
@@ -73,7 +74,7 @@ namespace sheet {
 		};
 		typedef fm::Ticks Duration;
 		typedef std::set<PitchDef> Pitches;
-		typedef std::vector<fm::String> Args;
+		typedef std::vector<sheet::Argument> Args;
 		typedef std::vector<Event> EventGroup;
 		typedef std::set<fm::String> Tags;
 		typedef fm::String Options;

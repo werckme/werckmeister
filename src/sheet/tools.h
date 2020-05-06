@@ -8,6 +8,7 @@
 #include <tuple>
 #include <boost/algorithm/string.hpp>
 #include <sheet/ASheetObject.hpp>
+#include <sheet/Argument.h>
 
 namespace sheet {
     struct Event;
@@ -30,7 +31,7 @@ namespace sheet {
     };
 
     namespace toolsimpl {
-        const std::vector<fm::String> & getMetaArgs(const Event &metaEvent);
+        const std::vector<sheet::Argument> & getMetaArgs(const Event &metaEvent);
         const fm::String & getMetaCommand(const Event &metaEvent);
     }
     namespace {
@@ -38,17 +39,19 @@ namespace sheet {
         template<typename TArg, typename TArgs>
         TArg __getArgument(const TArgs &args, int idx, TArg *defaultValue) 
         {
-            if (idx >= (int)args.size()) {
-                if (defaultValue) {
-                    return *defaultValue;
-                }
-                throw MissingArgument();
-            }
-            TArg result;
-            fm::StringStream ss;
-            ss << args[idx];
-            ss >> result;
-            return result;
+            return TArg();
+            // #74 TODO
+            // if (idx >= (int)args.size()) {
+            //     if (defaultValue) {
+            //         return *defaultValue;
+            //     }
+            //     throw MissingArgument();
+            // }
+            // TArg result;
+            // fm::StringStream ss;
+            // ss << args[idx];
+            // ss >> result;
+            // return result;
         }		
     }
     

@@ -32,10 +32,11 @@ namespace sheet {
 			auto ctx = context();
 
 			try {
-				ctx->processMeta(document->sheetDef.documentConfigs, 
-					[](const auto &x) { return x.name; }, 
-					[](const auto &x) { return x.args; }
-				);
+				// #74-TODO
+				// ctx->processMeta(document->sheetDef.documentConfigs, 
+				// 	[](const auto &x) { return x.name; }, 
+				// 	[](const auto &x) { return x.args; }
+				// );
 			} catch (fm::Exception &ex) {
 				ex << ex_sheet_document(document);
 				throw;
@@ -73,10 +74,11 @@ namespace sheet {
 				}				
 				auto trackId = ctx->createTrack();
 				ctx->setTrack(trackId);
-				ctx->processMeta(track.trackConfigs, 
-					[](const auto &x) { return x.name; }, 
-					[](const auto &x) { return x.args; }
-				);
+				// #74-TODO
+				// ctx->processMeta(track.trackConfigs, 
+				// 	[](const auto &x) { return x.name; }, 
+				// 	[](const auto &x) { return x.args; }
+				// );
 				preprocessor.process(track);
 				for (const auto &voice : track.voices)
 				{

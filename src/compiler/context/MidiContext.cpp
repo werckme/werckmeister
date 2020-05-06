@@ -296,49 +296,51 @@ namespace sheet {
 			auto argsBegin = args.begin() + 1;
 			auto argsEnd = args.end();
 			auto argsExceptFirst = Event::Args(argsBegin, argsEnd);
-			instrumentDef->volume = sheet::getArgValueFor<int>(SHEET_META__SET_INSTRUMENT_CONFIG_VOLUME, argsExceptFirst, instrumentDef->volume);
-			instrumentDef->pan = sheet::getArgValueFor<int>(SHEET_META__SET_INSTRUMENT_CONFIG_PAN, argsExceptFirst, instrumentDef->pan);
-			auto argsMappedByKeyword = mapArgumentsByKeywords(args, keywords);
-			auto argsRange = argsMappedByKeyword.equal_range(SHEET_META__SET_VOICING_STRATEGY);
+			// #74 TODO
+			// instrumentDef->volume = sheet::getArgValueFor<int>(SHEET_META__SET_INSTRUMENT_CONFIG_VOLUME, argsExceptFirst, instrumentDef->volume);
+			// instrumentDef->pan = sheet::getArgValueFor<int>(SHEET_META__SET_INSTRUMENT_CONFIG_PAN, argsExceptFirst, instrumentDef->pan);
+			// auto argsMappedByKeyword = mapArgumentsByKeywords(args, keywords);
+			// auto argsRange = argsMappedByKeyword.equal_range(SHEET_META__SET_VOICING_STRATEGY);
 			// assign voicingStrategies
-			if (argsRange.first != argsRange.second) {
-				auto &wm = fm::getWerckmeister();
-				auto it = argsRange.first;
-				for (; it != argsRange.second; ++it) {
-					const auto &args = it->second;
-					if (args.empty()) {
-						FM_THROW(Exception, fm::String("missing arguments for: ") + SHEET_META__SET_VOICING_STRATEGY);
-					}
-					instrumentDef->voicingStrategy = wm.getVoicingStrategy(args.front());
-					instrumentDef->voicingStrategy->setArguments(args);
-				}
-			}
+			// if (argsRange.first != argsRange.second) {
+			// 	auto &wm = fm::getWerckmeister();
+			// 	auto it = argsRange.first;
+			// 	for (; it != argsRange.second; ++it) {
+			// 		const auto &args = it->second;
+			// 		if (args.empty()) {
+			// 			FM_THROW(Exception, fm::String("missing arguments for: ") + SHEET_META__SET_VOICING_STRATEGY);
+			// 		}
+			// 		instrumentDef->voicingStrategy = wm.getVoicingStrategy(args.front());
+			// 		instrumentDef->voicingStrategy->setArguments(args);
+			// 	}
+			// }
 			// mods
-			argsRange = argsMappedByKeyword.equal_range(SHEET_META__SET_MOD);
-			if (argsRange.first != argsRange.second) {
-				auto &wm = fm::getWerckmeister();
-				auto it = argsRange.first;
-				for (; it != argsRange.second; ++it) {
-					const auto &args = it->second;
-					if (args.empty()) {
-						FM_THROW(Exception, fm::String("missing arguments for: ") + SHEET_META__SET_MOD);
-					}					
-					auto mod = wm.getModification(args.front());
-					mod->setArguments(args);
-					instrumentDef->modifications.push_back(mod);
-				}				
-			}		
+			// argsRange = argsMappedByKeyword.equal_range(SHEET_META__SET_MOD);
+			// if (argsRange.first != argsRange.second) {
+			// 	auto &wm = fm::getWerckmeister();
+			// 	auto it = argsRange.first;
+			// 	for (; it != argsRange.second; ++it) {
+			// 		const auto &args = it->second;
+			// 		if (args.empty()) {
+			// 			FM_THROW(Exception, fm::String("missing arguments for: ") + SHEET_META__SET_MOD);
+			// 		}					
+			// 		auto mod = wm.getModification(args.front());
+			// 		mod->setArguments(args);
+			// 		instrumentDef->modifications.push_back(mod);
+			// 	}				
+			// }		
 			// velocity overrides
 			auto assignIfSet = [&argsExceptFirst, instrumentDef, this](const fm::String &expression){
-				auto foundValue = sheet::getArgValueFor<int>(expression, argsExceptFirst);
-				if (!foundValue.first) {
-					return;
-				}
-				if (foundValue.second < 0 || foundValue.second > 100) {
-					FM_THROW(Exception, "invalid value for: " + expression);
-				}
-				auto exprValue = getExpression(expression);
-				instrumentDef->velocityOverride[exprValue] = foundValue.second;
+				// #74 TODO
+				// auto foundValue = sheet::getArgValueFor<int>(expression, argsExceptFirst);
+				// if (!foundValue.first) {
+				// 	return;
+				// }
+				// if (foundValue.second < 0 || foundValue.second > 100) {
+				// 	FM_THROW(Exception, "invalid value for: " + expression);
+				// }
+				// auto exprValue = getExpression(expression);
+				// instrumentDef->velocityOverride[exprValue] = foundValue.second;
 			};
 			for(const auto &keyValue : expressionMap_) {
 				assignIfSet(keyValue.first);
@@ -411,42 +413,43 @@ namespace sheet {
 			setMidiInstrumentDef(uname, def);
 		}
 
-		void MidiContext::processMeta(const fm::String &command, const std::vector<fm::String> &args)
+		void MidiContext::processMeta(const fm::String &command, const std::vector<sheet::Argument> &args)
 		{
-			try {
-				if (command == SHEET_META__MIDI_CHANNEL) {
-					metaSetChannel(getArgument<int>(args, 0));
-					return;
-				}
-				if (command == SHEET_META__MIDI_SOUNDSELECT) {
-					metaSoundSelect(getArgument<int>(args, 0), getArgument<int>(args, 1));
-					return;
-				}
-				if (command == SHEET_META__MIDI_INSTRUMENT_DEF) {
-					auto name = getArgument<fm::String>(args, 0);
-					std::size_t numArgs = args.size();
-					if (numArgs == 4) {
-						metaInstrument(getArgument<fm::String>(args, 0), getArgument<int>(args, 1), getArgument<int>(args, 2), getArgument<int>(args, 3));
-						return;
-					}
-					if (numArgs == 5) {
-						metaInstrument(getArgument<fm::String>(args, 0), getArgument<fm::String>(args, 1),getArgument<int>(args, 2), getArgument<int>(args, 3), getArgument<int>(args, 4));					
-						return;
-					}
-					FM_THROW(Exception, "invalid number of arguments for instrumentDef: " + name );
-				}
-				if (command == SHEET_META__SET_INSTRUMENT_CONFIG) {
-					metaSetInstrumentConfig(getArgument<fm::String>(args, 0), args);
-					return;
-				}
-			} catch(const std::exception &ex) {
-				FM_THROW(Exception, "failed to process " + command
-									+"\n" + ex.what());
-			}	
-			catch(...) {
-				FM_THROW(Exception, "failed to process " + command);
-			}
-			Base::processMeta(command, args);	
+			// #74 TODO
+			// try {
+			// 	if (command == SHEET_META__MIDI_CHANNEL) {
+			// 		metaSetChannel(getArgument<int>(args, 0));
+			// 		return;
+			// 	}
+			// 	if (command == SHEET_META__MIDI_SOUNDSELECT) {
+			// 		metaSoundSelect(getArgument<int>(args, 0), getArgument<int>(args, 1));
+			// 		return;
+			// 	}
+			// 	if (command == SHEET_META__MIDI_INSTRUMENT_DEF) {
+			// 		auto name = getArgument<fm::String>(args, 0);
+			// 		std::size_t numArgs = args.size();
+			// 		if (numArgs == 4) {
+			// 			metaInstrument(getArgument<fm::String>(args, 0), getArgument<int>(args, 1), getArgument<int>(args, 2), getArgument<int>(args, 3));
+			// 			return;
+			// 		}
+			// 		if (numArgs == 5) {
+			// 			metaInstrument(getArgument<fm::String>(args, 0), getArgument<fm::String>(args, 1),getArgument<int>(args, 2), getArgument<int>(args, 3), getArgument<int>(args, 4));					
+			// 			return;
+			// 		}
+			// 		FM_THROW(Exception, "invalid number of arguments for instrumentDef: " + name );
+			// 	}
+			// 	if (command == SHEET_META__SET_INSTRUMENT_CONFIG) {
+			// 		metaSetInstrumentConfig(getArgument<fm::String>(args, 0), args);
+			// 		return;
+			// 	}
+			// } catch(const std::exception &ex) {
+			// 	FM_THROW(Exception, "failed to process " + command
+			// 						+"\n" + ex.what());
+			// }	
+			// catch(...) {
+			// 	FM_THROW(Exception, "failed to process " + command);
+			// }
+			// Base::processMeta(command, args);	
 		}
 		AContext::TrackId MidiContext::createMasterTrack()
 		{
