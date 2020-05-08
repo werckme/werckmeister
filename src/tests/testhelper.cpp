@@ -83,7 +83,7 @@ bool checkMetaEvent(const sheet::Event &ev, const fm::String &command, const she
     auto it2 = args.begin();
     while (it1 != ev.metaArgs.end())
     {
-        if (*it1 != *it2) {
+        if (it1->name != it2->name || it1->value != it2->value) {
             return false;
         }
         ++it1;
