@@ -87,7 +87,7 @@ BOOST_FUSION_ADAPT_STRUCT(
 	(unsigned int, sourcePositionBegin)
 	(sheet::ASheetObjectWithSourceInfo::SourceId, sourceId)
 	(fm::String, name)
-	//(sheet::Event::Args, args)
+	(sheet::Event::Args, args)
 )
 
 BOOST_FUSION_ADAPT_STRUCT(
@@ -172,7 +172,7 @@ namespace sheet {
 						>> attr(sourceId_)
 						>> +char_("a-zA-Z") 
 						>> ":" 
-						>> +(lexeme['"' > +(char_ - '"') > '"'] | lexeme[+char_(ALLOWED_META_ARGUMENT)])
+						>> +argument_
 						>> ";";
 				}
 

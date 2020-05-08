@@ -54,14 +54,14 @@ BOOST_AUTO_TEST_CASE(test_trackArgQuoted)
 	using sheet::PitchDef;
 	fm::String text = FM_STRING("\
 [				\
-key: value;		\
+key: \"value\";		\
 {			    \
 }				\
 ]			    \
 ");
 	sheet::compiler::SheetDefParser parser;
 	auto defs = parser.parse(text);
-	BOOST_CHECK(defs.tracks[0].trackConfigs[0].args[0].value == FM_STRING("type") );
+	BOOST_CHECK(defs.tracks[0].trackConfigs[0].args[0].value == FM_STRING("value") );
 }
 
 BOOST_AUTO_TEST_CASE(test_trackArgUnquoted)
@@ -77,9 +77,7 @@ key: value;		\
 ");
 	sheet::compiler::SheetDefParser parser;
 	auto defs = parser.parse(text);
-	BOOST_CHECK(defs.documentConfigs.size() == 1); 
-	auto const &meta = defs.documentConfigs[0];
-	BOOST_CHECK(meta.args[0].value == "value");
+	BOOST_CHECK(defs.tracks[0].trackConfigs[0].args[0].value == FM_STRING("value") );
 }
 
 BOOST_AUTO_TEST_CASE(test_chordDefparser)
