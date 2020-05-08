@@ -142,6 +142,7 @@ namespace sheet {
 					using qi::lexeme;
 					using ascii::char_;
 					argument_ = meta_arg_value_;
+					expression_argument_ = expressionSymbols_;
 				}
 
 				template<class DocumentConfigRules>
@@ -308,7 +309,7 @@ namespace sheet {
 						>> attr(PitchDef()) 
 						>> attr(Event::NoDuration) 
 						>> attr("expression") 
-						>> expressionSymbols_
+						>> expression_argument_
 					)
 					| 
 					( // EXPRESSION PERFORMED ONCE
@@ -320,7 +321,7 @@ namespace sheet {
 						>> attr(PitchDef()) 
 						>> attr(Event::NoDuration) 
 						>> attr("singleExpression") 
-						>> expressionSymbols_
+						>> expression_argument_
 					)
 					| 
 					( // REST
@@ -354,7 +355,8 @@ namespace sheet {
 						>> attr(Event::Tags())
 						>> attr(PitchDef()) 
 						>> attr(Event::NoDuration) 
-						>> +argument_
+						>> +char_("a-zA-Z") >> ":" 
+						>> +(argument_)
 						>> "/"
 					)
 					;
@@ -407,6 +409,7 @@ namespace sheet {
 				qi::rule<Iterator, PitchDef(), ascii::space_type> pitch_;
 				qi::rule<Iterator, PitchDef(), ascii::space_type> pitchOrAlias_;
 				qi::rule<Iterator, Argument(), ascii::space_type> argument_;
+				qi::rule<Iterator, Argument(), ascii::space_type> expression_argument_;
 				qi::rule<Iterator, Track(), ascii::space_type> track;
 				qi::rule<Iterator, AliasPitch(), ascii::space_type> alias_;
 				qi::rule<Iterator, Voice(), ascii::space_type> voice;
