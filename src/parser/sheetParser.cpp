@@ -137,10 +137,11 @@ namespace sheet {
 
 				void initArgumentParser() 
 				{
+					using qi::eps;
 					using qi::attr;
 					using qi::lexeme;
 					using ascii::char_;
-					argument_ = +char_;
+					argument_ = meta_arg_value_;
 					//argument_ %= lexeme['"' > +(char_ - '"') > '"'];
 					//argument_ %= lexeme[+char_(ALLOWED_META_ARGUMENT)];
 				}
@@ -157,7 +158,7 @@ namespace sheet {
 						>> attr(sourceId_)
 						>> +char_("a-zA-Z") 
 						>> ":" 
-						>> +argument_
+						>> +(argument_)
 						> ";";
 				}
 
@@ -194,8 +195,11 @@ namespace sheet {
 					using qi::on_error;
 					using qi::fail;
 					quoted_string.name("quoted string");
-
+					meta_arg_value_.name("argument value");
+					
 					quoted_string %= lexeme['"' > +(char_ - '"') > '"'];
+					meta_arg_value_ = quoted_string | +char_(ALLOWED_META_ARGUMENT);
+
 					using_ %= "using" > quoted_string > ";";
 					usings_ %= *using_;
 					documentUsing_ %= usings_;
@@ -378,9 +382,10 @@ namespace sheet {
 					using qi::on_error;
 					using qi::fail;
 					using qi::attr;
+					initDocumentUsingParser();
 					initArgumentParser();
 					initSheetParser();
-					initDocumentUsingParser();
+
 					current_pos_.setStartPos(begin);
 
 					documentConfig_.name("document config");
@@ -413,6 +418,7 @@ namespace sheet {
 				qi::rule<Iterator, TrackConfig(), ascii::space_type> trackConfig_;
 				qi::rule<Iterator, DocumentUsing(), ascii::space_type> documentUsing_;
 				qi::rule<Iterator, fm::String(), ascii::space_type> quoted_string;
+				qi::rule<Iterator, fm::String(), ascii::space_type> meta_arg_value_;
 				qi::rule<Iterator, fm::String(), ascii::space_type> using_;
 				qi::rule<Iterator, DocumentUsing::Usings, ascii::space_type> usings_;
 				CurrentPos<Iterator> current_pos_;
