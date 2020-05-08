@@ -8,14 +8,9 @@
 #include "DocumentUsing.h"
 #include "ASheetObject.hpp"
 #include "Argument.h"
+#include "DocumentConfig.h"
 
 namespace sheet {
-
-	struct DocumentConfig : public ASheetObjectWithSourceInfo {
-		typedef std::vector<sheet::Argument> Args;
-		fm::String name;
-		Args args;
-	};
 
 	struct SheetDef {
 		typedef std::vector<Track> Tracks;
