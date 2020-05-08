@@ -68,10 +68,11 @@ namespace sheet {
 			auto renderer = sheetEventRenderer();
 			for (auto &track : document_->sheetDef.tracks)
 			{
-				fm::String type = getFirstMetaValueBy(SHEET_META__TRACK_META_KEY_TYPE, track.trackConfigs);
-				if (!type.empty()) { // do not render tracks with a specific type
-					continue;
-				}				
+				// #74-TODO
+				// fm::String type = getFirstMetaValueBy(SHEET_META__TRACK_META_KEY_TYPE, track.trackConfigs);
+				// if (!type.empty()) { // do not render tracks with a specific type
+				// 	continue;
+				// }				
 				auto trackId = ctx->createTrack();
 				ctx->setTrack(trackId);
 				// #74-TODO
@@ -150,14 +151,15 @@ namespace sheet {
 			}
 			template<class TContainer>
 			Track * getFirstSheetTrack(TContainer &c) {
-				auto sheetTrackIt = 
-					std::find_if(c.begin(), c.end(), [](const auto &x) {  
-						return getFirstMetaValueBy(SHEET_META__TRACK_META_KEY_TYPE, x.trackConfigs) == SHEET_META__TRACK_META_VALUE_TYPE_ACCOMP;
-					});
-				if (sheetTrackIt == c.end()) {
-					return nullptr;
-				}
-				return &(*sheetTrackIt);
+				// #74 TODO
+				// auto sheetTrackIt = 
+				// 	std::find_if(c.begin(), c.end(), [](const auto &x) {  
+				// 		return getFirstMetaValueBy(SHEET_META__TRACK_META_KEY_TYPE, x.trackConfigs) == SHEET_META__TRACK_META_VALUE_TYPE_ACCOMP;
+				// 	});
+				// if (sheetTrackIt == c.end()) {
+				// 	return nullptr;
+				// }
+				// return &(*sheetTrackIt);
 			} 
 		}
 

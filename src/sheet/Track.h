@@ -5,6 +5,7 @@
 #include <vector>
 #include "Event.h"
 #include "ASheetObject.hpp"
+#include "Argument.h"
 
 namespace sheet {
 
@@ -14,7 +15,7 @@ namespace sheet {
 	};
 
 	struct TrackConfig : public ASheetObjectWithSourceInfo {
-		typedef std::vector<fm::String> Args;
+		typedef std::vector<sheet::Argument> Args;
 		fm::String name;
 		Args args;
 	};

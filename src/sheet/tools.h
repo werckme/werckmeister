@@ -91,12 +91,12 @@ namespace sheet {
     } 
     
     template<class TMetaInfoContainer>
-    fm::String getFirstMetaValueBy(const fm::String &name, const TMetaInfoContainer& container, bool required = false)
+    sheet::Argument getFirstMetaValueBy(const fm::String &name, const TMetaInfoContainer& container, bool required = false)
     {
         auto values = getMetaValuesBy(name, container, required);
         if (values.empty()) {
             // no required check needed here (getMetaValuesBy throws already)
-            return fm::String();
+            return sheet::Argument();
         }
         return *values.begin();
     }

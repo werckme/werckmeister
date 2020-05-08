@@ -16,7 +16,7 @@ namespace {
 
 
 
-BOOST_AUTO_TEST_CASE(test_namedParameterQuoted)
+BOOST_AUTO_TEST_CASE(test_argQuoted)
 {
 	using namespace fm;
 	using sheet::PitchDef;
@@ -32,7 +32,7 @@ key: \"value\";		\
 	BOOST_CHECK(meta.args[0].value == "value");
 }
 
-BOOST_AUTO_TEST_CASE(test_namedParameterUnqouted)
+BOOST_AUTO_TEST_CASE(test_argUnqouted)
 {
 	using namespace fm;
 	using sheet::PitchDef;
@@ -48,10 +48,40 @@ key: value;		\
 	BOOST_CHECK(meta.args[0].value == "value");
 }
 
+BOOST_AUTO_TEST_CASE(test_trackArgQuoted)
+{
+	using namespace fm;
+	using sheet::PitchDef;
+	fm::String text = FM_STRING("\
+[				\
+key: value;		\
+{			    \
+}				\
+]			    \
+");
+	sheet::compiler::SheetDefParser parser;
+	auto defs = parser.parse(text);
+	BOOST_CHECK(defs.tracks[0].trackConfigs[0].args[0].value == FM_STRING("type") );
+}
 
+BOOST_AUTO_TEST_CASE(test_trackArgUnquoted)
+{
+	using namespace fm;
+	using sheet::PitchDef;
+	fm::String text = FM_STRING("\
+[				\
+key: value;		\
+{			    \
+}				\
+]			    \
+");
+	sheet::compiler::SheetDefParser parser;
+	auto defs = parser.parse(text);
+	BOOST_CHECK(defs.documentConfigs.size() == 1); 
+	auto const &meta = defs.documentConfigs[0];
+	BOOST_CHECK(meta.args[0].value == "value");
+}
 
-
-#if 0
 BOOST_AUTO_TEST_CASE(test_chordDefparser)
 {
 	fm::String str(FM_STRING("--here goes comment 1\n\
@@ -154,6 +184,8 @@ X/V: I=1 III=5 V=-6  --quinte im bass\
 
 	BOOST_CHECK((interval == chordDefs[4].intervals.end()));
 }
+
+#if 0
 
 BOOST_AUTO_TEST_CASE(test_SheetDefParser)
 {
