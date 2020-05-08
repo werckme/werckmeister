@@ -57,7 +57,7 @@ BOOST_FUSION_ADAPT_STRUCT(
 	(sheet::Event::Pitches, pitches)
 	(sheet::Event::Duration, duration)
 	(fm::String, stringValue)
-	//(sheet::Event::Args, metaArgs)
+	(sheet::Event::Args, metaArgs)
 	(unsigned int, sourcePositionEnd)
 )
 
@@ -234,129 +234,130 @@ namespace sheet {
 					pitch_ %= pitchSymbols_ >> (octaveSymbols_ | attr(PitchDef::DefaultOctave));
 					alias_ %= lexeme['"' >> +(char_ - '"') >> '"'];
 					pitchOrAlias_ %= pitch_ | alias_;
-					// event_ %= 
-					// ( // NOTE
-					// 	current_pos_.current_pos 
-					// 	>> attr(sourceId_)
-					// 	>> attr(Event::Note)
-					// 	>> (("\"" >> +(lexeme[+char_(ALLOWED_TAG_ARGUMENT)]) >> "\"" >> "@") | attr(Event::Tags()))
-					// 	>> (pitchOrAlias_ | ("<" >> +pitchOrAlias_ >> ">"))
-					// 	>> (durationSymbols_ | attr(Event::NoDuration))  
-					// 	>> attr("")
-					// 	>> attr(Event::Args())
-					// 	>> current_pos_.current_pos
-					// 	>> -(
-					// 			lit("~")[at_c<EvType>(_val) = Event::TiedNote] 
-					// 			| (lit("->")[at_c<EvType>(_val) = Event::Meta][at_c<EvStringValue>(_val) = FM_STRING("vorschlag")])
-					// 		)
-					// )
-					// |
-					// ( // DEGREE
-					// 	current_pos_.current_pos 
-					// 	>> attr(sourceId_)
-					// 	>> attr(Event::Degree)
-					// 	>> (("\"" >> +(lexeme[+char_(ALLOWED_TAG_ARGUMENT)]) >> "\"" >> "@") | attr(Event::Tags()))
-					// 	>> (degree_ | ("<" >> +degree_ >> ">"))
-					// 	>> (durationSymbols_ | attr(Event::NoDuration))  
-					// 	>> attr("")
-					// 	>> attr(Event::Args())
-					// 	>> current_pos_.current_pos						
-					// 	>> -(
-					// 			lit("~")[at_c<EvType>(_val) = Event::TiedDegree] 
-					// 			| (lit("->")[at_c<EvType>(_val) = Event::Meta][at_c<EvStringValue>(_val) = FM_STRING("vorschlag")])
-					// 		)
-					// )
-					// |
-					// ( // REPEAT SHORTCUT (x)
-					// 	current_pos_.current_pos 
-					// 	>> attr(sourceId_)
-					// 	>> attr(Event::Repeat) 
-					// 	>> "&"
-					// 	>> attr(Event::Tags())
-					// 	>> attr(PitchDef())
-					// 	>> (durationSymbols_ | attr(Event::NoDuration))
-					// 	>> attr("")
-					// 	>> attr(Event::Args())
-					// 	>> current_pos_.current_pos						
-					// 	>> -(
-					// 			lit("~")[at_c<EvType>(_val) = Event::TiedRepeat] 
-					// 			| (lit("->")[at_c<EvType>(_val) = Event::Meta][at_c<EvStringValue>(_val) = FM_STRING("vorschlag")])
-					// 		)
-					// )					
-					// |
-					// ( // CHORD
-					// 	current_pos_.current_pos 
-					// 	>> attr(sourceId_)
-					// 	>> attr(Event::Chord)
-					// 	>> attr(Event::Tags())
-					// 	>> attr(PitchDef())
-					// 	>> attr(Event::NoDuration)					
-					// 	>> lexeme[
-					// 		char_("a-gA-G")
-					// 		> *char_(ChordDefParser::ALLOWED_CHORD_SYMBOLS_REGEX)
-					// 	]
-					// 	>> attr(Event::Args())
-					// 	>> current_pos_.current_pos	
-					// )
-					// |
-					// ( // EXPRESSIONS
-					// 	current_pos_.current_pos 
-					// 	>> attr(sourceId_)
-					// 	>> "\\" 
-					// 	>> attr(Event::Meta)
-					// 	>> attr(Event::Tags())
-					// 	>> attr(PitchDef()) 
-					// 	>> attr(Event::NoDuration) 
-					// 	>> attr("expression") 
-					// 	>> expressionSymbols_
-					// )
-					// | 
-					// ( // EXPRESSION PERFORMED ONCE
-					// 	current_pos_.current_pos 
-					// 	>> attr(sourceId_)
-					// 	>> "!" 
-					// 	>> attr(Event::Meta)
-					// 	>> attr(Event::Tags())
-					// 	>> attr(PitchDef()) 
-					// 	>> attr(Event::NoDuration) 
-					// 	>> attr("singleExpression") 
-					// 	>> expressionSymbols_
-					// )
-					// | 
-					// ( // REST
-					// 	current_pos_.current_pos 
-					// 	>> attr(sourceId_)
-					// 	>> "r" 
-					// 	>> attr(Event::Rest)
-					// 	>> attr(Event::Tags())
-					// 	>> attr(PitchDef()) 
-					// 	>> (durationSymbols_ | attr(Event::NoDuration))
-					// 	>> attr("")
-					// 	>> attr(Event::Args())
-					// 	>> current_pos_.current_pos	
-					// )
-					// | 
-					// ( // END OF BAR
-					// 	current_pos_.current_pos 
-					// 	>> attr(sourceId_)
-					// 	>> "|"
-					// 	>> attr(Event::EOB)
-					// 	>> attr(Event::Tags())
-					// 	>> attr(PitchDef()) 
-					// 	>> attr(Event::NoDuration)
-					// )
-					// | 
-					// ( // META COMMANDS
-					// 	current_pos_.current_pos 
-					// 	>> attr(sourceId_)
-					// 	>>  "/" 
-					// 	>> attr(Event::Meta)
-					// 	>> attr(Event::Tags())
-					// 	>> attr(PitchDef()) 
-					// 	>> attr(Event::NoDuration) 
-					// 	>> +char_("a-zA-Z") >> ":" >> +(lexeme['"' > +(char_ - '"') > '"'] | lexeme[+char_(ALLOWED_META_ARGUMENT)] ) >> "/"
-					// )
-					// ;
+					event_ %= 
+					( // NOTE
+						current_pos_.current_pos 
+						>> attr(sourceId_)
+						>> attr(Event::Note)
+						>> (("\"" >> +(lexeme[+char_(ALLOWED_TAG_ARGUMENT)]) >> "\"" >> "@") | attr(Event::Tags()))
+						>> (pitchOrAlias_ | ("<" >> +pitchOrAlias_ >> ">"))
+						>> (durationSymbols_ | attr(Event::NoDuration))  
+						>> attr("")
+						>> attr(Event::Args())
+						>> current_pos_.current_pos
+						>> -(
+								lit("~")[at_c<EvType>(_val) = Event::TiedNote] 
+								| (lit("->")[at_c<EvType>(_val) = Event::Meta][at_c<EvStringValue>(_val) = FM_STRING("vorschlag")])
+							)
+					)
+					|
+					( // DEGREE
+						current_pos_.current_pos 
+						>> attr(sourceId_)
+						>> attr(Event::Degree)
+						>> (("\"" >> +(lexeme[+char_(ALLOWED_TAG_ARGUMENT)]) >> "\"" >> "@") | attr(Event::Tags()))
+						>> (degree_ | ("<" >> +degree_ >> ">"))
+						>> (durationSymbols_ | attr(Event::NoDuration))  
+						>> attr("")
+						>> attr(Event::Args())
+						>> current_pos_.current_pos						
+						>> -(
+								lit("~")[at_c<EvType>(_val) = Event::TiedDegree] 
+								| (lit("->")[at_c<EvType>(_val) = Event::Meta][at_c<EvStringValue>(_val) = FM_STRING("vorschlag")])
+							)
+					)
+					|
+					( // REPEAT SHORTCUT (x)
+						current_pos_.current_pos 
+						>> attr(sourceId_)
+						>> attr(Event::Repeat) 
+						>> "&"
+						>> attr(Event::Tags())
+						>> attr(PitchDef())
+						>> (durationSymbols_ | attr(Event::NoDuration))
+						>> attr("")
+						>> attr(Event::Args())
+						>> current_pos_.current_pos						
+						>> -(
+								lit("~")[at_c<EvType>(_val) = Event::TiedRepeat] 
+								| (lit("->")[at_c<EvType>(_val) = Event::Meta][at_c<EvStringValue>(_val) = FM_STRING("vorschlag")])
+							)
+					)					
+					|
+					( // CHORD
+						current_pos_.current_pos 
+						>> attr(sourceId_)
+						>> attr(Event::Chord)
+						>> attr(Event::Tags())
+						>> attr(PitchDef())
+						>> attr(Event::NoDuration)					
+						>> lexeme[
+							char_("a-gA-G")
+							> *char_(ChordDefParser::ALLOWED_CHORD_SYMBOLS_REGEX)
+						]
+						>> attr(Event::Args())
+						>> current_pos_.current_pos	
+					)
+					|
+					( // EXPRESSIONS
+						current_pos_.current_pos 
+						>> attr(sourceId_)
+						>> "\\" 
+						>> attr(Event::Meta)
+						>> attr(Event::Tags())
+						>> attr(PitchDef()) 
+						>> attr(Event::NoDuration) 
+						>> attr("expression") 
+						>> expressionSymbols_
+					)
+					| 
+					( // EXPRESSION PERFORMED ONCE
+						current_pos_.current_pos 
+						>> attr(sourceId_)
+						>> "!" 
+						>> attr(Event::Meta)
+						>> attr(Event::Tags())
+						>> attr(PitchDef()) 
+						>> attr(Event::NoDuration) 
+						>> attr("singleExpression") 
+						>> expressionSymbols_
+					)
+					| 
+					( // REST
+						current_pos_.current_pos 
+						>> attr(sourceId_)
+						>> "r" 
+						>> attr(Event::Rest)
+						>> attr(Event::Tags())
+						>> attr(PitchDef()) 
+						>> (durationSymbols_ | attr(Event::NoDuration))
+						>> attr("")
+						>> attr(Event::Args())
+						>> current_pos_.current_pos	
+					)
+					| 
+					( // END OF BAR
+						current_pos_.current_pos 
+						>> attr(sourceId_)
+						>> "|"
+						>> attr(Event::EOB)
+						>> attr(Event::Tags())
+						>> attr(PitchDef()) 
+						>> attr(Event::NoDuration)
+					)
+					| 
+					( // META COMMANDS
+						current_pos_.current_pos 
+						>> attr(sourceId_)
+						>>  "/" 
+						>> attr(Event::Meta)
+						>> attr(Event::Tags())
+						>> attr(PitchDef()) 
+						>> attr(Event::NoDuration) 
+						>> +argument_
+						>> "/"
+					)
+					;
 
 					groupedEvent_ %= 
 						attr(sourceId_)
