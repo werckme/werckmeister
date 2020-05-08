@@ -142,8 +142,6 @@ namespace sheet {
 					using qi::lexeme;
 					using ascii::char_;
 					argument_ = meta_arg_value_;
-					//argument_ %= lexeme['"' > +(char_ - '"') > '"'];
-					//argument_ %= lexeme[+char_(ALLOWED_META_ARGUMENT)];
 				}
 
 				template<class DocumentConfigRules>
@@ -158,7 +156,7 @@ namespace sheet {
 						>> attr(sourceId_)
 						>> +char_("a-zA-Z") 
 						>> ":" 
-						>> +(argument_)
+						>> +argument_
 						> ";";
 				}
 
