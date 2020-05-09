@@ -22,26 +22,26 @@ namespace fm {
         }
         return &(it->second);
     }
-    DeviceConfig ConfigServer::createDeviceConfig(const fm::String &name, std::vector<fm::String> &args) 
+    DeviceConfig ConfigServer::createDeviceConfig(const fm::String &name, std::vector<sheet::Argument> &args) 
     {
         DeviceConfig cf;
         if (args.empty()) {
             FM_THROW(Exception, "missing device type argument");
         }
         auto type = args.at(0);
-        if (type == FM_STRING("midi")) {
+        if (type.value == FM_STRING("midi")) {
             if (args.size() < 2) {
                 FM_THROW(Exception, "missing deviceid argument");
             }
             cf.type = DeviceConfig::Midi;
-            cf.deviceId = args.at(1);
+            cf.deviceId = args.at(1).value;
         }
         auto offsetValue = sheet::getArgValueFor<int>(FM_STRING("offset"), args);
         if (offsetValue.first) { // offset in ms
             cf.offsetMillis = offsetValue.second;
         }
         if (cf.type == DeviceConfig::Undefinded) {
-            FM_THROW(Exception, "no config for " + name + ", " + type);
+            FM_THROW(Exception, "no config for " + name + ", " + type.value);
         }
         return cf;
     }

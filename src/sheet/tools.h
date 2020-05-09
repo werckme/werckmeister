@@ -40,18 +40,17 @@ namespace sheet {
         TArg __getArgument(const TArgs &args, int idx, TArg *defaultValue) 
         {
             return TArg();
-            // #74 TODO
-            // if (idx >= (int)args.size()) {
-            //     if (defaultValue) {
-            //         return *defaultValue;
-            //     }
-            //     throw MissingArgument();
-            // }
-            // TArg result;
-            // fm::StringStream ss;
-            // ss << args[idx];
-            // ss >> result;
-            // return result;
+            if (idx >= (int)args.size()) {
+                if (defaultValue) {
+                    return *defaultValue;
+                }
+                throw MissingArgument();
+            }
+            TArg result;
+            fm::StringStream ss;
+            ss << args[idx].value;
+            ss >> result;
+            return result;
         }		
     }
     
@@ -116,7 +115,7 @@ namespace sheet {
      * @return std::pair(found, theValue)
      **/
     template <typename TValue, class TContainer>
-    std::pair<bool, TValue> getArgValueFor(const typename TContainer::value_type &key, const TContainer &container)
+    std::pair<bool, TValue> getArgValueFor(const fm::String &key, const TContainer &container)
     {
         auto defaultValue = TValue();
         if (key.empty()) {
@@ -124,7 +123,7 @@ namespace sheet {
         }
         size_t idx = 0;
         for(const auto &x : container) {
-            if (x == key) {
+            if (x.value == key) {
                 if (idx+1 >= container.size()) {
                     return std::make_pair(false, defaultValue);
                 }
