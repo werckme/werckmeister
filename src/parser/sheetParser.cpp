@@ -197,7 +197,7 @@ namespace sheet {
 					meta_arg_value_.name("argument value");
 					
 					quoted_string %= lexeme['"' > +(char_ - '"') > '"'];
-					meta_arg_value_ = quoted_string | +char_(ALLOWED_META_ARGUMENT);
+					meta_arg_value_ = quoted_string | lexeme[+char_(ALLOWED_META_ARGUMENT)];
 
 					using_ %= "using" > quoted_string > ";";
 					usings_ %= *using_;
