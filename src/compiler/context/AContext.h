@@ -215,19 +215,18 @@ namespace sheet {
 						std::function<fm::String(const typename TContainer::value_type&)> fcommand, 
 						std::function<std::vector<sheet::Argument>(const typename TContainer::value_type&)> fargs)
 		{
-			// #74 TODO
-			// int idx = 0;
-			// for(const auto &x : container) {
-			// 	fm::String command = fcommand(x);
-			// 	std::vector<fm::String> args = fargs(x);
-			// 	try {
-			// 		processMeta(command, args);
-			// 		idx++;
-			// 	} catch(fm::Exception &ex) {
-			// 		ex << ex_sheet_source_info(x);
-			// 		throw;
-			// 	}
-			// }
+			int idx = 0;
+			for(const auto &x : container) {
+				fm::String command = fcommand(x);
+				std::vector<sheet::Argument> args = fargs(x);
+				try {
+					processMeta(command, args);
+					idx++;
+				} catch(fm::Exception &ex) {
+					ex << ex_sheet_source_info(x);
+					throw;
+				}
+			}
 		}
     }
 }
