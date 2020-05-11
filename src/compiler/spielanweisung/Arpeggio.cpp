@@ -43,7 +43,7 @@ namespace sheet {
 
 		void Arpeggio::setArguments(const Event::Args &args)
 		{
-			// #74 TODO
+			// #74.2 TODO
 			// if (args.size() > 1) {
 			// 	auto directionStr = getArgumentValue<fm::String>(args, 1);
 			// 	if (directionStr == FM_STRING("down")) {

@@ -133,7 +133,7 @@ namespace sheet {
 
         void LuaModification::pushArgs(const Event::Args &args)
         {
-            // #74 TODO
+            // #74.2 TODO
             // lua_createtable(L, 0, 0);
             // if (args.size() == 1) { // first arg is the script name
             //     return;

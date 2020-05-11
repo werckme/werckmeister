@@ -200,7 +200,7 @@ namespace sheet {
      * @return theValue or default value
      **/
     template <typename TValue, class TContainer>
-    TValue getArgValueFor(const typename TContainer::value_type &key, const TContainer &container, const TValue &defaultValue)
+    TValue getArgValueFor(const fm::String &key, const TContainer &container, const TValue &defaultValue)
     {
         auto result = getArgValueFor<TValue>(key, container);
         if (!result.first) {

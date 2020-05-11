@@ -86,7 +86,7 @@ namespace sheet {
 
 	void SimpleGuitar::setArguments(const Event::Args &args) 
 	{
-		// #74 TODO
+		// #74.2 TODO
 		// if (args.size() > 1) {
 		// 		auto optionStr = getArgumentValue<fm::String>(args, 1);
 		// 		if (optionStr == FM_STRING("lowerRange")) {

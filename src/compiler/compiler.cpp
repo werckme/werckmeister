@@ -32,11 +32,10 @@ namespace sheet {
 			auto ctx = context();
 
 			try {
-				// #74-TODO
-				// ctx->processMeta(document->sheetDef.documentConfigs, 
-				// 	[](const auto &x) { return x.name; }, 
-				// 	[](const auto &x) { return x.args; }
-				// );
+				ctx->processMeta(document->sheetDef.documentConfigs, 
+					[](const auto &x) { return x.name; }, 
+					[](const auto &x) { return x.args; }
+				);
 			} catch (fm::Exception &ex) {
 				ex << ex_sheet_document(document);
 				throw;
@@ -68,18 +67,16 @@ namespace sheet {
 			auto renderer = sheetEventRenderer();
 			for (auto &track : document_->sheetDef.tracks)
 			{
-				// #74-TODO
-				// fm::String type = getFirstMetaValueBy(SHEET_META__TRACK_META_KEY_TYPE, track.trackConfigs);
-				// if (!type.empty()) { // do not render tracks with a specific type
-				// 	continue;
-				// }				
+				fm::String type = getFirstMetaValueBy(SHEET_META__TRACK_META_KEY_TYPE, track.trackConfigs).value;
+				if (!type.empty()) { // do not render tracks with a specific type
+					continue;
+				}				
 				auto trackId = ctx->createTrack();
 				ctx->setTrack(trackId);
-				// #74-TODO
-				// ctx->processMeta(track.trackConfigs, 
-				// 	[](const auto &x) { return x.name; }, 
-				// 	[](const auto &x) { return x.args; }
-				// );
+				ctx->processMeta(track.trackConfigs, 
+					[](const auto &x) { return x.name; }, 
+					[](const auto &x) { return x.args; }
+				);
 				preprocessor.process(track);
 				for (const auto &voice : track.voices)
 				{
@@ -151,15 +148,14 @@ namespace sheet {
 			}
 			template<class TContainer>
 			Track * getFirstSheetTrack(TContainer &c) {
-				// #74 TODO
-				// auto sheetTrackIt = 
-				// 	std::find_if(c.begin(), c.end(), [](const auto &x) {  
-				// 		return getFirstMetaValueBy(SHEET_META__TRACK_META_KEY_TYPE, x.trackConfigs) == SHEET_META__TRACK_META_VALUE_TYPE_ACCOMP;
-				// 	});
-				// if (sheetTrackIt == c.end()) {
-				// 	return nullptr;
-				// }
-				// return &(*sheetTrackIt);
+				auto sheetTrackIt = 
+					std::find_if(c.begin(), c.end(), [](const auto &x) {  
+						return getFirstMetaValueBy(SHEET_META__TRACK_META_KEY_TYPE, x.trackConfigs).value == SHEET_META__TRACK_META_VALUE_TYPE_ACCOMP;
+					});
+				if (sheetTrackIt == c.end()) {
+					return nullptr;
+				}
+				return &(*sheetTrackIt);
 			} 
 		}
 

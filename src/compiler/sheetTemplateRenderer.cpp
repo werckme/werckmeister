@@ -48,11 +48,10 @@ namespace sheet {
 			ctx_->setTarget(trackId, voiceId);
 			if (trackIsNew) {
 				try {
-					// #74 TODO
-					// ctx_->processMeta(track.trackConfigs, 
-					// 	[](const auto &x) { return x.name; }, 
-					// 	[](const auto &x) { return x.args; }
-					// );
+					ctx_->processMeta(track.trackConfigs, 
+						[](const auto &x) { return x.name; }, 
+						[](const auto &x) { return x.args; }
+					);
 				} catch (fm::Exception &ex) {
 					throw;
 				}
@@ -202,22 +201,21 @@ namespace sheet {
 
 			void __handleTemplatePositionCmd(const Event &metaEvent, DegreeEventServer &eventServer)
 			{
-				// #74 TODO 
-				// try {
-				// 	const auto &args = metaEvent.metaArgs;
-				// 	if (args.empty()) {
-				// 		FM_THROW(Exception, fm::String("no args for: ") + SHEET_META__SHEET_TEMPLATE_POSITION);
-				// 	}
-				// 	auto arg = args.front();
-				// 	if (arg == SHEET_META__SHEET_TEMPLATE_POSITION_CMD_RESET) {
-				// 		eventServer.seek(0);
-				// 	} else {
-				// 		FM_THROW(Exception, fm::String("invalid arg for: ") + SHEET_META__SHEET_TEMPLATE_POSITION + ": " + arg);
-				// 	}
-				// } catch (fm::Exception &ex) {
-				// 	ex << ex_sheet_source_info(metaEvent);
-				// 	throw;
-				// }
+				try {
+					const auto &args = metaEvent.metaArgs;
+					if (args.empty()) {
+						FM_THROW(Exception, fm::String("no args for: ") + SHEET_META__SHEET_TEMPLATE_POSITION);
+					}
+					auto arg = args.front();
+					if (arg.value == SHEET_META__SHEET_TEMPLATE_POSITION_CMD_RESET) {
+						eventServer.seek(0);
+					} else {
+						FM_THROW(Exception, fm::String("invalid arg for: ") + SHEET_META__SHEET_TEMPLATE_POSITION + ": " + arg.value);
+					}
+				} catch (fm::Exception &ex) {
+					ex << ex_sheet_source_info(metaEvent);
+					throw;
+				}
 			}
 
 			void __handleChordMeta(AContext *ctx,
