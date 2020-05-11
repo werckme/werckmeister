@@ -92,7 +92,7 @@ namespace sheet {
     }
 
     template<class TMetaInfoContainer>
-    auto getMetaValuesBy(const fm::String &name, const TMetaInfoContainer& container, bool required = false)
+    auto getMetaArgumentsWithKeyName(const fm::String &name, const TMetaInfoContainer& container, bool required = false)
     {
         auto it = std::find_if(container.begin(), 
                                container.end(), 
@@ -107,11 +107,11 @@ namespace sheet {
     } 
     
     template<class TMetaInfoContainer>
-    sheet::Argument getFirstMetaValueBy(const fm::String &name, const TMetaInfoContainer& container, bool required = false)
+    sheet::Argument getFirstMetaArgumentWithKeyName(const fm::String &name, const TMetaInfoContainer& container, bool required = false)
     {
-        auto values = getMetaValuesBy(name, container, required);
+        auto values = getMetaArgumentsWithKeyName(name, container, required);
         if (values.empty()) {
-            // no required check needed here (getMetaValuesBy throws already)
+            // no required check needed here (getMetaArgumentsWithKeyName throws already)
             return sheet::Argument();
         }
         return *values.begin();

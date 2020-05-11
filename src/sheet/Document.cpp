@@ -42,32 +42,31 @@ namespace sheet {
 
 	void Document::createSheetTemplatesMap()
 	{
-		// #74.2 TODO
-		// sheetTemplates_ = std::make_unique<SheetTemplates>();
-		// SheetTemplates &sheetTemplates = *sheetTemplates_;
-		// compiler::Preprocessor preprocessor;
-		// for(auto &track : this->sheetDef.tracks) {
-		// 	try {
-		// 		fm::String type = getFirstMetaValueBy(SHEET_META__TRACK_META_KEY_TYPE, track.trackConfigs);
-		// 		if (type != SHEET_META__TRACK_META_VALUE_TYPE_SHEET_TEMPLATE) {
-		// 			continue;
-		// 		}
-		// 		fm::String sheetTemplateName = getFirstMetaValueBy(SHEET_META__TRACK_META_KEY_NAME, track.trackConfigs);
-		// 		if (sheetTemplateName.empty()) {
-		// 			FM_THROW(compiler::Exception, "missing 'name' for sheetTemplate track");
-		// 		}					
-		// 		auto sheetTemplate = findSheetTemplate(sheetTemplateName);
-		// 		if (sheetTemplate == nullptr) {
-		// 			sheetTemplates[sheetTemplateName] = SheetTemplate(sheetTemplateName);
-		// 			sheetTemplate = &(sheetTemplates[sheetTemplateName]);
-		// 		}
-		// 		preprocessor.process(track);
-		// 		sheetTemplate->tracks.push_back(&track);
-		// 	} catch(const fm::Exception &ex) {
-		// 		ex << compiler::ex_sheet_source_info(track);
-		// 		throw;
-		// 	}
-		// }
+		sheetTemplates_ = std::make_unique<SheetTemplates>();
+		SheetTemplates &sheetTemplates = *sheetTemplates_;
+		compiler::Preprocessor preprocessor;
+		for(auto &track : this->sheetDef.tracks) {
+			try {
+				fm::String type = getFirstMetaArgumentWithKeyName(SHEET_META__TRACK_META_KEY_TYPE, track.trackConfigs).value;
+				if (type != SHEET_META__TRACK_META_VALUE_TYPE_SHEET_TEMPLATE) {
+					continue;
+				}
+				fm::String sheetTemplateName = getFirstMetaArgumentWithKeyName(SHEET_META__TRACK_META_KEY_NAME, track.trackConfigs).value;
+				if (sheetTemplateName.empty()) {
+					FM_THROW(compiler::Exception, "missing 'name' for sheetTemplate track");
+				}					
+				auto sheetTemplate = findSheetTemplate(sheetTemplateName);
+				if (sheetTemplate == nullptr) {
+					sheetTemplates[sheetTemplateName] = SheetTemplate(sheetTemplateName);
+					sheetTemplate = &(sheetTemplates[sheetTemplateName]);
+				}
+				preprocessor.process(track);
+				sheetTemplate->tracks.push_back(&track);
+			} catch(const fm::Exception &ex) {
+				ex << compiler::ex_sheet_source_info(track);
+				throw;
+			}
+		}
 	}
 
 	Document::SheetTemplates & Document::sheetTemplates()

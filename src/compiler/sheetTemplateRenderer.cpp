@@ -310,7 +310,7 @@ namespace sheet {
 							ctx_->voiceMetaData()->barPosition = 0;
 
 							DEBUGX(
-								auto trackname = getMetaValuesBy("name", track->trackConfigs).front();
+								auto trackname = getMetaArgumentsWithKeyName("name", track->trackConfigs).front();
 								auto position = ctx_->voiceMetaData()->position;
 								auto tempofac = ctx_->voiceMetaData()->tempoFactor;
 								std::cout << trackname << " ; " << position << " ; " << tempofac << std::endl;
