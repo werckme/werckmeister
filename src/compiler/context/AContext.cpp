@@ -392,14 +392,13 @@ namespace sheet {
 
 		void AContext::metaAddDevice(const fm::String name, const Event::Args &args)
 		{
-			// #74 TODO
-			// auto &cs = getConfigServer();
-			// if (args.size() < 2) {
-			// 	FM_THROW(Exception, "not enough arguments for device config");
-			// }
-			// std::vector<fm::String> deviceArgs(args.begin() + 1, args.end());
-			// auto device = cs.createDeviceConfig(name, deviceArgs);
-			// cs.addDevice(name, device);
+			auto &cs = getConfigServer();
+			if (args.size() < 2) {
+				FM_THROW(Exception, "not enough arguments for device config");
+			}
+			std::vector<sheet::Argument> deviceArgs(args.begin() + 1, args.end());
+			auto device = cs.createDeviceConfig(name, deviceArgs);
+			cs.addDevice(name, device);
 		}
 
 		void AContext::metaSetVoicingStrategy(const fm::String &name, const Event::Args &args)

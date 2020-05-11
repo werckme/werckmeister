@@ -24,6 +24,7 @@ namespace fm {
     }
     DeviceConfig ConfigServer::createDeviceConfig(const fm::String &name, std::vector<sheet::Argument> &args) 
     {
+        // #74.2 TODO
         DeviceConfig cf;
         if (args.empty()) {
             FM_THROW(Exception, "missing device type argument");
