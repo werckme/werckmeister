@@ -44,8 +44,8 @@ namespace sheet {
         void Bend::setArguments(const Event::Args &args)
         {
             // #74 TODO
-            // value = getArgument<double>(args, 2) / 100.;
-            // auto modestr = getArgument<fm::String>(args, 1);
+            // value = getArgumentValue<double>(args, 2) / 100.;
+            // auto modestr = getArgumentValue<fm::String>(args, 1);
             // if (modestr == FM_STRING("from")) {
             //     mode = From;
             // } else {

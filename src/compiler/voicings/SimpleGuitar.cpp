@@ -88,7 +88,7 @@ namespace sheet {
 	{
 		// #74 TODO
 		// if (args.size() > 1) {
-		// 		auto optionStr = getArgument<fm::String>(args, 1);
+		// 		auto optionStr = getArgumentValue<fm::String>(args, 1);
 		// 		if (optionStr == FM_STRING("lowerRange")) {
 		// 			lowerRange = true;
 		// 		}

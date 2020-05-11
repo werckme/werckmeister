@@ -36,42 +36,59 @@ namespace sheet {
     }
     namespace {
         struct MissingArgument {};
-        template<typename TArg, typename TArgs>
-        TArg __getArgument(const TArgs &args, int idx, TArg *defaultValue) 
+
+        template<typename TArgs>
+        const Argument * __getArgument(const TArgs &args, int idx) 
         {
-            return TArg();
             if (idx >= (int)args.size()) {
+                return nullptr;
+            }
+            return &args[idx];
+
+        }	
+
+        template<typename TValue, typename TArgs>
+        TValue __getArgumentValue(const TArgs &args, int idx, TValue *defaultValue) 
+        {
+            const Argument *argument = __getArgument(args, idx);
+            if (!argument) {
                 if (defaultValue) {
                     return *defaultValue;
                 }
                 throw MissingArgument();
             }
-            TArg result;
-            fm::StringStream ss;
-            ss << args[idx].value;
-            ss >> result;
-            return result;
+            return argument->parseValue<TValue>();
         }		
     }
     
     template<typename TArg>
-    TArg getArgument(const Event &metaEvent, int idx, TArg *defaultValue = nullptr) 
+    TArg getArgumentValue(const Event &metaEvent, int idx, TArg *defaultValue = nullptr) 
     {
         try {
-            return __getArgument<TArg>(toolsimpl::getMetaArgs(metaEvent), idx, defaultValue);
+            return __getArgumentValue<TArg>(toolsimpl::getMetaArgs(metaEvent), idx, defaultValue);
         } catch(const MissingArgument&) {
             FM_THROW(fm::Exception, "missing argument for '" + toolsimpl::getMetaCommand(metaEvent) + "'");
         }
     }
 
     template<typename TArg, typename TArgs>
-    TArg getArgument(const TArgs &args, int idx, TArg *defaultValue = nullptr) 
+    TArg getArgumentValue(const TArgs &args, int idx, TArg *defaultValue = nullptr) 
     {
         try {
-            return __getArgument<TArg, TArgs>(args, idx, defaultValue);
+            return __getArgumentValue<TArg, TArgs>(args, idx, defaultValue);
         } catch(const MissingArgument&) {
             FM_THROW(fm::Exception, "missing meta argumnet");
         }
+    }
+
+    template<typename TArgs>
+    sheet::Argument getArgument(const TArgs &args, int idx) 
+    {
+        auto result = __getArgument<TArgs>(args, idx);
+        if (!result) {
+            FM_THROW(fm::Exception, "missing meta argumnet");
+        }
+        return *result;
     }
 
     template<class TMetaInfoContainer>
@@ -127,7 +144,7 @@ namespace sheet {
                 if (idx+1 >= container.size()) {
                     return std::make_pair(false, defaultValue);
                 }
-                auto result = getArgument<TValue>(container, idx+1, &defaultValue);
+                auto result = getArgumentValue<TValue>(container, idx+1, &defaultValue);
                 return std::make_pair(true, result);
             }
             ++idx;

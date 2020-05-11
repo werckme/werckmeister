@@ -418,28 +418,28 @@ namespace sheet {
 			// #74 TODO
 			// try {
 			// 	if (command == SHEET_META__MIDI_CHANNEL) {
-			// 		metaSetChannel(getArgument<int>(args, 0));
+			// 		metaSetChannel(getArgumentValue<int>(args, 0));
 			// 		return;
 			// 	}
 			// 	if (command == SHEET_META__MIDI_SOUNDSELECT) {
-			// 		metaSoundSelect(getArgument<int>(args, 0), getArgument<int>(args, 1));
+			// 		metaSoundSelect(getArgumentValue<int>(args, 0), getArgumentValue<int>(args, 1));
 			// 		return;
 			// 	}
 			// 	if (command == SHEET_META__MIDI_INSTRUMENT_DEF) {
-			// 		auto name = getArgument<fm::String>(args, 0);
+			// 		auto name = getArgumentValue<fm::String>(args, 0);
 			// 		std::size_t numArgs = args.size();
 			// 		if (numArgs == 4) {
-			// 			metaInstrument(getArgument<fm::String>(args, 0), getArgument<int>(args, 1), getArgument<int>(args, 2), getArgument<int>(args, 3));
+			// 			metaInstrument(getArgumentValue<fm::String>(args, 0), getArgumentValue<int>(args, 1), getArgumentValue<int>(args, 2), getArgumentValue<int>(args, 3));
 			// 			return;
 			// 		}
 			// 		if (numArgs == 5) {
-			// 			metaInstrument(getArgument<fm::String>(args, 0), getArgument<fm::String>(args, 1),getArgument<int>(args, 2), getArgument<int>(args, 3), getArgument<int>(args, 4));					
+			// 			metaInstrument(getArgumentValue<fm::String>(args, 0), getArgumentValue<fm::String>(args, 1),getArgumentValue<int>(args, 2), getArgumentValue<int>(args, 3), getArgumentValue<int>(args, 4));					
 			// 			return;
 			// 		}
 			// 		FM_THROW(Exception, "invalid number of arguments for instrumentDef: " + name );
 			// 	}
 			// 	if (command == SHEET_META__SET_INSTRUMENT_CONFIG) {
-			// 		metaSetInstrumentConfig(getArgument<fm::String>(args, 0), args);
+			// 		metaSetInstrumentConfig(getArgumentValue<fm::String>(args, 0), args);
 			// 		return;
 			// 	}
 			// } catch(const std::exception &ex) {

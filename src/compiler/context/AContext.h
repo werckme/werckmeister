@@ -139,8 +139,8 @@ namespace sheet {
 							std::function<std::vector<sheet::Argument>(const typename TContainer::value_type&)> fargs);
 			virtual void metaSetInstrument(const fm::String &uname) {}
 			virtual void metaSetSheetTemplate(const Event::Args &args);
-			virtual void metaSetExpression(const fm::String &value);
-			virtual void metaSetSingleExpression(const fm::String &value);
+			virtual void metaSetExpression(const sheet::Argument &argument);
+			virtual void metaSetSingleExpression(const sheet::Argument &argument);
 			virtual void metaSetTempo(double bpm) {}
 			virtual void metaSetVoicingStrategy(const fm::String &name, const Event::Args &args);
 			virtual void metaSetSpielanweisung(const fm::String &name, const Event::Args &args);

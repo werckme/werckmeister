@@ -9,7 +9,20 @@ namespace sheet {
     {
         fm::String value;
         fm::String name;
+
+        template<typename TValue>
+        TValue parseValue() const;
     };
+
+    template<typename TValue>
+    TValue Argument::parseValue() const
+    {
+        TValue result;
+        fm::StringStream ss;
+        ss << this->value;
+        ss >> result;
+        return result;
+    }
 
 }
 

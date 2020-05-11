@@ -267,92 +267,93 @@ namespace sheet {
 		}
 		void AContext::processMeta(const fm::String &command, const std::vector<sheet::Argument> &args)
 		{
-			// #74 TODO
-			// try {
-			// 	if (command == SHEET_META__TRACK_META_KEY_TYPE /*handled elsewhere*/
-			// 	|| command == SHEET_META__TRACK_META_KEY_NAME
-			// 	|| command == SHEET_META__SET_VORSCHLAG
-			// 	|| command == SHEET_META__SHEET_TEMPLATE_POSITION) 
-			// 	{
-			// 		return;
-			// 	}
+			try {
+				if (command == SHEET_META__TRACK_META_KEY_TYPE /*handled elsewhere*/
+				|| command == SHEET_META__TRACK_META_KEY_NAME
+				|| command == SHEET_META__SET_VORSCHLAG
+				|| command == SHEET_META__SHEET_TEMPLATE_POSITION) 
+				{
+					return;
+				}
 							
-			// 	if (command == SHEET_META__SET_SHEET_TEMPLATE) {
-			// 		metaSetSheetTemplate(args);
-			// 		return;
-			// 	}
-			// 	if (command == SHEET_META__SET_EXPRESSION) {
-			// 		metaSetExpression(getArgument<fm::String>(args, 0));
-			// 		return;
-			// 	}
-			// 	if (command == SHEET_META__SET_SINGLE_EXPRESSION) {
-			// 		metaSetSingleExpression(getArgument<fm::String>(args, 0));
-			// 		return;
-			// 	}
-			// 	if (command == SHEET_META__SET_TEMPO) {
-			// 		if (args.front() == SHEET_META__SET_TEMPO_VALUE_HALF) {
-			// 			metaSetTempo(masterTempo() * 0.5);
-			// 			return;
-			// 		}
-			// 		if (args.front() == SHEET_META__SET_TEMPO_VALUE_DOUBLE) {
-			// 			metaSetTempo(masterTempo() * 2);
-			// 			return;
-			// 		}
-			// 		if (args.front() == SHEET_META__SET_TEMPO_VALUE_NORMAL) {
-			// 			metaSetTempo(masterTempo());
-			// 			return;
-			// 		}					
-			// 		metaSetTempo(getArgument<fm::BPM>(args, 0));
-			// 		return;
-			// 	}
-			// 	if (command == SHEET_META__SET_VOICING_STRATEGY) {
-			// 		metaSetVoicingStrategy(getArgument<fm::String>(args, 0), args);
-			// 		return;
-			// 	}
-			// 	if (command == SHEET_META__SET_SPIELANWEISUNG) {
-			// 		metaSetSpielanweisung(getArgument<fm::String>(args, 0), args);
-			// 		return;
-			// 	}	
-			// 	if (command == SHEET_META__SET_SPIELANWEISUNG_ONCE) {
-			// 		metaSetSpielanweisungOnce(getArgument<fm::String>(args, 0), args);
-			// 		return;
-			// 	}	
-			// 	if (command == SHEET_META__SET_MOD) {
-			// 		metaSetModification(getArgument<fm::String>(args, 0), args);
-			// 		return;
-			// 	}	
-			// 	if (command == SHEET_META__SET_MOD_ONCE) {
-			// 		metaSetModificationOnce(getArgument<fm::String>(args, 0), args);
-			// 		return;
-			// 	}
-			// 	if (command == SHEET_META__SET_SIGNATURE) {
-			// 		metaSetSignature(getArgument<int>(args, 0), getArgument<int>(args, 1));
-			// 		return;
-			// 	}
-			// 	if (command == SHEET_META__SET_DEVICE) {
-			// 		metaAddDevice(getArgument<fm::String>(args, 0), args);
-			// 		return;
-			// 	}	
-			// 	if (command == SHEET_META__SET_VOLUME) {
-			// 		metaSetVolume(getArgument<int>(args, 0));
-			// 		return;
-			// 	}
-			// 	if (command == SHEET_META__SET_PAN) {
-			// 		metaSetPan(getArgument<int>(args, 0));
-			// 		return;
-			// 	}
-			// 	if (command == SHEET_META__INSTRUMENT) {
-			// 		metaSetInstrument(getArgument<fm::String>(args, 0));
-			// 		return;
-			// 	}
-			// } catch(const std::exception &ex) {
-			// 	FM_THROW(Exception, "failed to process " + command
-			// 						+": " + ex.what());
-			// }	
-			// catch(...) {
-			// 	FM_THROW(Exception, "failed to process " + command);
-			// }
-			// FM_THROW(Exception, "invalid command: " + command);								
+				if (command == SHEET_META__SET_SHEET_TEMPLATE) {
+					metaSetSheetTemplate(args);
+					return;
+				}
+				if (command == SHEET_META__SET_EXPRESSION) {
+					metaSetExpression(getArgument(args, 0));
+					return;
+				}
+				if (command == SHEET_META__SET_SINGLE_EXPRESSION) {
+					metaSetSingleExpression(getArgument(args, 0));
+					return;
+				}
+				if (command == SHEET_META__SET_TEMPO) {
+					sheet::Argument argument = args.front();
+					if (argument.value == SHEET_META__SET_TEMPO_VALUE_HALF) {
+						metaSetTempo(masterTempo() * 0.5);
+						return;
+					}
+					if (argument.value == SHEET_META__SET_TEMPO_VALUE_DOUBLE) {
+						metaSetTempo(masterTempo() * 2);
+						return;
+					}
+					if (argument.value == SHEET_META__SET_TEMPO_VALUE_NORMAL) {
+						metaSetTempo(masterTempo());
+						return;
+					}			
+					fm::BPM bpm = argument.parseValue<fm::BPM>();		
+					metaSetTempo(bpm);
+					return;
+				}
+				if (command == SHEET_META__SET_VOICING_STRATEGY) {
+					metaSetVoicingStrategy(getArgumentValue<fm::String>(args, 0), args);
+					return;
+				}
+				if (command == SHEET_META__SET_SPIELANWEISUNG) {
+					metaSetSpielanweisung(getArgumentValue<fm::String>(args, 0), args);
+					return;
+				}	
+				if (command == SHEET_META__SET_SPIELANWEISUNG_ONCE) {
+					metaSetSpielanweisungOnce(getArgumentValue<fm::String>(args, 0), args);
+					return;
+				}	
+				if (command == SHEET_META__SET_MOD) {
+					metaSetModification(getArgumentValue<fm::String>(args, 0), args);
+					return;
+				}	
+				if (command == SHEET_META__SET_MOD_ONCE) {
+					metaSetModificationOnce(getArgumentValue<fm::String>(args, 0), args);
+					return;
+				}
+				if (command == SHEET_META__SET_SIGNATURE) {
+					metaSetSignature(getArgumentValue<int>(args, 0), getArgumentValue<int>(args, 1));
+					return;
+				}
+				if (command == SHEET_META__SET_DEVICE) {
+					metaAddDevice(getArgumentValue<fm::String>(args, 0), args);
+					return;
+				}	
+				if (command == SHEET_META__SET_VOLUME) {
+					metaSetVolume(getArgumentValue<int>(args, 0));
+					return;
+				}
+				if (command == SHEET_META__SET_PAN) {
+					metaSetPan(getArgumentValue<int>(args, 0));
+					return;
+				}
+				if (command == SHEET_META__INSTRUMENT) {
+					metaSetInstrument(getArgumentValue<fm::String>(args, 0));
+					return;
+				}
+			} catch(const std::exception &ex) {
+				FM_THROW(Exception, "failed to process " + command
+									+": " + ex.what());
+			}	
+			catch(...) {
+				FM_THROW(Exception, "failed to process " + command);
+			}
+			FM_THROW(Exception, "invalid command: " + command);								
 		}
 		void AContext::setMeta(const Event &metaEvent)
 		{
@@ -450,20 +451,20 @@ namespace sheet {
 		{
 		}
 
-		void AContext::metaSetExpression(const fm::String &value)
+		void AContext::metaSetExpression(const sheet::Argument &argument)
 		{
 			auto meta = voiceMetaData();
-			auto expr = getExpression(value);
+			auto expr = getExpression(argument.value);
 			if (expr == fm::expression::Default) {
 				return;
 			}
 			meta->expression = expr;
 		}
 
-		void AContext::metaSetSingleExpression(const fm::String &value)
+		void AContext::metaSetSingleExpression(const sheet::Argument &argument)
 		{
 			auto meta = voiceMetaData();
-			auto expr = getExpression(value);
+			auto expr = getExpression(argument.value);
 			if (expr == fm::expression::Default) {
 				return;
 			}

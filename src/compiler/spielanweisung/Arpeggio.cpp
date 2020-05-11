@@ -45,7 +45,7 @@ namespace sheet {
 		{
 			// #74 TODO
 			// if (args.size() > 1) {
-			// 	auto directionStr = getArgument<fm::String>(args, 1);
+			// 	auto directionStr = getArgumentValue<fm::String>(args, 1);
 			// 	if (directionStr == FM_STRING("down")) {
 			// 		direction = Down;
 			// 	} else {
