@@ -28,6 +28,7 @@ BOOST_FUSION_ADAPT_STRUCT(
 
 BOOST_FUSION_ADAPT_STRUCT(
 	sheet::Argument,
+	(fm::String, name)
 	(fm::String, value)
 )
 
@@ -141,8 +142,8 @@ namespace sheet {
 					using qi::attr;
 					using qi::lexeme;
 					using ascii::char_;
-					argument_ = meta_arg_value_;
-					expression_argument_ = expressionSymbols_;
+					argument_ = ((("#" >> +char_("a-zA-Z") >> "=") | attr("")) >> meta_arg_value_) ;
+					expression_argument_ = attr("") >> expressionSymbols_;
 				}
 
 				template<class DocumentConfigRules>

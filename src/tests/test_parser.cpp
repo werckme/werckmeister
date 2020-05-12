@@ -12,6 +12,11 @@ namespace {
 		argument.value = value;
 		argument.name = "";
 		return argument;
+	}
+	sheet::Argument makeArg(fm::String name, fm::String value) {
+		auto argument = makeArg(value);
+		argument.name = name;
+		return argument;
 	}	
 }
 
@@ -31,6 +36,40 @@ key: \"value\";		\
 	BOOST_CHECK(defs.documentConfigs.size() == 1); 
 	auto const &meta = defs.documentConfigs[0];
 	BOOST_CHECK(meta.args[0].value == "value");
+}
+
+BOOST_AUTO_TEST_CASE(test_argNameQuotedValue)
+{
+	using namespace fm;
+	using sheet::PitchDef;
+	fm::String text = FM_STRING("\
+key: #name=\"value\";		\
+[{			    \
+}]			    \
+");
+	sheet::compiler::SheetDefParser parser;
+	auto defs = parser.parse(text);
+	BOOST_CHECK(defs.documentConfigs.size() == 1); 
+	auto const &meta = defs.documentConfigs[0];
+	BOOST_CHECK(meta.args[0].value == "value");
+	BOOST_CHECK(meta.args[0].name == "name");
+}
+
+BOOST_AUTO_TEST_CASE(test_argNameValue)
+{
+	using namespace fm;
+	using sheet::PitchDef;
+	fm::String text = FM_STRING("\
+key: #name=value;		\
+[{			    \
+}]			    \
+");
+	sheet::compiler::SheetDefParser parser;
+	auto defs = parser.parse(text);
+	BOOST_CHECK(defs.documentConfigs.size() == 1); 
+	auto const &meta = defs.documentConfigs[0];
+	BOOST_CHECK(meta.args[0].value == "value");
+	BOOST_CHECK(meta.args[0].name == "name");
 }
 
 BOOST_AUTO_TEST_CASE(test_argUnqouted)
@@ -195,7 +234,7 @@ BOOST_AUTO_TEST_CASE(test_SheetDefParser)
 		I,4 II,,8 III,,,16 IV32 | I,4 I,, I,,, I | r1 | <I' III' V'>4 \n\
 		/name: bass/\n\
 		/soundselect: \"0\" \"0\"/\n\
-		/acommand: arg1 arg2/\n\
+		/acommand: #first=arg1 #second=\"arg2\"/\n\
 	} -- a voice\n\
 	{\n\
 		IV'4. VII''8. I'''16. II32. | II'4 II'' II''' II | r1 \n\
@@ -224,10 +263,11 @@ BOOST_AUTO_TEST_CASE(test_SheetDefParser)
 
 	BOOST_CHECK_EQUAL(defs.tracks[0].voices[0].events[13].metaArgs.size(), (size_t)1);
 	BOOST_CHECK(checkMetaEvent(defs.tracks[0].voices[0].events[13], FM_STRING("name"), sheet::Event::Args({ makeArg("bass") })));
+
 	BOOST_CHECK_EQUAL(defs.tracks[0].voices[0].events[14].metaArgs.size(), (size_t)2);
 	BOOST_CHECK(checkMetaEvent(defs.tracks[0].voices[0].events[14], FM_STRING("soundselect"), sheet::Event::Args({ makeArg("0"), makeArg("0") })));
 	BOOST_CHECK_EQUAL(defs.tracks[0].voices[0].events[15].metaArgs.size(), (size_t)2);
-	BOOST_CHECK(checkMetaEvent(defs.tracks[0].voices[0].events[15], FM_STRING("acommand"), sheet::Event::Args({ makeArg("arg1"), makeArg("arg2") })));
+	BOOST_CHECK(checkMetaEvent(defs.tracks[0].voices[0].events[15], FM_STRING("acommand"), sheet::Event::Args({ makeArg("first", "arg1"), makeArg("second", "arg2") })));
 
 	BOOST_CHECK(checkNote(defs.tracks[0].voices[1].events[0], sheet::Event::Degree, 4, 1, 1.0_N4p));
 	BOOST_CHECK(checkNote(defs.tracks[0].voices[1].events[1], sheet::Event::Degree, 7, 2, 1.0_N8p));
