@@ -142,7 +142,7 @@ namespace sheet {
 					using qi::attr;
 					using qi::lexeme;
 					using ascii::char_;
-					argument_ = ((("#" >> +char_("a-zA-Z") >> "=") | attr("")) >> meta_arg_value_) ;
+					argument_ = ((("." >> +char_("a-zA-Z") >> "=") | attr("")) >> meta_arg_value_) ;
 					expression_argument_ = attr("") >> expressionSymbols_;
 				}
 

@@ -4,6 +4,20 @@
 #include <fm/werckmeister.hpp>
 #include <iterator>
 #include <sheet/tools.h>
+#include <sheet/Argument.h>
+
+BOOST_AUTO_TEST_CASE(test_getArgValue)
+{
+	std::vector<sheet::Argument> args = {
+		{fm::String("1"), fm::String("name1")},
+		{fm::String("2"), fm::String("")},
+		{fm::String("3"), fm::String("name3")}
+	};
+	BOOST_CHECK_EQUAL(sheet::getArgValue<int>(args, "name1", 0), 1);
+	BOOST_CHECK_EQUAL(sheet::getArgValue<int>(args, "name2", 1), 2);
+	BOOST_CHECK_EQUAL(sheet::getArgValue<int>(args, "noname", 9, 101), 101);
+	BOOST_CHECK_THROW(sheet::getArgValue<int>(args, "noname", 9), sheet::MissingArgument);
+}
 
 BOOST_AUTO_TEST_CASE(test_endswap)
 {
@@ -49,22 +63,6 @@ BOOST_AUTO_TEST_CASE(test_resource_loader)
 	BOOST_CHECK(res.length() > 0);
 }
 
-// BOOST_AUTO_TEST_CASE(test_get_line_and_position_0)
-// {
-// 	fm::String line;
-// 	int position = -1;
-// 	std::tie(line, position) = sheet::getLineAndPosition(fm::String(FM_STRING("")), 0, false);
-// 	BOOST_CHECK(line.length() == 0);
-// 	BOOST_CHECK(position == -1);
-
-// 	std::tie(line, position) = sheet::getLineAndPosition(fm::String(FM_STRING(" ")), 0, false);
-// 	BOOST_CHECK(line.length() == 1);
-// 	BOOST_CHECK(position == 0);
-
-// 	std::tie(line, position) = sheet::getLineAndPosition(fm::String(FM_STRING(" ")), 0);
-// 	BOOST_CHECK(line.length() == 0);
-// 	BOOST_CHECK(position == -1);
-// }
 
 BOOST_AUTO_TEST_CASE(test_get_line_and_position_1)
 {

@@ -48,7 +48,7 @@ namespace sheet {
         }	
 
         template<typename TValue, typename TArgs>
-        TValue __getArgumentValue(const TArgs &args, int idx, TValue *defaultValue) 
+        TValue __getArgumentValue(const TArgs &args, int idx, const TValue *defaultValue) 
         {
             const Argument *argument = __getArgument(args, idx);
             if (!argument) {
@@ -58,6 +58,17 @@ namespace sheet {
                 throw MissingArgument();
             }
             return argument->parseValue<TValue>();
+        }
+
+        template<typename TValue, class ArgContainer>
+        TValue __getArgValue(const ArgContainer &container, fm::String name, int position, const TValue* defaultValue = nullptr)
+        {
+            auto it = std::find_if(container.begin(), container.end(), [name](const auto &x) {return x.name == name;});
+            if (it != container.end()) {
+                const Argument *argument = &(*it);
+                return argument->parseValue<TValue>();
+            }
+            return __getArgumentValue<TValue>(container, position, defaultValue);
         }		
     }
     
@@ -77,7 +88,7 @@ namespace sheet {
         try {
             return __getArgumentValue<TArg, TArgs>(args, idx, defaultValue);
         } catch(const MissingArgument&) {
-            FM_THROW(fm::Exception, "missing meta argumnet");
+            FM_THROW(fm::Exception, "missing meta argument");
         }
     }
 
@@ -86,7 +97,7 @@ namespace sheet {
     {
         auto result = __getArgument<TArgs>(args, idx);
         if (!result) {
-            FM_THROW(fm::Exception, "missing meta argumnet");
+            FM_THROW(fm::Exception, "missing meta argument");
         }
         return *result;
     }
@@ -127,10 +138,34 @@ namespace sheet {
     }
 
     /**
+     * returns a value from an argument list, either by positon or by name.
+     * @arg the name of the parameter
+     * @arg the position in the arguments list
+     * @arg optional the default value
+     **/
+    template<typename TValue, class ArgContainer>
+    TValue getArgValue(const ArgContainer &container, fm::String name, int position) {
+        return __getArgValue<TValue>(container, name, position);
+    }
+
+    /**
+     * returns a value from an argument list, either by positon or by name.
+     * @arg the name of the parameter
+     * @arg the position in the arguments list
+     * @arg optional the default value
+     **/
+    template<typename TValue, class ArgContainer>
+    TValue getArgValue(const ArgContainer &container, fm::String name, int position, const TValue &defaultValue) {
+        return __getArgValue<TValue>(container, name, position, &defaultValue);
+    }
+
+
+    /**
      * returns a value from an argument list such as:
      * key1 value1 key2 value2 ...
      * @return std::pair(found, theValue)
      **/
+    DEPRECATED
     template <typename TValue, class TContainer>
     std::pair<bool, TValue> getArgValueFor(const fm::String &key, const TContainer &container)
     {
@@ -153,6 +188,7 @@ namespace sheet {
     }
 
 
+
     /**
      * returns {
      *      keyword1: [value1, value2]
@@ -167,6 +203,7 @@ namespace sheet {
      * }
      * for: "value0 keyword1 value1 value2 keyword 1 value2 value3 keyword2 value4 value5"
      **/
+    DEPRECATED
     template<class TArgContainer, class TKeywordContainer>
     std::multimap<fm::String, std::vector<fm::String>> 
     mapArgumentsByKeywords(const TArgContainer &args, const TKeywordContainer &keywords)
@@ -199,6 +236,7 @@ namespace sheet {
      * key1 value1 key2 value2 ...
      * @return theValue or default value
      **/
+    DEPRECATED
     template <typename TValue, class TContainer>
     TValue getArgValueFor(const fm::String &key, const TContainer &container, const TValue &defaultValue)
     {
