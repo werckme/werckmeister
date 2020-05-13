@@ -16,7 +16,7 @@ BOOST_AUTO_TEST_CASE(test_getArgValue)
 	BOOST_CHECK_EQUAL(sheet::getArgValue<int>(args, "name1", 0), 1);
 	BOOST_CHECK_EQUAL(sheet::getArgValue<int>(args, "name2", 1), 2);
 	BOOST_CHECK_EQUAL(sheet::getArgValue<int>(args, "noname", 9, 101), 101);
-	BOOST_CHECK_THROW(sheet::getArgValue<int>(args, "noname", 9), sheet::MissingArgument);
+	BOOST_CHECK_THROW(sheet::getArgValue<int>(args, "noname", 9), fm::Exception);
 }
 
 BOOST_AUTO_TEST_CASE(test_endswap)

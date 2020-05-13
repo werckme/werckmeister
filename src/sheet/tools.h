@@ -68,7 +68,11 @@ namespace sheet {
                 const Argument *argument = &(*it);
                 return argument->parseValue<TValue>();
             }
-            return __getArgumentValue<TValue>(container, position, defaultValue);
+            try {
+                return __getArgumentValue<TValue>(container, position, defaultValue);
+            } catch(const MissingArgument&) {
+                FM_THROW(fm::Exception, "missing argument: '" + name + "'");
+            }
         }		
     }
     

@@ -43,7 +43,7 @@ BOOST_AUTO_TEST_CASE(test_argNameQuotedValue)
 	using namespace fm;
 	using sheet::PitchDef;
 	fm::String text = FM_STRING("\
-key: .name=\"value\";	 	\
+key: ~name=\"value\";	 	\
 [{			    \
 }]			    \
 ");
@@ -60,7 +60,7 @@ BOOST_AUTO_TEST_CASE(test_argNameValue)
 	using namespace fm;
 	using sheet::PitchDef;
 	fm::String text = FM_STRING("\
-key: .name=value;		\
+key: ~name=value;		\
 [{			    \
 }]			    \
 ");
@@ -234,7 +234,7 @@ BOOST_AUTO_TEST_CASE(test_SheetDefParser)
 		I,4 II,,8 III,,,16 IV32 | I,4 I,, I,,, I | r1 | <I' III' V'>4 \n\
 		/name: bass/\n\
 		/soundselect: \"0\" \"0\"/\n\
-		/acommand: .first=arg1 .second=\"arg2\"/\n\
+		/acommand: ~first=arg1 ~second=\"arg2\"/\n\
 	} -- a voice\n\
 	{\n\
 		IV'4. VII''8. I'''16. II32. | II'4 II'' II''' II | r1 \n\
