@@ -148,7 +148,7 @@ namespace sheet {
 			virtual void metaSetModification(const fm::String &name, const Event::Args &args);
 			virtual void metaSetModificationOnce(const fm::String &name, const Event::Args &args);
 			virtual void metaSetSignature(int upper, int lower);
-			virtual void metaAddDevice(const fm::String name, const Event::Args &args);
+			virtual void metaAddDevice(const Event::Args &args);
 			virtual void metaAddVorschlag(const Event &ev);
 			virtual void metaSetVolume(int volume);
 			virtual void metaSetPan(int val);

@@ -13,7 +13,8 @@
 namespace sheet {
     struct Event;
     class Document;
-    
+
+    enum { NO_ARG_POSITION = -1 }; 
 
     template<class TString>
     struct NewLine {
@@ -34,6 +35,30 @@ namespace sheet {
         const std::vector<sheet::Argument> & getMetaArgs(const Event &metaEvent);
         const fm::String & getMetaCommand(const Event &metaEvent);
     }
+
+    template<typename TArgs>
+    void throwIfmixedNamedAndPositionalArgs(const TArgs &args) 
+    {
+        if (args.empty()) {
+            return;
+        }
+        auto it = args.begin();
+        bool positional = it->name.empty(); 
+        while(++it!=args.end())
+        {
+            bool argIsPositional = it->name.empty();
+            if(positional != argIsPositional) {
+                fm::StringStream ss;
+                ss << "don't mixup named and positional arguments:" << std::endl;
+                ss << "'" << (argIsPositional ? it->value : it->name) << "'";
+                ss << " is " << (argIsPositional ? "positional" : "named");
+                ss << ". The argument(s) before are " << (positional ? "positional" : "named");
+                ss << ".";
+                FM_THROW(fm::Exception, ss.str());
+            } 
+        }
+    }
+
     namespace {
         struct MissingArgument {};
 
@@ -50,6 +75,12 @@ namespace sheet {
         template<typename TValue, typename TArgs>
         TValue __getArgumentValue(const TArgs &args, int idx, const TValue *defaultValue) 
         {
+            if (idx == NO_ARG_POSITION) {
+                if (defaultValue) {
+                    return *defaultValue;
+                }                
+                throw MissingArgument();
+            }
             const Argument *argument = __getArgument(args, idx);
             if (!argument) {
                 if (defaultValue) {
@@ -63,6 +94,7 @@ namespace sheet {
         template<typename TValue, class ArgContainer>
         TValue __getArgValue(const ArgContainer &container, fm::String name, int position, const TValue* defaultValue = nullptr)
         {
+            throwIfmixedNamedAndPositionalArgs(container);
             auto it = std::find_if(container.begin(), container.end(), [name](const auto &x) {return x.name == name;});
             if (it != container.end()) {
                 const Argument *argument = &(*it);
@@ -140,6 +172,7 @@ namespace sheet {
         }
         dst.insert(dst.end(), toAppend.begin(), toAppend.end());
     }
+
 
     /**
      * returns a value from an argument list, either by positon or by name.

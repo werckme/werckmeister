@@ -331,7 +331,7 @@ namespace sheet {
 					return;
 				}
 				if (command == SHEET_META__SET_DEVICE) {
-					metaAddDevice(getArgumentValue<fm::String>(args, 0), args);
+					metaAddDevice(args);
 					return;
 				}	
 				if (command == SHEET_META__SET_VOLUME) {
@@ -390,15 +390,11 @@ namespace sheet {
 			vorschlag->vorschlagNote = ev;
 		}
 
-		void AContext::metaAddDevice(const fm::String name, const Event::Args &args)
+		void AContext::metaAddDevice(const Event::Args &args)
 		{
 			auto &cs = getConfigServer();
-			if (args.size() < 2) {
-				FM_THROW(Exception, "not enough arguments for device config");
-			}
-			std::vector<sheet::Argument> deviceArgs(args.begin() + 1, args.end());
-			auto device = cs.createDeviceConfig(name, deviceArgs);
-			cs.addDevice(name, device);
+			auto device = cs.createDeviceConfig(args);
+			cs.addDevice(device);
 		}
 
 		void AContext::metaSetVoicingStrategy(const fm::String &name, const Event::Args &args)
