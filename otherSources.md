@@ -4,9 +4,12 @@ https://en.wikipedia.org/wiki/Drum_rudiment#Diddle_rudiments
 
 https://www.youtube.com/watch?v=iMLGPD-nyT4&list=WL&index=99&t=0s
 
+https://www.youtube.com/playlist?list=PLThYwnIoLwyV_4OVK8Oj3idnHqX3qnTNR
+
 https://www.youtube.com/watch?v=CPxfM4gwjGo
 
 https://www.youtube.com/watch?v=U5bIwdUyc6g
+
 
 #voicing
 
