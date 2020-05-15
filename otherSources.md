@@ -10,6 +10,9 @@ https://www.youtube.com/watch?v=CPxfM4gwjGo
 
 https://www.youtube.com/watch?v=U5bIwdUyc6g
 
+https://www.youtube.com/watch?v=TsiYKOTmv1I&list=PLThYwnIoLwyUe_YPrFLXUj1lxBZLhB0hm&index=3
+
+https://www.youtube.com/watch?v=C1AtfdNKYug&list=PLThYwnIoLwyUe_YPrFLXUj1lxBZLhB0hm&index=7
 
 #voicing
 
