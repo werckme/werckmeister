@@ -9,7 +9,7 @@
 #include <vector>
 #include <memory>
 #include <boost/icl/interval_map.hpp>
-#include <sheet/ASheetObject.hpp>
+#include <sheet/objects/ASheetObject.h>
 
 namespace fmapp {
     /*

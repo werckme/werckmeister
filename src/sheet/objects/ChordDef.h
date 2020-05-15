@@ -6,6 +6,7 @@
 #include <set>
 #include "Interval.h"
 #include "ASheetObject.h"
+#include <sheet/objects/DegreeDef.h>
 
 namespace sheet {
     struct PitchDef;

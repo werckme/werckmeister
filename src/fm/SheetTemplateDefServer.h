@@ -1,8 +1,8 @@
 #ifndef SHEET_TEMPLATEDEF_SERVER_HPP
 #define SHEET_TEMPLATEDEF_SERVER_HPP
 
-#include "ChordDef.h"
-#include "SheetDef.h"
+#include <sheet/objects/ChordDef.h>
+#include <sheet/SheetDef.h>
 namespace sheet {
 
     class ISheetTemplateDefServer {

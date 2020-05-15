@@ -1,7 +1,7 @@
 #ifndef COMPILER_SHEET_EVENT_RENDERER_H
 #define COMPILER_SHEET_EVENT_RENDERER_H
 
-#include "sheet/Event.h"
+#include <sheet/objects/Event.h>
 #include "context/AContext.h"
 
 namespace sheet {

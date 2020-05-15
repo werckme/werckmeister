@@ -4,8 +4,8 @@
 #include <fm/common.hpp>
 #include <fm/units.hpp>
 #include <map>
-#include "Interval.h"
-#include "Event.h"
+#include "objects/Interval.h"
+#include "objects/Event.h"
 
 namespace sheet {
 

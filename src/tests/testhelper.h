@@ -2,7 +2,7 @@
 #ifndef SHEET_TEST_HELPER_H
 #define SHEET_TEST_HELPER_H
 
-#include <sheet/Event.h>
+#include <sheet/objects/Event.h>
 
 bool checkNote(const sheet::Event &ev,
     sheet::Event::Type type,

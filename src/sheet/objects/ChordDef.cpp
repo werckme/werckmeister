@@ -1,6 +1,6 @@
 #include "ChordDef.h"
 #include <algorithm>
-#include <sheet/Event.h>
+#include <sheet/objects/Event.h>
 
 namespace sheet {
 

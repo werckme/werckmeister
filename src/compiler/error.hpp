@@ -9,7 +9,7 @@
 #include <string>
 #include <list>
 #include <boost/exception/info.hpp>
-#include <sheet/ASheetObject.hpp>
+#include <sheet/objects/ASheetObject.h>
 #include <algorithm>
 #include <sstream>
 #include <fm/common.hpp>

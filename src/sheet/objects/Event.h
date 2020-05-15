@@ -10,7 +10,8 @@
 #include <functional>
 #include <fm/exception.hpp>
 #include "ASheetObjectWithSourceInfo.h"
-#include "Argument.h"
+#include <sheet/Argument.h>
+#include <sheet/PitchDef.h>
 
 namespace sheet {
 

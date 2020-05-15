@@ -2,7 +2,7 @@
 #define PARSER_H
 #include <fm/common.hpp>
 #include <vector>
-#include "sheet/ChordDef.h"
+#include <sheet/objects/ChordDef.h>
 #include "sheet/SheetDef.h"
 #include "sheet/Pitchmap.h"
 #include "sheet/DocumentUsing.h"

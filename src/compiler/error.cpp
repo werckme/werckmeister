@@ -1,12 +1,13 @@
 #include "error.hpp"
 #include <boost/exception/get_error_info.hpp>
-#include <sheet/Event.h>
+#include <sheet/objects/Event.h>
 #include <sheet/Document.h>
 #include <memory>
-#include <sheet/tools.h>
+#include <fm/tools.h>
 #include <fm/werckmeister.hpp>
 #include <fm/common.hpp>
 #include <iostream>
+#include <sheet/objects/ParserSourceInfo.h>
 
 namespace sheet {
 	namespace compiler {

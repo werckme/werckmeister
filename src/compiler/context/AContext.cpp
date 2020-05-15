@@ -9,8 +9,8 @@
 #include <compiler/modification/AModification.h>
 #include <fm/literals.hpp>
 #include <fm/config/configServer.h>
-#include <sheet/Track.h>
-#include <sheet/tools.h>
+#include <sheet/objects/Track.h>
+#include <fm/tools.h>
 #include <sstream>
 
 namespace sheet {

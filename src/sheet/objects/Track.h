@@ -5,8 +5,9 @@
 #include <vector>
 #include "Event.h"
 #include "ASheetObjectWithSourceInfo.h"
-#include "Argument.h"
+#include <sheet/Argument.h>
 #include "TrackConfig.h"
+#include "Voice.h"
 
 namespace sheet {
 

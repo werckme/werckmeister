@@ -3,20 +3,43 @@
 #include <fm/midi.hpp>
 #include <fm/werckmeister.hpp>
 #include <iterator>
-#include <sheet/tools.h>
+#include <fm/tools.h>
 #include <sheet/Argument.h>
 
-BOOST_AUTO_TEST_CASE(test_getArgValue)
+BOOST_AUTO_TEST_CASE(test_getArgValueByName)
 {
 	std::vector<sheet::Argument> args = {
 		{fm::String("1"), fm::String("name1")},
-		{fm::String("2"), fm::String("")},
+		{fm::String("2"), fm::String("name2")},
 		{fm::String("3"), fm::String("name3")}
 	};
 	BOOST_CHECK_EQUAL(sheet::getArgValue<int>(args, "name1", 0), 1);
 	BOOST_CHECK_EQUAL(sheet::getArgValue<int>(args, "name2", 1), 2);
 	BOOST_CHECK_EQUAL(sheet::getArgValue<int>(args, "noname", 9, 101), 101);
 	BOOST_CHECK_THROW(sheet::getArgValue<int>(args, "noname", 9), fm::Exception);
+}
+
+BOOST_AUTO_TEST_CASE(test_getArgValueByPosition)
+{
+	std::vector<sheet::Argument> args = {
+		{fm::String("1"), fm::String("")},
+		{fm::String("2"), fm::String("")},
+		{fm::String("3"), fm::String("")}
+	};
+	BOOST_CHECK_EQUAL(sheet::getArgValue<int>(args, "name1", 0), 1);
+	BOOST_CHECK_EQUAL(sheet::getArgValue<int>(args, "name2", 1), 2);
+	BOOST_CHECK_EQUAL(sheet::getArgValue<int>(args, "noname", 9, 101), 101);
+	BOOST_CHECK_THROW(sheet::getArgValue<int>(args, "noname", 9), fm::Exception);
+}
+
+BOOST_AUTO_TEST_CASE(test_throwIfMixNamedAndPositional)
+{
+	std::vector<sheet::Argument> args = {
+		{fm::String("1"), fm::String("")},
+		{fm::String("2"), fm::String("name")},
+		{fm::String("3"), fm::String("")}
+	};
+	BOOST_CHECK_THROW(sheet::getArgValue<int>(args, "", 0), fm::Exception);
 }
 
 BOOST_AUTO_TEST_CASE(test_endswap)

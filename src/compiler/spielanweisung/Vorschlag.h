@@ -1,7 +1,7 @@
 #ifndef SPIELANWEISUNG_VORSCHLAG_HPP
 #define SPIELANWEISUNG_VORSCHLAG_HPP
 
-#include <sheet/Event.h>
+#include <sheet/objects/Event.h>
 #include <compiler/modification/AModification.h>
 
 namespace sheet {

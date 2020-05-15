@@ -5,7 +5,7 @@
 #include <vector>
 #include "Event.h"
 #include "ASheetObject.h"
-#include "Argument.h"
+#include <sheet/Argument.h>
 #include "Event.h"
 
 namespace sheet {

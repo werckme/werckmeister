@@ -18,8 +18,10 @@
 #include <sstream>
 #include "parserSymbols.h"
 #include "parserPositionIt.h"
-#include "sheet/DocumentUsing.h"
-#include <sheet/tools.h>
+#include <sheet/DocumentUsing.h>
+#include <sheet/AliasPitchDef.h>
+#include <sheet/objects/Grouped.h>
+#include <fm/tools.h>
 
 BOOST_FUSION_ADAPT_STRUCT(
 	sheet::DocumentUsing,
@@ -45,7 +47,7 @@ BOOST_FUSION_ADAPT_STRUCT(
 )
 
 BOOST_FUSION_ADAPT_STRUCT(
-	sheet::AliasPitch,
+	sheet::AliasPitchDef,
 	(fm::String, alias)
 )
 
@@ -412,7 +414,7 @@ namespace sheet {
 				qi::rule<Iterator, Argument(), ascii::space_type> argument_;
 				qi::rule<Iterator, Argument(), ascii::space_type> expression_argument_;
 				qi::rule<Iterator, Track(), ascii::space_type> track;
-				qi::rule<Iterator, AliasPitch(), ascii::space_type> alias_;
+				qi::rule<Iterator, AliasPitchDef(), ascii::space_type> alias_;
 				qi::rule<Iterator, Voice(), ascii::space_type> voice;
 				qi::rule<Iterator, Voice::Events(), ascii::space_type> events;
 				qi::rule<Iterator, Event(), ascii::space_type> event_;

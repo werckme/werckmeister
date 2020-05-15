@@ -3,7 +3,7 @@
 
 
 #include <list>
-#include <sheet/ASheetObject.hpp>
+#include <sheet/objects/ASheetObjectWithSourceInfo.h>
 #include <string>
 #include <memory>
 

@@ -8,6 +8,7 @@ SET (SRC_FETZER_LIB
     fm/config/configServer.cpp
     fm/lua/ALuaObject.cpp
     fm/lua/ALuaScript.cpp
+    fm/tools.cpp
     compiler/compiler.cpp
     parser/chordDefParser.cpp
     parser/sheetParser.cpp
@@ -35,7 +36,6 @@ SET (SRC_FETZER_LIB
     sheet/objects/Event.cpp
     sheet/objects/ChordDef.cpp
     sheet/Document.cpp
-    compiler/tools.cpp
 )
 
 add_definitions( -DGIT_VERSION="${GIT_VERSION}" )

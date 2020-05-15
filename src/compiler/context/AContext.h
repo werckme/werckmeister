@@ -1,14 +1,14 @@
 #ifndef COMPILER_CONTEXT_H
 #define COMPILER_CONTEXT_H
 
-#include <sheet/Event.h>
+#include <sheet/objects/Event.h>
 #include <memory>
 #include <unordered_map>
 #include <fm/units.hpp>
 #include <fm/literals.hpp>
 #include <map>
 #include <unordered_map>
-#include <sheet/SheetTemplateDefServer.h>
+#include <fm/SheetTemplateDefServer.h>
 #include <compiler/voicings/VoicingStrategy.h>
 #include <fm/common.hpp>
 #include <compiler/metaCommands.h>
