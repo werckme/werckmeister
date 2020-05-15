@@ -32,10 +32,10 @@ SET (SRC_FETZER_LIB
     compiler/warning.cpp
     compiler/argumentNames.cpp
     compiler/lua/luaTimeInfo.cpp
-    sheet/Event.cpp
+    sheet/objects/Event.cpp
+    sheet/objects/ChordDef.cpp
     sheet/Document.cpp
-    sheet/ChordDef.cpp
-    sheet/tools.cpp
+    compiler/tools.cpp
 )
 
 add_definitions( -DGIT_VERSION="${GIT_VERSION}" )
