@@ -1,4 +1,4 @@
-#drumming
+# drumming
 
 https://en.wikipedia.org/wiki/Drum_rudiment#Diddle_rudiments
 
@@ -14,7 +14,7 @@ https://www.youtube.com/watch?v=TsiYKOTmv1I&list=PLThYwnIoLwyUe_YPrFLXUj1lxBZLhB
 
 https://www.youtube.com/watch?v=C1AtfdNKYug&list=PLThYwnIoLwyUe_YPrFLXUj1lxBZLhB0hm&index=7
 
-#voicing
+# voicing
 
 https://www.youtube.com/watch?v=hNYJFaQZRnI&list=WL&index=25&t=0s
 
