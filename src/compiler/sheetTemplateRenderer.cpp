@@ -110,7 +110,7 @@ namespace sheet {
 				auto ctx = sheetTemplateRenderer.context();
 				AContext::SheetTemplates templates;
 				for (size_t idx=0; idx < metaEvent.metaArgs.size(); ++idx) {
-					auto sheetTemplateName = getArgumentValue<fm::String>(metaEvent, idx);
+					auto sheetTemplateName =fm::getArgumentValue<fm::String>(metaEvent, idx);
 					auto sheetTemplate = ctx->sheetTemplateDefServer()->getSheetTemplate(sheetTemplateName);
 					if (sheetTemplate.empty()) {
 						FM_THROW(Exception, "sheetTemplate not found: " + sheetTemplateName);

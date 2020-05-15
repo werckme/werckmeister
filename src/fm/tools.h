@@ -13,6 +13,9 @@
 namespace sheet {
     struct Event;
     class Document;
+}
+
+namespace fm {
 
     enum { NO_ARG_POSITION = -1 }; 
 
@@ -32,8 +35,8 @@ namespace sheet {
     };
 
     namespace toolsimpl {
-        const std::vector<sheet::Argument> & getMetaArgs(const Event &metaEvent);
-        const fm::String & getMetaCommand(const Event &metaEvent);
+        const std::vector<sheet::Argument> & getMetaArgs(const sheet::Event &metaEvent);
+        const fm::String & getMetaCommand(const sheet::Event &metaEvent);
     }
 
     template<typename TArgs>
@@ -63,7 +66,7 @@ namespace sheet {
         struct MissingArgument {};
 
         template<typename TArgs>
-        const Argument * __getArgument(const TArgs &args, int idx) 
+        const sheet::Argument * __getArgument(const TArgs &args, int idx) 
         {
             if (idx >= (int)args.size()) {
                 return nullptr;
@@ -81,7 +84,7 @@ namespace sheet {
                 }                
                 throw MissingArgument();
             }
-            const Argument *argument = __getArgument(args, idx);
+            const sheet::Argument *argument = __getArgument(args, idx);
             if (!argument) {
                 if (defaultValue) {
                     return *defaultValue;
@@ -97,7 +100,7 @@ namespace sheet {
             throwIfmixedNamedAndPositionalArgs(container);
             auto it = std::find_if(container.begin(), container.end(), [name](const auto &x) {return x.name == name;});
             if (it != container.end()) {
-                const Argument *argument = &(*it);
+                const sheet::Argument *argument = &(*it);
                 return argument->parseValue<TValue>();
             }
             try {
@@ -109,7 +112,7 @@ namespace sheet {
     }
     
     template<typename TArg>
-    TArg getArgumentValue(const Event &metaEvent, int idx, TArg *defaultValue = nullptr) 
+    TArg getArgumentValue(const sheet::Event &metaEvent, int idx, TArg *defaultValue = nullptr) 
     {
         try {
             return __getArgumentValue<TArg>(toolsimpl::getMetaArgs(metaEvent), idx, defaultValue);
@@ -445,8 +448,8 @@ namespace sheet {
     std::stringstream & documentMessageWhere(std::stringstream &ss, const std::string filename, int line=-1);
     std::stringstream & documentMessageWhat(std::stringstream &ss, const std::string &what);
     std::stringstream & documentMessage(std::stringstream &ss, 
-        const std::shared_ptr<Document>, 
-        ASheetObjectWithSourceInfo::SourceId,
+        const std::shared_ptr<sheet::Document>, 
+        sheet::ASheetObjectWithSourceInfo::SourceId,
         unsigned int sourcePosition,
         const std::string &message);
 

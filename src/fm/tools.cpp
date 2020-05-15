@@ -3,12 +3,12 @@
 #include <sheet/Document.h>
 #include <fm/werckmeister.hpp>
 
-namespace sheet {
+namespace fm {
 
         namespace {
 			auto _lineAndPos(const fm::String &file, unsigned int sourcePos)
 			{
-				if (sourcePos == ASheetObjectWithSourceInfo::UndefinedPosition) {
+				if (sourcePos == sheet::ASheetObjectWithSourceInfo::UndefinedPosition) {
 					sourcePos = 0;
 				}
 				try {
@@ -29,11 +29,11 @@ namespace sheet {
 
     namespace toolsimpl {
 
-        const std::vector<sheet::Argument> & getMetaArgs(const Event &metaEvent)
+        const std::vector<sheet::Argument> & getMetaArgs(const sheet::Event &metaEvent)
         {
             return metaEvent.metaArgs;
         }
-        const fm::String & getMetaCommand(const Event &metaEvent)
+        const fm::String & getMetaCommand(const sheet::Event &metaEvent)
         {
             return metaEvent.stringValue;
         }
@@ -74,8 +74,8 @@ namespace sheet {
     }
 
     std::stringstream & documentMessage(std::stringstream &ss, 
-        const std::shared_ptr<Document> document, 
-        ASheetObjectWithSourceInfo::SourceId sourceId,
+        const std::shared_ptr<sheet::Document> document, 
+        sheet::ASheetObjectWithSourceInfo::SourceId sourceId,
         unsigned int sourcePosition,
         const std::string &message)
     {

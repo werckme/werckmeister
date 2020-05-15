@@ -445,7 +445,7 @@ namespace sheet {
 		{
 			SheetDef result;
 			fm::String source(first, last);
-			removeComments(source.begin(), source.end());
+			fm::removeComments(source.begin(), source.end());
 			_parse(source, result, sourceId);
 			return result;
 		}

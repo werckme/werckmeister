@@ -26,13 +26,13 @@ namespace fm {
     DeviceConfig ConfigServer::createDeviceConfig(const std::vector<sheet::Argument> &args) 
     {
         DeviceConfig cf;
-        cf.name = sheet::getArgValue<fm::String>(args, argumentNames.Device.WithName, 0);
-        auto type = sheet::getArgValue<fm::String>(args, argumentNames.Device.IsType, 1);
+        cf.name = fm::getArgValue<fm::String>(args, argumentNames.Device.WithName, 0);
+        auto type = fm::getArgValue<fm::String>(args, argumentNames.Device.IsType, 1);
         if (type == FM_STRING("midi")) {
             cf.type = DeviceConfig::Midi;
-            cf.deviceId = sheet::getArgValue<fm::String>(args, argumentNames.Device.UsePort, 2);
+            cf.deviceId = fm::getArgValue<fm::String>(args, argumentNames.Device.UsePort, 2);
         }
-        auto offsetValue = sheet::getArgValue<int>(args, argumentNames.Device.Offset, sheet::NO_ARG_POSITION, -1);
+        auto offsetValue = fm::getArgValue<int>(args, argumentNames.Device.Offset, fm::NO_ARG_POSITION, -1);
         cf.offsetMillis = offsetValue >0 ? offsetValue : 0;
         if (cf.type == DeviceConfig::Undefinded) {
             FM_THROW(Exception, "no config for " + cf.name + ", " + type);

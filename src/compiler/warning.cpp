@@ -8,7 +8,7 @@ namespace sheet {
     {
         std::stringstream ss;
         ss << "[WARNING] ";
-        documentMessage(ss, document, sourceObject.sourceId, sourceObject.sourcePositionBegin, message);
+        fm::documentMessage(ss, document, sourceObject.sourceId, sourceObject.sourcePositionBegin, message);
         return ss.str();
     }
 

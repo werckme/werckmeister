@@ -26,7 +26,7 @@ namespace sheet {
                 auto chordElements = chordEvent->chordElements();
                 auto base = std::get<0>(chordElements);
                 auto options = std::get<1>(chordElements);
-                auto strBase = pitchToString(base);
+                auto strBase = fm::pitchToString(base);
                 int top = lua_gettop(L);
                 lua_pushstring(L, "strOptions");
                 lua_pushstring(L, options.c_str());

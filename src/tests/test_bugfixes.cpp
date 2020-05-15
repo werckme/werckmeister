@@ -125,7 +125,7 @@ BOOST_AUTO_TEST_CASE(issue_100_mod_gt_1_in_instrument_config_fails)
 		"volume", "63"
 	};
 	std::vector<fm::String> keywords = {"mod", "volume"};
-	auto keywordsAndValues = sheet::mapArgumentsByKeywords(args, keywords);
+	auto keywordsAndValues = fm::mapArgumentsByKeywords(args, keywords);
 	BOOST_CHECK(keywordsAndValues.size() == 4);
 	BOOST_CHECK(keywordsAndValues.count("") == 1);
 

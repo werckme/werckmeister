@@ -65,7 +65,7 @@ namespace sheet {
 			auto renderer = sheetEventRenderer();
 			for (auto &track : document_->sheetDef.tracks)
 			{
-				fm::String type = getFirstMetaArgumentWithKeyName(SHEET_META__TRACK_META_KEY_TYPE, track.trackConfigs).value;
+				fm::String type = fm::getFirstMetaArgumentWithKeyName(SHEET_META__TRACK_META_KEY_TYPE, track.trackConfigs).value;
 				if (!type.empty()) { // do not render tracks with a specific type
 					continue;
 				}				
@@ -148,7 +148,7 @@ namespace sheet {
 			Track * getFirstSheetTrack(TContainer &c) {
 				auto sheetTrackIt = 
 					std::find_if(c.begin(), c.end(), [](const auto &x) {  
-						return getFirstMetaArgumentWithKeyName(SHEET_META__TRACK_META_KEY_TYPE, x.trackConfigs).value == SHEET_META__TRACK_META_VALUE_TYPE_ACCOMP;
+						return fm::getFirstMetaArgumentWithKeyName(SHEET_META__TRACK_META_KEY_TYPE, x.trackConfigs).value == SHEET_META__TRACK_META_VALUE_TYPE_ACCOMP;
 					});
 				if (sheetTrackIt == c.end()) {
 					return nullptr;

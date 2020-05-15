@@ -42,8 +42,8 @@ namespace sheet {
 
 			void append(DocumentPtr doc, const SheetDef &sheetDef)
 			{
-				append(doc->sheetDef.documentConfigs, sheetDef.documentConfigs);
-				append(doc->sheetDef.tracks, sheetDef.tracks);
+				fm::append(doc->sheetDef.documentConfigs, sheetDef.documentConfigs);
+				fm::append(doc->sheetDef.tracks, sheetDef.tracks);
 			}
 
 			void useChordDef(DocumentPtr doc, const fm::String &path, Event::SourceId sourceId)

@@ -298,8 +298,8 @@ namespace sheet {
 			auto argsEnd = args.end();
 			auto argsExceptFirst = Event::Args(argsBegin, argsEnd);
 			// #74.2 TODO
-			instrumentDef->volume = sheet::getArgValueFor<int>(SHEET_META__SET_INSTRUMENT_CONFIG_VOLUME, argsExceptFirst, instrumentDef->volume);
-			instrumentDef->pan = sheet::getArgValueFor<int>(SHEET_META__SET_INSTRUMENT_CONFIG_PAN, argsExceptFirst, instrumentDef->pan);
+			instrumentDef->volume = fm::getArgValueFor<int>(SHEET_META__SET_INSTRUMENT_CONFIG_VOLUME, argsExceptFirst, instrumentDef->volume);
+			instrumentDef->pan = fm::getArgValueFor<int>(SHEET_META__SET_INSTRUMENT_CONFIG_PAN, argsExceptFirst, instrumentDef->pan);
 			//auto argsMappedByKeyword = mapArgumentsByKeywords(args, keywords);
 			// auto argsRange = argsMappedByKeyword.equal_range(SHEET_META__SET_VOICING_STRATEGY);
 			// assign voicingStrategies
@@ -333,7 +333,7 @@ namespace sheet {
 			// velocity overrides
 			auto assignIfSet = [&argsExceptFirst, instrumentDef, this](const fm::String &expression){
 				// #74.2 TODO
-				// auto foundValue = sheet::getArgValueFor<int>(expression, argsExceptFirst);
+				// auto foundValue = fm::getArgumentValue<int>(expression, argsExceptFirst);
 				// if (!foundValue.first) {
 				// 	return;
 				// }
@@ -418,30 +418,30 @@ namespace sheet {
 		{
 			try {
 				if (command == SHEET_META__MIDI_CHANNEL) {
-					metaSetChannel(getArgumentValue<int>(args, 0));
+					metaSetChannel(fm::getArgumentValue<int>(args, 0));
 					return;
 				}
 				if (command == SHEET_META__MIDI_SOUNDSELECT) {
 					// #74.2 TODO
-					metaSoundSelect(getArgumentValue<int>(args, 0), getArgumentValue<int>(args, 1));
+					metaSoundSelect(fm::getArgumentValue<int>(args, 0), fm::getArgumentValue<int>(args, 1));
 					return;
 				}
 				if (command == SHEET_META__MIDI_INSTRUMENT_DEF) {
 					// #74.2 TODO
-					auto name = getArgumentValue<fm::String>(args, 0);
+					auto name = fm::getArgumentValue<fm::String>(args, 0);
 					std::size_t numArgs = args.size();
 					if (numArgs == 4) {
-						metaInstrument(getArgumentValue<fm::String>(args, 0), getArgumentValue<int>(args, 1), getArgumentValue<int>(args, 2), getArgumentValue<int>(args, 3));
+						metaInstrument(fm::getArgumentValue<fm::String>(args, 0), fm::getArgumentValue<int>(args, 1), fm::getArgumentValue<int>(args, 2), fm::getArgumentValue<int>(args, 3));
 						return;
 					}
 					if (numArgs == 5) {
-						metaInstrument(getArgumentValue<fm::String>(args, 0), getArgumentValue<fm::String>(args, 1),getArgumentValue<int>(args, 2), getArgumentValue<int>(args, 3), getArgumentValue<int>(args, 4));					
+						metaInstrument(fm::getArgumentValue<fm::String>(args, 0), fm::getArgumentValue<fm::String>(args, 1),fm::getArgumentValue<int>(args, 2), fm::getArgumentValue<int>(args, 3), fm::getArgumentValue<int>(args, 4));					
 						return;
 					}
 					FM_THROW(Exception, "invalid number of arguments for instrumentDef: " + name );
 				}
 				if (command == SHEET_META__SET_INSTRUMENT_CONFIG) {
-					metaSetInstrumentConfig(getArgumentValue<fm::String>(args, 0), args);
+					metaSetInstrumentConfig(fm::getArgumentValue<fm::String>(args, 0), args);
 					return;
 				}
 			} catch(const std::exception &ex) {

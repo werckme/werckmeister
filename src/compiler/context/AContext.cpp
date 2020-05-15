@@ -307,27 +307,27 @@ namespace sheet {
 					return;
 				}
 				if (command == SHEET_META__SET_VOICING_STRATEGY) {
-					metaSetVoicingStrategy(getArgumentValue<fm::String>(args, 0), args);
+					metaSetVoicingStrategy(fm::getArgumentValue<fm::String>(args, 0), args);
 					return;
 				}
 				if (command == SHEET_META__SET_SPIELANWEISUNG) {
-					metaSetSpielanweisung(getArgumentValue<fm::String>(args, 0), args);
+					metaSetSpielanweisung(fm::getArgumentValue<fm::String>(args, 0), args);
 					return;
 				}	
 				if (command == SHEET_META__SET_SPIELANWEISUNG_ONCE) {
-					metaSetSpielanweisungOnce(getArgumentValue<fm::String>(args, 0), args);
+					metaSetSpielanweisungOnce(fm::getArgumentValue<fm::String>(args, 0), args);
 					return;
 				}	
 				if (command == SHEET_META__SET_MOD) {
-					metaSetModification(getArgumentValue<fm::String>(args, 0), args);
+					metaSetModification(fm::getArgumentValue<fm::String>(args, 0), args);
 					return;
 				}	
 				if (command == SHEET_META__SET_MOD_ONCE) {
-					metaSetModificationOnce(getArgumentValue<fm::String>(args, 0), args);
+					metaSetModificationOnce(fm::getArgumentValue<fm::String>(args, 0), args);
 					return;
 				}
 				if (command == SHEET_META__SET_SIGNATURE) {
-					metaSetSignature(getArgumentValue<int>(args, 0), getArgumentValue<int>(args, 1));
+					metaSetSignature(fm::getArgumentValue<int>(args, 0), fm::getArgumentValue<int>(args, 1));
 					return;
 				}
 				if (command == SHEET_META__SET_DEVICE) {
@@ -335,15 +335,15 @@ namespace sheet {
 					return;
 				}	
 				if (command == SHEET_META__SET_VOLUME) {
-					metaSetVolume(getArgumentValue<int>(args, 0));
+					metaSetVolume(fm::getArgumentValue<int>(args, 0));
 					return;
 				}
 				if (command == SHEET_META__SET_PAN) {
-					metaSetPan(getArgumentValue<int>(args, 0));
+					metaSetPan(fm::getArgumentValue<int>(args, 0));
 					return;
 				}
 				if (command == SHEET_META__INSTRUMENT) {
-					metaSetInstrument(getArgumentValue<fm::String>(args, 0));
+					metaSetInstrument(fm::getArgumentValue<fm::String>(args, 0));
 					return;
 				}
 			} catch(const std::exception &ex) {
