@@ -12,6 +12,7 @@
 #include <vector>
 #include <set>
 #include <functional>
+#include <fm/IRegisterable.h>
 
 #if defined(__GNUC__) || defined(__GNUG__)
 #pragma GCC diagnostic push
@@ -68,6 +69,7 @@ namespace fm {
 		Paths _searchPaths;
 		CreateContextFunction _createContextHandler;
 	public:
+		void register_() {}
 		Path resolvePath(const Path &relPath, sheet::ConstDocumentPtr, const Path &sourcePath = FM_STRING("")) const;
 		Path absolutePath(const Path &relPath) const;
 		bool fileExists(const Path &path) const;
