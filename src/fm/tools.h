@@ -9,6 +9,7 @@
 #include <boost/algorithm/string.hpp>
 #include <sheet/objects/ASheetObjectWithSourceInfo.h>
 #include <sheet/Argument.h>
+#include <fm/IHasParameter.h>
 
 namespace sheet {
     struct Event;
@@ -18,6 +19,8 @@ namespace sheet {
 namespace fm {
 
     enum { NO_ARG_POSITION = -1 }; 
+
+    void argumentsToParameters(const std::vector<sheet::Argument> arguments, IHasParameter::ParametersByNames &outParameters);
 
     template<class TString>
     struct NewLine {

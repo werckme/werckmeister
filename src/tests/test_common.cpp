@@ -5,6 +5,78 @@
 #include <iterator>
 #include <fm/tools.h>
 #include <sheet/Argument.h>
+#include <fm/IHasParameter.h>
+
+BOOST_AUTO_TEST_CASE(test_Parmeter_int)
+{
+	fm::Parameter p("myParam", 0, 10);
+	BOOST_CHECK_EQUAL(p.name(), fm::String("myParam"));
+	BOOST_CHECK_EQUAL(p.value<int>(), 10);
+}
+
+BOOST_AUTO_TEST_CASE(test_Parmeter_string)
+{
+	fm::Parameter p("myParam", 0, fm::String("defaultValue"));
+	BOOST_CHECK_EQUAL(p.name(), fm::String("myParam"));
+	BOOST_CHECK_EQUAL(p.value<fm::String>(), fm::String("defaultValue"));
+}
+
+BOOST_AUTO_TEST_CASE(test_Parmeter_valueSetter)
+{
+	fm::Parameter p("myParam", 0);
+	p.value(10);
+	BOOST_CHECK_EQUAL(p.value<int>(), 10);
+}
+
+BOOST_AUTO_TEST_CASE(test_Parmeter_noValue)
+{
+	fm::Parameter p("myParam", 0);
+	BOOST_CHECK_THROW(p.value<int>(), fm::Exception);
+}
+
+BOOST_AUTO_TEST_CASE(test_ArgsToParmeters_ByName)
+{
+	fm::IHasParameter::ParametersByNames parameters = {
+		FM_PARAMETER_DEF("myInt",   0),
+		FM_PARAMETER_DEF("myFloat", 1),
+	};
+	std::vector<sheet::Argument> args = {
+		{fm::String("101"), fm::String("myInt")},
+		{fm::String("2.0"), fm::String("myFloat")}
+	};
+	fm::argumentsToParameters(args, parameters);
+	BOOST_CHECK_EQUAL(parameters["myInt"].value<int>(), 101);
+	BOOST_CHECK_EQUAL(parameters["myFloat"].value<float>(), 2.0f);
+}
+
+BOOST_AUTO_TEST_CASE(test_ArgsToParmeters_ByPos)
+{
+	fm::IHasParameter::ParametersByNames parameters = {
+		FM_PARAMETER_DEF("myInt",   0),
+		FM_PARAMETER_DEF("myFloat", 1),
+	};
+	std::vector<sheet::Argument> args = {
+		{fm::String("101"), fm::String("")},
+		{fm::String("2.0"), fm::String("")}
+	};
+	fm::argumentsToParameters(args, parameters);
+	BOOST_CHECK_EQUAL(parameters["myInt"].value<int>(), 101);
+	BOOST_CHECK_EQUAL(parameters["myFloat"].value<float>(), 2.0f);
+}
+
+BOOST_AUTO_TEST_CASE(test_ArgsToParmeters_DefaultValue)
+{
+	fm::IHasParameter::ParametersByNames parameters = {
+		FM_PARAMETER_DEF		("myInt", 	0     ),
+		FM_PARAMETER_DEFAULT_DEF("myFloat", 1, 2.0),
+	};
+	std::vector<sheet::Argument> args = {
+		{fm::String("101"), fm::String("")},
+	};
+	fm::argumentsToParameters(args, parameters);
+	BOOST_CHECK_EQUAL(parameters["myInt"].value<int>(), 101);
+	BOOST_CHECK_EQUAL(parameters["myFloat"].value<float>(), 2.0f);
+}
 
 BOOST_AUTO_TEST_CASE(test_getArgValueByName)
 {

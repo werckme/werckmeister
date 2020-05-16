@@ -25,6 +25,23 @@ namespace fm {
 			}
 		}
 
+    void argumentsToParameters(const std::vector<sheet::Argument> arguments, IHasParameter::ParametersByNames &outParameters)
+    {
+        throwIfmixedNamedAndPositionalArgs(arguments);
+        for (int position = 0; position < (int)arguments.size(); ++position)
+        {
+            const auto &argument = arguments[position];
+            auto parameterIt = std::find_if(outParameters.begin(), outParameters.end(), [position, &argument](const auto &p) {
+                return p.second.position() == position || argument.name == p.second.name();
+            });
+            if (parameterIt == outParameters.end()) {
+                continue;
+            }
+            parameterIt->second.strValue(argument.value);
+        }
+
+    }
+
     RowAndColumn InvalidRowAndColumn = RowAndColumn(-1, -1);
 
     namespace toolsimpl {
