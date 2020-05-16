@@ -3,6 +3,7 @@
 
 namespace fm {
     class IRegisterable {
+    public:
         virtual ~IRegisterable() = default;
     };
 }

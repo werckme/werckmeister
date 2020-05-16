@@ -13,6 +13,7 @@
 #include <set>
 #include <functional>
 #include <fm/IRegisterable.h>
+#include <fm/exception.hpp>
 
 #if defined(__GNUC__) || defined(__GNUG__)
 #pragma GCC diagnostic push
@@ -21,8 +22,7 @@
 #pragma GCC diagnostic pop
 #else
 #include <loki/Singleton.h>
-#endif
-
+#endif            
 
 namespace fm {
     class Werckmeister {
@@ -63,13 +63,19 @@ namespace fm {
 	private:
 		typedef std::unordered_map<fm::String, Path> ScriptMap;
 		typedef std::unordered_map<Path, String> VirtualFiles;
+		typedef std::function<std::shared_ptr<fm::IRegisterable>()> CreateIRegFunction;
+		typedef std::unordered_map<fm::String, CreateIRegFunction> FactoryMap;
+		FactoryMap _factoryMap;
 		VirtualFiles virtualFiles_;
 		ScriptMap _scriptMap;
 		ResourceStream openResourceImpl(const Path &path);
 		Paths _searchPaths;
 		CreateContextFunction _createContextHandler;
 	public:
-		void register_() {}
+		template<class TRegisterable>
+		bool register_(const fm::String &name, const CreateIRegFunction&);
+		template<class TRegisterable>
+		std::shared_ptr<TRegisterable> create(const fm::String &name);
 		Path resolvePath(const Path &relPath, sheet::ConstDocumentPtr, const Path &sourcePath = FM_STRING("")) const;
 		Path absolutePath(const Path &relPath) const;
 		bool fileExists(const Path &path) const;
@@ -80,8 +86,29 @@ namespace fm {
 			return openResourceImpl(path);
 		}
 		void saveResource(const Path &path, const fm::String &data);
+
     };
     Werckmeister & getWerckmeister();
+	///////////////////////////////////////////////////////////////////////////
+	template<class TRegisterable>
+	bool Werckmeister::register_(const fm::String &name, const CreateIRegFunction &create)
+	{
+		return _factoryMap.emplace(std::make_pair(name, create)).second;
+	}
+	template<class TRegisterable>
+	std::shared_ptr<TRegisterable> Werckmeister::create(const fm::String &name)
+	{
+		auto it = _factoryMap.find(name);
+		if (it == _factoryMap.end()) {
+			FM_THROW(Exception, name + " not found.");
+		}
+		auto ptr = it->second();
+		std::shared_ptr<TRegisterable> result = std::dynamic_pointer_cast<TRegisterable>(ptr);
+		if (!ptr) {
+			FM_THROW(Exception, "Failed to create '" + name + "': wrong type expected.");
+		}
+		return result;
+	}
 }
 
 #endif

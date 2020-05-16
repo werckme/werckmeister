@@ -6,10 +6,10 @@
 #include <memory>
 #include <fm/common.hpp>
 #include <compiler/timeInfo.h>
-
+#include <fm/IRegisterable.h>
 namespace sheet {
 
-    class VoicingStrategy {
+    class VoicingStrategy : public fm::IRegisterable {
     public:
 		typedef Event::Pitches Degrees;
 		typedef Degrees Pitches;
@@ -23,5 +23,6 @@ namespace sheet {
     };
     typedef std::shared_ptr<VoicingStrategy> VoicingStrategyPtr;
 }
+
 
 #endif

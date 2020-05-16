@@ -1,3 +1,4 @@
+#include <DiConfig.h>
 #include <fm/werckmeister.hpp>
 #include <boost/program_options.hpp>
 #include <boost/filesystem.hpp>

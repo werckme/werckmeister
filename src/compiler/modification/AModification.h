@@ -4,11 +4,12 @@
 #include <fm/units.hpp>
 #include <sheet/objects/Event.h>
 #include <list>
+#include <fm/IRegisterable.h>
 
 namespace sheet {
     namespace compiler {
         class AContext;
-        class AModification {
+        class AModification : public fm::IRegisterable {
         protected:
             AModification() = default;
         public:
