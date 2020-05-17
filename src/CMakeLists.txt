@@ -36,6 +36,8 @@ SET (SRC_FETZER_LIB
     sheet/objects/Event.cpp
     sheet/objects/ChordDef.cpp
     sheet/Document.cpp
+    compiler/commands/ACommand.cpp
+    compiler/commands/DefineMidiInstrument.cpp
 )
 
 add_definitions( -DGIT_VERSION="${GIT_VERSION}" )

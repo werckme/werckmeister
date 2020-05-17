@@ -32,10 +32,10 @@ namespace sheet {
 			virtual void stopEvent(const PitchDef &pitch, fm::Ticks absolutePosition) override;
 			virtual void metaSetChannel(int channel);
 			virtual void metaSoundSelect(int cc, int pc);
-			virtual void metaInstrument(const fm::String &uname, int channel, int cc, int pc);
-			virtual void metaInstrument(const fm::String &uname, const fm::String &deviceName, int channel, int cc, int pc);
+			virtual void setMidiInstrument(const fm::String &uname, int channel, int cc, int pc);
+			virtual void setMidiInstrument(const fm::String &uname, const fm::String &deviceName, int channel, int cc, int pc);
 			virtual void metaSetInstrumentConfig(const fm::String &uname, const Event::Args &args);
-			virtual void metaSetInstrument(const fm::String &uname) override;
+			virtual void setInstrument(const fm::String &uname) override;
 			virtual void metaSetTempo(double bpm) override;
 			virtual void processMeta(const fm::String &command, const std::vector<sheet::Argument> &args) override;
 			virtual void metaSetVolume(int volume) override;

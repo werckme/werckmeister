@@ -26,7 +26,7 @@ namespace fm
                 return it->second;
             } 
         };
-        virtual ParametersByNames & getParameters() const = 0;
+        virtual ParametersByNames & getParameters() = 0;
         virtual ~IHasParameter() = default;
     };
 

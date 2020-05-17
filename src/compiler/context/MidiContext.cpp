@@ -7,6 +7,7 @@
 #include <algorithm>
 #include <fm/werckmeister.hpp>
 #include <compiler/modification/AModification.h>
+#include <compiler/commands/ACommand.h>
 
 #define SHEET_MASTER_TRACKNAME "master track"
 
@@ -348,14 +349,14 @@ namespace sheet {
 			}
 		}
 
-		void MidiContext::metaSetInstrument(const fm::String &uname)
+		void MidiContext::setInstrument(const fm::String &uname)
 		{
 			// send instrumentDef name meta event
 			auto trackName = fm::midi::Event::MetaTrack(uname);
 			trackName.absPosition(0);
 			addEvent(trackName); 
 			// find instrumentDef defs and assign them to the meta data of the voice
-			Base::metaSetInstrument(uname);
+			Base::setInstrument(uname);
 			auto instrumentDef = getMidiInstrumentDef(uname);
 			if (instrumentDef == nullptr) {
 				FM_THROW(Exception, "instrument " + uname + " not found");
@@ -398,12 +399,12 @@ namespace sheet {
 			midiInstrumentDefs_[uname].id = midiInstrumentDefs_.size();
 		}
 
-		void MidiContext::metaInstrument(const fm::String &uname, int channel, int cc, int pc)
+		void MidiContext::setMidiInstrument(const fm::String &uname, int channel, int cc, int pc)
 		{
-			metaInstrument(uname, fm::String(), channel, cc, pc);
+			setMidiInstrument(uname, fm::String(), channel, cc, pc);
 		}
 
-		void MidiContext::metaInstrument(const fm::String &uname, const fm::String &deviceName, int channel, int cc, int pc)
+		void MidiContext::setMidiInstrument(const fm::String &uname, const fm::String &deviceName, int channel, int cc, int pc)
 		{
 			MidiInstrumentDef def;
 			def.uname = uname;
@@ -414,44 +415,41 @@ namespace sheet {
 			setMidiInstrumentDef(uname, def);
 		}
 
-		void MidiContext::processMeta(const fm::String &command, const std::vector<sheet::Argument> &args)
+		void MidiContext::processMeta(const fm::String &commandName, const std::vector<sheet::Argument> &args)
 		{
 			try {
-				if (command == SHEET_META__MIDI_CHANNEL) {
+
+				auto &wm = fm::getWerckmeister();
+				auto command = wm.create<ACommand>(commandName);
+				if (command) {
+					command->setArguments(args);
+					command->execute(this);
+					return;
+				}
+
+				// #74 TODO: deprecated
+				if (commandName == SHEET_META__MIDI_CHANNEL) {
 					metaSetChannel(fm::getArgumentValue<int>(args, 0));
 					return;
 				}
-				if (command == SHEET_META__MIDI_SOUNDSELECT) {
+				if (commandName == SHEET_META__MIDI_SOUNDSELECT) {
 					// #74.2 TODO
 					metaSoundSelect(fm::getArgumentValue<int>(args, 0), fm::getArgumentValue<int>(args, 1));
 					return;
 				}
-				if (command == SHEET_META__MIDI_INSTRUMENT_DEF) {
-					// #74.2 TODO
-					auto name = fm::getArgumentValue<fm::String>(args, 0);
-					std::size_t numArgs = args.size();
-					if (numArgs == 4) {
-						metaInstrument(fm::getArgumentValue<fm::String>(args, 0), fm::getArgumentValue<int>(args, 1), fm::getArgumentValue<int>(args, 2), fm::getArgumentValue<int>(args, 3));
-						return;
-					}
-					if (numArgs == 5) {
-						metaInstrument(fm::getArgumentValue<fm::String>(args, 0), fm::getArgumentValue<fm::String>(args, 1),fm::getArgumentValue<int>(args, 2), fm::getArgumentValue<int>(args, 3), fm::getArgumentValue<int>(args, 4));					
-						return;
-					}
-					FM_THROW(Exception, "invalid number of arguments for instrumentDef: " + name );
-				}
-				if (command == SHEET_META__SET_INSTRUMENT_CONFIG) {
+
+				if (commandName == SHEET_META__SET_INSTRUMENT_CONFIG) {
 					metaSetInstrumentConfig(fm::getArgumentValue<fm::String>(args, 0), args);
 					return;
 				}
 			} catch(const std::exception &ex) {
-				FM_THROW(Exception, "failed to process " + command
+				FM_THROW(Exception, "failed to process " + commandName
 									+"\n" + ex.what());
 			}	
 			catch(...) {
-				FM_THROW(Exception, "failed to process " + command);
+				FM_THROW(Exception, "failed to process " + commandName);
 			}
-			Base::processMeta(command, args);	
+			Base::processMeta(commandName, args);	
 		}
 		AContext::TrackId MidiContext::createMasterTrack()
 		{

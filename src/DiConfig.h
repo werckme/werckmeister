@@ -41,3 +41,17 @@ namespace sheet {
         }
     }
 }
+
+// Commands
+#include <compiler/metaCommands.h>
+#include <compiler/commands/DefineMidiInstrument.h>
+namespace sheet {
+    namespace compiler {
+        namespace {
+            const bool commandsRegistered = ([]() {
+                _FM_Register(DefineMidiInstrument,     SHEET_META__MIDI_INSTRUMENT_DEF);
+                return true;
+            })();
+        }
+    }
+}

@@ -343,7 +343,7 @@ namespace sheet {
 					return;
 				}
 				if (command == SHEET_META__INSTRUMENT) {
-					metaSetInstrument(fm::getArgumentValue<fm::String>(args, 0));
+					setInstrument(fm::getArgumentValue<fm::String>(args, 0));
 					return;
 				}
 			} catch(const std::exception &ex) {

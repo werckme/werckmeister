@@ -137,7 +137,7 @@ namespace sheet {
 			void processMeta(const TContainer &container, 
 							std::function<fm::String(const typename TContainer::value_type&)> fcommand, 
 							std::function<std::vector<sheet::Argument>(const typename TContainer::value_type&)> fargs);
-			virtual void metaSetInstrument(const fm::String &uname) {}
+			virtual void setInstrument(const fm::String &uname) {}
 			virtual void metaSetSheetTemplate(const Event::Args &args);
 			virtual void metaSetExpression(const sheet::Argument &argument);
 			virtual void metaSetSingleExpression(const sheet::Argument &argument);
