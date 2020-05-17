@@ -32,8 +32,13 @@ namespace fm {
         {
             const auto &argument = arguments[position];
             auto parameterIt = std::find_if(outParameters.begin(), outParameters.end(), [position, &argument](const auto &p) {
-                return p.second.position() == position || argument.name == p.second.name();
+                return argument.name == p.second.name();
             });
+            if (parameterIt == outParameters.end()) {
+                parameterIt = std::find_if(outParameters.begin(), outParameters.end(), [position, &argument](const auto &p) {
+                    return p.second.position() == position;
+                });
+            }          
             if (parameterIt == outParameters.end()) {
                 continue;
             }

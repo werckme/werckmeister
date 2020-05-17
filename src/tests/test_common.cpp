@@ -49,6 +49,21 @@ BOOST_AUTO_TEST_CASE(test_ArgsToParmeters_ByName)
 	BOOST_CHECK_EQUAL(parameters["myFloat"].value<float>(), 2.0f);
 }
 
+BOOST_AUTO_TEST_CASE(test_ArgsToParmeters_ByName2)
+{
+	fm::IHasParameter::ParametersByNames parameters = {
+		FM_PARAMETER_DEF("myFloat", 0),
+		FM_PARAMETER_DEF("myInt",   1),
+	};
+	std::vector<sheet::Argument> args = {
+		{fm::String("101"), fm::String("myInt")},
+		{fm::String("2.0"), fm::String("myFloat")}
+	};
+	fm::argumentsToParameters(args, parameters);
+	BOOST_CHECK_EQUAL(parameters["myInt"].value<int>(), 101);
+	BOOST_CHECK_EQUAL(parameters["myFloat"].value<float>(), 2.0f);
+}
+
 BOOST_AUTO_TEST_CASE(test_ArgsToParmeters_ByPos)
 {
 	fm::IHasParameter::ParametersByNames parameters = {
