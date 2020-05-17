@@ -420,7 +420,7 @@ namespace sheet {
 			try {
 
 				auto &wm = fm::getWerckmeister();
-				auto command = wm.create<ACommand>(commandName);
+				auto command = wm.createOrDefault<ACommand>(commandName);
 				if (command) {
 					command->setArguments(args);
 					command->execute(this);

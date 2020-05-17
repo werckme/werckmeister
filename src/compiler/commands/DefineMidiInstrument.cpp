@@ -15,7 +15,7 @@ namespace sheet {
             auto ch         = parameters[argumentNames.InstrumentDef.Ch].value<int>();
             auto cc         = parameters[argumentNames.InstrumentDef.Cc].value<int>();
             auto pc         = parameters[argumentNames.InstrumentDef.Pc].value<int>();
-            midiContext->setMidiInstrument(name, ch, cc, pc);    
+            midiContext->setMidiInstrument(name, deviceName, ch, cc, pc);    
         }
     }
 }

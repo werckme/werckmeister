@@ -76,6 +76,8 @@ namespace fm {
 		bool register_(const fm::String &name, const CreateIRegFunction&);
 		template<class TRegisterable>
 		std::shared_ptr<TRegisterable> create(const fm::String &name);
+		template<class TRegisterable>
+		std::shared_ptr<TRegisterable> createOrDefault(const fm::String &name);
 		Path resolvePath(const Path &relPath, sheet::ConstDocumentPtr, const Path &sourcePath = FM_STRING("")) const;
 		Path absolutePath(const Path &relPath) const;
 		bool fileExists(const Path &path) const;
@@ -96,11 +98,11 @@ namespace fm {
 		return _factoryMap.emplace(std::make_pair(name, create)).second;
 	}
 	template<class TRegisterable>
-	std::shared_ptr<TRegisterable> Werckmeister::create(const fm::String &name)
+	std::shared_ptr<TRegisterable> Werckmeister::createOrDefault(const fm::String &name)
 	{
 		auto it = _factoryMap.find(name);
 		if (it == _factoryMap.end()) {
-			FM_THROW(Exception, name + " not found.");
+			return nullptr;
 		}
 		auto ptr = it->second();
 		std::shared_ptr<TRegisterable> result = std::dynamic_pointer_cast<TRegisterable>(ptr);
@@ -109,6 +111,15 @@ namespace fm {
 		}
 		return result;
 	}
+	template<class TRegisterable>
+	std::shared_ptr<TRegisterable> Werckmeister::create(const fm::String &name)
+	{
+		auto result = this->createOrDefault<TRegisterable>(name);
+		if (!result) {
+			FM_THROW(Exception, name + " not found.");
+		}
+		return result;
+	}	
 }
 
 #endif
