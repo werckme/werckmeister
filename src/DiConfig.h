@@ -45,11 +45,15 @@ namespace sheet {
 // Commands
 #include <compiler/metaCommands.h>
 #include <compiler/commands/DefineMidiInstrument.h>
+#include <compiler/commands/SetVolume.h>
+#include <compiler/commands/SetPan.h>
 namespace sheet {
     namespace compiler {
         namespace {
             const bool commandsRegistered = ([]() {
                 _FM_Register(DefineMidiInstrument,     SHEET_META__MIDI_INSTRUMENT_DEF);
+                _FM_Register(SetVolume,                SHEET_META__SET_VOLUME);
+                _FM_Register(SetPan,                   SHEET_META__SET_PAN);
                 return true;
             })();
         }

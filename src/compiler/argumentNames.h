@@ -4,12 +4,14 @@
 #include <string>
 
 struct ArgumentNames {
+
     struct {
         std::string WithName                = "withName";
         std::string IsType                  = "isType";
         std::string UsePort                 = "usePort";
         std::string Offset                  = "offset";
     } Device;
+
     struct {
         std::string WithName                = "withName";
         std::string OnDevice                = "onDevice";
@@ -17,6 +19,15 @@ struct ArgumentNames {
         std::string Cc                      = "cc";
         std::string Pc                      = "pc";
     } InstrumentDef;
+
+    struct {
+        std::string SetTo                   = "setTo";
+    } SetVolume;
+
+    struct {
+        std::string SetTo                   = "setTo";
+    } SetPan;
+    
 };
 
 extern ArgumentNames argumentNames;  

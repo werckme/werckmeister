@@ -150,8 +150,8 @@ namespace sheet {
 			virtual void metaSetSignature(int upper, int lower);
 			virtual void metaAddDevice(const Event::Args &args);
 			virtual void metaAddVorschlag(const Event &ev);
-			virtual void metaSetVolume(int volume);
-			virtual void metaSetPan(int val);
+			virtual void setVolume(int volume);
+			virtual void setPan(int val);
 			/////// actual context stuff
 			virtual void renderPitch(const PitchDef &pitch, fm::Ticks duration, double velocity, bool tying);
 			virtual void renderPitch(const PitchDef &pitch, fm::Ticks absolutePosition, double velocity, fm::Ticks duration) = 0;

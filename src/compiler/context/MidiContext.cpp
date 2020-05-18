@@ -233,9 +233,9 @@ namespace sheet {
 			return &trackMeta->instrument;
 		}
 
-		void MidiContext::metaSetVolume(int volume)
+		void MidiContext::setVolume(int volume)
 		{
-			Base::metaSetVolume(volume);
+			Base::setVolume(volume);
 			auto meta = voiceMetaData<MidiContext::VoiceMetaData>();
 			auto trackMeta = trackMetaData<MidiContext::TrackMetaData>();
 			if (!meta || !trackMeta) {
@@ -248,9 +248,9 @@ namespace sheet {
 			addEvent(ev); 
 		}
 
-		void MidiContext::metaSetPan(int val)
+		void MidiContext::setPan(int val)
 		{
-			Base::metaSetPan(val);
+			Base::setPan(val);
 			auto meta = voiceMetaData<MidiContext::VoiceMetaData>();
 			auto trackMeta = trackMetaData<MidiContext::TrackMetaData>();
 			if (!meta || !trackMeta) {
@@ -417,6 +417,7 @@ namespace sheet {
 
 		void MidiContext::processMeta(const fm::String &commandName, const std::vector<sheet::Argument> &args)
 		{
+			// #74 TODO: move to sheet event renderer
 			try {
 
 				auto &wm = fm::getWerckmeister();

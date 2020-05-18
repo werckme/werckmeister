@@ -38,8 +38,8 @@ namespace sheet {
 			virtual void setInstrument(const fm::String &uname) override;
 			virtual void metaSetTempo(double bpm) override;
 			virtual void processMeta(const fm::String &command, const std::vector<sheet::Argument> &args) override;
-			virtual void metaSetVolume(int volume) override;
-			virtual void metaSetPan(int val) override;
+			virtual void setVolume(int volume) override;
+			virtual void setPan(int val) override;
 			virtual void metaSetSignature(int upper, int lower) override;
 			/**
 			 * sends a custom meta event containing a device name

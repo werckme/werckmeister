@@ -38,6 +38,28 @@ SET (SRC_FETZER_LIB
     sheet/Document.cpp
     compiler/commands/ACommand.cpp
     compiler/commands/DefineMidiInstrument.cpp
+    compiler/commands/SetVolume.cpp
+    compiler/commands/SetPan.cpp
+    compiler/commands/SetTrackType.cpp
+    compiler/commands/SetTrackName.cpp
+    compiler/commands/AddVorschlag.cpp
+    compiler/commands/SetTemplatePosition.cpp
+    compiler/commands/SetTemplate.cpp
+    compiler/commands/SetExpression.cpp
+    compiler/commands/SetExpressionPlayedOnce.cpp
+    compiler/commands/SetSignature.cpp
+    compiler/commands/SetTempo.cpp
+    compiler/commands/SetVoicingStrategy.cpp
+    compiler/commands/SetSpielanweisung.cpp
+    compiler/commands/SetSpielanweisung.cpp
+    compiler/commands/SetSpielanweisungPlayedOnce.cpp
+    compiler/commands/AddMod.cpp
+    compiler/commands/AddModPlayedOnce.cpp
+    compiler/commands/SetDevice.cpp
+    compiler/commands/SetInstrument.cpp
+    compiler/commands/SetMidiChannel.cpp
+    compiler/commands/SelectMidiSound.cpp
+    compiler/commands/AddInstrumentConfig.cpp
 )
 
 add_definitions( -DGIT_VERSION="${GIT_VERSION}" )

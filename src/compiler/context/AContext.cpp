@@ -267,6 +267,7 @@ namespace sheet {
 		}
 		void AContext::processMeta(const fm::String &command, const std::vector<sheet::Argument> &args)
 		{
+			// #74 TODO: move to sheet event renderer
 			try {
 				if (command == SHEET_META__TRACK_META_KEY_TYPE /*handled elsewhere*/
 				|| command == SHEET_META__TRACK_META_KEY_NAME
@@ -334,14 +335,6 @@ namespace sheet {
 					metaAddDevice(args);
 					return;
 				}	
-				if (command == SHEET_META__SET_VOLUME) {
-					metaSetVolume(fm::getArgumentValue<int>(args, 0));
-					return;
-				}
-				if (command == SHEET_META__SET_PAN) {
-					metaSetPan(fm::getArgumentValue<int>(args, 0));
-					return;
-				}
 				if (command == SHEET_META__INSTRUMENT) {
 					setInstrument(fm::getArgumentValue<fm::String>(args, 0));
 					return;
@@ -360,6 +353,7 @@ namespace sheet {
 			if (metaEvent.stringValue.empty()) {
 				throwContextException("invalid meta command ");
 			}
+			// #74 TODO move to voice event renderer
 			if (metaEventHandler && metaEventHandler(metaEvent)) {
 				return;
 			}
@@ -369,13 +363,13 @@ namespace sheet {
 			processMeta(metaEvent.stringValue, metaEvent.metaArgs);				
 		}
 
-		void AContext::metaSetVolume(int volume)
+		void AContext::setVolume(int volume)
 		{
 			auto meta = voiceMetaData();
 			meta->volume = std::max(std::min(volume, 100), 0);
 		}
 
-		void AContext::metaSetPan(int val)
+		void AContext::setPan(int val)
 		{
 			auto meta = voiceMetaData();
 			meta->pan = std::max(std::min(val, 100), 0);
