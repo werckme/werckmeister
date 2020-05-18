@@ -17,6 +17,9 @@ namespace sheet {
 
         void AddInstrumentConfig::execute(AContext* context)
         {
+            if (this->_configCommands.empty()) {
+                return;
+            }
             auto uname = parameters[argumentNames.InstrumentConf.ForInstrument].value<fm::String>();
 			auto instrumentDef = context->getInstrumentDef(uname);
 			if (instrumentDef == nullptr) {
