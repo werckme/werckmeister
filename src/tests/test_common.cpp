@@ -6,6 +6,7 @@
 #include <fm/tools.h>
 #include <sheet/Argument.h>
 #include <fm/IHasParameter.h>
+#include "testhelper.h"
 
 BOOST_AUTO_TEST_CASE(test_Parmeter_int)
 {
@@ -366,9 +367,9 @@ BOOST_AUTO_TEST_CASE(position_to_row_and_column_ipanema)
 
 BOOST_AUTO_TEST_CASE(test_map_arguments_by_keyword)
 {
-	std::vector<fm::String> args = {
-			"keyword1", "value1", "value2",
-			"keyword2", "value3", "value4", "value5",
+	std::vector<sheet::Argument> args = {
+			makeArg("keyword1"), makeArg("value1"), makeArg("value2"),
+			makeArg("keyword2"), makeArg("value3"), makeArg("value4"), makeArg("value5"),
 	};
 	std::vector<fm::String> keywords = {"keyword1", "keyword2"};
 	auto keywordsAndValues = fm::mapArgumentsByKeywords(args, keywords);
@@ -377,34 +378,34 @@ BOOST_AUTO_TEST_CASE(test_map_arguments_by_keyword)
 	BOOST_CHECK(keywordsAndValues.count("keyword2") == 1);
 	auto argContainerIt = keywordsAndValues.equal_range("keyword1").first;
 	auto it = argContainerIt->second.begin();
-	BOOST_CHECK(*(it++) == "value1");
-	BOOST_CHECK(*it == "value2");
+	BOOST_CHECK((*(it++)).value == "value1");
+	BOOST_CHECK((*it).value == "value2");
 	argContainerIt = keywordsAndValues.equal_range("keyword2").first;
 	it = argContainerIt->second.begin();
-	BOOST_CHECK(*(it++) == "value3");
-	BOOST_CHECK(*(it++) == "value4");	
-	BOOST_CHECK(*(it) == "value5");	
+	BOOST_CHECK((*(it++)).value == "value3");
+	BOOST_CHECK((*(it++)).value == "value4");	
+	BOOST_CHECK((*(it)).value == "value5");	
 }
 
 BOOST_AUTO_TEST_CASE(test_map_arguments_by_keyword_2)
 {
-	std::vector<fm::String> args = {"value1", "value2", "value3"};
+	std::vector<sheet::Argument> args = {makeArg("value1"), makeArg("value2"), makeArg("value3")};
 	std::vector<fm::String> keywords = {"keyword1", "keyword2"};
 	auto keywordsAndValues = fm::mapArgumentsByKeywords(args, keywords);
 	BOOST_CHECK(keywordsAndValues.size() == 1);
 	BOOST_CHECK(keywordsAndValues.count("") == 1);
 	auto argsIt = keywordsAndValues.equal_range("").first;
 	auto it = argsIt->second.begin();
-	BOOST_CHECK(*(it++) == "value1");
-	BOOST_CHECK(*(it++) == "value2");	
-	BOOST_CHECK(*(it) == "value3");	
+	BOOST_CHECK((*(it++)).value == "value1");
+	BOOST_CHECK((*(it++)).value == "value2");	
+	BOOST_CHECK((*(it)).value == "value3");	
 }
 
 BOOST_AUTO_TEST_CASE(test_map_arguments_by_keyword_3)
 {
-	std::vector<fm::String> args = {
-		"keyword1", "value1", "value2", 
-		"keyword1", "value3"
+	std::vector<sheet::Argument> args = {
+		makeArg("keyword1"), makeArg("value1"), makeArg("value2"), 
+		makeArg("keyword1"), makeArg("value3")
 	};
 	std::vector<fm::String> keywords = {"keyword1", "keyword2"};
 	auto keywordsAndValues = fm::mapArgumentsByKeywords(args, keywords);
@@ -412,22 +413,9 @@ BOOST_AUTO_TEST_CASE(test_map_arguments_by_keyword_3)
 	BOOST_CHECK(keywordsAndValues.count("keyword1") == 2);
 	auto argsIt = keywordsAndValues.equal_range("keyword1").first;
 	auto it = argsIt->second.begin();
-	BOOST_CHECK(*(it++) == "value1");
-	BOOST_CHECK(*(it++) == "value2");
+	BOOST_CHECK((*(it++)).value == "value1");
+	BOOST_CHECK((*(it++)).value == "value2");
 	++argsIt;
 	it = argsIt->second.begin();
-	BOOST_CHECK(*(it) == "value3");	
+	BOOST_CHECK((*(it)).value == "value3");	
 }
-
-#if 0
-BOOST_AUTO_TEST_CASE(test_sconv)
-{
-	std::wstring wstr = fm::to_wstring("äöüÄÖÜ?§");
-	BOOST_CHECK(L"äöüÄÖÜ?§" == wstr);
-
-	std::string str = L"äöüÄÖÜ?§";
-	BOOST_CHECK("äöüÄÖÜ?§" == str);
-}
-#endif
-
-

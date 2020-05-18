@@ -6,22 +6,6 @@
 #include <fm/units.hpp>
 #include "testhelper.h"
 
-namespace {
-	sheet::Argument makeArg(fm::String value) {
-		sheet::Argument argument;
-		argument.value = value;
-		argument.name = "";
-		return argument;
-	}
-	sheet::Argument makeArg(fm::String name, fm::String value) {
-		auto argument = makeArg(value);
-		argument.name = name;
-		return argument;
-	}	
-}
-
-
-
 BOOST_AUTO_TEST_CASE(test_argQuoted)
 {
 	using namespace fm;

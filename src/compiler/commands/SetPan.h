@@ -3,10 +3,11 @@
 
 #include "ACommand.h"
 #include <compiler/argumentNames.h>
+#include "ACanSpecifyInstrument.h"
 
 namespace sheet {
     namespace compiler {
-        class SetPan : public ACommand
+        class SetPan : public ACommand, public ACanSpecifyInstrument
         {
         public:
             fm::IHasParameter::ParametersByNames parameters = {

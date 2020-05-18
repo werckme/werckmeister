@@ -246,20 +246,19 @@ namespace fm {
      * }
      * for: "value0 keyword1 value1 value2 keyword 1 value2 value3 keyword2 value4 value5"
      **/
-    DEPRECATED
     template<class TArgContainer, class TKeywordContainer>
-    std::multimap<fm::String, std::vector<fm::String>> 
+    std::multimap<fm::String, std::vector<sheet::Argument>> 
     mapArgumentsByKeywords(const TArgContainer &args, const TKeywordContainer &keywords)
     {
-        std::multimap<fm::String, std::vector<fm::String>> result;
+        std::multimap<fm::String, std::vector<sheet::Argument>> result;
         auto it = args.begin();
         auto end = args.end();
         fm::String keyword = "";
         bool defaultKeywordCreated = false;
         for(; it!=end; ++it) {
-            bool isKeyword = std::find(keywords.begin(), keywords.end(), *it) != keywords.end();
+            bool isKeyword = std::find(keywords.begin(), keywords.end(), it->value) != keywords.end();
             if (isKeyword) {
-                keyword = *it;
+                keyword = it->value;
                 result.emplace(std::make_pair(keyword, TArgContainer()));
                 continue;
             }
@@ -273,6 +272,7 @@ namespace fm {
         }
         return result;
     }
+    
 
     /**
      * returns a value from an argument list such as:

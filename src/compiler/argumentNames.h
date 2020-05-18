@@ -21,12 +21,16 @@ struct ArgumentNames {
     } InstrumentDef;
 
     struct {
-        std::string SetTo                   = "setTo";
+        std::string ForInstrument           = "for";
+    } InstrumentConf;
+
+    struct {
+        std::string SetTo                   = "to";
     } SetVolume;
 
     struct {
-        std::string SetTo                   = "setTo";
-    } SetPan;
+        std::string SetTo                   = "to";
+    } SetPan; 
     
 };
 

@@ -282,71 +282,22 @@ namespace sheet {
 		void MidiContext::metaSetInstrumentConfig(const fm::String &uname, const Event::Args &args)
 		{
 			
-			static const std::vector<fm::String> keywords = {
-				SHEET_META__SET_INSTRUMENT_CONFIG_VOLUME,
-				SHEET_META__SET_INSTRUMENT_CONFIG_PAN,
-				SHEET_META__SET_VOICING_STRATEGY,
-				SHEET_META__SET_MOD
-			}; 			
-			if (args.size() < 3 || args.size() % 2 == 0) {
-				FM_THROW(Exception, "not enough values for " + fm::String(SHEET_META__SET_INSTRUMENT_CONFIG) +  ": " + uname);
-			}
-			auto instrumentDef = getMidiInstrumentDef(uname);
-			if (instrumentDef == nullptr) {
-				FM_THROW(Exception, "instrumentDef not found: " + uname);
-			}
-			auto argsBegin = args.begin() + 1;
-			auto argsEnd = args.end();
-			auto argsExceptFirst = Event::Args(argsBegin, argsEnd);
-			// #74.2 TODO
-			instrumentDef->volume = fm::getArgValueFor<int>(SHEET_META__SET_INSTRUMENT_CONFIG_VOLUME, argsExceptFirst, instrumentDef->volume);
-			instrumentDef->pan = fm::getArgValueFor<int>(SHEET_META__SET_INSTRUMENT_CONFIG_PAN, argsExceptFirst, instrumentDef->pan);
-			//auto argsMappedByKeyword = mapArgumentsByKeywords(args, keywords);
-			// auto argsRange = argsMappedByKeyword.equal_range(SHEET_META__SET_VOICING_STRATEGY);
-			// assign voicingStrategies
-			// if (argsRange.first != argsRange.second) {
-			// 	auto &wm = fm::getWerckmeister();
-			// 	auto it = argsRange.first;
-			// 	for (; it != argsRange.second; ++it) {
-			// 		const auto &args = it->second;
-			// 		if (args.empty()) {
-			// 			FM_THROW(Exception, fm::String("missing arguments for: ") + SHEET_META__SET_VOICING_STRATEGY);
-			// 		}
-			// 		instrumentDef->voicingStrategy = wm.getVoicingStrategy(args.front());
-			// 		instrumentDef->voicingStrategy->setArguments(args);
-			// 	}
+			// // velocity overrides
+			// auto assignIfSet = [&argsExceptFirst, instrumentDef, this](const fm::String &expression){
+			// 	// #74.2 TODO
+			// 	// auto foundValue = fm::getArgumentValue<int>(expression, argsExceptFirst);
+			// 	// if (!foundValue.first) {
+			// 	// 	return;
+			// 	// }
+			// 	// if (foundValue.second < 0 || foundValue.second > 100) {
+			// 	// 	FM_THROW(Exception, "invalid value for: " + expression);
+			// 	// }
+			// 	// auto exprValue = getExpression(expression);
+			// 	// instrumentDef->velocityOverride[exprValue] = foundValue.second;
+			// };
+			// for(const auto &keyValue : expressionMap_) {
+			// 	assignIfSet(keyValue.first);
 			// }
-			// mods
-			// argsRange = argsMappedByKeyword.equal_range(SHEET_META__SET_MOD);
-			// if (argsRange.first != argsRange.second) {
-			// 	auto &wm = fm::getWerckmeister();
-			// 	auto it = argsRange.first;
-			// 	for (; it != argsRange.second; ++it) {
-			// 		const auto &args = it->second;
-			// 		if (args.empty()) {
-			// 			FM_THROW(Exception, fm::String("missing arguments for: ") + SHEET_META__SET_MOD);
-			// 		}					
-			// 		auto mod = wm.getModification(args.front());
-			// 		mod->setArguments(args);
-			// 		instrumentDef->modifications.push_back(mod);
-			// 	}				
-			// }		
-			// velocity overrides
-			auto assignIfSet = [&argsExceptFirst, instrumentDef, this](const fm::String &expression){
-				// #74.2 TODO
-				// auto foundValue = fm::getArgumentValue<int>(expression, argsExceptFirst);
-				// if (!foundValue.first) {
-				// 	return;
-				// }
-				// if (foundValue.second < 0 || foundValue.second > 100) {
-				// 	FM_THROW(Exception, "invalid value for: " + expression);
-				// }
-				// auto exprValue = getExpression(expression);
-				// instrumentDef->velocityOverride[exprValue] = foundValue.second;
-			};
-			for(const auto &keyValue : expressionMap_) {
-				assignIfSet(keyValue.first);
-			}
 		}
 
 		void MidiContext::setInstrument(const fm::String &uname)
@@ -439,10 +390,6 @@ namespace sheet {
 					return;
 				}
 
-				if (commandName == SHEET_META__SET_INSTRUMENT_CONFIG) {
-					metaSetInstrumentConfig(fm::getArgumentValue<fm::String>(args, 0), args);
-					return;
-				}
 			} catch(const std::exception &ex) {
 				FM_THROW(Exception, "failed to process " + commandName
 									+"\n" + ex.what());

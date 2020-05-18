@@ -3,10 +3,11 @@
 
 #include "ACommand.h"
 #include <compiler/argumentNames.h>
+#include "ACanSpecifyInstrument.h"
 
 namespace sheet {
     namespace compiler {
-        class SetVolume : public ACommand
+        class SetVolume : public ACommand, public ACanSpecifyInstrument
         {
         public:
             fm::IHasParameter::ParametersByNames parameters = {

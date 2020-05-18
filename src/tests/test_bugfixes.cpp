@@ -118,11 +118,11 @@ BOOST_AUTO_TEST_CASE(issue_100_mod_gt_1_in_instrument_config_fails)
     volume 63
 ;
 	*/
-	std::vector<fm::String> args = {
-		"organ", 
-		"mod", "staccato", 
-		"mod", "swing",
-		"volume", "63"
+	std::vector<sheet::Argument> args = {
+		makeArg("organ"), 
+		makeArg("mod"), makeArg("staccato"), 
+		makeArg("mod"), makeArg("swing"),
+		makeArg("volume"), makeArg("63")
 	};
 	std::vector<fm::String> keywords = {"mod", "volume"};
 	auto keywordsAndValues = fm::mapArgumentsByKeywords(args, keywords);
@@ -131,18 +131,18 @@ BOOST_AUTO_TEST_CASE(issue_100_mod_gt_1_in_instrument_config_fails)
 
 	auto argsIt = keywordsAndValues.equal_range("").first;
 	auto it = argsIt->second.begin();
-	BOOST_CHECK(*it == "organ");
+	BOOST_CHECK((*it).value == "organ");
 
 	argsIt = keywordsAndValues.equal_range("mod").first;
 	it = argsIt->second.begin();
-	BOOST_CHECK(*it++ == "staccato");
+	BOOST_CHECK((*it++).value == "staccato");
 
 	++argsIt;
 	it = argsIt->second.begin();
-	BOOST_CHECK(*it++ == "swing");
+	BOOST_CHECK((*it++).value == "swing");
 
 	argsIt = keywordsAndValues.equal_range("volume").first;
 	it = argsIt->second.begin();
-	BOOST_CHECK(*it++ == "63");
+	BOOST_CHECK((*it++).value == "63");
 
 }

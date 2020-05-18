@@ -37,6 +37,7 @@ SET (SRC_FETZER_LIB
     sheet/objects/ChordDef.cpp
     sheet/Document.cpp
     compiler/commands/ACommand.cpp
+    compiler/commands/ACanSpecifyInstrument.cpp
     compiler/commands/DefineMidiInstrument.cpp
     compiler/commands/SetVolume.cpp
     compiler/commands/SetPan.cpp

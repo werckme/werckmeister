@@ -47,6 +47,9 @@ namespace sheet {
 #include <compiler/commands/DefineMidiInstrument.h>
 #include <compiler/commands/SetVolume.h>
 #include <compiler/commands/SetPan.h>
+#include <compiler/commands/AddInstrumentConfig.h>
+
+
 namespace sheet {
     namespace compiler {
         namespace {
@@ -54,6 +57,7 @@ namespace sheet {
                 _FM_Register(DefineMidiInstrument,     SHEET_META__MIDI_INSTRUMENT_DEF);
                 _FM_Register(SetVolume,                SHEET_META__SET_VOLUME);
                 _FM_Register(SetPan,                   SHEET_META__SET_PAN);
+                _FM_Register(AddInstrumentConfig,      SHEET_META__SET_INSTRUMENT_CONFIG);
                 return true;
             })();
         }

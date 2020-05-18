@@ -91,3 +91,15 @@ bool checkMetaEvent(const sheet::Event &ev, const fm::String &command, const she
     }
     return true;
 }
+
+sheet::Argument makeArg(fm::String value) {
+    sheet::Argument argument;
+    argument.value = value;
+    argument.name = "";
+    return argument;
+}
+sheet::Argument makeArg(fm::String name, fm::String value) {
+    auto argument = makeArg(value);
+    argument.name = name;
+    return argument;
+}	
