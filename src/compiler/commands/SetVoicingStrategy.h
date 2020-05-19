@@ -3,20 +3,23 @@
 
 #include "ACommand.h"
 #include <compiler/argumentNames.h>
+#include "ACanSpecifyInstrument.h"
+#include <compiler/voicings/VoicingStrategy.h>
 
 namespace sheet {
     namespace compiler {
-        class SetVoicingStrategy : public ACommand
+        class SetVoicingStrategy : public ACommand, public ACanSpecifyInstrument
         {
         public:
+            typedef ACommand Base;
             fm::IHasParameter::ParametersByNames parameters = {
                 FM_PARAMETER_DEF		    (argumentNames.SetVoicingStrategy.Use, 	    0)
             };
             virtual ParametersByNames & getParameters() { return this->parameters; }
-            virtual void setArguments(const Arguments &args) override { _arguments = args; }
+            virtual void setArguments(const Arguments &args) override;
             virtual void execute(AContext*);
         protected:
-            Arguments _arguments;
+            VoicingStrategyPtr _voicingStrategy = nullptr;
         };
     }
 }

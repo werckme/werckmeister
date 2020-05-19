@@ -36,6 +36,9 @@ struct ArgumentNames {
         std::string Use                   = "use";
     } SetVoicingStrategy; 
     
+    struct {
+        std::string Range                   = "range";
+    } SimpleGuitarVoicingStrategy; 
 };
 
 extern ArgumentNames argumentNames;  

@@ -48,7 +48,7 @@ namespace sheet {
 #include <compiler/commands/SetVolume.h>
 #include <compiler/commands/SetPan.h>
 #include <compiler/commands/AddInstrumentConfig.h>
-
+#include <compiler/commands/SetVoicingStrategy.h>
 
 namespace sheet {
     namespace compiler {
@@ -58,6 +58,7 @@ namespace sheet {
                 _FM_Register(SetVolume,                SHEET_META__SET_VOLUME);
                 _FM_Register(SetPan,                   SHEET_META__SET_PAN);
                 _FM_Register(AddInstrumentConfig,      SHEET_META__SET_INSTRUMENT_CONFIG);
+                _FM_Register(SetVoicingStrategy,       SHEET_META__SET_VOICING_STRATEGY);
                 return true;
             })();
         }

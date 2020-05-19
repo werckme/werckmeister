@@ -142,7 +142,6 @@ namespace sheet {
 			virtual void metaSetExpression(const sheet::Argument &argument);
 			virtual void metaSetSingleExpression(const sheet::Argument &argument);
 			virtual void metaSetTempo(double bpm) {}
-			virtual void metaSetVoicingStrategy(const fm::String &name, const Event::Args &args);
 			virtual void metaSetSpielanweisung(const fm::String &name, const Event::Args &args);
 			virtual void metaSetSpielanweisungOnce(const fm::String &name, const Event::Args &args);
 			virtual void metaSetModification(const fm::String &name, const Event::Args &args);

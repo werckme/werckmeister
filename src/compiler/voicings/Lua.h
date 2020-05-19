@@ -20,6 +20,9 @@ namespace sheet {
             virtual void assertCanExecute() const override;
             virtual Pitches get(const Event &chord, const ChordDef &def, const Degrees &degreeIntervals, const TimeInfo&) override;
             virtual void setArguments(const Event::Args &args) override;
+            // #74 TODO
+            fm::IHasParameter::ParametersByNames parameters = {};
+            virtual ParametersByNames & getParameters() { return this->parameters; }
         protected:
             void pushArgs(const Event::Args &args);
         private:

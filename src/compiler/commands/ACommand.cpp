@@ -3,9 +3,6 @@
 
 namespace sheet {
     namespace compiler {
-        void ACommand::setArguments(const Arguments &args)
-        {
-            fm::argumentsToParameters(args, getParameters());
-        }
+
     }
 }

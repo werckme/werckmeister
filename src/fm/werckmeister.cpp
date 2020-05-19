@@ -9,17 +9,13 @@
 #include "compiler/compiler.h"
 #include <compiler/context/MidiContext.h>
 #include <memory>
-#include "compiler/voicings/DirectVoicingStrategy.h"
-#include "compiler/voicings/SimpleGuitar.h"
-#include "compiler/voicingStrategies.h"
 #include "compiler/voicings/VoicingStrategy.h"
+#include "compiler/voicingStrategies.h"
 #include "compiler/voicings/Lua.h"
 #include "compiler/spielanweisung/Arpeggio.h"
 #include "compiler/spielanweisung/Vorschlag.h"
 #include "compiler/spielanweisung/spielanweisungen.h"
-#include "compiler/modification/modifications.h"
 #include "compiler/modification/LuaMod.h"
-#include "compiler/modification/Bend.h"
 #include <sheet/Document.h>
 
 namespace fm {

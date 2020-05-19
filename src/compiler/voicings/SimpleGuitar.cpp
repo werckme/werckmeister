@@ -54,10 +54,11 @@ namespace sheet {
 
 	SimpleGuitar::Pitches SimpleGuitar::get(const Event &chord, const ChordDef &def, const Degrees &degreeIntervals, const TimeInfo& timeInfo)
 	{
+
 		if (degreeIntervals.size() < 3) {
 			return Base::get(chord, def, degreeIntervals, timeInfo);
 		}
-
+		bool lowerRange = parameters[argumentNames.SimpleGuitarVoicingStrategy.Range].value<fm::String>() == "lowerRange";
 		Pitches result;
 		auto chordElements = chord.chordElements();
 		auto root = std::get<0>(chordElements);
@@ -82,19 +83,5 @@ namespace sheet {
 		}
 
         return result;
-	}
-
-	void SimpleGuitar::setArguments(const Event::Args &args) 
-	{
-		// #74.2 TODO
-		// if (args.size() > 1) {
-		// 		auto optionStr = fm::getArgumentValue<fm::String>(args, 1);
-		// 		if (optionStr == FM_STRING("lowerRange")) {
-		// 			lowerRange = true;
-		// 		}
-		// 		if (optionStr == FM_STRING("higherRange")) {
-		// 			lowerRange = false;
-		// 		}
-		// 	}
 	}
 }

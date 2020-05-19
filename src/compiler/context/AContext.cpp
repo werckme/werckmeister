@@ -307,10 +307,6 @@ namespace sheet {
 					metaSetTempo(bpm);
 					return;
 				}
-				if (command == SHEET_META__SET_VOICING_STRATEGY) {
-					metaSetVoicingStrategy(fm::getArgumentValue<fm::String>(args, 0), args);
-					return;
-				}
 				if (command == SHEET_META__SET_SPIELANWEISUNG) {
 					metaSetSpielanweisung(fm::getArgumentValue<fm::String>(args, 0), args);
 					return;
@@ -389,17 +385,6 @@ namespace sheet {
 			auto &cs = getConfigServer();
 			auto device = cs.createDeviceConfig(args);
 			cs.addDevice(device);
-		}
-
-		void AContext::metaSetVoicingStrategy(const fm::String &name, const Event::Args &args)
-		{
-			auto meta = voiceMetaData();
-			if (meta->voicingStrategy && meta->voicingStrategy->name() == name) {
-				return;
-			}
-			auto &wm = fm::getWerckmeister();
-			meta->voicingStrategy = wm.getVoicingStrategy(name);
-			meta->voicingStrategy->setArguments(args);
 		}
 
 		void AContext::metaSetSpielanweisung(const fm::String &name, const Event::Args &args)

@@ -5,6 +5,7 @@ SET (SRC_FETZER_LIB
     fm/midi.cpp
     fm/common.cpp
     fm/exception.cpp
+    fm/AConvertsArgumentsToParameter.cpp
     fm/config/configServer.cpp
     fm/lua/ALuaObject.cpp
     fm/lua/ALuaScript.cpp

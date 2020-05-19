@@ -40,7 +40,7 @@ namespace sheet {
             auto &wm = fm::getWerckmeister();
             Base::setArguments(args);
             auto uname = parameters[argumentNames.InstrumentConf.ForInstrument].value<fm::String>();
-            if (args.size() < 3 || args.size() % 2 == 0) {
+            if (args.size() < 3) {
 				FM_THROW(Exception, "not enough values for " + fm::String(SHEET_META__SET_INSTRUMENT_CONFIG) +  ": " + uname);
 			}
             auto argsMappedByKeyword = fm::mapArgumentsByKeywords(args, SupportedConfigCommands);
@@ -59,7 +59,6 @@ namespace sheet {
                     commandObject->setArguments(args);
                     _configCommands.push_back(commandObject);
 				}
-
             }
         }
     }

@@ -3,7 +3,7 @@
 
 #include "DirectVoicingStrategy.h"
 #include <map>
-
+#include <compiler/argumentNames.h>
 namespace sheet {
 
     /**
@@ -23,8 +23,10 @@ namespace sheet {
         virtual ~SimpleGuitar() = default;
 		virtual Pitches get(const Event &chord, const ChordDef &def, const Degrees &degreeIntervals, const TimeInfo&) override;
         OctaveMap createOctaveMap(const ChordDef &def) const;
-        virtual void setArguments(const Event::Args &args) override;
-        bool lowerRange = false;
+        fm::IHasParameter::ParametersByNames parameters = {
+            FM_PARAMETER_DEFAULT_DEF	(argumentNames.SimpleGuitarVoicingStrategy.Range, 	    0,  "higherRange"),
+        };
+        virtual ParametersByNames & getParameters() { return this->parameters; }        
     };
 }
 
