@@ -30,7 +30,11 @@ struct ArgumentNames {
 
     struct {
         std::string SetTo                   = "to";
-    } SetPan; 
+    } SetPan;
+
+    struct {
+        std::string Use                   = "use";
+    } SetVoicingStrategy; 
     
 };
 

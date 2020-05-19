@@ -27,18 +27,26 @@ namespace fm {
 
     void argumentsToParameters(const std::vector<sheet::Argument> arguments, IHasParameter::ParametersByNames &outParameters)
     {
+        if (arguments.empty()) {
+            return;
+        }
         throwIfmixedNamedAndPositionalArgs(arguments);
+        bool byPosition = arguments.front().name.empty();
+        bool byName = !byPosition;
         for (int position = 0; position < (int)arguments.size(); ++position)
         {
             const auto &argument = arguments[position];
-            auto parameterIt = std::find_if(outParameters.begin(), outParameters.end(), [position, &argument](const auto &p) {
-                return argument.name == p.second.name();
-            });
-            if (parameterIt == outParameters.end()) {
+            IHasParameter::ParametersByNames::iterator parameterIt;
+            if (byName) {
+                parameterIt = std::find_if(outParameters.begin(), outParameters.end(), [position, &argument](const auto &p) {
+                    return argument.name == p.second.name();
+                });
+            }
+            if (byPosition) {
                 parameterIt = std::find_if(outParameters.begin(), outParameters.end(), [position, &argument](const auto &p) {
                     return p.second.position() == position;
                 });
-            }          
+            }
             if (parameterIt == outParameters.end()) {
                 continue;
             }
