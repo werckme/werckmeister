@@ -9,6 +9,7 @@ SET (SRC_FETZER_LIB
     fm/config/configServer.cpp
     fm/lua/ALuaObject.cpp
     fm/lua/ALuaScript.cpp
+    fm/lua/ALuaWithParameter.cpp
     fm/tools.cpp
     compiler/compiler.cpp
     parser/chordDefParser.cpp

@@ -5,12 +5,16 @@
 #include <fm/lua/ALuaScript.h>
 #include <fm/common.hpp>
 #include <forward.hpp>
+#include <fm/lua/ALuaWithParameter.h>
 
 #define LUA_VOICING_STRATEGY_FENTRY "solve"
 
 namespace sheet {
     namespace compiler {
-        class LuaVoicingStrategy : public VoicingStrategy, public lua::ALuaScript {
+        class LuaVoicingStrategy : public VoicingStrategy, 
+            public lua::ALuaScript, 
+            public fm::lua::ALuaWithParameter
+    {
         public:
             typedef VoicingStrategy Base;
             typedef lua::ALuaScript LuaBase;
@@ -19,10 +23,7 @@ namespace sheet {
             virtual bool canExecute() const override;
             virtual void assertCanExecute() const override;
             virtual Pitches get(const Event &chord, const ChordDef &def, const Degrees &degreeIntervals, const TimeInfo&) override;
-            virtual void setArguments(const Event::Args &args) override;
-            // #74 TODO
-            fm::IHasParameter::ParametersByNames parameters = {};
-            virtual ParametersByNames & getParameters() { return this->parameters; }
+            virtual ParametersByNames & getParameters() override;
         protected:
             void pushArgs(const Event::Args &args);
         private:

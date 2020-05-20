@@ -271,9 +271,9 @@ namespace sheet {
             // }
         }
 
-        void LuaVoicingStrategy::setArguments(const Event::Args &args)
+        LuaVoicingStrategy::ParametersByNames & LuaVoicingStrategy::getParameters()
         {
-            this->args_ = args;
+            return fm::lua::ALuaWithParameter::getParameters(L);
         }
     }
 }
