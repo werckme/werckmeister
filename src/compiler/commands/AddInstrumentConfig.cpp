@@ -26,11 +26,20 @@ namespace sheet {
 				FM_THROW(Exception, "instrument not found: " + uname);
 			}            
             for (auto configCommand : this->_configCommands) {
-                auto canSpecifyInstrument = std::dynamic_pointer_cast<ICanSpecifyInstrument>(configCommand);
+                const auto &name = configCommand.first;
+                auto commandObject = configCommand.second;
+                auto canSpecifyInstrument = std::dynamic_pointer_cast<ICanSpecifyInstrument>(commandObject);
                 if (canSpecifyInstrument) {
                     canSpecifyInstrument->setInstrument(instrumentDef);
                 }
-                configCommand->execute(context);
+                try {
+                    commandObject->execute(context);
+                } catch (const std::exception &ex) {
+                    fm::StringStream ss;
+                    ss << "failed to process: " << name << std::endl;
+                    ss << ex.what();
+                    FM_THROW(Exception, ss.str()); 
+                }
             }
            
         }
@@ -57,7 +66,7 @@ namespace sheet {
                         continue;
                     }
                     commandObject->setArguments(args);
-                    _configCommands.push_back(commandObject);
+                    _configCommands.push_back(std::make_pair(configCommandName, commandObject));
 				}
             }
         }

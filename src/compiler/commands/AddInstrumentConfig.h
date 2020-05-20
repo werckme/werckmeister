@@ -20,7 +20,9 @@ namespace sheet {
             virtual void execute(AContext*);
             virtual void setArguments(const Arguments &args) override;
         private:
-            typedef std::list<std::shared_ptr<ACommand>> ConfigCommands;
+            typedef fm::String CommandName;
+            typedef std::pair<CommandName, std::shared_ptr<ACommand>> ConfigCommand;
+            typedef std::list<ConfigCommand> ConfigCommands;
             ConfigCommands _configCommands;
         };
     }

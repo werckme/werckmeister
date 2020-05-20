@@ -6,10 +6,10 @@
 struct ArgumentNames {
 
     struct {
-        std::string WithName                = "withName";
+        std::string WithName                = "setName";
         std::string IsType                  = "isType";
         std::string UsePort                 = "usePort";
-        std::string Offset                  = "offset";
+        std::string Offset                  = "withOffset";
     } Device;
 
     struct {
