@@ -25,7 +25,6 @@ namespace sheet {
             virtual Pitches get(const Event &chord, const ChordDef &def, const Degrees &degreeIntervals, const TimeInfo&) override;
             virtual ParametersByNames & getParameters() override;
         protected:
-            void pushArgs(const Event::Args &args);
         private:
             Pitches popPitches(lua_State *L);
             PitchDef popPitch(lua_State *L);

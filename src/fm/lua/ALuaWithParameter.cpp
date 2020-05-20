@@ -12,17 +12,17 @@ namespace fm {
         {
             lua_getglobal(L, LUA_ALUA_WITH_PARAMETER_PARAMETERS);
             if (lua_istable(L, -1) != 1) {
-                return _parameters;
+                return parameters;
             }
             try {
-                _parameters = popParameters(L);
+                parameters = popParameters(L);
             } catch (const std::exception &ex) {
                 fm::StringStream ss;
                 ss << "failed to process lua " << LUA_ALUA_WITH_PARAMETER_PARAMETERS << " table: " << std::endl;
                 ss << "    " << ex.what();
                 FM_THROW(fm::Exception, ss.str());
             }
-            return _parameters;
+            return parameters;
         }
 
         IHasParameter::ParametersByNames ALuaWithParameter::popParameters(lua_State *L)
@@ -66,6 +66,27 @@ namespace fm {
             lua_pop(L, 1);
             fm::Parameter parameter(name, position);
             return parameter;
+        }
+
+        void ALuaWithParameter::pushParameters(lua_State *L, const IHasParameter::ParametersByNames &parameters)
+        {
+            lua_createtable(L, 0, 0);
+            if (parameters.empty()) { // first arg is the script name
+                return;
+            }
+            try {
+                auto top = lua_gettop(L);
+                for(auto parameter : parameters) {
+                    lua_pushstring(L, parameter.first.c_str());
+                    lua_pushstring(L, parameter.second.value<fm::String>().c_str());
+                    lua_settable(L, top);
+                }
+            } catch (const std::exception &ex) {
+                fm::StringStream ss;
+                ss << "failed to push parameter values to lua script:" << std::endl;
+                ss << ex.what();
+                FM_THROW(fm::Exception, ss.str());
+            }
         }
     }
 }

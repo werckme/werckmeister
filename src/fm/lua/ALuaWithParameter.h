@@ -22,8 +22,8 @@ namespace fm {
         protected: 
             virtual IHasParameter::ParametersByNames popParameters(lua_State *);
             virtual fm::Parameter popParameter(lua_State *, int position);
-        private:
-            IHasParameter::ParametersByNames _parameters;
+            virtual void pushParameters(lua_State *, const IHasParameter::ParametersByNames&);
+            IHasParameter::ParametersByNames parameters;
         };
     }
 }
