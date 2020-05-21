@@ -3,12 +3,11 @@
 
 #include "ACommand.h"
 #include <compiler/argumentNames.h>
-#include "ACanSpecifyInstrument.h"
 #include <compiler/voicings/VoicingStrategy.h>
 
 namespace sheet {
     namespace compiler {
-        class SetVoicingStrategy : public ACommand, public ACanSpecifyInstrument
+        class SetVoicingStrategy : public ACommand
         {
         public:
             typedef ACommand Base;

@@ -6,10 +6,6 @@ namespace sheet {
     namespace compiler {
         void SetVoicingStrategy::execute(AContext* context)
         {
-            if (this->hasInstrument()) {
-                getInstrument()->voicingStrategy = this->_voicingStrategy;
-                return;
-            }
             auto meta = context->voiceMetaData();
 			bool isAlreadySet = meta->voicingStrategy && meta->voicingStrategy->name() == _voicingStrategy->name();
             if (isAlreadySet) {

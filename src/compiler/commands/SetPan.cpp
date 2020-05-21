@@ -5,11 +5,7 @@ namespace sheet {
     namespace compiler {
         void SetPan::execute(AContext* context)
         {
-            auto setTo = parameters[argumentNames.SetVolume.SetTo].value<int>();
-            if (this->hasInstrument()) {
-                this->getInstrument()->pan = setTo;
-                return;
-            }            
+            auto setTo = parameters[argumentNames.SetVolume.SetTo].value<int>();      
             context->setPan(setTo);
         }
     }

@@ -63,6 +63,10 @@ SET (SRC_FETZER_LIB
     compiler/commands/SetMidiChannel.cpp
     compiler/commands/SelectMidiSound.cpp
     compiler/commands/AddInstrumentConfig.cpp
+    compiler/commands/InstrumentConfigSetPan.cpp
+    compiler/commands/InstrumentConfigAddMod.cpp
+    compiler/commands/InstrumentConfigSetVoicingStrategy.cpp
+    compiler/commands/InstrumentConfigSetVolume.cpp    
 )
 
 add_definitions( -DGIT_VERSION="${GIT_VERSION}" )

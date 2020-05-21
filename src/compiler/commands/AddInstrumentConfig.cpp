@@ -5,9 +5,11 @@
 #include <compiler/error.hpp>
 #include <fm/werckmeister.hpp>
 #include "ICanSpecifyInstrument.h"
+#include <iostream>
 
 namespace sheet {
     namespace compiler {
+
         const std::vector<fm::String> AddInstrumentConfig::SupportedConfigCommands = {
             SHEET_META__SET_INSTRUMENT_CONFIG_VOLUME,
             SHEET_META__SET_INSTRUMENT_CONFIG_PAN,
@@ -29,9 +31,10 @@ namespace sheet {
                 const auto &name = configCommand.first;
                 auto commandObject = configCommand.second;
                 auto canSpecifyInstrument = std::dynamic_pointer_cast<ICanSpecifyInstrument>(commandObject);
-                if (canSpecifyInstrument) {
-                    canSpecifyInstrument->setInstrument(instrumentDef);
+                if (!canSpecifyInstrument) {
+                    return;
                 }
+                canSpecifyInstrument->setInstrument(instrumentDef);
                 try {
                     commandObject->execute(context);
                 } catch (const std::exception &ex) {
@@ -61,7 +64,7 @@ namespace sheet {
                 auto it = argsRange.first;
 				for (; it != argsRange.second; ++it) {
 					const auto &args = it->second;
-                    auto commandObject = wm.createOrDefault<ACommand>(configCommandName);
+                    auto commandObject = wm.createOrDefault<ACommand>(InstrumentConfigCommandName(configCommandName));
                     if (!commandObject) {
                         continue;
                     }

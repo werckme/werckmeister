@@ -6,8 +6,15 @@
 #include <list>
 #include <memory>
 
+
 namespace sheet {
     namespace compiler {
+       
+        inline fm::String InstrumentConfigCommandName(const fm::String &cmdName) 
+        {
+            return "InstrumentConfigCommandPrefix_" + cmdName;
+        }
+
         class AddInstrumentConfig : public ACommand
         {
         public:

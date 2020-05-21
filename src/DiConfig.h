@@ -46,19 +46,25 @@ namespace sheet {
 #include <compiler/metaCommands.h>
 #include <compiler/commands/DefineMidiInstrument.h>
 #include <compiler/commands/SetVolume.h>
+#include <compiler/commands/InstrumentConfigSetVolume.h>
 #include <compiler/commands/SetPan.h>
+#include <compiler/commands/InstrumentConfigSetPan.h>
 #include <compiler/commands/AddInstrumentConfig.h>
 #include <compiler/commands/SetVoicingStrategy.h>
+#include <compiler/commands/InstrumentConfigSetVoicingStrategy.h>
 
 namespace sheet {
     namespace compiler {
         namespace {
             const bool commandsRegistered = ([]() {
-                _FM_Register(DefineMidiInstrument,     SHEET_META__MIDI_INSTRUMENT_DEF);
-                _FM_Register(SetVolume,                SHEET_META__SET_VOLUME);
-                _FM_Register(SetPan,                   SHEET_META__SET_PAN);
-                _FM_Register(AddInstrumentConfig,      SHEET_META__SET_INSTRUMENT_CONFIG);
-                _FM_Register(SetVoicingStrategy,       SHEET_META__SET_VOICING_STRATEGY);
+                _FM_Register(DefineMidiInstrument,                      SHEET_META__MIDI_INSTRUMENT_DEF);
+                _FM_Register(SetVolume,                                 SHEET_META__SET_VOLUME);
+                _FM_Register(InstrumentConfigSetVolume,                 InstrumentConfigCommandName(SHEET_META__SET_VOLUME));
+                _FM_Register(SetPan,                                    SHEET_META__SET_PAN);
+                _FM_Register(InstrumentConfigSetPan,                    InstrumentConfigCommandName(SHEET_META__SET_PAN));
+                _FM_Register(AddInstrumentConfig,                       SHEET_META__SET_INSTRUMENT_CONFIG);
+                _FM_Register(SetVoicingStrategy,                        SHEET_META__SET_VOICING_STRATEGY);
+                _FM_Register(InstrumentConfigSetVoicingStrategy,        InstrumentConfigCommandName(SHEET_META__SET_VOICING_STRATEGY));
                 return true;
             })();
         }
