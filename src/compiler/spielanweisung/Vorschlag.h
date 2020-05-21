@@ -14,6 +14,9 @@ namespace sheet {
             virtual ~Vorschlag() = default;
             virtual void perform(AContext *ctx, Events &events) override;
             Event vorschlagNote;
+            fm::IHasParameter::ParametersByNames parameters = {
+            };
+            virtual ParametersByNames & getParameters() { return this->parameters; }            
         };
     }
 }

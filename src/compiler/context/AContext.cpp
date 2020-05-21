@@ -315,14 +315,6 @@ namespace sheet {
 					metaSetSpielanweisungOnce(fm::getArgumentValue<fm::String>(args, 0), args);
 					return;
 				}	
-				if (command == SHEET_META__SET_MOD) {
-					metaSetModification(fm::getArgumentValue<fm::String>(args, 0), args);
-					return;
-				}	
-				if (command == SHEET_META__SET_MOD_ONCE) {
-					metaSetModificationOnce(fm::getArgumentValue<fm::String>(args, 0), args);
-					return;
-				}
 				if (command == SHEET_META__SET_SIGNATURE) {
 					metaSetSignature(fm::getArgumentValue<int>(args, 0), fm::getArgumentValue<int>(args, 1));
 					return;
@@ -401,24 +393,6 @@ namespace sheet {
 			auto meta = voiceMetaData();
 			meta->spielanweisungOnce = wm.getSpielanweisung(name);
 			meta->spielanweisungOnce->setArguments(args);
-		}
-
-		void AContext::metaSetModification(const fm::String &name, const Event::Args &args)
-		{
-			auto &wm = fm::getWerckmeister();
-			auto meta = voiceMetaData();
-			auto mod = wm.getModification(name);
-			meta->modifications.push_back(mod);
-			mod->setArguments(args);
-		}
-
-		void AContext::metaSetModificationOnce(const fm::String &name, const Event::Args &args)
-		{
-			auto &wm = fm::getWerckmeister();
-			auto meta = voiceMetaData();
-			auto mod = wm.getModification(name);
-			meta->modificationsOnce.push_back(mod);
-			mod->setArguments(args);
 		}
 
 		void AContext::metaSetSheetTemplate(const Event::Args &)

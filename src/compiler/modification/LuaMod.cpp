@@ -131,22 +131,6 @@ namespace sheet {
             }
         }
 
-        void LuaModification::pushArgs(const Event::Args &args)
-        {
-            // #74.2 TODO
-            // lua_createtable(L, 0, 0);
-            // if (args.size() == 1) { // first arg is the script name
-            //     return;
-            // }
-            // auto top = lua_gettop(L);
-            // auto it = args.begin() + 1;
-            // for(; it < args.end(); ++it) {
-            //     lua_pushinteger(L, it - args.begin());
-            //     lua_pushstring(L, it->c_str());
-            //     lua_settable(L, top);
-            // }
-        }
-
         void LuaModification::popNoteEvent(Event &event)
         {
             sheet::lua::getTableValue(L, LUA_EVENT_PROPETRY_VELOCITY, event.velocity);
@@ -229,16 +213,11 @@ namespace sheet {
             return result;
         }
 
-        void LuaModification::setArguments(const Event::Args &args)
-        {
-            this->args_ = args;
-        }
-
         void LuaModification::perform(AContext *ctx, Events &events)
         {
             lua_getglobal(L, LUA_MODIFICATION_FENTRY);
             pushEvents(ctx, events);
-            pushArgs(this->args_);
+            pushParameters(L, ALuaWithParameter::parameters);
             lua::LuaTimeInfo(ctx->getTimeInfo()).push(L);
             call(3, 1);
             auto processedEvents = popEvents();
@@ -255,6 +234,11 @@ namespace sheet {
                 LuaEvent(&event, ctx).push(L);
                 lua_settable(L, top);
             }
+        }
+
+        LuaModification::ParametersByNames & LuaModification::getParameters()
+        {
+            return fm::lua::ALuaWithParameter::getParameters(L);
         }
     }
 }

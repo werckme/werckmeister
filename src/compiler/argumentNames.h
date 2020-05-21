@@ -33,12 +33,25 @@ struct ArgumentNames {
     } SetPan;
 
     struct {
-        std::string Use                   = "use";
+        std::string Use                     = "use";
     } SetVoicingStrategy; 
     
     struct {
         std::string Range                   = "range";
-    } SimpleGuitarVoicingStrategy; 
+    } SimpleGuitarVoicingStrategy;
+
+    struct {
+        std::string Mode                    = "mode";
+        std::string Value                   = "value";
+        // @alternative
+        std::string BendTo                  = "to";
+        // @alternative
+        std::string BendFrom                = "from";        
+    } Bend; 
+
+    struct {
+        std::string Use                     = "use";
+    } AddModPlayedOnce;
 };
 
 extern ArgumentNames argumentNames;  

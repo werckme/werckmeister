@@ -3,17 +3,21 @@
 
 #include "ACommand.h"
 #include <compiler/argumentNames.h>
+#include <forward.hpp>
 
 namespace sheet {
     namespace compiler {
         class AddMod : public ACommand
         {
         public:
+            typedef ACommand Base;
             fm::IHasParameter::ParametersByNames parameters = {
-                //FM_PARAMETER_DEF		    (argumentNames.XYZ, 	0)
+                FM_PARAMETER_DEF		    (argumentNames.AddModPlayedOnce.Use, 	0)
             };
             virtual ParametersByNames & getParameters() { return this->parameters; }
             virtual void execute(AContext*);
+            virtual void setArguments(const Arguments &args) override;
+            AModificationPtr theModification;
         };
     }
 }

@@ -2,6 +2,9 @@
 #define MODIFICTAION_BEND_HPP
 
 #include "AModification.h"
+#include <compiler/argumentNames.h>
+
+#define FM_BEND_ALTERNAIVE_PARAM_VALUE_NOT_SET "-1"
 
 namespace sheet {
     namespace compiler {
@@ -10,10 +13,18 @@ namespace sheet {
             Bend() = default;
             virtual ~Bend() = default;
             virtual void perform(AContext *ctx, Events &evs) override;
-            virtual void setArguments(const Event::Args &args) override;
             double value = 0.5;
             enum BendMode { To, From };
             BendMode mode = To;
+            fm::IHasParameter::ParametersByNames parameters = {
+                FM_PARAMETER_DEFAULT_DEF	(argumentNames.Bend.Mode, 	    0,  "to"),
+                FM_PARAMETER_DEFAULT_DEF	(argumentNames.Bend.Value, 	    1,  "50"),
+                FM_PARAMETER_DEFAULT_DEF	(argumentNames.Bend.BendTo,	    2,  FM_BEND_ALTERNAIVE_PARAM_VALUE_NOT_SET),
+                FM_PARAMETER_DEFAULT_DEF	(argumentNames.Bend.BendFrom,   3,  FM_BEND_ALTERNAIVE_PARAM_VALUE_NOT_SET),
+            };
+            virtual ParametersByNames & getParameters() { return this->parameters; }
+        private:
+            void prepareValues();
         };
     }
 }
