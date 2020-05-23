@@ -341,10 +341,6 @@ namespace sheet {
 			if (metaEvent.stringValue.empty()) {
 				throwContextException("invalid meta command ");
 			}
-			// #74 TODO move to voice event renderer
-			if (metaEventHandler && metaEventHandler(metaEvent)) {
-				return;
-			}
 			processMeta(metaEvent);				
 		}
 

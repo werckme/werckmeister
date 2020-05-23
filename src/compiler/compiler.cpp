@@ -45,21 +45,14 @@ namespace sheet {
 			}
 
 			try {
-				ctx->metaEventHandler = std::bind(&Compiler::metaEventHandler, this, std::placeholders::_1);
 				renderChordTrack();
 				renderTracks();
-				ctx->metaEventHandler = AContext::MetaEventHandler();
 			} catch (fm::Exception &ex) {			
 				ex << ex_sheet_document(document);
 				throw;
 			} catch(...) {
 				throw;
 			}
-		}
-
-		bool Compiler::metaEventHandler(const Event &metaEvent)
-		{
-			return false;
 		}
 
 		void Compiler::renderTracks()

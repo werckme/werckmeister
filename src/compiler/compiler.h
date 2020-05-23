@@ -25,7 +25,6 @@ namespace sheet {
 			void renderTracks();
 			void renderChordTrack();
 		private:
-			bool metaEventHandler(const Event &metaEvent);
 			AContextPtr context_;
 			DocumentPtr document_;
 			SheetTemplateRenderer *currentSheetTemplateRenderer_ = nullptr;

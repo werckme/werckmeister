@@ -170,12 +170,6 @@ namespace sheet {
 			virtual double masterTempo() const { return masterTempo_; }
 			virtual void masterTempo(double val) { this->masterTempo_ = val; }			
 			Warnings warnings;
-			/**
-			 * MetaEventHandler: bool (Event& metaEvent)
-			 * if a MetaEventHandler returns true, a meta event will be marked as processed,
-			 * if false the event will be marked as not processed.
-			 */
-			MetaEventHandler metaEventHandler;
 			Capabilities capabilities;
             /**
              * @return the current velocity value between 0..1
