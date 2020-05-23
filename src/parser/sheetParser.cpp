@@ -251,7 +251,7 @@ namespace sheet {
 						>> current_pos_.current_pos
 						>> -(
 								lit("~")[at_c<EvType>(_val) = Event::TiedNote] 
-								| (lit("->")[at_c<EvType>(_val) = Event::Meta][at_c<EvStringValue>(_val) = FM_STRING("vorschlag")])
+								| (lit("->")[at_c<EvType>(_val) = Event::Meta][at_c<EvStringValue>(_val) = FM_STRING("addVorschlag")])
 							)
 					)
 					|
@@ -267,7 +267,7 @@ namespace sheet {
 						>> current_pos_.current_pos						
 						>> -(
 								lit("~")[at_c<EvType>(_val) = Event::TiedDegree] 
-								| (lit("->")[at_c<EvType>(_val) = Event::Meta][at_c<EvStringValue>(_val) = FM_STRING("vorschlag")])
+								| (lit("->")[at_c<EvType>(_val) = Event::Meta][at_c<EvStringValue>(_val) = FM_STRING("addVorschlag")])
 							)
 					)
 					|
@@ -284,7 +284,7 @@ namespace sheet {
 						>> current_pos_.current_pos						
 						>> -(
 								lit("~")[at_c<EvType>(_val) = Event::TiedRepeat] 
-								| (lit("->")[at_c<EvType>(_val) = Event::Meta][at_c<EvStringValue>(_val) = FM_STRING("vorschlag")])
+								| (lit("->")[at_c<EvType>(_val) = Event::Meta][at_c<EvStringValue>(_val) = FM_STRING("addVorschlag")])
 							)
 					)					
 					|

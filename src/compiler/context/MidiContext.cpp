@@ -8,6 +8,7 @@
 #include <fm/werckmeister.hpp>
 #include <compiler/modification/AModification.h>
 #include <compiler/commands/ACommand.h>
+#include <compiler/commands/AUsingAnEvent.h>
 
 #define SHEET_MASTER_TRACKNAME "master track"
 
@@ -366,14 +367,19 @@ namespace sheet {
 			setMidiInstrumentDef(uname, def);
 		}
 
-		void MidiContext::processMeta(const fm::String &commandName, const std::vector<sheet::Argument> &args)
+		void MidiContext::processMeta(const Event &metaEvent)
 		{
+			const auto &args = metaEvent.metaArgs;
+			const auto &commandName = metaEvent.stringValue;
 			// #74 TODO: move to sheet event renderer
 			try {
-
 				auto &wm = fm::getWerckmeister();
 				auto command = wm.createOrDefault<ACommand>(commandName);
 				if (command) {
+					auto *usingAnEvent = dynamic_cast<AUsingAnEvent*>(command.get());
+					if (usingAnEvent) {
+						usingAnEvent->event(metaEvent);
+					}
 					command->setArguments(args);
 					command->execute(this);
 					return;
@@ -397,7 +403,7 @@ namespace sheet {
 			catch(...) {
 				FM_THROW(Exception, "failed to process " + commandName);
 			}
-			Base::processMeta(commandName, args);	
+			Base::processMeta(metaEvent);	
 		}
 		AContext::TrackId MidiContext::createMasterTrack()
 		{

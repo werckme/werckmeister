@@ -3,15 +3,14 @@
 
 #include "ACommand.h"
 #include <compiler/argumentNames.h>
+#include "AUsingAnEvent.h"
 
 namespace sheet {
     namespace compiler {
-        class AddVorschlag : public ACommand
+        class AddVorschlag : public ACommand, public AUsingAnEvent
         {
         public:
-            fm::IHasParameter::ParametersByNames parameters = {
-                //FM_PARAMETER_DEF		    (argumentNames.XYZ, 	0)
-            };
+            fm::IHasParameter::ParametersByNames parameters = {};
             virtual ParametersByNames & getParameters() { return this->parameters; }
             virtual void execute(AContext*);
         };

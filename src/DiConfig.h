@@ -54,6 +54,7 @@ namespace sheet {
 #include <compiler/commands/InstrumentConfigSetVoicingStrategy.h>
 #include <compiler/commands/AddMod.h>
 #include <compiler/commands/AddModPlayedOnce.h>
+#include <compiler/commands/AddVorschlag.h>
 
 namespace sheet {
     namespace compiler {
@@ -70,6 +71,7 @@ namespace sheet {
 
                 _FM_Register(AddMod,                                    SHEET_META__SET_MOD);
                 _FM_Register(AddModPlayedOnce,                          SHEET_META__SET_MOD_ONCE);
+                _FM_Register(AddVorschlag,                              SHEET_META__SET_VORSCHLAG);
 
                 return true;
             })();

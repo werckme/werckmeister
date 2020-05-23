@@ -49,8 +49,13 @@ namespace sheet {
 			if (trackIsNew) {
 				try {
 					ctx_->processMeta(track.trackConfigs, 
-						[](const auto &x) { return x.name; }, 
-						[](const auto &x) { return x.args; }
+						[](const auto &x) { 
+							sheet::Event metaEvent;
+							metaEvent.type = sheet::Event::Meta;
+							metaEvent.stringValue = x.name;
+							metaEvent.metaArgs = x.args;
+							return metaEvent;
+						}
 					);
 				} catch (fm::Exception &ex) {
 					throw;

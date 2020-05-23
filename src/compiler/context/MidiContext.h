@@ -37,7 +37,7 @@ namespace sheet {
 			virtual void metaSetInstrumentConfig(const fm::String &uname, const Event::Args &args);
 			virtual void setInstrument(const fm::String &uname) override;
 			virtual void metaSetTempo(double bpm) override;
-			virtual void processMeta(const fm::String &command, const std::vector<sheet::Argument> &args) override;
+			virtual void processMeta(const Event &metaEvent) override;
 			virtual void setVolume(int volume) override;
 			virtual void setPan(int val) override;
 			virtual void metaSetSignature(int upper, int lower) override;

@@ -125,7 +125,7 @@ namespace sheet {
 			/**
 			 * @throw if command not handled
 			 */
-			virtual void processMeta(const fm::String &command, const std::vector<sheet::Argument> &args);
+			virtual void processMeta(const Event &metaEvent);
 			
 			/**
 			 * processed a cointainer of meta commands
@@ -133,10 +133,10 @@ namespace sheet {
 			 * @arg a function which returns the command of an container value_type object
 			 * @arg a function which returns the args of an container value_type object
 			 */
+			// #74 TODO: refactor document config renderer
 			template<class TContainer>
 			void processMeta(const TContainer &container, 
-							std::function<fm::String(const typename TContainer::value_type&)> fcommand, 
-							std::function<std::vector<sheet::Argument>(const typename TContainer::value_type&)> fargs);
+						std::function<sheet::Event(const typename TContainer::value_type&)> fGetMetaEvent);
 			virtual void setInstrument(const fm::String &uname) {}
 			virtual void metaSetSheetTemplate(const Event::Args &args);
 			virtual void metaSetExpression(const sheet::Argument &argument);
@@ -146,7 +146,6 @@ namespace sheet {
 			virtual void metaSetSpielanweisungOnce(const fm::String &name, const Event::Args &args);
 			virtual void metaSetSignature(int upper, int lower);
 			virtual void metaAddDevice(const Event::Args &args);
-			virtual void metaAddVorschlag(const Event &ev);
 			virtual void setVolume(int volume);
 			virtual void setPan(int val);
 			/////// actual context stuff
@@ -207,17 +206,16 @@ namespace sheet {
         };
 
 		///////////////////////////////////////////////////////////////////////
+		// #74 TODO: refactor document config renderer
 		template<class TContainer>
 		void AContext::processMeta(const TContainer &container, 
-						std::function<fm::String(const typename TContainer::value_type&)> fcommand, 
-						std::function<std::vector<sheet::Argument>(const typename TContainer::value_type&)> fargs)
+						std::function<sheet::Event(const typename TContainer::value_type&)> fGetMetaEvent)
 		{
 			int idx = 0;
 			for(const auto &x : container) {
-				fm::String command = fcommand(x);
-				std::vector<sheet::Argument> args = fargs(x);
+				Event metaEvent = fGetMetaEvent(x);
 				try {
-					processMeta(command, args);
+					processMeta(metaEvent);
 					idx++;
 				} catch(fm::Exception &ex) {
 					ex << ex_sheet_source_info(x);

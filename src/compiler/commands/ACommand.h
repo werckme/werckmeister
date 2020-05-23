@@ -15,7 +15,7 @@ namespace sheet {
             typedef std::vector<Argument> Arguments;
             virtual ~ACommand() = default;
             virtual void execute(AContext*) = 0;
-
+            
         };
     }
 }

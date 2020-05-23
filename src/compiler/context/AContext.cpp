@@ -5,7 +5,6 @@
 #include <fm/common.hpp>
 #include <compiler/spielanweisung/ASpielanweisung.h>
 #include <compiler/spielanweisung/spielanweisungen.h>
-#include <compiler/spielanweisung/Vorschlag.h>
 #include <compiler/modification/AModification.h>
 #include <fm/literals.hpp>
 #include <fm/config/configServer.h>
@@ -265,13 +264,14 @@ namespace sheet {
 			auto meta = voiceMetaData();
 			seek(duration);
 		}
-		void AContext::processMeta(const fm::String &command, const std::vector<sheet::Argument> &args)
+		void AContext::processMeta(const Event &metaEvent)
 		{
+			const auto &args = metaEvent.metaArgs;
+			const auto &command = metaEvent.stringValue;
 			// #74 TODO: move to sheet event renderer
 			try {
 				if (command == SHEET_META__TRACK_META_KEY_TYPE /*handled elsewhere*/
 				|| command == SHEET_META__TRACK_META_KEY_NAME
-				|| command == SHEET_META__SET_VORSCHLAG
 				|| command == SHEET_META__SHEET_TEMPLATE_POSITION) 
 				{
 					return;
@@ -345,10 +345,7 @@ namespace sheet {
 			if (metaEventHandler && metaEventHandler(metaEvent)) {
 				return;
 			}
-			if (metaEvent.stringValue == SHEET_META__SET_VORSCHLAG) {
-				metaAddVorschlag(metaEvent);
-			}
-			processMeta(metaEvent.stringValue, metaEvent.metaArgs);				
+			processMeta(metaEvent);				
 		}
 
 		void AContext::setVolume(int volume)
@@ -362,15 +359,6 @@ namespace sheet {
 			auto meta = voiceMetaData();
 			meta->pan = std::max(std::min(val, 100), 0);
 		}		
-
-		void AContext::metaAddVorschlag(const Event &ev)
-		{
-			auto &wm = fm::getWerckmeister();
-			auto meta = voiceMetaData();
-			meta->spielanweisungOnce = wm.getSpielanweisung(SHEET_SPIELANWEISUNG_VORSCHLAG);
-			auto vorschlag = std::dynamic_pointer_cast<Vorschlag>(meta->spielanweisungOnce);
-			vorschlag->vorschlagNote = ev;
-		}
 
 		void AContext::metaAddDevice(const Event::Args &args)
 		{
