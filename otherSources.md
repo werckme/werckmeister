@@ -23,3 +23,10 @@ https://www.youtube.com/watch?v=tgriLghwiFY&list=WL&index=41&t=0s
 https://www.youtube.com/watch?v=65LWpVwDrQE&list=WL&index=43&t=0s
 
 https://www.youtube.com/watch?v=31pHidEBdk4&list=WL&index=44&t=0s
+
+https://www.youtube.com/watch?v=gvntLSXK_Wc&list=WL&index=5&t=0s
+
+# music theory
+https://en.wikipedia.org/wiki/Turnaround_(music)
+
+https://pianowithwillie.com/what-are-chord-shells/
