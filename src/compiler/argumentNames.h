@@ -52,6 +52,11 @@ struct ArgumentNames {
     struct {
         std::string Use                     = "use";
     } AddModPlayedOnce;
+
+    struct {
+        std::string CC                     = "cc";
+        std::string PC                     = "pc";
+    } SelectMidiSound;
 };
 
 extern ArgumentNames argumentNames;  

@@ -1,12 +1,12 @@
 #ifndef SHEET_DEFINEMIDIINSTRUMENT_HPP
 #define SHEET_DEFINEMIDIINSTRUMENT_HPP
 
-#include "ACommand.h"
+#include "AMidiContextCommand.h"
 #include <compiler/argumentNames.h>
 
 namespace sheet {
     namespace compiler {
-        class DefineMidiInstrument : public ACommand
+        class DefineMidiInstrument : public AMidiContextCommand
         {
         public:
             fm::IHasParameter::ParametersByNames parameters = {

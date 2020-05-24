@@ -186,16 +186,7 @@ namespace sheet {
 			addEvent(sigEvent, masterTrackId());
 		}
 
-		void MidiContext::metaSetChannel(int channel)
-		{
-			auto meta = trackMetaData<MidiContext::TrackMetaData>();
-			if (!meta) {
-				FM_THROW(Exception, "meta data = null");
-			}			
-			meta->instrument.channel = channel;
-		}
-
-		void MidiContext::metaSoundSelect(int cc, int pc)
+		void MidiContext::selectMidiSound(int cc, int pc)
 		{
 			auto trackMeta = trackMetaData<MidiContext::TrackMetaData>();
 			if (!trackMeta) {
@@ -280,27 +271,6 @@ namespace sheet {
 			}			
 		}
 
-		void MidiContext::metaSetInstrumentConfig(const fm::String &uname, const Event::Args &args)
-		{
-			
-			// // velocity overrides
-			// auto assignIfSet = [&argsExceptFirst, instrumentDef, this](const fm::String &expression){
-			// 	// #74.2 TODO
-			// 	// auto foundValue = fm::getArgumentValue<int>(expression, argsExceptFirst);
-			// 	// if (!foundValue.first) {
-			// 	// 	return;
-			// 	// }
-			// 	// if (foundValue.second < 0 || foundValue.second > 100) {
-			// 	// 	FM_THROW(Exception, "invalid value for: " + expression);
-			// 	// }
-			// 	// auto exprValue = getExpression(expression);
-			// 	// instrumentDef->velocityOverride[exprValue] = foundValue.second;
-			// };
-			// for(const auto &keyValue : expressionMap_) {
-			// 	assignIfSet(keyValue.first);
-			// }
-		}
-
 		void MidiContext::setInstrument(const fm::String &uname)
 		{
 			// send instrumentDef name meta event
@@ -321,7 +291,7 @@ namespace sheet {
 			if (!instrumentDef->deviceName.empty()) {
 				addDeviceChangeEvent(instrumentDef->deviceName, 0);
 			}
-			metaSoundSelect(instrumentDef->cc, instrumentDef->pc);
+			selectMidiSound(instrumentDef->cc, instrumentDef->pc);
 			// volume
 			addEvent(__createVolumeEvent(*instrumentDef, currentPosition()));
 			// pan
@@ -384,18 +354,6 @@ namespace sheet {
 					command->execute(this);
 					return;
 				}
-
-				// #74 TODO: deprecated
-				if (commandName == SHEET_META__MIDI_CHANNEL) {
-					metaSetChannel(fm::getArgumentValue<int>(args, 0));
-					return;
-				}
-				if (commandName == SHEET_META__MIDI_SOUNDSELECT) {
-					// #74.2 TODO
-					metaSoundSelect(fm::getArgumentValue<int>(args, 0), fm::getArgumentValue<int>(args, 1));
-					return;
-				}
-
 			} catch(const std::exception &ex) {
 				FM_THROW(Exception, "failed to process " + commandName
 									+"\n" + ex.what());

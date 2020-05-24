@@ -55,6 +55,7 @@ namespace sheet {
 #include <compiler/commands/AddMod.h>
 #include <compiler/commands/AddModPlayedOnce.h>
 #include <compiler/commands/AddVorschlag.h>
+#include <compiler/commands/SelectMidiSound.h>
 
 namespace sheet {
     namespace compiler {
@@ -72,6 +73,7 @@ namespace sheet {
                 _FM_Register(AddMod,                                    SHEET_META__SET_MOD);
                 _FM_Register(AddModPlayedOnce,                          SHEET_META__SET_MOD_ONCE);
                 _FM_Register(AddVorschlag,                              SHEET_META__SET_VORSCHLAG);
+                _FM_Register(SelectMidiSound,                           SHEET_META__MIDI_SOUNDSELECT);
 
                 return true;
             })();

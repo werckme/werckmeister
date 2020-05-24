@@ -1,12 +1,12 @@
-#ifndef SETMIDICHANNEL_HPP
-#define SETMIDICHANNEL_HPP
+#ifndef INSTRUMENTCONFIGVELOCITYREMAP_HPP
+#define INSTRUMENTCONFIGVELOCITYREMAP_HPP
 
 #include "ACommand.h"
 #include <compiler/argumentNames.h>
 
 namespace sheet {
     namespace compiler {
-        class SetMidiChannel : public ACommand
+        class InstrumentConfigVelocityRemap : public ACommand
         {
         public:
             fm::IHasParameter::ParametersByNames parameters = {
