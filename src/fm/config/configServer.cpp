@@ -1,7 +1,6 @@
 #include "configServer.h"
 #include <fm/exception.hpp>
 #include <fm/tools.h>
-#include <compiler/argumentNames.h>
 
 namespace fm {
     
@@ -23,20 +22,13 @@ namespace fm {
         }
         return &(it->second);
     }
-    DeviceConfig ConfigServer::createDeviceConfig(const std::vector<sheet::Argument> &args) 
+    DeviceConfig ConfigServer::createMidiDeviceConfig(const fm::String &uname, const DeviceConfig::DeviceId &deviceId, int offsetMillis) 
     {
         DeviceConfig cf;
-        cf.name = fm::getArgValue<fm::String>(args, argumentNames.Device.WithName, 0);
-        auto type = fm::getArgValue<fm::String>(args, argumentNames.Device.IsType, 1);
-        if (type == FM_STRING("midi")) {
-            cf.type = DeviceConfig::Midi;
-            cf.deviceId = fm::getArgValue<fm::String>(args, argumentNames.Device.UsePort, 2);
-        }
-        auto offsetValue = fm::getArgValue<int>(args, argumentNames.Device.Offset, fm::NO_ARG_POSITION, -1);
-        cf.offsetMillis = offsetValue >0 ? offsetValue : 0;
-        if (cf.type == DeviceConfig::Undefinded) {
-            FM_THROW(Exception, "no config for " + cf.name + ", " + type);
-        }
+        cf.name = uname;
+        cf.type = DeviceConfig::Midi;
+        cf.deviceId = deviceId;
+        cf.offsetMillis = offsetMillis;
         return cf;
     }
 

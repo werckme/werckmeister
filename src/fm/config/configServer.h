@@ -6,7 +6,6 @@
 #include <vector>
 #include "deviceConfig.h"
 #include <fm/common.hpp>
-#include <sheet/Argument.h>
 
 #if defined(__GNUC__) || defined(__GNUG__)
 #pragma GCC diagnostic push
@@ -26,7 +25,7 @@ namespace fm {
 		ConfigServer(const ConfigServer&&) = delete;
 		ConfigServer& operator=(const ConfigServer&&) = delete;
         ~ConfigServer();
-        DeviceConfig createDeviceConfig(const std::vector<sheet::Argument> &args);
+        DeviceConfig createMidiDeviceConfig(const fm::String &uname, const DeviceConfig::DeviceId &deviceId, int offsetMillis = 0);
         void addDevice(const DeviceConfig &config);
         void clear();
         const DeviceConfig * getDevice(const fm::String &name) const;

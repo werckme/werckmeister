@@ -38,7 +38,7 @@ namespace sheet {
 			virtual void processMeta(const Event &metaEvent) override;
 			virtual void setVolume(int volume) override;
 			virtual void setPan(int val) override;
-			virtual void metaSetSignature(int upper, int lower) override;
+			virtual void setSignature(int upper, int lower) override;
 			/**
 			 * sends a custom meta event containing a device name
 			 */

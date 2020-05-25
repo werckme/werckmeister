@@ -245,7 +245,6 @@ namespace sheet {
 		}
 		void AContext::processMeta(const Event &metaEvent)
 		{
-			const auto &args = metaEvent.metaArgs;
 			const auto &command = metaEvent.stringValue;
 			// #74 TODO: move to sheet event renderer
 		
@@ -255,19 +254,6 @@ namespace sheet {
 			{
 				return;
 			}
-			if (command == SHEET_META__SET_SIGNATURE) {
-				metaSetSignature(fm::getArgumentValue<int>(args, 0), fm::getArgumentValue<int>(args, 1));
-				return;
-			}
-			if (command == SHEET_META__SET_DEVICE) {
-				metaAddDevice(args);
-				return;
-			}	
-			if (command == SHEET_META__INSTRUMENT) {
-				setInstrument(fm::getArgumentValue<fm::String>(args, 0));
-				return;
-			}
-								
 		}
 		void AContext::setMeta(const Event &metaEvent)
 		{
@@ -289,13 +275,6 @@ namespace sheet {
 			meta->pan = std::max(std::min(val, 100), 0);
 		}		
 
-		void AContext::metaAddDevice(const Event::Args &args)
-		{
-			auto &cs = getConfigServer();
-			auto device = cs.createDeviceConfig(args);
-			cs.addDevice(device);
-		}
-
 		void AContext::setExpression(fm::Expression expr)
 		{
 			if (expr == fm::expression::Default) {
@@ -314,7 +293,7 @@ namespace sheet {
 			meta->expressionPlayedOnce = expr;
 		}
 
-		void AContext::metaSetSignature(int upper, int lower)
+		void AContext::setSignature(int upper, int lower)
 		{
 			using namespace fm;
 			auto meta = voiceMetaData();

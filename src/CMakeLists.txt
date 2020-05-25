@@ -67,6 +67,7 @@ SET (SRC_FETZER_LIB
     compiler/commands/InstrumentConfigSetVoicingStrategy.cpp
     compiler/commands/InstrumentConfigSetVolume.cpp    
     compiler/commands/InstrumentConfigVelocityRemap.cpp    
+    compiler/commands/AddDevice.cpp    
 )
 
 add_definitions( -DGIT_VERSION="${GIT_VERSION}" )

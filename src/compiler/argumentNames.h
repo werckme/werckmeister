@@ -9,7 +9,12 @@ struct ArgumentNames {
         std::string WithName                = "setName";
         std::string IsType                  = "isType";
         std::string UsePort                 = "usePort";
-        std::string Offset                  = "withOffset";
+        // @positional
+        std::string OffsetIndicator         = "use";
+        // @positional
+        std::string OffsetValue             = "value";
+        // @named-alternative
+        std::string WithOffset              = "withOffset";
     } Device;
 
     struct {
@@ -41,11 +46,13 @@ struct ArgumentNames {
     } SimpleGuitarVoicingStrategy;
 
     struct {
+        // @positional
         std::string Mode                    = "mode";
+        // @positional
         std::string Value                   = "value";
-        // @alternative
+        // @named-alternative
         std::string BendTo                  = "to";
-        // @alternative
+        // @named-alternative
         std::string BendFrom                = "from";        
     } Bend; 
 
@@ -63,8 +70,17 @@ struct ArgumentNames {
     } SetExpression;
 
     struct {
-        std::string Bpm                  = "bpm";
+        std::string Bpm                     = "bpm";
     } SetTempo;
+
+    struct {
+        std::string Upper                  = "upper";
+        std::string Lower                  = "lower";
+    } SetSignature;
+
+    struct {
+        std::string Use                  = "use";
+    } SetInstrument;
 
 };
 

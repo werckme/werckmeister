@@ -16,11 +16,18 @@ namespace fm
             value<TValue>(defaultValue);
         }
         Parameter (const fm::String &name, int position) : _name(name), _position(position) {}
+        /**
+         * @return a parsed value
+         * @throw if value is empty
+         */
         template<typename TValue>
         TValue value();
         template<typename TValue>
         void value(const TValue& value);
         void strValue(const fm::String value) { this->_value = value; }
+        /**
+         * @return the raw string value
+         */
         fm::String strValue() const { return this->_value; }
         const fm::String & name() const { return _name; }
         int position() const { return _position; }

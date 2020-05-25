@@ -5,8 +5,9 @@ namespace sheet {
     namespace compiler {
         void SetSignature::execute(AContext* context)
         {
-            // auto value         = parameters[argumentNames.XYZ].value<int>();
-           
+            auto upper         = parameters[argumentNames.SetSignature.Upper].value<int>();
+            auto lower         = parameters[argumentNames.SetSignature.Lower].value<int>();
+            context->setSignature(upper, lower);
         }
     }
 }

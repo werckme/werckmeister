@@ -5,8 +5,8 @@ namespace sheet {
     namespace compiler {
         void SetInstrument::execute(AContext* context)
         {
-            // auto value         = parameters[argumentNames.XYZ].value<int>();
-           
+            auto name         = parameters[argumentNames.SetInstrument.Use].value<fm::String>();
+            context->setInstrument(name);           
         }
     }
 }

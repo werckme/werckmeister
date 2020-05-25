@@ -61,6 +61,9 @@ namespace sheet {
 #include <compiler/commands/SetTempo.h>
 #include <compiler/commands/SetSpielanweisung.h>
 #include <compiler/commands/SetSpielanweisungPlayedOnce.h>
+#include <compiler/commands/SetSignature.h>
+#include <compiler/commands/AddDevice.h>
+#include <compiler/commands/SetInstrument.h>
 
 namespace sheet {
     namespace compiler {
@@ -83,6 +86,9 @@ namespace sheet {
                 _FM_Register(SetTempo,                                  SHEET_META__SET_TEMPO);
                 _FM_Register(SetSpielanweisung,                         SHEET_META__SET_SPIELANWEISUNG);
                 _FM_Register(SetSpielanweisungPlayedOnce,               SHEET_META__SET_SPIELANWEISUNG_ONCE);
+                _FM_Register(SetSignature,                              SHEET_META__SET_SIGNATURE);
+                _FM_Register(AddDevice,                                 SHEET_META__SET_DEVICE);
+                _FM_Register(SetInstrument,                             SHEET_META__INSTRUMENT);
                 return true;
             })();
         }

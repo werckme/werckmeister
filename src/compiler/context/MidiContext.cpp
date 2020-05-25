@@ -177,9 +177,9 @@ namespace sheet {
 
 		}
 
-		void MidiContext::metaSetSignature(int upper, int lower)
+		void MidiContext::setSignature(int upper, int lower)
 		{
-			Base::metaSetSignature(upper, lower);
+			Base::setSignature(upper, lower);
 			auto meta = voiceMetaData<MidiContext::VoiceMetaData>();
 			auto sigEvent = fm::midi::Event::MetaSignature(upper, lower);
 			sigEvent.absPosition(currentPosition());

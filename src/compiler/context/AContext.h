@@ -139,8 +139,7 @@ namespace sheet {
 			virtual void setExpression(fm::Expression value);
 			virtual void setExpressionPlayedOnce(fm::Expression expr);
 			virtual void setTempo(double bpm) {}
-			virtual void metaSetSignature(int upper, int lower);
-			virtual void metaAddDevice(const Event::Args &args);
+			virtual void setSignature(int upper, int lower);
 			virtual void setVolume(int volume);
 			virtual void setPan(int val);
 			/////// actual context stuff
