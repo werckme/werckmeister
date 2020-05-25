@@ -137,10 +137,10 @@ namespace sheet {
 			Event ev = _ev;
 			auto meta = ctx_->voiceMetaData();
 			auto tmpExpression = meta->expression;
-			if (meta->singleExpression != fm::expression::Default) {
+			if (meta->expressionPlayedOnce != fm::expression::Default) {
 				tmpExpression = meta->expression;
-				meta->expression = meta->singleExpression;
-				meta->singleExpression = fm::expression::Default;
+				meta->expression = meta->expressionPlayedOnce;
+				meta->expressionPlayedOnce = fm::expression::Default;
 			}
 			ev.velocity = ctx_->velocity();
 			AModification::Events events = { ev };

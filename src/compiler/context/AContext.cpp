@@ -19,19 +19,7 @@ namespace sheet {
 		const double AContext::PitchbendMiddle = 0.5;
 		const Ticks AContext::TickTolerance = 0.5;
 		
-		AContext::AContext() 
-			: expressionMap_({
-				{FM_STRING("ppppp"), fm::expression::PPPPP},
-				{ FM_STRING("pppp"), fm::expression::PPPP },
-				{ FM_STRING("ppp"), fm::expression::PPP },
-				{ FM_STRING("pp"), fm::expression::PP },
-				{ FM_STRING("p"), fm::expression::P },
-				{ FM_STRING("f"), fm::expression::F },
-				{ FM_STRING("ff"), fm::expression::FF },
-				{ FM_STRING("fff"), fm::expression::FFF },
-				{ FM_STRING("ffff"), fm::expression::FFFF },
-				{ FM_STRING("fffff"), fm::expression::FFFFF }
-			})
+		AContext::AContext()
 		{
 		}
 
@@ -50,15 +38,6 @@ namespace sheet {
 				return tmp;
 			}
 			return meta->spielanweisung;
-		}
-
-		fm::Expression AContext::getExpression(const fm::String &str) const
-		{
-			auto it = expressionMap_.find(str);
-			if (it == expressionMap_.end()) {
-				return fm::expression::Default;
-			}
-			return it->second;
 		}
 
 		AContext::ISheetTemplateDefServerPtr AContext::sheetTemplateDefServer() const
@@ -269,72 +248,53 @@ namespace sheet {
 			const auto &args = metaEvent.metaArgs;
 			const auto &command = metaEvent.stringValue;
 			// #74 TODO: move to sheet event renderer
-			try {
-				if (command == SHEET_META__TRACK_META_KEY_TYPE /*handled elsewhere*/
-				|| command == SHEET_META__TRACK_META_KEY_NAME
-				|| command == SHEET_META__SHEET_TEMPLATE_POSITION) 
-				{
-					return;
-				}
-							
-				if (command == SHEET_META__SET_SHEET_TEMPLATE) {
-					metaSetSheetTemplate(args);
-					return;
-				}
-				if (command == SHEET_META__SET_EXPRESSION) {
-					metaSetExpression(getArgument(args, 0));
-					return;
-				}
-				if (command == SHEET_META__SET_SINGLE_EXPRESSION) {
-					metaSetSingleExpression(getArgument(args, 0));
-					return;
-				}
-				if (command == SHEET_META__SET_TEMPO) {
-					sheet::Argument argument = args.front();
-					if (argument.value == SHEET_META__SET_TEMPO_VALUE_HALF) {
-						metaSetTempo(masterTempo() * 0.5);
-						return;
-					}
-					if (argument.value == SHEET_META__SET_TEMPO_VALUE_DOUBLE) {
-						metaSetTempo(masterTempo() * 2);
-						return;
-					}
-					if (argument.value == SHEET_META__SET_TEMPO_VALUE_NORMAL) {
-						metaSetTempo(masterTempo());
-						return;
-					}			
-					fm::BPM bpm = argument.parseValue<fm::BPM>();		
-					metaSetTempo(bpm);
-					return;
-				}
-				if (command == SHEET_META__SET_SPIELANWEISUNG) {
-					metaSetSpielanweisung(fm::getArgumentValue<fm::String>(args, 0), args);
-					return;
-				}	
-				if (command == SHEET_META__SET_SPIELANWEISUNG_ONCE) {
-					metaSetSpielanweisungOnce(fm::getArgumentValue<fm::String>(args, 0), args);
-					return;
-				}	
-				if (command == SHEET_META__SET_SIGNATURE) {
-					metaSetSignature(fm::getArgumentValue<int>(args, 0), fm::getArgumentValue<int>(args, 1));
-					return;
-				}
-				if (command == SHEET_META__SET_DEVICE) {
-					metaAddDevice(args);
-					return;
-				}	
-				if (command == SHEET_META__INSTRUMENT) {
-					setInstrument(fm::getArgumentValue<fm::String>(args, 0));
-					return;
-				}
-			} catch(const std::exception &ex) {
-				FM_THROW(Exception, "failed to process " + command
-									+": " + ex.what());
-			}	
-			catch(...) {
-				FM_THROW(Exception, "failed to process " + command);
+		
+			if (command == SHEET_META__TRACK_META_KEY_TYPE /*handled elsewhere*/
+			|| command == SHEET_META__TRACK_META_KEY_NAME
+			|| command == SHEET_META__SHEET_TEMPLATE_POSITION) 
+			{
+				return;
 			}
-			FM_THROW(Exception, "invalid command: " + command);								
+						
+			if (command == SHEET_META__SET_TEMPO) {
+				sheet::Argument argument = args.front();
+				if (argument.value == SHEET_META__SET_TEMPO_VALUE_HALF) {
+					metaSetTempo(masterTempo() * 0.5);
+					return;
+				}
+				if (argument.value == SHEET_META__SET_TEMPO_VALUE_DOUBLE) {
+					metaSetTempo(masterTempo() * 2);
+					return;
+				}
+				if (argument.value == SHEET_META__SET_TEMPO_VALUE_NORMAL) {
+					metaSetTempo(masterTempo());
+					return;
+				}			
+				fm::BPM bpm = argument.parseValue<fm::BPM>();		
+				metaSetTempo(bpm);
+				return;
+			}
+			if (command == SHEET_META__SET_SPIELANWEISUNG) {
+				metaSetSpielanweisung(fm::getArgumentValue<fm::String>(args, 0), args);
+				return;
+			}	
+			if (command == SHEET_META__SET_SPIELANWEISUNG_ONCE) {
+				metaSetSpielanweisungOnce(fm::getArgumentValue<fm::String>(args, 0), args);
+				return;
+			}	
+			if (command == SHEET_META__SET_SIGNATURE) {
+				metaSetSignature(fm::getArgumentValue<int>(args, 0), fm::getArgumentValue<int>(args, 1));
+				return;
+			}
+			if (command == SHEET_META__SET_DEVICE) {
+				metaAddDevice(args);
+				return;
+			}	
+			if (command == SHEET_META__INSTRUMENT) {
+				setInstrument(fm::getArgumentValue<fm::String>(args, 0));
+				return;
+			}
+								
 		}
 		void AContext::setMeta(const Event &metaEvent)
 		{
@@ -379,28 +339,22 @@ namespace sheet {
 			meta->spielanweisungOnce->setArguments(args);
 		}
 
-		void AContext::metaSetSheetTemplate(const Event::Args &)
+		void AContext::setExpression(fm::Expression expr)
 		{
-		}
-
-		void AContext::metaSetExpression(const sheet::Argument &argument)
-		{
-			auto meta = voiceMetaData();
-			auto expr = getExpression(argument.value);
 			if (expr == fm::expression::Default) {
 				return;
 			}
+			auto meta = voiceMetaData();
 			meta->expression = expr;
 		}
 
-		void AContext::metaSetSingleExpression(const sheet::Argument &argument)
+		void AContext::setExpressionPlayedOnce(fm::Expression expr)
 		{
-			auto meta = voiceMetaData();
-			auto expr = getExpression(argument.value);
 			if (expr == fm::expression::Default) {
 				return;
 			}
-			meta->singleExpression = expr;
+			auto meta = voiceMetaData();
+			meta->expressionPlayedOnce = expr;
 		}
 
 		void AContext::metaSetSignature(int upper, int lower)

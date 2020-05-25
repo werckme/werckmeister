@@ -57,6 +57,11 @@ struct ArgumentNames {
         std::string CC                     = "cc";
         std::string PC                     = "pc";
     } SelectMidiSound;
+
+    struct {
+        std::string Value                  = "value";
+    } SetExpression;
+
 };
 
 extern ArgumentNames argumentNames;  

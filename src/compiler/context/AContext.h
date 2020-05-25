@@ -38,7 +38,6 @@ namespace sheet {
 			typedef Id TrackId;
 			typedef Id VoiceId;
 			typedef ISheetTemplateDefServer* ISheetTemplateDefServerPtr;
-			typedef std::unordered_map<fm::String, fm::Expression> ExpressionMap;
 			typedef std::shared_ptr<VoiceMetaData> VoiceMetaDataPtr;
 			typedef std::shared_ptr<TrackMetaData> TrackMetaDataPtr;
 			typedef std::unordered_map<VoiceId, VoiceMetaDataPtr> VoiceMetaDataMap;
@@ -113,7 +112,6 @@ namespace sheet {
 			virtual const SheetTemplates & currentSheetTemplates();
 			virtual void currentSheetTemplate(const SheetTemplates &sheetTemplate);
 			virtual VoicingStrategyPtr currentVoicingStrategy();
-			virtual fm::Expression getExpression(const fm::String &str) const;
 			virtual AModificationPtr spielanweisung();
 			virtual AInstrumentDef * getInstrumentDef(const fm::String &uname) = 0;
 			virtual AInstrumentDef * currentInstrumentDef() = 0;
@@ -138,9 +136,8 @@ namespace sheet {
 			void processMeta(const TContainer &container, 
 						std::function<sheet::Event(const typename TContainer::value_type&)> fGetMetaEvent);
 			virtual void setInstrument(const fm::String &uname) {}
-			virtual void metaSetSheetTemplate(const Event::Args &args);
-			virtual void metaSetExpression(const sheet::Argument &argument);
-			virtual void metaSetSingleExpression(const sheet::Argument &argument);
+			virtual void setExpression(fm::Expression value);
+			virtual void setExpressionPlayedOnce(fm::Expression expr);
 			virtual void metaSetTempo(double bpm) {}
 			virtual void metaSetSpielanweisung(const fm::String &name, const Event::Args &args);
 			virtual void metaSetSpielanweisungOnce(const fm::String &name, const Event::Args &args);
@@ -185,7 +182,6 @@ namespace sheet {
 			virtual VoiceMetaDataPtr createVoiceMetaData() = 0;
 			virtual TrackMetaDataPtr createTrackMetaData() = 0;
 			virtual TrackId createMasterTrack();
-			ExpressionMap expressionMap_;
 		private:
 			double masterTempo_ = fm::DefaultTempo;			
 			VoicingStrategyPtr defaultVoiceStrategy_;

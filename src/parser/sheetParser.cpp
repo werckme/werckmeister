@@ -323,7 +323,7 @@ namespace sheet {
 						>> attr(Event::Tags())
 						>> attr(PitchDef()) 
 						>> attr(Event::NoDuration) 
-						>> attr("singleExpression") 
+						>> attr("expressionPlayedOnce") 
 						>> expression_argument_
 					)
 					| 

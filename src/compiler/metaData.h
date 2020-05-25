@@ -40,7 +40,7 @@ namespace sheet {
             long long eventCount = 0;
             long long eventOffset = 0;
             fm::Expression expression = fm::expression::FF;
-            fm::Expression singleExpression = fm::expression::Default;
+            fm::Expression expressionPlayedOnce = fm::expression::Default;
             WaitForTieBuffer waitForTieBuffer;
             VoicingStrategyPtr voicingStrategy = nullptr;
             virtual ~VoiceMetaData() = default;

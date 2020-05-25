@@ -587,7 +587,7 @@ BOOST_AUTO_TEST_CASE(test_expression_meta)
 	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[7], sheet::Event::Note, fm::notes::C, 1, 1.0_N4));
 	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[8], sheet::Event::Note, fm::notes::D, 1, 1.0_N4));
 	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[9], sheet::Event::Note, fm::notes::E, 1, 1.0_N4));
-	BOOST_CHECK(checkMetaEvent(defs.tracks[0].voices[0].events[10], FM_STRING("singleExpression"), sheet::Event::Args({ makeArg("p") })));
+	BOOST_CHECK(checkMetaEvent(defs.tracks[0].voices[0].events[10], FM_STRING("expressionPlayedOnce"), sheet::Event::Args({ makeArg("p") })));
 	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[11], sheet::Event::Note, fm::notes::F, 1, 1.0_N4));
 	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[12], sheet::Event::EOB));
 

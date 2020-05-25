@@ -3,6 +3,8 @@
 
 #include "ACommand.h"
 #include <compiler/argumentNames.h>
+#include <map>
+#include <fm/units.hpp>
 
 namespace sheet {
     namespace compiler {
@@ -10,10 +12,14 @@ namespace sheet {
         {
         public:
             fm::IHasParameter::ParametersByNames parameters = {
-                //FM_PARAMETER_DEF		    (argumentNames.XYZ, 	0)
+                FM_PARAMETER_DEF		    (argumentNames.SetExpression.Value, 	0)
             };
             virtual ParametersByNames & getParameters() { return this->parameters; }
             virtual void execute(AContext*);
+            fm::Expression getExpression(fm::String &expressionStr) const;
+        private:
+            typedef std::map<fm::String, fm::Expression> ExpressionMap;
+            static const ExpressionMap _ExpressionMap;
         };
     }
 }
