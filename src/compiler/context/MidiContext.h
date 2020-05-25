@@ -34,7 +34,7 @@ namespace sheet {
 			virtual void setMidiInstrument(const fm::String &uname, int channel, int cc, int pc);
 			virtual void setMidiInstrument(const fm::String &uname, const fm::String &deviceName, int channel, int cc, int pc);
 			virtual void setInstrument(const fm::String &uname) override;
-			virtual void metaSetTempo(double bpm) override;
+			virtual void setTempo(double bpm) override;
 			virtual void processMeta(const Event &metaEvent) override;
 			virtual void setVolume(int volume) override;
 			virtual void setPan(int val) override;

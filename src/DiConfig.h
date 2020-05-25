@@ -56,9 +56,9 @@ namespace sheet {
 #include <compiler/commands/AddModPlayedOnce.h>
 #include <compiler/commands/AddVorschlag.h>
 #include <compiler/commands/SelectMidiSound.h>
-
 #include <compiler/commands/SetExpression.h>
 #include <compiler/commands/SetExpressionPlayedOnce.h>
+#include <compiler/commands/SetTempo.h>
 
 namespace sheet {
     namespace compiler {
@@ -78,7 +78,7 @@ namespace sheet {
                 _FM_Register(SelectMidiSound,                           SHEET_META__MIDI_SOUNDSELECT);
                 _FM_Register(SetExpression,                             SHEET_META__SET_EXPRESSION);
                 _FM_Register(SetExpressionPlayedOnce,                   SHEET_META__SET_EXPRESSION_PLAYED_ONCE);
-
+                _FM_Register(SetTempo,                                  SHEET_META__SET_TEMPO);
                 return true;
             })();
         }

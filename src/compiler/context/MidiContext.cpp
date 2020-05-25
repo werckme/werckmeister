@@ -154,9 +154,9 @@ namespace sheet {
 			return std::make_shared<MidiContext::TrackMetaData>();
 		}
 
-		void MidiContext::metaSetTempo(double bpm)
+		void MidiContext::setTempo(double bpm)
 		{
-			Base::metaSetTempo(bpm);
+			Base::setTempo(bpm);
 			auto meta = voiceMetaData<MidiContext::VoiceMetaData>();
 			bool isMasterTempoValue = !meta;
 			if (isMasterTempoValue) {

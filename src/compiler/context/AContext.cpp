@@ -256,24 +256,6 @@ namespace sheet {
 				return;
 			}
 						
-			if (command == SHEET_META__SET_TEMPO) {
-				sheet::Argument argument = args.front();
-				if (argument.value == SHEET_META__SET_TEMPO_VALUE_HALF) {
-					metaSetTempo(masterTempo() * 0.5);
-					return;
-				}
-				if (argument.value == SHEET_META__SET_TEMPO_VALUE_DOUBLE) {
-					metaSetTempo(masterTempo() * 2);
-					return;
-				}
-				if (argument.value == SHEET_META__SET_TEMPO_VALUE_NORMAL) {
-					metaSetTempo(masterTempo());
-					return;
-				}			
-				fm::BPM bpm = argument.parseValue<fm::BPM>();		
-				metaSetTempo(bpm);
-				return;
-			}
 			if (command == SHEET_META__SET_SPIELANWEISUNG) {
 				metaSetSpielanweisung(fm::getArgumentValue<fm::String>(args, 0), args);
 				return;

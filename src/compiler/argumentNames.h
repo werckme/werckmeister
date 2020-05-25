@@ -62,6 +62,10 @@ struct ArgumentNames {
         std::string Value                  = "value";
     } SetExpression;
 
+    struct {
+        std::string Bpm                  = "bpm";
+    } SetTempo;
+
 };
 
 extern ArgumentNames argumentNames;  
