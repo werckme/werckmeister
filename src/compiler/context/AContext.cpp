@@ -255,15 +255,6 @@ namespace sheet {
 			{
 				return;
 			}
-						
-			if (command == SHEET_META__SET_SPIELANWEISUNG) {
-				metaSetSpielanweisung(fm::getArgumentValue<fm::String>(args, 0), args);
-				return;
-			}	
-			if (command == SHEET_META__SET_SPIELANWEISUNG_ONCE) {
-				metaSetSpielanweisungOnce(fm::getArgumentValue<fm::String>(args, 0), args);
-				return;
-			}	
 			if (command == SHEET_META__SET_SIGNATURE) {
 				metaSetSignature(fm::getArgumentValue<int>(args, 0), fm::getArgumentValue<int>(args, 1));
 				return;
@@ -303,22 +294,6 @@ namespace sheet {
 			auto &cs = getConfigServer();
 			auto device = cs.createDeviceConfig(args);
 			cs.addDevice(device);
-		}
-
-		void AContext::metaSetSpielanweisung(const fm::String &name, const Event::Args &args)
-		{
-			auto &wm = fm::getWerckmeister();
-			auto meta = voiceMetaData();
-			meta->spielanweisung = wm.getSpielanweisung(name);
-			meta->spielanweisung->setArguments(args);
-		}
-
-		void AContext::metaSetSpielanweisungOnce(const fm::String &name, const Event::Args &args)
-		{
-			auto &wm = fm::getWerckmeister();
-			auto meta = voiceMetaData();
-			meta->spielanweisungOnce = wm.getSpielanweisung(name);
-			meta->spielanweisungOnce->setArguments(args);
 		}
 
 		void AContext::setExpression(fm::Expression expr)

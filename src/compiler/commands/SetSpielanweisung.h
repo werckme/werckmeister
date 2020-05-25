@@ -1,19 +1,16 @@
 #ifndef SETSPIELANWEISUNG_HPP
 #define SETSPIELANWEISUNG_HPP
 
-#include "ACommand.h"
+#include "AddMod.h"
 #include <compiler/argumentNames.h>
+#include <forward.hpp>
 
 namespace sheet {
     namespace compiler {
-        class SetSpielanweisung : public ACommand
+        class SetSpielanweisung : public AddMod
         {
         public:
-            fm::IHasParameter::ParametersByNames parameters = {
-                //FM_PARAMETER_DEF		    (argumentNames.XYZ, 	0)
-            };
-            virtual ParametersByNames & getParameters() { return this->parameters; }
-            virtual void execute(AContext*);
+            virtual void execute(AContext*) override;
         };
     }
 }

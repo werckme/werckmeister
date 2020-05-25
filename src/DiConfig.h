@@ -59,6 +59,8 @@ namespace sheet {
 #include <compiler/commands/SetExpression.h>
 #include <compiler/commands/SetExpressionPlayedOnce.h>
 #include <compiler/commands/SetTempo.h>
+#include <compiler/commands/SetSpielanweisung.h>
+#include <compiler/commands/SetSpielanweisungPlayedOnce.h>
 
 namespace sheet {
     namespace compiler {
@@ -79,6 +81,8 @@ namespace sheet {
                 _FM_Register(SetExpression,                             SHEET_META__SET_EXPRESSION);
                 _FM_Register(SetExpressionPlayedOnce,                   SHEET_META__SET_EXPRESSION_PLAYED_ONCE);
                 _FM_Register(SetTempo,                                  SHEET_META__SET_TEMPO);
+                _FM_Register(SetSpielanweisung,                         SHEET_META__SET_SPIELANWEISUNG);
+                _FM_Register(SetSpielanweisungPlayedOnce,               SHEET_META__SET_SPIELANWEISUNG_ONCE);
                 return true;
             })();
         }

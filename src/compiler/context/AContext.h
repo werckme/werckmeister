@@ -139,8 +139,6 @@ namespace sheet {
 			virtual void setExpression(fm::Expression value);
 			virtual void setExpressionPlayedOnce(fm::Expression expr);
 			virtual void setTempo(double bpm) {}
-			virtual void metaSetSpielanweisung(const fm::String &name, const Event::Args &args);
-			virtual void metaSetSpielanweisungOnce(const fm::String &name, const Event::Args &args);
 			virtual void metaSetSignature(int upper, int lower);
 			virtual void metaAddDevice(const Event::Args &args);
 			virtual void setVolume(int volume);

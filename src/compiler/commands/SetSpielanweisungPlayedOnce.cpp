@@ -5,8 +5,8 @@ namespace sheet {
     namespace compiler {
         void SetSpielanweisungPlayedOnce::execute(AContext* context)
         {
-            // auto value         = parameters[argumentNames.XYZ].value<int>();
-           
+            auto meta = context->voiceMetaData();
+			meta->spielanweisungOnce = theModification;
         }
     }
 }
