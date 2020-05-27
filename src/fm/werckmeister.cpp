@@ -166,7 +166,7 @@ namespace fm {
 			result->name(name);
 			return result;
 		}
-		result = create<sheet::VoicingStrategy>(name);
+		result = solve<sheet::VoicingStrategy>(name);
 		result->name(name);
 		return result;
 	}
@@ -192,7 +192,7 @@ namespace fm {
 			return anw;
 		}
 		
-		auto result = create<sheet::compiler::AModification>(name);
+		auto result = solve<sheet::compiler::AModification>(name);
 		return result;
 	}
 

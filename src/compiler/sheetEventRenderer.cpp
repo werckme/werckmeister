@@ -214,7 +214,7 @@ namespace sheet {
 			const auto &commandName = metaEvent.stringValue;
 			try {
 				auto &wm = fm::getWerckmeister();
-				auto command = wm.createOrDefault<ACommand>(commandName);
+				auto command = wm.solveOrDefault<ACommand>(commandName);
 				if (command) {
 					auto *usingAnEvent = dynamic_cast<AUsingAnEvent*>(command.get());
 					if (usingAnEvent) {

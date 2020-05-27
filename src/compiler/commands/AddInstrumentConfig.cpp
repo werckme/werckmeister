@@ -64,7 +64,7 @@ namespace sheet {
                 auto it = argsRange.first;
 				for (; it != argsRange.second; ++it) {
 					const auto &args = it->second;
-                    auto commandObject = wm.createOrDefault<ACommand>(InstrumentConfigCommandName(configCommandName));
+                    auto commandObject = wm.solveOrDefault<ACommand>(InstrumentConfigCommandName(configCommandName));
                     if (!commandObject) {
                         continue;
                     }

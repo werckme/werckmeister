@@ -5,6 +5,14 @@
 #define _FM_Register(type, name) static_assert(std::is_convertible<type*, fm::IRegisterable*>::value, "TRegisterable must implement IRegisterable"); \
 fm::getWerckmeister().register_<type>(name, [](){ return std::make_shared<type>(); })
 
+#define _FM_RegisterSingleton(type, name) static_assert(std::is_convertible<type*, fm::IRegisterable*>::value, "TRegisterable must implement IRegisterable"); \
+fm::getWerckmeister().register_<type>(name, [](){ static auto singleton = std::make_shared<type>(); return singleton; })
+
+#define _FM_ReplaceRegistration(type, name) static_assert(std::is_convertible<type*, fm::IRegisterable*>::value, "TRegisterable must implement IRegisterable"); \
+fm::getWerckmeister().replaceRegistration<type>(name, [](){ return std::make_shared<type>(); })
+
+#define _FM_ReplaceRegistrationSingleton(type, name) static_assert(std::is_convertible<type*, fm::IRegisterable*>::value, "TRegisterable must implement IRegisterable"); \
+fm::getWerckmeister().replaceRegistration<type>(name, [](){ static auto singleton = std::make_shared<type>(); return singleton; })
 
 // Voicing Stategies
 #include <compiler/voicingStrategies.h>
