@@ -213,17 +213,14 @@ namespace sheet {
 			meta->barPosition += duration;
 		}
 
-		void AContext::warn(const std::string &msg, const Event *event)
+		void AContext::warn(const std::string &msg)
 		{
-			Warning warning;
-			warning.message = msg;
-			if (!!event) {
-				warning.sourceObject = *event;
+			if (warningHandler) {
+				warningHandler(msg);
 			}
-			warnings.emplace_back(warning);
 		}
 
-		void AContext::newBar(const Event &newBarEvent)
+		void AContext::newBar()
 		{
 			auto meta = voiceMetaData();
 			if (!fm::compareTolerant(meta->barPosition, meta->barLength, fm::Ticks(TickTolerance))) {
@@ -232,7 +229,7 @@ namespace sheet {
 				std::stringstream ss;
 				std::string toLong = errorInQuaters > 0 ? "too long" : "too short";
 				ss << "bar is " << std::abs(errorInQuaters) << " quarter(s) " << toLong;
-				warn(ss.str(), &newBarEvent);
+				warn(ss.str());
 			}
 			meta->barPosition = 0;
 			++(meta->barCount);

@@ -327,8 +327,9 @@ namespace sheet {
 							for (const auto &chord : templateAndChords.chords)
 							{
 								if (chord->type == Event::EOB) {
+									const auto *eobEvent = chord;
 									__renderOneBar(ctx_, sheetEventRenderer, eventServer, chordsPerBar);
-									ctx_->newBar(*chord);
+									sheetEventRenderer->addEvent(*eobEvent);
 									chordsPerBar.clear();
 									continue;
 								}

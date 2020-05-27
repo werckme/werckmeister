@@ -6,6 +6,7 @@
 #include <fm/werckmeister.hpp>
 #include <compiler/commands/ACommand.h>
 #include <compiler/commands/AUsingAnEvent.h>
+#include <compiler/warning.hpp>
 
 namespace sheet {
     namespace compiler {
@@ -53,7 +54,7 @@ namespace sheet {
 			bool renderEvent<Event::EOB>(SheetEventRenderer* renderer, const Event *ev)
 			{
                 auto ctx = renderer->context();
-				ctx->newBar(*ev);
+				ctx->newBar();
 				return true;
 			}
 
@@ -127,11 +128,21 @@ namespace sheet {
 			auto meta = ctx_->voiceMetaData();
 			++(meta->eventCount);
 			try {
+				ctx_->warningHandler = std::bind(&SheetEventRenderer::onWarning, this, std::placeholders::_1, ev);
 				_addEvent(this, &ev);
+				ctx_->warningHandler = nullptr;
 			} catch(fm::Exception &ex) {
 				ex << ex_sheet_source_info(ev);
 				throw;
 			}
+		}
+
+		void SheetEventRenderer::onWarning(const fm::String &message, const Event &event)
+		{
+			Warning warning;
+			warning.message = message;
+			warning.sourceObject = event;
+			ctx_->warnings.emplace_back(warning);
 		}
 
 		void SheetEventRenderer::__renderEvent__(const Event &_ev)

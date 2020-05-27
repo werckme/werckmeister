@@ -22,6 +22,7 @@ namespace sheet {
             void handleMetaEvents(const TContainer &container, 
                             std::function<sheet::Event(const typename TContainer::value_type&)> fGetMetaEvent);        
         protected:
+            void onWarning(const fm::String &message, const Event &event);
         private:
             AContext* ctx_;
         };
