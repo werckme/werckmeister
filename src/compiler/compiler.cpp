@@ -30,7 +30,7 @@ namespace sheet {
 			auto ctx = context();
 
 			try {
-				ctx->processMeta(document->sheetDef.documentConfigs, 
+				sheetEventRenderer()->handleMetaEvents(document->sheetDef.documentConfigs, 
 					[](const auto &x) { 
 						sheet::Event metaEvent;
 						metaEvent.type = sheet::Event::Meta;
@@ -58,7 +58,6 @@ namespace sheet {
 		void Compiler::renderTracks()
 		{
 			auto ctx = context();
-			ctx->capabilities.canSeek = false;
 			Preprocessor preprocessor;
 			auto renderer = sheetEventRenderer();
 			for (auto &track : document_->sheetDef.tracks)
@@ -69,7 +68,7 @@ namespace sheet {
 				}				
 				auto trackId = ctx->createTrack();
 				ctx->setTrack(trackId);
-				ctx->processMeta(track.trackConfigs, 
+				renderer->handleMetaEvents(track.trackConfigs, 
 					[](const auto &x) { 
 						sheet::Event metaEvent;
 						metaEvent.type = sheet::Event::Meta;
@@ -109,7 +108,7 @@ namespace sheet {
 					sheetEventRenderer->addEvent(ev);
 				}
 			}
-			void preprocessSheetTrack(Track* sheetTrack, AContext *ctx) {
+			void preprocessSheetTrack(Track* sheetTrack, SheetEventRenderer *renderer, AContext *ctx) {
 				using namespace fm;
 				auto voice = sheetTrack->voices.begin(); 
 				auto it = voice->events.begin();
@@ -128,7 +127,7 @@ namespace sheet {
 				};
 				while (it != end) {
 					if (it->type == Event::Meta) {
-						ctx->setMeta(*it);
+						renderer->handleMetaEvent(*it);
 					}					
 					if (it->type == Event::EOB) {
 						processEob();
@@ -164,12 +163,11 @@ namespace sheet {
 		void Compiler::renderChordTrack() 
 		{
 			auto ctx = context();
-			ctx->capabilities.canSeek = true;
 			Track * sheetTrack = getFirstSheetTrack(document_->sheetDef.tracks);
 			if (!sheetTrack || sheetTrack->voices.empty()) {
 				return;
 			}
-			preprocessSheetTrack(sheetTrack, ctx.get());
+			preprocessSheetTrack(sheetTrack, sheetEventRenderer().get(), ctx.get());
 			consumeChords(sheetTrack, sheetEventRenderer().get(), ctx.get());
 			SheetTemplateRenderer sheetTemplateRenderer(ctx.get(), sheetEventRenderer().get());
 			sheetTemplateRenderer.render(sheetTrack);

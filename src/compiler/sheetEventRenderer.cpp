@@ -3,6 +3,9 @@
 #include "spielanweisung/spielanweisungen.h"
 #include "spielanweisung/Vorschlag.h"
 #include "modification/AModification.h"
+#include <fm/werckmeister.hpp>
+#include <compiler/commands/ACommand.h>
+#include <compiler/commands/AUsingAnEvent.h>
 
 namespace sheet {
     namespace compiler {
@@ -72,8 +75,7 @@ namespace sheet {
 			template<>
 			bool renderEvent<Event::Meta>(SheetEventRenderer* renderer, const Event *ev)
 			{
-                auto ctx = renderer->context();
-				ctx->setMeta(*ev);
+				renderer->handleMetaEvent(*ev);
 				return true;
 			}
 			//////////////////////////////////////////////////
@@ -193,6 +195,31 @@ namespace sheet {
             auto meta = ctx->voiceMetaData();
 			auto position = meta->position + static_cast<fm::Ticks>(pitchBendEvent.offset);
 			ctx->renderPitchbend(pitchBendEvent.pitchBendValue, position);
+		}
+
+		void SheetEventRenderer::handleMetaEvent(const Event &metaEvent) 
+		{
+			const auto &args = metaEvent.metaArgs;
+			const auto &commandName = metaEvent.stringValue;
+			try {
+				auto &wm = fm::getWerckmeister();
+				auto command = wm.createOrDefault<ACommand>(commandName);
+				if (command) {
+					auto *usingAnEvent = dynamic_cast<AUsingAnEvent*>(command.get());
+					if (usingAnEvent) {
+						usingAnEvent->event(metaEvent);
+					}
+					command->setArguments(args);
+					command->execute(ctx_);
+					return;
+				}
+			} catch(const std::exception &ex) {
+				FM_THROW(Exception, "failed to process " + commandName
+									+"\n" + ex.what());
+			}	
+			catch(...) {
+				FM_THROW(Exception, "failed to process " + commandName);
+			}
 		}
     }
 }

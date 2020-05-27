@@ -336,33 +336,6 @@ namespace sheet {
 			def.deviceName = deviceName;		
 			setMidiInstrumentDef(uname, def);
 		}
-
-		void MidiContext::processMeta(const Event &metaEvent)
-		{
-			const auto &args = metaEvent.metaArgs;
-			const auto &commandName = metaEvent.stringValue;
-			// #74 TODO: move to sheet event renderer
-			try {
-				auto &wm = fm::getWerckmeister();
-				auto command = wm.createOrDefault<ACommand>(commandName);
-				if (command) {
-					auto *usingAnEvent = dynamic_cast<AUsingAnEvent*>(command.get());
-					if (usingAnEvent) {
-						usingAnEvent->event(metaEvent);
-					}
-					command->setArguments(args);
-					command->execute(this);
-					return;
-				}
-			} catch(const std::exception &ex) {
-				FM_THROW(Exception, "failed to process " + commandName
-									+"\n" + ex.what());
-			}	
-			catch(...) {
-				FM_THROW(Exception, "failed to process " + commandName);
-			}
-			Base::processMeta(metaEvent);	
-		}
 		AContext::TrackId MidiContext::createMasterTrack()
 		{
 			auto trackId = Base::createMasterTrack();

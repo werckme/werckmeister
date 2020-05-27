@@ -243,26 +243,6 @@ namespace sheet {
 			auto meta = voiceMetaData();
 			seek(duration);
 		}
-		void AContext::processMeta(const Event &metaEvent)
-		{
-			const auto &command = metaEvent.stringValue;
-			// #74 TODO: move to sheet event renderer
-		
-			if (command == SHEET_META__TRACK_META_KEY_TYPE /*handled elsewhere*/
-			|| command == SHEET_META__TRACK_META_KEY_NAME
-			|| command == SHEET_META__SHEET_TEMPLATE_POSITION) 
-			{
-				return;
-			}
-		}
-		void AContext::setMeta(const Event &metaEvent)
-		{
-			if (metaEvent.stringValue.empty()) {
-				throwContextException("invalid meta command ");
-			}
-			processMeta(metaEvent);				
-		}
-
 		void AContext::setVolume(int volume)
 		{
 			auto meta = voiceMetaData();

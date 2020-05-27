@@ -27,11 +27,11 @@ namespace sheet {
             virtual ~SheetTemplateRenderer();
             void render(Track * sheetTrack);
             AContext* context() const { return this->ctx_; }
+            SheetEventRenderer *sheetEventRenderer;
         private:
             void setTargetCreateIfNotExists(const Track &track, const Voice &voice);
             typedef std::unordered_map<const void*, AContext::Id> PtrIdMap;
             AContext* ctx_;
-            SheetEventRenderer *sheetEventRenderer;
 			PtrIdMap ptrIdMap_;
         };
     }

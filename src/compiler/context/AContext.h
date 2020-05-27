@@ -23,10 +23,6 @@ namespace sheet {
     namespace compiler {
         class AContext {
         public:
-			struct Capabilities {
-				bool canSeek = false;
-			};
-
 			AContext();
 			static const double PitchbendMiddle;
 			enum { INVALID_TRACK_ID = -1, INVALID_VOICE_ID = -1, MAX_VOLUME = 100, MAX_PAN = 100 };
@@ -42,7 +38,6 @@ namespace sheet {
 			typedef std::shared_ptr<TrackMetaData> TrackMetaDataPtr;
 			typedef std::unordered_map<VoiceId, VoiceMetaDataPtr> VoiceMetaDataMap;
 			typedef std::unordered_map<TrackId, TrackMetaDataPtr> TrackMetaDataMap;
-			typedef std::function<bool(const Event&)> MetaEventHandler;
 			virtual void setTrack(TrackId trackId);
 			virtual void setVoice(VoiceId voice);
 			TrackId track() const;
@@ -118,23 +113,6 @@ namespace sheet {
 			virtual fm::Ticks currentPosition() const;
 			virtual fm::Ticks maxPosition() const;
 			TimeInfo getTimeInfo() const;
-			/////// meta commands
-			virtual void setMeta(const Event &metaEvent);
-			/**
-			 * @throw if command not handled
-			 */
-			virtual void processMeta(const Event &metaEvent);
-			
-			/**
-			 * processed a cointainer of meta commands
-			 * @arg the container
-			 * @arg a function which returns the command of an container value_type object
-			 * @arg a function which returns the args of an container value_type object
-			 */
-			// #74 TODO: refactor document config renderer
-			template<class TContainer>
-			void processMeta(const TContainer &container, 
-						std::function<sheet::Event(const typename TContainer::value_type&)> fGetMetaEvent);
 			virtual void setInstrument(const fm::String &uname) {}
 			virtual void setExpression(fm::Expression value);
 			virtual void setExpressionPlayedOnce(fm::Expression expr);
@@ -164,7 +142,6 @@ namespace sheet {
 			virtual double masterTempo() const { return masterTempo_; }
 			virtual void masterTempo(double val) { this->masterTempo_ = val; }			
 			Warnings warnings;
-			Capabilities capabilities;
             /**
              * @return the current velocity value between 0..1
              */
@@ -191,25 +168,6 @@ namespace sheet {
 			TrackMetaDataMap trackMetaDataMap_;
 			ISheetTemplateDefServerPtr sheetTemplateDefServer_ = nullptr;
         };
-
-		///////////////////////////////////////////////////////////////////////
-		// #74 TODO: refactor document config renderer
-		template<class TContainer>
-		void AContext::processMeta(const TContainer &container, 
-						std::function<sheet::Event(const typename TContainer::value_type&)> fGetMetaEvent)
-		{
-			int idx = 0;
-			for(const auto &x : container) {
-				Event metaEvent = fGetMetaEvent(x);
-				try {
-					processMeta(metaEvent);
-					idx++;
-				} catch(fm::Exception &ex) {
-					ex << ex_sheet_source_info(x);
-					throw;
-				}
-			}
-		}
     }
 }
 
