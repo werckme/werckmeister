@@ -15,19 +15,24 @@ namespace sheet {
         void AddMod::setArguments(const Arguments &args)
         {
             Base::setArguments(args);
-            fm::String modName = parameters[argumentNames.AddModPlayedOnce.Use].value<fm::String>();
+            fm::String modName = parameters[argumentNames.AddMod.Use].value<fm::String>();
             auto &wm = fm::getWerckmeister();
             theModification = wm.getModification(modName);
-            if (args.size() <= 1) {
-                return;
-            }
-
             // remove "use" Argument from collection
             Arguments copy (args.size());
-            auto copiedIt = std::copy_if(args.begin(), args.end(), copy.begin(), [](const auto &x) {  
-                return x.name != argumentNames.AddModPlayedOnce.Use;
+            bool paramUsefound = false;
+            auto copiedIt = std::copy_if(args.begin(), args.end(), copy.begin(), [&paramUsefound](const auto &x) {
+                if (!paramUsefound && x.name == argumentNames.AddMod.Use) {
+                    paramUsefound = true;
+                }
+                return x.name != argumentNames.AddMod.Use;
             });
-            copy.resize(std::distance(copy.begin(), copiedIt));
+            if (paramUsefound) {
+                copy.resize(std::distance(copy.begin(), copiedIt));
+            } else {
+                // not found by name -> skip first arg
+                copy = Arguments(copy.begin() + 1, copy.end());
+            }
             theModification->setArguments(copy);
         }
     }

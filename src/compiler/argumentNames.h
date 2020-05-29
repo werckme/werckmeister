@@ -58,7 +58,7 @@ struct ArgumentNames {
 
     struct {
         std::string Use                     = "use";
-    } AddModPlayedOnce;
+    } AddMod;
 
     struct {
         std::string CC                     = "cc";
