@@ -27,7 +27,7 @@ BOOST_AUTO_TEST_CASE(test_argNameQuotedValue)
 	using namespace fm;
 	using sheet::PitchDef;
 	fm::String text = FM_STRING("\
-key: ~name=\"value\";	 	\
+key: _name=\"value\";	 	\
 [{			    \
 }]			    \
 ");
@@ -44,7 +44,7 @@ BOOST_AUTO_TEST_CASE(test_argNameValue)
 	using namespace fm;
 	using sheet::PitchDef;
 	fm::String text = FM_STRING("\
-key: ~name=value;		\
+key: _name=value;		\
 [{			    \
 }]			    \
 ");
@@ -218,7 +218,7 @@ BOOST_AUTO_TEST_CASE(test_SheetDefParser)
 		I,4 II,,8 III,,,16 IV32 | I,4 I,, I,,, I | r1 | <I' III' V'>4 \n\
 		/name: bass/\n\
 		/soundselect: \"0\" \"0\"/\n\
-		/acommand: ~first=arg1 ~second=\"arg2\"/\n\
+		/acommand: _first=arg1 _second=\"arg2\"/\n\
 	} -- a voice\n\
 	{\n\
 		IV'4. VII''8. I'''16. II32. | II'4 II'' II''' II | r1 \n\
@@ -610,7 +610,7 @@ BOOST_AUTO_TEST_CASE(test_vorschlag)
 	BOOST_CHECK(defs.tracks[0].voices.size() == 1);
 	BOOST_CHECK(defs.tracks[0].voices[0].events.size() == 4);
 
-	BOOST_CHECK(checkMetaEvent(defs.tracks[0].voices[0].events[0], FM_STRING("vorschlag"), sheet::Event::Args({})));
+	BOOST_CHECK(checkMetaEvent(defs.tracks[0].voices[0].events[0], FM_STRING("addVorschlag"), sheet::Event::Args({})));
 	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[0], sheet::Event::Meta, fm::notes::D, 1, 1.0_N32));
 	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[1], sheet::Event::Note, fm::notes::C, 1, 1.0_N4));
 	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[2], sheet::Event::Rest, sheet::PitchDef::NoPitch, 0, 1.0_N2p));
@@ -634,7 +634,7 @@ BOOST_AUTO_TEST_CASE(test_alias_vorschlag)
 	BOOST_CHECK(defs.tracks[0].voices.size() == 1);
 	BOOST_CHECK(defs.tracks[0].voices[0].events.size() == 4);
 
-	BOOST_CHECK(checkMetaEvent(defs.tracks[0].voices[0].events[0], FM_STRING("vorschlag"), sheet::Event::Args({})));
+	BOOST_CHECK(checkMetaEvent(defs.tracks[0].voices[0].events[0], FM_STRING("addVorschlag"), sheet::Event::Args({})));
 	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[0], sheet::Event::Meta, FM_STRING("bd"), 1.0_N32));
 	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[1], sheet::Event::Note, fm::notes::C, 1, 1.0_N4));
 	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[2], sheet::Event::Rest, sheet::PitchDef::NoPitch, 0, 1.0_N2p));
