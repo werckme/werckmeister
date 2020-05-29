@@ -49,19 +49,19 @@ namespace fm {
             return;
         }
         auto it = args.begin();
-        bool positional = it->name.empty(); 
+        bool isNamed = false;
         while(++it!=args.end())
         {
-            bool argIsPositional = it->name.empty();
-            if(positional != argIsPositional) {
+            if (it->name.empty() && isNamed) {
                 fm::StringStream ss;
-                ss << "don't mixup named and positional arguments:" << std::endl;
-                ss << "'" << (argIsPositional ? it->value : it->name) << "'";
-                ss << " is " << (argIsPositional ? "positional" : "named");
-                ss << ". The argument(s) before are " << (positional ? "positional" : "named");
+                ss << "a positional parameter after a named parameter is not allowed:" << std::endl;
+                ss << "'" << it->value << "'";
+                ss << " is positional";
+                ss << ". The argument before is named";
                 ss << ".";
                 FM_THROW(fm::Exception, ss.str());
-            } 
+            }
+            isNamed = !it->name.empty();
         }
     }
 
