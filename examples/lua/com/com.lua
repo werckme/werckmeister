@@ -2,10 +2,27 @@ local _inspect = require "lua/com/inspect"
 
 local MidiSchluesselCOffset = 60;
 
+NamedAlternativeWithDefultNoValue = "NamedAlternativeWithDefultNoValue";
+
 function istable(t) return type(t) == 'table' end
 function isnumber(t) return type(t) == 'number' end
 function inspect(x) return print(_inspect(x)) end
 function dump(x) print(inspect(x)) end
+
+-- returns the parameter value of a named parameter alternative. 
+-- If this value is not set the positional version will be returned
+-- e.g.:
+-- parameters = {
+--     -- @positional
+--     { name="aParameter",         default="1" },
+--     -- @named @alternative
+--     { name="parameter",          default=NamedAlternativeWithDefultNoValue },
+-- }
+-- params will be given via host call (perform or solve)
+-- getNamedAlternative(params, "parameter", "aParameter") => returns the value for parameter if set, or the value for aParameter
+function getNamedAlternative(params, alternativeName, positionalName)
+    return (params[alternativeName] == NamedAlternativeWithDefultNoValue) and params[positionalName] or params[alternativeName]
+end
 
 -- returns the minimum amount of semitones between the relative pitches x and y.
 -- e.g.: from c(0) to b(11) = -1

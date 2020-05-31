@@ -3,28 +3,27 @@ require "events"
 
 
 parameters = {
-    -- @positional
+    -- @positional @legacy
     { name="directionKey",    default="direction" },
-    -- @positional
+    -- @positional @legacy
     { name="directionValue",  default="up" },
-    -- @positional
+    -- @positional @legacy
     { name="styleKey",        default="style" },
-    -- @positional
+    -- @positional @legacy
     { name="styleValue",      default="normal" },
-    -- @named @alternative
-    { name="style",           default="normal" },
-    -- @named @alternative
-    { name="direction",      default="up" },    
+    -- @named
+    { name="style",           default=NamedAlternativeWithDefultNoValue },
+    -- @named
+    { name="direction",      default=NamedAlternativeWithDefultNoValue }    
 }
 
 function perform(eventsOrigin, params, timeinfo)
-    --dump(params)
     local event     = eventsOrigin[1]
     local events    = { }
     local comparer  = pitchCompare
-    local direction = params.direction ~= nil and params.directionValue
-    local style     = params.style ~= nil and params.styleValue
-    --print(params.direction, params.style)
+    local direction = getNamedAlternative(params, "direction", "directionValue")
+    local style     = getNamedAlternative(params, "style"    , "styleValue"    )
+    print(direction, style)
 
     if direction == "down" then
         comparer = pitchCompareReversed

@@ -5,8 +5,10 @@ namespace sheet {
     namespace compiler {
         void InstrumentConfigAddMod::execute(AContext* context)
         {
-            // auto value         = parameters[argumentNames.XYZ].value<int>();
-           
+            if (!this->hasInstrument()) {
+                return;
+            }
+            this->getInstrument()->modifications.push_back(theModification);
         }
     }
 }

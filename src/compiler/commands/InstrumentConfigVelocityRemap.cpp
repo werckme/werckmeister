@@ -5,6 +5,7 @@ namespace sheet {
     namespace compiler {
         void InstrumentConfigVelocityRemap::execute(AContext* context)
         {
+            // #74.2
             // auto value         = parameters[argumentNames.XYZ].value<int>();
             // // velocity overrides
             // auto assignIfSet = [&argsExceptFirst, instrumentDef, this](const fm::String &expression){
