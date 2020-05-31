@@ -91,6 +91,32 @@ key: _name=value _name2=value2;		\
 	BOOST_CHECK(meta.args[1].name == "name2");
 }
 
+BOOST_AUTO_TEST_CASE(test_argNameValue3)
+{
+	using namespace fm;
+	using sheet::PitchDef;
+	fm::String text = FM_STRING("\
+key: myArpeggio direction down _style=legato2;		\
+[{			    \
+}]			    \
+");
+	sheet::compiler::SheetDefParser parser;
+	auto defs = parser.parse(text);
+	auto const &meta = defs.documentConfigs[0];
+	BOOST_CHECK_EQUAL(meta.args.size(), (size_t)4); 
+	BOOST_CHECK(meta.args[0].value == "myArpeggio");
+	BOOST_CHECK(meta.args[0].name == "");
+
+	BOOST_CHECK(meta.args[1].value == "direction");
+	BOOST_CHECK(meta.args[1].name == "");
+
+	BOOST_CHECK(meta.args[2].value == "down");
+	BOOST_CHECK(meta.args[2].name == "");
+
+	BOOST_CHECK(meta.args[3].value == "legato2");
+	BOOST_CHECK(meta.args[3].name == "style");
+}
+
 BOOST_AUTO_TEST_CASE(test_trackArgQuoted)
 {
 	using namespace fm;

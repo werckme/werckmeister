@@ -13,7 +13,7 @@ struct ArgumentNames {
         std::string OffsetIndicator         = "use";
         // @positional
         std::string OffsetValue             = "value";
-        // @named-alternative
+        // @named @alternative
         std::string WithOffset              = "withOffset";
     } Device;
 
@@ -50,9 +50,9 @@ struct ArgumentNames {
         std::string Mode                    = "mode";
         // @positional
         std::string Value                   = "value";
-        // @named-alternative
+        // @named @alternative
         std::string BendTo                  = "to";
-        // @named-alternative
+        // @named @alternative
         std::string BendFrom                = "from";        
     } Bend; 
 

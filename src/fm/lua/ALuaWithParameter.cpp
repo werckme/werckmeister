@@ -6,6 +6,8 @@
 #define FM_LUA_WITH_PARAMETER_KEY_POSITION "position"
 #define FM_LUA_WITH_PARAMETER_KEY_DEFAULT "default"
 
+#include <iostream>
+
 namespace fm {
     namespace lua {
         IHasParameter::ParametersByNames & ALuaWithParameter::getParameters(lua_State *L)
@@ -76,7 +78,9 @@ namespace fm {
             }
             try {
                 auto top = lua_gettop(L);
+                std::cout << "---------" << std::endl;
                 for(auto parameter : parameters) {
+                    std::cout << parameter.second.name() << " " << parameter.second.value<fm::String>() << std::endl;
                     lua_pushstring(L, parameter.first.c_str());
                     lua_pushstring(L, parameter.second.value<fm::String>().c_str());
                     lua_settable(L, top);
