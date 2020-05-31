@@ -33,7 +33,7 @@ tempo: 130;
 instrument: pianoRH;
 {
     \fff
-    c16 ccccccccccccccc | c16 ccccccccccccccc
+    r1 | r1
     | c2 d |e2~ e2 | r2 c#->c4 d4 | e4 e g c | d#2 d#4 d | 
     c2 bb4 a 
     | g2  g4 a | bb c' bb a | ab2 ab4 bb | c' ab,4 ab,4  bb,~ | <bb, c> ab ab bb | c' c' eb'8 d' c' d' 
@@ -46,7 +46,7 @@ type: template;
 name: myTemplate;
 instrument: pianoLH;
 {
-    --/voicingStrategy: _use=simpleGuitar _range=higherRange/
+    /voicingStrategy: simple _no=100/
     \ff
 
     "here"@<I, II, III, VI, V, VI, VII,>2 &2 |

@@ -1,8 +1,12 @@
 require "config"
 require "lua/com/com"
 
-ASolver = {}
+NoRangeSet = "__noRangeSet"
 
+ASolverDefaultParameter = {
+    { name="range", default=NoRangeSet },
+}
+ASolver = {}
 
 function ASolver:new(o)
     local o = o or {}
