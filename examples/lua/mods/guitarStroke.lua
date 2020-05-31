@@ -18,7 +18,6 @@ parameters = {
 
 }
 
-
 local direction = nil
 local mode = nil
 

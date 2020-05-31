@@ -1,8 +1,7 @@
 local _inspect = require "lua/com/inspect"
 
-local MidiSchluesselCOffset = 60;
-
-NamedAlternativeWithDefultNoValue = "NamedAlternativeWithDefultNoValue";
+local MidiSchluesselCOffset = 60
+ParameterValueNoTag = '__noTagValue'
 
 function istable(t) return type(t) == 'table' end
 function isnumber(t) return type(t) == 'number' end
@@ -15,7 +14,7 @@ function checkLegacyNamedParams(params, ...)
     for k, v in pairs(params) do
         if contains(args, v) then
             local msg = "Error: legacy named parameter with the argument '" ..  v .. "'. "
-            msg = msg .. " Use this expression instead: _" .. v .. "=theValue" 
+            msg = msg .. " Use this expression instead: _" .. v .. "=..." 
             error(msg)
         end
     end
@@ -39,6 +38,7 @@ function relpitchdiff(x, y)
 end
 
 -- [a, 1, b, 2, c, 3] => {a=1, b=2, c=3}
+-- @deprecated use the native named parameter feature: _name=value
 function tokeyvalue(args)
     assert(#args % 2 == 0)
     local result = {}

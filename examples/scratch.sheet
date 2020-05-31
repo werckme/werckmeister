@@ -4,6 +4,7 @@ using "./templates/ennio.template";
 using "./lua/voicings/simple.lua";
 using "./lua/mods/guitarStroke.lua";
 using "./lua/mods/myArpeggio.lua";
+using "./lua/mods/swing.lua";
 
 -- setup your midi device:
 -- to get a list of your available MIDI devices 
@@ -14,15 +15,16 @@ instrumentDef: _withName=pianoRH _onDevice=MyDevice _ch=0 _pc=1 _cc=8;
 instrumentDef: _withName=pianoLH _onDevice=MyDevice _ch=1 _pc=1 _cc=8;
 
 instrumentConf: pianoRH 
-    _set=volume _to=100 
-    _set=pan    _to=0
+    volume 100 
+    pan    0
+    mod swing _offset=80 
 ;
 
 
 instrumentConf: pianoLH 
     volume 100 
     pan    0
-    mod guitarStroke _value=8 _mode=normal _direction=down
+    --mod guitarStroke _value=8  _direction=down
 ;
 
 tempo: 130;
@@ -31,8 +33,8 @@ tempo: 130;
 instrument: pianoRH;
 {
     \fff
-    r1 | r1
-    | c2 d | /modOnce: bend _from=0/ e2~ e2 | r2 c#->c4 d4 | e4 e g c | /modOnce: bend to 40/d#2 d#4 d | 
+    c16 ccccccccccccccc | c16 ccccccccccccccc
+    | c2 d |e2~ e2 | r2 c#->c4 d4 | e4 e g c | d#2 d#4 d | 
     c2 bb4 a 
     | g2  g4 a | bb c' bb a | ab2 ab4 bb | c' ab,4 ab,4  bb,~ | <bb, c> ab ab bb | c' c' eb'8 d' c' d' 
     | b2 b, | r1 | r4 b4 b4 c' | d' d' d' d' | d' d' e'8 d' c' b | c'1 
@@ -46,7 +48,8 @@ instrument: pianoLH;
 {
     --/voicingStrategy: _use=simpleGuitar _range=higherRange/
     \ff
-    <I, II, III, VI, V, VI, VII,>1 |
+
+    "here"@<I, II, III, VI, V, VI, VII,>2 &2 |
 }
 ]
 
