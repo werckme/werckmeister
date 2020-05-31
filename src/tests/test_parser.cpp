@@ -72,6 +72,25 @@ key: value;		\
 	BOOST_CHECK(meta.args[0].value == "value");
 }
 
+BOOST_AUTO_TEST_CASE(test_argNameValue2)
+{
+	using namespace fm;
+	using sheet::PitchDef;
+	fm::String text = FM_STRING("\
+key: _name=value _name2=value2;		\
+[{			    \
+}]			    \
+");
+	sheet::compiler::SheetDefParser parser;
+	auto defs = parser.parse(text);
+	auto const &meta = defs.documentConfigs[0];
+	BOOST_CHECK_EQUAL(meta.args.size(), (size_t)2); 
+	BOOST_CHECK(meta.args[0].value == "value");
+	BOOST_CHECK(meta.args[0].name == "name");
+	BOOST_CHECK(meta.args[1].value == "value2");
+	BOOST_CHECK(meta.args[1].name == "name2");
+}
+
 BOOST_AUTO_TEST_CASE(test_trackArgQuoted)
 {
 	using namespace fm;
