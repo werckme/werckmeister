@@ -9,19 +9,16 @@ function isnumber(t) return type(t) == 'number' end
 function inspect(x) return print(_inspect(x)) end
 function dump(x) print(inspect(x)) end
 
--- returns the parameter value of a named parameter alternative. 
--- If this value is not set the positional version will be returned
--- e.g.:
--- parameters = {
---     -- @positional
---     { name="aParameter",         default="1" },
---     -- @named @alternative
---     { name="parameter",          default=NamedAlternativeWithDefultNoValue },
--- }
--- params will be given via host call (perform or solve)
--- getNamedAlternative(params, "parameter", "aParameter") => returns the value for parameter if set, or the value for aParameter
-function getNamedAlternative(params, alternativeName, positionalName)
-    return (params[alternativeName] == NamedAlternativeWithDefultNoValue) and params[positionalName] or params[alternativeName]
+
+function checkLegacyNamedParams(params, ...)
+    local args = table.pack(...)
+    for k, v in pairs(params) do
+        if contains(args, v) then
+            local msg = "Error: legacy named parameter with the argument '" ..  v .. "'. "
+            msg = msg .. " Use this expression instead: _" .. v .. "=theValue" 
+            error(msg)
+        end
+    end
 end
 
 -- returns the minimum amount of semitones between the relative pitches x and y.

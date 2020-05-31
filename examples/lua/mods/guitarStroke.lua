@@ -9,24 +9,12 @@ require "events"
 
 
 parameters = {
-    -- @positional @legacy
-    { name="directionKey",    default="direction" },
-    -- @positional @legacy
-    { name="directionValue",  default="up" },
-    -- @positional @legacy
-    { name="modeKey",         default="mode" },
-    -- @positional @legacy
-    { name="modeValue",       default="alternate" },
-    -- @positional @legacy
-    { name="valueKey",        default="value" },
-    -- @positional @legacy
-    { name="valueValue",      default="64" },
-    -- @named
-    { name="direction",       default=NamedAlternativeWithDefultNoValue },
-    -- @named
-    { name="value",           default=NamedAlternativeWithDefultNoValue },
-    -- @named
-    { name="mode",            default=NamedAlternativeWithDefultNoValue }
+    -- can be up, down
+    { name="direction",       default="up" },
+    -- can be 1, 2, 4, 8, 16, 32, 64, ...
+    { name="value",           default="64" },
+    -- can be normal, alternate
+    { name="mode",            default="alternate" }
 
 }
 
@@ -38,12 +26,11 @@ function perform(eventsOrigin, params, timeinfo)
     if #eventsOrigin > 2 then
         return eventsOrigin
     end
-
-    local directionParam = getNamedAlternative(params, "direction", "directionValue")
-    local modeParam      = getNamedAlternative(params, "mode"     , "modeValue"    )
-    local value          = getNamedAlternative(params, "value"    , "valueValue"    )
+    checkLegacyNamedParams(params, "direction", "mode", "value")
+    local directionParam = params.direction
+    local modeParam      = params.mode
+    local value          = params.value
     value = tonumber(value)
-    print(value)
     local event = eventsOrigin[1]
     local events = { }
     local comparer = pitchCompare

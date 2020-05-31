@@ -3,27 +3,19 @@ require "events"
 
 
 parameters = {
-    -- @positional @legacy
-    { name="directionKey",    default="direction" },
-    -- @positional @legacy
-    { name="directionValue",  default="up" },
-    -- @positional @legacy
-    { name="styleKey",        default="style" },
-    -- @positional @legacy
-    { name="styleValue",      default="normal" },
-    -- @named
-    { name="style",           default=NamedAlternativeWithDefultNoValue },
-    -- @named
-    { name="direction",      default=NamedAlternativeWithDefultNoValue }    
+    -- can be legato, normal
+    { name="style",           default="normal" },
+    -- can be up, down
+    { name="direction",       default="up" }
 }
 
 function perform(eventsOrigin, params, timeinfo)
+    checkLegacyNamedParams(params, "direction", "style")
     local event     = eventsOrigin[1]
     local events    = { }
     local comparer  = pitchCompare
-    local direction = getNamedAlternative(params, "direction", "directionValue")
-    local style     = getNamedAlternative(params, "style"    , "styleValue"    )
-    print(direction, style)
+    local direction = params.direction
+    local style     = params.style
 
     if direction == "down" then
         comparer = pitchCompareReversed
