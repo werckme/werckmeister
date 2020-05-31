@@ -96,22 +96,7 @@ namespace fm {
             }
             return argument->parseValue<TValue>();
         }
-
-        template<typename TValue, class ArgContainer>
-        TValue __getArgValue(const ArgContainer &container, fm::String name, int position, const TValue* defaultValue = nullptr)
-        {
-            throwIfmixedNamedAndPositionalArgs(container);
-            auto it = std::find_if(container.begin(), container.end(), [name](const auto &x) {return x.name == name;});
-            if (it != container.end()) {
-                const sheet::Argument *argument = &(*it);
-                return argument->parseValue<TValue>();
-            }
-            try {
-                return __getArgumentValue<TValue>(container, position, defaultValue);
-            } catch(const MissingArgument&) {
-                FM_THROW(fm::Exception, "missing argument: '" + name + "'");
-            }
-        }		
+	
     }
     
     template<typename TArg>
@@ -180,27 +165,9 @@ namespace fm {
     }
 
 
-    /**
-     * returns a value from an argument list, either by positon or by name.
-     * @arg the name of the parameter
-     * @arg the position in the arguments list
-     * @arg optional the default value
-     **/
-    template<typename TValue, class ArgContainer>
-    TValue getArgValue(const ArgContainer &container, fm::String name, int position) {
-        return __getArgValue<TValue>(container, name, position);
-    }
 
-    /**
-     * returns a value from an argument list, either by positon or by name.
-     * @arg the name of the parameter
-     * @arg the position in the arguments list
-     * @arg optional the default value
-     **/
-    template<typename TValue, class ArgContainer>
-    TValue getArgValue(const ArgContainer &container, fm::String name, int position, const TValue &defaultValue) {
-        return __getArgValue<TValue>(container, name, position, &defaultValue);
-    }
+
+
 
 
     /**
