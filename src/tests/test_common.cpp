@@ -80,6 +80,26 @@ BOOST_AUTO_TEST_CASE(test_ArgsToParmeters_ByPos)
 	BOOST_CHECK_EQUAL(parameters["myFloat"].value<float>(), 2.0f);
 }
 
+BOOST_AUTO_TEST_CASE(test_ArgsToParmeters_Mixed)
+{
+	fm::IHasParameter::ParametersByNames parameters = {
+		FM_PARAMETER_DEFAULT_DEF("p1",   0, "0"),
+		FM_PARAMETER_DEFAULT_DEF("p2",   1, "0"),
+		FM_PARAMETER_DEFAULT_DEF("p3",   2, "0"),
+		FM_PARAMETER_DEFAULT_DEF("p4",	 3, "0"),
+	};
+	std::vector<sheet::Argument> args = {
+		{fm::String("1"), fm::String("")},
+		{fm::String("4"), fm::String("p4")}
+	};
+	fm::argumentsToParameters(args, parameters);
+	BOOST_CHECK_EQUAL(parameters["p1"].value<int>(), 1);
+	BOOST_CHECK_EQUAL(parameters["p2"].value<int>(), 0);
+	BOOST_CHECK_EQUAL(parameters["p3"].value<int>(), 0);
+	BOOST_CHECK_EQUAL(parameters["p4"].value<int>(), 4);
+}
+
+
 BOOST_AUTO_TEST_CASE(test_ArgsToParmeters_DefaultValue)
 {
 	fm::IHasParameter::ParametersByNames parameters = {

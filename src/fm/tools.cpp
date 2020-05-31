@@ -31,11 +31,11 @@ namespace fm {
             return;
         }
         throwIfmixedNamedAndPositionalArgs(arguments);
-        bool byPosition = arguments.front().name.empty();
-        bool byName = !byPosition;
         for (int position = 0; position < (int)arguments.size(); ++position)
         {
             const auto &argument = arguments[position];
+            bool byPosition = argument.name.empty();
+            bool byName = !byPosition;
             IHasParameter::ParametersByNames::iterator parameterIt;
             if (byName) {
                 parameterIt = std::find_if(outParameters.begin(), outParameters.end(), [position, &argument](const auto &p) {
