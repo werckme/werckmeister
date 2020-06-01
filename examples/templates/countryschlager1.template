@@ -65,7 +65,7 @@ type: template;
 name: countryschlager1.ende;
 instrument: guitar; 
 {
-    /do:  guitarStroke value 8/
+    /do:  guitarStroke _value=8/
     <I II III IV V VI VII>1  |
 }   
 ] 

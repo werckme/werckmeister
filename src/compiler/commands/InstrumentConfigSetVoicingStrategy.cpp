@@ -8,7 +8,8 @@ namespace sheet {
             if (!this->hasInstrument()) {
                 return;
             }
-            getInstrument()->voicingStrategy = this->_voicingStrategy;
+            bool isAlreadySet = getInstrument()->voicingStrategy && getInstrument()->voicingStrategy->name() == voicingStrategy->name();
+            getInstrument()->voicingStrategy = this->voicingStrategy;
         }
     }
 }

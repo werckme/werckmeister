@@ -59,8 +59,7 @@ function GuitarSolver:degreeToPitch(degreeDef, chord)
     return chord.rootPitch + (degreeDef.degreeValue % 12)
 end
 
-function GuitarSolver:_solveImpl(chord, degrees, args)
-    
+function GuitarSolver:_solveImpl(chord, degrees, params)
     local d = function(degreeValue) return self:getDefaultDegreeDef(degreeValue, degrees) end
     local strDegrees = chordToHashString(chord)
     local voicing = VoicingMatrix[strDegrees]

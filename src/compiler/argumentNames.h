@@ -18,7 +18,7 @@ struct ArgumentNames {
     } Device;
 
     struct {
-        std::string WithName                = "withName";
+        std::string WithName                = "setName";
         std::string OnDevice                = "onDevice";
         std::string Ch                      = "ch";
         std::string Cc                      = "cc";

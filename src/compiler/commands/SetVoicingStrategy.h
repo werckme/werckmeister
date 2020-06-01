@@ -18,7 +18,7 @@ namespace sheet {
             virtual void setArguments(const Arguments &args) override;
             virtual void execute(AContext*);
         protected:
-            VoicingStrategyPtr _voicingStrategy = nullptr;
+            VoicingStrategyPtr voicingStrategy = nullptr;
         };
     }
 }

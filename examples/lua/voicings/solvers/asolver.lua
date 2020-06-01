@@ -4,6 +4,7 @@ require "lua/com/com"
 NoRangeSet = "__noRangeSet"
 
 ASolverDefaultParameter = {
+    -- can be contrabass, bass, baritone, tenor, alto, mezzosoprano, soprano
     { name="range", default=NoRangeSet },
 }
 ASolver = {}

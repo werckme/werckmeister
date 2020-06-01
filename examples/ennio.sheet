@@ -5,13 +5,12 @@ using "./templates/ennio.template";
 -- setup your midi device:
 -- to get a list of your available MIDI devices 
 -- and their port numbers, execute "sheetp --list"
---      name              type   portnumber
-device: MyDevice          midi       0;
+device: _setName=MyDevice          _isType=midi       _usePort=0;
 
 -- define your instruments:
 -- (ch= channel, pc= programm change, cc= control change)
 --             name    device    ch  cc  pc 
-instrumentDef: piano   MyDevice   1   0   3;
+instrumentDef: _setName=piano   _onDevice=MyDevice   _ch=1   _pc=3 _cc=0;
 
 tempo: 130;
 

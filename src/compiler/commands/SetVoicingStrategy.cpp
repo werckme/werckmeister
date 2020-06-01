@@ -7,23 +7,23 @@ namespace sheet {
         void SetVoicingStrategy::execute(AContext* context)
         {
             auto meta = context->voiceMetaData();
-			bool isAlreadySet = meta->voicingStrategy && meta->voicingStrategy->name() == _voicingStrategy->name();
+			bool isAlreadySet = meta->voicingStrategy && meta->voicingStrategy->name() == voicingStrategy->name();
             if (isAlreadySet) {
 				return;
 			}
-			meta->voicingStrategy = this->_voicingStrategy;
+			meta->voicingStrategy = this->voicingStrategy;
         }
 
         void SetVoicingStrategy::setArguments(const Arguments &args)
         {
             Base::setArguments(args);
             auto voicingStrategyName = parameters[argumentNames.SetVoicingStrategy.Use].value<fm::String>();
-            this->_voicingStrategy = fm::getWerckmeister().getVoicingStrategy(voicingStrategyName);
+            this->voicingStrategy = fm::getWerckmeister().getVoicingStrategy(voicingStrategyName);
             if (args.size() <= 1) {
                 return;
             }
             Arguments remaining (args.begin() + 1, args.end());
-            this->_voicingStrategy->setArguments(remaining);
+            this->voicingStrategy->setArguments(remaining);
         }
     }
 }
