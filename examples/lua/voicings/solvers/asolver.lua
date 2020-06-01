@@ -16,6 +16,10 @@ function ASolver:new(o)
     return o
 end
 
+function ASolver:checkForLegacyParameters(params)
+    checkLegacyNamedParams(params, "range")
+end
+
 -- returns the a degree def from the given degree def collection
 -- if more than one degree def defined, it will return the first one
 function ASolver:getDefaultDegreeDef(degreeValue, degrees)
@@ -84,6 +88,7 @@ end
 --                 If the current chord has no information about a degree
 --                 the value is empty eg.: II= {} 
 function ASolver:solve(chord, degrees, params)
+    self:checkForLegacyParameters(params)
     self:_setImportantDegreesIfExists(params, degrees)
     local result = self:_solveImpl(chord, degrees, params)
     if params.range ~= nil and params.range ~=NoRangeSet then

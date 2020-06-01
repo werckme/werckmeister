@@ -60,6 +60,7 @@ function VoiceLeadSolver:_solveImpl(chord, degrees, params)
 end
 
 function VoiceLeadSolver:solve(chord, degrees, params)
+    self:checkForLegacyParameters(params)
     local result = self:_solveImpl(chord, degrees, params)
     if params.range ~=nil and params.range ~=NoRangeSet then
         self:_keepRange(result, params.range)
