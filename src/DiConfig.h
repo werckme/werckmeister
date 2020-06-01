@@ -73,6 +73,7 @@ namespace sheet {
 #include <compiler/commands/AddDevice.h>
 #include <compiler/commands/SetInstrument.h>
 #include <compiler/commands/InstrumentConfigAddMod.h>
+#include <compiler/commands/InstrumentConfigVelocityRemap.h>
 
 namespace sheet {
     namespace compiler {
@@ -99,6 +100,7 @@ namespace sheet {
                 _FM_Register(AddDevice,                                 SHEET_META__SET_DEVICE);
                 _FM_Register(SetInstrument,                             SHEET_META__INSTRUMENT);
                 _FM_Register(InstrumentConfigAddMod,                    InstrumentConfigCommandName(SHEET_META__SET_MOD));
+                _FM_Register(InstrumentConfigVelocityRemap,             InstrumentConfigCommandName(SHEET_META__VELOCITY_REMAP));
                 return true;
             })();
         }

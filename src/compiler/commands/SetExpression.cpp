@@ -17,7 +17,7 @@ namespace sheet {
 				{ FM_STRING("fffff"), fm::expression::FFFFF }
         };
 
-        fm::Expression SetExpression::getExpression(fm::String &expressionStr) const
+        fm::Expression SetExpression::getExpressionForString(const fm::String &expressionStr)
         {
             auto it = _ExpressionMap.find(expressionStr);
             if (it == _ExpressionMap.end()) {
@@ -29,7 +29,7 @@ namespace sheet {
         void SetExpression::execute(AContext* context)
         {
             auto value         = parameters[argumentNames.SetExpression.Value].value<fm::String>();
-            context->setExpression(getExpression(value));           
+            context->setExpression(getExpressionForString(value));
         }
     }
 }

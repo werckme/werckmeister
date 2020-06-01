@@ -1,28 +1,32 @@
 #include "InstrumentConfigVelocityRemap.h"
 #include <compiler/context/AContext.h>
+#include <compiler/error.hpp>
+#include <compiler/commands/SetExpression.h>
 
 namespace sheet {
     namespace compiler {
+        const fm::String InstrumentConfigVelocityRemap::VelocityNotSet = "NoRemapValueSet";
+
         void InstrumentConfigVelocityRemap::execute(AContext* context)
         {
-            // #74.2
-            // auto value         = parameters[argumentNames.XYZ].value<int>();
-            // // velocity overrides
-            // auto assignIfSet = [&argsExceptFirst, instrumentDef, this](const fm::String &expression){
-            //      // #74.2 TODO
-            //      // auto foundValue = fm::getArgumentValue<int>(expression, argsExceptFirst);
-            //      // if (!foundValue.first) {
-            //      //      return;
-            //      // }
-            //      // if (foundValue.second < 0 || foundValue.second > 100) {
-            //      //      FM_THROW(Exception, "invalid value for: " + expression);
-            //      // }
-            //      // auto exprValue = getExpression(expression);
-            //      // instrumentDef->velocityOverride[exprValue] = foundValue.second;
-            // };
-            // for(const auto &keyValue : expressionMap_) {
-            //      assignIfSet(keyValue.first);
-            // }
+            if (this->hasInstrument() == false) {
+                return;
+            }
+            auto instrumentDef = getInstrument();
+            for (const auto& parametersKeyValue : parameters) {
+                const auto& parameter = parametersKeyValue.second;
+                auto hasValue = !parameter.empty() && parameter.strValue() != VelocityNotSet;
+                if (!hasValue) {
+                    continue;
+                }
+                const auto& expression = parameter.name();
+                int newValue = parameter.value<int>();
+                if (newValue < 0 || newValue > 100) {
+                    FM_THROW(Exception, "invalid value for: " + expression);
+                }
+                auto exprValue = SetExpression::getExpressionForString(expression);
+                instrumentDef->velocityOverride[exprValue] = newValue;
+            }
         }
     }
 }

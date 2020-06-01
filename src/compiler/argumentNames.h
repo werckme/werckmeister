@@ -82,6 +82,19 @@ struct ArgumentNames {
         std::string Use                  = "use";
     } SetInstrument;
 
+    struct {
+        std::string PPPPP = "ppppp";
+        std::string PPPP = "pppp";
+        std::string PPP = "ppp";
+        std::string PP = "pp";
+        std::string P = "p";
+        std::string F = "f";
+        std::string FF = "ff";
+        std::string FFF = "fff";
+        std::string FFFF = "ffff";
+        std::string FFFFF = "fffff";
+    } VelocityRemap;
+
 };
 
 extern ArgumentNames argumentNames;  

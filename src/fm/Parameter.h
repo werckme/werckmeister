@@ -21,7 +21,7 @@ namespace fm
          * @throw if value is empty
          */
         template<typename TValue>
-        TValue value();
+        TValue value() const;
         template<typename TValue>
         void value(const TValue& value);
         void strValue(const fm::String value) { this->_value = value; }
@@ -39,7 +39,7 @@ namespace fm
     };
     ///////////////////////////////////////////////////////////////////////////
     template<typename TValue>
-    TValue Parameter::value() 
+    TValue Parameter::value() const
     { 
         if (_value.empty()) {
             throw Exception(fm::String("missing value for: " + name() ));

@@ -16,7 +16,7 @@ namespace sheet {
             };
             virtual ParametersByNames & getParameters() { return this->parameters; }
             virtual void execute(AContext*);
-            fm::Expression getExpression(fm::String &expressionStr) const;
+            fm::Expression static getExpressionForString(const fm::String &expressionStr);
         private:
             typedef std::map<fm::String, fm::Expression> ExpressionMap;
             static const ExpressionMap _ExpressionMap;

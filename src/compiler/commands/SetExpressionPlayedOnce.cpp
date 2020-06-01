@@ -6,7 +6,7 @@ namespace sheet {
         void SetExpressionPlayedOnce::execute(AContext* context)
         {
             auto value         = parameters[argumentNames.SetExpression.Value].value<fm::String>();
-            context->setExpressionPlayedOnce(getExpression(value));  
+            context->setExpressionPlayedOnce(getExpressionForString(value));  
         }
     }
 }

@@ -20,7 +20,8 @@ instrumentDef: _setName=pianoLH _onDevice=MyDevice _ch=1 _pc=1 _cc=8;
 instrumentConf: pianoRH 
     volume 100 
     pan    0
-    mod swing _offset=80 
+    mod swing _offset=80
+    _set=remapVelocity _ppppp=100
 ;
 
 
@@ -37,7 +38,7 @@ tempo: 130;
 [
 instrument: pianoRH;
 {
-    \fff
+    \ppppp
     r1 | r1
     | c2 d |e2~ e2 | r2 c#->c4 d4 | e4 e g c | d#2 d#4 d | 
     c2 bb4 a 
