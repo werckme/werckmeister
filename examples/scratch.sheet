@@ -22,9 +22,10 @@ instrumentConf: pianoRH
 
 
 instrumentConf: pianoLH 
-    volume 100 
-    pan    0
+   -- volume 100 
+   -- pan    0
     --mod guitarStroke _value=8  _direction=down
+    _set=voicingStrategy _use=simple _range=basss _x=100
 ;
 
 tempo: 130;

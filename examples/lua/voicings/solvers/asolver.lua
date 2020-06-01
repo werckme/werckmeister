@@ -82,12 +82,11 @@ end
 --                 the chord definition eg.: { II= {degreeValue, octave} }
 --                 If the current chord has no information about a degree
 --                 the value is empty eg.: II= {} 
-function ASolver:solve(chord, degrees, args)
-    args = tokeyvalue(args)
-    self:_setImportantDegreesIfExists(args, degrees)
-    local result = self:_solveImpl(chord, degrees, args)
-    if args.range ~=nil then
-        self:_keepRange(result, args.range)
+function ASolver:solve(chord, degrees, params)
+    self:_setImportantDegreesIfExists(params, degrees)
+    local result = self:_solveImpl(chord, degrees, params)
+    if params.range ~= nil and params.range ~=NoRangeSet then
+        self:_keepRange(result, params.range)
     end
     return result
 end
