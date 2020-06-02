@@ -35,7 +35,7 @@ namespace sheet {
     template<typename TValue>
     TValue Argument::parseValue() const
     {
-        return _convertStrValue(this->value);
+        return _convertStrValue<TValue>(this->value);
     }
 
 }
