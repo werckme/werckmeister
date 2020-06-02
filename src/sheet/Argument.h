@@ -14,7 +14,7 @@ namespace sheet {
         TValue parseValue() const;
 
         template<>
-        fm::String parseValue<fm::String>() const;
+        fm::String parseValue<fm::String>() const { return value; }
     };
 
     template<typename TValue>
