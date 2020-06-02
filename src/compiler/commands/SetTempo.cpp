@@ -1,7 +1,6 @@
 #include "SetTempo.h"
 #include <compiler/context/AContext.h>
 #include <compiler/metaCommands.h>
-#include <iostream>
 
 namespace sheet {
     namespace compiler {
@@ -9,7 +8,6 @@ namespace sheet {
         {
             auto tempoParameter         = parameters[argumentNames.SetTempo.Bpm];
             auto tempoStringValue = tempoParameter.strValue();
-            std::cout << tempoStringValue << std::endl;	
             if (tempoStringValue == SHEET_META__SET_TEMPO_VALUE_HALF) {
                 context->setTempo(context->masterTempo() * 0.5);
                 return;
@@ -23,7 +21,6 @@ namespace sheet {
                 return;
             }			
             fm::BPM bpm = tempoParameter.value<fm::BPM>();	
-            
             context->setTempo(bpm);
         }
     }

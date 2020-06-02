@@ -127,7 +127,6 @@ namespace sheet {
 			std::list<TemplatesAndItsChords> __collectChordsPerTemplate(SheetTemplateRenderer &sheetTemplateRenderer, Track * sheetTrack)
 			{
 				auto ctx = sheetTemplateRenderer.context();
-				auto sheetEventRenderer = sheetTemplateRenderer.sheetEventRenderer;
 				std::list<TemplatesAndItsChords> templatesAndItsChords;
 				templatesAndItsChords.emplace_back(TemplatesAndItsChords());
 				templatesAndItsChords.back().templates = ctx->currentSheetTemplates();
@@ -135,6 +134,8 @@ namespace sheet {
 				auto tmpContext = wm.createTempContext();
 				tmpContext->masterTempo(ctx->masterTempo());
 				tmpContext->setChordTrackTarget();
+				SheetEventRenderer tmpEventRenderer(tmpContext.get());
+
 				auto &sheetEvents = sheetTrack->voices.begin()->events;
 				for (auto &ev : sheetEvents) {
 					try {
@@ -154,7 +155,7 @@ namespace sheet {
 							auto &currentTemplateAndChords = templatesAndItsChords.back();
 							currentTemplateAndChords.chords.push_back(&ev);
 							if (ev.type == Event::Meta) {
-								sheetEventRenderer->handleMetaEvent(ev);
+								tmpEventRenderer.handleMetaEvent(ev);
 								if (isTempoEvent) {
 									templatesAndItsChords.emplace_back(TemplatesAndItsChords());
 									auto &newTemplateAndChords = templatesAndItsChords.back();
