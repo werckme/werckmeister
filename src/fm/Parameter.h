@@ -23,9 +23,6 @@ namespace fm
         template<typename TValue>
         TValue value() const;
 
-        template<>
-        fm::String value<fm::String>() const { return strValue(); }
-
         template<typename TValue>
         void value(const TValue& value);
         void strValue(const fm::String value) { this->_value = value; }
@@ -42,17 +39,32 @@ namespace fm
         int _position = UndefinedPosition;
     };
     ///////////////////////////////////////////////////////////////////////////
+
+    namespace 
+    {
+        template<typename TValue>
+        TValue _convertStrValue(const fm::String strValue)
+        {
+            TValue result;
+            fm::StringStream ss;
+            ss << strValue;
+            ss >> result;
+            return result;
+        }
+        template<>
+        fm::String _convertStrValue<fm::String>(const fm::String strValue)
+        {
+            return strValue;
+        }
+    }
+
     template<typename TValue>
     TValue Parameter::value() const
     { 
         if (_value.empty()) {
             throw Exception(fm::String("missing value for: " + name() ));
         }
-        TValue result;
-        fm::StringStream ss;
-        ss << this->_value;
-        ss >> result;
-        return result;
+        return _convertStrValue<TValue>(_value);
     }
 
     template<typename TValue>

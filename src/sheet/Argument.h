@@ -12,19 +12,30 @@ namespace sheet {
 
         template<typename TValue>
         TValue parseValue() const;
-
-        template<>
-        fm::String parseValue<fm::String>() const { return value; }
     };
+
+    namespace
+    {
+        template<typename TValue>
+        TValue _convertStrValue(const fm::String strValue)
+        {
+            TValue result;
+            fm::StringStream ss;
+            ss << strValue;
+            ss >> result;
+            return result;
+        }
+        template<>
+        fm::String _convertStrValue<fm::String>(const fm::String strValue)
+        {
+            return strValue;
+        }
+    }
 
     template<typename TValue>
     TValue Argument::parseValue() const
     {
-        TValue result;
-        fm::StringStream ss;
-        ss << this->value;
-        ss >> result;
-        return result;
+        return _convertStrValue(this->value);
     }
 
 }
