@@ -11,7 +11,7 @@ type: template;
 name: x;
 instrument: piano; 
 {
-    /mod: staccato amount 100 forTag x/ 
+    /mod: staccato _amount=100 _forTag=x/ 
     /do: swing offset 10/ 
     
     \ff

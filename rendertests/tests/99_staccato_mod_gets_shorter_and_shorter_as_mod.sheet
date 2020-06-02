@@ -16,7 +16,7 @@ type: template;
 name: x;    
 instrument: organ;
 {
-    /mod: staccato amount 100/
+    /mod: staccato _amount=100/
     <I II III IV V VI VIII>2. <I II III IV V VI VIII>4 |
 }
 ]

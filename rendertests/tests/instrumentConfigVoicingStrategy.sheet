@@ -11,14 +11,14 @@ instrumentDef: bass    SC1 4 0 16;
 instrumentDef: guitar    SC1 4 0 27;
 
 instrumentConf: piano 
-    voicingStrategy voicelead range tenor
+    voicingStrategy voicelead _range=tenor
     volume 100
     pan 0 
 ;
 
 instrumentConf: 
     bass volume 100
-    voicingStrategy voicelead range tenor
+    voicingStrategy voicelead _range=tenor
 ;
 
 instrumentConf: 
@@ -41,7 +41,7 @@ type: template;
 name: myTrack;
 instrument: bass;
 {
-    /voicingStrategy: voicelead range contrabass/
+    /voicingStrategy: voicelead _range=contrabass/
     <I II III IV V VI VII>1 |
     
 }

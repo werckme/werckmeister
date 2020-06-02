@@ -30,7 +30,7 @@ instrumentConf: rhythm
     volume 70;   
 
 instrumentConf: bass
-    voicingStrategy simple range contrabass
+    voicingStrategy simple _range=contrabass
 ;   
 
 instrumentConf: piano
@@ -48,7 +48,7 @@ instrumentConf: bell
     volume 90;   
 
 instrumentConf: rhythm
-    voicingStrategy voicelead range tenor
+    voicingStrategy voicelead _range=tenor
     pan 40
     volume 100;   
 
@@ -97,7 +97,7 @@ instrument: drums;
 instrument: lead;
 {
     /signature: 2 4/
-    /mod: staccato amount 90/
+    /mod: staccato _amount=90/
     /do: swing grid 8 offset 15/
     \fff
     r2 | r2 | r2 | r2  | d'8. &16 &32 & &8 r16 | c'16 f d b,   g c' &32 & b e | c8. f'32 c' e'16 e &32 b, g, a, |

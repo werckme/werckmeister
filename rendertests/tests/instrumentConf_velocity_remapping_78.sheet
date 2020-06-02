@@ -11,7 +11,7 @@ instrumentDef: bass    SC1 4 0 16;
 instrumentDef: guitar    SC1 4 0 27;
 
 instrumentConf: piano 
-    voicingStrategy voicelead range tenor
+    voicingStrategy voicelead _range=tenor
     volume 100
     pan 0 
     fff 100

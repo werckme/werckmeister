@@ -18,7 +18,7 @@ using "lua/mods/guitarStroke.lua";
 -- to get a list of your available MIDI devices 
 -- and their port numbers, execute "sheetp --list"
 --      name              type   portnumber
-device: MyDevice          midi       0;
+device: MyDevice          midi       5;
 
 
 -- define your instruments:
@@ -34,14 +34,14 @@ instrumentDef: bell       MyDevice 5 0 14;
 instrumentDef: drums      MyDevice 9 0 0;
 
 instrumentConf: rhythm
-    voicingStrategy guitar range tenor
-    mod guitarStroke 
-    pan 60
-    volume 70;   
+    _set=voicingStrategy _use=guitar _range=tenor
+    _set=mod    _use=guitarStroke 
+    _set=pan    _to=60
+    _set=volume _to=70;   
 
 instrumentConf: bass
-    voicingStrategy simple range contrabass
-    volume 100
+    _set=voicingStrategy _use=simple _range=contrabass
+    _set=volume _to=100
 ;   
 
 instrumentConf: piano
@@ -73,7 +73,7 @@ tempo:  73;
 instrument: lead;
 {
     /signature: 2 4/
-    /mod: staccato amount 90/
+    /mod: staccato _amount=90/
     /do: swing _grid=8 _offset =15/
     \fff
     r2 | r2 | r2 | r2  | d'8. &16 &32 & &8 r16 | c'16 f d b,   g c' &32 & b e | c8. f'32 c' e'16 e &32 b, g, a, |
