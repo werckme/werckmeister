@@ -1,10 +1,10 @@
 using "./chords/default.chords";
 using "./lua/voicings/simple.lua";
-device: SC1 midi 1;
+device: SC1 midi 5;
 instrumentDef: piano   SC1 2 0 0;
 
 instrumentConf: piano 
-    voicingStrategy simple importantDegrees "IV VI";
+    voicingStrategy simple _importantDegrees="IV VI";
 
 [
 type: template;

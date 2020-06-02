@@ -22,6 +22,10 @@ namespace fm
          */
         template<typename TValue>
         TValue value() const;
+
+        template<>
+        fm::String value<fm::String>() const { return strValue(); }
+
         template<typename TValue>
         void value(const TValue& value);
         void strValue(const fm::String value) { this->_value = value; }

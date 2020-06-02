@@ -133,6 +133,22 @@ key: \"value\";		\
 	BOOST_CHECK(defs.tracks[0].trackConfigs[0].args[0].value == FM_STRING("value") );
 }
 
+BOOST_AUTO_TEST_CASE(test_trackArgQuoted2)
+{
+	using namespace fm;
+	using sheet::PitchDef;
+	fm::String text = FM_STRING("\
+[				\
+key: \"value two\";		\
+{			    \
+}				\
+]			    \
+");
+	sheet::compiler::SheetDefParser parser;
+	auto defs = parser.parse(text);
+	BOOST_CHECK(defs.tracks[0].trackConfigs[0].args[0].value == FM_STRING("value two"));
+}
+
 BOOST_AUTO_TEST_CASE(test_trackArgUnquoted)
 {
 	using namespace fm;

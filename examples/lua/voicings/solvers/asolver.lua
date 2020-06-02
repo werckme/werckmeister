@@ -2,10 +2,13 @@ require "config"
 require "lua/com/com"
 
 NoRangeSet = "__noRangeSet"
+NoImportantDegreesSet = "_noImportantDegreesSet"
 
 ASolverDefaultParameter = {
     -- can be contrabass, bass, baritone, tenor, alto, mezzosoprano, soprano
-    { name="range", default=NoRangeSet },
+    { name="range",             default=NoRangeSet },
+    { name="importantDegrees",  default=NoImportantDegreesSet },
+    { name="importantDegree",   default=NoImportantDegreesSet },
 }
 ASolver = {}
 
@@ -17,7 +20,7 @@ function ASolver:new(o)
 end
 
 function ASolver:checkForLegacyParameters(params)
-    checkLegacyNamedParams(params, "range")
+    checkLegacyNamedParams(params, "range", "importantDegrees", "importantDegree")
 end
 
 -- returns the a degree def from the given degree def collection
@@ -60,14 +63,14 @@ function ASolver:_addImportantDegree(degrees, degreeVal, semitone)
     degrees[degreeVal] = {degrObj}
 end
 
--- set important degrees if defined in args
+-- set important degrees if defined in params
 -- more informations about important degrees:
 -- https://github.com/werckme/werckmeister/issues/123
-function ASolver:_setImportantDegreesIfExists(args, degrees)
-    local strDegree = args["importantDegree"]
-    if (strDegree == nil) then
-        strDegree = args["importantDegrees"]
-        if strDegree == nil then
+function ASolver:_setImportantDegreesIfExists(params, degrees)
+    local strDegree = params.importantDegree
+    if (strDegree == nil or strDegree == NoImportantDegreesSet) then
+        strDegree = params.importantDegrees
+        if strDegree == nil or strDegree == NoImportantDegreesSet then
             return
         end
     end
