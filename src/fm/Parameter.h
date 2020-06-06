@@ -42,6 +42,7 @@ namespace fm
 
     namespace 
     {
+        
         template<typename TValue>
         TValue _convertStrValue(const fm::String strValue)
         {
