@@ -1,5 +1,7 @@
 require "lua/com/com"
 
+local defaultAmountValue = 50
+
 parameters = {
     -- specify a tag name. If set only events with this tag name will be affected by the staccato mod. 
     { name="forTag", default=ParameterValueNoTag },
@@ -7,7 +9,7 @@ parameters = {
     { name="amount",           default="50" }
 }
 
-function perform(events, params, timeinfo)
+function perform(events, params, timeinfo) 
     checkLegacyNamedParams(params, "forTag", "amount")
     local tag = params.forTag
     if tag == ParameterValueNoTag then
@@ -18,7 +20,7 @@ function perform(events, params, timeinfo)
     factor = factor / 100
     for i, event in pairs(events) do
         if tag == nil or contains(event.tags, tag) then
-            event.duration = event.duration * factor
+            event.duration = event.duration / factor
         end
     end
     return events

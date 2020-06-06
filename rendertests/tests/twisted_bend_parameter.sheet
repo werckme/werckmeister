@@ -7,13 +7,13 @@ using "./lua/voicings/simple.lua";
 -- to get a list of your available MIDI devices 
 -- and their port numbers, execute "sheetp --list"
 --      name              type   portnumber
-device: ~usePort=5 ~setName=MyDevice  ~isType=midi;
+device: _usePort=5 _setName=MyDevice  _isType=midi;
 
-instrumentDef: ~withName=piano ~onDevice=MyDevice ~ch=0 ~pc=1 ~cc=8;
-instrumentConf: ~for=piano 
-    ~set=volume ~to=100 
-    ~set=pan    ~to=0
-    ~set=voicingStrategy  ~use=simple ~Hallo=100 ~Welt=10000
+instrumentDef: _setName=piano _onDevice=MyDevice _ch=0 _pc=1 _cc=8;
+instrumentConf: _for=piano 
+    _set=volume _to=100 
+    _set=pan    _to=0
+    _set=voicingStrategy  _use=simple
 ;
 
 tempo: 130;
@@ -23,7 +23,7 @@ instrument: piano;
 {
     \ffff    
     r1 | r1
-    | c2 d | /modOnce: ~from=0 ~use=bend / e2~ e2 | r2 c4 d4 | e4 e g c | /modOnce: bend to 40/d#2 d#4 d | c2 bb4 a 
+    | c2 d | /modOnce: _from=0 _use=bend / e2~ e2 | r2 c4 d4 | e4 e g c | /modOnce: bend to 40/d#2 d#4 d | c2 bb4 a 
     | g2  g4 a | bb c' bb a | ab2 ab4 bb | c' ab,4 ab,4  bb,~ | <bb, c> ab ab bb | c' c' eb'8 d' c' d' 
     | b2 b, | r1 | r4 b4 b4 c' | d' d' d' d' | d' d' e'8 d' c' b | c'1 
 }

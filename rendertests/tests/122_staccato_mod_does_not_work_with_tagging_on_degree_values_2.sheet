@@ -12,7 +12,7 @@ name: x;
 instrument: piano; 
 {
     /mod: staccato _amount=100 _forTag=x/ 
-    /do: swing offset 10/ 
+    /do: swing _offset=10/ 
     
     \ff
     I,,4  III,,  V,,  "x"@III,,8  V,, |

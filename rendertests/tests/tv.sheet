@@ -48,9 +48,10 @@ instrumentConf: bell
     volume 90;   
 
 instrumentConf: rhythm
-    voicingStrategy voicelead _range=tenor
     pan 40
-    volume 100;   
+    volume 100
+    voicingStrategy voicelead _range=tenor
+;
 
 [
 type: template;
@@ -81,13 +82,13 @@ name: drums.fill1;
 instrument: drums; 
 {
     /signature: 4 4/
-    /do: swing grid 8 offset 5/
+    /do: swing _grid=8 _offset=5/
     \ffff
     "cy"8 "ho"  r "ho"  r "ho"  r "ho"   |
 }
 {
     /signature: 4 4/
-    /do: swing grid 8 offset 5/
+    /do: swing _grid=8 _offset=5/
     "bd"   "hto1"64->"hto1"4.       "mto1"8       !ffff"mto1"8. !fff"lto1" r16   |
 }
 ]
@@ -98,7 +99,7 @@ instrument: lead;
 {
     /signature: 2 4/
     /mod: staccato _amount=90/
-    /do: swing grid 8 offset 15/
+    /do: swing _grid=8 _offset=15/
     \fff
     r2 | r2 | r2 | r2  | d'8. &16 &32 & &8 r16 | c'16 f d b,   g c' &32 & b e | c8. f'32 c' e'16 e &32 b, g, a, |
     c'8 &16 &32 &  e' g g, e b c' r16 | b8. d'16t g' b  g16 e g | g'8 &&& | 

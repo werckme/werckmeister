@@ -1,14 +1,26 @@
 require "config"
 require "lua/com/com"
 
-ASolver = {}
+NoRangeSet = "__noRangeSet"
+NoImportantDegreesSet = "_noImportantDegreesSet"
 
+ASolverDefaultParameter = {
+    -- can be contrabass, bass, baritone, tenor, alto, mezzosoprano, soprano
+    { name="range",             default=NoRangeSet },
+    { name="importantDegrees",  default=NoImportantDegreesSet },
+    { name="importantDegree",   default=NoImportantDegreesSet },
+}
+ASolver = {}
 
 function ASolver:new(o)
     local o = o or {}
     setmetatable(o, self)
     self.__index = self
     return o
+end
+
+function ASolver:checkForLegacyParameters(params)
+    checkLegacyNamedParams(params, "range", "importantDegrees", "importantDegree")
 end
 
 -- returns the a degree def from the given degree def collection
@@ -51,14 +63,14 @@ function ASolver:_addImportantDegree(degrees, degreeVal, semitone)
     degrees[degreeVal] = {degrObj}
 end
 
--- set important degrees if defined in args
+-- set important degrees if defined in params
 -- more informations about important degrees:
 -- https://github.com/werckme/werckmeister/issues/123
-function ASolver:_setImportantDegreesIfExists(args, degrees)
-    local strDegree = args["importantDegree"]
-    if (strDegree == nil) then
-        strDegree = args["importantDegrees"]
-        if strDegree == nil then
+function ASolver:_setImportantDegreesIfExists(params, degrees)
+    local strDegree = params.importantDegree
+    if (strDegree == nil or strDegree == NoImportantDegreesSet) then
+        strDegree = params.importantDegrees
+        if strDegree == nil or strDegree == NoImportantDegreesSet then
             return
         end
     end
@@ -78,13 +90,12 @@ end
 --                 the chord definition eg.: { II= {degreeValue, octave} }
 --                 If the current chord has no information about a degree
 --                 the value is empty eg.: II= {} 
-function ASolver:solve(chord, degrees, args)
-   -- dump(degrees)
-    args = tokeyvalue(args)
-    self:_setImportantDegreesIfExists(args, degrees)
-    local result = self:_solveImpl(chord, degrees, args)
-    if args.range ~=nil then
-        self:_keepRange(result, args.range)
+function ASolver:solve(chord, degrees, params)
+    self:checkForLegacyParameters(params)
+    self:_setImportantDegreesIfExists(params, degrees)
+    local result = self:_solveImpl(chord, degrees, params)
+    if params.range ~= nil and params.range ~=NoRangeSet then
+        self:_keepRange(result, params.range)
     end
     return result
 end

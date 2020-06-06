@@ -7,7 +7,7 @@ function Simple:degreeToPitch(degreeDef, chord)
     return chord.rootPitch + degreeDef.degreeValue
 end
 
-function Simple:_solveImpl(chord, degrees, args)
+function Simple:_solveImpl(chord, degrees, parameters)
     local pitches = {}
     for degree, degreeDefs in pairs(degrees)
     do
