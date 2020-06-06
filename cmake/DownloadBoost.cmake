@@ -31,8 +31,8 @@ function(DownloadBOOST version download_dir)
     set(BOOST_DOWNLOAD_FILENAME "${BOOST_DISTRIBUTION}${FILE_EXT}")
     set(BOOST_DOWNLOAD_PATH "${BOOST_DOWNLOAD_DIR}/${BOOST_DOWNLOAD_FILENAME}")
     if(NOT EXISTS "${BOOST_DOWNLOAD_PATH}")
-      set(BOOST_DOWNLOAD_URL "https://dl.bintray.com/boostorg/release/${version}/source/${BOOST_DOWNLOAD_FILENAME}")
-
+      # boost bintray is temporarily down set(BOOST_DOWNLOAD_URL "https://dl.bintray.com/boostorg/release/${version}/source/${BOOST_DOWNLOAD_FILENAME}")
+      set(BOOST_DOWNLOAD_URL "https://sourceforge.net/projects/boost/files/boost/${version}/${BOOST_DOWNLOAD_FILENAME}")
       # Download the binary distribution and verify the hash.
       message(STATUS "Downloading ${BOOST_DOWNLOAD_URL}...")
       file(

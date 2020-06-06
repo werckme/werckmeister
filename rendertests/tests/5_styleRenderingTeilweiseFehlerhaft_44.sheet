@@ -1,7 +1,7 @@
 using "./chords/default.chords";
 
 tempo: 120;
-device: SC1 midi 1;
+device: SC1 midi 5;
 
 instrumentDef: piano      SC1 0 0  0;
 
