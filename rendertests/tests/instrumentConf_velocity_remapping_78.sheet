@@ -3,7 +3,7 @@ using "./voicings/guitar.lua";
 using "./voicings/voicelead.lua";
 using "./voicings/simple.lua";
 
-device: SC1 midi 1;
+device: SC1 midi 5;
 
 tempo: 100;
 instrumentDef: piano   SC1 3 0 0;
@@ -14,10 +14,13 @@ instrumentConf: piano
     volume 100
     pan 0 
     voicingStrategy voicelead _range=tenor
+;
+
+instrumentConf: piano 
+    remapVelocity
     _fff=100
     _p=10
 ;
-
 
 [
 instrument: piano;
