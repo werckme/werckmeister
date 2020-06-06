@@ -15,17 +15,19 @@ instrumentDef: bell       SC1 5 0 14;
 instrumentDef: drums      SC1 9 0 0;
 
 instrumentConf: bass
-    voicingStrategy simple range contrabass
     volume 100
+    voicingStrategy simple _range=contrabass
 ;   
 
 instrumentConf: piano
-    voicingStrategy simple range tenor
-    volume 80;  
+    volume 80
+    voicingStrategy simple _range=tenor
+;
 
 instrumentConf: lead 
     pan 50
-    volume 100;   
+    volume 100
+;   
 
 
 

@@ -1,12 +1,12 @@
 #ifndef SPIELANWEISUNG_VORSCHLAG_HPP
 #define SPIELANWEISUNG_VORSCHLAG_HPP
 
-#include <sheet/Event.h>
-#include <compiler/modification/AModification.h>
+#include <sheet/objects/Event.h>
+#include "ASpielanweisung.h"
 
 namespace sheet {
     namespace compiler {
-        class Vorschlag : public AModification {
+        class Vorschlag : public ASpielanweisung {
         public:
             typedef AModification Base;
             static const fm::Ticks defaultDuration;
@@ -14,6 +14,9 @@ namespace sheet {
             virtual ~Vorschlag() = default;
             virtual void perform(AContext *ctx, Events &events) override;
             Event vorschlagNote;
+            fm::IHasParameter::ParametersByNames parameters = {
+            };
+            virtual ParametersByNames & getParameters() { return this->parameters; }            
         };
     }
 }

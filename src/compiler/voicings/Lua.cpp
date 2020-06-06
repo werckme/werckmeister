@@ -1,7 +1,7 @@
 #include "Lua.h"
 #include <lua.hpp>
 #include <fm/lua/ALuaObject.h>
-#include <sheet/tools.h>
+#include <fm/tools.h>
 #include <compiler/error.hpp>
 #include <algorithm>
 #include <compiler/lua/luaTimeInfo.h>
@@ -26,7 +26,7 @@ namespace sheet {
                 auto chordElements = chordEvent->chordElements();
                 auto base = std::get<0>(chordElements);
                 auto options = std::get<1>(chordElements);
-                auto strBase = pitchToString(base);
+                auto strBase = fm::pitchToString(base);
                 int top = lua_gettop(L);
                 lua_pushstring(L, "strOptions");
                 lua_pushstring(L, options.c_str());
@@ -244,35 +244,28 @@ namespace sheet {
             const Degrees &degreeIntervals, 
             const TimeInfo& t)
         {
-            lua_getglobal(L, LUA_VOICING_STRATEGY_FENTRY);
-            luaChord::LuaChord luaChord(&def, &chord);
-            luaChord.push(L);
-            luaPitches::LuaPitches luaPitches(&def, &chord, &degreeIntervals);
-            luaPitches.push(L);
-            pushArgs(this->args_);
-            lua::LuaTimeInfo(t).push(L);
-            call(4, 1);
-            return popPitches(L);
-        }
-
-        void LuaVoicingStrategy::pushArgs(const Event::Args &args)
-        {
-            lua_createtable(L, 0, 0);
-            if (args.size() == 1) { // first arg is the script name
-                return;
-            }
-            auto top = lua_gettop(L);
-            auto it = args.begin() + 1;
-            for(; it < args.end(); ++it) {
-                lua_pushinteger(L, it - args.begin());
-                lua_pushstring(L, it->c_str());
-                lua_settable(L, top);
+            try {
+                lua_getglobal(L, LUA_VOICING_STRATEGY_FENTRY);
+                luaChord::LuaChord luaChord(&def, &chord);
+                luaChord.push(L);
+                luaPitches::LuaPitches luaPitches(&def, &chord, &degreeIntervals);
+                luaPitches.push(L);
+                pushParameters(L, ALuaWithParameter::parameters);
+                lua::LuaTimeInfo(t).push(L);
+                call(4, 1);
+                return popPitches(L);
+            } catch (const std::exception &ex) {
+                fm::StringStream ss;
+                ss << "failed to process lua script: '" << path() << "'" << std::endl;
+                ss << "failed to execute voicing function: '" << LUA_VOICING_STRATEGY_FENTRY << "'" << std::endl;
+                ss << ex.what();
+                FM_THROW(Exception, ss.str());
             }
         }
 
-        void LuaVoicingStrategy::setArguments(const Event::Args &args)
+        LuaVoicingStrategy::ParametersByNames & LuaVoicingStrategy::getParameters()
         {
-            this->args_ = args;
+            return fm::lua::ALuaWithParameter::getParameters(L);
         }
     }
 }

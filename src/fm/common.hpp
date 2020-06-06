@@ -14,6 +14,8 @@
 
 #define FM_THROW(ex, msg) throw ex((msg), __FILE__, __LINE__)
 
+#define DEPRECATED
+
 namespace fm {
 	typedef unsigned char Byte;
 	typedef char CharType;

@@ -3,6 +3,10 @@
 #include "spielanweisung/spielanweisungen.h"
 #include "spielanweisung/Vorschlag.h"
 #include "modification/AModification.h"
+#include <fm/werckmeister.hpp>
+#include <compiler/commands/ACommand.h>
+#include <compiler/commands/AUsingAnEvent.h>
+#include <compiler/warning.hpp>
 
 namespace sheet {
     namespace compiler {
@@ -50,7 +54,7 @@ namespace sheet {
 			bool renderEvent<Event::EOB>(SheetEventRenderer* renderer, const Event *ev)
 			{
                 auto ctx = renderer->context();
-				ctx->newBar(*ev);
+				ctx->newBar();
 				return true;
 			}
 
@@ -72,8 +76,7 @@ namespace sheet {
 			template<>
 			bool renderEvent<Event::Meta>(SheetEventRenderer* renderer, const Event *ev)
 			{
-                auto ctx = renderer->context();
-				ctx->setMeta(*ev);
+				renderer->handleMetaEvent(*ev);
 				return true;
 			}
 			//////////////////////////////////////////////////
@@ -125,11 +128,21 @@ namespace sheet {
 			auto meta = ctx_->voiceMetaData();
 			++(meta->eventCount);
 			try {
+				ctx_->warningHandler = std::bind(&SheetEventRenderer::onWarning, this, std::placeholders::_1, ev);
 				_addEvent(this, &ev);
+				ctx_->warningHandler = nullptr;
 			} catch(fm::Exception &ex) {
 				ex << ex_sheet_source_info(ev);
 				throw;
 			}
+		}
+
+		void SheetEventRenderer::onWarning(const fm::String &message, const Event &event)
+		{
+			Warning warning;
+			warning.message = message;
+			warning.sourceObject = event;
+			ctx_->warnings.emplace_back(warning);
 		}
 
 		void SheetEventRenderer::__renderEvent__(const Event &_ev)
@@ -137,10 +150,10 @@ namespace sheet {
 			Event ev = _ev;
 			auto meta = ctx_->voiceMetaData();
 			auto tmpExpression = meta->expression;
-			if (meta->singleExpression != fm::expression::Default) {
+			if (meta->expressionPlayedOnce != fm::expression::Default) {
 				tmpExpression = meta->expression;
-				meta->expression = meta->singleExpression;
-				meta->singleExpression = fm::expression::Default;
+				meta->expression = meta->expressionPlayedOnce;
+				meta->expressionPlayedOnce = fm::expression::Default;
 			}
 			ev.velocity = ctx_->velocity();
 			AModification::Events events = { ev };
@@ -193,6 +206,31 @@ namespace sheet {
             auto meta = ctx->voiceMetaData();
 			auto position = meta->position + static_cast<fm::Ticks>(pitchBendEvent.offset);
 			ctx->renderPitchbend(pitchBendEvent.pitchBendValue, position);
+		}
+
+		void SheetEventRenderer::handleMetaEvent(const Event &metaEvent) 
+		{
+			const auto &args = metaEvent.metaArgs;
+			const auto &commandName = metaEvent.stringValue;
+			try {
+				auto &wm = fm::getWerckmeister();
+				auto command = wm.solveOrDefault<ACommand>(commandName);
+				if (command) {
+					auto *usingAnEvent = dynamic_cast<AUsingAnEvent*>(command.get());
+					if (usingAnEvent) {
+						usingAnEvent->event(metaEvent);
+					}
+					command->setArguments(args);
+					command->execute(ctx_);
+					return;
+				}
+			} catch(const std::exception &ex) {
+				FM_THROW(Exception, "failed to process " + commandName
+									+"\n" + ex.what());
+			}	
+			catch(...) {
+				FM_THROW(Exception, "failed to process " + commandName);
+			}
 		}
     }
 }

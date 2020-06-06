@@ -25,8 +25,8 @@ namespace fm {
 		ConfigServer(const ConfigServer&&) = delete;
 		ConfigServer& operator=(const ConfigServer&&) = delete;
         ~ConfigServer();
-        DeviceConfig createDeviceConfig(const fm::String &name, std::vector<fm::String> &args);
-        void addDevice(const fm::String &name, const DeviceConfig &config);
+        DeviceConfig createMidiDeviceConfig(const fm::String &uname, const DeviceConfig::DeviceId &deviceId, int offsetMillis = 0);
+        void addDevice(const DeviceConfig &config);
         void clear();
         const DeviceConfig * getDevice(const fm::String &name) const;
         const Devices & getDevices() const { return devices; }

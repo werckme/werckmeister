@@ -2,7 +2,7 @@
 #include "compiler/context/AContext.h"
 #include <algorithm>
 #include <fm/literals.hpp>
-#include "sheet/tools.h"
+#include <fm/tools.h>
 
 namespace sheet {
     namespace compiler {
@@ -10,6 +10,7 @@ namespace sheet {
         void Bend::perform(AContext *ctx, Events &events)
         {
             using namespace fm;
+            prepareValues();
             if (events.empty()) {
                 return;
             }
@@ -38,13 +39,23 @@ namespace sheet {
             finalResetPitchBend.pitchBendValue = 0.5;
             finalResetPitchBend.offset = ev.duration + 1;
             events.push_back(finalResetPitchBend);
-            // swap result
         }
 
-        void Bend::setArguments(const Event::Args &args)
+        void Bend::prepareValues()
         {
-            value = getArgument<double>(args, 2) / 100.;
-            auto modestr = getArgument<fm::String>(args, 1);
+            if (parameters[argumentNames.Bend.BendTo].strValue() != FM_BEND_ALTERNAIVE_PARAM_VALUE_NOT_SET) {
+                value = parameters[argumentNames.Bend.BendTo].value<int>() / 100.;
+                mode = To;
+                return;
+            }
+            if (parameters[argumentNames.Bend.BendFrom].strValue() != FM_BEND_ALTERNAIVE_PARAM_VALUE_NOT_SET) {
+                value = parameters[argumentNames.Bend.BendFrom].value<int>() / 100.;
+                mode = From;
+                return;
+            }
+            
+            value = parameters[argumentNames.Bend.Value].value<int>() / 100.;
+            auto modestr = parameters[argumentNames.Bend.Mode].value<fm::String>();
             if (modestr == FM_STRING("from")) {
                 mode = From;
             } else {

@@ -1,5 +1,5 @@
 #include "preprocessor.h"
-#include <sheet/Track.h>
+#include <sheet/objects/Track.h>
 #include <compiler/metaData.h>
 #include "error.hpp"
 

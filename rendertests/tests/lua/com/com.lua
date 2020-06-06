@@ -1,11 +1,24 @@
 local _inspect = require "lua/com/inspect"
 
-local MidiSchluesselCOffset = 60;
+local MidiSchluesselCOffset = 60
+ParameterValueNoTag = '__noTagValue'
 
 function istable(t) return type(t) == 'table' end
 function isnumber(t) return type(t) == 'number' end
 function inspect(x) return print(_inspect(x)) end
 function dump(x) print(inspect(x)) end
+
+
+function checkLegacyNamedParams(params, ...)
+    local args = table.pack(...)
+    for k, v in pairs(params) do
+        if contains(args, v) then
+            local msg = "Error: legacy named parameter with the argument '" ..  v .. "'. "
+            msg = msg .. " Use this expression instead: _" .. v .. "=..." 
+            error(msg)
+        end
+    end
+end
 
 -- returns the minimum amount of semitones between the relative pitches x and y.
 -- e.g.: from c(0) to b(11) = -1
@@ -25,6 +38,7 @@ function relpitchdiff(x, y)
 end
 
 -- [a, 1, b, 2, c, 3] => {a=1, b=2, c=3}
+-- @deprecated use the native named parameter feature: _name=value
 function tokeyvalue(args)
     assert(#args % 2 == 0)
     local result = {}

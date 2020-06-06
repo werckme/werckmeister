@@ -2,12 +2,12 @@
 #define SHEET_SHEETDEF_H
 
 #include <fm/common.hpp>
-#include "Track.h"
-#include "Event.h"
+#include "objects/Track.h"
+#include "objects/Event.h"
 #include <vector>
 #include "DocumentUsing.h"
-#include "ASheetObject.hpp"
-#include "DocumentConfig.h"
+#include "objects/ASheetObject.h"
+#include "objects/DocumentConfig.h"
 
 namespace sheet {
 

@@ -1,7 +1,7 @@
 #include "Document.h"
 #include <algorithm>
 #include <boost/filesystem.hpp>
-#include <sheet/tools.h>
+#include <fm/tools.h>
 #include <compiler/metaCommands.h>
 #include <compiler/error.hpp>
 #include <functional>
@@ -47,11 +47,11 @@ namespace sheet {
 		compiler::Preprocessor preprocessor;
 		for(auto &track : this->sheetDef.tracks) {
 			try {
-				fm::String type = getFirstMetaValueBy(SHEET_META__TRACK_META_KEY_TYPE, track.trackConfigs);
+				fm::String type = fm::getFirstMetaArgumentWithKeyName(SHEET_META__TRACK_META_KEY_TYPE, track.trackConfigs).value;
 				if (type != SHEET_META__TRACK_META_VALUE_TYPE_SHEET_TEMPLATE) {
 					continue;
 				}
-				fm::String sheetTemplateName = getFirstMetaValueBy(SHEET_META__TRACK_META_KEY_NAME, track.trackConfigs);
+				fm::String sheetTemplateName = fm::getFirstMetaArgumentWithKeyName(SHEET_META__TRACK_META_KEY_NAME, track.trackConfigs).value;
 				if (sheetTemplateName.empty()) {
 					FM_THROW(compiler::Exception, "missing 'name' for sheetTemplate track");
 				}					

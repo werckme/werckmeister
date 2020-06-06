@@ -1,6 +1,6 @@
 #include "configServer.h"
 #include <fm/exception.hpp>
-#include <sheet/tools.h>
+#include <fm/tools.h>
 
 namespace fm {
     
@@ -10,9 +10,9 @@ namespace fm {
 		return Holder::Instance();
     }
     
-    void ConfigServer::addDevice(const fm::String &name, const DeviceConfig &config)
+    void ConfigServer::addDevice(const DeviceConfig &config)
     {
-        devices[name] = config;
+        devices[config.name] = config;
     }
     const DeviceConfig * ConfigServer::getDevice(const fm::String &name) const
     {
@@ -22,27 +22,13 @@ namespace fm {
         }
         return &(it->second);
     }
-    DeviceConfig ConfigServer::createDeviceConfig(const fm::String &name, std::vector<fm::String> &args) 
+    DeviceConfig ConfigServer::createMidiDeviceConfig(const fm::String &uname, const DeviceConfig::DeviceId &deviceId, int offsetMillis) 
     {
         DeviceConfig cf;
-        if (args.empty()) {
-            FM_THROW(Exception, "missing device type argument");
-        }
-        auto type = args.at(0);
-        if (type == FM_STRING("midi")) {
-            if (args.size() < 2) {
-                FM_THROW(Exception, "missing deviceid argument");
-            }
-            cf.type = DeviceConfig::Midi;
-            cf.deviceId = args.at(1);
-        }
-        auto offsetValue = sheet::getArgValueFor<int>(FM_STRING("offset"), args);
-        if (offsetValue.first) { // offset in ms
-            cf.offsetMillis = offsetValue.second;
-        }
-        if (cf.type == DeviceConfig::Undefinded) {
-            FM_THROW(Exception, "no config for " + name + ", " + type);
-        }
+        cf.name = uname;
+        cf.type = DeviceConfig::Midi;
+        cf.deviceId = deviceId;
+        cf.offsetMillis = offsetMillis;
         return cf;
     }
 

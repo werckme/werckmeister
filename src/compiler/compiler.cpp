@@ -1,17 +1,15 @@
 #include "compiler.h"
 #include "sheet/Document.h"
-#include "sheet/tools.h"
 #include "context/AContext.h"
-#include "sheet/Event.h"
+#include <sheet/objects/Event.h>
 #include <type_traits>
 #include <algorithm>
 #include <list>
 #include "sheetTemplateRenderer.h"
 #include "metaCommands.h"
 #include "error.hpp"
-#include <sheet/tools.h>
 #include <boost/exception/get_error_info.hpp>
-#include <sheet/tools.h>
+#include <fm/tools.h>
 #include <functional>
 #include "preprocessor.h"
 #include "sheetEventRenderer.h"
@@ -32,9 +30,14 @@ namespace sheet {
 			auto ctx = context();
 
 			try {
-				ctx->processMeta(document->sheetDef.documentConfigs, 
-					[](const auto &x) { return x.name; }, 
-					[](const auto &x) { return x.args; }
+				sheetEventRenderer()->handleMetaEvents(document->sheetDef.documentConfigs, 
+					[](const auto &x) { 
+						sheet::Event metaEvent;
+						metaEvent.type = sheet::Event::Meta;
+						metaEvent.stringValue = x.name;
+						metaEvent.metaArgs = x.args;
+						return metaEvent;
+					 }
 				);
 			} catch (fm::Exception &ex) {
 				ex << ex_sheet_document(document);
@@ -42,10 +45,8 @@ namespace sheet {
 			}
 
 			try {
-				ctx->metaEventHandler = std::bind(&Compiler::metaEventHandler, this, std::placeholders::_1);
 				renderChordTrack();
 				renderTracks();
-				ctx->metaEventHandler = AContext::MetaEventHandler();
 			} catch (fm::Exception &ex) {			
 				ex << ex_sheet_document(document);
 				throw;
@@ -54,28 +55,27 @@ namespace sheet {
 			}
 		}
 
-		bool Compiler::metaEventHandler(const Event &metaEvent)
-		{
-			return false;
-		}
-
 		void Compiler::renderTracks()
 		{
 			auto ctx = context();
-			ctx->capabilities.canSeek = false;
 			Preprocessor preprocessor;
 			auto renderer = sheetEventRenderer();
 			for (auto &track : document_->sheetDef.tracks)
 			{
-				fm::String type = getFirstMetaValueBy(SHEET_META__TRACK_META_KEY_TYPE, track.trackConfigs);
+				fm::String type = fm::getFirstMetaArgumentWithKeyName(SHEET_META__TRACK_META_KEY_TYPE, track.trackConfigs).value;
 				if (!type.empty()) { // do not render tracks with a specific type
 					continue;
 				}				
 				auto trackId = ctx->createTrack();
 				ctx->setTrack(trackId);
-				ctx->processMeta(track.trackConfigs, 
-					[](const auto &x) { return x.name; }, 
-					[](const auto &x) { return x.args; }
+				renderer->handleMetaEvents(track.trackConfigs, 
+					[](const auto &x) { 
+						sheet::Event metaEvent;
+						metaEvent.type = sheet::Event::Meta;
+						metaEvent.stringValue = x.name;
+						metaEvent.metaArgs = x.args;
+						return metaEvent;
+					}
 				);
 				preprocessor.process(track);
 				for (const auto &voice : track.voices)
@@ -108,7 +108,7 @@ namespace sheet {
 					sheetEventRenderer->addEvent(ev);
 				}
 			}
-			void preprocessSheetTrack(Track* sheetTrack, AContext *ctx) {
+			void preprocessSheetTrack(Track* sheetTrack, SheetEventRenderer *renderer, AContext *ctx) {
 				using namespace fm;
 				auto voice = sheetTrack->voices.begin(); 
 				auto it = voice->events.begin();
@@ -127,7 +127,7 @@ namespace sheet {
 				};
 				while (it != end) {
 					if (it->type == Event::Meta) {
-						ctx->setMeta(*it);
+						renderer->handleMetaEvent(*it);
 					}					
 					if (it->type == Event::EOB) {
 						processEob();
@@ -150,7 +150,7 @@ namespace sheet {
 			Track * getFirstSheetTrack(TContainer &c) {
 				auto sheetTrackIt = 
 					std::find_if(c.begin(), c.end(), [](const auto &x) {  
-						return getFirstMetaValueBy(SHEET_META__TRACK_META_KEY_TYPE, x.trackConfigs) == SHEET_META__TRACK_META_VALUE_TYPE_ACCOMP;
+						return fm::getFirstMetaArgumentWithKeyName(SHEET_META__TRACK_META_KEY_TYPE, x.trackConfigs).value == SHEET_META__TRACK_META_VALUE_TYPE_ACCOMP;
 					});
 				if (sheetTrackIt == c.end()) {
 					return nullptr;
@@ -163,12 +163,11 @@ namespace sheet {
 		void Compiler::renderChordTrack() 
 		{
 			auto ctx = context();
-			ctx->capabilities.canSeek = true;
 			Track * sheetTrack = getFirstSheetTrack(document_->sheetDef.tracks);
 			if (!sheetTrack || sheetTrack->voices.empty()) {
 				return;
 			}
-			preprocessSheetTrack(sheetTrack, ctx.get());
+			preprocessSheetTrack(sheetTrack, sheetEventRenderer().get(), ctx.get());
 			consumeChords(sheetTrack, sheetEventRenderer().get(), ctx.get());
 			SheetTemplateRenderer sheetTemplateRenderer(ctx.get(), sheetEventRenderer().get());
 			sheetTemplateRenderer.render(sheetTrack);

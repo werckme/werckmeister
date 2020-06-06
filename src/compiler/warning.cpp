@@ -1,14 +1,14 @@
 #include "warning.hpp"
 #include <sheet/Document.h>
 #include <sstream>
-#include <sheet/tools.h>
+#include <fm/tools.h>
 
 namespace sheet {
     std::string Warning::toString(std::shared_ptr<Document> document) const
     {
         std::stringstream ss;
         ss << "[WARNING] ";
-        documentMessage(ss, document, sourceObject.sourceId, sourceObject.sourcePositionBegin, message);
+        fm::documentMessage(ss, document, sourceObject.sourceId, sourceObject.sourcePositionBegin, message);
         return ss.str();
     }
 

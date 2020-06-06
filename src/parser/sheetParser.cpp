@@ -18,12 +18,20 @@
 #include <sstream>
 #include "parserSymbols.h"
 #include "parserPositionIt.h"
-#include "sheet/DocumentUsing.h"
-#include <sheet/tools.h>
+#include <sheet/DocumentUsing.h>
+#include <sheet/AliasPitchDef.h>
+#include <sheet/objects/Grouped.h>
+#include <fm/tools.h>
 
 BOOST_FUSION_ADAPT_STRUCT(
 	sheet::DocumentUsing,
 	(sheet::DocumentUsing::Usings, usings)
+)
+
+BOOST_FUSION_ADAPT_STRUCT(
+	sheet::Argument,
+	(fm::String, name)
+	(fm::String, value)
 )
 
 BOOST_FUSION_ADAPT_STRUCT(
@@ -39,7 +47,7 @@ BOOST_FUSION_ADAPT_STRUCT(
 )
 
 BOOST_FUSION_ADAPT_STRUCT(
-	sheet::AliasPitch,
+	sheet::AliasPitchDef,
 	(fm::String, alias)
 )
 
@@ -129,6 +137,17 @@ namespace sheet {
 			template <typename Iterator>
 			struct _SheetParser : qi::grammar<Iterator, SheetDef(), ascii::space_type>
 			{
+
+				void initArgumentParser() 
+				{
+					using qi::eps;
+					using qi::attr;
+					using qi::lexeme;
+					using ascii::char_;
+					argument_ = ((("_" >> +char_(ALLOWED_TAG_ARGUMENT) >> "=") | attr("")) >> meta_arg_value_) ;
+					expression_argument_ = attr("") >> expressionSymbols_;
+				}
+
 				template<class DocumentConfigRules>
 				void createDocumentConfigRules(DocumentConfigRules &documentConfig) const
 				{
@@ -141,7 +160,7 @@ namespace sheet {
 						>> attr(sourceId_)
 						>> +char_("a-zA-Z") 
 						>> ":" 
-						>> +(lexeme['"' > +(char_ - '"') > '"'] | lexeme[+char_(ALLOWED_META_ARGUMENT)])
+						>> +argument_
 						> ";";
 				}
 
@@ -157,7 +176,7 @@ namespace sheet {
 						>> attr(sourceId_)
 						>> +char_("a-zA-Z") 
 						>> ":" 
-						>> +(lexeme['"' > +(char_ - '"') > '"'] | lexeme[+char_(ALLOWED_META_ARGUMENT)])
+						>> +argument_
 						>> ";";
 				}
 
@@ -178,12 +197,17 @@ namespace sheet {
 					using qi::on_error;
 					using qi::fail;
 					quoted_string.name("quoted string");
-
+					meta_arg_value_.name("argument value");
+					
 					quoted_string %= lexeme['"' > +(char_ - '"') > '"'];
+					meta_arg_value_ = quoted_string | lexeme[+char_(ALLOWED_META_ARGUMENT)];
+
 					using_ %= "using" > quoted_string > ";";
 					usings_ %= *using_;
 					documentUsing_ %= usings_;
 				}
+
+
 
 				void initSheetParser()
 				{
@@ -227,7 +251,7 @@ namespace sheet {
 						>> current_pos_.current_pos
 						>> -(
 								lit("~")[at_c<EvType>(_val) = Event::TiedNote] 
-								| (lit("->")[at_c<EvType>(_val) = Event::Meta][at_c<EvStringValue>(_val) = FM_STRING("vorschlag")])
+								| (lit("->")[at_c<EvType>(_val) = Event::Meta][at_c<EvStringValue>(_val) = FM_STRING("addVorschlag")])
 							)
 					)
 					|
@@ -243,7 +267,7 @@ namespace sheet {
 						>> current_pos_.current_pos						
 						>> -(
 								lit("~")[at_c<EvType>(_val) = Event::TiedDegree] 
-								| (lit("->")[at_c<EvType>(_val) = Event::Meta][at_c<EvStringValue>(_val) = FM_STRING("vorschlag")])
+								| (lit("->")[at_c<EvType>(_val) = Event::Meta][at_c<EvStringValue>(_val) = FM_STRING("addVorschlag")])
 							)
 					)
 					|
@@ -260,7 +284,7 @@ namespace sheet {
 						>> current_pos_.current_pos						
 						>> -(
 								lit("~")[at_c<EvType>(_val) = Event::TiedRepeat] 
-								| (lit("->")[at_c<EvType>(_val) = Event::Meta][at_c<EvStringValue>(_val) = FM_STRING("vorschlag")])
+								| (lit("->")[at_c<EvType>(_val) = Event::Meta][at_c<EvStringValue>(_val) = FM_STRING("addVorschlag")])
 							)
 					)					
 					|
@@ -288,7 +312,7 @@ namespace sheet {
 						>> attr(PitchDef()) 
 						>> attr(Event::NoDuration) 
 						>> attr("expression") 
-						>> expressionSymbols_
+						>> expression_argument_
 					)
 					| 
 					( // EXPRESSION PERFORMED ONCE
@@ -299,8 +323,8 @@ namespace sheet {
 						>> attr(Event::Tags())
 						>> attr(PitchDef()) 
 						>> attr(Event::NoDuration) 
-						>> attr("singleExpression") 
-						>> expressionSymbols_
+						>> attr("expressionPlayedOnce") 
+						>> expression_argument_
 					)
 					| 
 					( // REST
@@ -334,7 +358,9 @@ namespace sheet {
 						>> attr(Event::Tags())
 						>> attr(PitchDef()) 
 						>> attr(Event::NoDuration) 
-						>> +char_("a-zA-Z") >> ":" >> +(lexeme['"' > +(char_ - '"') > '"'] | lexeme[+char_(ALLOWED_META_ARGUMENT)] ) >> "/"
+						>> +char_("a-zA-Z") >> ":" 
+						>> +(argument_)
+						>> "/"
 					)
 					;
 
@@ -360,8 +386,10 @@ namespace sheet {
 					using qi::on_error;
 					using qi::fail;
 					using qi::attr;
-					initSheetParser();
 					initDocumentUsingParser();
+					initArgumentParser();
+					initSheetParser();
+
 					current_pos_.setStartPos(begin);
 
 					documentConfig_.name("document config");
@@ -383,8 +411,10 @@ namespace sheet {
 				qi::rule<Iterator, SheetDef(), ascii::space_type> start;
 				qi::rule<Iterator, PitchDef(), ascii::space_type> pitch_;
 				qi::rule<Iterator, PitchDef(), ascii::space_type> pitchOrAlias_;
+				qi::rule<Iterator, Argument(), ascii::space_type> argument_;
+				qi::rule<Iterator, Argument(), ascii::space_type> expression_argument_;
 				qi::rule<Iterator, Track(), ascii::space_type> track;
-				qi::rule<Iterator, AliasPitch(), ascii::space_type> alias_;
+				qi::rule<Iterator, AliasPitchDef(), ascii::space_type> alias_;
 				qi::rule<Iterator, Voice(), ascii::space_type> voice;
 				qi::rule<Iterator, Voice::Events(), ascii::space_type> events;
 				qi::rule<Iterator, Event(), ascii::space_type> event_;
@@ -393,6 +423,7 @@ namespace sheet {
 				qi::rule<Iterator, TrackConfig(), ascii::space_type> trackConfig_;
 				qi::rule<Iterator, DocumentUsing(), ascii::space_type> documentUsing_;
 				qi::rule<Iterator, fm::String(), ascii::space_type> quoted_string;
+				qi::rule<Iterator, fm::String(), ascii::space_type> meta_arg_value_;
 				qi::rule<Iterator, fm::String(), ascii::space_type> using_;
 				qi::rule<Iterator, DocumentUsing::Usings, ascii::space_type> usings_;
 				CurrentPos<Iterator> current_pos_;
@@ -414,7 +445,7 @@ namespace sheet {
 		{
 			SheetDef result;
 			fm::String source(first, last);
-			removeComments(source.begin(), source.end());
+			fm::removeComments(source.begin(), source.end());
 			_parse(source, result, sourceId);
 			return result;
 		}

@@ -9,18 +9,13 @@
 #include "compiler/compiler.h"
 #include <compiler/context/MidiContext.h>
 #include <memory>
-#include "compiler/voicings/DirectVoicingStrategy.h"
-#include "compiler/voicings/SimpleGuitar.h"
-#include "compiler/voicingStrategies.h"
 #include "compiler/voicings/VoicingStrategy.h"
+#include "compiler/voicingStrategies.h"
 #include "compiler/voicings/Lua.h"
 #include "compiler/spielanweisung/Arpeggio.h"
 #include "compiler/spielanweisung/Vorschlag.h"
 #include "compiler/spielanweisung/spielanweisungen.h"
-#include "compiler/modification/modifications.h"
 #include "compiler/modification/LuaMod.h"
-#include "compiler/modification/Bend.h"
-#include <fm/exception.hpp>
 #include <sheet/Document.h>
 
 namespace fm {
@@ -168,33 +163,17 @@ namespace fm {
 				FM_THROW(Exception, ss.str());
 			}
 			result = anw;
+			result->name(name);
+			return result;
 		}
-		if (name == SHEET_VOICING_STRATEGY_SIMPLE_GUITAR) {
-			result = std::make_shared<sheet::SimpleGuitar>();
-		}
-		if (name == SHEET_VOICING_STRATEGY_AS_NOTATED) {
-			result = std::make_shared<sheet::DirectVoicingStrategy>();
-		}
-		if (!result) {
-			FM_THROW(Exception, "voicing strategy not found: " + name);
-		}
+		result = solve<sheet::VoicingStrategy>(name);
 		result->name(name);
 		return result;
 	}
 
 	sheet::compiler::AModificationPtr Werckmeister::getSpielanweisung(const fm::String &name)
 	{
-		if (name == SHEET_SPIELANWEISUNG_ARPEGGIO) {
-			return std::make_shared<sheet::compiler::Arpeggio>(); 
-		}
-		if (name == SHEET_SPIELANWEISUNG_VORSCHLAG) {
-			return std::make_shared<sheet::compiler::Vorschlag>(); 
-		}
-		auto mod = getModification(name);
-		if (mod) {
-			return mod;
-		}
-		FM_THROW(Exception, "spielanweisung not found: " + name);
+		return getModification(name);
 	}
 
 	sheet::compiler::AModificationPtr Werckmeister::getModification(const fm::String &name)
@@ -212,10 +191,9 @@ namespace fm {
 			}
 			return anw;
 		}
-		if (name == SHEET_MOD_BEND) {
-			return std::make_shared<sheet::compiler::Bend>();  
-		}
-		FM_THROW(Exception, "modification not found: " + name);
+		
+		auto result = solve<sheet::compiler::AModification>(name);
+		return result;
 	}
 
 	void Werckmeister::registerLuaScript(const Path &path)

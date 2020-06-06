@@ -7,9 +7,9 @@ name: rhythm.reggae.normal;
 instrument: rhythm;
 {
     \f
-    /do: swing grid 8 offset 40/
-    r4   /modOnce: staccato amount 100/ <I II III IV V VI VII>8  /modOnce: staccato amount 40/ <I II III IV V VI VII>8 
-    r4   /modOnce: staccato amount 100/ <I II III IV V VI VII>8  /modOnce: staccato amount 40/ <I II III IV V VI VII>8  
+    /do: swing _grid=8 _offset =40/
+    r4   /modOnce: staccato _amount=100/ <I II III IV V VI VII>8  /modOnce: staccato _amount=40/ <I II III IV V VI VII>8 
+    r4   /modOnce: staccato _amount=100/ <I II III IV V VI VII>8  /modOnce: staccato _amount=40/ <I II III IV V VI VII>8  
     |
 
 }

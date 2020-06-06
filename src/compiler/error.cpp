@@ -1,12 +1,13 @@
 #include "error.hpp"
 #include <boost/exception/get_error_info.hpp>
-#include <sheet/Event.h>
+#include <sheet/objects/Event.h>
 #include <sheet/Document.h>
 #include <memory>
-#include <sheet/tools.h>
+#include <fm/tools.h>
 #include <fm/werckmeister.hpp>
 #include <fm/common.hpp>
 #include <iostream>
+#include <sheet/objects/ParserSourceInfo.h>
 
 namespace sheet {
 	namespace compiler {
@@ -15,7 +16,7 @@ namespace sheet {
 			const std::shared_ptr<Document> document, 
 			const ASheetObjectWithSourceInfo* sourceInf) const
 		{
-			return documentMessage(ss, document, sourceInf->sourceId, sourceInf->sourcePositionBegin, msg_);
+			return fm::documentMessage(ss, document, sourceInf->sourceId, sourceInf->sourcePositionBegin, msg_);
 		}
 
 		const ASheetObjectWithSourceInfo * Exception::getSourceInfo() const
@@ -45,8 +46,8 @@ namespace sheet {
 				return ss.str();
 			}
 			if (sourceFile) {
-				documentMessageWhere(ss, *sourceFile) << std::endl;
-				documentMessageWhat(ss, msg_) << std::endl;
+				fm::documentMessageWhere(ss, *sourceFile) << std::endl;
+				fm::documentMessageWhat(ss, msg_) << std::endl;
 				return ss.str();
 			}
 			return Base::toString();
@@ -61,7 +62,7 @@ namespace sheet {
 			{
 				std::string line;
 				int linePos = 0;
-				std::tie(line, linePos) = getLineAndPosition<std::string>(source, errorPos, false);
+				std::tie(line, linePos) = fm::getLineAndPosition<std::string>(source, errorPos, false);
 				auto sourceInfo = ParserSourceInfo();
 				sourceInfo.sourceId = sourceId;
 				sourceInfo.sourcePositionBegin = errorPos;

@@ -30,17 +30,14 @@ namespace sheet {
 			virtual void renderPitchbend(double value, fm::Ticks absolutePosition) override;
 			virtual void startEvent(const PitchDef &pitch, fm::Ticks absolutePosition, double velocity) override;
 			virtual void stopEvent(const PitchDef &pitch, fm::Ticks absolutePosition) override;
-			virtual void metaSetChannel(int channel);
-			virtual void metaSoundSelect(int cc, int pc);
-			virtual void metaInstrument(const fm::String &uname, int channel, int cc, int pc);
-			virtual void metaInstrument(const fm::String &uname, const fm::String &deviceName, int channel, int cc, int pc);
-			virtual void metaSetInstrumentConfig(const fm::String &uname, const Event::Args &args);
-			virtual void metaSetInstrument(const fm::String &uname) override;
-			virtual void metaSetTempo(double bpm) override;
-			virtual void processMeta(const fm::String &command, const std::vector<fm::String> &args) override;
-			virtual void metaSetVolume(int volume) override;
-			virtual void metaSetPan(int val) override;
-			virtual void metaSetSignature(int upper, int lower) override;
+			virtual void selectMidiSound(int cc, int pc);
+			virtual void setMidiInstrument(const fm::String &uname, int channel, int cc, int pc);
+			virtual void setMidiInstrument(const fm::String &uname, const fm::String &deviceName, int channel, int cc, int pc);
+			virtual void setInstrument(const fm::String &uname) override;
+			virtual void setTempo(double bpm) override;
+			virtual void setVolume(int volume) override;
+			virtual void setPan(int val) override;
+			virtual void setSignature(int upper, int lower) override;
 			/**
 			 * sends a custom meta event containing a device name
 			 */

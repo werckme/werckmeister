@@ -2,11 +2,11 @@
 #define SHEET_DOCUMENT_HPP
 
 #include <fm/common.hpp>
-#include "ChordDef.h"
+#include "objects/ChordDef.h"
 #include "SheetDef.h"
 #include "Pitchmap.h"
 #include <unordered_map>
-#include "sheet/SheetTemplateDefServer.h"
+#include <fm/SheetTemplateDefServer.h>
 #include <memory>
 #include <boost/bimap.hpp>
 #include <memory>

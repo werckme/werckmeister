@@ -1,3 +1,4 @@
+#include <DiConfig.h>
 #include <fm/werckmeister.hpp>
 #include <boost/program_options.hpp>
 #include <boost/filesystem.hpp>
@@ -26,7 +27,7 @@
 #include "fmapp/json.hpp"
 #include "fmapp/MidiAndTimeline.hpp"
 #include <set>
-#include <sheet/tools.h>
+#include <fm/tools.h>
 #include <time.h>
 
 

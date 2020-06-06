@@ -1,7 +1,7 @@
 #include "Arpeggio.h"
 #include "compiler/context/AContext.h"
 #include <algorithm>
-#include "sheet/tools.h"
+#include <fm/tools.h>
 
 namespace sheet {
     namespace compiler {
@@ -40,19 +40,6 @@ namespace sheet {
 			}
 			events.swap(result);
         }
-
-		void Arpeggio::setArguments(const Event::Args &args)
-		{
-			if (args.size() > 1) {
-				auto directionStr = getArgument<fm::String>(args, 1);
-				if (directionStr == FM_STRING("down")) {
-					direction = Down;
-				} else {
-					direction = Up;
-				}
-
-			}
-		}
 
     }
 }

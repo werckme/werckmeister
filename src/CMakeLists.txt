@@ -5,9 +5,12 @@ SET (SRC_FETZER_LIB
     fm/midi.cpp
     fm/common.cpp
     fm/exception.cpp
+    fm/AConvertsArgumentsToParameter.cpp
     fm/config/configServer.cpp
     fm/lua/ALuaObject.cpp
     fm/lua/ALuaScript.cpp
+    fm/lua/ALuaWithParameter.cpp
+    fm/tools.cpp
     compiler/compiler.cpp
     parser/chordDefParser.cpp
     parser/sheetParser.cpp
@@ -30,11 +33,41 @@ SET (SRC_FETZER_LIB
     compiler/sheetTemplateRenderer.cpp
     compiler/error.cpp
     compiler/warning.cpp
+    compiler/argumentNames.cpp
     compiler/lua/luaTimeInfo.cpp
-    sheet/Event.cpp
+    sheet/objects/Event.cpp
+    sheet/objects/ChordDef.cpp
     sheet/Document.cpp
-    sheet/ChordDef.cpp
-    sheet/tools.cpp
+    compiler/commands/ACommand.cpp
+    compiler/commands/ACanSpecifyInstrument.cpp
+    compiler/commands/DefineMidiInstrument.cpp
+    compiler/commands/SetVolume.cpp
+    compiler/commands/SetPan.cpp
+    compiler/commands/SetTrackType.cpp
+    compiler/commands/SetTrackName.cpp
+    compiler/commands/AddVorschlag.cpp
+    compiler/commands/SetTemplatePosition.cpp
+    compiler/commands/SetTemplate.cpp
+    compiler/commands/SetExpression.cpp
+    compiler/commands/SetExpressionPlayedOnce.cpp
+    compiler/commands/SetSignature.cpp
+    compiler/commands/SetTempo.cpp
+    compiler/commands/SetVoicingStrategy.cpp
+    compiler/commands/SetSpielanweisung.cpp
+    compiler/commands/SetSpielanweisung.cpp
+    compiler/commands/SetSpielanweisungPlayedOnce.cpp
+    compiler/commands/AddMod.cpp
+    compiler/commands/AddModPlayedOnce.cpp
+    compiler/commands/SetDevice.cpp
+    compiler/commands/SetInstrument.cpp
+    compiler/commands/SelectMidiSound.cpp
+    compiler/commands/AddInstrumentConfig.cpp
+    compiler/commands/InstrumentConfigSetPan.cpp
+    compiler/commands/InstrumentConfigAddMod.cpp
+    compiler/commands/InstrumentConfigSetVoicingStrategy.cpp
+    compiler/commands/InstrumentConfigSetVolume.cpp    
+    compiler/commands/InstrumentConfigVelocityRemap.cpp    
+    compiler/commands/AddDevice.cpp    
 )
 
 add_definitions( -DGIT_VERSION="${GIT_VERSION}" )

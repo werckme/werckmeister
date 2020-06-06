@@ -1,6 +1,6 @@
 #include "sheetTemplateRenderer.h"
 #include "error.hpp"
-#include <sheet/tools.h>
+#include <fm/tools.h>
 #include <iostream>
 #include <boost/exception/get_error_info.hpp>
 #include "sheetEventRenderer.h"
@@ -14,8 +14,8 @@ namespace sheet {
     namespace compiler {
 
 		SheetTemplateRenderer::SheetTemplateRenderer(AContext* ctx, SheetEventRenderer *renderer) : 
-			ctx_(ctx) 
-			, sheetEventRenderer(renderer)
+			  sheetEventRenderer(renderer)
+			, ctx_(ctx) 
 		{
 		}
 
@@ -48,9 +48,14 @@ namespace sheet {
 			ctx_->setTarget(trackId, voiceId);
 			if (trackIsNew) {
 				try {
-					ctx_->processMeta(track.trackConfigs, 
-						[](const auto &x) { return x.name; }, 
-						[](const auto &x) { return x.args; }
+					sheetEventRenderer->handleMetaEvents(track.trackConfigs, 
+						[](const auto &x) { 
+							sheet::Event metaEvent;
+							metaEvent.type = sheet::Event::Meta;
+							metaEvent.stringValue = x.name;
+							metaEvent.metaArgs = x.args;
+							return metaEvent;
+						}
 					);
 				} catch (fm::Exception &ex) {
 					throw;
@@ -110,7 +115,7 @@ namespace sheet {
 				auto ctx = sheetTemplateRenderer.context();
 				AContext::SheetTemplates templates;
 				for (size_t idx=0; idx < metaEvent.metaArgs.size(); ++idx) {
-					auto sheetTemplateName = getArgument<fm::String>(metaEvent, idx);
+					auto sheetTemplateName =fm::getArgumentValue<fm::String>(metaEvent, idx);
 					auto sheetTemplate = ctx->sheetTemplateDefServer()->getSheetTemplate(sheetTemplateName);
 					if (sheetTemplate.empty()) {
 						FM_THROW(Exception, "sheetTemplate not found: " + sheetTemplateName);
@@ -129,6 +134,8 @@ namespace sheet {
 				auto tmpContext = wm.createTempContext();
 				tmpContext->masterTempo(ctx->masterTempo());
 				tmpContext->setChordTrackTarget();
+				SheetEventRenderer tmpEventRenderer(tmpContext.get());
+
 				auto &sheetEvents = sheetTrack->voices.begin()->events;
 				for (auto &ev : sheetEvents) {
 					try {
@@ -148,7 +155,7 @@ namespace sheet {
 							auto &currentTemplateAndChords = templatesAndItsChords.back();
 							currentTemplateAndChords.chords.push_back(&ev);
 							if (ev.type == Event::Meta) {
-								tmpContext->setMeta(ev);
+								tmpEventRenderer.handleMetaEvent(ev);
 								if (isTempoEvent) {
 									templatesAndItsChords.emplace_back(TemplatesAndItsChords());
 									auto &newTemplateAndChords = templatesAndItsChords.back();
@@ -207,10 +214,10 @@ namespace sheet {
 						FM_THROW(Exception, fm::String("no args for: ") + SHEET_META__SHEET_TEMPLATE_POSITION);
 					}
 					auto arg = args.front();
-					if (arg == SHEET_META__SHEET_TEMPLATE_POSITION_CMD_RESET) {
+					if (arg.value == SHEET_META__SHEET_TEMPLATE_POSITION_CMD_RESET) {
 						eventServer.seek(0);
 					} else {
-						FM_THROW(Exception, fm::String("invalid arg for: ") + SHEET_META__SHEET_TEMPLATE_POSITION + ": " + arg);
+						FM_THROW(Exception, fm::String("invalid arg for: ") + SHEET_META__SHEET_TEMPLATE_POSITION + ": " + arg.value);
 					}
 				} catch (fm::Exception &ex) {
 					ex << ex_sheet_source_info(metaEvent);
@@ -310,7 +317,7 @@ namespace sheet {
 							ctx_->voiceMetaData()->barPosition = 0;
 
 							DEBUGX(
-								auto trackname = getMetaValuesBy("name", track->trackConfigs).front();
+								auto trackname = getMetaArgumentsWithKeyName("name", track->trackConfigs).front();
 								auto position = ctx_->voiceMetaData()->position;
 								auto tempofac = ctx_->voiceMetaData()->tempoFactor;
 								std::cout << trackname << " ; " << position << " ; " << tempofac << std::endl;
@@ -321,8 +328,9 @@ namespace sheet {
 							for (const auto &chord : templateAndChords.chords)
 							{
 								if (chord->type == Event::EOB) {
+									const auto *eobEvent = chord;
 									__renderOneBar(ctx_, sheetEventRenderer, eventServer, chordsPerBar);
-									ctx_->newBar(*chord);
+									sheetEventRenderer->addEvent(*eobEvent);
 									chordsPerBar.clear();
 									continue;
 								}

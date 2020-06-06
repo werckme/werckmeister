@@ -24,7 +24,7 @@ type: template;
 name: bossanova.normal;
 instrument: guitar; 
 {
-    /do: guitarStroke value 32/
+    /do: guitarStroke _value=32/
     /voicingStrategy: guitar/
     \f
     <I II III IV V VI VII>4 <I II III IV V VI VII>4 r8 <I II III IV V VI VII>8 r8 <I II III IV V VI VII>8  |
@@ -39,7 +39,7 @@ type: template;
 name: bossanova.normal;
 instrument: piano; 
 {
-   -- /voicingStrategy: simple range tenor/
+   -- /voicingStrategy: simple _range=tenor/
     <VII, VII>4 <III, V,>8 <V, V>8 r8 <III, V,>8 r8 <V, V> | r8 <III, V,>8 r8 <V, V> r8 <III, V,> r8 <VII, VII> |
 }    
 ] 

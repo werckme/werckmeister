@@ -1,15 +1,13 @@
 #ifndef COMPILER_CONTEXT_H
 #define COMPILER_CONTEXT_H
 
-#include <sheet/Event.h>
 #include <memory>
 #include <unordered_map>
 #include <fm/units.hpp>
 #include <fm/literals.hpp>
 #include <map>
 #include <unordered_map>
-#include <sheet/SheetTemplateDefServer.h>
-#include <compiler/voicings/VoicingStrategy.h>
+#include <fm/SheetTemplateDefServer.h>
 #include <fm/common.hpp>
 #include <compiler/metaCommands.h>
 #include <list>
@@ -23,10 +21,6 @@ namespace sheet {
     namespace compiler {
         class AContext {
         public:
-			struct Capabilities {
-				bool canSeek = false;
-			};
-
 			AContext();
 			static const double PitchbendMiddle;
 			enum { INVALID_TRACK_ID = -1, INVALID_VOICE_ID = -1, MAX_VOLUME = 100, MAX_PAN = 100 };
@@ -38,12 +32,11 @@ namespace sheet {
 			typedef Id TrackId;
 			typedef Id VoiceId;
 			typedef ISheetTemplateDefServer* ISheetTemplateDefServerPtr;
-			typedef std::unordered_map<fm::String, fm::Expression> ExpressionMap;
 			typedef std::shared_ptr<VoiceMetaData> VoiceMetaDataPtr;
 			typedef std::shared_ptr<TrackMetaData> TrackMetaDataPtr;
 			typedef std::unordered_map<VoiceId, VoiceMetaDataPtr> VoiceMetaDataMap;
 			typedef std::unordered_map<TrackId, TrackMetaDataPtr> TrackMetaDataMap;
-			typedef std::function<bool(const Event&)> MetaEventHandler;
+			typedef std::function<void(fm::String)> WarningHandler;
 			virtual void setTrack(TrackId trackId);
 			virtual void setVoice(VoiceId voice);
 			TrackId track() const;
@@ -106,52 +99,27 @@ namespace sheet {
 				return std::dynamic_pointer_cast<TTrackMeta>(trackMetaData());
 			}					
 			virtual void throwContextException(const std::string &msg);
-			virtual void warn(const std::string &msg, const Event *event = nullptr);
+			virtual void warn(const std::string &msg);
+			WarningHandler warningHandler;
 			ISheetTemplateDefServerPtr sheetTemplateDefServer() const;
 			void sheetTemplateDefServer(ISheetTemplateDefServerPtr server);
 			typedef std::vector<ISheetTemplateDefServer::SheetTemplate> SheetTemplates;
 			virtual const SheetTemplates & currentSheetTemplates();
 			virtual void currentSheetTemplate(const SheetTemplates &sheetTemplate);
 			virtual VoicingStrategyPtr currentVoicingStrategy();
-			virtual fm::Expression getExpression(const fm::String &str) const;
 			virtual AModificationPtr spielanweisung();
 			virtual AInstrumentDef * getInstrumentDef(const fm::String &uname) = 0;
 			virtual AInstrumentDef * currentInstrumentDef() = 0;
 			virtual fm::Ticks currentPosition() const;
 			virtual fm::Ticks maxPosition() const;
 			TimeInfo getTimeInfo() const;
-			/////// meta commands
-			virtual void setMeta(const Event &metaEvent);
-			/**
-			 * @throw if command not handled
-			 */
-			virtual void processMeta(const fm::String &command, const std::vector<fm::String> &args);
-			
-			/**
-			 * processed a cointainer of meta commands
-			 * @arg the container
-			 * @arg a function which returns the command of an container value_type object
-			 * @arg a function which returns the args of an container value_type object
-			 */
-			template<class TContainer>
-			void processMeta(const TContainer &container, 
-							std::function<fm::String(const typename TContainer::value_type&)> fcommand, 
-							std::function<std::vector<fm::String>(const typename TContainer::value_type&)> fargs);
-			virtual void metaSetInstrument(const fm::String &uname) {}
-			virtual void metaSetSheetTemplate(const Event::Args &args);
-			virtual void metaSetExpression(const fm::String &value);
-			virtual void metaSetSingleExpression(const fm::String &value);
-			virtual void metaSetTempo(double bpm) {}
-			virtual void metaSetVoicingStrategy(const fm::String &name, const Event::Args &args);
-			virtual void metaSetSpielanweisung(const fm::String &name, const Event::Args &args);
-			virtual void metaSetSpielanweisungOnce(const fm::String &name, const Event::Args &args);
-			virtual void metaSetModification(const fm::String &name, const Event::Args &args);
-			virtual void metaSetModificationOnce(const fm::String &name, const Event::Args &args);
-			virtual void metaSetSignature(int upper, int lower);
-			virtual void metaAddDevice(const fm::String name, const Event::Args &args);
-			virtual void metaAddVorschlag(const Event &ev);
-			virtual void metaSetVolume(int volume);
-			virtual void metaSetPan(int val);
+			virtual void setInstrument(const fm::String &uname) {}
+			virtual void setExpression(fm::Expression value);
+			virtual void setExpressionPlayedOnce(fm::Expression expr);
+			virtual void setTempo(double bpm) {}
+			virtual void setSignature(int upper, int lower);
+			virtual void setVolume(int volume);
+			virtual void setPan(int val);
 			/////// actual context stuff
 			virtual void renderPitch(const PitchDef &pitch, fm::Ticks duration, double velocity, bool tying);
 			virtual void renderPitch(const PitchDef &pitch, fm::Ticks absolutePosition, double velocity, fm::Ticks duration) = 0;
@@ -165,7 +133,7 @@ namespace sheet {
 			 * if duration == 0 the last event duration will be used
 			 */ 
 			virtual void seek(fm::Ticks duration);
-			virtual void newBar(const Event &newBarEvent);
+			virtual void newBar();
 			virtual void rest(fm::Ticks duration);
 			virtual fm::Ticks barPos() const;
 			/**
@@ -174,13 +142,6 @@ namespace sheet {
 			virtual double masterTempo() const { return masterTempo_; }
 			virtual void masterTempo(double val) { this->masterTempo_ = val; }			
 			Warnings warnings;
-			/**
-			 * MetaEventHandler: bool (Event& metaEvent)
-			 * if a MetaEventHandler returns true, a meta event will be marked as processed,
-			 * if false the event will be marked as not processed.
-			 */
-			MetaEventHandler metaEventHandler;
-			Capabilities capabilities;
             /**
              * @return the current velocity value between 0..1
              */
@@ -195,7 +156,6 @@ namespace sheet {
 			virtual VoiceMetaDataPtr createVoiceMetaData() = 0;
 			virtual TrackMetaDataPtr createTrackMetaData() = 0;
 			virtual TrackId createMasterTrack();
-			ExpressionMap expressionMap_;
 		private:
 			double masterTempo_ = fm::DefaultTempo;			
 			VoicingStrategyPtr defaultVoiceStrategy_;
@@ -208,26 +168,6 @@ namespace sheet {
 			TrackMetaDataMap trackMetaDataMap_;
 			ISheetTemplateDefServerPtr sheetTemplateDefServer_ = nullptr;
         };
-
-		///////////////////////////////////////////////////////////////////////
-		template<class TContainer>
-		void AContext::processMeta(const TContainer &container, 
-						std::function<fm::String(const typename TContainer::value_type&)> fcommand, 
-						std::function<std::vector<fm::String>(const typename TContainer::value_type&)> fargs)
-		{
-			int idx = 0;
-			for(const auto &x : container) {
-				fm::String command = fcommand(x);
-				std::vector<fm::String> args = fargs(x);
-				try {
-					processMeta(command, args);
-					idx++;
-				} catch(fm::Exception &ex) {
-					ex << ex_sheet_source_info(x);
-					throw;
-				}
-			}
-		}
     }
 }
 

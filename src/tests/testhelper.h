@@ -2,7 +2,8 @@
 #ifndef SHEET_TEST_HELPER_H
 #define SHEET_TEST_HELPER_H
 
-#include <sheet/Event.h>
+#include <sheet/objects/Event.h>
+#include <sheet/Argument.h>
 
 bool checkNote(const sheet::Event &ev,
     sheet::Event::Type type,
@@ -24,5 +25,9 @@ bool checkNote(const sheet::Event &ev,
 bool checkChord(const sheet::Event &ev, fm::String chordName);
 
 bool checkMetaEvent(const sheet::Event &ev, const fm::String &command, const sheet::Event::Args &args);
+
+sheet::Argument makeArg(fm::String value);
+sheet::Argument makeArg(fm::String name, fm::String value);
+
 
 #endif

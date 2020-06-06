@@ -3,7 +3,7 @@ type: template;
 name: bass.blues.normal;    
 instrument: bass;
 {
-    /do: swing grid 8 offset 60/
+    /do: swing _grid=8 _offset =60/
     I,,,8 &  I,,&  VII,,,&  V,,,&  |
 }
 ]

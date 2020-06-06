@@ -5,7 +5,7 @@
 #include <fm/literals.hpp>
 #include <fm/common.hpp>
 #include <boost/spirit/include/qi.hpp>
-#include "sheet/Event.h"
+#include <sheet/objects/Event.h>
 
 namespace sheet {
 	namespace compiler {

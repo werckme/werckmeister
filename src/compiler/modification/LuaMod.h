@@ -5,12 +5,17 @@
 #include <fm/lua/ALuaScript.h>
 #include <fm/common.hpp>
 #include <forward.hpp>
+#include <fm/lua/ALuaWithParameter.h>
 
 #define LUA_MODIFICATION_FENTRY "perform"
 
 namespace sheet {
     namespace compiler {
-        class LuaModification : public AModification, public lua::ALuaScript {
+        class LuaModification : 
+            public AModification, 
+            public lua::ALuaScript,
+            public fm::lua::ALuaWithParameter
+        {
         public:
             typedef VoicingStrategy Base;
             typedef lua::ALuaScript LuaBase;
@@ -18,10 +23,9 @@ namespace sheet {
             virtual ~LuaModification() = default;
             virtual bool canExecute() const override;
             virtual void assertCanExecute() const override;
-            virtual void setArguments(const Event::Args &args) override;
             virtual void perform(AContext *ctx, Events &events) override;
+            virtual ParametersByNames & getParameters() override;
         protected:
-            void pushArgs(const Event::Args &args);
             void pushEvents(AContext *ctx, const Events &events);
             Events popEvents();
             void popNoteEvent(Event &event);

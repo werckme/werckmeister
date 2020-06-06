@@ -10,9 +10,11 @@ namespace sheet {
             Arpeggio() = default;
             virtual ~Arpeggio() = default;
             virtual void perform(AContext *ctx, Events &events) override;
-            virtual void setArguments(const Event::Args &args) override;
             enum Direction { Up, Down };
             Direction direction = Up;
+            fm::IHasParameter::ParametersByNames parameters = {
+            };
+            virtual ParametersByNames & getParameters() { return this->parameters; }            
         };
     }
 }

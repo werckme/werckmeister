@@ -1,0 +1,52 @@
+using "./chords/default.chords";
+using "./pitchmaps/defaultMidiDrumMap.pitchmap";
+using "./templates/ennio.template";
+using "./lua/voicings/simple.lua";
+
+-- setup your midi device:
+-- to get a list of your available MIDI devices 
+-- and their port numbers, execute "sheetp --list"
+--      name              type   portnumber
+device: _usePort=5 _setName=MyDevice  _isType=midi;
+
+instrumentDef: _setName=piano _onDevice=MyDevice _ch=0 _pc=1 _cc=8;
+instrumentConf: _for=piano 
+    _set=volume _to=100 
+    _set=pan    _to=0
+    _set=voicingStrategy  _use=simple
+;
+
+tempo: 130;
+
+[
+instrument: piano;
+{
+    \ffff    
+    r1 | r1
+    | c2 d | /modOnce: _from=0 _use=bend / e2~ e2 | r2 c4 d4 | e4 e g c | /modOnce: bend to 40/d#2 d#4 d | c2 bb4 a 
+    | g2  g4 a | bb c' bb a | ab2 ab4 bb | c' ab,4 ab,4  bb,~ | <bb, c> ab ab bb | c' c' eb'8 d' c' d' 
+    | b2 b, | r1 | r4 b4 b4 c' | d' d' d' d' | d' d' e'8 d' c' b | c'1 
+}
+]
+
+[
+type: template;
+name: myTemplate;
+instrument: piano;
+{
+    --/voicingStrategy: ~use=simpleGuitar ~range=higherRange/
+    \f
+    <I II III VI V VI VII>1
+}
+]
+
+[
+type: accomp;
+{
+    /template: myTemplate/
+
+    Cmaj7 | Cmaj7 | Cmaj7 | Cmaj7 | Cmaj7 | Cmaj7 | Ebmaj7 | Ebmaj7 | 
+    Ebmaj7 | Ebmaj7 | Abmaj7 | Abmaj7 | Abmaj7 | Abmaj7 | G7 
+    | G7 | G7 | G7 | G7 | C | C | Cmin | Cmin | 
+}
+]

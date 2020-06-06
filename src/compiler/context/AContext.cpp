@@ -5,12 +5,11 @@
 #include <fm/common.hpp>
 #include <compiler/spielanweisung/ASpielanweisung.h>
 #include <compiler/spielanweisung/spielanweisungen.h>
-#include <compiler/spielanweisung/Vorschlag.h>
 #include <compiler/modification/AModification.h>
 #include <fm/literals.hpp>
 #include <fm/config/configServer.h>
-#include <sheet/Track.h>
-#include <sheet/tools.h>
+#include <sheet/objects/Track.h>
+#include <fm/tools.h>
 #include <sstream>
 
 namespace sheet {
@@ -20,19 +19,7 @@ namespace sheet {
 		const double AContext::PitchbendMiddle = 0.5;
 		const Ticks AContext::TickTolerance = 0.5;
 		
-		AContext::AContext() 
-			: expressionMap_({
-				{FM_STRING("ppppp"), fm::expression::PPPPP},
-				{ FM_STRING("pppp"), fm::expression::PPPP },
-				{ FM_STRING("ppp"), fm::expression::PPP },
-				{ FM_STRING("pp"), fm::expression::PP },
-				{ FM_STRING("p"), fm::expression::P },
-				{ FM_STRING("f"), fm::expression::F },
-				{ FM_STRING("ff"), fm::expression::FF },
-				{ FM_STRING("fff"), fm::expression::FFF },
-				{ FM_STRING("ffff"), fm::expression::FFFF },
-				{ FM_STRING("fffff"), fm::expression::FFFFF }
-			})
+		AContext::AContext()
 		{
 		}
 
@@ -51,15 +38,6 @@ namespace sheet {
 				return tmp;
 			}
 			return meta->spielanweisung;
-		}
-
-		fm::Expression AContext::getExpression(const fm::String &str) const
-		{
-			auto it = expressionMap_.find(str);
-			if (it == expressionMap_.end()) {
-				return fm::expression::Default;
-			}
-			return it->second;
 		}
 
 		AContext::ISheetTemplateDefServerPtr AContext::sheetTemplateDefServer() const
@@ -235,17 +213,14 @@ namespace sheet {
 			meta->barPosition += duration;
 		}
 
-		void AContext::warn(const std::string &msg, const Event *event)
+		void AContext::warn(const std::string &msg)
 		{
-			Warning warning;
-			warning.message = msg;
-			if (!!event) {
-				warning.sourceObject = *event;
+			if (warningHandler) {
+				warningHandler(msg);
 			}
-			warnings.emplace_back(warning);
 		}
 
-		void AContext::newBar(const Event &newBarEvent)
+		void AContext::newBar()
 		{
 			auto meta = voiceMetaData();
 			if (!fm::compareTolerant(meta->barPosition, meta->barLength, fm::Ticks(TickTolerance))) {
@@ -254,7 +229,7 @@ namespace sheet {
 				std::stringstream ss;
 				std::string toLong = errorInQuaters > 0 ? "too long" : "too short";
 				ss << "bar is " << std::abs(errorInQuaters) << " quarter(s) " << toLong;
-				warn(ss.str(), &newBarEvent);
+				warn(ss.str());
 			}
 			meta->barPosition = 0;
 			++(meta->barCount);
@@ -265,210 +240,37 @@ namespace sheet {
 			auto meta = voiceMetaData();
 			seek(duration);
 		}
-		void AContext::processMeta(const fm::String &command, const std::vector<fm::String> &args)
-		{
-			try {
-				if (command == SHEET_META__TRACK_META_KEY_TYPE /*handled elsewhere*/
-				|| command == SHEET_META__TRACK_META_KEY_NAME
-				|| command == SHEET_META__SET_VORSCHLAG
-				|| command == SHEET_META__SHEET_TEMPLATE_POSITION) 
-				{
-					return;
-				}
-							
-				if (command == SHEET_META__SET_SHEET_TEMPLATE) {
-					metaSetSheetTemplate(args);
-					return;
-				}
-				if (command == SHEET_META__SET_EXPRESSION) {
-					metaSetExpression(getArgument<fm::String>(args, 0));
-					return;
-				}
-				if (command == SHEET_META__SET_SINGLE_EXPRESSION) {
-					metaSetSingleExpression(getArgument<fm::String>(args, 0));
-					return;
-				}
-				if (command == SHEET_META__SET_TEMPO) {
-					if (args.front() == SHEET_META__SET_TEMPO_VALUE_HALF) {
-						metaSetTempo(masterTempo() * 0.5);
-						return;
-					}
-					if (args.front() == SHEET_META__SET_TEMPO_VALUE_DOUBLE) {
-						metaSetTempo(masterTempo() * 2);
-						return;
-					}
-					if (args.front() == SHEET_META__SET_TEMPO_VALUE_NORMAL) {
-						metaSetTempo(masterTempo());
-						return;
-					}					
-					metaSetTempo(getArgument<fm::BPM>(args, 0));
-					return;
-				}
-				if (command == SHEET_META__SET_VOICING_STRATEGY) {
-					metaSetVoicingStrategy(getArgument<fm::String>(args, 0), args);
-					return;
-				}
-				if (command == SHEET_META__SET_SPIELANWEISUNG) {
-					metaSetSpielanweisung(getArgument<fm::String>(args, 0), args);
-					return;
-				}	
-				if (command == SHEET_META__SET_SPIELANWEISUNG_ONCE) {
-					metaSetSpielanweisungOnce(getArgument<fm::String>(args, 0), args);
-					return;
-				}	
-				if (command == SHEET_META__SET_MOD) {
-					metaSetModification(getArgument<fm::String>(args, 0), args);
-					return;
-				}	
-				if (command == SHEET_META__SET_MOD_ONCE) {
-					metaSetModificationOnce(getArgument<fm::String>(args, 0), args);
-					return;
-				}
-				if (command == SHEET_META__SET_SIGNATURE) {
-					metaSetSignature(getArgument<int>(args, 0), getArgument<int>(args, 1));
-					return;
-				}
-				if (command == SHEET_META__SET_DEVICE) {
-					metaAddDevice(getArgument<fm::String>(args, 0), args);
-					return;
-				}	
-				if (command == SHEET_META__SET_VOLUME) {
-					metaSetVolume(getArgument<int>(args, 0));
-					return;
-				}
-				if (command == SHEET_META__SET_PAN) {
-					metaSetPan(getArgument<int>(args, 0));
-					return;
-				}
-				if (command == SHEET_META__INSTRUMENT) {
-					metaSetInstrument(getArgument<fm::String>(args, 0));
-					return;
-				}
-			} catch(const std::exception &ex) {
-				FM_THROW(Exception, "failed to process " + command
-									+": " + ex.what());
-			}	
-			catch(...) {
-				FM_THROW(Exception, "failed to process " + command);
-			}
-			FM_THROW(Exception, "invalid command: " + command);								
-		}
-		void AContext::setMeta(const Event &metaEvent)
-		{
-			if (metaEvent.stringValue.empty()) {
-				throwContextException("invalid meta command ");
-			}
-			if (metaEventHandler && metaEventHandler(metaEvent)) {
-				return;
-			}
-			if (metaEvent.stringValue == SHEET_META__SET_VORSCHLAG) {
-				metaAddVorschlag(metaEvent);
-			}
-			processMeta(metaEvent.stringValue, metaEvent.metaArgs);				
-		}
-
-		void AContext::metaSetVolume(int volume)
+		void AContext::setVolume(int volume)
 		{
 			auto meta = voiceMetaData();
 			meta->volume = std::max(std::min(volume, 100), 0);
 		}
 
-		void AContext::metaSetPan(int val)
+		void AContext::setPan(int val)
 		{
 			auto meta = voiceMetaData();
 			meta->pan = std::max(std::min(val, 100), 0);
 		}		
 
-		void AContext::metaAddVorschlag(const Event &ev)
+		void AContext::setExpression(fm::Expression expr)
 		{
-			auto &wm = fm::getWerckmeister();
-			auto meta = voiceMetaData();
-			meta->spielanweisungOnce = wm.getSpielanweisung(SHEET_SPIELANWEISUNG_VORSCHLAG);
-			auto vorschlag = std::dynamic_pointer_cast<Vorschlag>(meta->spielanweisungOnce);
-			vorschlag->vorschlagNote = ev;
-		}
-
-		void AContext::metaAddDevice(const fm::String name, const Event::Args &args)
-		{
-			auto &cs = getConfigServer();
-			if (args.size() < 2) {
-				FM_THROW(Exception, "not enough arguments for device config");
-			}
-			std::vector<fm::String> deviceArgs(args.begin() + 1, args.end());
-			auto device = cs.createDeviceConfig(name, deviceArgs);
-			cs.addDevice(name, device);
-		}
-
-		void AContext::metaSetVoicingStrategy(const fm::String &name, const Event::Args &args)
-		{
-			auto meta = voiceMetaData();
-			if (meta->voicingStrategy && meta->voicingStrategy->name() == name) {
-				return;
-			}
-			auto &wm = fm::getWerckmeister();
-			meta->voicingStrategy = wm.getVoicingStrategy(name);
-			meta->voicingStrategy->setArguments(args);
-		}
-
-		void AContext::metaSetSpielanweisung(const fm::String &name, const Event::Args &args)
-		{
-			auto &wm = fm::getWerckmeister();
-			auto meta = voiceMetaData();
-			meta->spielanweisung = wm.getSpielanweisung(name);
-			meta->spielanweisung->setArguments(args);
-		}
-
-		void AContext::metaSetSpielanweisungOnce(const fm::String &name, const Event::Args &args)
-		{
-			auto &wm = fm::getWerckmeister();
-			auto meta = voiceMetaData();
-			meta->spielanweisungOnce = wm.getSpielanweisung(name);
-			meta->spielanweisungOnce->setArguments(args);
-		}
-
-		void AContext::metaSetModification(const fm::String &name, const Event::Args &args)
-		{
-			auto &wm = fm::getWerckmeister();
-			auto meta = voiceMetaData();
-			auto mod = wm.getModification(name);
-			meta->modifications.push_back(mod);
-			mod->setArguments(args);
-		}
-
-		void AContext::metaSetModificationOnce(const fm::String &name, const Event::Args &args)
-		{
-			auto &wm = fm::getWerckmeister();
-			auto meta = voiceMetaData();
-			auto mod = wm.getModification(name);
-			meta->modificationsOnce.push_back(mod);
-			mod->setArguments(args);
-		}
-
-		void AContext::metaSetSheetTemplate(const Event::Args &)
-		{
-		}
-
-		void AContext::metaSetExpression(const fm::String &value)
-		{
-			auto meta = voiceMetaData();
-			auto expr = getExpression(value);
 			if (expr == fm::expression::Default) {
 				return;
 			}
+			auto meta = voiceMetaData();
 			meta->expression = expr;
 		}
 
-		void AContext::metaSetSingleExpression(const fm::String &value)
+		void AContext::setExpressionPlayedOnce(fm::Expression expr)
 		{
-			auto meta = voiceMetaData();
-			auto expr = getExpression(value);
 			if (expr == fm::expression::Default) {
 				return;
 			}
-			meta->singleExpression = expr;
+			auto meta = voiceMetaData();
+			meta->expressionPlayedOnce = expr;
 		}
 
-		void AContext::metaSetSignature(int upper, int lower)
+		void AContext::setSignature(int upper, int lower)
 		{
 			using namespace fm;
 			auto meta = voiceMetaData();

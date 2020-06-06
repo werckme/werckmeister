@@ -7,18 +7,18 @@ using "./templates/countryschlager1.template";
 -- to get a list of your available MIDI devices 
 -- and their port numbers, execute "sheetp --list"
 --      name              type   portnumber
-device: MyDevice          midi       0;
+device: _setName=MyDevice          _isType=midi       _usePort=0;
 
 
 -- define your instruments:
 -- (ch= channel, pc= programm change, cc= control change)
---             name       device   ch  cc  pc  
-instrumentDef: piano      MyDevice  2   0   0;
-instrumentDef: guitar     MyDevice  3   0  25;
-instrumentDef: vibra      MyDevice  4   0  11;
-instrumentDef: bass       MyDevice  5   0  33;
-instrumentDef: drums      MyDevice  9   0  32;
-instrumentDef: slide      MyDevice  0   0   0;
+--             name       device 
+instrumentDef: piano      MyDevice  _ch=2   _cc=0  _pc=0;
+instrumentDef: guitar     MyDevice  _ch=3   _cc=0  _pc=25;
+instrumentDef: vibra      MyDevice  _ch=4   _cc=0  _pc=11;
+instrumentDef: bass       MyDevice  _ch=5   _cc=0  _pc=33;
+instrumentDef: drums      MyDevice  _ch=9   _cc=0  _pc=32;
+instrumentDef: slide      MyDevice  _ch=0   _cc=0  _pc=0;
 instrumentConf: guitar volume 70 pan 20;
 instrumentConf: piano volume 90 pan 80;
 instrumentConf: vibra volume 85;

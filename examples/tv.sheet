@@ -23,25 +23,26 @@ device: MyDevice          midi       0;
 
 -- define your instruments:
 -- (ch= channel, pc= programm change, cc= control change)
---             name       device    ch  cc  pc 
-instrumentDef: piano      MyDevice 0 0 0;
-instrumentDef: lead       MyDevice 1 0 105;
-instrumentDef: lead2      MyDevice 2 0 25;
-instrumentDef: sitar      MyDevice 6 0 104;
-instrumentDef: rhythm     MyDevice 3 0 25;
-instrumentDef: bass       MyDevice 4 0 26;
-instrumentDef: bell       MyDevice 5 0 14;
-instrumentDef: drums      MyDevice 9 0 0;
+--             name       device 
+instrumentDef: piano      MyDevice _ch=0 _cc=0 _pc=0;
+instrumentDef: lead       MyDevice _ch=1 _cc=0 _pc=105;
+instrumentDef: lead2      MyDevice _ch=2 _cc=0 _pc=25;
+instrumentDef: sitar      MyDevice _ch=6 _cc=0 _pc=104;
+instrumentDef: rhythm     MyDevice _ch=3 _cc=0 _pc=25;
+instrumentDef: bass       MyDevice _ch=4 _cc=0 _pc=26;
+instrumentDef: bell       MyDevice _ch=5 _cc=0 _pc=14;
+instrumentDef: drums      MyDevice _ch=9 _cc=0 _pc=0;
 
+instrumentConf: rhythm voicingStrategy guitar _range=tenor;  
+instrumentConf: rhythm mod guitarStroke;
 instrumentConf: rhythm
-    voicingStrategy guitar range tenor
-    mod guitarStroke 
-    pan 60
-    volume 70;   
+    pan    60
+    volume 70
+;   
 
 instrumentConf: bass
-    voicingStrategy simple range contrabass
     volume 100
+    voicingStrategy simple _range=contrabass
 ;   
 
 instrumentConf: piano
@@ -73,8 +74,8 @@ tempo:  73;
 instrument: lead;
 {
     /signature: 2 4/
-    /mod: staccato amount 90/
-    /do: swing grid 8 offset 15/
+    /mod: staccato _amount=90/
+    /do: swing _grid=8 _offset =15/
     \fff
     r2 | r2 | r2 | r2  | d'8. &16 &32 & &8 r16 | c'16 f d b,   g c' &32 & b e | c8. f'32 c' e'16 e &32 b, g, a, |
     c'8 &16 &32 &  e' g g, e b c' r16 | b8. (d' g' b)8  g16 e g | g'8 &&& | 

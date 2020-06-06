@@ -1,10 +1,10 @@
 #ifndef COMPILER_CONTEXT_EVENTS_HPP
 #define COMPILER_CONTEXT_EVENTS_HPP
 
-#include "sheet/Event.h"
+#include <sheet/objects/Event.h>
 #include <fm/units.hpp>
 #include <fm/literals.hpp>
-#include "sheet/ChordDef.h"
+#include <sheet/objects/ChordDef.h>
 #include <fm/common.hpp>
 #include "forward.hpp"
 #include "timeInfo.h"

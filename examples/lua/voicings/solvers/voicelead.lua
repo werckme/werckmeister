@@ -46,8 +46,8 @@ function VoiceLeadSolver:adjustOctaves(pitches, reference)
     return pitches
 end
 
-function VoiceLeadSolver:_solveImpl(chord, degrees, args)
-    local pitches = Simple:_solveImpl(chord, degrees, args)
+function VoiceLeadSolver:_solveImpl(chord, degrees, params)
+    local pitches = Simple:_solveImpl(chord, degrees, params)
     if #pitches < 2
     then
         return pitches
@@ -59,11 +59,11 @@ function VoiceLeadSolver:_solveImpl(chord, degrees, args)
     return pitches
 end
 
-function VoiceLeadSolver:solve(chord, degrees, args)
-    args = tokeyvalue(args)
-    local result = self:_solveImpl(chord, degrees, args)
-    if args.range ~=nil then
-        self:_keepRange(result, args.range)
+function VoiceLeadSolver:solve(chord, degrees, params)
+    self:checkForLegacyParameters(params)
+    local result = self:_solveImpl(chord, degrees, params)
+    if params.range ~=nil and params.range ~=NoRangeSet then
+        self:_keepRange(result, params.range)
     end
     self.previous = result
     return result

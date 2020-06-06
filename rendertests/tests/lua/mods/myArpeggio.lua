@@ -1,12 +1,23 @@
 require "lua/com/com"
 require "events"
 
-function perform(eventsOrigin, args, timeinfo)
-    local event = eventsOrigin[1]
-    local events = { }
-    args = tokeyvalue(args)
-    local comparer = pitchCompare
-    if args.direction == "down" then
+
+parameters = {
+    -- can be legato, normal
+    { name="style",           default="normal" },
+    -- can be up, down
+    { name="direction",       default="up" }
+}
+
+function perform(eventsOrigin, params, timeinfo)
+    checkLegacyNamedParams(params, "direction", "style")
+    local event     = eventsOrigin[1]
+    local events    = { }
+    local comparer  = pitchCompare
+    local direction = params.direction
+    local style     = params.style
+
+    if direction == "down" then
         comparer = pitchCompareReversed
     end
     local duration = event.duration / #event.pitches
@@ -14,10 +25,10 @@ function perform(eventsOrigin, args, timeinfo)
     for i, pitch in pairs(event.pitches) do
         local note = Note:new()
         note.duration = duration
-        if args.style == "legato" then
+        if style == "legato" then
             note.duration = event.duration
         end
-        note.velocity = event.velocity * i * (event.velocity / #event.pitches)
+        note.velocity = event.velocity
         note.offset = (i-1) * duration
         note.isTied = event.isTied
         note:addPitch(pitch.pitch, pitch.octave)
