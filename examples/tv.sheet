@@ -18,30 +18,31 @@ using "lua/mods/guitarStroke.lua";
 -- to get a list of your available MIDI devices 
 -- and their port numbers, execute "sheetp --list"
 --      name              type   portnumber
-device: MyDevice          midi       5;
+device: MyDevice          midi       0;
 
 
 -- define your instruments:
 -- (ch= channel, pc= programm change, cc= control change)
---             name       device    ch  cc  pc 
-instrumentDef: piano      MyDevice 0 0 0;
-instrumentDef: lead       MyDevice 1 0 105;
-instrumentDef: lead2      MyDevice 2 0 25;
-instrumentDef: sitar      MyDevice 6 0 104;
-instrumentDef: rhythm     MyDevice 3 0 25;
-instrumentDef: bass       MyDevice 4 0 26;
-instrumentDef: bell       MyDevice 5 0 14;
-instrumentDef: drums      MyDevice 9 0 0;
+--             name       device 
+instrumentDef: piano      MyDevice _ch=0 _cc=0 _pc=0;
+instrumentDef: lead       MyDevice _ch=1 _cc=0 _pc=105;
+instrumentDef: lead2      MyDevice _ch=2 _cc=0 _pc=25;
+instrumentDef: sitar      MyDevice _ch=6 _cc=0 _pc=104;
+instrumentDef: rhythm     MyDevice _ch=3 _cc=0 _pc=25;
+instrumentDef: bass       MyDevice _ch=4 _cc=0 _pc=26;
+instrumentDef: bell       MyDevice _ch=5 _cc=0 _pc=14;
+instrumentDef: drums      MyDevice _ch=9 _cc=0 _pc=0;
 
+instrumentConf: rhythm voicingStrategy guitar _range=tenor;  
+instrumentConf: rhythm mod guitarStroke;
 instrumentConf: rhythm
-    _set=voicingStrategy _use=guitar _range=tenor
-    _set=mod    _use=guitarStroke 
-    _set=pan    _to=60
-    _set=volume _to=70;   
+    pan    60
+    volume 70
+;   
 
 instrumentConf: bass
-    _set=voicingStrategy _use=simple _range=contrabass
-    _set=volume _to=100
+    volume 100
+    voicingStrategy simple _range=contrabass
 ;   
 
 instrumentConf: piano
