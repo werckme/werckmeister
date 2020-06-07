@@ -27,6 +27,18 @@ require "_events"
 parameters = {
 }
 
+SupportedRepeatTags = {
+    ["2x"]  =  2,
+    ["3x"]  =  3,
+    ["4x"]  =  4,
+    ["5x"]  =  5,
+    ["6x"]  =  6,
+    ["7x"]  =  7,
+    ["8x"]  =  8,
+    ["9x"]  =  9,
+    ["10x"] = 10,
+}
+
 function perform(events, params, timeinfo)
     if #events == 0 or #events[1].tags == 0 then
         return events
@@ -50,13 +62,33 @@ function RudimentPerformer:new(o)
     self.__index = self
     self.idxL = 1
     self.idxR = 1
+   
     return o
 end
 
+function RudimentPerformer:findRudimentName(tags)
+    for idx, tag in pairs(tags) do
+        local val = Rudiments[tag]
+        if val ~= nil then
+            return tag
+        end
+    end
+    return nil
+end
+
+function RudimentPerformer:findRepeatTagValue(tags)
+    for idx, tag in pairs(tags) do
+        local val = SupportedRepeatTags[tag]
+        if val ~= nil then
+            return val
+        end
+    end
+    return nil
+end
+
 function RudimentPerformer:setSourceEvents(events)
-    --dump(events)
     local event = events[1]
-    local rudimentName = event.tags[1]
+    local rudimentName = self:findRudimentName(event.tags)
     local source       = event.pitches
     self.rudiment = Rudiments[rudimentName]
     if self.rudiment == nil then
@@ -65,6 +97,10 @@ function RudimentPerformer:setSourceEvents(events)
     if #source % 2 ~= 0 then
         -- not enough events
         error("not enough events for rudiment " .. rudimentName)
+    end
+    local repeatCount = self:findRepeatTagValue(event.tags)
+    if repeatCount ~= nil then
+        self:repeat_(repeatCount)
     end
     self.duration = event.duration
     self.ls = {}
@@ -77,6 +113,16 @@ function RudimentPerformer:setSourceEvents(events)
             table.insert(self.rs, pitch)
         end
     end
+end
+
+function RudimentPerformer:repeat_(count)
+    local sequence = {}
+    for i=1,count do
+        for idx, rudimentEvent in pairs(self.rudiment) do
+            table.insert(sequence, rudimentEvent)
+        end
+    end
+    self.rudiment = sequence
 end
 
 function RudimentPerformer:l()
@@ -123,11 +169,12 @@ function RudimentPerformer:perform()
     local offset = 0
     local durationFactor = self.duration / self:defDuration()
     for idx, rudiment in pairs(self.rudiment) do
-        local which    = rudiment.which
-        local duration = rudiment.duration
+        local which          = rudiment.which
+        local duration       = rudiment.duration
+        local velocityFactor = rudiment.velocityFactor
         local note = Note:new()
         note.duration = duration * durationFactor
-        note.velocity = self.velocity
+        note.velocity = self.velocity * velocityFactor
         note.offset = offset
         local pitch = self:nextPitch(which)
         note:addPitch(pitch.pitch, pitch.octave)
