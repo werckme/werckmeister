@@ -38,7 +38,7 @@ namespace sheet {
 				}	
 				if (ev.isRepeat())  {
 					if (processData.lastNoRepeat.type == Event::Unknown) {
-						FM_THROW(Exception, "no event for shortcut: x");
+						FM_THROW(Exception, "no prevoius event for repeat symbol: '&'");
 					}
 					ev.pitches = processData.lastNoRepeat.pitches;
 					ev.type = resolveRepeatType(processData.lastNoRepeat, ev);
