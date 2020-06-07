@@ -1,0 +1,24 @@
+using "./chords/default.chords";
+using "./pitchmaps/defaultMidiDrumMap.pitchmap";
+using "./lua/mods/drumRudiments.lua";
+
+-- setup your midi device:
+-- to get a list of your available MIDI devices 
+-- and their port numbers, execute "sheetp --list"
+--      name              type   portnumber
+device: MyDevice _isType=midi _usePort=1;
+instrumentDef: drums MyDevice _ch=9 _pc=0 _cc=0;
+
+tempo: 120;
+
+[
+instrument: drums;
+{
+    /mod: drumRudiments/
+    "singleStrokeRollR"@<"hto" "lto">4
+    |
+}
+{
+    "ss"4 &&& |
+}
+]

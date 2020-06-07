@@ -1,5 +1,5 @@
 require "lua/com/com"
-require "events"
+require "_events"
 
 
 parameters = {
