@@ -1,0 +1,32 @@
+
+device: SC1 midi 1;
+instrumentDef: piano   SC1 4 0 0;
+
+instrumentConf: piano 
+    remapVelocity
+    _fff=55.5
+    _p=10
+;
+
+tempo: 75;
+
+[
+instrument: piano;
+{
+    \fff
+    c d e f | c d e f 
+}
+]
+
+[
+instrument: piano;
+{
+    \fff
+    /tempo: 37.5/
+    c, d, e, f, | 
+}
+]
+
+
+
+

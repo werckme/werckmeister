@@ -118,8 +118,8 @@ namespace sheet {
 			virtual void setExpressionPlayedOnce(fm::Expression expr);
 			virtual void setTempo(double bpm) {}
 			virtual void setSignature(int upper, int lower);
-			virtual void setVolume(int volume);
-			virtual void setPan(int val);
+			virtual void setVolume(double volume);
+			virtual void setPan(double val);
 			/////// actual context stuff
 			virtual void renderPitch(const PitchDef &pitch, fm::Ticks duration, double velocity, bool tying);
 			virtual void renderPitch(const PitchDef &pitch, fm::Ticks absolutePosition, double velocity, fm::Ticks duration) = 0;

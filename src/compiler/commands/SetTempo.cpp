@@ -20,6 +20,7 @@ namespace sheet {
                 context->setTempo(context->masterTempo());
                 return;
             }			
+            
             fm::BPM bpm = tempoParameter.value<fm::BPM>();	
             context->setTempo(bpm);
         }

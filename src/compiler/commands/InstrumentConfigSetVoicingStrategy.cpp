@@ -9,6 +9,9 @@ namespace sheet {
                 return;
             }
             bool isAlreadySet = getInstrument()->voicingStrategy && getInstrument()->voicingStrategy->name() == voicingStrategy->name();
+            if (isAlreadySet) {
+                return;
+            }
             getInstrument()->voicingStrategy = this->voicingStrategy;
         }
     }

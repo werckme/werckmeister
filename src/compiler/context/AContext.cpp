@@ -240,16 +240,16 @@ namespace sheet {
 			auto meta = voiceMetaData();
 			seek(duration);
 		}
-		void AContext::setVolume(int volume)
+		void AContext::setVolume(double volume)
 		{
 			auto meta = voiceMetaData();
-			meta->volume = std::max(std::min(volume, 100), 0);
+			meta->volume = std::max(std::min(volume, 100.0), 0.0);
 		}
 
-		void AContext::setPan(int val)
+		void AContext::setPan(double val)
 		{
 			auto meta = voiceMetaData();
-			meta->pan = std::max(std::min(val, 100), 0);
+			meta->pan = std::max(std::min(val, 100.0), 0.0);
 		}		
 
 		void AContext::setExpression(fm::Expression expr)

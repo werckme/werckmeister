@@ -5,7 +5,7 @@ namespace sheet {
     namespace compiler {
         void SetVolume::execute(AContext* context)
         {
-            auto setTo = parameters[argumentNames.SetVolume.SetTo].value<int>();
+            auto setTo = parameters[argumentNames.SetVolume.SetTo].value<double>();
             context->setVolume(setTo);
         }
 

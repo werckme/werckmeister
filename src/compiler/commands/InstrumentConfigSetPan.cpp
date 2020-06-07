@@ -8,7 +8,7 @@ namespace sheet {
             if (!this->hasInstrument()) {
                 return;
             }
-            auto setTo = parameters[argumentNames.SetVolume.SetTo].value<int>();
+            auto setTo = parameters[argumentNames.SetVolume.SetTo].value<double>();
             this->getInstrument()->pan = setTo; 
         }
     }

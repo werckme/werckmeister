@@ -51,8 +51,8 @@ namespace sheet {
             Modifications modificationsOnce; // played once
             ModificationCache modificationCache;
             PitchDefSet startedEvents;
-            int volume = 100;	
-            int pan = 50;            
+            double volume = 100;	
+            double pan = 50;            
         };
     }
 }

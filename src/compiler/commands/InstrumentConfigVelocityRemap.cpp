@@ -20,9 +20,9 @@ namespace sheet {
                     continue;
                 }
                 const auto& expression = parameter.name();
-                int newValue = parameter.value<int>();
+                double newValue = parameter.value<double>();
                 if (newValue < 0 || newValue > 100) {
-                    FM_THROW(Exception, "invalid value for: " + expression);
+                    FM_THROW(Exception, "invalid value for: " + expression + " (0..100)");
                 }
                 auto exprValue = SetExpression::getExpressionForString(expression);
                 instrumentDef->velocityOverride[exprValue] = newValue;

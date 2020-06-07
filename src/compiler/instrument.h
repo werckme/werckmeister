@@ -13,12 +13,12 @@ namespace sheet {
 
 		struct AInstrumentDef {
 			fm::String uname;
-			int volume = 100;
-			int pan = 50;
+			double volume = 100.0;
+			double pan = 50.0;
 			VoicingStrategyPtr voicingStrategy;
 			typedef std::list<AModificationPtr> Modifications;
 			Modifications modifications;			
-			typedef std::unordered_map<fm::Expression, int> VelocityOverride;
+			typedef std::unordered_map<fm::Expression, double> VelocityOverride;
 			VelocityOverride velocityOverride;
 			virtual ~AInstrumentDef() = default;
 		};

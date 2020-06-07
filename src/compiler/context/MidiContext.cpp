@@ -225,7 +225,7 @@ namespace sheet {
 			return &trackMeta->instrument;
 		}
 
-		void MidiContext::setVolume(int volume)
+		void MidiContext::setVolume(double volume)
 		{
 			Base::setVolume(volume);
 			auto meta = voiceMetaData<MidiContext::VoiceMetaData>();
@@ -240,7 +240,7 @@ namespace sheet {
 			addEvent(ev); 
 		}
 
-		void MidiContext::setPan(int val)
+		void MidiContext::setPan(double val)
 		{
 			Base::setPan(val);
 			auto meta = voiceMetaData<MidiContext::VoiceMetaData>();
