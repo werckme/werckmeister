@@ -1,0 +1,30 @@
+using "./chords/default.chords";
+using "./lua/mods/staccato.lua";
+
+device: MyDevice  midi 1;
+instrumentDef: pianoLH MyDevice 1 1 1;
+
+instrumentConf: pianoLH 
+    volume 100 
+    pan    0
+    mod staccato _amout=100 
+;
+
+[
+type: template;
+name: myTemplate;
+instrument: pianoLH;
+{
+    \ff
+    /modOnce: bend from 100/
+    I4 &&& |
+}
+]
+
+[
+type: accomp;
+{
+    /template: myTemplate/
+    Cmaj7 |
+}
+]

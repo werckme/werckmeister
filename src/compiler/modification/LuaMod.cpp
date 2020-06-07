@@ -36,6 +36,7 @@ namespace sheet {
             void push(lua_State *L);
             void pushPitches(lua_State *L);
 			void pushTags(lua_State *L);
+            void pushPitchBendValue(lua_State *L, int top, const Event &event);
             const char *getTypename() const;
         };
         void LuaEvent::push(lua_State *L)
@@ -60,8 +61,19 @@ namespace sheet {
             sheet::lua::setTableValue(L, LUA_EVENT_PROPETRY_DURATION, top, event->duration / fm::PPQ);
             // is tied
             sheet::lua::setTableValue(L, LUA_EVENT_PROPETRY_TYING, top, event->isTied());
+            // pitchbend value
+            pushPitchBendValue(L, top, *event);
                              
         }
+
+        void LuaEvent::pushPitchBendValue(lua_State *L, int top, const Event &event)
+        {
+            if (event.type != Event::PitchBend) {
+                return;
+            }
+            sheet::lua::setTableValue(L, LUA_EVENT_PROPETRY_PITCHBENDVALUE, top, event.pitchBendValue);
+        }
+
         void LuaEvent::pushPitches(lua_State *L)
         {
             lua_createtable(L, event->pitches.size(), 0);
@@ -178,7 +190,9 @@ namespace sheet {
         void LuaModification::popPitchBendEvent(Event &event)
         {
             sheet::lua::getTableValue(L, LUA_EVENT_PROPETRY_PITCHBENDVALUE, event.pitchBendValue);
-            lua_pop(L, 1);
+            sheet::lua::getTableValue(L, LUA_EVENT_PROPETRY_OFFSET, event.offset);
+            event.offset *= fm::PPQ;
+            sheet::lua::getTableValue(L, LUA_EVENT_PROPETRY_DURATION, event.duration);
         }
 
 
