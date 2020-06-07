@@ -168,7 +168,7 @@ namespace sheet {
                 sheet::PitchDef pitchDef;
                 pitchDef.pitch = pitch;
                 pitchDef.octave = octave;
-                event.pitches.insert(pitchDef);
+                event.pitches.emplace_back(pitchDef);
             }
             lua_pop(L, 1);
             // get tags

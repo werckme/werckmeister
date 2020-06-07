@@ -54,6 +54,7 @@ function RudimentPerformer:new(o)
 end
 
 function RudimentPerformer:setSourceEvents(events)
+    --dump(events)
     local event = events[1]
     local rudimentName = event.tags[1]
     local source       = event.pitches

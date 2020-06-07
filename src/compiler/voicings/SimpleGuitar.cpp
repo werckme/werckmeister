@@ -78,7 +78,7 @@ namespace sheet {
 			auto octave = octaveRange.first;
 			for(; octave != octaveRange.second; ++octave) { // some degrees may be twice (lower I & upper I)
 				x.octave = octave->second + transpose;
-				result.insert(x);
+				result.push_back(x);
 			}
 		}
 

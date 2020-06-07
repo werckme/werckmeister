@@ -15,7 +15,10 @@ tempo: 120;
 instrument: drums;
 {
     /mod: drumRudiments/
+    "singleStrokeRollL"@<"hto" "lto">4
+    "singleStrokeRollL"@<"hto" "lto">4
     "singleStrokeRollR"@<"hto" "lto">4
+    "singleStrokeRollL"@<"hto" "lto">4
     |
 }
 {

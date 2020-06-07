@@ -233,7 +233,7 @@ namespace sheet {
                     lua_pop(L, 1);
                     continue;
                 }
-                result.insert(popPitch(L));
+                result.push_back(popPitch(L));
                 lua_pop(L, 1);
             }
             return result;
