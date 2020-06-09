@@ -1,5 +1,6 @@
 #ifndef PARSER_H
 #define PARSER_H
+#include "IDocumentParser.h"
 #include <fm/common.hpp>
 #include <vector>
 #include <sheet/objects/ChordDef.h>
@@ -43,7 +44,8 @@ namespace sheet {
 			}
 		};
 
-		struct DocumentParser {
+		class DocumentParser : public IDocumentParser {
+		public:
 			typedef std::vector<fm::String> Usings;
 			DocumentPtr parse(const fm::String &path, DocumentPtr input = nullptr);
 			DocumentPtr parseString(const fm::String &text);

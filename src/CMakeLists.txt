@@ -124,8 +124,8 @@ add_library(fmapp ${SRC_SHEET_FMAPP})
 add_executable(rehearse ${SRC_FETZER_TESTS})
 target_link_libraries (rehearse ${SHEET_LIBS})
 
-add_executable(sheetc sheetcompiler_main.cpp fmapp/json.cpp sheet.cpp)
-target_link_libraries (sheetc ${SHEET_LIBS})
+add_executable(sheetc sheetcompiler_main.cpp SheetCompilerProgram.cpp)
+target_link_libraries (sheetc)
 
 if (WIN32)
     SET(LIBS_PLAYER ${LIBS_PLAYER} rtmidi_static)
