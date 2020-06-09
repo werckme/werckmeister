@@ -9,14 +9,14 @@ using "./lua/mods/drumRudiments.lua";
 device: MyDevice _isType=midi _usePort=5;
 instrumentDef: drums MyDevice _ch=9 _pc=0 _cc=0;
 
-tempo: 20;
+tempo: 30;
 
 [
 instrument: drums;
 {
     \ffff
     /mod: drumRudiments/
-    "16x sixStrokeRoll"@<"snr" "snl">1 |
+    "16x sevenStrokeRoll"@<"snr" "snl">1 |
     
 }
 {

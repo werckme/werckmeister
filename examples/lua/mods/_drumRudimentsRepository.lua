@@ -41,6 +41,8 @@ Rudiments = {
         { C(R, _32, un), C(R, _32, un), C(L, _32, un), C(L, _32, un), C(R, _8, ac) },
     ["sixStrokeRoll"] =
         { C(R, _8, ac), C(L, _16, un), C(L, _16, un), C(R, _16, un), C(R, _16, un), C(L, _8, ac) },
+    ["sevenStrokeRoll"] =
+        { C(R, _8, ac), C(L, _16, un), C(L, _16, un), C(R, _16, un), C(R, _16, un), C(L, _16, un), C(L, _16, un) },
     ["singleStrokeFour"] =
         { C(R, _4t), C(L, _4t), C(R, _4t), C(L, _4) },
     ["singleStrokeSeven"] =
