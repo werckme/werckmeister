@@ -2,11 +2,12 @@
 #include <iostream>
 
 SheetCompilerProgram::SheetCompilerProgram(sheet::compiler::IDocumentParser *documentParser)
+    : _documentParser(documentParser)
 {
     
 }
 
 void SheetCompilerProgram::execute()
 {
-    std::cout << "hello from sheet compiler program" << std::endl;
+    std::cout << "hello from sheet compiler program " << _documentParser << std::endl;
 }

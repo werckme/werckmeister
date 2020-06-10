@@ -7,6 +7,8 @@ class SheetCompilerProgram {
 public:
     SheetCompilerProgram(sheet::compiler::IDocumentParser *documentParser);
     void execute();
+private:
+    sheet::compiler::IDocumentParser *_documentParser;
 };
 
 #endif
