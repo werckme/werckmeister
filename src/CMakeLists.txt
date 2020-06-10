@@ -11,6 +11,7 @@ SET (SRC_FETZER_LIB
     fm/lua/ALuaScript.cpp
     fm/lua/ALuaWithParameter.cpp
     fm/tools.cpp
+    fm/ConsoleLogger.cpp
     compiler/compiler.cpp
     parser/chordDefParser.cpp
     parser/sheetParser.cpp
@@ -124,7 +125,7 @@ add_library(fmapp ${SRC_SHEET_FMAPP})
 add_executable(rehearse ${SRC_FETZER_TESTS})
 target_link_libraries (rehearse ${SHEET_LIBS})
 
-add_executable(sheetc sheetcompiler_main.cpp SheetCompilerProgram.cpp)
+add_executable(sheetc sheetcompiler_main.cpp SheetCompilerProgram.cpp CompilerProgramOptions.cpp)
 target_link_libraries (sheetc ${SHEET_LIBS})
 
 if (WIN32)

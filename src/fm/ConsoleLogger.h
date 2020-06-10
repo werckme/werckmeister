@@ -1,0 +1,18 @@
+#ifndef CONSOLELOGGER_H
+#define CONSOLELOGGER_H
+
+#include "ILogger.h"
+
+namespace fm {
+    class ConsoleLogger : public ILogger {
+    public:
+        typedef std::function<void(std::ostream&)> WriteToStreamF;
+        virtual void babble(const WriteToStreamF&);
+        virtual void warn(const WriteToStreamF&);
+        virtual void error(const WriteToStreamF&);
+        virtual void writeMessage(const WriteToStreamF &f);
+        virtual ~ConsoleLogger() = default;
+    };
+}
+
+#endif

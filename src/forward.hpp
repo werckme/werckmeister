@@ -34,5 +34,7 @@ namespace fm {
 	}
 	class IConfigServer;
 	typedef IConfigServer *IConfigServerPtr;
+
+	class Werckmeister;
 }
 #endif
