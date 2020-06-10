@@ -13,6 +13,8 @@ jobs:
     runs-on: macos-latest
     steps:
     - uses: actions/checkout@v2
+    - name: update submodules
+      run: git submodule update --init --recursive --remote
     - name: install boost
       run: brew install boost
     - name: configure
