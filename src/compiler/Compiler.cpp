@@ -1,6 +1,5 @@
 #include "Compiler.h"
 #include "sheet/Document.h"
-#include "context/AContext.h"
 #include <sheet/objects/Event.h>
 #include <type_traits>
 #include <algorithm>
@@ -80,7 +79,7 @@ namespace sheet {
 		}
 
 		namespace {
-			void consumeChords(Track* sheetTrack, ASheetEventRenderer *sheetEventRenderer, AContext *ctx) 
+			void consumeChords(Track* sheetTrack, ASheetEventRenderer *sheetEventRenderer, IContext *ctx) 
 			{
 				using namespace fm;
 				auto voice = sheetTrack->voices.begin(); 
@@ -97,7 +96,7 @@ namespace sheet {
 					sheetEventRenderer->addEvent(ev);
 				}
 			}
-			void preprocessSheetTrack(Track* sheetTrack, ASheetEventRenderer *renderer, AContext *ctx) {
+			void preprocessSheetTrack(Track* sheetTrack, ASheetEventRenderer *renderer, IContext *ctx) {
 				using namespace fm;
 				auto voice = sheetTrack->voices.begin(); 
 				auto it = voice->events.begin();

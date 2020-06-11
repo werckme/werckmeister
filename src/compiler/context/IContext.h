@@ -13,12 +13,11 @@
 #include <functional>
 #include <fm/SheetTemplateDefServer.h>
 #include <compiler/timeInfo.h>
+#include <compiler/metaData.h>
+#include <compiler/instrument.h>
 
 namespace sheet {
     namespace compiler {
-		struct AInstrumentDef;
-		struct VoiceMetaData;
-		struct TrackMetaData;
         class IContext {
         public:
 			typedef int Id;

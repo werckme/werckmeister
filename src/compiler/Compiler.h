@@ -5,20 +5,21 @@
 #include "ISheetTemplateRenderer.h"
 #include "ASheetEventRenderer.h"
 #include "IPreprocessor.h"
+#include <compiler/context/IContext.h>
 
 namespace sheet {
 	struct Event;
 	namespace compiler {
 		class Compiler : public ICompiler {
 		private:
-			AContext* context_;
+			IContext* context_;
 			DocumentPtr document_;
 			ASheetEventRenderer *sheetEventRenderer_;
 			ISheetTemplateRenderer *sheetTemplateRenderer_;
 			IPreprocessor *preprocessor_;
 		public:
 			Compiler(
-				AContext* context, 
+				IContext* context, 
 				DocumentPtr document, 
 				ASheetEventRenderer *sheetEventRenderer,
 				ISheetTemplateRenderer *sheetTemplateRenderer,
@@ -32,7 +33,7 @@ namespace sheet {
 			}
 			Compiler(const Compiler&) = delete;
 			Compiler & operator=(const Compiler&) = delete;
-			AContext* context() const { return context_; }
+			IContext* context() const { return context_; }
 			virtual void compile(DocumentPtr document) override;
 			virtual ~Compiler() = default;
 			ASheetEventRenderer* sheetEventRenderer();

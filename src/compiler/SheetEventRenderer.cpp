@@ -125,16 +125,17 @@ namespace sheet {
 
         void SheetEventRenderer::addEvent(const Event &ev)
 		{
-			auto meta = ctx_->voiceMetaData();
-			++(meta->eventCount);
-			try {
-				ctx_->warningHandler = std::bind(&SheetEventRenderer::onWarning, this, std::placeholders::_1, ev);
-				_addEvent(this, &ev);
-				ctx_->warningHandler = nullptr;
-			} catch(fm::Exception &ex) {
-				ex << ex_sheet_source_info(ev);
-				throw;
-			}
+			// TODO: #126
+			// auto meta = ctx_->voiceMetaData();
+			// ++(meta->eventCount);
+			// try {
+			// 	ctx_->warningHandler = std::bind(&SheetEventRenderer::onWarning, this, std::placeholders::_1, ev);
+			// 	_addEvent(this, &ev);
+			// 	ctx_->warningHandler = nullptr;
+			// } catch(fm::Exception &ex) {
+			// 	ex << ex_sheet_source_info(ev);
+			// 	throw;
+			// }
 		}
 
 		void SheetEventRenderer::onWarning(const fm::String &message, const Event &event)
@@ -142,7 +143,8 @@ namespace sheet {
 			Warning warning;
 			warning.message = message;
 			warning.sourceObject = event;
-			ctx_->warnings.emplace_back(warning);
+			// TODO: #126
+			//ctx_->warnings.emplace_back(warning);
 		}
 
 		void SheetEventRenderer::renderEvent(const Event &_ev)

@@ -2,7 +2,7 @@
 #define COMPILER_SHEET_EVENT_RENDERER_H
 
 #include <sheet/objects/Event.h>
-#include "context/AContext.h"
+#include "context/IContext.h"
 #include <compiler/error.hpp>
 #include "ASheetEventRenderer.h"
 
@@ -10,9 +10,9 @@ namespace sheet {
     namespace compiler {
         class SheetEventRenderer : public ASheetEventRenderer {
         public:
-            SheetEventRenderer(AContext *ctx) : ctx_(ctx) {}
+            SheetEventRenderer(IContext *ctx) : ctx_(ctx) {}
             virtual ~SheetEventRenderer() = default;
-            AContext* context() const { return this->ctx_; }
+            IContext* context() const { return this->ctx_; }
             virtual void addEvent(const Event &event);
             virtual void handleMetaEvent(const Event &_ev);
             virtual void renderEvent(const Event &_ev);
@@ -21,7 +21,7 @@ namespace sheet {
         protected:
             void onWarning(const fm::String &message, const Event &event);
         private:
-            AContext* ctx_;
+            IContext* ctx_;
         };
     }
 }
