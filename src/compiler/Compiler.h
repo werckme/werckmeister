@@ -11,14 +11,14 @@ namespace sheet {
 	namespace compiler {
 		class Compiler : public ICompiler {
 		private:
-			AContextPtr context_;
+			AContext* context_;
 			DocumentPtr document_;
 			ASheetEventRenderer *sheetEventRenderer_;
 			ISheetTemplateRenderer *sheetTemplateRenderer_;
 			IPreprocessor *preprocessor_;
 		public:
 			Compiler(
-				AContextPtr context, 
+				AContext* context, 
 				DocumentPtr document, 
 				ASheetEventRenderer *sheetEventRenderer,
 				ISheetTemplateRenderer *sheetTemplateRenderer,
@@ -32,7 +32,7 @@ namespace sheet {
 			}
 			Compiler(const Compiler&) = delete;
 			Compiler & operator=(const Compiler&) = delete;
-			AContextPtr context() const { return context_; }
+			AContext* context() const { return context_; }
 			virtual void compile(DocumentPtr document) override;
 			virtual ~Compiler() = default;
 			ASheetEventRenderer* sheetEventRenderer();
