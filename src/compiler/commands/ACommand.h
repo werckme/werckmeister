@@ -8,13 +8,13 @@
 
 namespace sheet {
     namespace compiler {
-        class AContext;
+        class IContext;
         class ACommand : public fm::IRegisterable, public fm::AConvertsArgumentsToParameter
         {
         public:
             typedef std::vector<Argument> Arguments;
             virtual ~ACommand() = default;
-            virtual void execute(AContext*) = 0;
+            virtual void execute(IContext*) = 0;
             
         };
     }

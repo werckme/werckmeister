@@ -1,10 +1,10 @@
 #include "SetVoicingStrategy.h"
-#include <compiler/context/AContext.h>
+#include <compiler/context/IContext.h>
 #include <fm/werckmeister.hpp>
 
 namespace sheet {
     namespace compiler {
-        void SetVoicingStrategy::execute(AContext* context)
+        void SetVoicingStrategy::execute(IContext* context)
         {
             auto meta = context->voiceMetaData();
 			bool isAlreadySet = meta->voicingStrategy && meta->voicingStrategy->name() == voicingStrategy->name();

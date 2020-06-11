@@ -23,10 +23,10 @@ namespace sheet {
             virtual ~LuaModification() = default;
             virtual bool canExecute() const override;
             virtual void assertCanExecute() const override;
-            virtual void perform(AContext *ctx, Events &events) override;
+            virtual void perform(IContext *ctx, Events &events) override;
             virtual ParametersByNames & getParameters() override;
         protected:
-            void pushEvents(AContext *ctx, const Events &events);
+            void pushEvents(IContext *ctx, const Events &events);
             Events popEvents();
             void popNoteEvent(Event &event);
             void popPitchBendEvent(Event &event);

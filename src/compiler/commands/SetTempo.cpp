@@ -1,10 +1,10 @@
 #include "SetTempo.h"
-#include <compiler/context/AContext.h>
+#include <compiler/context/IContext.h>
 #include <compiler/metaCommands.h>
 
 namespace sheet {
     namespace compiler {
-        void SetTempo::execute(AContext* context)
+        void SetTempo::execute(IContext* context)
         {
             auto tempoParameter         = parameters[argumentNames.SetTempo.Bpm];
             auto tempoStringValue = tempoParameter.strValue();

@@ -1,5 +1,5 @@
 #include "AddVorschlag.h"
-#include <compiler/context/AContext.h>
+#include <compiler/context/IContext.h>
 #include <fm/werckmeister.hpp>
 #include <compiler/spielanweisung/spielanweisungen.h>
 #include <compiler/spielanweisung/Vorschlag.h>
@@ -7,7 +7,7 @@
 
 namespace sheet {
     namespace compiler {
-        void AddVorschlag::execute(AContext* context)
+        void AddVorschlag::execute(IContext* context)
         {
             auto &wm = fm::getWerckmeister();
 			auto meta = context->voiceMetaData();

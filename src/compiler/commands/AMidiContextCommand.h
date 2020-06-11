@@ -11,7 +11,7 @@ namespace sheet {
         class AMidiContextCommand : public ACommand
         {
         public:
-            virtual MidiContext * getMidiContext(AContext *context) const 
+            virtual MidiContext * getMidiContext(IContext *context) const 
             {
                 auto midiContext = dynamic_cast<MidiContext*>(context);
                 if (midiContext == nullptr) {

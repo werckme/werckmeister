@@ -9,7 +9,7 @@ namespace sheet {
         class AddModPlayedOnce : public AddMod
         {
         public:
-            virtual void execute(AContext*) override;
+            virtual void execute(IContext*) override;
         };
     }
 }

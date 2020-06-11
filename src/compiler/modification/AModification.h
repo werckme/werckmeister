@@ -9,14 +9,14 @@
 
 namespace sheet {
     namespace compiler {
-        class AContext;
+        class IContext;
         class AModification : public fm::IRegisterable, public fm::AConvertsArgumentsToParameter {
         protected:
             AModification() = default;
         public:
             typedef std::list<Event> Events;
             virtual ~AModification() = default;
-            virtual void perform(AContext *ctx, Events &events) = 0;
+            virtual void perform(IContext *ctx, Events &events) = 0;
         };
     }
 }

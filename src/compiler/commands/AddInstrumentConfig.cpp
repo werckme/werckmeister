@@ -1,5 +1,5 @@
 #include "AddInstrumentConfig.h"
-#include <compiler/context/AContext.h>
+#include <compiler/context/IContext.h>
 #include <compiler/metaCommands.h>
 #include <fm/tools.h>
 #include <compiler/error.hpp>
@@ -18,7 +18,7 @@ namespace sheet {
             SHEET_META__VELOCITY_REMAP
         }; 	
 
-        void AddInstrumentConfig::execute(AContext* context)
+        void AddInstrumentConfig::execute(IContext* context)
         {
             if (this->_configCommands.empty()) {
                 return;

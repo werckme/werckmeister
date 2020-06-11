@@ -17,7 +17,7 @@ namespace sheet {
                 FM_PARAMETER_DEF		    (argumentNames.InstrumentDef.Pc, 	    4),
             };
             virtual ParametersByNames & getParameters() { return this->parameters; }
-            virtual void execute(AContext*);
+            virtual void execute(IContext*);
         };
     }
 }

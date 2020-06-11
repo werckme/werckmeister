@@ -1,5 +1,5 @@
 #include "InstrumentConfigVelocityRemap.h"
-#include <compiler/context/AContext.h>
+#include <compiler/context/IContext.h>
 #include <compiler/error.hpp>
 #include <compiler/commands/SetExpression.h>
 
@@ -7,7 +7,7 @@ namespace sheet {
     namespace compiler {
         const fm::String InstrumentConfigVelocityRemap::VelocityNotSet = "NoRemapValueSet";
 
-        void InstrumentConfigVelocityRemap::execute(AContext* context)
+        void InstrumentConfigVelocityRemap::execute(IContext* context)
         {
             if (this->hasInstrument() == false) {
                 return;

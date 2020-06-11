@@ -1,11 +1,11 @@
 #include "AddDevice.h"
-#include <compiler/context/AContext.h>
+#include <compiler/context/IContext.h>
 #include <compiler/error.hpp>
 #include <fm/config/configServer.h>
 
 namespace sheet {
     namespace compiler {
-        void AddDevice::execute(AContext* context)
+        void AddDevice::execute(IContext* context)
         {
             auto name             = parameters[argumentNames.Device.WithName].value<fm::String>();
             auto type             = parameters[argumentNames.Device.IsType].value<fm::String>();

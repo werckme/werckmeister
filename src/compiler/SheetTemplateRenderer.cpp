@@ -8,12 +8,13 @@
 #include <functional>
 #include <fm/werckmeister.hpp>
 
+
 #define DEBUGX(x)
 
 namespace sheet {
     namespace compiler {
 
-		SheetTemplateRenderer::SheetTemplateRenderer(AContext* ctx, SheetEventRenderer *renderer) : 
+		SheetTemplateRenderer::SheetTemplateRenderer(IContext* ctx, SheetEventRenderer *renderer) : 
 			  sheetEventRenderer(renderer)
 			, ctx_(ctx) 
 		{
@@ -25,8 +26,8 @@ namespace sheet {
 
         void SheetTemplateRenderer::setTargetCreateIfNotExists(const Track &track, const Voice &voice)
 		{
-			AContext::TrackId trackId;
-			AContext::VoiceId voiceId;
+			IContext::TrackId trackId;
+			IContext::VoiceId voiceId;
 			auto it = ptrIdMap_.find(&track);
 			bool trackIsNew = false;
 			if (it == ptrIdMap_.end()) {
@@ -66,7 +67,7 @@ namespace sheet {
 		namespace {
 			struct TemplatesAndItsChords {
 				typedef std::vector<Event*> Chords;
-				typedef AContext::SheetTemplates Templates;
+				typedef IContext::SheetTemplates Templates;
 				Chords chords;
 				Templates templates;
 				fm::Ticks offset = 0;
@@ -110,10 +111,10 @@ namespace sheet {
 				}
 				it_ = degrees_->begin();
 			}			
-			AContext::SheetTemplates __getTemplates(SheetTemplateRenderer &sheetTemplateRenderer, const Event &metaEvent)
+			IContext::SheetTemplates __getTemplates(SheetTemplateRenderer &sheetTemplateRenderer, const Event &metaEvent)
 			{
 				auto ctx = sheetTemplateRenderer.context();
-				AContext::SheetTemplates templates;
+				IContext::SheetTemplates templates;
 				for (size_t idx=0; idx < metaEvent.metaArgs.size(); ++idx) {
 					auto sheetTemplateName =fm::getArgumentValue<fm::String>(metaEvent, idx);
 					auto sheetTemplate = ctx->sheetTemplateDefServer()->getSheetTemplate(sheetTemplateName);
@@ -176,7 +177,7 @@ namespace sheet {
 				return templatesAndItsChords;
 			}
 
-			Event & __degreeToAbsoluteNote(AContext *ctx, const Event &chordEvent, const Event &degreeEvent, Event &target) {
+			Event & __degreeToAbsoluteNote(IContext *ctx, const Event &chordEvent, const Event &degreeEvent, Event &target) {
 				try {
 					target = degreeEvent;
 					if (degreeEvent.type == Event::Group) {
@@ -225,7 +226,7 @@ namespace sheet {
 				}
 			}
 
-			void __handleChordMeta(AContext *ctx,
+			void __handleChordMeta(IContext *ctx,
 			const Event &metaEvent, 
 			SheetEventRenderer *sheetEventRenderer,
 			DegreeEventServer &eventServer)
@@ -242,7 +243,7 @@ namespace sheet {
 			}		
 
 			typedef std::list<const Event*> Chords;
-			fm::Ticks __renderOneBar(AContext *ctx, 
+			fm::Ticks __renderOneBar(IContext *ctx, 
 				SheetEventRenderer *sheetEventRenderer, 
 				DegreeEventServer &eventServer, 
 				const Chords &chords) 

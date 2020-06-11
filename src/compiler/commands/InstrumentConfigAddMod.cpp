@@ -1,9 +1,9 @@
 #include "InstrumentConfigAddMod.h"
-#include <compiler/context/AContext.h>
+#include <compiler/context/IContext.h>
 
 namespace sheet {
     namespace compiler {
-        void InstrumentConfigAddMod::execute(AContext* context)
+        void InstrumentConfigAddMod::execute(IContext* context)
         {
             if (!this->hasInstrument()) {
                 return;

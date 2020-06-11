@@ -16,7 +16,7 @@
 #include <list>
 #include "forward.hpp"
 #include "metaData.h"
-#include "context/AContext.h"
+#include "context/IContext.h"
 #include "ISheetTemplateRenderer.h"
 
 namespace sheet {
@@ -24,15 +24,15 @@ namespace sheet {
         class SheetEventRenderer;
         class SheetTemplateRenderer : public ISheetTemplateRenderer {
         public:
-            SheetTemplateRenderer(AContext* ctx, SheetEventRenderer *renderer);
+            SheetTemplateRenderer(IContext* ctx, SheetEventRenderer *renderer);
             virtual ~SheetTemplateRenderer();
             void render(Track * sheetTrack);
-            AContext* context() const { return this->ctx_; }
+            IContext* context() const { return this->ctx_; }
             SheetEventRenderer *sheetEventRenderer;
         private:
             void setTargetCreateIfNotExists(const Track &track, const Voice &voice);
-            typedef std::unordered_map<const void*, AContext::Id> PtrIdMap;
-            AContext* ctx_;
+            typedef std::unordered_map<const void*, IContext::Id> PtrIdMap;
+            IContext* ctx_;
 			PtrIdMap ptrIdMap_;
         };
     }

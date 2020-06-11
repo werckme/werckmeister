@@ -9,7 +9,7 @@ namespace sheet {
         public:
             Arpeggio() = default;
             virtual ~Arpeggio() = default;
-            virtual void perform(AContext *ctx, Events &events) override;
+            virtual void perform(IContext *ctx, Events &events) override;
             enum Direction { Up, Down };
             Direction direction = Up;
             fm::IHasParameter::ParametersByNames parameters = {

@@ -134,7 +134,7 @@ namespace fm {
 		return nullptr;
 	}
 
-	sheet::compiler::AContextPtr Werckmeister::createTempContext()
+	sheet::compiler::IContextPtr Werckmeister::createTempContext()
 	{
 		// TODO: remove
 		return nullptr;

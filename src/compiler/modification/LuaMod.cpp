@@ -5,7 +5,7 @@
 #include <compiler/error.hpp>
 #include <algorithm>
 #include <compiler/lua/luaTimeInfo.h>
-#include <compiler/context/AContext.h>
+#include <compiler/context/IContext.h>
 #include <fm/lua/luaHelper.h>
 
 static const char * LUA_EVENT_TYPE_NOTE = "note";
@@ -29,8 +29,8 @@ namespace sheet {
         struct LuaEvent : lua::ALuaObject {
             typedef lua::ALuaObject Base;
             const Event *event;
-            AContext *ctx;
-            LuaEvent(const Event *event, AContext *ctx)
+            IContext *ctx;
+            LuaEvent(const Event *event, IContext *ctx)
                 : event(event), ctx(ctx)
             {}
             void push(lua_State *L);
@@ -227,7 +227,7 @@ namespace sheet {
             return result;
         }
 
-        void LuaModification::perform(AContext *ctx, Events &events)
+        void LuaModification::perform(IContext *ctx, Events &events)
         {
             lua_getglobal(L, LUA_MODIFICATION_FENTRY);
             pushEvents(ctx, events);
@@ -238,7 +238,7 @@ namespace sheet {
             events.swap(processedEvents);
         }
 
-        void LuaModification::pushEvents(AContext *ctx, const Events &events)
+        void LuaModification::pushEvents(IContext *ctx, const Events &events)
         {
             lua_createtable(L, events.size(), 0);
             auto top = lua_gettop(L);

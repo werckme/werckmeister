@@ -4,7 +4,7 @@
 
 namespace sheet {
     namespace compiler {
-        void SelectMidiSound::execute(AContext* context)
+        void SelectMidiSound::execute(IContext* context)
         {
             auto *midiContext = getMidiContext(context);
             auto pc         = parameters[argumentNames.SelectMidiSound.PC].value<int>();

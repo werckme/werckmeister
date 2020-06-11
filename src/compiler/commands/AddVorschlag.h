@@ -12,7 +12,7 @@ namespace sheet {
         public:
             fm::IHasParameter::ParametersByNames parameters = {};
             virtual ParametersByNames & getParameters() { return this->parameters; }
-            virtual void execute(AContext*);
+            virtual void execute(IContext*);
         };
     }
 }

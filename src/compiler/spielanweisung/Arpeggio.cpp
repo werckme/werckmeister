@@ -1,12 +1,12 @@
 #include "Arpeggio.h"
-#include "compiler/context/AContext.h"
+#include "compiler/context/IContext.h"
 #include <algorithm>
 #include <fm/tools.h>
 
 namespace sheet {
     namespace compiler {
 
-        void Arpeggio::perform(AContext *ctx, Events &events)
+        void Arpeggio::perform(IContext *ctx, Events &events)
         {
 			Events result;
 			if (events.empty()) {

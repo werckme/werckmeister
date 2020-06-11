@@ -16,7 +16,7 @@ namespace sheet {
             };
             virtual ParametersByNames & getParameters() { return this->parameters; }
             virtual void setArguments(const Arguments &args) override;
-            virtual void execute(AContext*);
+            virtual void execute(IContext*);
         protected:
             VoicingStrategyPtr voicingStrategy = nullptr;
         };

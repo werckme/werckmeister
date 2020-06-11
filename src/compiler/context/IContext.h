@@ -63,6 +63,10 @@ namespace sheet {
 			/**
 			 * TODO: no context domain
 			 */
+			virtual ISheetTemplateDefServerPtr sheetTemplateDefServer() const = 0;
+			/**
+			 * TODO: no context domain
+			 */
 			virtual const SheetTemplates & currentSheetTemplates() = 0;
 			/**
 			 * TODO: no context domain

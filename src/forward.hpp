@@ -9,6 +9,8 @@ namespace sheet {
 		typedef std::shared_ptr<Compiler> CompilerPtr;
 		class AContext;
 		typedef std::shared_ptr<AContext> AContextPtr;
+		class IContext;
+		typedef std::shared_ptr<IContext> IContextPtr;		
 		class ASpielanweisung;
 		typedef std::shared_ptr<ASpielanweisung> ASpielanweisungPtr;
 		class AModification;
