@@ -6,6 +6,7 @@
 #define ARG_MODE "mode"
 #define ARG_NOMETA "nometa"
 #define ARG_VERSION "version"
+#define ARG_VERBOSE "verbose"
 
 void CompilerProgramOptions::parseProgrammArgs(size_t argc, const char **argv)
 {
@@ -18,6 +19,7 @@ void CompilerProgramOptions::parseProgrammArgs(size_t argc, const char **argv)
 Validate mode checks for errors and returns the validation result as json object.")
         (ARG_NOMETA, "dosen't render midi meta events like track name or tempo")
         (ARG_VERSION, "prints the werckmeister version")
+        (ARG_VERBOSE, "prints (debug) informations to the output")
         ;
     po::positional_options_description p;
     p.add(ARG_INPUT, -1);
@@ -31,6 +33,10 @@ void CompilerProgramOptions::printHelpText(std::ostream &os)
     os << optionsDescription;
 }
 
+bool CompilerProgramOptions::isVerboseSet() const
+{
+    return !!variables.count(ARG_VERBOSE);
+}
 
 bool CompilerProgramOptions::isHelpSet() const 
 { 

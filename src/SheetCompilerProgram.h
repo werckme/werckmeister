@@ -6,6 +6,7 @@
 #include <forward.hpp>
 #include "ICompilerProgramOptions.h"
 #include <fm/ILogger.h>
+#include <ostream>
 
 class SheetCompilerProgram {
 private:
@@ -28,6 +29,7 @@ public:
     void execute();
     void prepareEnvironment();
 protected:
+    void printIntro(std::ostream &os);
     void prepareSearchPaths();
 };
 

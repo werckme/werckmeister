@@ -10,6 +10,7 @@ struct CompilerProgramOptions : public ICompilerProgramOptions {
 	virtual ~CompilerProgramOptions() = default;
 	virtual bool isHelpSet() const;
 	virtual bool isInputSet() const;
+	virtual bool isVerboseSet() const;
 	virtual fm::String getInput() const;
 	virtual bool isOutputSet() const;
 	virtual bool isNoMetaSet() const;

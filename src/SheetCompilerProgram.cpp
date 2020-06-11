@@ -11,10 +11,25 @@
 #include <iostream>
 #include <boost/filesystem.hpp>
 #include <exception>
+#include <fm/config.hpp>
 
 void SheetCompilerProgram::prepareEnvironment()
 {
+    if (_programOptions->isVerboseSet()) {
+        _logger->logLevel(fm::ILogger::LevelBabble);
+    }
+    _logger->babble(WRMLogLambda(printIntro(log)));
     prepareSearchPaths();
+}
+
+void SheetCompilerProgram::printIntro(std::ostream &os)
+{
+    os << "\tWERCKMEISTER "                          << std::endl
+       << "\t(c) Samba Godschynski "                          << std::endl
+       << "\thttps://werckme.github.io"                       << std::endl
+       << "\tversion: "                   << SHEET_VERSION    << std::endl
+       << "\tMIDI ppq value: "            << fm::PPQ          << std::endl
+    ;
 }
 
 void SheetCompilerProgram::execute()

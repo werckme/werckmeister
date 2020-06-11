@@ -12,6 +12,10 @@ namespace fm {
         virtual void error(const WriteToStreamF&);
         virtual void writeMessage(const WriteToStreamF &f);
         virtual ~ConsoleLogger() = default;
+        virtual void logLevel(LogLevel lvl) { _logLevel = lvl; }
+        virtual LogLevel logLevel() const { return _logLevel; }
+    private:
+        LogLevel _logLevel = LevelNone;
     };
 }
 

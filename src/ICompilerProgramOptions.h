@@ -15,6 +15,7 @@ struct ICompilerProgramOptions {
 	virtual bool isValidateMode() const = 0;
 	virtual bool isVersionSet() const = 0;
 	virtual void printHelpText(std::ostream &os) = 0;
+	virtual bool isVerboseSet() const = 0;
 };
 
 #endif
