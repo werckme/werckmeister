@@ -6,7 +6,7 @@
 #include <compiler/error.hpp>
 #include <functional>
 #include <fm/werckmeister.hpp>
-#include <compiler/preprocessor.h>
+#include <compiler/Preprocessor.h>
 #include <compiler/error.hpp>
 
 namespace sheet {

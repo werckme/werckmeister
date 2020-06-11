@@ -1,9 +1,9 @@
-#include "sheetTemplateRenderer.h"
+#include "SheetTemplateRenderer.h"
 #include "error.hpp"
 #include <fm/tools.h>
 #include <iostream>
 #include <boost/exception/get_error_info.hpp>
-#include "sheetEventRenderer.h"
+#include "SheetEventRenderer.h"
 #include <algorithm>
 #include <functional>
 #include <fm/werckmeister.hpp>

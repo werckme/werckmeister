@@ -1,18 +1,18 @@
-#include "compiler.h"
+#include "Compiler.h"
 #include "sheet/Document.h"
 #include "context/AContext.h"
 #include <sheet/objects/Event.h>
 #include <type_traits>
 #include <algorithm>
 #include <list>
-#include "sheetTemplateRenderer.h"
+#include "SheetTemplateRenderer.h"
 #include "metaCommands.h"
 #include "error.hpp"
 #include <boost/exception/get_error_info.hpp>
 #include <fm/tools.h>
 #include <functional>
-#include "preprocessor.h"
-#include "sheetEventRenderer.h"
+#include "Preprocessor.h"
+#include "SheetEventRenderer.h"
 
 namespace sheet {
 

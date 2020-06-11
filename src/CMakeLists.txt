@@ -12,15 +12,15 @@ SET (SRC_FETZER_LIB
     fm/lua/ALuaWithParameter.cpp
     fm/tools.cpp
     fm/ConsoleLogger.cpp
-    compiler/compiler.cpp
+    compiler/Compiler.cpp
     parser/chordDefParser.cpp
     parser/sheetParser.cpp
     parser/documentParser.cpp
     parser/pitchmapParser.cpp
     compiler/context/MidiContext.cpp
     compiler/context/AContext.cpp
-    compiler/preprocessor.cpp
-    compiler/sheetEventRenderer.cpp
+    compiler/Preprocessor.cpp
+    compiler/SheetEventRenderer.cpp
     compiler/spielanweisung/ASpielanweisung.cpp
     compiler/spielanweisung/Arpeggio.cpp
     compiler/spielanweisung/Vorschlag.cpp
@@ -31,7 +31,7 @@ SET (SRC_FETZER_LIB
     compiler/voicings/SimpleGuitar.cpp
     compiler/voicings/Lua.cpp
     compiler/metaData.cpp
-    compiler/sheetTemplateRenderer.cpp
+    compiler/SheetTemplateRenderer.cpp
     compiler/error.cpp
     compiler/warning.cpp
     compiler/argumentNames.cpp

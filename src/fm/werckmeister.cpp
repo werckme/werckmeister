@@ -6,7 +6,7 @@
 #include <boost/algorithm/string/join.hpp>
 #include <exception>
 #include <fstream>
-#include "compiler/compiler.h"
+#include "compiler/Compiler.h"
 #include <compiler/context/MidiContext.h>
 #include <memory>
 #include "compiler/voicings/VoicingStrategy.h"

@@ -1,11 +1,11 @@
 #include <fm/werckmeister.hpp>
 #include <fm/common.hpp>
 #include "sheet/Document.h"
-#include "compiler/compiler.h"
+#include "compiler/Compiler.h"
 #include "parser/parser.h"
 #include "compiler/context/MidiContext.h"
 #include "sheet.h"
-#include "compiler/sheetEventRenderer.h"
+#include "compiler/SheetEventRenderer.h"
 #include <fmapp/os.hpp>
 #include <iostream>
 #include <boost/filesystem.hpp>
