@@ -16,10 +16,11 @@
 #include <compiler/error.hpp>
 #include <compiler/instrument.h>
 #include <compiler/timeInfo.h>
+#include "IContext.h"
 
 namespace sheet {
     namespace compiler {
-        class AContext {
+        class AContext : public IContext {
         public:
 			AContext();
 			static const double PitchbendMiddle;
