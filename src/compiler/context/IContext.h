@@ -68,10 +68,6 @@ namespace sheet {
 			 * TODO: no context domain
 			 */
 			virtual const SheetTemplates & currentSheetTemplates() = 0;
-			/**
-			 * TODO: no context domain
-			 */			
-			virtual void currentSheetTemplate(const SheetTemplates &sheetTemplate) = 0;
 			virtual VoicingStrategyPtr currentVoicingStrategy() = 0;
 			virtual AModificationPtr spielanweisung() = 0;
 			virtual AInstrumentDef * getInstrumentDef(const fm::String &uname) = 0;
