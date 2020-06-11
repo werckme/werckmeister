@@ -18,7 +18,6 @@ namespace sheet {
 		void Compiler::compile(DocumentPtr document)
 		{
 			this->document_ = document;
-			auto ctx = context();
 
 			try {
 				sheetEventRenderer()->handleMetaEvents(document->sheetDef.documentConfigs, 
@@ -157,8 +156,8 @@ namespace sheet {
 			if (!sheetTrack || sheetTrack->voices.empty()) {
 				return;
 			}
-			preprocessSheetTrack(sheetTrack, sheetEventRenderer(), ctx.get());
-			consumeChords(sheetTrack, sheetEventRenderer(), ctx.get());
+			preprocessSheetTrack(sheetTrack, sheetEventRenderer(), ctx);
+			consumeChords(sheetTrack, sheetEventRenderer(), ctx);
 			sheetTemplateRenderer_->render(sheetTrack);
 		}
 
