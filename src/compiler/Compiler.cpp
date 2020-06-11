@@ -5,25 +5,16 @@
 #include <type_traits>
 #include <algorithm>
 #include <list>
-#include "SheetTemplateRenderer.h"
 #include "metaCommands.h"
 #include "error.hpp"
 #include <boost/exception/get_error_info.hpp>
 #include <fm/tools.h>
 #include <functional>
 #include "Preprocessor.h"
-#include "SheetEventRenderer.h"
 
 namespace sheet {
 
 	namespace compiler {
-
-		Compiler::Compiler() 
-		{
-		}
-		Compiler::~Compiler() 
-		{
-		}
 		void Compiler::compile(DocumentPtr document)
 		{
 			this->document_ = document;
@@ -58,7 +49,6 @@ namespace sheet {
 		void Compiler::renderTracks()
 		{
 			auto ctx = context();
-			Preprocessor preprocessor;
 			auto renderer = sheetEventRenderer();
 			for (auto &track : document_->sheetDef.tracks)
 			{
@@ -77,7 +67,7 @@ namespace sheet {
 						return metaEvent;
 					}
 				);
-				preprocessor.process(track);
+				preprocessor_->process(track);
 				for (const auto &voice : track.voices)
 				{
 					auto voiceId = ctx->createVoice();
@@ -91,7 +81,7 @@ namespace sheet {
 		}
 
 		namespace {
-			void consumeChords(Track* sheetTrack, SheetEventRenderer *sheetEventRenderer, AContext *ctx) 
+			void consumeChords(Track* sheetTrack, ASheetEventRenderer *sheetEventRenderer, AContext *ctx) 
 			{
 				using namespace fm;
 				auto voice = sheetTrack->voices.begin(); 
@@ -108,7 +98,7 @@ namespace sheet {
 					sheetEventRenderer->addEvent(ev);
 				}
 			}
-			void preprocessSheetTrack(Track* sheetTrack, SheetEventRenderer *renderer, AContext *ctx) {
+			void preprocessSheetTrack(Track* sheetTrack, ASheetEventRenderer *renderer, AContext *ctx) {
 				using namespace fm;
 				auto voice = sheetTrack->voices.begin(); 
 				auto it = voice->events.begin();
@@ -167,17 +157,13 @@ namespace sheet {
 			if (!sheetTrack || sheetTrack->voices.empty()) {
 				return;
 			}
-			preprocessSheetTrack(sheetTrack, sheetEventRenderer().get(), ctx.get());
-			consumeChords(sheetTrack, sheetEventRenderer().get(), ctx.get());
-			SheetTemplateRenderer sheetTemplateRenderer(ctx.get(), sheetEventRenderer().get());
-			sheetTemplateRenderer.render(sheetTrack);
+			preprocessSheetTrack(sheetTrack, sheetEventRenderer(), ctx.get());
+			consumeChords(sheetTrack, sheetEventRenderer(), ctx.get());
+			sheetTemplateRenderer_->render(sheetTrack);
 		}
 
-		SheetEventRendererPtr Compiler::sheetEventRenderer()
+		ASheetEventRenderer* Compiler::sheetEventRenderer()
 		{
-			if (!this->sheetEventRenderer_) {
-				this->sheetEventRenderer_ = std::make_shared<SheetEventRenderer>(context().get());
-			}
 			return this->sheetEventRenderer_;
 		}
 	}

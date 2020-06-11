@@ -23,10 +23,10 @@ namespace sheet {
                         std::function<sheet::Event(const typename TContainer::value_type&)> fGetMetaEvent)
         {
             for(const auto &x : container) {
-                Event metaEvent = fGetMetaEvent(x);
+                const Event &metaEvent = fGetMetaEvent(x);
                 try {
                     handleMetaEvent(metaEvent);
-                } catch(fm::Exception &ex) {
+                } catch(const fm::Exception &ex) {
                     ex << ex_sheet_source_info(x);
                     throw;
                 }

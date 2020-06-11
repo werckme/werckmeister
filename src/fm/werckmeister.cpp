@@ -124,23 +124,20 @@ namespace fm {
 
 	sheet::compiler::CompilerPtr Werckmeister::createCompiler()
 	{
-		return std::make_shared<sheet::compiler::Compiler>();
+		// TODO remove
+		return nullptr;
 	}
 
 	sheet::compiler::AContextPtr Werckmeister::createContext()
 	{
-		if (this->_createContextHandler) {
-			return _createContextHandler();
-		}
-		auto midiContext = std::make_shared<sheet::compiler::MidiContext>();
-		return midiContext;
+		// TODO: remove
+		return nullptr;
 	}
 
 	sheet::compiler::AContextPtr Werckmeister::createTempContext()
 	{
-		auto tmpContext = createContext();
-		std::dynamic_pointer_cast<sheet::compiler::MidiContext>(tmpContext)->midi(createMidi());
-		return tmpContext;
+		// TODO: remove
+		return nullptr;
 	}	
 
 	sheet::VoicingStrategyPtr Werckmeister::getDefaultVoicingStrategy()
