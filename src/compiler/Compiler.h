@@ -14,12 +14,10 @@ namespace sheet {
 			Compiler();
 			Compiler(const Compiler&) = delete;
 			Compiler & operator=(const Compiler&) = delete;
-			void context(AContextPtr context) { context_ = context; }
 			AContextPtr context() const { return context_; }
 			virtual void compile(DocumentPtr document) override;
 			virtual ~Compiler();
 			SheetEventRendererPtr sheetEventRenderer();
-			void sheetEventRenderer(SheetEventRendererPtr);
 		protected:
 			void renderTracks();
 			void renderChordTrack();

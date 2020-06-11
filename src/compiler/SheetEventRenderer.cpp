@@ -20,7 +20,7 @@ namespace sheet {
 			template<>
 			bool renderEvent<Event::Note>(SheetEventRenderer* renderer, const Event *ev)
 			{
-				renderer->__renderEvent__(*ev);
+				renderer->renderEvent(*ev);
 				return true;
 			}
 
@@ -39,14 +39,14 @@ namespace sheet {
 			template<>
 			bool renderEvent<Event::TiedNote>(SheetEventRenderer* renderer, const Event *ev)
 			{
-				renderer->__renderEvent__(*ev);
+				renderer->renderEvent(*ev);
 				return true;
 			}
 
 			template<>
 			bool renderEvent<Event::PitchBend>(SheetEventRenderer* renderer, const Event *ev)
 			{
-				renderer->__renderPitchBendEvent__(*ev);
+				renderer->renderPitchBendEvent(*ev);
 				return true;
 			}
 
@@ -145,7 +145,7 @@ namespace sheet {
 			ctx_->warnings.emplace_back(warning);
 		}
 
-		void SheetEventRenderer::__renderEvent__(const Event &_ev)
+		void SheetEventRenderer::renderEvent(const Event &_ev)
 		{
 			Event ev = _ev;
 			auto meta = ctx_->voiceMetaData();
@@ -177,15 +177,15 @@ namespace sheet {
 			meta->expression = tmpExpression;
 			for (const auto &event : events) {
 				if (event.isPitchBend()) {
-					__renderPitchBendEvent__(event);
+					renderPitchBendEvent(event);
 				} else {
-					__renderEventPitches__(event);
+					renderEventPitches(event);
 				}
 			}
 			ctx_->seek(ev.duration);
 		}
 
-		void SheetEventRenderer::__renderEventPitches__(const Event &ev)
+		void SheetEventRenderer::renderEventPitches(const Event &ev)
 		{
 			auto ctx = context();
 			ctx->seek(ev.offset);
@@ -200,7 +200,7 @@ namespace sheet {
 			ctx->seek(-ev.offset);
 		}
 
-		void SheetEventRenderer::__renderPitchBendEvent__(const Event &pitchBendEvent)
+		void SheetEventRenderer::renderPitchBendEvent(const Event &pitchBendEvent)
 		{
 			auto ctx = context();
             auto meta = ctx->voiceMetaData();

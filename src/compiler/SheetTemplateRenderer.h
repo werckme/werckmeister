@@ -17,11 +17,12 @@
 #include "forward.hpp"
 #include "metaData.h"
 #include "context/AContext.h"
+#include "ISheetTemplateRenderer.h"
 
 namespace sheet {
     namespace compiler {
         class SheetEventRenderer;
-        class SheetTemplateRenderer {
+        class SheetTemplateRenderer : public ISheetTemplateRenderer {
         public:
             SheetTemplateRenderer(AContext* ctx, SheetEventRenderer *renderer);
             virtual ~SheetTemplateRenderer();

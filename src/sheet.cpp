@@ -46,10 +46,6 @@ namespace sheet {
         context->midi(midi);
         context->sheetTemplateDefServer(doc.get());
         auto compiler = wm.createCompiler();
-        if (eventRenderer) {
-            compiler->sheetEventRenderer(eventRenderer);
-        }
-        compiler->context(context);
         compiler->compile(doc);
         context->warnings.swap(outWarnings);
         return midi;

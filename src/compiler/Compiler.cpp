@@ -180,9 +180,5 @@ namespace sheet {
 			}
 			return this->sheetEventRenderer_;
 		}
-		void Compiler::sheetEventRenderer(SheetEventRendererPtr renderer)
-		{
-			this->sheetEventRenderer_ = renderer;
-		}
 	}
 }
