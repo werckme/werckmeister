@@ -46,9 +46,12 @@ namespace sheet {
 
 		class DocumentParser : public IDocumentParser {
 		public:
+			DocumentParser(DocumentPtr document) : _document(document) {} 
 			typedef std::vector<fm::String> Usings;
-			DocumentPtr parse(const fm::String &path, DocumentPtr input = nullptr);
-			DocumentPtr parseString(const fm::String &text);
+			virtual DocumentPtr parse(const fm::String &path);
+			virtual DocumentPtr parseString(const fm::String &text);
+		private:
+			DocumentPtr _document;
 		};
 	}
 }

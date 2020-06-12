@@ -41,14 +41,10 @@ namespace fm {
 		midi::MidiPtr createMidi();
         virtual ~Werckmeister();
         const char * version() const;
-		sheet::compiler::CompilerPtr createCompiler();
-		sheet::compiler::AContextPtr createContext();
-		sheet::compiler::IContextPtr createTempContext();
 		sheet::compiler::AModificationPtr getSpielanweisung(const String &name);
 		sheet::compiler::AModificationPtr getModification(const String &name);		
 		sheet::VoicingStrategyPtr getDefaultVoicingStrategy();
 		sheet::VoicingStrategyPtr getVoicingStrategy(const String &name);
-		sheet::DocumentPtr createDocument();
 		void registerLuaScript(const Path &path);
 		const Paths & searchPaths() const;
 		void addSearchPath(const Path &path);

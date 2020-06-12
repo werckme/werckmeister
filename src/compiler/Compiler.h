@@ -5,6 +5,7 @@
 #include "ISheetTemplateRenderer.h"
 #include "ASheetEventRenderer.h"
 #include "IPreprocessor.h"
+#include <memory>
 #include <compiler/context/IContext.h>
 
 namespace sheet {

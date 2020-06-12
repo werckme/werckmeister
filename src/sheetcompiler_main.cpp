@@ -11,6 +11,7 @@
 #include <compiler/Compiler.h>
 #include <compiler/context/MidiContext.h>
 #include <compiler/Preprocessor.h>
+#include <sheet/Document.h>
 
 int main(int argc, const char** argv)
 {
@@ -18,6 +19,8 @@ int main(int argc, const char** argv)
 	namespace cp = sheet::compiler;
 	auto programOptionsPtr = std::make_shared<CompilerProgramOptions>();
 	programOptionsPtr->parseProgrammArgs(argc, argv);
+
+	auto documentPtr = std::make_shared<sheet::Document>();
 
 	auto injector = di::make_injector(
 		  di::bind<cp::IDocumentParser>().to<cp::DocumentParser>()
@@ -28,6 +31,7 @@ int main(int argc, const char** argv)
 		, di::bind<cp::IPreprocessor>().to<cp::Preprocessor>()
 		, di::bind<fm::Werckmeister>().to<fm::Werckmeister>()
 		, di::bind<ICompilerProgramOptions>().to(programOptionsPtr)
+		, di::bind<sheet::Document>().to(documentPtr)
 		, di::bind<fm::ILogger>().to<fm::ConsoleLogger>().in(di::singleton)
 	);
 	auto program = injector.create<SheetCompilerProgram>();

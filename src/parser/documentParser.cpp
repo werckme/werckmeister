@@ -119,7 +119,7 @@ namespace sheet {
 			}						
 		}
 
-		DocumentPtr DocumentParser::parse(const fm::String &path, DocumentPtr input)
+		DocumentPtr DocumentParser::parse(const fm::String &path)
 		{
 			auto &wm = fm::getWerckmeister();
 			auto filestream = wm.openResource(path);
@@ -131,19 +131,18 @@ namespace sheet {
 			const fm::String::value_type *first = documentText.c_str();
 			const fm::String::value_type *last = first + documentText.length();
 
-			auto res = !!input ? input : fm::getWerckmeister().createDocument();
-			res->path = wm.absolutePath(path);
-			auto sourceId = res->addSource(res->path);
-			res->sourceId = sourceId;
+			_document->path = wm.absolutePath(path);
+			auto sourceId = _document->addSource(_document->path);
+			_document->sourceId = sourceId;
 			SheetDefParser sheetParser;
 			try {
-				res->sheetDef = sheetParser.parse(first, last, sourceId);
-				processUsings(res, res->sheetDef.documentUsing, AllSupportedExtensions);
+				_document->sheetDef = sheetParser.parse(first, last, sourceId);
+				processUsings(_document, _document->sheetDef.documentUsing, AllSupportedExtensions);
 			} catch(fm::Exception &ex) {
-				ex << ex_sheet_document(res);
+				ex << ex_sheet_document(_document);
 				throw;
 			}
-			return res;
+			return _document;
 		}
 
 		DocumentPtr DocumentParser::parseString(const fm::String &documentText)
@@ -151,17 +150,15 @@ namespace sheet {
 			const fm::String::value_type *first = documentText.c_str();
 			const fm::String::value_type *last = first + documentText.length();
 
-			auto res = fm::getWerckmeister().createDocument();
-			res->sourceId = 0;
+			_document->sourceId = 0;
 			SheetDefParser sheetParser;
 			try {
-				res->sheetDef = sheetParser.parse(first, last, 0);
-				//processUsings(res, res->sheetDef.documentUsing, AllSupportedExtensions);
+				_document->sheetDef = sheetParser.parse(first, last, 0);
 			} catch(fm::Exception &ex) {
-				ex << ex_sheet_document(res);
+				ex << ex_sheet_document(_document);
 				throw;
 			}
-			return res;
+			return _document;
 		}
 	}
 }

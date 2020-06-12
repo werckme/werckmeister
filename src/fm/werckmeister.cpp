@@ -122,24 +122,6 @@ namespace fm {
 		return &(it->second);
 	}
 
-	sheet::compiler::CompilerPtr Werckmeister::createCompiler()
-	{
-		// TODO remove
-		return nullptr;
-	}
-
-	sheet::compiler::AContextPtr Werckmeister::createContext()
-	{
-		// TODO: remove
-		return nullptr;
-	}
-
-	sheet::compiler::IContextPtr Werckmeister::createTempContext()
-	{
-		// TODO: remove
-		return nullptr;
-	}	
-
 	sheet::VoicingStrategyPtr Werckmeister::getDefaultVoicingStrategy()
 	{
 		return getVoicingStrategy(SHEET_VOICING_STRATEGY_DEFAULT);
@@ -210,12 +192,6 @@ namespace fm {
 			return nullptr;
 		}
 		return &it->second;
-	}
-
-	sheet::DocumentPtr Werckmeister::createDocument() 
-	{
-		auto ptr = std::make_shared<sheet::Document>();
-		return ptr;
 	}
 
 	Path Werckmeister::resolvePath(const Path &strRelPath, sheet::ConstDocumentPtr doc, const Path &sourcePath) const

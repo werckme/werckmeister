@@ -10,7 +10,9 @@ namespace sheet {
     namespace compiler {
         class SheetEventRenderer : public ASheetEventRenderer {
         public:
-            SheetEventRenderer(IContext *ctx) : ctx_(ctx) {}
+            SheetEventRenderer(IContext *ctx) : ctx_(ctx) {
+
+            }
             virtual ~SheetEventRenderer() = default;
             IContext* context() const { return this->ctx_; }
             virtual void addEvent(const Event &event);

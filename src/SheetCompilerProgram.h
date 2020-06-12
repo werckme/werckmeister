@@ -6,28 +6,33 @@
 #include <forward.hpp>
 #include "ICompilerProgramOptions.h"
 #include <compiler/ICompiler.h>
+#include <compiler/context/IContext.h>
 #include <fm/ILogger.h>
 #include <ostream>
+
 
 class SheetCompilerProgram {
 private:
     fm::Werckmeister *_wm;
     std::shared_ptr<ICompilerProgramOptions> _programOptions;
-    std::shared_ptr<fm::ILogger> _logger;
+    fm::ILoggerPtr _logger;
     sheet::compiler::IDocumentParser *_documentParser;
     sheet::compiler::ICompiler *_compiler;
+    sheet::compiler::IContext *_context;
 public:
     SheetCompilerProgram(
         fm::Werckmeister *wm,
         std::shared_ptr<ICompilerProgramOptions> programOptions,
-        std::shared_ptr<fm::ILogger> logger,
+        fm::ILoggerPtr logger,
         sheet::compiler::IDocumentParser *documentParser,
-        sheet::compiler::ICompiler *compiler
+        sheet::compiler::ICompiler *compiler,
+        sheet::compiler::IContext *context
     ) : _wm(wm),
         _programOptions(programOptions),
         _logger(logger),
         _documentParser(documentParser),
-        _compiler(compiler)
+        _compiler(compiler),
+        _context(context)
     {
     }
     void execute();

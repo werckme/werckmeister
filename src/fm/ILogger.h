@@ -3,6 +3,7 @@
 
 #include <ostream>
 #include <functional>
+#include <memory>
 
 #define WRMLogLambda(x) [&](auto &log) { (x); } 
 
@@ -17,6 +18,7 @@ namespace fm {
         virtual void logLevel(LogLevel lvl) = 0;
         virtual LogLevel logLevel() const = 0;
     };
+    typedef std::shared_ptr<ILogger> ILoggerPtr;
 }
 
 #endif

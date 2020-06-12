@@ -3,6 +3,7 @@
 
 #include <functional>
 #include <compiler/error.hpp>
+#include <memory>
 
 namespace sheet {
     struct Event;
@@ -17,6 +18,7 @@ namespace sheet {
             void handleMetaEvents(const TContainer &container, 
                             std::function<sheet::Event(const typename TContainer::value_type&)> fGetMetaEvent);        
         };
+        typedef std::shared_ptr<ASheetEventRenderer> ASheetEventRendererPtr; 
         //---------------------------------------------------------------------
         template<class TContainer>
         void ASheetEventRenderer::handleMetaEvents(const TContainer &container, 

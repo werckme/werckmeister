@@ -132,7 +132,7 @@ namespace sheet {
 				templatesAndItsChords.emplace_back(TemplatesAndItsChords());
 				templatesAndItsChords.back().templates = ctx->currentSheetTemplates();
 				auto &wm = fm::getWerckmeister();
-				auto tmpContext = wm.createTempContext();
+				auto tmpContext = ctx->createNewContext();
 				tmpContext->masterTempo(ctx->masterTempo());
 				tmpContext->setChordTrackTarget();
 				SheetEventRenderer tmpEventRenderer(tmpContext.get());

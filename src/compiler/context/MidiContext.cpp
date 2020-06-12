@@ -133,6 +133,7 @@ namespace sheet {
 
 		MidiContext::Base::TrackId MidiContext::createTrackImpl()
 		{
+			_logger->babble(WRMLogLambda(log << this));
 			_checkMidi(midi_);
 			auto track = midi_->createTrack();
 			midi_->addTrack(track);
@@ -344,6 +345,13 @@ namespace sheet {
 			trackName.absPosition(0);
 			addEvent(trackName, trackId); 
 			return trackId;
+		}
+		IContextPtr MidiContext::createNewContext() const
+		{
+			auto midiContext = std::make_shared<sheet::compiler::MidiContext>(_logger);
+			auto midiFile 	= std::make_shared<fm::midi::Midi>(fm::PPQ);
+			midiContext->midi(midiFile);
+			return midiContext;
 		}
 	}
 }

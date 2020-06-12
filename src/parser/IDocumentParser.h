@@ -9,7 +9,7 @@ namespace sheet {
         
         class IDocumentParser {
 		public:
-			virtual DocumentPtr parse(const fm::String &path, DocumentPtr input = nullptr) = 0;
+			virtual DocumentPtr parse(const fm::String &path) = 0;
 		};
     }
 }

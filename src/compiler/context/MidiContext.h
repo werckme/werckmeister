@@ -7,11 +7,15 @@
 #include <map>
 #include <vector>
 #include <fm/config.hpp>
+#include <fm/ILogger.h>
 
 namespace sheet {
     namespace compiler {
         class MidiContext : public AContext {
+		private:
+			fm::ILoggerPtr _logger;
 		public:
+			MidiContext(fm::ILoggerPtr logger) : _logger(logger) {}
 			typedef AContext Base;
 			typedef std::unordered_map<fm::String, MidiInstrumentDef> MidiInstrumentDefs;
 			typedef std::vector<MidiInstrumentDef> InstrumentDefContainer;
@@ -46,6 +50,7 @@ namespace sheet {
 			MidiInstrumentDef * getMidiInstrumentDef(const fm::String &uname);
 			virtual AInstrumentDef * currentInstrumentDef() override;
 			const MidiInstrumentDefs & midiInstrumentDefs() const { return this->midiInstrumentDefs_; }
+			virtual IContextPtr createNewContext() const;
 		protected:
 			virtual Base::VoiceMetaDataPtr createVoiceMetaData() override;
 			virtual Base::TrackMetaDataPtr createTrackMetaData() override;

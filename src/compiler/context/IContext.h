@@ -37,6 +37,7 @@ namespace sheet {
 			 * @return the current voiceId
 			 */
 			virtual VoiceId voice() const = 0;
+			virtual IContextPtr createNewContext() const = 0;
 			virtual TrackId chordTrackId() const = 0;
 			virtual TrackId masterTrackId() = 0;
 			virtual VoiceId chordVoiceId() const = 0;

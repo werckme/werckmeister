@@ -44,8 +44,13 @@ void SheetCompilerProgram::execute()
     }
     auto file = _programOptions->getInput();
     _logger->babble(WRMLogLambda(log << "parsing '" << file << "'"));
-    sheet::compiler::DocumentParser docparser;
-    _documentParser->parse(file);
+    auto document =_documentParser->parse(file);
+    auto midiFile = fm::getWerckmeister().createMidi();
+    //_midiContext->midi(midiFile);
+    _logger->babble(WRMLogLambda(log << _context << "'"));
+    _logger->babble(WRMLogLambda(log << "compiling '" << file << "'"));
+    _compiler->compile(document);
+
 }
 
 void SheetCompilerProgram::prepareSearchPaths()
