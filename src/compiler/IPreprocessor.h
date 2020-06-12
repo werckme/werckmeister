@@ -2,18 +2,26 @@
 #define ICOMPILER_PREPROCESSOR_H
 
 #include <fm/common.hpp>
+#include "ASheetEventRenderer.h"
+#include <compiler/context/IContext.h>
 
 namespace sheet {
 	struct Track;
 	namespace compiler {
-        /**
-         * sets implicite duration to every event with duration = 0.
-		 * sets x shortcut e.g.: c1 x x x
-		 * set implicit EOB
-         */
 		class IPreprocessor {
 		public:
+			/**
+			 * resolves implicite duration to every event time consuming with duration = 0.
+			 * resolves x shortcut e.g.: c1 x x x -> c1 c1 c1 c1
+			 * set implicit EOB
+			 */
 			virtual void process(Track &track) = 0;
+			/**
+			 * determines the duration of every chord event, such as:
+			 * C D | E -> C(2) D(2) | E(4)
+			 * set implicit EOB
+			 */			
+			virtual void preprocessSheetTrack(Track &sheetTrack) = 0;
 		};
 	}
 }

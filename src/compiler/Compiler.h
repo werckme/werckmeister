@@ -13,19 +13,17 @@ namespace sheet {
 		class Compiler : public ICompiler {
 		private:
 			IContext* context_;
-			DocumentPtr document_;
+			DocumentWPtr document_;
 			ASheetEventRenderer *sheetEventRenderer_;
 			ISheetTemplateRenderer *sheetTemplateRenderer_;
 			IPreprocessor *preprocessor_;
 		public:
 			Compiler(
 				IContext* context, 
-				DocumentPtr document, 
 				ASheetEventRenderer *sheetEventRenderer,
 				ISheetTemplateRenderer *sheetTemplateRenderer,
 				IPreprocessor *preprocessor
 			) : context_(context),
-				document_(document),
 				sheetEventRenderer_(sheetEventRenderer),
 				sheetTemplateRenderer_(sheetTemplateRenderer),
 				preprocessor_(preprocessor)

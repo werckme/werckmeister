@@ -2,6 +2,7 @@
 #include <sheet/objects/Track.h>
 #include <compiler/metaData.h>
 #include "error.hpp"
+#include <functional>
 
 namespace sheet {
 	namespace compiler {
@@ -87,6 +88,46 @@ namespace sheet {
 				}
 			}
         }
+	
+		void Preprocessor::preprocessSheetTrack(Track& sheetTrack)
+		{
+			using namespace fm;
+			auto voice = sheetTrack.voices.begin(); 
+			auto it = voice->events.begin();
+			auto end = voice->events.end();
+			std::list<Event*> barEvents;
+			_context->setChordTrackTarget();
+			auto processEob = [&]() {
+				int nbOfEventsPerBar = barEvents.size();
+				if (nbOfEventsPerBar > 0) {
+					std::for_each(barEvents.begin(), barEvents.end(), [&](Event *ev) {
+						auto barLength = _context->voiceMetaData()->barLength;
+						ev->duration = barLength / nbOfEventsPerBar;
+					});
+				}
+				barEvents.clear();
+			};
+			while (it != end) {
+				if (it->type == Event::Meta) {
+					_renderer->handleMetaEvent(*it);
+				}					
+				if (it->type == Event::EOB) {
+					processEob();
+				}
+				if (it->isTimeConsuming()) {
+					barEvents.push_back(&(*it));
+				}
+				++it;
+			}
+			if (barEvents.empty()) {
+				return;
+			}
+			// add implicit eob
+			Event eob;
+			eob.type = Event::EOB;
+			processEob(); // first process bar events
+			voice->events.push_back(eob); // then modify source container
+		}
 
     }
 }

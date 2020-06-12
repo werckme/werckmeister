@@ -48,10 +48,12 @@ namespace sheet {
 		{
 			auto ctx = context();
 			auto renderer = sheetEventRenderer();
-			for (auto &track : document_->sheetDef.tracks)
+			auto document = document_.lock();
+			for (auto &track : document->sheetDef.tracks)
 			{
 				fm::String type = fm::getFirstMetaArgumentWithKeyName(SHEET_META__TRACK_META_KEY_TYPE, track.trackConfigs).value;
-				if (!type.empty()) { // do not render tracks with a specific type
+				bool isNoteEventTrack = type.empty();
+				if (!isNoteEventTrack) {
 					continue;
 				}				
 				auto trackId = ctx->createTrack();
@@ -86,7 +88,7 @@ namespace sheet {
 				std::list<Event*> barEvents;
 				ctx->setChordTrackTarget();
 				auto voiceMetaData = ctx->voiceMetaData();
-				// since we process the chord track a second time, we reset all vital values
+				// since we process the chord track a second time later, we reset all vital values
 				voiceMetaData->barPosition = 0;
 				voiceMetaData->position =  0;
 				voiceMetaData->tempoFactor = 1;
@@ -96,44 +98,7 @@ namespace sheet {
 					sheetEventRenderer->addEvent(ev);
 				}
 			}
-			void preprocessSheetTrack(Track* sheetTrack, ASheetEventRenderer *renderer, IContext *ctx) {
-				using namespace fm;
-				auto voice = sheetTrack->voices.begin(); 
-				auto it = voice->events.begin();
-				auto end = voice->events.end();
-				std::list<Event*> barEvents;
-				ctx->setChordTrackTarget();
-				auto processEob = [&barEvents, ctx]() {
-					int nbOfEventsPerBar = barEvents.size();
-					if (nbOfEventsPerBar > 0) {
-						std::for_each(barEvents.begin(), barEvents.end(), [nbOfEventsPerBar, ctx](Event *ev) {
-							auto barLength = ctx->voiceMetaData()->barLength;
-							ev->duration = barLength / nbOfEventsPerBar;
-						});
-					}
-					barEvents.clear();
-				};
-				while (it != end) {
-					if (it->type == Event::Meta) {
-						renderer->handleMetaEvent(*it);
-					}					
-					if (it->type == Event::EOB) {
-						processEob();
-					}
-					if (it->isTimeConsuming()) {
-						barEvents.push_back(&(*it));
-					}
-					++it;
-				}
-				if (barEvents.empty()) {
-					return;
-				}
-				// add implicit eob
-				Event eob;
-				eob.type = Event::EOB;
-				processEob(); // first process bar events
-				voice->events.push_back(eob); // then modify source container
-			}
+
 			template<class TContainer>
 			Track * getFirstSheetTrack(TContainer &c) {
 				auto sheetTrackIt = 
@@ -151,11 +116,12 @@ namespace sheet {
 		void Compiler::renderChordTrack() 
 		{
 			auto ctx = context();
-			Track * sheetTrack = getFirstSheetTrack(document_->sheetDef.tracks);
+			auto document = document_.lock();
+			Track * sheetTrack = getFirstSheetTrack(document->sheetDef.tracks);
 			if (!sheetTrack || sheetTrack->voices.empty()) {
 				return;
 			}
-			preprocessSheetTrack(sheetTrack, sheetEventRenderer(), ctx);
+			preprocessor_->preprocessSheetTrack(*sheetTrack);
 			consumeChords(sheetTrack, sheetEventRenderer(), ctx);
 			sheetTemplateRenderer_->render(sheetTrack);
 		}
