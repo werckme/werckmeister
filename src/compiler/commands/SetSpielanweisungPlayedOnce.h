@@ -9,7 +9,7 @@ namespace sheet {
         class SetSpielanweisungPlayedOnce : public SetSpielanweisung
         {
         public:
-            virtual void execute(IContext*);
+            virtual void execute(IContextPtr );
         };
     }
 }

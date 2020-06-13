@@ -18,21 +18,22 @@
 #include "metaData.h"
 #include "context/IContext.h"
 #include "ISheetTemplateRenderer.h"
+#include "ASheetEventRenderer.h"
 
 namespace sheet {
     namespace compiler {
-        class SheetEventRenderer;
+
         class SheetTemplateRenderer : public ISheetTemplateRenderer {
         public:
-            SheetTemplateRenderer(IContext* ctx, SheetEventRenderer *renderer);
+            SheetTemplateRenderer(IContextPtr ctx, ASheetEventRendererPtr renderer);
             virtual ~SheetTemplateRenderer();
             void render(Track * sheetTrack);
-            IContext* context() const { return this->ctx_; }
-            SheetEventRenderer *sheetEventRenderer;
+            IContextPtr context() const { return this->ctx_; }
+            ASheetEventRendererPtr sheetEventRenderer;
         private:
             void setTargetCreateIfNotExists(const Track &track, const Voice &voice);
             typedef std::unordered_map<const void*, IContext::Id> PtrIdMap;
-            IContext* ctx_;
+            IContextPtr ctx_;
 			PtrIdMap ptrIdMap_;
         };
     }

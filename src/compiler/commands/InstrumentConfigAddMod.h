@@ -10,7 +10,7 @@ namespace sheet {
         class InstrumentConfigAddMod : public AddMod, public ACanSpecifyInstrument
         {
         public:
-            virtual void execute(IContext*);
+            virtual void execute(IContextPtr );
         };
     }
 }

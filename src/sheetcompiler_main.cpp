@@ -23,16 +23,15 @@ int main(int argc, const char** argv)
 	auto documentPtr = std::make_shared<sheet::Document>();
 
 	auto injector = di::make_injector(
-		  di::bind<cp::IDocumentParser>().to<cp::DocumentParser>()
-		, di::bind<cp::ICompiler>().to<cp::Compiler>()
-		, di::bind<cp::ISheetTemplateRenderer>().to<cp::SheetTemplateRenderer>()
-		, di::bind<cp::ASheetEventRenderer>().to<cp::SheetEventRenderer>()
-		, di::bind<cp::IContext>().to<cp::MidiContext>()
-		, di::bind<cp::IPreprocessor>().to<cp::Preprocessor>()
-		, di::bind<fm::Werckmeister>().to<fm::Werckmeister>()
-		, di::bind<ICompilerProgramOptions>().to(programOptionsPtr)
-		, di::bind<sheet::Document>().to(documentPtr)
-		, di::bind<fm::ILogger>().to<fm::ConsoleLogger>().in(di::singleton)
+		  di::bind<cp::IDocumentParser>()			.to<cp::DocumentParser>()			.in(di::singleton)
+		, di::bind<cp::ICompiler>()					.to<cp::Compiler>()					.in(di::singleton)
+		, di::bind<cp::ISheetTemplateRenderer>()	.to<cp::SheetTemplateRenderer>()	.in(di::singleton)
+		, di::bind<cp::ASheetEventRenderer>()		.to<cp::SheetEventRenderer>()		.in(di::singleton)
+		, di::bind<cp::IContext>()					.to<cp::MidiContext>()				.in(di::singleton)
+		, di::bind<cp::IPreprocessor>()				.to<cp::Preprocessor>()				.in(di::singleton)
+		, di::bind<ICompilerProgramOptions>()		.to(programOptionsPtr)
+		, di::bind<sheet::Document>()				.to(documentPtr)
+		, di::bind<fm::ILogger>()					.to<fm::ConsoleLogger>()			.in(di::singleton)
 	);
 	auto program = injector.create<SheetCompilerProgram>();
 	try {

@@ -122,11 +122,11 @@ namespace sheet {
 				return;
 			}
 			preprocessor_->preprocessSheetTrack(*sheetTrack);
-			consumeChords(sheetTrack, sheetEventRenderer(), ctx);
+			consumeChords(sheetTrack, sheetEventRenderer().get(), ctx.get());
 			sheetTemplateRenderer_->render(sheetTrack);
 		}
 
-		ASheetEventRenderer* Compiler::sheetEventRenderer()
+		ASheetEventRendererPtr Compiler::sheetEventRenderer()
 		{
 			return this->sheetEventRenderer_;
 		}

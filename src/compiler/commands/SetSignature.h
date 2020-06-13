@@ -14,7 +14,7 @@ namespace sheet {
                 FM_PARAMETER_DEF		    (argumentNames.SetSignature.Lower, 	1)
             };
             virtual ParametersByNames & getParameters() { return this->parameters; }
-            virtual void execute(IContext*);
+            virtual void execute(IContextPtr );
         };
     }
 }

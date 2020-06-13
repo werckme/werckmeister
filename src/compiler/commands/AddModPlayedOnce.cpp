@@ -4,7 +4,7 @@
 
 namespace sheet {
     namespace compiler {
-        void AddModPlayedOnce::execute(IContext* context)
+        void AddModPlayedOnce::execute(IContextPtr  context)
         {
 			auto meta = context->voiceMetaData();
 			meta->modificationsOnce.push_back(theModification);

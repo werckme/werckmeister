@@ -133,7 +133,6 @@ namespace sheet {
 
 		MidiContext::Base::TrackId MidiContext::createTrackImpl()
 		{
-			_logger->babble(WRMLogLambda(log << this));
 			_checkMidi(midi_);
 			auto track = midi_->createTrack();
 			midi_->addTrack(track);

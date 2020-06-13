@@ -10,7 +10,7 @@ namespace sheet {
         class SetSpielanweisung : public AddMod
         {
         public:
-            virtual void execute(IContext*) override;
+            virtual void execute(IContextPtr ) override;
         };
     }
 }

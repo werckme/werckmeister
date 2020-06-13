@@ -3,7 +3,7 @@
 
 namespace sheet {
     namespace compiler {
-        void SetExpressionPlayedOnce::execute(IContext* context)
+        void SetExpressionPlayedOnce::execute(IContextPtr  context)
         {
             auto value         = parameters[argumentNames.SetExpression.Value].value<fm::String>();
             context->setExpressionPlayedOnce(getExpressionForString(value));  

@@ -3,7 +3,7 @@
 
 namespace sheet {
     namespace compiler {
-        void SetSignature::execute(IContext* context)
+        void SetSignature::execute(IContextPtr  context)
         {
             auto upper         = parameters[argumentNames.SetSignature.Upper].value<int>();
             auto lower         = parameters[argumentNames.SetSignature.Lower].value<int>();

@@ -10,7 +10,7 @@ namespace sheet {
         {
         public:
             virtual ParametersByNames & getParameters() { return this->parameters; }
-            virtual void execute(IContext*);
+            virtual void execute(IContextPtr );
         };
     }
 }

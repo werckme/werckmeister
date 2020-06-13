@@ -5,7 +5,6 @@
 #include "ISheetTemplateRenderer.h"
 #include "ASheetEventRenderer.h"
 #include "IPreprocessor.h"
-#include <memory>
 #include <compiler/context/IContext.h>
 
 namespace sheet {
@@ -13,17 +12,17 @@ namespace sheet {
 	namespace compiler {
 		class Compiler : public ICompiler {
 		private:
-			IContext* context_;
+			IContextPtr context_;
 			DocumentWPtr document_;
-			ASheetEventRenderer *sheetEventRenderer_;
-			ISheetTemplateRenderer *sheetTemplateRenderer_;
-			IPreprocessor *preprocessor_;
+			ASheetEventRendererPtr sheetEventRenderer_;
+			ISheetTemplateRendererPtr sheetTemplateRenderer_;
+			IPreprocessorPtr preprocessor_;
 		public:
 			Compiler(
-				IContext* context, 
-				ASheetEventRenderer *sheetEventRenderer,
-				ISheetTemplateRenderer *sheetTemplateRenderer,
-				IPreprocessor *preprocessor
+				IContextPtr context, 
+				ASheetEventRendererPtr sheetEventRenderer,
+				ISheetTemplateRendererPtr sheetTemplateRenderer,
+				IPreprocessorPtr preprocessor
 			) : context_(context),
 				sheetEventRenderer_(sheetEventRenderer),
 				sheetTemplateRenderer_(sheetTemplateRenderer),
@@ -32,10 +31,10 @@ namespace sheet {
 			}
 			Compiler(const Compiler&) = delete;
 			Compiler & operator=(const Compiler&) = delete;
-			IContext* context() const { return context_; }
+			IContextPtr context() const { return context_; }
 			virtual void compile(DocumentPtr document) override;
 			virtual ~Compiler() = default;
-			ASheetEventRenderer* sheetEventRenderer();
+			ASheetEventRendererPtr sheetEventRenderer();
 		protected:
 			void renderTracks();
 			void renderChordTrack();

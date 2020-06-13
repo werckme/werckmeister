@@ -4,7 +4,7 @@
 
 namespace sheet {
     namespace compiler {
-        void DefineMidiInstrument::execute(IContext* context)
+        void DefineMidiInstrument::execute(IContextPtr  context)
         {
             auto midiContext = getMidiContext(context);
             auto name       = parameters[argumentNames.InstrumentDef.WithName].value<fm::String>();

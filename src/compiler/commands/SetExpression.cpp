@@ -26,7 +26,7 @@ namespace sheet {
             return it->second;
         }
 
-        void SetExpression::execute(IContext* context)
+        void SetExpression::execute(IContextPtr  context)
         {
             auto value         = parameters[argumentNames.SetExpression.Value].value<fm::String>();
             context->setExpression(getExpressionForString(value));

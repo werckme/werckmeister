@@ -3,7 +3,7 @@
 
 namespace sheet {
     namespace compiler {
-        void InstrumentConfigAddMod::execute(IContext* context)
+        void InstrumentConfigAddMod::execute(IContextPtr  context)
         {
             if (!this->hasInstrument()) {
                 return;

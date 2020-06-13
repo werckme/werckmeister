@@ -5,7 +5,7 @@
 
 namespace sheet {
     namespace compiler {
-        void AddDevice::execute(IContext* context)
+        void AddDevice::execute(IContextPtr  context)
         {
             auto name             = parameters[argumentNames.Device.WithName].value<fm::String>();
             auto type             = parameters[argumentNames.Device.IsType].value<fm::String>();

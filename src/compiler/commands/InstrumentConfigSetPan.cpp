@@ -3,7 +3,7 @@
 
 namespace sheet {
     namespace compiler {
-        void InstrumentConfigSetPan::execute(IContext* context)
+        void InstrumentConfigSetPan::execute(IContextPtr  context)
         {
             if (!this->hasInstrument()) {
                 return;

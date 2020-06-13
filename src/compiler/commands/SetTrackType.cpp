@@ -3,7 +3,7 @@
 
 namespace sheet {
     namespace compiler {
-        void SetTrackType::execute(IContext* context)
+        void SetTrackType::execute(IContextPtr  context)
         {
             // auto value         = parameters[argumentNames.XYZ].value<int>();
            

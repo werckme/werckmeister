@@ -6,7 +6,7 @@
 
 namespace sheet {
     namespace compiler {
-        void AddMod::execute(IContext* context)
+        void AddMod::execute(IContextPtr  context)
         {
 			auto meta = context->voiceMetaData();
 			meta->modifications.push_back(theModification);

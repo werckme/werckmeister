@@ -6,7 +6,7 @@
 namespace sheet {
     namespace compiler {
 
-        void Arpeggio::perform(IContext *ctx, Events &events)
+        void Arpeggio::perform(IContextPtr ctx, Events &events)
         {
 			Events result;
 			if (events.empty()) {

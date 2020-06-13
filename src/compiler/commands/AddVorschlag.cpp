@@ -7,7 +7,7 @@
 
 namespace sheet {
     namespace compiler {
-        void AddVorschlag::execute(IContext* context)
+        void AddVorschlag::execute(IContextPtr  context)
         {
             auto &wm = fm::getWerckmeister();
 			auto meta = context->voiceMetaData();

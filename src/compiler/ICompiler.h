@@ -3,6 +3,7 @@
 
 #include <fm/common.hpp>
 #include "forward.hpp"
+#include <memory>
 
 namespace sheet {
 	struct Event;
@@ -11,7 +12,9 @@ namespace sheet {
 		public:
 			virtual void compile(DocumentPtr document) = 0;
 		};
+		typedef std::shared_ptr<ICompiler> ICompilerPtr;
 	}
+	
 }
 
 #endif

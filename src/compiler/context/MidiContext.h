@@ -63,6 +63,7 @@ namespace sheet {
 			MidiInstrumentDefs midiInstrumentDefs_;
 			fm::midi::MidiPtr midi_;
         };
+		typedef std::shared_ptr<MidiContext> MidiContextPtr;
     }
 }
 

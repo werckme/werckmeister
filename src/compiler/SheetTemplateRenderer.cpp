@@ -14,7 +14,7 @@
 namespace sheet {
     namespace compiler {
 
-		SheetTemplateRenderer::SheetTemplateRenderer(IContext* ctx, SheetEventRenderer *renderer) : 
+		SheetTemplateRenderer::SheetTemplateRenderer(IContextPtr  ctx, ASheetEventRendererPtr renderer) : 
 			  sheetEventRenderer(renderer)
 			, ctx_(ctx) 
 		{
@@ -135,7 +135,7 @@ namespace sheet {
 				auto tmpContext = ctx->createNewContext();
 				tmpContext->masterTempo(ctx->masterTempo());
 				tmpContext->setChordTrackTarget();
-				SheetEventRenderer tmpEventRenderer(tmpContext.get());
+				SheetEventRenderer tmpEventRenderer(tmpContext);
 
 				auto &sheetEvents = sheetTrack->voices.begin()->events;
 				for (auto &ev : sheetEvents) {
@@ -177,7 +177,7 @@ namespace sheet {
 				return templatesAndItsChords;
 			}
 
-			Event & __degreeToAbsoluteNote(IContext *ctx, const Event &chordEvent, const Event &degreeEvent, Event &target) {
+			Event & __degreeToAbsoluteNote(IContextPtr ctx, const Event &chordEvent, const Event &degreeEvent, Event &target) {
 				try {
 					target = degreeEvent;
 					if (degreeEvent.type == Event::Group) {
@@ -226,9 +226,9 @@ namespace sheet {
 				}
 			}
 
-			void __handleChordMeta(IContext *ctx,
+			void __handleChordMeta(IContextPtr ctx,
 			const Event &metaEvent, 
-			SheetEventRenderer *sheetEventRenderer,
+			ASheetEventRenderer *sheetEventRenderer,
 			DegreeEventServer &eventServer)
 			{
 				if (metaEvent.stringValue == SHEET_META__SHEET_TEMPLATE_POSITION) {
@@ -243,8 +243,8 @@ namespace sheet {
 			}		
 
 			typedef std::list<const Event*> Chords;
-			fm::Ticks __renderOneBar(IContext *ctx, 
-				SheetEventRenderer *sheetEventRenderer, 
+			fm::Ticks __renderOneBar(IContextPtr ctx, 
+				ASheetEventRenderer *sheetEventRenderer, 
 				DegreeEventServer &eventServer, 
 				const Chords &chords) 
 			{
@@ -330,7 +330,7 @@ namespace sheet {
 							{
 								if (chord->type == Event::EOB) {
 									const auto *eobEvent = chord;
-									__renderOneBar(ctx_, sheetEventRenderer, eventServer, chordsPerBar);
+									__renderOneBar(ctx_, sheetEventRenderer.get(), eventServer, chordsPerBar);
 									sheetEventRenderer->addEvent(*eobEvent);
 									chordsPerBar.clear();
 									continue;

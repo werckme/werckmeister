@@ -4,7 +4,7 @@
 
 namespace sheet {
     namespace compiler {
-        void SetVoicingStrategy::execute(IContext* context)
+        void SetVoicingStrategy::execute(IContextPtr  context)
         {
             auto meta = context->voiceMetaData();
 			bool isAlreadySet = meta->voicingStrategy && meta->voicingStrategy->name() == voicingStrategy->name();

@@ -111,7 +111,6 @@ endif(APPLE)
 ## PLAYER
 SET (SRC_SHEET_PLAYER
     sheetplayer_main.cpp 
-    sheet.cpp
 )
 
 SET (SHEET_LIBS ${SHEET_LIBS} sheet fmapp lua ${Boost_LIBRARIES})

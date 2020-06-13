@@ -24,7 +24,7 @@ namespace sheet {
                 FM_PARAMETER_DEFAULT_DEF(argumentNames.VelocityRemap.FFFFF, 	9, VelocityNotSet),
             };
             virtual ParametersByNames & getParameters() { return this->parameters; }
-            virtual void execute(IContext*);
+            virtual void execute(IContextPtr );
         };
     }
 }

@@ -10,11 +10,11 @@ namespace sheet {
     namespace compiler {
         class SheetEventRenderer : public ASheetEventRenderer {
         public:
-            SheetEventRenderer(IContext *ctx) : ctx_(ctx) {
+            SheetEventRenderer(IContextPtr ctx) : ctx_(ctx) {
 
             }
             virtual ~SheetEventRenderer() = default;
-            IContext* context() const { return this->ctx_; }
+            IContextPtr context() const { return this->ctx_; }
             virtual void addEvent(const Event &event);
             virtual void handleMetaEvent(const Event &_ev);
             virtual void renderEvent(const Event &_ev);
@@ -23,7 +23,7 @@ namespace sheet {
         protected:
             void onWarning(const fm::String &message, const Event &event);
         private:
-            IContext* ctx_;
+            IContextPtr ctx_;
         };
     }
 }

@@ -15,6 +15,7 @@
 #include <compiler/timeInfo.h>
 #include <compiler/metaData.h>
 #include <compiler/instrument.h>
+#include <memory>
 
 namespace sheet {
     namespace compiler {
@@ -114,6 +115,7 @@ namespace sheet {
 			 */
 			virtual PitchDef resolvePitch(const PitchDef &pitch) const = 0;						
         };
+		typedef std::shared_ptr<IContext> IContextPtr;
     }
 }
 

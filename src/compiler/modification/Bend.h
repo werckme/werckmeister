@@ -12,7 +12,7 @@ namespace sheet {
         public:
             Bend() = default;
             virtual ~Bend() = default;
-            virtual void perform(IContext *ctx, Events &evs) override;
+            virtual void perform(IContextPtr ctx, Events &evs) override;
             double value = 0.5;
             enum BendMode { To, From };
             BendMode mode = To;

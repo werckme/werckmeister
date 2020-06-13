@@ -11,9 +11,9 @@ namespace sheet {
         class AMidiContextCommand : public ACommand
         {
         public:
-            virtual MidiContext * getMidiContext(IContext *context) const 
+            virtual MidiContext * getMidiContext(IContextPtr context) const 
             {
-                auto midiContext = dynamic_cast<MidiContext*>(context);
+                auto midiContext = dynamic_cast<MidiContext*>(context.get());
                 if (midiContext == nullptr) {
                     FM_THROW(Exception, "failed to get midi context");
                 }

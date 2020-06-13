@@ -4,7 +4,7 @@
 #include <fm/common.hpp>
 #include "ASheetEventRenderer.h"
 #include <compiler/context/IContext.h>
-
+#include <memory>
 namespace sheet {
 	struct Track;
 	namespace compiler {
@@ -23,6 +23,7 @@ namespace sheet {
 			 */			
 			virtual void preprocessSheetTrack(Track &sheetTrack) = 0;
 		};
+		typedef std::shared_ptr<IPreprocessor> IPreprocessorPtr;
 	}
 }
 

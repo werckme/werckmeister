@@ -3,7 +3,7 @@
 
 namespace sheet {
     namespace compiler {
-        void $NAME::execute(IContext* context)
+        void $NAME::execute(IContextPtr  context)
         {
             // auto value         = parameters[argumentNames.XYZ].value<int>();
            

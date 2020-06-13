@@ -3,7 +3,7 @@
 
 namespace sheet {
     namespace compiler {
-        void SetTemplatePosition::execute(IContext* context)
+        void SetTemplatePosition::execute(IContextPtr  context)
         {
             // auto value         = parameters[argumentNames.XYZ].value<int>();
            

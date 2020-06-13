@@ -24,7 +24,7 @@ void SheetCompilerProgram::prepareEnvironment()
 
 void SheetCompilerProgram::printIntro(std::ostream &os)
 {
-    os << "\tWERCKMEISTER "                          << std::endl
+    os << "\tWERCKMEISTER "                                   << std::endl
        << "\t(c) Samba Godschynski "                          << std::endl
        << "\thttps://werckme.github.io"                       << std::endl
        << "\tversion: "                   << SHEET_VERSION    << std::endl
@@ -46,8 +46,7 @@ void SheetCompilerProgram::execute()
     _logger->babble(WRMLogLambda(log << "parsing '" << file << "'"));
     auto document =_documentParser->parse(file);
     auto midiFile = fm::getWerckmeister().createMidi();
-    //_midiContext->midi(midiFile);
-    _logger->babble(WRMLogLambda(log << _context << "'"));
+    _context->midi(midiFile);
     _logger->babble(WRMLogLambda(log << "compiling '" << file << "'"));
     _compiler->compile(document);
 

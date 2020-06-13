@@ -4,7 +4,7 @@
 
 namespace sheet {
     namespace compiler {
-        void SetTempo::execute(IContext* context)
+        void SetTempo::execute(IContextPtr  context)
         {
             auto tempoParameter         = parameters[argumentNames.SetTempo.Bpm];
             auto tempoStringValue = tempoParameter.strValue();

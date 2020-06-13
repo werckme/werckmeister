@@ -3,7 +3,7 @@
 
 namespace sheet {
     namespace compiler {
-        void SetSpielanweisungPlayedOnce::execute(IContext* context)
+        void SetSpielanweisungPlayedOnce::execute(IContextPtr  context)
         {
             auto meta = context->voiceMetaData();
 			meta->spielanweisungOnce = theModification;

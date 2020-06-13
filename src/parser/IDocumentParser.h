@@ -3,6 +3,7 @@
 
 #include "forward.hpp"
 #include <fm/common.hpp>
+#include <memory>
 
 namespace sheet {
 	namespace compiler {        
@@ -11,6 +12,7 @@ namespace sheet {
 		public:
 			virtual DocumentPtr parse(const fm::String &path) = 0;
 		};
+		typedef std::shared_ptr<IDocumentParser> IDocumentParserPtr;
     }
 }
 

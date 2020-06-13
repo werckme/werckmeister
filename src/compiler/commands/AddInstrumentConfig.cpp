@@ -18,7 +18,7 @@ namespace sheet {
             SHEET_META__VELOCITY_REMAP
         }; 	
 
-        void AddInstrumentConfig::execute(IContext* context)
+        void AddInstrumentConfig::execute(IContextPtr  context)
         {
             if (this->_configCommands.empty()) {
                 return;

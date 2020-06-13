@@ -9,17 +9,12 @@
 namespace sheet {
 	struct Track;
 	namespace compiler {
-        /**
-         * sets implicite duration to every event with duration = 0.
-		 * sets x shortcut e.g.: c1 x x x
-		 * set implicit EOB
-         */
 		class Preprocessor : public IPreprocessor {
 		private:
-			IContext 			*_context;
-			ASheetEventRenderer *_renderer;
+			IContextPtr 			_context;
+			ASheetEventRendererPtr _renderer;
 		public:
-			Preprocessor(IContext *context, ASheetEventRenderer *renderer)
+			Preprocessor(IContextPtr context, ASheetEventRendererPtr renderer)
 				: _context(context), _renderer(renderer)
 			{}
 			Preprocessor(const Preprocessor&) = delete;
