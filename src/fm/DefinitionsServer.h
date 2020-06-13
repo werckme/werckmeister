@@ -6,6 +6,7 @@
 #include "IDefinitionsServer.h"
 #include <sheet/Document.h>
 #include <unordered_map>
+#include <forward.hpp>
 
 namespace fm {
 
@@ -20,10 +21,13 @@ namespace fm {
 		virtual sheet::SheetTemplate getSheetTemplate(const fm::String &name);
 		virtual ConstChordValueType getChord(const fm::String &name);
 		virtual ConstPitchDefValueType getAlias(fm::String alias);
-		virtual sheet::PitchDef resolvePitch(const sheet::PitchDef &pitch) const;		
+		virtual sheet::PitchDef resolvePitch(const sheet::PitchDef &pitch);
+	protected:
+		SheetTemplates & sheetTemplates();
 	private:
 		SheetTemplate * findSheetTemplate(const fm::String &sheetTemplateName);
 		std::unique_ptr<SheetTemplates> sheetTemplates_;
+		sheet::DocumentPtr document_;
 		void createSheetTemplatesMap();
     };
 

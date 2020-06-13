@@ -142,7 +142,8 @@ namespace sheet {
             /**
              * @return the current velocity value between 0..1
              */
-            virtual double velocity();				
+            virtual double velocity();
+			virtual fm::IDefinitionsServerPtr definitionsServer() { return definitionsServer_; }			
 		protected:
 			virtual TrackId createTrackImpl() = 0;
 			virtual VoiceId createVoiceImpl() = 0;
@@ -150,6 +151,7 @@ namespace sheet {
 			virtual TrackMetaDataPtr createTrackMetaData() = 0;
 			virtual TrackId createMasterTrack();
 		private:
+			fm::IDefinitionsServerPtr definitionsServer_;
 			double masterTempo_ = fm::DefaultTempo;			
 			VoicingStrategyPtr defaultVoiceStrategy_;
 			SheetTemplates currentSheetTemplates_;

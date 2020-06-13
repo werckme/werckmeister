@@ -1,6 +1,6 @@
 #include "DefinitionsServer.h"
+#include <sheet/Document.h>
 
-#if 0
 namespace fm {
     namespace {
         template<typename TContainer>
@@ -69,21 +69,21 @@ namespace fm {
 		// find sheetTemplate by name
 		SheetTemplates::const_iterator it = _findByName(name, sheetTemplates);
 		if (it == sheetTemplates.end()) {
-			return SheetTemplateType();
+			return sheet::SheetTemplate();
 		}
 		return it->second;
 	}
 
 	IDefinitionsServer::ConstChordValueType DefinitionsServer::getChord(const fm::String &name)
 	{
-		ChordDefs::const_iterator it;
+		sheet::Document::ChordDefs::const_iterator it;
 		if (name == FM_STRING("?")) {
-			it = chordDefs.begin();
+			it = document_->chordDefs.begin();
 		}
 		else {
-			it = chordDefs.find(name);
+			it = document_->chordDefs.find(name);
 		}
-		if (it == chordDefs.end()) {
+		if (it == document_->chordDefs.end()) {
 			return nullptr;
 		}
 		return &(it->second);
@@ -91,25 +91,24 @@ namespace fm {
 
 	IDefinitionsServer::ConstPitchDefValueType DefinitionsServer::getAlias(fm::String alias)
 	{
-		PitchmapDefs::const_iterator it;
-		it = pitchmapDefs.find(alias);
+		sheet::Document::PitchmapDefs::const_iterator it;
+		it = document_->pitchmapDefs.find(alias);
 		
-		if (it == pitchmapDefs.end()) {
+		if (it == document_->pitchmapDefs.end()) {
 			return nullptr;
 		}
 		return &(it->second);
 	}
 
-	PitchDef DefinitionsServer::resolvePitch(const PitchDef &pitch) const
+	sheet::PitchDef DefinitionsServer::resolvePitch(const sheet::PitchDef &pitch)
 	{
 		if (pitch.alias.empty()) {
 			return pitch;
 		}
-		const PitchDef *result = sheetTemplateDefServer()->getAlias(pitch.alias);
+		const sheet::PitchDef *result = getAlias(pitch.alias);
 		if (result == nullptr) {
 			FM_THROW(Exception, "could not resolve alias: " + pitch.alias);
 		}
 		return *result;
 	}
 }
-#endif
