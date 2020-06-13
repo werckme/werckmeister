@@ -7,7 +7,7 @@
 #include <algorithm>
 #include <functional>
 #include <fm/werckmeister.hpp>
-
+#include <fm/IDefinitionsServer.h>
 
 #define DEBUGX(x)
 

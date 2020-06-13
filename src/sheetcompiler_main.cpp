@@ -12,6 +12,7 @@
 #include <compiler/context/MidiContext.h>
 #include <compiler/Preprocessor.h>
 #include <sheet/Document.h>
+#include <fm/DefinitionsServer.h>
 
 int main(int argc, const char** argv)
 {
@@ -32,6 +33,7 @@ int main(int argc, const char** argv)
 		, di::bind<ICompilerProgramOptions>()		.to(programOptionsPtr)
 		, di::bind<sheet::Document>()				.to(documentPtr)
 		, di::bind<fm::ILogger>()					.to<fm::ConsoleLogger>()			.in(di::singleton)
+		, di::bind<fm::IDefinitionsServer>()		.to<fm::DefinitionsServer>()		.in(di::singleton)
 	);
 	auto program = injector.create<SheetCompilerProgram>();
 	try {

@@ -7,12 +7,16 @@
 #include <sheet/Document.h>
 #include <unordered_map>
 #include <forward.hpp>
+#include <compiler/IPreprocessor.h>
 
 namespace fm {
 
     class DefinitionsServer : public IDefinitionsServer {
 	private:
     public:
+		DefinitionsServer(sheet::compiler::IPreprocessorPtr preprocessor) 
+			: preprocessor_(preprocessor)
+		{}
 		typedef fm::String SheetTemplateName;
 		typedef fm::String PartName;
 		typedef sheet::SheetTemplate SheetTemplate;
@@ -22,9 +26,11 @@ namespace fm {
 		virtual ConstChordValueType getChord(const fm::String &name);
 		virtual ConstPitchDefValueType getAlias(fm::String alias);
 		virtual sheet::PitchDef resolvePitch(const sheet::PitchDef &pitch);
+		virtual fm::String defaultSheetTemplateName() const { return "?"; }
 	protected:
 		SheetTemplates & sheetTemplates();
 	private:
+		sheet::compiler::IPreprocessorPtr preprocessor_;
 		SheetTemplate * findSheetTemplate(const fm::String &sheetTemplateName);
 		std::unique_ptr<SheetTemplates> sheetTemplates_;
 		sheet::DocumentPtr document_;

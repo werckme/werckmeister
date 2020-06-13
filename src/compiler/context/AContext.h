@@ -22,7 +22,7 @@ namespace sheet {
     namespace compiler {
         class AContext : public IContext {
         public:
-			AContext();
+			AContext(fm::IDefinitionsServerPtr definitionsServer);
 			static const double PitchbendMiddle;
 			enum { INVALID_TRACK_ID = -1, INVALID_VOICE_ID = -1, MAX_VOLUME = 100, MAX_PAN = 100 };
 			/**
@@ -150,8 +150,8 @@ namespace sheet {
 			virtual VoiceMetaDataPtr createVoiceMetaData() = 0;
 			virtual TrackMetaDataPtr createTrackMetaData() = 0;
 			virtual TrackId createMasterTrack();
-		private:
 			fm::IDefinitionsServerPtr definitionsServer_;
+		private:
 			double masterTempo_ = fm::DefaultTempo;			
 			VoicingStrategyPtr defaultVoiceStrategy_;
 			SheetTemplates currentSheetTemplates_;

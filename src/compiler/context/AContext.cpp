@@ -19,7 +19,8 @@ namespace sheet {
 		const double AContext::PitchbendMiddle = 0.5;
 		const Ticks AContext::TickTolerance = 0.5;
 		
-		AContext::AContext()
+		AContext::AContext(fm::IDefinitionsServerPtr definitionsServer)
+			: definitionsServer_(definitionsServer)
 		{
 		}
 
@@ -143,27 +144,26 @@ namespace sheet {
 
 		void AContext::renderPitch(const PitchDef &rawPitch, fm::Ticks duration, double velocity, bool tying)
 		{
-			// TODO #126
-			// using namespace fm;
-			// PitchDef pitch = resolvePitch(rawPitch);
-			// auto meta = voiceMetaData();
-			// if (tying) {
-			// 	auto alreadyTying = meta->waitForTieBuffer.find(pitch) != meta->waitForTieBuffer.end();
-			// 	if (!alreadyTying) {
-			// 		meta->waitForTieBuffer.insert({ pitch, duration });
-			// 		startEvent(pitch, meta->position, velocity);
-			// 	}
-			// 	return;
-			// }
-			// if (meta->pendingTie()) {
-			// 	auto it = meta->waitForTieBuffer.find(pitch);
-			// 	if (it != meta->waitForTieBuffer.end()) {
-			// 		stopEvent(pitch, meta->position + duration);
-			// 		meta->waitForTieBuffer.erase(it);
-			// 		return;
-			// 	}
-			// }
-			// renderPitch(pitch, meta->position, velocity, duration);
+			using namespace fm;
+			PitchDef pitch = definitionsServer_->resolvePitch(rawPitch);
+			auto meta = voiceMetaData();
+			if (tying) {
+				auto alreadyTying = meta->waitForTieBuffer.find(pitch) != meta->waitForTieBuffer.end();
+				if (!alreadyTying) {
+					meta->waitForTieBuffer.insert({ pitch, duration });
+					startEvent(pitch, meta->position, velocity);
+				}
+				return;
+			}
+			if (meta->pendingTie()) {
+				auto it = meta->waitForTieBuffer.find(pitch);
+				if (it != meta->waitForTieBuffer.end()) {
+					stopEvent(pitch, meta->position + duration);
+					meta->waitForTieBuffer.erase(it);
+					return;
+				}
+			}
+			renderPitch(pitch, meta->position, velocity, duration);
 		}
 
 		void AContext::startEvent(const PitchDef &pitch, fm::Ticks absolutePosition, double velocity)
@@ -279,12 +279,11 @@ namespace sheet {
 
 		const AContext::SheetTemplates & AContext::currentSheetTemplates()
 		{
-			// TODO: #126
-			// if (currentSheetTemplates_.empty()) {
-			// 	auto defaultTemplate = sheetTemplateDefServer()->getSheetTemplate(FM_STRING("?"));
-			// 	currentSheetTemplates_.push_back(defaultTemplate);
-			// }
-			// return currentSheetTemplates_;
+			if (currentSheetTemplates_.empty()) {
+				auto defaultTemplate = definitionsServer_->getSheetTemplate(definitionsServer_->defaultSheetTemplateName());
+				currentSheetTemplates_.push_back(defaultTemplate);
+			}
+			return currentSheetTemplates_;
 		}
 		void AContext::currentSheetTemplate(const SheetTemplates &sheetTemplate)
 		{

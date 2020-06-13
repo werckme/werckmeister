@@ -15,10 +15,11 @@ namespace sheet {
 		private:
 			fm::ILoggerPtr _logger;
 		public:
-			MidiContext(fm::ILoggerPtr logger) : _logger(logger) {}
 			typedef AContext Base;
 			typedef std::unordered_map<fm::String, MidiInstrumentDef> MidiInstrumentDefs;
-			typedef std::vector<MidiInstrumentDef> InstrumentDefContainer;
+			typedef std::vector<MidiInstrumentDef> InstrumentDefContainer;		
+			MidiContext(fm::IDefinitionsServerPtr definitionsServer, fm::ILoggerPtr logger) 
+				: Base(definitionsServer), _logger(logger) {}
 			struct VoiceMetaData : sheet::compiler::VoiceMetaData {
 				fm::Ticks positionOffset = 0;
 			};
