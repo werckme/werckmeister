@@ -11,7 +11,7 @@
 #include <list>
 #include <forward.hpp>
 #include <functional>
-#include <fm/SheetTemplateDefServer.h>
+#include <fm/IDefinitionsServer.h>
 #include <compiler/timeInfo.h>
 #include <compiler/metaData.h>
 #include <compiler/instrument.h>
@@ -24,13 +24,12 @@ namespace sheet {
 			typedef int Id;
 			typedef Id TrackId;
 			typedef Id VoiceId;
-			typedef ISheetTemplateDefServer* ISheetTemplateDefServerPtr;
 			typedef std::shared_ptr<VoiceMetaData> VoiceMetaDataPtr;
 			typedef std::shared_ptr<TrackMetaData> TrackMetaDataPtr;
 			typedef std::unordered_map<VoiceId, VoiceMetaDataPtr> VoiceMetaDataMap;
 			typedef std::unordered_map<TrackId, TrackMetaDataPtr> TrackMetaDataMap;
 			typedef std::function<void(fm::String)> WarningHandler;
-			typedef std::vector<ISheetTemplateDefServer::SheetTemplate> SheetTemplates;
+			typedef std::vector<sheet::SheetTemplate> SheetTemplates;
 			virtual void setTrack(TrackId trackId) = 0;
 			virtual void setVoice(VoiceId voice) = 0;
 			virtual TrackId track() const = 0;
@@ -63,11 +62,7 @@ namespace sheet {
 			virtual TrackMetaDataPtr trackMetaData() const = 0;
 			virtual TrackMetaDataPtr trackMetaData(TrackId trackid) const = 0;
 			/**
-			 * TODO: no context domain
-			 */
-			virtual ISheetTemplateDefServerPtr sheetTemplateDefServer() const = 0;
-			/**
-			 * TODO: no context domain
+			 * TODO: #126 no context domain
 			 */
 			virtual const SheetTemplates & currentSheetTemplates() = 0;
 			virtual VoicingStrategyPtr currentVoicingStrategy() = 0;
@@ -109,11 +104,7 @@ namespace sheet {
              * @return the current velocity value between 0..1
              */
             virtual double velocity() = 0;
-			/**
-			 * resolve pitches alias if exists
-			 * TODO: no context domain
-			 */
-			virtual PitchDef resolvePitch(const PitchDef &pitch) const = 0;						
+			virtual fm::IDefinitionsServerPtr definitionsServer();		
         };
 		typedef std::shared_ptr<IContext> IContextPtr;
     }

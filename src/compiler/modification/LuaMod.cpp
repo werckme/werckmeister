@@ -83,7 +83,7 @@ namespace sheet {
                 lua_pushnumber(L, count++);
                 lua_createtable(L, event->pitches.size(), 0);
                 auto objecttop = lua_gettop(L);
-                auto resolved = ctx->resolvePitch(pitch);
+                auto resolved = ctx->definitionsServer()->resolvePitch(pitch);
                 // pitch
                 lua_pushstring(L, LUA_EVENT_PITCH_PROPETRY_PITCH);
                 lua_pushnumber(L, resolved.pitch);

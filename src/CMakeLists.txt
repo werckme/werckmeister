@@ -10,6 +10,7 @@ SET (SRC_FETZER_LIB
     fm/lua/ALuaObject.cpp
     fm/lua/ALuaScript.cpp
     fm/lua/ALuaWithParameter.cpp
+    fm/DefinitionsServer.cpp
     fm/tools.cpp
     fm/ConsoleLogger.cpp
     compiler/Compiler.cpp

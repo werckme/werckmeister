@@ -9,7 +9,7 @@
 #include <map>
 #include <unordered_map>
 #include <sheet/objects/ChordDef.h>
-#include <fm/SheetTemplateDefServer.h>
+#include <fm/IDefinitionsServer.h>
 #include "compiler/voicings/VoicingStrategy.h"
 #include <fm/common.hpp>
 #include <list>

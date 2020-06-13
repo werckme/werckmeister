@@ -9,7 +9,7 @@
 #include <map>
 #include <unordered_map>
 #include <sheet/objects/ChordDef.h>
-#include <fm/SheetTemplateDefServer.h>
+#include <fm/IDefinitionsServer.h>
 #include "compiler/voicings/VoicingStrategy.h"
 #include <fm/common.hpp>
 #include "metaCommands.h"
@@ -19,6 +19,7 @@
 #include "context/IContext.h"
 #include "ISheetTemplateRenderer.h"
 #include "ASheetEventRenderer.h"
+#include <fm/IDefinitionsServer.h>
 
 namespace sheet {
     namespace compiler {

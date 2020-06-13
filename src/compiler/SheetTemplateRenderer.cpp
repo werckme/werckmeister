@@ -117,7 +117,7 @@ namespace sheet {
 				IContext::SheetTemplates templates;
 				for (size_t idx=0; idx < metaEvent.metaArgs.size(); ++idx) {
 					auto sheetTemplateName =fm::getArgumentValue<fm::String>(metaEvent, idx);
-					auto sheetTemplate = ctx->sheetTemplateDefServer()->getSheetTemplate(sheetTemplateName);
+					auto sheetTemplate = ctx->definitionsServer()->getSheetTemplate(sheetTemplateName);
 					if (sheetTemplate.empty()) {
 						FM_THROW(Exception, "sheetTemplate not found: " + sheetTemplateName);
 					}
@@ -191,7 +191,7 @@ namespace sheet {
 					if (!degreeEvent.isRelativeDegree()) {
 						return target;
 					}				
-					auto chordDef = ctx->sheetTemplateDefServer()->getChord(chordEvent.chordDefName());
+					auto chordDef = ctx->definitionsServer()->getChord(chordEvent.chordDefName());
 					if (chordDef == nullptr) {
 						FM_THROW(Exception, "chord not found: " + chordEvent.stringValue);
 					}									

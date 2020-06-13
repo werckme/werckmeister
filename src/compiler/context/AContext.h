@@ -7,7 +7,7 @@
 #include <fm/literals.hpp>
 #include <map>
 #include <unordered_map>
-#include <fm/SheetTemplateDefServer.h>
+#include <fm/IDefinitionsServer.h>
 #include <fm/common.hpp>
 #include <compiler/metaCommands.h>
 #include <list>
@@ -32,7 +32,6 @@ namespace sheet {
 			typedef int Id;
 			typedef Id TrackId;
 			typedef Id VoiceId;
-			typedef ISheetTemplateDefServer* ISheetTemplateDefServerPtr;
 			typedef std::shared_ptr<VoiceMetaData> VoiceMetaDataPtr;
 			typedef std::shared_ptr<TrackMetaData> TrackMetaDataPtr;
 			typedef std::unordered_map<VoiceId, VoiceMetaDataPtr> VoiceMetaDataMap;
@@ -102,9 +101,6 @@ namespace sheet {
 			virtual void throwContextException(const std::string &msg);
 			virtual void warn(const std::string &msg);
 			WarningHandler warningHandler;
-			ISheetTemplateDefServerPtr sheetTemplateDefServer() const;
-			void sheetTemplateDefServer(ISheetTemplateDefServerPtr server);
-			typedef std::vector<ISheetTemplateDefServer::SheetTemplate> SheetTemplates;
 			virtual const SheetTemplates & currentSheetTemplates();
 			virtual void currentSheetTemplate(const SheetTemplates &sheetTemplate);
 			virtual VoicingStrategyPtr currentVoicingStrategy();
@@ -146,11 +142,7 @@ namespace sheet {
             /**
              * @return the current velocity value between 0..1
              */
-            virtual double velocity();
-			/**
-			 * resolve pitches alias if exists
-			 */		
-			PitchDef resolvePitch(const PitchDef &pitch) const;						
+            virtual double velocity();				
 		protected:
 			virtual TrackId createTrackImpl() = 0;
 			virtual VoiceId createVoiceImpl() = 0;
@@ -167,7 +159,6 @@ namespace sheet {
 			VoiceId voiceId_ = INVALID_VOICE_ID, chordVoice_ = INVALID_VOICE_ID;
 			VoiceMetaDataMap voiceMetaDataMap_;
 			TrackMetaDataMap trackMetaDataMap_;
-			ISheetTemplateDefServerPtr sheetTemplateDefServer_ = nullptr;
         };
     }
 }

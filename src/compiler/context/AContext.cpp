@@ -40,18 +40,6 @@ namespace sheet {
 			return meta->spielanweisung;
 		}
 
-		AContext::ISheetTemplateDefServerPtr AContext::sheetTemplateDefServer() const
-		{
-			if (!sheetTemplateDefServer_) {
-				FM_THROW(Exception, "no sheetTemplatedef server set");
-			}
-			return sheetTemplateDefServer_;
-		}
-		void AContext::sheetTemplateDefServer(ISheetTemplateDefServerPtr server)
-		{
-			sheetTemplateDefServer_ = server;
-		}
-
 		AContext::TrackId AContext::track() const
 		{
 			return trackId_;
@@ -140,17 +128,6 @@ namespace sheet {
 			return position;
 		}
 
-		PitchDef AContext::resolvePitch(const PitchDef &pitch) const
-		{
-			if (pitch.alias.empty()) {
-				return pitch;
-			}
-			const PitchDef *result = sheetTemplateDefServer()->getAlias(pitch.alias);
-			if (result == nullptr) {
-				FM_THROW(Exception, "could not resolve alias: " + pitch.alias);
-			}
-			return *result;
-		}
 
 		double AContext::velocity()
 		{
@@ -166,26 +143,27 @@ namespace sheet {
 
 		void AContext::renderPitch(const PitchDef &rawPitch, fm::Ticks duration, double velocity, bool tying)
 		{
-			using namespace fm;
-			PitchDef pitch = resolvePitch(rawPitch);
-			auto meta = voiceMetaData();
-			if (tying) {
-				auto alreadyTying = meta->waitForTieBuffer.find(pitch) != meta->waitForTieBuffer.end();
-				if (!alreadyTying) {
-					meta->waitForTieBuffer.insert({ pitch, duration });
-					startEvent(pitch, meta->position, velocity);
-				}
-				return;
-			}
-			if (meta->pendingTie()) {
-				auto it = meta->waitForTieBuffer.find(pitch);
-				if (it != meta->waitForTieBuffer.end()) {
-					stopEvent(pitch, meta->position + duration);
-					meta->waitForTieBuffer.erase(it);
-					return;
-				}
-			}
-			renderPitch(pitch, meta->position, velocity, duration);
+			// TODO #126
+			// using namespace fm;
+			// PitchDef pitch = resolvePitch(rawPitch);
+			// auto meta = voiceMetaData();
+			// if (tying) {
+			// 	auto alreadyTying = meta->waitForTieBuffer.find(pitch) != meta->waitForTieBuffer.end();
+			// 	if (!alreadyTying) {
+			// 		meta->waitForTieBuffer.insert({ pitch, duration });
+			// 		startEvent(pitch, meta->position, velocity);
+			// 	}
+			// 	return;
+			// }
+			// if (meta->pendingTie()) {
+			// 	auto it = meta->waitForTieBuffer.find(pitch);
+			// 	if (it != meta->waitForTieBuffer.end()) {
+			// 		stopEvent(pitch, meta->position + duration);
+			// 		meta->waitForTieBuffer.erase(it);
+			// 		return;
+			// 	}
+			// }
+			// renderPitch(pitch, meta->position, velocity, duration);
 		}
 
 		void AContext::startEvent(const PitchDef &pitch, fm::Ticks absolutePosition, double velocity)
@@ -301,11 +279,12 @@ namespace sheet {
 
 		const AContext::SheetTemplates & AContext::currentSheetTemplates()
 		{
-			if (currentSheetTemplates_.empty()) {
-				auto defaultTemplate = sheetTemplateDefServer()->getSheetTemplate(FM_STRING("?"));
-				currentSheetTemplates_.push_back(defaultTemplate);
-			}
-			return currentSheetTemplates_;
+			// TODO: #126
+			// if (currentSheetTemplates_.empty()) {
+			// 	auto defaultTemplate = sheetTemplateDefServer()->getSheetTemplate(FM_STRING("?"));
+			// 	currentSheetTemplates_.push_back(defaultTemplate);
+			// }
+			// return currentSheetTemplates_;
 		}
 		void AContext::currentSheetTemplate(const SheetTemplates &sheetTemplate)
 		{
