@@ -22,6 +22,7 @@ namespace sheet {
 			 * set implicit EOB
 			 */			
 			virtual void preprocessSheetTrack(Track &sheetTrack) = 0;
+			virtual void prepareTemplateDefinitions(DocumentPtr document) = 0;
 		};
 		typedef std::shared_ptr<IPreprocessor> IPreprocessorPtr;
 	}

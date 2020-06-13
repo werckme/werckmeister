@@ -37,6 +37,7 @@ public:
 protected:
     void printIntro(std::ostream &os);
     void prepareSearchPaths();
+    void prepareTemplateDefinitions();
 };
 
 #endif

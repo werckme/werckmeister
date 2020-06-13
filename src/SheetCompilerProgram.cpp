@@ -64,3 +64,31 @@ void SheetCompilerProgram::prepareSearchPaths()
     wm.addSearchPath((path("/usr/local/share/werckmeister").string()));
 #endif
 }
+
+// void SheetCompilerProgram::prepareTemplateDefinitions()
+// {
+//     sheetTemplates_ = std::make_unique<SheetTemplates>();
+//     SheetTemplates &sheetTemplates = *sheetTemplates_;
+//     for(auto &track : this->document_->sheetDef.tracks) {
+//         try {
+//             fm::String type = fm::getFirstMetaArgumentWithKeyName(SHEET_META__TRACK_META_KEY_TYPE, track.trackConfigs).value;
+//             if (type != SHEET_META__TRACK_META_VALUE_TYPE_SHEET_TEMPLATE) {
+//                 continue;
+//             }
+//             fm::String sheetTemplateName = fm::getFirstMetaArgumentWithKeyName(SHEET_META__TRACK_META_KEY_NAME, track.trackConfigs).value;
+//             if (sheetTemplateName.empty()) {
+//                 FM_THROW(sheet::compiler::Exception, "missing 'name' for sheetTemplate track");
+//             }					
+//             auto sheetTemplate = findSheetTemplate(sheetTemplateName);
+//             if (sheetTemplate == nullptr) {
+//                 sheetTemplates[sheetTemplateName] = SheetTemplate(sheetTemplateName);
+//                 sheetTemplate = &(sheetTemplates[sheetTemplateName]);
+//             }
+//             preprocessor_->process(track);
+//             sheetTemplate->tracks.push_back(&track);
+//         } catch(const fm::Exception &ex) {
+//             ex << sheet::compiler::ex_sheet_source_info(track);
+//             throw;
+//         }
+//     }
+// }

@@ -14,8 +14,8 @@ namespace fm {
     class DefinitionsServer : public IDefinitionsServer {
 	private:
     public:
-		DefinitionsServer(sheet::compiler::IPreprocessorPtr preprocessor) 
-			: preprocessor_(preprocessor)
+		DefinitionsServer(sheet::DocumentPtr document)
+			: document_(document) 
 		{}
 		typedef fm::String SheetTemplateName;
 		typedef fm::String PartName;
@@ -30,11 +30,9 @@ namespace fm {
 	protected:
 		SheetTemplates & sheetTemplates();
 	private:
-		sheet::compiler::IPreprocessorPtr preprocessor_;
 		SheetTemplate * findSheetTemplate(const fm::String &sheetTemplateName);
 		std::unique_ptr<SheetTemplates> sheetTemplates_;
 		sheet::DocumentPtr document_;
-		void createSheetTemplatesMap();
     };
 
 }
