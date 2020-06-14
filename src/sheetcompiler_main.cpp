@@ -6,6 +6,7 @@
 #include <fm/werckmeister.hpp>
 #include <CompilerProgramOptions.h>
 #include <fm/ConsoleLogger.h>
+#include <compiler/LoggerAndWarningsCollector.h>
 #include <compiler/SheetEventRenderer.h>
 #include <compiler/SheetTemplateRenderer.h>
 #include <compiler/Compiler.h>
@@ -18,7 +19,8 @@
 #include <fmapp/MidiFileWriter.h>
 #include <fmapp/JsonWriter.h>
 
-typedef sheet::compiler::EventLogger<fm::ConsoleLogger> LoggerImpl;
+typedef sheet::compiler::EventLogger<fm::ConsoleLogger> 			   LoggerImpl;
+typedef sheet::compiler::LoggerAndWarningsCollector<fm::ConsoleLogger> WarningsCollectorLoggerImpl;
 
 int main(int argc, const char** argv)
 {

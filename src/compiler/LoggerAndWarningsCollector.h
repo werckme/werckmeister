@@ -2,21 +2,31 @@
 #define LOGGERANDWARNINGSCOLLECTOR_H
 
 #include "IEventLogger.h"
+#include "Warning.hpp"
+#include <sstream>
 
-// TODO: #126
-// namespace sheet {
-// 	struct Event;
-// 	namespace compiler {
-//         /**
-//          * this logger collects all the occuring warnings for later usage
-//          */
-//         template <class TLoggerBase>
-//         class LoggerAndWarningsCollector : public TLoggerBase, public IEventLogger {
-//         public:
-//             typedef TLoggerBase Base;
-//             virtual void warn(const WriteToStreamF&, const Event &theRelatedEvent);
-//         };
-//     }
-// }
-
+namespace sheet {
+	struct Event;
+	namespace compiler {
+        template <class TLoggerBase>
+        class LoggerAndWarningsCollector : public TLoggerBase, public IEventLogger {
+        private:
+        public:
+            Warnings warnings;
+            typedef TLoggerBase Base;
+            virtual void warn(const ILogger::WriteToStreamF&, const Event &theRelatedEvent);
+        };
+        ///////////////////////////////////////////////////////////////////////
+        template <class TLoggerBase>
+        void LoggerAndWarningsCollector<TLoggerBase>::warn(const ILogger::WriteToStreamF& f, const Event &sourceObject)
+        {
+            std::stringstream messageStream;
+            f(messageStream);
+            Warning warning;
+            warning.message = messageStream.str();
+            warning.sourceObject = sourceObject;
+            warnings.push_back(warning);
+        }
+    }
+}
 #endif
