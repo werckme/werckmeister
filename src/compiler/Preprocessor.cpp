@@ -3,6 +3,9 @@
 #include <compiler/metaData.h>
 #include "error.hpp"
 #include <functional>
+#include <sheet/Document.h>
+#include "metaCommands.h"
+#include <fm/tools.h>
 
 namespace sheet {
 	namespace compiler {
@@ -89,7 +92,7 @@ namespace sheet {
 			}
         }
 	
-		void Preprocessor::preprocessSheetTrack(Track& sheetTrack)
+		void Preprocessor::preprocessChordTrack(Track& sheetTrack)
 		{
 			using namespace fm;
 			auto voice = sheetTrack.voices.begin(); 
@@ -127,6 +130,22 @@ namespace sheet {
 			eob.type = Event::EOB;
 			processEob(); // first process bar events
 			voice->events.push_back(eob); // then modify source container
+		}
+
+		void Preprocessor::preprocess(DocumentPtr document)
+		{
+			for (auto &track : document->sheetDef.tracks)
+			{
+				fm::String type = fm::getFirstMetaArgumentWithKeyName(SHEET_META__TRACK_META_KEY_TYPE, track.trackConfigs).value;
+				bool isNoteEventTrack = type.empty();
+				bool isTemplateTrack  = type ==  SHEET_META__SET_SHEET_TEMPLATE;
+				if (isNoteEventTrack || isTemplateTrack) {
+					process(track);
+				}
+				if (type == SHEET_META__TRACK_META_VALUE_TYPE_ACCOMP) {
+					preprocessChordTrack(track);
+				}
+			}
 		}
 
     }

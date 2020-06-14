@@ -36,10 +36,6 @@ int main(int argc, const char** argv)
 		, di::bind<fm::IDefinitionsServer>()		.to<fm::DefinitionsServer>()		.in(di::singleton)
 	);
 	auto program = injector.create<SheetCompilerProgram>();
-	try {
-		program.prepareEnvironment();
-		program.execute();
-	} catch (const std::exception &ex) {
-		std::cout << ex.what() << std::endl;
-	}
+	program.prepareEnvironment();
+	return program.execute();
 }

@@ -67,7 +67,6 @@ namespace sheet {
 						return metaEvent;
 					}
 				);
-				preprocessor_->process(track);
 				for (const auto &voice : track.voices)
 				{
 					auto voiceId = ctx->createVoice();
@@ -121,7 +120,6 @@ namespace sheet {
 			if (!sheetTrack || sheetTrack->voices.empty()) {
 				return;
 			}
-			preprocessor_->preprocessSheetTrack(*sheetTrack);
 			consumeChords(sheetTrack, sheetEventRenderer().get(), ctx.get());
 			sheetTemplateRenderer_->render(sheetTrack);
 		}

@@ -28,8 +28,8 @@ namespace sheet {
 			Preprocessor(const Preprocessor&) = delete;
 			Preprocessor & operator=(const Preprocessor&) = delete;
 			virtual void process(Track &track);
-			virtual void preprocessSheetTrack(Track &sheetTrack);
-			virtual void prepareTemplateDefinitions(DocumentPtr document);
+			virtual void preprocessChordTrack(Track &sheetTrack);
+			virtual void preprocess(DocumentPtr document);
 		};
 	}
 }

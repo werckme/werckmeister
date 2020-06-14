@@ -30,6 +30,7 @@ namespace fm {
 	protected:
 		SheetTemplates & sheetTemplates();
 	private:
+		void prepareTemplateDefinitions();
 		SheetTemplate * findSheetTemplate(const fm::String &sheetTemplateName);
 		std::unique_ptr<SheetTemplates> sheetTemplates_;
 		sheet::DocumentPtr document_;

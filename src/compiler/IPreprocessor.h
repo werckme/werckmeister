@@ -11,18 +11,16 @@ namespace sheet {
 		class IPreprocessor {
 		public:
 			/**
+			 * for note event tracks:
 			 * resolves implicite duration to every event time consuming with duration = 0.
 			 * resolves x shortcut e.g.: c1 x x x -> c1 c1 c1 c1
 			 * set implicit EOB
-			 */
-			virtual void process(Track &track) = 0;
-			/**
+			 * for chord tracks:
 			 * determines the duration of every chord event, such as:
 			 * C D | E -> C(2) D(2) | E(4)
 			 * set implicit EOB
 			 */			
-			virtual void preprocessSheetTrack(Track &sheetTrack) = 0;
-			virtual void prepareTemplateDefinitions(DocumentPtr document) = 0;
+			virtual void preprocess(DocumentPtr document) = 0;
 		};
 		typedef std::shared_ptr<IPreprocessor> IPreprocessorPtr;
 	}

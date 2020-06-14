@@ -20,6 +20,7 @@ void SheetCompilerProgram::prepareEnvironment()
     }
     _logger->babble(WRMLogLambda(printIntro(log)));
     prepareSearchPaths();
+    prepareContext();
 }
 
 void SheetCompilerProgram::printIntro(std::ostream &os)
@@ -32,7 +33,13 @@ void SheetCompilerProgram::printIntro(std::ostream &os)
     ;
 }
 
-void SheetCompilerProgram::execute()
+void SheetCompilerProgram::prepareContext()
+{
+    auto midiFile = fm::getWerckmeister().createMidi();
+    _context->midi(midiFile);
+}
+
+void SheetCompilerProgram::compile()
 {
     if (_programOptions->isHelpSet()) {
         _programOptions->printHelpText(std::cout);
@@ -45,11 +52,10 @@ void SheetCompilerProgram::execute()
     auto file = _programOptions->getInput();
     _logger->babble(WRMLogLambda(log << "parsing '" << file << "'"));
     auto document =_documentParser->parse(file);
-    auto midiFile = fm::getWerckmeister().createMidi();
-    _context->midi(midiFile);
-    _logger->babble(WRMLogLambda(log << "compiling '" << file << "'"));
+    _logger->babble(WRMLogLambda(log << "preprocess '" << file << "'"));
+    _preprocessor->preprocess(document);
+    _logger->babble(WRMLogLambda(log << "compiling '" << file << "'"));    
     _compiler->compile(document);
-
 }
 
 void SheetCompilerProgram::prepareSearchPaths()
@@ -65,30 +71,22 @@ void SheetCompilerProgram::prepareSearchPaths()
 #endif
 }
 
-// void SheetCompilerProgram::prepareTemplateDefinitions()
-// {
-//     sheetTemplates_ = std::make_unique<SheetTemplates>();
-//     SheetTemplates &sheetTemplates = *sheetTemplates_;
-//     for(auto &track : this->document_->sheetDef.tracks) {
-//         try {
-//             fm::String type = fm::getFirstMetaArgumentWithKeyName(SHEET_META__TRACK_META_KEY_TYPE, track.trackConfigs).value;
-//             if (type != SHEET_META__TRACK_META_VALUE_TYPE_SHEET_TEMPLATE) {
-//                 continue;
-//             }
-//             fm::String sheetTemplateName = fm::getFirstMetaArgumentWithKeyName(SHEET_META__TRACK_META_KEY_NAME, track.trackConfigs).value;
-//             if (sheetTemplateName.empty()) {
-//                 FM_THROW(sheet::compiler::Exception, "missing 'name' for sheetTemplate track");
-//             }					
-//             auto sheetTemplate = findSheetTemplate(sheetTemplateName);
-//             if (sheetTemplate == nullptr) {
-//                 sheetTemplates[sheetTemplateName] = SheetTemplate(sheetTemplateName);
-//                 sheetTemplate = &(sheetTemplates[sheetTemplateName]);
-//             }
-//             preprocessor_->process(track);
-//             sheetTemplate->tracks.push_back(&track);
-//         } catch(const fm::Exception &ex) {
-//             ex << sheet::compiler::ex_sheet_source_info(track);
-//             throw;
-//         }
-//     }
-// }
+int SheetCompilerProgram::execute() {
+    try {
+        compile();
+        return 0;
+    }
+    catch (const fm::Exception &ex)
+	{
+        std::cerr << ex.toString() << std::endl;
+	}
+	catch (const std::exception &ex)
+	{
+        std::cerr << ex.what() << std::endl;
+	}
+	catch (...)
+	{
+        std::cerr << "unkown error" << std::endl;
+	}
+    return -1;
+}

@@ -7,6 +7,7 @@
 #include "ICompilerProgramOptions.h"
 #include <compiler/ICompiler.h>
 #include <compiler/context/MidiContext.h>
+#include <compiler/IPreprocessor.h>
 #include <fm/ILogger.h>
 #include <ostream>
 
@@ -18,26 +19,32 @@ private:
     sheet::compiler::IDocumentParserPtr  _documentParser;
     sheet::compiler::ICompilerPtr        _compiler;
     sheet::compiler::MidiContextPtr      _context;
+    sheet::compiler::IPreprocessorPtr    _preprocessor;
 public:
     SheetCompilerProgram(
         std::shared_ptr<ICompilerProgramOptions> programOptions,
         fm::ILoggerPtr                           logger,
         sheet::compiler::IDocumentParserPtr      documentParser,
         sheet::compiler::ICompilerPtr            compiler,
-        sheet::compiler::MidiContextPtr          context
+        sheet::compiler::MidiContextPtr          context,
+        sheet::compiler::IPreprocessorPtr        preprocessor
     ) : _programOptions(programOptions),
         _logger(logger),
         _documentParser(documentParser),
         _compiler(compiler),
-        _context(context)
+        _context(context),
+        _preprocessor(preprocessor)
     {
     }
-    void execute();
+    int execute();
     void prepareEnvironment();
 protected:
+    virtual void prepareContext();
     void printIntro(std::ostream &os);
     void prepareSearchPaths();
     void prepareTemplateDefinitions();
+private:
+    void compile();
 };
 
 #endif
