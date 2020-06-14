@@ -34,7 +34,7 @@ SET (SRC_FETZER_LIB
     compiler/metaData.cpp
     compiler/SheetTemplateRenderer.cpp
     compiler/error.cpp
-    compiler/warning.cpp
+    compiler/Warning.cpp
     compiler/argumentNames.cpp
     compiler/lua/luaTimeInfo.cpp
     sheet/objects/Event.cpp

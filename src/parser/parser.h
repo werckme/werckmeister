@@ -50,6 +50,7 @@ namespace sheet {
 			typedef std::vector<fm::String> Usings;
 			virtual DocumentPtr parse(const fm::String &path);
 			virtual DocumentPtr parseString(const fm::String &text);
+			virtual ~DocumentParser() = default;
 		private:
 			DocumentPtr _document;
 		};

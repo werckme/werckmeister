@@ -28,7 +28,6 @@ namespace sheet {
 			typedef std::shared_ptr<TrackMetaData> TrackMetaDataPtr;
 			typedef std::unordered_map<VoiceId, VoiceMetaDataPtr> VoiceMetaDataMap;
 			typedef std::unordered_map<TrackId, TrackMetaDataPtr> TrackMetaDataMap;
-			typedef std::function<void(fm::String)> WarningHandler;
 			typedef std::vector<sheet::SheetTemplate> SheetTemplates;
 			virtual void setTrack(TrackId trackId) = 0;
 			virtual void setVoice(VoiceId voice) = 0;

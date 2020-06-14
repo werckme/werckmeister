@@ -12,6 +12,7 @@ namespace fmapp {
         ICompilerProgramOptionsPtr _programOptions;
         fm::midi::MidiPtr          _midifile;
         fm::ILoggerPtr             _logger;
+        
     public:
         MidiFileWriter(
             ICompilerProgramOptionsPtr  programOptions, 
@@ -22,6 +23,7 @@ namespace fmapp {
               _logger        (logger)
         {}
         virtual void write(sheet::DocumentPtr document);
+        virtual ~MidiFileWriter() = default;
     };
 }
 

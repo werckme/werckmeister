@@ -6,7 +6,7 @@
 #include <fm/werckmeister.hpp>
 #include <compiler/commands/ACommand.h>
 #include <compiler/commands/AUsingAnEvent.h>
-#include <compiler/warning.hpp>
+#include <compiler/Warning.hpp>
 
 namespace sheet {
     namespace compiler {

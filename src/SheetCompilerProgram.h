@@ -45,6 +45,7 @@ public:
     }
     int execute();
     void prepareEnvironment();
+    virtual ~SheetCompilerProgram() = default;
 protected:
     virtual void prepareContext();
     void printIntro(std::ostream &os);

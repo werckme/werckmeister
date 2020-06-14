@@ -5,6 +5,10 @@
 #include <forward.hpp>
 #include <ICompilerProgramOptions.h>
 #include <fm/ILogger.h>
+#include <rapidjson/document.h>
+#include <rapidjson/writer.h>
+#include <rapidjson/stringbuffer.h>
+#include <iostream>
 
 namespace fmapp {
     class JsonWriter : public IDocumentWriter {
@@ -22,6 +26,12 @@ namespace fmapp {
               _logger        (logger)
         {}
         virtual void write(sheet::DocumentPtr document);
+        void docToJson(std::ostream &, sheet::DocumentPtr document);
+        void eventInfosAsJson(std::ostream &, sheet::DocumentPtr document);
+        std::string base64Encode(const std::string &data);
+        std::string base64Decode(const std::string &base64);
+        std::string midiToBase64(fm::midi::MidiPtr midi);
+        virtual ~JsonWriter() = default;
     };
 }
 

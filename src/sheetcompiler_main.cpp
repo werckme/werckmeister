@@ -11,11 +11,14 @@
 #include <compiler/Compiler.h>
 #include <compiler/context/MidiContext.h>
 #include <compiler/Preprocessor.h>
+#include <compiler/EventLogger.h>
 #include <sheet/Document.h>
 #include <fm/DefinitionsServer.h>
 #include <fm/midi.hpp>
 #include <fmapp/MidiFileWriter.h>
 #include <fmapp/JsonWriter.h>
+
+typedef sheet::compiler::EventLogger<fm::ConsoleLogger> LoggerImpl;
 
 int main(int argc, const char** argv)
 {
@@ -43,7 +46,7 @@ int main(int argc, const char** argv)
 		, di::bind<cp::IPreprocessor>()				.to<cp::Preprocessor>()				.in(di::singleton)
 		, di::bind<ICompilerProgramOptions>()		.to(programOptionsPtr)
 		, di::bind<sheet::Document>()				.to(documentPtr)
-		, di::bind<fm::ILogger>()					.to<fm::ConsoleLogger>()			.in(di::singleton)
+		, di::bind<fm::ILogger>()					.to<LoggerImpl>()					.in(di::singleton)
 		, di::bind<fm::IDefinitionsServer>()		.to<fm::DefinitionsServer>()		.in(di::singleton)
 		, di::bind<fm::midi::Midi>()				.to(midiFile)
 		, di::bind<fmapp::IDocumentWriter>()		.to([&](const auto &injector) -> fmapp::IDocumentWriterPtr 

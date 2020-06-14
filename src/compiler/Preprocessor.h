@@ -30,6 +30,7 @@ namespace sheet {
 			virtual void process(Track &track);
 			virtual void preprocessChordTrack(Track &sheetTrack);
 			virtual void preprocess(DocumentPtr document);
+			virtual ~Preprocessor() = default;
 		};
 	}
 }

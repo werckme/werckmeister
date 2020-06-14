@@ -4,7 +4,7 @@
 #include "ILogger.h"
 
 namespace fm {
-    class ConsoleLogger : public ILogger {
+    class ConsoleLogger : public virtual ILogger {
     public:
         typedef std::function<void(std::ostream&)> WriteToStreamF;
         virtual void babble(const WriteToStreamF&);
