@@ -3,6 +3,7 @@
 
 #include <fm/common.hpp>
 #include <ostream>
+#include <memory>
 
 struct ICompilerProgramOptions {
 	virtual bool isHelpSet() const = 0;
@@ -17,5 +18,7 @@ struct ICompilerProgramOptions {
 	virtual void printHelpText(std::ostream &os) = 0;
 	virtual bool isVerboseSet() const = 0;
 };
+
+typedef std::shared_ptr<ICompilerProgramOptions> ICompilerProgramOptionsPtr;
 
 #endif

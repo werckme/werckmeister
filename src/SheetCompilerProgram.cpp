@@ -14,12 +14,13 @@
 #include <fm/config.hpp>
 #include "FactoryConfig.h"
 
+
 void SheetCompilerProgram::prepareEnvironment()
 {
     if (_programOptions->isVerboseSet()) {
         _logger->logLevel(fm::ILogger::LevelBabble);
     }
-    _logger->babble(WRMLogLambda(printIntro(log)));
+    _logger->babble(WMLogLambda(printIntro(log)));
     prepareSearchPaths();
     prepareContext();
 }
@@ -36,44 +37,56 @@ void SheetCompilerProgram::printIntro(std::ostream &os)
 
 void SheetCompilerProgram::prepareContext()
 {
-    auto midiFile = fm::getWerckmeister().createMidi();
-    _context->midi(midiFile);
 }
 
 void SheetCompilerProgram::compile()
 {
-    if (_programOptions->isHelpSet()) {
-        _programOptions->printHelpText(std::cout);
-        std::cout << std::endl;
-        return;
-    }
-    if (!_programOptions->isInputSet()) {
-        throw std::runtime_error("missing input file");
-    }
     auto file = _programOptions->getInput();
-    _logger->babble(WRMLogLambda(log << "parsing '" << file << "'"));
+    _logger->babble(WMLogLambda(log << "parsing '" << file << "'"));
     auto document =_documentParser->parse(file);
-    _logger->babble(WRMLogLambda(log << "preprocess '" << file << "'"));
+    _logger->babble(WMLogLambda(log << "preprocess '" << file << "'"));
     _preprocessor->preprocess(document);
-    _logger->babble(WRMLogLambda(log << "compiling '" << file << "'"));    
+    _logger->babble(WMLogLambda(log << "compiling '" << file << "'"));    
     _compiler->compile(document);
+    _logger->babble(WMLogLambda(log << "write document"));   
+    _documentWriter->write(document);
+}
+
+void SheetCompilerProgram::addSearchPath(const fm::String &path)
+{
+    auto &wm = fm::getWerckmeister();
+    wm.addSearchPath(path);
+     _logger->babble(WMLogLambda(log << "add to search path: \"" << path << "\""));   
 }
 
 void SheetCompilerProgram::prepareSearchPaths()
 {
     using boost::filesystem::path;
     using boost::filesystem::system_complete;
-    auto &wm = fm::getWerckmeister();
+    
     auto execPath = path(fmapp::os::getExecutablePath());
-    wm.addSearchPath(execPath.string());
-    wm.addSearchPath(system_complete(execPath / path("../share/werckmeister")).string());
+    addSearchPath(execPath.string());
+    addSearchPath(system_complete(execPath / path("../share/werckmeister")).string());
 #ifndef WIN32
-    wm.addSearchPath((path("/usr/local/share/werckmeister").string()));
+    addSearchPath((path("/usr/local/share/werckmeister").string()));
 #endif
 }
 
-int SheetCompilerProgram::execute() {
-    try {
+int SheetCompilerProgram::execute() { 
+    try { 
+        if (_programOptions->isHelpSet()) {
+            _programOptions->printHelpText(std::cout);
+            std::cout << std::endl;
+            return 0;
+        }  
+        if (_programOptions->isVersionSet()) {
+            auto &wm = fm::getWerckmeister();
+            std::cout << wm.version() << std::endl;
+            return 0;
+        }
+        if (!_programOptions->isInputSet()) {
+            throw std::runtime_error("missing input file");
+        }                              
         compile();
         return 0;
     }

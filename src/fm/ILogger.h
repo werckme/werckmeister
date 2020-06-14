@@ -5,7 +5,7 @@
 #include <functional>
 #include <memory>
 
-#define WRMLogLambda(x) [&](auto &log) { (x); } 
+#define WMLogLambda(x) [&](auto &log) { (x); } 
 
 namespace fm {
     class ILogger {

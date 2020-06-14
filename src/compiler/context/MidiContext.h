@@ -13,21 +13,21 @@ namespace sheet {
     namespace compiler {
         class MidiContext : public AContext {
 		private:
+			fm::midi::MidiPtr midi_;
 			fm::ILoggerPtr _logger;
 		public:
 			typedef AContext Base;
 			typedef std::unordered_map<fm::String, MidiInstrumentDef> MidiInstrumentDefs;
 			typedef std::vector<MidiInstrumentDef> InstrumentDefContainer;		
-			MidiContext(fm::IDefinitionsServerPtr definitionsServer, fm::ILoggerPtr logger) 
-				: Base(definitionsServer), _logger(logger) {}
+			MidiContext(fm::midi::MidiPtr midiFile, fm::IDefinitionsServerPtr definitionsServer, fm::ILoggerPtr logger) 
+				: Base(definitionsServer), midi_(midiFile), _logger(logger) {}
 			struct VoiceMetaData : sheet::compiler::VoiceMetaData {
 				fm::Ticks positionOffset = 0;
 			};
 			struct TrackMetaData : sheet::compiler::TrackMetaData {
 				MidiInstrumentDef instrument;
 			};
-			void midi(fm::midi::MidiPtr midi) { midi_ = midi; }
-			fm::midi::MidiPtr midi() const { return midi_; }
+			fm::midi::MidiPtr midiFile() const { return midi_; }
 			virtual TrackId createTrackImpl() override;
 			virtual VoiceId createVoiceImpl() override;
 			virtual void renderPitch(const PitchDef &pitch, fm::Ticks absolutePosition, double velocity, fm::Ticks duration) override;
@@ -62,7 +62,6 @@ namespace sheet {
 			int toMidiVelocity(double velocity);
 		private:
 			MidiInstrumentDefs midiInstrumentDefs_;
-			fm::midi::MidiPtr midi_;
         };
 		typedef std::shared_ptr<MidiContext> MidiContextPtr;
     }

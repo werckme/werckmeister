@@ -93,6 +93,7 @@ SET (SRC_SHEET_FMAPP
     fmapp/boostTimer.cpp
     fmapp/rtmidiBackend.cpp
     fmapp/midiplayer.cpp
+    fmapp/MidiFileWriter.cpp
     fmapp/midiProvider.cpp
     fmapp/udpSender.cpp
     fmapp/json.cpp

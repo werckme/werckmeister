@@ -13,15 +13,25 @@
 #include <compiler/Preprocessor.h>
 #include <sheet/Document.h>
 #include <fm/DefinitionsServer.h>
+#include <fm/midi.hpp>
+#include <fmapp/MidiFileWriter.h>
 
 int main(int argc, const char** argv)
 {
 	namespace di = boost::di;
 	namespace cp = sheet::compiler;
 	auto programOptionsPtr = std::make_shared<CompilerProgramOptions>();
-	programOptionsPtr->parseProgrammArgs(argc, argv);
+
+	try {
+		programOptionsPtr->parseProgrammArgs(argc, argv);
+	} catch (const std::exception &ex) {
+		std::cerr << ex.what() << std::endl;
+		return 1;
+	}
 
 	auto documentPtr = std::make_shared<sheet::Document>();
+
+	auto midiFile = fm::getWerckmeister().createMidi();
 
 	auto injector = di::make_injector(
 		  di::bind<cp::IDocumentParser>()			.to<cp::DocumentParser>()			.in(di::singleton)
@@ -34,6 +44,8 @@ int main(int argc, const char** argv)
 		, di::bind<sheet::Document>()				.to(documentPtr)
 		, di::bind<fm::ILogger>()					.to<fm::ConsoleLogger>()			.in(di::singleton)
 		, di::bind<fm::IDefinitionsServer>()		.to<fm::DefinitionsServer>()		.in(di::singleton)
+		, di::bind<fm::midi::Midi>()				.to(midiFile)
+		, di::bind<fmapp::IDocumentWriter>()		.to<fmapp::MidiFileWriter>()
 	);
 	auto program = injector.create<SheetCompilerProgram>();
 	program.prepareEnvironment();

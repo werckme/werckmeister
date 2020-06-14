@@ -347,9 +347,8 @@ namespace sheet {
 		}
 		IContextPtr MidiContext::createNewContext() const
 		{
-			auto midiContext = std::make_shared<sheet::compiler::MidiContext>(definitionsServer_, _logger);
 			auto midiFile 	= std::make_shared<fm::midi::Midi>(fm::PPQ);
-			midiContext->midi(midiFile);
+			auto midiContext = std::make_shared<sheet::compiler::MidiContext>(midiFile, definitionsServer_, _logger);
 			return midiContext;
 		}
 	}
