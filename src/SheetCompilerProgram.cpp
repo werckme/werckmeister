@@ -12,7 +12,7 @@
 #include <boost/filesystem.hpp>
 #include <exception>
 #include <fm/config.hpp>
-#include "DiConfig.h"
+#include "FactoryConfig.h"
 
 void SheetCompilerProgram::prepareEnvironment()
 {
