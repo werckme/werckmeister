@@ -15,6 +15,7 @@
 #include <fm/DefinitionsServer.h>
 #include <fm/midi.hpp>
 #include <fmapp/MidiFileWriter.h>
+#include <fmapp/JsonWriter.h>
 
 int main(int argc, const char** argv)
 {
@@ -45,7 +46,13 @@ int main(int argc, const char** argv)
 		, di::bind<fm::ILogger>()					.to<fm::ConsoleLogger>()			.in(di::singleton)
 		, di::bind<fm::IDefinitionsServer>()		.to<fm::DefinitionsServer>()		.in(di::singleton)
 		, di::bind<fm::midi::Midi>()				.to(midiFile)
-		, di::bind<fmapp::IDocumentWriter>()		.to<fmapp::MidiFileWriter>()
+		, di::bind<fmapp::IDocumentWriter>()		.to([&](const auto &injector) -> fmapp::IDocumentWriterPtr 
+		{
+			if (programOptionsPtr->isJsonModeSet()) {
+				return injector.template create< std::shared_ptr<fmapp::JsonWriter> >();
+			}
+			return injector.template create< std::shared_ptr<fmapp::MidiFileWriter> >();
+		})
 	);
 	auto program = injector.create<SheetCompilerProgram>();
 	program.prepareEnvironment();

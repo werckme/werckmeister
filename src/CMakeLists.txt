@@ -96,7 +96,7 @@ SET (SRC_SHEET_FMAPP
     fmapp/MidiFileWriter.cpp
     fmapp/midiProvider.cpp
     fmapp/udpSender.cpp
-    fmapp/json.cpp
+    fmapp/JsonWriter.cpp
 )
 
 if (WIN32)

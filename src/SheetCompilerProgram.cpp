@@ -41,6 +41,7 @@ void SheetCompilerProgram::prepareContext()
 
 void SheetCompilerProgram::compile()
 {
+    _midiFile->midiConfig.skipMetaEvents = _programOptions->isNoMetaSet();
     auto file = _programOptions->getInput();
     _logger->babble(WMLogLambda(log << "parsing '" << file << "'"));
     auto document =_documentParser->parse(file);
