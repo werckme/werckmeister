@@ -29,14 +29,6 @@ namespace sheet {
 			 * for rounding errors e.g. for triplets
 			 */
 			static const fm::Ticks TickTolerance;
-			typedef int Id;
-			typedef Id TrackId;
-			typedef Id VoiceId;
-			typedef std::shared_ptr<VoiceMetaData> VoiceMetaDataPtr;
-			typedef std::shared_ptr<TrackMetaData> TrackMetaDataPtr;
-			typedef std::unordered_map<VoiceId, VoiceMetaDataPtr> VoiceMetaDataMap;
-			typedef std::unordered_map<TrackId, TrackMetaDataPtr> TrackMetaDataMap;
-			typedef std::function<void(fm::String)> WarningHandler;
 			virtual void setTrack(TrackId trackId);
 			virtual void setVoice(VoiceId voice);
 			TrackId track() const;
@@ -100,7 +92,6 @@ namespace sheet {
 			}					
 			virtual void throwContextException(const std::string &msg);
 			virtual void warn(const std::string &msg);
-			WarningHandler warningHandler;
 			virtual const SheetTemplates & currentSheetTemplates();
 			virtual void currentSheetTemplate(const SheetTemplates &sheetTemplate);
 			virtual VoicingStrategyPtr currentVoicingStrategy();
@@ -138,12 +129,13 @@ namespace sheet {
 			 */
 			virtual double masterTempo() const { return masterTempo_; }
 			virtual void masterTempo(double val) { this->masterTempo_ = val; }			
-			Warnings warnings;
             /**
              * @return the current velocity value between 0..1
              */
             virtual double velocity();
-			virtual fm::IDefinitionsServerPtr definitionsServer() { return definitionsServer_; }			
+			virtual fm::IDefinitionsServerPtr definitionsServer() { return definitionsServer_; }
+			virtual void warningHandler(const WarningHandler &handler) { _warningHandler = handler; }
+			virtual WarningHandler& warningHandler() { return _warningHandler; }		
 		protected:
 			virtual TrackId createTrackImpl() = 0;
 			virtual VoiceId createVoiceImpl() = 0;
@@ -152,6 +144,7 @@ namespace sheet {
 			virtual TrackId createMasterTrack();
 			fm::IDefinitionsServerPtr definitionsServer_;
 		private:
+			WarningHandler _warningHandler;
 			double masterTempo_ = fm::DefaultTempo;			
 			VoicingStrategyPtr defaultVoiceStrategy_;
 			SheetTemplates currentSheetTemplates_;

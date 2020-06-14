@@ -193,8 +193,8 @@ namespace sheet {
 
 		void AContext::warn(const std::string &msg)
 		{
-			if (warningHandler) {
-				warningHandler(msg);
+			if (_warningHandler) {
+				_warningHandler(msg);
 			}
 		}
 

@@ -7,6 +7,7 @@
 #include <compiler/commands/ACommand.h>
 #include <compiler/commands/AUsingAnEvent.h>
 #include <compiler/Warning.hpp>
+#include "IEventLogger.h"
 
 namespace sheet {
     namespace compiler {
@@ -123,28 +124,33 @@ namespace sheet {
 			}
 		}
 
+		std::shared_ptr<ASheetEventRenderer> SheetEventRenderer::createNewSheetEventRenderer(IContextPtr ctx)
+		{
+			return std::make_shared<SheetEventRenderer>(ctx, logger_);
+		}
+
         void SheetEventRenderer::addEvent(const Event &ev)
 		{
-			// TODO: #126
-			// auto meta = ctx_->voiceMetaData();
-			// ++(meta->eventCount);
-			// try {
-			// 	ctx_->warningHandler = std::bind(&SheetEventRenderer::onWarning, this, std::placeholders::_1, ev);
-			// 	_addEvent(this, &ev);
-			// 	ctx_->warningHandler = nullptr;
-			// } catch(fm::Exception &ex) {
-			// 	ex << ex_sheet_source_info(ev);
-			// 	throw;
-			// }
+			auto meta = ctx_->voiceMetaData();
+			++(meta->eventCount);
+			try {
+				ctx_->warningHandler(std::bind(&SheetEventRenderer::onWarning, this, std::placeholders::_1, ev));
+				_addEvent(this, &ev);
+				ctx_->warningHandler(nullptr);
+			} catch(fm::Exception &ex) {
+				ex << ex_sheet_source_info(ev);
+				throw;
+			}
 		}
 
 		void SheetEventRenderer::onWarning(const fm::String &message, const Event &event)
 		{
-			Warning warning;
-			warning.message = message;
-			warning.sourceObject = event;
-			// TODO: #126
-			//ctx_->warnings.emplace_back(warning);
+			IEventLoggerPtr eventLogger = std::dynamic_pointer_cast<IEventLogger>(logger_);
+			if (!eventLogger) {
+				logger_->warn(WMLogLambda(log << message));
+				return;
+			}
+			eventLogger->warn(WMLogLambda(log << message), event);
 		}
 
 		void SheetEventRenderer::renderEvent(const Event &_ev)

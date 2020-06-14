@@ -15,7 +15,7 @@ namespace fm {
         virtual void logLevel(LogLevel lvl) { _logLevel = lvl; }
         virtual LogLevel logLevel() const { return _logLevel; }
     private:
-        LogLevel _logLevel = LevelNone;
+        LogLevel _logLevel = LevelWarn;
     };
 }
 

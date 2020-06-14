@@ -135,7 +135,7 @@ namespace sheet {
 				auto tmpContext = ctx->createNewContext();
 				tmpContext->masterTempo(ctx->masterTempo());
 				tmpContext->setChordTrackTarget();
-				SheetEventRenderer tmpEventRenderer(tmpContext);
+				auto tmpEventRenderer = sheetTemplateRenderer.sheetEventRenderer->createNewSheetEventRenderer(tmpContext);
 
 				auto &sheetEvents = sheetTrack->voices.begin()->events;
 				for (auto &ev : sheetEvents) {
@@ -156,7 +156,7 @@ namespace sheet {
 							auto &currentTemplateAndChords = templatesAndItsChords.back();
 							currentTemplateAndChords.chords.push_back(&ev);
 							if (ev.type == Event::Meta) {
-								tmpEventRenderer.handleMetaEvent(ev);
+								tmpEventRenderer->handleMetaEvent(ev);
 								if (isTempoEvent) {
 									templatesAndItsChords.emplace_back(TemplatesAndItsChords());
 									auto &newTemplateAndChords = templatesAndItsChords.back();

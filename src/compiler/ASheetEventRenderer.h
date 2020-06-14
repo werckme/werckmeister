@@ -4,16 +4,16 @@
 #include <functional>
 #include <compiler/error.hpp>
 #include <memory>
+#include <compiler/context/IContext.h>
 
 namespace sheet {
     struct Event;
     namespace compiler {
-        class AContext;
         class ASheetEventRenderer {
         public:
             virtual void addEvent(const Event &event) = 0;
             virtual void handleMetaEvent(const Event &_ev) = 0;
-
+            virtual std::shared_ptr<ASheetEventRenderer> createNewSheetEventRenderer(IContextPtr ctx) = 0;
             template<class TContainer>
             void handleMetaEvents(const TContainer &container, 
                             std::function<sheet::Event(const typename TContainer::value_type&)> fGetMetaEvent);        
