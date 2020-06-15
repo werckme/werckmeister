@@ -9,20 +9,24 @@
 #include <rapidjson/writer.h>
 #include <rapidjson/stringbuffer.h>
 #include <iostream>
+#include <fmapp/TimelineVisitor.hpp>
 
 namespace fmapp {
     class JsonWriter : public IDocumentWriter {
     private:
         ICompilerProgramOptionsPtr _programOptions;
         fm::midi::MidiPtr          _midifile;
+        fmapp::DefaultTimelinePtr  _timeline;
         fm::ILoggerPtr             _logger;
     public:
         JsonWriter(
             ICompilerProgramOptionsPtr  programOptions, 
             fm::midi::MidiPtr           midiFile,
+            fmapp::DefaultTimelinePtr   timeline,
             fm::ILoggerPtr              logger) 
             : _programOptions(programOptions), 
               _midifile      (midiFile),
+              _timeline      (timeline),
               _logger        (logger)
         {}
         virtual void write(sheet::DocumentPtr document);

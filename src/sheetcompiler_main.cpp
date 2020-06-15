@@ -40,7 +40,7 @@ int main(int argc, const char** argv)
 	auto documentPtr = std::make_shared<sheet::Document>();
 
 	auto midiFile = fm::getWerckmeister().createMidi();
-	bool needTimeline = true;
+	bool needTimeline = programOptionsPtr->isJsonModeSet();
 	auto injector = di::make_injector(
 		  di::bind<cp::IDocumentParser>()			.to<cp::DocumentParser>()			.in(di::singleton)
 		, di::bind<cp::ICompiler>()					.to<cp::Compiler>()					.in(di::singleton)
@@ -66,7 +66,7 @@ int main(int argc, const char** argv)
 				return injector.template create< std::shared_ptr<fmapp::DefaultTimeline>>();
 			}
 			return injector.template create< std::shared_ptr<cp::DefaultCompilerVisitor>>();
-		})		
+		})
 	);
 	auto program = injector.create<SheetCompilerProgram>();
 	program.prepareEnvironment();

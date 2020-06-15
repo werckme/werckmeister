@@ -57,6 +57,7 @@ namespace fmapp {
     typedef boost::icl::interval_map<fm::Ticks, TextPositionSet> EventTimeline;
     typedef boost::icl::interval<fm::Ticks> TicksInterval;
     typedef TimelineVisitor<EventTimeline> DefaultTimeline;
+    typedef std::shared_ptr<DefaultTimeline> DefaultTimelinePtr;
 
     ///////////////////////////////////////////////////////////////////////////  
     template<class TIntervalContainer>
@@ -70,8 +71,8 @@ namespace fmapp {
         }
         auto meta = ctx->voiceMetaData();
         auto evStartPos = meta->position * meta->tempoFactor;
+        auto evEndPos = (meta->position + ev.duration) * meta->tempoFactor;
         this->currentEventInfo_ = std::make_shared<EventInfo>();
-        auto evEndPos = meta->position * meta->tempoFactor;
 		currentEventInfo_->beginPosition = ev.sourcePositionBegin;
         if (ev.sourcePositionEnd != sheet::ASheetObjectWithSourceInfo::UndefinedPosition) {
             currentEventInfo_->endPosition = ev.sourcePositionEnd;

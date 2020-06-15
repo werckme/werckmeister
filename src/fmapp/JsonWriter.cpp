@@ -11,6 +11,12 @@
 #include <fmapp/os.hpp>
 
 namespace {
+    void toStream(std::ostream& os, rapidjson::Document &doc) 
+    {
+        rapidjson::OStreamWrapper osw(os);
+        rapidjson::Writer<rapidjson::OStreamWrapper> writer(osw);
+        doc.Accept(writer);
+    }    
     rapidjson::Document documentInfosToJSONDoc(sheet::DocumentPtr sheetDoc, fm::Ticks duration)
     {
         rapidjson::Document doc;
@@ -47,11 +53,40 @@ namespace {
         doc.AddMember("warnings", warningsArray, doc.GetAllocator());
         return doc;
     }
-    void toStream(std::ostream& os, rapidjson::Document &doc) 
+    void eventInfoToJSON(std::ostream& os,
+        fm::Ticks elapsedTime, 
+        unsigned long lastUpdateTimestamp, 
+        const std::vector<fmapp::DefaultTimeline::EventInfo> &eventInfos, 
+        bool ignoreTimestamp)
     {
-        rapidjson::OStreamWrapper osw(os);
-        rapidjson::Writer<rapidjson::OStreamWrapper> writer(osw);
-        doc.Accept(writer);
+        rapidjson::Document doc;
+        doc.SetObject();
+        rapidjson::Value elapsed;
+        elapsed.SetDouble(elapsedTime);
+        rapidjson::Value lastUpdate;
+		lastUpdate.SetUint(lastUpdateTimestamp);
+        rapidjson::Value pid;
+        pid.SetInt(fmapp::os::getPId());
+        doc.AddMember("sheetTime", elapsed, doc.GetAllocator());
+        doc.AddMember("pid", pid, doc.GetAllocator());
+        if (!ignoreTimestamp) {
+            doc.AddMember("lastUpdateTimestamp", lastUpdate, doc.GetAllocator());
+        }
+        rapidjson::Value array(rapidjson::kArrayType);
+        for (const auto &eventInfo : eventInfos) {
+            rapidjson::Value object(rapidjson::kObjectType);
+            rapidjson::Value beginPosition(eventInfo.beginPosition);
+            object.AddMember("beginPosition", beginPosition, doc.GetAllocator());
+            if (eventInfo.endPosition > 0) {
+                rapidjson::Value endPosition(eventInfo.endPosition);
+                object.AddMember("endPosition", endPosition, doc.GetAllocator());
+            }
+            rapidjson::Value sourceId(eventInfo.sourceId);
+            object.AddMember("sourceId", sourceId, doc.GetAllocator());
+            array.PushBack(object, doc.GetAllocator());
+        }
+        doc.AddMember("sheetEventInfos", array, doc.GetAllocator());
+        toStream(os, doc);
     }
 }
 
@@ -83,21 +118,20 @@ namespace fmapp {
     {
         os << "[" << std::endl;
         
-        // TODO #126
-        // bool first = true;
-        // for (const auto &timelineEntry : timeline) {
-        //     fmapp::EventInfos eventInfos;
-        //     fm::Ticks eventsBeginTime = timelineEntry.first.lower() / (double)fm::PPQ;
-        //     eventInfos.reserve(timelineEntry.second.size());
-        //     for (const auto &x : timelineEntry.second) {
-        //         eventInfos.push_back(x);
-        //     }
-        //     if (!first) {
-        //         ss << ", ";
-        //     }
-        //     ss << jsonWriter.funkfeuerToJSON(eventsBeginTime, 0, eventInfos, true); 
-        //     first = false;
-        // }
+        bool first = true;
+        for (const auto &timelineEntry : _timeline->intervalContainer()) {
+            fmapp::EventInfos eventInfos;
+            fm::Ticks eventsBeginTime = timelineEntry.first.lower() / (double)fm::PPQ;
+            eventInfos.reserve(timelineEntry.second.size());
+            for (const auto &x : timelineEntry.second) {
+                eventInfos.push_back(x);
+            }
+            if (!first) {
+                os << ", ";
+            }
+            eventInfoToJSON(os, eventsBeginTime, 0, eventInfos, true); 
+            first = false;
+        }
         os << "]";
     }
 
@@ -135,5 +169,4 @@ namespace fmapp {
         delete []data;
         return result;
     }
-
 }
