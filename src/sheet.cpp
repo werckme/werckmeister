@@ -37,7 +37,7 @@ namespace sheet {
     {
         auto &wm = fm::getWerckmeister();
         auto context = std::dynamic_pointer_cast<sheet::compiler::MidiContext>( wm.createContext() );
-        // there is one case where context and event renderer is one object -> MidiAndTimeline
+        // there is one case where context and event renderer is one object -> TimelineVisitor
         auto eventRenderer = std::dynamic_pointer_cast<sheet::compiler::SheetEventRenderer>( context );
         auto midi = wm.createMidi();
         if (midiConfig) {

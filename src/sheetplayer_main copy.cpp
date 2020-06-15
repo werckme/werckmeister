@@ -25,7 +25,7 @@
 #include <fm/config/configServer.h>
 #include <fmapp/udpSender.hpp>
 #include "fmapp/json.hpp"
-#include "fmapp/MidiAndTimeline.hpp"
+#include "fmapp/TimelineVisitor.hpp"
 #include <set>
 #include <fm/tools.h>
 #include <time.h>

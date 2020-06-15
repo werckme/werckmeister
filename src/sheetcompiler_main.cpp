@@ -19,7 +19,7 @@
 #include <fmapp/MidiFileWriter.h>
 #include <fmapp/JsonWriter.h>
 #include <compiler/DefaultCompilerVisitor.h>
-#include <fmapp/MidiAndTimeline.hpp>
+#include <fmapp/TimelineVisitor.hpp>
 
 typedef sheet::compiler::EventLogger<fm::ConsoleLogger> 			   LoggerImpl;
 typedef sheet::compiler::LoggerAndWarningsCollector<fm::ConsoleLogger> WarningsCollectorLoggerImpl; 
@@ -63,7 +63,7 @@ int main(int argc, const char** argv)
 		, di::bind<cp::ICompilerVisitor>()			.to([&](const auto &injector) -> cp::ICompilerVisitorPtr 
 		{
 			if (needTimeline) {
-				return injector.template create< std::shared_ptr<fmapp::DefaultMidiAndTimeline>>();
+				return injector.template create< std::shared_ptr<fmapp::DefaultTimeline>>();
 			}
 			return injector.template create< std::shared_ptr<cp::DefaultCompilerVisitor>>();
 		})		

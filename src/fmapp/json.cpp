@@ -3,7 +3,7 @@
 #include <rapidjson/writer.h>
 #include <rapidjson/stringbuffer.h>
 #include <sheet/Document.h>
-#include <fmapp/MidiAndTimeline.hpp>
+#include <fmapp/TimelineVisitor.hpp>
 #include <compiler/error.hpp>
 #include <boost/beast/core/detail/base64.hpp>
 #include <fm/midi.hpp>

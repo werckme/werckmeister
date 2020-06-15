@@ -12,7 +12,7 @@
 #include <fm/common.hpp>
 #include "sheet/Document.h"
 #include "sheet.h"
-#include "fmapp/MidiAndTimeline.hpp"
+#include "fmapp/TimelineVisitor.hpp"
 
 #define ARG_HELP "help"
 #define ARG_INPUT "input"

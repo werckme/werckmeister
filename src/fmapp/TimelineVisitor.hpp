@@ -16,20 +16,19 @@
 namespace fmapp {
     /*
     * a timeline tells you at what time, which events are used
-    * this context creates such timeline, while creating the midi data.
-    * this class combines renderer and context to get this information.
+    * this context creates such timeline
     */
     template<class TIntervalContainer>
-    class MidiAndTimeline : public sheet::compiler::ICompilerVisitor {
+    class TimelineVisitor : public sheet::compiler::ICompilerVisitor {
     private:
         fm::ILoggerPtr _logger;
     public:
-        MidiAndTimeline(fm::ILoggerPtr logger) : _logger(logger) {}
+        TimelineVisitor(fm::ILoggerPtr logger) : _logger(logger) {}
         typedef typename TIntervalContainer::value_type::second_type TSet;
         typedef typename TIntervalContainer::interval_type IntervalType;
         typedef typename TSet::value_type EventInfo;
         typedef sheet::compiler::IContext::TrackId TrackId;
-        virtual ~MidiAndTimeline() = default;
+        virtual ~TimelineVisitor() = default;
         TIntervalContainer &intervalContainer() { return intervalContainer_; }
         const TIntervalContainer &intervalContainer() const { return intervalContainer_; }
         virtual void visit(sheet::compiler::IContext *context, const sheet::Event &ev) override;
@@ -57,11 +56,11 @@ namespace fmapp {
     typedef std::set<EventInfo> TextPositionSet;
     typedef boost::icl::interval_map<fm::Ticks, TextPositionSet> EventTimeline;
     typedef boost::icl::interval<fm::Ticks> TicksInterval;
-    typedef MidiAndTimeline<EventTimeline> DefaultMidiAndTimeline;
+    typedef TimelineVisitor<EventTimeline> DefaultTimeline;
 
     ///////////////////////////////////////////////////////////////////////////  
     template<class TIntervalContainer>
-    void MidiAndTimeline<TIntervalContainer>::visit(sheet::compiler::IContext *ctx, const sheet::Event &ev)
+    void TimelineVisitor<TIntervalContainer>::visit(sheet::compiler::IContext *ctx, const sheet::Event &ev)
     {
         if (!ev.isTimeConsuming()) {
             return;
@@ -84,7 +83,7 @@ namespace fmapp {
     }
 
     template<class TIntervalContainer>
-    void MidiAndTimeline<TIntervalContainer>::visit(sheet::compiler::IContext *ctx, const fm::midi::Event &ev, TrackId trackId)
+    void TimelineVisitor<TIntervalContainer>::visit(sheet::compiler::IContext *ctx, const fm::midi::Event &ev, TrackId trackId)
     {
         if (ev.eventType() != fm::midi::NoteOn) {
             return;
