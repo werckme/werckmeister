@@ -1,8 +1,7 @@
 #ifndef FMAPP_TIMELINECONTEXT_H
 #define FMAPP_TIMELINECONTEXT_H
 
-#include <compiler/context/MidiContext.h>
-#include <compiler/SheetEventRenderer.h>
+
 #include <forward.hpp>
 #include <fm/midi.hpp>
 #include <map>
@@ -10,6 +9,9 @@
 #include <memory>
 #include <boost/icl/interval_map.hpp>
 #include <sheet/objects/ASheetObject.h>
+#include <compiler/ICompilerVisitor.h>
+#include <compiler/context/MidiContext.h>
+#include <fm/ILogger.h>
 
 namespace fmapp {
     /*
@@ -18,21 +20,22 @@ namespace fmapp {
     * this class combines renderer and context to get this information.
     */
     template<class TIntervalContainer>
-    class MidiAndTimeline : public sheet::compiler::MidiContext, public sheet::compiler::SheetEventRenderer {
+    class MidiAndTimeline : public sheet::compiler::ICompilerVisitor {
+    private:
+        fm::ILoggerPtr _logger;
     public:
-        typedef sheet::compiler::MidiContext Context;
-        typedef sheet::compiler::SheetEventRenderer Renderer;
+        MidiAndTimeline(fm::ILoggerPtr logger) : _logger(logger) {}
         typedef typename TIntervalContainer::value_type::second_type TSet;
         typedef typename TIntervalContainer::interval_type IntervalType;
-        typedef typename TSet::value_type EventInfo;        
-        MidiAndTimeline(fm::midi::MidiPtr midiFile, fm::IDefinitionsServerPtr definitionsServer, fm::ILoggerPtr logger);
-        virtual ~MidiAndTimeline();
-        virtual void addEvent(const sheet::Event &ev) override;
-        virtual void addEvent(const fm::midi::Event &ev, TrackId trackId) override;
-        TIntervalContainer *intervalContainer() { return intervalContainer_; }
-        void intervalContainer(TIntervalContainer *container) { intervalContainer_ = container; }
+        typedef typename TSet::value_type EventInfo;
+        typedef sheet::compiler::IContext::TrackId TrackId;
+        virtual ~MidiAndTimeline() = default;
+        TIntervalContainer &intervalContainer() { return intervalContainer_; }
+        const TIntervalContainer &intervalContainer() const { return intervalContainer_; }
+        virtual void visit(sheet::compiler::IContext *context, const sheet::Event &ev) override;
+        virtual void visit(sheet::compiler::IContext *context, const fm::midi::Event &ev, TrackId trackId) override;    
     private:
-        TIntervalContainer *intervalContainer_ = nullptr;
+        TIntervalContainer intervalContainer_;
         std::shared_ptr<EventInfo> currentEventInfo_;
     };
     
@@ -54,49 +57,35 @@ namespace fmapp {
     typedef std::set<EventInfo> TextPositionSet;
     typedef boost::icl::interval_map<fm::Ticks, TextPositionSet> EventTimeline;
     typedef boost::icl::interval<fm::Ticks> TicksInterval;
-    typedef MidiAndTimeline<EventTimeline> MidiAndTimelineContext;
+    typedef MidiAndTimeline<EventTimeline> DefaultMidiAndTimeline;
 
-    ///////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////  
     template<class TIntervalContainer>
-    MidiAndTimeline<TIntervalContainer>::MidiAndTimeline() : sheet::compiler::SheetEventRenderer(this)
-    {
-
-    }
-    template<class TIntervalContainer>
-    MidiAndTimeline<TIntervalContainer>::~MidiAndTimeline()
-    {
-
-    }    
-    template<class TIntervalContainer>
-    void MidiAndTimeline<TIntervalContainer>::addEvent(const sheet::Event &ev)
+    void MidiAndTimeline<TIntervalContainer>::visit(sheet::compiler::IContext *ctx, const sheet::Event &ev)
     {
         if (!ev.isTimeConsuming()) {
-            Renderer::addEvent(ev);
             return;
         }
         if (ev.type == sheet::Event::Group) {
-            Renderer::addEvent(ev);
             return;
         }
-        auto meta = voiceMetaData();
+        auto meta = ctx->voiceMetaData();
         auto evStartPos = meta->position * meta->tempoFactor;
         this->currentEventInfo_ = std::make_shared<EventInfo>();
-        Renderer::addEvent(ev);
         auto evEndPos = meta->position * meta->tempoFactor;
 		currentEventInfo_->beginPosition = ev.sourcePositionBegin;
         if (ev.sourcePositionEnd != sheet::ASheetObjectWithSourceInfo::UndefinedPosition) {
             currentEventInfo_->endPosition = ev.sourcePositionEnd;
         }
 		currentEventInfo_->sourceId = ev.sourceId;
-		currentEventInfo_->eventNr = intervalContainer_->size();
+		currentEventInfo_->eventNr = intervalContainer_.size();
         TSet value = { *currentEventInfo_ };
-        (*intervalContainer_) += std::make_pair(IntervalType::right_open(evStartPos, evEndPos), value);
+        intervalContainer_ += std::make_pair(IntervalType::right_open(evStartPos, evEndPos), value);
     }
 
     template<class TIntervalContainer>
-    void MidiAndTimeline<TIntervalContainer>::addEvent(const fm::midi::Event &ev, TrackId trackId)
+    void MidiAndTimeline<TIntervalContainer>::visit(sheet::compiler::IContext *ctx, const fm::midi::Event &ev, TrackId trackId)
     {
-        Context::addEvent(ev, trackId);
         if (ev.eventType() != fm::midi::NoteOn) {
             return;
         }
@@ -105,7 +94,8 @@ namespace fmapp {
         }
         this->currentEventInfo_->pitches.push_back(ev.parameter1());
         this->currentEventInfo_->channel = ev.channel();
-        auto trackMeta = trackMetaData<Context::TrackMetaData>(trackId);
+        typedef sheet::compiler::MidiContext::TrackMetaData MidiTrackMetaData;
+        auto trackMeta = std::dynamic_pointer_cast<MidiTrackMetaData>(ctx->trackMetaData(trackId));
         if (trackMeta) {
             this->currentEventInfo_->instrumentId = trackMeta->instrument.id;
         }

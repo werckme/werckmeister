@@ -19,9 +19,10 @@
 #include <fmapp/MidiFileWriter.h>
 #include <fmapp/JsonWriter.h>
 #include <compiler/DefaultCompilerVisitor.h>
+#include <fmapp/MidiAndTimeline.hpp>
 
 typedef sheet::compiler::EventLogger<fm::ConsoleLogger> 			   LoggerImpl;
-typedef sheet::compiler::LoggerAndWarningsCollector<fm::ConsoleLogger> WarningsCollectorLoggerImpl;
+typedef sheet::compiler::LoggerAndWarningsCollector<fm::ConsoleLogger> WarningsCollectorLoggerImpl; 
 
 int main(int argc, const char** argv)
 {
@@ -39,14 +40,13 @@ int main(int argc, const char** argv)
 	auto documentPtr = std::make_shared<sheet::Document>();
 
 	auto midiFile = fm::getWerckmeister().createMidi();
-
+	bool needTimeline = true;
 	auto injector = di::make_injector(
 		  di::bind<cp::IDocumentParser>()			.to<cp::DocumentParser>()			.in(di::singleton)
 		, di::bind<cp::ICompiler>()					.to<cp::Compiler>()					.in(di::singleton)
 		, di::bind<cp::ISheetTemplateRenderer>()	.to<cp::SheetTemplateRenderer>()	.in(di::singleton)
 		, di::bind<cp::ASheetEventRenderer>()		.to<cp::SheetEventRenderer>()		.in(di::singleton)
 		, di::bind<cp::IContext>()					.to<cp::MidiContext>()				.in(di::singleton)
-		, di::bind<cp::ICompilerVisitor>()			.to<cp::DefaultCompilerVisitor>()	.in(di::singleton)
 		, di::bind<cp::IPreprocessor>()				.to<cp::Preprocessor>()				.in(di::singleton)
 		, di::bind<ICompilerProgramOptions>()		.to(programOptionsPtr)
 		, di::bind<sheet::Document>()				.to(documentPtr)
@@ -56,10 +56,17 @@ int main(int argc, const char** argv)
 		, di::bind<fmapp::IDocumentWriter>()		.to([&](const auto &injector) -> fmapp::IDocumentWriterPtr 
 		{
 			if (programOptionsPtr->isJsonModeSet()) {
-				return injector.template create< std::shared_ptr<fmapp::JsonWriter> >();
+				return injector.template create<std::shared_ptr<fmapp::JsonWriter>>();
 			}
-			return injector.template create< std::shared_ptr<fmapp::MidiFileWriter> >();
+			return injector.template create<std::shared_ptr<fmapp::MidiFileWriter>>();
 		})
+		, di::bind<cp::ICompilerVisitor>()			.to([&](const auto &injector) -> cp::ICompilerVisitorPtr 
+		{
+			if (needTimeline) {
+				return injector.template create< std::shared_ptr<fmapp::DefaultMidiAndTimeline>>();
+			}
+			return injector.template create< std::shared_ptr<cp::DefaultCompilerVisitor>>();
+		})		
 	);
 	auto program = injector.create<SheetCompilerProgram>();
 	program.prepareEnvironment();

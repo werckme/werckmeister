@@ -131,7 +131,7 @@ namespace sheet {
 
         void SheetEventRenderer::addEvent(const Event &ev)
 		{
-			compilerVisitor_->visit(ev);
+			compilerVisitor_->visit(ctx_.get(), ev);
 			auto meta = ctx_->voiceMetaData();
 			++(meta->eventCount);
 			try {

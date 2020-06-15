@@ -102,7 +102,7 @@ namespace sheet {
 
 		void MidiContext::addEvent(const fm::midi::Event &ev, TrackId trackId)
 		{
-			_compilerVisitor->visit(ev, trackId);
+			_compilerVisitor->visit(this, ev, trackId);
 			if (trackId == INVALID_TRACK_ID) {
 				trackId = track(); // context's current track
 			}
