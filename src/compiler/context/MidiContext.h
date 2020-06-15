@@ -8,19 +8,29 @@
 #include <vector>
 #include <fm/config.hpp>
 #include <fm/ILogger.h>
+#include <compiler/ICompilerVisitor.h>
 
 namespace sheet {
     namespace compiler {
         class MidiContext : public AContext {
 		private:
 			fm::midi::MidiPtr midi_;
+			ICompilerVisitorPtr _compilerVisitor;
 			fm::ILoggerPtr _logger;
 		public:
 			typedef AContext Base;
 			typedef std::unordered_map<fm::String, MidiInstrumentDef> MidiInstrumentDefs;
 			typedef std::vector<MidiInstrumentDef> InstrumentDefContainer;		
-			MidiContext(fm::midi::MidiPtr midiFile, fm::IDefinitionsServerPtr definitionsServer, fm::ILoggerPtr logger) 
-				: Base(definitionsServer), midi_(midiFile), _logger(logger) {}
+			MidiContext(fm::midi::MidiPtr midiFile, 
+				fm::IDefinitionsServerPtr definitionsServer, 
+				ICompilerVisitorPtr compilerVisitor, 
+				fm::ILoggerPtr logger) 
+				: Base(definitionsServer), 
+				  midi_(midiFile),
+				  _compilerVisitor(compilerVisitor),
+				  _logger(logger) 
+				{}
+
 			struct VoiceMetaData : sheet::compiler::VoiceMetaData {
 				fm::Ticks positionOffset = 0;
 			};

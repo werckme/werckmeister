@@ -126,11 +126,12 @@ namespace sheet {
 
 		std::shared_ptr<ASheetEventRenderer> SheetEventRenderer::createNewSheetEventRenderer(IContextPtr ctx)
 		{
-			return std::make_shared<SheetEventRenderer>(ctx, logger_);
+			return std::make_shared<SheetEventRenderer>(ctx, compilerVisitor_, logger_);
 		}
 
         void SheetEventRenderer::addEvent(const Event &ev)
 		{
+			compilerVisitor_->visit(ev);
 			auto meta = ctx_->voiceMetaData();
 			++(meta->eventCount);
 			try {

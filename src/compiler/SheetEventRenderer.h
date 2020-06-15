@@ -6,13 +6,14 @@
 #include <compiler/error.hpp>
 #include "ASheetEventRenderer.h"
 #include <fm/ILogger.h>
+#include "ICompilerVisitor.h"
 
 namespace sheet {
     namespace compiler {
         class SheetEventRenderer : public ASheetEventRenderer {
         public:
-            SheetEventRenderer(IContextPtr ctx, fm::ILoggerPtr logger) 
-                : ctx_(ctx), logger_(logger) 
+            SheetEventRenderer(IContextPtr ctx, ICompilerVisitorPtr compilerVisitor, fm::ILoggerPtr logger) 
+                : ctx_(ctx), compilerVisitor_(compilerVisitor), logger_(logger) 
             {}
             virtual ~SheetEventRenderer() = default;
             IContextPtr context() const { return this->ctx_; }
@@ -27,6 +28,7 @@ namespace sheet {
         private:
             IContextPtr ctx_;
             fm::ILoggerPtr logger_;
+            ICompilerVisitorPtr compilerVisitor_;
         };
     }
 }

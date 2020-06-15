@@ -102,6 +102,7 @@ namespace sheet {
 
 		void MidiContext::addEvent(const fm::midi::Event &ev, TrackId trackId)
 		{
+			_compilerVisitor->visit(ev, trackId);
 			if (trackId == INVALID_TRACK_ID) {
 				trackId = track(); // context's current track
 			}
@@ -348,7 +349,13 @@ namespace sheet {
 		IContextPtr MidiContext::createNewContext() const
 		{
 			auto midiFile 	= std::make_shared<fm::midi::Midi>(fm::PPQ);
-			auto midiContext = std::make_shared<sheet::compiler::MidiContext>(midiFile, definitionsServer_, _logger);
+			auto midiContext = std::make_shared<sheet::compiler::MidiContext>
+			(
+				midiFile, 
+				definitionsServer_, 
+				_compilerVisitor, 
+				_logger
+			);
 			return midiContext;
 		}
 	}

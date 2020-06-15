@@ -25,7 +25,7 @@ namespace fmapp {
         typedef typename TIntervalContainer::value_type::second_type TSet;
         typedef typename TIntervalContainer::interval_type IntervalType;
         typedef typename TSet::value_type EventInfo;        
-        MidiAndTimeline();
+        MidiAndTimeline(fm::midi::MidiPtr midiFile, fm::IDefinitionsServerPtr definitionsServer, fm::ILoggerPtr logger);
         virtual ~MidiAndTimeline();
         virtual void addEvent(const sheet::Event &ev) override;
         virtual void addEvent(const fm::midi::Event &ev, TrackId trackId) override;

@@ -18,6 +18,7 @@
 #include <fm/midi.hpp>
 #include <fmapp/MidiFileWriter.h>
 #include <fmapp/JsonWriter.h>
+#include <compiler/DefaultCompilerVisitor.h>
 
 typedef sheet::compiler::EventLogger<fm::ConsoleLogger> 			   LoggerImpl;
 typedef sheet::compiler::LoggerAndWarningsCollector<fm::ConsoleLogger> WarningsCollectorLoggerImpl;
@@ -45,6 +46,7 @@ int main(int argc, const char** argv)
 		, di::bind<cp::ISheetTemplateRenderer>()	.to<cp::SheetTemplateRenderer>()	.in(di::singleton)
 		, di::bind<cp::ASheetEventRenderer>()		.to<cp::SheetEventRenderer>()		.in(di::singleton)
 		, di::bind<cp::IContext>()					.to<cp::MidiContext>()				.in(di::singleton)
+		, di::bind<cp::ICompilerVisitor>()			.to<cp::DefaultCompilerVisitor>()	.in(di::singleton)
 		, di::bind<cp::IPreprocessor>()				.to<cp::Preprocessor>()				.in(di::singleton)
 		, di::bind<ICompilerProgramOptions>()		.to(programOptionsPtr)
 		, di::bind<sheet::Document>()				.to(documentPtr)
