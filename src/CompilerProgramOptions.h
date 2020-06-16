@@ -5,7 +5,7 @@
 #include <boost/program_options.hpp>
 #include <ICompilerProgramOptions.h>
 
-struct CompilerProgramOptions : public ICompilerProgramOptions {
+struct CompilerProgramOptions : public virtual ICompilerProgramOptions {
 	CompilerProgramOptions() : optionsDescription("Allowed options") {}
 	virtual ~CompilerProgramOptions() = default;
 	virtual bool isHelpSet() const;

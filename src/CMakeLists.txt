@@ -116,6 +116,7 @@ SET (SRC_SHEET_PLAYER
     SheetCompilerProgram.cpp 
     SheetPlayerProgram.cpp 
     CompilerProgramOptions.cpp
+    PlayerProgramOptions.cpp
 )
 
 SET (SHEET_LIBS ${SHEET_LIBS} fmapp sheet lua ${Boost_LIBRARIES})

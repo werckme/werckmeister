@@ -4,7 +4,7 @@
 #include "SheetPlayerProgram.h"
 #include <parser/parser.h>
 #include <fm/werckmeister.hpp>
-#include <CompilerProgramOptions.h>
+#include <PlayerProgramOptions.h>
 #include <fm/ConsoleLogger.h>
 #include <compiler/LoggerAndWarningsCollector.h>
 #include <compiler/SheetEventRenderer.h>
@@ -28,7 +28,7 @@ int main(int argc, const char** argv)
 {
 	namespace di = boost::di;
 	namespace cp = sheet::compiler;
-	auto programOptionsPtr = std::make_shared<CompilerProgramOptions>();
+	auto programOptionsPtr = std::make_shared<PlayerProgramOptions>();
 
 	try {
 		programOptionsPtr->parseProgrammArgs(argc, argv);
