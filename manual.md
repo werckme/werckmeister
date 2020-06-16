@@ -180,7 +180,7 @@ Have a look [here](/manual#adding-a-device) to see how it's done.
 
 To get a good impression of what is possible and how it can be achieved, it is recommended to have a look at the example sheets.
 
-To can find them in your installation folder under `shared/werckmeister/examples`. Or download them from [here](https://github.com/werckme/werckmeister/tree/master/examples).
+To can find them in your installation folder under `shared/werckmeister/examples`. Or download them from [here](https://github.com/werckme/werckmeister/tree/v0.1.53/examples).
 
 You find the examples here:
 

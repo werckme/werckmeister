@@ -22,7 +22,7 @@
 #include <fmapp/TimelineVisitor.hpp>
 
 typedef sheet::compiler::EventLogger<fm::ConsoleLogger> 			   LoggerImpl;
-typedef sheet::compiler::LoggerAndWarningsCollector<fm::ConsoleLogger> WarningsCollectorLoggerImpl; 
+typedef sheet::compiler::LoggerAndWarningsCollector<fm::ConsoleLogger> WarningsCollectorWithConsoleLogger;
 
 int main(int argc, const char** argv)
 {
@@ -38,9 +38,9 @@ int main(int argc, const char** argv)
 	}
 
 	auto documentPtr = std::make_shared<sheet::Document>();
-
 	auto midiFile = fm::getWerckmeister().createMidi();
 	bool needTimeline = programOptionsPtr->isJsonModeSet();
+	bool writeWarningsToConsole = !(programOptionsPtr->isJsonModeSet() || programOptionsPtr->isValidateMode());
 	auto injector = di::make_injector(
 		  di::bind<cp::IDocumentParser>()			.to<cp::DocumentParser>()			.in(di::singleton)
 		, di::bind<cp::ICompiler>()					.to<cp::Compiler>()					.in(di::singleton)
@@ -50,7 +50,6 @@ int main(int argc, const char** argv)
 		, di::bind<cp::IPreprocessor>()				.to<cp::Preprocessor>()				.in(di::singleton)
 		, di::bind<ICompilerProgramOptions>()		.to(programOptionsPtr)
 		, di::bind<sheet::Document>()				.to(documentPtr)
-		, di::bind<fm::ILogger>()					.to<LoggerImpl>()					.in(di::singleton)
 		, di::bind<fm::IDefinitionsServer>()		.to<fm::DefinitionsServer>()		.in(di::singleton)
 		, di::bind<fm::midi::Midi>()				.to(midiFile)
 		, di::bind<fmapp::IDocumentWriter>()		.to([&](const auto &injector) -> fmapp::IDocumentWriterPtr 
@@ -66,6 +65,13 @@ int main(int argc, const char** argv)
 				return injector.template create< std::shared_ptr<fmapp::DefaultTimeline>>();
 			}
 			return injector.template create< std::shared_ptr<cp::DefaultCompilerVisitor>>();
+		})
+		, di::bind<fm::ILogger>()					.to([&](const auto &injector) -> fm::ILoggerPtr 
+		{
+			if (writeWarningsToConsole) {
+				return injector.template create<std::shared_ptr<LoggerImpl>>();
+			}
+			return injector.template create<std::shared_ptr<WarningsCollectorWithConsoleLogger>>();
 		})
 	);
 	auto program = injector.create<SheetCompilerProgram>();

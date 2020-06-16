@@ -6,20 +6,16 @@ using "./lua/mods/drumRudiments.lua";
 -- to get a list of your available MIDI devices 
 -- and their port numbers, execute "sheetp --list"
 --      name              type   portnumber
-device: MyDevice _isType=midi _usePort=5;
+device: MyDevice _isType=midi _usePort=1;
 instrumentDef: drums MyDevice _ch=9 _pc=0 _cc=0;
 
-tempo: 30;
+tempo: 60;
 
 [
 instrument: drums;
 {
     \ffff
     /mod: drumRudiments/
-    "16x sevenStrokeRoll"@<"snr" "snl">1 |
-    
-}
-{
-    --"bd"4 &&& |
+    "4x singleStrokeSeven"@<"hto" "mto">1
 }
 ]

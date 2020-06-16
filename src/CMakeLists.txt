@@ -115,7 +115,7 @@ SET (SRC_SHEET_PLAYER
     sheetplayer_main.cpp 
 )
 
-SET (SHEET_LIBS ${SHEET_LIBS} sheet fmapp lua ${Boost_LIBRARIES})
+SET (SHEET_LIBS ${SHEET_LIBS} fmapp sheet lua ${Boost_LIBRARIES})
 
 if(WIN32)
     SET (SHEET_LIBS ${SHEET_LIBS} Bcrypt.lib)

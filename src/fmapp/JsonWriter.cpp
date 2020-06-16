@@ -9,6 +9,7 @@
 #include <boost/beast/core/detail/base64.hpp>
 #include <fm/midi.hpp>
 #include <fmapp/os.hpp>
+#include <compiler/IWarningsCollection.h>
 
 namespace {
     void toStream(std::ostream& os, rapidjson::Document &doc) 
@@ -17,7 +18,7 @@ namespace {
         rapidjson::Writer<rapidjson::OStreamWrapper> writer(osw);
         doc.Accept(writer);
     }    
-    rapidjson::Document documentInfosToJSONDoc(sheet::DocumentPtr sheetDoc, fm::Ticks duration)
+    rapidjson::Document documentInfosToJSONDoc(sheet::DocumentPtr sheetDoc, fm::Ticks duration, const sheet::Warnings &warnings)
     {
         rapidjson::Document doc;
         doc.SetObject();
@@ -33,21 +34,20 @@ namespace {
             object.AddMember("path", path, doc.GetAllocator());
             array.PushBack(object, doc.GetAllocator());
 	    }
-        // TODO: #126
-        // for (const auto &warning : warnings) {
-        //     rapidjson::Value object(rapidjson::kObjectType);
-        //     rapidjson::Value message;
-        //     rapidjson::Value path;
-        //     path.SetString(warning.getSourceFile(sheetDoc).c_str(), doc.GetAllocator());
-        //     rapidjson::Value sourceId(warning.sourceObject.sourceId);
-        //     rapidjson::Value positionBegin(warning.sourceObject.sourcePositionBegin);
-        //     message.SetString(warning.message.c_str(), doc.GetAllocator());
-        //     object.AddMember("message", message, doc.GetAllocator());
-        //     object.AddMember("sourceFile", path, doc.GetAllocator());
-        //     object.AddMember("sourceId", sourceId, doc.GetAllocator());
-        //     object.AddMember("positionBegin", positionBegin, doc.GetAllocator());
-        //     warningsArray.PushBack(object, doc.GetAllocator());
-        // }
+        for (const auto &warning : warnings) {
+            rapidjson::Value object(rapidjson::kObjectType);
+            rapidjson::Value message;
+            rapidjson::Value path;
+            path.SetString(warning.getSourceFile(sheetDoc).c_str(), doc.GetAllocator());
+            rapidjson::Value sourceId(warning.sourceObject.sourceId);
+            rapidjson::Value positionBegin(warning.sourceObject.sourcePositionBegin);
+            message.SetString(warning.message.c_str(), doc.GetAllocator());
+            object.AddMember("message", message, doc.GetAllocator());
+            object.AddMember("sourceFile", path, doc.GetAllocator());
+            object.AddMember("sourceId", sourceId, doc.GetAllocator());
+            object.AddMember("positionBegin", positionBegin, doc.GetAllocator());
+            warningsArray.PushBack(object, doc.GetAllocator());
+        }
         doc.AddMember("sources", array, doc.GetAllocator());
         doc.AddMember("duration", durationValue, doc.GetAllocator());
         doc.AddMember("warnings", warningsArray, doc.GetAllocator());
@@ -106,7 +106,13 @@ namespace fmapp {
     }
     void JsonWriter::docToJson(std::ostream& os, sheet::DocumentPtr document)
     {
-        rapidjson::Document doc = documentInfosToJSONDoc(document, _midifile->duration());
+        sheet::Warnings __warnings;
+        const sheet::Warnings *warnings = &__warnings;
+        auto waningsCollection = std::dynamic_pointer_cast<sheet::compiler::IWarningsCollection>(_logger);
+        if (waningsCollection) {
+            warnings = &(waningsCollection->warnings());
+        }
+        rapidjson::Document doc = documentInfosToJSONDoc(document, _midifile->duration(), *warnings);
         rapidjson::Value midiData;
         rapidjson::Value bpm(_midifile->bpm());
         midiData.SetString(midiToBase64(_midifile).c_str(), doc.GetAllocator());
