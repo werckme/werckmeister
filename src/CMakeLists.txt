@@ -92,7 +92,7 @@ SET (SRC_FETZER_TESTS
 SET (SRC_SHEET_FMAPP
     fmapp/boostTimer.cpp
     fmapp/rtmidiBackend.cpp
-    fmapp/midiplayer.cpp
+    fmapp/MidiPlayer.cpp
     fmapp/MidiFileWriter.cpp
     fmapp/midiProvider.cpp
     fmapp/udpSender.cpp
@@ -113,6 +113,9 @@ endif(APPLE)
 ## PLAYER
 SET (SRC_SHEET_PLAYER
     sheetplayer_main.cpp 
+    SheetCompilerProgram.cpp 
+    SheetPlayerProgram.cpp 
+    CompilerProgramOptions.cpp
 )
 
 SET (SHEET_LIBS ${SHEET_LIBS} fmapp sheet lua ${Boost_LIBRARIES})

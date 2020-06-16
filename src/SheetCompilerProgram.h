@@ -43,7 +43,7 @@ public:
         _documentWriter(documentWriter)
     {
     }
-    int execute();
+    virtual int execute();
     void prepareEnvironment();
     virtual ~SheetCompilerProgram() = default;
 protected:
