@@ -58,7 +58,7 @@ int main(int argc, const char** argv)
 		, di::bind<sheet::Document>()				.to(documentPtr)
 		, di::bind<fm::IDefinitionsServer>()		.to<fm::DefinitionsServer>()		.in(di::singleton)
 		, di::bind<fm::midi::Midi>()				.to(midiFile)
-		, di::bind<fmapp::IDocumentWriter>()		.to([&](const auto &injector) -> fmapp::IDocumentWriterPtr 
+		, di::bind<fmapp::IDocumentWriter>()		.to([&](const auto &injector) -> fmapp::IDocumentWriterPtr
 		{
 			return injector.template create<std::shared_ptr<fmapp::MidiPlayer>>();
 		})
@@ -79,7 +79,10 @@ int main(int argc, const char** argv)
 		, di::bind<fmapp::DiContainerWrapper<fmapp::IPlayerLoopVisitorPtr>>().to([&](const auto &injector) {
 			fmapp::DiContainerWrapper<fmapp::IPlayerLoopVisitorPtr> wrapper;
 			if (!programOptionsPtr->isNoTimePrintSet()) {
-				wrapper.container.push_back( injector.template create< std::shared_ptr<fmapp::PlayerTimePrinter>>() );
+				wrapper.container.emplace_back( injector.template create< std::shared_ptr<fmapp::PlayerTimePrinter>>() );
+			}
+			if (programOptionsPtr->isWatchSet()) {
+				wrapper.container.emplace_back( injector.template create< std::shared_ptr<fmapp::SheetWatcher>>() );
 			}
 			return wrapper;
 		})

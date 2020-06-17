@@ -11,10 +11,10 @@
 
 #define UPDATE_THREAD_SLEEPTIME 70
 
-#ifdef WIN32
-#include "fmapp/os_win_ipc_kill_handler.hpp"
-#define SIGINT_WORKAROUND
-#endif
+// #ifdef WIN32
+// #include "fmapp/os_win_ipc_kill_handler.hpp"
+// #define SIGINT_WORKAROUND
+// #endif
 
 
 #ifdef SHEET_USE_BOOST_TIMER
