@@ -17,7 +17,7 @@ struct PlayerProgramOptions : public CompilerProgramOptions, public IPlayerProgr
 	virtual bool isWatchSet() const;
 	virtual bool isUdpSet() const;
 	virtual fm::String getUdpHostname() const;
-	virtual bool isNostdoutSet() const const;
+	virtual bool isNoTimePrintSet() const;
 	virtual bool isDocumentInfoJSONSet() const;
 	virtual bool isEventInfosJSONSet() const;
 	virtual bool isSigintWorkaroundSet() const;

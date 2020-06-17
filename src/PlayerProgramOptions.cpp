@@ -33,6 +33,7 @@ void PlayerProgramOptions::parseProgrammArgs(size_t argc, const char **argv)
         (ARG_INFO, "prints sheet info as json")
         (ARG_PRINT_EVENTINFOS_JSON, "prints the sheet events as json")
         (ARG_VERSION, "prints the werckmeister version")
+        (ARG_VERBOSE, "prints (debug) informations to the output")
 #ifdef SIGINT_WORKAROUND
         (ARG_WIN32_SIGINT_WORKAROUND, "uses a ipc workaround for the lack of a proper SIGINT signal handling in windows. \
 (an ipc handler will be created before the player starts. If the handler will receive a ipc message, called by a separate program, the player will be stopped.)")
@@ -74,7 +75,7 @@ fm::String PlayerProgramOptions::getUdpHostname() const {
     return variables[ARG_UDP].as<std::string>();
 }
 
-bool PlayerProgramOptions::isNostdoutSet() const {
+bool PlayerProgramOptions::isNoTimePrintSet() const {
     return !!variables.count(ARG_NOSTDOUT);
 }
 

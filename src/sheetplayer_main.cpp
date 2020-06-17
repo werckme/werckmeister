@@ -1,6 +1,7 @@
 #include <boost/di.hpp>
 #include <iostream>
 #include <memory>
+#include <vector>
 #include "SheetPlayerProgram.h"
 #include <parser/parser.h>
 #include <fm/werckmeister.hpp>
@@ -20,6 +21,9 @@
 #include <fmapp/JsonWriter.h>
 #include <compiler/DefaultCompilerVisitor.h>
 #include <fmapp/TimelineVisitor.hpp>
+#include <fmapp/SheetWatcher.h>
+#include <fmapp/PlayerTimePrinter.h>
+#include <fmapp/DiContainerWrapper.h>
 
 typedef sheet::compiler::EventLogger<fm::ConsoleLogger> 			   LoggerImpl;
 typedef sheet::compiler::LoggerAndWarningsCollector<fm::ConsoleLogger> WarningsCollectorWithConsoleLogger;
@@ -36,6 +40,8 @@ int main(int argc, const char** argv)
 		std::cerr << ex.what() << std::endl;
 		return 1;
 	}
+
+	fmapp::PlayerTimePrinter playerPrinter;
 
 	auto documentPtr = std::make_shared<sheet::Document>();
 	auto midiFile = fm::getWerckmeister().createMidi();
@@ -69,6 +75,13 @@ int main(int argc, const char** argv)
 				return injector.template create<std::shared_ptr<LoggerImpl>>();
 			}
 			return injector.template create<std::shared_ptr<WarningsCollectorWithConsoleLogger>>();
+		})
+		, di::bind<fmapp::DiContainerWrapper<fmapp::IPlayerLoopVisitorPtr>>().to([&](const auto &injector) {
+			fmapp::DiContainerWrapper<fmapp::IPlayerLoopVisitorPtr> wrapper;
+			if (!programOptionsPtr->isNoTimePrintSet()) {
+				wrapper.container.push_back( injector.template create< std::shared_ptr<fmapp::PlayerTimePrinter>>() );
+			}
+			return wrapper;
 		})
 	);
 	auto program = injector.create<SheetPlayerProgram>();

@@ -7,7 +7,7 @@
 #include "rtmidiBackend.h"
 #include <thread>
 #include <iostream>
-#include <boost/format.hpp>
+
 
 #define UPDATE_THREAD_SLEEPTIME 70
 
@@ -52,7 +52,6 @@ namespace fmapp {
 
         bool playing = true;
         bool watch = false; // TODO: #126
-        bool stdout_ = true; // TODO: #126
         bool loop   = false; // TODO: #126
         //Timestamps timestamps;
         // hasChanges(document, timestamps);	// init timestamps
@@ -77,9 +76,6 @@ namespace fmapp {
 #endif
         while (playing) {
             auto elapsed = midiPlayerImpl.elapsed();
-            if (stdout_) {
-                printElapsedTime(elapsed);
-            }
             std::this_thread::sleep_for( std::chrono::milliseconds(UPDATE_THREAD_SLEEPTIME) );
 #ifdef SIGINT_WORKAROUND
             if (ipcMessageQueue && ipcMessageQueue->sigintReceived()) {
@@ -104,6 +100,7 @@ namespace fmapp {
                 }
                 midiPlayerImpl.play(begin);
             }
+            visitVisitors(elapsed);
         }
         std::cout << std::endl;
         midiPlayerImpl.stop();
@@ -118,20 +115,10 @@ namespace fmapp {
 
     }
 
-    void MidiPlayer::printElapsedTime(fm::Ticks elapsed) 
+    void MidiPlayer::visitVisitors(fm::Ticks elapsed)
     {
-        using boost::format;
-        using boost::str;
-        using boost::io::group;
-
-        std::string strOut = "[" + str(format("%.3f") % (elapsed / (double)fm::PPQ)) + "]";
-        static std::string lastOutput;
-        for (std::size_t i=0; i<lastOutput.size(); ++i) {
-            std::cout << "\b";
+        for(auto visitor : _loopVisitors.container) {
+            visitor->visit(elapsed);
         }
-        std::cout 
-            << strOut 
-            << std::flush;
-        lastOutput = strOut;
     }
 }
