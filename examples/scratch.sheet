@@ -17,7 +17,7 @@ device: _usePort=5 _setName=MyDevice  _isType=midi;
 instrumentDef: _setName=pianoRH _onDevice=MyDevice _ch=0 _pc=1 _cc=8;
 instrumentDef: _setName=pianoLH _onDevice=MyDevice _ch=1 _pc=1 _cc=8;
 
-instrumentConf: pianoRH 
+instrumentConf: pianoRH
     volume 100 
     pan    0
     mod swing _offset=80

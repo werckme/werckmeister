@@ -24,6 +24,7 @@
 #include <fmapp/SheetWatcher.h>
 #include <fmapp/PlayerTimePrinter.h>
 #include <fmapp/DiContainerWrapper.h>
+#include <fmapp/ISheetWatcherHandler.h>
 
 typedef sheet::compiler::EventLogger<fm::ConsoleLogger> 			   LoggerImpl;
 typedef sheet::compiler::LoggerAndWarningsCollector<fm::ConsoleLogger> WarningsCollectorWithConsoleLogger;
@@ -41,8 +42,7 @@ int main(int argc, const char** argv)
 		return 1;
 	}
 
-	fmapp::PlayerTimePrinter playerPrinter;
-
+	fmapp::SheetWatcherHandlersPtr sheetWatcherHandlers = std::make_shared<fmapp::SheetWatcherHandlers>();
 	auto documentPtr = std::make_shared<sheet::Document>();
 	auto midiFile = fm::getWerckmeister().createMidi();
 	bool needTimeline = programOptionsPtr->isJsonModeSet();
@@ -58,6 +58,7 @@ int main(int argc, const char** argv)
 		, di::bind<sheet::Document>()				.to(documentPtr)
 		, di::bind<fm::IDefinitionsServer>()		.to<fm::DefinitionsServer>()		.in(di::singleton)
 		, di::bind<fm::midi::Midi>()				.to(midiFile)
+		, di::bind<fmapp::SheetWatcherHandlers>()	.to(sheetWatcherHandlers)
 		, di::bind<fmapp::IDocumentWriter>()		.to([&](const auto &injector) -> fmapp::IDocumentWriterPtr
 		{
 			return injector.template create<std::shared_ptr<fmapp::MidiPlayer>>();
@@ -88,6 +89,7 @@ int main(int argc, const char** argv)
 		})
 	);
 	auto program = injector.create<SheetPlayerProgram>();
+	sheetWatcherHandlers->container.push_back(&program);
 	program.prepareEnvironment();
 	return program.execute();
 }

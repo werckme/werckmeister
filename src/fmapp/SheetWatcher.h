@@ -7,7 +7,7 @@
 #include <fm/common.hpp>
 #include <time.h>
 #include <forward.hpp>
-
+#include "ISheetWatcherHandler.h"
 
 namespace fmapp {
     /**
@@ -15,10 +15,11 @@ namespace fmapp {
      */
     class SheetWatcher : public IPlayerLoopVisitor {
     private:
-        sheet::DocumentPtr _document;
+        sheet::DocumentPtr               _document;
+        fmapp::SheetWatcherHandlersPtr   _sheetWatcherHandlers;
     public:
-        SheetWatcher(sheet::DocumentPtr document) 
-        : _document(document) 
+        SheetWatcher(sheet::DocumentPtr document, fmapp::SheetWatcherHandlersPtr sheetWatcherHandlers) 
+        : _document(document), _sheetWatcherHandlers(sheetWatcherHandlers)
         {}
         virtual void visit(fm::Ticks elapsed);
         virtual ~SheetWatcher() = default;
@@ -29,6 +30,7 @@ namespace fmapp {
         time_t getTimestamp(const fm::String &sheetPath);
         bool hasChanges();
         unsigned long _lastUpdateTimestamp = 0;
+        bool firstVisit = true;
     };
 }
 #endif

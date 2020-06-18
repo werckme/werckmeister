@@ -3,10 +3,12 @@
 
 #include <SheetCompilerProgram.h>
 #include <IPlayerProgramOptions.h>
+#include <fmapp/ISheetWatcherHandler.h>
 
-class SheetPlayerProgram : public SheetCompilerProgram {
+class SheetPlayerProgram : public SheetCompilerProgram, public fmapp::ISheetWatcherHandler {
 private:
-    IPlayerProgramOptionsPtr             _programOptions;
+    IPlayerProgramOptionsPtr                     _programOptions;
+    fm::ILoggerPtr                               _logger;
 public:
     typedef SheetCompilerProgram Base;
     SheetPlayerProgram(
@@ -21,9 +23,11 @@ public:
     ) : 
         Base(programOptions, logger, documentParser, compiler, context, preprocessor, midiFile, documentWriter)
       , _programOptions(programOptions)
+      , _logger(logger)
     {
     }
     virtual ~SheetPlayerProgram() = default;
+    virtual void onSheetChanged();
 protected:
 private:
 };

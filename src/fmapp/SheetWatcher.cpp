@@ -43,6 +43,17 @@ namespace fmapp {
 
     void SheetWatcher::visit(fm::Ticks elapsed)
     {
+        if (!this->hasChanges()) {
+            return;
+        }
+        if (firstVisit) {
+            // ignore first visit
+            firstVisit = false;
+            return;
+        }
+        for(auto sheetWatcher : _sheetWatcherHandlers->container) {
+            sheetWatcher->onSheetChanged();
+        }
     }
 
 }
