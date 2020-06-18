@@ -52,8 +52,8 @@ protected:
     void prepareSearchPaths();
     void prepareTemplateDefinitions();
     void addSearchPath(const fm::String &path);
+    virtual void compile();
 private:
-    void compile();
 };
 
 #endif

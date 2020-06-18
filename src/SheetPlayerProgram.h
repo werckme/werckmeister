@@ -4,11 +4,15 @@
 #include <SheetCompilerProgram.h>
 #include <IPlayerProgramOptions.h>
 #include <fmapp/ISheetWatcherHandler.h>
+#include <fmapp/MidiPlayer.h>
 
 class SheetPlayerProgram : public SheetCompilerProgram, public fmapp::ISheetWatcherHandler {
 private:
     IPlayerProgramOptionsPtr                     _programOptions;
     fm::ILoggerPtr                               _logger;
+    fmapp::MidiPlayerPtr                         _midiPlayerPtr;
+    fm::midi::MidiPtr                            _midiFile;
+
 public:
     typedef SheetCompilerProgram Base;
     SheetPlayerProgram(
@@ -19,11 +23,13 @@ public:
         sheet::compiler::MidiContextPtr          context,
         sheet::compiler::IPreprocessorPtr        preprocessor,
         fm::midi::MidiPtr                        midiFile,
-        fmapp::IDocumentWriterPtr                documentWriter
+        fmapp::MidiPlayerPtr                     midiPlayer
     ) : 
-        Base(programOptions, logger, documentParser, compiler, context, preprocessor, midiFile, documentWriter)
+        Base(programOptions, logger, documentParser, compiler, context, preprocessor, midiFile, midiPlayer)
       , _programOptions(programOptions)
       , _logger(logger)
+      , _midiPlayerPtr(midiPlayer)
+      , _midiFile(midiFile)
     {
     }
     virtual ~SheetPlayerProgram() = default;

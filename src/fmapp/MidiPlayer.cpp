@@ -38,6 +38,9 @@ namespace {
 namespace fmapp {
     void MidiPlayer::write(sheet::DocumentPtr doc)
     {
+        if (state > Stopped) {
+            return;
+        }
         _logger->babble(WMLogLambda(log << "start playback"));
         execLoop(doc);
     }
@@ -50,7 +53,7 @@ namespace fmapp {
         midiPlayerImpl.midi(_midifile);
         midiPlayerImpl.play(begin);
 
-        bool playing = true;
+        state = Playing;
         bool watch = false; // TODO: #126
         bool loop   = false; // TODO: #126
         //Timestamps timestamps;
@@ -58,7 +61,7 @@ namespace fmapp {
         // updateLastChangedTimestamp();
         //auto inputfile = settings.getInput();
         fmapp::os::setSigtermHandler([&]{
-            playing = false;
+            state = Stopped;
             midiPlayerImpl.panic();
         });
 
@@ -74,9 +77,12 @@ namespace fmapp {
             fmapp::BoostTimer::io_run();
         });
 #endif
-        while (playing) {
+        while (state > Stopped) {
             auto elapsed = midiPlayerImpl.elapsed();
             std::this_thread::sleep_for( std::chrono::milliseconds(UPDATE_THREAD_SLEEPTIME) );
+            if (state == Paused) {
+                continue;
+            }
 #ifdef SIGINT_WORKAROUND
             if (ipcMessageQueue && ipcMessageQueue->sigintReceived()) {
                 playing = false;
@@ -120,5 +126,25 @@ namespace fmapp {
         for(auto visitor : _loopVisitors.container) {
             visitor->visit(elapsed);
         }
+    }
+
+    void MidiPlayer::pause()
+    {
+        if (state == Paused) {
+            return;
+        }
+        pausePosition = midiPlayerImpl.elapsed();
+        midiPlayerImpl.stop();
+        state = Paused;
+    }
+
+    void MidiPlayer::resume()
+    {
+        if (state != Paused) {
+            return;
+        }
+        midiPlayerImpl.play(pausePosition);
+        pausePosition = 0;
+        state = Playing;
     }
 }

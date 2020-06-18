@@ -8,11 +8,13 @@
 #include <fmapp/IPlayerLoopVisitor.h>
 #include <vector>
 #include <fmapp/DiContainerWrapper.h>
+#include <memory>
 
 namespace fmapp {
     class MidiPlayer : public IDocumentWriter {
     public:
         typedef DiContainerWrapper<IPlayerLoopVisitorPtr> LoopVisitors;
+        enum State { Stopped, Playing, Paused };
     private:
         ICompilerProgramOptionsPtr _programOptions;
         fm::midi::MidiPtr          _midifile;
@@ -32,10 +34,15 @@ namespace fmapp {
         }
         virtual void write(sheet::DocumentPtr document);
         virtual ~MidiPlayer() = default;
+        virtual void pause();
+        virtual void resume();
     private:
         void execLoop(sheet::DocumentPtr document);
         void visitVisitors(fm::Ticks elapsed);
+        State state = Stopped;
+        fm::Ticks pausePosition = 0;
         
     };
+    typedef std::shared_ptr<MidiPlayer> MidiPlayerPtr;
 }
 #endif

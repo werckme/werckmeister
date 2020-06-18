@@ -632,5 +632,10 @@ namespace fm {
 			}
 			return duration;
 		}
+
+		void Midi::clear() {
+			bpm_ = fm::DefaultTempo;
+			_container.clear();
+		}
 	}
 }

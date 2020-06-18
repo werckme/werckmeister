@@ -243,6 +243,7 @@ namespace fm {
 			BPM bpm() const { return bpm_; }
 			void bpm(BPM bpm) { bpm_ = bpm; }
 			MidiConfig midiConfig;
+			void clear();
 		private:
 			BPM bpm_ = fm::DefaultTempo;
 			Ticks _ppq = 0;
