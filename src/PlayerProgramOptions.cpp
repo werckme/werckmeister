@@ -56,11 +56,21 @@ bool PlayerProgramOptions::isLoopSet() const {
 }
 
 bool PlayerProgramOptions::isBeginSet() const {
-    return !!variables.count(ARG_BEGIN);
+    return customBeginValue > 0 || !!variables.count(ARG_BEGIN);
 }
 
-int PlayerProgramOptions::getBegin() const {
+#include <iostream> 
+
+double PlayerProgramOptions::getBegin() const {
+    if (customBeginValue > 0) {
+        return customBeginValue;
+    }
     return variables[ARG_BEGIN].as<double>();
+}
+
+void PlayerProgramOptions::setBegin(double ticks) 
+{
+    customBeginValue = ticks;
 }
 
 bool PlayerProgramOptions::isWatchSet() const {

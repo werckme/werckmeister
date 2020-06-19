@@ -2,38 +2,11 @@
 #include <fm/config.hpp>
 #include <fmapp/os.hpp>
 #include <fm/config.hpp>
-#include "midiplayerClient.h"
-#include "midiProvider.h"
-#include "rtmidiBackend.h"
 #include <thread>
 #include <iostream>
 
 
 #define UPDATE_THREAD_SLEEPTIME 70
-
-// #ifdef WIN32
-// #include "fmapp/os_win_ipc_kill_handler.hpp"
-// #define SIGINT_WORKAROUND
-// #endif
-
-
-#ifdef SHEET_USE_BOOST_TIMER
-#include "fmapp/boostTimer.h"
-#else
-#include "fmapp/os.hpp"
-#endif
-
-#ifdef SHEET_USE_BOOST_TIMER
-	typedef fmapp::BoostTimer TimerImpl;
-#else
-	typedef fmapp::os::MMTimer TimerImpl;
-#endif
-
-namespace {
-	typedef fmapp::MidiplayerClient<fmapp::RtMidiBackend, fmapp::MidiProvider, TimerImpl> MidiplayerImpl;
-	MidiplayerImpl midiPlayerImpl;
-}
-
 
 namespace fmapp {
     void MidiPlayer::write(sheet::DocumentPtr doc)
@@ -42,27 +15,27 @@ namespace fmapp {
             return;
         }
         _logger->babble(WMLogLambda(log << "start playback"));
+        _logger->babble(WMLogLambda(log << "midi: " << _midifile->byteSize() << " bytes"));
         execLoop(doc);
     }
 
     void MidiPlayer::execLoop(sheet::DocumentPtr)
     {
-        fm::Ticks begin = 0; // TODO: #126
+        fm::Ticks begin = 0;
+        if (_programOptions->isBeginSet()) {
+            begin = _programOptions->getBegin() * fm::PPQ;
+        }
+        _logger->babble(WMLogLambda(log << "begin at tick: " << begin));
         fm::Ticks end = _midifile->duration();
-        midiPlayerImpl.updateOutputMapping(fm::getConfigServer().getDevices());
-        midiPlayerImpl.midi(_midifile);
-        midiPlayerImpl.play(begin);
+        _midiPlayerImpl.updateOutputMapping(fm::getConfigServer().getDevices());
+        _midiPlayerImpl.midi(_midifile);
+        _midiPlayerImpl.play(begin);
 
         state = Playing;
-        bool watch = false; // TODO: #126
         bool loop   = false; // TODO: #126
-        //Timestamps timestamps;
-        // hasChanges(document, timestamps);	// init timestamps
-        // updateLastChangedTimestamp();
-        //auto inputfile = settings.getInput();
         fmapp::os::setSigtermHandler([&]{
             state = Stopped;
-            midiPlayerImpl.panic();
+            _midiPlayerImpl.panic();
         });
 
 #ifdef SIGINT_WORKAROUND
@@ -72,17 +45,9 @@ namespace fmapp {
             ipcMessageQueue = std::make_unique<fmapp::os::InterProcessMessageQueue>();
         }
 #endif
-#ifdef SHEET_USE_BOOST_TIMER
-        std::thread boost_asio_([] {
-            fmapp::BoostTimer::io_run();
-        });
-#endif
         while (state > Stopped) {
-            auto elapsed = midiPlayerImpl.elapsed();
+            auto elapsed = _midiPlayerImpl.elapsed();
             std::this_thread::sleep_for( std::chrono::milliseconds(UPDATE_THREAD_SLEEPTIME) );
-            if (state == Paused) {
-                continue;
-            }
 #ifdef SIGINT_WORKAROUND
             if (ipcMessageQueue && ipcMessageQueue->sigintReceived()) {
                 playing = false;
@@ -104,20 +69,14 @@ namespace fmapp {
                 if (!loop) {
                     break;
                 }
-                midiPlayerImpl.play(begin);
+                _midiPlayerImpl.play(begin);
             }
             visitVisitors(elapsed);
         }
         std::cout << std::endl;
-        midiPlayerImpl.stop();
-        midiPlayerImpl.panic();
-
-    #ifdef SHEET_USE_BOOST_TIMER
-        fmapp::BoostTimer::io_stop();
-        boost_asio_.join();
-    #endif
-
-        midiPlayerImpl.Backend:: tearDown();
+        _midiPlayerImpl.stop();
+        _midiPlayerImpl.panic();
+        _midiPlayerImpl.Backend:: tearDown();
 
     }
 
@@ -128,23 +87,14 @@ namespace fmapp {
         }
     }
 
-    void MidiPlayer::pause()
+    fm::Ticks MidiPlayer::stop()
     {
-        if (state == Paused) {
-            return;
+        if (state == Stopped) {
+            return 0;
         }
-        pausePosition = midiPlayerImpl.elapsed();
-        midiPlayerImpl.stop();
-        state = Paused;
-    }
-
-    void MidiPlayer::resume()
-    {
-        if (state != Paused) {
-            return;
-        }
-        midiPlayerImpl.play(pausePosition);
-        pausePosition = 0;
-        state = Playing;
+        auto position = _midiPlayerImpl.elapsed();
+        _midiPlayerImpl.stop();
+        state = Stopped;
+        return position;
     }
 }

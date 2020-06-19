@@ -25,14 +25,26 @@
 #include <fmapp/PlayerTimePrinter.h>
 #include <fmapp/DiContainerWrapper.h>
 #include <fmapp/ISheetWatcherHandler.h>
+#include <boost/di/extension/scopes/scoped.hpp>
+#ifdef SHEET_USE_BOOST_TIMER
+#include "fmapp/boostTimer.h"
+#else
+#include "fmapp/os.hpp"
+#endif
+
 
 typedef sheet::compiler::EventLogger<fm::ConsoleLogger> 			   LoggerImpl;
 typedef sheet::compiler::LoggerAndWarningsCollector<fm::ConsoleLogger> WarningsCollectorWithConsoleLogger;
 
+int startPlayer(std::shared_ptr<PlayerProgramOptions> programOptionsPtr);
+
 int main(int argc, const char** argv)
 {
-	namespace di = boost::di;
-	namespace cp = sheet::compiler;
+#ifdef SHEET_USE_BOOST_TIMER
+        std::thread boost_asio_([] {
+            fmapp::BoostTimer::io_run();
+        });
+#endif
 	auto programOptionsPtr = std::make_shared<PlayerProgramOptions>();
 
 	try {
@@ -42,33 +54,51 @@ int main(int argc, const char** argv)
 		return 1;
 	}
 
+	int returnCode = 0;
+	
+	do {
+		returnCode = startPlayer(programOptionsPtr);
+	} while (returnCode == SheetPlayerProgram::RetCodeRestart);
+	
+
+#ifdef SHEET_USE_BOOST_TIMER
+	fmapp::BoostTimer::io_stop();
+	boost_asio_.join();
+#endif	
+	return returnCode;
+}
+
+int startPlayer(std::shared_ptr<PlayerProgramOptions> programOptionsPtr)
+{
+	namespace di = boost::di;
+	namespace cp = sheet::compiler;
 	fmapp::SheetWatcherHandlersPtr sheetWatcherHandlers = std::make_shared<fmapp::SheetWatcherHandlers>();
 	auto documentPtr = std::make_shared<sheet::Document>();
 	auto midiFile = fm::getWerckmeister().createMidi();
 	bool needTimeline = programOptionsPtr->isJsonModeSet();
 	bool writeWarningsToConsole = !(programOptionsPtr->isJsonModeSet() || programOptionsPtr->isValidateMode());
 	auto injector = di::make_injector(
-		  di::bind<cp::IDocumentParser>()			.to<cp::DocumentParser>()			.in(di::singleton)
-		, di::bind<cp::ICompiler>()					.to<cp::Compiler>()					.in(di::singleton)
-		, di::bind<cp::ISheetTemplateRenderer>()	.to<cp::SheetTemplateRenderer>()	.in(di::singleton)
-		, di::bind<cp::ASheetEventRenderer>()		.to<cp::SheetEventRenderer>()		.in(di::singleton)
-		, di::bind<cp::IContext>()					.to<cp::MidiContext>()				.in(di::singleton)
-		, di::bind<cp::IPreprocessor>()				.to<cp::Preprocessor>()				.in(di::singleton)
+		  di::bind<cp::IDocumentParser>()			.to<cp::DocumentParser>()			.in(di::extension::scoped)
+		, di::bind<cp::ICompiler>()					.to<cp::Compiler>()					.in(di::extension::scoped)
+		, di::bind<cp::ISheetTemplateRenderer>()	.to<cp::SheetTemplateRenderer>()	.in(di::extension::scoped)
+		, di::bind<cp::ASheetEventRenderer>()		.to<cp::SheetEventRenderer>()		.in(di::extension::scoped)
+		, di::bind<cp::IContext>()					.to<cp::MidiContext>()				.in(di::extension::scoped)
+		, di::bind<cp::IPreprocessor>()				.to<cp::Preprocessor>()				.in(di::extension::scoped)
 		, di::bind<ICompilerProgramOptions>()		.to(programOptionsPtr)
 		, di::bind<sheet::Document>()				.to(documentPtr)
-		, di::bind<fm::IDefinitionsServer>()		.to<fm::DefinitionsServer>()		.in(di::singleton)
+		, di::bind<fm::IDefinitionsServer>()		.to<fm::DefinitionsServer>()		.in(di::extension::scoped)
 		, di::bind<fm::midi::Midi>()				.to(midiFile)
 		, di::bind<fmapp::SheetWatcherHandlers>()	.to(sheetWatcherHandlers)
 		, di::bind<fmapp::IDocumentWriter>()		.to([&](const auto &injector) -> fmapp::IDocumentWriterPtr
 		{
-			return injector.template create<std::shared_ptr<fmapp::MidiPlayer>>();
+			return injector.template create<std::unique_ptr<fmapp::MidiPlayer>>();
 		})
 		, di::bind<cp::ICompilerVisitor>()			.to([&](const auto &injector) -> cp::ICompilerVisitorPtr 
 		{
 			if (needTimeline) {
-				return injector.template create< std::shared_ptr<fmapp::DefaultTimeline>>();
+				return injector.template create< std::unique_ptr<fmapp::DefaultTimeline>>();
 			}
-			return injector.template create< std::shared_ptr<cp::DefaultCompilerVisitor>>();
+			return injector.template create< std::unique_ptr<cp::DefaultCompilerVisitor>>();
 		})
 		, di::bind<fm::ILogger>()					.to([&](const auto &injector) -> fm::ILoggerPtr 
 		{
@@ -80,16 +110,18 @@ int main(int argc, const char** argv)
 		, di::bind<fmapp::DiContainerWrapper<fmapp::IPlayerLoopVisitorPtr>>().to([&](const auto &injector) {
 			fmapp::DiContainerWrapper<fmapp::IPlayerLoopVisitorPtr> wrapper;
 			if (!programOptionsPtr->isNoTimePrintSet()) {
-				wrapper.container.emplace_back( injector.template create< std::shared_ptr<fmapp::PlayerTimePrinter>>() );
+				wrapper.container.emplace_back( injector.template create< std::unique_ptr<fmapp::PlayerTimePrinter>>() );
 			}
 			if (programOptionsPtr->isWatchSet()) {
-				wrapper.container.emplace_back( injector.template create< std::shared_ptr<fmapp::SheetWatcher>>() );
+				wrapper.container.emplace_back( injector.template create< std::unique_ptr<fmapp::SheetWatcher>>() );
 			}
 			return wrapper;
 		})
 	);
-	auto program = injector.create<SheetPlayerProgram>();
-	sheetWatcherHandlers->container.push_back(&program);
-	program.prepareEnvironment();
-	return program.execute();
+	auto program = injector.create<SheetPlayerProgram*>();
+	sheetWatcherHandlers->container.push_back(program);
+	program->prepareEnvironment();
+	auto result = program->execute();
+	sheetWatcherHandlers->container.clear();
+	return result;
 }

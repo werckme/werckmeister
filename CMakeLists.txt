@@ -92,6 +92,7 @@ INCLUDE_DIRECTORIES(src/ext)
 INCLUDE_DIRECTORIES(submodules/lua/src)
 INCLUDE_DIRECTORIES(submodules/rapidjson/include)
 INCLUDE_DIRECTORIES(submodules/di/include)
+INCLUDE_DIRECTORIES(submodules/di/extension/include)
 
 if(WIN32)
   INCLUDE_DIRECTORIES(submodules)

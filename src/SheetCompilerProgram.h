@@ -18,7 +18,7 @@ private:
     fm::ILoggerPtr _logger;
     sheet::compiler::IDocumentParserPtr  _documentParser;
     sheet::compiler::ICompilerPtr        _compiler;
-    sheet::compiler::MidiContextPtr      _context;
+    sheet::compiler::IContextPtr         _context;
     sheet::compiler::IPreprocessorPtr    _preprocessor;
     fm::midi::MidiPtr                    _midiFile;
     fmapp::IDocumentWriterPtr            _documentWriter;
@@ -29,7 +29,7 @@ public:
         fm::ILoggerPtr                           logger,
         sheet::compiler::IDocumentParserPtr      documentParser,
         sheet::compiler::ICompilerPtr            compiler,
-        sheet::compiler::MidiContextPtr          context,
+        sheet::compiler::IContextPtr             context,
         sheet::compiler::IPreprocessorPtr        preprocessor,
         fm::midi::MidiPtr                        midiFile,
         fmapp::IDocumentWriterPtr                documentWriter

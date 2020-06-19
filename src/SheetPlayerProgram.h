@@ -11,32 +11,33 @@ private:
     IPlayerProgramOptionsPtr                     _programOptions;
     fm::ILoggerPtr                               _logger;
     fmapp::MidiPlayerPtr                         _midiPlayerPtr;
-    fm::midi::MidiPtr                            _midiFile;
-    sheet::compiler::IContextPtr                 _context;
 public:
+    enum { 
+        RetCodeRestart = 100 // restart right after exiting, for example when a document was changed
+    };
     typedef SheetCompilerProgram Base;
     SheetPlayerProgram(
-        IPlayerProgramOptionsPtr                 programOptions,
+        ICompilerProgramOptionsPtr               programOptions,
         fm::ILoggerPtr                           logger,
         sheet::compiler::IDocumentParserPtr      documentParser,
         sheet::compiler::ICompilerPtr            compiler,
-        sheet::compiler::MidiContextPtr          context,
+        sheet::compiler::IContextPtr             context,
         sheet::compiler::IPreprocessorPtr        preprocessor,
         fm::midi::MidiPtr                        midiFile,
-        fmapp::MidiPlayerPtr                     midiPlayer
+        fmapp::IDocumentWriterPtr                documentWriter
     ) : 
-        Base(programOptions, logger, documentParser, compiler, context, preprocessor, midiFile, midiPlayer)
-      , _programOptions(programOptions)
+        Base(programOptions, logger, documentParser, compiler, context, preprocessor, midiFile, documentWriter)
+      , _programOptions(std::dynamic_pointer_cast<IPlayerProgramOptions>(programOptions))
       , _logger(logger)
-      , _midiPlayerPtr(midiPlayer)
-      , _midiFile(midiFile)
-      , _context(context)
+      , _midiPlayerPtr(std::dynamic_pointer_cast<fmapp::MidiPlayer>(documentWriter))
     {
     }
     virtual ~SheetPlayerProgram() = default;
     virtual void onSheetChanged();
+    virtual int execute() override;
 protected:
 private:
+    bool documentWasChanged = false;
 };
 
 #endif
