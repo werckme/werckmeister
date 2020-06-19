@@ -27,6 +27,11 @@ void SheetCompilerProgram::prepareEnvironment()
 
 void SheetCompilerProgram::printIntro(std::ostream &os)
 {
+    static bool shown = false;
+    if (shown) {
+        return;
+    }
+    shown = true;
     os << "\tWERCKMEISTER "                                   << std::endl
        << "\t(c) Samba Godschynski "                          << std::endl
        << "\thttps://werckme.github.io"                       << std::endl

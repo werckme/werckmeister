@@ -36,7 +36,7 @@ tempo: 130;
 [
 instrument: pianoRH;
 {
-    \ppppp
+    \ppppp 
     r1 | r1
     | c2 d |e2~ e | r2 c#->c4 d4 | e4 e g c | d#2 d#4 d | 
     c2 bb4 a 
