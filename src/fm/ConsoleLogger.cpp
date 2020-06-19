@@ -7,7 +7,7 @@ namespace fm {
         if (_logLevel > LevelBabble) {
             return;
         }
-        std::cout << "[info] ";
+        std::clog << "[info] ";
         writeMessage(f);
     }
     void ConsoleLogger::warn(const WriteToStreamF& f)
@@ -15,7 +15,7 @@ namespace fm {
         if (_logLevel > LevelWarn) {
             return;
         }
-        std::cout << "[warning] ";
+        std::clog << "[warning] ";
         writeMessage(f);
     }
     void ConsoleLogger::error(const WriteToStreamF& f)
@@ -23,7 +23,7 @@ namespace fm {
         if (_logLevel > LevelError) {
             return;
         }
-        std::cout << "[error] ";
+        std::cerr << "[error] ";
         writeMessage(f);
     }
     void ConsoleLogger::writeMessage(const WriteToStreamF &f)

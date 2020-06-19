@@ -93,15 +93,15 @@ int SheetCompilerProgram::execute() {
     }
     catch (const fm::Exception &ex)
 	{
-        std::cerr << ex.toString() << std::endl;
+        _logger->error(WMLogLambda(log << ex.toString() ));
 	}
 	catch (const std::exception &ex)
 	{
-        std::cerr << ex.what() << std::endl;
+        _logger->error(WMLogLambda(log << ex.what() ));
 	}
 	catch (...)
 	{
-        std::cerr << "unkown error" << std::endl;
+        _logger->error(WMLogLambda(log << "unkown error" ));
 	}
     return -1;
 }
