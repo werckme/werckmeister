@@ -358,5 +358,10 @@ namespace sheet {
 			);
 			return midiContext;
 		}
+		void MidiContext::clear() 
+		{
+			Base::clear();
+			midiInstrumentDefs_.clear();
+		}
 	}
 }

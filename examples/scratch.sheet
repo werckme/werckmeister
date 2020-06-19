@@ -25,7 +25,6 @@ instrumentConf: pianoRH
 ;
 
 
-
 instrumentConf: pianoLH 
     volume 100 
     pan    0

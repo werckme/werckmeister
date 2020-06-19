@@ -135,7 +135,8 @@ namespace sheet {
             virtual double velocity();
 			virtual fm::IDefinitionsServerPtr definitionsServer() { return definitionsServer_; }
 			virtual void warningHandler(const WarningHandler &handler) { _warningHandler = handler; }
-			virtual WarningHandler& warningHandler() { return _warningHandler; }		
+			virtual WarningHandler& warningHandler() { return _warningHandler; }
+			virtual void clear() override;
 		protected:
 			virtual TrackId createTrackImpl() = 0;
 			virtual VoiceId createVoiceImpl() = 0;

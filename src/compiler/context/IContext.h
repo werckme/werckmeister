@@ -106,9 +106,14 @@ namespace sheet {
              * @return the current velocity value between 0..1
              */
             virtual double velocity() = 0;
-			virtual fm::IDefinitionsServerPtr definitionsServer() = 0;		
+			virtual fm::IDefinitionsServerPtr definitionsServer() = 0;
+			/**
+			 * clears all contents, resets settings  
+			 */
+			virtual void clear() = 0;		
         };
 		typedef std::shared_ptr<IContext> IContextPtr;
+		
     }
 }
 

@@ -12,7 +12,7 @@ private:
     fm::ILoggerPtr                               _logger;
     fmapp::MidiPlayerPtr                         _midiPlayerPtr;
     fm::midi::MidiPtr                            _midiFile;
-
+    sheet::compiler::IContextPtr                 _context;
 public:
     typedef SheetCompilerProgram Base;
     SheetPlayerProgram(
@@ -30,6 +30,7 @@ public:
       , _logger(logger)
       , _midiPlayerPtr(midiPlayer)
       , _midiFile(midiFile)
+      , _context(context)
     {
     }
     virtual ~SheetPlayerProgram() = default;

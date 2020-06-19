@@ -62,6 +62,7 @@ namespace sheet {
 			virtual AInstrumentDef * currentInstrumentDef() override;
 			const MidiInstrumentDefs & midiInstrumentDefs() const { return this->midiInstrumentDefs_; }
 			virtual IContextPtr createNewContext() const;
+			virtual void clear() override;
 		protected:
 			virtual Base::VoiceMetaDataPtr createVoiceMetaData() override;
 			virtual Base::TrackMetaDataPtr createTrackMetaData() override;

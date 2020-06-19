@@ -304,5 +304,19 @@ namespace sheet {
 			}
 			return defaultVoiceStrategy_;
 		}
+
+		void AContext::clear()
+		{
+			masterTempo_ = fm::DefaultTempo;
+			defaultVoiceStrategy_ = nullptr;
+			currentSheetTemplates_.clear();
+			TrackId trackId_ = INVALID_TRACK_ID;
+			chordTrack_ = INVALID_TRACK_ID;
+			masterTrackId_ = INVALID_TRACK_ID;
+			VoiceId voiceId_ = INVALID_VOICE_ID;
+			chordVoice_ = INVALID_VOICE_ID;
+			voiceMetaDataMap_.clear();
+			trackMetaDataMap_.clear();
+		}
 	}
 }
