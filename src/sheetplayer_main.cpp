@@ -27,6 +27,9 @@
 #include <fmapp/DiContainerWrapper.h>
 #include <fmapp/ISheetWatcherHandler.h>
 #include <fmapp/Funkfeuer.h>
+#include <fmapp/UdpSender.hpp>
+#include <fmapp/NullStringSender.hpp>
+
 #ifdef SHEET_USE_BOOST_TIMER
 #include "fmapp/boostTimer.h"
 #else
@@ -39,12 +42,19 @@ typedef sheet::compiler::LoggerAndWarningsCollector<fm::ConsoleLogger> WarningsC
 
 int startPlayer(std::shared_ptr<PlayerProgramOptions> programOptionsPtr);
 
+funk::UdpSenderPtr _udpSender = nullptr;
+
 int main(int argc, const char** argv)
 {
 	auto programOptionsPtr = std::make_shared<PlayerProgramOptions>();
 
 	try {
 		programOptionsPtr->parseProgrammArgs(argc, argv);
+		if (programOptionsPtr->isUdpSet()) {
+			auto host = programOptionsPtr->getUdpHostname();
+			_udpSender = std::make_shared<funk::UdpSender>(host);
+			_udpSender->start();
+		}
 	} catch (const std::exception &ex) {
 		std::cerr << ex.what() << std::endl;
 		return 1;
@@ -66,7 +76,10 @@ int main(int argc, const char** argv)
 #ifdef SHEET_USE_BOOST_TIMER
 	fmapp::BoostTimer::io_stop();
 	boost_asio_.join();
-#endif	
+#endif
+	if (_udpSender) {
+		_udpSender->stop();
+	}
 	return returnCode;
 }
 
@@ -122,6 +135,13 @@ int startPlayer(std::shared_ptr<PlayerProgramOptions> programOptionsPtr)
 			}
 			return wrapper;
 		})
+		, di::bind<fmapp::IStringSender>()					.to([&](const auto &injector) -> fmapp::IStringSenderPtr 
+		{
+			if (programOptionsPtr->isUdpSet()) {
+				return _udpSender;
+			}
+			return injector.template create<std::shared_ptr<fmapp::NullStringSender>>();
+		})		
 	);
 	try {
 		auto program = injector.create<SheetPlayerProgram*>();

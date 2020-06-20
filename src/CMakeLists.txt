@@ -95,7 +95,7 @@ SET (SRC_SHEET_FMAPP
     fmapp/MidiPlayer.cpp
     fmapp/MidiFileWriter.cpp
     fmapp/midiProvider.cpp
-    fmapp/udpSender.cpp
+    fmapp/UdpSender.cpp
     fmapp/JsonWriter.cpp
     fmapp/JsonWriterBase.cpp
     fmapp/SheetWatcher.cpp

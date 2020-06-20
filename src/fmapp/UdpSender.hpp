@@ -7,16 +7,17 @@
 #include <boost/asio.hpp>
 #include <fm/common.hpp>
 #include <boost/core/noncopyable.hpp>
+#include "IStringSender.hpp"
 
 namespace funk {
 	/**
 	 * test the connection using: socat UDP-RECV:$port STDOUT
 	 */ 
-	class UdpSender : boost::noncopyable {
+	class UdpSender : boost::noncopyable, public fmapp::IStringSender {
 		public:
 			void start();
 			void stop();
-			void send(const char *bytes, size_t length);
+			void send(const char *bytes, size_t length) override;
 		private:
 			typedef std::string Host;
 			typedef std::string Port;
@@ -33,6 +34,7 @@ namespace funk {
 		protected:
 		public:
 			UdpSender(const std::string &host);
+			virtual ~UdpSender() = default;
 	};
 }
 

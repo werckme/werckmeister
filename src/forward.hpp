@@ -40,4 +40,10 @@ namespace fm {
 
 	class Werckmeister;
 }
+
+namespace funk {
+    class UdpSender;
+	typedef std::shared_ptr<UdpSender> UdpSenderPtr;
+}
+
 #endif

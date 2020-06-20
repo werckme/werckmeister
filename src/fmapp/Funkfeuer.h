@@ -9,6 +9,7 @@
 #include <fm/exception.hpp>
 #include "JsonWriterBase.h"
 #include <forward.hpp>
+#include "IStringSender.hpp"
 
 namespace fmapp {
     /**
@@ -17,13 +18,17 @@ namespace fmapp {
      */
     class Funkfeuer : public JsonWriterBase, public IPlayerLoopVisitor {
     private:
-        fm::ILoggerPtr              _logger;
-        fmapp::DefaultTimelinePtr   _timelineVisitor;
+        fm::ILoggerPtr         _logger;
+        DefaultTimelinePtr     _timelineVisitor;
+        IStringSenderPtr       _sender;
     public:
         typedef JsonWriterBase Base;
-        Funkfeuer(sheet::compiler::ICompilerVisitorPtr compilerVisitor,  fm::ILoggerPtr logger)
+        Funkfeuer(sheet::compiler::ICompilerVisitorPtr compilerVisitor,
+            fm::ILoggerPtr logger,
+            IStringSenderPtr sender)
             :_logger(logger)
             , _timelineVisitor(std::dynamic_pointer_cast<fmapp::DefaultTimeline>(compilerVisitor))
+            , _sender(sender)
         {
             if (!_timelineVisitor)
             FM_THROW(fm::Exception, "expected a time line visitor instance");
@@ -33,6 +38,7 @@ namespace fmapp {
         virtual ~Funkfeuer() = default;
     private:
         fmapp::EventTimeline::const_iterator lastTimelineEvent;
+        unsigned long lastUpdateTimestamp = 0;
     };
 }
 #endif
