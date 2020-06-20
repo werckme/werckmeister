@@ -1,6 +1,5 @@
 #include "JsonWriter.h"
 #include <iostream>
-#include <compiler/IWarningsCollection.h>
 #include <sheet/Document.h>
 
 namespace {
@@ -44,6 +43,49 @@ namespace {
 namespace fmapp {
     void JsonWriter::write(sheet::DocumentPtr document)
     {
+        if (_programOptions->isJsonModeSet()) {
+            writeDocumentToJson(document);
+        }
+        if (_programOptions->isJsonDocInfoMode()) {
+            writeValidationJson(document);
+        }
+    }
+
+    void JsonWriter::writeException(const std::exception &ex)
+    {
+        exceptionToJSON(std::cout, ex);
+    }
+
+    void JsonWriter::writeException(const fm::Exception &ex)
+    {
+        exceptionToJSON(std::cout, ex);
+    }
+
+    void JsonWriter::writeUnknownException()
+    {
+        std::runtime_error ex("unkown error");
+        exceptionToJSON(std::cout, ex);
+    }
+
+    sheet::compiler::IWarningsCollectionPtr JsonWriter::getWarnings()
+    {
+        auto waningsCollection = std::dynamic_pointer_cast<sheet::compiler::IWarningsCollection>(_logger);
+        return waningsCollection;
+    }
+
+    void JsonWriter::writeValidationJson(sheet::DocumentPtr document)
+    {
+        sheet::Warnings __warnings;
+        const sheet::Warnings *warnings = &__warnings;
+        auto waningsCollection = getWarnings();
+        if (waningsCollection) {
+            warnings = &(waningsCollection->warnings());
+        }
+        rapidjson::Document doc = documentInfosToJSONDoc(document, _midifile->duration(), *warnings);
+        toStream(std::cout, doc);
+    }
+    void JsonWriter::writeDocumentToJson(sheet::DocumentPtr document)
+    {
         std::cout 
         << "{" 
         << "\"midi\": ";
@@ -58,7 +100,7 @@ namespace fmapp {
     {
         sheet::Warnings __warnings;
         const sheet::Warnings *warnings = &__warnings;
-        auto waningsCollection = std::dynamic_pointer_cast<sheet::compiler::IWarningsCollection>(_logger);
+        auto waningsCollection = getWarnings();
         if (waningsCollection) {
             warnings = &(waningsCollection->warnings());
         }

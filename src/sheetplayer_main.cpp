@@ -91,7 +91,7 @@ int startPlayer(std::shared_ptr<PlayerProgramOptions> programOptionsPtr)
 	auto documentPtr = std::make_shared<sheet::Document>();
 	auto midiFile = fm::getWerckmeister().createMidi();
 	bool needTimeline = programOptionsPtr->isUdpSet();
-	bool writeWarningsToConsole = !(programOptionsPtr->isJsonModeSet() || programOptionsPtr->isValidateMode());
+	bool writeWarningsToConsole = !(programOptionsPtr->isJsonModeSet() || programOptionsPtr->isJsonDocInfoMode());
 	auto injector = di::make_injector(
 		  di::bind<cp::IDocumentParser>()			.to<cp::DocumentParser>()			.in(di::extension::scoped)
 		, di::bind<cp::ICompiler>()					.to<cp::Compiler>()					.in(di::extension::scoped)

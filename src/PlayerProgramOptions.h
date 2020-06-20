@@ -31,7 +31,7 @@ struct PlayerProgramOptions : public CompilerProgramOptions, public IPlayerProgr
 	virtual bool isNoMetaSet() const override 		{ return false; }
 	virtual fm::String getOutput() const override 	{ return ""; }
 	virtual bool isJsonModeSet() const override		{ return false; }
-	virtual bool isValidateMode() const override	{ return false; }
+	virtual bool isJsonDocInfoMode() const override	{ return false; }
 private:
 	double resumeAtPosition = 0;
 };

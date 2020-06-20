@@ -5,9 +5,10 @@
 #include <forward.hpp>
 #include <ICompilerProgramOptions.h>
 #include <fm/ILogger.h>
+#include "ADocumentWriter.h"
 
 namespace fmapp {
-    class MidiFileWriter : public IDocumentWriter {
+    class MidiFileWriter : public ADocumentWriter {
     private:
         ICompilerProgramOptionsPtr _programOptions;
         fm::midi::MidiPtr          _midifile;
@@ -18,7 +19,8 @@ namespace fmapp {
             ICompilerProgramOptionsPtr  programOptions, 
             fm::midi::MidiPtr           midiFile,
             fm::ILoggerPtr              logger) 
-            : _programOptions(programOptions), 
+            : ADocumentWriter(logger),
+              _programOptions(programOptions), 
               _midifile      (midiFile),
               _logger        (logger)
         {}

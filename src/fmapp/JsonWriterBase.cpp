@@ -98,4 +98,37 @@ namespace fmapp {
         doc.AddMember("sheetEventInfos", array, doc.GetAllocator());
         toStream(os, doc);
     }
+
+    void JsonWriterBase::exceptionToJSON(std::ostream& os,const std::exception &ex)
+    {
+        typedef sheet::compiler::Exception SheetException;
+        rapidjson::Document doc;
+        doc.SetObject();
+        rapidjson::Value errorMessage;
+        const SheetException *fmex                       = dynamic_cast<const SheetException*>(&ex);
+        const sheet::ASheetObjectWithSourceInfo *docInfo = fmex ? fmex->getSourceInfo() : nullptr;
+        if (fmex && docInfo) {
+            const auto sourceFile = fmex->getSourceFile(); 
+            rapidjson::Value sourceId(docInfo->sourceId);
+            rapidjson::Value positionBegin(docInfo->sourcePositionBegin);
+            rapidjson::Value positionEnd(docInfo->sourcePositionEnd);
+            errorMessage.SetString(fmex->what(), doc.GetAllocator());
+            doc.AddMember("sourceId", sourceId, doc.GetAllocator());
+            if (docInfo->sourcePositionBegin != sheet::ASheetObjectWithSourceInfo::UndefinedPosition) {
+                doc.AddMember("positionBegin", positionBegin, doc.GetAllocator());
+            }
+            if (docInfo->sourcePositionEnd != sheet::ASheetObjectWithSourceInfo::UndefinedPosition) {
+                doc.AddMember("positionEnd", positionEnd, doc.GetAllocator());
+            }
+            if (true) {
+                rapidjson::Value jsonSourceFile;
+                jsonSourceFile.SetString(sourceFile.c_str(), doc.GetAllocator());
+                doc.AddMember("sourceFile", jsonSourceFile, doc.GetAllocator());
+            }
+        } else {
+            errorMessage.SetString(ex.what(), doc.GetAllocator());
+        }
+        doc.AddMember("errorMessage", errorMessage, doc.GetAllocator());
+        toStream(os, doc);
+    }
 }

@@ -83,7 +83,7 @@ bool CompilerProgramOptions::isJsonModeSet() const
     return variables[ARG_MODE].as<std::string>() == "json";
 }
 
-bool CompilerProgramOptions::isValidateMode() const 
+bool CompilerProgramOptions::isJsonDocInfoMode() const 
 {
     if (variables.count(ARG_MODE) == 0) {
         return false;

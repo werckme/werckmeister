@@ -40,7 +40,7 @@ int main(int argc, const char** argv)
 	auto documentPtr = std::make_shared<sheet::Document>();
 	auto midiFile = fm::getWerckmeister().createMidi();
 	bool needTimeline = programOptionsPtr->isJsonModeSet();
-	bool writeWarningsToConsole = !(programOptionsPtr->isJsonModeSet() || programOptionsPtr->isValidateMode());
+	bool writeWarningsToConsole = !(programOptionsPtr->isJsonModeSet() || programOptionsPtr->isJsonDocInfoMode());
 	auto injector = di::make_injector(
 		  di::bind<cp::IDocumentParser>()			.to<cp::DocumentParser>()			.in(di::singleton)
 		, di::bind<cp::ICompiler>()					.to<cp::Compiler>()					.in(di::singleton)
@@ -54,7 +54,7 @@ int main(int argc, const char** argv)
 		, di::bind<fm::midi::Midi>()				.to(midiFile)
 		, di::bind<fmapp::IDocumentWriter>()		.to([&](const auto &injector) -> fmapp::IDocumentWriterPtr 
 		{
-			if (programOptionsPtr->isJsonModeSet()) {
+			if (programOptionsPtr->isJsonModeSet() || programOptionsPtr->isJsonDocInfoMode()) {
 				return injector.template create<std::shared_ptr<fmapp::JsonWriter>>();
 			}
 			return injector.template create<std::shared_ptr<fmapp::MidiFileWriter>>();

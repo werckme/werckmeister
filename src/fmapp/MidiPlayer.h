@@ -13,6 +13,7 @@
 #include "midiProvider.h"
 #include "rtmidiBackend.h"
 #include <ostream>
+#include "ADocumentWriter.h"
 
 #ifdef SHEET_USE_BOOST_TIMER
 #include "fmapp/boostTimer.h"
@@ -24,7 +25,7 @@ typedef fmapp::os::MMTimer TimerImpl;
 
 
 namespace fmapp {
-    class MidiPlayer : public IDocumentWriter {
+    class MidiPlayer : public ADocumentWriter {
     public:
         typedef DiContainerWrapper<IPlayerLoopVisitorPtr> LoopVisitors;
         typedef MidiplayerClient<RtMidiBackend, fmapp::MidiProvider, TimerImpl> MidiplayerImpl;
@@ -40,7 +41,8 @@ namespace fmapp {
             fm::midi::MidiPtr           midiFile,
             LoopVisitors                loopVisitors,
             fm::ILoggerPtr              logger) 
-            : _programOptions(std::dynamic_pointer_cast<IPlayerProgramOptions>(programOptions)),
+            : ADocumentWriter(logger),
+              _programOptions(std::dynamic_pointer_cast<IPlayerProgramOptions>(programOptions)),
               _midifile      (midiFile),
               _loopVisitors  (loopVisitors),
               _logger        (logger)

@@ -92,6 +92,7 @@ SET (SRC_FETZER_TESTS
 SET (SRC_SHEET_FMAPP
     fmapp/boostTimer.cpp
     fmapp/rtmidiBackend.cpp
+    fmapp/ADocumentWriter.cpp
     fmapp/MidiPlayer.cpp
     fmapp/MidiFileWriter.cpp
     fmapp/midiProvider.cpp

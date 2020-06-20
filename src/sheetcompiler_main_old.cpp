@@ -83,7 +83,7 @@ Validate mode checks for errors and returns the validation result as json object
 		return variables[ARG_MODE].as<std::string>() == "json";
 	}
 
-	bool isValidateMode() const {
+	bool isJsonDocInfoMode() const {
 		if (variables.count(ARG_MODE) == 0) {
 			return false;
 		}
@@ -182,7 +182,7 @@ int main(int argc, const char** argv)
 	try {
 		Settings settings(argc, argv);
 		jsonMode = settings.isJsonMode();
-		vaidateMode = settings.isValidateMode();
+		vaidateMode = settings.isJsonDocInfoMode();
 		std::string infile;
 
 		if (settings.help()) {

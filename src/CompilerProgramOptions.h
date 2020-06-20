@@ -17,7 +17,7 @@ struct CompilerProgramOptions : public virtual ICompilerProgramOptions {
 	virtual bool isNoMetaSet() const;
 	virtual fm::String getOutput() const;
 	virtual bool isJsonModeSet() const;
-	virtual bool isValidateMode() const;
+	virtual bool isJsonDocInfoMode() const;
 	virtual bool isVersionSet() const;
 	virtual void parseProgrammArgs(size_t argc, const char **argv);
 	virtual void printHelpText(std::ostream &os);

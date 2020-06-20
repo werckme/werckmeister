@@ -101,15 +101,15 @@ int SheetCompilerProgram::execute() {
     }
     catch (const fm::Exception &ex)
 	{
-        _logger->error(WMLogLambda(log << ex.toString() ));
+        _documentWriter->writeException(ex);
 	}
 	catch (const std::exception &ex)
 	{
-        _logger->error(WMLogLambda(log << ex.what() ));
+        _documentWriter->writeException(ex);
 	}
 	catch (...)
 	{
-        _logger->error(WMLogLambda(log << "unkown error" ));
+        _documentWriter->writeUnknownException();
 	}
     return -1;
 }

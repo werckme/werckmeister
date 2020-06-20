@@ -13,7 +13,7 @@ struct ICompilerProgramOptions {
 	virtual bool isNoMetaSet() const = 0;
 	virtual fm::String getOutput() const = 0;
 	virtual bool isJsonModeSet() const = 0;
-	virtual bool isValidateMode() const = 0;
+	virtual bool isJsonDocInfoMode() const = 0;
 	virtual bool isVersionSet() const = 0;
 	virtual void printHelpText(std::ostream &os) = 0;
 	virtual bool isVerboseSet() const = 0;

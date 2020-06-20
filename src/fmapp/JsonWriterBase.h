@@ -16,6 +16,7 @@ namespace fmapp {
         std::string base64Decode(const std::string &base64);
         std::string midiToBase64(fm::midi::MidiPtr midi);
         void toStream(std::ostream& os, rapidjson::Document &doc);
+        void exceptionToJSON(std::ostream&, const std::exception&);
     };
 }
 
