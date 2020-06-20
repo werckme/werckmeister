@@ -48,32 +48,21 @@ namespace fmapp {
         });
 
 #ifdef SIGINT_WORKAROUND
-        std::unique_ptr<fmapp::os::InterProcessMessageQueue> ipcMessageQueue = nullptr;
-        bool isSigintWorkaround = false // TODO: #126
-        if (isSigintWorkaround) {
-            ipcMessageQueue = std::make_unique<fmapp::os::InterProcessMessageQueue>();
-        }
+        // std::unique_ptr<fmapp::os::InterProcessMessageQueue> ipcMessageQueue = nullptr;
+        // bool isSigintWorkaround = false; // TODO: #126
+        // if (isSigintWorkaround) {
+        //     ipcMessageQueue = std::make_unique<fmapp::os::InterProcessMessageQueue>();
+        // }
 #endif
         while (state > Stopped) {
             auto elapsed = _midiPlayerImpl.elapsed();
             std::this_thread::sleep_for( std::chrono::milliseconds(UPDATE_THREAD_SLEEPTIME) );
 #ifdef SIGINT_WORKAROUND
-            if (ipcMessageQueue && ipcMessageQueue->sigintReceived()) {
-                playing = false;
-                player.panic();
-            }
-#endif
-            // if (watch) {
-            //     if (hasChanges(document, timestamps)) {
-            //         try {
-            //             updatePlayer(player, inputfile);
-            //             updateLastChangedTimestamp();
-            //         } catch(...) {
-            //             player.panic();
-            //             break;
-            //         }
-            //     }
+            // if (ipcMessageQueue && ipcMessageQueue->sigintReceived()) {
+            //     playing = false;
+            //     player.panic();
             // }
+#endif
             if (elapsed > end) {
                 if (!loop) {
                     break;
