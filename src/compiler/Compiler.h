@@ -5,6 +5,7 @@
 #include "ISheetTemplateRenderer.h"
 #include "ASheetEventRenderer.h"
 #include <compiler/context/IContext.h>
+#include "ICompilerVisitor.h"
 
 namespace sheet {
 	struct Event;
@@ -15,14 +16,17 @@ namespace sheet {
 			DocumentWPtr document_;
 			ASheetEventRendererPtr sheetEventRenderer_;
 			ISheetTemplateRendererPtr sheetTemplateRenderer_;
+			ICompilerVisitorPtr	compilerVisitorPtr_;
 		public:
 			Compiler(
 				IContextPtr context, 
 				ASheetEventRendererPtr sheetEventRenderer,
-				ISheetTemplateRendererPtr sheetTemplateRenderer
+				ISheetTemplateRendererPtr sheetTemplateRenderer,
+				ICompilerVisitorPtr	compilerVisitorPtr
 			) :   context_(context)
 				, sheetEventRenderer_(sheetEventRenderer)
 				, sheetTemplateRenderer_(sheetTemplateRenderer)
+				, compilerVisitorPtr_(compilerVisitorPtr)
 			{
 			}
 			Compiler(const Compiler&) = delete;

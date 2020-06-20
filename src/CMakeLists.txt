@@ -97,8 +97,10 @@ SET (SRC_SHEET_FMAPP
     fmapp/midiProvider.cpp
     fmapp/udpSender.cpp
     fmapp/JsonWriter.cpp
+    fmapp/JsonWriterBase.cpp
     fmapp/SheetWatcher.cpp
     fmapp/PlayerTimePrinter.cpp
+    fmapp/Funkfeuer.cpp
 )
 
 if (WIN32)

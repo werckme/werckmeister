@@ -17,7 +17,10 @@
 
 void SheetCompilerProgram::prepareEnvironment()
 {
-    if (_programOptions->isVerboseSet()) {
+    if (_programOptions->isDebugSet()) {
+        _logger->logLevel(fm::ILogger::LevelDebug);
+    }
+    else if (_programOptions->isVerboseSet()) {
         _logger->logLevel(fm::ILogger::LevelBabble);
     }
     _logger->babble(WMLogLambda(printIntro(log)));

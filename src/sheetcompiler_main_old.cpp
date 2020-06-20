@@ -134,7 +134,7 @@ fm::Path prepareJSONMode(const std::string &jsonData) {
 	return sheetPath;
 }
 
-std::string eventInfosAsJson(sheet::DocumentPtr document) 
+std::string eventInfosToJson(sheet::DocumentPtr document) 
 {
 	std::stringstream ss;
 	ss << "[" << std::endl;
@@ -163,7 +163,7 @@ void toJSONOutput(sheet::DocumentPtr doc, fm::midi::MidiPtr midi, const sheet::W
 	std::cout 
 	<< "{" 
 	<< "\"midi\": " << jsonWriter.midiToJSON(doc, midi, warnings)
-	<< ", \"eventInfos\": " << eventInfosAsJson(doc)
+	<< ", \"eventInfos\": " << eventInfosToJson(doc)
 	<< "}" << std::endl
 	;
 }

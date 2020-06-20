@@ -11,6 +11,7 @@ struct CompilerProgramOptions : public virtual ICompilerProgramOptions {
 	virtual bool isHelpSet() const;
 	virtual bool isInputSet() const;
 	virtual bool isVerboseSet() const;
+	virtual bool isDebugSet() const;
 	virtual fm::String getInput() const;
 	virtual bool isOutputSet() const;
 	virtual bool isNoMetaSet() const;

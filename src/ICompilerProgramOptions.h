@@ -17,6 +17,7 @@ struct ICompilerProgramOptions {
 	virtual bool isVersionSet() const = 0;
 	virtual void printHelpText(std::ostream &os) = 0;
 	virtual bool isVerboseSet() const = 0;
+	virtual bool isDebugSet() const = 0;
 	virtual ~ICompilerProgramOptions() = default;
 };
 

@@ -14,6 +14,8 @@ namespace sheet {
 	namespace compiler {
         class ICompilerVisitor {
         public:
+            virtual void beginCompile() = 0;
+            virtual void endCompile() = 0;
             virtual void visit(IContext *context, const sheet::Event &ev) = 0;
             virtual void visit(IContext *context, const fm::midi::Event &ev, IContext::TrackId trackId) = 0;
         };

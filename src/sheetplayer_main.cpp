@@ -1,4 +1,5 @@
 #include <boost/di.hpp>
+#include <boost/di/extension/scopes/scoped.hpp>
 #include <iostream>
 #include <memory>
 #include <vector>
@@ -25,7 +26,7 @@
 #include <fmapp/PlayerTimePrinter.h>
 #include <fmapp/DiContainerWrapper.h>
 #include <fmapp/ISheetWatcherHandler.h>
-#include <boost/di/extension/scopes/scoped.hpp>
+#include <fmapp/Funkfeuer.h>
 #ifdef SHEET_USE_BOOST_TIMER
 #include "fmapp/boostTimer.h"
 #else
@@ -40,11 +41,6 @@ int startPlayer(std::shared_ptr<PlayerProgramOptions> programOptionsPtr);
 
 int main(int argc, const char** argv)
 {
-#ifdef SHEET_USE_BOOST_TIMER
-        std::thread boost_asio_([] {
-            fmapp::BoostTimer::io_run();
-        });
-#endif
 	auto programOptionsPtr = std::make_shared<PlayerProgramOptions>();
 
 	try {
@@ -56,6 +52,12 @@ int main(int argc, const char** argv)
 
 	int returnCode = 0;
 	
+#ifdef SHEET_USE_BOOST_TIMER
+        std::thread boost_asio_([] {
+            fmapp::BoostTimer::io_run();
+        });
+#endif
+
 	do {
 		returnCode = startPlayer(programOptionsPtr);
 	} while (returnCode == SheetPlayerProgram::RetCodeRestart);
@@ -75,7 +77,7 @@ int startPlayer(std::shared_ptr<PlayerProgramOptions> programOptionsPtr)
 	fmapp::SheetWatcherHandlersPtr sheetWatcherHandlers = std::make_shared<fmapp::SheetWatcherHandlers>();
 	auto documentPtr = std::make_shared<sheet::Document>();
 	auto midiFile = fm::getWerckmeister().createMidi();
-	bool needTimeline = programOptionsPtr->isJsonModeSet();
+	bool needTimeline = programOptionsPtr->isUdpSet();
 	bool writeWarningsToConsole = !(programOptionsPtr->isJsonModeSet() || programOptionsPtr->isValidateMode());
 	auto injector = di::make_injector(
 		  di::bind<cp::IDocumentParser>()			.to<cp::DocumentParser>()			.in(di::extension::scoped)
@@ -96,7 +98,7 @@ int startPlayer(std::shared_ptr<PlayerProgramOptions> programOptionsPtr)
 		, di::bind<cp::ICompilerVisitor>()			.to([&](const auto &injector) -> cp::ICompilerVisitorPtr 
 		{
 			if (needTimeline) {
-				return injector.template create< std::unique_ptr<fmapp::DefaultTimeline>>();
+				return injector.template create< std::shared_ptr<fmapp::DefaultTimeline>>();
 			}
 			return injector.template create< std::unique_ptr<cp::DefaultCompilerVisitor>>();
 		})
@@ -115,13 +117,25 @@ int startPlayer(std::shared_ptr<PlayerProgramOptions> programOptionsPtr)
 			if (programOptionsPtr->isWatchSet()) {
 				wrapper.container.emplace_back( injector.template create< std::unique_ptr<fmapp::SheetWatcher>>() );
 			}
+			if (programOptionsPtr->isUdpSet()) {
+				wrapper.container.emplace_back( injector.template create< std::unique_ptr<fmapp::Funkfeuer>>() );
+			}
 			return wrapper;
 		})
 	);
-	auto program = injector.create<SheetPlayerProgram*>();
-	sheetWatcherHandlers->container.push_back(program);
-	program->prepareEnvironment();
-	auto result = program->execute();
-	sheetWatcherHandlers->container.clear();
-	return result;
+	try {
+		auto program = injector.create<SheetPlayerProgram*>();
+		sheetWatcherHandlers->container.push_back(program);
+		program->prepareEnvironment();
+		auto result = program->execute();
+		sheetWatcherHandlers->container.clear();
+		return result;
+	} catch (const fm::Exception &ex) {
+		std::cerr << ex.toString() << std::endl;
+		return 1;
+	} catch (const std::exception &ex) {
+		std::cerr << ex.what() << std::endl;
+		return 1;
+	}
+	
 }

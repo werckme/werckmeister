@@ -315,7 +315,7 @@ void sendFunkfeuerIfNeccessary(sheet::DocumentPtr document, fm::Ticks elapsed)
 	funkfeuer->send(bff.data(), bff.size());
 }
 
-std::string eventInfosAsJson(sheet::DocumentPtr document) 
+std::string eventInfosToJson(sheet::DocumentPtr document) 
 {
 	std::stringstream ss;
 	ss << "[" << std::endl;
@@ -495,7 +495,7 @@ int main(int argc, const char** argv)
 		}
 		else if(settings.eventInfosJSON())
 		{
-			std::cout << eventInfosAsJson(doc) << std::endl;
+			std::cout << eventInfosToJson(doc) << std::endl;
 		}
 		else 
 		{

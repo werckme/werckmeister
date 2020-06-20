@@ -7,6 +7,7 @@ namespace fm {
     class ConsoleLogger : public virtual ILogger {
     public:
         typedef std::function<void(std::ostream&)> WriteToStreamF;
+        virtual void debug(const WriteToStreamF&);
         virtual void babble(const WriteToStreamF&);
         virtual void warn(const WriteToStreamF&);
         virtual void error(const WriteToStreamF&);

@@ -5,20 +5,18 @@
 #include <forward.hpp>
 #include <ICompilerProgramOptions.h>
 #include <fm/ILogger.h>
-#include <rapidjson/document.h>
-#include <rapidjson/writer.h>
-#include <rapidjson/stringbuffer.h>
-#include <iostream>
 #include <fmapp/TimelineVisitor.hpp>
+#include "JsonWriterBase.h"
 
 namespace fmapp {
-    class JsonWriter : public IDocumentWriter {
+    class JsonWriter : public JsonWriterBase, public IDocumentWriter {
     private:
         ICompilerProgramOptionsPtr _programOptions;
         fm::midi::MidiPtr          _midifile;
         fmapp::DefaultTimelinePtr  _timeline;
         fm::ILoggerPtr             _logger;
     public:
+        typedef JsonWriterBase Base;
         JsonWriter(
             ICompilerProgramOptionsPtr  programOptions, 
             fm::midi::MidiPtr           midiFile,
@@ -29,12 +27,9 @@ namespace fmapp {
               _timeline      (timeline),
               _logger        (logger)
         {}
-        virtual void write(sheet::DocumentPtr document);
         void docToJson(std::ostream &, sheet::DocumentPtr document);
-        void eventInfosAsJson(std::ostream &, sheet::DocumentPtr document);
-        std::string base64Encode(const std::string &data);
-        std::string base64Decode(const std::string &base64);
-        std::string midiToBase64(fm::midi::MidiPtr midi);
+        void eventInfosToJson(std::ostream &os, sheet::DocumentPtr document);
+        virtual void write(sheet::DocumentPtr document);
         virtual ~JsonWriter() = default;
     };
 }

@@ -17,6 +17,7 @@
 #define ARG_INFO "info"
 #define ARG_PRINT_EVENTINFOS_JSON "print-events"
 #define ARG_WIN32_SIGINT_WORKAROUND "win32-sigint-workaround"
+#define ARG_DEBUG "debug"
 
 void PlayerProgramOptions::parseProgrammArgs(size_t argc, const char **argv)
 {
@@ -34,6 +35,7 @@ void PlayerProgramOptions::parseProgrammArgs(size_t argc, const char **argv)
         (ARG_PRINT_EVENTINFOS_JSON, "prints the sheet events as json")
         (ARG_VERSION, "prints the werckmeister version")
         (ARG_VERBOSE, "prints (debug) informations to the output")
+        (ARG_DEBUG, "prints debug informations to the output")
 #ifdef SIGINT_WORKAROUND
         (ARG_WIN32_SIGINT_WORKAROUND, "uses a ipc workaround for the lack of a proper SIGINT signal handling in windows. \
 (an ipc handler will be created before the player starts. If the handler will receive a ipc message, called by a separate program, the player will be stopped.)")

@@ -31,6 +31,8 @@ namespace fmapp {
         virtual ~TimelineVisitor() = default;
         TIntervalContainer &intervalContainer() { return intervalContainer_; }
         const TIntervalContainer &intervalContainer() const { return intervalContainer_; }
+        virtual void beginCompile() override { intervalContainer_.clear(); }
+        virtual void endCompile() override {}
         virtual void visit(sheet::compiler::IContext *context, const sheet::Event &ev) override;
         virtual void visit(sheet::compiler::IContext *context, const fm::midi::Event &ev, TrackId trackId) override;    
     private:

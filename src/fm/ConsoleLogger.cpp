@@ -2,6 +2,14 @@
 #include <iostream>
 
 namespace fm {
+    void ConsoleLogger::debug(const WriteToStreamF& f)
+    {
+        if (_logLevel > LevelDebug) {
+            return;
+        }
+        std::clog << "[debug] ";
+        writeMessage(f);
+    }    
     void ConsoleLogger::babble(const WriteToStreamF& f)
     {
         if (_logLevel > LevelBabble) {

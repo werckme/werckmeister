@@ -16,8 +16,8 @@ namespace sheet {
 	namespace compiler {
 		void Compiler::compile(DocumentPtr document)
 		{
+			this->compilerVisitorPtr_->beginCompile();
 			this->document_ = document;
-
 			try {
 				sheetEventRenderer()->handleMetaEvents(document->sheetDef.documentConfigs, 
 					[](const auto &x) { 
@@ -42,6 +42,7 @@ namespace sheet {
 			} catch(...) {
 				throw;
 			}
+			this->compilerVisitorPtr_->endCompile();
 		}
 
 		void Compiler::renderTracks()
