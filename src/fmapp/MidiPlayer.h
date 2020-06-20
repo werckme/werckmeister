@@ -12,7 +12,7 @@
 #include "midiplayerClient.h"
 #include "midiProvider.h"
 #include "rtmidiBackend.h"
-
+#include <ostream>
 
 #ifdef SHEET_USE_BOOST_TIMER
 #include "fmapp/boostTimer.h"
@@ -47,6 +47,7 @@ namespace fmapp {
         {
 
         }
+        void listDevices(std::ostream&);
         virtual void write(sheet::DocumentPtr document);
         virtual ~MidiPlayer() = default;
         /**

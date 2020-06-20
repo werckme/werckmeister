@@ -9,6 +9,15 @@
 #define UPDATE_THREAD_SLEEPTIME 70
 
 namespace fmapp {
+
+    void MidiPlayer::listDevices(std::ostream& os)
+    {
+        auto outputs = _midiPlayerImpl.getOutputs();
+        for (const auto &output : outputs) {
+            os << output.id << ": " << output.name << std::endl;
+        }
+    }
+
     void MidiPlayer::write(sheet::DocumentPtr doc)
     {
         if (state > Stopped) {

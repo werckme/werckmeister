@@ -12,6 +12,10 @@ void SheetPlayerProgram::onSheetChanged()
 
 int SheetPlayerProgram::execute()
 {
+    if (_programOptions->isListDevicesSet()) {
+        _midiPlayerPtr->listDevices(std::cout);
+        return 0;
+    }
     int result = Base::execute();
     if (result != 0) {
         return result;
