@@ -4,7 +4,7 @@
 #include <fm/config.hpp>
 #include <thread>
 #include <iostream>
-
+#include <algorithm>
 
 #define UPDATE_THREAD_SLEEPTIME 70
 
@@ -31,11 +31,18 @@ namespace fmapp {
     void MidiPlayer::execLoop(sheet::DocumentPtr)
     {
         fm::Ticks begin = 0;
-        if (_programOptions->isBeginSet()) {
-            begin = _programOptions->getBegin() * fm::PPQ;
-        }
-        _logger->babble(WMLogLambda(log << "begin at tick: " << begin));
         fm::Ticks end = _midifile->duration();
+        if (_programOptions->isBeginSet()) {
+            begin = std::max(fm::Ticks(0), std::min(_programOptions->getBegin() * fm::PPQ, end));
+        }
+        if (_programOptions->isEndSet()) {
+            end = std::max(fm::Ticks(0), std::min(_programOptions->getEnd() * fm::PPQ, end));
+        }
+        if (_programOptions->getResumeAtPosition() > 0) {
+            begin = _programOptions->getResumeAtPosition() * fm::PPQ;
+            _programOptions->setResumeAtPosition(0);
+        }        
+        _logger->babble(WMLogLambda(log << "begin at tick: " << begin));
         _midiPlayerImpl.updateOutputMapping(fm::getConfigServer().getDevices());
         _midiPlayerImpl.midi(_midifile);
         _midiPlayerImpl.play(begin);
@@ -54,6 +61,7 @@ namespace fmapp {
         //     ipcMessageQueue = std::make_unique<fmapp::os::InterProcessMessageQueue>();
         // }
 #endif
+        visitVisitors(BeginLoop, 0);
         while (state > Stopped) {
             auto elapsed = _midiPlayerImpl.elapsed();
             std::this_thread::sleep_for( std::chrono::milliseconds(UPDATE_THREAD_SLEEPTIME) );
@@ -69,19 +77,29 @@ namespace fmapp {
                 }
                 _midiPlayerImpl.play(begin);
             }
-            visitVisitors(elapsed);
+            visitVisitors(Loop, elapsed);
         }
-        std::cout << std::endl;
+        visitVisitors(EndLoop, 0);
         _midiPlayerImpl.stop();
         _midiPlayerImpl.panic();
         _midiPlayerImpl.Backend:: tearDown();
 
     }
 
-    void MidiPlayer::visitVisitors(fm::Ticks elapsed)
+    void MidiPlayer::visitVisitors(VisitorMessage msg, fm::Ticks elapsed)
     {
         for(auto visitor : _loopVisitors.container) {
-            visitor->visit(elapsed);
+            switch (msg)
+            {
+                case BeginLoop: 
+                    visitor->loopBegin();
+                    break;
+                case EndLoop:
+                    visitor->loopEnd();
+                    break;
+                case Loop:
+                    visitor->visit(elapsed);
+            }
         }
     }
 

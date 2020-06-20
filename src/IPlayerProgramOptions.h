@@ -8,7 +8,8 @@ struct IPlayerProgramOptions : public virtual ICompilerProgramOptions {
 	virtual bool isLoopSet() const = 0;
 	virtual bool isBeginSet() const = 0;
 	virtual double getBegin() const = 0;
-	virtual void setBegin(double ticks) = 0;
+	virtual bool isEndSet() const = 0;
+	virtual double getEnd() const = 0;		
 	virtual bool isWatchSet() const = 0;
 	virtual bool isUdpSet() const = 0;
 	virtual fm::String getUdpHostname() const = 0;
@@ -16,6 +17,8 @@ struct IPlayerProgramOptions : public virtual ICompilerProgramOptions {
 	virtual bool isDocumentInfoJSONSet() const = 0;
 	virtual bool isEventInfosJSONSet() const = 0;
 	virtual bool isSigintWorkaroundSet() const = 0;
+	virtual void setResumeAtPosition(double quarters) = 0;
+	virtual double getResumeAtPosition() = 0;
 };
 
 typedef std::shared_ptr<IPlayerProgramOptions> IPlayerProgramOptionsPtr;

@@ -21,6 +21,8 @@ namespace fmapp {
         SheetWatcher(sheet::DocumentPtr document, fmapp::SheetWatcherHandlersPtr sheetWatcherHandlers) 
         : _document(document), _sheetWatcherHandlers(sheetWatcherHandlers)
         {}
+        virtual void loopBegin() override {}
+        virtual void loopEnd() override {}
         virtual void visit(fm::Ticks elapsed);
         virtual ~SheetWatcher() = default;
     private:

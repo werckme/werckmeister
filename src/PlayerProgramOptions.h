@@ -14,7 +14,10 @@ struct PlayerProgramOptions : public CompilerProgramOptions, public IPlayerProgr
 	virtual bool isLoopSet() const;
 	virtual bool isBeginSet() const;
 	virtual double getBegin() const;
-	virtual void setBegin(double quarters) override;
+	virtual bool isEndSet() const;
+	virtual double getEnd() const;	
+	virtual void setResumeAtPosition(double quarters) override { resumeAtPosition = quarters; }
+	virtual double getResumeAtPosition() override { return resumeAtPosition; }
 	virtual bool isWatchSet() const;
 	virtual bool isUdpSet() const;
 	virtual fm::String getUdpHostname() const;
@@ -30,7 +33,7 @@ struct PlayerProgramOptions : public CompilerProgramOptions, public IPlayerProgr
 	virtual bool isJsonModeSet() const override		{ return false; }
 	virtual bool isValidateMode() const override	{ return false; }
 private:
-	double customBeginValue = -1;
+	double resumeAtPosition = 0;
 };
 
 #endif

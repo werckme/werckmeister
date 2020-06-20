@@ -55,8 +55,9 @@ namespace fmapp {
          */
         virtual fm::Ticks stop();
     private:
+        enum VisitorMessage { Loop, BeginLoop, EndLoop };
         void execLoop(sheet::DocumentPtr document);
-        void visitVisitors(fm::Ticks elapsed);
+        void visitVisitors(VisitorMessage, fm::Ticks elapsed);
         State state = Stopped;
         MidiplayerImpl _midiPlayerImpl;
         

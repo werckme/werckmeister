@@ -11,6 +11,7 @@
 #define ARG_LIST "list"
 #define ARG_LOOP "loop"
 #define ARG_BEGIN "begin"
+#define ARG_END "end"
 #define ARG_WATCH "watch"
 #define ARG_UDP "funkfeuer"
 #define ARG_NOSTDOUT "notime"
@@ -28,6 +29,7 @@ void PlayerProgramOptions::parseProgrammArgs(size_t argc, const char **argv)
         (ARG_LIST, "list midi devices")
         (ARG_LOOP, "activates playback loop")
         (ARG_BEGIN, po::value<double>(), "start postition in quarter notes. E.g.: 1.2")
+        (ARG_END,   po::value<double>(), "end postition in quarter notes. E.g.: 1.2")
         (ARG_WATCH, "checks the input file for changes and recompiles if any")
         (ARG_UDP, po::value<std::string>(), "activates an udp sender, which sends sheet info periodically to to given host")
         (ARG_NOSTDOUT, "disable printing time on stdout")
@@ -58,21 +60,20 @@ bool PlayerProgramOptions::isLoopSet() const {
 }
 
 bool PlayerProgramOptions::isBeginSet() const {
-    return customBeginValue > 0 || !!variables.count(ARG_BEGIN);
+    return !!variables.count(ARG_BEGIN);
 }
 
-#include <iostream> 
+bool PlayerProgramOptions::isEndSet() const {
+    return !!variables.count(ARG_END);
+}
+
 
 double PlayerProgramOptions::getBegin() const {
-    if (customBeginValue > 0) {
-        return customBeginValue;
-    }
     return variables[ARG_BEGIN].as<double>();
 }
 
-void PlayerProgramOptions::setBegin(double ticks) 
-{
-    customBeginValue = ticks;
+double PlayerProgramOptions::getEnd() const {
+    return variables[ARG_END].as<double>();
 }
 
 bool PlayerProgramOptions::isWatchSet() const {

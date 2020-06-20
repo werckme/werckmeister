@@ -34,6 +34,8 @@ namespace fmapp {
             FM_THROW(fm::Exception, "expected a time line visitor instance");
             lastTimelineEvent = _timelineVisitor->intervalContainer().end();
         }
+        virtual void loopBegin() override {}
+        virtual void loopEnd() override {}
         virtual void visit(fm::Ticks elapsed) override;  
         virtual ~Funkfeuer() = default;
     private:
