@@ -41,7 +41,7 @@ namespace fmapp {
         _midiPlayerImpl.play(begin);
 
         state = Playing;
-        bool loop   = false; // TODO: #126
+        bool loop   = _programOptions->isLoopSet();
         fmapp::os::setSigtermHandler([&]{
             state = Stopped;
             _midiPlayerImpl.panic();
