@@ -30,6 +30,7 @@ namespace fmapp {
 
     void MidiPlayer::execLoop(sheet::DocumentPtr)
     {
+        fm::Ticks resume = 0;
         fm::Ticks begin = 0;
         fm::Ticks end = _midifile->duration();
         if (_programOptions->isBeginSet()) {
@@ -39,13 +40,13 @@ namespace fmapp {
             end = std::max(fm::Ticks(0), std::min(_programOptions->getEnd() * fm::PPQ, end));
         }
         if (_programOptions->getResumeAtPosition() > 0) {
-            begin = _programOptions->getResumeAtPosition() * fm::PPQ;
+            resume = _programOptions->getResumeAtPosition() * fm::PPQ;
             _programOptions->setResumeAtPosition(0);
         }        
         _logger->babble(WMLogLambda(log << "begin at tick: " << begin));
         _midiPlayerImpl.updateOutputMapping(fm::getConfigServer().getDevices());
         _midiPlayerImpl.midi(_midifile);
-        _midiPlayerImpl.play(begin);
+        _midiPlayerImpl.play(resume > 0 ? resume : begin);
 
         state = Playing;
         bool loop   = _programOptions->isLoopSet();
@@ -71,7 +72,7 @@ namespace fmapp {
             //     player.panic();
             // }
 #endif
-            if (elapsed > end) {
+            if (elapsed >= end) {
                 if (!loop) {
                     break;
                 }
