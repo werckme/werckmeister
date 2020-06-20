@@ -125,15 +125,15 @@ int startPlayer(std::shared_ptr<PlayerProgramOptions> programOptionsPtr)
 		, di::bind<fmapp::DiContainerWrapper<fmapp::IPlayerLoopVisitorPtr>>().to([&](const auto &injector) {
 			fmapp::DiContainerWrapper<fmapp::IPlayerLoopVisitorPtr> wrapper;
 			if (!programOptionsPtr->isNoTimePrintSet()) {
-				std::shared_ptr<fmapp::PlayerTimePrinter> vis = injector.template create<std::unique_ptr<fmapp::PlayerTimePrinter>>();
+				std::shared_ptr<fmapp::PlayerTimePrinter> vis = injector.create<std::unique_ptr<fmapp::PlayerTimePrinter>>();
 				wrapper.container.push_back(vis);
 			}
 			if (programOptionsPtr->isWatchSet()) {
-				std::shared_ptr<fmapp::SheetWatcher> vis = injector.template create<std::unique_ptr<fmapp::SheetWatcher>>();
+				std::shared_ptr<fmapp::SheetWatcher> vis = injector.create<std::unique_ptr<fmapp::SheetWatcher>>();
 				wrapper.container.push_back(vis);
 			}
 			if (programOptionsPtr->isUdpSet()) {
-				std::shared_ptr<fmapp::Funkfeuer> vis = injector.template create<std::unique_ptr<fmapp::Funkfeuer>>();
+				std::shared_ptr<fmapp::Funkfeuer> vis = injector.create<std::unique_ptr<fmapp::Funkfeuer>>();
 				wrapper.container.push_back(vis);
 			}
 			return wrapper;
