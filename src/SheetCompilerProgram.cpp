@@ -57,8 +57,6 @@ void SheetCompilerProgram::compile()
     }
     _logger->babble(WMLogLambda(log << "parsing '" << file << "'"));
     auto document =_documentParser->parse(file);
-    _logger->babble(WMLogLambda(log << "preprocess '" << file << "'"));
-    _preprocessor->preprocess(document);
     _logger->babble(WMLogLambda(log << "compiling '" << file << "'"));    
     _compiler->compile(document);
     _logger->babble(WMLogLambda(log << "write document"));   

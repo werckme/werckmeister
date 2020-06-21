@@ -6,6 +6,8 @@
 #include "ASheetEventRenderer.h"
 #include <compiler/context/IContext.h>
 #include "ICompilerVisitor.h"
+#include "IPreprocessor.h"
+#include <fm/ILogger.h>
 
 namespace sheet {
 	struct Event;
@@ -17,16 +19,22 @@ namespace sheet {
 			ASheetEventRendererPtr sheetEventRenderer_;
 			ISheetTemplateRendererPtr sheetTemplateRenderer_;
 			ICompilerVisitorPtr	compilerVisitorPtr_;
+			fm::ILoggerPtr	logger_;
+			IPreprocessorPtr preprocessor_;
 		public:
 			Compiler(
 				IContextPtr context, 
 				ASheetEventRendererPtr sheetEventRenderer,
 				ISheetTemplateRendererPtr sheetTemplateRenderer,
-				ICompilerVisitorPtr	compilerVisitorPtr
+				ICompilerVisitorPtr	compilerVisitorPtr,
+				fm::ILoggerPtr logger,
+				IPreprocessorPtr preprocessor
 			) :   context_(context)
 				, sheetEventRenderer_(sheetEventRenderer)
 				, sheetTemplateRenderer_(sheetTemplateRenderer)
 				, compilerVisitorPtr_(compilerVisitorPtr)
+				, logger_(logger)
+				, preprocessor_(preprocessor)
 			{
 			}
 			Compiler(const Compiler&) = delete;

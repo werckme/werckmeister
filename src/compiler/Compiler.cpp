@@ -9,7 +9,6 @@
 #include <boost/exception/get_error_info.hpp>
 #include <fm/tools.h>
 #include <functional>
-#include "Preprocessor.h"
 
 namespace sheet {
 
@@ -32,7 +31,8 @@ namespace sheet {
 				ex << ex_sheet_document(document);
 				throw;
 			}
-
+			logger_->babble(WMLogLambda(log << "preprocess '" << document->path << "'"));
+			preprocessor_->preprocess(document);
 			try {
 				renderChordTrack();
 				renderTracks();
