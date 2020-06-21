@@ -80,7 +80,7 @@ namespace fmapp {
             currentEventInfo_->endPosition = ev.sourcePositionEnd;
         }
 		currentEventInfo_->sourceId = ev.sourceId;
-		currentEventInfo_->eventNr = intervalContainer_.size();
+		currentEventInfo_->eventNr = (int)intervalContainer_.size();
         TSet value = { *currentEventInfo_ };
         intervalContainer_ += std::make_pair(IntervalType::right_open(evStartPos, evEndPos), value);
     }

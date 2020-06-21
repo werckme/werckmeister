@@ -46,7 +46,7 @@ void PlayerProgramOptions::parseProgrammArgs(size_t argc, const char **argv)
     ;
     po::positional_options_description p;
     p.add(ARG_INPUT, -1);
-    po::store(po::command_line_parser(argc, argv).
+    po::store(po::command_line_parser((int)argc, argv).
         options(optionsDescription).positional(p).run(), variables);
     po::notify(variables);
 }
