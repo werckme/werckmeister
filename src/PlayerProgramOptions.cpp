@@ -16,7 +16,6 @@
 #define ARG_UDP "funkfeuer"
 #define ARG_NOSTDOUT "notime"
 #define ARG_INFO "info"
-#define ARG_PRINT_EVENTINFOS_JSON "print-events"
 #define ARG_WIN32_SIGINT_WORKAROUND "win32-sigint-workaround"
 #define ARG_DEBUG "debug"
 
@@ -34,7 +33,6 @@ void PlayerProgramOptions::parseProgrammArgs(size_t argc, const char **argv)
         (ARG_UDP, po::value<std::string>(), "activates an udp sender, which sends sheet info periodically to to given host")
         (ARG_NOSTDOUT, "disable printing time on stdout")
         (ARG_INFO, "prints sheet info as json")
-        (ARG_PRINT_EVENTINFOS_JSON, "prints the sheet events as json")
         (ARG_VERSION, "prints the werckmeister version")
         (ARG_VERBOSE, "prints (debug) informations to the output")
         (ARG_DEBUG, "prints debug informations to the output")
@@ -49,6 +47,11 @@ void PlayerProgramOptions::parseProgrammArgs(size_t argc, const char **argv)
     po::store(po::command_line_parser((int)argc, argv).
         options(optionsDescription).positional(p).run(), variables);
     po::notify(variables);
+}
+
+bool PlayerProgramOptions::isJsonDocInfoMode() const
+{
+    return !!variables.count(ARG_INFO);
 }
 
 bool PlayerProgramOptions::isListDevicesSet() const {
@@ -90,14 +93,6 @@ fm::String PlayerProgramOptions::getUdpHostname() const {
 
 bool PlayerProgramOptions::isNoTimePrintSet() const {
     return !!variables.count(ARG_NOSTDOUT);
-}
-
-bool PlayerProgramOptions::isDocumentInfoJSONSet() const {
-    return !!variables.count(ARG_INFO);
-}
-
-bool PlayerProgramOptions::isEventInfosJSONSet() const {
-    return !!variables.count(ARG_PRINT_EVENTINFOS_JSON);
 }
 
 bool PlayerProgramOptions::isSigintWorkaroundSet() const {

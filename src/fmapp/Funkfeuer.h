@@ -7,7 +7,7 @@
 #include "TimelineVisitor.hpp"
 #include <memory>
 #include <fm/exception.hpp>
-#include "JsonWriterBase.h"
+#include "JsonIOBase.h"
 #include <forward.hpp>
 #include "IStringSender.hpp"
 
@@ -16,13 +16,13 @@ namespace fmapp {
      * funkfeuer sends event informations via udp. Used for example by the vscode extension
      * to obtain the informations which events are currently played.   
      */
-    class Funkfeuer : public JsonWriterBase, public IPlayerLoopVisitor {
+    class Funkfeuer : public JsonIOBase, public IPlayerLoopVisitor {
     private:
         fm::ILoggerPtr         _logger;
         DefaultTimelinePtr     _timelineVisitor;
         IStringSenderPtr       _sender;
     public:
-        typedef JsonWriterBase Base;
+        typedef JsonIOBase Base;
         Funkfeuer(sheet::compiler::ICompilerVisitorPtr compilerVisitor,
             fm::ILoggerPtr logger,
             IStringSenderPtr sender)

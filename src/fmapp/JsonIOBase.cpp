@@ -1,4 +1,4 @@
-#include "JsonWriterBase.h"
+#include "JsonIOBase.h"
 #include <rapidjson/writer.h>
 #include <rapidjson/stringbuffer.h>
 #include <rapidjson/ostreamwrapper.h>
@@ -23,12 +23,12 @@ namespace {
 
 namespace fmapp {
 
-    void JsonWriterBase::toStream(std::ostream& os, rapidjson::Document &doc) 
+    void JsonIOBase::toStream(std::ostream& os, rapidjson::Document &doc) 
     {
         return ::toStream(os, doc);
     }
 
-    std::string JsonWriterBase::midiToBase64(fm::midi::MidiPtr midi)
+    std::string JsonIOBase::midiToBase64(fm::midi::MidiPtr midi)
     {
         size_t nbytes = midi->byteSize();
         size_t nBase64 = boost::beast::detail::base64::encoded_size(nbytes);
@@ -42,7 +42,7 @@ namespace fmapp {
         return result;
     }
 
-    std::string JsonWriterBase::base64Encode(const std::string &data)
+    std::string JsonIOBase::base64Encode(const std::string &data)
     {
         size_t nbytes = data.size();
         size_t nBase64 = boost::beast::detail::base64::encoded_size(nbytes);
@@ -52,7 +52,7 @@ namespace fmapp {
         delete []base64;
         return result;
     }
-    std::string JsonWriterBase::base64Decode(const std::string &base64)
+    std::string JsonIOBase::base64Decode(const std::string &base64)
     {
         size_t nBase64 = base64.size();
         size_t nbytes = boost::beast::detail::base64::decoded_size(nBase64);
@@ -63,7 +63,7 @@ namespace fmapp {
         return result;
     }
 
-    void JsonWriterBase::eventInfoToJSON(std::ostream& os,
+    void JsonIOBase::eventInfoToJSON(std::ostream& os,
         fm::Ticks elapsedTime, 
         unsigned long lastUpdateTimestamp, 
         const std::vector<fmapp::DefaultTimeline::EventInfo> &eventInfos, 
@@ -99,7 +99,7 @@ namespace fmapp {
         toStream(os, doc);
     }
 
-    void JsonWriterBase::exceptionToJSON(std::ostream& os,const std::exception &ex)
+    void JsonIOBase::exceptionToJSON(std::ostream& os,const std::exception &ex)
     {
         typedef sheet::compiler::Exception SheetException;
         rapidjson::Document doc;

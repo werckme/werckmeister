@@ -8,7 +8,7 @@
 #include <fmapp/TimelineVisitor.hpp>
 
 namespace fmapp {
-    class JsonWriterBase {
+    class JsonIOBase {
     private:
     public:
         void eventInfoToJSON(std::ostream& os, fm::Ticks elapsedTime, unsigned long lastUpdateTimestamp, const std::vector<fmapp::DefaultTimeline::EventInfo> &eventInfos, bool ignoreTimestamp = false);

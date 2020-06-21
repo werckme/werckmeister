@@ -5,19 +5,19 @@
 #include <ICompilerProgramOptions.h>
 #include <fm/ILogger.h>
 #include <fmapp/TimelineVisitor.hpp>
-#include "JsonWriterBase.h"
+#include "JsonIOBase.h"
 #include <compiler/IWarningsCollection.h>
 #include "ADocumentWriter.h"
 
 namespace fmapp {
-    class JsonWriter : public JsonWriterBase, public ADocumentWriter {
+    class JsonWriter : public JsonIOBase, public ADocumentWriter {
     private:
         ICompilerProgramOptionsPtr _programOptions;
         fm::midi::MidiPtr          _midifile;
         fmapp::DefaultTimelinePtr  _timeline;
         fm::ILoggerPtr             _logger;
     public:
-        typedef JsonWriterBase Base;
+        typedef JsonIOBase Base;
         JsonWriter(
             ICompilerProgramOptionsPtr  programOptions, 
             fm::midi::MidiPtr           midiFile,

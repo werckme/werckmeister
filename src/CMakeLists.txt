@@ -98,7 +98,8 @@ SET (SRC_SHEET_FMAPP
     fmapp/midiProvider.cpp
     fmapp/UdpSender.cpp
     fmapp/JsonWriter.cpp
-    fmapp/JsonWriterBase.cpp
+    fmapp/JsonStringInputReader.cpp
+    fmapp/JsonIOBase.cpp
     fmapp/SheetWatcher.cpp
     fmapp/PlayerTimePrinter.cpp
     fmapp/Funkfeuer.cpp

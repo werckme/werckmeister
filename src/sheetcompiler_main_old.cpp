@@ -116,7 +116,7 @@ void printWarnings(sheet::DocumentPtr document, sheet::Warnings &warnings)
 fm::Path prepareJSONMode(const std::string &jsonData) {
 	auto &wm = fm::getWerckmeister();
 	// prepare vfs
-	fmapp::JsonReader jsonReader;
+	fmapp::JsonStringInputReader jsonReader;
 	auto vfiles = jsonReader.readVirtualFS(jsonData);
 	fm::Path sheetPath;
 	for(const auto &vfile : vfiles) {
