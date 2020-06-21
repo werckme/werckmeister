@@ -63,9 +63,6 @@ namespace sheet {
 			 */
 			virtual TrackMetaDataPtr trackMetaData() const = 0;
 			virtual TrackMetaDataPtr trackMetaData(TrackId trackid) const = 0;
-			/**
-			 * TODO: #126 no context domain
-			 */
 			virtual const SheetTemplates & currentSheetTemplates() = 0;
 			virtual VoicingStrategyPtr currentVoicingStrategy() = 0;
 			virtual AModificationPtr spielanweisung() = 0;
