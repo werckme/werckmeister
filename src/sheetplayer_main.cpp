@@ -1,3 +1,8 @@
+
+int main(int argc, const char** argv)
+{
+}
+
 //#include <boost/di.hpp>
 //#include <boost/di/extension/scopes/scoped.hpp>
 //#include <iostream>
