@@ -10,7 +10,7 @@ namespace fmapp {
         using boost::str;
         using boost::io::group;
 
-        std::string strOut = "🕑 " + str(format("%.3f") % (elapsed / (double)fm::PPQ));
+        std::string strOut = "[" + str(format("%.3f") % (elapsed / (double)fm::PPQ)) + "]";
         clearLine();
         std::cout 
             << strOut 

@@ -8,6 +8,11 @@
 
 #define UPDATE_THREAD_SLEEPTIME 70
 
+#ifdef WIN32
+#include <fmapp/os_win_ipc_kill_handler.hpp>
+#define SIGINT_WORKAROUND
+#endif
+
 namespace fmapp {
 
     void MidiPlayer::listDevices(std::ostream& os)
@@ -53,24 +58,27 @@ namespace fmapp {
         fmapp::os::setSigtermHandler([&]{
             state = Stopped;
             _midiPlayerImpl.panic();
+            _logger->debug(WMLogLambda(log << "stopped via SIGTERM"));
         });
-
+       
 #ifdef SIGINT_WORKAROUND
-        // std::unique_ptr<fmapp::os::InterProcessMessageQueue> ipcMessageQueue = nullptr;
-        // bool isSigintWorkaround = false; // TODO: #126
-        // if (isSigintWorkaround) {
-        //     ipcMessageQueue = std::make_unique<fmapp::os::InterProcessMessageQueue>();
-        // }
+         std::unique_ptr<fmapp::os::InterProcessMessageQueue> ipcMessageQueue = nullptr;
+         bool isSigintWorkaround = _programOptions->isSigintWorkaroundSet();
+         if (isSigintWorkaround) {
+             ipcMessageQueue = std::make_unique<fmapp::os::InterProcessMessageQueue>();
+         }
+         _logger->debug(WMLogLambda(log << "using win32 sigterm ipc workaround"));
 #endif
         visitVisitors(BeginLoop, 0);
         while (state > Stopped) {
             auto elapsed = _midiPlayerImpl.elapsed();
             std::this_thread::sleep_for( std::chrono::milliseconds(UPDATE_THREAD_SLEEPTIME) );
 #ifdef SIGINT_WORKAROUND
-            // if (ipcMessageQueue && ipcMessageQueue->sigintReceived()) {
-            //     playing = false;
-            //     player.panic();
-            // }
+             if (ipcMessageQueue && ipcMessageQueue->sigintReceived()) {
+                 state = Stopped;
+                 _midiPlayerImpl.panic();
+                 _logger->debug(WMLogLambda(log << "stopped via win32 sigterm ipc workaround"));
+             }
 #endif
             if (elapsed >= end) {
                 if (!loop) {
