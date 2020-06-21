@@ -18,7 +18,7 @@ namespace sheet {
                 FM_PARAMETER_DEF            (argumentNames.Device.WithOffset, 	        5),
             };
             virtual ParametersByNames & getParameters() { return this->parameters; }
-            virtual void execute(AContext*);
+            virtual void execute(IContextPtr );
         };
     }
 }

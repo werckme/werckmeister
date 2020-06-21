@@ -12,7 +12,7 @@ namespace sheet {
             static const fm::Ticks defaultDuration;
             Vorschlag() = default;
             virtual ~Vorschlag() = default;
-            virtual void perform(AContext *ctx, Events &events) override;
+            virtual void perform(IContextPtr ctx, Events &events) override;
             Event vorschlagNote;
             fm::IHasParameter::ParametersByNames parameters = {
             };

@@ -3,15 +3,6 @@
 
 #include <vector>
 #include <string>
-#if defined(__GNUC__) || defined(__GNUG__)
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-#include <loki/Singleton.h>
-#pragma GCC diagnostic pop
-#else
-#include <loki/Singleton.h>
-#endif
-
 #include <memory>
 #include <fm/config.hpp>
 #include <fm/units.hpp>
@@ -28,7 +19,6 @@ namespace fmapp {
 
 	template<class TBackend, class TMidiProvider, class TTimer>
 	class MidiplayerClient : public TBackend, public TMidiProvider {
-		friend struct Loki::CreateUsingNew<MidiplayerClient>;
 	public:
 		enum State { Undefined, Playing, Stopped };
 		typedef TTimer Timer;

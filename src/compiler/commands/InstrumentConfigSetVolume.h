@@ -10,7 +10,7 @@ namespace sheet {
         class InstrumentConfigSetVolume : public SetVolume, public ACanSpecifyInstrument
         {
         public:
-            virtual void execute(AContext*);
+            virtual void execute(IContextPtr );
         };
     }
 }

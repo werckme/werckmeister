@@ -3,6 +3,7 @@
 #include <sheet/Document.h>
 #include <fm/werckmeister.hpp>
 
+
 namespace fm {
 
         namespace {
@@ -88,7 +89,7 @@ namespace fm {
         }
     } 
 
-    std::stringstream & documentMessageWhere(std::stringstream &ss, const std::string filename, int line)
+    std::ostream & documentMessageWhere(std::ostream &ss, const std::string filename, int line)
     {
         ss << "in file " << filename;
         if (line > 0) {
@@ -97,13 +98,13 @@ namespace fm {
         return ss;
     }
 
-    std::stringstream & documentMessageWhat(std::stringstream &ss, const std::string &what)
+    std::ostream & documentMessageWhat(std::ostream &ss, const std::string &what)
     {
         ss << what;
         return ss;
     }
 
-    std::stringstream & documentMessage(std::stringstream &ss, 
+    std::ostream & documentMessage(std::ostream &ss, 
         const std::shared_ptr<sheet::Document> document, 
         sheet::ASheetObjectWithSourceInfo::SourceId sourceId,
         unsigned int sourcePosition,

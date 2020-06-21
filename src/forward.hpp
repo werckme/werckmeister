@@ -9,6 +9,8 @@ namespace sheet {
 		typedef std::shared_ptr<Compiler> CompilerPtr;
 		class AContext;
 		typedef std::shared_ptr<AContext> AContextPtr;
+		class IContext;
+		typedef std::shared_ptr<IContext> IContextPtr;		
 		class ASpielanweisung;
 		typedef std::shared_ptr<ASpielanweisung> ASpielanweisungPtr;
 		class AModification;
@@ -22,6 +24,7 @@ namespace sheet {
 	}
 	class Document;
 	typedef std::shared_ptr<Document> DocumentPtr;
+	typedef std::weak_ptr<Document> DocumentWPtr;
 	typedef std::shared_ptr<const Document> ConstDocumentPtr;
 	class VoicingStrategy;
 	typedef std::shared_ptr<VoicingStrategy> VoicingStrategyPtr;
@@ -34,5 +37,13 @@ namespace fm {
 	}
 	class IConfigServer;
 	typedef IConfigServer *IConfigServerPtr;
+
+	class Werckmeister;
 }
+
+namespace funk {
+    class UdpSender;
+	typedef std::shared_ptr<UdpSender> UdpSenderPtr;
+}
+
 #endif

@@ -12,7 +12,7 @@
 namespace sheet {
 	namespace compiler {
 
-		std::stringstream & Exception::strSheetError(std::stringstream &ss, 
+		std::ostream & Exception::strSheetError(std::ostream &ss, 
 			const std::shared_ptr<Document> document, 
 			const ASheetObjectWithSourceInfo* sourceInf) const
 		{

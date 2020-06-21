@@ -4,3 +4,7 @@
 [submodule "submodules/rapidjson"]
 	path = submodules/rapidjson
 	url = https://github.com/Tencent/rapidjson.git
+[submodule "submodules/di"]
+	path = submodules/di
+	url = https://github.com/boost-experimental/di
+	branch = cpp14

@@ -1,9 +1,9 @@
 #include "InstrumentConfigSetVoicingStrategy.h"
-#include <compiler/context/AContext.h>
+#include <compiler/context/IContext.h>
 
 namespace sheet {
     namespace compiler {
-        void InstrumentConfigSetVoicingStrategy::execute(AContext* context)
+        void InstrumentConfigSetVoicingStrategy::execute(IContextPtr  context)
         {
             if (!this->hasInstrument()) {
                 return;

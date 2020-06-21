@@ -1,9 +1,9 @@
 #include "SetDevice.h"
-#include <compiler/context/AContext.h>
+#include <compiler/context/IContext.h>
 
 namespace sheet {
     namespace compiler {
-        void SetDevice::execute(AContext* context)
+        void SetDevice::execute(IContextPtr  context)
         {
             // auto value         = parameters[argumentNames.XYZ].value<int>();
            

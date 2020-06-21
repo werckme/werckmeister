@@ -1,11 +1,11 @@
 #include <fm/werckmeister.hpp>
 #include <fm/common.hpp>
 #include "sheet/Document.h"
-#include "compiler/compiler.h"
+#include "compiler/Compiler.h"
 #include "parser/parser.h"
 #include "compiler/context/MidiContext.h"
 #include "sheet.h"
-#include "compiler/sheetEventRenderer.h"
+#include "compiler/SheetEventRenderer.h"
 #include <fmapp/os.hpp>
 #include <iostream>
 #include <boost/filesystem.hpp>
@@ -37,7 +37,7 @@ namespace sheet {
     {
         auto &wm = fm::getWerckmeister();
         auto context = std::dynamic_pointer_cast<sheet::compiler::MidiContext>( wm.createContext() );
-        // there is one case where context and event renderer is one object -> MidiAndTimeline
+        // there is one case where context and event renderer is one object -> TimelineVisitor
         auto eventRenderer = std::dynamic_pointer_cast<sheet::compiler::SheetEventRenderer>( context );
         auto midi = wm.createMidi();
         if (midiConfig) {
@@ -46,10 +46,6 @@ namespace sheet {
         context->midi(midi);
         context->sheetTemplateDefServer(doc.get());
         auto compiler = wm.createCompiler();
-        if (eventRenderer) {
-            compiler->sheetEventRenderer(eventRenderer);
-        }
-        compiler->context(context);
         compiler->compile(doc);
         context->warnings.swap(outWarnings);
         return midi;

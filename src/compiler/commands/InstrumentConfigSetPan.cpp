@@ -1,9 +1,9 @@
 #include "InstrumentConfigSetPan.h"
-#include <compiler/context/AContext.h>
+#include <compiler/context/IContext.h>
 
 namespace sheet {
     namespace compiler {
-        void InstrumentConfigSetPan::execute(AContext* context)
+        void InstrumentConfigSetPan::execute(IContextPtr  context)
         {
             if (!this->hasInstrument()) {
                 return;

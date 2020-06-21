@@ -5,16 +5,16 @@
 #include <fm/AConvertsArgumentsToParameter.h>
 #include <sheet/Argument.h>
 #include <vector>
+#include <compiler/context/IContext.h>
 
 namespace sheet {
     namespace compiler {
-        class AContext;
         class ACommand : public fm::IRegisterable, public fm::AConvertsArgumentsToParameter
         {
         public:
             typedef std::vector<Argument> Arguments;
             virtual ~ACommand() = default;
-            virtual void execute(AContext*) = 0;
+            virtual void execute(IContextPtr ) = 0;
             
         };
     }
