@@ -38,7 +38,7 @@ namespace sheet {
 			NumEvents
 		};
 		typedef fm::Ticks Duration;
-		typedef std::set<PitchDef> Pitches;
+		typedef std::vector<PitchDef> Pitches;
 		typedef std::vector<sheet::Argument> Args;
 		typedef std::vector<Event> EventGroup;
 		typedef std::set<fm::String> Tags;

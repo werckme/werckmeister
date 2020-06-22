@@ -10,6 +10,7 @@
 #include <sheet/objects/ASheetObjectWithSourceInfo.h>
 #include <sheet/Argument.h>
 #include <fm/IHasParameter.h>
+#include <ostream>
 
 namespace sheet {
     struct Event;
@@ -415,9 +416,9 @@ namespace fm {
         }
         return *(rowsAndColumns.begin());
     }
-    std::stringstream & documentMessageWhere(std::stringstream &ss, const std::string filename, int line=-1);
-    std::stringstream & documentMessageWhat(std::stringstream &ss, const std::string &what);
-    std::stringstream & documentMessage(std::stringstream &ss, 
+    std::ostream & documentMessageWhere(std::ostream &ss, const std::string filename, int line=-1);
+    std::ostream & documentMessageWhat(std::ostream &ss, const std::string &what);
+    std::ostream & documentMessage(std::ostream &ss, 
         const std::shared_ptr<sheet::Document>, 
         sheet::ASheetObjectWithSourceInfo::SourceId,
         unsigned int sourcePosition,

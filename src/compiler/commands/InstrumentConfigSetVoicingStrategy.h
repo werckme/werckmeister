@@ -10,7 +10,7 @@ namespace sheet {
         class InstrumentConfigSetVoicingStrategy : public SetVoicingStrategy, public ACanSpecifyInstrument
         {
         public:
-            virtual void execute(AContext*);
+            virtual void execute(IContextPtr );
         };
     }
 }

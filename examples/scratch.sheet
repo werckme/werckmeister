@@ -17,13 +17,12 @@ device: _usePort=5 _setName=MyDevice  _isType=midi;
 instrumentDef: _setName=pianoRH _onDevice=MyDevice _ch=0 _pc=1 _cc=8;
 instrumentDef: _setName=pianoLH _onDevice=MyDevice _ch=1 _pc=1 _cc=8;
 
-instrumentConf: pianoRH 
+instrumentConf: pianoRH
     volume 100 
     pan    0
     mod swing _offset=80
     _set=remapVelocity _ppppp=100
 ;
-
 
 instrumentConf: pianoLH 
     volume 100 
@@ -34,16 +33,15 @@ instrumentConf: pianoLH
 ;
 
 tempo: 130;
-
 [
 instrument: pianoRH;
 {
-    \ppppp
+    \ppppp 
     r1 | r1
-    | c2 d |e2~ e2 | r2 c#->c4 d4 | e4 e g c | d#2 d#4 d | 
+    | c2 d |e2~ e | r2 c#->c4 d4 | e4 e g c | d#2 d#4 d | 
     c2 bb4 a 
     | g2  g4 a | bb c' bb a | ab2 ab4 bb | c' ab,4 ab,4  bb,~ | <bb, c> ab ab bb | c' c' eb'8 d' c' d' 
-    | b2 b, | r1 | r4 b4 b4 c' | d' d' d' d' | d' d' e'8 d' c' b | c'1 
+    | b2 b, | r1 | r4 b4 b4 c' | d' d' d' d' | d' d' e'8 d' c' b | c#'->c'1 
 }
 ]
 

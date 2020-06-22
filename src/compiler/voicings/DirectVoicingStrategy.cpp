@@ -14,7 +14,7 @@ namespace sheet {
 			}
 			x.pitch = root + interval.value;
 			x.octave = degree.octave;
-			result.insert(x);
+			result.push_back(x);
 		}
 		return result;
 	}

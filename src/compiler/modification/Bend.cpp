@@ -1,5 +1,5 @@
 #include "Bend.h"
-#include "compiler/context/AContext.h"
+#include "compiler/context/IContext.h"
 #include <algorithm>
 #include <fm/literals.hpp>
 #include <fm/tools.h>
@@ -7,7 +7,7 @@
 namespace sheet {
     namespace compiler {
 
-        void Bend::perform(AContext *ctx, Events &events)
+        void Bend::perform(IContextPtr ctx, Events &events)
         {
             using namespace fm;
             prepareValues();

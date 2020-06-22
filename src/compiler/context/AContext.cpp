@@ -19,7 +19,8 @@ namespace sheet {
 		const double AContext::PitchbendMiddle = 0.5;
 		const Ticks AContext::TickTolerance = 0.5;
 		
-		AContext::AContext()
+		AContext::AContext(fm::IDefinitionsServerPtr definitionsServer)
+			: definitionsServer_(definitionsServer)
 		{
 		}
 
@@ -38,18 +39,6 @@ namespace sheet {
 				return tmp;
 			}
 			return meta->spielanweisung;
-		}
-
-		AContext::ISheetTemplateDefServerPtr AContext::sheetTemplateDefServer() const
-		{
-			if (!sheetTemplateDefServer_) {
-				FM_THROW(Exception, "no sheetTemplatedef server set");
-			}
-			return sheetTemplateDefServer_;
-		}
-		void AContext::sheetTemplateDefServer(ISheetTemplateDefServerPtr server)
-		{
-			sheetTemplateDefServer_ = server;
 		}
 
 		AContext::TrackId AContext::track() const
@@ -140,17 +129,6 @@ namespace sheet {
 			return position;
 		}
 
-		PitchDef AContext::resolvePitch(const PitchDef &pitch) const
-		{
-			if (pitch.alias.empty()) {
-				return pitch;
-			}
-			const PitchDef *result = sheetTemplateDefServer()->getAlias(pitch.alias);
-			if (result == nullptr) {
-				FM_THROW(Exception, "could not resolve alias: " + pitch.alias);
-			}
-			return *result;
-		}
 
 		double AContext::velocity()
 		{
@@ -167,7 +145,7 @@ namespace sheet {
 		void AContext::renderPitch(const PitchDef &rawPitch, fm::Ticks duration, double velocity, bool tying)
 		{
 			using namespace fm;
-			PitchDef pitch = resolvePitch(rawPitch);
+			PitchDef pitch = definitionsServer_->resolvePitch(rawPitch);
 			auto meta = voiceMetaData();
 			if (tying) {
 				auto alreadyTying = meta->waitForTieBuffer.find(pitch) != meta->waitForTieBuffer.end();
@@ -215,8 +193,8 @@ namespace sheet {
 
 		void AContext::warn(const std::string &msg)
 		{
-			if (warningHandler) {
-				warningHandler(msg);
+			if (_warningHandler) {
+				_warningHandler(msg);
 			}
 		}
 
@@ -302,7 +280,7 @@ namespace sheet {
 		const AContext::SheetTemplates & AContext::currentSheetTemplates()
 		{
 			if (currentSheetTemplates_.empty()) {
-				auto defaultTemplate = sheetTemplateDefServer()->getSheetTemplate(FM_STRING("?"));
+				auto defaultTemplate = definitionsServer_->getSheetTemplate(definitionsServer_->defaultSheetTemplateName());
 				currentSheetTemplates_.push_back(defaultTemplate);
 			}
 			return currentSheetTemplates_;
@@ -325,6 +303,20 @@ namespace sheet {
 				return currentInstrument->voicingStrategy;
 			}
 			return defaultVoiceStrategy_;
+		}
+
+		void AContext::clear()
+		{
+			masterTempo_ = fm::DefaultTempo;
+			defaultVoiceStrategy_ = nullptr;
+			currentSheetTemplates_.clear();
+			TrackId trackId_ = INVALID_TRACK_ID;
+			chordTrack_ = INVALID_TRACK_ID;
+			masterTrackId_ = INVALID_TRACK_ID;
+			VoiceId voiceId_ = INVALID_VOICE_ID;
+			chordVoice_ = INVALID_VOICE_ID;
+			voiceMetaDataMap_.clear();
+			trackMetaDataMap_.clear();
 		}
 	}
 }

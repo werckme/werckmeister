@@ -10,16 +10,18 @@ SET (SRC_FETZER_LIB
     fm/lua/ALuaObject.cpp
     fm/lua/ALuaScript.cpp
     fm/lua/ALuaWithParameter.cpp
+    fm/DefinitionsServer.cpp
     fm/tools.cpp
-    compiler/compiler.cpp
+    fm/ConsoleLogger.cpp
+    compiler/Compiler.cpp
     parser/chordDefParser.cpp
     parser/sheetParser.cpp
     parser/documentParser.cpp
     parser/pitchmapParser.cpp
     compiler/context/MidiContext.cpp
     compiler/context/AContext.cpp
-    compiler/preprocessor.cpp
-    compiler/sheetEventRenderer.cpp
+    compiler/Preprocessor.cpp
+    compiler/SheetEventRenderer.cpp
     compiler/spielanweisung/ASpielanweisung.cpp
     compiler/spielanweisung/Arpeggio.cpp
     compiler/spielanweisung/Vorschlag.cpp
@@ -30,9 +32,9 @@ SET (SRC_FETZER_LIB
     compiler/voicings/SimpleGuitar.cpp
     compiler/voicings/Lua.cpp
     compiler/metaData.cpp
-    compiler/sheetTemplateRenderer.cpp
+    compiler/SheetTemplateRenderer.cpp
     compiler/error.cpp
-    compiler/warning.cpp
+    compiler/Warning.cpp
     compiler/argumentNames.cpp
     compiler/lua/luaTimeInfo.cpp
     sheet/objects/Event.cpp
@@ -90,10 +92,17 @@ SET (SRC_FETZER_TESTS
 SET (SRC_SHEET_FMAPP
     fmapp/boostTimer.cpp
     fmapp/rtmidiBackend.cpp
-    fmapp/midiplayer.cpp
+    fmapp/ADocumentWriter.cpp
+    fmapp/MidiPlayer.cpp
+    fmapp/MidiFileWriter.cpp
     fmapp/midiProvider.cpp
-    fmapp/udpSender.cpp
-    fmapp/json.cpp
+    fmapp/UdpSender.cpp
+    fmapp/JsonWriter.cpp
+    fmapp/JsonStringInputReader.cpp
+    fmapp/JsonIOBase.cpp
+    fmapp/SheetWatcher.cpp
+    fmapp/PlayerTimePrinter.cpp
+    fmapp/Funkfeuer.cpp
 )
 
 if (WIN32)
@@ -110,10 +119,13 @@ endif(APPLE)
 ## PLAYER
 SET (SRC_SHEET_PLAYER
     sheetplayer_main.cpp 
-    sheet.cpp
+    SheetCompilerProgram.cpp 
+    SheetPlayerProgram.cpp 
+    CompilerProgramOptions.cpp
+    PlayerProgramOptions.cpp
 )
 
-SET (SHEET_LIBS ${SHEET_LIBS} sheet fmapp lua ${Boost_LIBRARIES})
+SET (SHEET_LIBS ${SHEET_LIBS} fmapp sheet lua ${Boost_LIBRARIES})
 
 if(WIN32)
     SET (SHEET_LIBS ${SHEET_LIBS} Bcrypt.lib)
@@ -124,7 +136,7 @@ add_library(fmapp ${SRC_SHEET_FMAPP})
 add_executable(rehearse ${SRC_FETZER_TESTS})
 target_link_libraries (rehearse ${SHEET_LIBS})
 
-add_executable(sheetc sheetcompiler_main.cpp fmapp/json.cpp sheet.cpp)
+add_executable(sheetc sheetcompiler_main.cpp SheetCompilerProgram.cpp CompilerProgramOptions.cpp)
 target_link_libraries (sheetc ${SHEET_LIBS})
 
 if (WIN32)

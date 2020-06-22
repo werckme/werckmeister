@@ -10,7 +10,7 @@ namespace sheet {
         class InstrumentConfigSetPan : public SetPan, public ACanSpecifyInstrument
         {
         public:
-            virtual void execute(AContext*);
+            virtual void execute(IContextPtr );
         };
     }
 }

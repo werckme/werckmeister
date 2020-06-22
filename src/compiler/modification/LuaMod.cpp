@@ -5,7 +5,7 @@
 #include <compiler/error.hpp>
 #include <algorithm>
 #include <compiler/lua/luaTimeInfo.h>
-#include <compiler/context/AContext.h>
+#include <compiler/context/IContext.h>
 #include <fm/lua/luaHelper.h>
 
 static const char * LUA_EVENT_TYPE_NOTE = "note";
@@ -29,8 +29,8 @@ namespace sheet {
         struct LuaEvent : lua::ALuaObject {
             typedef lua::ALuaObject Base;
             const Event *event;
-            AContext *ctx;
-            LuaEvent(const Event *event, AContext *ctx)
+            IContextPtr ctx;
+            LuaEvent(const Event *event, IContextPtr ctx)
                 : event(event), ctx(ctx)
             {}
             void push(lua_State *L);
@@ -83,7 +83,7 @@ namespace sheet {
                 lua_pushnumber(L, count++);
                 lua_createtable(L, event->pitches.size(), 0);
                 auto objecttop = lua_gettop(L);
-                auto resolved = ctx->resolvePitch(pitch);
+                auto resolved = ctx->definitionsServer()->resolvePitch(pitch);
                 // pitch
                 lua_pushstring(L, LUA_EVENT_PITCH_PROPETRY_PITCH);
                 lua_pushnumber(L, resolved.pitch);
@@ -168,7 +168,7 @@ namespace sheet {
                 sheet::PitchDef pitchDef;
                 pitchDef.pitch = pitch;
                 pitchDef.octave = octave;
-                event.pitches.insert(pitchDef);
+                event.pitches.emplace_back(pitchDef);
             }
             lua_pop(L, 1);
             // get tags
@@ -227,7 +227,7 @@ namespace sheet {
             return result;
         }
 
-        void LuaModification::perform(AContext *ctx, Events &events)
+        void LuaModification::perform(IContextPtr ctx, Events &events)
         {
             lua_getglobal(L, LUA_MODIFICATION_FENTRY);
             pushEvents(ctx, events);
@@ -238,7 +238,7 @@ namespace sheet {
             events.swap(processedEvents);
         }
 
-        void LuaModification::pushEvents(AContext *ctx, const Events &events)
+        void LuaModification::pushEvents(IContextPtr ctx, const Events &events)
         {
             lua_createtable(L, events.size(), 0);
             auto top = lua_gettop(L);

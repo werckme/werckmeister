@@ -14,7 +14,7 @@ namespace sheet {
                 FM_PARAMETER_DEF	           	    (argumentNames.SelectMidiSound.PC, 	1)
             };
             virtual ParametersByNames & getParameters() { return this->parameters; }
-            virtual void execute(AContext*);
+            virtual void execute(IContextPtr );
         };
     }
 }

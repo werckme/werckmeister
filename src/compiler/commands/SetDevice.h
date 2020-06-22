@@ -13,7 +13,7 @@ namespace sheet {
                 //FM_PARAMETER_DEF		    (argumentNames.XYZ, 	0)
             };
             virtual ParametersByNames & getParameters() { return this->parameters; }
-            virtual void execute(AContext*);
+            virtual void execute(IContextPtr );
         };
     }
 }

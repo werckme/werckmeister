@@ -6,7 +6,7 @@
 #include <boost/algorithm/string/join.hpp>
 #include <exception>
 #include <fstream>
-#include "compiler/compiler.h"
+#include "compiler/Compiler.h"
 #include <compiler/context/MidiContext.h>
 #include <memory>
 #include "compiler/voicings/VoicingStrategy.h"
@@ -122,27 +122,6 @@ namespace fm {
 		return &(it->second);
 	}
 
-	sheet::compiler::CompilerPtr Werckmeister::createCompiler()
-	{
-		return std::make_shared<sheet::compiler::Compiler>();
-	}
-
-	sheet::compiler::AContextPtr Werckmeister::createContext()
-	{
-		if (this->_createContextHandler) {
-			return _createContextHandler();
-		}
-		auto midiContext = std::make_shared<sheet::compiler::MidiContext>();
-		return midiContext;
-	}
-
-	sheet::compiler::AContextPtr Werckmeister::createTempContext()
-	{
-		auto tmpContext = createContext();
-		std::dynamic_pointer_cast<sheet::compiler::MidiContext>(tmpContext)->midi(createMidi());
-		return tmpContext;
-	}	
-
 	sheet::VoicingStrategyPtr Werckmeister::getDefaultVoicingStrategy()
 	{
 		return getVoicingStrategy(SHEET_VOICING_STRATEGY_DEFAULT);
@@ -213,12 +192,6 @@ namespace fm {
 			return nullptr;
 		}
 		return &it->second;
-	}
-
-	sheet::DocumentPtr Werckmeister::createDocument() 
-	{
-		auto ptr = std::make_shared<sheet::Document>();
-		return ptr;
 	}
 
 	Path Werckmeister::resolvePath(const Path &strRelPath, sheet::ConstDocumentPtr doc, const Path &sourcePath) const

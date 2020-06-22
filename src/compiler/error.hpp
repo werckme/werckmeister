@@ -13,7 +13,7 @@
 #include <algorithm>
 #include <sstream>
 #include <fm/common.hpp>
-#include "warning.hpp"
+#include "Warning.hpp"
 
 namespace sheet {
 	class Document;
@@ -34,7 +34,7 @@ namespace sheet {
 			const ASheetObjectWithSourceInfo* getSourceInfo() const;
 			const std::string getSourceFile() const;
 		protected:
-			std::stringstream & strSheetError(std::stringstream &ss, const std::shared_ptr<Document>, const ASheetObjectWithSourceInfo*) const;
+			std::ostream & strSheetError(std::ostream &ss, const std::shared_ptr<Document>, const ASheetObjectWithSourceInfo*) const;
 		};
 
 		namespace handler {

@@ -1,12 +1,12 @@
 #include "Arpeggio.h"
-#include "compiler/context/AContext.h"
+#include "compiler/context/IContext.h"
 #include <algorithm>
 #include <fm/tools.h>
 
 namespace sheet {
     namespace compiler {
 
-        void Arpeggio::perform(AContext *ctx, Events &events)
+        void Arpeggio::perform(IContextPtr ctx, Events &events)
         {
 			Events result;
 			if (events.empty()) {
@@ -33,7 +33,7 @@ namespace sheet {
 			{
 				Event arpNote = ev;
 				arpNote.pitches.clear();
-				arpNote.pitches.insert(pitch);
+				arpNote.pitches.push_back(pitch);
 				arpNote.duration = arpduration;
 				arpNote.offset = arpduration * static_cast<fm::Ticks>(noteNumber++);
 				result.push_back(arpNote);

@@ -7,7 +7,7 @@
 #include <fm/literals.hpp>
 #include <map>
 #include <unordered_map>
-#include <fm/SheetTemplateDefServer.h>
+#include <fm/IDefinitionsServer.h>
 #include <fm/common.hpp>
 #include <compiler/metaCommands.h>
 #include <list>
@@ -16,27 +16,19 @@
 #include <compiler/error.hpp>
 #include <compiler/instrument.h>
 #include <compiler/timeInfo.h>
+#include "IContext.h"
 
 namespace sheet {
     namespace compiler {
-        class AContext {
+        class AContext : public IContext {
         public:
-			AContext();
+			AContext(fm::IDefinitionsServerPtr definitionsServer);
 			static const double PitchbendMiddle;
 			enum { INVALID_TRACK_ID = -1, INVALID_VOICE_ID = -1, MAX_VOLUME = 100, MAX_PAN = 100 };
 			/**
 			 * for rounding errors e.g. for triplets
 			 */
 			static const fm::Ticks TickTolerance;
-			typedef int Id;
-			typedef Id TrackId;
-			typedef Id VoiceId;
-			typedef ISheetTemplateDefServer* ISheetTemplateDefServerPtr;
-			typedef std::shared_ptr<VoiceMetaData> VoiceMetaDataPtr;
-			typedef std::shared_ptr<TrackMetaData> TrackMetaDataPtr;
-			typedef std::unordered_map<VoiceId, VoiceMetaDataPtr> VoiceMetaDataMap;
-			typedef std::unordered_map<TrackId, TrackMetaDataPtr> TrackMetaDataMap;
-			typedef std::function<void(fm::String)> WarningHandler;
 			virtual void setTrack(TrackId trackId);
 			virtual void setVoice(VoiceId voice);
 			TrackId track() const;
@@ -100,10 +92,6 @@ namespace sheet {
 			}					
 			virtual void throwContextException(const std::string &msg);
 			virtual void warn(const std::string &msg);
-			WarningHandler warningHandler;
-			ISheetTemplateDefServerPtr sheetTemplateDefServer() const;
-			void sheetTemplateDefServer(ISheetTemplateDefServerPtr server);
-			typedef std::vector<ISheetTemplateDefServer::SheetTemplate> SheetTemplates;
 			virtual const SheetTemplates & currentSheetTemplates();
 			virtual void currentSheetTemplate(const SheetTemplates &sheetTemplate);
 			virtual VoicingStrategyPtr currentVoicingStrategy();
@@ -141,22 +129,23 @@ namespace sheet {
 			 */
 			virtual double masterTempo() const { return masterTempo_; }
 			virtual void masterTempo(double val) { this->masterTempo_ = val; }			
-			Warnings warnings;
             /**
              * @return the current velocity value between 0..1
              */
             virtual double velocity();
-			/**
-			 * resolve pitches alias if exists
-			 */		
-			PitchDef resolvePitch(const PitchDef &pitch) const;						
+			virtual fm::IDefinitionsServerPtr definitionsServer() { return definitionsServer_; }
+			virtual void warningHandler(const WarningHandler &handler) { _warningHandler = handler; }
+			virtual WarningHandler& warningHandler() { return _warningHandler; }
+			virtual void clear() override;
 		protected:
 			virtual TrackId createTrackImpl() = 0;
 			virtual VoiceId createVoiceImpl() = 0;
 			virtual VoiceMetaDataPtr createVoiceMetaData() = 0;
 			virtual TrackMetaDataPtr createTrackMetaData() = 0;
 			virtual TrackId createMasterTrack();
+			fm::IDefinitionsServerPtr definitionsServer_;
 		private:
+			WarningHandler _warningHandler;
 			double masterTempo_ = fm::DefaultTempo;			
 			VoicingStrategyPtr defaultVoiceStrategy_;
 			SheetTemplates currentSheetTemplates_;
@@ -166,7 +155,6 @@ namespace sheet {
 			VoiceId voiceId_ = INVALID_VOICE_ID, chordVoice_ = INVALID_VOICE_ID;
 			VoiceMetaDataMap voiceMetaDataMap_;
 			TrackMetaDataMap trackMetaDataMap_;
-			ISheetTemplateDefServerPtr sheetTemplateDefServer_ = nullptr;
         };
     }
 }

@@ -1,12 +1,12 @@
 #include "AddMod.h"
-#include <compiler/context/AContext.h>
+#include <compiler/context/IContext.h>
 #include <compiler/modification/AModification.h>
 #include <fm/werckmeister.hpp>
 #include <algorithm>
 
 namespace sheet {
     namespace compiler {
-        void AddMod::execute(AContext* context)
+        void AddMod::execute(IContextPtr  context)
         {
 			auto meta = context->voiceMetaData();
 			meta->modifications.push_back(theModification);
