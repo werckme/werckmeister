@@ -5,19 +5,16 @@
 
 struct ArgumentNames {
 
-    struct CDevice {
+    struct {
         std::string WithName                = "setName";
         std::string IsType                  = "isType";
         std::string UsePort                 = "usePort";
-        // @positional
         std::string OffsetIndicator         = "use";
-        // @positional
         std::string OffsetValue             = "value";
-        // @named @alternative
         std::string WithOffset              = "withOffset";
     } Device;
 
-    struct CInstrumentDef {
+    struct {
         std::string WithName                = "setName";
         std::string OnDevice                = "onDevice";
         std::string Ch                      = "ch";
@@ -25,64 +22,60 @@ struct ArgumentNames {
         std::string Pc                      = "pc";
     } InstrumentDef;
 
-    struct CInstrumentConf {
+    struct {
         std::string ForInstrument           = "for";
     } InstrumentConf;
 
-    struct CSetVolume {
+    struct {
         std::string SetTo                   = "to";
     } SetVolume;
 
-    struct CSetPan {
+    struct {
         std::string SetTo                   = "to";
     } SetPan;
 
-    struct CSetVoicingStrategy {
+    struct {
         std::string Use                     = "use";
     } SetVoicingStrategy; 
     
-    struct CSimpleGuitarVoicingStrategy {
+    struct {
         std::string Range                   = "range";
     } SimpleGuitarVoicingStrategy;
 
-    struct CBend {
-        // @positional
+    struct {
         std::string Mode                    = "mode";
-        // @positional
         std::string Value                   = "value";
-        // @named @alternative
         std::string BendTo                  = "to";
-        // @named @alternative
         std::string BendFrom                = "from";        
     } Bend; 
 
-    struct CAddMod {
+    struct {
         std::string Use                     = "use";
     } AddMod;
 
-    struct CSelectMidiSound {
+    struct {
         std::string CC                     = "cc";
         std::string PC                     = "pc";
     } SelectMidiSound;
 
-    struct CSetExpression {
+    struct {
         std::string Value                  = "value";
     } SetExpression;
 
-    struct CSetTempo {
+    struct {
         std::string Bpm                     = "bpm";
     } SetTempo;
 
-    struct CSetSignature {
+    struct {
         std::string Upper                  = "upper";
         std::string Lower                  = "lower";
     } SetSignature;
 
-    struct CSetInstrument {
+    struct {
         std::string Use                  = "use";
     } SetInstrument;
 
-    struct CVelocityRemap {
+    struct {
         std::string PPPPP = "ppppp";
         std::string PPPP = "pppp";
         std::string PPP = "ppp";

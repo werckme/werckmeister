@@ -6,6 +6,15 @@
 
 namespace sheet {
     namespace compiler {
+        /// <command name="volume" where="track">
+        ///     set the volume of the current track
+        /// ### examples
+        /// **positional:** 
+        /// `/volume: 50/`
+        /// **named:**
+        /// `/volume: _to=50/`   
+        /// </command>
+        /// <param name="to" position="0" range="0..100">The volume value.</param>
         class SetVolume : public ACommand
         {
         public:

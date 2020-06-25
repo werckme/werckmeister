@@ -24,9 +24,9 @@ instrumentConf: pianoRH
     _set=remapVelocity _ppppp=100
 ;
 
-instrumentConf: pianoLH 
-    volume 100 
-    pan    0
+instrumentConf: _for=pianoLH 
+    _set=volume _to=100 
+    _set=pan    _to=0
     _set=mod _use=staccato _amount=100 _forTag=here
     _set=mod _use=guitarStroke _value=32  _direction=down
     _set=voicingStrategy _use=guitar --_range=alto
