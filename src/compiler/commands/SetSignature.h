@@ -7,7 +7,7 @@
 namespace sheet {
     namespace compiler {
         /// <command name="signature">
-        /// Set the signature of the current track.
+        /// Set the time signature of the current track.
         /// ### examples
         /// **positional:** 
         /// `/signature: 3 4/`
