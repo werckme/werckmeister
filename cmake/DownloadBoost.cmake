@@ -16,6 +16,11 @@ function(DownloadBOOST version download_dir)
   set(BOOST_ROOT "${BOOST_DOWNLOAD_DIR}/${BOOST_DISTRIBUTION}" CACHE INTERNAL "BOOST_ROOT")
 
   set(BOOST_PREFIX "${BOOST_ROOT}")
+  set(TOOLSET "")
+  if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+   message(STATUS "Using Clang")
+   SET(TOOLSET "--toolset=clang")
+  endif()
   if(WIN32)
     SET(FILE_EXT ".zip")
     SET(BOOST_BOOTSTRAP "bootstrap.bat")
@@ -56,6 +61,7 @@ function(DownloadBOOST version download_dir)
     message(STATUS "building boost...")
     execute_process(
       COMMAND ${BOOST_B2}
+      ${TOOLSET}
       "link=static" 
       "runtime-link=static" 
       "--with-filesystem" 
