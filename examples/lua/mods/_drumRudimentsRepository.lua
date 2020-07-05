@@ -31,7 +31,7 @@ end
 
 local function Diddle(which, duration)
     return {
-        C(which, duration), C(which, duration)
+        C(which, duration, un), C(which, duration, un)
     }
 end
 
