@@ -1,3 +1,4 @@
+
 -- Implements a collection of different drum rudiments.
 -- You can specify which notes are for L & R and the time measure.
 -- This will be achived by using an chord as source material.

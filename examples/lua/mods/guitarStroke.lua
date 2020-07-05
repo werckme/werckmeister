@@ -1,3 +1,4 @@
+
 -- note: the alternate mode works only if this mod is set via instrumentConf.
 -- e.g.
 -- instrumentConf: myInstrument

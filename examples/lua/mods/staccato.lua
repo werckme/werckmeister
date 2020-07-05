@@ -1,5 +1,5 @@
 -- <command name="staccato" where="mod">
--- Performs every note staccato. It is also possible to tag specify notes.
+-- Performs every note staccato. It is also possible to tag single notes.
 -- If a tag is given, only the tagged notes are performed staccato.
 -- ```
 -- /mod: staccato _forTag="stac"/\n
