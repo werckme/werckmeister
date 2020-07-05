@@ -29,6 +29,30 @@ local function C(which, duration, velocityFactor)
     return { which=which, duration=duration, velocityFactor = velocityFactor }
 end
 
+local function Diddle(which, duration)
+    return {
+        C(which, duration), C(which, duration)
+    }
+end
+
+-- Creates a sequence of variable args.
+-- An argument can be either a array of events or a single event
+local function Seq(...)
+    local args = table.pack(...)
+    local result = {}
+    for i=1,args.n do
+        local arg = args[i]
+        local isEvent = arg.which ~= nil
+        if isEvent then
+            table.insert(result, arg)
+        else
+            for key, event in pairs(arg) do
+                table.insert(result, event)
+            end
+        end
+    end
+    return result
+end
 
 Rudiments = {
     ["singleStrokeRoll"] =
@@ -39,15 +63,28 @@ Rudiments = {
         { C(R, _4), C(R, _4), C(R, _4), C(L, _4), C(L, _4), C(L, _4) },
     ["fiveStrokeRoll"] =
         { C(R, _32, un), C(R, _32, un), C(L, _32, un), C(L, _32, un), C(R, _8, ac) },
-    ["sixStrokeRoll"] =
-        { C(R, _8, ac), C(L, _16, un), C(L, _16, un), C(R, _16, un), C(R, _16, un), C(L, _8, ac) },
-    ["sevenStrokeRoll"] =
-        { C(R, _8, ac), C(L, _16, un), C(L, _16, un), C(R, _16, un), C(R, _16, un), C(L, _16, un), C(L, _16, un) },
     ["singleStrokeFour"] =
         { C(R, _4t), C(L, _4t), C(R, _4t), C(L, _4) },
     ["singleStrokeSeven"] =
         { C(R, _8t), C(L, _8t), C(R, _8t), C(L, _8t), C(R, _8t), C(L, _8t), C(R, _4) },
     ["multipleBounceRoll"] =
         { C(R, _32, 1.0), C(R, _32, 0.9), C(R, _32, 0.8), C(R, _32, 0.7),
-          C(L, _32, 1.0), C(L, _32, 0.9), C(L, _32, 0.8), C(L, _32, 0.7)}
+          C(L, _32, 1.0), C(L, _32, 0.9), C(L, _32, 0.8), C(L, _32, 0.7)},
+    ["sixStrokeRoll"] =
+        Seq(C(R, _8, ac), Diddle(L, _16), Diddle(R, _16), C(L, _8, ac)),
+    ["sevenStrokeRoll"] =
+        Seq(Diddle(L, _16), Diddle(R, _16), Diddle(L, _16), C(R, _8, ac)),
+    ["nineStrokeRoll"] =
+        Seq(Diddle(R, _16), Diddle(L, _16), Diddle(R, _16), Diddle(L, _16), C(R, _8, ac)),
+    ["tenStrokeRoll"] =
+        Seq(Diddle(R, _16), Diddle(L, _16), Diddle(R, _16), Diddle(L, _16), C(R, _8, ac), C(L, _8, ac)),
+    ["elevenStrokeRoll"] =
+        Seq(Diddle(R, _16), Diddle(L, _16), Diddle(R, _16), Diddle(L, _16), Diddle(R, _16), C(L, _8, ac)),
+    ["thirteenStrokeRoll"] =
+        Seq(Diddle(R, _16), Diddle(L, _16), Diddle(R, _16), Diddle(L, _16), Diddle(R, _16), Diddle(L, _16), C(R, _8, ac)),
+    ["fifteenStrokeRoll"] =
+        Seq(Diddle(R, _16), Diddle(L, _16), Diddle(R, _16), Diddle(L, _16), Diddle(R, _16), Diddle(L, _16), Diddle(R, _16), C(L, _8, ac)),
+    ["seventeenStrokeRoll"] =
+        Seq(Diddle(R, _16), Diddle(L, _16), Diddle(R, _16), Diddle(L, _16), Diddle(R, _16), Diddle(L, _16), Diddle(R, _16), Diddle(L, _16), C(R, _8, ac)),
+
 }
