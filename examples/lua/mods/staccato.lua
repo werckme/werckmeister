@@ -6,7 +6,7 @@
 -- c d e "stac"@f -- only f will be performed staccato\n
 -- ```
 -- </command>
--- <param name="forTag" optional="1" range="[a-zA-Z0-9.]+">Specifies a tag name</param>
+-- <param name="forTag" optional="1" range="[a-zA-Z0-9.]+">Specifies a tag name. If set only events with this tag name will be affected by the staccato mod.</param>
 -- <param name="amount" optional="1" range="0..100">The ammount of the staccato</param>
 
 require "lua/com/com"
