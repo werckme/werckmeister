@@ -35,6 +35,32 @@ local function Diddle(which, duration)
     }
 end
 
+-- returns L for R and R for L.
+local function Alt(which)
+    if which == L then
+        return R
+    elseif which == R then
+        return L
+    end
+    return nil
+end
+
+-- Creates a alternating stroke sequence RL...n or LR...n.
+-- @param startingEvent: the first event. All further created events are unaccented.
+-- @param numberOfPerformances: the number of the total performances. One RL means one performance.
+local function Alternate(startingEvent, numberOfPerformances)
+    if numberOfPerformances == nil then
+        numberOfPerformances = 1
+    end
+    local result = {startingEvent}
+    local which = startingEvent.which
+    for i = 0, (numberOfPerformances-1)*2, 1 do
+        which = Alt(which)
+        table.insert(result, C(which, startingEvent.duration, un))
+    end
+    return result
+end
+
 -- Creates a sequence of variable args.
 -- An argument can be either a array of events or a single event
 local function Seq(...)
@@ -86,5 +112,12 @@ Rudiments = {
         Seq(Diddle(R, _16), Diddle(L, _16), Diddle(R, _16), Diddle(L, _16), Diddle(R, _16), Diddle(L, _16), Diddle(R, _16), C(L, _8, ac)),
     ["seventeenStrokeRoll"] =
         Seq(Diddle(R, _16), Diddle(L, _16), Diddle(R, _16), Diddle(L, _16), Diddle(R, _16), Diddle(L, _16), Diddle(R, _16), Diddle(L, _16), C(R, _8, ac)),
-
+    ["paradiddle"] =
+        Seq(Alternate(C(R, _16, ac)), Diddle(R, _16)),
+    ["doubleParadiddle"] =
+        Seq(Alternate(C(R, _16, ac), 2), Diddle(R, _16)),
+    ["trippleParadiddle"] =
+        Seq(Alternate(C(R, _16, ac), 3), Diddle(R, _16)),
+    ["paradiddlediddle"] =
+        Seq(Alternate(C(R, _16, ac)), Diddle(R, _16), Diddle(L, _16)),
 }
