@@ -19,7 +19,7 @@ local _16t  = _16 / 3
 local _32t  = _32 / 3
 -- velocity factors
 local ac  = 1.0 -- accent
-local un  = 0.8 -- unaccented
+local un  = 0.5 -- unaccented
 
 -- create a rudiment sequence event
 local function C(which, duration, velocityFactor)
