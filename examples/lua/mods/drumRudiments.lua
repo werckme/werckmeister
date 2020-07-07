@@ -61,17 +61,66 @@ SupportedRepeatTags = {
     ["32x"] = 32,
 }
 
+local tiedEventCache = {
+    ["offset"] = 0,
+    ["duration"] = 0,
+    ["originEvent"] = nil
+}
+
+local function newTiedEventCache(event)
+    tiedEventCache.duration = event.duration
+    tiedEventCache.originEvent = event
+end
+
+local function isTiedEventCacheEmpty()
+    return tiedEventCache.originEvent == nil
+end
+
+local function clearTiedEventCache()
+    tiedEventCache.originEvent = nil
+    tiedEventCache.duration = 0
+    tiedEventCache.offset = 0
+end
+
+local function getPossibleRudimentEvent(events)
+    local firstEvent = events[1]
+    if not isTiedEventCacheEmpty() then
+        tiedEventCache.duration = tiedEventCache.duration + firstEvent.duration
+        tiedEventCache.offset = tiedEventCache.offset - firstEvent.duration
+        if firstEvent.isTied then
+            return nil
+        end
+    end
+    if not isTiedEventCacheEmpty() and not firstEvent.isTied then
+        firstEvent = tiedEventCache.originEvent
+        firstEvent.isTied = false
+        firstEvent.offset = tiedEventCache.offset
+        firstEvent.duration = tiedEventCache.duration
+        clearTiedEventCache()
+    end
+    return firstEvent
+end
+
+
 function perform(events, params, timeinfo)
-    if #events == 0 or #events[1].tags == 0 then
+    local firstEvent = getPossibleRudimentEvent(events)
+    if (firstEvent == nil) then
+        return {}
+    end
+    if #events == 0 or #firstEvent.tags == 0 then
         return events
     end
-    if events[1].duration == 0 then
+    if firstEvent.duration == 0 then
         return events
     end
     local rudimentPerformer = RudimentPerformer:new()
-    rudimentPerformer:setSourceEvents(events)
+    rudimentPerformer:setSourceEvent(firstEvent)
     if rudimentPerformer.rudiment == nil then
         return events
+    end
+    if firstEvent.isTied then
+        newTiedEventCache(firstEvent)
+        return {}
     end
     local rudimentEvents = rudimentPerformer:perform();
     return rudimentEvents
@@ -84,7 +133,7 @@ function RudimentPerformer:new(o)
     self.__index = self
     self.idxL = 1
     self.idxR = 1
-   
+    self.offset = 0
     return o
 end
 
@@ -108,17 +157,17 @@ function RudimentPerformer:findRepeatTagValue(tags)
     return nil
 end
 
-function RudimentPerformer:setSourceEvents(events)
-    local event = events[1]
+function RudimentPerformer:setSourceEvent(event)
     local rudimentName = self:findRudimentName(event.tags)
     local source       = event.pitches
+    self.offset        = event.offset
     self.rudiment = Rudiments[rudimentName]
     if self.rudiment == nil then
         return
     end
     if #source % 2 ~= 0 then
         -- not enough events
-        error("not enough events for rudiment " .. rudimentName)
+        error("not enough chord pitches for rudiment " .. rudimentName)
     end
     local repeatCount = self:findRepeatTagValue(event.tags)
     if repeatCount ~= nil then
@@ -188,7 +237,7 @@ end
 
 function RudimentPerformer:perform()
     local events = {}
-    local offset = 0
+    local offset = self.offset
     local durationFactor = self.duration / self:defDuration()
     for idx, rudiment in pairs(self.rudiment) do
         local which          = rudiment.which

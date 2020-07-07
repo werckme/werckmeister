@@ -16,11 +16,11 @@ type: template;
 name: x;
 instrument: drums;
 {
-    \ffff
+    \fff
     /mod: drumRudiments/
-    "sn"4
+    !ffff"sn"4
     "1x paradiddle"@      <"htol" "ht">4
-    "sn"16
+    !ffff"sn"16
     "sng"16
     "1x paradiddlediddle"@<"mtol" "ht" "ltol" "sn">4.
 }
