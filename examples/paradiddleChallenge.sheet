@@ -11,7 +11,7 @@ using "./lua/mods/drumRudiments.lua";
 device: MyDevice _isType=midi _usePort=5;
 instrumentDef: drums MyDevice _ch=9 _pc=0 _cc=0;
 
-tempo: 150;
+tempo: 110;
 
 [
 type: template;
@@ -89,16 +89,13 @@ instrument: drums;
     \ffff
     /signature: 3 1/
     /mod: drumRudiments/
-    --"12x paradiddle"@      <"snr" "snl">1 ~&~&
+    "12x paradiddle"@      <"snr" "snl">1 ~&~&
 }
 {
     /signature: 3 1/
     /mod: drumRudiments/
     \fffff
-    "4x paradiddle"@      <"bd" "hf">1 ~&~& | 
-    --      "bd"16rr  "hf"16rr  "bd"16rr  "bd"16rr  "hf"16rr "bd"
-    -- rr  "hf"16rr  "hf"16rr  "bd"16rr  "hf"16rr  "bd"16r   
-    -- r  "bd"16rr  "hf"16rr  "bd"16rr  "hf"16rr  "hf"16rr   
+    "4x paradiddle"@      <"bd" "hf">1 ~&~& |  
 }
 ]
 
@@ -106,7 +103,7 @@ instrument: drums;
 type: accomp;
 {
     /signature: 3 1/
-    /template: step5/
+    /template: step1/
     C |
     /template: step2/ 
     C |

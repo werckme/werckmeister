@@ -189,8 +189,13 @@ end
 function RudimentPerformer:repeat_(count)
     local sequence = {}
     for i=1,count do
+        local useAlternation = i % 2 == 1
         for idx, rudimentEvent in pairs(self.rudiment) do
-            table.insert(sequence, rudimentEvent)
+            local event = rudimentEvent
+            if (useAlternation) then
+                event = AlternateEvent(event)
+            end
+            table.insert(sequence, event)
         end
     end
     self.rudiment = sequence
