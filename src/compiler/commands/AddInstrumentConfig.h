@@ -10,8 +10,8 @@
 namespace sheet {
     namespace compiler {
         /// <command name="instrumentConf" where="document">
-        /// With `instrumentConf` you are able to config a specific instrument.
-        /// Following settings can be used:
+        /// With `instrumentConf` you are able to setup a specific instrument.
+        /// Following settings can be applied:
         ///  * volume
         ///  * pan
         ///  * voicing strategy
