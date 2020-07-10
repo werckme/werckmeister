@@ -1,5 +1,10 @@
 Werckmeister
 ===================
+
+
+<img src="https://raw.githubusercontent.com/werckme/werckmeister/master/assets/hero.png" class="hero-image" alt="from sheet code via Werckmeister to MIDI music">
+<br><br>
+
 ## An [open source](https://github.com/werckme/werckmeister) Sheet Music MIDI Compiler
 
 Werckmeister compiles sheet music source code into a MIDI file.
