@@ -20,7 +20,7 @@ namespace sheet {
         /// #### Arpeggio
         /// `/mod: arpeggio/`
         /// </command>
-        /// <param name="use" position="0" range="[a-zA-Z0-9.]+">The name of the modification to load. This is the only "unique" parameter for this command. All further parameters are specific to its related modification.</param>
+        /// <param name="use" position="0" type="word">The name of the modification to load. This is the only "unique" parameter for this command. All further parameters are specific to its related modification.</param>
         class AddMod : public ACommand
         {
         public:

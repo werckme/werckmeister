@@ -27,10 +27,10 @@ namespace sheet {
         /// ] \n
         /// ```
         /// </command>
-        /// <param name="setName"    position="0" range="[a-zA-Z0-9.]+">An arbitary name.</param>
-        /// <param name="isType"     position="1" range="[midi]">The type of the device. (Currently the only supported type is `midi`)</param>
-        /// <param name="usePort"    position="2" range="0..N">The port id of your device. You can get a list of your connected devices, by executing `sheetp --list`</param>
-        /// <param name="withOffset" position=""  optional="1" range="0..N">Defines an offset in milliseconds. Can be used to keep different devices in sync.</param>
+        /// <param name="setName"    position="0" type="word">An arbitary name.</param>
+        /// <param name="isType"     position="1" type="[midi]">The type of the device. (Currently the only supported type is `midi`)</param>
+        /// <param name="usePort"    position="2" type="0..N">The port id of your device. You can get a list of your connected devices, by executing `sheetp --list`</param>
+        /// <param name="withOffset" position=""  optional="1" type="0..N">Defines an offset in milliseconds. Can be used to keep different devices in sync.</param>
         class AddDevice : public ACommand
         {
         public:

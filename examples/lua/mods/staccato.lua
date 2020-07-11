@@ -1,4 +1,4 @@
--- <command name="staccato" where="mod">
+-- <command name="staccato" where="mod" using="lua/mod/staccato.lua">
 -- Performs every note staccato. It is also possible to tag single notes.
 -- If a tag is given, only the tagged notes are performed staccato.
 -- ```
@@ -6,8 +6,8 @@
 -- c d e "stac"@f -- only f will be performed staccato\n
 -- ```
 -- </command>
--- <param name="forTag" optional="1" range="[a-zA-Z0-9.]+">Specifies a tag name. If set only events with this tag name will be affected by the staccato mod.</param>
--- <param name="amount" optional="1" range="0..100">The ammount of the staccato</param>
+-- <param name="forTag" optional="1" type="word">Specifies a tag name. If set only events with this tag name will be affected by the staccato mod.</param>
+-- <param name="amount" optional="1" type="0..100">The ammount of the staccato</param>
 
 require "lua/com/com"
 

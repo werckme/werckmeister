@@ -223,7 +223,9 @@ I want to ...
 
 [... setup my own chord symbols](#chords)
 
-[... see an overview of all commands/modifications](#references)
+[... see an overview of all commands](#commands)
+
+[... see an overview of lua extensions](#lua-extensions)
 
 ## It's just text
 The Werckmeister language knows only a few statement types. It's all about tracks, voices, and events. That's it. 
@@ -708,13 +710,15 @@ type: accomp;
 * [modOnce](#modOnce)
 * [pan](#pan)
 * [signature](#signature)
-* [staccato](#staccato)
 * [tempo](#tempo)
 * [voicingStrategy](#voicingStrategy)
 * [volume](#volume)
 
-## `device`
----
+## Lua Extensions
+* [staccato](#staccato)
+
+## Commands
+### `device`
 Defines a device which can be used when adding instruments (see [instrumentDef](#instrumentDef))
 
  ### examples
@@ -745,18 +749,17 @@ Defines a device which can be used when adding instruments (see [instrumentDef](
  } 
  ] 
  ```
-### parameters
-| name | position | description | range |
+#### parameters
+| name | position | description | type |
 |:--- |:--- |:--- |:--- |
-| setName | 1 | An arbitary name. | [a-zA-Z0-9.]+ |
+| setName | 1 | An arbitary name. | word |
 | isType | 2 | The type of the device. (Currently the only supported type is `midi`) | [midi] |
 | usePort | 3 | The port id of your device. You can get a list of your connected devices, by executing `sheetp --list` | 0..N |
 | withOffset |  | Defines an offset in milliseconds. Can be used to keep different devices in sync. | 0..N |
 
 <br><br><br>
 
-## `instrument`
----
+### `instrument`
 Set or change the instrument of a track.
 
  ### examples
@@ -795,15 +798,14 @@ Set or change the instrument of a track.
  } 
  ] 
  ```
-### parameters
-| name | position | description | range |
+#### parameters
+| name | position | description | type |
 |:--- |:--- |:--- |:--- |
-| use | 1 | The instrument name. | [a-zA-Z0-9.]+ |
+| use | 1 | The instrument name. | word |
 
 <br><br><br>
 
-## `instrumentConf`
----
+### `instrumentConf`
 With `instrumentConf` you are able to setup a specific instrument.
 
  Following settings can be applied:
@@ -855,15 +857,14 @@ With `instrumentConf` you are able to setup a specific instrument.
  **positional:**
 
  `remapVelocity` dosen't supports positional arguments
-### parameters
-| name | position | description | range |
+#### parameters
+| name | position | description | type |
 |:--- |:--- |:--- |:--- |
 | for | 1 | The name of the target instrument. This is the only "unique" parameter for this command. All further parameters are specific to its related setting. | - |
 
 <br><br><br>
 
-## `instrumentDef`
----
+### `instrumentDef`
 Adds a new MIDI instrument.
 
  ### examples
@@ -894,19 +895,18 @@ Adds a new MIDI instrument.
  } 
  ] 
  ```
-### parameters
-| name | position | description | range |
+#### parameters
+| name | position | description | type |
 |:--- |:--- |:--- |:--- |
-| setName | 1 | An arbitary name. | [a-zA-Z0-9.]+ |
-| onDevice | 2 | The device which to use (The name of the device, see [device](#device)). | [a-zA-Z0-9.]+ |
+| setName | 1 | An arbitary name. | word |
+| onDevice | 2 | The device which to use (The name of the device, see [device](#device)). | word |
 | ch | 3 | The MIDI channel. | 0..15 |
 | cc | 4 | A MIDI `control change` value. | 0..127 |
 | pc | 5 | A MIDI `program change` value. | 0..127 |
 
 <br><br><br>
 
-## `mod`
----
+### `mod`
 Adds a modification to the track.
 
  ### examples
@@ -928,15 +928,14 @@ Adds a modification to the track.
  #### Arpeggio
 
  `/mod: arpeggio/`
-### parameters
-| name | position | description | range |
+#### parameters
+| name | position | description | type |
 |:--- |:--- |:--- |:--- |
-| use | 1 | The name of the modification to load. This is the only "unique" parameter for this command. All further parameters are specific to its related modification. | [a-zA-Z0-9.]+ |
+| use | 1 | The name of the modification to load. This is the only "unique" parameter for this command. All further parameters are specific to its related modification. | word |
 
 <br><br><br>
 
-## `modOnce`
----
+### `modOnce`
 Like [mod](#mod). But with the difference, that the loaded mod will be only executed once for the following event.
 
  ### examples
@@ -948,15 +947,14 @@ Like [mod](#mod). But with the difference, that the loaded mod will be only exec
  **named:**
 
  `/modOnce: _use=arpeggio/`
-### parameters
-| name | position | description | range |
+#### parameters
+| name | position | description | type |
 |:--- |:--- |:--- |:--- |
-| use | 1 | The name of the modification to load. This is the only "unique" parameter for this command. All further parameters are specific to its related modification. | [a-zA-Z0-9.]+ |
+| use | 1 | The name of the modification to load. This is the only "unique" parameter for this command. All further parameters are specific to its related modification. | word |
 
 <br><br><br>
 
-## `pan`
----
+### `pan`
 set the pan of the current track
 
  ### examples
@@ -968,15 +966,14 @@ set the pan of the current track
  **named:**
 
  `/pan: _to=50/`
-### parameters
-| name | position | description | range |
+#### parameters
+| name | position | description | type |
 |:--- |:--- |:--- |:--- |
 | to | 1 | The pan value. Where 50 means the center | 0..100 |
 
 <br><br><br>
 
-## `signature`
----
+### `signature`
 Set the time signature of the current track.
 
  ### examples
@@ -988,35 +985,15 @@ Set the time signature of the current track.
  **named:**
 
  `/signature: _upper=3 _lower=4/`
-### parameters
-| name | position | description | range |
+#### parameters
+| name | position | description | type |
 |:--- |:--- |:--- |:--- |
 | upper | 1 | The upper value of the signature. | - |
 | lower | 2 | The lower value of the signature. | - |
 
 <br><br><br>
 
-## `staccato`
----
-Performs every note staccato. It is also possible to tag single notes.
-
- If a tag is given, only the tagged notes are performed staccato.
-
- ```
-
- /mod: staccato _forTag="stac"/
- c d e "stac"@f  only f will be performed staccato
- ```
-### parameters
-| name | position | description | range |
-|:--- |:--- |:--- |:--- |
-| forTag | - | Specifies a tag name. If set only events with this tag name will be affected by the staccato mod. | [a-zA-Z0-9.]+ |
-| amount | - | The ammount of the staccato | 0..100 |
-
-<br><br><br>
-
-## `tempo`
----
+### `tempo`
 `tempo` defines or changes the current tempo.
 
  ### examples
@@ -1040,15 +1017,14 @@ Performs every note staccato. It is also possible to tag single notes.
  It is also possible to set diffrent tempo values for several tracks:
 
  [see here](/manual#Tempo)
-### parameters
-| name | position | description | range |
+#### parameters
+| name | position | description | type |
 |:--- |:--- |:--- |:--- |
 | bpm | 1 | The tempo bpm value. | - |
 
 <br><br><br>
 
-## `voicingStrategy`
----
+### `voicingStrategy`
 Adds a modification to the track.
 
  ### examples
@@ -1066,15 +1042,14 @@ Adds a modification to the track.
  * asNotated
 
  * simpleGuitar
-### parameters
-| name | position | description | range |
+#### parameters
+| name | position | description | type |
 |:--- |:--- |:--- |:--- |
-| use | 1 | The name of the strategy to load. This is the only "unique" parameter for this command. All further parameters are specific to its related strategy. | [a-zA-Z0-9.]+ |
+| use | 1 | The name of the strategy to load. This is the only "unique" parameter for this command. All further parameters are specific to its related strategy. | word |
 
 <br><br><br>
 
-## `volume`
----
+### `volume`
 set the volume of the current track
 
  ### examples
@@ -1086,10 +1061,33 @@ set the volume of the current track
  **named:**
 
  `/volume: _to=50/`
-### parameters
-| name | position | description | range |
+#### parameters
+| name | position | description | type |
 |:--- |:--- |:--- |:--- |
 | to | 1 | The volume value. | 0..100 |
+
+<br><br><br>
+
+
+## Lua Extensions
+### `staccato`
+Performs every note staccato. It is also possible to tag single notes.
+
+ If a tag is given, only the tagged notes are performed staccato.
+
+ ```
+
+ /mod: staccato _forTag="stac"/
+ c d e "stac"@f  only f will be performed staccato
+ ```
+#### include extension
+`using "lua/mod/staccato.lua";`
+
+#### parameters
+| name | position | description | type |
+|:--- |:--- |:--- |:--- |
+| forTag | - | Specifies a tag name. If set only events with this tag name will be affected by the staccato mod. | word |
+| amount | - | The ammount of the staccato | 0..100 |
 
 <br><br><br>
 

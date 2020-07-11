@@ -14,7 +14,7 @@ namespace sheet {
         /// **named:**
         /// `/volume: _to=50/`   
         /// </command>
-        /// <param name="to" position="0" range="0..100">The volume value.</param>
+        /// <param name="to" position="0" type="0..100">The volume value.</param>
         class SetVolume : public ACommand
         {
         public:

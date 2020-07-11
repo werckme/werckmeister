@@ -27,11 +27,11 @@ namespace sheet {
         /// ] \n
         /// ```
         /// </command>
-        /// <param name="setName"  position="0" range="[a-zA-Z0-9.]+">An arbitary name.</param>
-        /// <param name="onDevice" position="1" range="[a-zA-Z0-9.]+">The device which to use (The name of the device, see [device](#device)).</param>
-        /// <param name="ch"       position="2" range="0..15">The MIDI channel.</param>
-        /// <param name="cc"       position="3" range="0..127">A MIDI `control change` value.</param>
-        /// <param name="pc"       position="4" range="0..127">A MIDI `program change` value.</param>
+        /// <param name="setName"  position="0" type="word">An arbitary name.</param>
+        /// <param name="onDevice" position="1" type="word">The device which to use (The name of the device, see [device](#device)).</param>
+        /// <param name="ch"       position="2" type="0..15">The MIDI channel.</param>
+        /// <param name="cc"       position="3" type="0..127">A MIDI `control change` value.</param>
+        /// <param name="pc"       position="4" type="0..127">A MIDI `program change` value.</param>
         class DefineMidiInstrument : public AMidiContextCommand
         {
         public:

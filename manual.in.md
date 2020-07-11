@@ -223,7 +223,9 @@ I want to ...
 
 [... setup my own chord symbols](#chords)
 
-[... see an overview of all commands/modifications](#references)
+[... see an overview of all commands](#commands)
+
+[... see an overview of lua extensions](#lua-extensions)
 
 ## It's just text
 The Werckmeister language knows only a few statement types. It's all about tracks, voices, and events. That's it. 

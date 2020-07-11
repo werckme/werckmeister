@@ -33,7 +33,7 @@ namespace sheet {
         /// ] \n
         /// ```       
         /// </command>
-        /// <param name="use" position="0" range="[a-zA-Z0-9.]+">The instrument name.</param>
+        /// <param name="use" position="0" type="word">The instrument name.</param>
         class SetInstrument : public ACommand
         {
         public:

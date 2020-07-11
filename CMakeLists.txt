@@ -130,10 +130,6 @@ if(WIN32)
   set(CPACK_WIX_UPGRADE_GUID  "C2C29CB5-2FB4-4367-83C5-A3F41D3502BC")
 endif(WIN32)
 
-if(APPLE)
-  set(CPACK_GENERATOR "PackageMaker")
-endif(APPLE)
-
 include(CPack)
 
 set (EXAMPLES_FOLDER "${PROJECT_SOURCE_DIR}/examples")

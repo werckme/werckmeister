@@ -14,7 +14,7 @@ namespace sheet {
         /// **named:**
         /// `/pan: _to=50/`   
         /// </command>
-        /// <param name="to" position="0" range="0..100">The pan value. Where 50 means the center</param>   
+        /// <param name="to" position="0" type="0..100">The pan value. Where 50 means the center</param>   
         class SetPan : public ACommand
         {
         public:
