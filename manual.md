@@ -1075,11 +1075,21 @@ Performs every note staccato. It is also possible to tag single notes.
 
  If a tag is given, only the tagged notes are performed staccato.
 
+ ```language=Werckmeister
+using "lua/mods/staccato.lua";
+tempo: 140;
+device: MyDevice  midi 0;
+instrumentDef:piano  MyDevice  _ch=0 _pc=0;
+[
+instrument: piano;
+{
+   /mod: staccato _forTag=stac _amount=100/
+   c "stac"@d e f
+}
+]
  ```
 
- /mod: staccato _forTag="stac"/
- c d e "stac"@f  only f will be performed staccato
- ```
+ *(only the `d` will be performed staccato.)*
 #### include extension
 `using "lua/mod/staccato.lua";`
 
