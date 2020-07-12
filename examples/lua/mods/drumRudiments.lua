@@ -1,25 +1,44 @@
-
+-- <command name="drumRudiments" where="mod" using="lua/mod/drumRudiments.lua">
+-- <![CDATA[
 -- Implements a collection of different drum rudiments.
--- You can specify which notes are for L & R and the time measure.
+-- You can specify which notes are for `L` and `R` and the time measure.
 -- This will be achived by using an chord as source material.
--- The Chord pitches will be used for L&R.
+-- The Chord pitches will be used for `L` and `R`.
 -- The length of the chord event defines in which speed the rudiment will be peformed.
 -- The event tag specifies which rudiment will be performed.
 -- Examples:
 --
--- This plays a paradiddle with the length of 1 quarter
+-- This plays a paradiddle over a length of 1 quarter
 -- using sn1 for L and sn2 for R
--- /mod: rudiments /
--- "paradiddle"@<"sn1" "sn2">4
+-- ```
+-- /mod: drumRudiments/\n
+-- "paradiddle"@<"sn1" "sn2">4\n
+--\n
+--                 R     L \n
+-- "paradiddle"@<"sn1" "sn2">4\n
+-- ```
+-- which performs a sn1(R)  sn2(L)paradiddle sequence.
 --
---                 L     R    L      R
--- "paradiddle"@<"sn1" "sn2" "tm1" "tm2">4
--- which results in   sn1(L)   sn2(R)  tm1(L)  tm2(R) sn1(L) ..
---
--- since the pitches of an chord event are distinct, this is not possible.
--- "paradiddle"@<"sn1" "sn1">4
--- tis problem also appears if two pitch aliases (e.g. "sn1", "sn2") are mapped
--- to the same picth
+-- ```language=Werckmeister\n
+--using "lua/mods/drumRudiments.lua";\n
+--tempo: 120;\n
+--device: MyDevice  midi 0;\n
+--instrumentDef:piano  MyDevice  _ch=0 _pc=0;\n
+--[\n
+--instrument: piano;\n
+--{\n
+--   /mod: drumRudiments/\n
+-- "4x paradiddle"@<c' c>1 \n
+--}\n
+--]\n
+-- ```
+-- *(performs 4 paradiddles with c' for R and c for L)*
+-- ]]>
+-- </command>
+
+
+
+
 
 require "lua/com/com"
 require "_drumRudimentsRepository"

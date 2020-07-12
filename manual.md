@@ -715,6 +715,8 @@ type: accomp;
 * [volume](#volume)
 
 ## Lua Extensions
+* [drumRudiments](#drumRudiments)
+* [legato](#legato)
 * [staccato](#staccato)
 
 ## Commands
@@ -1070,6 +1072,95 @@ set the volume of the current track
 
 
 ## Lua Extensions
+### `drumRudiments`
+Implements a collection of different drum rudiments.
+
+ You can specify which notes are for `L` and `R` and the time measure.
+
+ This will be achived by using an chord as source material.
+
+ The Chord pitches will be used for `L` and `R`.
+
+ The length of the chord event defines in which speed the rudiment will be peformed.
+
+ The event tag specifies which rudiment will be performed.
+
+ Examples:
+
+
+
+ This plays a paradiddle with the length of 1 quarter
+
+ using sn1 for L and sn2 for R
+
+ ```
+
+ /mod: drumRudiments/
+ "paradiddle"@<"sn1" "sn2">4
+
+                 R     L 
+ "paradiddle"@<"sn1" "sn2">4
+ ```
+
+ which performs a sn1(R)  sn2(L)paradiddle sequence.
+
+
+
+ ```language=Werckmeister
+using "lua/mods/drumRudiments.lua";
+tempo: 120;
+device: MyDevice  midi 0;
+instrumentDef:piano  MyDevice  _ch=0 _pc=0;
+[
+instrument: piano;
+{
+   /mod: drumRudiments/
+ "4x paradiddle"@<c' c>1 
+}
+]
+ ```
+
+ *(performs 4 paradiddles with c' for R and c for L)*
+#### include extension
+`using "lua/mod/drumRudiments.lua";`
+
+#### parameters
+| name | position | description | type |
+|:--- |:--- |:--- |:--- |
+
+<br><br><br>
+
+### `legato`
+Performs every note legato. It is also possible to tag single notes.
+
+ If a tag is given, only the tagged notes are performed legato.
+
+ ```language=Werckmeister
+using "lua/mods/legato.lua";
+tempo: 140;
+device: MyDevice  midi 0;
+instrumentDef:piano  MyDevice  _ch=0 _pc=0;
+[
+instrument: piano;
+{
+   /mod: legato _forTag=leg _amount=100/
+   c "leg"@d e f
+}
+]
+ ```
+
+ *(only the `d` will be performed legato.)*
+#### include extension
+`using "lua/mod/legato.lua";`
+
+#### parameters
+| name | position | description | type |
+|:--- |:--- |:--- |:--- |
+| forTag | - | Specifies a tag name. If set only events with this tag name will be affected by the legato mod. | word |
+| amount | - | The ammount of the legato effect | 0..100 |
+
+<br><br><br>
+
 ### `staccato`
 Performs every note staccato. It is also possible to tag single notes.
 
@@ -1097,7 +1188,7 @@ instrument: piano;
 | name | position | description | type |
 |:--- |:--- |:--- |:--- |
 | forTag | - | Specifies a tag name. If set only events with this tag name will be affected by the staccato mod. | word |
-| amount | - | The ammount of the staccato | 0..100 |
+| amount | - | The ammount of the staccato effect | 0..100 |
 
 <br><br><br>
 
