@@ -1089,7 +1089,7 @@ Implements a collection of different drum rudiments.
 
 
 
- This plays a paradiddle with the length of 1 quarter
+ This plays a paradiddle over a length of 1 quarter
 
  using sn1 for L and sn2 for R
 
@@ -1115,18 +1115,15 @@ instrumentDef:piano  MyDevice  _ch=0 _pc=0;
 instrument: piano;
 {
    /mod: drumRudiments/
- "4x paradiddle"@<c' c>1 
+ -- performs 4 paradiddles with c' for R and c for L
+ "4x paradiddle"@<c' c>1
 }
 ]
  ```
-
- *(performs 4 paradiddles with c' for R and c for L)*
+#### parameters
+*no parameters*
 #### include extension
 `using "lua/mod/drumRudiments.lua";`
-
-#### parameters
-| name | position | description | type |
-|:--- |:--- |:--- |:--- |
 
 <br><br><br>
 
@@ -1150,14 +1147,14 @@ instrument: piano;
  ```
 
  *(only the `d` will be performed legato.)*
-#### include extension
-`using "lua/mod/legato.lua";`
-
 #### parameters
 | name | position | description | type |
 |:--- |:--- |:--- |:--- |
 | forTag | - | Specifies a tag name. If set only events with this tag name will be affected by the legato mod. | word |
 | amount | - | The ammount of the legato effect | 0..100 |
+
+#### include extension
+`using "lua/mod/legato.lua";`
 
 <br><br><br>
 
@@ -1181,14 +1178,14 @@ instrument: piano;
  ```
 
  *(only the `d` will be performed staccato.)*
-#### include extension
-`using "lua/mod/staccato.lua";`
-
 #### parameters
 | name | position | description | type |
 |:--- |:--- |:--- |:--- |
 | forTag | - | Specifies a tag name. If set only events with this tag name will be affected by the staccato mod. | word |
 | amount | - | The ammount of the staccato effect | 0..100 |
+
+#### include extension
+`using "lua/mod/staccato.lua";`
 
 <br><br><br>
 

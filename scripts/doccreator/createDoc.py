@@ -49,6 +49,13 @@ class DocParser:
     def __init__(self, comment_sequence = '///'):
         self.comment_sequence = comment_sequence
 
+    def remove_comments(self, str):
+        str = str.replace('\r', '')
+        lines = str.split('\n')
+        rm = lambda s: s.replace(self.comment_sequence, '', 1)
+        lines = [rm(line) for line in lines]
+        return "\n".join(lines)
+
     def parse(self, str:str):
         txt = lambda node: node \
             .text \
@@ -57,7 +64,7 @@ class DocParser:
             .replace('\n', '\n\n') \
             .replace('$nl', '\n')
         attr = lambda node, name, default="": node.attrib[name] if name in node.attrib else default
-        str = str.replace(self.comment_sequence, '')
+        str = self.remove_comments(str)
         doc_tree = ET.fromstring(f'<root>{str}</root>')
         command_node = doc_tree.find('command')
         if command_node == None:
@@ -105,21 +112,28 @@ class Printer:
         writer.writeline(f'`using "{self.dto.include}";`')
         writer.writeline('')
 
+    def print_parameters(self, writer):
+        writer.write_heading("parameters", self.heading_level + 1)
+        if len(self.dto.args) == 0:
+            writer.writeline('*no parameters*')
+            return
+        table = mg.Table()
+        table.add_column('name')
+        table.add_column('position')
+        table.add_column('description')
+        table.add_column('type')
+        for arg in self.dto.args:
+            table.append(arg.name, arg.position, arg.summary, arg.type)
+        writer.write(table)
+
+
     def print(self):
         with StringIO() as stream:
             writer = mg.Writer(stream)
             writer.write_heading(f'`{self.dto.command_name}`', self.heading_level)
             writer.writeline(self.dto.summary)
+            self.print_parameters(writer)
             self.print_include(writer)
-            writer.write_heading("parameters", self.heading_level + 1)
-            table = mg.Table()
-            table.add_column('name')
-            table.add_column('position')
-            table.add_column('description')
-            table.add_column('type')
-            for arg in self.dto.args:
-                table.append(arg.name, arg.position, arg.summary, arg.type)
-            writer.write(table)
             writer.writeline('<br>'*3)
             #finito
             stream.seek(0)

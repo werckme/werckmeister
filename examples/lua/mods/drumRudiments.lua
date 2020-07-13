@@ -28,11 +28,11 @@
 --instrument: piano;\n
 --{\n
 --   /mod: drumRudiments/\n
--- "4x paradiddle"@<c' c>1 \n
+-- -- performs 4 paradiddles with c' for R and c for L\n
+-- "4x paradiddle"@<c' c>1\n
 --}\n
 --]\n
 -- ```
--- *(performs 4 paradiddles with c' for R and c for L)*
 -- ]]>
 -- </command>
 
