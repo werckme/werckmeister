@@ -716,11 +716,14 @@ type: accomp;
 
 ## Lua Extensions
 * [drumRudiments](#drumrudiments)
+* [guitar](#guitar)
 * [guitarStroke](#guitarstroke)
 * [legato](#legato)
 * [myArpeggio](#myarpeggio)
+* [simple](#simple)
 * [staccato](#staccato)
 * [swing](#swing)
+* [voicelead](#voicelead)
 
 ## Commands
 ### `device`
@@ -1225,6 +1228,44 @@ instrument: piano;
 
 <br><br><br>
 
+### `guitar`
+Tries to simulates the chord voicing of an guitar.
+
+ ```language=Werckmeister
+using "lua/voicings/guitar.lua";
+using "chords/default.chords";
+
+tempo: 120;
+device: MyDevice  midi 0;
+instrumentDef:piano  MyDevice  _ch=0 _pc=0;
+[
+type: template;
+name: myTemplate;
+instrument: piano;
+{
+   /voicingStrategy: guitar/
+   <I II III IV V VI VII>1
+}
+]
+[
+type: accomp;
+
+{
+  Gmaj7 | Dmaj7
+}
+]
+ ```
+
+#### parameters
+| name | position | description | type |
+|:--- |:--- |:--- |:--- |
+| range | - | If given the strategy tries to keeps the range by shifting the octave of the chord. | [contrabass,bass,baritone,tenor,alto,mezzosoprano,soprano] |
+
+#### include extension
+`using "lua/voicings/guitar.lua";`
+
+<br><br><br>
+
 ### `guitarStroke`
 Simulates guitar strokes as mini arpeggios.
 
@@ -1337,6 +1378,44 @@ instrument: piano;
 
 <br><br><br>
 
+### `simple`
+The simple voicing strategy performs no octave shifting.
+
+ ```language=Werckmeister
+using "lua/voicings/simple.lua";
+using "chords/default.chords";
+
+tempo: 120;
+device: MyDevice  midi 0;
+instrumentDef:piano  MyDevice  _ch=0 _pc=0;
+[
+type: template;
+name: myTemplate;
+instrument: piano;
+{
+   /voicingStrategy: simple/
+   <I II III IV V VI VII>1
+}
+]
+[
+type: accomp;
+
+{
+  Gmaj7 | Dmaj7
+}
+]
+ ```
+
+#### parameters
+| name | position | description | type |
+|:--- |:--- |:--- |:--- |
+| range | - | If given the strategy tries to keeps the range by shifting the octave of the chord. | [contrabass,bass,baritone,tenor,alto,mezzosoprano,soprano] |
+
+#### include extension
+`using "lua/voicings/simple.lua";`
+
+<br><br><br>
+
 ### `staccato`
 Performs every note staccato. It is also possible to tag single notes.
 
@@ -1394,6 +1473,46 @@ instrument: piano;
 
 #### include extension
 `using "lua/mod/swing.lua";`
+
+<br><br><br>
+
+### `voicelead`
+Tries to simulates a voice leading approach:
+
+ the octaves of a chord are rearranged, so that the actual pitch distance between the previous chord is kept minimal.
+
+ ```language=Werckmeister
+using "lua/voicings/voicelead.lua";
+using "chords/default.chords";
+
+tempo: 120;
+device: MyDevice  midi 0;
+instrumentDef:piano  MyDevice  _ch=0 _pc=0;
+[
+type: template;
+name: myTemplate;
+instrument: piano;
+{
+   /voicingStrategy: voicelead/
+   <I II III IV V VI VII>1
+}
+]
+[
+type: accomp;
+
+{
+  C | F | G | C |
+}
+]
+ ```
+
+#### parameters
+| name | position | description | type |
+|:--- |:--- |:--- |:--- |
+| range | - | If given the strategy tries to keeps the range by shifting the octave of the chord. | [contrabass,bass,baritone,tenor,alto,mezzosoprano,soprano] |
+
+#### include extension
+`using "lua/voicings/voicelead.lua";`
 
 <br><br><br>
 
