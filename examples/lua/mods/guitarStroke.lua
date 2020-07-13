@@ -1,9 +1,38 @@
-
--- note: the alternate mode works only if this mod is set via instrumentConf.
--- e.g.
--- instrumentConf: myInstrument
---     _set=mod _use=guitarStroke _mode=alternate
--- ;
+-- <command name="guitarStroke" where="mod" using="lua/mod/guitarStroke.lua">
+-- <![CDATA[
+-- Simulates guitar strokes as mini arpeggios.
+-- *Note: the alternate mode works only if this mod is set via instrumentConf.*
+-- ```
+-- -- does not work: \n
+-- [ \n
+-- { \n
+--   /mod: guitarStroke _mode=alternate/\n
+-- } \n
+-- ] \n
+-- ```
+-- ```
+-- -- does work: \n
+-- instrumentConf: myInstrument mod guitarStroke _mode=alternate; \n
+-- ```
+-- **Example**
+-- ```language=Werckmeister\n
+--using "lua/mods/guitarStroke.lua";\n
+--tempo: 120;\n
+--device: MyDevice  midi 0;\n
+--instrumentDef:  piano  MyDevice  _ch=0 _pc=0;\n
+--instrumentConf: piano mod guitarStroke _mode=alternate; \n
+--[\n
+--instrument: piano;\n
+--{\n
+--  <c e g b>4 <c e g b>4 <c eb g bb>4 <c eb g bb>4\n
+--}\n
+--]\n
+-- ```
+-- ]]>
+-- </command>
+-- <param name="direction" optional="1" type="[up,down]">Specifies the start direction of the stroke</param>
+-- <param name="value" optional="1" type="[1,2,4,8,...]">the duration of one aprgeggio event. (Default=64)</param>
+-- <param name="mode" optional="1" type="[normal,alternate]">Perform only one stroke direction (normal) or alternates between up and down. (Default=normal)</param>
 
 require "lua/com/com"
 require "_events"
@@ -15,7 +44,7 @@ parameters = {
     -- can be 1, 2, 4, 8, 16, 32, 64, ...
     { name="value",           default="64" },
     -- can be normal, alternate
-    { name="mode",            default="alternate" }
+    { name="mode",            default="normal" }
 
 }
 

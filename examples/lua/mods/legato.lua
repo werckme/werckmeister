@@ -10,11 +10,11 @@
 --instrument: piano;\n
 --{\n
 --   /mod: legato _forTag=leg _amount=100/\n
+--   -- only the `d` will be performed legato. \n
 --   c "leg"@d e f\n
 --}\n
 --]\n
 -- ```
--- *(only the `d` will be performed legato.)* 
 -- </command>
 -- <param name="forTag" optional="1" type="word">Specifies a tag name. If set only events with this tag name will be affected by the legato mod.</param>
 -- <param name="amount" optional="1" type="0..100">The ammount of the legato effect</param>

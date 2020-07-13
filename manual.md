@@ -716,7 +716,9 @@ type: accomp;
 
 ## Lua Extensions
 * [drumRudiments](#drumRudiments)
+* [guitarStroke](#guitarStroke)
 * [legato](#legato)
+* [myArpeggio](#myArpeggio)
 * [staccato](#staccato)
 
 ## Commands
@@ -1085,13 +1087,11 @@ Implements a collection of different drum rudiments.
 
  The event tag specifies which rudiment will be performed.
 
- Examples:
-
-
+ For example:
 
  This plays a paradiddle over a length of 1 quarter
 
- using sn1 for L and sn2 for R
+ using `sn1` for R and `sn2` for L:
 
  ```
 
@@ -1102,9 +1102,26 @@ Implements a collection of different drum rudiments.
  "paradiddle"@<"sn1" "sn2">4
  ```
 
- which performs a sn1(R)  sn2(L)paradiddle sequence.
+ Examples:
 
+ **a fiveStrokeRoll**
 
+ ```language=Werckmeister
+using "lua/mods/drumRudiments.lua";
+tempo: 150;
+device: MyDevice  midi 0;
+instrumentDef:piano  MyDevice  _ch=0 _pc=0;
+[
+instrument: piano;
+{
+   /mod: drumRudiments/
+   -- a fiveStrokeRoll with c' for R and c for L
+   "fiveStrokeRoll"@<c' c>1
+}
+]
+ ```
+
+ **repeating**
 
  ```language=Werckmeister
 using "lua/mods/drumRudiments.lua";
@@ -1115,8 +1132,31 @@ instrumentDef:piano  MyDevice  _ch=0 _pc=0;
 instrument: piano;
 {
    /mod: drumRudiments/
- -- performs 4 paradiddles with c' for R and c for L
- "4x paradiddle"@<c' c>1
+   -- performs 4 paradiddles with c' for R and c for L
+   "4x paradiddle"@<c' c>1
+}
+]
+ ```
+
+ **orchestration**
+
+ If you want to orchestrate a rudiment over a drum set,
+
+ you are able to define more R & L notes. The total number of notes has to be even.
+
+ ```language=Werckmeister
+using "lua/mods/drumRudiments.lua";
+tempo: 120;
+device: MyDevice  midi 0;
+instrumentDef:piano  MyDevice  _ch=0 _pc=0;
+[
+instrument: piano;
+{
+   /mod: drumRudiments/
+   -- performs a paradiddles with: 
+   --       c' for R1 and c for L1
+   --  and  d' for R2 and d for L2
+   "paradiddle"@<c' c d' d>1
 }
 ]
  ```
@@ -1124,6 +1164,54 @@ instrument: piano;
 *no parameters*
 #### include extension
 `using "lua/mod/drumRudiments.lua";`
+
+<br><br><br>
+
+### `guitarStroke`
+Simulates guitar strokes as mini arpeggios.
+
+ *Note: the alternate mode works only if this mod is set via instrumentConf.*
+
+ ```
+
+ -- does not work: 
+ [ 
+ { 
+   /mod: guitarStroke _mode=alternate/
+ } 
+ ] 
+ ```
+
+ ```
+
+ -- does work: 
+ instrumentConf: myInstrument mod guitarStroke _mode=alternate; 
+ ```
+
+ **Example**
+
+ ```language=Werckmeister
+using "lua/mods/guitarStroke.lua";
+tempo: 120;
+device: MyDevice  midi 0;
+instrumentDef:  piano  MyDevice  _ch=0 _pc=0;
+instrumentConf: piano mod guitarStroke _mode=alternate; 
+[
+instrument: piano;
+{
+  <c e g b>4 <c e g b>4 <c eb g bb>4 <c eb g bb>4
+}
+]
+ ```
+#### parameters
+| name | position | description | type |
+|:--- |:--- |:--- |:--- |
+| direction | - | Specifies the start direction of the stroke | [up,down] |
+| value | - | the duration of one aprgeggio event. (Default=64) | [1,2,4,8,...] |
+| mode | - | Perform only one stroke direction (normal) or alternates between up and down. (Default=normal) | [normal,alternate] |
+
+#### include extension
+`using "lua/mod/guitarStroke.lua";`
 
 <br><br><br>
 
@@ -1141,12 +1229,11 @@ instrumentDef:piano  MyDevice  _ch=0 _pc=0;
 instrument: piano;
 {
    /mod: legato _forTag=leg _amount=100/
+   -- only the `d` will be performed legato. 
    c "leg"@d e f
 }
 ]
  ```
-
- *(only the `d` will be performed legato.)*
 #### parameters
 | name | position | description | type |
 |:--- |:--- |:--- |:--- |
@@ -1155,6 +1242,37 @@ instrument: piano;
 
 #### include extension
 `using "lua/mod/legato.lua";`
+
+<br><br><br>
+
+### `myArpeggio`
+A simple arpeggio implementation.
+
+ **Example**
+
+ ```language=Werckmeister
+using "lua/mods/myArpeggio.lua";
+tempo: 120;
+device: MyDevice  midi 0;
+instrumentDef:  piano  MyDevice  _ch=0 _pc=0;
+[
+instrument: piano;
+{
+ /do: myArpeggio/ 
+ <c e g b>2 
+ /do: myArpeggio _direction=down/ 
+ <c eb g bb>2 
+}
+]
+ ```
+#### parameters
+| name | position | description | type |
+|:--- |:--- |:--- |:--- |
+| style | - | Performs the arpeggio normal or legato | [normal,legato] |
+| direction | - | the direction of the aprgeggio. (Default=up) | [up,down] |
+
+#### include extension
+`using "lua/mod/myArpeggio.lua";`
 
 <br><br><br>
 
@@ -1172,12 +1290,11 @@ instrumentDef:piano  MyDevice  _ch=0 _pc=0;
 instrument: piano;
 {
    /mod: staccato _forTag=stac _amount=100/
+   -- only the `d` will be performed staccato. 
    c "stac"@d e f
 }
 ]
  ```
-
- *(only the `d` will be performed staccato.)*
 #### parameters
 | name | position | description | type |
 |:--- |:--- |:--- |:--- |

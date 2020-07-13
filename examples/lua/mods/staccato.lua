@@ -10,11 +10,11 @@
 --instrument: piano;\n
 --{\n
 --   /mod: staccato _forTag=stac _amount=100/\n
+--   -- only the `d` will be performed staccato. \n
 --   c "stac"@d e f\n
 --}\n
 --]\n
--- ```
--- *(only the `d` will be performed staccato.)* 
+-- ``` 
 -- </command>
 -- <param name="forTag" optional="1" type="word">Specifies a tag name. If set only events with this tag name will be affected by the staccato mod.</param>
 -- <param name="amount" optional="1" type="0..100">The ammount of the staccato effect</param>

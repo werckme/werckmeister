@@ -6,10 +6,9 @@
 -- The Chord pitches will be used for `L` and `R`.
 -- The length of the chord event defines in which speed the rudiment will be peformed.
 -- The event tag specifies which rudiment will be performed.
--- Examples:
---
+-- For example:
 -- This plays a paradiddle over a length of 1 quarter
--- using sn1 for L and sn2 for R
+-- using `sn1` for R and `sn2` for L:
 -- ```
 -- /mod: drumRudiments/\n
 -- "paradiddle"@<"sn1" "sn2">4\n
@@ -17,8 +16,23 @@
 --                 R     L \n
 -- "paradiddle"@<"sn1" "sn2">4\n
 -- ```
--- which performs a sn1(R)  sn2(L)paradiddle sequence.
---
+-- Examples:
+-- **a fiveStrokeRoll**
+-- ```language=Werckmeister\n
+--using "lua/mods/drumRudiments.lua";\n
+--tempo: 150;\n
+--device: MyDevice  midi 0;\n
+--instrumentDef:piano  MyDevice  _ch=0 _pc=0;\n
+--[\n
+--instrument: piano;\n
+--{\n
+--   /mod: drumRudiments/\n
+--   -- a fiveStrokeRoll with c' for R and c for L\n
+--   "fiveStrokeRoll"@<c' c>1\n
+--}\n
+--]\n
+-- ```
+-- **repeating**
 -- ```language=Werckmeister\n
 --using "lua/mods/drumRudiments.lua";\n
 --tempo: 120;\n
@@ -28,15 +42,32 @@
 --instrument: piano;\n
 --{\n
 --   /mod: drumRudiments/\n
--- -- performs 4 paradiddles with c' for R and c for L\n
--- "4x paradiddle"@<c' c>1\n
+--   -- performs 4 paradiddles with c' for R and c for L\n
+--   "4x paradiddle"@<c' c>1\n
+--}\n
+--]\n
+-- ```
+-- **orchestration**
+-- If you want to orchestrate a rudiment over a drum set,
+-- you are able to define more R & L notes. The total number of notes has to be even.
+-- ```language=Werckmeister\n
+--using "lua/mods/drumRudiments.lua";\n
+--tempo: 120;\n
+--device: MyDevice  midi 0;\n
+--instrumentDef:piano  MyDevice  _ch=0 _pc=0;\n
+--[\n
+--instrument: piano;\n
+--{\n
+--   /mod: drumRudiments/\n
+--   -- performs a paradiddles with: \n
+--   --       c' for R1 and c for L1\n
+--   --  and  d' for R2 and d for L2\n
+--   "paradiddle"@<c' c d' d>1\n
 --}\n
 --]\n
 -- ```
 -- ]]>
 -- </command>
-
-
 
 
 
