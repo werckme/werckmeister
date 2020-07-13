@@ -1,23 +1,21 @@
 -- <command name="drumRudiments" where="mod" using="lua/mod/drumRudiments.lua">
 -- <![CDATA[
 -- Implements a collection of different drum rudiments. ([see Wikipedia](https://en.wikipedia.org/wiki/Drum_rudiment))
--- You can specify which notes are for `L` and `R` and the time measure.
+-- You can specify which notes are for `L` and `R` and performing duration.
 -- This will be achived by using an chord as source material.
--- The Chord pitches will be used for `L` and `R`.
--- The length of the chord event defines in which speed the rudiment will be peformed.
--- The event tag specifies which rudiment will be performed.
+-- The chord pitches will be used for `L` and `R`.
+-- The length of the chord event defines over which time the rudiment will be peformed.
+-- An event tag specifies which rudiment will be performed.
 -- For example:
--- This plays a paradiddle over a length of 1 quarter
+-- This plays one paradiddle over a length of 1 quarter
 -- using `sn1` for R and `sn2` for L:
 -- ```
 -- /mod: drumRudiments/\n
--- "paradiddle"@<"sn1" "sn2">4\n
---\n
 --                 R     L \n
 -- "paradiddle"@<"sn1" "sn2">4\n
 -- ```
 -- Examples:
--- **a paradiddle**
+-- **a single paradiddle**
 -- ```language=Werckmeister\n
 --using "lua/mods/drumRudiments.lua";\n
 --tempo: 150;\n
@@ -49,7 +47,7 @@
 -- ```
 -- **orchestration**
 -- If you want to orchestrate a rudiment over a drum set,
--- you are able to define more R & L notes. The total number of the notes has to be even.
+-- you are able to define more R & L notes. *(The total number of the notes has to be even.)*
 -- ```language=Werckmeister\n
 --using "lua/mods/drumRudiments.lua";\n
 --tempo: 120;\n

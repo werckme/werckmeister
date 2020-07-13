@@ -1,6 +1,6 @@
 -- <command name="guitar" where="voicingStrategy" using="lua/voicings/guitar.lua">
 -- <![CDATA[
--- Tries to simulates the chord voicing of an guitar.
+-- Tries to simulate the chord voicing of an guitar.
 -- ```language=Werckmeister\n
 --using "lua/voicings/guitar.lua";\n
 --using "chords/default.chords";
@@ -19,7 +19,7 @@
 --[\n
 --type: accomp;
 --{\n
---  Gmaj7 | Dmaj7\n
+--  C | F | G | C |\n
 --}\n
 --]\n
 -- ```

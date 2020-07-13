@@ -1,6 +1,6 @@
 -- <command name="simple" where="voicingStrategy" using="lua/voicings/simple.lua">
 -- <![CDATA[
--- The simple voicing strategy performs no octave shifting.
+-- The simple approach with no strategy.
 -- ```language=Werckmeister\n
 --using "lua/voicings/simple.lua";\n
 --using "chords/default.chords";
@@ -19,7 +19,7 @@
 --[\n
 --type: accomp;
 --{\n
---  Gmaj7 | Dmaj7\n
+--  C | F | G | C |\n
 --}\n
 --]\n
 -- ```

@@ -72,6 +72,7 @@ class DocParser:
         command = CommandDto(attr(command_node, 'name'))
         command.include = attr(command_node, 'using')
         command.summary = txt(command_node)
+        command.where = attr(command_node, 'where')
         for param in doc_tree.findall("param"):
             argument = ArgumentDto(attr(param, "name"))
             argument.summary = txt(param)
@@ -98,6 +99,7 @@ class CommandDto:
         self.type = CommandType.UNDEFINED
         self.include = None 
         self.args = []
+        self.where = ""
 
 class Printer:
     def __init__(self, dto):
@@ -146,29 +148,41 @@ class Printer:
     def __repr__(self):
         return str(self)
 
-def printToc(title, commands):
+def printToc(title, subtitle, commands):
     print(f'## {title}')
+    if subtitle != None:
+        print(f'### {subtitle}')
     for command in commands:
         print(f'* [{command.command_name}](#{command.command_name.lower()})')  
 
 def printCommands(commands):
     internal = [cmd for cmd in commands if cmd.type == CommandType.INTERNAL_COMMAND]
     internal.sort(key=lambda x: x.command_name)
-    lua_ext  = [cmd for cmd in commands if cmd.type == CommandType.LUA_EXTENSION]
-    lua_ext.sort(key=lambda x: x.command_name)
-    printToc('Commands', internal)
+    lua_mods  = [cmd for cmd in commands if cmd.type == CommandType.LUA_EXTENSION and cmd.where == "mod"]
+    lua_mods.sort(key=lambda x: x.command_name)
+    lua_voicings  = [cmd for cmd in commands if cmd.type == CommandType.LUA_EXTENSION and cmd.where == "voicingStrategy"]
+    lua_voicings.sort(key=lambda x: x.command_name)    
+    printToc('Commands', None, internal)
     print('')
-    printToc('Lua Extensions', lua_ext)
+    printToc('Lua Extensions', 'Modifications', lua_mods)
     print('')
+    printToc('Lua Extensions', 'Voicing Strategies', lua_voicings)
+    print('')    
     print('## Commands')
     for command in internal:
         printer = Printer(command)
         print(printer)
     print('')
     print('## Lua Extensions')
-    for command in lua_ext:
+    print('### Modifications')
+    for command in lua_mods:
         printer = Printer(command)
-        print(printer)        
+        print(printer)
+    print('')
+    print('### Voicing Strategies')
+    for command in lua_voicings:
+        printer = Printer(command)
+        print(printer)                
 
 
 
