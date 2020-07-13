@@ -20,7 +20,7 @@
 --tempo: 120;\n
 --device: MyDevice  midi 0;\n
 --instrumentDef:  piano  MyDevice  _ch=0 _pc=0;\n
---instrumentConf: piano mod guitarStroke _mode=alternate; \n
+--instrumentConf: piano mod guitarStroke _mode=alternate _value=8; \n
 --[\n
 --instrument: piano;\n
 --{\n

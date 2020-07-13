@@ -1,6 +1,21 @@
-
--- werckmeister swing modification
--- possible arguments:
+-- <command name="swing" where="mod" using="lua/mod/swing.lua">
+-- Performs a swing groove.
+-- ```language=Werckmeister\n
+--using "lua/mods/swing.lua";\n
+--tempo: 120;\n
+--device: MyDevice  midi 0;\n
+--instrumentDef:  piano  MyDevice  _ch=0 _pc=0;\n
+--[\n
+--instrument: piano;\n
+--{\n
+--   /mod: swing/\n
+--   c8  c   c   c   c   c   c   c
+--}\n
+--]\n
+-- ```
+-- </command>
+-- <param name="grid" optional="1" type="[8, 16]">Performs the swing offset either on 8th or 16th. (Default=8)</param>
+-- <param name="offset" optional="1" type="0..100">The ammount of the swing offset</param>
 
 require "lua/com/com"
 

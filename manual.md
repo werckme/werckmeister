@@ -704,22 +704,23 @@ type: accomp;
 ## Commands
 * [device](#device)
 * [instrument](#instrument)
-* [instrumentConf](#instrumentConf)
-* [instrumentDef](#instrumentDef)
+* [instrumentConf](#instrumentconf)
+* [instrumentDef](#instrumentdef)
 * [mod](#mod)
-* [modOnce](#modOnce)
+* [modOnce](#modonce)
 * [pan](#pan)
 * [signature](#signature)
 * [tempo](#tempo)
-* [voicingStrategy](#voicingStrategy)
+* [voicingStrategy](#voicingstrategy)
 * [volume](#volume)
 
 ## Lua Extensions
-* [drumRudiments](#drumRudiments)
-* [guitarStroke](#guitarStroke)
+* [drumRudiments](#drumrudiments)
+* [guitarStroke](#guitarstroke)
 * [legato](#legato)
-* [myArpeggio](#myArpeggio)
+* [myArpeggio](#myarpeggio)
 * [staccato](#staccato)
+* [swing](#swing)
 
 ## Commands
 ### `device`
@@ -753,6 +754,7 @@ Defines a device which can be used when adding instruments (see [instrumentDef](
  } 
  ] 
  ```
+
 #### parameters
 | name | position | description | type |
 |:--- |:--- |:--- |:--- |
@@ -802,6 +804,7 @@ Set or change the instrument of a track.
  } 
  ] 
  ```
+
 #### parameters
 | name | position | description | type |
 |:--- |:--- |:--- |:--- |
@@ -861,6 +864,7 @@ With `instrumentConf` you are able to setup a specific instrument.
  **positional:**
 
  `remapVelocity` dosen't supports positional arguments
+
 #### parameters
 | name | position | description | type |
 |:--- |:--- |:--- |:--- |
@@ -899,6 +903,7 @@ Adds a new MIDI instrument.
  } 
  ] 
  ```
+
 #### parameters
 | name | position | description | type |
 |:--- |:--- |:--- |:--- |
@@ -932,6 +937,7 @@ Adds a modification to the track.
  #### Arpeggio
 
  `/mod: arpeggio/`
+
 #### parameters
 | name | position | description | type |
 |:--- |:--- |:--- |:--- |
@@ -951,6 +957,7 @@ Like [mod](#mod). But with the difference, that the loaded mod will be only exec
  **named:**
 
  `/modOnce: _use=arpeggio/`
+
 #### parameters
 | name | position | description | type |
 |:--- |:--- |:--- |:--- |
@@ -970,6 +977,7 @@ set the pan of the current track
  **named:**
 
  `/pan: _to=50/`
+
 #### parameters
 | name | position | description | type |
 |:--- |:--- |:--- |:--- |
@@ -989,6 +997,7 @@ Set the time signature of the current track.
  **named:**
 
  `/signature: _upper=3 _lower=4/`
+
 #### parameters
 | name | position | description | type |
 |:--- |:--- |:--- |:--- |
@@ -1021,6 +1030,7 @@ Set the time signature of the current track.
  It is also possible to set diffrent tempo values for several tracks:
 
  [see here](/manual#Tempo)
+
 #### parameters
 | name | position | description | type |
 |:--- |:--- |:--- |:--- |
@@ -1046,6 +1056,7 @@ Adds a modification to the track.
  * asNotated
 
  * simpleGuitar
+
 #### parameters
 | name | position | description | type |
 |:--- |:--- |:--- |:--- |
@@ -1065,6 +1076,7 @@ set the volume of the current track
  **named:**
 
  `/volume: _to=50/`
+
 #### parameters
 | name | position | description | type |
 |:--- |:--- |:--- |:--- |
@@ -1075,7 +1087,7 @@ set the volume of the current track
 
 ## Lua Extensions
 ### `drumRudiments`
-Implements a collection of different drum rudiments.
+Implements a collection of different drum rudiments. ([see Wikipedia](https://en.wikipedia.org/wiki/Drum_rudiment))
 
  You can specify which notes are for `L` and `R` and the time measure.
 
@@ -1104,7 +1116,7 @@ Implements a collection of different drum rudiments.
 
  Examples:
 
- **a fiveStrokeRoll**
+ **a paradiddle**
 
  ```language=Werckmeister
 using "lua/mods/drumRudiments.lua";
@@ -1115,8 +1127,8 @@ instrumentDef:piano  MyDevice  _ch=0 _pc=0;
 instrument: piano;
 {
    /mod: drumRudiments/
-   -- a fiveStrokeRoll with c' for R and c for L
-   "fiveStrokeRoll"@<c' c>1
+   -- a paradiddle (RLRR) with c' for R and c for L
+   "paradiddle"@<c' c>1
 }
 ]
  ```
@@ -1132,7 +1144,7 @@ instrumentDef:piano  MyDevice  _ch=0 _pc=0;
 instrument: piano;
 {
    /mod: drumRudiments/
-   -- performs 4 paradiddles with c' for R and c for L
+   -- performs 4 paradiddles (RLRR) with c' for R and c for L
    "4x paradiddle"@<c' c>1
 }
 ]
@@ -1142,7 +1154,7 @@ instrument: piano;
 
  If you want to orchestrate a rudiment over a drum set,
 
- you are able to define more R & L notes. The total number of notes has to be even.
+ you are able to define more R & L notes. The total number of the notes has to be even.
 
  ```language=Werckmeister
 using "lua/mods/drumRudiments.lua";
@@ -1153,13 +1165,59 @@ instrumentDef:piano  MyDevice  _ch=0 _pc=0;
 instrument: piano;
 {
    /mod: drumRudiments/
-   -- performs a paradiddles with: 
-   --       c' for R1 and c for L1
-   --  and  d' for R2 and d for L2
-   "paradiddle"@<c' c d' d>1
+   -- performs a paradiddlediddle (RLRRLL) with 
+   --      c' for R1 and c for L1
+   -- and  d' for R2 and d for L2.
+   -- The final sequence: c'(R1) c(L1) d'(R2) c(R1) d(L2) c(L1) 
+   "paradiddlediddle"@<c' c d' d>1
 }
 ]
  ```
+
+ **Supported Rudiments**
+
+<ul style="font-size: 0.9em;">
+
+<li>singleStrokeRoll</li>
+
+<li>doubleStrokeRoll</li>
+
+<li>trippleStrokeRoll</li>
+
+<li>fiveStrokeRoll</li>
+
+<li>singleStrokeFour</li>
+
+<li>singleStrokeSeven</li>
+
+<li>multipleBounceRoll</li>
+
+<li>sixStrokeRoll</li>
+
+<li>sevenStrokeRoll</li>
+
+<li>nineStrokeRoll</li>
+
+<li>tenStrokeRoll</li>
+
+<li>elevenStrokeRoll</li>
+
+<li>thirteenStrokeRoll</li>
+
+<li>fifteenStrokeRoll</li>
+
+<li>seventeenStrokeRoll</li>
+
+<li>paradiddle</li>
+
+<li>doubleParadiddle</li>
+
+<li>trippleParadiddle</li>
+
+<li>paradiddlediddle</li>
+
+</ul>
+
 #### parameters
 *no parameters*
 #### include extension
@@ -1195,7 +1253,7 @@ using "lua/mods/guitarStroke.lua";
 tempo: 120;
 device: MyDevice  midi 0;
 instrumentDef:  piano  MyDevice  _ch=0 _pc=0;
-instrumentConf: piano mod guitarStroke _mode=alternate; 
+instrumentConf: piano mod guitarStroke _mode=alternate _value=8; 
 [
 instrument: piano;
 {
@@ -1203,6 +1261,7 @@ instrument: piano;
 }
 ]
  ```
+
 #### parameters
 | name | position | description | type |
 |:--- |:--- |:--- |:--- |
@@ -1234,6 +1293,7 @@ instrument: piano;
 }
 ]
  ```
+
 #### parameters
 | name | position | description | type |
 |:--- |:--- |:--- |:--- |
@@ -1265,6 +1325,7 @@ instrument: piano;
 }
 ]
  ```
+
 #### parameters
 | name | position | description | type |
 |:--- |:--- |:--- |:--- |
@@ -1295,6 +1356,7 @@ instrument: piano;
 }
 ]
  ```
+
 #### parameters
 | name | position | description | type |
 |:--- |:--- |:--- |:--- |
@@ -1303,6 +1365,35 @@ instrument: piano;
 
 #### include extension
 `using "lua/mod/staccato.lua";`
+
+<br><br><br>
+
+### `swing`
+Performs a swing groove.
+
+ ```language=Werckmeister
+using "lua/mods/swing.lua";
+tempo: 120;
+device: MyDevice  midi 0;
+instrumentDef:  piano  MyDevice  _ch=0 _pc=0;
+[
+instrument: piano;
+{
+   /mod: swing/
+   c8  c   c   c   c   c   c   c
+
+}
+]
+ ```
+
+#### parameters
+| name | position | description | type |
+|:--- |:--- |:--- |:--- |
+| grid | - | Performs the swing offset either on 8th or 16th. (Default=8) | [8, 16] |
+| offset | - | The ammount of the swing offset | 0..100 |
+
+#### include extension
+`using "lua/mod/swing.lua";`
 
 <br><br><br>
 

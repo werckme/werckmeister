@@ -1,6 +1,6 @@
 -- <command name="drumRudiments" where="mod" using="lua/mod/drumRudiments.lua">
 -- <![CDATA[
--- Implements a collection of different drum rudiments.
+-- Implements a collection of different drum rudiments. ([see Wikipedia](https://en.wikipedia.org/wiki/Drum_rudiment))
 -- You can specify which notes are for `L` and `R` and the time measure.
 -- This will be achived by using an chord as source material.
 -- The Chord pitches will be used for `L` and `R`.
@@ -17,7 +17,7 @@
 -- "paradiddle"@<"sn1" "sn2">4\n
 -- ```
 -- Examples:
--- **a fiveStrokeRoll**
+-- **a paradiddle**
 -- ```language=Werckmeister\n
 --using "lua/mods/drumRudiments.lua";\n
 --tempo: 150;\n
@@ -27,8 +27,8 @@
 --instrument: piano;\n
 --{\n
 --   /mod: drumRudiments/\n
---   -- a fiveStrokeRoll with c' for R and c for L\n
---   "fiveStrokeRoll"@<c' c>1\n
+--   -- a paradiddle (RLRR) with c' for R and c for L\n
+--   "paradiddle"@<c' c>1\n
 --}\n
 --]\n
 -- ```
@@ -42,14 +42,14 @@
 --instrument: piano;\n
 --{\n
 --   /mod: drumRudiments/\n
---   -- performs 4 paradiddles with c' for R and c for L\n
+--   -- performs 4 paradiddles (RLRR) with c' for R and c for L\n
 --   "4x paradiddle"@<c' c>1\n
 --}\n
 --]\n
 -- ```
 -- **orchestration**
 -- If you want to orchestrate a rudiment over a drum set,
--- you are able to define more R & L notes. The total number of notes has to be even.
+-- you are able to define more R & L notes. The total number of the notes has to be even.
 -- ```language=Werckmeister\n
 --using "lua/mods/drumRudiments.lua";\n
 --tempo: 120;\n
@@ -59,13 +59,36 @@
 --instrument: piano;\n
 --{\n
 --   /mod: drumRudiments/\n
---   -- performs a paradiddles with: \n
---   --       c' for R1 and c for L1\n
---   --  and  d' for R2 and d for L2\n
---   "paradiddle"@<c' c d' d>1\n
+--   -- performs a paradiddlediddle (RLRRLL) with \n
+--   --      c' for R1 and c for L1\n
+--   -- and  d' for R2 and d for L2.\n
+--   -- The final sequence: c'(R1) c(L1) d'(R2) c(R1) d(L2) c(L1) \n
+--   "paradiddlediddle"@<c' c d' d>1\n
 --}\n
 --]\n
 -- ```
+-- **Supported Rudiments**
+--<ul style="font-size: 0.9em;">
+--<li>singleStrokeRoll</li>
+--<li>doubleStrokeRoll</li>
+--<li>trippleStrokeRoll</li>
+--<li>fiveStrokeRoll</li>
+--<li>singleStrokeFour</li>
+--<li>singleStrokeSeven</li>
+--<li>multipleBounceRoll</li>
+--<li>sixStrokeRoll</li>
+--<li>sevenStrokeRoll</li>
+--<li>nineStrokeRoll</li>
+--<li>tenStrokeRoll</li>
+--<li>elevenStrokeRoll</li>
+--<li>thirteenStrokeRoll</li>
+--<li>fifteenStrokeRoll</li>
+--<li>seventeenStrokeRoll</li>
+--<li>paradiddle</li>
+--<li>doubleParadiddle</li>
+--<li>trippleParadiddle</li>
+--<li>paradiddlediddle</li>
+--</ul>
 -- ]]>
 -- </command>
 
@@ -87,34 +110,34 @@ SupportedRepeatTags = {
     ["7x"]  =  7,
     ["8x"]  =  8,
     ["9x"]  =  9,
-    ["11x"] = 11,
-    ["12x"] = 12,
-    ["13x"] = 13,
-    ["14x"] = 14,
-    ["15x"] = 15,
-    ["16x"] = 16,
-    ["17x"] = 17,
-    ["18x"] = 18,
-    ["19x"] = 19,
-    ["20x"] = 20,
-    ["21x"] = 21,
-    ["22x"] = 22,
-    ["23x"] = 23,
-    ["24x"] = 24,
-    ["25x"] = 25,
-    ["26x"] = 26,
-    ["27x"] = 27,
-    ["28x"] = 28,
-    ["29x"] = 29,
-    ["30x"] = 30,
-    ["31x"] = 31,
-    ["32x"] = 32,
+    -- * 11x 11,
+    -- * 12x 12,
+    -- * 13x 13,
+    -- * 14x 14,
+    -- * 15x 15,
+    -- * 16x 16,
+    -- * 17x 17,
+    -- * 18x 18,
+    -- * 19x 19,
+    -- * 20x 20,
+    -- * 21x 21,
+    -- * 22x 22,
+    -- * 23x 23,
+    -- * 24x 24,
+    -- * 25x 25,
+    -- * 26x 26,
+    -- * 27x 27,
+    -- * 28x 28,
+    -- * 29x 29,
+    -- * 30x 30,
+    -- * 31x 31,
+    -- * 32x 32,
 }
 
 local tiedEventCache = {
-    ["offset"] = 0,
-    ["duration"] = 0,
-    ["originEvent"] = nil
+    -- * offset 0,
+    -- * duration 0,
+    -- * originEvent nil
 }
 
 local function newTiedEventCache(event)

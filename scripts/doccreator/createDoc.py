@@ -132,6 +132,7 @@ class Printer:
             writer = mg.Writer(stream)
             writer.write_heading(f'`{self.dto.command_name}`', self.heading_level)
             writer.writeline(self.dto.summary)
+            writer.writeline('')
             self.print_parameters(writer)
             self.print_include(writer)
             writer.writeline('<br>'*3)
@@ -148,7 +149,7 @@ class Printer:
 def printToc(title, commands):
     print(f'## {title}')
     for command in commands:
-        print(f'* [{command.command_name}](#{command.command_name})')  
+        print(f'* [{command.command_name}](#{command.command_name.lower()})')  
 
 def printCommands(commands):
     internal = [cmd for cmd in commands if cmd.type == CommandType.INTERNAL_COMMAND]
