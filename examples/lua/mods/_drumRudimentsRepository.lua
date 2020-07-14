@@ -8,6 +8,8 @@
 R="R"
 L="L"
 
+FlamType = "flam"
+
 -- durations
 local _4    = 1
 local _8    = 1/2
@@ -18,15 +20,22 @@ local _8t   = _8 / 3
 local _16t  = _16 / 3
 local _32t  = _32 / 3
 -- velocity factors
-local ac  = 1.0 -- accent
-local un  = 0.5 -- unaccented
-
+local ac    = 1.0 -- accent
+local un    = 0.7 -- unaccented
+local grace = 0.2 -- grace note 
 -- create a rudiment sequence event
 local function Stroke(which, duration, velocityFactor)
     if velocityFactor == nil then
         velocityFactor = 1
     end
     return { which=which, duration=duration, velocityFactor = velocityFactor }
+end
+
+local function Flam(which, duration, velocityFactor)
+    if velocityFactor == nil then
+        velocityFactor = 1
+    end
+    return { which=which, duration=duration, velocityFactor = velocityFactor, type = FlamType}
 end
 
 local S = Stroke
@@ -38,7 +47,7 @@ local function Diddle(which, duration)
 end
 
 -- returns L for R and R for L.
-local function Alt(which)
+function Alt(which)
     if which == L then
         return R
     elseif which == R then
@@ -131,4 +140,24 @@ Rudiments = {
         Seq(Alternate(S(R, _16, ac), 3), Diddle(R, _16)),
     ["paradiddlediddle"] =
         Seq(Alternate(S(R, _16, ac)), Diddle(R, _16), Diddle(L, _16)),
+    ["flam"] =
+        Seq(Flam(R, _4)),
+    ["flamAccent"] =
+        Seq(Flam(R, _8, ac), S(L, _8, un), S(R, _8, un)),
+    ["flamTap"] =
+        Seq(Flam(R, _16, ac), S(R, _16, un)),
+    ["flamacue"] =
+        Seq(Flam(R, _16, un), S(L, _16, ac), S(R, _16, un), S(L, _16, un), Flam(R, _4, un)),
+    ["flamParadiddle"] =
+        Seq(Flam(R, _16, ac), S(L, _16, un), Diddle(R, _16)),
+    ["singleFlammedMill"] =
+        Seq(Flam(R, _16, ac), S(R, _16, un), S(L, _16, un), S(R, _16, un)),
+    ["pataflafla"] =
+        Seq(Flam(R, _16, ac), S(L, _16, un), Diddle(R, _16), Flam(L, _16, ac)),
+    ["swissArmytriplet"] =
+        Seq(Flam(R, _16t, ac), S(R, _16t, un), S(L, _16t, un)),
+    ["invertedFlamTap"] =
+        Seq(Flam(R, _16, ac), S(L, _16, un)),
+    ["flamDrag"] =
+        Seq(Flam(R, _8, ac), S(L, _16, un), S(L, _16, un), S(R, _8, un)),
 }

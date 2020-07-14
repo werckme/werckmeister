@@ -86,6 +86,16 @@
 --<li>doubleParadiddle</li>
 --<li>trippleParadiddle</li>
 --<li>paradiddlediddle</li>
+--<li>flam</li>
+--<li>flamAccent</li>
+--<li>flamTap</li>
+--<li>flamacue</li>
+--<li>flamParadiddle</li>
+--<li>singleFlammedMill</li>
+--<li>pataflafla</li>
+--<li>swissArmytriplet</li>
+--<li>invertedFlamTap</li>
+--<li>flamDrag</li>
 --</ul>
 -- ]]>
 -- </command>
@@ -316,6 +326,7 @@ function RudimentPerformer:perform()
     local offset = self.offset
     local durationFactor = self.duration / self:defDuration()
     for idx, rudiment in pairs(self.rudiment) do
+        local type           = rudiment.type
         local which          = rudiment.which
         local duration       = rudiment.duration
         local velocityFactor = rudiment.velocityFactor
@@ -325,9 +336,25 @@ function RudimentPerformer:perform()
         note.offset = offset
         local pitch = self:nextPitch(which)
         note:addPitch(pitch.pitch, pitch.octave)
+        if type == FlamType then
+            self:performFlam(events, note, Alt(which))
+        end
         table.insert(events, note)
         offset = offset + note.duration
     end
     return events
 end
 
+
+function RudimentPerformer:performFlam(events, note, which)
+    local flamDuration = 0.05
+    local flam = Note:new()
+    local pitch = self:nextPitch(which)
+    flam:addPitch(pitch.pitch, pitch.octave)
+    flam.duration = flamDuration
+    flam.velocity = note.velocity * 0.25
+    flam.offset = note.offset
+    note.offset = note.offset + flamDuration
+    note.duration = note.duration - flamDuration
+    table.insert(events, flam)
+end

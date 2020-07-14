@@ -9,23 +9,19 @@ using "./lua/mods/drumRudiments.lua";
 device: MyDevice _isType=midi _usePort=5;
 instrumentDef: drums MyDevice _ch=9 _pc=0 _cc=0;
 
-tempo: 90;
+tempo: 60;
 
 [
 type: template;
 name: x;
 instrument: drums;
 {
-    \fff
+    \ffff
     /mod: drumRudiments/
-    !ffff"sn"4
-    "1x sevenStrokeRoll"@      <"htol" "ht" "snl" "snr">4
-    !ffff"sn"16
-    "sng"16
-    "2x paradiddlediddle"@<"mtol" "ht" "ltol" "sn" "bd" "sn">4.
+    "8x flamDrag"@      <"snr" "snl">1
 }
 {
-    "bd" &&&
+
 }
 ]
 
