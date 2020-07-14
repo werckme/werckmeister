@@ -118,6 +118,7 @@ SupportedRepeatTags = {
     ["7x"]  =  7,
     ["8x"]  =  8,
     ["9x"]  =  9,
+    ["10x"]  =  10,
     ["11x"] = 11,
     ["12x"] = 12,
     ["13x"] = 13,
@@ -355,6 +356,6 @@ function RudimentPerformer:performFlam(events, note, which)
     flam.velocity = note.velocity * 0.25
     flam.offset = note.offset
     note.offset = note.offset + flamDuration
-    note.duration = note.duration - flamDuration
+    note.duration = note.duration
     table.insert(events, flam)
 end
