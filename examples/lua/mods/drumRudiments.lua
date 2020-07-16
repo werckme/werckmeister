@@ -108,6 +108,11 @@
 --</ul>
 -- ]]>
 -- </command>
+-- <param name="velocityFactorAccented"   optional="1" type="0..1">The velocity factor for accented notes (Default=1)</param>
+-- <param name="velocityFactorUnaccented" optional="1" type="0..1">The velocity factor for unaccented notes (Default=0.7)</param>
+-- <param name="velocityFactorGraceNote"  optional="1" type="0..1">The velocity factor for accented notes (Default=1)</param>
+-- <param name="flamOffset"               optional="1" type="0..N">The offset in quartes when to perform the grace note before the actual note (Default=0.05)</param>
+-- <param name="dragOffset"               optional="1" type="0..N">The offset in quartes when to perform the two grace notes before the actual note (Default=0.05)</param>
 
 
 
@@ -116,7 +121,13 @@ require "_drumRudimentsRepository"
 require "_events"
 
 parameters = {
+    { name="velocityFactorAccented",            default="1" },
+    { name="velocityFactorUnaccented",          default="0.7" },
+    { name="velocityFactorGraceNote",           default="0.2" },
+    { name="flamOffset",                        default="0.05" },
+    { name="dragOffset",                        default="0.05" },
 }
+
 
 SupportedRepeatTags = {
     ["2x"]  =  2,
@@ -205,6 +216,11 @@ function perform(events, params, timeinfo)
         return events
     end
     local rudimentPerformer = RudimentPerformer:new()
+    rudimentPerformer.velocityFactorAccented = tonumber(params.velocityFactorAccented)
+    rudimentPerformer.velocityFactorUnaccented = tonumber(params.velocityFactorUnaccented)
+    rudimentPerformer.velocityFactorGraceNote = tonumber(params.velocityFactorGraceNote)
+    rudimentPerformer.flamOffset = tonumber(params.flamOffset)
+    rudimentPerformer.dragOffset = tonumber(params.dragOffset)
     rudimentPerformer:setSourceEvent(firstEvent)
     if rudimentPerformer.rudiment == nil then
         return events

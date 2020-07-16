@@ -9,20 +9,24 @@ using "./lua/mods/drumRudiments.lua";
 device: MyDevice _isType=midi _usePort=5;
 instrumentDef: drums MyDevice _ch=9 _pc=0 _cc=0;
 
-tempo: 60;
+tempo: 100;
 
 [
 type: template;
 name: x;
 instrument: drums;
 {
-    \ffff
-    /mod: drumRudiments/
-    --"2x dragParadiddle1"@      <"snl" "snr">1
-    "1x trippleRatamacue"@      <"snl" "snr">1
+    \fffff
+    /mod: drumRudiments _velocityFactorGraceNote=0.7/
+    --"2x drag"@      <"snl" "snr">1
+    "1x flamTap"@      <"htol" "htor" "mtol" "mtor" "ltor" "ltol" "ftol" "ftor" >4
+    r
+    "1x swissArmytriplet"@      <"mtol" "mtor" "ltor" "ltol" "ftol" "ftor" >4
+    "singleDragadiddle"@<"ftol" "ftor" "ho" "ht">8. 
+    "ht"16
 }
 {
-
+    "bd"
 }
 ]
 
