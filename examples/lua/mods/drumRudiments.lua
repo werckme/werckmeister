@@ -216,6 +216,10 @@ function RudimentPerformer:new(o)
     self.idxL = 1
     self.idxR = 1
     self.offset = 0
+    self.velocityFactorAccented = 1
+    self.velocityFactorUnaccented = 0.7
+    self.velocityFactorGraceNote = 0.2
+    self.flamOffset = 0.05
     return o
 end
 
@@ -322,6 +326,19 @@ function RudimentPerformer:defDuration()
     return duration
 end
 
+function RudimentPerformer:getVelocityFactor(rudiment)
+    if rudiment.velocityClass == Accent then
+        return self.velocityFactorAccented
+    end
+    if rudiment.velocityClass == Unaccented then
+        return self.velocityFactorUnaccented
+    end
+    if rudiment.velocityClass == GraceNote then
+        return self.velocityFactorGraceNote
+    end
+    error("no velocity value for class " .. rudiment.velocityClass)
+end
+
 function RudimentPerformer:perform()
     local events = {}
     local offset = self.offset
@@ -330,7 +347,7 @@ function RudimentPerformer:perform()
         local type           = rudiment.type
         local which          = rudiment.which
         local duration       = rudiment.duration
-        local velocityFactor = rudiment.velocityFactor
+        local velocityFactor = self:getVelocityFactor(rudiment)
         local note = Note:new()
         note.duration = duration * durationFactor
         note.velocity = self.velocity * velocityFactor
@@ -348,12 +365,12 @@ end
 
 
 function RudimentPerformer:performFlam(events, note, which)
-    local flamDuration = 0.05
+    local flamDuration = self.flamOffset
     local flam = Note:new()
     local pitch = self:nextPitch(which)
     flam:addPitch(pitch.pitch, pitch.octave)
     flam.duration = flamDuration
-    flam.velocity = note.velocity * 0.25
+    flam.velocity = note.velocity * self.velocityFactorGraceNote
     flam.offset = note.offset
     note.offset = note.offset + flamDuration
     note.duration = note.duration

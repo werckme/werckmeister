@@ -18,7 +18,7 @@ instrument: drums;
 {
     \ffff
     /mod: drumRudiments/
-    "13x flamDrag"@      <"snl" "snr">1
+    "12x flamDrag"@      <"snl" "snr">1
 }
 {
 

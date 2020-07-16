@@ -20,22 +20,27 @@ local _8t   = _8 / 3
 local _16t  = _16 / 3
 local _32t  = _32 / 3
 -- velocity factors
-local ac    = 1.0 -- accent
-local un    = 0.7 -- unaccented
-local grace = 0.2 -- grace note 
+Accent      = "accent"
+Unaccented  = "unaccented"
+GraceNote   = "grace note"
+
+local ac = Accent
+local un = Unaccented
+
+
 -- create a rudiment sequence event
-local function Stroke(which, duration, velocityFactor)
-    if velocityFactor == nil then
-        velocityFactor = 1
+local function Stroke(which, duration, velocityClass)
+    if velocityClass == nil then
+        velocityClass = Accent
     end
-    return { which=which, duration=duration, velocityFactor = velocityFactor }
+    return { which=which, duration=duration, velocityClass = velocityClass }
 end
 
-local function Flam(which, duration, velocityFactor)
-    if velocityFactor == nil then
-        velocityFactor = 1
+local function Flam(which, duration, velocityClass)
+    if velocityClass == nil then
+        velocityClass = 1
     end
-    return { which=which, duration=duration, velocityFactor = velocityFactor, type = FlamType}
+    return { which=which, duration=duration, velocityClass = velocityClass, type = FlamType}
 end
 
 local S = Stroke
@@ -114,8 +119,8 @@ Rudiments = {
     ["singleStrokeSeven"] =
         { S(R, _8t), S(L, _8t), S(R, _8t), S(L, _8t), S(R, _8t), S(L, _8t), S(R, _4) },
     ["multipleBounceRoll"] =
-        { S(R, _32, 1.0), S(R, _32, 0.9), S(R, _32, 0.8), S(R, _32, 0.7),
-          S(L, _32, 1.0), S(L, _32, 0.9), S(L, _32, 0.8), S(L, _32, 0.7)},
+        { S(R, _32, un), S(R, _32, un), S(R, _32, un), S(R, _32, un),
+          S(L, _32, un), S(L, _32, un), S(L, _32, un), S(L, _32, un)},
     ["sixStrokeRoll"] =
         Seq(S(R, _8, ac), Diddle(L, _16), Diddle(R, _16), S(L, _8, ac)),
     ["sevenStrokeRoll"] =
