@@ -357,6 +357,9 @@ function RudimentPerformer:perform()
         if type == FlamType then
             self:performFlam(events, note, Alt(which))
         end
+        if type == DragType then
+            self:performDrag(events, note, Alt(which))
+        end        
         table.insert(events, note)
         offset = offset + note.duration
     end
@@ -375,4 +378,26 @@ function RudimentPerformer:performFlam(events, note, which)
     note.offset = note.offset + flamDuration
     note.duration = note.duration
     table.insert(events, flam)
+end
+
+function RudimentPerformer:performDrag(events, note, which)
+    local flamDuration = self.flamOffset
+    local pitch = self:nextPitch(which)
+    local flam = Note:new()
+    flam:addPitch(pitch.pitch, pitch.octave)
+    flam.duration = flamDuration
+    flam.velocity = note.velocity * self.velocityFactorGraceNote
+    flam.offset = note.offset
+    table.insert(events, flam)
+
+    flam = Note:new()
+    flam:addPitch(pitch.pitch, pitch.octave)
+    flam.duration = flamDuration
+    flam.velocity = note.velocity * self.velocityFactorGraceNote
+    flam.offset = note.offset + flamDuration
+    table.insert(events, flam)
+
+    note.offset = note.offset + flamDuration * 2
+    note.duration = note.duration
+
 end

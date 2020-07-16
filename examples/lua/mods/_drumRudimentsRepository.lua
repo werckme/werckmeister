@@ -9,6 +9,7 @@ R="R"
 L="L"
 
 FlamType = "flam"
+DragType = "drag"
 
 -- durations
 local _4    = 1
@@ -38,9 +39,16 @@ end
 
 local function Flam(which, duration, velocityClass)
     if velocityClass == nil then
-        velocityClass = 1
+        velocityClass = Accent
     end
     return { which=which, duration=duration, velocityClass = velocityClass, type = FlamType}
+end
+
+local function Drag(which, duration, velocityClass)
+    if velocityClass == nil then
+        velocityClass = Accent
+    end
+    return { which=which, duration=duration, velocityClass = velocityClass, type = DragType}
 end
 
 local S = Stroke
@@ -165,4 +173,6 @@ Rudiments = {
         Seq(Flam(R, _16, ac), S(L, _16, un)),
     ["flamDrag"] =
         Seq(Flam(R, _8, ac), S(L, _16, un), S(L, _16, un), S(R, _8, un)),
+    ["drag"] =
+        Seq(Drag(L, _4, ac)),
 }
