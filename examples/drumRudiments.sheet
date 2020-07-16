@@ -18,7 +18,8 @@ instrument: drums;
 {
     \ffff
     /mod: drumRudiments/
-    "12x drag"@      <"snl" "snr">1
+    --"2x dragParadiddle1"@      <"snl" "snr">1
+    "1x trippleRatamacue"@      <"snl" "snr">1
 }
 {
 

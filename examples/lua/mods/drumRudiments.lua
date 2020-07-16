@@ -96,6 +96,15 @@
 --<li>swissArmytriplet</li>
 --<li>invertedFlamTap</li>
 --<li>flamDrag</li>
+--<li>singleDragTap</li>
+--<li>doubleDragTap</li>
+--<li>lesson25</li>
+--<li>singleDragadiddle</li>
+--<li>dragParadiddle1</li>
+--<li>dragParadiddle2</li>
+--<li>singleRatamacue</li>
+--<li>doubleRatamacue</li>
+--<li>trippleRatamacue</li>
 --</ul>
 -- ]]>
 -- </command>
@@ -220,6 +229,7 @@ function RudimentPerformer:new(o)
     self.velocityFactorUnaccented = 0.7
     self.velocityFactorGraceNote = 0.2
     self.flamOffset = 0.05
+    self.dragOffset = 0.05
     return o
 end
 
@@ -381,7 +391,7 @@ function RudimentPerformer:performFlam(events, note, which)
 end
 
 function RudimentPerformer:performDrag(events, note, which)
-    local flamDuration = self.flamOffset
+    local flamDuration = self.dragOffset
     local pitch = self:nextPitch(which)
     local flam = Note:new()
     flam:addPitch(pitch.pitch, pitch.octave)

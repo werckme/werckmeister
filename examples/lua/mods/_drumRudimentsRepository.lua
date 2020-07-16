@@ -174,5 +174,23 @@ Rudiments = {
     ["flamDrag"] =
         Seq(Flam(R, _8, ac), S(L, _16, un), S(L, _16, un), S(R, _8, un)),
     ["drag"] =
-        Seq(Drag(L, _4, ac)),
+        Seq(Drag(R, _4, ac)),
+    ["singleDragTap"] =
+        Seq(Drag(R, _8, un), S(L, _8, ac)),
+    ["doubleDragTap"] =
+        Seq(Drag(R, _8, un), Drag(R, _8, un), S(L, _8, ac)),
+    ["lesson25"] =
+        Seq(Drag(R, _16, un), S(L, _16, un), S(R, _8, ac)),
+    ["singleDragadiddle"] =
+        Seq(Drag(R, _16, ac), S(L, _16, un), Diddle(R, _16)),
+    ["dragParadiddle1"] =
+        Seq(S(R, _8, ac), Drag(R, _16, un), S(L, _16, un), Diddle(R, _16)),
+    ["dragParadiddle2"] =
+        Seq(S(R, _8, ac), Drag(R, _8, un), Drag(R, _16, un), S(L, _16, un), Diddle(R, _16)),
+    ["singleRatamacue"] =
+        Seq(Drag(R, _8t, un), S(L, _8t, un), S(R, _8t, un), S(L, _8, ac)),
+    ["doubleRatamacue"] =
+        Seq(Drag(R, _8, un), Drag(R, _8t, un), S(L, _8t, un), S(R, _8t, un), S(L, _8, ac)),
+    ["trippleRatamacue"] =
+        Seq(Drag(R, _8, un), Drag(R, _8, un), Drag(R, _8t, un), S(L, _8t, un), S(R, _8t, un), S(L, _8, ac))        
 }
