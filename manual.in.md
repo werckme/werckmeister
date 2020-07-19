@@ -14,27 +14,19 @@ Werckmeister compiles sheet music source code into a MIDI file.
    c'4   g8 g   a4 g~  |   g  b c'
 ```
 
-## Features
+## Use Werckmeister if you want to
+* translate sheet music into midi music
+* prototype a song
+* experiment with chord progressions or different accompaniment styles  
+* compose using readable source code instead of proprietary files formats
 
+## Features
  * open source
  * a fast sheet music MIDI compiler
  * a sheet music player
  * accompaniment template rendering engine
- * Lua script extensions
- * Lua modifications
- * Lua voicing strategies
+ * [Lua](https://www.lua.org/) script extensions
 
-## What it wants to be
-* a fast and easy way to create lead sheet music
-* that tool in your toolchain, between the initial idea and polishing work with your favourite DAW
-* a way to create music without a Graphical User Interface
-* a tool which relies only on human readable files
-
-
-## What it doesn't want to be
-* a replacement to your favourite Sequencer/DAW
-* a scorewriter software
-* a programming language
 
 Vision
 ------
@@ -42,7 +34,8 @@ Consider the beauty of lead sheet music: you write a melody and some chords, add
 
 Thats it.
 
-This is the idea behind Werckmeister. Of course it can not replace a musician or a band. But it offers you a tool to write melodies and chords then you can define how to interpret the chords along your melody or even define your own interpretation templates.
+This is the idea behind Werckmeister. Of course it can not replace a real musician or a band. 
+But it offers you a tool to create music just by writing melodies and chords.
 
 ## Try it out online
 
@@ -328,6 +321,9 @@ C7 D-7 E-7 F7 Gmaj7 A-7
 
 ### Meta Events
 Events to set up something or loading a mod script.
+
+*Meta events are also called [Commands](#commands)*
+
 <br>You can recognize meta events by its slashes at the beginning and the end.
 ```language=Werckmeister,type=single
 /tempo: 100/ -- meta event: set tempo to 100

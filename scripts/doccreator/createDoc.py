@@ -19,7 +19,7 @@ def processHeader(file_str):
     if 'doxygen' not in class_:
         return
     comments = class_['doxygen']
-    comments_parser = DocParser()
+    comments_parser = DocParser(file_str)
     command = comments_parser.parse(comments)
     if command != None:
         command.type = CommandType.INTERNAL_COMMAND
@@ -38,7 +38,7 @@ def processLua(file_str):
         comment_str = "".join(comment_lines)
     if len(comment_str) == 0:
         return None
-    comments_parser = DocParser('--')
+    comments_parser = DocParser(file_str, '--')
     command = comments_parser.parse(comment_str)
     if command != None:
         command.type = CommandType.LUA_EXTENSION
@@ -46,8 +46,9 @@ def processLua(file_str):
     return command    
 
 class DocParser:
-    def __init__(self, comment_sequence = '///'):
+    def __init__(self, file_str, comment_sequence = '///'):
         self.comment_sequence = comment_sequence
+        self.file_str = file_str
 
     def remove_comments(self, str):
         str = str.replace('\r', '')
@@ -65,7 +66,11 @@ class DocParser:
             .replace('$nl', '\n')
         attr = lambda node, name, default="": node.attrib[name] if name in node.attrib else default
         str = self.remove_comments(str)
-        doc_tree = ET.fromstring(f'<root>{str}</root>')
+        doc_tree = None
+        try:
+            doc_tree = ET.fromstring(f'<root>{str}</root>')
+        except Exception as ex:
+            raise RuntimeError(f"failed to parse xml with file: {self.file_str} -> {ex}")
         command_node = doc_tree.find('command')
         if command_node == None:
             return
