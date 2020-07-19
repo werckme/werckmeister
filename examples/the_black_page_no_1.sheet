@@ -7,19 +7,19 @@ using "lua/voicings/simple.lua";
 -- to get a list of your available MIDI devices 
 -- and their port numbers, execute "sheetp --list"
 --      name              type   portnumber
-device: MyDevice          midi       0;
+device: MyDevice          midi       5;
 
 -- define your instruments:
 -- (ch= channel, pc= programm change, cc= control change)
---             name       device   ch  cc  pc   
+--             name       device
 instrumentDef: piano      MyDevice _ch=0 _cc=0  _pc=0;
 instrumentDef: lead       MyDevice _ch=1 _cc=0  _pc=12;
 instrumentDef: bass       MyDevice _ch=2 _cc=0  _pc=26;
 instrumentDef: drums      MyDevice _ch=9 _cc=0  _pc=0;
 
 instrumentConf: bass
-    volume 65
     voicingStrategy simple _range=contrabass
+    volume 65
 ;   
 
 instrumentConf: piano

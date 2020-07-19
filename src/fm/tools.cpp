@@ -31,7 +31,6 @@ namespace fm {
         if (arguments.empty()) {
             return;
         }
-        throwIfmixedNamedAndPositionalArgs(arguments);
         for (int position = 0; position < (int)arguments.size(); ++position)
         {
             const auto &argument = arguments[position];

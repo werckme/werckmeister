@@ -43,29 +43,6 @@ namespace fm {
         const fm::String & getMetaCommand(const sheet::Event &metaEvent);
     }
 
-    template<typename TArgs>
-    void throwIfmixedNamedAndPositionalArgs(const TArgs &args) 
-    {
-        if (args.empty()) {
-            return;
-        }
-        auto it = args.begin();
-        bool isNamed = false;
-        while(++it!=args.end())
-        {
-            if (it->name.empty() && isNamed) {
-                fm::StringStream ss;
-                ss << "a positional parameter after a named parameter is not allowed:" << std::endl;
-                ss << "'" << it->value << "'";
-                ss << " is positional";
-                ss << ". The argument before is named";
-                ss << ".";
-                FM_THROW(fm::Exception, ss.str());
-            }
-            isNamed = !it->name.empty();
-        }
-    }
-
     namespace {
         struct MissingArgument {};
 

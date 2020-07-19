@@ -62,23 +62,25 @@ I,,4 I,8 I,8   I,,4 I,8 I,8 |
 ```language=Werckmeister   
 using "chords/default.chords";
 tempo: 140;
-device: MyDevice  midi 0;
-instrumentDef:lead  MyDevice  0 0 0;
-instrumentDef:piano  MyDevice  0 0 0;
-instrumentDef:bass  MyDevice  0 0 0;
+device: MyDevice  midi _usePort=0;
+instrumentDef:lead  _onDevice=MyDevice  _ch=0 _pc=0;
+instrumentDef:piano _onDevice=MyDevice  _ch=0 _pc=0;
+instrumentDef:bass  _onDevice=MyDevice  _ch=0 _pc=0;
 
 -- melody track
 [
 instrument: piano;
 {
     \fff
-    r4 e f# g | c'1~ | c'4 d e f# | b2 b2~ | b4 c d e | a1~ | a4 b, c# d# | g1 |
-    -- wiederholung
-    r4 e f# g | c'1~ | c'4 d e f# | b2 b2~ | b4 c d e | a1~ | 
-    -- 2.
-    a4 f# a g | e1~ | e4 r d# e | f# b, f#2~ | f#4 f# e f# | g1~ | g4 g f# g | a1~ |
-    a4 d d' c' | b1~ | b4 r a# b | c' c' a a | f#2. c'4 | b2 b2~ | b2. e4 | a2. g4 | 
-    f#2 g4 b, | e1 
+    r4 e f# g  | c'1~       | c'4 d e f#  | b2 b2~ | 
+    b4 c d e   | a1~        | a4 b, c# d# | g1     |
+    r4 e f# g  | c'1~       | c'4 d e f#  | b2 b2~ | 
+    b4 c d e   | a1~        | a4 f# a g   | e1~    |
+    e4 r d# e  | f# b, f#2~ | f#4 f# e f# | g1~    |
+    g4 g f# g  | a1~        | a4 d d' c'  | b1~    | 
+    b4 r a# b  | c' c' a a  | f#2. c'4    | b2 b2~ | 
+    b2. e4     | a2. g4     | f#2 g4 b,   | 
+    e1 
 }
 ]
 
@@ -86,12 +88,14 @@ instrument: piano;
 [
 type: accomp;
 {   
-    r | A-7 | D7 | Gmaj7 | Cmaj7 | F#-7b5 | B7 | E- | E- |
-    -- wiederholung
-    A-7 | D7 | Gmaj7 | Cmaj7 | F#-7b5  | 
-    -- 2.
-    B7 | E- | E- | F#-7b5  | B7b9 | E- | E- | A-7 | D7 | Gmaj7 | Gmaj7 |
-    F#-7b5  | B7b9 | E-7 A7 | D-7 G7 | F#-7b5 | B7b9 | E- |
+    r      | A-7    | D7    | Gmaj7  | 
+    Cmaj7  | F#-7b5 | B7    | E-     | 
+    E-     | A-7    | D7    | Gmaj7  | 
+    Cmaj7  | F#-7b5 | B7    | E-     | 
+    E-     | F#-7b5 | B7b9  | E-     | 
+    E-     | A-7    | D7    | Gmaj7  |
+    Gmaj7  | F#-7b5 | B7b9  | E-7 A7 | 
+    D-7 G7 | F#-7b5 | B7b9  | E-     |
 }
 ]
 
@@ -241,11 +245,11 @@ A basic Werckmeister document will look like this:
 
 -- 1)
 --      name         type portnumber
-device: MyMidiDevice midi 1;
+device: MyMidiDevice midi _usePort=1;
 
 -- 2)
---             name  device       ch  cc pc
-instrumentDef: piano MyMidiDevice  0   0  0;
+--             name         
+instrumentDef: piano _onDevice=MyMidiDevice  _ch=0   _pc=0  _cc=0;
 -- (ch= channel, pc= programm change, cc= control change)
 
 -- 3)
@@ -334,6 +338,25 @@ g a b c'
 
 ```
 
+## Parameters
+[Meta Events](#metaevents) or Config Statements will be configurated with parameters. Parameters can be defined in two ways:
+
+#### Positional
+`/volume: 50/` 
+
+#### Named
+`/volume: _to=50/`
+
+For sake of understanding the meaning of statements, it's recommended to use named parameters if the meaning of a parameter isn't obvious.
+
+**do'nt**<br>
+`instrumentDef: piano MyMidiDevice 1 2 3;`
+
+**do**<br>
+`instrumentDef: piano MyMidiDevice  _ch=1  _pc=2 _cc=3;`
+
+
+
 ## Setup A Piece
 ### Using 
 The first thing you want to do in a Werckmeister document, is to load include other files to your project. This may be chord definitions, accomp. templates or modulation scripts.
@@ -351,11 +374,7 @@ The path can be absolute or relative to the current document.
 ### Devices & Instruments
 #### Adding a device
 
-To add a MIDI device to your project, use the device statement. With that statement, you have to choose a name and set a MIDI port for your new device.
-
-device statement format:
-
-`device: aName midi aMidiPort [offset millis]`
+To add a MIDI device to your project, use the [device](#device) statement. With that statement, you have to choose a name and set a MIDI port for your new device.
 
 To see which devices with what port are connected to your device run the player with the `--list` argument: 
 
@@ -379,26 +398,24 @@ where the first number means the port number.
 So lets say we want to add the `SC-8850 Part A` to our project, we write:
 
 ```language=Werckmeister,type=mute
-device: MyRoland midi 1;
+device: MyRoland midi _usePort=1;
 ```
 
 To add a further MIDI port, for example a DX7 on the USB-Midi Port we add another line:
 ```language=Werckmeister,type=mute
-device: MyRoland midi 1;
-device: MyDX7 midi 5;
+device: MyRoland midi _usePort=1;
+device: MyDX7    midi _usePort=5;
 ```
 
 Imagine your USB-Midi Port is a bit cheap and laggy. Every signal to your USB-Midi port has a delay of about 20 milliseconds. We can compensate this by adding a 20 milliseconds delay to the `MyRoland` device, so that this device and your laggy USB-Midi Port should be in sync. We do this by using an optional `offset` argument.
 
 ```language=Werckmeister,type=mute
-device: MyRoland midi 1 offset 20;
-device: MyDX7 midi 5;
+device: MyRoland midi _usePort=1 _withOffset=20;
+device: MyDX7    midi _usePort=5;
 ```
 
 #### Adding instruments
-To adding instruments we using the `instrumentDef` statement, which is constructed like this:
-
-`instrumentDef: aInstrumentName aMidiDevice midiChannel midiControlChange midiProgramChange`
+To adding instruments we using the [instrumentDef](#instrumentdef) statement, which is constructed like this:
 
 Let's add an organ instrument which uses our Roland device from above:
 
@@ -406,26 +423,16 @@ The Roland SC-8850 offers, for example, a `Farf Organ`. So if I want to use this
 A suitable `instrumentDef` statement would be look as follows: 
 
 ```language=Werckmeister,type=mute
---             name      device   ch   cc   pc
-instrumentDef: myFarfisa MyRoland  0   19   17;
+--             name      device              
+instrumentDef: myFarfisa _onDevice=MyRoland  _ch=0   _cc=19   _pc=17;
 ```
 
 
 #### Configuring instruments
-With an instrument added there are further options to configure it.
-A config statement has as first argument the instrument name you want to configure followed by several optional config aruments.
+With an instrument added, there are further options to configure it.
+A [config statement](#instrumentconf) has as first argument the instrument name you want to configure, followed by several *optional* config aruments.
 
-`instrumentConf: aInstrumentName [pan aValue] [volume aValue] [voicingStrategy aStrategyName] [mod aModName];`
-
-  option                            |  value                  | purpose                         
-  ----------------------------------| ----------------------- | --------------------------------------
-  volume                            | 0..100                  | set the volume
-  pan                               | 0..100                  | set the pan, 0=left, 50=center, 100=right 
-  mod                               | aName [option value]    | set a [mod](#mods) 
-  voicingStrategy                   | aName [option value]    | set a [voicingStrategy](#voicing-strategies)
-  dynamics expression (ppppp-fffff) | 0..100                  | overwrite default velocity mapping  
-
-Now, as an example we set a volume value of 80 to our Farfisa organ, also we set the pan more to the left.
+As an example we set a volume value of 80 to our Farfisa organ, also we set the pan more to the left.
 
 *(the final result of these settings is strongly dependent by your actual MIDI device)* 
 
@@ -438,7 +445,7 @@ To set the tempo of your piece, write `tempo: aNumber`.
 
 
 ```language=Werckmeister,type=partial
-tempo 120;
+tempo: 120;
 [
 {
     c d e f | g a b c'
@@ -616,9 +623,9 @@ tbd.
 ## Accomp My Melodies
 
 Imagine you give your bass player some chords, and he or she asks you how to play these.
-<br>You would say something like: play the 1st degree on one and the 5th degree on four. 
+<br>You would say something like: play the 1st degree on the first beat and the 5th degree on the fourth beat. 
 
-And this is exactly what you doing when writing style templates.
+And this is what you doing when writing style templates.
 <br>So in our example above you would write:
 
 ```language=Werckmeister,type=full
@@ -626,8 +633,8 @@ And this is exactly what you doing when writing style templates.
 using "chords/default.chords";
 
 device: MyDevice  midi 0;
---             name  device       ch pc cc
-instrumentDef:bass  MyDevice      0  0  0;
+--            name  device       
+instrumentDef:bass  MyDevice _ch=0  _pc=0;
 
 -- here is the template:
 [
@@ -659,11 +666,10 @@ There are the same rules as for writing absolute [notes](#notes):
 such as:
 
 * use `#` or `b` for sharp or flat
-* to perform inervals use angle brackes. For example a triad: `<I II III>`
+* to perform inervals use angle brackes. For example a triad: `<I III V>`
 * use `~` for tied and `.` for dotted notes
 * create tuplets using parantheses
 
-To spiece up our example a bit, we add a second bar which plays an interval with I and III
 
 ```language=Werckmeister,type=full
 -- make sure that you have a chord definition loaded
@@ -671,14 +677,14 @@ using "chords/default.chords";
 
 device: MyDevice  midi 0;
 --             name  device       ch pc cc
-instrumentDef:bass  MyDevice      0  0  0;
+instrumentDef:bass  MyDevice _ch=0  _pc=0;
 
 [
 type: template;
 name: simpleBass;
 instrument: bass;
 {
-    I,,2. V,,4 | <I,, III,>1
+    I,,2. V,,4 | <I,, III, V,>1
 }
 ]
 
