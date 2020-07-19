@@ -91,7 +91,6 @@ SET (SRC_FETZER_TESTS
 ## FMAPP
 SET (SRC_SHEET_FMAPP
     fmapp/boostTimer.cpp
-    fmapp/rtmidiBackend.cpp
     fmapp/ADocumentWriter.cpp
     fmapp/MidiPlayer.cpp
     fmapp/MidiFileWriter.cpp
@@ -118,6 +117,7 @@ endif(APPLE)
 
 ## PLAYER
 SET (SRC_SHEET_PLAYER
+    fmapp/rtmidiBackend.cpp
     sheetplayer_main.cpp 
     SheetCompilerProgram.cpp 
     SheetPlayerProgram.cpp 
