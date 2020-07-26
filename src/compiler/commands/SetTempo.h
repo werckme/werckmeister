@@ -17,8 +17,8 @@ namespace sheet {
         /// `tempo: 120;`
         /// or within a track
         /// `/tempo: 120/`
-        /// It is also possible to set diffrent tempo values for several tracks:
-        /// [see here](/manual#Tempo)
+        /// It is also possible to set different tempo values for several tracks:
+        /// [see here](/manual#tempo)
         /// </command>
         /// <param name="bpm" position="0">The tempo bpm value.</param>
         class SetTempo : public ACommand
