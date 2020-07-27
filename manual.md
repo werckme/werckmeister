@@ -56,13 +56,13 @@ I,,4 I,8 I,8   I,,4 I,8 I,8 |
 using "chords/default.chords";
 tempo: 140;
 device: MyDevice  midi _usePort=0;
-instrumentDef:lead  _onDevice=MyDevice  _ch=0 _pc=0;
-instrumentDef:piano _onDevice=MyDevice  _ch=0 _pc=0;
-instrumentDef:bass  _onDevice=MyDevice  _ch=0 _pc=0;
+instrumentDef:lead    _onDevice=MyDevice  _ch=0 _pc=0;
+instrumentDef:rhtythm _onDevice=MyDevice  _ch=1 _pc=0;
+instrumentDef:bass    _onDevice=MyDevice  _ch=2 _pc=0;
 
 -- melody track
 [
-instrument: piano;
+instrument: lead;
 {
     \fff
     r4 e f# g  | c'1~       | c'4 d e f#  | b2 b2~ | 
@@ -96,7 +96,7 @@ type: accomp;
 [
 type: template;
 name: myAccomp;
-instrument: piano;
+instrument: rhtythm;
 {
     \p
     <III, V, VII, II>1 | 
@@ -124,7 +124,7 @@ instrument: bass;
 Getting Started
 ============
 
-Go to the page https://github.com/werckme/werckmeister/releases and download the most recent version of Werckmeister.
+Go to this [page](https://github.com/werckme/werckmeister/releases) and download the most recent version of Werckmeister. *(look for the assets section)*
 
 On Mac and on Linux you can install the binaries by executing the installer script.
 
@@ -1178,7 +1178,7 @@ Implements a collection of different drum rudiments. ([see Wikipedia](https://en
 using "lua/mods/drumRudiments.lua";
 tempo: 150;
 device: MyDevice  midi 0;
-instrumentDef:piano  MyDevice  _ch=0 _pc=0;
+instrumentDef:piano  MyDevice  _ch=0 _pc=118;
 [
 instrument: piano;
 {
@@ -1195,12 +1195,12 @@ instrument: piano;
 using "lua/mods/drumRudiments.lua";
 tempo: 120;
 device: MyDevice  midi 0;
-instrumentDef:piano  MyDevice  _ch=0 _pc=0;
+instrumentDef:piano  MyDevice  _ch=0 _pc=118;
 [
 instrument: piano;
 {
    /mod: drumRudiments/
-   -- performs 4 paradiddles (RLRR) with c' for R and c for L
+   -- performs 4 paradiddles (RLRR LRLL RLRR LRLL) with c' for R and c for L
    "4x paradiddle"@<c' c>1
 }
 ]
@@ -1216,16 +1216,17 @@ instrument: piano;
 using "lua/mods/drumRudiments.lua";
 tempo: 120;
 device: MyDevice  midi 0;
-instrumentDef:piano  MyDevice  _ch=0 _pc=0;
+instrumentDef:piano  MyDevice  _ch=0 _pc=118;
 [
 instrument: piano;
 {
    /mod: drumRudiments/
-   -- performs a paradiddlediddle (RLRRLL) with 
+   -- performs 4 paradiddles (RLRR LRLL RLRR LRLL) with 
    --      c' for R1 and c for L1
-   -- and  d' for R2 and d for L2.
-   -- The final sequence: c'(R1) c(L1) d'(R2) c(R1) d(L2) c(L1) 
-   "paradiddlediddle"@<c' c d' d>1
+   -- and  c, for R2 and c,, for L2.
+   -- The final sequence will be: c'(R1) c(L1) c,(R2) c,,(R1) ... 
+   "4x paradiddle"@<c' c c, c,,>1
+
 }
 ]
  ```
@@ -1353,12 +1354,12 @@ Simulates guitar strokes as mini arpeggios.
 using "lua/mods/guitarStroke.lua";
 tempo: 120;
 device: MyDevice  midi 0;
-instrumentDef:  piano  MyDevice  _ch=0 _pc=0;
-instrumentConf: piano mod guitarStroke _mode=alternate _value=8; 
+instrumentDef:  piano  MyDevice  _ch=0 _pc=24;
+instrumentConf: piano mod guitarStroke _mode=alternate _value=16; 
 [
 instrument: piano;
 {
-  <c e g b>4 <c e g b>4 <c eb g bb>4 <c eb g bb>4
+  <c e g b>4 <c e g b>4 <c eb g bb>2 |  <c eb g bb>2 <c eb g bb>2
 }
 ]
  ```

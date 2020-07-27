@@ -20,7 +20,7 @@
 --using "lua/mods/drumRudiments.lua";\n
 --tempo: 150;\n
 --device: MyDevice  midi 0;\n
---instrumentDef:piano  MyDevice  _ch=0 _pc=0;\n
+--instrumentDef:piano  MyDevice  _ch=0 _pc=118;\n
 --[\n
 --instrument: piano;\n
 --{\n
@@ -35,12 +35,12 @@
 --using "lua/mods/drumRudiments.lua";\n
 --tempo: 120;\n
 --device: MyDevice  midi 0;\n
---instrumentDef:piano  MyDevice  _ch=0 _pc=0;\n
+--instrumentDef:piano  MyDevice  _ch=0 _pc=118;\n
 --[\n
 --instrument: piano;\n
 --{\n
 --   /mod: drumRudiments/\n
---   -- performs 4 paradiddles (RLRR) with c' for R and c for L\n
+--   -- performs 4 paradiddles (RLRR LRLL RLRR LRLL) with c' for R and c for L\n
 --   "4x paradiddle"@<c' c>1\n
 --}\n
 --]\n
@@ -52,16 +52,16 @@
 --using "lua/mods/drumRudiments.lua";\n
 --tempo: 120;\n
 --device: MyDevice  midi 0;\n
---instrumentDef:piano  MyDevice  _ch=0 _pc=0;\n
+--instrumentDef:piano  MyDevice  _ch=0 _pc=118;\n
 --[\n
 --instrument: piano;\n
 --{\n
 --   /mod: drumRudiments/\n
---   -- performs a paradiddlediddle (RLRRLL) with \n
+--   -- performs 4 paradiddles (RLRR LRLL RLRR LRLL) with \n
 --   --      c' for R1 and c for L1\n
---   -- and  d' for R2 and d for L2.\n
---   -- The final sequence: c'(R1) c(L1) d'(R2) c(R1) d(L2) c(L1) \n
---   "paradiddlediddle"@<c' c d' d>1\n
+--   -- and  c, for R2 and c,, for L2.\n
+--   -- The final sequence will be: c'(R1) c(L1) c,(R2) c,,(R1) ... \n
+--   "4x paradiddle"@<c' c c, c,,>1
 --}\n
 --]\n
 -- ```

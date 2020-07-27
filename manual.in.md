@@ -56,13 +56,13 @@ I,,4 I,8 I,8   I,,4 I,8 I,8 |
 using "chords/default.chords";
 tempo: 140;
 device: MyDevice  midi _usePort=0;
-instrumentDef:lead  _onDevice=MyDevice  _ch=0 _pc=0;
-instrumentDef:piano _onDevice=MyDevice  _ch=0 _pc=0;
-instrumentDef:bass  _onDevice=MyDevice  _ch=0 _pc=0;
+instrumentDef:lead    _onDevice=MyDevice  _ch=0 _pc=0;
+instrumentDef:rhtythm _onDevice=MyDevice  _ch=1 _pc=0;
+instrumentDef:bass    _onDevice=MyDevice  _ch=2 _pc=0;
 
 -- melody track
 [
-instrument: piano;
+instrument: lead;
 {
     \fff
     r4 e f# g  | c'1~       | c'4 d e f#  | b2 b2~ | 
@@ -96,7 +96,7 @@ type: accomp;
 [
 type: template;
 name: myAccomp;
-instrument: piano;
+instrument: rhtythm;
 {
     \p
     <III, V, VII, II>1 | 
@@ -124,7 +124,7 @@ instrument: bass;
 Getting Started
 ============
 
-Go to the page https://github.com/werckme/werckmeister/releases and download the most recent version of Werckmeister.
+Go to this [page](https://github.com/werckme/werckmeister/releases) and download the most recent version of Werckmeister. *(look for the assets section)*
 
 On Mac and on Linux you can install the binaries by executing the installer script.
 

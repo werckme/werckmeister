@@ -19,12 +19,12 @@
 --using "lua/mods/guitarStroke.lua";\n
 --tempo: 120;\n
 --device: MyDevice  midi 0;\n
---instrumentDef:  piano  MyDevice  _ch=0 _pc=0;\n
---instrumentConf: piano mod guitarStroke _mode=alternate _value=8; \n
+--instrumentDef:  piano  MyDevice  _ch=0 _pc=24;\n
+--instrumentConf: piano mod guitarStroke _mode=alternate _value=16; \n
 --[\n
 --instrument: piano;\n
 --{\n
---  <c e g b>4 <c e g b>4 <c eb g bb>4 <c eb g bb>4\n
+--  <c e g b>4 <c e g b>4 <c eb g bb>2 |  <c eb g bb>2 <c eb g bb>2\n
 --}\n
 --]\n
 -- ```
