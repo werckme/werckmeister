@@ -1,7 +1,7 @@
 -- A definition of drum rudiments.
 -- The actual rudiment duration dosen't matter. At the end, the sequence
 -- will be ajdusted, so that it fits into the duration of the related event.
--- The relations between the diffrent durations is what matters.
+-- The relations between the different durations is what matters.
 -- For example
 -- A rudiment with four quarters, played over the duration of one eight:
 -- every rudiment quarter will become eventually a 32th

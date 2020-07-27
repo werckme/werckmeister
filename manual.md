@@ -503,7 +503,7 @@ tempo: 120;
 
 ### Time Signatures
 The time signature 4/4 by default.
-If you want to setup a different time signature than the default, you can achieve this by using the signature [meta event](#Meta-Events).
+If you want to setup a different time signature than the default, you can achieve this by using the signature [meta event](#meta-events).
 With this you are able to setup different time signatures during a piece.
 ```language=Werckmeister,type=partial
 [
@@ -1084,9 +1084,9 @@ Set the time signature of the current track.
 
  `/tempo: 120/`
 
- It is also possible to set diffrent tempo values for several tracks:
+ It is also possible to set different tempo values for several tracks:
 
- [see here](/manual#Tempo)
+ [see here](/manual#tempo)
 
 #### parameters
 | name | position | description | type |
