@@ -124,24 +124,13 @@ instrument: bass;
 Getting Started
 ============
 
-Go to this [page](https://github.com/werckme/werckmeister/releases) and download the most recent version of Werckmeister. *(look for the assets section)*
+## Download & Installation
+Have a look [here](/download).
 
-On Mac and on Linux you can install the binaries by executing the installer script.
+Find the download and follow the installtion instructions regarding to your OS.
 
-## Mac
-```
-sudo sh werckmeister-x.x.x-Darwin.sh --prefix=/usr/local --exclude-subdir
-```
 
-## Linux
-```
-sudo sh werckmeister-x.x.x-Linux.sh --prefix=/usr/local --exclude-subdir
-```
-
-## Windows
-Just execute the installer.
-
-## All done, what now?
+## Installation is done, what now?
 After the installation, two executables should be available:
 * `sheetc` a sheet file compiler  
 * `sheetp` a sheet file player
