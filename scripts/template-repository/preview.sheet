@@ -1,0 +1,41 @@
+using "./chords/default.chords";
+$USINGS
+
+device: MyDevice          midi      $DEVICE_ID;
+
+
+-- define your instruments:
+-- (ch= channel, pc= programm change, cc= control change)
+--             name       device    ch  cc  pc  
+instrumentDef: piano      MyDevice   2   0   0;
+instrumentDef: rhythm     MyDevice   3   0  25;
+instrumentDef: rhythm2    MyDevice   4   0  0;
+instrumentDef: bass       MyDevice   5   0  33;
+instrumentDef: drums      MyDevice   9   0  0;
+
+
+instrumentConf: rhythm
+    volume 100
+;
+
+
+instrumentConf: rhythm2
+    volume 90
+;
+
+instrumentConf: drums
+    volume 100
+;
+
+instrumentConf: bass
+    volume 100
+;
+
+$DOC_CONFIG
+
+[
+type: accomp;
+{
+    $ACCOMP
+}
+]
