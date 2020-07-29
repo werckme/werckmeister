@@ -125,7 +125,7 @@ Getting Started
 ============
 
 ## Download & Installation
-Have a look [here](/download).
+Have a look [here](https://werckme.github.io/download).
 
 Find the download and follow the installtion instructions regarding to your OS.
 
