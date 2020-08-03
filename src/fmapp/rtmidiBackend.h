@@ -21,11 +21,10 @@ namespace fmapp {
 		RtMidiBackend(const RtMidiBackend&&) = delete;
 		RtMidiBackend& operator=(const RtMidiBackend&&) = delete;
 		Outputs getOutputs() const;
-		bool setOutput(const Output &output);
 		virtual ~RtMidiBackend();
 		template<class TEvents>
-		void send(const TEvents &events, const Output *output = nullptr);
-		void send(const fm::midi::Event &event, const Output *output = nullptr);
+		void send(const TEvents &events, const Output *output);
+		void send(const fm::midi::Event &event, const Output *output);
 		void tearDown() { closeAllPorts(); }
 		void panic();
 	private:
