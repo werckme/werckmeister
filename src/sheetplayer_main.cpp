@@ -152,7 +152,7 @@ int main(int argc, const char** argv)
 
 	try {
 
-		test_fluidsynth();
+		//test_fluidsynth();
 
 		programOptionsPtr->parseProgrammArgs(argc, argv);
 		if (programOptionsPtr->isUdpSet()) {

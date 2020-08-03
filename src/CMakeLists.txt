@@ -118,6 +118,7 @@ endif(APPLE)
 SET (SRC_SHEET_PLAYER
     fmapp/MidiPlayer.cpp
     fmapp/rtmidiBackend.cpp
+    fmapp/MidiBackendContainer.cpp
     sheetplayer_main.cpp 
     SheetCompilerProgram.cpp 
     SheetPlayerProgram.cpp 

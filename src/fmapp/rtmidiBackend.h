@@ -5,28 +5,19 @@
 #include <vector>
 #include <fm/midi.hpp>
 #include <rtmidi/RtMidi.h>
+#include "AMidiBackend.h"
 
 namespace fmapp {
-	class RtMidiBackend {
+	class RtMidiBackend : public AMidiBackend {
 	public:
-		enum { UNKNOWN_PORT = -1 };
-		struct Output {
-			typedef std::string IdType;
-			int portid = UNKNOWN_PORT;
-			IdType id;
-			std::string name = "undefined output";
-		};
-		typedef std::vector<Output> Outputs;
 		RtMidiBackend();
 		RtMidiBackend(const RtMidiBackend&&) = delete;
 		RtMidiBackend& operator=(const RtMidiBackend&&) = delete;
-		Outputs getOutputs() const;
+		virtual Outputs getOutputs() const override;
 		virtual ~RtMidiBackend();
-		template<class TEvents>
-		void send(const TEvents &events, const Output *output);
-		void send(const fm::midi::Event &event, const Output *output);
-		void tearDown() { closeAllPorts(); }
-		void panic();
+		virtual void send(const fm::midi::Event &event, const Output *output) override;
+		virtual void tearDown() override { closeAllPorts(); }
+		virtual void panic() override;
 	private:
 		void closeAllPorts();
 		typedef std::vector<std::unique_ptr<RtMidiOut>> MidiOuts;
@@ -35,19 +26,6 @@ namespace fmapp {
 		RtMidiOut * getRtOutputReadyForSend(int idx);
 		Output output_;
 	};
-
-	///////////////////////////////////////////////////////////////////////////////
-	// Impl.
-	template<class TEvents>
-	void RtMidiBackend::send(const TEvents &events, const Output *output)
-	{
-		if (events.empty()) {
-			return;
-		}
-		for (auto &ev : events) {
-			send(ev, output);
-		}
-	}
 }
 
 #endif
