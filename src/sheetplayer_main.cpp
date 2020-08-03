@@ -59,7 +59,7 @@ funk::UdpSenderPtr _udpSender = nullptr;
 #endif
 int test_fluidsynth()
 {
-	boost::dll::shared_library lib("libfluidsynth-2.dll");
+	boost::dll::shared_library lib("/usr/lib/libfluidsynth.so");
 	auto dll_new_fluid_settings			= lib.get<fluid_settings_t* ()>("new_fluid_settings");
 	auto dll_new_fluid_synth			= lib.get<fluid_synth_t* (fluid_settings_t*)>("new_fluid_synth");
 	auto dll_new_fluid_audio_driver		= lib.get<fluid_audio_driver_t* (fluid_settings_t*, fluid_synth_t*)>("new_fluid_audio_driver");
@@ -67,6 +67,11 @@ int test_fluidsynth()
 	auto dll_fluid_synth_noteon			= lib.get<int(fluid_synth_t*, int, int, int)>("fluid_synth_noteon");
 	auto dll_fluid_synth_noteoff		= lib.get<int(fluid_synth_t*, int, int)>("fluid_synth_noteoff");
 	auto dll_fluid_synth_program_change = lib.get<int(fluid_synth_t*, int, int)>("fluid_synth_program_change");
+	auto dll_fluid_settings_setstr		= lib.get<int(fluid_settings_t*, const char*, const char*)>("fluid_settings_setstr");
+	auto dll_fluid_audio_driver_register= lib.get<int(const char**)>("fluid_audio_driver_register");
+	auto dll_delete_fluid_audio_driver  = lib.get<void(fluid_audio_driver_t*)>("delete_fluid_audio_driver");
+	auto dll_delete_fluid_synth 		= lib.get<void(fluid_synth_t*)>("delete_fluid_synth");
+	auto dll_delete_fluid_settings 		= lib.get<void(fluid_settings_t*)>("delete_fluid_settings");	
 
 
 	fluid_settings_t* settings;
@@ -74,8 +79,35 @@ int test_fluidsynth()
 	fluid_audio_driver_t* adriver;
 	int sfont_id;
 	int i, key;
+
+
+	const char *adrivers[2];
+	adrivers[0] = "jack";
+	adrivers[1] = NULL; /* NULL terminate the array */
+
+	int res = dll_fluid_audio_driver_register(adrivers);
+
+	if(res != FLUID_OK)
+	{
+		puts("adriver reg err");
+		return -1;
+	}
+
 	/* Create the settings. */
 	settings = dll_new_fluid_settings();
+
+	res = dll_fluid_settings_setstr(settings, "audio.driver", adrivers[0]);
+
+#if FLUIDSYNTH_VERSION_MAJOR >= 2
+	if(res != FLUID_OK)
+#else
+	if(res == 0)
+#endif
+	{
+		puts("audio.driver set err");
+		return -1;
+	}	
+
 	/* Change the settings if necessary*/
 	/* Create the synthesizer. */
 	synth = dll_new_fluid_synth(settings);
@@ -84,7 +116,7 @@ int test_fluidsynth()
 	adriver = dll_new_fluid_audio_driver(settings, synth);
 	/* Load a SoundFont and reset presets (so that new instruments
 	 * get used from the SoundFont) */
-	sfont_id = dll_fluid_synth_sfload(synth, "E:\\Users\\samba\\Soundfonts\\FluidR3_GM.sf2", 1);
+	sfont_id = dll_fluid_synth_sfload(synth, "/usr/share/soundfonts/FluidR3_GM.sf2", 1);
 	if (sfont_id == FLUID_FAILED)
 	{
 		puts("Loading the SoundFont failed!");
@@ -99,6 +131,7 @@ int test_fluidsynth()
 		key = 60 + (int)(12.0f * rand() / (float)RAND_MAX);
 		/* Play a note */
 		dll_fluid_synth_noteon(synth, 0, key, 80);
+		puts(".");
 		/* Sleep for 1 second */
 		sleep(1);
 		/* Stop the note */
@@ -106,9 +139,6 @@ int test_fluidsynth()
 	}
 err:
 //	/* Clean up */
-	auto dll_delete_fluid_audio_driver = lib.get<void(fluid_audio_driver_t*)>("delete_fluid_audio_driver");
-	auto dll_delete_fluid_synth = lib.get<void(fluid_synth_t*)>("delete_fluid_synth");
-	auto dll_delete_fluid_settings = lib.get<void(fluid_settings_t*)>("delete_fluid_settings");
 	dll_delete_fluid_audio_driver(adriver);
 	dll_delete_fluid_synth(synth);
 	dll_delete_fluid_settings(settings);
