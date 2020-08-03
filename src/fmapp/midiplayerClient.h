@@ -37,7 +37,6 @@ namespace fmapp {
 		MidiplayerClient& operator=(MidiplayerClient&&) = delete;
 		~MidiplayerClient() = default;
 		Outputs getOutputs() const;
-		bool setOutput(const Output &);
 		bool isPlaying() const { return state_ == Playing; }
 		void play();
 		void play(fm::Ticks ticks);
@@ -128,11 +127,6 @@ namespace fmapp {
 		return Backend::getOutputs();
 	}
 
-	template<class TBackend, class TMidiProvider, class TTimer>
-	bool MidiplayerClient<TBackend, TMidiProvider, TTimer>::setOutput(const Output &output)
-	{
-		return Backend::setOutput(output);
-	}
 
 	template<class TBackend, class TMidiProvider, class TTimer>
 	void MidiplayerClient<TBackend, TMidiProvider, TTimer>::updateElapsedTime()

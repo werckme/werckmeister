@@ -44,12 +44,6 @@ namespace fmapp {
 		return result;
 	}
 
-	bool RtMidiBackend::setOutput(const Output &output)
-	{
-		this->output_ = output;
-		return true;
-	}
-
 	void RtMidiBackend::panic() 
 	{
 		fm::Byte message[3] = {0}; 
