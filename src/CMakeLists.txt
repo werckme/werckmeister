@@ -119,6 +119,7 @@ SET (SRC_SHEET_PLAYER
     fmapp/MidiPlayer.cpp
     fmapp/RTMidiBackend.cpp
     fmapp/FluidSynthBackend.cpp
+    fmapp/FluidSynthWrapper.cpp
     fmapp/MidiBackendContainer.cpp
     sheetplayer_main.cpp 
     SheetCompilerProgram.cpp 

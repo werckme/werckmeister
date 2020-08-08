@@ -1,10 +1,10 @@
 #ifndef FM_FLUIDSYNTH_BACKEND_HPP
-#define FM_RTMIDI_BACKEND_HPP
+#define FM_FLUIDSYNTH_BACKEND_HPP
 
 #include <memory>
 #include <vector>
 #include <fm/midi.hpp>
-#include <fluidsynth.h>
+#include "FluidSynthWrapper.h"
 #include "AMidiBackend.h"
 
 namespace fmapp {
