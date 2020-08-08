@@ -2,6 +2,7 @@
 #define FM_FLUIDSYNTH_BACKEND_HPP
 
 #include <memory>
+#include <functional>
 #include <vector>
 #include <fm/midi.hpp>
 #include "FluidSynthWrapper.h"
@@ -19,7 +20,7 @@ namespace fmapp {
 		virtual void tearDown() override;
 		virtual void panic() override;
 	private:
-
+		std::vector<FluidSynthPtr> _synths;
 	};
 }
 

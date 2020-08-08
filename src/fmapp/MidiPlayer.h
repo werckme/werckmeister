@@ -11,7 +11,7 @@
 #include <memory>
 #include "midiplayerClient.h"
 #include "midiProvider.h"
-#include "RTMidiBackend.h"
+#include "FluidSynthBackend.h"
 #include <ostream>
 #include "ADocumentWriter.h"
 
@@ -28,7 +28,7 @@ namespace fmapp {
     class MidiPlayer : public ADocumentWriter {
     public:
         typedef DiContainerWrapper<IPlayerLoopVisitorPtr> LoopVisitors;
-        typedef MidiplayerClient<RtMidiBackend, fmapp::MidiProvider, TimerImpl> MidiplayerImpl;
+        typedef MidiplayerClient<FluidSynthBackend, fmapp::MidiProvider, TimerImpl> MidiplayerImpl;
         enum State { Stopped, Playing };
     private:
         IPlayerProgramOptionsPtr   _programOptions;

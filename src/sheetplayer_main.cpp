@@ -47,6 +47,18 @@ int startPlayer(std::shared_ptr<PlayerProgramOptions> programOptionsPtr);
 
 funk::UdpSenderPtr _udpSender = nullptr;
 
+#define dll_new_fluid_settings_ftype fluid_settings_t* ()
+#define dll_new_fluid_synth_ftype fluid_synth_t* (fluid_settings_t*)
+#define dll_new_fluid_audio_driver_ftype fluid_audio_driver_t* (fluid_settings_t*, fluid_synth_t*)
+#define dll_fluid_synth_sfload_ftype int(fluid_synth_t*, const char*, int)
+#define dll_fluid_synth_noteon_ftype int(fluid_synth_t*, int, int, int)
+#define dll_fluid_synth_noteoff_ftype int(fluid_synth_t*, int, int)
+#define dll_fluid_synth_program_change_ftype int(fluid_synth_t*, int, int)
+#define dll_fluid_settings_setstr_ftype int(fluid_settings_t*, const char*, const char*)
+#define dll_fluid_audio_driver_register_ftype int(const char**)
+#define dll_delete_fluid_audio_driver_ftype void(fluid_audio_driver_t*)
+#define dll_delete_fluid_synth_ftype void(fluid_synth_t*)
+#define dll_delete_fluid_settings_ftype void(fluid_settings_t*)
 
 
 #include <fluidsynth.h>
@@ -60,18 +72,18 @@ funk::UdpSenderPtr _udpSender = nullptr;
 int test_fluidsynth()
 {
 	boost::dll::shared_library lib("/usr/lib/libfluidsynth.so");
-	auto dll_new_fluid_settings			= lib.get<fluid_settings_t* ()>("new_fluid_settings");
-	auto dll_new_fluid_synth			= lib.get<fluid_synth_t* (fluid_settings_t*)>("new_fluid_synth");
-	auto dll_new_fluid_audio_driver		= lib.get<fluid_audio_driver_t* (fluid_settings_t*, fluid_synth_t*)>("new_fluid_audio_driver");
-	auto dll_fluid_synth_sfload			= lib.get<int(fluid_synth_t*, const char*, int)>("fluid_synth_sfload");
-	auto dll_fluid_synth_noteon			= lib.get<int(fluid_synth_t*, int, int, int)>("fluid_synth_noteon");
-	auto dll_fluid_synth_noteoff		= lib.get<int(fluid_synth_t*, int, int)>("fluid_synth_noteoff");
-	auto dll_fluid_synth_program_change = lib.get<int(fluid_synth_t*, int, int)>("fluid_synth_program_change");
-	auto dll_fluid_settings_setstr		= lib.get<int(fluid_settings_t*, const char*, const char*)>("fluid_settings_setstr");
-	auto dll_fluid_audio_driver_register= lib.get<int(const char**)>("fluid_audio_driver_register");
-	auto dll_delete_fluid_audio_driver  = lib.get<void(fluid_audio_driver_t*)>("delete_fluid_audio_driver");
-	auto dll_delete_fluid_synth 		= lib.get<void(fluid_synth_t*)>("delete_fluid_synth");
-	auto dll_delete_fluid_settings 		= lib.get<void(fluid_settings_t*)>("delete_fluid_settings");	
+	std::function<dll_new_fluid_settings_ftype> dll_new_fluid_settings = lib.get<dll_new_fluid_settings_ftype>("new_fluid_settings");
+	std::function<dll_new_fluid_synth_ftype> dll_new_fluid_synth = lib.get<dll_new_fluid_synth_ftype>("new_fluid_synth");
+	std::function<dll_new_fluid_audio_driver_ftype> dll_new_fluid_audio_driver = lib.get<dll_new_fluid_audio_driver_ftype>("new_fluid_audio_driver");
+	std::function<dll_fluid_synth_sfload_ftype> dll_fluid_synth_sfload = lib.get<dll_fluid_synth_sfload_ftype>("fluid_synth_sfload");
+	std::function<dll_fluid_synth_noteon_ftype> dll_fluid_synth_noteon = lib.get<dll_fluid_synth_noteon_ftype>("fluid_synth_noteon");
+	std::function<dll_fluid_synth_noteoff_ftype> dll_fluid_synth_noteoff = lib.get<dll_fluid_synth_noteoff_ftype>("fluid_synth_noteoff");
+	std::function<dll_fluid_synth_program_change_ftype> dll_fluid_synth_program_change = lib.get<dll_fluid_synth_program_change_ftype>("fluid_synth_program_change");
+	std::function<dll_fluid_settings_setstr_ftype> dll_fluid_settings_setstr = lib.get<dll_fluid_settings_setstr_ftype>("fluid_settings_setstr");
+	std::function<dll_fluid_audio_driver_register_ftype> dll_fluid_audio_driver_register = lib.get<dll_fluid_audio_driver_register_ftype>("fluid_audio_driver_register");
+	std::function<dll_delete_fluid_audio_driver_ftype> dll_delete_fluid_audio_driver = lib.get<dll_delete_fluid_audio_driver_ftype>("delete_fluid_audio_driver");
+	std::function<dll_delete_fluid_synth_ftype> dll_delete_fluid_synth = lib.get<dll_delete_fluid_synth_ftype>("delete_fluid_synth");
+	std::function<dll_delete_fluid_settings_ftype> dll_delete_fluid_settings = lib.get<dll_delete_fluid_settings_ftype>("delete_fluid_settings");	
 
 
 	fluid_settings_t* settings;
@@ -151,9 +163,6 @@ int main(int argc, const char** argv)
 	auto programOptionsPtr = std::make_shared<PlayerProgramOptions>();
 
 	try {
-
-		//test_fluidsynth();
-
 		programOptionsPtr->parseProgrammArgs(argc, argv);
 		if (programOptionsPtr->isUdpSet()) {
 			auto host = programOptionsPtr->getUdpHostname();

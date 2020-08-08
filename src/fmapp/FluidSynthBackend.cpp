@@ -6,11 +6,15 @@
 namespace fmapp {
 	FluidSynthBackend::FluidSynthBackend()
 	{
-
+		_synths.push_back(std::make_shared<FluidSynth>("/usr/share/soundfonts/FluidR3_GM.sf2"));
 	}
 	FluidSynthBackend::Outputs FluidSynthBackend::getOutputs() const
 	{
-		FluidSynthBackend::Outputs result;
+		Output output;
+		output.id = "1";
+		output.name = "fluid synth";
+		output.portid = 1;
+		FluidSynthBackend::Outputs result({output});
 		return result;
 	}
 	FluidSynthBackend::~FluidSynthBackend()
