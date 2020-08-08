@@ -5,6 +5,7 @@
 #include <vector>
 #include <fluidsynth.h>
 #include <boost/dll.hpp>
+#include <fm/midi.hpp>
 
 #if FLUIDSYNTH_VERSION_MAJOR < 2
 #error "Fluidsynth version >2 required"
@@ -30,23 +31,24 @@ namespace fmapp {
 		FluidSynth(const FluidSynth&&) = delete;
 		FluidSynth& operator=(const FluidSynth&&) = delete;
 		virtual ~FluidSynth();
+		void send(const fm::midi::Event& event);
 	private:
         void initSynth(const std::string soundFondPath);
         void tearDownSynth();
         void initLibraryFunctions();
         std::string findFluidSynthLibraryPath() const;
-		std::function<new_fluid_settings_ftype> 		 new_fluid_settings;
-		std::function<new_fluid_synth_ftype> 			 new_fluid_synth;
-		std::function<new_fluid_audio_driver_ftype> 	 new_fluid_audio_driver;
-		std::function<fluid_synth_sfload_ftype> 		 fluid_synth_sfload;
-		std::function<fluid_synth_noteon_ftype> 		 fluid_synth_noteon;
-		std::function<fluid_synth_noteoff_ftype> 		 fluid_synth_noteoff;
-		std::function<fluid_synth_program_change_ftype>  fluid_synth_program_change;
-		std::function<fluid_settings_setstr_ftype> 		 fluid_settings_setstr;
-		std::function<fluid_audio_driver_register_ftype> fluid_audio_driver_register;
-		std::function<delete_fluid_audio_driver_ftype> 	 delete_fluid_audio_driver;
-		std::function<delete_fluid_synth_ftype> 		 delete_fluid_synth;
-		std::function<delete_fluid_settings_ftype> 		 delete_fluid_settings;
+		std::function<new_fluid_settings_ftype> 		 _new_fluid_settings;
+		std::function<new_fluid_synth_ftype> 			 _new_fluid_synth;
+		std::function<new_fluid_audio_driver_ftype> 	 _new_fluid_audio_driver;
+		std::function<fluid_synth_sfload_ftype> 		 _fluid_synth_sfload;
+		std::function<fluid_synth_noteon_ftype> 		 _fluid_synth_noteon;
+		std::function<fluid_synth_noteoff_ftype> 		 _fluid_synth_noteoff;
+		std::function<fluid_synth_program_change_ftype>  _fluid_synth_program_change;
+		std::function<fluid_settings_setstr_ftype> 		 _fluid_settings_setstr;
+		std::function<fluid_audio_driver_register_ftype> _fluid_audio_driver_register;
+		std::function<delete_fluid_audio_driver_ftype> 	 _delete_fluid_audio_driver;
+		std::function<delete_fluid_synth_ftype> 		 _delete_fluid_synth;
+		std::function<delete_fluid_settings_ftype> 		 _delete_fluid_settings;
         boost::dll::shared_library *_library = nullptr;
         fluid_settings_t* settings = nullptr;
         fluid_synth_t* synth = nullptr;

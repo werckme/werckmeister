@@ -6,7 +6,8 @@
 namespace fmapp {
 	FluidSynthBackend::FluidSynthBackend()
 	{
-		_synths.push_back(std::make_shared<FluidSynth>("/usr/share/soundfonts/FluidR3_GM.sf2"));
+		_synths.push_back(std::make_shared<FluidSynth>("E:\\Users\\samba\\Soundfonts\\FluidR3_GM.sf2"));
+		//_synths.push_back(std::make_shared<FluidSynth>("/usr/share/soundfonts/FluidR3_GM.sf2"));
 	}
 	FluidSynthBackend::Outputs FluidSynthBackend::getOutputs() const
 	{
@@ -23,11 +24,11 @@ namespace fmapp {
 	}
 	void FluidSynthBackend::send(const fm::midi::Event &event, const Output *output)
 	{
-
+		_synths.front()->send(event);
 	}
 	void FluidSynthBackend::tearDown()
 	{
-
+		_synths.clear();
 	}
 	void FluidSynthBackend::panic()
 	{

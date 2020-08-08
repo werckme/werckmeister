@@ -17,78 +17,71 @@ namespace fmapp {
     }    
     void FluidSynth::initLibraryFunctions()
     {
-        auto libPath                = findFluidSynthLibraryPath();
-        _library                    = new boost::dll::shared_library(libPath); 
-        new_fluid_settings          = _library->get<new_fluid_settings_ftype>("new_fluid_settings");
-        new_fluid_synth             = _library->get<new_fluid_synth_ftype>("new_fluid_synth");
-        new_fluid_audio_driver      = _library->get<new_fluid_audio_driver_ftype>("new_fluid_audio_driver");
-        fluid_synth_sfload          = _library->get<fluid_synth_sfload_ftype>("fluid_synth_sfload");
-        fluid_synth_noteon          = _library->get<fluid_synth_noteon_ftype>("fluid_synth_noteon");
-        fluid_synth_noteoff         = _library->get<fluid_synth_noteoff_ftype>("fluid_synth_noteoff");
-        fluid_synth_program_change  = _library->get<fluid_synth_program_change_ftype>("fluid_synth_program_change");
-        fluid_settings_setstr       = _library->get<fluid_settings_setstr_ftype>("fluid_settings_setstr");
-        fluid_audio_driver_register = _library->get<fluid_audio_driver_register_ftype>("fluid_audio_driver_register");
-        delete_fluid_audio_driver   = _library->get<delete_fluid_audio_driver_ftype>("delete_fluid_audio_driver");
-        delete_fluid_synth          = _library->get<delete_fluid_synth_ftype>("delete_fluid_synth");
-        delete_fluid_settings       = _library->get<delete_fluid_settings_ftype>("delete_fluid_settings");	
+        auto libPath                 = findFluidSynthLibraryPath();
+        _library                     = new boost::dll::shared_library(libPath); 
+        _new_fluid_settings          = _library->get<new_fluid_settings_ftype>("new_fluid_settings");
+        _new_fluid_synth             = _library->get<new_fluid_synth_ftype>("new_fluid_synth");
+        _new_fluid_audio_driver      = _library->get<new_fluid_audio_driver_ftype>("new_fluid_audio_driver");
+        _fluid_synth_sfload          = _library->get<fluid_synth_sfload_ftype>("fluid_synth_sfload");
+        _fluid_synth_noteon          = _library->get<fluid_synth_noteon_ftype>("fluid_synth_noteon");
+        _fluid_synth_noteoff         = _library->get<fluid_synth_noteoff_ftype>("fluid_synth_noteoff");
+        _fluid_synth_program_change  = _library->get<fluid_synth_program_change_ftype>("fluid_synth_program_change");
+        _fluid_settings_setstr       = _library->get<fluid_settings_setstr_ftype>("fluid_settings_setstr");
+        _fluid_audio_driver_register = _library->get<fluid_audio_driver_register_ftype>("fluid_audio_driver_register");
+        _delete_fluid_audio_driver   = _library->get<delete_fluid_audio_driver_ftype>("delete_fluid_audio_driver");
+        _delete_fluid_synth          = _library->get<delete_fluid_synth_ftype>("delete_fluid_synth");
+        _delete_fluid_settings       = _library->get<delete_fluid_settings_ftype>("delete_fluid_settings");	
     }
 
     void FluidSynth::tearDownSynth()
     {
         if (adriver) {
-            delete_fluid_audio_driver(adriver);
+            _delete_fluid_audio_driver(adriver);
             adriver = nullptr;
         }
         if (synth) {
-            delete_fluid_synth(synth);
+            _delete_fluid_synth(synth);
             synth = nullptr;
         }
         if (settings) {
-            delete_fluid_settings(settings);
+            _delete_fluid_settings(settings);
             settings = nullptr;
         }
     }
 
     std::string FluidSynth::findFluidSynthLibraryPath() const
     {
-        return "/usr/lib/libfluidsynth.so";
+        return "libfluidsynth-2.dll";
+        // return "/usr/lib/libfluidsynth.so";
     }
 
     void FluidSynth::initSynth(const std::string soundFondPath)
     {
-        const char *adrivers[2];
-        adrivers[0] = "jack";
-        adrivers[1] = NULL; /* NULL terminate the array */
-
-        int res = fluid_audio_driver_register(adrivers);
-
-        if(res != FLUID_OK)
-        {
-            throw new std::runtime_error("adriver reg err");
-        }
-
-        /* Create the settings. */
-        settings = new_fluid_settings();
-
-        res = fluid_settings_setstr(settings, "audio.driver", adrivers[0]);
-
-        if(res != FLUID_OK)
-        {
-            throw new std::runtime_error("audio.driver set err");
-        }	
-
-        /* Change the settings if necessary*/
-        /* Create the synthesizer. */
-        synth = new_fluid_synth(settings);
-        /* Create the audio driver. The synthesizer starts playing as soon
-        as the driver is created. */
-        adriver = new_fluid_audio_driver(settings, synth);
-        /* Load a SoundFont and reset presets (so that new instruments
-        * get used from the SoundFont) */
-        auto sfont_id = fluid_synth_sfload(synth, "/usr/share/soundfonts/FluidR3_GM.sf2", 1);
+        settings = _new_fluid_settings();
+        synth = _new_fluid_synth(settings);
+        adriver = _new_fluid_audio_driver(settings, synth);
+        auto sfont_id = _fluid_synth_sfload(synth, soundFondPath.c_str(), 1);
         if (sfont_id == FLUID_FAILED)
         {
             throw new std::runtime_error("Loading the SoundFont failed!");
         }
+    }
+
+    void FluidSynth::send(const fm::midi::Event& event)
+    {
+        switch (event.eventType()) {
+        case fm::midi::NoteOn:
+            _fluid_synth_noteon(synth, event.channel(), event.parameter1(), event.parameter2());
+            break;
+        case fm::midi::NoteOff:
+            _fluid_synth_noteoff(synth, event.channel(), event.parameter1());
+            break;
+        case fm::midi::ProgramChange:
+            _fluid_synth_program_change(synth, event.channel(), event.parameter1());
+            break;
+        case fm::midi::Controller:
+        default: break;
+        }
+
     }
 }

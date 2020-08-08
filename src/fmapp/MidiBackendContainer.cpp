@@ -10,6 +10,7 @@ namespace fmapp {
             auto outputs = backend->getOutputs();
             result.insert(result.end(), outputs.begin(), outputs.end());
         }
+        return result;
     }
     MidiBackendContainer::~MidiBackendContainer()
     {
