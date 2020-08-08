@@ -117,7 +117,8 @@ endif(APPLE)
 ## PLAYER
 SET (SRC_SHEET_PLAYER
     fmapp/MidiPlayer.cpp
-    fmapp/rtmidiBackend.cpp
+    fmapp/RTMidiBackend.cpp
+    fmapp/FluidSynthBackend.cpp
     fmapp/MidiBackendContainer.cpp
     sheetplayer_main.cpp 
     SheetCompilerProgram.cpp 

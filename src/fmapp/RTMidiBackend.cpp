@@ -1,4 +1,4 @@
-#include "rtmidiBackend.h"
+#include "RTMidiBackend.h"
 #include <algorithm>
 
 namespace fmapp {

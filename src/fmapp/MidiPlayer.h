@@ -11,7 +11,7 @@
 #include <memory>
 #include "midiplayerClient.h"
 #include "midiProvider.h"
-#include "rtmidiBackend.h"
+#include "RTMidiBackend.h"
 #include <ostream>
 #include "ADocumentWriter.h"
 

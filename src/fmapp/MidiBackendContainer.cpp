@@ -16,7 +16,7 @@ namespace fmapp {
     }
     void MidiBackendContainer::send(const fm::midi::Event &event, const Output *output)
     {
-        // TODO: need a mapping from output to backend
+        // TODO: check output.backendId
     }
     void MidiBackendContainer::tearDown()
     {
