@@ -58,6 +58,7 @@ namespace fmapp {
         virtual fm::Ticks stop();
     private:
         enum VisitorMessage { Loop, BeginLoop, EndLoop };
+        void initFluidSynthInstances();
         void execLoop(sheet::DocumentPtr document);
         void visitVisitors(VisitorMessage, fm::Ticks elapsed);
         State state = Stopped;

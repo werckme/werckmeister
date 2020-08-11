@@ -14,7 +14,6 @@ namespace fmapp {
 			typedef std::string IdType;
 			int portid = UNKNOWN_PORT;
 			IdType id;
-			IdType backendId;
 			std::string name = "undefined output";
 		};
 		typedef std::vector<Output> Outputs;

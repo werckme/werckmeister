@@ -4,18 +4,29 @@
 #include "FluidSynthBackend.h"
 
 namespace fmapp {
+
+	std::unordered_map<std::string, FluidSynthPtr> FluidSynthBackend::_synths;
+
 	FluidSynthBackend::FluidSynthBackend()
 	{
-		_synths.push_back(std::make_shared<FluidSynth>("E:\\Users\\samba\\Soundfonts\\FluidR3_GM.sf2"));
-		//_synths.push_back(std::make_shared<FluidSynth>("/usr/share/soundfonts/FluidR3_GM.sf2"));
 	}
+
+	void FluidSynthBackend::createInstance(const std::string& deviceId, const std::string& soundfontPath)
+	{
+		_synths.insert(std::make_pair(deviceId, std::make_shared<FluidSynth>(soundfontPath)));
+	}
+
 	FluidSynthBackend::Outputs FluidSynthBackend::getOutputs() const
 	{
-		Output output;
-		output.id = "1";
-		output.name = "fluid synth";
-		output.portid = 1;
-		FluidSynthBackend::Outputs result({output});
+		FluidSynthBackend::Outputs result;
+		result.reserve(_synths.size());
+		for (const auto& idSynthPair : _synths) {
+			Output output;
+			output.id = idSynthPair.first;
+			output.name = output.id;
+			output.portid = 0;
+			result.emplace_back(output);
+		}
 		return result;
 	}
 	FluidSynthBackend::~FluidSynthBackend()
@@ -24,7 +35,7 @@ namespace fmapp {
 	}
 	void FluidSynthBackend::send(const fm::midi::Event &event, const Output *output)
 	{
-		_synths.front()->send(event);
+		_synths.begin()->second->send(event);
 	}
 	void FluidSynthBackend::tearDown()
 	{

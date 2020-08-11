@@ -96,16 +96,16 @@ namespace fmapp {
 	{
 		outputMap_.clear();
 		auto outputs = getOutputs();
-		for(const auto &x : devices) {
-			auto name = x.first;
-			auto id = x.second.deviceId;
-			auto it = std::find_if(outputs.begin(), outputs.end(), [id](const auto &x) { return x.id == id; });
+		for(const auto &device : devices) {
+			auto name = device.first;
+			auto id = device.second.deviceId;
+			auto it = std::find_if(outputs.begin(), outputs.end(), [id](const auto &ouput) { return ouput.id == id; });
 			if (it==outputs.end()) {
 				throw std::runtime_error("output with id = " + id + " not found");
 			}
 			OutputInfo inf;
 			inf.output = *it;
-			inf.offset = x.second.offsetMillis;
+			inf.offset = device.second.offsetMillis;
 			outputMap_[name] = inf;
 		}
 	}

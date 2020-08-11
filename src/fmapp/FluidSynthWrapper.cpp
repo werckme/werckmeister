@@ -2,7 +2,7 @@
 #include <boost/dll.hpp>
 
 namespace fmapp {
-    FluidSynth::FluidSynth(const std::string &soundfontPath) 
+    FluidSynth::FluidSynth(const std::string &soundfontPath)
     {
         initLibraryFunctions();
         initSynth(soundfontPath);

@@ -7,7 +7,8 @@ namespace fm {
     struct DeviceConfig {
         enum Type {
             Undefinded,
-            Midi
+            Midi,
+            FluidSynth
         };
         std::string name;
         int offsetMillis = 0;

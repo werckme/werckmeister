@@ -3,7 +3,7 @@
 
 #include <memory>
 #include <functional>
-#include <vector>
+#include <unordered_map>
 #include <fm/midi.hpp>
 #include "FluidSynthWrapper.h"
 #include "AMidiBackend.h"
@@ -19,8 +19,9 @@ namespace fmapp {
 		virtual void send(const fm::midi::Event &event, const Output *output) override;
 		virtual void tearDown() override;
 		virtual void panic() override;
+		static void createInstance(const std::string &deviceId, const std::string& soundfontPath);
 	private:
-		std::vector<FluidSynthPtr> _synths;
+		static std::unordered_map<std::string, FluidSynthPtr> _synths;
 	};
 }
 

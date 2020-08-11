@@ -60,7 +60,6 @@ SET (SRC_FETZER_LIB
     compiler/commands/SetSpielanweisungPlayedOnce.cpp
     compiler/commands/AddMod.cpp
     compiler/commands/AddModPlayedOnce.cpp
-    compiler/commands/SetDevice.cpp
     compiler/commands/SetInstrument.cpp
     compiler/commands/SelectMidiSound.cpp
     compiler/commands/AddInstrumentConfig.cpp
