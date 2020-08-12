@@ -15,7 +15,7 @@ namespace sheet {
 	fm::String Document::getAbsolutePath(const fm::String &path) const
 	{
 		sheet::ConstDocumentPtr thisPtr = shared_from_this();
-		return fm::getWerckmeister().resolvePath(path, thisPtr);
+		return fm::getWerckmeister().resolvePath(path);
 	}
 
 	Event::SourceId Document::addSource(const Path &_path)

@@ -18,6 +18,8 @@
 #define fluid_synth_noteon_ftype 		 	int(fluid_synth_t*, int, int, int)
 #define fluid_synth_noteoff_ftype 		 	int(fluid_synth_t*, int, int)
 #define fluid_synth_program_change_ftype 	int(fluid_synth_t*, int, int)
+#define fluid_synth_cc_ftype			 	int(fluid_synth_t*, int, int, int)
+#define fluid_synth_pitch_bend_ftype	 	int(fluid_synth_t*, int, int)
 #define fluid_settings_setstr_ftype 	  	int(fluid_settings_t*, const char*, const char*)
 #define fluid_audio_driver_register_ftype 	int(const char**)
 #define delete_fluid_audio_driver_ftype 	void(fluid_audio_driver_t*)
@@ -44,6 +46,8 @@ namespace fmapp {
 		std::function<fluid_synth_noteon_ftype> 		 _fluid_synth_noteon;
 		std::function<fluid_synth_noteoff_ftype> 		 _fluid_synth_noteoff;
 		std::function<fluid_synth_program_change_ftype>  _fluid_synth_program_change;
+		std::function<fluid_synth_cc_ftype>				 _fluid_synth_cc;
+		std::function<fluid_synth_pitch_bend_ftype>		 _fluid_synth_pitch_bend;
 		std::function<fluid_settings_setstr_ftype> 		 _fluid_settings_setstr;
 		std::function<fluid_audio_driver_register_ftype> _fluid_audio_driver_register;
 		std::function<delete_fluid_audio_driver_ftype> 	 _delete_fluid_audio_driver;

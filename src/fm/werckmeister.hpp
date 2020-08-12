@@ -76,7 +76,7 @@ namespace fm {
 		std::shared_ptr<TRegisterable> solve(const fm::String &name);
 		template<class TRegisterable>
 		std::shared_ptr<TRegisterable> solveOrDefault(const fm::String &name);
-		Path resolvePath(const Path &relPath, sheet::ConstDocumentPtr, const Path &sourcePath = FM_STRING("")) const;
+		Path resolvePath(const Path &relPath) const;
 		Path absolutePath(const Path &relPath) const;
 		bool fileExists(const Path &path) const;
 		bool fileIsSheet(const Path &path) const;

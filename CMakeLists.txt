@@ -19,8 +19,10 @@ set(BOOST_VERSION "1.72.0")
 set(CMAKE_BINARY_DIR ${CMAKE_SOURCE_DIR}/build)
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR})
 set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR})
+set(LIB_FLUIDSYNTH_SEARCH_PATHS "")
 
 IF(UNIX)
+  SET (LIB_FLUIDSYNTH_FILENAME "libfluidsynth.so")
   SET (CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "-std=c++14 -Wall -Wno-unused-function")
   add_definitions( -DSHEET_USE_BOOST_TIMER )
   add_definitions( -DSHEET_OS_UNIX )
@@ -33,6 +35,8 @@ IF(UNIX)
 ENDIF(UNIX)
 
 IF(WIN32)
+  SET (LIB_FLUIDSYNTH_FILENAME "libfluidsynth-2.dll")
+  SET (LIB_FLUIDSYNTH_SEARCH_PATHS "{\"C:\\\\Windows\\\\System32\"}")
   add_definitions( -DSHEET_USE_BOOST_TIMER )
   add_definitions( -DBOOST_ALL_NO_LIB )
   add_definitions( -DSHEET_OS_WINDOWS )
@@ -48,6 +52,7 @@ ENDIF(WIN32)
 
 
 IF(APPLE)
+  SET (LIB_FLUIDSYNTH_FILENAME "libfluidsynth.dylib")
   SET(Boost_USE_STATIC_LIBS ON)
 ENDIF(APPLE)
 
