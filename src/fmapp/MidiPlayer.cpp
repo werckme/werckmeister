@@ -6,6 +6,7 @@
 #include <iostream>
 #include <algorithm>
 #include "FluidSynthBackend.h"
+#include "RTMidiBackend.h"
 
 #define UPDATE_THREAD_SLEEPTIME 70
 
@@ -32,6 +33,14 @@ namespace fmapp {
         _logger->babble(WMLogLambda(log << "start playback"));
         _logger->babble(WMLogLambda(log << "midi: " << _midifile->byteSize() << " bytes"));
         execLoop(doc);
+    }
+
+    void MidiPlayer::initMidiBackends()
+    {
+        _logger->babble(WMLogLambda(log << "init rtmidi backend"));
+        _midiPlayerImpl.addBackend(std::make_shared<RtMidiBackend>());
+        _logger->babble(WMLogLambda(log << "init fluidsynth backend"));
+        _midiPlayerImpl.addBackend(std::make_shared<FluidSynthBackend>());
     }
 
     void MidiPlayer::execLoop(sheet::DocumentPtr)

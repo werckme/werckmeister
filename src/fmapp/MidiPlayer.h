@@ -11,7 +11,7 @@
 #include <memory>
 #include "midiplayerClient.h"
 #include "midiProvider.h"
-#include "FluidSynthBackend.h"
+#include "MidiBackendContainer.h"
 #include <ostream>
 #include "ADocumentWriter.h"
 
@@ -28,7 +28,7 @@ namespace fmapp {
     class MidiPlayer : public ADocumentWriter {
     public:
         typedef DiContainerWrapper<IPlayerLoopVisitorPtr> LoopVisitors;
-        typedef MidiplayerClient<FluidSynthBackend, fmapp::MidiProvider, TimerImpl> MidiplayerImpl;
+        typedef MidiplayerClient<MidiBackendContainer, fmapp::MidiProvider, TimerImpl> MidiplayerImpl;
         enum State { Stopped, Playing };
     private:
         IPlayerProgramOptionsPtr   _programOptions;
@@ -47,7 +47,7 @@ namespace fmapp {
               _loopVisitors  (loopVisitors),
               _logger        (logger)
         {
-
+            initMidiBackends();
         }
         void listDevices(std::ostream&);
         virtual void write(sheet::DocumentPtr document);
@@ -58,6 +58,7 @@ namespace fmapp {
         virtual fm::Ticks stop();
     private:
         enum VisitorMessage { Loop, BeginLoop, EndLoop };
+        void initMidiBackends();
         void initFluidSynthInstances();
         void execLoop(sheet::DocumentPtr document);
         void visitVisitors(VisitorMessage, fm::Ticks elapsed);

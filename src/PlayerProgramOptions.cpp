@@ -34,7 +34,7 @@ void PlayerProgramOptions::parseProgrammArgs(size_t argc, const char **argv)
         (ARG_NOSTDOUT, "disable printing time on stdout")
         (ARG_INFO, "prints sheet info as json")
         (ARG_VERSION, "prints the werckmeister version")
-        (ARG_VERBOSE, "prints (debug) informations to the output")
+        (ARG_VERBOSE, "prints informations to the output")
         (ARG_DEBUG, "prints debug informations to the output")
 #ifdef SIGINT_WORKAROUND
         (ARG_WIN32_SIGINT_WORKAROUND, "uses a ipc workaround for the lack of a proper SIGINT signal handling in windows. \

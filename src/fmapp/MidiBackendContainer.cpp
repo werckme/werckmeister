@@ -1,12 +1,20 @@
 #include "MidiBackendContainer.h"
 
-
-
 namespace fmapp {
+
+    MidiBackendContainer::MidiBackendContainer() 
+    {
+    }
+
+    void MidiBackendContainer::addBackend(AMidiBackendPtr backend)
+    {
+        _midiBackends.push_back(backend);
+    }
+
     AMidiBackend::Outputs MidiBackendContainer::getOutputs() const
     {
         AMidiBackend::Outputs result;
-        for(const auto backend : this->_midiBackends) {
+        for (const auto backend : this->_midiBackends) {
             auto outputs = backend->getOutputs();
             result.insert(result.end(), outputs.begin(), outputs.end());
         }
@@ -15,9 +23,13 @@ namespace fmapp {
     MidiBackendContainer::~MidiBackendContainer()
     {
     }
-    void MidiBackendContainer::send(const fm::midi::Event &event, const Output *output)
+    void MidiBackendContainer::send(const fm::midi::Event &event, const Output *_output)
     {
-        // TODO: check output.backendId
+        auto backend = getBackend(_output->id);
+        if (backend == nullptr) {
+            throw new std::runtime_error("unexcpected midi backend error");
+        }
+        backend->send(event, _output);
     }
     void MidiBackendContainer::tearDown()
     {
@@ -30,5 +42,33 @@ namespace fmapp {
         for(const auto backend : this->_midiBackends) {
             backend->panic();
         } 
+    }
+
+    const MidiBackendContainer::OutputIdToBackend& MidiBackendContainer::outputIdToBackend()
+    {
+        if (_outputIdToBackend.empty()) {
+            _initOutputIdToBackendMap();
+        }
+        return _outputIdToBackend;
+    }
+
+    void MidiBackendContainer::_initOutputIdToBackendMap()
+    {
+        for (const auto backend : this->_midiBackends) {
+            auto outputs = backend->getOutputs();
+            for (const auto& output : outputs) {
+                _outputIdToBackend[output.id] = backend;
+            }
+        }
+    }
+
+    AMidiBackendPtr MidiBackendContainer::getBackend(const std::string& outputId)
+    {
+        const auto& outputMap = outputIdToBackend();
+        const auto& outputMapIt = outputMap.find(outputId);
+        if (outputMapIt == outputMap.end()) {
+            return nullptr;
+        }
+        return outputMapIt->second;
     }
 }
