@@ -23,6 +23,7 @@ set(LIB_FLUIDSYNTH_SEARCH_PATHS "")
 
 IF(UNIX)
   SET (LIB_FLUIDSYNTH_FILENAME "libfluidsynth.so")
+  SET (LIB_FLUIDSYNTH_SEARCH_PATHS "{\"/usr/lib\", \"/usr/local/lib\"}")
   SET (CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "-std=c++14 -Wall -Wno-unused-function")
   add_definitions( -DSHEET_USE_BOOST_TIMER )
   add_definitions( -DSHEET_OS_UNIX )
@@ -53,6 +54,7 @@ ENDIF(WIN32)
 
 IF(APPLE)
   SET (LIB_FLUIDSYNTH_FILENAME "libfluidsynth.dylib")
+  SET (LIB_FLUIDSYNTH_SEARCH_PATHS "{\"/usr/lib\", \"/usr/local/lib\"}")
   SET(Boost_USE_STATIC_LIBS ON)
 ENDIF(APPLE)
 
