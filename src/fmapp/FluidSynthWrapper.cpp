@@ -2,7 +2,7 @@
 #include <boost/dll.hpp>
 #include <fm/werckmeister.hpp>
 #include <fm/config.hpp>
-
+#include <iostream>
 namespace fmapp {
     FluidSynth::FluidSynth(const std::string &soundfontPath)
     {
@@ -70,7 +70,8 @@ namespace fmapp {
     {
         auto& wm = fm::getWerckmeister();
         std::string libraryPath(LIB_FLUIDSYNTH_FILENAME);
-        for (const auto& searchPath : fm::LibfluidSynthSearchPaths()) {
+        const auto &searchPaths = fm::LibfluidSynthSearchPaths();
+        for (const auto& searchPath : searchPaths) {
             wm.addSearchPath(searchPath);
         }
         return wm.resolvePath(libraryPath);

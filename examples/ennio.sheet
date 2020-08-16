@@ -5,7 +5,7 @@ using "./templates/ennio.template";
 -- setup your midi device:
 -- to get a list of your available MIDI devices 
 -- and their port numbers, execute "sheetp --list"
-device: _setName=MyDevice          _isType=fluidSynth       _useFont="E:\Users\samba\Soundfonts\FluidR3_GM.sf2";
+device: _setName=MyDevice          _isType=fluidSynth       _useFont="/Users/samba/Documents/Soundfonds/FluidR3_GM.sf2";
 --device: MyDevice          midi       5;
 
 -- define your instruments:
