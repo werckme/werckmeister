@@ -201,6 +201,9 @@ namespace fm {
 		}
 		auto rel = boost::filesystem::path(strRelPath);
 		if (rel.is_absolute()) {
+			if (!boost::filesystem::exists(rel)) {
+				FM_THROW(Exception, fm::String("could not resolve " + strRelPath));
+			}
 			return strRelPath;
 		}
 		for (const auto &searchPath : _searchPaths) {

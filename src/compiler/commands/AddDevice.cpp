@@ -2,6 +2,7 @@
 #include <compiler/context/IContext.h>
 #include <compiler/error.hpp>
 #include <fm/config/configServer.h>
+#include <fm/werckmeister.hpp>
 
 namespace sheet {
     namespace compiler {
@@ -42,7 +43,8 @@ namespace sheet {
         void AddDevice::addFluidSynthDevice(const fm::String& uname, const fm::String& soundfontPath, int offsetMillis)
         {
             auto& cs = fm::getConfigServer();
-            auto device = cs.createFluidSynthDeviceConfig(uname, soundfontPath, offsetMillis);
+            auto resolvedPath = fm::getWerckmeister().resolvePath(soundfontPath);
+            auto device = cs.createFluidSynthDeviceConfig(uname, resolvedPath, offsetMillis);
             cs.addDevice(device);
         }
     }

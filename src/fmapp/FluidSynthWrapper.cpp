@@ -79,14 +79,13 @@ namespace fmapp {
 
     void FluidSynth::initSynth(const std::string soundFondPath)
     {
-        auto resolvedPath = fm::getWerckmeister().resolvePath(soundFondPath);
         settings = _new_fluid_settings();
         synth = _new_fluid_synth(settings);
         adriver = _new_fluid_audio_driver(settings, synth);
-        auto sfont_id = _fluid_synth_sfload(synth, resolvedPath.c_str(), 1);
+        auto sfont_id = _fluid_synth_sfload(synth, soundFondPath.c_str(), 1);
         if (sfont_id == FLUID_FAILED)
         {
-            throw std::runtime_error("Loading the SoundFont " + resolvedPath +  "  failed!");
+            throw std::runtime_error("Loading the SoundFont " + soundFondPath +  "  failed!");
         }
     }
 
