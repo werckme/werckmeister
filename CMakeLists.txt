@@ -10,10 +10,15 @@ SET(WERCKMEISTER_VERSION_MAJOR 0)
 SET(WERCKMEISTER_VERSION_MINOR 1)
 SET(WERCKMEISTER_VERSION_PATCH 54)
 
+# Add this project's cmake/ directory to the module path.
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+
+
 # PROJECT CONFIG
 set(FM_CHARSET "ISO-8859-1")
 set(FM_PPQ 500)
 set(BOOST_VERSION "1.72.0")
+set(FLUIDSYNTH_VERSION "2.1.0")
 #END PROJECT CONFIG
 
 set(CMAKE_BINARY_DIR ${CMAKE_SOURCE_DIR}/build)
@@ -35,6 +40,8 @@ IF(UNIX)
 ENDIF(UNIX)
 
 IF(WIN32)
+  include(DownloadLibFluidSynthWin)
+  DownloadLibFluidSynthWin("${FLUIDSYNTH_VERSION}" "${CMAKE_SOURCE_DIR}/third_party/libfluidsynth")
   SET (LIB_FLUIDSYNTH_FILENAME "libfluidsynth-2.dll")
   SET (LIB_FLUIDSYNTH_SEARCH_PATHS "{\"C:\\\\Windows\\\\System32\"}")
   add_definitions( -DSHEET_USE_BOOST_TIMER )
@@ -55,9 +62,6 @@ IF(APPLE)
   SET (LIB_FLUIDSYNTH_FILENAME "libfluidsynth.dylib")
   SET(Boost_USE_STATIC_LIBS ON)
 ENDIF(APPLE)
-
-# Add this project's cmake/ directory to the module path.
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
 SET(BOOST_PACKAGES unit_test_framework filesystem program_options locale system)
 
@@ -164,6 +168,13 @@ file(GLOB WM_PITCHMAPS
 file(GLOB WM_TEMPLATES
     "${EXAMPLES_FOLDER}/templates/*.template"
 )
+
+if(WIN32)
+  file(GLOB LIB_FLUIDSYNTH_FILES
+      "${FLUIDSYNTH_ROOT}/bin/*.dll"
+  )
+  install(FILES ${LIB_FLUIDSYNTH_FILES}    DESTINATION bin)
+endif()
 
 install(FILES ${WM_CHORDS}                 DESTINATION share/werckmeister/chords)
 install(FILES ${WM_LUA}                    DESTINATION share/werckmeister/lua)

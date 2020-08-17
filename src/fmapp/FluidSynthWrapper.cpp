@@ -105,8 +105,7 @@ namespace fmapp {
             _fluid_synth_cc(synth, event.channel(), event.parameter1(), event.parameter2());
             break;
         case fm::midi::PitchBend:
-            // TODO
-            //_fluid_synth_noteon(synth, event.channel(), );
+            _fluid_synth_pitch_bend(synth, event.channel(), event.pitchBend() * (double)fm::midi::MaxPitchbend );
             break;
         default: break;
         }

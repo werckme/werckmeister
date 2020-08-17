@@ -166,5 +166,12 @@ if (WIN32)
     SET (WM_TARGETS ${WM_TARGETS} win32-kill-sheetp-process)
 endif(WIN32)
 
+# Win32 LibFluidSynth copy
+if(WIN32)
+  add_custom_command(TARGET sheetp POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_directory ${FLUIDSYNTH_ROOT}/bin "$<TARGET_FILE_DIR:sheetp>"
+  )  
+endif()
+
 
 install(TARGETS ${WM_TARGETS} DESTINATION bin)

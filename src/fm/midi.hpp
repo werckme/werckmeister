@@ -102,6 +102,7 @@ namespace fm {
 			Byte parameter1() const { return _p1; }
 			void parameter2(Byte val) { _p2 = val; }
 			Byte parameter2() const { return _p2; }
+			double pitchBend() const;
 			size_t read(Ticks deltaOffset, const Byte *, size_t maxByteSize);
 			size_t write(Ticks deltaOffset, Byte *, size_t maxByteSize) const;
 			size_t byteSize(Ticks deltaOffset) const;
