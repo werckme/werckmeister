@@ -17,14 +17,14 @@ instrumentDef: guitar     MyDevice  _ch=3  _cc=0  _pc=25;
 instrumentDef: guitar2    MyDevice  _ch=4  _cc=0  _pc=26;
 instrumentDef: bass       MyDevice  _ch=5  _cc=0  _pc=33;
 instrumentDef: slide      MyDevice  _ch=6  _cc=8  _pc=26;
-instrumentDef: drums      MyDevice  _ch=9  _cc=0  _pc=32;
+instrumentDef: drums      MyDevice  _ch=9  _cc=128  _pc=1;
 
 instrumentConf: guitar
     volume 100
 ;
 
 instrumentConf: guitar2
-    volume 90
+    volume 100
 ;
 
 instrumentConf: drums

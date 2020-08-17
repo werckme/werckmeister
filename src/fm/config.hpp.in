@@ -21,7 +21,7 @@ namespace fm {
     constexpr unsigned int FUNK_MAX_SIGNAL_LENGTH = 255;
     inline auto LibfluidSynthSearchPaths()
     {
-        return std::vector<std::string> { @LIB_FLUIDSYNTH_SEARCH_PATHS@ };
+        return std::vector<std::string> @LIB_FLUIDSYNTH_SEARCH_PATHS@;
     }
 }
 
