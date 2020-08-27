@@ -3,10 +3,11 @@ name: Windows Build
 on:
   push:
     branches: 
-      - master
-      - feature/* 
+        - main
+        - feature/* 
+        - develop
   pull_request:
-    branches: [ master ]
+    branches: [ develop ]
 
 jobs:
   build:
