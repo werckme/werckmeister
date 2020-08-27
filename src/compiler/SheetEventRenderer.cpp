@@ -234,11 +234,11 @@ namespace sheet {
 					return;
 				}
 			} catch(const std::exception &ex) {
-				FM_THROW(Exception, "failed to process " + commandName
-									+"\n" + ex.what());
+				FM_THROW(Exception, "failed to process \"" + commandName 
+									+"\", \n" + ex.what());
 			}	
 			catch(...) {
-				FM_THROW(Exception, "failed to process " + commandName);
+				FM_THROW(Exception, "failed to process \"" + commandName + "\"");
 			}
 		}
     }

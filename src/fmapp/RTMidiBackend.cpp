@@ -1,4 +1,4 @@
-#include "rtmidiBackend.h"
+#include "RTMidiBackend.h"
 #include <algorithm>
 
 namespace fmapp {
@@ -42,12 +42,6 @@ namespace fmapp {
 			output.name = defaultRtOutput()->getPortName(idx);
 		}
 		return result;
-	}
-
-	bool RtMidiBackend::setOutput(const Output &output)
-	{
-		this->output_ = output;
-		return true;
 	}
 
 	void RtMidiBackend::panic() 

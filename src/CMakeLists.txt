@@ -60,7 +60,6 @@ SET (SRC_FETZER_LIB
     compiler/commands/SetSpielanweisungPlayedOnce.cpp
     compiler/commands/AddMod.cpp
     compiler/commands/AddModPlayedOnce.cpp
-    compiler/commands/SetDevice.cpp
     compiler/commands/SetInstrument.cpp
     compiler/commands/SelectMidiSound.cpp
     compiler/commands/AddInstrumentConfig.cpp
@@ -117,7 +116,10 @@ endif(APPLE)
 ## PLAYER
 SET (SRC_SHEET_PLAYER
     fmapp/MidiPlayer.cpp
-    fmapp/rtmidiBackend.cpp
+    fmapp/RTMidiBackend.cpp
+    fmapp/FluidSynthBackend.cpp
+    fmapp/FluidSynthWrapper.cpp
+    fmapp/MidiBackendContainer.cpp
     sheetplayer_main.cpp 
     SheetCompilerProgram.cpp 
     SheetPlayerProgram.cpp 
@@ -146,9 +148,9 @@ if (APPLE)
     SET(LIBS_PLAYER ${LIBS_PLAYER} rtmidi_static)
 elseif(UNIX)
     if ($ENV{WM_LINUX_LINK_STATIC})
-        SET(LIBS_PLAYER ${LIBS_PLAYER} rtmidi_static)
+        SET(LIBS_PLAYER ${LIBS_PLAYER} rtmidi_static ${CMAKE_DL_LIBS})
     else($ENV{WM_LINUX_LINK_STATIC})
-        SET(LIBS_PLAYER ${LIBS_PLAYER} rtmidi pthread)
+        SET(LIBS_PLAYER ${LIBS_PLAYER} rtmidi pthread ${CMAKE_DL_LIBS})
     endif($ENV{WM_LINUX_LINK_STATIC})
 endif(APPLE)
 
@@ -163,6 +165,13 @@ if (WIN32)
     target_link_libraries (win32-kill-sheetp-process ${Boost_LIBRARIES})
     SET (WM_TARGETS ${WM_TARGETS} win32-kill-sheetp-process)
 endif(WIN32)
+
+# Win32 LibFluidSynth copy
+if(WIN32)
+  add_custom_command(TARGET sheetp POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_directory ${FLUIDSYNTH_ROOT}/bin "$<TARGET_FILE_DIR:sheetp>"
+  )  
+endif()
 
 
 install(TARGETS ${WM_TARGETS} DESTINATION bin)

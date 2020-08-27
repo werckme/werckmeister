@@ -12,6 +12,7 @@ struct ArgumentNames {
         std::string OffsetIndicator         = "use";
         std::string OffsetValue             = "value";
         std::string WithOffset              = "withOffset";
+        std::string UseFont                 = "useFont";
     } Device;
 
     struct {

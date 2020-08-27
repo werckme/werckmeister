@@ -35,7 +35,7 @@ namespace fmapp {
         bool result = changed(_document->path);
         // check all files, to update their timestamps
         for(const auto &p : _document->sheetDef.documentUsing.usings) {
-            auto fullPath = fm::getWerckmeister().resolvePath(p, _document);
+            auto fullPath = fm::getWerckmeister().resolvePath(p);
             result |= changed(fullPath);
         }
         return result;

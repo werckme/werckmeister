@@ -5,6 +5,8 @@
 #include <thread>
 #include <iostream>
 #include <algorithm>
+#include "FluidSynthBackend.h"
+#include "RTMidiBackend.h"
 
 #define UPDATE_THREAD_SLEEPTIME 70
 
@@ -33,6 +35,14 @@ namespace fmapp {
         execLoop(doc);
     }
 
+    void MidiPlayer::initMidiBackends()
+    {
+        _logger->babble(WMLogLambda(log << "init rtmidi backend"));
+        _midiPlayerImpl.addBackend(std::make_shared<RtMidiBackend>());
+        _logger->babble(WMLogLambda(log << "init fluidsynth backend"));
+        _midiPlayerImpl.addBackend(std::make_shared<FluidSynthBackend>());
+    }
+
     void MidiPlayer::execLoop(sheet::DocumentPtr)
     {
         fm::Ticks resume = 0;
@@ -49,6 +59,7 @@ namespace fmapp {
             _programOptions->setResumeAtPosition(0);
         }        
         _logger->babble(WMLogLambda(log << "begin at tick: " << begin));
+        initFluidSynthInstances();
         _midiPlayerImpl.updateOutputMapping(fm::getConfigServer().getDevices());
         _midiPlayerImpl.midi(_midifile);
         _midiPlayerImpl.play(resume > 0 ? resume : begin);
@@ -121,5 +132,18 @@ namespace fmapp {
         _midiPlayerImpl.stop();
         state = Stopped;
         return position;
+    }
+
+    void MidiPlayer::initFluidSynthInstances()
+    {
+        const auto& deviceConfigs = fm::getConfigServer().getDevices();
+        for (const auto& idConfPair : deviceConfigs) {
+            const auto& conf = idConfPair.second;
+            if (conf.type != fm::DeviceConfig::FluidSynth) {
+                continue;
+            }
+            const auto& soundFontFile = conf.deviceId;
+            FluidSynthBackend::createInstance(conf.deviceId, soundFontFile);
+        }
     }
 }

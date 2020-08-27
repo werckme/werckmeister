@@ -37,7 +37,6 @@ namespace fmapp {
 		MidiplayerClient& operator=(MidiplayerClient&&) = delete;
 		~MidiplayerClient() = default;
 		Outputs getOutputs() const;
-		bool setOutput(const Output &);
 		bool isPlaying() const { return state_ == Playing; }
 		void play();
 		void play(fm::Ticks ticks);
@@ -97,16 +96,16 @@ namespace fmapp {
 	{
 		outputMap_.clear();
 		auto outputs = getOutputs();
-		for(const auto &x : devices) {
-			auto name = x.first;
-			auto id = x.second.deviceId;
-			auto it = std::find_if(outputs.begin(), outputs.end(), [id](const auto &x) { return x.id == id; });
+		for(const auto &device : devices) {
+			auto name = device.first;
+			auto id = device.second.deviceId;
+			auto it = std::find_if(outputs.begin(), outputs.end(), [id](const auto &ouput) { return ouput.id == id; });
 			if (it==outputs.end()) {
 				throw std::runtime_error("output with id = " + id + " not found");
 			}
 			OutputInfo inf;
 			inf.output = *it;
-			inf.offset = x.second.offsetMillis;
+			inf.offset = device.second.offsetMillis;
 			outputMap_[name] = inf;
 		}
 	}
@@ -128,11 +127,6 @@ namespace fmapp {
 		return Backend::getOutputs();
 	}
 
-	template<class TBackend, class TMidiProvider, class TTimer>
-	bool MidiplayerClient<TBackend, TMidiProvider, TTimer>::setOutput(const Output &output)
-	{
-		return Backend::setOutput(output);
-	}
 
 	template<class TBackend, class TMidiProvider, class TTimer>
 	void MidiplayerClient<TBackend, TMidiProvider, TTimer>::updateElapsedTime()

@@ -2,6 +2,7 @@
 #include <compiler/context/IContext.h>
 #include <compiler/error.hpp>
 #include <fm/config/configServer.h>
+#include <fm/werckmeister.hpp>
 
 namespace sheet {
     namespace compiler {
@@ -9,7 +10,6 @@ namespace sheet {
         {
             auto name             = parameters[argumentNames.Device.WithName].value<fm::String>();
             auto type             = parameters[argumentNames.Device.IsType].value<fm::String>();
-            auto deviceId         = parameters[argumentNames.Device.UsePort].value<fm::String>();
             int offsetMillis = 0;
             if (parameters[argumentNames.Device.OffsetIndicator].strValue() == "offset") {
                 offsetMillis = parameters[argumentNames.Device.OffsetValue].value<int>();
@@ -17,13 +17,34 @@ namespace sheet {
             if (parameters[argumentNames.Device.WithOffset].empty() == false) {
                 offsetMillis = parameters[argumentNames.Device.WithOffset].value<int>();
             }
-            if (type != "midi") {
-                fm::StringStream ss;
-                ss << "device type: '" << type << "' is not supported.";
-                FM_THROW(Exception, ss.str());
+            if (type == "midi") {
+                auto deviceId = parameters[argumentNames.Device.UsePort].value<fm::String>();
+                addMidiDevice(name, deviceId, offsetMillis);
+                return;
             }
-            auto &cs = fm::getConfigServer();
-            auto device = cs.createMidiDeviceConfig(name, deviceId, offsetMillis);
+            if (type == "fluidSynth") {
+                auto font = parameters[argumentNames.Device.UseFont].value<fm::String>();
+                addFluidSynthDevice(name, font, offsetMillis);
+                return;
+            }
+            fm::StringStream ss;
+            ss << "device type: '" << type << "' is not supported.";
+            FM_THROW(Exception, ss.str());
+
+        }
+
+        void AddDevice::addMidiDevice(const fm::String& uname, const fm::String& deviceId, int offsetMillis)
+        {
+            auto& cs = fm::getConfigServer();
+            auto device = cs.createMidiDeviceConfig(uname, deviceId, offsetMillis);
+            cs.addDevice(device);
+        }
+
+        void AddDevice::addFluidSynthDevice(const fm::String& uname, const fm::String& soundfontPath, int offsetMillis)
+        {
+            auto& cs = fm::getConfigServer();
+            auto resolvedPath = fm::getWerckmeister().resolvePath(soundfontPath);
+            auto device = cs.createFluidSynthDeviceConfig(uname, resolvedPath, offsetMillis);
             cs.addDevice(device);
         }
     }
