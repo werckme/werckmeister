@@ -14,6 +14,7 @@
 #include <fm/config.hpp>
 #include "FactoryConfig.h"
 #include <fmapp/JsonStringInputReader.hpp>
+#include <boost/algorithm/string/join.hpp>
 
 void SheetCompilerProgram::prepareEnvironment()
 {
@@ -57,6 +58,9 @@ void SheetCompilerProgram::compile()
     }
     _logger->babble(WMLogLambda(log << "parsing '" << file << "'"));
     auto document =_documentParser->parse(file);
+    if (_logger->logLevel() >= fm::ILogger::LevelBabble) {
+        printSearchPaths();
+    }
     _logger->babble(WMLogLambda(log << "compiling '" << file << "'"));    
     _compiler->compile(document);
     _logger->babble(WMLogLambda(log << "write document"));   
@@ -67,7 +71,6 @@ void SheetCompilerProgram::addSearchPath(const fm::String &path)
 {
     auto &wm = fm::getWerckmeister();
     wm.addSearchPath(path);
-     _logger->babble(WMLogLambda(log << "add to search path: \"" << path << "\""));   
 }
 
 void SheetCompilerProgram::prepareSearchPaths()
@@ -81,6 +84,13 @@ void SheetCompilerProgram::prepareSearchPaths()
 #ifndef WIN32
     addSearchPath((path("/usr/local/share/werckmeister").string()));
 #endif
+}
+
+void SheetCompilerProgram::printSearchPaths() const
+{
+    const auto& paths = fm::getWerckmeister().searchPaths();
+    auto strSearchPaths = boost::algorithm::join(paths, "\n");
+    _logger->babble(WMLogLambda(log << "search paths:" << std::endl << strSearchPaths << std::endl));
 }
 
 int SheetCompilerProgram::execute() { 

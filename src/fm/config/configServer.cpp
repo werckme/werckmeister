@@ -32,6 +32,16 @@ namespace fm {
         return cf;
     }
 
+    DeviceConfig ConfigServer::createFluidSynthDeviceConfig(const fm::String& uname, const std::string& soundfontFile, int offsetMillis)
+    {
+        DeviceConfig cf;
+        cf.name = uname;
+        cf.type = DeviceConfig::FluidSynth;
+        cf.offsetMillis = offsetMillis;
+        cf.deviceId = soundfontFile;
+        return cf;
+    }
+
     void ConfigServer::clear()
     {
         this->devices.clear();

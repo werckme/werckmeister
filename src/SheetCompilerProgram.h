@@ -52,6 +52,7 @@ protected:
     void prepareSearchPaths();
     void prepareTemplateDefinitions();
     void addSearchPath(const fm::String &path);
+    void printSearchPaths() const;
     virtual void compile();
 private:
     fm::Path prepareJSONInput(const std::string &base64JsonInputStr);

@@ -256,6 +256,11 @@ namespace fm {
 			ev.eventType(midi::PitchBend);
 			return ev;
 		}
+		double Event::pitchBend() const
+		{
+			int ivalue = (parameter2() << 7) | parameter1();
+			return ivalue / (double)MaxPitchbend;
+		}
 		Event Event::MetaTempo(double bpm)
 		{
 			bpm = std::max(bpm, 1.0);

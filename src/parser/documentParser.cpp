@@ -100,6 +100,7 @@ namespace sheet {
 				const Extensions &allowedExtendions,
 				const fm::String &sourcePath)
 			{
+				auto& wm = fm::getWerckmeister();
 				for (const auto &x : documentUsing.usings)
 				{
 					auto path = boost::filesystem::path(x);
@@ -112,7 +113,8 @@ namespace sheet {
 						FM_THROW(Exception, "document type not allowed: " + x);
 					}
 					fm::String absolutePath;
-					absolutePath = fm::getWerckmeister().resolvePath(x, doc, sourcePath);
+					wm.addSearchPath(sourcePath);
+					absolutePath = wm.resolvePath(x);
 					auto sourceId = doc->addSource(absolutePath);
 					it->second(doc, absolutePath, sourceId);
 				}
@@ -142,6 +144,7 @@ namespace sheet {
 				ex << ex_sheet_document(_document);
 				throw;
 			}
+			wm.addSearchPath(_document->path);
 			return _document;
 		}
 
