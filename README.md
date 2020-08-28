@@ -2,7 +2,7 @@
 ![Windows Build](https://github.com/werckme/werckmeister/workflows/Windows%20Build/badge.svg)
 ![Mac Build](https://github.com/werckme/werckmeister/workflows/Mac%20Build/badge.svg)
 
-<img src="https://raw.githubusercontent.com/SambaGodschynski/werckmeister/master/assets/Logo_med.png" style="display: block; margin: auto">
+<img src="https://raw.githubusercontent.com/SambaGodschynski/werckmeister/main/assets/Logo_med.png" style="display: block; margin: auto">
 
 
 ## An open source Sheet Music MIDI Compiler
@@ -42,7 +42,7 @@ The syntax is loosely inspired by the [lilypond](http://lilypond.org) notaion sy
 
 
 
-![a simple scale with quartes and eights](https://raw.githubusercontent.com/SambaGodschynski/werckmeister/master/assets/example1.gif)
+![a simple scale with quartes and eights](https://raw.githubusercontent.com/SambaGodschynski/werckmeister/main/assets/example1.gif)
 <br>*a simple scale with quartes and eights*
 
 
@@ -53,7 +53,7 @@ Instead of writing absolute notes, you use relative degrees. For example `I4` me
 
 
 
-![This template playes the Ist IIIrd Vth and the VIIth degree as quarter note. It will be played two bars. Starting with a C7 followed by a C minor 7 chord](https://raw.githubusercontent.com/SambaGodschynski/werckmeister/master/assets/example2.gif)
+![This template playes the Ist IIIrd Vth and the VIIth degree as quarter note. It will be played two bars. Starting with a C7 followed by a C minor 7 chord](https://raw.githubusercontent.com/SambaGodschynski/werckmeister/main/assets/example2.gif)
 <br>*This template playes the Ist, IIIrd, Vth and the VIIth degree as quarter note. It will be used for two bars. Starting with a C7 followed by a C minor 7 chord.*
 
 # Installation

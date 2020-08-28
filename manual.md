@@ -2,7 +2,7 @@ Werckmeister
 ===================
 
 
-<img src="https://raw.githubusercontent.com/werckme/werckmeister/master/assets/hero.png" class="hero-image" alt="from sheet code via Werckmeister to MIDI music">
+<img src="https://raw.githubusercontent.com/werckme/werckmeister/main/assets/hero.png" class="hero-image" alt="from sheet code via Werckmeister to MIDI music">
 <br><br>
 
 ## An [open source](https://github.com/werckme/werckmeister) Sheet Music MIDI Compiler
@@ -268,7 +268,7 @@ If you want to write polyphonic melody lines, you can add more voices to your tr
 
 
 
-![a polyphonic melody](https://raw.githubusercontent.com/SambaGodschynski/werckmeister/master/assets/poly.png)
+![a polyphonic melody](https://raw.githubusercontent.com/SambaGodschynski/werckmeister/main/assets/poly.png)
 
 The melody above would be written like this:
 
@@ -556,7 +556,7 @@ c2 c4 c8 c16 c32 c64 c128 r
 
 Notes that have to sound simultaneous are written in angle brackets. The duration is written after the brackets.
 
-![two chords](https://raw.githubusercontent.com/SambaGodschynski/werckmeister/master/assets/chords.png)
+![two chords](https://raw.githubusercontent.com/SambaGodschynski/werckmeister/main/assets/chords.png)
 
 ```language=Werckmeister,type=single,tempo=80
 <g,, c e g bb>4   <c, c eb g bb>2.
@@ -567,7 +567,7 @@ Notes that have to sound simultaneous are written in angle brackets. The duratio
 To write a augmentation dot (`.`) append a dot after a note duration value.
 <br>For ties use a tilde (`~`) instead. 
 
-![dots and ties](https://raw.githubusercontent.com/SambaGodschynski/werckmeister/master/assets/dotsties.png)
+![dots and ties](https://raw.githubusercontent.com/SambaGodschynski/werckmeister/main/assets/dotsties.png)
 
 
 ```language=Werckmeister,type=single
@@ -583,7 +583,7 @@ It doesn't matter if you write `(c2 c2 c2)4` or `(c8 c8 c8)4` because you have t
 
 *The relations between the notes are vital, not their absolute durations.*
 
-![n-tole examples with 3,7 and 9](https://raw.githubusercontent.com/SambaGodschynski/werckmeister/master/assets/tuplets.png)
+![n-tole examples with 3,7 and 9](https://raw.githubusercontent.com/SambaGodschynski/werckmeister/main/assets/tuplets.png)
 
 ```language=Werckmeister,type=single,tempo=60
 (c8 c c)4   (c8 c c c c)4  (c8 c c c c c c)4  (c8 c c c c c c c c)4
@@ -593,7 +593,7 @@ It doesn't matter if you write `(c2 c2 c2)4` or `(c8 c8 c8)4` because you have t
 
 You are also able to write nested tuplets:
 
-![a example of nested tuplets](https://raw.githubusercontent.com/SambaGodschynski/werckmeister/master/assets/blackpages.png)
+![a example of nested tuplets](https://raw.githubusercontent.com/SambaGodschynski/werckmeister/main/assets/blackpages.png)
 
 ```language=Werckmeister,type=single,tempo=60
 b2 ((b c#' c#' b d')  (f' a a bb c')  (e' a' bb' f' c' g))2
