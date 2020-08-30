@@ -139,7 +139,7 @@ add_executable(rehearse ${SRC_FETZER_TESTS})
 target_link_libraries (rehearse ${SHEET_LIBS})
 
 add_executable(sheetc sheetcompiler_main.cpp SheetCompilerProgram.cpp CompilerProgramOptions.cpp)
-target_link_libraries (sheetc ${SHEET_LIBS})
+target_link_libraries (sheetc ${SHEET_LIBS} emscripten_boost_libs)
 
 if (WIN32)
     SET(LIBS_PLAYER ${LIBS_PLAYER} rtmidi_static)

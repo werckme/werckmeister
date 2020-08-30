@@ -21,6 +21,11 @@ set(BOOST_VERSION "1.72.0")
 set(FLUIDSYNTH_VERSION "2.1.0")
 #END PROJECT CONFIG
 
+if ("${CMAKE_SYSTEM}" MATCHES "Emscripten*")
+    MESSAGE("using emscripten")
+    SET(USE_EMSCRIPTEN 1)
+endif()
+
 set(CMAKE_BINARY_DIR ${CMAKE_SOURCE_DIR}/build)
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR})
 set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR})
@@ -67,14 +72,16 @@ ENDIF(APPLE)
 
 SET(BOOST_PACKAGES unit_test_framework filesystem program_options locale system)
 
-if ($ENV{WM_DOWNLOAD_EXTERNALS})
+if ("$ENV{WM_DOWNLOAD_EXTERNALS}")
   #Download Boost
   include(DownloadBoost)
   DownloadBoost("${BOOST_VERSION}" "${CMAKE_SOURCE_DIR}/third_party/boost")
-endif ($ENV{WM_DOWNLOAD_EXTERNALS})
+endif ()
 
-find_package(Boost 1.66.0 COMPONENTS ${BOOST_PACKAGES} REQUIRED)
+#find_package(Boost 1.66.0 COMPONENTS ${BOOST_PACKAGES} REQUIRED)
+SET (Boost_INCLUDE_DIRS $ENV{BOOST_ROOT})
 
+#MESSAGE(${Boost_LIBRARIES})
 IF(APPLE)
   SET(Boost_LIBRARIES ${Boost_LIBRARIES}
       /usr/local/opt/icu4c/lib/libicudata.a 
@@ -125,6 +132,7 @@ endif(APPLE)
 
 add_subdirectory(src)
 add_subdirectory(submodules/lua)
+add_subdirectory(third_party/emscripten_boost)
 
 configure_file("${PROJECT_SOURCE_DIR}/src/fm/config.hpp.in" "${PROJECT_SOURCE_DIR}/src/fm/config.hpp")
 
