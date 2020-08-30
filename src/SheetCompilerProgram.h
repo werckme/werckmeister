@@ -13,7 +13,7 @@
 #include <fmapp/IDocumentWriter.h>
 
 class SheetCompilerProgram {
-private:
+protected:
     ICompilerProgramOptionsPtr _programOptions;
     fm::ILoggerPtr _logger;
     sheet::compiler::IDocumentParserPtr  _documentParser;

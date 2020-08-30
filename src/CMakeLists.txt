@@ -157,7 +157,7 @@ endif()
 if(${BUILD_SHEETJS})
     add_executable(werckmeister sheetjs_main.cpp SheetCompilerProgramJs.cpp SheetCompilerProgram.cpp)
     target_link_libraries (werckmeister ${SHEET_LIBS} emscripten_boost_libs)
-    set_target_properties(werckmeister PROPERTIES LINK_FLAGS "-s DISABLE_EXCEPTION_CATCHING=0")
+    set_target_properties(werckmeister PROPERTIES LINK_FLAGS "-s DISABLE_EXCEPTION_CATCHING=0 -s EXTRA_EXPORTED_RUNTIME_METHODS=['cwrap'] -s EXPORTED_FUNCTIONS=\"['_main', '_compile']\"")
 endif()
 
 

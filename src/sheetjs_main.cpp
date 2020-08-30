@@ -23,7 +23,7 @@
 
 typedef sheet::compiler::EventLogger<fm::ConsoleLogger> 			   LoggerImpl;
 typedef sheet::compiler::LoggerAndWarningsCollector<fm::ConsoleLogger> WarningsCollectorWithConsoleLogger;
-int compile(const std::string &json);
+extern "C" const char * compile(const std::string &json);
 
 class JsProgramOptions : public ICompilerProgramOptions
 {
@@ -46,11 +46,11 @@ public:
 
 int main(int argc, const char** argv)
 {
-    std::cout << "HELLO" << std::endl;
-	compile("[{\"path\":\"unknown.sheet\",\"data\":\"tempo: 140;device: MyDevice  midi 1;instrumentDef:ex1  MyDevice  0 0 0;[instrument: ex1;{c'4   g8 g   a4 g~  | \n   g  b c'}]\"}]");
+    std::cout << fm::getWerckmeister().version() << std::endl;
 }
 
-int compile(const std::string &json)
+
+extern "C" const char * compile(const std::string &json)
 {
 	namespace di = boost::di;
 	namespace cp = sheet::compiler;
@@ -95,6 +95,16 @@ int compile(const std::string &json)
 		})
 	);
 	auto program = injector.create<SheetCompilerProgramJs>();
+	auto jsonWriterPtr = std::dynamic_pointer_cast<fmapp::JsonWriter>(program.documentWriter());
+	if (!jsonWriterPtr) {
+		throw std::runtime_error("invalid cast: expected JsonWriter object");
+	}
+	std::stringstream outputStream;
+	jsonWriterPtr->setOutputStream(outputStream);
 	program.prepareEnvironment();
-	return program.execute();
+	program.execute();
+	auto src = outputStream.str();
+	auto dst = new char[src.length()];
+	strcpy(&dst[0], src.c_str());
+	return &dst[0];
 }

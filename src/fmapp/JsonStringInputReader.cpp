@@ -11,11 +11,11 @@ namespace fmapp {
     {
         std::list<VirtualFileDto> result;
         rapidjson::Document document;
-        document.Parse(jsonData.c_str());
+       document.Parse(jsonData.c_str());
         if (document.HasParseError()) {
-            auto errCode = document.GetParseError();
+            auto errOffset = document.GetErrorOffset(); 
             std::stringstream ss;
-            ss << "failed parsing input json: "  << errCode;
+            ss << "failed parsing input json at offset: "  << errOffset;
             throw std::runtime_error(ss.str());
         }
         if (!document.IsArray()) {

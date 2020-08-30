@@ -49,9 +49,6 @@ namespace fmapp {
 		}
 		fm::String getExecutablePath()
 		{
-#ifdef __EMSCRIPTEN__
-			return "";
-#endif
 			char *bff = readlink_malloc("/proc/self/exe");
 			if (bff == NULL) {
 				throw std::runtime_error("Error resolving symlink /proc/self/exe.");

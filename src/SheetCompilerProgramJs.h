@@ -4,16 +4,6 @@
 #include "SheetCompilerProgram.h"
 
 class SheetCompilerProgramJs : public SheetCompilerProgram {
-private:
-    ICompilerProgramOptionsPtr _programOptions;
-    fm::ILoggerPtr _logger;
-    sheet::compiler::IDocumentParserPtr  _documentParser;
-    sheet::compiler::ICompilerPtr        _compiler;
-    sheet::compiler::IContextPtr         _context;
-    sheet::compiler::IPreprocessorPtr    _preprocessor;
-    fm::midi::MidiPtr                    _midiFile;
-    fmapp::IDocumentWriterPtr            _documentWriter;
-
 public:
     SheetCompilerProgramJs(
         ICompilerProgramOptionsPtr               programOptions,
@@ -35,7 +25,9 @@ public:
     )
     {
     }
+    fmapp::IDocumentWriterPtr documentWriter() const { return _documentWriter; }
     virtual ~SheetCompilerProgramJs() = default;
+
 protected:
     virtual void prepareSearchPaths();
 };
