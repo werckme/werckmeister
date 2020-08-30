@@ -126,13 +126,12 @@ int SheetCompilerProgram::execute() {
     return -1;
 }
 
-fm::Path SheetCompilerProgram::prepareJSONInput(const std::string &base64JsonInputStr) 
+fm::Path SheetCompilerProgram::prepareJSONInput(const std::string &inputJson) 
 {
 	auto &wm = fm::getWerckmeister();
-	// prepare vfs
+	// // prepare vfs
 	fmapp::JsonStringInputReader jsonReader;
-    auto jsonData = jsonReader.base64Decode(base64JsonInputStr);
-	auto vfiles = jsonReader.readVirtualFS(jsonData);
+	auto vfiles = jsonReader.readVirtualFS(inputJson);
 	fm::Path sheetPath;
 	for(const auto &vfile : vfiles) {
 		if (wm.fileIsSheet(vfile.path)) {

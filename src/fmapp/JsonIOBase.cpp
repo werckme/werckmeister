@@ -17,6 +17,7 @@ namespace {
         rapidjson::OStreamWrapper osw(os);
         rapidjson::Writer<rapidjson::OStreamWrapper> writer(osw);
         doc.Accept(writer);
+        os << std::endl;
     }    
 }
 

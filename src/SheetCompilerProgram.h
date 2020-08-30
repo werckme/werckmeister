@@ -44,15 +44,14 @@ public:
     {
     }
     virtual int execute();
-    void prepareEnvironment();
+    virtual void prepareEnvironment();
     virtual ~SheetCompilerProgram() = default;
 protected:
     virtual void prepareContext();
-    void printIntro(std::ostream &os);
-    void prepareSearchPaths();
-    void prepareTemplateDefinitions();
-    void addSearchPath(const fm::String &path);
-    void printSearchPaths() const;
+    virtual void printIntro(std::ostream &os);
+    virtual void prepareSearchPaths();
+    virtual void addSearchPath(const fm::String &path);
+    virtual void printSearchPaths() const;
     virtual void compile();
 private:
     fm::Path prepareJSONInput(const std::string &base64JsonInputStr);

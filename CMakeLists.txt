@@ -78,10 +78,19 @@ if ("$ENV{WM_DOWNLOAD_EXTERNALS}")
   DownloadBoost("${BOOST_VERSION}" "${CMAKE_SOURCE_DIR}/third_party/boost")
 endif ()
 
-#find_package(Boost 1.66.0 COMPONENTS ${BOOST_PACKAGES} REQUIRED)
-SET (Boost_INCLUDE_DIRS $ENV{BOOST_ROOT})
+if(${USE_EMSCRIPTEN})
+  add_compile_options(-s DISABLE_EXCEPTION_CATCHING=0)
+  # due a bug: https://github.com/emscripten-core/emscripten/issues/10078
+  # we cant rely on find boost in combination with emscripten
+  SET (Boost_INCLUDE_DIRS $ENV{BOOST_ROOT})
+  INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIRS})
+  # compile the needed files manually
+  # (I was not able to get linking against the boost library to work properly, even with --toolset=emscripten)
+  add_subdirectory(third_party/emscripten_boost)
+else()
+  find_package(Boost 1.66.0 COMPONENTS ${BOOST_PACKAGES} REQUIRED)
+endif()
 
-#MESSAGE(${Boost_LIBRARIES})
 IF(APPLE)
   SET(Boost_LIBRARIES ${Boost_LIBRARIES}
       /usr/local/opt/icu4c/lib/libicudata.a 
@@ -104,6 +113,7 @@ IF(UNIX)
       dl)
   endif ($ENV{WM_LINUX_LINK_STATIC})
 ENDIF(UNIX)
+
 
 INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(src/)
@@ -132,7 +142,6 @@ endif(APPLE)
 
 add_subdirectory(src)
 add_subdirectory(submodules/lua)
-add_subdirectory(third_party/emscripten_boost)
 
 configure_file("${PROJECT_SOURCE_DIR}/src/fm/config.hpp.in" "${PROJECT_SOURCE_DIR}/src/fm/config.hpp")
 
