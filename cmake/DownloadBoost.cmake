@@ -6,7 +6,7 @@
 # |download_dir|. The |BOOST_ROOT| variable will be set in global scope pointing
 # to the extracted location.
 
-function(DownloadBOOST version download_dir)
+function(DownloadBOOST version download_dir skip_build)
   # Specify the binary distribution type and download directory.
   string(REPLACE "." "_" version_lodash ${version})
   set(BOOST_DISTRIBUTION "boost_${version_lodash}")
@@ -56,7 +56,9 @@ function(DownloadBOOST version download_dir)
       COMMAND ${CMAKE_COMMAND} -E tar xzf "${BOOST_DOWNLOAD_DIR}/${BOOST_DOWNLOAD_FILENAME}"
       WORKING_DIRECTORY ${BOOST_DOWNLOAD_DIR}
     )
-
+    if(skip_build)
+      return()
+    endif()
     message(STATUS "Executing ${BOOST_BOOTSTRAP}...")
     execute_process(
       COMMAND ${BOOST_BOOTSTRAP}
