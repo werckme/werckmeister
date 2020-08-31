@@ -78,7 +78,7 @@ SET(BOOST_PACKAGES unit_test_framework filesystem program_options locale system)
 if ("$ENV{WM_DOWNLOAD_EXTERNALS}")
   #Download Boost
   include(DownloadBoost)
-  DownloadBoost("${BOOST_VERSION}" "${CMAKE_SOURCE_DIR}/third_party/boost")
+  DownloadBoost("${BOOST_VERSION}" "${CMAKE_SOURCE_DIR}/third_party/boost" 0)
 endif ()
 
 if(${USE_EMSCRIPTEN})
