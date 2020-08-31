@@ -23,7 +23,6 @@
 
 typedef sheet::compiler::EventLogger<fm::ConsoleLogger> 			   LoggerImpl;
 typedef sheet::compiler::LoggerAndWarningsCollector<fm::ConsoleLogger> WarningsCollectorWithConsoleLogger;
-extern "C" const char * create_compile_result(const std::string &json);
 
 class JsProgramOptions : public ICompilerProgramOptions
 {
@@ -44,11 +43,6 @@ public:
 };
 
 
-int main(int argc, const char** argv)
-{
-    std::cout << fm::getWerckmeister().version() << std::endl;
-}
-
 const char * create_c_str(const std::string &input) 
 {
 	auto bff = new char[input.length() + 1];
@@ -65,7 +59,7 @@ const char * create_c_str(const std::string &input)
  * let jsonResult = UTF8ToString(pCompilerResult)
  * _free(pCompilerResult)
  */
-extern "C" const char * create_compile_result(const std::string &json)
+extern "C" const char * create_compile_result(const char *json)
 {
 	namespace di = boost::di;
 	namespace cp = sheet::compiler;
@@ -119,4 +113,9 @@ extern "C" const char * create_compile_result(const std::string &json)
 	program.prepareEnvironment();
 	program.execute();
 	return create_c_str(outputStream.str());
+}
+
+int main(int argc, const char** argv)
+{
+    std::cout << fm::getWerckmeister().version() << std::endl;
 }
