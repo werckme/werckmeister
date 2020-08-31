@@ -51,8 +51,9 @@ int main(int argc, const char** argv)
 
 const char * create_c_str(const std::string &input) 
 {
-	auto bff = new char[input.length()];
+	auto bff = new char[input.length() + 1];
 	strcpy(&bff[0], input.c_str());
+	bff[input.length() - 1] = '\0';
 	return &bff[0];
 }
 
