@@ -23,7 +23,7 @@
 
 typedef sheet::compiler::EventLogger<fm::ConsoleLogger> 			   LoggerImpl;
 typedef sheet::compiler::LoggerAndWarningsCollector<fm::ConsoleLogger> WarningsCollectorWithConsoleLogger;
-extern "C" const char * compile(const std::string &json);
+extern "C" const char * create_compile_result(const std::string &json);
 
 class JsProgramOptions : public ICompilerProgramOptions
 {
@@ -49,8 +49,22 @@ int main(int argc, const char** argv)
     std::cout << fm::getWerckmeister().version() << std::endl;
 }
 
+const char * create_c_str(const std::string &input) 
+{
+	auto bff = new char[input.length()];
+	strcpy(&bff[0], input.c_str());
+	return &bff[0];
+}
 
-extern "C" const char * compile(const std::string &json)
+
+/**
+ * usage:
+ * let createCompileResult = cwrap('create_compile_result', 'number', ['string']);
+ * let pCompilerResult = createCompileResult(jsonString)
+ * let jsonResult = UTF8ToString(pCompilerResult)
+ * _free(pCompilerResult)
+ */
+extern "C" const char * create_compile_result(const std::string &json)
 {
 	namespace di = boost::di;
 	namespace cp = sheet::compiler;
@@ -103,8 +117,5 @@ extern "C" const char * compile(const std::string &json)
 	jsonWriterPtr->setOutputStream(outputStream);
 	program.prepareEnvironment();
 	program.execute();
-	auto src = outputStream.str();
-	auto dst = new char[src.length()];
-	strcpy(&dst[0], src.c_str());
-	return &dst[0];
+	return create_c_str(outputStream.str());
 }
