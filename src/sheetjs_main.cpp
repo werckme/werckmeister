@@ -20,6 +20,7 @@
 #include <fmapp/JsonWriter.h>
 #include <compiler/DefaultCompilerVisitor.h>
 #include <fmapp/TimelineVisitor.hpp>
+#include <boost/di/extension/scopes/scoped.hpp>
 
 typedef sheet::compiler::EventLogger<fm::ConsoleLogger> 			   LoggerImpl;
 typedef sheet::compiler::LoggerAndWarningsCollector<fm::ConsoleLogger> WarningsCollectorWithConsoleLogger;
@@ -71,15 +72,15 @@ extern "C" const char * create_compile_result(const char *json)
 	bool needTimeline = programOptionsPtr->isJsonModeSet();
 	bool writeWarningsToConsole = !(programOptionsPtr->isJsonModeSet() || programOptionsPtr->isJsonDocInfoMode());
 	auto injector = di::make_injector(
-		  di::bind<cp::IDocumentParser>()			.to<cp::DocumentParser>()			.in(di::singleton)
-		, di::bind<cp::ICompiler>()					.to<cp::Compiler>()					.in(di::singleton)
-		, di::bind<cp::ISheetTemplateRenderer>()	.to<cp::SheetTemplateRenderer>()	.in(di::singleton)
-		, di::bind<cp::ASheetEventRenderer>()		.to<cp::SheetEventRenderer>()		.in(di::singleton)
-		, di::bind<cp::IContext>()					.to<cp::MidiContext>()				.in(di::singleton)
-		, di::bind<cp::IPreprocessor>()				.to<cp::Preprocessor>()				.in(di::singleton)
+		  di::bind<cp::IDocumentParser>()			.to<cp::DocumentParser>()			.in(di::extension::scoped)
+		, di::bind<cp::ICompiler>()					.to<cp::Compiler>()					.in(di::extension::scoped)
+		, di::bind<cp::ISheetTemplateRenderer>()	.to<cp::SheetTemplateRenderer>()	.in(di::extension::scoped)
+		, di::bind<cp::ASheetEventRenderer>()		.to<cp::SheetEventRenderer>()		.in(di::extension::scoped)
+		, di::bind<cp::IContext>()					.to<cp::MidiContext>()				.in(di::extension::scoped)
+		, di::bind<cp::IPreprocessor>()				.to<cp::Preprocessor>()				.in(di::extension::scoped)
 		, di::bind<ICompilerProgramOptions>()		.to(programOptionsPtr)
 		, di::bind<sheet::Document>()				.to(documentPtr)
-		, di::bind<fm::IDefinitionsServer>()		.to<fm::DefinitionsServer>()		.in(di::singleton)
+		, di::bind<fm::IDefinitionsServer>()		.to<fm::DefinitionsServer>()		.in(di::extension::scoped)
 		, di::bind<fm::midi::Midi>()				.to(midiFile)
 		, di::bind<fmapp::IDocumentWriter>()		.to([&](const auto &injector) -> fmapp::IDocumentWriterPtr 
 		{
