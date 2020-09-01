@@ -214,3 +214,18 @@ if(${INSTALL_AUX})
   install(FILES ${WM_PITCHMAPS}              DESTINATION share/werckmeister/pitchmaps)
   install(FILES ${WM_TEMPLATES}              DESTINATION share/werckmeister/templates)
 endif()
+
+if (${USE_EMSCRIPTEN})
+  execute_process(WORKING_DIRECTORY ${CMAKE_BINARY_DIR} COMMAND python3 ${CMAKE_SOURCE_DIR}/packauxiliaries.py
+    ${EXAMPLES_FOLDER}
+    ${WM_CHORDS} 
+    ${WM_LUA} 
+    ${WM_LUA_COM}
+    ${WM_LUA_MODS}
+    ${WM_LUA_VOICINGS}
+    ${WM_LUA_VOICINGS_SOVLERS}
+    ${WM_PITCHMAPS}
+    ${WM_TEMPLATES})
+
+  install(FILES ${CMAKE_BINARY_DIR}/werckmeister-auxiliaries.json DESTINATION .)
+endif()
