@@ -69,7 +69,6 @@ extern "C" const char * create_compile_result(const char *json)
 
 	auto documentPtr = std::make_shared<sheet::Document>();
 	auto midiFile = fm::getWerckmeister().createMidi();
-	bool needTimeline = programOptionsPtr->isJsonModeSet();
 	bool writeWarningsToConsole = !(programOptionsPtr->isJsonModeSet() || programOptionsPtr->isJsonDocInfoMode());
 	auto injector = di::make_injector(
 		  di::bind<cp::IDocumentParser>()			.to<cp::DocumentParser>()			.in(di::extension::scoped)
@@ -84,17 +83,11 @@ extern "C" const char * create_compile_result(const char *json)
 		, di::bind<fm::midi::Midi>()				.to(midiFile)
 		, di::bind<fmapp::IDocumentWriter>()		.to([&](const auto &injector) -> fmapp::IDocumentWriterPtr 
 		{
-			if (programOptionsPtr->isJsonModeSet() || programOptionsPtr->isJsonDocInfoMode()) {
-				return injector.template create<std::shared_ptr<fmapp::JsonWriter>>();
-			}
-			return injector.template create<std::shared_ptr<fmapp::MidiFileWriter>>();
+			return injector.template create<std::unique_ptr<fmapp::JsonWriter>>();
 		})
 		, di::bind<cp::ICompilerVisitor>()			.to([&](const auto &injector) -> cp::ICompilerVisitorPtr 
 		{
-			if (needTimeline) {
-				return injector.template create< std::shared_ptr<fmapp::DefaultTimeline>>();
-			}
-			return injector.template create< std::shared_ptr<cp::DefaultCompilerVisitor>>();
+			return injector.template create< std::unique_ptr<fmapp::DefaultTimeline>>();
 		})
 		, di::bind<fm::ILogger>()					.to([&](const auto &injector) -> fm::ILoggerPtr 
 		{
