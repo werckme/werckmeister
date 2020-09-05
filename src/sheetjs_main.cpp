@@ -30,7 +30,7 @@ class JsProgramOptions : public ICompilerProgramOptions
 public:
 	virtual bool isHelpSet() const { return false; }
 	virtual bool isInputSet() const { return true; }
-	virtual fm::String getInput() const { return inputJson; }
+	virtual fm::String getInput() const { return input; }
 	virtual bool isOutputSet() const { return false; }
 	virtual bool isNoMetaSet() const { return true; }
 	virtual fm::String getOutput() const { return ""; }
@@ -40,7 +40,7 @@ public:
 	virtual void printHelpText(std::ostream &os) {}
 	virtual bool isVerboseSet() const { return false; }
 	virtual bool isDebugSet() const { return false; }
-	std::string inputJson;
+	std::string input;
 };
 
 
@@ -60,12 +60,12 @@ const char * create_c_str(const std::string &input)
  * let jsonResult = UTF8ToString(pCompilerResult)
  * _free(pCompilerResult)
  */
-extern "C" const char * create_compile_result(const char *json)
+extern "C" const char * create_compile_result(const char *file)
 {
 	namespace di = boost::di;
 	namespace cp = sheet::compiler;
 	auto programOptionsPtr = std::make_shared<JsProgramOptions>();
-	programOptionsPtr->inputJson = json;
+	programOptionsPtr->input = file;
 
 	auto documentPtr = std::make_shared<sheet::Document>();
 	auto midiFile = fm::getWerckmeister().createMidi();
@@ -87,7 +87,7 @@ extern "C" const char * create_compile_result(const char *json)
 		})
 		, di::bind<cp::ICompilerVisitor>()			.to([&](const auto &injector) -> cp::ICompilerVisitorPtr 
 		{
-			return injector.template create< std::unique_ptr<fmapp::DefaultTimeline>>();
+			return injector.template create< std::shared_ptr<fmapp::DefaultTimeline>>();
 		})
 		, di::bind<fm::ILogger>()					.to([&](const auto &injector) -> fm::ILoggerPtr 
 		{
