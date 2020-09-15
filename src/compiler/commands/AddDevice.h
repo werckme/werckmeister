@@ -14,7 +14,7 @@ namespace sheet {
         /// **named:**
         /// `device: _setName=MyDevice _isType=midi _usePort=0 _withOffset=100;`   
         /// **a complete example**
-        /// define an device, an instrument and set it to a track.
+        /// define an device, an instrument and assign it to a track.
         /// see [instrumentDef](#instrumentDef), [instrument](#instrument)
         /// ```
         /// device: MyDevice midi 0;
@@ -25,10 +25,14 @@ namespace sheet {
         ///    c d e f \n
         /// } \n
         /// ] \n
-        /// ```
+        /// ``` \n
+        /// **Fluidsynth**
+        /// If you want to use [fluidSynth](http://www.fluidsynth.org) as output device, you can achieve this with a command like this:
+        /// `device: MyDevice fluidSynth _useFont="PATH OF A SOUNDFONT FILE";`
+        /// On mac, make sure that you have fluidsynth installed.
         /// </command>
         /// <param name="setName"    position="0" type="word">An arbitary name.</param>
-        /// <param name="isType"     position="1" type="[midi|fluidSynth]">The type of the device.</param>
+        /// <param name="isType"     position="1" type="[midi,fluidSynth]">The type of the device.</param>
         /// <param name="usePort"    position="2" type="0..N">The midi port id of your device. You can get a list of your connected devices, by executing `sheetp --list`</param>
         /// <param name="withOffset" position=""  optional="1" type="0..N">Defines an offset in milliseconds. Can be used to keep different devices in sync.</param>
         /// <param name="useFont"    position=""  optional="1" type="a file path">Only valid if isType=`fluidsynth`. Sets the location of the soundfont file, which will be used by FluidSynth</param>
