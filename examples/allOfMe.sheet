@@ -1,0 +1,32 @@
+using "./chords/default.chords";
+ 
+
+device: _setName=MyDevice          _isType=midi       _usePort=5;
+
+instrumentDef: piano      MyDevice  _ch=1  _pc=0;
+
+
+[
+instrument: piano;
+{
+  cdef
+}
+]
+
+[
+type: accomp;
+{
+    /template: dummyTemplate/
+    E-7b5/b5 |
+}
+]
+
+
+[
+type: template;
+name: dummyTemplate;
+instrument: piano;
+{
+    <I II III IV V VI VII>1 |
+}
+]
