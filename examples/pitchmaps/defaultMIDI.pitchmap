@@ -1,0 +1,49 @@
+"bd": c,,,,
+"bd2": b,,,
+"sn": d,,
+"sn2": e,,
+"esn": e,,     -- electric snare
+"sng": d,,      --snare ghost notes
+"ss": c#,,     -- sidestick
+"hc": d#,,     -- handclap
+"ht": f#,,     -- hihat closed
+"hf": g#,,     -- hihat foot
+"ho": bb,,     -- hihat open
+"ho1": bb,,    -- hihat half open1
+"ho2": bb,,    -- hihat half open2
+"ho3": bb,,    -- hihat half open3
+"cy": c#,      -- crash cymbal
+"spl": g,      -- splash cymbal
+"hto": c,      -- high tom 
+"hto1": c,
+"hto2": d,
+"mto": b,,     -- middle tom
+"mto1": b,,
+"mto2": a,,
+"lto": g,,     -- low tom
+"lto1": g,,
+"lto2": f,,
+"rcym1": d#,  -- ride cymbal 1
+"rcym2": b,   -- ride cymbal 2
+"rbell": f,   -- ride bell
+"mtr": ab'    -- muted triangle
+"otr": a'     -- open triangle
+"bo1": c      --bongo 1
+"bo2": c#     --bongo 2
+"tim1": f     --timbale 1
+"tim2": f#    --timbale 2
+"ago1": g     --agogo 1
+"ago2": g#    --agogo 2
+"cui1": f#'   -- cuica 1
+"cui2": g'    -- cuica 2
+"cwb": g#,    -- cowbell
+"cla": d#'    -- claves
+"mcon":d      -- mute high conga
+"ocon":d#     -- open conga
+"lcon":e      -- low conga
+"tmb":f#,    -- tambourine 
+
+
+"brsw": e,,     -- brush swirl
+"brtp": d,,     -- brush tap
+"brsp": d#,,     -- brush slap

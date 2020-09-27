@@ -1,0 +1,13 @@
+-- tempo: 155
+-- signature: 4/4
+-- parts: normal
+[
+type: template;
+name: bass.jazzSwing.normal;
+instrument: bass; 
+{
+    I,,2  V,, | 
+    I,,   V,,,4 I,, |
+}
+
+]

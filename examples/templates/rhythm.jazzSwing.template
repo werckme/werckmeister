@@ -1,0 +1,22 @@
+-- tempo: 155
+-- signature: 4/4
+-- parts: normal
+[
+type: template;
+name: rhythm.jazzSwing.normal;
+instrument: rhythm2; 
+{
+   \f
+   <I,, V, VII, I III>1~    |   &4  (r r &) r2 |
+
+  (<V, VII, I III> r r)4 r  <V, VII, I III>4  r |
+   
+  (<V, VII, I III> r I,,)4 r  <V, VII, I III>4  r |
+
+  <I,, V, VII, I III>1~    |   &4  (r r &) r2 |
+
+  (<V, VII, I III> r r)4 r  <V, VII, I III>4  r |
+
+   <V, VII, I III> r I,,4  (I,, r <V, VII, I III>~)  (<V, VII, I III> r I,,)  |
+}
+]

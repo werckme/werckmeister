@@ -1,0 +1,38 @@
+-- tempo: 155
+-- signature: 4/4
+-- parts: normal, bridge
+[
+type: template;
+name: drums.jazzSwing.bridge;
+instrument: drumsBrushes; 
+{
+    (!ff"rcym1" r r)4  ("rcym1" r !p"rcym1") (!ff"rcym1" r r) ("rcym1" r !p"rcym1")
+}
+{
+    (r r "brtp")4     r4  (r r !p"brtp")4  r4 |
+    (r r !p"brtp")4   r4  (r r !p"brtp")4  r4 |
+    (r r !p"brtp")4   r4  (r r !p"brtp")4  r4 |
+    (r r !p"brtp")4   (r !pp"brtp"4 r)  (r r !p"brtp")4  r4 |
+}
+{
+    \pp
+    "bd2"4  (r r "bd2")4  r2  |
+}
+]
+
+[
+type: template;
+name: drums.jazzSwing.normal;
+instrument: drumsBrushes; 
+{
+    \pp
+   ("brtp" !pppp"brsw" r)4  (!ppp"brsp" r "brtp")  ("brtp"  !pppp"brsw" r)  (!pp"brsp" r  !p"brtp") 
+}
+{
+    \p
+    r4 "ht" r &
+}
+{
+    !pp"bd2"1    |
+}
+]

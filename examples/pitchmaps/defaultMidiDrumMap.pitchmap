@@ -33,3 +33,9 @@
 "cui2": g'    -- cuica 2
 "cwb": g#,   -- cowbell
 "cla": d#'   -- claves
+
+"cr": c#,      -- crash cymal
+"t1": c,       -- high tom 
+"t2": b,,      -- middle tom
+"t3": g,,      -- low tom
+"t4": f,,

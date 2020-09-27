@@ -1,0 +1,61 @@
+-- ALL OF ME
+-- Seymour Simons
+-- Gerald Marks
+
+using "./chords/default.chords";
+using "./pitchmaps/defaultMIDI.pitchmap";
+using "./templates/drums.jazzSwing.template";
+using "./templates/rhythm.jazzSwing.template";
+using "./templates/bass.jazzSwing.template";
+
+device: RolandSC8850 midi _usePort=5;
+instrumentDef: piano _onDevice=RolandSC8850 _ch=0 _pc=0;
+instrumentDef: bass  _onDevice=RolandSC8850  _ch=1 _pc=32;
+instrumentDef: rhythm2 _onDevice=RolandSC8850  _ch=1 _pc=0;
+instrumentDef: drumsBrushes _onDevice=RolandSC8850 _ch=9 _pc=40;
+
+
+
+[
+instrument: piano;
+{
+    c'4 g8 e~e2~    | e2    (c' d' c')2  |  b4  g#8 e8~e2~  |   e1   | -- 16
+    a4.   g8 e2~    | e4 d# (e  bb a )2  |  g2      f~      |   f1   | -- 32
+    e4.   eb8 d2~   | d2    (e  g# b )2  |  d'2     c'~     |   c'1  | -- 48
+    b4.   bb8 a2~   | a2    (a  d' b )2  |  a1              |   b1   | -- 64
+    c'4   g8 e~ e2~ | e2    (c' d' c')2  |  b4    g#8 e~e2~ |   e1   | -- 80
+    a4.   g8 e2~    | e4 d# (e  bb  a)2  |  g2       f~     |   f1   | -- 96
+    d'2   c'4  bb   | d'2.          c'4  |  b2      e4  g   | b2. a4 | -- 112
+    c'2   a4  c'    | e'2    e'          | c'1~             | c'1    |   
+}
+]
+
+[
+type: accomp;
+{
+    /template: myDummyTemplate
+        drums.jazzSwing.normal
+        rhythm.jazzSwing.normal
+        bass.jazzSwing.normal
+    /
+    C6     |    C6    |    E7    |    E7    |
+    A7     |    A7    |    D-7   |    D-7   |
+    E7     |    E7    |    A-7   |    A-7   |
+    D7     |    D7    |    D-7   |    G7    |
+    C6     |    C6    |    E7    |    E7    |
+    A7     |    A7    |    D-7   |    D-7   |
+    F6     |    F-6   |  Cmaj7 E-7b5/b5 |  A7  |
+    D-7    |    G7    |  C6  Eb07 |  D-7   G7  |
+}
+]
+
+
+[
+type: template;
+name: myDummyTemplate;
+instrument: piano;
+{
+    \p
+    <I, II III IV V VI VII>1 |
+}
+]
