@@ -8,7 +8,7 @@ namespace fm {
             return;
         }
         std::clog << "[debug] ";
-        writeMessage(f);
+        writeMessage(f, std::clog);
     }    
     void ConsoleLogger::babble(const WriteToStreamF& f)
     {
@@ -16,7 +16,7 @@ namespace fm {
             return;
         }
         std::clog << "[info] ";
-        writeMessage(f);
+        writeMessage(f, std::clog);
     }
     void ConsoleLogger::warn(const WriteToStreamF& f)
     {
@@ -24,7 +24,7 @@ namespace fm {
             return;
         }
         std::clog << "[warning] ";
-        writeMessage(f);
+        writeMessage(f, std::clog);
     }
     void ConsoleLogger::error(const WriteToStreamF& f)
     {
@@ -32,7 +32,7 @@ namespace fm {
             return;
         }
         std::cerr << "[error] ";
-        writeMessage(f);
+        writeMessage(f, std::cerr);
     }
     void ConsoleLogger::writeMessage(const WriteToStreamF &f)
     {
