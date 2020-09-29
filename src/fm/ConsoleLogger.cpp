@@ -34,9 +34,9 @@ namespace fm {
         std::cerr << "[error] ";
         writeMessage(f, std::cerr);
     }
-    void ConsoleLogger::writeMessage(const WriteToStreamF &f)
+    void ConsoleLogger::writeMessage(const WriteToStreamF &f, std::ostream &os)
     {
-        f(std::cout);
-        std::cout << std::endl;
+        f(os);
+        os << std::endl;
     }
 }
