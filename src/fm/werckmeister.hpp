@@ -48,21 +48,13 @@ namespace fm {
 		void registerLuaScript(const Path &path);
 		const Paths & searchPaths() const;
 		void addSearchPath(const Path &path);
-		Path createVirtualFile(const Path &path, const fm::String &data = "");
-		Path createVirtualFile();
-		const String * getVirtualFileData(const Path &path) const;
-		void updateVirtualFile(const Path &path, const String &data);
-		bool isVirtualFilePath(const Path &path) const;
-		ResourceStream openVirtualFile(const Path &path);
 		const CreateContextFunction & createContextHandler() const;
 		void createContextHandler(const CreateContextFunction &createContextHandler);
 	private:
 		typedef std::unordered_map<fm::String, Path> ScriptMap;
-		typedef std::unordered_map<Path, String> VirtualFiles;
 		typedef std::function<std::shared_ptr<fm::IRegisterable>()> CreateIRegFunction;
 		typedef std::unordered_map<fm::String, CreateIRegFunction> FactoryMap;
 		FactoryMap _factoryMap;
-		VirtualFiles virtualFiles_;
 		ScriptMap _scriptMap;
 		ResourceStream openResourceImpl(const Path &path);
 		Paths _searchPaths;

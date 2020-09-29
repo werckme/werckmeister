@@ -1,0 +1,15 @@
+{
+    "name": "werckmeisterjs",
+    "description": "a javascript version of werckmeister the sheet music MIDI compiler. Compiled with emscripten.",
+    "version": "@WERCKMEISTER_VERSION_MAJOR@.@WERCKMEISTER_VERSION_MINOR@.@WERCKMEISTER_VERSION_PATCH@10",
+    "homepage": "https://werckme.github.io",
+    "engines": {
+        "node": ">= 0.6.0"
+    },
+    "author": "Samba Godschynski (werckmeister@vstforx.de)",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/werckme/werckmeister"
+    },
+    "license": "GPL-3.0"
+}

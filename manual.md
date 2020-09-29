@@ -112,13 +112,6 @@ instrument: bass;
     I,,2. V,,4 |
 }
 ]
-
-
-
-
-
-
-
 ```
 
 Getting Started
@@ -738,7 +731,7 @@ Defines a device which can be used when adding instruments (see [instrumentDef](
 
  **a complete example**
 
- define an device, an instrument and set it to a track.
+ define an device, an instrument and assign it to a track.
 
  see [instrumentDef](#instrumentDef), [instrument](#instrument)
 
@@ -753,15 +746,23 @@ Defines a device which can be used when adding instruments (see [instrumentDef](
     c d e f 
  } 
  ] 
- ```
+ ``` 
+ **Fluidsynth**
+
+ If you want to use [fluidSynth](http://www.fluidsynth.org) as output device, you can achieve this with a command like this:
+
+ `device: MyDevice fluidSynth _useFont="PATH OF A SOUNDFONT FILE";`
+
+ On mac, make sure that you have fluidsynth installed.
 
 #### parameters
 | name | position | description | type |
 |:--- |:--- |:--- |:--- |
 | setName | 1 | An arbitary name. | word |
-| isType | 2 | The type of the device. (Currently the only supported type is `midi`) | [midi] |
-| usePort | 3 | The port id of your device. You can get a list of your connected devices, by executing `sheetp --list` | 0..N |
+| isType | 2 | The type of the device. | [midi,fluidSynth] |
+| usePort | 3 | The midi port id of your device. You can get a list of your connected devices, by executing `sheetp --list` | 0..N |
 | withOffset |  | Defines an offset in milliseconds. Can be used to keep different devices in sync. | 0..N |
+| useFont |  | Only valid if isType=`fluidsynth`. Sets the location of the soundfont file, which will be used by FluidSynth | a file path |
 
 <br><br><br>
 

@@ -43,9 +43,6 @@ namespace fm {
 		if (path.empty()) {
 			FM_THROW(Exception, "tried to load an empty path");
 		}
-		if (isVirtualFilePath(path)) {
-			return openVirtualFile(path);
-		}
 		auto fpath = boost::filesystem::system_complete(path);
 		auto absolute = fpath.string();
 		if (!boost::filesystem::exists(path))
@@ -61,10 +58,6 @@ namespace fm {
 		if (path.empty()) {
 			FM_THROW(Exception, "tried to save an empty path");
 		}
-		if (isVirtualFilePath(path)) {
-			updateVirtualFile(path, dataAsStr);
-			return;
-		}
 		auto fpath = boost::filesystem::system_complete(path);
 		auto absolute = fpath.string();
 		std::fstream file(absolute, std::fstream::out | std::ios::trunc);
@@ -73,53 +66,9 @@ namespace fm {
 		file.close();
 	}
 
-	Werckmeister::ResourceStream Werckmeister::openVirtualFile(const Path &path) 
-	{
-		auto data = getVirtualFileData(path);
-		if (!data) {
-			FM_THROW(Exception, "virtual file not found: " + path);
-		}
-		Werckmeister::ResourceStream result = std::make_unique<std::stringstream>();
-		std::stringstream *ss = dynamic_cast<std::stringstream*>(result.get());
-		ss->write(data->data(), data->size());
-		return result;
-	}
-
-	void Werckmeister::updateVirtualFile(const Path &path, const String &data)
-	{
-		virtualFiles_[path] = data;
-	}
-
-	bool Werckmeister::isVirtualFilePath(const Path &path) const
-	{
-		return virtualFiles_.find(path) != virtualFiles_.end();
-	}
-
 	bool Werckmeister::fileExists(const Path &path) const
 	{
-		return isVirtualFilePath(path) || boost::filesystem::exists(path);
-	}
-
-	Path Werckmeister::createVirtualFile()
-	{
-		auto path = "_werckmeister_virtual-file-" + std::to_string(virtualFiles_.size() + 1);
-		virtualFiles_[path] = "";
-		return path;
-	}
-
-	Path Werckmeister::createVirtualFile(const Path &path, const std::string &data)
-	{
-		virtualFiles_[path] = data;
-		return path;
-	}
-
-	const String * Werckmeister::getVirtualFileData(const Path &path) const
-	{
-		auto it = virtualFiles_.find(path);
-		if (it==virtualFiles_.end()) {
-			return nullptr;	
-		}
-		return &(it->second);
+		return boost::filesystem::exists(path);
 	}
 
 	sheet::VoicingStrategyPtr Werckmeister::getDefaultVoicingStrategy()
@@ -196,9 +145,6 @@ namespace fm {
 
 	Path Werckmeister::resolvePath(const Path &strRelPath) const
 	{
-		if (isVirtualFilePath(strRelPath)) {
-			return strRelPath;
-		}
 		auto rel = boost::filesystem::path(strRelPath);
 		if (rel.is_absolute()) {
 			if (!boost::filesystem::exists(rel)) {
@@ -221,9 +167,6 @@ namespace fm {
 
 	Path Werckmeister::absolutePath(const Path &relPath) const
 	{
-		if (isVirtualFilePath(relPath)) {
-			return relPath;
-		}
 		return boost::filesystem::system_complete(relPath).string();
 	}
 

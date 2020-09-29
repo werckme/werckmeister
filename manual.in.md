@@ -112,13 +112,6 @@ instrument: bass;
     I,,2. V,,4 |
 }
 ]
-
-
-
-
-
-
-
 ```
 
 Getting Started

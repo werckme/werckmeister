@@ -41,6 +41,17 @@ namespace {
 }
 
 namespace fmapp {
+
+    void JsonWriter::initOutputStream()
+    {
+        this->_ostream = &std::cout;
+    }
+
+    void JsonWriter::setOutputStream(std::ostream &os)
+    {
+        this->_ostream = &os;
+    }
+
     void JsonWriter::write(sheet::DocumentPtr document)
     {
         if (_programOptions->isJsonModeSet()) {
@@ -53,18 +64,18 @@ namespace fmapp {
 
     void JsonWriter::writeException(const std::exception &ex)
     {
-        exceptionToJSON(std::cout, ex);
+        exceptionToJSON(ostream(), ex);
     }
 
     void JsonWriter::writeException(const fm::Exception &ex)
     {
-        exceptionToJSON(std::cout, ex);
+        exceptionToJSON(ostream(), ex);
     }
 
     void JsonWriter::writeUnknownException()
     {
         std::runtime_error ex("unkown error");
-        exceptionToJSON(std::cout, ex);
+        exceptionToJSON(ostream(), ex);
     }
 
     sheet::compiler::IWarningsCollectionPtr JsonWriter::getWarnings()
@@ -82,17 +93,17 @@ namespace fmapp {
             warnings = &(waningsCollection->warnings());
         }
         rapidjson::Document doc = documentInfosToJSONDoc(document, _midifile->duration(), *warnings);
-        toStream(std::cout, doc);
+        toStream(ostream(), doc);
     }
     void JsonWriter::writeDocumentToJson(sheet::DocumentPtr document)
     {
-        std::cout 
+        ostream() 
         << "{" 
         << "\"midi\": ";
-        docToJson(std::cout, document);
-        std::cout << ", \"eventInfos\": ";
-        eventInfosToJson(std::cout, document);
-        std::cout << "}" 
+        docToJson(ostream(), document);
+        ostream() << ", \"eventInfos\": ";
+        eventInfosToJson(ostream(), document);
+        ostream() << "}" 
         << std::endl
         ;
     }

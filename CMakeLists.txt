@@ -21,10 +21,20 @@ set(BOOST_VERSION "1.72.0")
 set(FLUIDSYNTH_VERSION "2.1.0")
 #END PROJECT CONFIG
 
+set (INSTALL_AUX 1)
+
+if ("${CMAKE_SYSTEM}" MATCHES "Emscripten*")
+    MESSAGE("using emscripten")
+    SET(USE_EMSCRIPTEN 1)
+    SET (INSTALL_AUX 0)
+    SET(CMAKE_INSTALL_PREFIX ${CMAKE_SOURCE_DIR}/werckmeisterjs)
+endif()
+
 set(CMAKE_BINARY_DIR ${CMAKE_SOURCE_DIR}/build)
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR})
 set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR})
 set(LIB_FLUIDSYNTH_SEARCH_PATHS "")
+
 
 IF(UNIX)
   SET (LIB_FLUIDSYNTH_FILENAME "libfluidsynth.so")
@@ -67,13 +77,26 @@ ENDIF(APPLE)
 
 SET(BOOST_PACKAGES unit_test_framework filesystem program_options locale system)
 
-if ($ENV{WM_DOWNLOAD_EXTERNALS})
+if ("$ENV{WM_DOWNLOAD_EXTERNALS}")
   #Download Boost
   include(DownloadBoost)
-  DownloadBoost("${BOOST_VERSION}" "${CMAKE_SOURCE_DIR}/third_party/boost")
-endif ($ENV{WM_DOWNLOAD_EXTERNALS})
+  DownloadBoost("${BOOST_VERSION}" "${CMAKE_SOURCE_DIR}/third_party/boost" 0)
+endif ()
 
-find_package(Boost 1.66.0 COMPONENTS ${BOOST_PACKAGES} REQUIRED)
+if(${USE_EMSCRIPTEN})
+  include(DownloadBoost)
+  DownloadBoost("${BOOST_VERSION}" "${CMAKE_SOURCE_DIR}/third_party/boost" 1)
+  add_compile_options(-s DISABLE_EXCEPTION_CATCHING=0 -Oz)
+  # due a bug: https://github.com/emscripten-core/emscripten/issues/10078
+  # we cant rely on find boost in combination with emscripten
+  SET (Boost_INCLUDE_DIRS ${BOOST_ROOT})
+  INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIRS})
+  # compile the needed files manually
+  # (I was not able to get linking against the boost library to work properly, even with --toolset=emscripten)
+  add_subdirectory(third_party/emscripten_boost)
+else()
+  find_package(Boost 1.66.0 COMPONENTS ${BOOST_PACKAGES} REQUIRED)
+endif()
 
 IF(APPLE)
   SET(Boost_LIBRARIES ${Boost_LIBRARIES}
@@ -97,6 +120,7 @@ IF(UNIX)
       dl)
   endif ($ENV{WM_LINUX_LINK_STATIC})
 ENDIF(UNIX)
+
 
 INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(src/)
@@ -127,6 +151,10 @@ add_subdirectory(src)
 add_subdirectory(submodules/lua)
 
 configure_file("${PROJECT_SOURCE_DIR}/src/fm/config.hpp.in" "${PROJECT_SOURCE_DIR}/src/fm/config.hpp")
+
+if (${USE_EMSCRIPTEN})
+  configure_file("package.in.json" "${CMAKE_BINARY_DIR}/package.json")
+endif()
 
 include(InstallRequiredSystemLibraries)
 set(CPACK_PACKAGE_VENDOR "Samba Godschynski")
@@ -178,11 +206,28 @@ if(WIN32)
   install(FILES ${LIB_FLUIDSYNTH_FILES}    DESTINATION bin)
 endif()
 
-install(FILES ${WM_CHORDS}                 DESTINATION share/werckmeister/chords)
-install(FILES ${WM_LUA}                    DESTINATION share/werckmeister/lua)
-install(FILES ${WM_LUA_COM}                DESTINATION share/werckmeister/lua/com)
-install(FILES ${WM_LUA_MODS}               DESTINATION share/werckmeister/lua/mods)
-install(FILES ${WM_LUA_VOICINGS}           DESTINATION share/werckmeister/lua/voicings)
-install(FILES ${WM_LUA_VOICINGS_SOVLERS}   DESTINATION share/werckmeister/lua/voicings/solvers)
-install(FILES ${WM_PITCHMAPS}              DESTINATION share/werckmeister/pitchmaps)
-install(FILES ${WM_TEMPLATES}              DESTINATION share/werckmeister/templates)
+if(${INSTALL_AUX})
+  install(FILES ${WM_CHORDS}                 DESTINATION share/werckmeister/chords)
+  install(FILES ${WM_LUA}                    DESTINATION share/werckmeister/lua)
+  install(FILES ${WM_LUA_COM}                DESTINATION share/werckmeister/lua/com)
+  install(FILES ${WM_LUA_MODS}               DESTINATION share/werckmeister/lua/mods)
+  install(FILES ${WM_LUA_VOICINGS}           DESTINATION share/werckmeister/lua/voicings)
+  install(FILES ${WM_LUA_VOICINGS_SOVLERS}   DESTINATION share/werckmeister/lua/voicings/solvers)
+  install(FILES ${WM_PITCHMAPS}              DESTINATION share/werckmeister/pitchmaps)
+  install(FILES ${WM_TEMPLATES}              DESTINATION share/werckmeister/templates)
+endif()
+
+if (${USE_EMSCRIPTEN})
+  execute_process(WORKING_DIRECTORY ${CMAKE_BINARY_DIR} COMMAND python3 ${CMAKE_SOURCE_DIR}/packauxiliaries.py
+    ${EXAMPLES_FOLDER}
+    ${WM_CHORDS} 
+    ${WM_LUA} 
+    ${WM_LUA_COM}
+    ${WM_LUA_MODS}
+    ${WM_LUA_VOICINGS}
+    ${WM_LUA_VOICINGS_SOVLERS}
+    ${WM_PITCHMAPS}
+    ${WM_TEMPLATES})
+
+  install(FILES ${CMAKE_BINARY_DIR}/werckmeister-auxiliaries.json DESTINATION .)
+endif()

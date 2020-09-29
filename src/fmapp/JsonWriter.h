@@ -8,6 +8,7 @@
 #include "JsonIOBase.h"
 #include <compiler/IWarningsCollection.h>
 #include "ADocumentWriter.h"
+#include <ostream>
 
 namespace fmapp {
     class JsonWriter : public JsonIOBase, public ADocumentWriter {
@@ -28,7 +29,9 @@ namespace fmapp {
               _midifile      (midiFile),
               _timeline      (timeline),
               _logger        (logger)
-        {}
+        {
+            initOutputStream();
+        }
         void docToJson(std::ostream &, sheet::DocumentPtr document);
         void eventInfosToJson(std::ostream &os, sheet::DocumentPtr document);
         virtual void write(sheet::DocumentPtr document) override;
@@ -38,8 +41,13 @@ namespace fmapp {
         virtual void writeException(const fm::Exception &ex) override;
         virtual void writeUnknownException() override;        
         virtual ~JsonWriter() = default;
+        void setOutputStream(std::ostream &os);
+    protected:
+        void initOutputStream();
+        inline std::ostream & ostream() { return *_ostream; }
     private:
         sheet::compiler::IWarningsCollectionPtr getWarnings();
+        std::ostream *_ostream = nullptr;
     };
 }
 

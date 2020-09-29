@@ -4,6 +4,7 @@ cefapp/third_party/
 third_party
 fe/package-lock.jso
 .vscode
+package.json
 
 # Created by 
 https://www.gitignore.io/api/c,c++,grunt,cmake,emacs,angular,visualstudio

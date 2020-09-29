@@ -1,0 +1,35 @@
+name: Emscripten Build
+
+on:
+  push:
+    branches: 
+        - main
+        - feature/* 
+        - develop
+  pull_request:
+    branches: [ develop ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: update submodules
+      run: git submodule update --init --recursive --remote    
+    - name: install emscripten
+      run: git clone https://github.com/emscripten-core/emsdk.git && cd emsdk && ./emsdk install latest && ./emsdk activate latest
+      working-directory: third_party
+    - name: configure
+      run: source ../third_party/emsdk/emsdk_env.sh && emcmake cmake -DCMAKE_BUILD_TYPE=Release ..
+      working-directory: build
+    - name: build
+      run: cmake --build .
+      working-directory: build  
+    - name: pack
+      run: cpack -G ZIP
+      working-directory: build
+    - uses: actions/upload-artifact@v1
+      with:
+        name: werckmeister-linux-${{ github.sha }}
+        path: build/werckmeister-0.1.55-Emscripten.zip

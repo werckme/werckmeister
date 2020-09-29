@@ -52,10 +52,6 @@ void SheetCompilerProgram::compile()
 {
     _midiFile->midiConfig.skipMetaEvents = _programOptions->isNoMetaSet();
     auto file = _programOptions->getInput();
-    if (_programOptions->isJsonModeSet()) { // for more cases, cosider a input provider approach
-        auto base64JsonInputStr = file;
-        file = prepareJSONInput(base64JsonInputStr);
-    }
     _logger->babble(WMLogLambda(log << "parsing '" << file << "'"));
     auto document =_documentParser->parse(file);
     if (_logger->logLevel() >= fm::ILogger::LevelBabble) {
@@ -124,21 +120,4 @@ int SheetCompilerProgram::execute() {
         _documentWriter->writeUnknownException();
 	}
     return -1;
-}
-
-fm::Path SheetCompilerProgram::prepareJSONInput(const std::string &base64JsonInputStr) 
-{
-	auto &wm = fm::getWerckmeister();
-	// prepare vfs
-	fmapp::JsonStringInputReader jsonReader;
-    auto jsonData = jsonReader.base64Decode(base64JsonInputStr);
-	auto vfiles = jsonReader.readVirtualFS(jsonData);
-	fm::Path sheetPath;
-	for(const auto &vfile : vfiles) {
-		if (wm.fileIsSheet(vfile.path)) {
-			sheetPath = vfile.path;
-		}
-		wm.createVirtualFile(vfile.path, vfile.data);
-	}
-	return sheetPath;
 }

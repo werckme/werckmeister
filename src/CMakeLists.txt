@@ -1,3 +1,11 @@
+if(${USE_EMSCRIPTEN})
+    SET(BUILD_SHEETJS 1)
+else()
+    SET(BUILD_SHEETC   1)
+    SET(BUILD_SHEETP   1)
+    SET(BUILD_REHEARSE 1)
+endif()
+
 ## lib
 SET (SRC_FETZER_LIB
     fm/literals.cpp
@@ -135,11 +143,27 @@ endif(WIN32)
 
 add_library(fmapp ${SRC_SHEET_FMAPP})
 
-add_executable(rehearse ${SRC_FETZER_TESTS})
-target_link_libraries (rehearse ${SHEET_LIBS})
+if(${BUILD_REHEARSE})
+    add_executable(rehearse ${SRC_FETZER_TESTS})
+    target_link_libraries (rehearse ${SHEET_LIBS})
+endif()
 
-add_executable(sheetc sheetcompiler_main.cpp SheetCompilerProgram.cpp CompilerProgramOptions.cpp)
-target_link_libraries (sheetc ${SHEET_LIBS})
+if(${BUILD_SHEETC})
+    add_executable(sheetc sheetcompiler_main.cpp SheetCompilerProgram.cpp CompilerProgramOptions.cpp)
+    target_link_libraries (sheetc ${SHEET_LIBS})
+    SET (WM_TARGETS ${WM_TARGETS} sheetc)
+endif()
+
+if(${BUILD_SHEETJS})
+    add_executable(werckmeister sheetjs_main.cpp SheetCompilerProgramJs.cpp SheetCompilerProgram.cpp)
+    target_link_libraries (werckmeister ${SHEET_LIBS} emscripten_boost_libs)
+    set_target_properties(werckmeister PROPERTIES LINK_FLAGS "-Oz -s MODULARIZE=1 -s EXPORT_NAME=\"startWerckmeisterJs\" -s DISABLE_EXCEPTION_CATCHING=0 -s EXTRA_EXPORTED_RUNTIME_METHODS=\"['cwrap', 'UTF8ToString', 'FS']\" -s EXPORTED_FUNCTIONS=\"['_main', '_create_compile_result']\"")
+    install(FILES ${CMAKE_BINARY_DIR}/werckmeister.wasm DESTINATION .)
+    install(FILES ${CMAKE_BINARY_DIR}/package.json DESTINATION .)
+    install(FILES ${PROJECT_SOURCE_DIR}/LICENSE DESTINATION .)
+    install(TARGETS werckmeister DESTINATION .)
+endif()
+
 
 if (WIN32)
     SET(LIBS_PLAYER ${LIBS_PLAYER} rtmidi_static)
@@ -154,10 +178,13 @@ elseif(UNIX)
     endif($ENV{WM_LINUX_LINK_STATIC})
 endif(APPLE)
 
-add_executable(sheetp ${SRC_SHEET_PLAYER})
-target_link_libraries (sheetp ${SHEET_LIBS} ${LIBS_PLAYER})
+if(${BUILD_SHEETP})
+    add_executable(sheetp ${SRC_SHEET_PLAYER})
+    target_link_libraries (sheetp ${SHEET_LIBS} ${LIBS_PLAYER})
+    SET (WM_TARGETS ${WM_TARGETS} sheetp)
+endif()
 
-SET (WM_TARGETS sheetp sheetc)
+
 
 # Win32 Kill Process Workaround
 if (WIN32) 
