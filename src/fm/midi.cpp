@@ -532,15 +532,20 @@ namespace fm {
 				FM_THROW(fm::Exception, "buffer to small");
 			}
 			Header header;
-			header.chunkSize = static_cast<DWord>(events().byteSize());
+			header.chunkSize = static_cast<DWord>(events().byteSize() + EoTSize);
 			if (isLittleEndian()) {
 				endswap(&header.chunkSize);
 			}
 			::memcpy(bff, &header, HeaderSize);
 			bff += HeaderSize;
 			wrote += HeaderSize;
-			wrote += events().write(bff, maxByteSize - wrote);
-			return wrote;
+			auto eventBytesWritten = events().write(bff, maxByteSize - wrote);
+			wrote += eventBytesWritten;
+			bff += eventBytesWritten;
+			(*(bff++)) = 0XFF;
+			(*(bff++)) = 0x2F;
+			(*(bff++)) = 0X00;
+			return wrote + EoTSize;
 		}
 		void Track::setMetaData(const MetaKey &key, const MetaValue &val)
 		{
