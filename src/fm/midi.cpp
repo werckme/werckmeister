@@ -265,7 +265,7 @@ namespace fm {
 		{
 			bpm = std::max(bpm, 1.0);
 			auto ev = Event();
-			auto bytes = MetaCreateIntData(static_cast<int>(MicrosecondsPerMinute / bpm));
+			auto bytes = MetaCreateIntData(static_cast<int>(MicrosecondsPerMinute / bpm), 3);
 			ev.metaData(Tempo, bytes.data(), bytes.size());
 			return ev;
 		}
@@ -305,7 +305,6 @@ namespace fm {
 		}
 		std::vector<Byte> Event::MetaCreateIntData(int value, size_t numBytes)
 		{
-			numBytes = sizeof(int);
 			std::vector<Byte> result(numBytes);
 			for (size_t i=1; i<=numBytes; ++i) {
 				auto byte = value & 0xFF;

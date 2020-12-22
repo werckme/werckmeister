@@ -598,12 +598,12 @@ BOOST_AUTO_TEST_CASE(event_container_from)
 BOOST_AUTO_TEST_CASE(meta_event_write_1)
 {
 	using namespace fm;
-	constexpr size_t eventSize = 8;
+	constexpr size_t eventSize = 7;
 	auto tempo = midi::Event::MetaTempo(120.0);
 	BOOST_CHECK( tempo.eventType() == midi::MetaEvent );
 	BOOST_CHECK( tempo.metaEventType() == midi::Tempo);
-	BOOST_CHECK( tempo.byteSize(0) == 8 );
-	BOOST_CHECK( tempo.payloadSize() == 7);
+	BOOST_CHECK( tempo.byteSize(0) == 7 );
+	BOOST_CHECK( tempo.payloadSize() == 6);
 	
 	Byte bff[eventSize];
 	BOOST_CHECK_THROW(tempo.write(0, &bff[0], eventSize-1), fm::Exception);
@@ -612,17 +612,16 @@ BOOST_AUTO_TEST_CASE(meta_event_write_1)
 	BOOST_CHECK(bff[0] == 0);
 	BOOST_CHECK(bff[1] == 0xFF);
 	BOOST_CHECK(bff[2] == 0x51);
-	BOOST_CHECK(bff[3] == 0x4);
-	BOOST_CHECK(bff[4] == 0);
-	BOOST_CHECK(bff[5] == 0x7);
-	BOOST_CHECK(bff[6] == 0xA1);
-	BOOST_CHECK(bff[7] == 0x20);
+	BOOST_CHECK(bff[3] == 0x3);
+	BOOST_CHECK(bff[4] == 0x7);
+	BOOST_CHECK(bff[5] == 0xA1);
+	BOOST_CHECK(bff[6] == 0x20);
 }
 
 BOOST_AUTO_TEST_CASE(meta_event_read_1)
 {
 	using namespace fm;
-	constexpr size_t eventSize = 8;
+	constexpr size_t eventSize = 7;
 	auto tempo = midi::Event::MetaTempo(120.0);	
 	Byte bff[eventSize];
 	tempo.write(0, &bff[0], eventSize);
@@ -633,7 +632,7 @@ BOOST_AUTO_TEST_CASE(meta_event_read_1)
 
 	BOOST_CHECK(readTempo.eventType() == midi::MetaEvent);
 	BOOST_CHECK(readTempo.metaEventType() == midi::Tempo);
-	BOOST_CHECK(readTempo.metaDataSize() == 4);
+	BOOST_CHECK(readTempo.metaDataSize() == 3);
 
 	int bpmMicros = midi::Event::MetaGetIntValue(readTempo.metaData(), readTempo.metaDataSize());
 	BOOST_CHECK(midi::MicrosecondsPerMinute / bpmMicros == 120);
