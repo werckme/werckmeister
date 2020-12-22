@@ -8,7 +8,7 @@ using "./templates/drums.jazzSwing.template";
 using "./templates/rhythm.jazzSwing.template";
 using "./templates/bass.jazzSwing.template";
 
-device: RolandSC8850 midi _usePort=5;
+device: RolandSC8850 midi _usePort=7;
 instrumentDef: piano _onDevice=RolandSC8850 _ch=0 _pc=0;
 instrumentDef: bass  _onDevice=RolandSC8850  _ch=1 _pc=32;
 instrumentDef: rhythm2 _onDevice=RolandSC8850  _ch=2 _pc=0;
