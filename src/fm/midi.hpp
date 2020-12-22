@@ -130,7 +130,7 @@ namespace fm {
 			static std::vector<Byte> MetaCreateStringData(const std::string &string);
 			static std::string MetaGetStringValue(const Byte *data, size_t length);
 			static int MetaGetIntValue(const Byte *data, size_t length);
-			static std::vector<Byte> MetaCreateIntData(int value);
+			static std::vector<Byte> MetaCreateIntData(int value, size_t numBytes = sizeof(int));
 			static CustomMetaData MetaGetCustomData(const Byte *data, size_t length);
 
 			/**
@@ -201,12 +201,12 @@ namespace fm {
 			static const MetaKey MetaKeyRelatedVertexId;
 			static const MetaKey MetaKeyRelatedSheetId;
 			static const MetaKey MetaKeyMidiChannel;
-			enum { HeaderSize = 8 };
+			enum { HeaderSize = 8, EoTSize = 5 };
 			const EventContainer & events() const { return _container; }
 			EventContainer & events() { return _container; }
 			size_t read(const Byte *, size_t length);
 			size_t write(Byte *, size_t maxByteSize) const;
-			size_t byteSize() const { return _container.byteSize() + sizeof(Header); }
+			size_t byteSize() const { return _container.byteSize() + sizeof(Header) + EoTSize; }
 			/**
 				values will not be written to midi file
 			*/

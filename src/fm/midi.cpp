@@ -265,7 +265,7 @@ namespace fm {
 		{
 			bpm = std::max(bpm, 1.0);
 			auto ev = Event();
-			auto bytes = MetaCreateIntData(static_cast<int>(MicrosecondsPerMinute / bpm));
+			auto bytes = MetaCreateIntData(static_cast<int>(MicrosecondsPerMinute / bpm), 3);
 			ev.metaData(Tempo, bytes.data(), bytes.size());
 			return ev;
 		}
@@ -303,9 +303,8 @@ namespace fm {
 			_metaData = Bytes(new Byte[numBytes]);
 			::memcpy(_metaData.get(), data, numBytes);
 		}
-		std::vector<Byte> Event::MetaCreateIntData(int value)
+		std::vector<Byte> Event::MetaCreateIntData(int value, size_t numBytes)
 		{
-			constexpr size_t numBytes = sizeof(int);
 			std::vector<Byte> result(numBytes);
 			for (size_t i=1; i<=numBytes; ++i) {
 				auto byte = value & 0xFF;
@@ -532,14 +531,21 @@ namespace fm {
 				FM_THROW(fm::Exception, "buffer to small");
 			}
 			Header header;
-			header.chunkSize = static_cast<DWord>(events().byteSize());
+			auto eot = Event();
+			Byte eotBytes[] = {0};
+			eot.metaData(EndOfTrack, &eotBytes[0], 1);
+
+			header.chunkSize = static_cast<DWord>(events().byteSize() + eot.byteSize(0));
 			if (isLittleEndian()) {
 				endswap(&header.chunkSize);
 			}
 			::memcpy(bff, &header, HeaderSize);
 			bff += HeaderSize;
 			wrote += HeaderSize;
-			wrote += events().write(bff, maxByteSize - wrote);
+			auto eventBytesWritten = events().write(bff, maxByteSize - wrote);
+			wrote += eventBytesWritten;
+			bff += eventBytesWritten;
+			wrote += eot.write(0, bff, maxByteSize - wrote);
 			return wrote;
 		}
 		void Track::setMetaData(const MetaKey &key, const MetaValue &val)
