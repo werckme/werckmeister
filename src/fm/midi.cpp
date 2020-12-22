@@ -534,10 +534,6 @@ namespace fm {
 				FM_THROW(fm::Exception, "buffer to small");
 			}
 			Header header;
-			auto eot = Event();
-			Byte eotBytes[] = {0};
-			eot.metaData(EndOfTrack, &eotBytes[0], 1);
-
 			header.chunkSize = static_cast<DWord>(events().byteSize() + EoTSize);
 			if (isLittleEndian()) {
 				endswap(&header.chunkSize);
@@ -549,7 +545,9 @@ namespace fm {
 			auto eventBytesWritten = events().write(bff, maxByteSize - wrote, &writtenDuration);
 			wrote += eventBytesWritten;
 			bff += eventBytesWritten;
-			eot.absPosition(writtenDuration + 1);
+			auto eot = Event();
+			eot.metaData(EndOfTrack, nullptr, 0);
+			eot.absPosition(writtenDuration);
 			wrote += eot.write(writtenDuration, bff, maxByteSize - wrote);
 			return wrote;
 		}

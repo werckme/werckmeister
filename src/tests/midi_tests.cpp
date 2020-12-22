@@ -294,9 +294,9 @@ BOOST_AUTO_TEST_CASE(write_midi_event_container_write)
 	events.add(midi::Event::NoteOn(2, 100, 26, 102));
 	BOOST_CHECK(events.numEvents() == 4);
 	constexpr size_t byteSize = 16;
-	BOOST_CHECK(byteSize == events.byteSize());
+	BOOST_CHECK_EQUAL(byteSize, events.byteSize());
 	Byte bytes[byteSize];
-	BOOST_CHECK(events.write(&bytes[0], byteSize) == byteSize);
+	BOOST_CHECK_EQUAL(events.write(&bytes[0], byteSize), byteSize);
 	int c = 0;
 	BOOST_CHECK(bytes[c] == 1); BOOST_CHECK((bytes[c + 1] & 0xF0) >> 4 == midi::NoteOn); BOOST_CHECK((bytes[c + 1] & 0xF) == 0); BOOST_CHECK(bytes[c + 2] == 24); BOOST_CHECK(bytes[c + 3] == 100);
 	c += 4;
@@ -436,20 +436,23 @@ BOOST_AUTO_TEST_CASE(write_midi_event_track_write)
 	events.add(midi::Event::NoteOn(1, 50, 25, 101));
 	events.add(midi::Event::NoteOn(2, 100, 26, 102));
 
-	constexpr size_t byteSize = 25;
-	BOOST_CHECK(byteSize == track.byteSize());
+	constexpr size_t byteSize = 24;
+	BOOST_CHECK_EQUAL(byteSize, track.byteSize());
 	Byte bytes[byteSize];
 	BOOST_CHECK(track.write(&bytes[0], byteSize) == byteSize);
 	int c = 0;
 	BOOST_CHECK(std::string(reinterpret_cast<char*>(&bytes[c]), 4) == "MTrk");
 	c += 4;
-	BOOST_CHECK((bytes[c] == 0 && bytes[c + 1] == 0 && bytes[c + 2] == 0 && bytes[c + 3] == 17));
+	BOOST_CHECK((bytes[c] == 0 && bytes[c + 1] == 0 && bytes[c + 2] == 0 && bytes[c + 3] == 16));
 	c += 4;
 	BOOST_CHECK(bytes[c] == 0); BOOST_CHECK((bytes[c + 1] & 0xF0) >> 4 == midi::NoteOn); BOOST_CHECK((bytes[c + 1] & 0xF) == 0); BOOST_CHECK(bytes[c + 2] == 24); BOOST_CHECK(bytes[c + 3] == 100);
 	c += 4;
 	BOOST_CHECK(bytes[c] == 50); BOOST_CHECK((bytes[c + 1] & 0xF0) >> 4 == midi::NoteOn); BOOST_CHECK((bytes[c + 1] & 0xF) == 1); BOOST_CHECK(bytes[c + 2] == 25); BOOST_CHECK(bytes[c + 3] == 101);
 	c += 4;
 	BOOST_CHECK(bytes[c] == 50); BOOST_CHECK((bytes[c + 1] & 0xF0) >> 4 == midi::NoteOn); BOOST_CHECK((bytes[c + 1] & 0xF) == 2); BOOST_CHECK(bytes[c + 2] == 26); BOOST_CHECK(bytes[c + 3] == 102);
+	BOOST_CHECK(bytes[21] == 0xFF); 
+	BOOST_CHECK(bytes[22] == 0x2F); 
+	BOOST_CHECK(bytes[23] == 0x00); 
 }
 
 BOOST_AUTO_TEST_CASE(write_midi_write_fail)
@@ -494,7 +497,7 @@ BOOST_AUTO_TEST_CASE(write_midi_write)
 		events.add(midi::Event::NoteOn(5, 100, 52, 105));
 		midi.addTrack(track);
 	}
-	constexpr size_t byteSize = 14 + 8 * 2 + 2 * 4 * 3 + midi::Track::EoTSize*2;
+	constexpr size_t byteSize = 62;
 	BOOST_CHECK(byteSize == midi.byteSize());
 	Byte bytes[byteSize];
 	BOOST_CHECK(midi.write(&bytes[0], byteSize) == byteSize);
@@ -518,25 +521,39 @@ BOOST_AUTO_TEST_CASE(write_midi_write)
 	// Track 1
 	BOOST_CHECK(std::string(reinterpret_cast<char*>(&bytes[c]), 4) == "MTrk");
 	c += 4;
-	BOOST_CHECK((bytes[c] == 0 && bytes[c + 1] == 0 && bytes[c + 2] == 0 && bytes[c + 3] == 17));
+	BOOST_CHECK((bytes[c] == 0 && bytes[c + 1] == 0 && bytes[c + 2] == 0 && bytes[c + 3] == 16));
 	c += 4;
 	BOOST_CHECK(bytes[c] == 0); BOOST_CHECK((bytes[c + 1] & 0xF0) >> 4 == midi::NoteOn); BOOST_CHECK((bytes[c + 1] & 0xF) == 0); BOOST_CHECK(bytes[c + 2] == 24); BOOST_CHECK(bytes[c + 3] == 100);
 	c += 4;
 	BOOST_CHECK(bytes[c] == 50); BOOST_CHECK((bytes[c + 1] & 0xF0) >> 4 == midi::NoteOn); BOOST_CHECK((bytes[c + 1] & 0xF) == 1); BOOST_CHECK(bytes[c + 2] == 25); BOOST_CHECK(bytes[c + 3] == 101);
 	c += 4;
 	BOOST_CHECK(bytes[c] == 50); BOOST_CHECK((bytes[c + 1] & 0xF0) >> 4 == midi::NoteOn); BOOST_CHECK((bytes[c + 1] & 0xF) == 2); BOOST_CHECK(bytes[c + 2] == 26); BOOST_CHECK(bytes[c + 3] == 102);
-	c += 9;	
+	c += 5;
+	// end of track sequence
+	BOOST_CHECK(bytes[c] == 0xFF);
+	c += 1;
+	BOOST_CHECK(bytes[c] == 0x2F);
+	c += 1;
+	BOOST_CHECK(bytes[c] == 0x00);
+	c += 1;		
 
 	// Track 2
 	BOOST_CHECK(std::string(reinterpret_cast<char*>(&bytes[c]), 4) == "MTrk");
 	c += 4;
-	BOOST_CHECK((bytes[c] == 0 && bytes[c + 1] == 0 && bytes[c + 2] == 0 && bytes[c + 3] == 17));
+	BOOST_CHECK((bytes[c] == 0 && bytes[c + 1] == 0 && bytes[c + 2] == 0 && bytes[c + 3] == 16));
 	c += 4;
 	BOOST_CHECK(bytes[c] == 0); BOOST_CHECK((bytes[c + 1] & 0xF0) >> 4 == midi::NoteOn); BOOST_CHECK((bytes[c + 1] & 0xF) == 3); BOOST_CHECK(bytes[c + 2] == 48); BOOST_CHECK(bytes[c + 3] == 103);
 	c += 4;
 	BOOST_CHECK(bytes[c] == 50); BOOST_CHECK((bytes[c + 1] & 0xF0) >> 4 == midi::NoteOn); BOOST_CHECK((bytes[c + 1] & 0xF) == 4); BOOST_CHECK(bytes[c + 2] == 50); BOOST_CHECK(bytes[c + 3] == 104);
 	c += 4;
 	BOOST_CHECK(bytes[c] == 50); BOOST_CHECK((bytes[c + 1] & 0xF0) >> 4 == midi::NoteOn); BOOST_CHECK((bytes[c + 1] & 0xF) == 5); BOOST_CHECK(bytes[c + 2] == 52); BOOST_CHECK(bytes[c + 3] == 105);
+	c +=5;
+	// end of track sequence
+	BOOST_CHECK(bytes[c] == 0xFF);
+	c += 1;
+	BOOST_CHECK(bytes[c] == 0x2F);
+	c += 1;
+	BOOST_CHECK(bytes[c] == 0x00); 
 }
 
 BOOST_AUTO_TEST_CASE(write_midi_write_to_file)
