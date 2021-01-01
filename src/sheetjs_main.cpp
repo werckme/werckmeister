@@ -32,7 +32,7 @@ public:
 	virtual bool isInputSet() const { return true; }
 	virtual fm::String getInput() const { return input; }
 	virtual bool isOutputSet() const { return false; }
-	virtual bool isNoMetaSet() const { return true; }
+	virtual bool isNoMetaSet() const { return false; }
 	virtual fm::String getOutput() const { return ""; }
 	virtual bool isJsonModeSet() const { return true; }
 	virtual bool isJsonDocInfoMode() const { return false; }
