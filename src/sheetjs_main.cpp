@@ -111,5 +111,6 @@ extern "C" const char * create_compile_result(const char *file)
 
 int main(int argc, const char** argv)
 {
-    std::cout << fm::getWerckmeister().version() << std::endl;
+    //std::cout << fm::getWerckmeister().version() << std::endl;
+	std::cout << create_compile_result("./midi.sheet") << std::endl;
 }
