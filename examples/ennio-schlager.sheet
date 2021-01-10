@@ -6,8 +6,8 @@ using "./templates/countryschlager1.template";
 -- to get a list of your available MIDI devices 
 -- and their port numbers, execute "sheetp --list"
 --      name              type   portnumber
-device: _setName=MyDevice          _isType=fluidSynth       _useFont="E:\Users\samba\Soundfonts\FluidsR3_GM.sf2";
-
+-- device: _setName=MyDevice          _isType=fluidSynth       _useFont="E:\Users\samba\Soundfonts\FluidsR3_GM.sf2";
+device: _setName=MyDevice _isType=midi _usePort=4;
 
 -- define your instruments:
 -- (ch= channel, pc= programm change, cc= control change)
@@ -32,7 +32,7 @@ instrumentConf: drums
 ;
 
 instrumentConf: bass
-    volume 100
+    volume 85
 ;
 
 tempo: 130;
