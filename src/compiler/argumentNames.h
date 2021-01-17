@@ -89,6 +89,11 @@ struct ArgumentNames {
         std::string FFFFF = "fffff";
     } VelocityRemap;
 
+    struct {
+        std::string Ignore                  = "ignore";
+        std::string Repeat                  = "repeat";
+    } Jump;
+
 };
 
 extern ArgumentNames argumentNames;  
