@@ -7,6 +7,7 @@
 #include <compiler/context/IContext.h>
 #include <fm/IDefinitionsServer.h>
 #include <forward.hpp>
+#include "ISheetNavigator.h"
 
 namespace sheet {
 	struct Track;
@@ -16,14 +17,17 @@ namespace sheet {
 			IContextPtr 			_context;
 			ASheetEventRendererPtr _renderer;
 			fm::IDefinitionsServerPtr _definitionServer;
+			ISheetNavigatorPtr		_sheetNavigator;
 		public:
 			Preprocessor(IContextPtr context, 
 				ASheetEventRendererPtr renderer, 
-				fm::IDefinitionsServerPtr definitionServer
+				fm::IDefinitionsServerPtr definitionServer,
+				ISheetNavigatorPtr		sheetNavigator
 			)
 				: _context(context)
 				, _renderer(renderer)
 				, _definitionServer(definitionServer)
+				, _sheetNavigator(sheetNavigator)
 			{}
 			Preprocessor(const Preprocessor&) = delete;
 			Preprocessor & operator=(const Preprocessor&) = delete;

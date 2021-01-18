@@ -45,6 +45,7 @@ SET (SRC_FETZER_LIB
     compiler/error.cpp
     compiler/Warning.cpp
     compiler/argumentNames.cpp
+    compiler/SheetNavigator.cpp
     compiler/lua/luaTimeInfo.cpp
     sheet/objects/Event.cpp
     sheet/objects/ChordDef.cpp
@@ -79,7 +80,7 @@ SET (SRC_FETZER_LIB
     compiler/commands/InstrumentConfigVelocityRemap.cpp    
     compiler/commands/AddDevice.cpp
     compiler/commands/Mark.cpp    
-    compiler/commands/Jump.cpp    
+    compiler/commands/Jump.cpp 
 )
 
 add_definitions( -DGIT_VERSION="${GIT_VERSION}" )

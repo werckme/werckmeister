@@ -21,6 +21,7 @@
 #include <compiler/DefaultCompilerVisitor.h>
 #include <fmapp/TimelineVisitor.hpp>
 #include <boost/di/extension/scopes/scoped.hpp>
+#include <compiler/SheetNavigator.h>
 
 typedef sheet::compiler::EventLogger<fm::ConsoleLogger> 			   LoggerImpl;
 typedef sheet::compiler::LoggerAndWarningsCollector<fm::ConsoleLogger> WarningsCollectorWithConsoleLogger;
@@ -77,6 +78,7 @@ extern "C" const char * create_compile_result(const char *file)
 		, di::bind<cp::ASheetEventRenderer>()		.to<cp::SheetEventRenderer>()		.in(di::extension::scoped)
 		, di::bind<cp::IContext>()					.to<cp::MidiContext>()				.in(di::extension::scoped)
 		, di::bind<cp::IPreprocessor>()				.to<cp::Preprocessor>()				.in(di::extension::scoped)
+		, di::bind<cp::ISheetNavigator>()			.to<cp::SheetNavigator>()			.in(di::extension::scoped)
 		, di::bind<ICompilerProgramOptions>()		.to(programOptionsPtr)
 		, di::bind<sheet::Document>()				.to(documentPtr)
 		, di::bind<fm::IDefinitionsServer>()		.to<fm::DefinitionsServer>()		.in(di::extension::scoped)
@@ -100,7 +102,7 @@ extern "C" const char * create_compile_result(const char *file)
 	auto program = injector.create<SheetCompilerProgramJs>();
 	auto jsonWriterPtr = std::dynamic_pointer_cast<fmapp::JsonWriter>(program.documentWriter());
 	if (!jsonWriterPtr) {
-		throw std::runtime_error("invalid cast: expected JsonWriter object");
+		return nullptr;
 	}
 	std::stringstream outputStream;
 	jsonWriterPtr->setOutputStream(outputStream);
