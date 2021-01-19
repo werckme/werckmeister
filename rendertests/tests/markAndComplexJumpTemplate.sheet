@@ -28,8 +28,6 @@ type: accomp;
 {
     /signature: 5 4/
     /template: myTemplate/
-    /mark: A/
-    C7 | 
-    /jump: A _repeat=2/
+    C7 | C7 | C7 | C7 
 }
 ]

@@ -16,6 +16,7 @@ namespace {
     struct Jump {
         fm::String to;
         int numVisited = 0;
+        int numPerformed = 0;
         int numIgnore = 0;
         int numPerform = 0;
     };
@@ -34,7 +35,7 @@ namespace {
         else if (it->second != eventContainerIndex) {
             std::stringstream ss;
             ss << "marker duplicate with \"" << name << "\"";
-            fm::Exception exception(ss.str());
+            sheet::compiler::Exception exception(ss.str());
             exception << sheet::compiler::ex_sheet_source_info(event);
             throw exception;
         }
@@ -90,25 +91,25 @@ namespace sheet {
                 if (markIt == marks.end()) {
                     std::stringstream ss;
                     ss << "marker not found: \"" << jump.to << "\"";
-                    fm::Exception exception(ss.str());
+                    sheet::compiler::Exception exception(ss.str());
                     exception << sheet::compiler::ex_sheet_source_info(event);
                     throw exception;
                 }
                 ++jump.numVisited;
-                if (jump.numVisited >= jump.numPerform) {
+                if (jump.numPerformed >= jump.numPerform) {
                     continue;
                 }
-                //if (jump.numVisited < jump.numIgnore) {
-                //    ++jump.numVisited;
-                //    continue;
-                //}
+                if (jump.numVisited <= jump.numIgnore) {
+                    continue;
+                }
                 if (jump.numVisited >= fm::SheetNavigationMaxJumps) {
                     std::stringstream ss;
                     ss << "max jump size exceeded: " << fm::SheetNavigationMaxJumps;
-                    fm::Exception exception(ss.str());
+                    sheet::compiler::Exception exception(ss.str());
                     exception << sheet::compiler::ex_sheet_source_info(event);
                     throw exception;
                 }
+                ++jump.numPerformed;
                 idx = markIt->second;
             }
             dst.swap(src);
