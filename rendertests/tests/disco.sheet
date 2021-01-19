@@ -4,7 +4,7 @@ using "./pitchmaps/defaultMidiDrumMap.pitchmap";
 
 tempo: 125;
 
-device: SC1 midi 2;
+device: SC1 midi 5;
 
 --       instrument  dv ch cc pc
 instrumentDef: piano SC1 3 0 0;

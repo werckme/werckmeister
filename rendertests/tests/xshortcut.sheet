@@ -1,5 +1,5 @@
 using "./chords/default.chords";
-device: SC1 midi 2;
+device: SC1 midi 5;
 
 tempo: 130;
 --          instrument dv ch cc pc
