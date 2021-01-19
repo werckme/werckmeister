@@ -32,11 +32,11 @@ namespace sheet {
 				throw;
 			}
 			logger_->babble(WMLogLambda(log << "preprocess '" << document->path << "'"));
-			preprocessor_->preprocess(document);
 			try {
+				preprocessor_->preprocess(document);
 				renderChordTrack();
 				renderTracks();
-			} catch (fm::Exception &ex) {			
+			} catch (const fm::Exception &ex) {			
 				ex << ex_sheet_document(document);
 				throw;
 			} catch(...) {

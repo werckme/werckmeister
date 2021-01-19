@@ -2,7 +2,7 @@ using "./pitchmaps/defaultMidiDrumMap.pitchmap";
 using "./chords/default.chords";
 
 tempo: 150;
-device: SC1 midi 1;
+device: SC1 midi 5;
 
 
 --             instrument dv ch cc pc

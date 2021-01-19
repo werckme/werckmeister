@@ -74,6 +74,8 @@ namespace sheet {
 #include <compiler/commands/SetInstrument.h>
 #include <compiler/commands/InstrumentConfigAddMod.h>
 #include <compiler/commands/InstrumentConfigVelocityRemap.h>
+#include <compiler/commands/Mark.h>
+#include <compiler/commands/Jump.h>
 
 namespace sheet {
     namespace compiler {
@@ -101,6 +103,8 @@ namespace sheet {
                 _FM_Register(SetInstrument,                             SHEET_META__INSTRUMENT);
                 _FM_Register(InstrumentConfigAddMod,                    InstrumentConfigCommandName(SHEET_META__SET_MOD));
                 _FM_Register(InstrumentConfigVelocityRemap,             InstrumentConfigCommandName(SHEET_META__VELOCITY_REMAP));
+                _FM_Register(Mark,                                      SHEET_META__MARK);
+                _FM_Register(Jump,                                      SHEET_META__JUMP);
                 return true;
             })();
         }

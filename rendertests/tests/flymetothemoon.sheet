@@ -3,7 +3,7 @@ using "./templates/quickstep.template";
 using "./pitchmaps/defaultMidiDrumMap.pitchmap";
 
 tempo: 180;
-device: SC1 midi 1;
+device: SC1 midi 5;
 
 
 --          instrument dv ch cc pc

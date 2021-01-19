@@ -2,8 +2,8 @@ using "chords/default.chords";
 using "pitchmaps/defaultMidiDrumMap.pitchmap";
 using "lua/mods/swing.lua";
 using "lua/mods/staccato.lua";
-device: SC1 midi 2;
-device: BC midi 2;
+device: SC1 midi 5;
+device: BC midi 5;
 
 tempo: 120;
 instrumentDef: drums   BC 9 0 0;

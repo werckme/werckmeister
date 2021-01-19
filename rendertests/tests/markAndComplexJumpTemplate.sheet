@@ -1,0 +1,33 @@
+using "./chords/default.chords";
+
+device: _usePort=5 _setName=MyDevice  _isType=midi;
+instrumentDef: _setName=piano _onDevice=MyDevice _ch=0 _pc=1 _cc=8;
+tempo: 120;
+
+[
+type: template;
+name: myTemplate;
+instrument: piano;
+{
+    /signature: 5 4/
+    /mark: A/
+    -- |:
+    I4 III V VII I' |
+    -- 1
+    /jump: B _ignore=1/
+    V VII I' III' V' | -- :|
+    /jump: A/
+    /mark: B/
+    -- 2
+    V' III' I'2. |
+}
+]
+
+[
+type: accomp;
+{
+    /signature: 5 4/
+    /template: myTemplate/
+    C7 | C7 | C7 | C7 
+}
+]

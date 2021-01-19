@@ -5,8 +5,8 @@ using "./templates/purdie.template";
 
 
 tempo: 160;
-device: SC1 midi 2 _offset=20;
-device: BT  midi 8;
+device: SC1 midi 5 _offset=20;
+device: BT  midi 5;
 
 --             instrument dv ch cc pc
 instrumentDef: piano      SC1 0 0  0;

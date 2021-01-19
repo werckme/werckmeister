@@ -4,7 +4,7 @@ using "./pitchmaps/defaultMidiDrumMap.pitchmap";
 --using "./pitchmaps/battery3.tight.pitchmap";
 
 tempo: 140;
-device: SC1 midi 2;
+device: SC1 midi 5;
 --device: BT midi 8;
 
 --             instrument dv ch cc pc

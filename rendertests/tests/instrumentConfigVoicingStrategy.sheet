@@ -3,7 +3,7 @@ using "./lua/voicings/guitar.lua";
 using "./lua/voicings/voicelead.lua";
 using "./lua/voicings/simple.lua";
 
-device: SC1 midi 1;
+device: SC1 midi 5;
 
 tempo: 400;
 instrumentDef: piano   SC1 3 0 0;
