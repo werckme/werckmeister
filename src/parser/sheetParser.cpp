@@ -348,8 +348,22 @@ namespace sheet {
 						>> attr(Event::Tags())
 						>> attr(PitchDef()) 
 						>> attr(Event::NoDuration)
+						>> *(lit(":"))[at_c<EvStringValue>(_val) = FM_STRING("__repeat_begin_")] 
 					)
-					| 
+					|
+					( // END OF BAR WITH REPEAT
+						current_pos_.current_pos
+						>> attr(sourceId_)
+						>> ":"
+						>> attr(Event::EOB)
+						>> *lexeme[+char_(ALLOWED_META_ARGUMENT)]
+						>> attr(PitchDef()) 
+						>> attr(Event::NoDuration) 
+						>> attr("__repeat_end_") 
+						>> "|"
+						>> *(lit(":"))[at_c<EvStringValue>(_val) = FM_STRING("__repeat_begin_and_end_")] 
+					)
+					|								
 					( // META COMMANDS
 						current_pos_.current_pos 
 						>> attr(sourceId_)

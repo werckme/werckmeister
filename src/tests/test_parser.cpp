@@ -1367,5 +1367,46 @@ BOOST_AUTO_TEST_CASE(test_issue_102_delimiter_for_meta_args)
 	sheet::compiler::SheetDefParser parser;
 	auto defs = parser.parse(text);
 	BOOST_CHECK(checkMetaEvent(defs.tracks[0].voices[0].events[0], FM_STRING("metacommand"), sheet::Event::Args({ makeArg("abc"), makeArg("1 2 drei") })));
+	
+}
 
+BOOST_AUTO_TEST_CASE(test_repeats)
+{
+	using namespace fm;
+	using sheet::PitchDef;
+	fm::String text = FM_STRING("\n\
+[\n\
+{\n\
+| c d e f :|\n\
+|: c d e f :x2| r1 \n\
+:|: c d e f :x2|:\n\
+--| c d e f g |1  c d e f g :|2  c d e f g | c d e f g |\n\
+}\n\
+]\n\
+");
+	sheet::compiler::SheetDefParser parser;
+	auto defs = parser.parse(text);
+	BOOST_CHECK(defs.tracks.size() == 1);
+	BOOST_CHECK(defs.tracks[0].voices.size() == 1);
+	BOOST_CHECK_EQUAL(defs.tracks[0].voices[0].events.size(), 19);
+	const auto& events = defs.tracks[0].voices[0].events;
+	BOOST_CHECK_EQUAL(events[5].type, sheet::Event::EOB);
+	BOOST_CHECK_EQUAL(events[5].stringValue, FM_STRING("__repeat_end_"));
+
+	BOOST_CHECK_EQUAL(events[6].type, sheet::Event::EOB);
+	BOOST_CHECK_EQUAL(events[6].stringValue, FM_STRING("__repeat_begin_"));
+
+	BOOST_CHECK_EQUAL(events[11].type, sheet::Event::EOB);
+	BOOST_CHECK_EQUAL(events[11].stringValue, FM_STRING("__repeat_end_"));
+	BOOST_CHECK_EQUAL(events[11].tags.size(), 1);
+	BOOST_CHECK_EQUAL(*(events[11].tags.begin()), FM_STRING("x2"));
+
+	BOOST_CHECK_EQUAL(events[13].type, sheet::Event::EOB);
+	BOOST_CHECK_EQUAL(events[13].stringValue, FM_STRING("__repeat_begin_and_end_"));
+
+	BOOST_CHECK_EQUAL(events[18].type, sheet::Event::EOB);
+	BOOST_CHECK_EQUAL(events[18].stringValue, FM_STRING("__repeat_begin_and_end_"));
+	BOOST_CHECK_EQUAL(events[18].tags.size(), 1);
+	BOOST_CHECK_EQUAL(*(events[18].tags.begin()), FM_STRING("x2"));
+	
 }
