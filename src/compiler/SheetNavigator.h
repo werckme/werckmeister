@@ -9,6 +9,9 @@ namespace sheet {
 		class SheetNavigator : public ISheetNavigator {
 		public:	
 			virtual void processNavigation(Voice&) override;
+		private:
+			void processJumps(Voice&);
+			void processRepeats(Voice&);
 		};
 	}
 }

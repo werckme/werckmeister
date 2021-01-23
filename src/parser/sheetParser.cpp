@@ -355,7 +355,7 @@ namespace sheet {
 						>> attr("")
 						>> attr(Event::Args())
 						>> current_pos_.current_pos
-						>> *bar_jump_mark_[insert(boost::phoenix::ref(at_c<EvTags>(_val)), "^"+qi::_1)    ]
+						>> *bar_jump_mark_[ (insert(at_c<EvTags>(_val), "^"+qi::_1))  ]
 						>> -(lit(":"))[at_c<EvStringValue>(_val) = FM_STRING("__repeat_begin_")] 
 					)
 					|
@@ -370,9 +370,9 @@ namespace sheet {
 						>> attr("__repeat_end_")
 						>> attr(Event::Args())
 						>> current_pos_.current_pos	
-						>> -bar_repeat_[insert(boost::phoenix::ref(at_c<EvTags>(_val)), "x"+qi::_1)    ]
+						>> -bar_repeat_[insert(at_c<EvTags>(_val), "x"+qi::_1)    ]
 						>> "|"
-						>> *bar_jump_mark_[insert(boost::phoenix::ref(at_c<EvTags>(_val)), "^"+qi::_1)    ]
+						>> *bar_jump_mark_[insert(at_c<EvTags>(_val), "^"+qi::_1)    ]
 						>> -(lit(":"))[at_c<EvStringValue>(_val) = FM_STRING("__repeat_begin_and_end_")]
 					)
 					|								

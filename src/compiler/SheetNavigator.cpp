@@ -62,6 +62,11 @@ namespace sheet {
     namespace compiler {
         void SheetNavigator::processNavigation(Voice& voice)
         {
+            processRepeats(voice);
+            processJumps(voice);
+        }
+        void SheetNavigator::processJumps(Voice& voice)
+        {
             if (voice.events.empty()) {
                 return;
             }
@@ -113,6 +118,11 @@ namespace sheet {
                 idx = markIt->second;
             }
             dst.swap(src);
+        }
+        
+        void SheetNavigator::processRepeats(Voice&)
+        {
+
         }
     }
 }
