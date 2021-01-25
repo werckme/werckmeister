@@ -227,8 +227,7 @@ namespace sheet {
 					using boost::phoenix::insert;
 
 					start.name("sheet");
-					bar_repeat_.name("bar repeat value");
-					bar_jump_mark_.name("bar jump mark");
+					bar_volta_.name("bar jump mark");
 					event_.name("event");
 					groupedEvent_.name("eventGroup");
 					track.name("track");
@@ -236,8 +235,7 @@ namespace sheet {
 					events.name("events");
 					pitch_.name("pitch");
 					degree_.name("pitch");
-					bar_repeat_ %= ('x' >> +(char_("0-9")));
-					bar_jump_mark_ %= ('^' >> +(char_("0-9")));
+					bar_volta_ %= lexeme['^' >> +(char_("0-9")) >> -(char_("-") >> +(char_("0-9")))];
 					degree_ %= (degreeSymbols_ >> (octaveSymbols_ | attr(PitchDef::DefaultOctave)) >> attr(false));
 					pitch_ %= pitchSymbols_ >> (octaveSymbols_ | attr(PitchDef::DefaultOctave));
 					alias_ %= lexeme['"' >> +(char_ - '"') >> '"'];
@@ -355,7 +353,7 @@ namespace sheet {
 						>> attr("")
 						>> attr(Event::Args())
 						>> current_pos_.current_pos
-						>> *bar_jump_mark_[ (insert(at_c<EvTags>(_val), "^"+qi::_1))  ]
+						>> -bar_volta_[ (insert(at_c<EvTags>(_val), qi::_1))]
 						>> -(lit(":"))[at_c<EvStringValue>(_val) = FM_STRING("__repeat_begin_")] 
 					)
 					|
@@ -370,9 +368,8 @@ namespace sheet {
 						>> attr("__repeat_end_")
 						>> attr(Event::Args())
 						>> current_pos_.current_pos	
-						>> -bar_repeat_[insert(at_c<EvTags>(_val), "x"+qi::_1)    ]
 						>> "|"
-						>> *bar_jump_mark_[insert(at_c<EvTags>(_val), "^"+qi::_1)    ]
+						>> -bar_volta_[insert(at_c<EvTags>(_val), qi::_1)]
 						>> -(lit(":"))[at_c<EvStringValue>(_val) = FM_STRING("__repeat_begin_and_end_")]
 					)
 					|								
@@ -452,8 +449,7 @@ namespace sheet {
 				qi::rule<Iterator, fm::String(), ascii::space_type> meta_arg_value_;
 				qi::rule<Iterator, fm::String(), ascii::space_type> using_;
 				qi::rule<Iterator, DocumentUsing::Usings, ascii::space_type> usings_;
-				qi::rule<Iterator, fm::String(), ascii::space_type> bar_repeat_;
-				qi::rule<Iterator, fm::String(), ascii::space_type> bar_jump_mark_;
+				qi::rule<Iterator, fm::String(), ascii::space_type> bar_volta_;
 				CurrentPos<Iterator> current_pos_;
 			};
 

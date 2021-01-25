@@ -1,0 +1,18 @@
+
+-- setup your midi device:
+-- to get a list of your available MIDI devices 
+-- and their port numbers, execute "sheetp --list"
+--      name              type   portnumber
+device: _usePort=5 _setName=MyDevice  _isType=midi;
+instrumentDef: _setName=piano _onDevice=MyDevice _ch=0 _pc=1 _cc=8;
+
+tempo: 350;
+
+[
+instrument: piano;
+{
+    /signature: 5 4/
+       c4 d e f g   :| c,1~ &4
+    |: a b c' d' e' :| d,1~ &4
+}
+]
