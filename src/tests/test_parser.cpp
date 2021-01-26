@@ -1380,7 +1380,7 @@ BOOST_AUTO_TEST_CASE(test_repeats)
 | c d e f :|\n\
 |: c d e f :| r1 \n\
 :|: c d e f :|: r1 \n\
-| c d e f g |^1 d e f g  |^2:  c d e f g :|^3: c d e f g :|^4: r1 |^5-6:\n\
+| c d e f g |^1 d e f g  |^2:  c d e f g :|^3: c d e f g :|^4: r1 |^5:\n\
 }\n\
 ]\n\
 ");
@@ -1428,7 +1428,7 @@ BOOST_AUTO_TEST_CASE(test_repeats)
 	BOOST_CHECK_EQUAL(events[45].type, sheet::Event::EOB);
 	BOOST_CHECK_EQUAL(events[45].stringValue, FM_STRING("__repeat_begin_"));
 	BOOST_CHECK_EQUAL(events[45].tags.size(), 1);
-	BOOST_CHECK_EQUAL(*(events[45].tags.begin()), FM_STRING("5-6"));
+	BOOST_CHECK_EQUAL(*(events[45].tags.begin()), FM_STRING("5"));
 }
 
 BOOST_AUTO_TEST_CASE(test_repeat_mark_fail_white_space)
@@ -1447,21 +1447,6 @@ BOOST_AUTO_TEST_CASE(test_repeat_mark_fail_white_space)
 
 }
 
-BOOST_AUTO_TEST_CASE(test_repeat_volta_fail_01)
-{
-	using namespace fm;
-	using sheet::PitchDef;
-	fm::String text = FM_STRING("\n\
-[\n\
-{\n\
-|: c d e f :|^1-2-3: r1 \n\
-}\n\
-]\n\
-");
-	sheet::compiler::SheetDefParser parser;
-	BOOST_CHECK_THROW(parser.parse(text), sheet::compiler::Exception);
-
-}
 
 BOOST_AUTO_TEST_CASE(test_repeat_volta_fail_02)
 {
@@ -1470,7 +1455,7 @@ BOOST_AUTO_TEST_CASE(test_repeat_volta_fail_02)
 	fm::String text = FM_STRING("\n\
 [\n\
 {\n\
-|: c d e f :|^1 2: r1 \n\
+|: c d e f :|^1 ^2: r1 \n\
 }\n\
 ]\n\
 ");
@@ -1485,7 +1470,7 @@ BOOST_AUTO_TEST_CASE(test_repeat_volta_fail_03)
 	fm::String text = FM_STRING("\n\
 [\n\
 {\n\
-|: c d e f :|^1 - 2: r1 \n\
+|: c d e f :|^1 2: r1 \n\
 }\n\
 ]\n\
 ");

@@ -6,11 +6,11 @@
 device: _usePort=5 _setName=MyDevice  _isType=midi;
 instrumentDef: _setName=piano _onDevice=MyDevice _ch=0 _pc=1 _cc=8;
 
-tempo: 200;
+tempo: 500;
 
 [
 instrument: piano;
 {
-    c2 d2  :x10|
+    c1 | c2 d2  :| c1 :|
 }
 ]

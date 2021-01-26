@@ -235,7 +235,7 @@ namespace sheet {
 					events.name("events");
 					pitch_.name("pitch");
 					degree_.name("pitch");
-					bar_volta_ %= lexeme['^' >> +(char_("0-9")) >> -(char_("-") >> +(char_("0-9")))];
+					bar_volta_ %= lexeme['^' >> +char_("0-9")];
 					degree_ %= (degreeSymbols_ >> (octaveSymbols_ | attr(PitchDef::DefaultOctave)) >> attr(false));
 					pitch_ %= pitchSymbols_ >> (octaveSymbols_ | attr(PitchDef::DefaultOctave));
 					alias_ %= lexeme['"' >> +(char_ - '"') >> '"'];

@@ -3,17 +3,14 @@
 -- to get a list of your available MIDI devices 
 -- and their port numbers, execute "sheetp --list"
 --      name              type   portnumber
-device: _usePort=0 _setName=MyDevice  _isType=midi;
+device: _usePort=5 _setName=MyDevice  _isType=midi;
 instrumentDef: _setName=piano _onDevice=MyDevice _ch=0 _pc=1 _cc=8;
+
+tempo: 300;
 
 [
 instrument: piano;
 {
-    /signature: 5 4/
-    /mark: A/       -- valid & unique to this voice
-    c4 d e f g |
-    /jump: _to=A _repeat=1/       -- jumps to A once
-    a b c'2. |
-    /jump: _to=A/
+    c2 d2 |^1 c2 d :|^2 e2 f2 :|^3 c#2 d#2 | c2 d2 | c2 d :|
 }
 ]

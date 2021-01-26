@@ -72,26 +72,29 @@ namespace {
         return result.first->second;
     }
 
-    std::string createInternalMarkerName(int id)
+    std::string createInternalMarkerName(int id, int voltaSequenceNr = 0)
     {
         std::stringstream ss;
         ss << "__wm_" << id << "__";
+        if (voltaSequenceNr > 0) {
+            ss << "vg" << voltaSequenceNr;
+        }
         return ss.str();
     }
 
-    sheet::Event createMarkerEvent(int id) 
+    sheet::Event createMarkerEvent(const fm::String& id)
     {
         sheet::Event event;
         event.stringValue = SHEET_META__MARK;
         event.type = sheet::Event::Meta;
         sheet::Argument arg;
         arg.name = argumentNames.Mark.Name;
-        arg.value = createInternalMarkerName(id);
+        arg.value = id;
         event.metaArgs.emplace_back(arg);
         return event;
     }
 
-    sheet::Event createJumpEvent(int id, int repeat = 0)
+    sheet::Event createJumpEvent(const fm::String &id, int repeat = 0, int ignore = 0)
     {
         sheet::Event event;
         event.type = sheet::Event::Meta;
@@ -99,13 +102,13 @@ namespace {
         {
             sheet::Argument arg;
             arg.name = argumentNames.Jump.To;
-            arg.value = createInternalMarkerName(id);
+            arg.value = id;
             event.metaArgs.emplace_back(arg);
         }
         {
             sheet::Argument arg;
             arg.name = argumentNames.Jump.Ignore;
-            arg.value = std::to_string(0);
+            arg.value = std::to_string(ignore);
             event.metaArgs.emplace_back(arg);
         }
         {
@@ -117,60 +120,29 @@ namespace {
         return event;
     }
 
-    int getNumRepeats(const sheet::Event& eob) 
+    sheet::Event createVoltaJumpEvent(int srcVoltaNr, int voltaGrp)
     {
-        if (eob.type != sheet::Event::EOB) {
-            return 0;
-        }
-        if (eob.tags.empty()) {
-            return 0;
-        }
-        for (const auto& tag : eob.tags)
-        {
-            if (tag.length() < 2) {
-                continue;
-            }
-            if (tag.at(0) != RepeatChar) {
-                continue;
-            }
-            fm::String val(tag.begin() + 1, tag.end());
-            int result = atoi(val.c_str());
-            if (result < 2) {
-                std::stringstream ss;
-                ss << "repeat minimum is 'x2'" << std::endl;
-                sheet::compiler::Exception exception(ss.str());
-                exception << sheet::compiler::ex_sheet_source_info(eob);
-                throw exception;
-            }
-            return result - 1;
-        }
-        return 0;
+        sheet::Event event = createJumpEvent(createInternalMarkerName(srcVoltaNr, voltaGrp), 0, 1);
+        return event;
     }
 
-    std::vector<int> getVoltaList(const sheet::Voice& voice)
+    int getVoltaNr(const sheet::Event &event)
     {
-        std::vector<int> result;
-        for (const auto& event : voice.events) {
-            if (event.type != sheet::Event::EOB) {
-                continue;
-            }
-            if (event.tags.empty()) {
-                continue;
-            }
-            for (const auto& tag : event.tags)
-            {
-                if (tag.length() < 2) {
-                    continue;
-                }
-                if (tag.at(0) != RepeatChar) {
-                    continue;
-                }
-                fm::String val(tag.begin() + 1, tag.end());
-                int markNr = atoi(val.c_str());
-                result.push_back(markNr);
-            }
+        if (event.type != sheet::Event::EOB) {
+            return -1;
         }
-        return result;
+        if (event.tags.empty()) {
+            return -1;
+        }
+        for (const auto& tag : event.tags)
+        {
+            if (tag.empty()) {
+                continue;
+            }
+            int voltaNr = atoi(tag.c_str());
+            return voltaNr;
+        }
+        return -1;
     }
 }
 
@@ -216,7 +188,8 @@ namespace sheet {
                     throw exception;
                 }
                 ++jump.numVisited;
-                if (jump.numPerformed >= jump.numPerform) {
+                if (jump.numPerformed >= jump.numPerform) { // the jump has been perfomed
+                    jump.numPerformed = 0; // reset the counter for revisiting
                     continue;
                 }
                 if (jump.numVisited <= jump.numIgnore) {
@@ -241,28 +214,54 @@ namespace sheet {
             if (voice.events.empty()) {
                 return;
             }
-            Jumps jumps;
-            Marks marks;
             Voice::Events& src = voice.events;
             std::list<sheet::Event> dst;
             size_t length = src.size();
             int markCounter = 0;
-            dst.emplace_front(createMarkerEvent(markCounter++));
+            auto markAtBegin = createMarkerEvent(createInternalMarkerName(markCounter++));
+            dst.emplace_front(markAtBegin);
+            int voltaSequenceNr = 1;
+            int lastVoltaNr = 0;
+            auto voltaSeqBegin = dst.end();
             for (size_t idx = 0; idx < length; ++idx) {
                 const auto& event = src.at(idx);
                 dst.push_back(event);
                 if (event.type != Event::EOB) {
                     continue;
                 }
+                int voltaNr = getVoltaNr(event);
+                if (voltaNr != -1) { // we have a volta
+                    if (lastVoltaNr > 1 && voltaNr == 1) {  // a new volta sequence begins
+                        ++voltaSequenceNr;
+                        lastVoltaNr = 0;
+                    }
+                    if (voltaNr == 1) { // remember the position of the first volta
+                        voltaSeqBegin = --dst.end();
+                    }
+                    if (voltaNr - lastVoltaNr != 1) {
+                        std::stringstream ss;
+                        ss << "volta sequence is out of order with value '" << voltaNr << "'";
+                        sheet::compiler::Exception exception(ss.str());
+                        exception << sheet::compiler::ex_sheet_source_info(event);
+                        throw exception;
+                    }
+                    if (voltaNr > 1) { // peform a jump from the first volta mark to the current location
+                        dst.emplace_back(createMarkerEvent(createInternalMarkerName(voltaNr, voltaSequenceNr)));
+                        auto voltaJump = createVoltaJumpEvent(voltaNr, voltaSequenceNr);
+                        voltaSeqBegin = dst.insert(++voltaSeqBegin, voltaJump);
+                    }
+                    lastVoltaNr = voltaNr;
+                }
+                // handle the repeats
                 if (event.stringValue == RepeatBegin) {
-                    dst.emplace_back(createMarkerEvent(markCounter++));
+                    dst.emplace_back(createMarkerEvent(createInternalMarkerName(markCounter++)));
                 }
                 if (event.stringValue == RepeatEnd) {
-                    dst.emplace_back(createJumpEvent(markCounter - 1, getNumRepeats(event)));
+                    dst.emplace_back(createJumpEvent(createInternalMarkerName(markCounter - 1)));
                 }
                 if (event.stringValue == RepeatBeginAndEnd) {
-                    dst.emplace_back(createJumpEvent(markCounter - 1, getNumRepeats(event)));
-                    dst.emplace_back(createMarkerEvent(markCounter++));
+                    dst.emplace_back(createJumpEvent(createInternalMarkerName(markCounter - 1)));
+                    dst.emplace_back(createMarkerEvent(createInternalMarkerName(markCounter++)));
                 }
             }
             Voice::Events copy(dst.begin(), dst.end());
