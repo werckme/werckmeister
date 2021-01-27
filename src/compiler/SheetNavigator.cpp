@@ -18,11 +18,10 @@ namespace {
     const fm::String RepeatBegin("__repeat_begin_");
     const fm::String RepeatEnd("__repeat_end_");
     const fm::String RepeatBeginAndEnd("__repeat_begin_and_end_");
-    const char RepeatChar = 'x';
-    const char JumpMarkChar = '^';
     struct Jump {
         fm::String to;
         int numVisited = 0;
+        int numVisitedTotal = 0;
         int numPerformed = 0;
         int numIgnore = 0;
         int numPerform = 0;
@@ -190,12 +189,13 @@ namespace sheet {
                 ++jump.numVisited;
                 if (jump.numPerformed >= jump.numPerform) { // the jump has been perfomed
                     jump.numPerformed = 0; // reset the counter for revisiting
+                    jump.numVisited = 0;
                     continue;
                 }
                 if (jump.numVisited <= jump.numIgnore) {
                     continue;
                 }
-                if (jump.numVisited > fm::SheetNavigationMaxJumps) {
+                if ((++jump.numVisitedTotal) > fm::SheetNavigationMaxJumps) {
                     std::stringstream ss;
                     ss << "max jump size exceeded = " << fm::SheetNavigationMaxJumps << " jumps";
                     sheet::compiler::Exception exception(ss.str());
