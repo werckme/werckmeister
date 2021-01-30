@@ -41,4 +41,4 @@ jobs:
     - uses: actions/upload-artifact@v1
       with:
         name: werckmeister-mac-${{ github.sha }}
-        path: build/werckmeister-0.1.55-Darwin.sh
+        path: build/werckmeister-*-Darwin.sh
