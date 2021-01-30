@@ -33,11 +33,14 @@ jobs:
       working-directory: build
     - name: test
       run: ./rehearse
-      working-directory: build      
+      working-directory: build
+    - name: run rendertests
+      run: sh runtests.sh
+      working-directory: rendertests   
     - name: pack
       run: cmake --build . --config Release --target package
       working-directory: build
     - uses: actions/upload-artifact@v1
       with:
         name: werckmeister-linux-${{ github.sha }}
-        path: build/werckmeister-0.1.55-Linux.sh
+        path: build/werckmeister-0.1.56-Linux.sh
