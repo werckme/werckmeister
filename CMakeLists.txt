@@ -106,9 +106,7 @@ IF(APPLE)
       /usr/local/opt/icu4c/lib/libicuuc.a 
       /usr/local/opt/icu4c/lib/libicuio.a 
       iconv)
-ENDIF(APPLE)
-
-IF(UNIX)
+ELSEIF(UNIX)
   if ($ENV{WM_LINUX_LINK_STATIC})
     SET(
       Boost_LIBRARIES ${Boost_LIBRARIES}
