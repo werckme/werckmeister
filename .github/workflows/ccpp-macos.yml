@@ -17,7 +17,7 @@ jobs:
     - name: update submodules
       run: git submodule update --init --recursive --remote
     - name: install boost
-      run: brew install boost
+      run: brew install boost --with-icu4c
     - name: install render test requirements
       run: pip3 install -r requirements.txt
       working-directory: rendertests      
@@ -38,7 +38,7 @@ jobs:
     - name: pack
       run: cmake --build . --config Release --target package
       working-directory: build
-    - uses: actions/upload-artifact@v1
+    - uses: actions/upload-artifact@v2
       with:
         name: werckmeister-mac-${{ github.sha }}
         path: build/werckmeister-*-Darwin.sh
