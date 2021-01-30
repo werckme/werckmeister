@@ -32,7 +32,7 @@ jobs:
       run: ./rehearse
       working-directory: build/Release 
     - name: run rendertests
-      run: python3 runtests.py
+      run: python runtests.py
       continue-on-error: true
       working-directory: rendertests           
     - name: pack
