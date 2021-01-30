@@ -33,8 +33,9 @@ jobs:
       run: ./rehearse
       working-directory: build
     - name: run rendertests
-      run: sh runtests.sh
-      working-directory: rendertests         
+      run: python3 runtests.py
+      continue-on-error: true
+      working-directory: rendertests        
     - name: pack
       run: cmake --build . --config Release --target package
       working-directory: build
