@@ -16,8 +16,8 @@ jobs:
     - uses: actions/checkout@v2
     - name: update submodules
       run: git submodule update --init --recursive --remote
-    - name: install boost@1.72.0
-      run: brew install boost
+    - name: install boost
+      run: brew install boost@1.72.0
     - name: install render test requirements
       run: pip3 install -r requirements.txt
       working-directory: rendertests      
