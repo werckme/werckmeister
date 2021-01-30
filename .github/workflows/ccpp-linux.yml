@@ -19,6 +19,9 @@ jobs:
       run: git submodule update --init --recursive --remote    
     - name: install alsa
       run: sudo apt-get update && sudo apt-get install -y libasound2 libasound2-dev
+    - name: install render test requirements
+      run: pip3 install -r requirements.txt
+      working-directory: rendertests
     - name: configure
       run: cmake -DCMAKE_BUILD_TYPE=Release ..
       env:
