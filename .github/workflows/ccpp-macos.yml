@@ -17,7 +17,7 @@ jobs:
     - name: update submodules
       run: git submodule update --init --recursive --remote
     - name: install boost
-      run: brew install boost@1.72
+      run: brew install https://raw.githubusercontent.com/Homebrew/homebrew-core/e1284c97d0d7c7b576160e299d0bfc17068aad81/Formula/boost.rb
     - name: install render test requirements
       run: pip3 install -r requirements.txt
       working-directory: rendertests      
