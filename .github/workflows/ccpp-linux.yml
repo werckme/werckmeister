@@ -19,6 +19,9 @@ jobs:
       run: git submodule update --init --recursive --remote    
     - name: install alsa
       run: sudo apt-get update && sudo apt-get install -y libasound2 libasound2-dev
+    - name: install render test requirements
+      run: pip3 install -r requirements.txt
+      working-directory: rendertests
     - name: configure
       run: cmake -DCMAKE_BUILD_TYPE=Release ..
       env:
@@ -30,11 +33,15 @@ jobs:
       working-directory: build
     - name: test
       run: ./rehearse
-      working-directory: build      
+      working-directory: build
+    - name: run rendertests
+      run: python3 runtests.py
+      continue-on-error: true
+      working-directory: rendertests   
     - name: pack
       run: cmake --build . --config Release --target package
       working-directory: build
-    - uses: actions/upload-artifact@v1
+    - uses: actions/upload-artifact@v2
       with:
         name: werckmeister-linux-${{ github.sha }}
-        path: build/werckmeister-0.1.56-Linux.sh
+        path: build/werckmeister-*-Linux.sh

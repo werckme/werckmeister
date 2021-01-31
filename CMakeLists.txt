@@ -8,7 +8,7 @@ project(werckmeister)
 
 SET(WERCKMEISTER_VERSION_MAJOR 0)
 SET(WERCKMEISTER_VERSION_MINOR 1)
-SET(WERCKMEISTER_VERSION_PATCH 56) # TODO: find a way to update the upload artefact github workflows to the latest version. until then fix the version by hand
+SET(WERCKMEISTER_VERSION_PATCH 56)
 
 # Add this project's cmake/ directory to the module path.
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
@@ -106,9 +106,7 @@ IF(APPLE)
       /usr/local/opt/icu4c/lib/libicuuc.a 
       /usr/local/opt/icu4c/lib/libicuio.a 
       iconv)
-ENDIF(APPLE)
-
-IF(UNIX)
+ELSEIF(UNIX)
   if ($ENV{WM_LINUX_LINK_STATIC})
     SET(
       Boost_LIBRARIES ${Boost_LIBRARIES}
