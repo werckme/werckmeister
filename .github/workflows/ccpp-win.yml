@@ -41,8 +41,4 @@ jobs:
     - uses: actions/upload-artifact@v2
       with:
         name: werckmeister-win-${{ github.sha }}
-<<<<<<< HEAD
         path: build/werckmeister-*-win64.msi
-=======
-        path: build/werckmeister-0.1.56-win64.msi
->>>>>>> main

@@ -32,8 +32,4 @@ jobs:
     - uses: actions/upload-artifact@v2
       with:
         name: werckmeister-linux-${{ github.sha }}
-<<<<<<< HEAD
         path: build/werckmeister-*-Emscripten.zip
-=======
-        path: build/werckmeister-0.1.56-Emscripten.zip
->>>>>>> main
