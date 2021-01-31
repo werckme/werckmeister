@@ -2,16 +2,15 @@
 #include "lexer.h"
 #include <boost/config/warning_disable.hpp>
 #include <boost/spirit/include/qi.hpp>
-#include <boost/spirit/include/phoenix_core.hpp>
 #include <boost/spirit/include/phoenix_operator.hpp>
 #include <boost/spirit/include/phoenix_object.hpp>
 #include <boost/fusion/include/adapt_struct.hpp>
 #include <boost/fusion/include/io.hpp>
 #include <boost/fusion/include/vector.hpp>
 #include <boost/spirit/include/phoenix_core.hpp>
-#include <boost/spirit/include/phoenix_operator.hpp>
 #include <boost/spirit/include/phoenix_fusion.hpp>
 #include <boost/spirit/include/phoenix_stl.hpp>
+
 #include <fm/literals.hpp>
 #include <fm/units.hpp>
 #include "error.hpp"
@@ -212,7 +211,9 @@ namespace sheet {
 				void initSheetParser()
 				{
 					using qi::int_;
+					using qi::_1;
 					using qi::lit;
+					using qi::string;
 					using qi::space;
 					using qi::_val;
 					using qi::double_;
@@ -222,9 +223,11 @@ namespace sheet {
 					using qi::on_error;
 					using qi::fail;
 					using boost::phoenix::at_c;
+					using boost::phoenix::push_back;
+					using boost::phoenix::insert;
 
 					start.name("sheet");
-
+					bar_volta_.name("bar jump mark");
 					event_.name("event");
 					groupedEvent_.name("eventGroup");
 					track.name("track");
@@ -232,9 +235,8 @@ namespace sheet {
 					events.name("events");
 					pitch_.name("pitch");
 					degree_.name("pitch");
-
+					bar_volta_ %= lexeme['^' >> +char_("0-9")];
 					degree_ %= (degreeSymbols_ >> (octaveSymbols_ | attr(PitchDef::DefaultOctave)) >> attr(false));
-
 					pitch_ %= pitchSymbols_ >> (octaveSymbols_ | attr(PitchDef::DefaultOctave));
 					alias_ %= lexeme['"' >> +(char_ - '"') >> '"'];
 					pitchOrAlias_ %= pitch_ | alias_;
@@ -348,8 +350,29 @@ namespace sheet {
 						>> attr(Event::Tags())
 						>> attr(PitchDef()) 
 						>> attr(Event::NoDuration)
+						>> attr("")
+						>> attr(Event::Args())
+						>> current_pos_.current_pos
+						>> -bar_volta_[ (insert(at_c<EvTags>(_val), qi::_1))]
+						>> -(lit(":"))[at_c<EvStringValue>(_val) = FM_STRING("__repeat_begin_")] 
 					)
-					| 
+					|
+					( // END OF BAR WITH REPEAT
+						current_pos_.current_pos
+						>> attr(sourceId_)
+						>> ":"
+						>> attr(Event::EOB)
+						>> attr(Event::Tags())
+						>> attr(PitchDef()) 
+						>> attr(Event::NoDuration) 
+						>> attr("__repeat_end_")
+						>> attr(Event::Args())
+						>> current_pos_.current_pos	
+						>> "|"
+						>> -bar_volta_[insert(at_c<EvTags>(_val), qi::_1)]
+						>> -(lit(":"))[at_c<EvStringValue>(_val) = FM_STRING("__repeat_begin_and_end_")]
+					)
+					|								
 					( // META COMMANDS
 						current_pos_.current_pos 
 						>> attr(sourceId_)
@@ -426,6 +449,7 @@ namespace sheet {
 				qi::rule<Iterator, fm::String(), ascii::space_type> meta_arg_value_;
 				qi::rule<Iterator, fm::String(), ascii::space_type> using_;
 				qi::rule<Iterator, DocumentUsing::Usings, ascii::space_type> usings_;
+				qi::rule<Iterator, fm::String(), ascii::space_type> bar_volta_;
 				CurrentPos<Iterator> current_pos_;
 			};
 

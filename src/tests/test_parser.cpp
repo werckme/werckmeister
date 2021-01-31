@@ -1367,5 +1367,163 @@ BOOST_AUTO_TEST_CASE(test_issue_102_delimiter_for_meta_args)
 	sheet::compiler::SheetDefParser parser;
 	auto defs = parser.parse(text);
 	BOOST_CHECK(checkMetaEvent(defs.tracks[0].voices[0].events[0], FM_STRING("metacommand"), sheet::Event::Args({ makeArg("abc"), makeArg("1 2 drei") })));
+	
+}
+
+BOOST_AUTO_TEST_CASE(test_repeats)
+{
+	using namespace fm;
+	using sheet::PitchDef;
+	fm::String text = FM_STRING("\n\
+[\n\
+{\n\
+| c d e f :|\n\
+|: c d e f :| r1 \n\
+:|: c d e f :|: r1 \n\
+| c d e f g |^1 d e f g  |^2:  c d e f g :|^3: c d e f g :|^4: r1 |^5:\n\
+}\n\
+]\n\
+");
+	sheet::compiler::SheetDefParser parser;
+	auto defs = parser.parse(text);
+	BOOST_CHECK(defs.tracks.size() == 1);
+	BOOST_CHECK(defs.tracks[0].voices.size() == 1);
+	BOOST_CHECK_EQUAL(defs.tracks[0].voices[0].events.size(), 46);
+	const auto& events = defs.tracks[0].voices[0].events;
+	BOOST_CHECK_EQUAL(events[5].type, sheet::Event::EOB);
+	BOOST_CHECK_EQUAL(events[5].stringValue, FM_STRING("__repeat_end_"));
+
+	BOOST_CHECK_EQUAL(events[6].type, sheet::Event::EOB);
+	BOOST_CHECK_EQUAL(events[6].stringValue, FM_STRING("__repeat_begin_"));
+
+	BOOST_CHECK_EQUAL(events[11].type, sheet::Event::EOB);
+	BOOST_CHECK_EQUAL(events[11].stringValue, FM_STRING("__repeat_end_"));
+
+	BOOST_CHECK_EQUAL(events[13].type, sheet::Event::EOB);
+	BOOST_CHECK_EQUAL(events[13].stringValue, FM_STRING("__repeat_begin_and_end_"));
+
+	BOOST_CHECK_EQUAL(events[18].type, sheet::Event::EOB);
+	BOOST_CHECK_EQUAL(events[18].stringValue, FM_STRING("__repeat_begin_and_end_"));
+
+	BOOST_CHECK_EQUAL(events[26].type, sheet::Event::EOB);
+	BOOST_CHECK_EQUAL(events[26].stringValue.empty(), true);
+	BOOST_CHECK_EQUAL(events[26].tags.size(), 1);
+	BOOST_CHECK_EQUAL(*(events[26].tags.begin()), FM_STRING("1"));
+
+	BOOST_CHECK_EQUAL(events[31].type, sheet::Event::EOB);
+	BOOST_CHECK_EQUAL(events[31].stringValue, FM_STRING("__repeat_begin_"));
+	BOOST_CHECK_EQUAL(events[31].tags.size(), 1);
+	BOOST_CHECK_EQUAL(*(events[31].tags.begin()), FM_STRING("2"));
+
+	BOOST_CHECK_EQUAL(events[37].type, sheet::Event::EOB);
+	BOOST_CHECK_EQUAL(events[37].stringValue, FM_STRING("__repeat_begin_and_end_"));
+	BOOST_CHECK_EQUAL(events[37].tags.size(), 1);
+	BOOST_CHECK_EQUAL(*(events[37].tags.begin()), FM_STRING("3"));	
+
+	BOOST_CHECK_EQUAL(events[43].type, sheet::Event::EOB);
+	BOOST_CHECK_EQUAL(events[43].stringValue, FM_STRING("__repeat_begin_and_end_"));
+	BOOST_CHECK_EQUAL(events[43].tags.size(), 1);
+	BOOST_CHECK_EQUAL(*(events[43].tags.begin()), FM_STRING("4"));
+
+	BOOST_CHECK_EQUAL(events[45].type, sheet::Event::EOB);
+	BOOST_CHECK_EQUAL(events[45].stringValue, FM_STRING("__repeat_begin_"));
+	BOOST_CHECK_EQUAL(events[45].tags.size(), 1);
+	BOOST_CHECK_EQUAL(*(events[45].tags.begin()), FM_STRING("5"));
+}
+
+BOOST_AUTO_TEST_CASE(test_repeat_mark_fail_white_space)
+{
+	using namespace fm;
+	using sheet::PitchDef;
+	fm::String text = FM_STRING("\n\
+[\n\
+{\n\
+|: c d e f :|^ 1: r1 \n\
+}\n\
+]\n\
+");
+	sheet::compiler::SheetDefParser parser;
+	BOOST_CHECK_THROW(parser.parse(text), sheet::compiler::Exception);
+
+}
+
+
+BOOST_AUTO_TEST_CASE(test_repeat_volta_fail_02)
+{
+	using namespace fm;
+	using sheet::PitchDef;
+	fm::String text = FM_STRING("\n\
+[\n\
+{\n\
+|: c d e f :|^1 ^2: r1 \n\
+}\n\
+]\n\
+");
+	sheet::compiler::SheetDefParser parser;
+	BOOST_CHECK_THROW(parser.parse(text), sheet::compiler::Exception);
+
+}
+BOOST_AUTO_TEST_CASE(test_repeat_volta_fail_03)
+{
+	using namespace fm;
+	using sheet::PitchDef;
+	fm::String text = FM_STRING("\n\
+[\n\
+{\n\
+|: c d e f :|^1 2: r1 \n\
+}\n\
+]\n\
+");
+	sheet::compiler::SheetDefParser parser;
+	BOOST_CHECK_THROW(parser.parse(text), sheet::compiler::Exception);
+
+}
+
+
+BOOST_AUTO_TEST_CASE(test_repeats_fail_duplicated_multiplier_colon)
+{
+	using namespace fm;
+	using sheet::PitchDef;
+	fm::String text = FM_STRING("\n\
+[\n\
+{\n\
+|:: c d e f | r1 \n\
+}\n\
+]\n\
+");
+	sheet::compiler::SheetDefParser parser;
+	BOOST_CHECK_THROW(parser.parse(text), sheet::compiler::Exception);
+
+}
+
+BOOST_AUTO_TEST_CASE(test_repeats_fail_duplicated_multiplier_colon_2)
+{
+	using namespace fm;
+	using sheet::PitchDef;
+	fm::String text = FM_STRING("\n\
+[\n\
+{\n\
+|: c d e f ::| r1 \n\
+}\n\
+]\n\
+");
+	sheet::compiler::SheetDefParser parser;
+	BOOST_CHECK_THROW(parser.parse(text), sheet::compiler::Exception);
+
+}
+
+BOOST_AUTO_TEST_CASE(test_repeats_fail_duplicated_multiplier_colon_3)
+{
+	using namespace fm;
+	using sheet::PitchDef;
+	fm::String text = FM_STRING("\n\
+[\n\
+{\n\
+|: c d e f :|:: r1 \n\
+}\n\
+]\n\
+");
+	sheet::compiler::SheetDefParser parser;
+	BOOST_CHECK_THROW(parser.parse(text), sheet::compiler::Exception);
 
 }

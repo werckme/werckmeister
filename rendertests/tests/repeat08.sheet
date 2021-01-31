@@ -6,13 +6,11 @@
 device: _usePort=5 _setName=MyDevice  _isType=midi;
 instrumentDef: _setName=piano _onDevice=MyDevice _ch=0 _pc=1 _cc=8;
 
+tempo: 220;
+
 [
 instrument: piano;
 {
-    /signature: 5 4/
-    /mark: A/       -- valid & unique to this voice
-    c4 d e f g |
-    /jump: _to=A/       -- jumps to A once
-    a b c'2. |
+    c2 d2 |^1 c#2 d# :|^2 e2 f2 :|^3 c#'2 d#'2 | c'2 d'2 | c,,2 d,, :|
 }
 ]
