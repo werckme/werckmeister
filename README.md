@@ -1,3 +1,16 @@
+# Feature Relative Notation
+```
+[
+{
+  /baseChord: C11/ -- C13 contains all notes of CMaj
+  I II III IV V VI VII I' -- cmaj 
+  /baseChord: C11/ -- C-13 contains all notes of CMin
+  I II III IV V VI VII I' -- cmin
+}
+]
+```
+
+
 ![Linux Build](https://github.com/werckme/werckmeister/workflows/Linux%20Build/badge.svg)
 ![Windows Build](https://github.com/werckme/werckmeister/workflows/Windows%20Build/badge.svg)
 ![Mac Build](https://github.com/werckme/werckmeister/workflows/Mac%20Build/badge.svg)

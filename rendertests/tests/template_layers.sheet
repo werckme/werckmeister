@@ -13,7 +13,7 @@ using "./templates/bass.disco.template";
 using "./templates/guitar.country.template";
 using "./pitchmaps/defaultMidiDrumMap.pitchmap";
 
-device: SC1 midi 1;
+device: SC1 midi 5;
 
 tempo: 130;
 instrumentDef: piano   SC1 2 0 0;

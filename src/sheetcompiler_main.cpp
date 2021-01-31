@@ -20,6 +20,7 @@
 #include <fmapp/JsonWriter.h>
 #include <compiler/DefaultCompilerVisitor.h>
 #include <fmapp/TimelineVisitor.hpp>
+#include <compiler/SheetNavigator.h>
 
 typedef sheet::compiler::EventLogger<fm::ConsoleLogger> 			   LoggerImpl;
 typedef sheet::compiler::LoggerAndWarningsCollector<fm::ConsoleLogger> WarningsCollectorWithConsoleLogger;
@@ -48,6 +49,7 @@ int main(int argc, const char** argv)
 		, di::bind<cp::ASheetEventRenderer>()		.to<cp::SheetEventRenderer>()		.in(di::singleton)
 		, di::bind<cp::IContext>()					.to<cp::MidiContext>()				.in(di::singleton)
 		, di::bind<cp::IPreprocessor>()				.to<cp::Preprocessor>()				.in(di::singleton)
+		, di::bind<cp::ISheetNavigator>()			.to<cp::SheetNavigator>()			.in(di::singleton)
 		, di::bind<ICompilerProgramOptions>()		.to(programOptionsPtr)
 		, di::bind<sheet::Document>()				.to(documentPtr)
 		, di::bind<fm::IDefinitionsServer>()		.to<fm::DefinitionsServer>()		.in(di::singleton)

@@ -4,7 +4,7 @@ using "./templates/ido.template";
 using "./pitchmaps/defaultMidiDrumMap.pitchmap";
 --using "./pitchmaps/battery3.tight.pitchmap";
 
-device: SC1 midi 2 _offset=20;
+device: SC1 midi 5 _offset=20;
 --device: BT midi 8;
 
 tempo: 145;

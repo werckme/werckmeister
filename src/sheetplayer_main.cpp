@@ -30,8 +30,7 @@
 #include <fmapp/Funkfeuer.h>
 #include <fmapp/UdpSender.hpp>
 #include <fmapp/NullStringSender.hpp>
-#include <boost/dll.hpp>
-#include <fluidsynth.h>
+#include <compiler/SheetNavigator.h>
 
 #ifdef SHEET_USE_BOOST_TIMER
 #include "fmapp/boostTimer.h"
@@ -46,117 +45,6 @@ typedef sheet::compiler::LoggerAndWarningsCollector<fm::ConsoleLogger> WarningsC
 int startPlayer(std::shared_ptr<PlayerProgramOptions> programOptionsPtr);
 
 funk::UdpSenderPtr _udpSender = nullptr;
-
-#define dll_new_fluid_settings_ftype fluid_settings_t* ()
-#define dll_new_fluid_synth_ftype fluid_synth_t* (fluid_settings_t*)
-#define dll_new_fluid_audio_driver_ftype fluid_audio_driver_t* (fluid_settings_t*, fluid_synth_t*)
-#define dll_fluid_synth_sfload_ftype int(fluid_synth_t*, const char*, int)
-#define dll_fluid_synth_noteon_ftype int(fluid_synth_t*, int, int, int)
-#define dll_fluid_synth_noteoff_ftype int(fluid_synth_t*, int, int)
-#define dll_fluid_synth_program_change_ftype int(fluid_synth_t*, int, int)
-#define dll_fluid_settings_setstr_ftype int(fluid_settings_t*, const char*, const char*)
-#define dll_fluid_audio_driver_register_ftype int(const char**)
-#define dll_delete_fluid_audio_driver_ftype void(fluid_audio_driver_t*)
-#define dll_delete_fluid_synth_ftype void(fluid_synth_t*)
-#define dll_delete_fluid_settings_ftype void(fluid_settings_t*)
-
-
-#include <fluidsynth.h>
-#if defined(WIN32)
-#include <windows.h>
-#define sleep(_t) Sleep(_t * 1000)
-#else
-#include <stdlib.h>
-#include <unistd.h>
-#endif
-int test_fluidsynth()
-{
-	boost::dll::shared_library lib("/usr/lib/libfluidsynth.so");
-	std::function<dll_new_fluid_settings_ftype> dll_new_fluid_settings = lib.get<dll_new_fluid_settings_ftype>("new_fluid_settings");
-	std::function<dll_new_fluid_synth_ftype> dll_new_fluid_synth = lib.get<dll_new_fluid_synth_ftype>("new_fluid_synth");
-	std::function<dll_new_fluid_audio_driver_ftype> dll_new_fluid_audio_driver = lib.get<dll_new_fluid_audio_driver_ftype>("new_fluid_audio_driver");
-	std::function<dll_fluid_synth_sfload_ftype> dll_fluid_synth_sfload = lib.get<dll_fluid_synth_sfload_ftype>("fluid_synth_sfload");
-	std::function<dll_fluid_synth_noteon_ftype> dll_fluid_synth_noteon = lib.get<dll_fluid_synth_noteon_ftype>("fluid_synth_noteon");
-	std::function<dll_fluid_synth_noteoff_ftype> dll_fluid_synth_noteoff = lib.get<dll_fluid_synth_noteoff_ftype>("fluid_synth_noteoff");
-	std::function<dll_fluid_synth_program_change_ftype> dll_fluid_synth_program_change = lib.get<dll_fluid_synth_program_change_ftype>("fluid_synth_program_change");
-	std::function<dll_fluid_settings_setstr_ftype> dll_fluid_settings_setstr = lib.get<dll_fluid_settings_setstr_ftype>("fluid_settings_setstr");
-	std::function<dll_fluid_audio_driver_register_ftype> dll_fluid_audio_driver_register = lib.get<dll_fluid_audio_driver_register_ftype>("fluid_audio_driver_register");
-	std::function<dll_delete_fluid_audio_driver_ftype> dll_delete_fluid_audio_driver = lib.get<dll_delete_fluid_audio_driver_ftype>("delete_fluid_audio_driver");
-	std::function<dll_delete_fluid_synth_ftype> dll_delete_fluid_synth = lib.get<dll_delete_fluid_synth_ftype>("delete_fluid_synth");
-	std::function<dll_delete_fluid_settings_ftype> dll_delete_fluid_settings = lib.get<dll_delete_fluid_settings_ftype>("delete_fluid_settings");	
-
-
-	fluid_settings_t* settings;
-	fluid_synth_t* synth;
-	fluid_audio_driver_t* adriver;
-	int sfont_id;
-	int i, key;
-
-
-	const char *adrivers[2];
-	adrivers[0] = "jack";
-	adrivers[1] = NULL; /* NULL terminate the array */
-
-	int res = dll_fluid_audio_driver_register(adrivers);
-
-	if(res != FLUID_OK)
-	{
-		puts("adriver reg err");
-		return -1;
-	}
-
-	/* Create the settings. */
-	settings = dll_new_fluid_settings();
-
-	res = dll_fluid_settings_setstr(settings, "audio.driver", adrivers[0]);
-
-#if FLUIDSYNTH_VERSION_MAJOR >= 2
-	if(res != FLUID_OK)
-#else
-	if(res == 0)
-#endif
-	{
-		puts("audio.driver set err");
-		return -1;
-	}	
-
-	/* Change the settings if necessary*/
-	/* Create the synthesizer. */
-	synth = dll_new_fluid_synth(settings);
-	/* Create the audio driver. The synthesizer starts playing as soon
-	   as the driver is created. */
-	adriver = dll_new_fluid_audio_driver(settings, synth);
-	/* Load a SoundFont and reset presets (so that new instruments
-	 * get used from the SoundFont) */
-	sfont_id = dll_fluid_synth_sfload(synth, "/usr/share/soundfonts/FluidR3_GM.sf2", 1);
-	if (sfont_id == FLUID_FAILED)
-	{
-		puts("Loading the SoundFont failed!");
-		goto err;
-	}
-	/* Initialize the random number generator */
-	srand(getpid());
-	dll_fluid_synth_program_change(synth, 0, 16);
-	for (i = 0; i < 12; i++)
-	{
-		/* Generate a random key */
-		key = 60 + (int)(12.0f * rand() / (float)RAND_MAX);
-		/* Play a note */
-		dll_fluid_synth_noteon(synth, 0, key, 80);
-		puts(".");
-		/* Sleep for 1 second */
-		sleep(1);
-		/* Stop the note */
-		dll_fluid_synth_noteoff(synth, 0, key);
-	}
-err:
-//	/* Clean up */
-	dll_delete_fluid_audio_driver(adriver);
-	dll_delete_fluid_synth(synth);
-	dll_delete_fluid_settings(settings);
-	return 0;
-}
-
 
 int main(int argc, const char** argv)
 {
@@ -214,6 +102,7 @@ int startPlayer(std::shared_ptr<PlayerProgramOptions> programOptionsPtr)
 		, di::bind<cp::ASheetEventRenderer>()								 .to<cp::SheetEventRenderer>()		.in(di::extension::scoped)
 		, di::bind<cp::IContext>()											 .to<cp::MidiContext>()				.in(di::extension::scoped)
 		, di::bind<cp::IPreprocessor>()										 .to<cp::Preprocessor>()			.in(di::extension::scoped)
+		, di::bind<cp::ISheetNavigator>()									 .to<cp::SheetNavigator>()			.in(di::extension::scoped)
 		, di::bind<ICompilerProgramOptions>()								 .to(programOptionsPtr)
 		, di::bind<sheet::Document>()										 .to(documentPtr)
 		, di::bind<fm::IDefinitionsServer>()								 .to<fm::DefinitionsServer>()		.in(di::extension::scoped)

@@ -1,7 +1,7 @@
 {
-    "name": "werckmeisterjs",
+    "name": "@werckmeister/compilerjs",
     "description": "a javascript version of werckmeister the sheet music MIDI compiler. Compiled with emscripten.",
-    "version": "@WERCKMEISTER_VERSION_MAJOR@.@WERCKMEISTER_VERSION_MINOR@.@WERCKMEISTER_VERSION_PATCH@10",
+    "version": "@WERCKMEISTER_VERSION_MAJOR@.@WERCKMEISTER_VERSION_MINOR@.@WERCKMEISTER_VERSION_PATCH-@1",
     "homepage": "https://werckme.github.io",
     "engines": {
         "node": ">= 0.6.0"

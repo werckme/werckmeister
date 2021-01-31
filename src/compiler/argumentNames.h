@@ -88,6 +88,16 @@ struct ArgumentNames {
         std::string FFFF = "ffff";
         std::string FFFFF = "fffff";
     } VelocityRemap;
+    
+    struct {
+        std::string Name = "name";
+    } Mark;
+
+    struct {
+        std::string Ignore                  = "ignore";
+        std::string Repeat                  = "repeat";
+        std::string To                      = "to";
+    } Jump;
 
 };
 

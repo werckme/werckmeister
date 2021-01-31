@@ -8,7 +8,7 @@ project(werckmeister)
 
 SET(WERCKMEISTER_VERSION_MAJOR 0)
 SET(WERCKMEISTER_VERSION_MINOR 1)
-SET(WERCKMEISTER_VERSION_PATCH 55)
+SET(WERCKMEISTER_VERSION_PATCH 56) # TODO: find a way to update the upload artefact github workflows to the latest version. until then fix the version by hand
 
 # Add this project's cmake/ directory to the module path.
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
@@ -16,7 +16,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
 # PROJECT CONFIG
 set(FM_CHARSET "ISO-8859-1")
-set(FM_PPQ 500)
+set(FM_PPQ 5000)
 set(BOOST_VERSION "1.72.0")
 set(FLUIDSYNTH_VERSION "2.1.0")
 #END PROJECT CONFIG

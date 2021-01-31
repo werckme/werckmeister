@@ -2,7 +2,7 @@ using "chords/default.chords";
 using "pitchmaps/defaultMidiDrumMap.pitchmap";
 using "lua/voicings/simple.lua";
 
-device: SC1 midi 2;
+device: SC1 midi 5;
 
 tempo: 60;
 instrumentDef: piano      SC1 0 0 0;

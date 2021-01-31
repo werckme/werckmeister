@@ -1,5 +1,5 @@
 
-device: SC1 midi 2;
+device: SC1 midi 5;
 
 tempo: 120;
 instrumentDef: drums   SC1 9 0 0;
