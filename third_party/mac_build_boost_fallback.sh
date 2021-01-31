@@ -15,11 +15,4 @@ echo bootstraping
 cd boost
 sh ./bootstrap.sh
 echo build
-./b2 link=static 
-  runtime-link=static\ 
-  --with-filesystem\
-  --with-program_options\ 
-  --with-locale\
-  --with-system\
-  --with-test\
-  --with-date_time
+./b2 link=static runtime-link=static --with-filesystem --with-program_options --with-locale --with-system --with-test --with-date_time
