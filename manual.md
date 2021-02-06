@@ -592,6 +592,32 @@ You are also able to write nested tuplets:
 b2 ((b c#' c#' b d')  (f' a a bb c')  (e' a' bb' f' c' g))2
 ```
 
+### Repeats
+```language=Werckmeister,type=single,tempo=200
+c4 d e f :| g a b c' |
+```
+
+```language=Werckmeister,type=single,tempo=200
+c4 d e f |: g a b ab :| c'1
+```
+
+##### Volta
+```language=Werckmeister,type=single,tempo=200
+c4 d e f |^1 g a b ab :|^2 c'1
+```
+
+```language=Werckmeister,type=single,tempo=200
+c2 d2 |^1 c#2 d# :|^2 e2 f2 :|^3 c#'2 d#'2 | c'2 d'2 | c,,2 d,, :|
+-- c4 d e f |^1 g a b ab :|^2 g# a# c#' d# :| c'1
+```
+
+##### Mark/Jump
+For more complex musical navigation you can use the [mark](#mark)/[jump](#jump) commands.
+In combination with its ignore argument you are able to implement - for example - a coda:
+```language=Werckmeister,type=single,tempo=200
+-- tbd
+```
+
 ## Write for drums
 ### Pitchmaps
 
@@ -692,6 +718,8 @@ type: accomp;
 * [instrument](#instrument)
 * [instrumentConf](#instrumentconf)
 * [instrumentDef](#instrumentdef)
+* [jump](#jump)
+* [mark](#mark)
 * [mod](#mod)
 * [modOnce](#modonce)
 * [pan](#pan)
@@ -957,6 +985,66 @@ Adds a new MIDI instrument.
 | ch | 3 | The MIDI channel. | 0..15 |
 | cc | 4 | A MIDI `control change` value. | 0..127 |
 | pc | 5 | A MIDI `program change` value. | 0..127 |
+
+<br><br><br>
+
+### `jump`
+Jumps to a previous defined mark See [mark](manual/#mark).
+
+ ### examples
+
+ 
+
+ ```language=Werckmeister
+ device: _usePort=0 _setName=MyDevice  _isType=midi;
+ instrumentDef: _setName=piano _onDevice=MyDevice _ch=0 _pc=1 _cc=8;
+ [
+ instrument: piano;
+ {
+     /signature: 5 4/
+     /mark: A/       -- valid & unique to this voice
+     c4 d e f g |
+     /jump: A/       -- jumps to A once
+     a b c'2
+ }
+ ]
+ ```
+
+#### parameters
+| name | position | description | type |
+|:--- |:--- |:--- |:--- |
+| to | 1 | the destination marker | word |
+| ignore |  | Ignores the jump N times | 0..100 |
+| repreat |  | Repeats the jump N times. (A repeat value of 1 performs 2 jumps) | 0..100 |
+
+<br><br><br>
+
+### `mark`
+adds a mark to the voice. Why you want to do that? See [jump](manual/#jump).
+
+ ### examples
+
+ 
+
+ ```language=Werckmeister
+ device: _usePort=0 _setName=MyDevice  _isType=midi;
+ instrumentDef: _setName=piano _onDevice=MyDevice _ch=0 _pc=1 _cc=8;
+ [
+ instrument: piano;
+ {
+     /signature: 5 4/
+     /mark: A/       -- valid & unique to this voice
+     c4 d e f g |
+     /jump: A/       -- jumps to A once
+     a b c'2
+ }
+ ]
+ ```
+
+#### parameters
+| name | position | description | type |
+|:--- |:--- |:--- |:--- |
+| name | 1 | the name of the mark | word |
 
 <br><br><br>
 

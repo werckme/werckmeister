@@ -592,6 +592,32 @@ You are also able to write nested tuplets:
 b2 ((b c#' c#' b d')  (f' a a bb c')  (e' a' bb' f' c' g))2
 ```
 
+### Repeats
+```language=Werckmeister,type=single,tempo=200
+c4 d e f :| g a b c' |
+```
+
+```language=Werckmeister,type=single,tempo=200
+c4 d e f |: g a b ab :| c'1
+```
+
+##### Volta
+```language=Werckmeister,type=single,tempo=200
+c4 d e f |^1 g a b ab :|^2 c'1
+```
+
+```language=Werckmeister,type=single,tempo=200
+c2 d2 |^1 c#2 d# :|^2 e2 f2 :|^3 c#'2 d#'2 | c'2 d'2 | c,,2 d,, :|
+-- c4 d e f |^1 g a b ab :|^2 g# a# c#' d# :| c'1
+```
+
+##### Mark/Jump
+For more complex musical navigation you can use the [mark](#mark)/[jump](#jump) commands.
+In combination with its ignore argument you are able to implement - for example - a coda:
+```language=Werckmeister,type=single,tempo=200
+-- tbd
+```
+
 ## Write for drums
 ### Pitchmaps
 
