@@ -121,7 +121,7 @@ namespace {
 
     sheet::Event createVoltaJumpEvent(int srcVoltaNr, int voltaGrp)
     {
-        sheet::Event event = createJumpEvent(createInternalMarkerName(srcVoltaNr, voltaGrp), 0, 1);
+        sheet::Event event = createJumpEvent(createInternalMarkerName(srcVoltaNr, voltaGrp), 0, srcVoltaNr-1);
         return event;
     }
 
@@ -179,6 +179,7 @@ namespace sheet {
                 }
                 auto& jump = getJump(idx, event, jumps);
                 auto markIt = marks.find(jump.to);
+                bool jumpForward = markIt->second > idx;
                 if (markIt == marks.end()) {
                     std::stringstream ss;
                     ss << "marker not found: \"" << jump.to << "\"";
@@ -187,6 +188,7 @@ namespace sheet {
                     throw exception;
                 }
                 ++jump.numVisited;
+                ++jump.numVisitedTotal;
                 if (jump.numPerformed >= jump.numPerform) { // the jump has been perfomed
                     jump.numPerformed = 0; // reset the counter for revisiting
                     jump.numVisited = 0;
@@ -195,14 +197,21 @@ namespace sheet {
                 if (jump.numVisited <= jump.numIgnore) {
                     continue;
                 }
-                if ((++jump.numVisitedTotal) > fm::SheetNavigationMaxJumps) {
+                if ((jump.numVisitedTotal) > fm::SheetNavigationMaxJumps) {
                     std::stringstream ss;
                     ss << "max jump size exceeded = " << fm::SheetNavigationMaxJumps << " jumps";
                     sheet::compiler::Exception exception(ss.str());
                     exception << sheet::compiler::ex_sheet_source_info(event);
                     throw exception;
                 }
-                ++jump.numPerformed;
+                if (jumpForward) {
+                    // in case of a forwad jump, reset counter imediately
+                    jump.numPerformed = 0;
+                    jump.numVisited = 0;
+                }
+                else {
+                    ++jump.numPerformed;
+                }
                 idx = markIt->second;
             }
             Voice::Events copy(dst.begin(), dst.end());
@@ -236,6 +245,8 @@ namespace sheet {
                         lastVoltaNr = 0;
                     }
                     if (voltaNr == 1) { // remember the position of the first volta
+                        // add a dummy event be one behind the EOB
+                        dst.emplace_back(createMarkerEvent(createInternalMarkerName(0, voltaSequenceNr)));
                         voltaSeqBegin = --dst.end();
                     }
                     if (voltaNr - lastVoltaNr != 1) {
@@ -248,7 +259,7 @@ namespace sheet {
                     if (voltaNr > 1) { // peform a jump from the first volta mark to the current location
                         dst.emplace_back(createMarkerEvent(createInternalMarkerName(voltaNr, voltaSequenceNr)));
                         auto voltaJump = createVoltaJumpEvent(voltaNr, voltaSequenceNr);
-                        voltaSeqBegin = dst.insert(++voltaSeqBegin, voltaJump);
+                        voltaSeqBegin = dst.insert(voltaSeqBegin, voltaJump);
                     }
                     lastVoltaNr = voltaNr;
                 }
