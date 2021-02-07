@@ -152,14 +152,15 @@ add_subdirectory(submodules/lua)
 
 configure_file("${PROJECT_SOURCE_DIR}/src/fm/config.hpp.in" "${PROJECT_SOURCE_DIR}/src/fm/config.hpp")
 
-if (${USE_EMSCRIPTEN})
+#if (${USE_EMSCRIPTEN})
   if(${GIT_BRANCH_NAME} STREQUAL "main")
     SET(BUILD_NR $ENV{BUILD_NR}) 
   else()
-    SET(BUILD_NR dev-$ENV{BUILD_NR}) 
+    string(REGEX REPLACE "[^0-9a-z]" "" BRANCH_VERSION_NAME ${GIT_BRANCH_NAME})
+    SET(BUILD_NR ${BRANCH_VERSION_NAME}-$ENV{BUILD_NR}) 
   endif()
   configure_file("package.in.json" "${CMAKE_BINARY_DIR}/package.json")
-endif()
+#endif()
 
 include(InstallRequiredSystemLibraries)
 set(CPACK_PACKAGE_VENDOR "Samba Godschynski")
