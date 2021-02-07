@@ -23,6 +23,8 @@ jobs:
     - name: configure
       run: source ../third_party/emsdk/emsdk_env.sh && emcmake cmake -DCMAKE_BUILD_TYPE=Release ..
       working-directory: build
+      env: 
+        BUILD_NR: ${{ github.run_number }}
     - name: build
       run: cmake --build .
       working-directory: build  
