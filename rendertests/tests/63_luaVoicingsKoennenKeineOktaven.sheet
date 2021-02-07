@@ -1,7 +1,7 @@
 using "./chords/default.chords";
 using "./voicings/simple.lua";
 
-device: SC1 midi 2;
+device: SC1 midi 5;
 
 tempo: 130;
 instrumentDef: piano   SC1 2 0 0;

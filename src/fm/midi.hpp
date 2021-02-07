@@ -178,7 +178,7 @@ namespace fm {
 			ConstIterator from(Ticks absTicks) const;
 			ConstIterator to(Ticks absTicks) const;
 			size_t read(const Byte *, size_t length);
-			size_t write(Byte *, size_t maxByteSize) const;
+			size_t write(Byte *, size_t maxByteSize, fm::Ticks *outWrittenDuration = nullptr) const;
 			size_t byteSize() const;
 			size_t numEvents() const { return _container.size(); }
 			bool contains(const Event &event) const;
@@ -201,7 +201,7 @@ namespace fm {
 			static const MetaKey MetaKeyRelatedVertexId;
 			static const MetaKey MetaKeyRelatedSheetId;
 			static const MetaKey MetaKeyMidiChannel;
-			enum { HeaderSize = 8, EoTSize = 5 };
+			enum { HeaderSize = 8, EoTSize = 4 };
 			const EventContainer & events() const { return _container; }
 			EventContainer & events() { return _container; }
 			size_t read(const Byte *, size_t length);

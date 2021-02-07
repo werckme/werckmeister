@@ -12,13 +12,14 @@ namespace sheet {
 		public:
 			/**
 			 * for note event tracks:
-			 * resolves implicite duration to every event time consuming with duration = 0.
-			 * resolves x shortcut e.g.: c1 x x x -> c1 c1 c1 c1
-			 * set implicit EOB
+			 *   resolves implicite duration to every event time consuming with duration = 0.
+			 *   resolves x shortcut e.g.: c1 x x x -> c1 c1 c1 c1
+			 *   set implicit EOB
 			 * for chord tracks:
-			 * determines the duration of every chord event, such as:
-			 * C D | E -> C(2) D(2) | E(4)
+			 *   determines the duration of every chord event, such as:
+			 *   C D | E -> C(2) D(2) | E(4)
 			 * set implicit EOB
+			 * processes navigation commands such as mark/jump
 			 */			
 			virtual void preprocess(DocumentPtr document) = 0;
 		};

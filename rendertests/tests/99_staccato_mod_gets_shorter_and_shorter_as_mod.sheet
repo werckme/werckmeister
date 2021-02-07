@@ -1,7 +1,7 @@
 using "chords/default.chords";
 using "pitchmaps/defaultMidiDrumMap.pitchmap";
 using "lua/mods/staccato.lua";
-device: SC1 midi 2;
+device: SC1 midi 5;
 
 tempo: 120;
 instrumentDef: organ   SC1 2 35 17;

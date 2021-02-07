@@ -22,16 +22,23 @@ jobs:
       working-directory: build
       env:
         WM_DOWNLOAD_EXTERNALS: 1
+    - name: install render test requirements
+      run: pip3 install -r requirements.txt
+      working-directory: rendertests        
     - name: build
       run: cmake --build . --config Release
       working-directory: build
     - name: test
       run: ./rehearse
-      working-directory: build/Release       
+      working-directory: build/Release 
+    - name: run rendertests
+      run: python runtests.py
+      continue-on-error: true
+      working-directory: rendertests           
     - name: pack
       run: cmake --build . --config Release --target package
       working-directory: build
-    - uses: actions/upload-artifact@v1
+    - uses: actions/upload-artifact@v2
       with:
         name: werckmeister-win-${{ github.sha }}
-        path: build/werckmeister-0.1.55-win64.msi
+        path: build/werckmeister-*-win64.msi

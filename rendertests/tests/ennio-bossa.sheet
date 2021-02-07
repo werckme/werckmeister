@@ -3,7 +3,7 @@ using "./pitchmaps/defaultMidiDrumMap.pitchmap";
 using "./templates/bossanova.template";
 using "./templates/countryschlager1.template";
  
-device: SC1 midi 2;
+device: SC1 midi 5;
 
 tempo: 130;
 --           instrument device ch cc pc

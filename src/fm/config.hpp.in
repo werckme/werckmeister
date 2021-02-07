@@ -17,6 +17,7 @@
 namespace fm {
     constexpr Ticks PPQ = @FM_PPQ@;
 	constexpr int NotesPerOctave = 12;
+    constexpr int SheetNavigationMaxJumps = 200;
     constexpr double DefaultTempo = 120.0;
     constexpr unsigned int FUNK_MAX_SIGNAL_LENGTH = 255;
     inline auto LibfluidSynthSearchPaths()

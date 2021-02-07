@@ -37,5 +37,7 @@
 #define SHEET_META__SET_SIGNATURE FM_STRING("signature")
 #define SHEET_META__SET_DEVICE FM_STRING("device")
 #define SHEET_META__SET_VORSCHLAG FM_STRING("addVorschlag")
+#define SHEET_META__MARK FM_STRING("mark")
+#define SHEET_META__JUMP FM_STRING("jump")
 
 #endif

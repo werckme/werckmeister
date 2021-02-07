@@ -2,6 +2,7 @@ if(${USE_EMSCRIPTEN})
     SET(BUILD_SHEETJS 1)
 else()
     SET(BUILD_SHEETC   1)
+    SET(BUILD_SHEETJSD 1)
     SET(BUILD_SHEETP   1)
     SET(BUILD_REHEARSE 1)
 endif()
@@ -44,6 +45,7 @@ SET (SRC_FETZER_LIB
     compiler/error.cpp
     compiler/Warning.cpp
     compiler/argumentNames.cpp
+    compiler/SheetNavigator.cpp
     compiler/lua/luaTimeInfo.cpp
     sheet/objects/Event.cpp
     sheet/objects/ChordDef.cpp
@@ -76,7 +78,9 @@ SET (SRC_FETZER_LIB
     compiler/commands/InstrumentConfigSetVoicingStrategy.cpp
     compiler/commands/InstrumentConfigSetVolume.cpp    
     compiler/commands/InstrumentConfigVelocityRemap.cpp    
-    compiler/commands/AddDevice.cpp    
+    compiler/commands/AddDevice.cpp
+    compiler/commands/Mark.cpp    
+    compiler/commands/Jump.cpp 
 )
 
 add_definitions( -DGIT_VERSION="${GIT_VERSION}" )
@@ -151,6 +155,12 @@ endif()
 if(${BUILD_SHEETC})
     add_executable(sheetc sheetcompiler_main.cpp SheetCompilerProgram.cpp CompilerProgramOptions.cpp)
     target_link_libraries (sheetc ${SHEET_LIBS})
+    SET (WM_TARGETS ${WM_TARGETS} sheetc)
+endif()
+
+if(${BUILD_SHEETJSD})
+    add_executable(sheetjsc sheetjs_main.cpp SheetCompilerProgramJs.cpp SheetCompilerProgram.cpp)
+    target_link_libraries (sheetjsc ${SHEET_LIBS})
     SET (WM_TARGETS ${WM_TARGETS} sheetc)
 endif()
 
