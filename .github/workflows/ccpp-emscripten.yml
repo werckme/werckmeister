@@ -33,3 +33,15 @@ jobs:
       with:
         name: werckmeister-linux-${{ github.sha }}
         path: build/werckmeister-*-Emscripten.zip
+    - uses: actions/setup-node@v1
+      with:
+        node-version: 14
+    - name: Publish
+      run: 
+          unzip werckmeister-*-Emscripten.zip
+          cd werckmeister-*-Emscripten
+          npm config set //registry.npmjs.org/:_authToken ${NPM_TOKEN}
+          npm publish --ignore-scripts --access=public
+      working-directory: build
+      env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
