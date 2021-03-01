@@ -25,7 +25,7 @@ set(FLUIDSYNTH_VERSION "2.1.0")
 
 set (INSTALL_AUX 1)
 
-if ("${CMAKE_SYSTEM}" MATCHES "Emscripten*")
+if (EMSCRIPTEN)
     MESSAGE("using emscripten")
     SET(USE_EMSCRIPTEN 1)
     SET (INSTALL_AUX 0)
