@@ -179,7 +179,6 @@ namespace sheet {
                 }
                 auto& jump = getJump(idx, event, jumps);
                 auto markIt = marks.find(jump.to);
-                bool jumpForward = markIt->second > idx;
                 if (markIt == marks.end()) {
                     std::stringstream ss;
                     ss << "marker not found: \"" << jump.to << "\"";
@@ -187,6 +186,7 @@ namespace sheet {
                     exception << sheet::compiler::ex_sheet_source_info(event);
                     throw exception;
                 }
+                bool jumpForward = markIt->second > idx;
                 ++jump.numVisited;
                 ++jump.numVisitedTotal;
                 if (jump.numPerformed >= jump.numPerform) { // the jump has been perfomed
