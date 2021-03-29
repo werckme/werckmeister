@@ -455,26 +455,27 @@ namespace sheet {
 			
 			template <typename Iterator>
 			struct _ConfigParser : public _SheetParser<Iterator> {
+				typedef _SheetParser<Iterator> Base;
 				_ConfigParser(Iterator begin, Event::SourceId sourceId = Event::UndefinedSource) : _SheetParser<Iterator>(begin, sourceId)
 				{
 					using qi::on_error;
 					using qi::fail;
 					using qi::attr;
-					initArgumentParser();
-					createDocumentConfigRules(documentConfig_);
+					Base::initArgumentParser();
+					Base::createDocumentConfigRules(Base::documentConfig_);
 
-					current_pos_.setStartPos(begin);
+					Base::current_pos_.setStartPos(begin);
 
-					documentConfig_.name("document config");
-					documentUsing_.name("document config");
+					Base::documentConfig_.name("document config");
+					Base::documentUsing_.name("document config");
 
-					start %= attr(DocumentUsing())
-							> *documentConfig_
+					Base::start %= attr(DocumentUsing())
+							> *Base::documentConfig_
 							> attr(Track())
 							> boost::spirit::eoi;
 
-					auto onError = boost::bind(&handler::errorHandler<Iterator>, _1, sourceId_);
-					on_error<fail>(start, onError);
+					auto onError = boost::bind(&handler::errorHandler<Iterator>, _1, Base::sourceId_);
+					on_error<fail>(Base::start, onError);
 				}
 			};
 
@@ -487,6 +488,7 @@ namespace sheet {
 				SheetParserType g(source.begin(), sourceId);
 				phrase_parse(source.begin(), source.end(), g, space, def);
 			}
+
 		}
 
 
@@ -509,7 +511,7 @@ namespace sheet {
 			typedef _ConfigParser<fm::String::const_iterator> ConfigParserType;
 
 			ConfigParserType g(source.begin(), sourceId);
-			phrase_parse(source.begin(), source.end(), g, space, result);
+			phrase_parse(source.cbegin(), source.cend(), g, space, result);
 
 			return result.documentConfigs;
 		}
