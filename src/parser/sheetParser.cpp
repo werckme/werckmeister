@@ -428,7 +428,7 @@ namespace sheet {
 					on_error<fail>(start, onError);
 
 				}
-			private:
+			protected:
 				Event::SourceId sourceId_ = Event::UndefinedSource;
 				qi::rule<Iterator, PitchDef(), ascii::space_type> degree_;
 				qi::rule<Iterator, SheetDef(), ascii::space_type> start;
@@ -452,6 +452,32 @@ namespace sheet {
 				qi::rule<Iterator, fm::String(), ascii::space_type> bar_volta_;
 				CurrentPos<Iterator> current_pos_;
 			};
+			
+			template <typename Iterator>
+			struct _ConfigParser : public _SheetParser<Iterator> {
+				typedef _SheetParser<Iterator> Base;
+				_ConfigParser(Iterator begin, Event::SourceId sourceId = Event::UndefinedSource) : _SheetParser<Iterator>(begin, sourceId)
+				{
+					using qi::on_error;
+					using qi::fail;
+					using qi::attr;
+					Base::initArgumentParser();
+					Base::createDocumentConfigRules(Base::documentConfig_);
+
+					Base::current_pos_.setStartPos(begin);
+
+					Base::documentConfig_.name("document config");
+					Base::documentUsing_.name("document config");
+
+					Base::start %= attr(DocumentUsing())
+							> *Base::documentConfig_
+							> attr(Track())
+							> boost::spirit::eoi;
+
+					auto onError = boost::bind(&handler::errorHandler<Iterator>, _1, Base::sourceId_);
+					on_error<fail>(Base::start, onError);
+				}
+			};
 
 
 			void _parse(const fm::String &source, SheetDef &def, Event::SourceId sourceId)
@@ -462,6 +488,7 @@ namespace sheet {
 				SheetParserType g(source.begin(), sourceId);
 				phrase_parse(source.begin(), source.end(), g, space, def);
 			}
+
 		}
 
 
@@ -472,6 +499,21 @@ namespace sheet {
 			fm::removeComments(source.begin(), source.end());
 			_parse(source, result, sourceId);
 			return result;
+		}
+
+		SheetDef::DocumentConfigs ConfigParser::parse(fm::CharType const* first, fm::CharType const* last, Event::SourceId sourceId)
+		{
+			SheetDef result;
+			fm::String source(first, last);
+			fm::removeComments(source.begin(), source.end());
+
+			using boost::spirit::ascii::space;
+			typedef _ConfigParser<fm::String::const_iterator> ConfigParserType;
+
+			ConfigParserType g(source.begin(), sourceId);
+			phrase_parse(source.cbegin(), source.cend(), g, space, result);
+
+			return result.documentConfigs;
 		}
 	}
 }
