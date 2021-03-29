@@ -428,7 +428,7 @@ namespace sheet {
 					on_error<fail>(start, onError);
 
 				}
-			private:
+			protected:
 				Event::SourceId sourceId_ = Event::UndefinedSource;
 				qi::rule<Iterator, PitchDef(), ascii::space_type> degree_;
 				qi::rule<Iterator, SheetDef(), ascii::space_type> start;
@@ -452,6 +452,31 @@ namespace sheet {
 				qi::rule<Iterator, fm::String(), ascii::space_type> bar_volta_;
 				CurrentPos<Iterator> current_pos_;
 			};
+			
+			template <typename Iterator>
+			struct _ConfigParser : public _SheetParser<Iterator> {
+				_ConfigParser(Iterator begin, Event::SourceId sourceId = Event::UndefinedSource) : _SheetParser<Iterator>(begin, sourceId)
+				{
+					using qi::on_error;
+					using qi::fail;
+					using qi::attr;
+					initArgumentParser();
+					createDocumentConfigRules(documentConfig_);
+
+					current_pos_.setStartPos(begin);
+
+					documentConfig_.name("document config");
+					documentUsing_.name("document config");
+
+					start %= attr(DocumentUsing())
+							> *documentConfig_
+							> attr(Track())
+							> boost::spirit::eoi;
+
+					auto onError = boost::bind(&handler::errorHandler<Iterator>, _1, sourceId_);
+					on_error<fail>(start, onError);
+				}
+			};
 
 
 			void _parse(const fm::String &source, SheetDef &def, Event::SourceId sourceId)
@@ -472,6 +497,21 @@ namespace sheet {
 			fm::removeComments(source.begin(), source.end());
 			_parse(source, result, sourceId);
 			return result;
+		}
+
+		SheetDef::DocumentConfigs ConfigParser::parse(fm::CharType const* first, fm::CharType const* last, Event::SourceId sourceId)
+		{
+			SheetDef result;
+			fm::String source(first, last);
+			fm::removeComments(source.begin(), source.end());
+
+			using boost::spirit::ascii::space;
+			typedef _ConfigParser<fm::String::const_iterator> ConfigParserType;
+
+			ConfigParserType g(source.begin(), sourceId);
+			phrase_parse(source.begin(), source.end(), g, space, result);
+
+			return result.documentConfigs;
 		}
 	}
 }
