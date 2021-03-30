@@ -22,6 +22,11 @@
 #include <sheet/objects/Grouped.h>
 #include <fm/tools.h>
 
+// lit(fm::String((c))+"b" )[at_c<0>(_val) = fm::String((c)) + "b"]
+#define DEF_EX_PITCH(c) \
+	  lit(fm::String((c))+"#" )[at_c<0>(_val) = fm::String((c)) + "#"] \
+	| lit((c))[at_c<0>(_val) = fm::String((c))]
+
 BOOST_FUSION_ADAPT_STRUCT(
 	sheet::DocumentUsing,
 	(sheet::DocumentUsing::Usings, usings)
@@ -206,12 +211,38 @@ namespace sheet {
 					documentUsing_ %= usings_;
 				}
 
-
+				void initExtendedPitchs() 
+				{
+					using qi::lit;
+					using qi::_val;
+					using boost::phoenix::at_c;
+					extendedPitch_.name("extended pitch");
+					extendedPitch_ %= 
+						  DEF_EX_PITCH("h")
+						| DEF_EX_PITCH("i")
+						| DEF_EX_PITCH("j")
+						| DEF_EX_PITCH("k")
+						| DEF_EX_PITCH("l")
+						| DEF_EX_PITCH("m")
+						| DEF_EX_PITCH("n")
+						| DEF_EX_PITCH("o")
+						| DEF_EX_PITCH("p")
+						| DEF_EX_PITCH("q")
+						| DEF_EX_PITCH("s")
+						| DEF_EX_PITCH("u")
+						| DEF_EX_PITCH("v")
+						| DEF_EX_PITCH("w")
+						| DEF_EX_PITCH("x")
+						| DEF_EX_PITCH("y")
+						| DEF_EX_PITCH("z")
+					;
+				}
 
 				void initSheetParser()
 				{
 					using qi::int_;
 					using qi::_1;
+					using qi::_a;
 					using qi::lit;
 					using qi::string;
 					using qi::space;
@@ -225,7 +256,7 @@ namespace sheet {
 					using boost::phoenix::at_c;
 					using boost::phoenix::push_back;
 					using boost::phoenix::insert;
-
+					initExtendedPitchs();
 					start.name("sheet");
 					bar_volta_.name("bar jump mark");
 					event_.name("event");
@@ -239,7 +270,7 @@ namespace sheet {
 					degree_ %= (degreeSymbols_ >> (octaveSymbols_ | attr(PitchDef::DefaultOctave)) >> attr(false));
 					pitch_ %= pitchSymbols_ >> (octaveSymbols_ | attr(PitchDef::DefaultOctave));
 					alias_ %= lexeme['"' >> +(char_ - '"') >> '"'];
-					pitchOrAlias_ %= pitch_ | alias_;
+					pitchOrAlias_ %= pitch_ | alias_ | extendedPitch_;
 					event_ %= 
 					( // NOTE
 						current_pos_.current_pos 
@@ -433,6 +464,7 @@ namespace sheet {
 				qi::rule<Iterator, PitchDef(), ascii::space_type> degree_;
 				qi::rule<Iterator, SheetDef(), ascii::space_type> start;
 				qi::rule<Iterator, PitchDef(), ascii::space_type> pitch_;
+				qi::rule<Iterator, AliasPitchDef(), ascii::space_type> extendedPitch_;
 				qi::rule<Iterator, PitchDef(), ascii::space_type> pitchOrAlias_;
 				qi::rule<Iterator, Argument(), ascii::space_type> argument_;
 				qi::rule<Iterator, Argument(), ascii::space_type> expression_argument_;
