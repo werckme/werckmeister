@@ -1,0 +1,19 @@
+using "./myConfig.config";
+using "./chords/default.chords";
+using "./pitchmaps/defaultMidiDrumMap.pitchmap";
+
+
+-- define your instruments:
+-- (ch= channel, pc= programm change, cc= control change)
+--             name    device    ch  cc  pc 
+instrumentDef: _setName=piano   _onDevice=MyDevice   _ch=1   _pc=3 _cc=0;
+tempo: 130;
+
+[
+instrument: piano;
+{
+    \ffff
+   c2 d | e1 | r2 c4 d4 | e4 e g c | d#2 d#4 d | c2 bb4 a | g2  g4 a | bb c' bb a | ab2 ab4 bb | 
+    c' ab,4 ab,4  bb,~ | <bb, c> ab ab bb | c' c' eb'8 d' c' d' | b2 b, | r1 | r4 b4 b4 c' | d' d' d' d' | d' d' e'8 d' c' b | c'1 |
+}
+]

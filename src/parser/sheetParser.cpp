@@ -21,6 +21,7 @@
 #include <sheet/AliasPitchDef.h>
 #include <sheet/objects/Grouped.h>
 #include <fm/tools.h>
+#include "extendedPitchSymbols.h"
 
 BOOST_FUSION_ADAPT_STRUCT(
 	sheet::DocumentUsing,
@@ -206,12 +207,11 @@ namespace sheet {
 					documentUsing_ %= usings_;
 				}
 
-
-
 				void initSheetParser()
 				{
 					using qi::int_;
 					using qi::_1;
+					using qi::_a;
 					using qi::lit;
 					using qi::string;
 					using qi::space;
@@ -225,6 +225,8 @@ namespace sheet {
 					using boost::phoenix::at_c;
 					using boost::phoenix::push_back;
 					using boost::phoenix::insert;
+					
+					_impl::initExtendedPitches(extendedPitch_);
 
 					start.name("sheet");
 					bar_volta_.name("bar jump mark");
@@ -239,7 +241,7 @@ namespace sheet {
 					degree_ %= (degreeSymbols_ >> (octaveSymbols_ | attr(PitchDef::DefaultOctave)) >> attr(false));
 					pitch_ %= pitchSymbols_ >> (octaveSymbols_ | attr(PitchDef::DefaultOctave));
 					alias_ %= lexeme['"' >> +(char_ - '"') >> '"'];
-					pitchOrAlias_ %= pitch_ | alias_;
+					pitchOrAlias_ %= pitch_ | alias_ | extendedPitch_;
 					event_ %= 
 					( // NOTE
 						current_pos_.current_pos 
@@ -433,6 +435,7 @@ namespace sheet {
 				qi::rule<Iterator, PitchDef(), ascii::space_type> degree_;
 				qi::rule<Iterator, SheetDef(), ascii::space_type> start;
 				qi::rule<Iterator, PitchDef(), ascii::space_type> pitch_;
+				qi::rule<Iterator, AliasPitchDef(), ascii::space_type> extendedPitch_;
 				qi::rule<Iterator, PitchDef(), ascii::space_type> pitchOrAlias_;
 				qi::rule<Iterator, Argument(), ascii::space_type> argument_;
 				qi::rule<Iterator, Argument(), ascii::space_type> expression_argument_;
