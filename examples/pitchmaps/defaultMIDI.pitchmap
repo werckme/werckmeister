@@ -1,26 +1,34 @@
 "bd": c,,,,
 "bd2": b,,,
+"o": b,,,
 "sn": d,,
+"x": d,,
 "sn2": e,,
 "esn": e,,     -- electric snare
 "sng": d,,      --snare ghost notes
 "ss": c#,,     -- sidestick
 "hc": d#,,     -- handclap
 "ht": f#,,     -- hihat closed
+"h": f#,,      -- hihat closed
 "hf": g#,,     -- hihat foot
+"h,": g#,,     -- hihat foot
 "ho": bb,,     -- hihat open
+"h'": bb,,     -- hihat open
 "ho1": bb,,    -- hihat half open1
 "ho2": bb,,    -- hihat half open2
 "ho3": bb,,    -- hihat half open3
 "cy": c#,      -- crash cymbal
 "spl": g,      -- splash cymbal
 "hto": c,      -- high tom 
+"m'": c,      -- high tom 
 "hto1": c,
 "hto2": d,
 "mto": b,,     -- middle tom
+"m": b,,     -- middle tom
 "mto1": b,,
 "mto2": a,,
 "lto": g,,     -- low tom
+"m,": g,,     -- low tom
 "lto1": g,,
 "lto2": f,,
 "rcym1": d#,  -- ride cymbal 1

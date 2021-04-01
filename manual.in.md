@@ -620,14 +620,19 @@ In combination with its ignore argument you are able to implement - for example 
 
 ## Write for drums
 ### Pitchmaps
+With pitchmaps you are able to define own note symbols. This is useful espacially for drum notes.<br>
+In a pitchmap file you can define note symbols like that:
+```
+"sn": c'  -- snare
+"bd": c,  -- bass drum
+```
+Since a delimited string like "bd" is harder to read than a single character, there are the following rules:
 
-
-    every single lowercase character is allowed as note
-    a note can also have more than one character but then a delimiter is neccessary
-    a delimiter can be either ' or "
-    single character notes can be followed by the accidentals b or #
-    the characters c, d, e, f, g, a, b, r, t are predefined events
-    all not predefined events can be overwritten in a pitchmap e.g.: o: c,,,, o#: c'
+* every single lowercase alphabetic character is allowed as note
+* a note can also have more than one character but then a delimiter is neccessary
+* single character notes can be followed by the octave symbols `'` or `,`
+* the characters c, d, e, f, g, a, b, r, t are predefined events
+* predefined events can **not** be overwritten in a pitchmap
 
 
 
