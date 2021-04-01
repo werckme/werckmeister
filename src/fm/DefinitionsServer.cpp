@@ -80,7 +80,7 @@ namespace fm {
 		}
 		const sheet::PitchDef *result = getAlias(pitch.alias);
 		if (result == nullptr) {
-			FM_THROW(Exception, "could not resolve alias: " + pitch.alias);
+			FM_THROW(sheet::compiler::Exception, "could not resolve alias: " + pitch.alias);
 		}
 		return *result;
 	}
