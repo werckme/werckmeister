@@ -34,7 +34,11 @@ namespace sheet {
 
 		int MidiContext::getAbsolutePitch(const PitchDef &pitch)
 		{
-			return MidiSchluesselCOffset + pitch.pitch + (pitch.octave * fm::NotesPerOctave);
+			auto value =  MidiSchluesselCOffset + pitch.pitch + (pitch.octave * fm::NotesPerOctave);
+			if (value < 0 || value > 127) {
+				FM_THROW(Exception, "invalid note value, the highest possible note is g'''''");
+			}
+			return value;
 		}
 
 		int MidiContext::toMidiVelocity(double velocity)
