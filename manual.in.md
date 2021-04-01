@@ -621,7 +621,14 @@ In combination with its ignore argument you are able to implement - for example 
 ## Write for drums
 ### Pitchmaps
 
-tbd.
+
+    every single lowercase character is allowed as note
+    a note can also have more than one character but then a delimiter is neccessary
+    a delimiter can be either ' or "
+    single character notes can be followed by the accidentals b or #
+    the characters c, d, e, f, g, a, b, r, t are predefined events
+    all not predefined events can be overwritten in a pitchmap e.g.: o: c,,,, o#: c'
+
 
 
 ## Accomp My Melodies
