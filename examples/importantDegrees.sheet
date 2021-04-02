@@ -1,7 +1,8 @@
+using "./myConfig.config";
 using "./chords/default.chords";
 using "./lua/voicings/simple.lua";
-device: SC1 midi 5;
-instrumentDef: piano   SC1 2 0 0;
+
+instrumentDef: piano   MyDevice 2 0 0;
 
 instrumentConf: piano 
     voicingStrategy simple _importantDegrees="IV VI";

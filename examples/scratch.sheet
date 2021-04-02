@@ -1,5 +1,5 @@
+using "./myConfig.config";
 using "./chords/default.chords";
-using "./pitchmaps/defaultMidiDrumMap.pitchmap";
 using "./templates/ennio.template";
 using "./lua/voicings/simple.lua";
 using "./lua/voicings/guitar.lua";
@@ -9,11 +9,7 @@ using "./lua/mods/myArpeggio.lua";
 using "./lua/mods/swing.lua";
 using "./lua/mods/staccato.lua";
 
--- setup your midi device:
--- to get a list of your available MIDI devices 
--- and their port numbers, execute "sheetp --list"
---      name              type   portnumber
-device: _usePort=5 _setName=MyDevice  _isType=midi;
+instrumentDef: _setName=piano _onDevice=MyDevice _ch=0 _pc=1 _cc=8;
 instrumentDef: _setName=pianoRH _onDevice=MyDevice _ch=0 _pc=1 _cc=8;
 instrumentDef: _setName=pianoLH _onDevice=MyDevice _ch=1 _pc=1 _cc=8;
 

@@ -1,18 +1,17 @@
 -- ALL OF ME
 -- Seymour Simons
 -- Gerald Marks
-
+using "./myConfig.config";
 using "./chords/default.chords";
 using "./pitchmaps/defaultMIDI.pitchmap";
 using "./templates/drums.jazzSwing.template";
 using "./templates/rhythm.jazzSwing.template";
 using "./templates/bass.jazzSwing.template";
 
-device: RolandSC8850 midi _usePort=5;
-instrumentDef: piano _onDevice=RolandSC8850 _ch=0 _pc=0;
-instrumentDef: bass  _onDevice=RolandSC8850  _ch=1 _pc=32;
-instrumentDef: rhythm2 _onDevice=RolandSC8850  _ch=2 _pc=0;
-instrumentDef: drumsBrushes _onDevice=RolandSC8850 _ch=9 _pc=40;
+instrumentDef: piano _onDevice=MyDevice _ch=0 _pc=0;
+instrumentDef: bass  _onDevice=MyDevice  _ch=1 _pc=32;
+instrumentDef: rhythm2 _onDevice=MyDevice  _ch=2 _pc=0;
+instrumentDef: drumsBrushes _onDevice=MyDevice _ch=9 _pc=40;
 
 
 
