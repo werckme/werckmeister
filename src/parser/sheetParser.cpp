@@ -466,13 +466,13 @@ namespace sheet {
 					using qi::attr;
 					Base::initArgumentParser();
 					Base::createDocumentConfigRules(Base::documentConfig_);
-
+					Base::initDocumentUsingParser();
 					Base::current_pos_.setStartPos(begin);
 
 					Base::documentConfig_.name("document config");
 					Base::documentUsing_.name("document config");
 
-					Base::start %= attr(DocumentUsing())
+					Base::start %= (Base::documentUsing_ | attr(DocumentUsing()))
 							> *Base::documentConfig_
 							> attr(Track())
 							> boost::spirit::eoi;
@@ -504,7 +504,7 @@ namespace sheet {
 			return result;
 		}
 
-		SheetDef::DocumentConfigs ConfigParser::parse(fm::CharType const* first, fm::CharType const* last, Event::SourceId sourceId)
+		SheetDef ConfigParser::parse(fm::CharType const* first, fm::CharType const* last, Event::SourceId sourceId)
 		{
 			SheetDef result;
 			fm::String source(first, last);
@@ -516,7 +516,7 @@ namespace sheet {
 			ConfigParserType g(source.begin(), sourceId);
 			phrase_parse(source.cbegin(), source.cend(), g, space, result);
 
-			return result.documentConfigs;
+			return result;
 		}
 	}
 }
