@@ -18,7 +18,16 @@ namespace sheet {
 			this->compilerVisitorPtr_->beginCompile();
 			this->document_ = document;
 			try {
-				sheetEventRenderer()->handleMetaEvents(document->sheetDef.documentConfigs, 
+				auto priorisedDocumentConfigs = document->sheetDef.documentConfigs;
+				std::sort(priorisedDocumentConfigs.begin(), priorisedDocumentConfigs.end(), [](const auto &a, const auto &b) 
+				{
+					if (a.name == SHEET_META__SET_DEVICE) { // device commands first
+						return true;
+					}
+					return false;
+				});
+
+				sheetEventRenderer()->handleMetaEvents(priorisedDocumentConfigs,
 					[](const auto &x) { 
 						sheet::Event metaEvent;
 						metaEvent.type = sheet::Event::Meta;

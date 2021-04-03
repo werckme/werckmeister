@@ -9,6 +9,7 @@
 #include <compiler/modification/AModification.h>
 #include <compiler/commands/ACommand.h>
 #include <compiler/commands/AUsingAnEvent.h>
+#include <fm/config/configServer.h>
 
 #define SHEET_MASTER_TRACKNAME "master track"
 
@@ -338,7 +339,11 @@ namespace sheet {
 			def.channel = channel;
 			def.cc = cc;
 			def.pc = pc;
-			def.deviceName = deviceName;		
+			def.deviceName = deviceName;
+			auto& config = fm::getConfigServer();
+			if (!config.getDevice(deviceName)) {
+				FM_THROW(Exception, "Device '" + deviceName + "' not found");
+			}
 			setMidiInstrumentDef(uname, def);
 		}
 		AContext::TrackId MidiContext::createMasterTrack()
