@@ -1,0 +1,72 @@
+using "chords/default.chords";
+using "lua/voicings/simple.lua";
+using "lua/voicings/guitar.lua";
+using "lua/mods/swing.lua";
+using "lua/mods/staccato.lua";
+using "templates/drums.disco.template";
+using "templates/bass.disco.template";
+using "templates/bass.bossanova.template";
+using "templates/rhythm.country.template";
+using "templates/rhythm.bossanova.template";
+using "templates/drums.bossanova.template";
+using "templates/drums.country.template";
+using "templates/bass.country.template";
+using "lua/mods/guitarStroke.lua";
+ 
+device: MyDevice midi 0;
+
+-- define your instruments:
+-- (ch= channel, pc= programm change, cc= control change)
+--             name       device 
+instrumentDef: piano      MyDevice _ch=0 _cc=0 _pc=0;
+instrumentDef: lead       MyDevice _ch=1 _cc=0 _pc=105;
+instrumentDef: lead2      MyDevice _ch=2 _cc=0 _pc=25;
+instrumentDef: sitar      MyDevice _ch=6 _cc=0 _pc=104;
+instrumentDef: rhythm     MyDevice _ch=3 _cc=0 _pc=25;
+instrumentDef: bass       MyDevice _ch=4 _cc=0 _pc=26;
+instrumentDef: bell       MyDevice _ch=5 _cc=0 _pc=14;
+instrumentDef: drums      MyDevice _ch=9 _cc=0 _pc=0;
+
+instrumentConf: rhythm voicingStrategy guitar _range=tenor;  
+instrumentConf: rhythm mod guitarStroke;
+instrumentConf: rhythm
+    pan    60
+    volume 70
+;   
+
+instrumentConf: bass
+    volume 100
+    voicingStrategy simple _range=contrabass
+;   
+
+instrumentConf: piano
+    volume 70;  
+
+instrumentConf: lead 
+    pan 50
+    volume 90;   
+
+instrumentConf: lead2
+    pan 30
+    volume 90;   
+
+instrumentConf: sitar
+    pan 40
+    volume 60;  
+
+instrumentConf: bell
+    pan 60
+    volume 90;   
+
+instrumentConf: drums
+    volume 90;       
+
+
+tempo:  73;
+
+[
+instrument: rhythm;
+{
+    c1 |
+}
+]

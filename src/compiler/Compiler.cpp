@@ -18,16 +18,16 @@ namespace sheet {
 			this->compilerVisitorPtr_->beginCompile();
 			this->document_ = document;
 			try {
-				auto priorisedDocumentConfigs = document->sheetDef.documentConfigs;
-				std::sort(priorisedDocumentConfigs.begin(), priorisedDocumentConfigs.end(), [](const auto &a, const auto &b) 
-				{
-					if (a.name == SHEET_META__SET_DEVICE) { // device commands first
-						return true;
+				std::list<DocumentConfig> priorisedDocumentConfigs;
+				for(auto &conf : document->sheetDef.documentConfigs) {
+					if (conf.name == SHEET_META__SET_DEVICE) { // device commands first
+						priorisedDocumentConfigs.push_front(conf);
+						continue;
 					}
-					return false;
-				});
-
-				sheetEventRenderer()->handleMetaEvents(priorisedDocumentConfigs,
+					priorisedDocumentConfigs.push_back(conf);
+				}
+				std::vector<DocumentConfig> configs(priorisedDocumentConfigs.begin(), priorisedDocumentConfigs.end());
+				sheetEventRenderer()->handleMetaEvents(configs,
 					[](const auto &x) { 
 						sheet::Event metaEvent;
 						metaEvent.type = sheet::Event::Meta;
