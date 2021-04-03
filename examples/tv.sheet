@@ -1,5 +1,5 @@
+using "./myConfig.config";
 using "chords/default.chords";
-using "pitchmaps/defaultMidiDrumMap.pitchmap";
 using "lua/voicings/simple.lua";
 using "lua/voicings/guitar.lua";
 using "lua/mods/swing.lua";
@@ -14,12 +14,6 @@ using "templates/drums.country.template";
 using "templates/bass.country.template";
 using "lua/mods/guitarStroke.lua";
  
--- setup your midi device:
--- to get a list of your available MIDI devices 
--- and their port numbers, execute "sheetp --list"
---      name              type   portnumber
-device: MyDevice          midi       5;
-
 
 -- define your instruments:
 -- (ch= channel, pc= programm change, cc= control change)

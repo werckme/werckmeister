@@ -1,0 +1,19 @@
+
+using "pitchmaps/extendedPitches.pitchmap";
+
+device: SC1 midi 5;
+instrumentDef: piano   SC1 4 0 0;
+
+tempo: 75;
+
+[
+instrument: piano;
+{
+    \fff
+    c1 | "c"1
+}
+]
+
+
+
+

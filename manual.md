@@ -608,14 +608,21 @@ c4 d e f |^1 g a b ab :|^2 c'1
 
 ```language=Werckmeister,type=single,tempo=200
 c2 d2 |^1 c#2 d# :|^2 e2 f2 :|^3 c#'2 d#'2 | c'2 d'2 | c,,2 d,, :|
--- c4 d e f |^1 g a b ab :|^2 g# a# c#' d# :| c'1
 ```
 
 ##### Mark/Jump
 For more complex musical navigation you can use the [mark](#mark)/[jump](#jump) commands.
 In combination with its ignore argument you are able to implement - for example - a coda:
 ```language=Werckmeister,type=single,tempo=200
--- tbd
+/mark: begin/
+c d e f | 
+/jump: coda _ignore=1/
+g a b c' |
+d' e' f' g' |
+/mark: coda/
+g' f' e' d' |
+/jump: begin/
+c'1 |
 ```
 
 ## Write for drums
