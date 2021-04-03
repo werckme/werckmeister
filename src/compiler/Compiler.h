@@ -45,7 +45,7 @@ namespace sheet {
 			ASheetEventRendererPtr sheetEventRenderer();
 		protected:
 			void renderTracks();
-			void renderChordTrack();
+			void renderAccompTrack();
 		};
 	}
 }
