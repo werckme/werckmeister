@@ -1,0 +1,50 @@
+using "./chords/default.chords";
+using "./pitchmaps/defaultMidiDrumMap.pitchmap";
+using "./templates/ennio.template";
+
+device: SC1 midi 0;
+
+tempo: 130;
+--          instrument dv ch cc pc
+instrumentDef: piano   SC1 2 0 3;
+
+[
+instrument: piano;
+{
+    /channel: 5/
+    \fffff
+    r1 | r1 |c2 d | e1 | r2 c4 d4 | e4 e g c | d#2 d#4 d | c2 bb4 a | g2  g4 a | bb c' bb a | ab2 ab4 bb | 
+    c' ab,4 ab,4  bb,~ | <bb, c> ab ab bb | c' c' eb'8 d' c' d' | b2 b, | r1 | r4 b4 b4 c' | d' d' d' d' | d' d' e'8 d' c' b | c'1 |
+}
+]
+
+[
+type: template;
+name: zwei;
+instrument: piano;
+{
+    I'''1 |
+}
+]
+
+[
+type: accomp;
+{
+    /template: ennio.normal/
+
+    Cmaj7 | Cmaj7 | Cmaj7 | Cmaj7 | Cmaj7 | Cmaj7 | Ebmaj7 | Ebmaj7 | 
+    Ebmaj7 | Ebmaj7 | Abmaj7 | Abmaj7 | Abmaj7 | Abmaj7 | G7 
+    | G7 | G7 | G7 | G7 | C | C | Cmin | Cmin | 
+}
+]
+
+[
+type: accomp;
+{
+    /template: zwei/
+
+    Cmaj7 | Cmaj7 | Cmaj7 | Cmaj7 | Cmaj7 | Cmaj7 | Ebmaj7 | Ebmaj7 | 
+    Ebmaj7 | Ebmaj7 | Abmaj7 | Abmaj7 | Abmaj7 | Abmaj7 | G7 
+    | G7 | G7 | G7 | G7 | C | C | Cmin | Cmin | 
+}
+]
