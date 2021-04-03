@@ -101,7 +101,7 @@ namespace sheet {
 			virtual fm::Ticks currentPosition() const;
 			virtual fm::Ticks maxPosition() const;
 			TimeInfo getTimeInfo() const;
-			virtual void setInstrument(const fm::String &uname) {}
+			virtual void setInstrument(const fm::String& uname);
 			virtual void setExpression(fm::Expression value);
 			virtual void setExpressionPlayedOnce(fm::Expression expr);
 			virtual void setTempo(double bpm) {}
