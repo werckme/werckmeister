@@ -11,6 +11,7 @@
 #include <sheet/objects/Track.h>
 #include <fm/tools.h>
 #include <sstream>
+#include <fm/config/configServer.h>
 
 namespace sheet {
 
@@ -317,6 +318,10 @@ namespace sheet {
 			chordVoice_ = INVALID_VOICE_ID;
 			voiceMetaDataMap_.clear();
 			trackMetaDataMap_.clear();
+		}
+
+		void AContext::setInstrument(const fm::String& uname)
+		{
 		}
 	}
 }
