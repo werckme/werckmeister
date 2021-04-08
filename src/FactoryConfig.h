@@ -76,6 +76,7 @@ namespace sheet {
 #include <compiler/commands/InstrumentConfigVelocityRemap.h>
 #include <compiler/commands/Mark.h>
 #include <compiler/commands/Jump.h>
+#include <compiler/commands/SetFade.h>
 
 namespace sheet {
     namespace compiler {
@@ -105,6 +106,7 @@ namespace sheet {
                 _FM_Register(InstrumentConfigVelocityRemap,             InstrumentConfigCommandName(SHEET_META__VELOCITY_REMAP));
                 _FM_Register(Mark,                                      SHEET_META__MARK);
                 _FM_Register(Jump,                                      SHEET_META__JUMP);
+                _FM_Register(SetFade,                                   SHEET_META__SET_FADE);
                 return true;
             })();
         }

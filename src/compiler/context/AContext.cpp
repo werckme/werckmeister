@@ -219,7 +219,7 @@ namespace sheet {
 			auto meta = voiceMetaData();
 			seek(duration);
 		}
-		void AContext::setVolume(double volume)
+		void AContext::setVolume(double volume, fm::Ticks relativePosition)
 		{
 			auto meta = voiceMetaData();
 			meta->volume = std::max(std::min(volume, 100.0), 0.0);

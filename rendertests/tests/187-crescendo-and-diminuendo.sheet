@@ -1,0 +1,17 @@
+
+device: SC1 midi 5;
+instrumentDef: organ  SC1 _ch=0 _pc=16;
+
+tempo: 75;
+
+[
+instrument: organ;
+{
+    \fff
+    /fade: _from=0 _to=100 _duration=4/
+    c1
+}
+]
+
+
+

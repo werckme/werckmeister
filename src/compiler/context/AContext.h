@@ -106,7 +106,7 @@ namespace sheet {
 			virtual void setExpressionPlayedOnce(fm::Expression expr);
 			virtual void setTempo(double bpm) {}
 			virtual void setSignature(int upper, int lower);
-			virtual void setVolume(double volume);
+			virtual void setVolume(double volume, fm::Ticks relativePosition = 0);
 			virtual void setPan(double val);
 			/////// actual context stuff
 			virtual void renderPitch(const PitchDef &pitch, fm::Ticks duration, double velocity, bool tying);

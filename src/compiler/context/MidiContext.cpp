@@ -231,7 +231,7 @@ namespace sheet {
 			return &trackMeta->instrument;
 		}
 
-		void MidiContext::setVolume(double volume)
+		void MidiContext::setVolume(double volume, fm::Ticks relativePosition)
 		{
 			Base::setVolume(volume);
 			auto meta = voiceMetaData<MidiContext::VoiceMetaData>();
@@ -242,7 +242,7 @@ namespace sheet {
 			auto midiVol = meta->volume * fm::midi::MaxMidiValue / MAX_VOLUME;
 			auto channel = getChannel(*trackMeta);
 			auto ev = fm::midi::Event::CCVolume(channel, midiVol);
-			ev.absPosition(currentPosition());
+			ev.absPosition(currentPosition() + relativePosition);
 			addEvent(ev); 
 		}
 

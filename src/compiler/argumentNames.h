@@ -99,6 +99,12 @@ struct ArgumentNames {
         std::string To                      = "to";
     } Jump;
 
+    struct {
+        std::string FadeTo                  = "to";
+        std::string FadeFrom                = "from";
+        std::string FadeDuration            = "duration";        
+    } SetFade; 
+
 };
 
 extern ArgumentNames argumentNames;  
