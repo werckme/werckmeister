@@ -102,7 +102,8 @@ struct ArgumentNames {
     struct {
         std::string FadeTo                  = "to";
         std::string FadeFrom                = "from";
-        std::string FadeDuration            = "duration";        
+        std::string FadeDuration            = "duration";
+        std::string Curve                   = "curve";        
     } SetFade; 
 
 };

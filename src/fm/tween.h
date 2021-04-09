@@ -14,22 +14,21 @@ namespace fm {
     class Tween  {
     public:
     private:
-        T p = T(0);
         T b = T(0);
         T e = T(0);
         T d = T(0);
         T c = T(0);
     public:
         Tween(T b, T e, T d) : b(b), e(e), d(d), c(e - b) {}
-        T calc(T t) {
+        T calc(T t) const {
             return calc(t, Int2Type<TTweenType>());
 	    }
-        T calc(T t, Int2Type<TweenTypeLin>){ return c*t/d + b; }
-        T calc(T t, Int2Type<TweenTypeQuad>){ p=t/d; return c*p*p + b; }
-        T calc(T t, Int2Type<TweenTypeCub>){ p=t/d; return c*p*p*p + b;  }
-        T calc(T t, Int2Type<TweenTypeQuart>){ p=t/d; return c*p*p*p*p + b; }
-        T calc(T t, Int2Type<TweenTypeQuint>){ p=t/d; return c*p*p*p*p*p + b; }
-        T calc(T t, Int2Type<TweenTypeExp>){ p=t/d; return c * std::pow(T(2.0), T(10.0) * ( p - T(1.0) )) + b; }
+        T calc(T t, Int2Type<TweenTypeLin>) const { return c*t/d + b; }
+        T calc(T t, Int2Type<TweenTypeQuad>) const { auto p=t/d; return c*p*p + b; }
+        T calc(T t, Int2Type<TweenTypeCub>) const { auto p=t/d; return c*p*p*p + b;  }
+        T calc(T t, Int2Type<TweenTypeQuart>) const { auto p=t/d; return c*p*p*p*p + b; }
+        T calc(T t, Int2Type<TweenTypeQuint>) const { auto p=t/d; return c*p*p*p*p*p + b; }
+        T calc(T t, Int2Type<TweenTypeExp>) const { auto p=t/d; return c * std::pow(T(2.0), T(10.0) * ( p - T(1.0) )) + b; }
     };
 }
 
