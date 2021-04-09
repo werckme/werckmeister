@@ -82,6 +82,7 @@ SET (SRC_FETZER_LIB
     compiler/commands/AddDevice.cpp
     compiler/commands/Mark.cpp    
     compiler/commands/Jump.cpp 
+    compiler/commands/SetFade.cpp 
 )
 
 add_definitions( -DGIT_VERSION="${GIT_VERSION}" )
