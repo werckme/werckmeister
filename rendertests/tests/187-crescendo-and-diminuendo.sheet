@@ -1,5 +1,5 @@
 
-device: SC1 midi 5;
+device: SC1 midi 4;
 instrumentDef: organ  SC1 _ch=0 _pc=16;
 
 tempo: 75;
