@@ -3,7 +3,7 @@ using "./chords/default.chords";
 using "./templates/justchords.template";
 using "./pitchmaps/defaultMidiDrumMap.pitchmap";
 
-device: SC1 midi 5;
+device: SC1 midi 4;
 --           instrument   dv ch cc pc
 instrumentDef: piano      SC1 2 0 104;
 

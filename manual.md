@@ -627,8 +627,20 @@ c'1 |
 
 ## Write for drums
 ### Pitchmaps
+With pitchmaps you are able to define own note symbols. This is useful espacially for drum notes.<br>
+In a pitchmap file you can define note symbols like that:
+```
+"sn": c'  -- snare
+"bd": c,  -- bass drum
+```
+Since a delimited string like "bd" is harder to read than a single character, there are the following rules:
 
-tbd.
+* every single lowercase alphabetic character is allowed as note
+* a note can also have more than one character but then a delimiter is neccessary
+* single character notes can be followed by the octave symbols `'` or `,`
+* the characters c, d, e, f, g, a, b, r, t are predefined events
+* predefined events can **not** be overwritten in a pitchmap
+
 
 
 ## Accomp My Melodies
@@ -722,6 +734,7 @@ type: accomp;
 * [device](#device)
 * [do](#do)
 * [doOnce](#doonce)
+* [fade](#fade)
 * [instrument](#instrument)
 * [instrumentConf](#instrumentconf)
 * [instrumentDef](#instrumentdef)
@@ -842,6 +855,62 @@ Like [do](#do). But with the difference, that the loaded mod will be only execut
 | name | position | description | type |
 |:--- |:--- |:--- |:--- |
 | use | 1 | The name of the modification to load. This is the only "unique" parameter for this command. All further parameters are specific to its related modification. | word |
+
+<br><br><br>
+
+### `fade`
+Fades the volume over a given duration in quarters.
+
+ ### examples
+
+ **positional:**
+
+ Fades from 0 to 50 in 2 quarters:
+
+ `/fade: 2 0 50/`
+
+ **named:**
+
+ Fades from 0 to 50 in 2 quarters:
+
+ `/fade: _duration=2 _from=0 _to=50/`
+
+ Optionally a fade curve type can be set.
+
+ ```language=Werckmeister,type=full
+
+ device: myDevice midi _usePort=0;
+ instrumentDef: organ  SC1 _ch=0 _pc=16;
+ tempo: 75;
+ [
+ instrument: organ;
+ {
+     \fff
+     /fade: _from=0 _to=100 _duration=4/
+     c1 |
+     /fade: _from=0 _to=100 _duration=4 _curve="quad"/
+     c1 |
+     /fade: _from=0 _to=100 _duration=4 _curve="cub"/
+     c1 |
+     /fade: _from=0 _to=100 _duration=4 _curve="quart"/
+     c1 |
+     /fade: _from=0 _to=100 _duration=4 _curve="quint"/
+     c1 |
+     /fade: _from=0 _to=100 _duration=4 _curve="exp"/
+     c1 |
+ }
+ ]
+ ```
+
+ ![supported curve types](https://raw.githubusercontent.com/werckme/werckmeister/feature/187-crescendo-and-diminuendo-performance/assets/curve-types.png)
+
+#### parameters
+| name | position | description | type |
+|:--- |:--- |:--- |:--- |
+| duration | 1 | the duration in quarters. | 0..N |
+| from | 2 | The source volume value. | 0..100 |
+| to | 3 | The target volume value. | 0..100 |
+| curve | 4 | The fade curve type. | lin,quad,cub,quart,quint,exp |
 
 <br><br><br>
 
@@ -1074,11 +1143,19 @@ Adds a modification to the track. Every `mod` statement adds a further modificat
 
  #### Bend
 
- `/mod: bend _from=0/`
+ Performs a pitch bend from or to the pitch of a note. The value range is 0..100 where 50 means the pichbend center.
+
+ ```language=Werckmeister,type=single,tempo=140
+
+/doOnce: bend _from=0/ c1 | /doOnce: bend _to=0/ c1
+
+ ```
 
  #### Arpeggio
 
- `/mod: arpeggio/`
+ Performs an arpeggio over a given chord.
+
+ **Arpeggio is deprecated. Use the lua mod [myArpeggio](#myarpeggio) instead.**
 
 #### parameters
 | name | position | description | type |
