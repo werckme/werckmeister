@@ -880,7 +880,7 @@ Fades the volume over a given duration in quarters.
  ```language=Werckmeister,type=full
 
  device: myDevice midi _usePort=0;
- instrumentDef: organ  SC1 _ch=0 _pc=16;
+ instrumentDef: organ  myDevice _ch=0 _pc=16;
  tempo: 75;
  [
  instrument: organ;
@@ -902,7 +902,7 @@ Fades the volume over a given duration in quarters.
  ]
  ```
 
- ![supported curve types](https://raw.githubusercontent.com/werckme/werckmeister/feature/187-crescendo-and-diminuendo-performance/assets/curve-types.png)
+ ![supported curve types](https://raw.githubusercontent.com/werckme/werckmeister/main/assets/curve-types.png)
 
 #### parameters
 | name | position | description | type |
