@@ -18,7 +18,7 @@ namespace sheet {
         /// Optionally a fade curve type can be set.
         /// ```language=Werckmeister,type=full
         /// device: myDevice midi _usePort=0;\n
-        /// instrumentDef: organ  SC1 _ch=0 _pc=16;\n
+        /// instrumentDef: organ  myDevice _ch=0 _pc=16;\n
         /// tempo: 75;\n
         /// [\n
         /// instrument: organ;\n
