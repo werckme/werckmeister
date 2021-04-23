@@ -224,15 +224,15 @@ namespace sheet {
 			try {
 				auto &wm = fm::getWerckmeister();
 				auto command = wm.solveOrDefault<ACommand>(commandName);
-				if (command) {
-					auto *usingAnEvent = dynamic_cast<AUsingAnEvent*>(command.get());
-					if (usingAnEvent) {
-						usingAnEvent->event(metaEvent);
-					}
-					command->setArguments(args);
-					command->execute(ctx_);
-					return;
+				if (!command) {
+					FM_THROW(Exception, "command not found: " + commandName);
 				}
+				auto *usingAnEvent = dynamic_cast<AUsingAnEvent*>(command.get());
+				if (usingAnEvent) {
+					usingAnEvent->event(metaEvent);
+				}
+				command->setArguments(args);
+				command->execute(ctx_);
 			} catch(const std::exception &ex) {
 				FM_THROW(Exception, "failed to process \"" + commandName 
 									+"\", \n" + ex.what());

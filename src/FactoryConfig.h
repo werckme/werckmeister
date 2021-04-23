@@ -77,6 +77,7 @@ namespace sheet {
 #include <compiler/commands/Mark.h>
 #include <compiler/commands/Jump.h>
 #include <compiler/commands/SetFade.h>
+#include <compiler/commands/NopCommand.h>
 
 namespace sheet {
     namespace compiler {
@@ -107,6 +108,11 @@ namespace sheet {
                 _FM_Register(Mark,                                      SHEET_META__MARK);
                 _FM_Register(Jump,                                      SHEET_META__JUMP);
                 _FM_Register(SetFade,                                   SHEET_META__SET_FADE);
+                _FM_Register(NopCommand,                                SHEET_META__TRACK_META_KEY_TYPE);
+                _FM_Register(NopCommand,                                SHEET_META__INSTRUMENT);
+                _FM_Register(NopCommand,                                SHEET_META__TRACK_META_KEY_NAME);
+                _FM_Register(NopCommand,                                SHEET_META__SET_SHEET_TEMPLATE);
+                _FM_Register(NopCommand,                                SHEET_META__SHEET_TEMPLATE_POSITION);
                 return true;
             })();
         }

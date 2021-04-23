@@ -56,11 +56,7 @@ SET (SRC_FETZER_LIB
     compiler/commands/DefineMidiInstrument.cpp
     compiler/commands/SetVolume.cpp
     compiler/commands/SetPan.cpp
-    compiler/commands/SetTrackType.cpp
-    compiler/commands/SetTrackName.cpp
     compiler/commands/AddVorschlag.cpp
-    compiler/commands/SetTemplatePosition.cpp
-    compiler/commands/SetTemplate.cpp
     compiler/commands/SetExpression.cpp
     compiler/commands/SetExpressionPlayedOnce.cpp
     compiler/commands/SetSignature.cpp
