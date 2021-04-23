@@ -7,8 +7,6 @@
 #include <algorithm>
 #include <fm/werckmeister.hpp>
 #include <compiler/modification/AModification.h>
-#include <compiler/commands/ACommand.h>
-#include <compiler/commands/AUsingAnEvent.h>
 #include <fm/config/configServer.h>
 
 #define SHEET_MASTER_TRACKNAME "master track"
