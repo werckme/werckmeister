@@ -1,5 +1,4 @@
 using "lua/mods/staccato.lua";
-using "./pitchmaps/defaultMIDI.pitchmap";
 
 tempo: 210;
 device: MyDevice  midi _usePort=0;
