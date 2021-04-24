@@ -181,7 +181,7 @@ namespace fm {
 		if (!boost::filesystem::is_directory(path)) {
 			path = path.parent_path();
 		}
-		_searchPaths.insert(path.string());
+		_searchPaths.push_front(path.string());
 	}
 
 	const Werckmeister::CreateContextFunction & Werckmeister::createContextHandler() const
