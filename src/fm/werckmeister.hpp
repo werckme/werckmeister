@@ -33,7 +33,7 @@ namespace fm {
 		Werckmeister& operator=(const Werckmeister&&) = delete;
 		typedef std::istream StreamType;
 		typedef std::unique_ptr<StreamType> ResourceStream;
-		typedef std::set<Path> Paths;
+		typedef std::list<Path> Paths;
 		typedef std::function<sheet::compiler::AContextPtr()> CreateContextFunction;
         /*
             creates a default sheet. if werk parameter set, it will added to the werk after creation.
