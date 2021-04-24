@@ -1,0 +1,28 @@
+using "lua/mods/staccato.lua";
+using "./pitchmaps/defaultMIDI.pitchmap";
+
+tempo: 210;
+device: MyDevice  midi _usePort=0;
+instrumentDef: bass    _onDevice=MyDevice  _ch=0 _pc=38;
+instrumentDef: drums    _onDevice=MyDevice  _ch=9 _pc=0;
+
+
+[
+instrument: bass;
+{
+	/signature: 2 2/
+    /mod: staccato _forTag="."/
+    /mod: staccato _forTag=",`':;?.!()[]<>+*/=$%&@\\^_|~-/" /
+    /tempo: double/
+	c,,4   c,  a,,, a,, |  bb,,, bb,,  r2 |  r1  | r1 |
+    c,,4   c,  a,,, a,, |  bb,,, bb,,  r2 |  r1  | r1 |
+    f,,,4 f,, d,,, d,,  |  eb,,, eb,,  r2 |  r1  | r1 |
+    f,,,4 f,, d,,, d,,  |  eb,,, eb,,  r2 |  r1  |
+    r2  (eb,, d,, db,,)2|  "."@c,,2    "s"@eb,,  |  
+    "."@d,,   "."@ab,,,  |  "."@g,,,     "."@db,,  |
+    (c,,  gb,,  f,,)2  (e,,  bb,,  a,,)  |
+    ("."@ab,,     "."@eb,,     "."@b,,,)1          |
+    ("."@bb,,,    "."@a,,,    ",`':;?.!()[]<>+*/=$%&@\\^_|~-/"@ab,,,)1    |
+    ",`':;?.!()[]<>+*/=$%&@\\^_|~-/"@c1 |
+}
+]
