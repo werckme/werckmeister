@@ -127,7 +127,8 @@ namespace sheet {
 			DurationSymbols durationSymbols_;
 			ExpressionSymbols expressionSymbols_;
 			const std::string ALLOWED_META_ARGUMENT = "a-zA-Z0-9."; 
-			const std::string ALLOWED_TAG_ARGUMENT = "a-zA-Z0-9";
+			const std::string ALLOWED_ARGUMENT_NAME_SYMBOLS = "a-zA-Z0-9";
+			const std::string ALLOWED_EVENT_TAG_ARGUMENT = "a-zA-Z0-9,`':;?.!()[]<>+*/=$%&@\\^_|~-";
 		}
 
 		namespace {
@@ -144,7 +145,7 @@ namespace sheet {
 					using qi::attr;
 					using qi::lexeme;
 					using ascii::char_;
-					argument_ = ((("_" >> +char_(ALLOWED_TAG_ARGUMENT) >> "=") | attr("")) >> meta_arg_value_) ;
+					argument_ = ((("_" >> +char_(ALLOWED_ARGUMENT_NAME_SYMBOLS) >> "=") | attr("")) >> meta_arg_value_) ;
 					expression_argument_ = attr("") >> expressionSymbols_;
 				}
 
@@ -247,7 +248,7 @@ namespace sheet {
 						current_pos_.current_pos 
 						>> attr(sourceId_)
 						>> attr(Event::Note)
-						>> (("\"" >> +(lexeme[+char_(ALLOWED_TAG_ARGUMENT)]) >> "\"" >> "@") | attr(Event::Tags()))
+						>> (("\"" >> +(lexeme[+char_(ALLOWED_EVENT_TAG_ARGUMENT)]) >> "\"" >> "@") | attr(Event::Tags()))
 						>> (pitchOrAlias_ | ("<" >> +pitchOrAlias_ >> ">"))
 						>> (durationSymbols_ | attr(Event::NoDuration))  
 						>> attr("")
@@ -263,7 +264,7 @@ namespace sheet {
 						current_pos_.current_pos 
 						>> attr(sourceId_)
 						>> attr(Event::Degree)
-						>> (("\"" >> +(lexeme[+char_(ALLOWED_TAG_ARGUMENT)]) >> "\"" >> "@") | attr(Event::Tags()))
+						>> (("\"" >> +(lexeme[+char_(ALLOWED_EVENT_TAG_ARGUMENT)]) >> "\"" >> "@") | attr(Event::Tags()))
 						>> (degree_ | ("<" >> +degree_ >> ">"))
 						>> (durationSymbols_ | attr(Event::NoDuration))  
 						>> attr("")
