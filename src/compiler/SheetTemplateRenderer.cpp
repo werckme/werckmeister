@@ -262,7 +262,8 @@ namespace sheet {
 			fm::Ticks __renderOneBar(IContextPtr ctx, 
 				ASheetEventRenderer *sheetEventRenderer, 
 				DegreeEventServer &eventServer, 
-				const Chords &chords) 
+				const Chords &chords,
+				fm::String &out_lastChord) 
 			{
 				fm::Ticks leftover = 0;
 				fm::Ticks written = 0;
@@ -275,6 +276,12 @@ namespace sheet {
 					if (chord->type == Event::Meta) {
 						__handleChordMeta(ctx, *chord, sheetEventRenderer, eventServer);
 						continue;
+					}
+					if (chord->type == Event::Chord && chord->stringValue != out_lastChord) {
+						// chord changed, we can't be sure that all of our tied notes will be stopped
+						// so we stop them now
+						out_lastChord = chord->stringValue;
+						ctx->stopAllPendingTies();
 					}
 					fm::Ticks ticksToWrite = chord->duration;
 					while(ticksToWrite > 1.0_N128) {
@@ -342,11 +349,12 @@ namespace sheet {
 
 
 							Chords chordsPerBar;
+							fm::String lastChord;
 							for (const auto &chord : templateAndChords.chords)
 							{
 								if (chord->type == Event::EOB) {
 									const auto *eobEvent = chord;
-									__renderOneBar(ctx_, sheetEventRenderer.get(), eventServer, chordsPerBar);
+									__renderOneBar(ctx_, sheetEventRenderer.get(), eventServer, chordsPerBar, lastChord);
 									sheetEventRenderer->addEvent(*eobEvent);
 									chordsPerBar.clear();
 									continue;

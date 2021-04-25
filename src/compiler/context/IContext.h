@@ -107,7 +107,11 @@ namespace sheet {
 			/**
 			 * clears all contents, resets settings  
 			 */
-			virtual void clear() = 0;		
+			virtual void clear() = 0;
+			/**
+			 * sends note off to all pitches where its tie process wasn't completed yet
+			 */
+			virtual void stopAllPendingTies() = 0;
         };
 		typedef std::shared_ptr<IContext> IContextPtr;
 		
