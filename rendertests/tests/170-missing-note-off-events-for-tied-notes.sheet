@@ -1,0 +1,22 @@
+using "lua/mods/staccato.lua";
+using "./chords/default.chords";
+
+tempo: 120;
+device: MyDevice  midi _usePort=4;
+instrumentDef: organ    _onDevice=MyDevice  _ch=0 _pc=16;
+
+[
+type: template;
+name: X;
+instrument: organ;
+{
+	I III V I~ |
+}
+]
+
+[
+type: accomp;
+{
+    C | C | D | E | F | G | A | B 
+}
+]
