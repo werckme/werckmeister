@@ -26,11 +26,11 @@ namespace sheet {
 
 		SheetTemplateRenderer::ContainerKeyType SheetTemplateRenderer::getKey(const Track& track) const
 		{
-			auto trackName = fm::getFirstMetaArgumentForKey(SHEET_META__INSTRUMENT, track.trackConfigs);
-			if (trackName.value.empty()) {
+			auto instrumentName = fm::getFirstMetaArgumentForKey(SHEET_META__INSTRUMENT, track.trackConfigs);
+			if (instrumentName.value.empty()) {
 				return std::to_string((long long)(&track));
 			}
-			return trackName.value;
+			return instrumentName.value;
 		}
 
 		SheetTemplateRenderer::ContainerKeyType SheetTemplateRenderer::getKey(const Voice& voice) const
