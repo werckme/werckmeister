@@ -32,11 +32,11 @@ namespace sheet {
         private:
             typedef fm::String ContainerKeyType;
             void setTargetCreateIfNotExists(const Track &track, const Voice &voice);
-            typedef std::unordered_map<fm::String, IContext::Id> Container2ContextId;
+            typedef std::unordered_map<fm::String, IContext::Id> Container2ContextElementId;
             ContainerKeyType getKey(const Track&) const;
             ContainerKeyType getKey(const Voice&) const;
             IContextPtr ctx_;
-			Container2ContextId _contextIdMap;
+			Container2ContextElementId _contextElementIdMap;
         };
     }
 }

@@ -43,21 +43,21 @@ namespace sheet {
 			IContext::TrackId trackId;
 			IContext::VoiceId voiceId;
 			auto trackKey = getKey(track);
-			auto it = _contextIdMap.find(trackKey);
+			auto it = _contextElementIdMap.find(trackKey);
 			bool trackIsNew = false;
-			if (it == _contextIdMap.end()) {
+			if (it == _contextElementIdMap.end()) {
 				trackId = ctx_->createTrack();
-				_contextIdMap[trackKey] = trackId;
+				_contextElementIdMap[trackKey] = trackId;
 				trackIsNew = true;
 			}
 			else {
 				trackId = it->second;
 			}
 			auto voiceKey = getKey(voice);
-			it = _contextIdMap.find(voiceKey);
-			if (it == _contextIdMap.end()) {
+			it = _contextElementIdMap.find(voiceKey);
+			if (it == _contextElementIdMap.end()) {
 				voiceId = ctx_->createVoice();
-				_contextIdMap[voiceKey] = voiceId;
+				_contextElementIdMap[voiceKey] = voiceId;
 			}
 			else {
 				voiceId = it->second;
