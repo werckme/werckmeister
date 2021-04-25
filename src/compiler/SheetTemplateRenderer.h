@@ -30,10 +30,13 @@ namespace sheet {
             IContextPtr context() const { return this->ctx_; }
             ASheetEventRendererPtr sheetEventRenderer;
         private:
+            typedef fm::String ContainerKeyType;
             void setTargetCreateIfNotExists(const Track &track, const Voice &voice);
-            typedef std::unordered_map<const void*, IContext::Id> PtrIdMap;
+            typedef std::unordered_map<fm::String, IContext::Id> Container2ContextId;
+            ContainerKeyType getKey(const Track&) const;
+            ContainerKeyType getKey(const Voice&) const;
             IContextPtr ctx_;
-			PtrIdMap ptrIdMap_;
+			Container2ContextId _contextIdMap;
         };
     }
 }

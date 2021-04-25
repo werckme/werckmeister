@@ -24,24 +24,40 @@ namespace sheet {
 		{
 		}
 
+		SheetTemplateRenderer::ContainerKeyType SheetTemplateRenderer::getKey(const Track& track) const
+		{
+			auto trackName = fm::getFirstMetaArgumentForKey(SHEET_META__INSTRUMENT, track.trackConfigs);
+			if (trackName.value.empty()) {
+				return std::to_string((long long)(&track));
+			}
+			return trackName.value;
+		}
+
+		SheetTemplateRenderer::ContainerKeyType SheetTemplateRenderer::getKey(const Voice& voice) const
+		{
+			return std::to_string((long long)(&voice));
+		}
+
         void SheetTemplateRenderer::setTargetCreateIfNotExists(const Track &track, const Voice &voice)
 		{
 			IContext::TrackId trackId;
 			IContext::VoiceId voiceId;
-			auto it = ptrIdMap_.find(&track);
+			auto trackKey = getKey(track);
+			auto it = _contextIdMap.find(trackKey);
 			bool trackIsNew = false;
-			if (it == ptrIdMap_.end()) {
+			if (it == _contextIdMap.end()) {
 				trackId = ctx_->createTrack();
-				ptrIdMap_[&track] = trackId;
+				_contextIdMap[trackKey] = trackId;
 				trackIsNew = true;
 			}
 			else {
 				trackId = it->second;
 			}
-			it = ptrIdMap_.find(&voice);
-			if (it == ptrIdMap_.end()) {
+			auto voiceKey = getKey(voice);
+			it = _contextIdMap.find(voiceKey);
+			if (it == _contextIdMap.end()) {
 				voiceId = ctx_->createVoice();
-				ptrIdMap_[&voice] = voiceId;
+				_contextIdMap[voiceKey] = voiceId;
 			}
 			else {
 				voiceId = it->second;
@@ -318,7 +334,7 @@ namespace sheet {
 							ctx_->voiceMetaData()->barPosition = 0;
 
 							DEBUGX(
-								auto trackname = getMetaArgumentsWithKeyName("name", track->trackConfigs).front();
+								auto trackname = getMetaArgumentsForKey("name", track->trackConfigs).front();
 								auto position = ctx_->voiceMetaData()->position;
 								auto tempofac = ctx_->voiceMetaData()->tempoFactor;
 								std::cout << trackname << " ; " << position << " ; " << tempofac << std::endl;
