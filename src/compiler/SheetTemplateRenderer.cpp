@@ -267,10 +267,18 @@ namespace sheet {
 			{
 				fm::Ticks leftover = 0;
 				fm::Ticks written = 0;
+				int numberOfChords = std::count_if(chords.begin(), chords.end(), [](auto &ev) {
+					return ev->type == Event::Chord;
+				});
 				for(const Event *chord : chords) {
 					using namespace fm;
-					if (chord->type == Event::Rest) {
+					if (chord->type == Event::Rest && numberOfChords == 0) {
+						// if the bar just contains this one rest we can skip the whole thing
 						ctx->seek(chord->duration);
+						continue;
+					}
+					if (chord->type == Event::Meta) {
+						__handleChordMeta(ctx, *chord, sheetEventRenderer, eventServer);
 						continue;
 					}
 					if (chord->type == Event::Meta) {
@@ -286,9 +294,13 @@ namespace sheet {
 					fm::Ticks ticksToWrite = chord->duration;
 					while(ticksToWrite > 1.0_N128) {
 						const Event &degree = *(eventServer.nextEvent());
-						Event copy; 
-						copy = __degreeToAbsoluteNote(ctx, *chord, degree, copy);
-
+						Event copy;
+						if (chord->type == Event::Rest) {
+							copy = degree;
+							copy.type = Event::Rest;
+						} else {
+							copy = __degreeToAbsoluteNote(ctx, *chord, degree, copy);
+						}
 						bool isTimeConsuming = copy.isTimeConsuming();
 						if (isTimeConsuming && leftover > 0) {
 							copy.duration += leftover;
