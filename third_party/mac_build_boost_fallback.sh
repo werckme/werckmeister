@@ -6,8 +6,10 @@
 VERSION=1.72.0
 FILE=boost_1_72_0
 FILENAME=$FILE.tar.gz
-echo Downloading https://dl.bintray.com/boostorg/release/$VERSION/source/$FILENAME
-curl -L https://dl.bintray.com/boostorg/release/$VERSION/source/$FILENAME > $FILENAME
+#url=https://dl.bintray.com/boostorg/release/$VERSION/source/$FILENAME
+url=https://sourceforge.net/projects/boost/files/boost/$VERSION/$FILENAME
+echo Downloading $url
+curl -L $url > $FILENAME
 echo extracting
 tar -xf $FILENAME
 mv $FILE boost
