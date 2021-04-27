@@ -37,7 +37,7 @@ jobs:
       working-directory: build
     - name: run rendertests
       run: python3 runtests.py
-      continue-on-error: false
+      continue-on-error: true
       working-directory: rendertests   
     - name: pack
       run: cmake --build . --config Release --target package
