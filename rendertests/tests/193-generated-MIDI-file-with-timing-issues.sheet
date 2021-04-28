@@ -1,0 +1,42 @@
+using "chords/default.chords";
+using "lua/voicings/simple.lua";
+using "lua/voicings/guitar.lua";
+using "lua/mods/swing.lua";
+using "lua/mods/staccato.lua";
+using "templates/drums.disco.template";
+using "templates/bass.disco.template";
+using "templates/bass.bossanova.template";
+using "templates/rhythm.country.template";
+using "templates/rhythm.bossanova.template";
+using "templates/drums.bossanova.template";
+using "templates/drums.country.template";
+using "templates/bass.country.template";
+using "lua/mods/guitarStroke.lua";
+ 
+
+device: MyDevice midi 5;
+
+instrumentDef: piano      MyDevice _ch=0 _cc=0 _pc=0;
+
+[
+instrument: piano;
+{
+     /mod: staccato _amount=100/
+    \fff
+      (c'&&)2 (c'&&)2 | (c'&&)2 (c'&&)2 | (c'&&)2 (c'&&)2 | (c'&&)2 (c'&&)2 | (c'&&)2 (c'&&)2 | (c'&&)2 (c'&&)2 |
+      (c'&&)2 (c'&&)2 | (c'&&)2 (c'&&)2 | (c'&&)2 (c'&&)2 | (c'&&)2 (c'&&)2 | (c'&&)2 (c'&&)2 | (c'&&)2 (c'&&)2 |
+      (c'&&)2 (c'&&)2 | (c'&&)2 (c'&&)2 | (c'&&)2 (c'&&)2 | (c'&&)2 (c'&&)2 | (c'&&)2 (c'&&)2 | (c'&&)2 (c'&&)2 |
+      (c'&&)2 (c'&&)2 | (c'&&)2 (c'&&)2 | (c'&&)2 (c'&&)2 | (c'&&)2 (c'&&)2 | (c'&&)2 (c'&&)2 | (c'&&)2 (c'&&)2 |
+      (c'&&)2 (c'&&)2 | (c'&&)2 (c'&&)2 | (c'&&)2 (c'&&)2 | (c'&&)2 (c'&&)2 | (c'&&)2 (c'&&)2 | (c'&&)2 (c'&&)2 |
+      (c'&&)2 (c'&&)2 | (c'&&)2 (c'&&)2 | (c'&&)2 (c'&&)2 | (c'&&)2 (c'&&)2 | (c'&&)2 (c'&&)2 | (c'&&)2 (c'&&)2 |
+      (c'&&)2 (c'&&)2 | (c'&&)2 (c'&&)2 | (c'&&)2 (c'&&)2 | (c'&&)2 (c'&&)2 | (c'&&)2 (c'&&)2 | (c'&&)2 (c'&&)2 |
+      (c'&&)2 (c'&&)2 | (c'&&)2 (c'&&)2 | (c'&&)2 (c'&&)2 | (c'&&)2 (c'&&)2 | (c'&&)2 (c'&&)2 | (c'&&)2 (c'&&)2 |
+      (c'&&)2 (c'&&)2 | (c'&&)2 (c'&&)2 | (c'&&)2 (c'&&)2 | (c'&&)2 (c'&&)2 | (c'&&)2 (c'&&)2 | (c'&&)2 (c'&&)2 |
+      (c'&&)2 (c'&&)2 | (c'&&)2 (c'&&)2 | (c'&&)2 (c'&&)2 | (c'&&)2 (c'&&)2 | (c'&&)2 (c'&&)2 | (c'&&)2 (c'&&)2 |
+      (c'&&)2 (c'&&)2 | (c'&&)2 (c'&&)2 | (c'&&)2 (c'&&)2 | (c'&&)2 (c'&&)2 | (c'&&)2 (c'&&)2 | (c'&&)2 (c'&&)2 |
+      (c'&&)2 (c'&&)2 | (c'&&)2 (c'&&)2 | (c'&&)2 (c'&&)2 | (c'&&)2 (c'&&)2 | (c'&&)2 (c'&&)2 | (c'&&)2 (c'&&)2 |
+      (c'&&)2 (c'&&)2 | (c'&&)2 (c'&&)2 | (c'&&)2 (c'&&)2 | (c'&&)2 (c'&&)2 | (c'&&)2 (c'&&)2 | (c'&&)2 (c'&&)2 |
+      (c'&&)2 (c'&&)2 | (c'&&)2 (c'&&)2 | (c'&&)2 (c'&&)2 | (c'&&)2 (c'&&)2 | (c'&&)2 (c'&&)2 | (c'&&)2 (c'&&)2 |
+      (c'&&)2 (c'&&)2 | (c'&&)2 (c'&&)2 | (c'&&)2 (c'&&)2 | (c'&&)2 (c'&&)2 | (c'&&)2 (c'&&)2 | (c'&&)2 (c'&&)2 |
+}
+]

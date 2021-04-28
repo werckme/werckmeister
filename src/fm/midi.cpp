@@ -151,7 +151,7 @@ namespace fm {
 			if (length > maxByteSize) {
 				FM_THROW(fm::Exception, "buffer to small");
 			}
-			auto relOff = relDelta(deltaOffset);
+			MidiLong relOff = (MidiLong)::nearbyint(relDelta(deltaOffset));
 			size_t c = variableLengthWrite(relOff, bytes, maxByteSize);
 			writePayload(&bytes[c], maxByteSize - c);
 			return length;
@@ -486,7 +486,7 @@ namespace fm {
 			Ticks offset = 0;
 			for (const auto& ev : _container) {
 				auto numBytes = ev.write(offset, bff, maxByteSize - written);
-				offset = ev.absPosition();
+				offset = ::nearbyint(ev.absPosition());
 				written += numBytes;
 				bff += numBytes;
 			}
