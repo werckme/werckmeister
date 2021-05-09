@@ -152,15 +152,6 @@ add_subdirectory(submodules/lua)
 
 configure_file("${PROJECT_SOURCE_DIR}/src/fm/config.hpp.in" "${PROJECT_SOURCE_DIR}/src/fm/config.hpp")
 
-<<<<<<< HEAD
-if (${USE_EMSCRIPTEN})
-  if(${GIT_BRANCH_NAME} STREQUAL "main")
-    SET(BUILD_NR $ENV{BUILD_NR}) 
-  else()
-    string(REGEX REPLACE "[^0-9a-z]" "" BRANCH_VERSION_NAME ${GIT_BRANCH_NAME})
-    SET(BUILD_NR ${BRANCH_VERSION_NAME}-$ENV{BUILD_NR}) 
-  endif()
-=======
 #if (${USE_EMSCRIPTEN})
   if(${GIT_BRANCH_NAME} MATCHES "main[ \t\r\n]*")
     SET(BUILD_NR $ENV{BUILD_NR}) 
@@ -168,7 +159,6 @@ if (${USE_EMSCRIPTEN})
     SET(BUILD_NR dev-$ENV{BUILD_NR}) 
   endif()
   
->>>>>>> main
   configure_file("package.in.json" "${CMAKE_BINARY_DIR}/package.json")
 #endif()
 
