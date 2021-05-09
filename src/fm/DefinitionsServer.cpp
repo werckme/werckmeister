@@ -80,7 +80,7 @@ namespace fm {
 		}
 		const sheet::PitchDef *result = getAlias(pitch.alias);
 		if (result == nullptr) {
-			FM_THROW(Exception, "could not resolve alias: " + pitch.alias);
+			FM_THROW(sheet::compiler::Exception, "could not resolve alias: " + pitch.alias);
 		}
 		return *result;
 	}
@@ -91,11 +91,11 @@ namespace fm {
 		SheetTemplates &sheetTemplates = *sheetTemplates_;
 		for(auto &track : this->document_->sheetDef.tracks) {
 			try {
-				fm::String type = fm::getFirstMetaArgumentWithKeyName(SHEET_META__TRACK_META_KEY_TYPE, track.trackConfigs).value;
+				fm::String type = fm::getFirstMetaArgumentForKey(SHEET_META__TRACK_META_KEY_TYPE, track.trackConfigs).value;
 				if (type != SHEET_META__TRACK_META_VALUE_TYPE_SHEET_TEMPLATE) {
 					continue;
 				}
-				fm::String sheetTemplateName = fm::getFirstMetaArgumentWithKeyName(SHEET_META__TRACK_META_KEY_NAME, track.trackConfigs).value;
+				fm::String sheetTemplateName = fm::getFirstMetaArgumentForKey(SHEET_META__TRACK_META_KEY_NAME, track.trackConfigs).value;
 				if (sheetTemplateName.empty()) {
 					FM_THROW(sheet::compiler::Exception, "missing 'name' for sheetTemplate track");
 				}					

@@ -18,7 +18,16 @@ namespace sheet {
 			this->compilerVisitorPtr_->beginCompile();
 			this->document_ = document;
 			try {
-				sheetEventRenderer()->handleMetaEvents(document->sheetDef.documentConfigs, 
+				std::list<DocumentConfig> priorisedDocumentConfigs;
+				for(auto &conf : document->sheetDef.documentConfigs) {
+					if (conf.name == SHEET_META__SET_DEVICE) { // device commands first
+						priorisedDocumentConfigs.push_front(conf);
+						continue;
+					}
+					priorisedDocumentConfigs.push_back(conf);
+				}
+				std::vector<DocumentConfig> configs(priorisedDocumentConfigs.begin(), priorisedDocumentConfigs.end());
+				sheetEventRenderer()->handleMetaEvents(configs,
 					[](const auto &x) { 
 						sheet::Event metaEvent;
 						metaEvent.type = sheet::Event::Meta;
@@ -34,7 +43,7 @@ namespace sheet {
 			logger_->babble(WMLogLambda(log << "preprocess '" << document->path << "'"));
 			try {
 				preprocessor_->preprocess(document);
-				renderChordTrack();
+				renderAccompTrack();
 				renderTracks();
 			} catch (const fm::Exception &ex) {			
 				ex << ex_sheet_document(document);
@@ -52,7 +61,7 @@ namespace sheet {
 			auto document = document_.lock();
 			for (auto &track : document->sheetDef.tracks)
 			{
-				fm::String type = fm::getFirstMetaArgumentWithKeyName(SHEET_META__TRACK_META_KEY_TYPE, track.trackConfigs).value;
+				fm::String type = fm::getFirstMetaArgumentForKey(SHEET_META__TRACK_META_KEY_TYPE, track.trackConfigs).value;
 				bool isNoteEventTrack = type.empty();
 				if (!isNoteEventTrack) {
 					continue;
@@ -99,30 +108,29 @@ namespace sheet {
 				}
 			}
 
-			template<class TContainer>
-			Track * getFirstSheetTrack(TContainer &c) {
-				auto sheetTrackIt = 
-					std::find_if(c.begin(), c.end(), [](const auto &x) {  
-						return fm::getFirstMetaArgumentWithKeyName(SHEET_META__TRACK_META_KEY_TYPE, x.trackConfigs).value == SHEET_META__TRACK_META_VALUE_TYPE_ACCOMP;
-					});
-				if (sheetTrackIt == c.end()) {
-					return nullptr;
-				}
-				return &(*sheetTrackIt);
-			} 
+			bool isAccompTrack(const Track &track) 
+			{
+				return fm::getFirstMetaArgumentForKey(SHEET_META__TRACK_META_KEY_TYPE, track.trackConfigs)
+					.value == SHEET_META__TRACK_META_VALUE_TYPE_ACCOMP;
+			}
 		}
 
 
-		void Compiler::renderChordTrack() 
+		void Compiler::renderAccompTrack() 
 		{
 			auto ctx = context();
 			auto document = document_.lock();
-			Track * sheetTrack = getFirstSheetTrack(document->sheetDef.tracks);
-			if (!sheetTrack || sheetTrack->voices.empty()) {
-				return;
+			for (sheet::Track &track : document->sheetDef.tracks) {
+				if (!isAccompTrack(track)) {
+					continue;
+				}
+				if (track.voices.empty()) {
+					return;
+				}
+				consumeChords(&track, sheetEventRenderer().get(), ctx.get());
+				sheetTemplateRenderer_->render(&track);
 			}
-			consumeChords(sheetTrack, sheetEventRenderer().get(), ctx.get());
-			sheetTemplateRenderer_->render(sheetTrack);
+			
 		}
 
 		ASheetEventRendererPtr Compiler::sheetEventRenderer()

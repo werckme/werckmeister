@@ -50,7 +50,7 @@ namespace sheet {
 			virtual void setMidiInstrument(const fm::String &uname, const fm::String &deviceName, int channel, int cc, int pc);
 			virtual void setInstrument(const fm::String &uname) override;
 			virtual void setTempo(double bpm) override;
-			virtual void setVolume(double volume) override;
+			virtual void setVolume(double volume, fm::Ticks relativePosition = 0) override;
 			virtual void setPan(double val) override;
 			virtual void setSignature(int upper, int lower) override;
 			/**

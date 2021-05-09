@@ -1,0 +1,10 @@
+using "myconfig.config";
+
+instrumentDef: piano  MyDevice 4 0 0;
+
+[
+instrument: piano;
+{
+    "bd" d e f | g a b c' |
+}
+]

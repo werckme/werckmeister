@@ -10,7 +10,7 @@ project(werckmeister)
 
 SET(WERCKMEISTER_VERSION_MAJOR 0)
 SET(WERCKMEISTER_VERSION_MINOR 1)
-SET(WERCKMEISTER_VERSION_PATCH 56)
+SET(WERCKMEISTER_VERSION_PATCH 58)
 
 # Add this project's cmake/ directory to the module path.
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
@@ -25,7 +25,7 @@ set(FLUIDSYNTH_VERSION "2.1.0")
 
 set (INSTALL_AUX 1)
 
-if ("${CMAKE_SYSTEM}" MATCHES "Emscripten*")
+if (EMSCRIPTEN)
     MESSAGE("using emscripten")
     SET(USE_EMSCRIPTEN 1)
     SET (INSTALL_AUX 0)
@@ -152,6 +152,7 @@ add_subdirectory(submodules/lua)
 
 configure_file("${PROJECT_SOURCE_DIR}/src/fm/config.hpp.in" "${PROJECT_SOURCE_DIR}/src/fm/config.hpp")
 
+<<<<<<< HEAD
 if (${USE_EMSCRIPTEN})
   if(${GIT_BRANCH_NAME} STREQUAL "main")
     SET(BUILD_NR $ENV{BUILD_NR}) 
@@ -159,8 +160,17 @@ if (${USE_EMSCRIPTEN})
     string(REGEX REPLACE "[^0-9a-z]" "" BRANCH_VERSION_NAME ${GIT_BRANCH_NAME})
     SET(BUILD_NR ${BRANCH_VERSION_NAME}-$ENV{BUILD_NR}) 
   endif()
+=======
+#if (${USE_EMSCRIPTEN})
+  if(${GIT_BRANCH_NAME} MATCHES "main[ \t\r\n]*")
+    SET(BUILD_NR $ENV{BUILD_NR}) 
+  else()
+    SET(BUILD_NR dev-$ENV{BUILD_NR}) 
+  endif()
+  
+>>>>>>> main
   configure_file("package.in.json" "${CMAKE_BINARY_DIR}/package.json")
-endif()
+#endif()
 
 include(InstallRequiredSystemLibraries)
 set(CPACK_PACKAGE_VENDOR "Samba Godschynski")

@@ -101,12 +101,12 @@ namespace sheet {
 			virtual fm::Ticks currentPosition() const;
 			virtual fm::Ticks maxPosition() const;
 			TimeInfo getTimeInfo() const;
-			virtual void setInstrument(const fm::String &uname) {}
+			virtual void setInstrument(const fm::String& uname);
 			virtual void setExpression(fm::Expression value);
 			virtual void setExpressionPlayedOnce(fm::Expression expr);
 			virtual void setTempo(double bpm) {}
 			virtual void setSignature(int upper, int lower);
-			virtual void setVolume(double volume);
+			virtual void setVolume(double volume, fm::Ticks relativePosition = 0);
 			virtual void setPan(double val);
 			/////// actual context stuff
 			virtual void renderPitch(const PitchDef &pitch, fm::Ticks duration, double velocity, bool tying);
@@ -117,6 +117,10 @@ namespace sheet {
 			virtual void renderPitchbend(double value, fm::Ticks absolutePosition) = 0;			
 			virtual void startEvent(const PitchDef &pitch, fm::Ticks absolutePosition, double velocity);
 			virtual void stopEvent(const PitchDef &pitch, fm::Ticks absolutePosition);
+			/**
+			 * sends note off to all pitches where its tie process wasn't completed yet
+			 */
+			virtual void stopAllPendingTies() override;
 			/**
 			 * if duration == 0 the last event duration will be used
 			 */ 

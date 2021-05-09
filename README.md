@@ -1,16 +1,3 @@
-# Feature Relative Notation
-```
-[
-{
-  /baseChord: C11/ -- C13 contains all notes of CMaj
-  I II III IV V VI VII I' -- cmaj 
-  /baseChord: C11/ -- C-13 contains all notes of CMin
-  I II III IV V VI VII I' -- cmin
-}
-]
-```
-
-
 ![Linux Build](https://github.com/werckme/werckmeister/workflows/Linux%20Build/badge.svg)
 ![Windows Build](https://github.com/werckme/werckmeister/workflows/Windows%20Build/badge.svg)
 ![Mac Build](https://github.com/werckme/werckmeister/workflows/Mac%20Build/badge.svg)
@@ -22,27 +9,21 @@
 
 Werckmeister compiles sheet music source code into a MIDI file.
 
-Vision
-------
-Consider the beauty of lead sheet music: you write a melody and some chords, add some remarks, which instruments and which style.
+[Try it online](https://werckme.github.io/editor)
 
-Thats it.
+### Use Werckmeister if you want to
+* prototype a song
+* transcript sheet music
+* experiment with chord progressions or different accompaniment styles
+* compose using readable source code instead of proprietary files formats
 
-This is the idea behind Werckmeister. Of course it can not replace a musician or a band. But it offers you a tool to write melodies and chords then you can define how to interpret the chords along your melody or even define your own interpretation templates.
-
-
-## What it wants to be
-* a fast and easy way to create lead sheet music
-* that tool in your toolchain, between the initial idea of an piece and developing the details in your favourite Sequencer/DAW
-* a way to create music without a Graphical User Interface
-* a tool which relies only on human readable files
-
-
-## What it doesn't want to be
-* a replacement to your favourite Sequencer/DAW
-* a scorewriter software
-* a programming language
-
+### Features
+* open source
+* fast sheet music MIDI compiler
+* sheet file MIDI player
+* vscode extension
+* accompaniment template rendering engine
+* Lua mods
 
 ## Syntax
 ### Tracks and Voices

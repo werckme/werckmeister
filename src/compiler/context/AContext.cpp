@@ -11,6 +11,7 @@
 #include <sheet/objects/Track.h>
 #include <fm/tools.h>
 #include <sstream>
+#include <fm/config/configServer.h>
 
 namespace sheet {
 
@@ -142,6 +143,14 @@ namespace sheet {
 			return  expr / 10.;
 		}
 
+		void AContext::stopAllPendingTies()
+		{
+			auto meta = voiceMetaData();
+			for(const auto &tie : meta->waitForTieBuffer) {
+				stopEvent(tie.first, meta->position);
+			}
+			meta->waitForTieBuffer.clear();
+		}
 		void AContext::renderPitch(const PitchDef &rawPitch, fm::Ticks duration, double velocity, bool tying)
 		{
 			using namespace fm;
@@ -218,7 +227,7 @@ namespace sheet {
 			auto meta = voiceMetaData();
 			seek(duration);
 		}
-		void AContext::setVolume(double volume)
+		void AContext::setVolume(double volume, fm::Ticks relativePosition)
 		{
 			auto meta = voiceMetaData();
 			meta->volume = std::max(std::min(volume, 100.0), 0.0);
@@ -317,6 +326,10 @@ namespace sheet {
 			chordVoice_ = INVALID_VOICE_ID;
 			voiceMetaDataMap_.clear();
 			trackMetaDataMap_.clear();
+		}
+
+		void AContext::setInstrument(const fm::String& uname)
+		{
 		}
 	}
 }

@@ -7,8 +7,7 @@
 #include <algorithm>
 #include <fm/werckmeister.hpp>
 #include <compiler/modification/AModification.h>
-#include <compiler/commands/ACommand.h>
-#include <compiler/commands/AUsingAnEvent.h>
+#include <fm/config/configServer.h>
 
 #define SHEET_MASTER_TRACKNAME "master track"
 
@@ -34,7 +33,11 @@ namespace sheet {
 
 		int MidiContext::getAbsolutePitch(const PitchDef &pitch)
 		{
-			return MidiSchluesselCOffset + pitch.pitch + (pitch.octave * fm::NotesPerOctave);
+			auto value =  MidiSchluesselCOffset + pitch.pitch + (pitch.octave * fm::NotesPerOctave);
+			if (value < 0 || value > 127) {
+				FM_THROW(Exception, "invalid note value, the highest possible note is g'''''");
+			}
+			return value;
 		}
 
 		int MidiContext::toMidiVelocity(double velocity)
@@ -226,7 +229,7 @@ namespace sheet {
 			return &trackMeta->instrument;
 		}
 
-		void MidiContext::setVolume(double volume)
+		void MidiContext::setVolume(double volume, fm::Ticks relativePosition)
 		{
 			Base::setVolume(volume);
 			auto meta = voiceMetaData<MidiContext::VoiceMetaData>();
@@ -237,7 +240,7 @@ namespace sheet {
 			auto midiVol = meta->volume * fm::midi::MaxMidiValue / MAX_VOLUME;
 			auto channel = getChannel(*trackMeta);
 			auto ev = fm::midi::Event::CCVolume(channel, midiVol);
-			ev.absPosition(currentPosition());
+			ev.absPosition(currentPosition() + relativePosition);
 			addEvent(ev); 
 		}
 
@@ -334,7 +337,11 @@ namespace sheet {
 			def.channel = channel;
 			def.cc = cc;
 			def.pc = pc;
-			def.deviceName = deviceName;		
+			def.deviceName = deviceName;
+			auto& config = fm::getConfigServer();
+			if (!config.getDevice(deviceName)) {
+				FM_THROW(Exception, "Device '" + deviceName + "' not found");
+			}
 			setMidiInstrumentDef(uname, def);
 		}
 		AContext::TrackId MidiContext::createMasterTrack()

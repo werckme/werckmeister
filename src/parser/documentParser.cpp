@@ -20,7 +20,9 @@ namespace sheet {
 			void useChordDef(DocumentPtr doc, const fm::String &path, Event::SourceId);
 			void usePitchmapDef(DocumentPtr doc, const fm::String &path, Event::SourceId);
 			void useLuaScript(DocumentPtr doc, const fm::String &path, Event::SourceId);
+			void useLuaScript(DocumentPtr doc, const fm::String& path, Event::SourceId);
 			void useSheetTemplateDef(DocumentPtr doc, const fm::String &path, Event::SourceId);
+			void useConfig(DocumentPtr doc, const fm::String& path, Event::SourceId sourceId);
 			void processUsings(DocumentPtr doc, 
 				const sheet::DocumentUsing &documentUsing, 
 				const Extensions &allowedExtendions,
@@ -30,14 +32,16 @@ namespace sheet {
 				{ CHORD_DEF_EXTENSION , &useChordDef },
 				{ SHEET_TEMPLATE_DEF_EXTENSION , &useSheetTemplateDef },
 				{ PITCHMAP_DEF_EXTENSION , &usePitchmapDef },
-				{ LUA_DEF_EXTENSION , &useLuaScript }
+				{ LUA_DEF_EXTENSION , &useLuaScript },
+				{ SHEET_CONFIG , &useConfig }
 			});
 			
 			const Extensions AllSupportedExtensions = {
 				CHORD_DEF_EXTENSION,
 				SHEET_TEMPLATE_DEF_EXTENSION,
 				PITCHMAP_DEF_EXTENSION,
-				LUA_DEF_EXTENSION
+				LUA_DEF_EXTENSION,
+				SHEET_CONFIG
 			};
 
 			void append(DocumentPtr doc, const SheetDef &sheetDef)
@@ -90,6 +94,29 @@ namespace sheet {
 					append(doc, sheetDef);
 					processUsings(doc, sheetDef.documentUsing, {LUA_DEF_EXTENSION, PITCHMAP_DEF_EXTENSION}, path);
 				} catch (Exception &ex) {
+					ex << ex_error_source_file(path);
+					throw;
+				}
+			}
+
+			void useConfig(DocumentPtr doc, const fm::String& path, Event::SourceId sourceId)
+			{
+				try {
+					auto filestream = fm::getWerckmeister().openResource(path);
+					fm::StreamBuffIterator begin(*filestream);
+					fm::StreamBuffIterator end;
+					fm::String documentText(begin, end);
+					ConfigParser configParser;
+					auto configDef = configParser.parse(documentText, sourceId);
+					fm::append(doc->sheetDef.documentConfigs, configDef.documentConfigs);
+					processUsings(doc, configDef.documentUsing, {
+						LUA_DEF_EXTENSION, 
+						PITCHMAP_DEF_EXTENSION, 
+						CHORD_DEF_EXTENSION,
+						SHEET_TEMPLATE_DEF_EXTENSION
+					}, path);
+				}
+				catch (Exception& ex) {
 					ex << ex_error_source_file(path);
 					throw;
 				}

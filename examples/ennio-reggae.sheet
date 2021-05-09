@@ -1,16 +1,12 @@
-using "chords/default.chords";
-using "pitchmaps/defaultMidiDrumMap.pitchmap";
-using "lua/mods/swing.lua";
-using "lua/voicings/voicelead.lua";
-using "lua/voicings/guitar.lua";
-using "templates/drums.reggae.template";
-using "templates/bass.reggae.template";
+using "./myConfig.config";
+using "./chords/default.chords";
+using "./lua/mods/swing.lua";
+using "./lua/voicings/voicelead.lua";
+using "./lua/voicings/guitar.lua";
+using "./templates/drums.reggae.template";
+using "./templates/bass.reggae.template";
 
--- setup your midi device:
--- to get a list of your available MIDI devices 
--- and their port numbers, execute "sheetp --list"
---      name              type   portnumber
-device: MyDevice          midi       1;
+
 
 -- define your instruments:
 -- (ch= channel, pc= programm change, cc= control change)

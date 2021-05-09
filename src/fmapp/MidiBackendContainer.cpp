@@ -25,6 +25,9 @@ namespace fmapp {
     }
     void MidiBackendContainer::send(const fm::midi::Event &event, const Output *_output)
     {
+        if (_output == nullptr) {
+            throw new std::runtime_error("output == null");
+        }
         auto backend = getBackend(_output->id);
         if (backend == nullptr) {
             throw new std::runtime_error("unexcpected midi backend error");

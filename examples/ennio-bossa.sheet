@@ -1,15 +1,8 @@
+using "./myConfig.config";
 using "./chords/default.chords";
-using "./pitchmaps/defaultMidiDrumMap.pitchmap";
 using "./templates/bossanova.template";
 using "./templates/countryschlager1.template";
  
--- setup your midi device:
--- to get a list of your available MIDI devices 
--- and their port numbers, execute "sheetp --list"
---      name              type   portnumber
-device: _setName=MyDevice          _isType=midi       _usePort=7;
-
-
 -- define your instruments:
 -- (ch= channel, pc= programm change, cc= control change)
 --             name       device 

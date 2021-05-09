@@ -27,6 +27,7 @@ SET (SRC_FETZER_LIB
     parser/sheetParser.cpp
     parser/documentParser.cpp
     parser/pitchmapParser.cpp
+    parser/extendedPitchSymbols.cpp
     compiler/context/MidiContext.cpp
     compiler/context/AContext.cpp
     compiler/Preprocessor.cpp
@@ -55,11 +56,7 @@ SET (SRC_FETZER_LIB
     compiler/commands/DefineMidiInstrument.cpp
     compiler/commands/SetVolume.cpp
     compiler/commands/SetPan.cpp
-    compiler/commands/SetTrackType.cpp
-    compiler/commands/SetTrackName.cpp
     compiler/commands/AddVorschlag.cpp
-    compiler/commands/SetTemplatePosition.cpp
-    compiler/commands/SetTemplate.cpp
     compiler/commands/SetExpression.cpp
     compiler/commands/SetExpressionPlayedOnce.cpp
     compiler/commands/SetSignature.cpp
@@ -81,6 +78,7 @@ SET (SRC_FETZER_LIB
     compiler/commands/AddDevice.cpp
     compiler/commands/Mark.cpp    
     compiler/commands/Jump.cpp 
+    compiler/commands/SetFade.cpp 
 )
 
 add_definitions( -DGIT_VERSION="${GIT_VERSION}" )

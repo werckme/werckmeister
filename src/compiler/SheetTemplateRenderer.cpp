@@ -24,24 +24,40 @@ namespace sheet {
 		{
 		}
 
+		SheetTemplateRenderer::ContainerKeyType SheetTemplateRenderer::getKey(const Track& track) const
+		{
+			auto instrumentName = fm::getFirstMetaArgumentForKey(SHEET_META__INSTRUMENT, track.trackConfigs);
+			if (instrumentName.value.empty()) {
+				return std::to_string((long long)(&track));
+			}
+			return instrumentName.value;
+		}
+
+		SheetTemplateRenderer::ContainerKeyType SheetTemplateRenderer::getKey(const Voice& voice) const
+		{
+			return std::to_string((long long)(&voice));
+		}
+
         void SheetTemplateRenderer::setTargetCreateIfNotExists(const Track &track, const Voice &voice)
 		{
 			IContext::TrackId trackId;
 			IContext::VoiceId voiceId;
-			auto it = ptrIdMap_.find(&track);
+			auto trackKey = getKey(track);
+			auto it = _contextElementIdMap.find(trackKey);
 			bool trackIsNew = false;
-			if (it == ptrIdMap_.end()) {
+			if (it == _contextElementIdMap.end()) {
 				trackId = ctx_->createTrack();
-				ptrIdMap_[&track] = trackId;
+				_contextElementIdMap[trackKey] = trackId;
 				trackIsNew = true;
 			}
 			else {
 				trackId = it->second;
 			}
-			it = ptrIdMap_.find(&voice);
-			if (it == ptrIdMap_.end()) {
+			auto voiceKey = getKey(voice);
+			it = _contextElementIdMap.find(voiceKey);
+			if (it == _contextElementIdMap.end()) {
 				voiceId = ctx_->createVoice();
-				ptrIdMap_[&voice] = voiceId;
+				_contextElementIdMap[voiceKey] = voiceId;
 			}
 			else {
 				voiceId = it->second;
@@ -246,13 +262,18 @@ namespace sheet {
 			fm::Ticks __renderOneBar(IContextPtr ctx, 
 				ASheetEventRenderer *sheetEventRenderer, 
 				DegreeEventServer &eventServer, 
-				const Chords &chords) 
+				const Chords &chords,
+				fm::String &out_lastChord) 
 			{
 				fm::Ticks leftover = 0;
 				fm::Ticks written = 0;
+				int numberOfChords = std::count_if(chords.begin(), chords.end(), [](auto &ev) {
+					return ev->type == Event::Chord;
+				});
 				for(const Event *chord : chords) {
 					using namespace fm;
-					if (chord->type == Event::Rest) {
+					if (chord->type == Event::Rest && numberOfChords == 0) {
+						// if the bar just contains this one rest we can skip the whole thing
 						ctx->seek(chord->duration);
 						continue;
 					}
@@ -260,12 +281,26 @@ namespace sheet {
 						__handleChordMeta(ctx, *chord, sheetEventRenderer, eventServer);
 						continue;
 					}
+					if (chord->type == Event::Meta) {
+						__handleChordMeta(ctx, *chord, sheetEventRenderer, eventServer);
+						continue;
+					}
+					if (chord->type == Event::Chord && chord->stringValue != out_lastChord) {
+						// chord changed, we can't be sure that all of our tied notes will be stopped
+						// so we stop them now
+						out_lastChord = chord->stringValue;
+						ctx->stopAllPendingTies();
+					}
 					fm::Ticks ticksToWrite = chord->duration;
 					while(ticksToWrite > 1.0_N128) {
 						const Event &degree = *(eventServer.nextEvent());
-						Event copy; 
-						copy = __degreeToAbsoluteNote(ctx, *chord, degree, copy);
-
+						Event copy;
+						if (chord->type == Event::Rest) {
+							copy = degree;
+							copy.type = Event::Rest;
+						} else {
+							copy = __degreeToAbsoluteNote(ctx, *chord, degree, copy);
+						}
 						bool isTimeConsuming = copy.isTimeConsuming();
 						if (isTimeConsuming && leftover > 0) {
 							copy.duration += leftover;
@@ -318,7 +353,7 @@ namespace sheet {
 							ctx_->voiceMetaData()->barPosition = 0;
 
 							DEBUGX(
-								auto trackname = getMetaArgumentsWithKeyName("name", track->trackConfigs).front();
+								auto trackname = getMetaArgumentsForKey("name", track->trackConfigs).front();
 								auto position = ctx_->voiceMetaData()->position;
 								auto tempofac = ctx_->voiceMetaData()->tempoFactor;
 								std::cout << trackname << " ; " << position << " ; " << tempofac << std::endl;
@@ -326,11 +361,12 @@ namespace sheet {
 
 
 							Chords chordsPerBar;
+							fm::String lastChord;
 							for (const auto &chord : templateAndChords.chords)
 							{
 								if (chord->type == Event::EOB) {
 									const auto *eobEvent = chord;
-									__renderOneBar(ctx_, sheetEventRenderer.get(), eventServer, chordsPerBar);
+									__renderOneBar(ctx_, sheetEventRenderer.get(), eventServer, chordsPerBar, lastChord);
 									sheetEventRenderer->addEvent(*eobEvent);
 									chordsPerBar.clear();
 									continue;

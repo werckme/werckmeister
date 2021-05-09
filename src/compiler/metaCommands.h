@@ -39,5 +39,6 @@
 #define SHEET_META__SET_VORSCHLAG FM_STRING("addVorschlag")
 #define SHEET_META__MARK FM_STRING("mark")
 #define SHEET_META__JUMP FM_STRING("jump")
+#define SHEET_META__SET_FADE FM_STRING("fade")
 
 #endif

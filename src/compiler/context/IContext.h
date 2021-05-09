@@ -76,7 +76,7 @@ namespace sheet {
 			virtual void setExpressionPlayedOnce(fm::Expression expr) = 0;
 			virtual void setTempo(double bpm) = 0;
 			virtual void setSignature(int upper, int lower) = 0;
-			virtual void setVolume(double volume) = 0;
+			virtual void setVolume(double volume, fm::Ticks relativePosition = 0) = 0;
 			virtual void setPan(double val) = 0;
 			/////// actual context stuff
 			virtual void renderPitch(const PitchDef &pitch, fm::Ticks duration, double velocity, bool tying) = 0;
@@ -107,7 +107,11 @@ namespace sheet {
 			/**
 			 * clears all contents, resets settings  
 			 */
-			virtual void clear() = 0;		
+			virtual void clear() = 0;
+			/**
+			 * sends note off to all pitches where its tie process wasn't completed yet
+			 */
+			virtual void stopAllPendingTies() = 0;
         };
 		typedef std::shared_ptr<IContext> IContextPtr;
 		
