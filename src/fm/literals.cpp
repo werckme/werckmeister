@@ -47,30 +47,128 @@ namespace fm {
     }
     Ticks operator "" _N4p(long double val)
     {
-        return static_cast<Ticks>( (val * PPQ + PPQ / 2) );
+        return static_cast<Ticks>( (val * PPQ + PPQ/2) );
     }
     Ticks operator "" _N8p(long double val) 
     {
-        return static_cast<Ticks>( (val * PPQ / 2 + PPQ / 4) );
+        return static_cast<Ticks>( (val * PPQ/2 + PPQ/4) );
     }
     Ticks operator "" _N16p(long double val) 
     {
-        return static_cast<Ticks>( (val * PPQ / 4 + PPQ / 8) );
+        return static_cast<Ticks>( (val * PPQ/4 + PPQ/8) );
     }
     Ticks operator "" _N32p(long double val) 
     {
-        return static_cast<Ticks>( (val * PPQ / 8 + PPQ / 16) );
+        return static_cast<Ticks>( (val * PPQ/8 + PPQ/16) );
     }
     Ticks operator "" _N64p(long double val) 
     {
-        return static_cast<Ticks>( (val * PPQ / 16 + PPQ / 32) );
+        return static_cast<Ticks>( (val * PPQ/16 + PPQ/32) );
     }
     Ticks operator "" _N128p(long double val) 
     {
-        return static_cast<Ticks>( (val * PPQ / 32 + PPQ / 64) );
+        return static_cast<Ticks>( (val * PPQ/32 + PPQ/64) );
     }
 
+    Ticks operator "" _N1pp(long double val) 
+    {
+        return static_cast<Ticks>( (val * PPQ * 4.0 + PPQ * 2.0 + PPQ) );
+    }
+    Ticks operator "" _N2pp(long double val) 
+    {
+        return static_cast<Ticks>( (val * PPQ * 2.0 + PPQ + PPQ/2) );
+    }
+    Ticks operator "" _N4pp(long double val)
+    {
+        return static_cast<Ticks>( (val * PPQ + PPQ/2 + PPQ/4) );
+    }
+    Ticks operator "" _N8pp(long double val) 
+    {
+        return static_cast<Ticks>( (val * PPQ/2 + PPQ/4 + PPQ/8) );
+    }
+    Ticks operator "" _N16pp(long double val) 
+    {
+        return static_cast<Ticks>( (val * PPQ/4 + PPQ/8 + PPQ/16) );
+    }
+    Ticks operator "" _N32pp(long double val) 
+    {
+        return static_cast<Ticks>( (val * PPQ/8 + PPQ/16 + PPQ/32) );
+    }
+    Ticks operator "" _N64pp(long double val) 
+    {
+        return static_cast<Ticks>( (val * PPQ/16 + PPQ/32 + PPQ/64) );
+    }
+    Ticks operator "" _N128pp(long double val) 
+    {
+        return static_cast<Ticks>( (val * PPQ/32 + PPQ/64 + PPQ/128) );
+    }
+
+    Ticks operator "" _N1ppp(long double val) 
+    {
+        return static_cast<Ticks>( (val * PPQ * 4.0 + PPQ * 2.0 + PPQ + PPQ/2) );
+    }
+    Ticks operator "" _N2ppp(long double val) 
+    {
+        return static_cast<Ticks>( (val * PPQ * 2.0 + PPQ + PPQ/2 + PPQ/4) );
+    }
+    Ticks operator "" _N4ppp(long double val)
+    {
+        return static_cast<Ticks>( (val * PPQ + PPQ/2 + PPQ/4 + PPQ/8) );
+    }
+    Ticks operator "" _N8ppp(long double val) 
+    {
+        return static_cast<Ticks>( (val * PPQ/2 + PPQ/4 + PPQ/8 + PPQ/16) );
+    }
+    Ticks operator "" _N16ppp(long double val) 
+    {
+        return static_cast<Ticks>( (val * PPQ/4 + PPQ/8 + PPQ/16 + PPQ/32) );
+    }
+    Ticks operator "" _N32ppp(long double val) 
+    {
+        return static_cast<Ticks>( (val * PPQ/8 + PPQ/16 + PPQ/32 + PPQ/64) );
+    }
+    Ticks operator "" _N64ppp(long double val) 
+    {
+        return static_cast<Ticks>( (val * PPQ/16 + PPQ/32 + PPQ/64 + PPQ/128) );
+    }
+    Ticks operator "" _N128ppp(long double val) 
+    {
+        return static_cast<Ticks>( (val * PPQ/32 + PPQ/64 + PPQ/128 + PPQ/256) );
+    }
     
+    Ticks operator "" _N1pppp(long double val) 
+    {
+        return static_cast<Ticks>( (val * PPQ * 4.0 + PPQ * 2.0 + PPQ + PPQ/2 + PPQ/4) );
+    }
+    Ticks operator "" _N2pppp(long double val) 
+    {
+        return static_cast<Ticks>( (val * PPQ * 2.0 + PPQ + PPQ/2 + PPQ/4 + PPQ/8) );
+    }
+    Ticks operator "" _N4pppp(long double val)
+    {
+        return static_cast<Ticks>( (val * PPQ + PPQ/2 + PPQ/4 + PPQ/8 + PPQ/16) );
+    }
+    Ticks operator "" _N8pppp(long double val) 
+    {
+        return static_cast<Ticks>( (val * PPQ/2 + PPQ/4 + PPQ/8 + PPQ/16 + PPQ/32) );
+    }
+    Ticks operator "" _N16pppp(long double val) 
+    {
+        return static_cast<Ticks>( (val * PPQ/4 + PPQ/8 + PPQ/16 + PPQ/32 + PPQ/64) );
+    }
+    Ticks operator "" _N32pppp(long double val) 
+    {
+        return static_cast<Ticks>( (val * PPQ/8 + PPQ/16 + PPQ/32 + PPQ/64 + PPQ/128) );
+    }
+    Ticks operator "" _N64pppp(long double val) 
+    {
+        return static_cast<Ticks>( (val * PPQ/16 + PPQ/32 + PPQ/64 + PPQ/128 + PPQ/256) );
+    }
+    Ticks operator "" _N128pppp(long double val) 
+    {
+        return static_cast<Ticks>( (val * PPQ/32 + PPQ/64 + PPQ/128 + PPQ/256 + PPQ/512) );
+    }
+
     Ticks operator "" _N1t(long double val) 
     {
         return static_cast<Ticks>( (val * PPQ * 8.0 / 3.0) );
