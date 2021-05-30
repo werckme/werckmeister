@@ -23,7 +23,6 @@ static const char * LUA_EVENT_PITCH_PROPETRY_PITCH = "pitch";
 static const char * LUA_EVENT_PITCH_PROPETRY_TAGS = "tags";
 static const char * LUA_EVENT_PITCH_PROPETRY_OCTAVE = "octave";
 static const char * LUA_EVENT_PITCH_PROPETRY_ALIAS = "alias";
-
 static const char * LUA_EVENT_PROPETRY_TOAL_TIED_DURATION = "totalTiedDuration";
 static const char * LUA_EVENT_PROPERTY_TIED_DURATION = "tiedDuration";
 
@@ -121,11 +120,14 @@ namespace sheet {
         {
             switch (event->type)
             {
-            case Event::TiedNote: return LUA_EVENT_TYPE_NOTE;
+            // case Event::TiedNote: return LUA_EVENT_TYPE_NOTE;
+            // case Event::Note: return LUA_EVENT_TYPE_NOTE;
+            // case Event::PitchBend: return LUA_EVENT_TYPE_PITCHBEND;
+            // case Event::TiedDegree: return LUA_EVENT_TYPE_DEGREE;
+            // case Event::Degree: return LUA_EVENT_TYPE_DEGREE;
+            case Event::TiedNote: return LUA_EVENT_TYPE_DEGREE;
             case Event::Note: return LUA_EVENT_TYPE_NOTE;
-            case Event::PitchBend: return LUA_EVENT_TYPE_PITCHBEND;
-            case Event::TiedDegree: return LUA_EVENT_TYPE_DEGREE;
-            case Event::Degree: return LUA_EVENT_TYPE_DEGREE;
+            case Event::PitchBend: return LUA_EVENT_TYPE_PITCHBEND;            
             default: return LUA_EVENT_TYPE_UNKNOWN;
             }
             return nullptr;

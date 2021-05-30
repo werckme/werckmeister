@@ -118,15 +118,15 @@ namespace sheet {
 					auto &ev = *it;
 					processEvent(ev, processData);
 				}
-				it = voice.events.begin();
-				// second pass (repeat symbols are resolved now)
-				for (; it!=end; ++it)
-				{
-					auto &ev = *it;
-					if (ev.isTied()) {
-						determineTiedDuration(it, end);
-					}
-				}				
+				// it = voice.events.begin();
+				// // second pass (repeat symbols are resolved now)
+				// for (; it!=end; ++it)
+				// {
+				// 	auto &ev = *it;
+				// 	if (ev.isTied()) {
+				// 		determineTiedDuration(it, end);
+				// 	}
+				// }				
 				if (!processData.hasTimeConsumingEvents) {
 					// no need to do anything
 					voice.events.clear();
