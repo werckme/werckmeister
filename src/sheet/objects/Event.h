@@ -51,6 +51,14 @@ namespace sheet {
 		Type type = Unknown;
 		Duration duration = NoDuration;
 		/**
+		 * duration of this event and all following tied events
+		 */
+		Duration tiedDuration = NoDuration;
+		/**
+		 * duration of the total tied events chain
+		 **/
+		Duration tiedDurationTotal = NoDuration;
+		/**
 		 *  can be for instance a meta event command or a chordname
 		 */
 		fm::String stringValue;
