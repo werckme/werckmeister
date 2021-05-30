@@ -120,11 +120,6 @@ namespace sheet {
         {
             switch (event->type)
             {
-            // case Event::TiedNote: return LUA_EVENT_TYPE_NOTE;
-            // case Event::Note: return LUA_EVENT_TYPE_NOTE;
-            // case Event::PitchBend: return LUA_EVENT_TYPE_PITCHBEND;
-            // case Event::TiedDegree: return LUA_EVENT_TYPE_DEGREE;
-            // case Event::Degree: return LUA_EVENT_TYPE_DEGREE;
             case Event::TiedNote: return LUA_EVENT_TYPE_DEGREE;
             case Event::Note: return LUA_EVENT_TYPE_NOTE;
             case Event::PitchBend: return LUA_EVENT_TYPE_PITCHBEND;            
