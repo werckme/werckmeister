@@ -9,6 +9,12 @@ instrumentConf: piano  mod testTotalTiedDuration;
 [
 instrument: piano;
 {
+    \ppp  -- if all ok, then bound notes velocity = fffff
+    c d e f |
     c4~&~&~& |
+    c d e f | 
+    c4~&~&~& | 
+    /signature: 4 2/
+    c4~ d e c~ d e f c |
 }
 ]
