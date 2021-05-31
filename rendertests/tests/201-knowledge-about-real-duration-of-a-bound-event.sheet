@@ -1,7 +1,7 @@
 using "./lua/mods/testTotalTiedDuration.lua";
  
 
-device: MyDevice midi 5;
+device: MyDevice midi 4;
 
 instrumentDef: piano  MyDevice _ch=0 _cc=0 _pc=0;
 instrumentConf: piano  mod testTotalTiedDuration;

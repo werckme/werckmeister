@@ -66,7 +66,7 @@ namespace sheet {
 				std::vector<Event*> totalDurations;
 				totalDurations.reserve(end - eventIt);
 				startEvent.tiedDurationTotal = startEvent.duration;
-				while((eventIt++) != end) {
+				while((++eventIt) != end) {
 					Event &event = *eventIt;
 					bool isSamePitch = event.pitches.size() >= startEvent.pitches.size() &&
 						std::is_permutation(startEvent.pitches.begin(), startEvent.pitches.end(), event.pitches.begin());
@@ -118,15 +118,15 @@ namespace sheet {
 					auto &ev = *it;
 					processEvent(ev, processData);
 				}
-				// it = voice.events.begin();
-				// // second pass (repeat symbols are resolved now)
-				// for (; it!=end; ++it)
-				// {
-				// 	auto &ev = *it;
-				// 	if (ev.isTied()) {
-				// 		determineTiedDuration(it, end);
-				// 	}
-				// }				
+				it = voice.events.begin();
+				// second pass (repeat symbols are resolved now)
+				for (; it!=end; ++it)
+				{
+					auto &ev = *it;
+					if (ev.isTied()) {
+						determineTiedDuration(it, end);
+					}
+				}				
 				if (!processData.hasTimeConsumingEvents) {
 					// no need to do anything
 					voice.events.clear();
