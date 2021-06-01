@@ -120,8 +120,10 @@ namespace sheet {
         {
             switch (event->type)
             {
-            case Event::TiedNote: return LUA_EVENT_TYPE_DEGREE;
             case Event::Note: return LUA_EVENT_TYPE_NOTE;
+            case Event::TiedNote: return LUA_EVENT_TYPE_NOTE;
+            case Event::Degree: return LUA_EVENT_TYPE_DEGREE;
+            case Event::TiedDegree: return LUA_EVENT_TYPE_DEGREE;
             case Event::PitchBend: return LUA_EVENT_TYPE_PITCHBEND;            
             default: return LUA_EVENT_TYPE_UNKNOWN;
             }
@@ -152,7 +154,11 @@ namespace sheet {
         {
             sheet::lua::getTableValue(L, LUA_EVENT_PROPETRY_VELOCITY, event.velocity);
             sheet::lua::getTableValue(L, LUA_EVENT_PROPETRY_OFFSET, event.offset);
+            sheet::lua::getTableValue(L, LUA_EVENT_PROPETRY_TOAL_TIED_DURATION, event.tiedDurationTotal);
+            sheet::lua::getTableValue(L, LUA_EVENT_PROPERTY_TIED_DURATION, event.tiedDuration);
             event.offset *= fm::PPQ;
+            event.tiedDuration *= fm::PPQ;
+            event.tiedDurationTotal *= fm::PPQ;
             sheet::lua::getTableValue(L, LUA_EVENT_PROPETRY_DURATION, event.duration);
             bool isTied = false;
             sheet::lua::getTableValue(L, LUA_EVENT_PROPETRY_TYING, isTied);
