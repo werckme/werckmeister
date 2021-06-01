@@ -1,0 +1,44 @@
+using "./lua/mods/testTotalTiedDuration.lua";
+using "./lua/mods/nop.lua";
+
+device: MyDevice midi 4;
+
+instrumentDef: piano  MyDevice _ch=0 _cc=0 _pc=0;
+instrumentDef: piano2  MyDevice _ch=0 _cc=0 _pc=0;
+instrumentConf: piano  
+    mod nop
+    mod testTotalTiedDuration
+;
+
+instrumentConf: piano2  
+    mod testTotalTiedDuration
+    mod nop
+;
+
+[
+instrument: piano;
+{
+    \ppp  -- if all ok, then bound notes velocity = fffff
+    c d e f |
+    c4~&~&~& |
+    c d e f | 
+    c4~&~&~& | 
+    /signature: 4 2/
+    c4~ d e c~ d e f c |
+}
+]
+
+[
+instrument: piano2;
+{
+    /signature: 4 4/
+    r1 | r1 | r1 | r1 | r1 | r1 |
+    \ppp  -- if all ok, then bound notes velocity = fffff
+    c4 d e f |
+    c4~&~&~& |
+    c d e f | 
+    c4~&~&~& | 
+    /signature: 4 2/
+    c4~ d e c~ d e f c |
+}
+]
