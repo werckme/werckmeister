@@ -12,10 +12,6 @@ struct PlayerProgramOptions : public CompilerProgramOptions, public IPlayerProgr
 
 	virtual bool isListDevicesSet() const override;
 	virtual bool isLoopSet() const override;
-	virtual bool isBeginSet() const override;
-	virtual double getBegin() const override;
-	virtual bool isEndSet() const override;
-	virtual double getEnd() const override;
 	virtual void setResumeAtPosition(double quarters) override { resumeAtPosition = quarters; }
 	virtual double getResumeAtPosition() override { return resumeAtPosition; }
 	virtual bool isWatchSet() const override;
