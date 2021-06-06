@@ -30,7 +30,8 @@ namespace sheet {
 				: Base(definitionsServer), 
 				  midi_(midiFile),
 				  _compilerVisitor(compilerVisitor),
-				  _logger(logger) 
+				  _logger(logger),
+				  _options(options)
 				{}
 
 			struct VoiceMetaData : sheet::compiler::VoiceMetaData {
@@ -75,7 +76,7 @@ namespace sheet {
 			int toMidiVelocity(double velocity);
 		private:
 			MidiInstrumentDefs midiInstrumentDefs_;
-			ICompilerVisitorPtr options_;
+			ICompilerProgramOptionsPtr _options;
         };
 		typedef std::shared_ptr<MidiContext> MidiContextPtr;
     }
