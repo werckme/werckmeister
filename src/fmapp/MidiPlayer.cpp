@@ -48,12 +48,6 @@ namespace fmapp {
         fm::Ticks resume = 0;
         fm::Ticks begin = 0;
         fm::Ticks end = _midifile->duration();
-        if (_programOptions->isBeginSet()) {
-            begin = std::max(fm::Ticks(0), std::min(_programOptions->getBegin() * fm::PPQ, end));
-        }
-        if (_programOptions->isEndSet()) {
-            end = std::max(fm::Ticks(0), std::min(_programOptions->getEnd() * fm::PPQ, end));
-        }
         if (_programOptions->getResumeAtPosition() > 0) {
             resume = _programOptions->getResumeAtPosition() * fm::PPQ;
             _programOptions->setResumeAtPosition(0);
