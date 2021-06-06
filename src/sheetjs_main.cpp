@@ -41,6 +41,10 @@ public:
 	virtual void printHelpText(std::ostream &os) {}
 	virtual bool isVerboseSet() const { return false; }
 	virtual bool isDebugSet() const { return false; }
+	virtual bool isBeginSet() const { return false; }
+	virtual double getBegin() const { return 0; }
+	virtual bool isEndSet() const { return false; }
+	virtual double getEnd() const { return 0; }	
 	std::string input;
 };
 
