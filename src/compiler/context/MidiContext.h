@@ -9,6 +9,7 @@
 #include <fm/config.hpp>
 #include <fm/ILogger.h>
 #include <compiler/ICompilerVisitor.h>
+#include <ICompilerProgramOptions.h>
 
 namespace sheet {
     namespace compiler {
@@ -24,7 +25,8 @@ namespace sheet {
 			MidiContext(fm::midi::MidiPtr midiFile, 
 				fm::IDefinitionsServerPtr definitionsServer, 
 				ICompilerVisitorPtr compilerVisitor, 
-				fm::ILoggerPtr logger) 
+				fm::ILoggerPtr logger,
+				ICompilerProgramOptionsPtr options) 
 				: Base(definitionsServer), 
 				  midi_(midiFile),
 				  _compilerVisitor(compilerVisitor),
@@ -73,6 +75,7 @@ namespace sheet {
 			int toMidiVelocity(double velocity);
 		private:
 			MidiInstrumentDefs midiInstrumentDefs_;
+			ICompilerVisitorPtr options_;
         };
 		typedef std::shared_ptr<MidiContext> MidiContextPtr;
     }
