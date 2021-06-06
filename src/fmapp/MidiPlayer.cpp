@@ -102,6 +102,7 @@ namespace fmapp {
 
     void MidiPlayer::visitVisitors(VisitorMessage msg, fm::Ticks elapsed)
     {
+        fm::Ticks renderRangeBegin = _programOptions->isBeginSet() ? (_programOptions->getBegin() * fm::PPQ) : 0;
         for(auto visitor : _loopVisitors.container) {
             switch (msg)
             {
@@ -112,7 +113,7 @@ namespace fmapp {
                     visitor->loopEnd();
                     break;
                 case Loop:
-                    visitor->visit(elapsed);
+                    visitor->visit(elapsed + renderRangeBegin);
             }
         }
     }
