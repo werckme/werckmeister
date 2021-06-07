@@ -61,12 +61,12 @@ const char * create_c_str(const std::string &input)
 
 /**
  * usage:
- * let createCompileResult = cwrap('create_compile_result', 'number', ['string', 'number']);
- * let pCompilerResult = createCompileResult(jsonString, 0)
+ * let createCompileResult = cwrap('create_compile_result', 'number', ['number', 'string']);
+ * let pCompilerResult = createCompileResult(0, jsonString)
  * let jsonResult = UTF8ToString(pCompilerResult)
  * _free(pCompilerResult)
  */
-extern "C" const char * create_compile_result(const char *file, int beginTicks)
+extern "C" const char * create_compile_result(int beginTicks, const char *file)
 {
 	namespace di = boost::di;
 	namespace cp = sheet::compiler;
