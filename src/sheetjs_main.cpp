@@ -66,7 +66,7 @@ const char * create_c_str(const std::string &input)
  * let jsonResult = UTF8ToString(pCompilerResult)
  * _free(pCompilerResult)
  */
-extern "C" const char * create_compile_result(int beginTicks, const char *file)
+extern "C" const char * create_compile_result(const char *file)
 {
 	namespace di = boost::di;
 	namespace cp = sheet::compiler;
