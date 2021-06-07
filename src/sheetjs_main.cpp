@@ -72,7 +72,7 @@ extern "C" const char * create_compile_result(const char *file)
 	namespace cp = sheet::compiler;
 	auto programOptionsPtr = std::make_shared<JsProgramOptions>();
 	programOptionsPtr->input = file;
-	programOptionsPtr->begin = beginTicks / fm::PPQ;
+	// programOptionsPtr->begin = beginTicks / fm::PPQ;
 
 	auto documentPtr = std::make_shared<sheet::Document>();
 	auto midiFile = fm::getWerckmeister().createMidi();
