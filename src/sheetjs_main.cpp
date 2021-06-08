@@ -61,18 +61,18 @@ const char * create_c_str(const std::string &input)
 
 /**
  * usage:
- * let createCompileResult = cwrap('create_compile_result', 'number', ['number', 'string']);
- * let pCompilerResult = createCompileResult(0, jsonString)
+ * let createCompileResult = cwrap('create_compile_result', 'number', ['string', 'number']);
+ * let pCompilerResult = createCompileResult(jsonString, 0)
  * let jsonResult = UTF8ToString(pCompilerResult)
  * _free(pCompilerResult)
  */
-extern "C" const char * create_compile_result(const char *file)
+extern "C" const char * create_compile_result(const char *file, double beginQuarters)
 {
 	namespace di = boost::di;
 	namespace cp = sheet::compiler;
 	auto programOptionsPtr = std::make_shared<JsProgramOptions>();
 	programOptionsPtr->input = file;
-	// programOptionsPtr->begin = beginTicks / fm::PPQ;
+	programOptionsPtr->begin = beginQuarters;
 
 	auto documentPtr = std::make_shared<sheet::Document>();
 	auto midiFile = fm::getWerckmeister().createMidi();
