@@ -4,6 +4,7 @@
 #include <fm/common.hpp>
 #include <vector>
 #include <sheet/objects/ChordDef.h>
+#include <sheet/objects/StyleDef.h>
 #include "sheet/SheetDef.h"
 #include "sheet/Pitchmap.h"
 #include "sheet/DocumentUsing.h"
@@ -53,6 +54,16 @@ namespace sheet {
 				fm::CharType const* cstr = str.c_str();
 				return parse(cstr, cstr + str.length(), sourceId);
 			}
+		};
+
+		struct StyleSheetParser {
+			std::vector<StyleDef> parse(fm::CharType const* first, fm::CharType const* last, Event::SourceId sourceId = Event::UndefinedSource);
+			std::vector<StyleDef> parse(const fm::String& str, Event::SourceId sourceId = Event::UndefinedSource)
+			{
+				fm::CharType const* cstr = str.c_str();
+				return parse(cstr, cstr + str.length(), sourceId);
+			}
+			virtual ~StyleSheetParser() = default;
 		};
 
 		class DocumentParser : public IDocumentParser {

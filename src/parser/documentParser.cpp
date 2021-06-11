@@ -19,6 +19,7 @@ namespace sheet {
 			typedef std::set<std::string> Extensions;
 			void useChordDef(DocumentPtr doc, const fm::String &path, Event::SourceId);
 			void usePitchmapDef(DocumentPtr doc, const fm::String &path, Event::SourceId);
+			void useStyleSheet(DocumentPtr doc, const fm::String &path, Event::SourceId);
 			void useLuaScript(DocumentPtr doc, const fm::String &path, Event::SourceId);
 			void useLuaScript(DocumentPtr doc, const fm::String& path, Event::SourceId);
 			void useSheetTemplateDef(DocumentPtr doc, const fm::String &path, Event::SourceId);
@@ -33,7 +34,8 @@ namespace sheet {
 				{ SHEET_TEMPLATE_DEF_EXTENSION , &useSheetTemplateDef },
 				{ PITCHMAP_DEF_EXTENSION , &usePitchmapDef },
 				{ LUA_DEF_EXTENSION , &useLuaScript },
-				{ SHEET_CONFIG , &useConfig }
+				{ SHEET_CONFIG , &useConfig },
+				{ STYLE_SHEET , &useStyleSheet }
 			});
 			
 			const Extensions AllSupportedExtensions = {
@@ -41,7 +43,8 @@ namespace sheet {
 				SHEET_TEMPLATE_DEF_EXTENSION,
 				PITCHMAP_DEF_EXTENSION,
 				LUA_DEF_EXTENSION,
-				SHEET_CONFIG
+				SHEET_CONFIG,
+				STYLE_SHEET
 			};
 
 			void append(DocumentPtr doc, const SheetDef &sheetDef)
@@ -74,6 +77,17 @@ namespace sheet {
 				for (const auto &x : pitchmaps) {
 					doc->pitchmapDefs[x.name] = x.pitch;
 				}
+			}
+			void useStyleSheet(DocumentPtr doc, const fm::String &path, Event::SourceId sourceId)
+			{
+				
+				auto filestream = fm::getWerckmeister().openResource(path);
+				fm::StreamBuffIterator begin(*filestream);
+				fm::StreamBuffIterator end;
+				fm::String documentText(begin, end);
+				StyleSheetParser parser;
+				auto styleDefs = parser.parse(documentText);
+				doc->styleDefs = styleDefs;
 			}
 			void useLuaScript(DocumentPtr doc, const fm::String &path, Event::SourceId sourceId)
 			{

@@ -1,0 +1,3 @@
+drums.voice(1).atBeat(1 3) {
+    velocity: +10;
+}
