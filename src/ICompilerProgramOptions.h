@@ -18,6 +18,10 @@ struct ICompilerProgramOptions {
 	virtual void printHelpText(std::ostream &os) = 0;
 	virtual bool isVerboseSet() const = 0;
 	virtual bool isDebugSet() const = 0;
+	virtual bool isBeginSet() const = 0;
+	virtual double getBegin() const = 0;
+	virtual bool isEndSet() const = 0;
+	virtual double getEnd() const = 0;		
 	virtual ~ICompilerProgramOptions() = default;
 };
 

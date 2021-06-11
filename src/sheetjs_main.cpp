@@ -41,7 +41,12 @@ public:
 	virtual void printHelpText(std::ostream &os) {}
 	virtual bool isVerboseSet() const { return false; }
 	virtual bool isDebugSet() const { return false; }
+	virtual bool isBeginSet() const { return begin > 0; }
+	virtual double getBegin() const { return begin; }
+	virtual bool isEndSet() const { return false; }
+	virtual double getEnd() const { return 0; }	
 	std::string input;
+	double begin = -1;
 };
 
 
@@ -56,17 +61,18 @@ const char * create_c_str(const std::string &input)
 
 /**
  * usage:
- * let createCompileResult = cwrap('create_compile_result', 'number', ['string']);
- * let pCompilerResult = createCompileResult(jsonString)
+ * let createCompileResult = cwrap('create_compile_result', 'number', ['string', 'number']);
+ * let pCompilerResult = createCompileResult(jsonString, 0)
  * let jsonResult = UTF8ToString(pCompilerResult)
  * _free(pCompilerResult)
  */
-extern "C" const char * create_compile_result(const char *file)
+extern "C" const char * create_compile_result(const char *file, double beginQuarters)
 {
 	namespace di = boost::di;
 	namespace cp = sheet::compiler;
 	auto programOptionsPtr = std::make_shared<JsProgramOptions>();
 	programOptionsPtr->input = file;
+	programOptionsPtr->begin = beginQuarters;
 
 	auto documentPtr = std::make_shared<sheet::Document>();
 	auto midiFile = fm::getWerckmeister().createMidi();
