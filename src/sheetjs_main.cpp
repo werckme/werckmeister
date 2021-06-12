@@ -77,7 +77,6 @@ extern "C" const char * create_compile_result(const char *file, double beginQuar
 	auto documentPtr = std::make_shared<sheet::Document>();
 	auto midiFile = fm::getWerckmeister().createMidi();
 	auto logger = std::make_shared<WarningsCollectorWithConsoleLogger>();
-	auto timeline = std::make_shared<fmapp::DefaultTimeline>(logger);
 	auto injector = di::make_injector(
 		  di::bind<cp::IDocumentParser>()			.to<cp::DocumentParser>()			.in(di::extension::scoped)
 		, di::bind<cp::ICompiler>()					.to<cp::Compiler>()					.in(di::extension::scoped)
@@ -94,7 +93,10 @@ extern "C" const char * create_compile_result(const char *file, double beginQuar
 		{
 			return injector.template create<std::unique_ptr<fmapp::JsonWriter>>();
 		})
-		, di::bind<cp::ICompilerVisitor>()			.to(timeline)
+		, di::bind<cp::ICompilerVisitor>()                      .to([&](const auto &injector) -> cp::ICompilerVisitorPtr 
+		{
+			return injector.template create< std::shared_ptr<fmapp::DefaultTimeline>>();
+		})
 		, di::bind<fm::ILogger>()					.to(logger)
 	);
 	auto program = injector.create<SheetCompilerProgramJs>();
@@ -110,7 +112,6 @@ extern "C" const char * create_compile_result(const char *file, double beginQuar
 	documentPtr.reset();
 	midiFile.reset();
 	logger.reset();
-	timeline.reset();
 	return result;
 }
 
