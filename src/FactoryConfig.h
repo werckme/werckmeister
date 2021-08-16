@@ -78,6 +78,7 @@ namespace sheet {
 #include <compiler/commands/Jump.h>
 #include <compiler/commands/SetFade.h>
 #include <compiler/commands/NopCommand.h>
+#include <compiler/commands/Cue.h>
 
 namespace sheet {
     namespace compiler {
@@ -113,6 +114,7 @@ namespace sheet {
                 _FM_Register(NopCommand,                                SHEET_META__TRACK_META_KEY_NAME);
                 _FM_Register(NopCommand,                                SHEET_META__SET_SHEET_TEMPLATE);
                 _FM_Register(NopCommand,                                SHEET_META__SHEET_TEMPLATE_POSITION);
+                _FM_Register(Cue,                                       SHEET_META__ADD_CUE);
                 return true;
             })();
         }

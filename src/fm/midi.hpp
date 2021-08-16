@@ -126,6 +126,7 @@ namespace fm {
 			static Event CCPan(Channel channel, Byte volume);
 			static Event MetaInstrument(const std::string &name);
 			static Event MetaTrack(const std::string &name);
+			static Event MetaCue(const std::string &name);
 			static Event MetaCustom(const CustomMetaData &custom);
 			static std::vector<Byte> MetaCreateStringData(const std::string &string);
 			static std::string MetaGetStringValue(const Byte *data, size_t length);
