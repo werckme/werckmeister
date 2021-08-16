@@ -165,8 +165,8 @@ namespace sheet {
 				for (auto &ev : sheetEvents) {
 					try {
 						bool isTempoEvent = ev.stringValue == SHEET_META__SET_TEMPO;
-						bool isTemplateEvent = ev.stringValue == SHEET_META__SET_SHEET_TEMPLATE || SHEET_META__SET_FILL_TEMPLATE;
 						bool isFillTemplate = ev.stringValue == SHEET_META__SET_FILL_TEMPLATE;
+						bool isTemplateEvent = ev.stringValue == SHEET_META__SET_SHEET_TEMPLATE;
 						if (isTemplateEvent) {
 							// new template
 							templatesAndItsChords.emplace_back(TemplatesAndItsChords());
@@ -174,8 +174,25 @@ namespace sheet {
 							newTemplateAndChords.templates = __getTemplates(sheetTemplateRenderer, ev);
 							newTemplateAndChords.offset = tmpContext->currentPosition();
 							newTemplateAndChords.tempoFactor = tmpContext->voiceMetaData()->tempoFactor;
-							for(auto &tmpl : newTemplateAndChords.templates) {
+						} else if (isFillTemplate) {
+							TemplatesAndItsChords::Templates prevTemplates;
+							if (!templatesAndItsChords.empty()) {
+								prevTemplates = templatesAndItsChords.back().templates;
+							}
+							templatesAndItsChords.emplace_back(TemplatesAndItsChords());
+							auto& newTemplateAndChords = templatesAndItsChords.back();
+							newTemplateAndChords.templates = __getTemplates(sheetTemplateRenderer, ev);
+							newTemplateAndChords.offset = tmpContext->currentPosition();
+							newTemplateAndChords.tempoFactor = tmpContext->voiceMetaData()->tempoFactor;
+							for (auto& tmpl : newTemplateAndChords.templates) {
 								tmpl.isFill = isFillTemplate;
+							}
+							for (auto& prevTemplate : prevTemplates) {
+								// add running templates
+								if (prevTemplate.isFill) {
+									continue;
+								}
+								newTemplateAndChords.templates.push_back(prevTemplate);
 							}
 						}
 						else {
@@ -307,6 +324,7 @@ namespace sheet {
 						const Event *degree = eventServer.nextEvent();
 						if (degree == nullptr) {
 							// no more events to come
+							ctx->rest(ticksToWrite);
 							break;
 						}
 						Event copy;

@@ -1,11 +1,12 @@
 using "./chords/default.chords";
 
 
-device: SC1 midi 4;
+device: SC1 midi 3;
 --           instrument   dv ch cc pc
-instrumentDef: piano      SC1 2 0 104;
+instrumentDef: piano      SC1 0 0 0;
 
 [
+instrument: piano;
 type: template;
 name: bg;
 {
@@ -14,21 +15,53 @@ name: bg;
 ]
 
 [
+instrument: piano;
+type: template;
+name: bg2;
+{
+    III,&&& |
+}
+]
+
+[
+instrument: piano;
 type: template;
 name: myfill;
 {
-    I''4 &&& |
+    I'' &&& |
+}
+]
+
+[
+instrument: piano;
+type: template;
+name: myfill2;
+{
+    I,, &&& |
 }
 ]
 
 [
 type: accomp;
 {
-    /template: bg/
-    C | C | C |
     /fill: myfill/
-    C | C | C |
-
-
+    C |
+    /template: bg/
+    C | 
+    /fill: myfill/
+    C | C | 
+    /fill: myfill/
+    C | C |
+    /fill: myfill2/
+    C | C |
+    /template: bg2/
+    C |
+    /fill: myfill myfill2/
+    C | C |
+    /template: bg bg2/
+    /fill: myfill myfill2/
+    C | C |
+    /template: bg/
+    C | 
 }
 ]
