@@ -1,0 +1,34 @@
+using "./chords/default.chords";
+
+
+device: SC1 midi 4;
+--           instrument   dv ch cc pc
+instrumentDef: piano      SC1 2 0 104;
+
+[
+type: template;
+name: bg;
+{
+    I I I I |
+}
+]
+
+[
+type: template;
+name: myfill;
+{
+    I''4 &&& |
+}
+]
+
+[
+type: accomp;
+{
+    /template: bg/
+    C | C | C |
+    /fill: myfill/
+    C | C | C |
+
+
+}
+]
