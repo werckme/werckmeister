@@ -143,6 +143,14 @@ namespace sheet {
 			return  expr / 10.;
 		}
 
+		void AContext::stopAllPendingTies()
+		{
+			auto meta = voiceMetaData();
+			for(const auto &tie : meta->waitForTieBuffer) {
+				stopEvent(tie.first, meta->position);
+			}
+			meta->waitForTieBuffer.clear();
+		}
 		void AContext::renderPitch(const PitchDef &rawPitch, fm::Ticks duration, double velocity, bool tying)
 		{
 			using namespace fm;

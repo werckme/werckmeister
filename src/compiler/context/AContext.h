@@ -118,6 +118,10 @@ namespace sheet {
 			virtual void startEvent(const PitchDef &pitch, fm::Ticks absolutePosition, double velocity);
 			virtual void stopEvent(const PitchDef &pitch, fm::Ticks absolutePosition);
 			/**
+			 * sends note off to all pitches where its tie process wasn't completed yet
+			 */
+			virtual void stopAllPendingTies() override;
+			/**
 			 * if duration == 0 the last event duration will be used
 			 */ 
 			virtual void seek(fm::Ticks duration);

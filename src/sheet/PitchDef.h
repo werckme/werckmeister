@@ -43,6 +43,14 @@ namespace sheet {
 		{
 			return id() > b.id();
 		}
+		bool operator==(const PitchDef& b) const
+		{
+			return id() == b.id();
+		}
+		bool operator!=(const PitchDef& b) const
+		{
+			return id() != b.id();
+		}		
 	};
 }
 

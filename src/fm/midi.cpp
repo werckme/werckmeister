@@ -151,7 +151,7 @@ namespace fm {
 			if (length > maxByteSize) {
 				FM_THROW(fm::Exception, "buffer to small");
 			}
-			auto relOff = relDelta(deltaOffset);
+			MidiLong relOff = (MidiLong)::nearbyint(relDelta(deltaOffset));
 			size_t c = variableLengthWrite(relOff, bytes, maxByteSize);
 			writePayload(&bytes[c], maxByteSize - c);
 			return length;
@@ -292,6 +292,13 @@ namespace fm {
 			ev.metaData(SequenceOrTrackName, bytes.data(), bytes.size());
 			return ev;
 		}
+		Event Event::MetaCue(const std::string &name)
+		{
+			auto ev = Event();
+			auto bytes = MetaCreateStringData(name);
+			ev.metaData(CuePoint, bytes.data(), bytes.size());
+			return ev;
+		}		
 		void Event::metaData(MetaEventType type, Byte *data, size_t numBytes)
 		{
 			if (numBytes >= MaxVarLength) {
@@ -486,7 +493,7 @@ namespace fm {
 			Ticks offset = 0;
 			for (const auto& ev : _container) {
 				auto numBytes = ev.write(offset, bff, maxByteSize - written);
-				offset = ev.absPosition();
+				offset = ::nearbyint(ev.absPosition());
 				written += numBytes;
 				bff += numBytes;
 			}

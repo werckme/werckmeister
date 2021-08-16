@@ -4,7 +4,6 @@
 
 <img src="https://raw.githubusercontent.com/SambaGodschynski/werckmeister/main/assets/Logo_med.png" style="display: block; margin: auto">
 
-
 ## An open source Sheet Music MIDI Compiler
 
 Werckmeister compiles sheet music source code into a MIDI file.

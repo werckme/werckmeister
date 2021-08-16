@@ -1,7 +1,6 @@
 Werckmeister
 ===================
 
-
 <img src="https://raw.githubusercontent.com/werckme/werckmeister/main/assets/hero.png" class="hero-image" alt="from sheet code via Werckmeister to MIDI music">
 <br><br>
 

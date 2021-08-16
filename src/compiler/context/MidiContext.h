@@ -9,6 +9,7 @@
 #include <fm/config.hpp>
 #include <fm/ILogger.h>
 #include <compiler/ICompilerVisitor.h>
+#include <ICompilerProgramOptions.h>
 
 namespace sheet {
     namespace compiler {
@@ -24,11 +25,13 @@ namespace sheet {
 			MidiContext(fm::midi::MidiPtr midiFile, 
 				fm::IDefinitionsServerPtr definitionsServer, 
 				ICompilerVisitorPtr compilerVisitor, 
-				fm::ILoggerPtr logger) 
+				fm::ILoggerPtr logger,
+				ICompilerProgramOptionsPtr options) 
 				: Base(definitionsServer), 
 				  midi_(midiFile),
 				  _compilerVisitor(compilerVisitor),
-				  _logger(logger) 
+				  _logger(logger),
+				  _options(options)
 				{}
 
 			struct VoiceMetaData : sheet::compiler::VoiceMetaData {
@@ -52,6 +55,7 @@ namespace sheet {
 			virtual void setTempo(double bpm) override;
 			virtual void setVolume(double volume, fm::Ticks relativePosition = 0) override;
 			virtual void setPan(double val) override;
+			virtual void addCue(const fm::String &text, fm::Ticks absolutePosition);
 			virtual void setSignature(int upper, int lower) override;
 			/**
 			 * sends a custom meta event containing a device name
@@ -73,6 +77,7 @@ namespace sheet {
 			int toMidiVelocity(double velocity);
 		private:
 			MidiInstrumentDefs midiInstrumentDefs_;
+			ICompilerProgramOptionsPtr _options;
         };
 		typedef std::shared_ptr<MidiContext> MidiContextPtr;
     }

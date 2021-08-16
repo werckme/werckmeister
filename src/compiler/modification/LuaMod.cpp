@@ -23,6 +23,8 @@ static const char * LUA_EVENT_PITCH_PROPETRY_PITCH = "pitch";
 static const char * LUA_EVENT_PITCH_PROPETRY_TAGS = "tags";
 static const char * LUA_EVENT_PITCH_PROPETRY_OCTAVE = "octave";
 static const char * LUA_EVENT_PITCH_PROPETRY_ALIAS = "alias";
+static const char * LUA_EVENT_PROPETRY_TOAL_TIED_DURATION = "totalTiedDuration";
+static const char * LUA_EVENT_PROPERTY_TIED_DURATION = "tiedDuration";
 
 namespace sheet {
     namespace compiler {
@@ -63,7 +65,10 @@ namespace sheet {
             sheet::lua::setTableValue(L, LUA_EVENT_PROPETRY_TYING, top, event->isTied());
             // pitchbend value
             pushPitchBendValue(L, top, *event);
-                             
+            // totalTiedDuration
+            sheet::lua::setTableValue(L, LUA_EVENT_PROPETRY_TOAL_TIED_DURATION, top, event->tiedDurationTotal / fm::PPQ);    
+            // tiedDuration
+            sheet::lua::setTableValue(L, LUA_EVENT_PROPERTY_TIED_DURATION, top, event->tiedDuration / fm::PPQ);
         }
 
         void LuaEvent::pushPitchBendValue(lua_State *L, int top, const Event &event)
@@ -115,9 +120,11 @@ namespace sheet {
         {
             switch (event->type)
             {
-            case Event::TiedNote: return LUA_EVENT_TYPE_DEGREE;
             case Event::Note: return LUA_EVENT_TYPE_NOTE;
-            case Event::PitchBend: return LUA_EVENT_TYPE_PITCHBEND;
+            case Event::TiedNote: return LUA_EVENT_TYPE_NOTE;
+            case Event::Degree: return LUA_EVENT_TYPE_DEGREE;
+            case Event::TiedDegree: return LUA_EVENT_TYPE_DEGREE;
+            case Event::PitchBend: return LUA_EVENT_TYPE_PITCHBEND;            
             default: return LUA_EVENT_TYPE_UNKNOWN;
             }
             return nullptr;
@@ -147,7 +154,11 @@ namespace sheet {
         {
             sheet::lua::getTableValue(L, LUA_EVENT_PROPETRY_VELOCITY, event.velocity);
             sheet::lua::getTableValue(L, LUA_EVENT_PROPETRY_OFFSET, event.offset);
+            sheet::lua::getTableValue(L, LUA_EVENT_PROPETRY_TOAL_TIED_DURATION, event.tiedDurationTotal);
+            sheet::lua::getTableValue(L, LUA_EVENT_PROPERTY_TIED_DURATION, event.tiedDuration);
             event.offset *= fm::PPQ;
+            event.tiedDuration *= fm::PPQ;
+            event.tiedDurationTotal *= fm::PPQ;
             sheet::lua::getTableValue(L, LUA_EVENT_PROPETRY_DURATION, event.duration);
             bool isTied = false;
             sheet::lua::getTableValue(L, LUA_EVENT_PROPETRY_TYING, isTied);

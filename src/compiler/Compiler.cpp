@@ -61,7 +61,7 @@ namespace sheet {
 			auto document = document_.lock();
 			for (auto &track : document->sheetDef.tracks)
 			{
-				fm::String type = fm::getFirstMetaArgumentWithKeyName(SHEET_META__TRACK_META_KEY_TYPE, track.trackConfigs).value;
+				fm::String type = fm::getFirstMetaArgumentForKey(SHEET_META__TRACK_META_KEY_TYPE, track.trackConfigs).value;
 				bool isNoteEventTrack = type.empty();
 				if (!isNoteEventTrack) {
 					continue;
@@ -110,7 +110,7 @@ namespace sheet {
 
 			bool isAccompTrack(const Track &track) 
 			{
-				return fm::getFirstMetaArgumentWithKeyName(SHEET_META__TRACK_META_KEY_TYPE, track.trackConfigs)
+				return fm::getFirstMetaArgumentForKey(SHEET_META__TRACK_META_KEY_TYPE, track.trackConfigs)
 					.value == SHEET_META__TRACK_META_VALUE_TYPE_ACCOMP;
 			}
 		}

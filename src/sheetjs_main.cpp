@@ -41,7 +41,12 @@ public:
 	virtual void printHelpText(std::ostream &os) {}
 	virtual bool isVerboseSet() const { return false; }
 	virtual bool isDebugSet() const { return false; }
+	virtual bool isBeginSet() const { return begin > 0; }
+	virtual double getBegin() const { return begin; }
+	virtual bool isEndSet() const { return false; }
+	virtual double getEnd() const { return 0; }	
 	std::string input;
+	double begin = -1;
 };
 
 
@@ -56,21 +61,22 @@ const char * create_c_str(const std::string &input)
 
 /**
  * usage:
- * let createCompileResult = cwrap('create_compile_result', 'number', ['string']);
- * let pCompilerResult = createCompileResult(jsonString)
+ * let createCompileResult = cwrap('create_compile_result', 'number', ['string', 'number']);
+ * let pCompilerResult = createCompileResult(jsonString, 0)
  * let jsonResult = UTF8ToString(pCompilerResult)
  * _free(pCompilerResult)
  */
-extern "C" const char * create_compile_result(const char *file)
+extern "C" const char * create_compile_result(const char *file, double beginQuarters)
 {
 	namespace di = boost::di;
 	namespace cp = sheet::compiler;
 	auto programOptionsPtr = std::make_shared<JsProgramOptions>();
 	programOptionsPtr->input = file;
+	programOptionsPtr->begin = beginQuarters;
 
 	auto documentPtr = std::make_shared<sheet::Document>();
 	auto midiFile = fm::getWerckmeister().createMidi();
-	bool writeWarningsToConsole = !(programOptionsPtr->isJsonModeSet() || programOptionsPtr->isJsonDocInfoMode());
+	auto logger = std::make_shared<WarningsCollectorWithConsoleLogger>();
 	auto injector = di::make_injector(
 		  di::bind<cp::IDocumentParser>()			.to<cp::DocumentParser>()			.in(di::extension::scoped)
 		, di::bind<cp::ICompiler>()					.to<cp::Compiler>()					.in(di::extension::scoped)
@@ -87,17 +93,11 @@ extern "C" const char * create_compile_result(const char *file)
 		{
 			return injector.template create<std::unique_ptr<fmapp::JsonWriter>>();
 		})
-		, di::bind<cp::ICompilerVisitor>()			.to([&](const auto &injector) -> cp::ICompilerVisitorPtr 
+		, di::bind<cp::ICompilerVisitor>()                      .to([&](const auto &injector) -> cp::ICompilerVisitorPtr 
 		{
 			return injector.template create< std::shared_ptr<fmapp::DefaultTimeline>>();
 		})
-		, di::bind<fm::ILogger>()					.to([&](const auto &injector) -> fm::ILoggerPtr 
-		{
-			if (writeWarningsToConsole) {
-				return injector.template create<std::shared_ptr<LoggerImpl>>();
-			}
-			return injector.template create<std::shared_ptr<WarningsCollectorWithConsoleLogger>>();
-		})
+		, di::bind<fm::ILogger>()					.to(logger)
 	);
 	auto program = injector.create<SheetCompilerProgramJs>();
 	auto jsonWriterPtr = std::dynamic_pointer_cast<fmapp::JsonWriter>(program.documentWriter());
@@ -108,7 +108,11 @@ extern "C" const char * create_compile_result(const char *file)
 	jsonWriterPtr->setOutputStream(outputStream);
 	program.prepareEnvironment();
 	program.execute();
-	return create_c_str(outputStream.str());
+	auto result = create_c_str(outputStream.str());
+	documentPtr.reset();
+	midiFile.reset();
+	logger.reset();
+	return result;
 }
 
 int main(int argc, const char** argv)

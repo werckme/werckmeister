@@ -1,0 +1,78 @@
+device: SC1 midi 0;
+instrumentDef: piano   SC1 2 0 0;
+
+[
+{
+    /signature: 3 2/
+    c1. |
+    /signature: 7 4/
+    c1..|
+    /signature: 15 8/
+    c1... |
+    /signature: 31 16/
+    c1.... |
+
+    /signature: 3 4/
+    c2. |
+    /signature: 7 8/
+    c2..|
+    /signature: 15 16/
+    c2... |
+    /signature: 31 32/
+    c2.... |   
+
+    /signature: 3 8/
+    c4. |
+    /signature: 7 16/
+    c4..|
+    /signature: 15 32/
+    c4... |
+    /signature: 31 64/
+    c4.... |   
+
+    /signature: 3 16/
+    c8. |
+    /signature: 7 32/
+    c8..|
+    /signature: 15 64/
+    c8... |
+    /signature: 31 128/
+    c8.... |  
+
+    /signature: 3 32/
+    c16. |
+    /signature: 7 64/
+    c16..|
+    /signature: 15 128/
+    c16... |
+    /signature: 31 256/
+    c16.... |     
+
+    /signature: 3 64/
+    c32. |
+    /signature: 7 128/
+    c32..|
+    /signature: 15 256/
+    c32... |
+    /signature: 31 512/
+    c32.... |  
+
+    /signature: 3 128/
+    c64. |
+    /signature: 7 256/
+    c64..|
+    /signature: 15 512/
+    c64... |
+    /signature: 31 1024/
+    c64.... |  
+
+    /signature: 3 256/
+    c128. |
+    /signature: 7 512/
+    c128..|
+    /signature: 15 1024/
+    c128... |
+    /signature: 31 2048/
+    c128.... |  
+}   
+]

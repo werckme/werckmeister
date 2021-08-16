@@ -14,6 +14,7 @@ namespace sheet {
 			 * for note event tracks:
 			 *   resolves implicite duration to every event time consuming with duration = 0.
 			 *   resolves x shortcut e.g.: c1 x x x -> c1 c1 c1 c1
+			 *   determines total duration of tied events
 			 *   set implicit EOB
 			 * for chord tracks:
 			 *   determines the duration of every chord event, such as:
