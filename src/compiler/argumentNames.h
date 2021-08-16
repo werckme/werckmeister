@@ -106,6 +106,10 @@ struct ArgumentNames {
         std::string Curve                   = "curve";        
     } SetFade; 
 
+    struct {
+        std::string Text = "text";
+    } Cue;    
+
 };
 
 extern ArgumentNames argumentNames;  
