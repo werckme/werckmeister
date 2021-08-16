@@ -94,11 +94,16 @@ namespace sheet {
 				Voice::Events::const_iterator it_;
 				void degrees(const Voice::Events *degrees);
 			public:
+				bool templateIsFill = false;
 				typedef std::function<void()> OnLoop;
 				OnLoop onLoop;			
 				DegreeEventServer(const Voice::Events *degrees);
 				const Event * nextEvent();
 				void seek(fm::Ticks);
+				bool hasFurtherEvents() const 
+				{
+					return this->it_ != degrees_->end();
+				} 
 
 			};
 			DegreeEventServer::DegreeEventServer(const Voice::Events *degrees)
@@ -113,6 +118,9 @@ namespace sheet {
 			const Event * DegreeEventServer::nextEvent()
 			{
 				if (it_ == degrees_->end()) {
+					if (this->templateIsFill) {
+						return nullptr;
+					}
 					seek(0);
 				}
 				return &(*it_++);
@@ -157,7 +165,8 @@ namespace sheet {
 				for (auto &ev : sheetEvents) {
 					try {
 						bool isTempoEvent = ev.stringValue == SHEET_META__SET_TEMPO;
-						bool isTemplateEvent = ev.stringValue == SHEET_META__SET_SHEET_TEMPLATE;
+						bool isTemplateEvent = ev.stringValue == SHEET_META__SET_SHEET_TEMPLATE || SHEET_META__SET_FILL_TEMPLATE;
+						bool isFillTemplate = ev.stringValue == SHEET_META__SET_FILL_TEMPLATE;
 						if (isTemplateEvent) {
 							// new template
 							templatesAndItsChords.emplace_back(TemplatesAndItsChords());
@@ -165,7 +174,9 @@ namespace sheet {
 							newTemplateAndChords.templates = __getTemplates(sheetTemplateRenderer, ev);
 							newTemplateAndChords.offset = tmpContext->currentPosition();
 							newTemplateAndChords.tempoFactor = tmpContext->voiceMetaData()->tempoFactor;
-							
+							for(auto &tmpl : newTemplateAndChords.templates) {
+								tmpl.isFill = isFillTemplate;
+							}
 						}
 						else {
 							// add any other event
@@ -293,13 +304,17 @@ namespace sheet {
 					}
 					fm::Ticks ticksToWrite = chord->duration;
 					while(ticksToWrite > 1.0_N128) {
-						const Event &degree = *(eventServer.nextEvent());
+						const Event *degree = eventServer.nextEvent();
+						if (degree == nullptr) {
+							// no more events to come
+							break;
+						}
 						Event copy;
 						if (chord->type == Event::Rest) {
-							copy = degree;
+							copy = *degree;
 							copy.type = Event::Rest;
 						} else {
-							copy = __degreeToAbsoluteNote(ctx, *chord, degree, copy);
+							copy = __degreeToAbsoluteNote(ctx, *chord, *degree, copy);
 						}
 						bool isTimeConsuming = copy.isTimeConsuming();
 						if (isTimeConsuming && leftover > 0) {
@@ -343,6 +358,7 @@ namespace sheet {
 								continue;
 							}
 							DegreeEventServer eventServer(&(voice.events));
+							eventServer.templateIsFill = tmpl.isFill;
 							eventServer.onLoop = [this]() {
 								// clear mods: https://github.com/SambaGodschynski/werckmeister/issues/99
 								ctx_->voiceMetaData()->modifications.clear();
@@ -369,6 +385,9 @@ namespace sheet {
 									__renderOneBar(ctx_, sheetEventRenderer.get(), eventServer, chordsPerBar, lastChord);
 									sheetEventRenderer->addEvent(*eobEvent);
 									chordsPerBar.clear();
+									if (eventServer.templateIsFill && !eventServer.hasFurtherEvents()) {
+										break;
+									}
 									continue;
 								}
 								if (chord->type == Event::Chord 
