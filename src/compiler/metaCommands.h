@@ -40,5 +40,6 @@
 #define SHEET_META__MARK FM_STRING("mark")
 #define SHEET_META__JUMP FM_STRING("jump")
 #define SHEET_META__SET_FADE FM_STRING("fade")
+#define SHEET_META__SET_FILL_TEMPLATE FM_STRING("fill")
 
 #endif

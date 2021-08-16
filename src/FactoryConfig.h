@@ -113,6 +113,7 @@ namespace sheet {
                 _FM_Register(NopCommand,                                SHEET_META__TRACK_META_KEY_NAME);
                 _FM_Register(NopCommand,                                SHEET_META__SET_SHEET_TEMPLATE);
                 _FM_Register(NopCommand,                                SHEET_META__SHEET_TEMPLATE_POSITION);
+                _FM_Register(NopCommand,                                SHEET_META__SET_FILL_TEMPLATE);
                 return true;
             })();
         }
