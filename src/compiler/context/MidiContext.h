@@ -55,6 +55,7 @@ namespace sheet {
 			virtual void setTempo(double bpm) override;
 			virtual void setVolume(double volume, fm::Ticks relativePosition = 0) override;
 			virtual void setPan(double val) override;
+			virtual void addCue(const fm::String &text, fm::Ticks absolutePosition);
 			virtual void setSignature(int upper, int lower) override;
 			/**
 			 * sends a custom meta event containing a device name
