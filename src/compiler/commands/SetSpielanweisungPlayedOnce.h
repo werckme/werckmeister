@@ -14,7 +14,7 @@ namespace sheet {
         /// **named:**
         /// `/doOnce: _use=arpeggio/`  
         /// </command>
-        /// <param name="use" position="0" type="word">The name of the modification to load. This is the only "unique" parameter for this command. All further parameters are specific to its related modification.</param>
+        /// <param name="use" position="0" type="text">The name of the modification to load. This is the only "unique" parameter for this command. All further parameters are specific to its related modification.</param>
 
         class SetSpielanweisungPlayedOnce : public SetSpielanweisung
         {

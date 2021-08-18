@@ -18,7 +18,7 @@ namespace sheet {
         /// * asNotated
         /// * simpleGuitar
         /// </command>
-        /// <param name="use" position="0" type="word">The name of the strategy to load. This is the only "unique" parameter for this command. All further parameters are specific to its related strategy.</param>
+        /// <param name="use" position="0" type="text">The name of the strategy to load. This is the only "unique" parameter for this command. All further parameters are specific to its related strategy.</param>
 
         class SetVoicingStrategy : public ACommand
         {
