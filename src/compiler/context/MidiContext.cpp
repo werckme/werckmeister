@@ -147,6 +147,13 @@ namespace sheet {
 			addEvent(event, track());
 		}
 
+		void MidiContext::addCue(const fm::String &text, fm::Ticks absolutePosition) 
+		{
+			auto cue = fm::midi::Event::MetaCue(text);
+			cue.absPosition(absolutePosition);
+			addEvent(cue); 
+		}
+
 		MidiContext::Base::TrackId MidiContext::createTrackImpl()
 		{
 			_checkMidi(midi_);

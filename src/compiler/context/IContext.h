@@ -78,6 +78,7 @@ namespace sheet {
 			virtual void setSignature(int upper, int lower) = 0;
 			virtual void setVolume(double volume, fm::Ticks relativePosition = 0) = 0;
 			virtual void setPan(double val) = 0;
+			virtual void addCue(const fm::String &text, fm::Ticks absolutePosition) = 0;
 			/////// actual context stuff
 			virtual void renderPitch(const PitchDef &pitch, fm::Ticks duration, double velocity, bool tying) = 0;
 			virtual void renderPitch(const PitchDef &pitch, fm::Ticks absolutePosition, double velocity, fm::Ticks duration) = 0;

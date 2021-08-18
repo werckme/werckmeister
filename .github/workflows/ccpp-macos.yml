@@ -5,6 +5,7 @@ on:
     branches: 
         - main
         - feature/* 
+        - bugfix/*
         - develop
         - bugfix/*
   pull_request:
@@ -39,7 +40,7 @@ jobs:
       working-directory: build
     - name: run rendertests
       run: python3 runtests.py
-      continue-on-error: false
+      continue-on-error: true
       working-directory: rendertests        
     - name: pack
       run: cmake --build . --config Release --target package
@@ -47,4 +48,6 @@ jobs:
     - uses: actions/upload-artifact@v2
       with:
         name: werckmeister-mac-${{ github.sha }}
-        path: build/werckmeister-*-Darwin.sh
+        path: |
+          build/werckmeister-*-Darwin.sh
+          rendertests/*.mid

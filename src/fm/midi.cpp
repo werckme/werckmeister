@@ -292,6 +292,13 @@ namespace fm {
 			ev.metaData(SequenceOrTrackName, bytes.data(), bytes.size());
 			return ev;
 		}
+		Event Event::MetaCue(const std::string &name)
+		{
+			auto ev = Event();
+			auto bytes = MetaCreateStringData(name);
+			ev.metaData(CuePoint, bytes.data(), bytes.size());
+			return ev;
+		}		
 		void Event::metaData(MetaEventType type, Byte *data, size_t numBytes)
 		{
 			if (numBytes >= MaxVarLength) {

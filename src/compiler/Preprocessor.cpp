@@ -154,7 +154,9 @@ namespace sheet {
 			};
 			while (it != end) {
 				if (it->type == Event::Meta) {
-					_renderer->handleMetaEvent(*it);
+					if (it->stringValue != SHEET_META__ADD_CUE) {
+						_renderer->handleMetaEvent(*it);
+					}
 				}					
 				if (it->type == Event::EOB) {
 					processEob();
