@@ -50,7 +50,9 @@ SET (SRC_FETZER_LIB
     compiler/lua/luaTimeInfo.cpp
     sheet/objects/Event.cpp
     sheet/objects/ChordDef.cpp
+    sheet/objects/Track.cpp
     sheet/Document.cpp
+    sheet/SheetTemplate.cpp
     compiler/commands/ACommand.cpp
     compiler/commands/ACanSpecifyInstrument.cpp
     compiler/commands/DefineMidiInstrument.cpp

@@ -1,7 +1,7 @@
 using "./chords/default.chords";
 
 
-device: SC1 midi 3;
+device: SC1 midi 0;
 --           instrument   dv ch cc pc
 instrumentDef: piano      SC1 0 0 0;
 
@@ -44,22 +44,22 @@ name: myfill2;
 [
 type: accomp;
 {
-    /fill: myfill/
-    C |
     /template: bg/
     C | 
-    /fill: myfill/
+    /fill: _template=myfill _replace=bg/
     C | C | 
-    /fill: myfill/
+    /fill: _template=myfill/
     C | C |
-    /fill: myfill2/
+    /fill: _template=myfill2 _replace=bg/
     C | C |
-    /template: bg2/
+    /template: _template=bg2/
     C |
-    /fill: myfill myfill2/
+    /fill: _template=myfill/
+    /fill: _template=myfill2/
     C | C |
     /template: bg bg2/
-    /fill: myfill myfill2/
+    /fill: _template=myfill/
+    /fill: _template=myfill2/
     C | C |
     /template: bg/
     C | 

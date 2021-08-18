@@ -96,10 +96,11 @@ namespace sheet {
 				void degrees(const Voice::Events *degrees);
 			public:
 				bool templateIsFill = false;
+				fm::Ticks ignoreUntilPosition = -1.0;
 				typedef std::function<void()> OnLoop;
 				OnLoop onLoop;			
 				DegreeEventServer(const Voice::Events *degrees);
-				const Event * nextEvent();
+				std::pair<const Event *, fm::Ticks> nextEvent(IContextPtr ctx);
 				void seek(fm::Ticks);
 				bool hasFurtherEvents() const 
 				{
@@ -116,15 +117,23 @@ namespace sheet {
 				this->degrees_ = degrees;
 				it_ = this->degrees_->begin();
 			}
-			const Event * DegreeEventServer::nextEvent()
+			std::pair<const Event*, fm::Ticks> DegreeEventServer::nextEvent(IContextPtr ctx)
 			{
 				if (it_ == degrees_->end()) {
 					if (this->templateIsFill) {
-						return nullptr;
+						return std::make_pair(nullptr, 0.0);
 					}
 					seek(0);
 				}
-				return &(*it_++);
+				const auto *ev = &(*it_++);
+				if (!ev->isTimeConsuming()) {
+					return std::make_pair(ev, ev->duration);
+				}
+				auto position = ctx->currentPosition();
+				if (position < ignoreUntilPosition) {
+					return std::make_pair(nullptr, ev->duration);
+				}
+				return std::make_pair(ev, ev->duration);
 			}
 			void DegreeEventServer::seek(fm::Ticks ticks)
 			{
@@ -158,6 +167,19 @@ namespace sheet {
 				}
 				return templates;
 			}
+
+			template<class TCommand>
+			std::shared_ptr<TCommand> __getCommand(const Event& ev)
+			{
+				auto& wm = fm::getWerckmeister();
+				auto fillCommand = wm.solveOrDefault<TCommand>(ev.stringValue);
+				if (!fillCommand) {
+					FM_THROW(Exception, "expecting command");
+				}
+				fillCommand->setArguments(ev.metaArgs);
+				return fillCommand;
+			}
+
 			std::list<TemplatesAndItsChords> __collectChordsPerTemplate(SheetTemplateRenderer &sheetTemplateRenderer, Track * sheetTrack)
 			{
 				auto ctx = sheetTemplateRenderer.context();
@@ -184,11 +206,7 @@ namespace sheet {
 							newTemplateAndChords.offset = tmpContext->currentPosition();
 							newTemplateAndChords.tempoFactor = tmpContext->voiceMetaData()->tempoFactor;
 						} else if (isFillTemplate) {
-							auto& wm = fm::getWerckmeister();
-							auto fillCommand = wm.solveOrDefault<Fill>(ev.stringValue);
-							if (!fillCommand) {
-								FM_THROW(Exception, "expecting fill command");
-							}
+							auto fillCommand = __getCommand<Fill>(ev);
 							TemplatesAndItsChords::Templates prevTemplates;
 							if (!templatesAndItsChords.empty()) {
 								prevTemplates = templatesAndItsChords.back().templates;
@@ -205,6 +223,10 @@ namespace sheet {
 								// add running templates
 								if (prevTemplate.isFill) {
 									continue;
+								}
+								bool isReplacedByFill = prevTemplate.name == fillCommand->replaceTemplateName();
+								if (isReplacedByFill) {
+									prevTemplate.ignoreUnitlPosition = tmpContext->currentPosition() + fillTemplate.maxLength();
 								}
 								newTemplateAndChords.templates.push_back(prevTemplate);
 							}
@@ -335,18 +357,27 @@ namespace sheet {
 					}
 					fm::Ticks ticksToWrite = chord->duration;
 					while(ticksToWrite > 1.0_N128) {
-						const Event *degree = eventServer.nextEvent();
-						if (degree == nullptr) {
+						const Event* degree = nullptr;
+						fm::Ticks degreeDuration;
+						std::tie(degree, degreeDuration) = eventServer.nextEvent(ctx);
+						if (degree == nullptr && degreeDuration == 0) {
 							// no more events to come
 							ctx->rest(ticksToWrite);
 							break;
 						}
 						Event copy;
-						if (chord->type == Event::Rest) {
-							copy = *degree;
+						if (degree == nullptr) {
+							copy.duration = degreeDuration;
 							copy.type = Event::Rest;
-						} else {
-							copy = __degreeToAbsoluteNote(ctx, *chord, *degree, copy);
+						}
+						else {
+							if (chord->type == Event::Rest) {
+								copy = *degree;
+								copy.type = Event::Rest;
+							}
+							else {
+								copy = __degreeToAbsoluteNote(ctx, *chord, *degree, copy);
+							}
 						}
 						bool isTimeConsuming = copy.isTimeConsuming();
 						if (isTimeConsuming && leftover > 0) {
@@ -391,6 +422,7 @@ namespace sheet {
 							}
 							DegreeEventServer eventServer(&(voice.events));
 							eventServer.templateIsFill = tmpl.isFill;
+							eventServer.ignoreUntilPosition = tmpl.ignoreUnitlPosition;
 							eventServer.onLoop = [this]() {
 								// clear mods: https://github.com/SambaGodschynski/werckmeister/issues/99
 								ctx_->voiceMetaData()->modifications.clear();
