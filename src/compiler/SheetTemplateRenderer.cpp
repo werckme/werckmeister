@@ -8,6 +8,7 @@
 #include <functional>
 #include <fm/werckmeister.hpp>
 #include <fm/IDefinitionsServer.h>
+#include <compiler/commands/Fill.h>
 
 #define DEBUGX(x)
 
@@ -134,17 +135,25 @@ namespace sheet {
 					onLoop();
 				}
 				it_ = degrees_->begin();
-			}			
+			}	
+
+			sheet::SheetTemplate __getTemplate(SheetTemplateRenderer& sheetTemplateRenderer, const fm::String& sheetTemplateName)
+			{
+				auto ctx = sheetTemplateRenderer.context();
+				auto sheetTemplate = ctx->definitionsServer()->getSheetTemplate(sheetTemplateName);
+				if (sheetTemplate.empty()) {
+					FM_THROW(Exception, "sheetTemplate not found: " + sheetTemplateName);
+				}
+				return sheetTemplate;
+			}
+
 			IContext::SheetTemplates __getTemplates(SheetTemplateRenderer &sheetTemplateRenderer, const Event &metaEvent)
 			{
 				auto ctx = sheetTemplateRenderer.context();
 				IContext::SheetTemplates templates;
 				for (size_t idx=0; idx < metaEvent.metaArgs.size(); ++idx) {
 					auto sheetTemplateName =fm::getArgumentValue<fm::String>(metaEvent, idx);
-					auto sheetTemplate = ctx->definitionsServer()->getSheetTemplate(sheetTemplateName);
-					if (sheetTemplate.empty()) {
-						FM_THROW(Exception, "sheetTemplate not found: " + sheetTemplateName);
-					}
+					auto sheetTemplate = __getTemplate(sheetTemplateRenderer, sheetTemplateName);
 					templates.push_back(sheetTemplate);
 				}
 				return templates;
@@ -175,18 +184,23 @@ namespace sheet {
 							newTemplateAndChords.offset = tmpContext->currentPosition();
 							newTemplateAndChords.tempoFactor = tmpContext->voiceMetaData()->tempoFactor;
 						} else if (isFillTemplate) {
+							auto& wm = fm::getWerckmeister();
+							auto fillCommand = wm.solveOrDefault<Fill>(ev.stringValue);
+							if (!fillCommand) {
+								FM_THROW(Exception, "expecting fill command");
+							}
 							TemplatesAndItsChords::Templates prevTemplates;
 							if (!templatesAndItsChords.empty()) {
 								prevTemplates = templatesAndItsChords.back().templates;
 							}
 							templatesAndItsChords.emplace_back(TemplatesAndItsChords());
 							auto& newTemplateAndChords = templatesAndItsChords.back();
-							newTemplateAndChords.templates = __getTemplates(sheetTemplateRenderer, ev);
+							auto fillTemplate = __getTemplate(sheetTemplateRenderer, fillCommand->templateName());
+							fillTemplate.isFill = true;
+							newTemplateAndChords.templates = { fillTemplate };
 							newTemplateAndChords.offset = tmpContext->currentPosition();
 							newTemplateAndChords.tempoFactor = tmpContext->voiceMetaData()->tempoFactor;
-							for (auto& tmpl : newTemplateAndChords.templates) {
-								tmpl.isFill = isFillTemplate;
-							}
+							fm::String replaceTemplateName = fillCommand->replaceTemplateName();
 							for (auto& prevTemplate : prevTemplates) {
 								// add running templates
 								if (prevTemplate.isFill) {

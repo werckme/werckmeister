@@ -79,7 +79,8 @@ SET (SRC_FETZER_LIB
     compiler/commands/Mark.cpp    
     compiler/commands/Jump.cpp 
     compiler/commands/SetFade.cpp
-    compiler/commands/Cue.cpp 
+    compiler/commands/Cue.cpp
+    compiler/commands/Fill.cpp 
 )
 
 add_definitions( -DGIT_VERSION="${GIT_VERSION}" )

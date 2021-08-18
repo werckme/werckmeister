@@ -108,7 +108,12 @@ struct ArgumentNames {
 
     struct {
         std::string Text = "text";
-    } Cue;    
+    } Cue;
+
+    struct {
+        std::string Template = "template";
+        std::string Replace = "replace";
+    } Fill;   
 
 };
 
