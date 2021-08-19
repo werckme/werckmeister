@@ -7,7 +7,8 @@
 namespace sheet {
     namespace compiler {
         /// <command name="fill" where="accomp">
-        ///     TBD
+        /// Plays a template only once. Is also able to replace the performance of another template during its playback.
+        /// Useful for fill ins.
         /// ```
         ///   /fill: myDrumfill _replace=myDrums/
         /// ```
