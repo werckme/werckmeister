@@ -208,8 +208,10 @@ namespace sheet {
 						} else if (isFillTemplate) {
 							auto fillCommand = __getCommand<Fill>(ev);
 							TemplatesAndItsChords::Templates prevTemplates;
+							fm::Ticks prevOffset = -1;
 							if (!templatesAndItsChords.empty()) {
 								prevTemplates = templatesAndItsChords.back().templates;
+								prevOffset = templatesAndItsChords.back().offset;
 							}
 							templatesAndItsChords.emplace_back(TemplatesAndItsChords());
 							auto& newTemplateAndChords = templatesAndItsChords.back();
@@ -221,7 +223,7 @@ namespace sheet {
 							fm::String replaceTemplateName = fillCommand->replaceTemplateName();
 							for (auto& prevTemplate : prevTemplates) {
 								// add running templates
-								if (prevTemplate.isFill) {
+								if (prevTemplate.isFill && (prevOffset >= 0 && prevOffset != newTemplateAndChords.offset)) {
 									continue;
 								}
 								bool isReplacedByFill = prevTemplate.name == fillCommand->replaceTemplateName();

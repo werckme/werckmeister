@@ -1,6 +1,6 @@
 using "./chords/default.chords";
 
-
+tempo: 190;
 device: SC1 midi 0;
 --           instrument   dv ch cc pc
 instrumentDef: piano      SC1 0 0 0;
@@ -42,6 +42,15 @@ name: myfill2;
 ]
 
 [
+instrument: piano;
+type: template;
+name: myfill3;
+{
+    I'' II' III'' I'' | I,, II,,, III,, I,,
+}
+]
+
+[
 type: accomp;
 {
     /template: bg/
@@ -63,5 +72,15 @@ type: accomp;
     C | C |
     /template: bg/
     C | 
+    /template: bg bg2/
+    /fill: _template=myfill _replace="bg"/
+    /fill: _template=myfill2 _replace="bg2"/
+    C | C |
+    /template: bg/
+    C |    
+    /fill: _template=myfill3 _replace=bg/
+    C9 | C9 | C9 |
+    /fill: _template=myfill3/
+    C9 | C9 | C9 |    
 }
 ]
