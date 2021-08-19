@@ -63,12 +63,12 @@ type: accomp;
     C | C |
     /template: _template=bg2/
     C |
-    /fill: _template=myfill/
+    --/fill: _template=myfill/
     /fill: _template=myfill2/
     C | C |
     /template: bg bg2/
     /fill: _template=myfill/
-    /fill: _template=myfill2/
+    --/fill: _template=myfill2/
     C | C |
     /template: bg/
     C | 
