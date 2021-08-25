@@ -50,7 +50,9 @@ SET (SRC_FETZER_LIB
     compiler/lua/luaTimeInfo.cpp
     sheet/objects/Event.cpp
     sheet/objects/ChordDef.cpp
+    sheet/objects/Track.cpp
     sheet/Document.cpp
+    sheet/SheetTemplate.cpp
     compiler/commands/ACommand.cpp
     compiler/commands/ACanSpecifyInstrument.cpp
     compiler/commands/DefineMidiInstrument.cpp
@@ -79,7 +81,8 @@ SET (SRC_FETZER_LIB
     compiler/commands/Mark.cpp    
     compiler/commands/Jump.cpp 
     compiler/commands/SetFade.cpp
-    compiler/commands/Cue.cpp 
+    compiler/commands/Cue.cpp
+    compiler/commands/Fill.cpp 
 )
 
 add_definitions( -DGIT_VERSION="${GIT_VERSION}" )

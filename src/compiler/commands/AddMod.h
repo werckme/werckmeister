@@ -25,7 +25,7 @@ namespace sheet {
         /// Performs an arpeggio over a given chord.
         /// **Arpeggio is deprecated. Use the lua mod [myArpeggio](#myarpeggio) instead.**
         /// </command>
-        /// <param name="use" position="0" type="word">The name of the modification to load. This is the only "unique" parameter for this command. All further parameters are specific to its related modification.</param>
+        /// <param name="use" position="0" type="text">The name of the modification to load. This is the only "unique" parameter for this command. All further parameters are specific to its related modification.</param>
         class AddMod : public ACommand
         {
         public:
