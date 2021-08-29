@@ -24,6 +24,29 @@ Werckmeister compiles sheet music source code into a MIDI file.
 * accompaniment template rendering engine
 * Lua mods
 
+## Motivation
+* [SuperCollider](https://supercollider.github.io/)
+* [CSound](https://en.wikipedia.org/wiki/Csound)
+* [alda](https://alda.io/)
+* [...](https://en.wikipedia.org/wiki/List_of_audio_programming_languages)
+
+Why oh why does the world needs another musical programming language?
+
+TBD.:
+* searching a new scorewriter program
+* usage of my new SC-8850
+* pevious program (overture) outdated
+* files more then less useless because of proprietary file format 
+* btw.: unawareness of MuseScore
+* eventually found LilyPond
+* loved the idea having text based score
+* BUT
+* made for music engraving
+* rudimental MIDI generation
+* long rendering time
+* bloated soure code with visual engraving informations
+* so the idea of having a tool like LilyPond but focused on creating MIDI music
+
 ## Syntax
 ### Tracks and Voices
 A Werckmeister piece is built of tracks and voices. A track can have an arbitray number of voices, but at least there
