@@ -42,6 +42,7 @@ SET (SRC_FETZER_LIB
     compiler/voicings/SimpleGuitar.cpp
     compiler/voicings/Lua.cpp
     compiler/metaData.cpp
+    compiler/Instrument.cpp
     compiler/SheetTemplateRenderer.cpp
     compiler/error.cpp
     compiler/Warning.cpp

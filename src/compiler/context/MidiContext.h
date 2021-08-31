@@ -14,14 +14,16 @@
 namespace sheet {
     namespace compiler {
         class MidiContext : public AContext {
+			friend class MidiInstrumentDef;
+			friend class InstrumentSectionDef;
 		private:
 			fm::midi::MidiPtr midi_;
 			ICompilerVisitorPtr _compilerVisitor;
 			fm::ILoggerPtr _logger;
 		public:
 			typedef AContext Base;
-			typedef std::unordered_map<fm::String, MidiInstrumentDef> MidiInstrumentDefs;
-			typedef std::vector<MidiInstrumentDef> InstrumentDefContainer;		
+			typedef std::unordered_map<fm::String, AInstrumentDefPtr> InstrumentDefs;
+			typedef std::vector<AInstrumentDefPtr> InstrumentDefContainer;
 			MidiContext(fm::midi::MidiPtr midiFile, 
 				fm::IDefinitionsServerPtr definitionsServer, 
 				ICompilerVisitorPtr compilerVisitor, 
@@ -38,7 +40,7 @@ namespace sheet {
 				fm::Ticks positionOffset = 0;
 			};
 			struct TrackMetaData : sheet::compiler::TrackMetaData {
-				MidiInstrumentDef instrument;
+				AInstrumentDefPtr instrument;
 			};
 			fm::midi::MidiPtr midiFile() const { return midi_; }
 			virtual TrackId createTrackImpl() override;
@@ -50,8 +52,8 @@ namespace sheet {
 			virtual void startEvent(const PitchDef &pitch, fm::Ticks absolutePosition, double velocity) override;
 			virtual void stopEvent(const PitchDef &pitch, fm::Ticks absolutePosition) override;
 			virtual void selectMidiSound(int cc, int pc);
-			virtual void setMidiInstrument(const fm::String &uname, int channel, int cc, int pc);
-			virtual void setMidiInstrument(const fm::String &uname, const fm::String &deviceName, int channel, int cc, int pc);
+			virtual void defineMidiInstrument(const fm::String &uname, int channel, int cc, int pc);
+			virtual void defineMidiInstrument(const fm::String &uname, const fm::String &deviceName, int channel, int cc, int pc);
 			virtual void setInstrument(const fm::String &uname) override;
 			virtual void setTempo(double bpm) override;
 			virtual void setVolume(double volume, fm::Ticks relativePosition = 0) override;
@@ -62,22 +64,22 @@ namespace sheet {
 			 * sends a custom meta event containing a device name
 			 */
 			virtual void addDeviceChangeEvent(const fm::String &deviceName, fm::Ticks position);
-			virtual AInstrumentDef * getInstrumentDef(const fm::String &uname) override;
-			MidiInstrumentDef * getMidiInstrumentDef(const fm::String &uname);
-			virtual AInstrumentDef * currentInstrumentDef() override;
-			const MidiInstrumentDefs & midiInstrumentDefs() const { return this->midiInstrumentDefs_; }
+			virtual AInstrumentDefPtr getInstrumentDef(const fm::String &uname) override;
+			virtual AInstrumentDefPtr currentInstrumentDef() override;
+			const InstrumentDefs & instrumentDefs() const { return this->instrumentDefs_; }
 			virtual IContextPtr createNewContext() const;
 			virtual void clear() override;
 		protected:
 			virtual Base::VoiceMetaDataPtr createVoiceMetaData() override;
 			virtual Base::TrackMetaDataPtr createTrackMetaData() override;
-			void setMidiInstrumentDef(const fm::String &uname, const MidiInstrumentDef &def);
-			InstrumentDefContainer getInstruments() const;
+			void addMidiInstrumentDef(const fm::String &uname, std::shared_ptr<MidiInstrumentDef> def);
 			virtual TrackId createMasterTrack() override;
 			int getAbsolutePitch(const PitchDef &pitch);
 			int toMidiVelocity(double velocity);
+			void setInstrument(std::shared_ptr<MidiInstrumentDef> def);
+			void setInstrument(std::shared_ptr<InstrumentSectionDef> def);
 		private:
-			MidiInstrumentDefs midiInstrumentDefs_;
+			InstrumentDefs instrumentDefs_;
 			ICompilerProgramOptionsPtr _options;
         };
 		typedef std::shared_ptr<MidiContext> MidiContextPtr;

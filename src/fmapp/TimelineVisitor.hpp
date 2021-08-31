@@ -88,19 +88,20 @@ namespace fmapp {
     template<class TIntervalContainer>
     void TimelineVisitor<TIntervalContainer>::visit(sheet::compiler::IContext *ctx, const fm::midi::Event &ev, TrackId trackId)
     {
-        if (ev.eventType() != fm::midi::NoteOn) {
-            return;
-        }
-        if (!this->currentEventInfo_) {
-            return;
-        }
-        this->currentEventInfo_->pitches.push_back(ev.parameter1());
-        this->currentEventInfo_->channel = ev.channel();
-        typedef sheet::compiler::MidiContext::TrackMetaData MidiTrackMetaData;
-        auto trackMeta = std::dynamic_pointer_cast<MidiTrackMetaData>(ctx->trackMetaData(trackId));
-        if (trackMeta) {
-            this->currentEventInfo_->instrumentId = trackMeta->instrument.id;
-        }
+        // TODO: #89
+        //if (ev.eventType() != fm::midi::NoteOn) {
+        //    return;
+        //}
+        //if (!this->currentEventInfo_) {
+        //    return;
+        //}
+        //this->currentEventInfo_->pitches.push_back(ev.parameter1());
+        //this->currentEventInfo_->channel = ev.channel();
+        //typedef sheet::compiler::MidiContext::TrackMetaData MidiTrackMetaData;
+        //auto trackMeta = std::dynamic_pointer_cast<MidiTrackMetaData>(ctx->trackMetaData(trackId));
+        //if (trackMeta) {
+        //    this->currentEventInfo_->instrumentId = trackMeta->instrument.id;
+        //}
     }
 }
 

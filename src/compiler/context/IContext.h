@@ -14,7 +14,7 @@
 #include <fm/IDefinitionsServer.h>
 #include <compiler/timeInfo.h>
 #include <compiler/metaData.h>
-#include <compiler/instrument.h>
+#include <compiler/Instrument.h>
 #include <memory>
 
 namespace sheet {
@@ -66,8 +66,8 @@ namespace sheet {
 			virtual const SheetTemplates & currentSheetTemplates() = 0;
 			virtual VoicingStrategyPtr currentVoicingStrategy() = 0;
 			virtual AModificationPtr spielanweisung() = 0;
-			virtual AInstrumentDef * getInstrumentDef(const fm::String &uname) = 0;
-			virtual AInstrumentDef * currentInstrumentDef() = 0;
+			virtual AInstrumentDefPtr getInstrumentDef(const fm::String &uname) = 0;
+			virtual AInstrumentDefPtr currentInstrumentDef() = 0;
 			virtual fm::Ticks currentPosition() const = 0;
 			virtual fm::Ticks maxPosition() const = 0;
 			virtual TimeInfo getTimeInfo() const = 0;
