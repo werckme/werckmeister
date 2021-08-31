@@ -47,6 +47,10 @@ TBD.:
 * bloated soure code with visual engraving informations
 * so the idea of having a tool like LilyPond but focused on creating MIDI music
 
+TODO:
+ * cool stuff in a nutshell
+ * buzzword icons (visual studio code extension)
+
 ## Syntax
 ### Tracks and Voices
 A Werckmeister piece is built of tracks and voices. A track can have an arbitray number of voices, but at least there
