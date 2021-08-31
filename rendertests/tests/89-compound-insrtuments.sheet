@@ -1,0 +1,12 @@
+tempo: 120;
+device: SC1 midi 4;
+instrumentDef: piano SC1 _ch=0 _pc=0;
+instrumentDef: ebass  SC1 _ch=1 _pc=33;
+instrumentSection: _setName=bass piano ebass; 
+
+[
+instrument: bass;
+{
+    (c d e f g)1 |
+}
+]
