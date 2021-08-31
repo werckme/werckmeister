@@ -60,12 +60,12 @@ namespace sheet {
 				getAbsolutePitch(pitch), 
 				toMidiVelocity(velocity)
 			);
-			addEvent(event, track());
+			addEvent(event);
 			event = fm::midi::Event::NoteOff(instrumentDef.channel, 
 				absolutePosition + duration, 
 				getAbsolutePitch(pitch)
 			);
-			addEvent(event, track());
+			addEvent(event);
 		}
 
 		void MidiContext::startEvent(const PitchDef &pitch, fm::Ticks absolutePosition, double velocity)
@@ -83,7 +83,7 @@ namespace sheet {
 				getAbsolutePitch(pitch), 
 				toMidiVelocity(velocity)
 			);
-			addEvent(event, track());
+			addEvent(event);
 		}
 
 		
@@ -100,18 +100,22 @@ namespace sheet {
 				absolutePosition, 
 				getAbsolutePitch(pitch)
 			);
-			addEvent(event, track());
+			addEvent(event);
+		}
+
+		void MidiContext::addEvent(const fm::midi::Event &ev)
+		{
+			auto trackId = track(); // context's current track
+			if (trackId == INVALID_TRACK_ID) {
+				FM_THROW(Exception, "failed to add an event without related track");
+			}
+			addEvent(ev, trackId);
 		}
 
 		void MidiContext::addEvent(const fm::midi::Event &ev, TrackId trackId)
 		{
 			_compilerVisitor->visit(this, ev, trackId);
-			if (trackId == INVALID_TRACK_ID) {
-				trackId = track(); // context's current track
-			}
-			if (trackId == INVALID_TRACK_ID) {
-				FM_THROW(Exception, "failed to add an event without related track");
-			}
+
 			auto voiceConfig = voiceMetaData<MidiContext::VoiceMetaData>();
 			if (voiceConfig)
 			{
@@ -144,7 +148,7 @@ namespace sheet {
 			}			
 			const auto &instrumentDef = trackMeta->instrument;
 			auto event = fm::midi::Event::PitchBend(instrumentDef.channel, absolutePosition, value);
-			addEvent(event, track());
+			addEvent(event);
 		}
 
 		void MidiContext::addCue(const fm::String &text, fm::Ticks absolutePosition) 

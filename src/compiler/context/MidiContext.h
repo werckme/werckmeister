@@ -44,7 +44,8 @@ namespace sheet {
 			virtual TrackId createTrackImpl() override;
 			virtual VoiceId createVoiceImpl() override;
 			virtual void renderPitch(const PitchDef &pitch, fm::Ticks absolutePosition, double velocity, fm::Ticks duration) override;
-			virtual void addEvent(const fm::midi::Event &ev, TrackId trackId = INVALID_TRACK_ID);
+			virtual void addEvent(const fm::midi::Event &ev);
+			virtual void addEvent(const fm::midi::Event &ev, TrackId trackId);
 			virtual void renderPitchbend(double value, fm::Ticks absolutePosition) override;
 			virtual void startEvent(const PitchDef &pitch, fm::Ticks absolutePosition, double velocity) override;
 			virtual void stopEvent(const PitchDef &pitch, fm::Ticks absolutePosition) override;
