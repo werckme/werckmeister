@@ -6,17 +6,23 @@ namespace sheet {
     namespace compiler {
         void DefineInstrumentSection::execute(IContextPtr  context)
         {
+            if (sectionInstruments.empty()) {
+                FM_THROW(Exception, "missing instruments for this section");
+            }
             auto midiContext = getMidiContext(context);
-/*            auto name       = parameters[argumentNames.InstrumentDef.WithName].value<fm::String>();
-            auto deviceName = parameters[argumentNames.InstrumentDef.OnDevice].value<fm::String>();
-            auto ch         = parameters[argumentNames.InstrumentDef.Ch].value<int>();
-            auto cc         = parameters[argumentNames.InstrumentDef.Cc].value<int>();
-            auto pc         = parameters[argumentNames.InstrumentDef.Pc].value<int>();
-            midiContext->setMidiInstrument(name, deviceName, ch, cc, pc);  */  
+            auto name = parameters[argumentNames.InstrumentSection.WithName].value<fm::String>();
+            midiContext->defineInstrumentSection(name, sectionInstruments);
         }
 
         void DefineInstrumentSection::setArguments(const Arguments& args)
         {
+            Base::setArguments(args);
+            for (const auto &arg : args) {
+                if (arg.name == argumentNames.InstrumentSection.WithName) {
+                    continue;
+                }
+                sectionInstruments.push_back(arg.value);
+            }
         }
 
     }

@@ -52,6 +52,7 @@ namespace sheet {
 			virtual void startEvent(const PitchDef &pitch, fm::Ticks absolutePosition, double velocity) override;
 			virtual void stopEvent(const PitchDef &pitch, fm::Ticks absolutePosition) override;
 			virtual void selectMidiSound(int cc, int pc);
+			virtual void defineInstrumentSection(const fm::String& uname, std::list<fm::String> &sectionInstrumentUNames);
 			virtual void defineMidiInstrument(const fm::String &uname, int channel, int cc, int pc);
 			virtual void defineMidiInstrument(const fm::String &uname, const fm::String &deviceName, int channel, int cc, int pc);
 			virtual void setInstrument(const fm::String &uname) override;
@@ -72,7 +73,7 @@ namespace sheet {
 		protected:
 			virtual Base::VoiceMetaDataPtr createVoiceMetaData() override;
 			virtual Base::TrackMetaDataPtr createTrackMetaData() override;
-			void addMidiInstrumentDef(const fm::String &uname, std::shared_ptr<MidiInstrumentDef> def);
+			void addInstrumentDef(const fm::String &uname, AInstrumentDefPtr def);
 			virtual TrackId createMasterTrack() override;
 			int getAbsolutePitch(const PitchDef &pitch);
 			int toMidiVelocity(double velocity);

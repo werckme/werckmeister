@@ -24,6 +24,10 @@ struct ArgumentNames {
     } InstrumentDef;
 
     struct {
+        std::string WithName = "setName";
+    } InstrumentSection;
+
+    struct {
         std::string ForInstrument           = "for";
     } InstrumentConf;
 

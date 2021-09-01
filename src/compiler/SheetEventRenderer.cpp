@@ -155,24 +155,6 @@ namespace sheet {
 			eventLogger->warn(WMLogLambda(log << message), event);
 		}
 
-		void SheetEventRenderer::renderEvents(std::list<Event> &events, AInstrumentDefPtr instrument)
-		{
-			auto meta = ctx_->voiceMetaData();
-			if (instrument && !instrument->modifications.empty()) {
-				for (auto mod : instrument->modifications) {
-					mod->perform(ctx_, events);
-				}
-			}
-			for (const auto& event : events) {
-				if (event.isPitchBend()) {
-					renderPitchBendEvent(event);
-				}
-				else {
-					renderEventPitches(event);
-				}
-			}
-		}
-
 		void SheetEventRenderer::renderEvent(const Event &_ev)
 		{
 			Event ev = _ev;
@@ -196,9 +178,17 @@ namespace sheet {
 				mod->perform(ctx_, events);
 			}
 			auto instrument = ctx_->currentInstrumentDef();
-			auto instrumentSection = std::dynamic_pointer_cast<InstrumentSectionDef>(instrument);
-			if (!instrumentSection) {
-				renderEvents(events, instrument);
+			if (instrument) {
+				instrument->renderEvents(this, events);
+			} else {
+				for (const auto& event : events) {
+					if (event.isPitchBend()) {
+						renderPitchBendEvent(event);
+					}
+					else {
+						renderEventPitches(event);
+					}
+				}
 			}
 			meta->modificationsOnce.clear();
 			meta->expression = tmpExpression;

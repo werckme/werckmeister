@@ -27,7 +27,6 @@ namespace sheet {
         protected:
             void onWarning(const fm::String &message, const Event &event);
         private:
-            void renderEvents(std::list<Event> &events, AInstrumentDefPtr instrument);
             IContextPtr ctx_;
             fm::ILoggerPtr logger_;
             ICompilerVisitorPtr compilerVisitor_;

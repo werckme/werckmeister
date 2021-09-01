@@ -3,6 +3,7 @@
 
 #include "AMidiContextCommand.h"
 #include <compiler/argumentNames.h>
+#include <list>
 
 namespace sheet {
     namespace compiler {
@@ -32,12 +33,14 @@ namespace sheet {
         class DefineInstrumentSection : public AMidiContextCommand
         {
         public:
+            typedef AMidiContextCommand Base;
             fm::IHasParameter::ParametersByNames parameters = {
-                FM_PARAMETER_DEF		    (argumentNames.InstrumentDef.WithName, 	0),
+                FM_PARAMETER_DEF		    (argumentNames.InstrumentSection.WithName, 	0),
             };
             virtual ParametersByNames & getParameters() { return this->parameters; }
             virtual void execute(IContextPtr );
             virtual void setArguments(const Arguments &args) override;
+            std::list<fm::String> sectionInstruments;
         };
     }
 }
