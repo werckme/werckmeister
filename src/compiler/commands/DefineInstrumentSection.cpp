@@ -17,11 +17,17 @@ namespace sheet {
         void DefineInstrumentSection::setArguments(const Arguments& args)
         {
             Base::setArguments(args);
+            bool containsWithName = false;
             for (const auto &arg : args) {
                 if (arg.name == argumentNames.InstrumentSection.WithName) {
+                    containsWithName = true;
                     continue;
                 }
                 sectionInstruments.push_back(arg.value);
+            }
+            if (!containsWithName && !sectionInstruments.empty()) {
+                // in this case the first argument is the name, so remove it from the list
+                sectionInstruments.pop_front();
             }
         }
 

@@ -40,7 +40,14 @@ namespace sheet
 				throw std::runtime_error("expecting a midi context");
 			}
 			for (const auto& uname : instrumentNames) {
+				if (uname == this->uname) {
+					FM_THROW(Exception, "instrumentSection '" + this->uname + "' can not reference to it self");
+				}
 				auto instrumentDef = ctx->getInstrumentDef(uname);
+				bool isInstrumentSection = std::dynamic_pointer_cast<InstrumentSectionDef>(instrumentDef) != nullptr;
+				if (isInstrumentSection) {
+					FM_THROW(Exception, "instrumentSection '" + this->uname + "' can not reference to another instrumentSection '" + uname +  "'");
+				}
 				if (!instrumentDef) {
 					FM_THROW(Exception, "section instrument not found: " + uname);
 				}

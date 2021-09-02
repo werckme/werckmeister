@@ -372,6 +372,7 @@ namespace sheet {
 		{
 			auto def = std::make_shared<InstrumentSectionDef>();
 			def->instrumentNames = sectionInstrumentUNames;
+			def->uname = uname;
 			addInstrumentDef(uname, def);
 		}
 
