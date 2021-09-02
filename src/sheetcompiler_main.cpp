@@ -22,15 +22,23 @@
 #include <fmapp/TimelineVisitor.hpp>
 #include <compiler/SheetNavigator.h>
 
+#ifdef _MSC_VER
+#define _CRTDBG_MAP_ALLOC
+#include <stdlib.h>
+#include <crtdbg.h>
+#endif
+
 typedef sheet::compiler::EventLogger<fm::ConsoleLogger> 			   LoggerImpl;
 typedef sheet::compiler::LoggerAndWarningsCollector<fm::ConsoleLogger> WarningsCollectorWithConsoleLogger;
 
 int main(int argc, const char** argv)
 {
+#ifdef _MSC_VER
+	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+#endif
 	namespace di = boost::di;
 	namespace cp = sheet::compiler;
 	auto programOptionsPtr = std::make_shared<CompilerProgramOptions>();
-
 	try {
 		programOptionsPtr->parseProgrammArgs(argc, argv);
 	} catch (const std::exception &ex) {

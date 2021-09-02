@@ -42,6 +42,7 @@ SET (SRC_FETZER_LIB
     compiler/voicings/SimpleGuitar.cpp
     compiler/voicings/Lua.cpp
     compiler/metaData.cpp
+    compiler/Instrument.cpp
     compiler/SheetTemplateRenderer.cpp
     compiler/error.cpp
     compiler/Warning.cpp
@@ -82,7 +83,8 @@ SET (SRC_FETZER_LIB
     compiler/commands/Jump.cpp 
     compiler/commands/SetFade.cpp
     compiler/commands/Cue.cpp
-    compiler/commands/Fill.cpp 
+    compiler/commands/Fill.cpp
+    compiler/commands/DefineInstrumentSection.cpp
 )
 
 add_definitions( -DGIT_VERSION="${GIT_VERSION}" )

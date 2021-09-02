@@ -10,11 +10,11 @@ namespace sheet {
         {
         public:
             virtual ~ACanSpecifyInstrument() = default;
-            virtual void setInstrument(AInstrumentDef *instrument) override { this->_instr = instrument; }
-            virtual AInstrumentDef* getInstrument() override { return this->_instr; }
+            virtual void setInstrument(AInstrumentDefPtr instrument) override { this->_instr = instrument; }
+            virtual AInstrumentDefPtr getInstrument() override { return this->_instr; }
             virtual bool hasInstrument() const override { return this->_instr != nullptr; }
         private:
-            AInstrumentDef *_instr = nullptr;
+            AInstrumentDefPtr _instr = nullptr;
         };
     }
 }

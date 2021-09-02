@@ -80,6 +80,7 @@ namespace sheet {
 #include <compiler/commands/NopCommand.h>
 #include <compiler/commands/Cue.h>
 #include <compiler/commands/Fill.h>
+#include <compiler/commands/DefineInstrumentSection.h>
 
 namespace sheet {
     namespace compiler {
@@ -117,6 +118,7 @@ namespace sheet {
                 _FM_Register(NopCommand,                                SHEET_META__SHEET_TEMPLATE_POSITION);
                 _FM_Register(Fill,                                      SHEET_META__SET_FILL_TEMPLATE);
                 _FM_Register(Cue,                                       SHEET_META__ADD_CUE);
+                _FM_Register(DefineInstrumentSection,                   SHEET_META__DEFINE_INSTRUMENT_SECTION);
                 return true;
             })();
         }

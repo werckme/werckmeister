@@ -38,6 +38,11 @@
 #include "fmapp/os.hpp"
 #endif
 
+#ifdef _MSC_VER
+#define _CRTDBG_MAP_ALLOC
+#include <stdlib.h>
+#include <crtdbg.h>
+#endif
 
 typedef sheet::compiler::EventLogger<fm::ConsoleLogger> 			   LoggerImpl;
 typedef sheet::compiler::LoggerAndWarningsCollector<fm::ConsoleLogger> WarningsCollectorWithConsoleLogger;
@@ -48,8 +53,10 @@ funk::UdpSenderPtr _udpSender = nullptr;
 
 int main(int argc, const char** argv)
 {
+#ifdef _MSC_VER
+	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+#endif
 	auto programOptionsPtr = std::make_shared<PlayerProgramOptions>();
-
 	try {
 		programOptionsPtr->parseProgrammArgs(argc, argv);
 		if (programOptionsPtr->isUdpSet()) {
