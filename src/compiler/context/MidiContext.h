@@ -24,22 +24,17 @@ namespace sheet {
 			typedef AContext Base;
 			typedef std::unordered_map<fm::String, AInstrumentDefPtr> InstrumentDefs;
 			typedef std::vector<AInstrumentDefPtr> InstrumentDefContainer;
-			MidiContext(fm::midi::MidiPtr midiFile, 
-				fm::IDefinitionsServerPtr definitionsServer, 
-				ICompilerVisitorPtr compilerVisitor, 
+			MidiContext(fm::midi::MidiPtr midiFile,
+				fm::IDefinitionsServerPtr definitionsServer,
+				ICompilerVisitorPtr compilerVisitor,
 				fm::ILoggerPtr logger,
-				ICompilerProgramOptionsPtr options) 
-				: Base(definitionsServer), 
-				  midi_(midiFile),
-				  _compilerVisitor(compilerVisitor),
-				  _logger(logger),
-				  _options(options)
-				{}
+				ICompilerProgramOptionsPtr options);
 
 			struct VoiceMetaData : sheet::compiler::VoiceMetaData {
 				fm::Ticks positionOffset = 0;
 			};
 			struct TrackMetaData : sheet::compiler::TrackMetaData {
+				TrackMetaData();
 				AInstrumentDefPtr instrument;
 			};
 			fm::midi::MidiPtr midiFile() const { return midi_; }

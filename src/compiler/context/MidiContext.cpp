@@ -15,6 +15,9 @@ namespace sheet {
 	namespace compiler {
 
 		namespace {
+
+			AInstrumentDefPtr UnknownInstrument = std::make_shared<MidiInstrumentDef>();
+
 			inline std::shared_ptr<MidiInstrumentDef> getActiveMidiInstrument(AInstrumentDefPtr instrument)
 			{
 				AInstrumentDefPtr activeInstrument = instrument->activeInstrument();
@@ -41,6 +44,16 @@ namespace sheet {
 			}
 		}
 
+		MidiContext::TrackMetaData::TrackMetaData() : instrument(UnknownInstrument)
+		{
+		}
+
+		MidiContext::MidiContext(fm::midi::MidiPtr midiFile, fm::IDefinitionsServerPtr definitionsServer, ICompilerVisitorPtr compilerVisitor,
+			fm::ILoggerPtr logger, ICompilerProgramOptionsPtr options) : 
+			Base(definitionsServer), midi_(midiFile),
+			_compilerVisitor(compilerVisitor), _logger(logger), _options(options)
+		{
+		}
 
 		int MidiContext::getAbsolutePitch(const PitchDef &pitch)
 		{
