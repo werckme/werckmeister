@@ -1,11 +1,7 @@
 using "./lua/mods/staccato.lua";
 
 tempo: 120;
-<<<<<<< HEAD
 device: SC1 midi 0;
-=======
-device: SC1 midi 4;
->>>>>>> main
 instrumentDef: piano SC1 _ch=0 _pc=0;
 instrumentDef: ebass  SC1 _ch=1 _pc=33;
 instrumentConf: ebass mod staccato _amount=100;
