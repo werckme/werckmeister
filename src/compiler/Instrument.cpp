@@ -61,6 +61,7 @@ namespace sheet
 		void InstrumentSectionDef::renderEvents(SheetEventRenderer* renderer, std::list<Event>& events)
 		{
 			auto ctx_ = renderer->context();
+			VoiceMetaData voiceMetaCopy = *ctx_->voiceMetaData();
 			for (const auto& uname : instrumentNames) {
 				auto instrumentDef = ctx_->getInstrumentDef(uname);
 				if (!instrumentDef) {
@@ -68,6 +69,8 @@ namespace sheet
 				}
 				_currentInstrument = instrumentDef;
 				std::list<Event> copy = events; // we like it original here
+				auto contextMetaPtr = ctx_->voiceMetaData();
+				*contextMetaPtr = voiceMetaCopy;
 				instrumentDef->renderEvents(renderer, copy);
 			}
 			_currentInstrument.reset();
