@@ -165,6 +165,7 @@ int startPlayer(std::shared_ptr<PlayerProgramOptions> programOptionsPtr)
 		program->prepareEnvironment();
 		auto result = program->execute();
 		sheetWatcherHandlers->container.clear();
+		delete program;
 		return result;
 	} catch (const fm::Exception &ex) {
 		std::cerr << ex.toString() << std::endl;
