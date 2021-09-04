@@ -8,7 +8,7 @@
 
 Werckmeister compiles sheet music source code into a MIDI file.
 
-[Try it online](https://werckme.github.io/editor)
+## [Try it online](https://werckme.github.io/editor)
 
 ### Use Werckmeister if you want to
 * prototype a song
@@ -27,29 +27,41 @@ Werckmeister compiles sheet music source code into a MIDI file.
 ## Motivation
 * [SuperCollider](https://supercollider.github.io/)
 * [CSound](https://en.wikipedia.org/wiki/Csound)
-* [alda](https://alda.io/)
+* [Alda](https://alda.io/)
 * [...](https://en.wikipedia.org/wiki/List_of_audio_programming_languages)
 
-Why oh why does the world needs another musical programming language?
+### Why oh why does the world need another musical programming language?
 
-TBD.:
-* searching a new scorewriter program
-* usage of my new SC-8850
-* pevious program (overture) outdated
-* files more then less useless because of proprietary file format 
-* btw.: unawareness of MuseScore
-* eventually found LilyPond
-* loved the idea having text based score
-* BUT
-* made for music engraving
+It begun with the fact, that I was searching for new scorewriter tool. I was using [Overture](https://sonicscores.com/overture/) for a long time but it got outdated and did'nt run very well on my new computer. It anoyed me that I have to pay several hundred dollars just to get it to run on a new system.
+
+That and the fact that all music I have written is "locked in" in a proprietary file format, led me to the decision that the new solution has to be open source.
+
+> Fun Fact: If I had known [MuseScore](https://musescore.org/) during that time, maybe there would be no werckmeister today
+
+So eventually I found [LilypPond](https://lilypond.org/). I loved the idea behind it: writing music just with text. It addressed the problem having usless (score) files, because having no program that can read it. 
+
+Unfortunately lilypond dosen't fullfill all my needs. It is made with a focus on "music engraving", not creating music in a way I would do with a regulary scorewriter *(in terms of trying things out, experimenting with ideas)*. 
+
+So, for me, it had following disadvantages:
 * rudimental MIDI generation
 * long rendering time
 * bloated soure code with visual engraving informations
-* so the idea of having a tool like LilyPond but focused on creating MIDI music
 
-TODO:
- * cool stuff in a nutshell
- * buzzword icons (visual studio code extension)
+so that was original idea:
+
+#### having a tool like LilyPond, but 
+* with a focus on MIDI
+* fast compile time
+* tight source code
+
+So I searched more in this "music via source code" direction. I found great software there, such as CSound and SuperCollider. But, for my opinion, these programs are made to have a **new way** of creating music, less writing music in a more traditional way.
+
+> Alda comes very close to that, what I was searching for, but also, I didn't know it back then. 
+
+So finally, I decided to create werckmeister. 
+
+Somewhat later, I played around with a Yamaha keyboard and its "Auto Accompaniment" feature and I was wondering how it comes, that when I press a Cmaj7 chord the virtual band plays the correct notes to that. And that was the beginning of the "accompaniment template" system.
+
 
 ## Syntax
 ### Tracks and Voices
