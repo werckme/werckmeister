@@ -56,7 +56,7 @@ so that was original idea:
 
 So I searched more in this "music via source code" direction. I found great software there, such as CSound and SuperCollider. But, for my opinion, these programs are made to have a **new way** of creating music, less writing music in a more traditional way.
 
-> Alda comes very close to that, what I was searching for, but also, I didn't know it back then. 
+> Alda comes very close to that, what I was searching for, but again, I didn't know it back then. 
 
 So finally, I decided to create werckmeister. 
 
