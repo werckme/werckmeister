@@ -23,6 +23,15 @@
 #include <boost/di/extension/scopes/scoped.hpp>
 #include <compiler/SheetNavigator.h>
 
+#ifdef _MSC_VER
+#define _CRTDBG_MAP_ALLOC
+#include <stdlib.h>
+#include <crtdbg.h>
+#endif
+
+
+// #define LOCAL_TEST_RUN
+
 typedef sheet::compiler::EventLogger<fm::ConsoleLogger> 			   LoggerImpl;
 typedef sheet::compiler::LoggerAndWarningsCollector<fm::ConsoleLogger> WarningsCollectorWithConsoleLogger;
 
@@ -115,7 +124,20 @@ extern "C" const char * create_compile_result(const char *file, double beginQuar
 	return result;
 }
 
+
+#ifdef LOCAL_TEST_RUN
 int main(int argc, const char** argv)
 {
-    std::cout << fm::getWerckmeister().version() << std::endl;
+#ifdef _MSC_VER
+	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+#endif
+	auto result = create_compile_result("put a valid sheetfile here", 0);
+    std::cout << std::string(result) << std::endl;
+	delete result;
 }
+#else
+int main(int argc, const char** argv)
+{
+	std::cout << fm::getWerckmeister().version() << std::endl;
+}
+#endif
