@@ -78,10 +78,10 @@ namespace sheet {
 		// }
 
 
-		std::vector<StyleDef> StyleSheetParser::parse(fm::CharType const* first, fm::CharType const* last, Event::SourceId sourceId)
+		std::vector<ConductionSheetDef> ConductionSheetParser::parse(fm::CharType const* first, fm::CharType const* last, Event::SourceId sourceId)
 		{
 			
-			std::vector<StyleDef> result;
+			std::vector<ConductionSheetDef> result;
 			// ChordDefTokenizer<LexerType> chordDefTok;
 			// LexerType::iterator_type iter = chordDefTok.begin(first, last);
 			// LexerType::iterator_type end = chordDefTok.end();

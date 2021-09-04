@@ -35,7 +35,7 @@ namespace sheet {
 				{ PITCHMAP_DEF_EXTENSION , &usePitchmapDef },
 				{ LUA_DEF_EXTENSION , &useLuaScript },
 				{ SHEET_CONFIG , &useConfig },
-				{ STYLE_SHEET , &useStyleSheet }
+				{ CONDUCTIONS_SHEET , &useStyleSheet }
 			});
 			
 			const Extensions AllSupportedExtensions = {
@@ -44,7 +44,7 @@ namespace sheet {
 				PITCHMAP_DEF_EXTENSION,
 				LUA_DEF_EXTENSION,
 				SHEET_CONFIG,
-				STYLE_SHEET
+				CONDUCTIONS_SHEET
 			};
 
 			void append(DocumentPtr doc, const SheetDef &sheetDef)
@@ -85,7 +85,7 @@ namespace sheet {
 				fm::StreamBuffIterator begin(*filestream);
 				fm::StreamBuffIterator end;
 				fm::String documentText(begin, end);
-				StyleSheetParser parser;
+				ConductionSheetParser parser;
 				auto styleDefs = parser.parse(documentText);
 				doc->styleDefs = styleDefs;
 			}

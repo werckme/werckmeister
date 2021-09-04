@@ -5,7 +5,7 @@
 
 namespace sheet {
 
-	struct StyleDef {
+	struct ConductionSheetDef {
 		
 	};
 

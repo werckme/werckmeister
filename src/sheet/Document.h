@@ -9,14 +9,14 @@
 #include <memory>
 #include <boost/bimap.hpp>
 #include <memory>
-#include "objects/StyleDef.h"
+#include "objects/ConductionSheetDef.h"
 
 namespace sheet {
 	class Document: public std::enable_shared_from_this<Document> {
 	public:
 		typedef std::unordered_map<fm::String, ChordDef> ChordDefs;
 		typedef std::unordered_map<fm::String, PitchDef> PitchmapDefs;
-		typedef std::vector<StyleDef> StyleDefs;
+		typedef std::vector<ConductionSheetDef> StyleDefs;
 		typedef fm::String Path;
 		typedef boost::bimap<Event::SourceId, Path> Sources;
 		fm::String path;

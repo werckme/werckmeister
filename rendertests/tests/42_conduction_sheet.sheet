@@ -1,6 +1,6 @@
 using "./lua/voicings/voicelead.lua";
 using "./chords/default.chords";
---using "42_style_sheet.style";
+--using "42_style_sheet.conductions";
 
 tempo: 120;
 device: SC1 midi 4;
