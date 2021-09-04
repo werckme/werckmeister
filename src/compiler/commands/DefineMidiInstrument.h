@@ -27,8 +27,8 @@ namespace sheet {
         /// ] \n
         /// ```
         /// </command>
-        /// <param name="setName"  position="0" type="word">An arbitary name.</param>
-        /// <param name="onDevice" position="1" type="word">The device which to use (The name of the device, see [device](#device)).</param>
+        /// <param name="setName"  position="0" type="text">An arbitary name.</param>
+        /// <param name="onDevice" position="1" type="text">The device which to use (The name of the device, see [device](#device)).</param>
         /// <param name="ch"       position="2" type="0..15">The MIDI channel.</param>
         /// <param name="cc"       position="3" type="0..127">A MIDI `control change` value.</param>
         /// <param name="pc"       position="4" type="0..127">A MIDI `program change` value.</param>

@@ -31,7 +31,7 @@ namespace sheet {
         /// `device: MyDevice fluidSynth _useFont="PATH OF A SOUNDFONT FILE";`
         /// On mac, make sure that you have fluidsynth installed.
         /// </command>
-        /// <param name="setName"    position="0" type="word">An arbitary name.</param>
+        /// <param name="setName"    position="0" type="text">An arbitary name.</param>
         /// <param name="isType"     position="1" type="[midi,fluidSynth]">The type of the device.</param>
         /// <param name="usePort"    position="2" type="0..N">The midi port id of your device. You can get a list of your connected devices, by executing `sheetp --list`</param>
         /// <param name="withOffset" position=""  optional="1" type="0..N">Defines an offset in milliseconds. Can be used to keep different devices in sync.</param>

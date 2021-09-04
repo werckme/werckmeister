@@ -24,6 +24,10 @@ struct ArgumentNames {
     } InstrumentDef;
 
     struct {
+        std::string WithName = "setName";
+    } InstrumentSection;
+
+    struct {
         std::string ForInstrument           = "for";
     } InstrumentConf;
 
@@ -104,7 +108,16 @@ struct ArgumentNames {
         std::string FadeFrom                = "from";
         std::string FadeDuration            = "duration";
         std::string Curve                   = "curve";        
-    } SetFade; 
+    } SetFade;
+
+    struct {
+        std::string Text = "text";
+    } Cue;
+
+    struct {
+        std::string Template = "template";
+        std::string Replace = "replace";
+    } Fill;   
 
 };
 

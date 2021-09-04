@@ -14,7 +14,7 @@
 #include <forward.hpp>
 #include <compiler/metaData.h>
 #include <compiler/error.hpp>
-#include <compiler/instrument.h>
+#include <compiler/Instrument.h>
 #include <compiler/timeInfo.h>
 #include "IContext.h"
 
@@ -96,8 +96,8 @@ namespace sheet {
 			virtual void currentSheetTemplate(const SheetTemplates &sheetTemplate);
 			virtual VoicingStrategyPtr currentVoicingStrategy();
 			virtual AModificationPtr spielanweisung();
-			virtual AInstrumentDef * getInstrumentDef(const fm::String &uname) = 0;
-			virtual AInstrumentDef * currentInstrumentDef() = 0;
+			virtual AInstrumentDefPtr getInstrumentDef(const fm::String &uname) = 0;
+			virtual AInstrumentDefPtr currentInstrumentDef() = 0;
 			virtual fm::Ticks currentPosition() const;
 			virtual fm::Ticks maxPosition() const;
 			TimeInfo getTimeInfo() const;

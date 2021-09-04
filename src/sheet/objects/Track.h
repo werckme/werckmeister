@@ -17,6 +17,7 @@ namespace sheet {
 		typedef std::vector<TrackConfig> TrackConfigs;
 		TrackConfigs trackConfigs;
 		Voices voices;
+		fm::Ticks maxLength() const;
 	};
 
 }

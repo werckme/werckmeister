@@ -35,6 +35,6 @@ if __name__ == '__main__':
             print(term.orange + "  " + str(ex))
             print(term.normal)
         finally:
-            os.remove(midifile)
+            pass #os.remove(midifile)
     exit(returnCode)
 

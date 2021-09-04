@@ -1,7 +1,8 @@
-device: SC1 midi 0;
-instrumentDef: piano   SC1 2 0 0;
+device: SC1 midi 3;
+instrumentDef: piano   SC1 0 0 0;
 
 [
+instrument: piano;
 {
     /signature: 3 2/
     c1. |

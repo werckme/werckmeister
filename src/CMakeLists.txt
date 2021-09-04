@@ -43,6 +43,7 @@ SET (SRC_FETZER_LIB
     compiler/voicings/SimpleGuitar.cpp
     compiler/voicings/Lua.cpp
     compiler/metaData.cpp
+    compiler/Instrument.cpp
     compiler/SheetTemplateRenderer.cpp
     compiler/error.cpp
     compiler/Warning.cpp
@@ -51,7 +52,9 @@ SET (SRC_FETZER_LIB
     compiler/lua/luaTimeInfo.cpp
     sheet/objects/Event.cpp
     sheet/objects/ChordDef.cpp
+    sheet/objects/Track.cpp
     sheet/Document.cpp
+    sheet/SheetTemplate.cpp
     compiler/commands/ACommand.cpp
     compiler/commands/ACanSpecifyInstrument.cpp
     compiler/commands/DefineMidiInstrument.cpp
@@ -79,7 +82,10 @@ SET (SRC_FETZER_LIB
     compiler/commands/AddDevice.cpp
     compiler/commands/Mark.cpp    
     compiler/commands/Jump.cpp 
-    compiler/commands/SetFade.cpp 
+    compiler/commands/SetFade.cpp
+    compiler/commands/Cue.cpp
+    compiler/commands/Fill.cpp
+    compiler/commands/DefineInstrumentSection.cpp
 )
 
 add_definitions( -DGIT_VERSION="${GIT_VERSION}" )

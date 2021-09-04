@@ -1,7 +1,7 @@
 #ifndef SHEET_ICANSPECIFYINSTRUMENT_HPP
 #define SHEET_ICANSPECIFYINSTRUMENT_HPP
 
-#include <compiler/instrument.h>
+#include <compiler/Instrument.h>
 
 namespace sheet {
     namespace compiler {
@@ -9,8 +9,8 @@ namespace sheet {
         {
         public:
             virtual ~ICanSpecifyInstrument() = default;
-            virtual void setInstrument(AInstrumentDef *instrument) = 0;
-            virtual AInstrumentDef* getInstrument() = 0;
+            virtual void setInstrument(AInstrumentDefPtr instrument) = 0;
+            virtual AInstrumentDefPtr getInstrument() = 0;
             virtual bool hasInstrument() const = 0;
         };
     }
