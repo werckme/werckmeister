@@ -233,7 +233,7 @@ namespace fmapp {
 					onProcess();
 				}
 				catch (...) {
-					std::cerr << __FILE__ << " unexcpected exception" << std::endl;
+					std::cerr << __FILE__ << " unexpected exception" << std::endl;
 				}
 			});
 		}
