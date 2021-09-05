@@ -8,7 +8,7 @@
 namespace sheet {
     namespace compiler {
         /// <command name="instrumentSection" where="document">
-        /// Combines several instruments into one.
+        /// Combines several instruments into a new one.
         /// ### examples
         /// **positional:** 
         /// `instrumentSection: bass piano ebass`; 
@@ -17,17 +17,23 @@ namespace sheet {
         /// **a complete example**
         /// define an device, an instrument and set it to a track.
         /// see [instrumentDef](#instrumentDef), [instrument](#instrument), [device](#device)
+        /// <![CDATA[
+        /// ```language=Werckmeister\n
+        /// tempo: 120;\n
+        /// device: MyDevice  midi _usePort=0;\n
+        /// instrumentDef:piano    _onDevice=MyDevice  _ch=0 _pc=0;\n
+        /// instrumentDef:guitar   _onDevice=MyDevice _ch=1  _pc=29;\n
+        /// instrumentDef:organ   _onDevice=MyDevice _ch=2  _pc=16;\n
+        /// instrumentSection: myNewInstrument piano guitar organ;\n
+        /// \n
+        /// [\n
+        /// instrument: myNewInstrument;\n
+        /// {\n
+        ///  a,,1 | a, | d#,~ | &\n
+        /// }\n
+        /// ]\n
         /// ```
-        ///    instrumentDef: piano MyDevice _ch=0 _pc=0;
-        ///    instrumentDef: ebass MyDevice _ch=1 _pc=33;
-        ///    instrumentSection: _setName=bass piano ebass; 
-        /// [ \n
-        /// instrument: bass; \n
-        /// { \n
-        ///    c d e f \n
-        /// } \n
-        /// ] \n
-        /// ```
+        /// ]]>
         /// </command>
         /// <param name="setName"  position="0" type="text">An arbitary name.</param>
         class DefineInstrumentSection : public AMidiContextCommand
