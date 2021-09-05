@@ -1,28 +1,30 @@
-#ifndef SHEET_STYLE_SHEET_H
-#define SHEET_STYLE_SHEET_H
+#ifndef SHEET_CONDUCTION_SHEET_H
+#define SHEET_CONDUCTION_SHEET_H
 
+#include "ASheetObjectWithSourceInfo.h"
 #include <fm/common.hpp>
-#include <list>
+#include <vector>
+#include <sheet/PitchDef.h>
 
 namespace sheet {
-
-	struct ConductionSelector {
-		enum Type { Unkown };
-		Type type = Unkown;
-	};
-
-	struct ConductionRule {
-		ConductionSelector selector;
-	};
-
-	struct ConductionSheetDef {
-		enum {
-			UndefinedSource = 0,
-			UndefinedPosition = INT_MAX
+	struct ConductionSelector :  public ASheetObjectWithSourceInfo {
+		struct ArgumentValue {
+			fm::Ticks tickValue = 0;
+			PitchDef pitch;
 		};
-		typedef unsigned int SourceId;
-		SourceId sourceId = UndefinedSource;
-		typedef std::list<ConductionRule> Rules;
+		typedef std::vector<ArgumentValue> Arguments; 
+		enum Type { TypeUnkown, TypePosition, TypePitch };
+		Type type = TypeUnkown;
+		Arguments arguments; 
+	};
+
+	struct ConductionRule : public ASheetObjectWithSourceInfo {
+		typedef std::vector<ConductionSelector> Selectors;
+		Selectors selectors;
+	};
+
+	struct ConductionSheetDef : public ASheetObjectWithSourceInfo {
+		typedef std::vector<ConductionRule> Rules;
 		Rules rules;
 	};
 

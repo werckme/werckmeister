@@ -15,11 +15,45 @@ BOOST_AUTO_TEST_CASE(parse_empty_succeeds)
 	auto defs = parser.parse(text);
 }
 
-BOOST_AUTO_TEST_CASE(parse_invalid_fails)
+// BOOST_AUTO_TEST_CASE(parse_invalid_fails)
+// {
+// 	using namespace fm;
+// 	using sheet::PitchDef;
+// 	fm::String text = FM_STRING("0123456");
+// 	sheet::compiler::ConductionSheetParser parser;
+// 	BOOST_CHECK_THROW(parser.parse(text), sheet::compiler::Exception);
+// }
+
+BOOST_AUTO_TEST_CASE(parse_oneSelector_emptyRule)
 {
 	using namespace fm;
 	using sheet::PitchDef;
-	fm::String text = FM_STRING("0123456");
+	fm::String text = FM_STRING("\
+	position(1) \
+");
 	sheet::compiler::ConductionSheetParser parser;
-	BOOST_CHECK_THROW(parser.parse(text), sheet::compiler::Exception);
+	auto defs = parser.parse(text);
+	BOOST_CHECK_EQUAL(defs.rules.size(), size_t(1));
+	BOOST_CHECK_EQUAL(defs.rules[0].selectors.size(), size_t(1));
+	BOOST_CHECK_EQUAL(defs.rules[0].selectors[0].type, sheet::ConductionSelector::TypePosition);
+	BOOST_CHECK_EQUAL(defs.rules[0].selectors[0].arguments.size(), size_t(1));
+	BOOST_CHECK_EQUAL(defs.rules[0].selectors[0].arguments[0].tickValue, fm::Ticks(1));
+}
+
+BOOST_AUTO_TEST_CASE(parse_twoSlector_emptyRule)
+{
+	using namespace fm;
+	using sheet::PitchDef;
+	fm::String text = FM_STRING("\
+	position(1) pitch(1 2){} \
+");
+	sheet::compiler::ConductionSheetParser parser;
+	auto defs = parser.parse(text);
+	BOOST_CHECK_EQUAL(defs.rules.size(), size_t(1));
+	BOOST_CHECK_EQUAL(defs.rules[0].selectors.size(), size_t(2));
+	BOOST_CHECK_EQUAL(defs.rules[0].selectors[0].type, sheet::ConductionSelector::TypePosition);
+	BOOST_CHECK_EQUAL(defs.rules[0].selectors[0].arguments.size(), size_t(1));
+	BOOST_CHECK_EQUAL(defs.rules[0].selectors[0].arguments[0].tickValue, fm::Ticks(1));
+	BOOST_CHECK_EQUAL(defs.rules[0].selectors[1].type, sheet::ConductionSelector::TypePitch);
+	BOOST_CHECK_EQUAL(defs.rules[0].selectors[1].arguments.size(), size_t(2));
 }

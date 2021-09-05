@@ -16,7 +16,6 @@ namespace sheet {
 	public:
 		typedef std::unordered_map<fm::String, ChordDef> ChordDefs;
 		typedef std::unordered_map<fm::String, PitchDef> PitchmapDefs;
-		typedef std::vector<ConductionSheetDef> StyleDefs;
 		typedef fm::String Path;
 		typedef boost::bimap<Event::SourceId, Path> Sources;
 		fm::String path;
@@ -24,7 +23,7 @@ namespace sheet {
 		SheetDef sheetDef;
 		ChordDefs chordDefs;
 		PitchmapDefs pitchmapDefs;
-		StyleDefs styleDefs;
+		ConductionSheetDef conductionSheets;
 		Sources sources;
 		Event::SourceId addSource(const Path &path);
 		Path findSourcePath(Event::SourceId id) const;

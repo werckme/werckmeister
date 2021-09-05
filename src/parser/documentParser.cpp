@@ -86,8 +86,8 @@ namespace sheet {
 				fm::StreamBuffIterator end;
 				fm::String documentText(begin, end);
 				ConductionSheetParser parser;
-				auto styleDefs = parser.parse(documentText);
-				doc->styleDefs = styleDefs;
+				auto conductionSheets = parser.parse(documentText);
+				doc->conductionSheets = conductionSheets;
 			}
 			void useLuaScript(DocumentPtr doc, const fm::String &path, Event::SourceId sourceId)
 			{
