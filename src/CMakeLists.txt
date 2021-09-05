@@ -102,6 +102,7 @@ SET (SRC_FETZER_TESTS
     tests/test_bugfixes.cpp
     tests/testhelper.cpp
     tests/test_document.cpp
+    tests/test_conduction_parser.cpp
 )
 
 ## FMAPP

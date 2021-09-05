@@ -57,8 +57,8 @@ namespace sheet {
 		};
 
 		struct ConductionSheetParser {
-			std::vector<ConductionSheetDef> parse(fm::CharType const* first, fm::CharType const* last, Event::SourceId sourceId = Event::UndefinedSource);
-			std::vector<ConductionSheetDef> parse(const fm::String& str, Event::SourceId sourceId = Event::UndefinedSource)
+			ConductionSheetDef parse(fm::CharType const* first, fm::CharType const* last, Event::SourceId sourceId = Event::UndefinedSource);
+			ConductionSheetDef parse(const fm::String& str, Event::SourceId sourceId = Event::UndefinedSource)
 			{
 				fm::CharType const* cstr = str.c_str();
 				return parse(cstr, cstr + str.length(), sourceId);
