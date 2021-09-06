@@ -15,8 +15,7 @@
 #include "parserSymbols.h"
 #include <fm/tools.h>
 #include "parserPositionIt.h"
-#include <sheet/AliasPitchDef.h>
-#include "extendedPitchSymbols.h"
+#include "pitchParser.h"
 
 BOOST_FUSION_ADAPT_STRUCT(
 	sheet::ConductionSelector::ArgumentValue,
@@ -57,37 +56,18 @@ BOOST_FUSION_ADAPT_STRUCT(
 	(sheet::ConductionSheetDef::Rules, rules)
 )
 
-BOOST_FUSION_ADAPT_STRUCT(
-	sheet::PitchDef,
-	(sheet::PitchDef::Pitch, pitch)
-	(sheet::PitchDef::Octave, octave)
-)
-
-BOOST_FUSION_ADAPT_STRUCT(
-	sheet::AliasPitchDef,
-	(fm::String, alias)
-)
-
 namespace sheet {
 	namespace compiler {
-
-		
-		namespace {
-			DegreeSymbols degreeSymbols_;
-			PitchSymbols pitchSymbols_;
-			OctaveSymbols octaveSymbols_;
-			DurationSymbols durationSymbols_;
-			ExpressionSymbols expressionSymbols_;
-		}
 
 		namespace {
 			namespace qi = boost::spirit::qi;
 			namespace ascii = boost::spirit::ascii;
 
 			template <typename Iterator>
-			struct _ConductionParser : qi::grammar<Iterator, ConductionSheetDef(), ascii::space_type>
+			struct _ConductionParser : PitchParser, qi::grammar<Iterator, ConductionSheetDef(), ascii::space_type>
 			{
 				_ConductionParser(Iterator begin, ConductionSheetDef::SourceId sourceId = ConductionSheetDef::UndefinedSource) : 
+					PitchParser(),
 					_ConductionParser::base_type(start, "conduction"),
 					sourceId_(sourceId)
 				{
@@ -103,13 +83,10 @@ namespace sheet {
 					using boost::phoenix::push_back;
 					using boost::phoenix::insert;
 					using qi::_val;
+			
 					current_pos_.setStartPos(begin);
 					auto onError = boost::bind(&handler::errorHandler<Iterator>, _1);
 					on_error<fail>(start, onError);
-					_impl::initExtendedPitches(extendedPitch_);
-					pitch_ %= pitchSymbols_ >> (octaveSymbols_ | attr(PitchDef::DefaultOctave));
-					alias_ %= lexeme['"' >> +(char_ - '"') >> '"'];
-					pitchOrAlias_ %= pitch_ | alias_ | extendedPitch_;
 
 					argument_ %= 
 						(double_[at_c<ArTickValue>(_val) = qi::_1]);
@@ -142,10 +119,6 @@ namespace sheet {
 				qi::rule<Iterator, ConductionSelector(), ascii::space_type> selector_;
 				qi::rule<Iterator, ConductionRule(), ascii::space_type> rules_;
 				qi::rule<Iterator, sheet::ConductionSelector::ArgumentValue(), ascii::space_type> argument_;
-				qi::rule<Iterator, PitchDef(), ascii::space_type> pitchOrAlias_;
-				qi::rule<Iterator, AliasPitchDef(), ascii::space_type> extendedPitch_;
-				qi::rule<Iterator, AliasPitchDef(), ascii::space_type> alias_;
-				qi::rule<Iterator, PitchDef(), ascii::space_type> pitch_;
 				CurrentPos<Iterator> current_pos_;
 			};
 
