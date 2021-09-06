@@ -1,4 +1,5 @@
 #include <boost/spirit/include/qi.hpp>
+#include <sheet/PitchDef.h>
 #include <sheet/AliasPitchDef.h>
 #include <fm/common.hpp>
 #include <boost/spirit/include/phoenix_operator.hpp>

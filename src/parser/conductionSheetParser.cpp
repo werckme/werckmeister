@@ -20,11 +20,13 @@
 BOOST_FUSION_ADAPT_STRUCT(
 	sheet::ConductionSelector::ArgumentValue,
 	(fm::Ticks, tickValue)
+	(sheet::PitchDef, pitch)
 )
 
 namespace {
 	enum SelectorArgumentValueFields {
-		ArTickValue
+		ArTickValue,
+		ArPitch
 	};
 }
 
@@ -89,7 +91,9 @@ namespace sheet {
 					on_error<fail>(start, onError);
 
 					argument_ %= 
-						(double_[at_c<ArTickValue>(_val) = qi::_1]);
+						  (double_[at_c<ArTickValue>(_val) = qi::_1] >> attr(PitchDef()))
+						| (attr(0) >> pitchOrAlias_[at_c<ArPitch>(_val) = qi::_1] )
+					;
 
 					selector_ %= 
 					(
