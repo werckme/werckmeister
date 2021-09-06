@@ -34,6 +34,7 @@ namespace {
 BOOST_FUSION_ADAPT_STRUCT(
 	sheet::ConductionSelector,
 	(unsigned int, sourcePositionBegin)
+	(sheet::ASheetObjectWithSourceInfo::SourceId, sourceId)
 	(sheet::ConductionSelector::Type, type)
 	(sheet::ConductionSelector::Arguments, arguments)
 )
@@ -49,6 +50,7 @@ namespace {
 BOOST_FUSION_ADAPT_STRUCT(
 	sheet::ConductionRule::Declaration,
 	(unsigned int, sourcePositionBegin)
+	(sheet::ASheetObjectWithSourceInfo::SourceId, sourceId)
 	(sheet::ConductionRule::Declaration::Property, property)
 	(sheet::ConductionRule::Declaration::OperationType, operation)
 	(double, value)
@@ -59,6 +61,7 @@ BOOST_FUSION_ADAPT_STRUCT(
 BOOST_FUSION_ADAPT_STRUCT(
 	sheet::ConductionRule,
 	(unsigned int, sourcePositionBegin)
+	(sheet::ASheetObjectWithSourceInfo::SourceId, sourceId)
 	(sheet::ConductionRule::Selectors, selectors)
 	(sheet::ConductionRule::Declarations, declarations)
 )
@@ -108,12 +111,14 @@ namespace sheet {
 
 					selector_ %= 
 					(
-						current_pos_.current_pos 
+						current_pos_.current_pos
+						>> attr(sourceId_)
 						>> "position" >> attr(ConductionSelector::TypePosition) >> "(" >> +argument_ >> ")"
 					)
 					|
 					(
 						current_pos_.current_pos 
+						>> attr(sourceId_)
 						>> "pitch" >> attr(ConductionSelector::TypePitch) >> "(" >> +argument_ >> ")"
 					)
 					;
@@ -140,6 +145,7 @@ namespace sheet {
 
 					declaration_ %= 
 						current_pos_.current_pos
+						>> attr(sourceId_)
 						>> ( 
 							  "velocity" >> attr(ConductionRule::Declaration::PropertyVelocity)
 							| "time"  	 >> attr(ConductionRule::Declaration::PropertyTime)
@@ -152,6 +158,7 @@ namespace sheet {
 
 					rules_ %= 
 						current_pos_.current_pos 
+						>> attr(sourceId_)
 						>> +selector_
 						>> "{" >> *declaration_ > "}"
 					;

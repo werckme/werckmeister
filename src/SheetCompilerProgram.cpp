@@ -59,6 +59,8 @@ void SheetCompilerProgram::compile()
     }
     _logger->babble(WMLogLambda(log << "compiling '" << file << "'"));    
     _compiler->compile(document);
+    _logger->babble(WMLogLambda(log << "aplying conduction rules"));   
+    _conductionsPerformer->applyConductions(document);
     _logger->babble(WMLogLambda(log << "write document"));   
     _documentWriter->write(document);
 }

@@ -31,6 +31,7 @@
 #include <fmapp/UdpSender.hpp>
 #include <fmapp/NullStringSender.hpp>
 #include <compiler/SheetNavigator.h>
+#include <conductionsPerformer/ConductionsPerformer.h>
 
 #ifdef SHEET_USE_BOOST_TIMER
 #include "fmapp/boostTimer.h"
@@ -110,6 +111,7 @@ int startPlayer(std::shared_ptr<PlayerProgramOptions> programOptionsPtr)
 		, di::bind<cp::IContext>()											 .to<cp::MidiContext>()				.in(di::extension::scoped)
 		, di::bind<cp::IPreprocessor>()										 .to<cp::Preprocessor>()			.in(di::extension::scoped)
 		, di::bind<cp::ISheetNavigator>()									 .to<cp::SheetNavigator>()			.in(di::extension::scoped)
+		, di::bind<sheet::IConductionsPerformer>()							 .to<sheet::ConductionsPerformer>()	.in(di::extension::scoped)
 		, di::bind<ICompilerProgramOptions>()								 .to(programOptionsPtr)
 		, di::bind<sheet::Document>()										 .to(documentPtr)
 		, di::bind<fm::IDefinitionsServer>()								 .to<fm::DefinitionsServer>()		.in(di::extension::scoped)

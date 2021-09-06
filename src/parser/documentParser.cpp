@@ -19,7 +19,7 @@ namespace sheet {
 			typedef std::set<std::string> Extensions;
 			void useChordDef(DocumentPtr doc, const fm::String &path, Event::SourceId);
 			void usePitchmapDef(DocumentPtr doc, const fm::String &path, Event::SourceId);
-			void useStyleSheet(DocumentPtr doc, const fm::String &path, Event::SourceId);
+			void useConductionSheet(DocumentPtr doc, const fm::String &path, Event::SourceId);
 			void useLuaScript(DocumentPtr doc, const fm::String &path, Event::SourceId);
 			void useLuaScript(DocumentPtr doc, const fm::String& path, Event::SourceId);
 			void useSheetTemplateDef(DocumentPtr doc, const fm::String &path, Event::SourceId);
@@ -35,7 +35,7 @@ namespace sheet {
 				{ PITCHMAP_DEF_EXTENSION , &usePitchmapDef },
 				{ LUA_DEF_EXTENSION , &useLuaScript },
 				{ SHEET_CONFIG , &useConfig },
-				{ CONDUCTIONS_SHEET , &useStyleSheet }
+				{ CONDUCTIONS_SHEET , &useConductionSheet }
 			});
 			
 			const Extensions AllSupportedExtensions = {
@@ -78,7 +78,7 @@ namespace sheet {
 					doc->pitchmapDefs[x.name] = x.pitch;
 				}
 			}
-			void useStyleSheet(DocumentPtr doc, const fm::String &path, Event::SourceId sourceId)
+			void useConductionSheet(DocumentPtr doc, const fm::String &path, Event::SourceId sourceId)
 			{
 				
 				auto filestream = fm::getWerckmeister().openResource(path);
@@ -86,8 +86,8 @@ namespace sheet {
 				fm::StreamBuffIterator end;
 				fm::String documentText(begin, end);
 				ConductionSheetParser parser;
-				auto conductionSheets = parser.parse(documentText);
-				doc->conductionSheets = conductionSheets;
+				auto conductionSheet = parser.parse(documentText, sourceId);
+				doc->conductionSheets.push_back(conductionSheet);
 			}
 			void useLuaScript(DocumentPtr doc, const fm::String &path, Event::SourceId sourceId)
 			{

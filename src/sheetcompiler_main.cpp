@@ -21,6 +21,7 @@
 #include <compiler/DefaultCompilerVisitor.h>
 #include <fmapp/TimelineVisitor.hpp>
 #include <compiler/SheetNavigator.h>
+#include <conductionsPerformer/ConductionsPerformer.h>
 
 #ifdef _MSC_VER
 #define _CRTDBG_MAP_ALLOC
@@ -58,11 +59,12 @@ int main(int argc, const char** argv)
 		, di::bind<cp::IContext>()					.to<cp::MidiContext>()				.in(di::singleton)
 		, di::bind<cp::IPreprocessor>()				.to<cp::Preprocessor>()				.in(di::singleton)
 		, di::bind<cp::ISheetNavigator>()			.to<cp::SheetNavigator>()			.in(di::singleton)
+		, di::bind<sheet::IConductionsPerformer>()	.to<sheet::ConductionsPerformer>()	.in(di::singleton)
 		, di::bind<ICompilerProgramOptions>()		.to(programOptionsPtr)
 		, di::bind<sheet::Document>()				.to(documentPtr)
 		, di::bind<fm::IDefinitionsServer>()		.to<fm::DefinitionsServer>()		.in(di::singleton)
 		, di::bind<fm::midi::Midi>()				.to(midiFile)
-		, di::bind<fmapp::IDocumentWriter>()		.to([&](const auto &injector) -> fmapp::IDocumentWriterPtr 
+		, di::bind<fmapp::IDocumentWriter>()		.to([&](const auto &injector) -> fmapp::IDocumentWriterPtr
 		{
 			if (programOptionsPtr->isJsonModeSet() || programOptionsPtr->isJsonDocInfoMode()) {
 				return injector.template create<std::shared_ptr<fmapp::JsonWriter>>();
