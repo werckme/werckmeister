@@ -47,9 +47,20 @@ namespace {
 }
 
 BOOST_FUSION_ADAPT_STRUCT(
+	sheet::ConductionRule::Declaration,
+	(unsigned int, sourcePositionBegin)
+	(sheet::ConductionRule::Declaration::Property, property)
+	(sheet::ConductionRule::Declaration::OperationType, operation)
+	(double, value)
+	(sheet::ConductionRule::Declaration::ValueUnit, unit)
+)
+
+
+BOOST_FUSION_ADAPT_STRUCT(
 	sheet::ConductionRule,
 	(unsigned int, sourcePositionBegin)
 	(sheet::ConductionRule::Selectors, selectors)
+	(sheet::ConductionRule::Declarations, declarations)
 )
 
 BOOST_FUSION_ADAPT_STRUCT(
@@ -57,6 +68,7 @@ BOOST_FUSION_ADAPT_STRUCT(
 	(unsigned int, sourcePositionBegin)
 	(sheet::ConductionSheetDef::Rules, rules)
 )
+
 
 namespace sheet {
 	namespace compiler {
@@ -87,8 +99,7 @@ namespace sheet {
 					using qi::_val;
 			
 					current_pos_.setStartPos(begin);
-					auto onError = boost::bind(&handler::errorHandler<Iterator>, _1);
-					on_error<fail>(start, onError);
+					start.name("conduction sheet");
 
 					argument_ %= 
 						  (double_[at_c<ArTickValue>(_val) = qi::_1] >> attr(PitchDef()))
@@ -107,22 +118,61 @@ namespace sheet {
 					)
 					;
 
+					operationType_ %= 
+					(
+						"+=" >> attr(ConductionRule::Declaration::OperationAdd)
+					)
+					|
+					(
+						"=" >> attr(ConductionRule::Declaration::OperationSet)
+					)
+					;
+
+					valueUnit_ %= 
+					(
+						"%" >> attr(ConductionRule::Declaration::UnitPercent)
+					)
+					|
+					(
+						attr(ConductionRule::Declaration::UnitAbsolute)
+					)
+					;
+
+					declaration_ %= 
+						current_pos_.current_pos
+						>> ( 
+							  "velocity" >> attr(ConductionRule::Declaration::PropertyVelocity)
+							| "time"  	 >> attr(ConductionRule::Declaration::PropertyTime)
+						)
+						>> operationType_
+						>> double_
+						>> valueUnit_
+						>> ";"
+					;
+
 					rules_ %= 
 						current_pos_.current_pos 
 						>> +selector_
+						>> "{" >> *declaration_ > "}"
 					;
 
 					start %= 
 						current_pos_.current_pos 
-						>> *rules_
-						>> boost::spirit::eoi
+						> *rules_
+						> boost::spirit::eoi
 					;
+
+					auto onError = boost::bind(&handler::errorHandler<Iterator>, _1, sourceId_);
+					on_error<fail>(start, onError);
 				}
 				ConductionSheetDef::SourceId sourceId_ = ConductionSheetDef::UndefinedSource;
 				qi::rule<Iterator, ConductionSheetDef(), ascii::space_type> start;
 				qi::rule<Iterator, ConductionSelector(), ascii::space_type> selector_;
 				qi::rule<Iterator, ConductionRule(), ascii::space_type> rules_;
 				qi::rule<Iterator, sheet::ConductionSelector::ArgumentValue(), ascii::space_type> argument_;
+				qi::rule<Iterator, sheet::ConductionRule::Declaration(), ascii::space_type> declaration_;
+				qi::rule<Iterator, sheet::ConductionRule::Declaration::OperationType(), ascii::space_type> operationType_;
+				qi::rule<Iterator, sheet::ConductionRule::Declaration::ValueUnit(), ascii::space_type> valueUnit_;
 				CurrentPos<Iterator> current_pos_;
 			};
 
