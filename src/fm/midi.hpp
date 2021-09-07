@@ -4,6 +4,7 @@
 #include <cstddef>
 #include "units.hpp"
 #include <set>
+#include <list>
 #include <vector>
 #include <unordered_map>
 #include <boost/cstdint.hpp>
@@ -168,7 +169,7 @@ namespace fm {
 		};
 		class EventContainer {
 		public:
-			typedef std::multiset<Event, EventCompare> TContainer;
+			typedef std::vector<Event> TContainer;
 			typedef TContainer::iterator Iterator;
 			typedef TContainer::const_iterator ConstIterator;
 			void add(const Event &event);
@@ -176,18 +177,16 @@ namespace fm {
 			void addNote(Channel, Ticks absPosition, Pitch, Velocity, Ticks length);
 			ConstIterator begin() const;
 			ConstIterator end() const;
-			ConstIterator from(Ticks absTicks) const;
-			ConstIterator to(Ticks absTicks) const;
+
 			size_t read(const Byte *, size_t length);
 			size_t write(Byte *, size_t maxByteSize, fm::Ticks *outWrittenDuration = nullptr) const;
 			size_t byteSize() const;
 			size_t numEvents() const { return _container.size(); }
-			bool contains(const Event &event) const;
 			const TContainer & container() const { return _container; }
 			TContainer & container() { return _container; }
 			const MidiConfig * midiConfig() const;
 			void midiConfig (const MidiConfig *midiConfig) { this->_midiConfig = midiConfig; }
-			
+			void sortEvents();
 		private:
 			const MidiConfig *_midiConfig = nullptr;
 			TContainer _container;
@@ -206,7 +205,7 @@ namespace fm {
 			const EventContainer & events() const { return _container; }
 			EventContainer & events() { return _container; }
 			size_t read(const Byte *, size_t length);
-			size_t write(Byte *, size_t maxByteSize) const;
+			size_t write(Byte *, size_t maxByteSize);
 			size_t byteSize() const { return _container.byteSize() + sizeof(Header) + EoTSize; }
 			/**
 				values will not be written to midi file
@@ -238,18 +237,23 @@ namespace fm {
 			void addTrack(TrackPtr track);
 			TrackPtr createTrack() const;
 			const TrackContainer & tracks() const { return _container; }
-			TrackContainer & tracks() { return _container; }
-			void write(const char* filename) const;
-			void write(std::ostream&) const;
+			TrackContainer & tracks();
+			void write(const char* filename);
+			void write(std::ostream&);
 			Ticks duration() const;
 			BPM bpm() const { return bpm_; }
 			void bpm(BPM bpm) { bpm_ = bpm; }
 			MidiConfig midiConfig;
 			void clear();
+			/**
+			 * seal before write
+			 */
+			void seal();
 		private:
 			BPM bpm_ = fm::DefaultTempo;
 			Ticks _ppq = 0;
 			TrackContainer _container;
+			bool _sealed = false;
 		};
 	}
 }

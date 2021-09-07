@@ -11,27 +11,37 @@ namespace sheet
 		void ConductionsPerformer::applyConductions()
 		{
 			auto eventAndOperations = selectEvents();
+			_midifile->seal();
 		}
 
 		ConductionsPerformer::EventsAndOperationsCollection ConductionsPerformer::selectEvents() const
 		{
 			auto &wm = fm::getWerckmeister();
 			auto result = EventsAndOperationsCollection();
-			for(auto &track : _midifile->tracks()) {
-				for (auto &event : track->events()) {
-					if (!isEventOfInterest(event)) {
-						continue;
-					}
-					for (const auto &cs : _document->conductionSheets) {
-						for (auto const &rule : cs.rules) {
-							for (auto const &selector : rule.selectors) {
+
+			for (const auto &cs : _document->conductionSheets)
+			{
+				for (auto const &rule : cs.rules)
+				{
+					for (auto const &selector : rule.selectors)
+					{
+						for (auto &track : _midifile->tracks())
+						{
+							for (auto &event : track->events().container())
+							{
+								if (!isEventOfInterest(event))
+								{
+									continue;
+								}
 								auto selectorImpl = wm.solveOrDefault<ISelector>(selector.type);
-								if (!selectorImpl) {
+								if (!selectorImpl)
+								{
 									FM_THROW(compiler::Exception, "selector not found: " + selector.type);
 								}
-								if (selectorImpl->isMatch(selector.arguments, event)) {
+								if (selectorImpl->isMatch(selector.arguments, event))
+								{
 									EventsAndOperations eventsAndOperations;
-									//eventsAndOperations.events.push_back(&event);
+									eventsAndOperations.events.push_back(&event);
 								}
 							}
 						}
@@ -40,10 +50,9 @@ namespace sheet
 			}
 		}
 
-		bool ConductionsPerformer::isEventOfInterest(const fm::midi::Event& event) const
+		bool ConductionsPerformer::isEventOfInterest(const fm::midi::Event &event) const
 		{
-			return event.eventType() == fm::midi::NoteOn
-				|| event.eventType() == fm::midi::NoteOff;
+			return event.eventType() == fm::midi::NoteOn || event.eventType() == fm::midi::NoteOff;
 		}
 	}
 }

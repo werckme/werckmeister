@@ -420,9 +420,12 @@ namespace fm {
 			return (int)t1<(int)t2;
 		}
 
-
 		///////////////////////////////////////////////////////////////////////////
 		// EventContainer
+		void EventContainer::sortEvents()
+		{
+			std::sort(_container.begin(), _container.end(), EventCompare());
+		}
 		const MidiConfig * EventContainer::midiConfig() const
 		{
 			if (!this->_midiConfig) {
@@ -435,10 +438,10 @@ namespace fm {
 			if (midiConfig()->skipMetaEvents && event.eventType() == MetaEvent) {
 				return;
 			}
-			if (contains(event)) {
-				return;
-			}
-			_container.insert(event);
+			// if (contains(event)) {
+			// 	return;
+			// }
+			_container.push_back(event);
 		}
 		void EventContainer::remove(const Event &event)
 		{
@@ -459,14 +462,6 @@ namespace fm {
 		{
 			return _container.end();
 		}
-		EventContainer::ConstIterator EventContainer::from(Ticks absTicks) const
-		{
-			return _container.lower_bound(Event::NoteOff(0, absTicks, 0));
-		}
-		EventContainer::ConstIterator EventContainer::to(Ticks absTicks) const
-		{
-			return _container.upper_bound(Event::NoteOff(0, absTicks, 0));
-		}
 		size_t EventContainer::read(const Byte *bff, size_t byteSize)
 		{
 			Ticks offset = 0;
@@ -475,7 +470,7 @@ namespace fm {
 				Event ev;
 				auto numBytes = ev.read(offset, bff, byteSize);
 				offset = ev.absPosition();
-				_container.insert(ev);
+				_container.push_back(ev);
 				bff += numBytes;
 				byteSize -= numBytes;
 				if (((int)byteSize - (int)MinEventSize) <= 0) {
@@ -517,12 +512,6 @@ namespace fm {
 			}
 			return result;
 		}
-		bool EventContainer::contains(const Event &event) const
-		{
-			TContainer::const_iterator s, e;
-			std::tie(s, e) = _container.equal_range(event);
-			return std::any_of(s, e, [event](const Event &x) { return x.equals(event); });
-		}
 		///////////////////////////////////////////////////////////////////////////
 		// Track
 
@@ -534,7 +523,7 @@ namespace fm {
 		{
 			FM_THROW(fm::Exception, "not yet implemented");
 		}
-		size_t Track::write(Byte *bff, size_t maxByteSize) const
+		size_t Track::write(Byte *bff, size_t maxByteSize)
 		{
 			size_t wrote = 0;
 			if (maxByteSize < byteSize()) {
@@ -582,6 +571,9 @@ namespace fm {
 		}
 		size_t Midi::write(Byte *bff, size_t maxByteSize) const
 		{
+			if (!_sealed) {
+				throw std::runtime_error("seal midi file before writing");
+			}
 			size_t wrote = 0;
 			if (maxByteSize < byteSize()) {
 				FM_THROW(fm::Exception, "buffer to small");
@@ -607,6 +599,9 @@ namespace fm {
 		}
 		size_t Midi::byteSize() const
 		{
+			if (!_sealed) {
+				throw std::runtime_error("seal midi file before obtaining byte size");
+			}
 			size_t result = HeaderSize;
 			for (const auto &track : _container) {
 				result += track->byteSize();
@@ -615,22 +610,34 @@ namespace fm {
 		}
 		void Midi::addTrack(TrackPtr track)
 		{
+			if (_sealed) {
+				throw std::runtime_error("midi file is sealed");
+			}
 			track->events().midiConfig(&this->midiConfig);
 			_container.push_back(track);
 		}
+		
+		Midi::TrackContainer & Midi::tracks() 
+		{ 
+			if (_sealed) {
+				throw std::runtime_error("midi file is sealed");
+			}
+			return _container; 
+		}
+
 		TrackPtr Midi::createTrack() const
 		{
 			auto result = std::make_shared<Track>();
 			return result;
 		}
-		void Midi::write(const char* filename) const
+		void Midi::write(const char* filename)
 		{
 			std::fstream stream(filename, std::ios::out | std::ios::trunc | std::ios::binary);
 			write(stream);
 
 			stream.close();
 		}
-		void Midi::write(std::ostream &os) const
+		void Midi::write(std::ostream &os)
 		{
 			size_t size = byteSize();
 			Byte *bff = new Byte[size];
@@ -657,6 +664,13 @@ namespace fm {
 		void Midi::clear() {
 			bpm_ = fm::DefaultTempo;
 			_container.clear();
+		}
+
+		void Midi::seal() {
+			for (auto track : tracks()) {
+				track->events().sortEvents();
+			}
+			_sealed = true;
 		}
 	}
 }

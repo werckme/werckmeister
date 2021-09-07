@@ -378,7 +378,7 @@ BOOST_AUTO_TEST_CASE(write_midi_event_pc_cc_before_notes)
 		pc.parameter1(5);
 		events.add(pc);
 
-
+		events.sortEvents();
 		BOOST_CHECK(events.numEvents() == 4);
 		byteSize = events.byteSize();
 		bytes = new Byte[byteSize];
@@ -470,6 +470,7 @@ BOOST_AUTO_TEST_CASE(write_midi_write_fail)
 
 	constexpr size_t byteSize = 14 + 8 + 4 * 3;
 	Byte bytes[byteSize];
+	midi.seal();
 	BOOST_CHECK_THROW(midi.write(&bytes[0], byteSize - 1), fm::Exception);
 }
 
@@ -498,6 +499,7 @@ BOOST_AUTO_TEST_CASE(write_midi_write)
 		midi.addTrack(track);
 	}
 	constexpr size_t byteSize = 62;
+	midi.seal();
 	BOOST_CHECK(byteSize == midi.byteSize());
 	Byte bytes[byteSize];
 	BOOST_CHECK(midi.write(&bytes[0], byteSize) == byteSize);
@@ -586,6 +588,7 @@ BOOST_AUTO_TEST_CASE(write_midi_write_to_file)
 		events.addNote(0, 7.0_N8, 48, 100, 1.0_N8);
 		midi.addTrack(track);
 	}
+	midi.seal();
 	midi.write(TEST_MIDI_FILE);
 	size_t byteSize = midi.byteSize();
 
@@ -594,23 +597,6 @@ BOOST_AUTO_TEST_CASE(write_midi_write_to_file)
 	midifile.seekg(std::ios::beg);
 }
 
-BOOST_AUTO_TEST_CASE(event_container_from)
-{
-	using namespace fm;
-	midi::Midi midi(PPQ);
-	midi::TrackPtr track = std::make_shared<midi::Track>();
-	auto &events = track->events();
-	midi::MidiConfig config;
-	events.midiConfig(&config);
-	events.add(midi::Event::NoteOn(0, 0, 24, 100));
-	events.add(midi::Event::NoteOn(1, 50, 25, 101));
-	events.add(midi::Event::NoteOn(3, 100, 26, 102));
-	events.add(midi::Event::NoteOn(4, 200, 26, 102));
-	events.add(midi::Event::NoteOn(5, 300, 26, 102));
-
-	auto it = events.to(100);
-	BOOST_CHECK((*it).channel() == 4);
-}
 
 BOOST_AUTO_TEST_CASE(meta_event_write_1)
 {
