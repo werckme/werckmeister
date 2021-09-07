@@ -25,6 +25,7 @@ namespace sheet
 				{
 					for (auto const &selector : rule.selectors)
 					{
+						EventsAndOperations* eventsAndOperations = nullptr;
 						for (auto &track : _midifile->tracks())
 						{
 							for (auto &event : track->events().container())
@@ -40,14 +41,19 @@ namespace sheet
 								}
 								if (selectorImpl->isMatch(selector.arguments, event))
 								{
-									EventsAndOperations eventsAndOperations;
-									eventsAndOperations.events.push_back(&event);
+									if (eventsAndOperations == nullptr) {
+										EventsAndOperations newValue;
+										result.emplace_back(newValue);
+										eventsAndOperations = &result.back();
+									}
+									eventsAndOperations->events.push_back(&event);
 								}
 							}
 						}
 					}
 				}
 			}
+			return result;
 		}
 
 		bool ConductionsPerformer::isEventOfInterest(const fm::midi::Event &event) const
