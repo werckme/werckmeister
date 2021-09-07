@@ -21,7 +21,7 @@
 #include <compiler/DefaultCompilerVisitor.h>
 #include <fmapp/TimelineVisitor.hpp>
 #include <compiler/SheetNavigator.h>
-#include <conductionsPerformer/ConductionsPerformer.h>
+#include <conductor/ConductionsPerformer.h>
 
 #ifdef _MSC_VER
 #define _CRTDBG_MAP_ALLOC

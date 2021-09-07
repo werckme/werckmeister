@@ -31,7 +31,7 @@
 #include <fmapp/UdpSender.hpp>
 #include <fmapp/NullStringSender.hpp>
 #include <compiler/SheetNavigator.h>
-#include <conductionsPerformer/ConductionsPerformer.h>
+#include <conductor/ConductionsPerformer.h>
 
 #ifdef SHEET_USE_BOOST_TIMER
 #include "fmapp/boostTimer.h"

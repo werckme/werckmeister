@@ -16,6 +16,7 @@
 #include <fm/tools.h>
 #include "parserPositionIt.h"
 #include "pitchParser.h"
+#include <conductor/conductorNames.h>
 
 BOOST_FUSION_ADAPT_STRUCT(
 	sheet::ConductionSelector::ArgumentValue,
@@ -35,7 +36,7 @@ BOOST_FUSION_ADAPT_STRUCT(
 	sheet::ConductionSelector,
 	(unsigned int, sourcePositionBegin)
 	(sheet::ASheetObjectWithSourceInfo::SourceId, sourceId)
-	(sheet::ConductionSelector::Type, type)
+	(fm::String, type)
 	(sheet::ConductionSelector::Arguments, arguments)
 )
 
@@ -113,25 +114,25 @@ namespace sheet {
 					(
 						current_pos_.current_pos
 						>> attr(sourceId_)
-						>> "fromPosition" >> attr(ConductionSelector::TypeFromPosition) >> "(" >> argument_ >> ")"
+						>> SHEET_CONDUCTOR_SEL__FROM_POSITION >> attr(SHEET_CONDUCTOR_SEL__FROM_POSITION) >> "(" >> argument_ >> ")"
 					)
 					|
 					(
 						current_pos_.current_pos
 						>> attr(sourceId_)
-						>> "toPosition" >> attr(ConductionSelector::TypeToPosition) >> "(" >> argument_ >> ")"
+						>> SHEET_CONDUCTOR_SEL__TO_POSITION >> attr(SHEET_CONDUCTOR_SEL__TO_POSITION) >> "(" >> argument_ >> ")"
 					)
 					|
 					(
 						current_pos_.current_pos 
 						>> attr(sourceId_)
-						>> "pitch" >> attr(ConductionSelector::TypePitch) >> "(" >> +argument_ >> ")"
+						>> SHEET_CONDUCTOR_SEL__PITCH >> attr(SHEET_CONDUCTOR_SEL__PITCH) >> "(" >> +argument_ >> ")"
 					)
 					|
 					(
 						current_pos_.current_pos 
 						>> attr(sourceId_)
-						>> "atBeat" >> attr(ConductionSelector::TypeAtBeat) >> "(" >> +argument_ >> ")"
+						>> SHEET_CONDUCTOR_SEL__AT_BEAT >> attr(SHEET_CONDUCTOR_SEL__AT_BEAT) >> "(" >> +argument_ >> ")"
 					)					
 					;
 
@@ -159,8 +160,8 @@ namespace sheet {
 						current_pos_.current_pos
 						>> attr(sourceId_)
 						>> ( 
-							  "velocity" >> attr(ConductionRule::Declaration::PropertyVelocity)
-							| "time"  	 >> attr(ConductionRule::Declaration::PropertyTime)
+							  SHEET_CONDUCTOR_DEC__VELOCITY >> attr(ConductionRule::Declaration::PropertyVelocity)
+							| SHEET_CONDUCTOR_DEC__TIME 	>> attr(ConductionRule::Declaration::PropertyTime)
 						)
 						>> operationType_
 						>> double_

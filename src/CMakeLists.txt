@@ -86,7 +86,7 @@ SET (SRC_FETZER_LIB
     compiler/commands/Cue.cpp
     compiler/commands/Fill.cpp
     compiler/commands/DefineInstrumentSection.cpp
-    conductionsPerformer/ConductionsPerformer.cpp
+    conductor/ConductionsPerformer.cpp
 )
 
 add_definitions( -DGIT_VERSION="${GIT_VERSION}" )

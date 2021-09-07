@@ -8,7 +8,7 @@
 #include <compiler/ICompiler.h>
 #include <compiler/context/MidiContext.h>
 #include <compiler/IPreprocessor.h>
-#include <conductionsPerformer/IConductionsPerformer.h>
+#include <conductor/IConductionsPerformer.h>
 #include <fm/ILogger.h>
 #include <ostream>
 #include <fmapp/IDocumentWriter.h>

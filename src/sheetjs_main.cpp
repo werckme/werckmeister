@@ -22,7 +22,7 @@
 #include <fmapp/TimelineVisitor.hpp>
 #include <boost/di/extension/scopes/scoped.hpp>
 #include <compiler/SheetNavigator.h>
-#include <conductionsPerformer/ConductionsPerformer.h>
+#include <conductor/ConductionsPerformer.h>
 
 typedef sheet::compiler::EventLogger<fm::ConsoleLogger> 			   LoggerImpl;
 typedef sheet::compiler::LoggerAndWarningsCollector<fm::ConsoleLogger> WarningsCollectorWithConsoleLogger;

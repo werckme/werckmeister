@@ -12,7 +12,7 @@ namespace sheet
 		class IConductionsPerformer
 		{
 		public:
-			virtual void applyConductions(DocumentPtr document) = 0;
+			virtual void applyConductions() = 0;
 		};
 		typedef std::shared_ptr<IConductionsPerformer> IConductionsPerformerPtr;
 	}
