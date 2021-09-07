@@ -113,7 +113,13 @@ namespace sheet {
 					(
 						current_pos_.current_pos
 						>> attr(sourceId_)
-						>> "position" >> attr(ConductionSelector::TypePosition) >> "(" >> +argument_ >> ")"
+						>> "fromPosition" >> attr(ConductionSelector::TypeFromPosition) >> "(" >> argument_ >> ")"
+					)
+					|
+					(
+						current_pos_.current_pos
+						>> attr(sourceId_)
+						>> "toPosition" >> attr(ConductionSelector::TypeToPosition) >> "(" >> argument_ >> ")"
 					)
 					|
 					(
@@ -121,6 +127,12 @@ namespace sheet {
 						>> attr(sourceId_)
 						>> "pitch" >> attr(ConductionSelector::TypePitch) >> "(" >> +argument_ >> ")"
 					)
+					|
+					(
+						current_pos_.current_pos 
+						>> attr(sourceId_)
+						>> "atBeat" >> attr(ConductionSelector::TypeAtBeat) >> "(" >> +argument_ >> ")"
+					)					
 					;
 
 					operationType_ %= 

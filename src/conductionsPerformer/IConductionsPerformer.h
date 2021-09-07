@@ -5,12 +5,17 @@
 #include <forward.hpp>
 #include <memory>
 
-namespace sheet {
-	class IConductionsPerformer {
-	public:
-		virtual void applyConductions(DocumentPtr document) = 0;
-	};
-	typedef std::shared_ptr<IConductionsPerformer> IConductionsPerformerPtr;
+namespace sheet
+{
+	namespace conductor
+	{
+		class IConductionsPerformer
+		{
+		public:
+			virtual void applyConductions(DocumentPtr document) = 0;
+		};
+		typedef std::shared_ptr<IConductionsPerformer> IConductionsPerformerPtr;
+	}
 }
 
 #endif

@@ -39,6 +39,7 @@ int main(int argc, const char** argv)
 #endif
 	namespace di = boost::di;
 	namespace cp = sheet::compiler;
+	namespace co = sheet::conductor;
 	auto programOptionsPtr = std::make_shared<CompilerProgramOptions>();
 	try {
 		programOptionsPtr->parseProgrammArgs(argc, argv);
@@ -59,7 +60,7 @@ int main(int argc, const char** argv)
 		, di::bind<cp::IContext>()					.to<cp::MidiContext>()				.in(di::singleton)
 		, di::bind<cp::IPreprocessor>()				.to<cp::Preprocessor>()				.in(di::singleton)
 		, di::bind<cp::ISheetNavigator>()			.to<cp::SheetNavigator>()			.in(di::singleton)
-		, di::bind<sheet::IConductionsPerformer>()	.to<sheet::ConductionsPerformer>()	.in(di::singleton)
+		, di::bind<co::IConductionsPerformer>()		.to<co::ConductionsPerformer>()		.in(di::singleton)
 		, di::bind<ICompilerProgramOptions>()		.to(programOptionsPtr)
 		, di::bind<sheet::Document>()				.to(documentPtr)
 		, di::bind<fm::IDefinitionsServer>()		.to<fm::DefinitionsServer>()		.in(di::singleton)

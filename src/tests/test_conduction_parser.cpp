@@ -29,13 +29,13 @@ BOOST_AUTO_TEST_CASE(parse_oneSelector_emptyDeclarations)
 	using namespace fm;
 	using sheet::PitchDef;
 	fm::String text = FM_STRING("\
-	position(1){} \
+	atBeat(1){} \
 ");
 	sheet::compiler::ConductionSheetParser parser;
 	auto defs = parser.parse(text);
 	BOOST_CHECK_EQUAL(defs.rules.size(), size_t(1));
 	BOOST_CHECK_EQUAL(defs.rules[0].selectors.size(), size_t(1));
-	BOOST_CHECK_EQUAL(defs.rules[0].selectors[0].type, sheet::ConductionSelector::TypePosition);
+	BOOST_CHECK_EQUAL(defs.rules[0].selectors[0].type, sheet::ConductionSelector::TypeAtBeat);
 	BOOST_CHECK_EQUAL(defs.rules[0].selectors[0].arguments.size(), size_t(1));
 	BOOST_CHECK_EQUAL(defs.rules[0].selectors[0].arguments[0].tickValue, fm::Ticks(1));
 }
@@ -45,13 +45,13 @@ BOOST_AUTO_TEST_CASE(parse_twoSlector_emptyDeclarations)
 	using namespace fm;
 	using sheet::PitchDef;
 	fm::String text = FM_STRING("\
-	position(1) pitch(c d' x \"bd\"){} \
+	atBeat(1) pitch(c d' x \"bd\"){} \
 ");
 	sheet::compiler::ConductionSheetParser parser;
 	auto defs = parser.parse(text);
 	BOOST_CHECK_EQUAL(defs.rules.size(), size_t(1));
 	BOOST_CHECK_EQUAL(defs.rules[0].selectors.size(), size_t(2));
-	BOOST_CHECK_EQUAL(defs.rules[0].selectors[0].type, sheet::ConductionSelector::TypePosition);
+	BOOST_CHECK_EQUAL(defs.rules[0].selectors[0].type, sheet::ConductionSelector::TypeAtBeat);
 	BOOST_CHECK_EQUAL(defs.rules[0].selectors[0].arguments.size(), size_t(1));
 	BOOST_CHECK_EQUAL(defs.rules[0].selectors[0].arguments[0].tickValue, fm::Ticks(1));
 	BOOST_CHECK_EQUAL(defs.rules[0].selectors[1].type, sheet::ConductionSelector::TypePitch);
@@ -69,7 +69,7 @@ BOOST_AUTO_TEST_CASE(parse_oneSelector_oneDeclaration)
 	using namespace fm;
 	using sheet::PitchDef;
 	fm::String text = FM_STRING("\
-	position(1) {\
+	atBeat(1) {\
 		velocity+=10;\
 	}\
 ");
@@ -77,7 +77,7 @@ BOOST_AUTO_TEST_CASE(parse_oneSelector_oneDeclaration)
 	auto defs = parser.parse(text);
 	BOOST_CHECK_EQUAL(defs.rules.size(), size_t(1));
 	BOOST_CHECK_EQUAL(defs.rules[0].selectors.size(), size_t(1));
-	BOOST_CHECK_EQUAL(defs.rules[0].selectors[0].type, sheet::ConductionSelector::TypePosition);
+	BOOST_CHECK_EQUAL(defs.rules[0].selectors[0].type, sheet::ConductionSelector::TypeAtBeat);
 	BOOST_CHECK_EQUAL(defs.rules[0].selectors[0].arguments.size(), size_t(1));
 	BOOST_CHECK_EQUAL(defs.rules[0].selectors[0].arguments[0].tickValue, fm::Ticks(1));
 	BOOST_CHECK_EQUAL(defs.rules[0].declarations.size(), size_t(1));
@@ -92,7 +92,7 @@ BOOST_AUTO_TEST_CASE(parse_oneSelector_twoDeclarations)
 	using namespace fm;
 	using sheet::PitchDef;
 	fm::String text = FM_STRING("\
-	position(1) {\
+	atBeat(1) {\
 		velocity+=10;\
 		time=2%;\
 	}\
@@ -101,7 +101,7 @@ BOOST_AUTO_TEST_CASE(parse_oneSelector_twoDeclarations)
 	auto defs = parser.parse(text);
 	BOOST_CHECK_EQUAL(defs.rules.size(), size_t(1));
 	BOOST_CHECK_EQUAL(defs.rules[0].selectors.size(), size_t(1));
-	BOOST_CHECK_EQUAL(defs.rules[0].selectors[0].type, sheet::ConductionSelector::TypePosition);
+	BOOST_CHECK_EQUAL(defs.rules[0].selectors[0].type, sheet::ConductionSelector::TypeAtBeat);
 	BOOST_CHECK_EQUAL(defs.rules[0].selectors[0].arguments.size(), size_t(1));
 	BOOST_CHECK_EQUAL(defs.rules[0].selectors[0].arguments[0].tickValue, fm::Ticks(1));
 	BOOST_CHECK_EQUAL(defs.rules[0].declarations.size(), size_t(2));
@@ -120,7 +120,7 @@ BOOST_AUTO_TEST_CASE(parse_noDeclarationBody_fails)
 {
 	using namespace fm;
 	using sheet::PitchDef;
-	fm::String text = FM_STRING("position(1)");
+	fm::String text = FM_STRING("atBeat(1)");
 	sheet::compiler::ConductionSheetParser parser;
 	BOOST_CHECK_THROW(parser.parse(text), sheet::compiler::Exception);
 }

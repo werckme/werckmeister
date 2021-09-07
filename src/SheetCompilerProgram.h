@@ -23,7 +23,7 @@ protected:
     sheet::compiler::IPreprocessorPtr    _preprocessor;
     fm::midi::MidiPtr                    _midiFile;
     fmapp::IDocumentWriterPtr            _documentWriter;
-    sheet::IConductionsPerformerPtr      _conductionsPerformer;
+    sheet::conductor::IConductionsPerformerPtr      _conductionsPerformer;
 
 public:
     SheetCompilerProgram(
@@ -35,7 +35,7 @@ public:
         sheet::compiler::IPreprocessorPtr        preprocessor,
         fm::midi::MidiPtr                        midiFile,
         fmapp::IDocumentWriterPtr                documentWriter,
-        sheet::IConductionsPerformerPtr          conductionsPerformer
+        sheet::conductor::IConductionsPerformerPtr          conductionsPerformer
     ) : _programOptions(programOptions),
         _logger(logger),
         _documentParser(documentParser),

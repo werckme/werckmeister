@@ -7,14 +7,20 @@
 #include <memory>
 #include <fm/midi.hpp>
 
-namespace sheet {
-	class ConductionsPerformer : public IConductionsPerformer {
-	protected:
-		fm::midi::MidiPtr          _midifile;
-	public:
-		ConductionsPerformer(fm::midi::MidiPtr midifile) : _midifile(midifile) {}
-		virtual void applyConductions(DocumentPtr document) override;
-	};
+namespace sheet
+{
+	namespace conductor
+	{
+		class ConductionsPerformer : public IConductionsPerformer
+		{
+		protected:
+			fm::midi::MidiPtr _midifile;
+
+		public:
+			ConductionsPerformer(fm::midi::MidiPtr midifile) : _midifile(midifile) {}
+			virtual void applyConductions(DocumentPtr document) override;
+		};
+	}
 }
 
 #endif

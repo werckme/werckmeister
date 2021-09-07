@@ -97,6 +97,7 @@ int startPlayer(std::shared_ptr<PlayerProgramOptions> programOptionsPtr)
 {
 	namespace di = boost::di;
 	namespace cp = sheet::compiler;
+	namespace co = sheet::conductor;
 	fmapp::SheetWatcherHandlersPtr sheetWatcherHandlers = std::make_shared<fmapp::SheetWatcherHandlers>();
 	auto documentPtr = std::make_shared<sheet::Document>();
 	auto midiFile = fm::getWerckmeister().createMidi();
@@ -111,7 +112,7 @@ int startPlayer(std::shared_ptr<PlayerProgramOptions> programOptionsPtr)
 		, di::bind<cp::IContext>()											 .to<cp::MidiContext>()				.in(di::extension::scoped)
 		, di::bind<cp::IPreprocessor>()										 .to<cp::Preprocessor>()			.in(di::extension::scoped)
 		, di::bind<cp::ISheetNavigator>()									 .to<cp::SheetNavigator>()			.in(di::extension::scoped)
-		, di::bind<sheet::IConductionsPerformer>()							 .to<sheet::ConductionsPerformer>()	.in(di::extension::scoped)
+		, di::bind<co::IConductionsPerformer>()								 .to<co::ConductionsPerformer>()	.in(di::extension::scoped)
 		, di::bind<ICompilerProgramOptions>()								 .to(programOptionsPtr)
 		, di::bind<sheet::Document>()										 .to(documentPtr)
 		, di::bind<fm::IDefinitionsServer>()								 .to<fm::DefinitionsServer>()		.in(di::extension::scoped)

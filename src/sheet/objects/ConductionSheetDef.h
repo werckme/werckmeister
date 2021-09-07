@@ -13,7 +13,7 @@ namespace sheet {
 			PitchDef pitch;
 		};
 		typedef std::vector<ArgumentValue> Arguments; 
-		enum Type { TypeUnkown, TypePosition, TypePitch };
+		enum Type { TypeUnkown, TypeFromPosition, TypeToPosition, TypePitch, TypeAtBeat };
 		Type type = TypeUnkown;
 		Arguments arguments; 
 	};

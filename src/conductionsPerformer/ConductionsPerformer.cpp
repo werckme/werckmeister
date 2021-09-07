@@ -1,8 +1,11 @@
 #include "ConductionsPerformer.h"
 
-namespace sheet {
-	void ConductionsPerformer::applyConductions(DocumentPtr document)
+namespace sheet
+{
+	namespace conductor
 	{
-		int halt = 0;
+		void ConductionsPerformer::applyConductions(DocumentPtr document)
+		{
+		}
 	}
 }
