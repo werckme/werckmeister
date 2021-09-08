@@ -87,6 +87,7 @@ SET (SRC_FETZER_LIB
     compiler/commands/Fill.cpp
     compiler/commands/DefineInstrumentSection.cpp
     conductor/ConductionsPerformer.cpp
+    conductor/selectors/AtBeat.cpp
 )
 
 add_definitions( -DGIT_VERSION="${GIT_VERSION}" )

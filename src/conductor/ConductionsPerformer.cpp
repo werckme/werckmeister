@@ -58,7 +58,7 @@ namespace sheet
 
 		bool ConductionsPerformer::isEventOfInterest(const fm::midi::Event &event) const
 		{
-			return event.eventType() == fm::midi::NoteOn || event.eventType() == fm::midi::NoteOff;
+			return event.eventType() == fm::midi::NoteOn;
 		}
 	}
 }

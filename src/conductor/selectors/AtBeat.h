@@ -10,10 +10,7 @@ namespace sheet
         class AtBeat : public ISelector
         {
         public:
-            virtual bool isMatch(const ConductionSelector::Arguments&, const fm::midi::Event&) const override
-            {
-                return false;
-            }
+            virtual bool isMatch(const ConductionSelector::Arguments&, const fm::midi::Event&) const override;
             virtual ~AtBeat() = default;
         };
     }

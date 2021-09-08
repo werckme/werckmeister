@@ -156,7 +156,7 @@ namespace sheet
         {
             const bool commandsRegistered = ([]() 
             {
-                _FM_RegisterSingleton(AtBeat,  SHEET_CONDUCTOR_SEL__FROM_POSITION);
+                _FM_RegisterSingleton(AtBeat,  SHEET_CONDUCTOR_SEL__AT_BEAT);
                 return true;
             })();
         }
