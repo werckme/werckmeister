@@ -1,6 +1,7 @@
 Werckmeister
 ===================
 
+
 <img src="https://raw.githubusercontent.com/werckme/werckmeister/main/assets/hero.png" class="hero-image" alt="from sheet code via Werckmeister to MIDI music">
 <br><br>
 
@@ -730,13 +731,16 @@ type: accomp;
 
 ## References
 ## Commands
+* [cue](#cue)
 * [device](#device)
 * [do](#do)
 * [doOnce](#doonce)
 * [fade](#fade)
+* [fill](#fill)
 * [instrument](#instrument)
 * [instrumentConf](#instrumentconf)
 * [instrumentDef](#instrumentdef)
+* [instrumentSection](#instrumentsection)
 * [jump](#jump)
 * [mark](#mark)
 * [mod](#mod)
@@ -763,6 +767,20 @@ type: accomp;
 * [voicelead](#voicelead)
 
 ## Commands
+### `cue`
+adds a cue meta message to the corresponding midi track
+
+ ### examples
+
+ `/cue: _text="cue text"/`
+
+#### parameters
+| name | position | description | type |
+|:--- |:--- |:--- |:--- |
+| text | - | the text which appears in the MIDI message | text |
+
+<br><br><br>
+
 ### `device`
 Defines a device which can be used when adding instruments (see [instrumentDef](#instrumentDef))
 
@@ -805,7 +823,7 @@ Defines a device which can be used when adding instruments (see [instrumentDef](
 #### parameters
 | name | position | description | type |
 |:--- |:--- |:--- |:--- |
-| setName | 1 | An arbitary name. | word |
+| setName | 1 | An arbitary name. | text |
 | isType | 2 | The type of the device. | [midi,fluidSynth] |
 | usePort | 3 | The midi port id of your device. You can get a list of your connected devices, by executing `sheetp --list` | 0..N |
 | withOffset |  | Defines an offset in milliseconds. Can be used to keep different devices in sync. | 0..N |
@@ -833,7 +851,7 @@ Such as [mod](#mod)&nbsp;`do` adds a modification to the track.
 #### parameters
 | name | position | description | type |
 |:--- |:--- |:--- |:--- |
-| use | 1 | The name of the modification to load. This is the only "unique" parameter for this command. All further parameters are specific to its related modification. | word |
+| use | 1 | The name of the modification to load. This is the only "unique" parameter for this command. All further parameters are specific to its related modification. | text |
 
 <br><br><br>
 
@@ -853,7 +871,7 @@ Like [do](#do). But with the difference, that the loaded mod will be only execut
 #### parameters
 | name | position | description | type |
 |:--- |:--- |:--- |:--- |
-| use | 1 | The name of the modification to load. This is the only "unique" parameter for this command. All further parameters are specific to its related modification. | word |
+| use | 1 | The name of the modification to load. This is the only "unique" parameter for this command. All further parameters are specific to its related modification. | text |
 
 <br><br><br>
 
@@ -913,6 +931,63 @@ Fades the volume over a given duration in quarters.
 
 <br><br><br>
 
+### `fill`
+Plays a template only once. Is also able to replace the performance of another template during its playback.
+
+ Useful for fill ins.
+
+ 
+
+ ```language=Werckmeister
+using "chords/default.chords";
+tempo: 90;
+device: MyDevice  midi _usePort=0;
+instrumentDef:drums    _onDevice=MyDevice  _ch=9 _pc=0;
+
+[
+type: template;
+name: drums.fill;
+instrument: drums;
+{
+  (c, & &)4 (b,, & &)4 (a,, & &)4 (g,, & &)4 |
+}
+]
+
+[
+type: template;
+name: drums.main;
+instrument: drums;
+{
+  r8 f#,, r & r & r & |
+}
+{
+   r4 d,, r4 & | 
+}
+{
+  c,,4 r & r |
+}
+]
+
+[
+type: accomp;
+{
+ /template: drums.main/
+ C |
+ /fill: drums.fill/ -- play fill and drum beat together
+ C | C |
+ /fill: drums.fill _replace="drums.main"/ -- play only the fill in
+ C | C |
+}
+]
+ ```
+
+#### parameters
+| name | position | description | type |
+|:--- |:--- |:--- |:--- |
+| replace | - | the name of the template to be replaced by the fill | text |
+
+<br><br><br>
+
 ### `instrument`
 Set or change the instrument of a track.
 
@@ -956,7 +1031,7 @@ Set or change the instrument of a track.
 #### parameters
 | name | position | description | type |
 |:--- |:--- |:--- |:--- |
-| use | 1 | The instrument name. | word |
+| use | 1 | The instrument name. | text |
 
 <br><br><br>
 
@@ -1055,11 +1130,55 @@ Adds a new MIDI instrument.
 #### parameters
 | name | position | description | type |
 |:--- |:--- |:--- |:--- |
-| setName | 1 | An arbitary name. | word |
-| onDevice | 2 | The device which to use (The name of the device, see [device](#device)). | word |
+| setName | 1 | An arbitary name. | text |
+| onDevice | 2 | The device which to use (The name of the device, see [device](#device)). | text |
 | ch | 3 | The MIDI channel. | 0..15 |
 | cc | 4 | A MIDI `control change` value. | 0..127 |
 | pc | 5 | A MIDI `program change` value. | 0..127 |
+
+<br><br><br>
+
+### `instrumentSection`
+Combines several instruments into a new one.
+
+ ### examples
+
+ **positional:** 
+
+ `instrumentSection: bass piano ebass`; 
+
+ **named:**
+
+ `instrumentSection: _setName=bass piano ebass`; 
+
+ **a complete example**
+
+ define an device, an instrument and set it to a track.
+
+ see [instrumentDef](#instrumentDef), [instrument](#instrument), [device](#device)
+
+ 
+
+ ```language=Werckmeister
+ tempo: 120;
+ device: MyDevice  midi _usePort=0;
+ instrumentDef:piano    _onDevice=MyDevice  _ch=0 _pc=0;
+ instrumentDef:guitar   _onDevice=MyDevice _ch=1  _pc=29;
+ instrumentDef:organ   _onDevice=MyDevice _ch=2  _pc=16;
+ instrumentSection: myNewInstrument piano guitar organ;
+ 
+ [
+ instrument: myNewInstrument;
+ {
+  a,,1 | a, | d#,~ | &
+ }
+ ]
+ ```
+
+#### parameters
+| name | position | description | type |
+|:--- |:--- |:--- |:--- |
+| setName | 1 | An arbitary name. | text |
 
 <br><br><br>
 
@@ -1088,7 +1207,7 @@ Jumps to a previous defined mark See [mark](manual/#mark).
 #### parameters
 | name | position | description | type |
 |:--- |:--- |:--- |:--- |
-| to | 1 | the destination marker | word |
+| to | 1 | the destination marker | text |
 | ignore |  | Ignores the jump N times | 0..100 |
 | repreat |  | Repeats the jump N times. (A repeat value of 1 performs 2 jumps) | 0..100 |
 
@@ -1159,7 +1278,7 @@ Adds a modification to the track. Every `mod` statement adds a further modificat
 #### parameters
 | name | position | description | type |
 |:--- |:--- |:--- |:--- |
-| use | 1 | The name of the modification to load. This is the only "unique" parameter for this command. All further parameters are specific to its related modification. | word |
+| use | 1 | The name of the modification to load. This is the only "unique" parameter for this command. All further parameters are specific to its related modification. | text |
 
 <br><br><br>
 
@@ -1179,7 +1298,7 @@ Like [mod](#mod). But with the difference, that the loaded mod will be only exec
 #### parameters
 | name | position | description | type |
 |:--- |:--- |:--- |:--- |
-| use | 1 | The name of the modification to load. This is the only "unique" parameter for this command. All further parameters are specific to its related modification. | word |
+| use | 1 | The name of the modification to load. This is the only "unique" parameter for this command. All further parameters are specific to its related modification. | text |
 
 <br><br><br>
 
@@ -1278,7 +1397,7 @@ Adds a modification to the track.
 #### parameters
 | name | position | description | type |
 |:--- |:--- |:--- |:--- |
-| use | 1 | The name of the strategy to load. This is the only "unique" parameter for this command. All further parameters are specific to its related strategy. | word |
+| use | 1 | The name of the strategy to load. This is the only "unique" parameter for this command. All further parameters are specific to its related strategy. | text |
 
 <br><br><br>
 
@@ -1560,7 +1679,7 @@ instrument: piano;
 #### parameters
 | name | position | description | type |
 |:--- |:--- |:--- |:--- |
-| forTag | - | Specifies a tag name. If set only events with this tag name will be affected by the legato mod. | word |
+| forTag | - | Specifies a tag name. If set only events with this tag name will be affected by the legato mod. | text |
 | amount | - | The ammount of the legato effect | 0..100 |
 
 #### include extension
@@ -1623,7 +1742,7 @@ instrument: piano;
 #### parameters
 | name | position | description | type |
 |:--- |:--- |:--- |:--- |
-| forTag | - | Specifies a tag name. If set only events with this tag name will be affected by the staccato mod. | word |
+| forTag | - | Specifies a tag name. If set only events with this tag name will be affected by the staccato mod. | text |
 | amount | - | The ammount of the staccato effect | 0..100 |
 
 #### include extension

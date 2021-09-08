@@ -9,9 +9,50 @@ namespace sheet {
         /// <command name="fill" where="accomp">
         /// Plays a template only once. Is also able to replace the performance of another template during its playback.
         /// Useful for fill ins.
+        /// <![CDATA[
+        /// ```language=Werckmeister\n
+        ///using "chords/default.chords";\n
+        ///tempo: 90;\n
+        ///device: MyDevice  midi _usePort=0;\n
+        ///instrumentDef:drums    _onDevice=MyDevice  _ch=9 _pc=0;\n
+        ///\n
+        ///[\n
+        ///type: template;\n
+        ///name: drums.fill;\n
+        ///instrument: drums;\n
+        ///{\n
+        ///  (c, & &)4 (b,, & &)4 (a,, & &)4 (g,, & &)4 |\n
+        ///}\n
+        ///]\n
+        ///\n
+        ///[\n
+        ///type: template;\n
+        ///name: drums.main;\n
+        ///instrument: drums;\n
+        ///{\n
+        ///  r8 f#,, r & r & r & |\n
+        ///}\n
+        ///{\n
+        ///   r4 d,, r4 & | \n
+        ///}\n
+        ///{\n
+        ///  c,,4 r & r |\n
+        ///}\n
+        ///]\n
+        ///\n
+        ///[\n
+        ///type: accomp;\n
+        ///{\n
+        /// /template: drums.main/\n
+        /// C |\n
+        /// /fill: drums.fill/ -- play fill and drum beat together\n
+        /// C | C |\n
+        /// /fill: drums.fill _replace="drums.main"/ -- play only the fill in\n
+        /// C | C |\n
+        ///}\n
+        ///]\n
         /// ```
-        ///   /fill: myDrumfill _replace=myDrums/
-        /// ```
+        /// ]]>
         /// </command>
         /// <param name="replace"  type="text">the name of the template to be replaced by the fill</param>   
         class Fill : public ACommand
