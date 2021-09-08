@@ -10,6 +10,6 @@ instrumentDef: piano SC1 0 0 0;
 instrument: piano;
 {
     \ppp
-    c d e f | g a b c' |
+    c8& d& e& f& | g& a& b& c'& |
 }
 ]
