@@ -13,8 +13,9 @@ namespace sheet
         {
             for (const auto &argument : arguments) {
                 auto quarters = ev.absPosition() / fm::PPQ;
-                auto quarterValue = argument.tickValue - 1;
-                if (::fmod(quarters, argument.tickValue) <= Tolerance) {
+                auto beat = ::fmod(quarters, 4); // TODO replace 4 with something dynamic
+                auto valueToMatch = argument.tickValue - 1;
+                if (::abs(beat - valueToMatch) <= Tolerance) {
                     return true;
                 }
             }

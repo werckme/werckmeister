@@ -148,6 +148,7 @@ namespace sheet
 // Conductor
 #include <conductor/conductorNames.h>
 #include <conductor/selectors/AtBeat.h>
+#include <conductor/declarations/Velocity.h>
 namespace sheet
 {
     namespace conductor
@@ -157,6 +158,7 @@ namespace sheet
             const bool commandsRegistered = ([]() 
             {
                 _FM_RegisterSingleton(AtBeat,  SHEET_CONDUCTOR_SEL__AT_BEAT);
+                _FM_RegisterSingleton(Velocity,  SHEET_CONDUCTOR_DEC__VELOCITY);
                 return true;
             })();
         }

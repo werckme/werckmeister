@@ -52,7 +52,7 @@ BOOST_FUSION_ADAPT_STRUCT(
 	sheet::ConductionRule::Declaration,
 	(unsigned int, sourcePositionBegin)
 	(sheet::ASheetObjectWithSourceInfo::SourceId, sourceId)
-	(sheet::ConductionRule::Declaration::Property, property)
+	(fm::String, property)
 	(sheet::ConductionRule::Declaration::OperationType, operation)
 	(double, value)
 	(sheet::ConductionRule::Declaration::ValueUnit, unit)
@@ -157,16 +157,25 @@ namespace sheet {
 					;
 
 					declaration_ %= 
+					( 
 						current_pos_.current_pos
 						>> attr(sourceId_)
-						>> ( 
-							  SHEET_CONDUCTOR_DEC__VELOCITY >> attr(ConductionRule::Declaration::PropertyVelocity)
-							| SHEET_CONDUCTOR_DEC__TIME 	>> attr(ConductionRule::Declaration::PropertyTime)
-						)
+						>> SHEET_CONDUCTOR_DEC__VELOCITY >> attr(SHEET_CONDUCTOR_DEC__VELOCITY)
 						>> operationType_
 						>> double_
 						>> valueUnit_
 						>> ";"
+					)
+					|
+					(
+						current_pos_.current_pos
+						>> attr(sourceId_)
+						>> SHEET_CONDUCTOR_DEC__TIME >> attr(SHEET_CONDUCTOR_DEC__TIME)
+						>> operationType_
+						>> double_
+						>> valueUnit_
+						>> ";"
+					)
 					;
 
 					rules_ %= 

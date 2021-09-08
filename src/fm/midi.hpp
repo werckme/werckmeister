@@ -236,7 +236,8 @@ namespace fm {
 			size_t byteSize() const;
 			void addTrack(TrackPtr track);
 			TrackPtr createTrack() const;
-			const TrackContainer & tracks() const { return _container; }
+			const TrackContainer& tracks() const { return _container; }
+			const TrackContainer& ctracks() const { return _container; }
 			TrackContainer & tracks();
 			void write(const char* filename);
 			void write(std::ostream&);

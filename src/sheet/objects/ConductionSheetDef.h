@@ -20,11 +20,6 @@ namespace sheet {
 	struct ConductionRule : public ASheetObjectWithSourceInfo {
 		typedef std::vector<ConductionSelector> Selectors;
 		struct Declaration : public ASheetObjectWithSourceInfo {
-			enum Property {
-				PropertyUnknown,
-				PropertyVelocity,
-				PropertyTime
-			};
 			enum OperationType {
 				OperationUnknown,
 				OperationAdd,
@@ -34,7 +29,7 @@ namespace sheet {
 				UnitAbsolute,
 				UnitPercent	
 			};
-			Property property = PropertyUnknown;
+			fm::String property = "";
 			OperationType operation = OperationUnknown;
 			ValueUnit unit = UnitAbsolute;
 			double value = 0;

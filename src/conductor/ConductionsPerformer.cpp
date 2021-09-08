@@ -11,13 +11,41 @@ namespace sheet
 		void ConductionsPerformer::applyConductions()
 		{
 			auto eventAndOperations = selectEvents();
+			perform(eventAndOperations);
 			_midifile->seal();
 		}
 
-		ConductionsPerformer::EventsAndOperationsCollection ConductionsPerformer::selectEvents() const
+		std::vector<fm::midi::Event*> ConductionsPerformer::findMatches(const sheet::ConductionSelector& selector) const
+		{
+			std::vector<fm::midi::Event*> result;
+			auto& wm = fm::getWerckmeister();
+			for (auto& track : _midifile->tracks())
+			{
+				for (auto& event : track->events().container())
+				{
+					if (!isEventOfInterest(event))
+					{
+						continue;
+					}
+					auto selectorImpl = wm.solveOrDefault<ISelector>(selector.type);
+					if (!selectorImpl)
+					{
+						FM_THROW(compiler::Exception, "selector not found: " + selector.type);
+					}
+					if (selectorImpl->isMatch(selector.arguments, event))
+					{
+						
+						result.push_back(&event);
+					}
+				}
+			}
+			return result;
+		}
+
+		ConductionsPerformer::EventsAndDeclarationsCollection ConductionsPerformer::selectEvents() const
 		{
 			auto &wm = fm::getWerckmeister();
-			auto result = EventsAndOperationsCollection();
+			auto result = EventsAndDeclarationsCollection();
 
 			for (const auto &cs : _document->conductionSheets)
 			{
@@ -25,35 +53,36 @@ namespace sheet
 				{
 					for (auto const &selector : rule.selectors)
 					{
-						EventsAndOperations* eventsAndOperations = nullptr;
-						for (auto &track : _midifile->tracks())
-						{
-							for (auto &event : track->events().container())
-							{
-								if (!isEventOfInterest(event))
-								{
-									continue;
-								}
-								auto selectorImpl = wm.solveOrDefault<ISelector>(selector.type);
-								if (!selectorImpl)
-								{
-									FM_THROW(compiler::Exception, "selector not found: " + selector.type);
-								}
-								if (selectorImpl->isMatch(selector.arguments, event))
-								{
-									if (eventsAndOperations == nullptr) {
-										EventsAndOperations newValue;
-										result.emplace_back(newValue);
-										eventsAndOperations = &result.back();
-									}
-									eventsAndOperations->events.push_back(&event);
-								}
+						auto matchedMidiEvents = findMatches(selector);
+						if (matchedMidiEvents.empty()) {
+							continue;
+						}
+						EventsAndDeclarations newValue;
+						result.emplace_back(newValue);
+						auto EventsAndDeclarations = &result.back();
+						EventsAndDeclarations->events.swap(matchedMidiEvents);
+						for (const auto& declaration : rule.declarations) {
+							auto declarationImpl = wm.solveOrDefault<IDeclaration>(declaration.property);
+							if (!declarationImpl) {
+								FM_THROW(compiler::Exception, "declaration not found: " + declaration.property);
 							}
+							EventsAndDeclarations->declarations.push_back(declarationImpl);
 						}
 					}
 				}
 			}
 			return result;
+		}
+
+		void ConductionsPerformer::perform(const EventsAndDeclarationsCollection& collection) const
+		{
+			for (const auto& eventsAndDeclarations : collection) {
+				for (auto event : eventsAndDeclarations.events) {
+					for (auto declaration : eventsAndDeclarations.declarations) {
+						declaration->perform(*event);
+					}
+				}
+			}
 		}
 
 		bool ConductionsPerformer::isEventOfInterest(const fm::midi::Event &event) const
