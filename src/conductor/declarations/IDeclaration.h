@@ -13,6 +13,7 @@ namespace sheet
         class IDeclaration : public fm::IRegisterable
         {
         public:
+            ConductionRule::Declaration declaration;
             virtual void perform(fm::midi::Event&) const = 0;
             virtual ~IDeclaration() = default;
         };

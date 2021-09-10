@@ -1,6 +1,6 @@
 fromPosition(1) toPosition(8) atBeat(1 3) {
-    velocity = 100;
+    velocity = 0;
 }
 fromPosition(8) toPosition(16) atBeat(2 4) {
-    velocity = 100;
+    velocity = 10;
 }

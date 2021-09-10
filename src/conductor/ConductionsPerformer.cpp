@@ -91,13 +91,14 @@ namespace sheet
 							continue;
 						}
 						eventsAndDeclarations->events.swap(matchedMidiEvents);
-						for (const auto& declaration : rule.declarations) {
-							auto declarationImpl = wm.solveOrDefault<IDeclaration>(declaration.property);
-							if (!declarationImpl) {
-								FM_THROW(compiler::Exception, "declaration not found: " + declaration.property);
-							}
-							eventsAndDeclarations->declarations.push_back(declarationImpl);
+					}
+					for (const auto& declaration : rule.declarations) {
+						auto declarationImpl = wm.solveOrDefault<IDeclaration>(declaration.property);
+						if (!declarationImpl) {
+							FM_THROW(compiler::Exception, "declaration not found: " + declaration.property);
 						}
+						declarationImpl->declaration = declaration;
+						eventsAndDeclarations->declarations.push_back(declarationImpl);
 					}
 				}
 			}
