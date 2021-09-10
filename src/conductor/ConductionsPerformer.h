@@ -30,7 +30,8 @@ namespace sheet
 			virtual void applyConductions() override;
 		private:
 			bool isEventOfInterest(const fm::midi::Event&) const;
-			std::vector<fm::midi::Event*> findMatches(const sheet::ConductionSelector &selector) const;
+			std::vector<fm::midi::Event*> findMatches(const sheet::ConductionSelector &) const;
+			std::vector<fm::midi::Event*> findMatches(const sheet::ConductionSelector&, EventsAndDeclarations::Events&) const;
 			void perform(const EventsAndDeclarationsCollection&) const;
 			fm::midi::MidiPtr _midifile;
 			sheet::DocumentPtr _document;

@@ -42,6 +42,30 @@ namespace sheet
 			return result;
 		}
 
+		std::vector<fm::midi::Event*> ConductionsPerformer::findMatches(const sheet::ConductionSelector& selector, EventsAndDeclarations::Events& events) const
+		{
+			std::vector<fm::midi::Event*> result;
+			auto& wm = fm::getWerckmeister();
+			for (auto event : events)
+			{
+				if (!isEventOfInterest(*event))
+				{
+					continue;
+				}
+				auto selectorImpl = wm.solveOrDefault<ISelector>(selector.type);
+				if (!selectorImpl)
+				{
+					FM_THROW(compiler::Exception, "selector not found: " + selector.type);
+				}
+				if (selectorImpl->isMatch(selector.arguments, *event))
+				{
+
+					result.push_back(event);
+				}
+			}
+			return result;
+		}
+
 		ConductionsPerformer::EventsAndDeclarationsCollection ConductionsPerformer::selectEvents() const
 		{
 			auto &wm = fm::getWerckmeister();
@@ -51,22 +75,28 @@ namespace sheet
 			{
 				for (auto const &rule : cs.rules)
 				{
+					EventsAndDeclarations newValue;
+					result.emplace_back(newValue);
+					auto eventsAndDeclarations = &result.back();
 					for (auto const &selector : rule.selectors)
 					{
-						auto matchedMidiEvents = findMatches(selector);
+						EventsAndDeclarations::Events matchedMidiEvents;
+						if (eventsAndDeclarations->events.empty()) {
+							matchedMidiEvents = findMatches(selector);
+						}
+						else {
+							matchedMidiEvents = findMatches(selector, eventsAndDeclarations->events);
+						}
 						if (matchedMidiEvents.empty()) {
 							continue;
 						}
-						EventsAndDeclarations newValue;
-						result.emplace_back(newValue);
-						auto EventsAndDeclarations = &result.back();
-						EventsAndDeclarations->events.swap(matchedMidiEvents);
+						eventsAndDeclarations->events.swap(matchedMidiEvents);
 						for (const auto& declaration : rule.declarations) {
 							auto declarationImpl = wm.solveOrDefault<IDeclaration>(declaration.property);
 							if (!declarationImpl) {
 								FM_THROW(compiler::Exception, "declaration not found: " + declaration.property);
 							}
-							EventsAndDeclarations->declarations.push_back(declarationImpl);
+							eventsAndDeclarations->declarations.push_back(declarationImpl);
 						}
 					}
 				}
