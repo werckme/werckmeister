@@ -159,10 +159,10 @@ namespace sheet
         {
             const bool commandsRegistered = ([]() 
             {
-                _FM_RegisterSingleton(AtBeat,  SHEET_CONDUCTOR_SEL__AT_BEAT);
-                _FM_RegisterSingleton(FromPosition, SHEET_CONDUCTOR_SEL__FROM_POSITION);
-                _FM_RegisterSingleton(ToPosition, SHEET_CONDUCTOR_SEL__TO_POSITION);
-                _FM_RegisterSingleton(Velocity, SHEET_CONDUCTOR_DEC__VELOCITY);
+                _FM_Register(AtBeat,  SHEET_CONDUCTOR_SEL__AT_BEAT);
+                _FM_Register(FromPosition, SHEET_CONDUCTOR_SEL__FROM_POSITION);
+                _FM_Register(ToPosition, SHEET_CONDUCTOR_SEL__TO_POSITION);
+                _FM_Register(Velocity, SHEET_CONDUCTOR_DEC__VELOCITY);
                 return true;
             })();
         }
