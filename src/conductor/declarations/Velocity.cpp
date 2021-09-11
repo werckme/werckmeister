@@ -5,14 +5,15 @@ namespace sheet
 {
     namespace conductor
     {
-        void Velocity::perform(fm::midi::Event* noteOn, fm::midi::Event*) const 
+        void Velocity::perform(fm::midi::Event* noteOn, fm::midi::Event* noteOff) const
         {
-            if (declaration.unit == ConductionRule::Declaration::UnitPercent) {
-                FM_THROW(compiler::Exception, "not yet impl.");
-            }
-            auto value = declaration.value / 100 * 127;
-            value = std::max(0.0, std::min(value, 127.0));
-            noteOn->parameter2(fm::Byte(value));
+            FNormalize normalizeInValue = [](double inputValue) { return inputValue / 100.; };
+            FGetValue getOriginalValue = [](fm::midi::Event* noteOn) { return noteOn->parameter2() / double(fm::midi::MaxMidiValue); };
+            FGetValue getPercentBase = [](fm::midi::Event* noteOn) { return noteOn->parameter2() / double(fm::midi::MaxMidiValue); };
+            FSetValue setNoteOn = [](fm::midi::Event* noteOn, double val) { noteOn->parameter2( fm::Byte(val * fm::midi::MaxMidiValue) ); };
+            FSetValue setNoteOff = [](fm::midi::Event* noteOn, double val) { };
+            performImpl(noteOn, noteOff, normalizeInValue, getOriginalValue, getPercentBase, setNoteOn, setNoteOff);
+
         }
     }
 }

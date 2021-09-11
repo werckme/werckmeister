@@ -142,6 +142,10 @@ namespace sheet {
 					)
 					|
 					(
+						"-=" >> attr(ConductionRule::Declaration::OperationSubstract)
+					)
+					|
+					(
 						"=" >> attr(ConductionRule::Declaration::OperationSet)
 					)
 					;

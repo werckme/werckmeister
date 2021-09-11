@@ -23,6 +23,7 @@ namespace sheet {
 			enum OperationType {
 				OperationUnknown,
 				OperationAdd,
+				OperationSubstract,
 				OperationSet
 			};
 			enum ValueUnit {
