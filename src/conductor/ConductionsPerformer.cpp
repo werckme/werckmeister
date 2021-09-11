@@ -3,11 +3,29 @@
 #include <fm/werckmeister.hpp>
 #include "selectors/ISelector.h"
 #include <compiler/error.hpp>
+#include <fm/tools.h>
 
 namespace sheet
 {
 	namespace conductor
 	{
+		namespace 
+		{
+			fm::midi::Event* findCorrespondingNoteOffEvent(fm::midi::EventContainer::Iterator noteOn, fm::midi::EventContainer::Iterator end)
+			{
+				auto it = noteOn;
+				while (it++ != end) {
+					if (it->eventType() != fm::midi::NoteOff) {
+						continue;
+					}
+					if (it->parameter1() == noteOn->parameter1()) {
+						return &(*it);
+					}
+				}
+				return nullptr;
+			}
+		}
+
 		void ConductionsPerformer::applyConductions()
 		{
 			auto eventAndOperations = selectEvents();
@@ -15,14 +33,17 @@ namespace sheet
 			_midifile->seal();
 		}
 
-		std::vector<fm::midi::Event*> ConductionsPerformer::findMatches(const sheet::ConductionSelector& selector) const
+		ConductionsPerformer::Events ConductionsPerformer::findMatches(const sheet::ConductionSelector& selector) const
 		{
-			std::vector<fm::midi::Event*> result;
+			Events result;
 			auto& wm = fm::getWerckmeister();
 			for (auto& track : _midifile->tracks())
 			{
-				for (auto& event : track->events().container())
+				auto it = track->events().container().begin();
+				auto end = track->events().container().end();
+				for (; it != end; ++it)
 				{
+					fm::midi::Event &event = *it;
 					if (!isEventOfInterest(event))
 					{
 						continue;
@@ -34,21 +55,21 @@ namespace sheet
 					}
 					if (selectorImpl->isMatch(selector.arguments, event))
 					{
-						
-						result.push_back(&event);
+						auto noteOff = findCorrespondingNoteOffEvent(it, end);
+						result.push_back(std::make_pair(&event, noteOff));
 					}
 				}
 			}
 			return result;
 		}
 
-		std::vector<fm::midi::Event*> ConductionsPerformer::findMatches(const sheet::ConductionSelector& selector, EventsAndDeclarations::Events& events) const
+		ConductionsPerformer::Events ConductionsPerformer::findMatches(const sheet::ConductionSelector& selector, Events& events) const
 		{
-			std::vector<fm::midi::Event*> result;
+			Events result;
 			auto& wm = fm::getWerckmeister();
-			for (auto event : events)
+			for (auto noteOnAndOffEvent : events)
 			{
-				if (!isEventOfInterest(*event))
+				if (!isEventOfInterest(*noteOnAndOffEvent.first))
 				{
 					continue;
 				}
@@ -57,10 +78,10 @@ namespace sheet
 				{
 					FM_THROW(compiler::Exception, "selector not found: " + selector.type);
 				}
-				if (selectorImpl->isMatch(selector.arguments, *event))
+				if (selectorImpl->isMatch(selector.arguments, *noteOnAndOffEvent.first))
 				{
 
-					result.push_back(event);
+					result.push_back(noteOnAndOffEvent);
 				}
 			}
 			return result;
@@ -68,19 +89,19 @@ namespace sheet
 
 		ConductionsPerformer::EventsAndDeclarationsCollection ConductionsPerformer::selectEvents() const
 		{
-			auto &wm = fm::getWerckmeister();
+			auto& wm = fm::getWerckmeister();
 			auto result = EventsAndDeclarationsCollection();
 
-			for (const auto &cs : _document->conductionSheets)
+			for (const auto& cs : _document->conductionSheets)
 			{
-				for (auto const &rule : cs.rules)
+				for (auto const& rule : cs.rules)
 				{
 					EventsAndDeclarations newValue;
 					result.emplace_back(newValue);
 					auto eventsAndDeclarations = &result.back();
-					for (auto const &selector : rule.selectors)
+					for (auto const& selector : rule.selectors)
 					{
-						EventsAndDeclarations::Events matchedMidiEvents;
+						Events matchedMidiEvents;
 						if (eventsAndDeclarations->events.empty()) {
 							matchedMidiEvents = findMatches(selector);
 						}
@@ -108,15 +129,15 @@ namespace sheet
 		void ConductionsPerformer::perform(const EventsAndDeclarationsCollection& collection) const
 		{
 			for (const auto& eventsAndDeclarations : collection) {
-				for (auto event : eventsAndDeclarations.events) {
+				for (auto noteOnAndOff : eventsAndDeclarations.events) {
 					for (auto declaration : eventsAndDeclarations.declarations) {
-						declaration->perform(*event);
+						declaration->perform(noteOnAndOff.first, noteOnAndOff.second);
 					}
 				}
 			}
 		}
 
-		bool ConductionsPerformer::isEventOfInterest(const fm::midi::Event &event) const
+		bool ConductionsPerformer::isEventOfInterest(const fm::midi::Event& event) const
 		{
 			return event.eventType() == fm::midi::NoteOn;
 		}

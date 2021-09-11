@@ -1,0 +1,4 @@
+fromPosition(1) toPosition(4) atBeat(2) {
+    timeOffset = 2;
+    velocity = 95;
+}

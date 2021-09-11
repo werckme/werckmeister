@@ -11,6 +11,7 @@
 
 // declarartions
 #define SHEET_CONDUCTOR_DEC__VELOCITY FM_STRING("velocity")
-#define SHEET_CONDUCTOR_DEC__TIME FM_STRING("time")
+#define SHEET_CONDUCTOR_DEC__TIME_OFFSET FM_STRING("timeOffset")
+#define SHEET_CONDUCTOR_DEC__LENGTH FM_STRING("length")
 
 #endif

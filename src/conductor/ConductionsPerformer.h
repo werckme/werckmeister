@@ -15,10 +15,12 @@ namespace sheet
 	{
 		class ConductionsPerformer : public IConductionsPerformer
 		{
+		public:
+			typedef std::pair<fm::midi::Event*, fm::midi::Event*> NoteOnAndOffEvent;
+			typedef std::vector<NoteOnAndOffEvent> Events;
+			typedef std::vector<IDeclarationPtr> Declarations;
 		protected:
 			struct EventsAndDeclarations {
-				typedef std::vector<fm::midi::Event*> Events;
-				typedef std::vector<IDeclarationPtr> Declarations;
 				Declarations declarations;
 				Events events;
 			};
@@ -30,8 +32,8 @@ namespace sheet
 			virtual void applyConductions() override;
 		private:
 			bool isEventOfInterest(const fm::midi::Event&) const;
-			std::vector<fm::midi::Event*> findMatches(const sheet::ConductionSelector &) const;
-			std::vector<fm::midi::Event*> findMatches(const sheet::ConductionSelector&, EventsAndDeclarations::Events&) const;
+			Events findMatches(const sheet::ConductionSelector &) const;
+			Events findMatches(const sheet::ConductionSelector&, Events&) const;
 			void perform(const EventsAndDeclarationsCollection&) const;
 			fm::midi::MidiPtr _midifile;
 			sheet::DocumentPtr _document;

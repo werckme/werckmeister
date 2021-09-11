@@ -160,17 +160,7 @@ namespace sheet {
 					( 
 						current_pos_.current_pos
 						>> attr(sourceId_)
-						>> SHEET_CONDUCTOR_DEC__VELOCITY >> attr(SHEET_CONDUCTOR_DEC__VELOCITY)
-						>> operationType_
-						>> double_
-						>> valueUnit_
-						>> ";"
-					)
-					|
-					(
-						current_pos_.current_pos
-						>> attr(sourceId_)
-						>> SHEET_CONDUCTOR_DEC__TIME >> attr(SHEET_CONDUCTOR_DEC__TIME)
+						>> +char_("a-zA-Z")
 						>> operationType_
 						>> double_
 						>> valueUnit_

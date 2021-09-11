@@ -14,7 +14,7 @@ namespace sheet
         {
         public:
             ConductionRule::Declaration declaration;
-            virtual void perform(fm::midi::Event&) const = 0;
+            virtual void perform(fm::midi::Event* noteOn, fm::midi::Event* noteOff) const = 0;
             virtual ~IDeclaration() = default;
         };
         typedef std::shared_ptr<IDeclaration> IDeclarationPtr;
