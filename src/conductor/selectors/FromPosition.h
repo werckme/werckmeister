@@ -10,7 +10,7 @@ namespace sheet
         class FromPosition : public ISelector
         {
         public:
-            virtual bool isMatch(const ConductionSelector::Arguments&, const fm::midi::Event&) const override;
+            virtual bool isMatch(const ConductionSelector::Arguments&, const EventWithMetaInfo&) const override;
             virtual ~FromPosition() = default;
         };
     }

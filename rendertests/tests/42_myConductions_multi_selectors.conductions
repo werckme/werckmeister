@@ -1,9 +1,9 @@
 fromPosition(1) toPosition(8) atBeat(1) {
-    velocity = 100;
+    velocity = 127;
 }
 fromPosition(1) toPosition(8) atBeat(3) {
-    velocity = 75;
+    velocity = 100;
 }
 fromPosition(8) toPosition(16) atBeat(2 4) {
-    velocity = 75;
+    velocity = 127;
 }

@@ -8,6 +8,7 @@
 #include <fm/midi.hpp>
 #include <vector>
 #include <conductor/declarations/IDeclaration.h>
+#include <conductor/selectors/ISelector.h>
 
 namespace sheet
 {
@@ -16,14 +17,6 @@ namespace sheet
 		class ConductionsPerformer : public IConductionsPerformer
 		{
 		public:
-			struct EventWithMetaInfo
-			{
-				fm::midi::Event* noteOn;
-				fm::midi::Event* noteOff;
-				std::pair<fm::Byte, fm::Byte> timeSignature;
-				fm::String instrumentName;
-				int voiceNr = 0;
-			};
 			typedef std::vector<EventWithMetaInfo> Events;
 			typedef std::vector<IDeclarationPtr> Declarations;
 		protected:

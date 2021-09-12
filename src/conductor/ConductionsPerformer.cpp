@@ -43,12 +43,12 @@ namespace sheet
 			{
 				auto it = track->events().container().begin();
 				auto end = track->events().container().end();
+				TimeSignature timeSignature = { 4, 4 };
 				for (; it != end; ++it)
 				{
 					if (it->eventType() == fm::midi::MetaEvent && it->metaEventType() == fm::midi::TimeSignature)
 					{
-						auto signature = fm::midi::Event::MetaGetSignatureValue(it->metaData(), it->metaDataSize());
-						int halt = 0;
+						timeSignature = fm::midi::Event::MetaGetSignatureValue(it->metaData(), it->metaDataSize());
 					}
 
 					fm::midi::Event &event = *it;
@@ -61,11 +61,12 @@ namespace sheet
 					{
 						FM_THROW(compiler::Exception, "selector not found: " + selector.type);
 					}
-					if (selectorImpl->isMatch(selector.arguments, event))
+					EventWithMetaInfo eventWithMetaInfo;
+					eventWithMetaInfo.timeSignature = timeSignature;
+					eventWithMetaInfo.noteOn = &event;
+					if (selectorImpl->isMatch(selector.arguments, eventWithMetaInfo))
 					{
 						auto noteOff = findCorrespondingNoteOffEvent(it, end);
-						EventWithMetaInfo eventWithMetaInfo;
-						eventWithMetaInfo.noteOn = &event;
 						eventWithMetaInfo.noteOff = noteOff;
 						result.emplace_back(eventWithMetaInfo);
 					}
@@ -89,7 +90,7 @@ namespace sheet
 				{
 					FM_THROW(compiler::Exception, "selector not found: " + selector.type);
 				}
-				if (selectorImpl->isMatch(selector.arguments, *eventAndMetaInfo.noteOn))
+				if (selectorImpl->isMatch(selector.arguments, eventAndMetaInfo))
 				{
 
 					result.push_back(eventAndMetaInfo);

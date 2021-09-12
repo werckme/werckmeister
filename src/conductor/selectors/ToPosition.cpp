@@ -6,9 +6,11 @@ namespace sheet
 {
     namespace conductor
     {
-        bool ToPosition::isMatch(const ConductionSelector::Arguments& arguments, const fm::midi::Event& ev) const
+        bool ToPosition::isMatch(const ConductionSelector::Arguments& arguments, const EventWithMetaInfo& evm) const
         {
-            if (arguments.empty()) {
+            const auto& ev = *evm.noteOn;
+            if (arguments.empty()) 
+            {
                 FM_THROW(compiler::Exception, "missing argument for selector ToPosition");
             }
             auto eventPosition = ev.absPosition() / fm::PPQ;

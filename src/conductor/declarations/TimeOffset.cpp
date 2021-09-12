@@ -11,7 +11,7 @@ namespace sheet
             FGetValue getOriginalValue = [noteOn]() { return 0; };
             FGetValue getPercentBase = [noteOn, noteOff]() { return (noteOff->absPosition() - noteOn->absPosition()) / fm::PPQ; };
             FSetValue setNoteOn = [](fm::midi::Event* noteOn, double val) { noteOn->absPosition(noteOn->absPosition() + val * fm::PPQ); };
-            FSetValue setNoteOff = [noteOn](fm::midi::Event* noteOff, double val) { noteOff->absPosition(noteOn->absPosition() + val * fm::PPQ); };
+            FSetValue setNoteOff = [noteOn](fm::midi::Event* noteOff, double val) { noteOff->absPosition(noteOff->absPosition() + val * fm::PPQ); };
             double inputValue = declaration.value;
             constexpr double min = -std::numeric_limits<double>::max();
             constexpr double max =  std::numeric_limits<double>::max();

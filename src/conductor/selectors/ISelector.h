@@ -9,10 +9,19 @@ namespace sheet
 {
     namespace conductor
     {
+        typedef std::pair<fm::Byte, fm::Byte> TimeSignature;
+        struct EventWithMetaInfo
+        {
+            fm::midi::Event* noteOn;
+            fm::midi::Event* noteOff;
+            TimeSignature timeSignature;
+            fm::String instrumentName;
+            int voiceNr = 0;
+        };
         class ISelector : public fm::IRegisterable
         {
         public:
-            virtual bool isMatch(const ConductionSelector::Arguments&, const fm::midi::Event&) const = 0;
+            virtual bool isMatch(const ConductionSelector::Arguments&, const EventWithMetaInfo&) const = 0;
             virtual ~ISelector() = default;
         };
     }
