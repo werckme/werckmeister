@@ -123,6 +123,7 @@ namespace fm {
 			static Event NoteOff(Channel, Ticks, Pitch);
 			static Event MetaTempo(double bpm);
 			static Event MetaSignature(Byte nominator, Byte denominator, Byte clocksBetweenMetronomeClick = 24, Byte nth32PerQuarter = 8 );
+			static std::pair<Byte, Byte> MetaGetSignatureValue(const Byte *data, size_t length);
 			static Event CCVolume(Channel channel, Byte volume);
 			static Event CCPan(Channel channel, Byte volume);
 			static Event MetaInstrument(const std::string &name);

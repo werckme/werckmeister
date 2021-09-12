@@ -9,8 +9,6 @@
 #include <compiler/modification/AModification.h>
 #include <fm/config/configServer.h>
 
-#define SHEET_MASTER_TRACKNAME "master track"
-
 namespace sheet {
 	namespace compiler {
 
@@ -234,7 +232,7 @@ namespace sheet {
 			auto meta = voiceMetaData<MidiContext::VoiceMetaData>();
 			auto sigEvent = fm::midi::Event::MetaSignature(upper, lower);
 			sigEvent.absPosition(currentPosition());
-			addEvent(sigEvent, masterTrackId());
+			addEvent(sigEvent);
 		}
 
 		void MidiContext::selectMidiSound(int cc, int pc)

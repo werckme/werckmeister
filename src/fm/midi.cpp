@@ -278,6 +278,16 @@ namespace fm {
 			ev.metaData(TimeSignature, bytes.data(), bytes.size());
 			return ev;
 		}
+		std::pair<Byte, Byte> Event::MetaGetSignatureValue(const Byte *data, size_t length)
+		{
+			if (length != 4) {
+				throw std::runtime_error("invalid byte size for meta time signature");
+			}
+			static const double log2 = 0.6931471805599453;
+			Byte nominator = data[0];
+			Byte denominator = Byte(::nearbyint(exp(double(data[1] * log2))));
+			return std::make_pair(nominator, denominator);
+		}
 		Event Event::MetaInstrument(const std::string &name)
 		{
 			auto ev = Event();

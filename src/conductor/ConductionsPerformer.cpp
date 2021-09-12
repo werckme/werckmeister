@@ -4,6 +4,8 @@
 #include "selectors/ISelector.h"
 #include <compiler/error.hpp>
 #include <fm/tools.h>
+#include <compiler/context/MidiContext.h>
+
 
 namespace sheet
 {
@@ -43,6 +45,12 @@ namespace sheet
 				auto end = track->events().container().end();
 				for (; it != end; ++it)
 				{
+					if (it->eventType() == fm::midi::MetaEvent && it->metaEventType() == fm::midi::TimeSignature)
+					{
+						auto signature = fm::midi::Event::MetaGetSignatureValue(it->metaData(), it->metaDataSize());
+						int halt = 0;
+					}
+
 					fm::midi::Event &event = *it;
 					if (!isEventOfInterest(event))
 					{
@@ -56,7 +64,10 @@ namespace sheet
 					if (selectorImpl->isMatch(selector.arguments, event))
 					{
 						auto noteOff = findCorrespondingNoteOffEvent(it, end);
-						result.push_back(std::make_pair(&event, noteOff));
+						EventWithMetaInfo eventWithMetaInfo;
+						eventWithMetaInfo.noteOn = &event;
+						eventWithMetaInfo.noteOff = noteOff;
+						result.emplace_back(eventWithMetaInfo);
 					}
 				}
 			}
@@ -67,9 +78,9 @@ namespace sheet
 		{
 			Events result;
 			auto& wm = fm::getWerckmeister();
-			for (auto noteOnAndOffEvent : events)
+			for (auto eventAndMetaInfo : events)
 			{
-				if (!isEventOfInterest(*noteOnAndOffEvent.first))
+				if (!isEventOfInterest(*eventAndMetaInfo.noteOn))
 				{
 					continue;
 				}
@@ -78,10 +89,10 @@ namespace sheet
 				{
 					FM_THROW(compiler::Exception, "selector not found: " + selector.type);
 				}
-				if (selectorImpl->isMatch(selector.arguments, *noteOnAndOffEvent.first))
+				if (selectorImpl->isMatch(selector.arguments, *eventAndMetaInfo.noteOn))
 				{
 
-					result.push_back(noteOnAndOffEvent);
+					result.push_back(eventAndMetaInfo);
 				}
 			}
 			return result;
@@ -129,9 +140,9 @@ namespace sheet
 		void ConductionsPerformer::perform(const EventsAndDeclarationsCollection& collection) const
 		{
 			for (const auto& eventsAndDeclarations : collection) {
-				for (auto noteOnAndOff : eventsAndDeclarations.events) {
+				for (auto eventAndMetaInfo : eventsAndDeclarations.events) {
 					for (auto declaration : eventsAndDeclarations.declarations) {
-						declaration->perform(noteOnAndOff.first, noteOnAndOff.second);
+						declaration->perform(eventAndMetaInfo.noteOn, eventAndMetaInfo.noteOff);
 					}
 				}
 			}

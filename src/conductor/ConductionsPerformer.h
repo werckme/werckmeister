@@ -16,8 +16,15 @@ namespace sheet
 		class ConductionsPerformer : public IConductionsPerformer
 		{
 		public:
-			typedef std::pair<fm::midi::Event*, fm::midi::Event*> NoteOnAndOffEvent;
-			typedef std::vector<NoteOnAndOffEvent> Events;
+			struct EventWithMetaInfo
+			{
+				fm::midi::Event* noteOn;
+				fm::midi::Event* noteOff;
+				std::pair<fm::Byte, fm::Byte> timeSignature;
+				fm::String instrumentName;
+				int voiceNr = 0;
+			};
+			typedef std::vector<EventWithMetaInfo> Events;
 			typedef std::vector<IDeclarationPtr> Declarations;
 		protected:
 			struct EventsAndDeclarations {

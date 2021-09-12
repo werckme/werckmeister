@@ -1,0 +1,3 @@
+atBeat(1) {
+    velocity += 50%;
+}

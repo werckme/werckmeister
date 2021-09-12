@@ -11,6 +11,8 @@
 #include <compiler/ICompilerVisitor.h>
 #include <ICompilerProgramOptions.h>
 
+#define SHEET_MASTER_TRACKNAME "master track"
+
 namespace sheet {
     namespace compiler {
         class MidiContext : public AContext {
