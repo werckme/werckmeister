@@ -21,6 +21,7 @@ namespace fm {
 			enum Type {
 				Undefined,
 				SetDevice,
+				SetInstrument,
 				MaxTypeId = 0xFF
 			};
 			typedef std::vector<Byte> Data;

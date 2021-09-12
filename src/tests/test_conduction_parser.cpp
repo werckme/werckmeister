@@ -124,3 +124,19 @@ BOOST_AUTO_TEST_CASE(parse_noDeclarationBody_fails)
 	sheet::compiler::ConductionSheetParser parser;
 	BOOST_CHECK_THROW(parser.parse(text), sheet::compiler::Exception);
 }
+
+BOOST_AUTO_TEST_CASE(parse_oneSelectorWithNameArgument)
+{
+	using namespace fm;
+	using sheet::PitchDef;
+	fm::String text = FM_STRING("\
+	instrument(myInstrument) {} \
+");
+	sheet::compiler::ConductionSheetParser parser;
+	auto defs = parser.parse(text);
+	BOOST_CHECK_EQUAL(defs.rules.size(), size_t(1));
+	BOOST_CHECK_EQUAL(defs.rules[0].selectors.size(), size_t(1));
+	BOOST_CHECK_EQUAL(defs.rules[0].selectors[0].type, "instrument");
+	BOOST_CHECK_EQUAL(defs.rules[0].selectors[0].arguments.size(), size_t(1));
+	BOOST_CHECK_EQUAL(defs.rules[0].selectors[0].arguments[0].name, fm::String("myInstrument"));
+}

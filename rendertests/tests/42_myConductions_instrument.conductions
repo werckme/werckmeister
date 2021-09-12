@@ -1,3 +1,4 @@
 instrument(pianoR) {
     timeOffset += 50%;
+    velocity += 15%;
 }

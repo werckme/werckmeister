@@ -13,6 +13,7 @@ namespace sheet
 	{
 		namespace 
 		{
+			const fm::String conductorNamespace_ = "conductor.";
 			fm::midi::Event* findCorrespondingNoteOffEvent(fm::midi::EventContainer::Iterator noteOn, fm::midi::EventContainer::Iterator end)
 			{
 				auto it = noteOn;
@@ -44,19 +45,26 @@ namespace sheet
 				auto it = track->events().container().begin();
 				auto end = track->events().container().end();
 				TimeSignature timeSignature = { 4, 4 };
+				fm::String instrumentName;
 				for (; it != end; ++it)
 				{
 					if (it->eventType() == fm::midi::MetaEvent && it->metaEventType() == fm::midi::TimeSignature)
 					{
 						timeSignature = fm::midi::Event::MetaGetSignatureValue(it->metaData(), it->metaDataSize());
 					}
-
+					if (it->eventType() == fm::midi::MetaEvent && it->metaEventType() == fm::midi::CustomMetaEvent)
+					{
+						auto customEvent = fm::midi::Event::MetaGetCustomData(it->metaData(), it->metaDataSize());
+						if (customEvent.type == fm::midi::CustomMetaData::SetInstrument) {
+							instrumentName = fm::String(customEvent.data.begin(), customEvent.data.end());
+						}
+					}
 					fm::midi::Event &event = *it;
 					if (!isEventOfInterest(event))
 					{
 						continue;
 					}
-					auto selectorImpl = wm.solveOrDefault<ISelector>(selector.type);
+					auto selectorImpl = wm.solveOrDefault<ISelector>(conductorNamespace_ + selector.type);
 					if (!selectorImpl)
 					{
 						FM_THROW(compiler::Exception, "selector not found: " + selector.type);
@@ -64,6 +72,7 @@ namespace sheet
 					EventWithMetaInfo eventWithMetaInfo;
 					eventWithMetaInfo.timeSignature = timeSignature;
 					eventWithMetaInfo.noteOn = &event;
+					eventWithMetaInfo.instrumentName = instrumentName;
 					if (selectorImpl->isMatch(selector.arguments, eventWithMetaInfo))
 					{
 						auto noteOff = findCorrespondingNoteOffEvent(it, end);
@@ -126,7 +135,7 @@ namespace sheet
 						eventsAndDeclarations->events.swap(matchedMidiEvents);
 					}
 					for (const auto& declaration : rule.declarations) {
-						auto declarationImpl = wm.solveOrDefault<IDeclaration>(declaration.property);
+						auto declarationImpl = wm.solveOrDefault<IDeclaration>(conductorNamespace_ + declaration.property);
 						if (!declarationImpl) {
 							FM_THROW(compiler::Exception, "declaration not found: " + declaration.property);
 						}

@@ -11,6 +11,7 @@ namespace sheet {
 		struct ArgumentValue {
 			fm::Ticks tickValue = 0;
 			PitchDef pitch;
+			fm::String name;
 		};
 		typedef std::vector<ArgumentValue> Arguments; 
 		fm::String type;

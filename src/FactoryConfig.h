@@ -150,9 +150,14 @@ namespace sheet
 #include <conductor/selectors/AtBeat.h>
 #include <conductor/selectors/FromPosition.h>
 #include <conductor/selectors/ToPosition.h>
+#include <conductor/selectors/Pitch.h>
+#include <conductor/selectors/FromPitch.h>
+#include <conductor/selectors/ToPitch.h>
+#include <conductor/selectors/Instrument.h>
 #include <conductor/declarations/Velocity.h>
 #include <conductor/declarations/TimeOffset.h>
 #include <conductor/declarations/Duration.h>
+
 namespace sheet
 {
     namespace conductor
@@ -161,12 +166,17 @@ namespace sheet
         {
             const bool commandsRegistered = ([]() 
             {
-                _FM_Register(AtBeat,  SHEET_CONDUCTOR_SEL__AT_BEAT);
-                _FM_Register(FromPosition, SHEET_CONDUCTOR_SEL__FROM_POSITION);
-                _FM_Register(ToPosition, SHEET_CONDUCTOR_SEL__TO_POSITION);
-                _FM_Register(Velocity, SHEET_CONDUCTOR_DEC__VELOCITY);
-                _FM_Register(TimeOffset, SHEET_CONDUCTOR_DEC__TIME_OFFSET);
-                _FM_Register(Duration, SHEET_CONDUCTOR_DEC__LENGTH);
+                fm::String namespace_ = "conductor.";
+                _FM_Register(AtBeat,  namespace_ + SHEET_CONDUCTOR_SEL__AT_BEAT);
+                _FM_Register(FromPosition, namespace_ + SHEET_CONDUCTOR_SEL__FROM_POSITION);
+                _FM_Register(ToPosition, namespace_ + SHEET_CONDUCTOR_SEL__TO_POSITION);
+                _FM_Register(Velocity, namespace_ + SHEET_CONDUCTOR_DEC__VELOCITY);
+                _FM_Register(TimeOffset, namespace_ + SHEET_CONDUCTOR_DEC__TIME_OFFSET);
+                _FM_Register(Duration, namespace_ + SHEET_CONDUCTOR_DEC__LENGTH);
+                _FM_Register(Pitch, namespace_ + SHEET_CONDUCTOR_SEL__PITCH);
+                _FM_Register(FromPitch, namespace_ + SHEET_CONDUCTOR_SEL__FROM_PITCH);
+                _FM_Register(ToPitch, namespace_ + SHEET_CONDUCTOR_SEL__TO_PITCH);
+                _FM_Register(Instrument, namespace_ + SHEET_CONDUCTOR_SEL__INSTRUMENT);
                 return true;
             })();
         }

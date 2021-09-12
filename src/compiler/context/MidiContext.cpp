@@ -321,6 +321,7 @@ namespace sheet {
 			auto track = fm::midi::Event::MetaTrack(uname);
 			track.absPosition(0);
 			addEvent(track);
+			addSetInstrumentEvent(uname, currentPosition());
 			// find instrumentDef defs and assign them to the meta data of the voice
 			Base::setInstrument(uname);
 			auto instrumentDef = getInstrumentDef(uname);
@@ -365,6 +366,20 @@ namespace sheet {
 			cdata.type = fm::midi::CustomMetaData::SetDevice;
 			std::string ndeviceName = deviceName;
 			cdata.data = fm::midi::CustomMetaData::Data(ndeviceName.begin(), ndeviceName.end());
+			auto ev = fm::midi::Event::MetaCustom(cdata);
+			ev.absPosition(position);
+			addEvent(ev);
+		}
+
+		void MidiContext::addSetInstrumentEvent(const fm::String &instrumentName, fm::Ticks position)
+		{
+			if (instrumentName.empty()) {
+				return;
+			}
+			fm::midi::CustomMetaData cdata;
+			cdata.type = fm::midi::CustomMetaData::SetInstrument;
+			std::string ninstrumentName = instrumentName;
+			cdata.data = fm::midi::CustomMetaData::Data(ninstrumentName.begin(), ninstrumentName.end());
 			auto ev = fm::midi::Event::MetaCustom(cdata);
 			ev.absPosition(position);
 			addEvent(ev);

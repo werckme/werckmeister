@@ -16,7 +16,6 @@ namespace sheet
             fm::midi::Event* noteOff;
             TimeSignature timeSignature;
             fm::String instrumentName;
-            int voiceNr = 0;
         };
         class ISelector : public fm::IRegisterable
         {

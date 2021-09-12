@@ -62,6 +62,7 @@ namespace sheet {
 			 * sends a custom meta event containing a device name
 			 */
 			virtual void addDeviceChangeEvent(const fm::String &deviceName, fm::Ticks position);
+			virtual void addSetInstrumentEvent(const fm::String& instrumentName, fm::Ticks position);
 			virtual AInstrumentDefPtr getInstrumentDef(const fm::String &uname) override;
 			virtual AInstrumentDefPtr currentInstrumentDef() override;
 			const InstrumentDefs & instrumentDefs() const { return this->instrumentDefs_; }

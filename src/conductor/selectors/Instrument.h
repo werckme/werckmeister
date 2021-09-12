@@ -8,12 +8,13 @@ namespace sheet
     namespace conductor
     {
         /// <selector name="instrument">
-        ///     Selects any event which belongs to the given instrument.
+        ///     Selects any event which belongs to one of the given instruments.
         /// ## example, select the events after time >= 8 quarters: 
         /// ```
         /// instrument(bass) {...}
+        /// instrument(bass drums) {...}
         /// ```
-        /// <param name="instrument name" type="string"></param>
+        /// <param name="instrument name" type="instrumentName+"></param>
         /// </selector>
         class Instrument : public ISelector
         {

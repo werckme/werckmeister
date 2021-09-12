@@ -22,6 +22,7 @@ BOOST_FUSION_ADAPT_STRUCT(
 	sheet::ConductionSelector::ArgumentValue,
 	(fm::Ticks, tickValue)
 	(sheet::PitchDef, pitch)
+	(fm::String, name)
 )
 
 namespace {
@@ -105,35 +106,66 @@ namespace sheet {
 					current_pos_.setStartPos(begin);
 					start.name("conduction sheet");
 
-					argument_ %= 
-						  (double_[at_c<ArTickValue>(_val) = qi::_1] >> attr(PitchDef()))
-						| (attr(0) >> pitchOrAlias_[at_c<ArPitch>(_val) = qi::_1] )
+					numberArgument_ %= 
+						  double_[at_c<ArTickValue>(_val) = qi::_1] >> attr(PitchDef()) >> attr(fm::String())
+					;
+
+					pitchArgument_ %= 
+						  attr(0) >> pitchOrAlias_[at_c<ArPitch>(_val) = qi::_1] >> attr(fm::String())
+					;
+
+					stringArgument_ %= 
+						  attr(0) >> attr(PitchDef()) >> +char_("a-zA-Z0-9")
 					;
 
 					selector_ %= 
 					(
 						current_pos_.current_pos
 						>> attr(sourceId_)
-						>> SHEET_CONDUCTOR_SEL__FROM_POSITION >> attr(SHEET_CONDUCTOR_SEL__FROM_POSITION) >> "(" >> argument_ >> ")"
+						>> SHEET_CONDUCTOR_SEL__FROM_POSITION >> attr(SHEET_CONDUCTOR_SEL__FROM_POSITION) >> "(" >> numberArgument_ >> ")"
 					)
 					|
 					(
 						current_pos_.current_pos
 						>> attr(sourceId_)
-						>> SHEET_CONDUCTOR_SEL__TO_POSITION >> attr(SHEET_CONDUCTOR_SEL__TO_POSITION) >> "(" >> argument_ >> ")"
+						>> SHEET_CONDUCTOR_SEL__TO_POSITION >> attr(SHEET_CONDUCTOR_SEL__TO_POSITION) >> "(" >> numberArgument_ >> ")"
 					)
 					|
 					(
 						current_pos_.current_pos 
 						>> attr(sourceId_)
-						>> SHEET_CONDUCTOR_SEL__PITCH >> attr(SHEET_CONDUCTOR_SEL__PITCH) >> "(" >> +argument_ >> ")"
+						>> SHEET_CONDUCTOR_SEL__PITCH >> attr(SHEET_CONDUCTOR_SEL__PITCH) >> "(" >> +pitchArgument_ >> ")"
 					)
 					|
 					(
 						current_pos_.current_pos 
 						>> attr(sourceId_)
-						>> SHEET_CONDUCTOR_SEL__AT_BEAT >> attr(SHEET_CONDUCTOR_SEL__AT_BEAT) >> "(" >> +argument_ >> ")"
-					)					
+						>> SHEET_CONDUCTOR_SEL__AT_BEAT >> attr(SHEET_CONDUCTOR_SEL__AT_BEAT) >> "(" >> +numberArgument_ >> ")"
+					)
+					|
+					(
+						current_pos_.current_pos
+						>> attr(sourceId_)
+						>> SHEET_CONDUCTOR_SEL__FROM_PITCH >> attr(SHEET_CONDUCTOR_SEL__FROM_PITCH) >> "(" >> pitchArgument_ >> ")"
+					)
+					|
+					(
+						current_pos_.current_pos
+						>> attr(sourceId_)
+						>> SHEET_CONDUCTOR_SEL__TO_PITCH >> attr(SHEET_CONDUCTOR_SEL__TO_PITCH) >> "(" >> pitchArgument_ >> ")"
+					)
+					|
+					(
+						current_pos_.current_pos
+						>> attr(sourceId_)
+						>> SHEET_CONDUCTOR_SEL__INSTRUMENT >> attr(SHEET_CONDUCTOR_SEL__INSTRUMENT) >> "(" >> +stringArgument_ >> ")"
+					)
+					|
+					(
+						current_pos_.current_pos
+						>> attr(sourceId_)
+						>> SHEET_CONDUCTOR_SEL__PITCH >> attr(SHEET_CONDUCTOR_SEL__PITCH) >> "(" >> +pitchArgument_ >> ")"
+					)
 					;
 
 					operationType_ %= 
@@ -192,7 +224,9 @@ namespace sheet {
 				qi::rule<Iterator, ConductionSheetDef(), ascii::space_type> start;
 				qi::rule<Iterator, ConductionSelector(), ascii::space_type> selector_;
 				qi::rule<Iterator, ConductionRule(), ascii::space_type> rules_;
-				qi::rule<Iterator, sheet::ConductionSelector::ArgumentValue(), ascii::space_type> argument_;
+				qi::rule<Iterator, sheet::ConductionSelector::ArgumentValue(), ascii::space_type> numberArgument_;
+				qi::rule<Iterator, sheet::ConductionSelector::ArgumentValue(), ascii::space_type> pitchArgument_;
+				qi::rule<Iterator, sheet::ConductionSelector::ArgumentValue(), ascii::space_type> stringArgument_;
 				qi::rule<Iterator, sheet::ConductionRule::Declaration(), ascii::space_type> declaration_;
 				qi::rule<Iterator, sheet::ConductionRule::Declaration::OperationType(), ascii::space_type> operationType_;
 				qi::rule<Iterator, sheet::ConductionRule::Declaration::ValueUnit(), ascii::space_type> valueUnit_;
