@@ -91,7 +91,10 @@ SET (SRC_FETZER_LIB
     conductor/selectors/FromPosition.cpp
     conductor/selectors/FromPosition.cpp
     conductor/selectors/ToPosition.cpp
-    conductor/selectors/ToPosition.cpp
+    conductor/selectors/Instrument.cpp
+    conductor/selectors/FromPitch.cpp
+    conductor/selectors/ToPitch.cpp
+    conductor/selectors/Pitch.cpp
     conductor/declarations/ADeclaration.cpp
     conductor/declarations/Velocity.cpp
     conductor/declarations/TimeOffset.cpp

@@ -1,0 +1,3 @@
+instrument(pianoR) {
+    timeOffset += 50%;
+}

@@ -1,5 +1,4 @@
 #include "FromPosition.h"
-#include <cmath>
 #include <compiler/error.hpp>
 
 namespace sheet
