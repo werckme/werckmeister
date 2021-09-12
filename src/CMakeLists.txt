@@ -95,7 +95,7 @@ SET (SRC_FETZER_LIB
     conductor/declarations/ADeclaration.cpp
     conductor/declarations/Velocity.cpp
     conductor/declarations/TimeOffset.cpp
-    conductor/declarations/Length.cpp
+    conductor/declarations/Duration.cpp
 )
 
 add_definitions( -DGIT_VERSION="${GIT_VERSION}" )

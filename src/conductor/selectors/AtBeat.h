@@ -7,6 +7,14 @@ namespace sheet
 {
     namespace conductor
     {
+        /// <selector name="atBeat">
+        ///     Selects an event at a given beat or a list of beats
+        /// ## example, select the events at beat 1 and 3: 
+        /// ```
+        /// atBeat(1 3) {...}
+        /// ```
+        /// <param name="beat" type="quarters+"></param>
+        /// </selector>
         class AtBeat : public ISelector
         {
         public:

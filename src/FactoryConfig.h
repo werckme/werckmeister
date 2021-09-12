@@ -152,7 +152,7 @@ namespace sheet
 #include <conductor/selectors/ToPosition.h>
 #include <conductor/declarations/Velocity.h>
 #include <conductor/declarations/TimeOffset.h>
-#include <conductor/declarations/Length.h>
+#include <conductor/declarations/Duration.h>
 namespace sheet
 {
     namespace conductor
@@ -166,7 +166,7 @@ namespace sheet
                 _FM_Register(ToPosition, SHEET_CONDUCTOR_SEL__TO_POSITION);
                 _FM_Register(Velocity, SHEET_CONDUCTOR_DEC__VELOCITY);
                 _FM_Register(TimeOffset, SHEET_CONDUCTOR_DEC__TIME_OFFSET);
-                _FM_Register(Length, SHEET_CONDUCTOR_DEC__LENGTH);
+                _FM_Register(Duration, SHEET_CONDUCTOR_DEC__LENGTH);
                 return true;
             })();
         }

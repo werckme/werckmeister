@@ -7,6 +7,15 @@ namespace sheet
 {
     namespace conductor
     {
+        /// <selector name="fromPosition">
+        ///     Selects any event where its position is after a given time.
+        /// see also: [toPosition](#toPosition).
+        /// ## example, select the events after time >= 8 quarters: 
+        /// ```
+        /// fromPosition(8) {...}
+        /// ```
+        /// <param name="beat" type="quarters"></param>
+        /// </selector>
         class FromPosition : public ISelector
         {
         public:

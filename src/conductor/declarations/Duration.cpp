@@ -1,11 +1,11 @@
-#include "Length.h"
+#include "Duration.h"
 #include <compiler/error.hpp>
 
 namespace sheet
 {
     namespace conductor
     {
-        void Length::perform(fm::midi::Event* noteOn, fm::midi::Event* noteOff) const
+        void Duration::perform(fm::midi::Event* noteOn, fm::midi::Event* noteOff) const
         {
             FGetValue getOriginalValue = [noteOn]() { return 0; };
             FGetValue getPercentBase = [noteOn, noteOff]() { return (noteOff->absPosition() - noteOn->absPosition()) / fm::PPQ; };
