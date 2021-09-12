@@ -5,16 +5,16 @@ namespace sheet
 {
     namespace conductor
     {
-        void Length::perform(fm::midi::Event* noteOn, fm::midi::Event* noteOffOrNull) const 
+        void Length::perform(fm::midi::Event* noteOn, fm::midi::Event* noteOff) const
         {
-            if (declaration.unit == ConductionRule::Declaration::UnitPercent) {
-                FM_THROW(compiler::Exception, "not yet impl.");
-            }
-            if (!noteOffOrNull) {
-                return;
-            }
-            auto value = declaration.value * fm::PPQ;
-            noteOffOrNull->absPosition(noteOffOrNull->absPosition() + value);
+            FGetValue getOriginalValue = [noteOn]() { return 0; };
+            FGetValue getPercentBase = [noteOn, noteOff]() { return (noteOff->absPosition() - noteOn->absPosition()) / fm::PPQ; };
+            FSetValue setNoteOn = [](fm::midi::Event* noteOn, double val) {};
+            FSetValue setNoteOff = [noteOn](fm::midi::Event* noteOff, double val) { noteOff->absPosition(noteOff->absPosition() + val * fm::PPQ); };
+            double inputValue = declaration.value;
+            constexpr double min = -std::numeric_limits<double>::max();
+            constexpr double max = std::numeric_limits<double>::max();
+            performImpl(noteOn, noteOff, inputValue, min, max, getOriginalValue, getPercentBase, setNoteOn, setNoteOff);
         }
     }
 }

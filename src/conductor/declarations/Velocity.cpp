@@ -13,8 +13,8 @@ namespace sheet
             FSetValue setNoteOn = [](fm::midi::Event* noteOn, double val) { noteOn->parameter2(fm::Byte(val)); };
             FSetValue setNoteOff = [](fm::midi::Event* noteOn, double val) { };
             double inputValue = declaration.value;
-            double min = 0.0;
-            double max = double(fm::midi::MaxMidiValue);
+            constexpr double min = 0.0;
+            constexpr double max = double(fm::midi::MaxMidiValue);
             performImpl(noteOn, noteOff, inputValue, min, max, getOriginalValue, getPercentBase, setNoteOn, setNoteOff);
         }
     }
