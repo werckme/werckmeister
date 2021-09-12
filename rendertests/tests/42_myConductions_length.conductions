@@ -1,4 +1,4 @@
 fromPosition(1) toPosition(4) atBeat(2) {
     length = -0.9;
-    velocity += 20;
+    velocity += 20%;
 }

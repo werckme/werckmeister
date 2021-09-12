@@ -1,5 +1,6 @@
 #include "Velocity.h"
 #include <compiler/error.hpp>
+#include <fm/midi.hpp>
 
 namespace sheet
 {
@@ -7,13 +8,14 @@ namespace sheet
     {
         void Velocity::perform(fm::midi::Event* noteOn, fm::midi::Event* noteOff) const
         {
-            FNormalize normalizeInValue = [](double inputValue) { return inputValue / 100.; };
-            FGetValue getOriginalValue = [](fm::midi::Event* noteOn) { return noteOn->parameter2() / double(fm::midi::MaxMidiValue); };
-            FGetValue getPercentBase = [](fm::midi::Event* noteOn) { return noteOn->parameter2() / double(fm::midi::MaxMidiValue); };
-            FSetValue setNoteOn = [](fm::midi::Event* noteOn, double val) { noteOn->parameter2( fm::Byte(val * fm::midi::MaxMidiValue) ); };
+            FGetValue getOriginalValue = [noteOn]() { return noteOn->parameter2(); };
+            FGetValue getPercentBase = [noteOn]() { return noteOn->parameter2(); };
+            FSetValue setNoteOn = [](fm::midi::Event* noteOn, double val) { noteOn->parameter2(fm::Byte(val)); };
             FSetValue setNoteOff = [](fm::midi::Event* noteOn, double val) { };
-            performImpl(noteOn, noteOff, normalizeInValue, getOriginalValue, getPercentBase, setNoteOn, setNoteOff);
-
+            double inputValue = declaration.value;
+            double min = 0.0;
+            double max = double(fm::midi::MaxMidiValue);
+            performImpl(noteOn, noteOff, inputValue, min, max, getOriginalValue, getPercentBase, setNoteOn, setNoteOff);
         }
     }
 }

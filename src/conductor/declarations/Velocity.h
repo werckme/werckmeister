@@ -1,13 +1,13 @@
 #ifndef DECLARATION_VELOCITY_H
 #define DECLARATION_VELOCITY_H
 
-#include "IDeclaration.h"
+#include "ADeclaration.h"
 
 namespace sheet
 {
     namespace conductor
     {
-        class Velocity : public IDeclaration
+        class Velocity : public ADeclaration
         {
         public:
             virtual void perform(fm::midi::Event*, fm::midi::Event*) const override;

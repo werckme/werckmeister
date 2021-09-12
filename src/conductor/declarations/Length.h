@@ -1,13 +1,13 @@
 #ifndef DECLARATION_LENGTH_H
 #define DECLARATION_LENGTH_H
 
-#include "IDeclaration.h"
+#include "ADeclaration.h"
 
 namespace sheet
 {
     namespace conductor
     {
-        class Length : public IDeclaration
+        class Length : public ADeclaration
         {
         public:
             virtual void perform(fm::midi::Event*, fm::midi::Event*) const override;

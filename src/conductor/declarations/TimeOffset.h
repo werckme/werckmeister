@@ -1,13 +1,13 @@
 #ifndef DECLARATION_TIME_H
 #define DECLARATION_TIME_H
 
-#include "IDeclaration.h"
+#include "ADeclaration.h"
 
 namespace sheet
 {
     namespace conductor
     {
-        class TimeOffset : public IDeclaration
+        class TimeOffset : public ADeclaration
         {
         public:
             virtual void perform(fm::midi::Event*, fm::midi::Event*) const override;

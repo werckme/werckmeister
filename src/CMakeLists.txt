@@ -92,6 +92,7 @@ SET (SRC_FETZER_LIB
     conductor/selectors/FromPosition.cpp
     conductor/selectors/ToPosition.cpp
     conductor/selectors/ToPosition.cpp
+    conductor/declarations/ADeclaration.cpp
     conductor/declarations/Velocity.cpp
     conductor/declarations/TimeOffset.cpp
     conductor/declarations/Length.cpp

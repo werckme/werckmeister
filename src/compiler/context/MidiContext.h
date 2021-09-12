@@ -14,8 +14,8 @@
 namespace sheet {
     namespace compiler {
         class MidiContext : public AContext {
-			friend class MidiInstrumentDef;
-			friend class InstrumentSectionDef;
+			friend struct MidiInstrumentDef;
+			friend struct InstrumentSectionDef;
 		private:
 			fm::midi::MidiPtr midi_;
 			ICompilerVisitorPtr _compilerVisitor;
