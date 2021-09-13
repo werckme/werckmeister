@@ -53,7 +53,7 @@ namespace sheet {
 		{
 		}
 
-		int MidiContext::getAbsolutePitch(const PitchDef &pitch)
+		int MidiContext::toMidiPitch(const PitchDef &pitch)
 		{
 			auto value =  MidiSchluesselCOffset + pitch.pitch + (pitch.octave * fm::NotesPerOctave);
 			if (value < 0 || value > 127) {
@@ -79,13 +79,13 @@ namespace sheet {
 			const auto &instrumentDef = getActiveMidiInstrument(trackMeta->instrument);
 			auto event = fm::midi::Event::NoteOn(instrumentDef->channel, 
 				absolutePosition, 
-				getAbsolutePitch(pitch), 
+				toMidiPitch(pitch), 
 				toMidiVelocity(velocity)
 			);
 			addEvent(event);
 			event = fm::midi::Event::NoteOff(instrumentDef->channel, 
 				absolutePosition + duration, 
-				getAbsolutePitch(pitch)
+				toMidiPitch(pitch)
 			);
 			addEvent(event);
 		}
@@ -102,7 +102,7 @@ namespace sheet {
 			const auto& instrumentDef = getActiveMidiInstrument(trackMeta->instrument);
 			auto event = fm::midi::Event::NoteOn(instrumentDef->channel, 
 				absolutePosition, 
-				getAbsolutePitch(pitch), 
+				toMidiPitch(pitch), 
 				toMidiVelocity(velocity)
 			);
 			addEvent(event);
@@ -120,7 +120,7 @@ namespace sheet {
 			const auto& instrumentDef = getActiveMidiInstrument(trackMeta->instrument);
 			auto event = fm::midi::Event::NoteOff(instrumentDef->channel, 
 				absolutePosition, 
-				getAbsolutePitch(pitch)
+				toMidiPitch(pitch)
 			);
 			addEvent(event);
 		}

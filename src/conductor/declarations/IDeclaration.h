@@ -15,7 +15,7 @@ namespace sheet
         class IDeclaration : public fm::IRegisterable
         {
         public:
-            ConductionRule::Declaration declaration;
+            virtual void setDeclarationData(const ConductionRule::Declaration&) = 0;
             virtual void perform(fm::midi::Event* noteOn, fm::midi::Event* noteOff) const = 0;
             virtual ~IDeclaration() = default;
         };

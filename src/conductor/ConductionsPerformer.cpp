@@ -94,7 +94,7 @@ namespace sheet
 				{
 					continue;
 				}
-				auto selectorImpl = wm.solveOrDefault<ISelector>(selector.type);
+				auto selectorImpl = wm.solveOrDefault<ISelector>(conductorNamespace_ + selector.type);
 				if (!selectorImpl)
 				{
 					FM_THROW(compiler::Exception, "selector not found: " + selector.type);
@@ -139,7 +139,7 @@ namespace sheet
 						if (!declarationImpl) {
 							FM_THROW(compiler::Exception, "declaration not found: " + declaration.property);
 						}
-						declarationImpl->declaration = declaration;
+						declarationImpl->setDeclarationData(declaration);
 						eventsAndDeclarations->declarations.push_back(declarationImpl);
 					}
 				}

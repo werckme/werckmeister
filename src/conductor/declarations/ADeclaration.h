@@ -12,7 +12,9 @@ namespace sheet
         public:
             virtual void perform(fm::midi::Event* noteOn, fm::midi::Event* noteOff) const = 0;
             virtual ~ADeclaration() = default;
+            virtual void setDeclarationData(const ConductionRule::Declaration& val) override { declaration = val; }
         protected:
+            ConductionRule::Declaration declaration;
             typedef std::function<double()> FGetValue;
             typedef std::function<void(fm::midi::Event*, double)> FSetValue;
             void performImpl(fm::midi::Event* noteOn, fm::midi::Event* noteOff, double inputValue, double min, double max, const FGetValue &getOriginalValue, const FGetValue &getPercentBaseValue, const FSetValue &setNoteOnValue, const FSetValue &setNoteOffValue) const;

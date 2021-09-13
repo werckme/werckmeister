@@ -68,12 +68,12 @@ namespace sheet {
 			const InstrumentDefs & instrumentDefs() const { return this->instrumentDefs_; }
 			virtual IContextPtr createNewContext() const;
 			virtual void clear() override;
+			static int toMidiPitch(const PitchDef &pitch);
 		protected:
 			virtual Base::VoiceMetaDataPtr createVoiceMetaData() override;
 			virtual Base::TrackMetaDataPtr createTrackMetaData() override;
 			void addInstrumentDef(const fm::String &uname, AInstrumentDefPtr def);
 			virtual TrackId createMasterTrack() override;
-			int getAbsolutePitch(const PitchDef &pitch);
 			int toMidiVelocity(double velocity);
 			void setInstrument(std::shared_ptr<MidiInstrumentDef> def);
 			void setInstrument(std::shared_ptr<InstrumentSectionDef> def);
