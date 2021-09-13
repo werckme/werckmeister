@@ -32,6 +32,7 @@
 #include <fmapp/NullStringSender.hpp>
 #include <compiler/SheetNavigator.h>
 #include <conductor/ConductionsPerformer.h>
+#include "FactoryConfig.h"
 
 #ifdef SHEET_USE_BOOST_TIMER
 #include "fmapp/boostTimer.h"
@@ -162,7 +163,8 @@ int startPlayer(std::shared_ptr<PlayerProgramOptions> programOptionsPtr)
 			std::shared_ptr<fmapp::Funkfeuer> vis = injector.create<std::unique_ptr<fmapp::Funkfeuer>>();
 			loopVisitors.container.push_back(vis);
 		}
-
+		sheet::FactoryConfig factory(injector);
+		factory.init();
 		auto program = injector.create<SheetPlayerProgram*>();
 		sheetWatcherHandlers->container.push_back(program);
 		program->prepareEnvironment();

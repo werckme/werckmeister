@@ -90,6 +90,7 @@ int main(int argc, const char** argv)
 		})
 	);
 	sheet::FactoryConfig factory(injector);
+	factory.init();
 	auto program = injector.create<SheetCompilerProgram>();
 	program.prepareEnvironment();
 	return program.execute();

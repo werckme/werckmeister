@@ -23,6 +23,7 @@
 #include <boost/di/extension/scopes/scoped.hpp>
 #include <compiler/SheetNavigator.h>
 #include <conductor/ConductionsPerformer.h>
+#include "FactoryConfig.h"
 
 #ifdef _MSC_VER
 #define _CRTDBG_MAP_ALLOC
@@ -111,6 +112,8 @@ extern "C" const char * create_compile_result(const char *file, double beginQuar
 		})
 		, di::bind<fm::ILogger>()					.to(logger)
 	);
+	sheet::FactoryConfig factory(injector);
+	factory.init();
 	auto program = injector.create<SheetCompilerProgramJs>();
 	auto jsonWriterPtr = std::dynamic_pointer_cast<fmapp::JsonWriter>(program.documentWriter());
 	if (!jsonWriterPtr) {

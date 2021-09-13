@@ -1,11 +1,12 @@
 #include <fm/werckmeister.hpp>
-#include <type_traits>
+#include <memory>
 
 namespace sheet 
 {
     template<class TInjector>
-    struct FactoryConfig 
+    class FactoryConfig 
     {
+    public:
         FactoryConfig(TInjector &injector) : injector_(injector) 
         {
         }
@@ -18,19 +19,23 @@ namespace sheet
             initCommands();
             initConductor();
         }
+    private:
         void initVoicingStrategies();
         void initModifications();
         void initCommands();
         void initConductor();
-    private:
         TInjector &injector_;
+        template <class TRegisterable>
+        std::shared_ptr<TRegisterable> create()
+        {
+            return injector_.create<std::shared_ptr<TRegisterable>>();
+        }
         template<class TRegisterable>
         void register_(const fm::String &name)
         {
-            static_assert(std::is_convertible<TRegisterable*, fm::IRegisterable*>::value, "TRegisterable must implement IRegisterable");
-            fm::getWerckmeister().register_<TRegisterable>(name, []() 
+            fm::getWerckmeister().register_<TRegisterable>(name, [this]() 
             { 
-                return std::make_shared<TRegisterable>(); 
+                return create<TRegisterable>();
             });
         }
         
