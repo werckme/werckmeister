@@ -12,7 +12,6 @@
 #include <boost/filesystem.hpp>
 #include <exception>
 #include <fm/config.hpp>
-#include "FactoryConfig.h"
 #include <fmapp/JsonStringInputReader.hpp>
 #include <boost/algorithm/string/join.hpp>
 

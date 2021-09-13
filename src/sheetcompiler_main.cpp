@@ -22,6 +22,7 @@
 #include <fmapp/TimelineVisitor.hpp>
 #include <compiler/SheetNavigator.h>
 #include <conductor/ConductionsPerformer.h>
+#include "FactoryConfig.h"
 
 #ifdef _MSC_VER
 #define _CRTDBG_MAP_ALLOC
@@ -31,6 +32,7 @@
 
 typedef sheet::compiler::EventLogger<fm::ConsoleLogger> 			   LoggerImpl;
 typedef sheet::compiler::LoggerAndWarningsCollector<fm::ConsoleLogger> WarningsCollectorWithConsoleLogger;
+
 
 int main(int argc, const char** argv)
 {
@@ -87,6 +89,7 @@ int main(int argc, const char** argv)
 			return injector.template create<std::shared_ptr<WarningsCollectorWithConsoleLogger>>();
 		})
 	);
+	sheet::FactoryConfig factory(injector);
 	auto program = injector.create<SheetCompilerProgram>();
 	program.prepareEnvironment();
 	return program.execute();

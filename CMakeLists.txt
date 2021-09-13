@@ -15,6 +15,7 @@ SET(WERCKMEISTER_VERSION_PATCH 59)
 # Add this project's cmake/ directory to the module path.
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
+set (CMAKE_CXX_STANDARD 17)
 
 # PROJECT CONFIG
 set(FM_CHARSET "ISO-8859-1")
@@ -41,7 +42,7 @@ set(LIB_FLUIDSYNTH_SEARCH_PATHS "")
 IF(UNIX)
   SET (LIB_FLUIDSYNTH_FILENAME "libfluidsynth.so")
   SET (LIB_FLUIDSYNTH_SEARCH_PATHS "{\"/usr/lib\", \"/usr/local/lib\"}")
-  SET (CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "-std=c++14 -Wall -Wno-unused-function")
+  SET (CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "-std=c++17 -Wall -Wno-unused-function")
   add_definitions( -DSHEET_USE_BOOST_TIMER )
   add_definitions( -DSHEET_OS_UNIX )
   if ($ENV{WM_LINUX_LINK_STATIC})
