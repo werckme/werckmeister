@@ -23,8 +23,8 @@ namespace fm {
 	
 	Werckmeister & getWerckmeister()
     {
-        typedef Loki::SingletonHolder<Werckmeister> Holder;
-		return Holder::Instance();
+        static Werckmeister instance;
+		return instance;
     }
 
     const char * Werckmeister::version() const
