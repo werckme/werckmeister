@@ -14,6 +14,7 @@
 #include <functional>
 #include <fm/IRegisterable.h>
 #include <fm/exception.hpp>
+#include <list>
 
 namespace fm {
     class Werckmeister {
