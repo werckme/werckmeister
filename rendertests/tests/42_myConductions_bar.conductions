@@ -11,5 +11,5 @@ onBar(5) {
 }
 
 fromBar(4) nthBar(1) {
-    --velocity = 127;
+    velocity = 127;
 }
