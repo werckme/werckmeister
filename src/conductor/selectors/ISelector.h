@@ -16,6 +16,7 @@ namespace sheet
             fm::midi::Event* noteOff;
             TimeSignature timeSignature;
             fm::String instrumentName;
+            fm::Ticks barNumber;
         };
         class ISelector : public fm::IRegisterable
         {

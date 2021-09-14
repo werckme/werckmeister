@@ -64,6 +64,7 @@ namespace sheet
 					{
 						continue;
 					}
+					fm::Ticks quarters = it->absPosition() / fm::PPQ;
 					auto selectorImpl = wm.solveOrDefault<ISelector>(conductorNamespace_ + selector.type);
 					if (!selectorImpl)
 					{
@@ -73,6 +74,7 @@ namespace sheet
 					eventWithMetaInfo.timeSignature = timeSignature;
 					eventWithMetaInfo.noteOn = &event;
 					eventWithMetaInfo.instrumentName = instrumentName;
+					eventWithMetaInfo.barNumber = (quarters * timeSignature.second) / (4.0 * timeSignature.first);
 					if (selectorImpl->isMatch(selector.arguments, eventWithMetaInfo))
 					{
 						auto noteOff = findCorrespondingNoteOffEvent(it, end);

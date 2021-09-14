@@ -140,7 +140,7 @@ namespace sheet {
 					(
 						current_pos_.current_pos 
 						>> attr(sourceId_)
-						>> SHEET_CONDUCTOR_SEL__AT_BEAT >> attr(SHEET_CONDUCTOR_SEL__AT_BEAT) >> "(" >> +numberArgument_ >> ")"
+						>> SHEET_CONDUCTOR_SEL__ON_BEAT >> attr(SHEET_CONDUCTOR_SEL__ON_BEAT) >> "(" >> +numberArgument_ >> ")"
 					)
 					|
 					(
@@ -166,6 +166,45 @@ namespace sheet {
 						>> attr(sourceId_)
 						>> SHEET_CONDUCTOR_SEL__PITCH >> attr(SHEET_CONDUCTOR_SEL__PITCH) >> "(" >> +pitchArgument_ >> ")"
 					)
+
+					|
+					(
+						current_pos_.current_pos 
+						>> attr(sourceId_)
+						>> SHEET_CONDUCTOR_SEL__FROM_BEAT >> attr(SHEET_CONDUCTOR_SEL__FROM_BEAT) >> "(" >> numberArgument_ >> ")"
+					)
+					|
+					(
+						current_pos_.current_pos 
+						>> attr(sourceId_)
+						>> SHEET_CONDUCTOR_SEL__TO_BEAT >> attr(SHEET_CONDUCTOR_SEL__TO_BEAT) >> "(" >> numberArgument_ >> ")"
+					)
+					|
+					(
+						current_pos_.current_pos 
+						>> attr(sourceId_)
+						>> SHEET_CONDUCTOR_SEL__FROM_BAR >> attr(SHEET_CONDUCTOR_SEL__FROM_BAR) >> "(" >> numberArgument_ >> ")"
+					)
+					|
+					(
+						current_pos_.current_pos 
+						>> attr(sourceId_)
+						>> SHEET_CONDUCTOR_SEL__TO_BAR >> attr(SHEET_CONDUCTOR_SEL__TO_BAR) >> "(" >> numberArgument_ >> ")"
+					)
+					|
+					(
+						current_pos_.current_pos 
+						>> attr(sourceId_)
+						>> SHEET_CONDUCTOR_SEL__ON_BAR >> attr(SHEET_CONDUCTOR_SEL__ON_BAR) >> "(" >> +numberArgument_ >> ")"
+					)
+					|
+					(
+						current_pos_.current_pos 
+						>> attr(sourceId_)
+						>> SHEET_CONDUCTOR_SEL__NTH_BAR >> attr(SHEET_CONDUCTOR_SEL__NTH_BAR) >> "(" >> +numberArgument_ >> ")"
+					)																				
+
+
 					;
 
 					operationType_ %= 

@@ -1,3 +1,0 @@
-fromBeat(1) toBeat(2) {
-    velocity = 127;
-}

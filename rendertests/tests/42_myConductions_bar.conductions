@@ -1,0 +1,15 @@
+fromBar(1) toBar(2) {
+   -- velocity = 127;
+}
+
+onBar(2) {
+    velocity = 5;
+}
+
+onBar(5) {
+    velocity = 100;
+}
+
+fromBar(4) nthBar(1) {
+    --velocity = 127;
+}

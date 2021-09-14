@@ -168,6 +168,13 @@ namespace sheet
 #include <conductor/declarations/TimeOffset.h>
 #include <conductor/declarations/Duration.h>
 
+#include <conductor/selectors/FromBar.h>
+#include <conductor/selectors/ToBar.h>
+#include <conductor/selectors/FromBeat.h>
+#include <conductor/selectors/ToBeat.h>
+#include <conductor/selectors/OnBar.h>
+#include <conductor/selectors/NthBar.h>
+
 namespace sheet
 {
     template<class TInjector>
@@ -175,7 +182,7 @@ namespace sheet
     {
         using namespace conductor;
         fm::String namespace_ = "conductor.";
-         register_<OnBeat>( namespace_ + SHEET_CONDUCTOR_SEL__AT_BEAT);
+         register_<OnBeat>( namespace_ + SHEET_CONDUCTOR_SEL__ON_BEAT);
          register_<FromPosition>(namespace_ + SHEET_CONDUCTOR_SEL__FROM_POSITION);
          register_<ToPosition>(namespace_ + SHEET_CONDUCTOR_SEL__TO_POSITION);
          register_<Velocity>(namespace_ + SHEET_CONDUCTOR_DEC__VELOCITY);
@@ -185,5 +192,12 @@ namespace sheet
          register_<FromPitch>(namespace_ + SHEET_CONDUCTOR_SEL__FROM_PITCH);
          register_<ToPitch>(namespace_ + SHEET_CONDUCTOR_SEL__TO_PITCH);
          register_<Instrument>(namespace_ + SHEET_CONDUCTOR_SEL__INSTRUMENT);
+
+         register_<FromBar>(namespace_ + SHEET_CONDUCTOR_SEL__FROM_BAR);
+         register_<ToBar>(namespace_ + SHEET_CONDUCTOR_SEL__TO_BAR);
+         register_<FromBeat>(namespace_ + SHEET_CONDUCTOR_SEL__FROM_BEAT);
+         register_<ToBeat>(namespace_ + SHEET_CONDUCTOR_SEL__TO_BEAT);
+         register_<OnBar>(namespace_ + SHEET_CONDUCTOR_SEL__ON_BAR);
+         register_<NthBar>(namespace_ + SHEET_CONDUCTOR_SEL__NTH_BAR);
     }
 }
