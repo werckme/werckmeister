@@ -1,4 +1,4 @@
-#include "AtBeat.h"
+#include "OnBeat.h"
 #include <cmath>
 
 namespace {
@@ -9,7 +9,7 @@ namespace sheet
 {
     namespace conductor
     {
-        bool AtBeat::isMatch(const ConductionSelector::Arguments& arguments, const EventWithMetaInfo& evm) const 
+        bool OnBeat::isMatch(const ConductionSelector::Arguments& arguments, const EventWithMetaInfo& evm) const 
         {
             const auto& ev = *evm.noteOn;
             for (const auto &argument : arguments) {

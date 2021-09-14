@@ -157,7 +157,7 @@ namespace sheet
 
 // Conductor
 #include <conductor/conductorNames.h>
-#include <conductor/selectors/AtBeat.h>
+#include <conductor/selectors/OnBeat.h>
 #include <conductor/selectors/FromPosition.h>
 #include <conductor/selectors/ToPosition.h>
 #include <conductor/selectors/Pitch.h>
@@ -175,7 +175,7 @@ namespace sheet
     {
         using namespace conductor;
         fm::String namespace_ = "conductor.";
-         register_<AtBeat>( namespace_ + SHEET_CONDUCTOR_SEL__AT_BEAT);
+         register_<OnBeat>( namespace_ + SHEET_CONDUCTOR_SEL__AT_BEAT);
          register_<FromPosition>(namespace_ + SHEET_CONDUCTOR_SEL__FROM_POSITION);
          register_<ToPosition>(namespace_ + SHEET_CONDUCTOR_SEL__TO_POSITION);
          register_<Velocity>(namespace_ + SHEET_CONDUCTOR_DEC__VELOCITY);

@@ -15,11 +15,11 @@ namespace sheet
         /// ```
         /// <param name="beat" type="quarters+"></param>
         /// </selector>
-        class AtBeat : public ISelector
+        class OnBeat : public ISelector
         {
         public:
             virtual bool isMatch(const ConductionSelector::Arguments&, const EventWithMetaInfo&) const override;
-            virtual ~AtBeat() = default;
+            virtual ~OnBeat() = default;
         };
     }
 }

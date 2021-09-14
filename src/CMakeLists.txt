@@ -87,7 +87,7 @@ SET (SRC_FETZER_LIB
     compiler/commands/Fill.cpp
     compiler/commands/DefineInstrumentSection.cpp
     conductor/ConductionsPerformer.cpp
-    conductor/selectors/AtBeat.cpp
+    conductor/selectors/OnBeat.cpp
     conductor/selectors/FromPosition.cpp
     conductor/selectors/FromPosition.cpp
     conductor/selectors/ToPosition.cpp
