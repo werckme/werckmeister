@@ -18,10 +18,12 @@
 #define SHEET_CONDUCTOR_SEL__TO_BAR    FM_STRING("toBar")
 #define SHEET_CONDUCTOR_SEL__ON_BAR    FM_STRING("onBar")
 #define SHEET_CONDUCTOR_SEL__NTH_BAR   FM_STRING("nthBar")
+#define SHEET_CONDUCTOR_SEL__CHANNEL   FM_STRING("channel")
 
 // declarartions
 #define SHEET_CONDUCTOR_DEC__VELOCITY FM_STRING("velocity")
 #define SHEET_CONDUCTOR_DEC__TIME_OFFSET FM_STRING("timeOffset")
 #define SHEET_CONDUCTOR_DEC__LENGTH FM_STRING("duration")
+#define SHEET_CONDUCTOR_DEC__PITCH FM_STRING("pitch")
 
 #endif

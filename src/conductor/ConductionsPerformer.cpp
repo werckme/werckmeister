@@ -12,7 +12,8 @@ namespace sheet
 	{
 		namespace
 		{
-			const fm::String conductorNamespace_ = "conductor.";
+			fm::String selNamespace_ = "conductor.sel.";
+        	fm::String declNamespace_ = "conductor.decl.";
 			fm::midi::Event *findCorrespondingNoteOffEvent(fm::midi::EventContainer::Iterator noteOn, fm::midi::EventContainer::Iterator end)
 			{
 				auto it = noteOn;
@@ -78,7 +79,7 @@ namespace sheet
 						continue;
 					}
 					fm::Ticks quarters = it->absPosition() / fm::PPQ;
-					auto selectorImpl = wm.solveOrDefault<ISelector>(conductorNamespace_ + selector.type);
+					auto selectorImpl = wm.solveOrDefault<ISelector>(selNamespace_ + selector.type);
 					if (!selectorImpl)
 					{
 						FM_THROW(compiler::Exception, "selector not found: " + selector.type);
@@ -109,7 +110,7 @@ namespace sheet
 				{
 					continue;
 				}
-				auto selectorImpl = wm.solveOrDefault<ISelector>(conductorNamespace_ + selector.type);
+				auto selectorImpl = wm.solveOrDefault<ISelector>(selNamespace_ + selector.type);
 				if (!selectorImpl)
 				{
 					FM_THROW(compiler::Exception, "selector not found: " + selector.type);
@@ -154,7 +155,7 @@ namespace sheet
 					}
 					for (const auto &declaration : rule.declarations)
 					{
-						auto declarationImpl = wm.solveOrDefault<IDeclaration>(conductorNamespace_ + declaration.property);
+						auto declarationImpl = wm.solveOrDefault<IDeclaration>(declNamespace_ + declaration.property);
 						if (!declarationImpl)
 						{
 							FM_THROW(compiler::Exception, "declaration not found: " + declaration.property);

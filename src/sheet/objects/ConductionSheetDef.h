@@ -9,7 +9,7 @@
 namespace sheet {
 	struct ConductionSelector :  public ASheetObjectWithSourceInfo {
 		struct ArgumentValue {
-			fm::Ticks tickValue = 0;
+			fm::Ticks numberValue = 0;
 			PitchDef pitch;
 			fm::String name;
 		};

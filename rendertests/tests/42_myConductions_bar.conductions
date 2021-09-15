@@ -1,4 +1,3 @@
-
 onBar(2) {
     velocity = 5;
 }
@@ -19,17 +18,6 @@ onBar(14) {
     velocity = 5;
 }
 
------------------------------
 fromBar(16) toBar(17) {
    velocity = 127;
-}
-
-fromBar(19) toBar(24) nthBar(1) {
-    velocity = 127;
-}
-fromBar(25) toBar(33) nthBar(2) {
-    velocity = 127;
-}
-fromBar(34) nthBar(3) {
-    velocity = 127;
 }

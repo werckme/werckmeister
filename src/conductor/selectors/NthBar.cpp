@@ -9,7 +9,7 @@ namespace sheet
         {
             const auto& ev = *evm.noteOn;
             for (const auto& argument : arguments) {
-                int valueToMatch = int(argument.tickValue);
+                int valueToMatch = int(argument.numberValue);
                 if (valueToMatch <= 0)
                 {
                     FM_THROW(compiler::Exception, "nth bar value \"" + std::to_string(valueToMatch) + "\" can not be less than 2");

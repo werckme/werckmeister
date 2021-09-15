@@ -21,18 +21,5 @@ instrument: piano;
     c8& d& e& f& | g& a& b& c'& | c8& d& e& f& | 
                   -- 17    
     c8& d& e& f& | g& a& b& c'& | c8& d& e& f& |
-    -- 19
-    c8& d& e& f& | g& a& b& c'& | c8& d& e& f& |
-    c8& d& e& f& | g& a& b& c'& | c8& d& e& f& |
-
-    -- 25
-    c8& d& e& f& | g& a& b& c'& | c8& d& e& f& |
-    c8& d& e& f& | g& a& b& c'& | c8& d& e& f& |
-    c8& d& e& f& | g& a& b& c'& | c8& d& e& f& |
-
-    -- 34
-    c8& d& e& f& | g& a& b& c'& | c8& d& e& f& |
-    c8& d& e& f& | g& a& b& c'& | c8& d& e& f& |
-    c8& d& e& f& | g& a& b& c'& | c8& d& e& f& |
 }
 ]

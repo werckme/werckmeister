@@ -95,16 +95,16 @@ SET (SRC_FETZER_LIB
     conductor/selectors/FromPitch.cpp
     conductor/selectors/ToPitch.cpp
     conductor/selectors/Pitch.cpp
-
+    conductor/selectors/Channel.cpp
     conductor/selectors/FromBeat.cpp
     conductor/selectors/ToBeat.cpp
     conductor/selectors/FromBar.cpp
     conductor/selectors/ToBar.cpp
     conductor/selectors/OnBar.cpp
     conductor/selectors/NthBar.cpp
-
     conductor/declarations/ADeclaration.cpp
     conductor/declarations/Velocity.cpp
+    conductor/declarations/Pitch.cpp
     conductor/declarations/TimeOffset.cpp
     conductor/declarations/Duration.cpp
 )

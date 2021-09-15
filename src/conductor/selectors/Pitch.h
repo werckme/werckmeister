@@ -2,6 +2,7 @@
 #define SEL_PITCH_H
 
 #include "ISelector.h"
+#include <fm/IDefinitionsServer.h>
 
 namespace sheet
 {
@@ -19,8 +20,11 @@ namespace sheet
         class Pitch : public ISelector
         {
         public:
+            Pitch(fm::IDefinitionsServerPtr definitionServer) : _definitionServer(definitionServer) {}
             virtual bool isMatch(const ConductionSelector::Arguments&, const EventWithMetaInfo&) const override;
             virtual ~Pitch() = default;
+        private:
+            fm::IDefinitionsServerPtr _definitionServer;
         };
     }
 }

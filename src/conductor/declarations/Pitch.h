@@ -1,5 +1,5 @@
-#ifndef DECLARATION_VELOCITY_H
-#define DECLARATION_VELOCITY_H
+#ifndef DECLARATION_PITCH_H
+#define DECLARATION_PITCH_H
 
 #include "ADeclaration.h"
 
@@ -7,25 +7,25 @@ namespace sheet
 {
     namespace conductor
     {
-        /// <declaration name="velocity">
-        ///     Changes the velocity of an event.
+        /// <declaration name="pitch">
+        ///     Changes the pitch of an event.
         /// ## example: 
         /// ```
         /// atBeat(1) {
-        ///   velocity = 127;
+        ///   pitch = 60;
         /// }
         /// atBeat(3) {
-        ///   velocity += 25%;
+        ///   pitch += 25%;
         /// }        
         /// ```
         /// </selector>
         /// <value name="absolute" type="0..127"></value>
-        /// <value name="percent"  type="0%..100%">percent base value is events velocity</value>
-        class Velocity : public ADeclaration
+        /// <value name="percent"  type="0%..100%">percent base value is events pitch</value>
+        class PitchDecl : public ADeclaration
         {
         public:
             virtual void perform(fm::midi::Event*, fm::midi::Event*) const override;
-            virtual ~Velocity() = default;
+            virtual ~PitchDecl() = default;
         };
     }
 }

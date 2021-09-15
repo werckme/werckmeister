@@ -37,7 +37,7 @@ BOOST_AUTO_TEST_CASE(parse_oneSelector_emptyDeclarations)
 	BOOST_CHECK_EQUAL(defs.rules[0].selectors.size(), size_t(1));
 	BOOST_CHECK_EQUAL(defs.rules[0].selectors[0].type, "onBeat");
 	BOOST_CHECK_EQUAL(defs.rules[0].selectors[0].arguments.size(), size_t(1));
-	BOOST_CHECK_EQUAL(defs.rules[0].selectors[0].arguments[0].tickValue, fm::Ticks(1));
+	BOOST_CHECK_EQUAL(defs.rules[0].selectors[0].arguments[0].numberValue, fm::Ticks(1));
 }
 
 BOOST_AUTO_TEST_CASE(parse_twoSlector_emptyDeclarations)
@@ -53,7 +53,7 @@ BOOST_AUTO_TEST_CASE(parse_twoSlector_emptyDeclarations)
 	BOOST_CHECK_EQUAL(defs.rules[0].selectors.size(), size_t(2));
 	BOOST_CHECK_EQUAL(defs.rules[0].selectors[0].type, "onBeat");
 	BOOST_CHECK_EQUAL(defs.rules[0].selectors[0].arguments.size(), size_t(1));
-	BOOST_CHECK_EQUAL(defs.rules[0].selectors[0].arguments[0].tickValue, fm::Ticks(1));
+	BOOST_CHECK_EQUAL(defs.rules[0].selectors[0].arguments[0].numberValue, fm::Ticks(1));
 	BOOST_CHECK_EQUAL(defs.rules[0].selectors[1].type, "pitch");
 	BOOST_CHECK_EQUAL(defs.rules[0].selectors[1].arguments.size(), size_t(4));
 	BOOST_CHECK_EQUAL(defs.rules[0].selectors[1].arguments[0].pitch.pitch, sheet::PitchDef::Pitch(0));
@@ -79,7 +79,7 @@ BOOST_AUTO_TEST_CASE(parse_oneSelector_oneDeclaration)
 	BOOST_CHECK_EQUAL(defs.rules[0].selectors.size(), size_t(1));
 	BOOST_CHECK_EQUAL(defs.rules[0].selectors[0].type, "onBeat");
 	BOOST_CHECK_EQUAL(defs.rules[0].selectors[0].arguments.size(), size_t(1));
-	BOOST_CHECK_EQUAL(defs.rules[0].selectors[0].arguments[0].tickValue, fm::Ticks(1));
+	BOOST_CHECK_EQUAL(defs.rules[0].selectors[0].arguments[0].numberValue, fm::Ticks(1));
 	BOOST_CHECK_EQUAL(defs.rules[0].declarations.size(), size_t(1));
 	BOOST_CHECK_EQUAL(defs.rules[0].declarations[0].property, "velocity");
 	BOOST_CHECK_EQUAL(defs.rules[0].declarations[0].operation, sheet::ConductionRule::Declaration::OperationAdd);
@@ -103,7 +103,7 @@ BOOST_AUTO_TEST_CASE(parse_oneSelector_twoDeclarations)
 	BOOST_CHECK_EQUAL(defs.rules[0].selectors.size(), size_t(1));
 	BOOST_CHECK_EQUAL(defs.rules[0].selectors[0].type, "onBeat");
 	BOOST_CHECK_EQUAL(defs.rules[0].selectors[0].arguments.size(), size_t(1));
-	BOOST_CHECK_EQUAL(defs.rules[0].selectors[0].arguments[0].tickValue, fm::Ticks(1));
+	BOOST_CHECK_EQUAL(defs.rules[0].selectors[0].arguments[0].numberValue, fm::Ticks(1));
 	BOOST_CHECK_EQUAL(defs.rules[0].declarations.size(), size_t(2));
 	BOOST_CHECK_EQUAL(defs.rules[0].declarations[0].property, "velocity");
 	BOOST_CHECK_EQUAL(defs.rules[0].declarations[0].operation, sheet::ConductionRule::Declaration::OperationAdd);

@@ -12,7 +12,7 @@ namespace sheet
 				double nominator = double(evm.timeSignature.first);
 				double denominator = double(evm.timeSignature.second);
 				auto beat = ::fmod(quarters, nominator / denominator * 4);
-				auto valueToMatch = argument.tickValue - 1;
+				auto valueToMatch = argument.numberValue - 1;
 				if (beat <= valueToMatch) {
 					return true;
 				}

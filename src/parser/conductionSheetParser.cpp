@@ -20,7 +20,7 @@
 
 BOOST_FUSION_ADAPT_STRUCT(
 	sheet::ConductionSelector::ArgumentValue,
-	(fm::Ticks, tickValue)
+	(fm::Ticks, numberValue)
 	(sheet::PitchDef, pitch)
 	(fm::String, name)
 )
@@ -203,8 +203,12 @@ namespace sheet {
 						>> attr(sourceId_)
 						>> SHEET_CONDUCTOR_SEL__NTH_BAR >> attr(SHEET_CONDUCTOR_SEL__NTH_BAR) >> "(" >> +numberArgument_ >> ")"
 					)																				
-
-
+					|
+					(
+						current_pos_.current_pos 
+						>> attr(sourceId_)
+						>> SHEET_CONDUCTOR_SEL__CHANNEL >> attr(SHEET_CONDUCTOR_SEL__CHANNEL) >> "(" >> +numberArgument_ >> ")"
+					)
 					;
 
 					operationType_ %= 

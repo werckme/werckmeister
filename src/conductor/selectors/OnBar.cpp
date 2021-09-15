@@ -10,7 +10,7 @@ namespace sheet
         {
             const auto& ev = *evm.noteOn;
             for (const auto& argument : arguments) {
-                int valueToMatch = int(argument.tickValue - 1);
+                int valueToMatch = int(argument.numberValue - 1);
                 if (int(evm.barNumber) == valueToMatch) {
                     return true;
                 }
