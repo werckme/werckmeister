@@ -1,5 +1,5 @@
 fromBar(1) toBar(2) {
-   -- velocity = 127;
+   velocity = 127;
 }
 
 onBar(2) {
@@ -8,6 +8,18 @@ onBar(2) {
 
 onBar(5) {
     velocity = 100;
+}
+
+onBar(11) {
+    velocity = 100;
+}
+
+onBar(8) {
+    velocity = 5;
+}
+
+onBar(14) {
+    velocity = 5;
 }
 
 fromBar(4) nthBar(1) {

@@ -13,6 +13,12 @@ instrument: piano;
     c8& d& e& f& | g& a& b& c'& | c8& d& e& f& |
     /signature: 3 4/
     c4 eb eb | c d d | c d d |
+    /signature: 4 4/
+    c8& d& e& f& | g& a& b& c'& | c8& d& e& f& |
+    /signature: 5 4/
+    c4 eb & & & | c d & & & | c d & & &  |
+    /signature: 4 4/
+    c8& d& e& f& | g& a& b& c'& | c8& d& e& f& | 
     -- c8& d& e& f& | g& a& b& c'& | c8& d& e& f& |
     -- c8& d& e& f& | g& a& b& c'& | c8& d& e& f& |
     -- c8& d& e& f& | g& a& b& c'& | c8& d& e& f& |

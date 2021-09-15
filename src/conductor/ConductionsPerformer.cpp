@@ -6,26 +6,33 @@
 #include <fm/tools.h>
 #include <compiler/context/MidiContext.h>
 
-
 namespace sheet
 {
 	namespace conductor
 	{
-		namespace 
+		namespace
 		{
 			const fm::String conductorNamespace_ = "conductor.";
-			fm::midi::Event* findCorrespondingNoteOffEvent(fm::midi::EventContainer::Iterator noteOn, fm::midi::EventContainer::Iterator end)
+			fm::midi::Event *findCorrespondingNoteOffEvent(fm::midi::EventContainer::Iterator noteOn, fm::midi::EventContainer::Iterator end)
 			{
 				auto it = noteOn;
-				while (it++ != end) {
-					if (it->eventType() != fm::midi::NoteOff) {
+				while (it++ != end)
+				{
+					if (it->eventType() != fm::midi::NoteOff)
+					{
 						continue;
 					}
-					if (it->parameter1() == noteOn->parameter1()) {
+					if (it->parameter1() == noteOn->parameter1())
+					{
 						return &(*it);
 					}
 				}
 				return nullptr;
+			}
+
+			inline fm::Ticks calculateBarNumber(fm::Ticks quarters, TimeSignature signature)
+			{
+				return (quarters * signature.second) / (4.0 * signature.first);
 			}
 		}
 
@@ -36,26 +43,32 @@ namespace sheet
 			_midifile->seal();
 		}
 
-		ConductionsPerformer::Events ConductionsPerformer::findMatches(const sheet::ConductionSelector& selector) const
+		ConductionsPerformer::Events ConductionsPerformer::findMatches(const sheet::ConductionSelector &selector) const
 		{
 			Events result;
-			auto& wm = fm::getWerckmeister();
-			for (auto& track : _midifile->tracks())
+			auto &wm = fm::getWerckmeister();
+			for (auto &track : _midifile->tracks())
 			{
 				auto it = track->events().container().begin();
 				auto end = track->events().container().end();
-				TimeSignature timeSignature = { 4, 4 };
+				TimeSignature timeSignature = {4, 4};
+				fm::Ticks signatureChangeBarOffset = 0;
 				fm::String instrumentName;
 				for (; it != end; ++it)
 				{
 					if (it->eventType() == fm::midi::MetaEvent && it->metaEventType() == fm::midi::TimeSignature)
 					{
+						fm::Ticks quarters = it->absPosition() / fm::PPQ;
+						fm::Ticks oldBarNumber = calculateBarNumber(quarters, timeSignature);
 						timeSignature = fm::midi::Event::MetaGetSignatureValue(it->metaData(), it->metaDataSize());
+						fm::Ticks newBarNumber = calculateBarNumber(quarters, timeSignature);
+						signatureChangeBarOffset += oldBarNumber - newBarNumber;
 					}
 					if (it->eventType() == fm::midi::MetaEvent && it->metaEventType() == fm::midi::CustomMetaEvent)
 					{
 						auto customEvent = fm::midi::Event::MetaGetCustomData(it->metaData(), it->metaDataSize());
-						if (customEvent.type == fm::midi::CustomMetaData::SetInstrument) {
+						if (customEvent.type == fm::midi::CustomMetaData::SetInstrument)
+						{
 							instrumentName = fm::String(customEvent.data.begin(), customEvent.data.end());
 						}
 					}
@@ -74,7 +87,7 @@ namespace sheet
 					eventWithMetaInfo.timeSignature = timeSignature;
 					eventWithMetaInfo.noteOn = &event;
 					eventWithMetaInfo.instrumentName = instrumentName;
-					eventWithMetaInfo.barNumber = (quarters * timeSignature.second) / (4.0 * timeSignature.first);
+					eventWithMetaInfo.barNumber = calculateBarNumber(quarters, timeSignature) + signatureChangeBarOffset;
 					if (selectorImpl->isMatch(selector.arguments, eventWithMetaInfo))
 					{
 						auto noteOff = findCorrespondingNoteOffEvent(it, end);
@@ -86,10 +99,10 @@ namespace sheet
 			return result;
 		}
 
-		ConductionsPerformer::Events ConductionsPerformer::findMatches(const sheet::ConductionSelector& selector, Events& events) const
+		ConductionsPerformer::Events ConductionsPerformer::findMatches(const sheet::ConductionSelector &selector, Events &events) const
 		{
 			Events result;
-			auto& wm = fm::getWerckmeister();
+			auto &wm = fm::getWerckmeister();
 			for (auto eventAndMetaInfo : events)
 			{
 				if (!isEventOfInterest(*eventAndMetaInfo.noteOn))
@@ -112,33 +125,38 @@ namespace sheet
 
 		ConductionsPerformer::EventsAndDeclarationsCollection ConductionsPerformer::selectEvents() const
 		{
-			auto& wm = fm::getWerckmeister();
+			auto &wm = fm::getWerckmeister();
 			auto result = EventsAndDeclarationsCollection();
 
-			for (const auto& cs : _document->conductionSheets)
+			for (const auto &cs : _document->conductionSheets)
 			{
-				for (auto const& rule : cs.rules)
+				for (auto const &rule : cs.rules)
 				{
 					EventsAndDeclarations newValue;
 					result.emplace_back(newValue);
 					auto eventsAndDeclarations = &result.back();
-					for (auto const& selector : rule.selectors)
+					for (auto const &selector : rule.selectors)
 					{
 						Events matchedMidiEvents;
-						if (eventsAndDeclarations->events.empty()) {
+						if (eventsAndDeclarations->events.empty())
+						{
 							matchedMidiEvents = findMatches(selector);
 						}
-						else {
+						else
+						{
 							matchedMidiEvents = findMatches(selector, eventsAndDeclarations->events);
 						}
-						if (matchedMidiEvents.empty()) {
+						if (matchedMidiEvents.empty())
+						{
 							continue;
 						}
 						eventsAndDeclarations->events.swap(matchedMidiEvents);
 					}
-					for (const auto& declaration : rule.declarations) {
+					for (const auto &declaration : rule.declarations)
+					{
 						auto declarationImpl = wm.solveOrDefault<IDeclaration>(conductorNamespace_ + declaration.property);
-						if (!declarationImpl) {
+						if (!declarationImpl)
+						{
 							FM_THROW(compiler::Exception, "declaration not found: " + declaration.property);
 						}
 						declarationImpl->setDeclarationData(declaration);
@@ -149,18 +167,21 @@ namespace sheet
 			return result;
 		}
 
-		void ConductionsPerformer::perform(const EventsAndDeclarationsCollection& collection) const
+		void ConductionsPerformer::perform(const EventsAndDeclarationsCollection &collection) const
 		{
-			for (const auto& eventsAndDeclarations : collection) {
-				for (auto eventAndMetaInfo : eventsAndDeclarations.events) {
-					for (auto declaration : eventsAndDeclarations.declarations) {
+			for (const auto &eventsAndDeclarations : collection)
+			{
+				for (auto eventAndMetaInfo : eventsAndDeclarations.events)
+				{
+					for (auto declaration : eventsAndDeclarations.declarations)
+					{
 						declaration->perform(eventAndMetaInfo.noteOn, eventAndMetaInfo.noteOff);
 					}
 				}
 			}
 		}
 
-		bool ConductionsPerformer::isEventOfInterest(const fm::midi::Event& event) const
+		bool ConductionsPerformer::isEventOfInterest(const fm::midi::Event &event) const
 		{
 			return event.eventType() == fm::midi::NoteOn;
 		}
