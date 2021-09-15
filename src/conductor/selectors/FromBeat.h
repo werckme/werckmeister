@@ -8,12 +8,12 @@ namespace sheet
     namespace conductor
     {
         /// <selector name="fromBeat">
-        ///     Selects an event where its beat time is equal or greater 
+        ///     Selects an event where its beat time is equal or greater.
         /// ```
         /// fromBeat(1) {...}
         /// ```
-        /// <param name="beat" type="quarters"></param>
         /// </selector>
+        /// <param name="beat" type="quarters"></param>
         class FromBeat : public ISelector
         {
         public:

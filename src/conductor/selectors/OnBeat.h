@@ -13,8 +13,8 @@ namespace sheet
         /// ```
         /// atBeat(1 3) {...}
         /// ```
-        /// <param name="beat" type="quarters+"></param>
         /// </selector>
+        /// <param name="beat" type="quarters+"></param>
         class OnBeat : public ISelector
         {
         public:

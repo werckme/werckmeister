@@ -14,8 +14,8 @@ namespace sheet
         /// pitch(c) {...}
         /// pitch(c, c c') {...}
         /// ```
-        /// <param name="pitch" type="pitch+"></param>
         /// </selector>
+        /// <param name="pitch" type="pitch+"></param>
         class Pitch : public ISelector
         {
         public:

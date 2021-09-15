@@ -14,8 +14,8 @@ namespace sheet
         /// ```
         /// fromPosition(8) {...}
         /// ```
-        /// <param name="beat" type="quarters"></param>
         /// </selector>
+        /// <param name="beat" type="quarters"></param>
         class FromPosition : public ISelector
         {
         public:

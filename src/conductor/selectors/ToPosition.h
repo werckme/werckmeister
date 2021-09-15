@@ -14,8 +14,8 @@ namespace sheet
         /// ```
         /// toPosition(8) {...}
         /// ```
-        /// <param name="beat" type="quarters"></param>
         /// </selector>
+        /// <param name="beat" type="quarters"></param>
         class ToPosition : public ISelector
         {
         public:

@@ -14,8 +14,8 @@ namespace sheet
         /// instrument(bass) {...}
         /// instrument(bass drums) {...}
         /// ```
-        /// <param name="instrument name" type="instrumentName+"></param>
         /// </selector>
+        /// <param name="instrument name" type="instrumentName+"></param>
         class Instrument : public ISelector
         {
         public:

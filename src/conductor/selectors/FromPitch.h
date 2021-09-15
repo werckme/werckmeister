@@ -14,8 +14,8 @@ namespace sheet
         /// ```
         /// fromPitch(c,) {...}
         /// ```
-        /// <param name="pitch" type="pitch"></param>
         /// </selector>
+        /// <param name="pitch" type="pitch"></param>
         class FromPitch : public ISelector
         {
         public:

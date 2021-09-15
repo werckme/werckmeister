@@ -12,8 +12,9 @@ namespace sheet
         /// ```
         /// onBar(1 3) {...}
         /// ```
-        /// <param name="beat" type="bar number+"></param>
+        /// see also: [fromBar](#fromBar), [toBar](#toBar), [nthBar](#nthBar).
         /// </selector>
+        /// <param name="beat" type="bar number+"></param>
         class OnBar : public ISelector
         {
         public:

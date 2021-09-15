@@ -8,12 +8,13 @@ namespace sheet
     namespace conductor
     {
         /// <selector name="fromBar">
-        ///     Selects an event where its bar time is equal or greater 
+        ///     Selects an event where its bar time is equal or greater.
         /// ```
         /// fromBar(1) {...}
         /// ```
-        /// <param name="bar" type="bar number"></param>
+        /// see also: [toBar](#toBar), [onBar](#onBar), [nthBar](#nthBar).
         /// </selector>
+        /// <param name="bar" type="bar number"></param>
         class FromBar : public ISelector
         {
         public:
