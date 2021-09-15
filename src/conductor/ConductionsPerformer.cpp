@@ -5,6 +5,8 @@
 #include <compiler/error.hpp>
 #include <fm/tools.h>
 #include <compiler/context/MidiContext.h>
+#include <compiler/error.hpp>
+
 
 namespace sheet
 {
@@ -117,7 +119,6 @@ namespace sheet
 				}
 				if (selectorImpl->isMatch(selector.arguments, eventAndMetaInfo))
 				{
-
 					result.push_back(eventAndMetaInfo);
 				}
 			}
@@ -138,30 +139,46 @@ namespace sheet
 					auto eventsAndDeclarations = &result.back();
 					for (auto const &selector : rule.selectors)
 					{
-						Events matchedMidiEvents;
-						if (eventsAndDeclarations->events.empty())
+						try 
 						{
-							matchedMidiEvents = findMatches(selector);
+							Events matchedMidiEvents;
+							if (eventsAndDeclarations->events.empty())
+							{
+								matchedMidiEvents = findMatches(selector);
+							}
+							else
+							{
+								matchedMidiEvents = findMatches(selector, eventsAndDeclarations->events);
+							}
+							if (matchedMidiEvents.empty())
+							{
+								continue;
+							}
+							eventsAndDeclarations->events.swap(matchedMidiEvents);
 						}
-						else
+						catch (fm::Exception& ex)
 						{
-							matchedMidiEvents = findMatches(selector, eventsAndDeclarations->events);
+							ex << compiler::ex_sheet_source_info(selector);
+							throw;
 						}
-						if (matchedMidiEvents.empty())
-						{
-							continue;
-						}
-						eventsAndDeclarations->events.swap(matchedMidiEvents);
 					}
 					for (const auto &declaration : rule.declarations)
 					{
-						auto declarationImpl = wm.solveOrDefault<IDeclaration>(declNamespace_ + declaration.property);
-						if (!declarationImpl)
+						try 
 						{
-							FM_THROW(compiler::Exception, "declaration not found: " + declaration.property);
+							auto declarationImpl = wm.solveOrDefault<IDeclaration>(declNamespace_ + declaration.property);
+							if (!declarationImpl)
+							{
+								FM_THROW(compiler::Exception, "declaration not found: " + declaration.property);
+							}
+							declarationImpl->setDeclarationData(declaration);
+							eventsAndDeclarations->declarations.push_back(declarationImpl);
 						}
-						declarationImpl->setDeclarationData(declaration);
-						eventsAndDeclarations->declarations.push_back(declarationImpl);
+						catch (fm::Exception& ex)
+						{
+							ex << compiler::ex_sheet_source_info(declaration);
+							throw;
+						}
 					}
 				}
 			}
@@ -176,7 +193,15 @@ namespace sheet
 				{
 					for (auto declaration : eventsAndDeclarations.declarations)
 					{
-						declaration->perform(eventAndMetaInfo.noteOn, eventAndMetaInfo.noteOff);
+						try 
+						{
+							declaration->perform(eventAndMetaInfo.noteOn, eventAndMetaInfo.noteOff);
+						}
+						catch(fm::Exception &ex)
+						{
+							ex << compiler::ex_sheet_source_info(declaration->getDeclarationData());
+							throw ex;
+						}
 					}
 				}
 			}

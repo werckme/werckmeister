@@ -13,6 +13,7 @@ namespace sheet
             virtual void perform(fm::midi::Event* noteOn, fm::midi::Event* noteOff) const = 0;
             virtual ~ADeclaration() = default;
             virtual void setDeclarationData(const ConductionRule::Declaration& val) override { declaration = val; }
+            virtual const ConductionRule::Declaration& getDeclarationData() const override { return declaration; }
         protected:
             ConductionRule::Declaration declaration;
             typedef std::function<double()> FGetValue;

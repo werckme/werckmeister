@@ -1,0 +1,18 @@
+using "./lua/voicings/voicelead.lua";
+using "./chords/default.chords";
+using "42_myConductions_channel.conductions";
+
+tempo: 200;
+device: SC1 midi 4;
+instrumentDef: piano SC1 _ch=0 _pc=0;
+instrumentDef: bass SC1 _ch=1 _pc=11;
+instrumentConf: bass pan 0;
+instrumentConf: piano pan 100;
+instrumentSection: lead piano bass;
+
+[
+instrument: lead;
+{
+    c8& d& e& f& | g& a& b& c'& | c8& d& e& f& |
+}
+]

@@ -16,6 +16,7 @@ namespace sheet
         {
         public:
             virtual void setDeclarationData(const ConductionRule::Declaration&) = 0;
+            virtual const ConductionRule::Declaration& getDeclarationData() const = 0;
             virtual void perform(fm::midi::Event* noteOn, fm::midi::Event* noteOff) const = 0;
             virtual ~IDeclaration() = default;
         };
