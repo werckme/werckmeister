@@ -4,8 +4,8 @@ using "42_myConductions_instrument.conductions";
 
 tempo: 120;
 device: SC1 midi 4;
-instrumentDef: pianoL SC1 0 0 0;
-instrumentDef: pianoR SC1 0 0 0;
+instrumentDef: pianoL SC1 _ch=0 _pc=0;
+instrumentDef: pianoR SC1 _ch=1 _pc=11;
 
 [
 instrument: pianoL;
