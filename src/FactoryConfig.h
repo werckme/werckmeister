@@ -31,7 +31,9 @@ namespace sheet
         {
             // injector needs to create uniqe_ptr not shared_ptr otherwise the creation
             // is considered as singleton
-            return std::shared_ptr<TRegisterable>(injector_.create<std::unique_ptr<TRegisterable>>().release());
+            typedef std::unique_ptr<TRegisterable> PtrType;
+            auto uniquePtr = injector_.template create<PtrType>();
+            return std::shared_ptr<TRegisterable>(uniquePtr.release());
         }
         template <class TRegisterable>
         void register_(const fm::String &name)

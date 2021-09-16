@@ -6,7 +6,6 @@ namespace sheet
     {
         bool ToBar::isMatch(const ConductionSelector::Arguments& arguments, const EventWithMetaInfo& evm) const 
         {
-            const auto& ev = *evm.noteOn;
             for (const auto& argument : arguments) {
                 int valueToMatch = int(argument.numberValue - 1);
                 if (int(evm.barNumber) <= valueToMatch) {

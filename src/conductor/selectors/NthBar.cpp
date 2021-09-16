@@ -7,7 +7,6 @@ namespace sheet
     {
         bool NthBar::isMatch(const ConductionSelector::Arguments& arguments, const EventWithMetaInfo& evm) const 
         {
-            const auto& ev = *evm.noteOn;
             for (const auto& argument : arguments) {
                 int valueToMatch = int(argument.numberValue);
                 if (valueToMatch <= 1)

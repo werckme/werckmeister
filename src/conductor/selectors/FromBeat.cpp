@@ -1,4 +1,5 @@
 #include "FromBeat.h"
+#include <cmath>
 
 namespace sheet
 {

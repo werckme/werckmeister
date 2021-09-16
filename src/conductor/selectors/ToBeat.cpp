@@ -1,4 +1,5 @@
 #include "ToBeat.h"
+#include <cmath>
 
 namespace sheet
 {
