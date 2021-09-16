@@ -14,11 +14,11 @@ namespace sheet
             const auto& ev = *evm.noteOn;
             for (const auto &argument : arguments) {
                 auto quarters = ev.absPosition() / fm::PPQ;
-                double nominator = double(evm.timeSignature.first);
-                double denominator = double(evm.timeSignature.second);
-                auto beat = ::fmod(quarters, nominator/denominator * 4);
+                auto nominator = fm::Ticks(evm.timeSignature.first);
+                auto denominator = fm::Ticks(evm.timeSignature.second);
+                auto beat = ::fmod(quarters, nominator/denominator * fm::Ticks(4.0));
                 auto valueToMatch = argument.numberValue - 1;
-                if (::abs(beat - valueToMatch) <= Tolerance) {
+                if (::fabs(beat - valueToMatch) <= Tolerance) {
                     return true;
                 }
             }
