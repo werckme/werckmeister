@@ -434,25 +434,7 @@ namespace fm {
 		// EventContainer
 		void EventContainer::sort()
 		{
-			auto& events = container();
-			std::multiset<Event, EventCompare> set(events.begin(), events.end(), EventCompare());
-			events = EventContainer::TContainer(set.begin(), set.end());
-		}
-		void EventContainer::distinct()
-		{
-			// https://stackoverflow.com/questions/1041620/whats-the-most-efficient-way-to-erase-duplicates-and-sort-a-vector
-			auto& events = container();
-			std::function<bool(const Event&, const Event&)> compareUnique = [](const Event& a, const Event& b) 
-			{ 
-				return a.absPosition() == b.absPosition()
-					&& a.channel() == b.channel()
-					&& a.eventType() == b.eventType()
-					&& a.parameter1() == b.parameter1()
-					&& a.parameter2() == b.parameter2()
-					;//&& a.eventType() != MetaEvent; 
-			};
 			std::sort(_container.begin(), _container.end(), EventCompare());
-			events.erase( std::unique( events.begin(), events.end(), EventCompare() ), events.end());
 		}
 		const MidiConfig * EventContainer::midiConfig() const
 		{
