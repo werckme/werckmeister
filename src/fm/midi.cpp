@@ -434,7 +434,9 @@ namespace fm {
 		// EventContainer
 		void EventContainer::sort()
 		{
-			std::sort(_container.begin(), _container.end(), EventCompare());
+			auto& events = container();
+			std::multiset<Event, EventCompare> set(events.begin(), events.end(), EventCompare());
+			events = EventContainer::TContainer(set.begin(), set.end());
 		}
 		void EventContainer::distinct()
 		{
