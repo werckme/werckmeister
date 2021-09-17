@@ -432,9 +432,25 @@ namespace fm {
 
 		///////////////////////////////////////////////////////////////////////////
 		// EventContainer
-		void EventContainer::sortEvents()
+		void EventContainer::sort()
 		{
 			std::sort(_container.begin(), _container.end(), EventCompare());
+		}
+		void EventContainer::distinct()
+		{
+			// https://stackoverflow.com/questions/1041620/whats-the-most-efficient-way-to-erase-duplicates-and-sort-a-vector
+			auto& events = container();
+			std::function<bool(const Event&, const Event&)> compareUnique = [](const Event& a, const Event& b) 
+			{ 
+				return a.absPosition() == b.absPosition()
+					&& a.channel() == b.channel()
+					&& a.eventType() == b.eventType()
+					&& a.parameter1() == b.parameter1()
+					&& a.parameter2() == b.parameter2()
+					;//&& a.eventType() != MetaEvent; 
+			};
+			std::sort(_container.begin(), _container.end(), EventCompare());
+			events.erase( std::unique( events.begin(), events.end(), EventCompare() ), events.end());
 		}
 		const MidiConfig * EventContainer::midiConfig() const
 		{
@@ -678,7 +694,7 @@ namespace fm {
 
 		void Midi::seal() {
 			for (auto track : tracks()) {
-				track->events().sortEvents();
+				track->events().sort();
 			}
 			_sealed = true;
 		}

@@ -378,7 +378,7 @@ BOOST_AUTO_TEST_CASE(write_midi_event_pc_cc_before_notes)
 		pc.parameter1(5);
 		events.add(pc);
 
-		events.sortEvents();
+		events.sort();
 		BOOST_CHECK(events.numEvents() == 4);
 		byteSize = events.byteSize();
 		bytes = new Byte[byteSize];

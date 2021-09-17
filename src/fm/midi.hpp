@@ -188,7 +188,8 @@ namespace fm {
 			TContainer & container() { return _container; }
 			const MidiConfig * midiConfig() const;
 			void midiConfig (const MidiConfig *midiConfig) { this->_midiConfig = midiConfig; }
-			void sortEvents();
+			void sort();
+			void distinct();
 		private:
 			const MidiConfig *_midiConfig = nullptr;
 			TContainer _container;
