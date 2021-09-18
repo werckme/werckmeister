@@ -6,6 +6,7 @@ tempo: 120;
 device: SC1 midi 4;
 instrumentDef: pianoL SC1 _ch=0 _pc=0;
 instrumentDef: pianoR SC1 _ch=1 _pc=11;
+instrumentDef: rhythm SC1 _ch=2 _pc=0;
 
 [
 instrument: pianoL;
@@ -18,5 +19,22 @@ instrument: pianoL;
 instrument: pianoR;
 {
     c d e f | g a b c' |
+}
+]
+
+[
+type: template;
+name: myAccomp;
+instrument: rhythm;
+{
+    \p
+    <III, V, VII, II>1 | 
+}
+]
+
+[
+type: accomp;
+{
+    A-7 | D7 |
 }
 ]

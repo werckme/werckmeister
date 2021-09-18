@@ -2,3 +2,7 @@ instrument(pianoR) {
     timeOffset += 50%;
     velocity += 15%;
 }
+
+instrument(rhtyhm)  {
+    velocity = 127;
+}
