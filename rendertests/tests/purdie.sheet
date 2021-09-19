@@ -1,3 +1,4 @@
+-- #skip-event-plausibility-test
 using "./chords/default.chords";
 using "./pitchmaps/battery3.tight.pitchmap";
 --using "./pitchmaps/defaultMidiDrumMap.pitchmap";

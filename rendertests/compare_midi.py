@@ -5,6 +5,8 @@
     all other information will be ignored.
 """
 
+TAG_SKIP_PLAUSIBILLITY_CHECK = 'skip-event-plausibility-test'
+
 import sys
 from mido import MidiFile  # tick2second seems not to work properly
 
@@ -31,7 +33,46 @@ def get_events(midifile):
             if event.type in _acceptedEventTypes:
                 yield trackIdx, event, absTicks
 
-def compare(file1, file2):
+
+
+def check_for_event_order_issues(midifile):
+    """
+        an order issue could be if a note-on and a note-off event, with the same pitch, 
+        happens on the same time, and the note-on is before the note off.
+        So the note will never be heard. This is the case if two equal notes are written in a row: `c c`
+    """
+    ev_time = -1
+    ev = None
+    for trackIdx, event, absTicks in get_events(midifile):
+        prev_ev_time = ev_time
+        prev_ev = ev
+        ev_time = absTicks
+        ev = event
+        if prev_ev_time != ev_time:
+            continue
+        if prev_ev.note != ev.note:
+            continue
+        if prev_ev.type == 'note_on':
+            raise RuntimeError(f'Order issue notes: {prev_ev} AND {ev} appears in the wrong order')
+
+def check_for_plausibility(midifile):
+    key = lambda ev: (ev.note, ev.channel) 
+    for track in midifile.tracks:
+        noteon_by_pitches = {}
+        absTicks = 0
+        for event in track:
+            if hasattr(event, 'time'):
+                absTicks += event.time       
+            if event.type == 'note_on':
+                noteon_by_pitches[key(event)] = event
+            if event.type == 'note_off':
+                if key(event) not in noteon_by_pitches:
+                    raise RuntimeError(f'{event} at {absTicks} missing corresponding noteon')
+                noteon_by_pitches.pop(key(event))
+        if len(noteon_by_pitches.values()) > 0:
+            raise RuntimeError(f'{", ".join([str(x) for x in noteon_by_pitches.values()])} missing corresponding noteoff')
+
+def compare(file1, file2, test_tags):
     global fticks_2_seconds
     events_a = set()
     midi_a = MidiFile(file1)
@@ -39,6 +80,7 @@ def compare(file1, file2):
     if midi_a.ticks_per_beat != midi_b.ticks_per_beat:
         raise RuntimeError("ticks per beat dosen't match")
     fticks_2_seconds = lambda ticks:  60.0 * ticks / (_tempo * midi_a.ticks_per_beat)
+
     for trackIdx, event, absTicks in get_events(midi_a):
         addEvent(trackIdx, events_a, event, absTicks)
     
@@ -48,8 +90,21 @@ def compare(file1, file2):
             events_a.remove(key)
         else:
             raise RuntimeError("%s's event(%s, time=%f) not found in %s" % (file2, str(event), fticks_2_seconds(absTicks), file1))
+
     if len(events_a) > 0:
         raise RuntimeError("%s has %d more events than %s" % (file1, len(events_a), file2))
+    
+    if TAG_SKIP_PLAUSIBILLITY_CHECK in test_tags:
+        return
+    try:
+        check_for_plausibility(midi_b)
+    except RuntimeError as ex:
+        raise RuntimeError(f'{file2}: {ex}')        
+    try:
+        check_for_plausibility(midi_a)
+    except RuntimeError as ex:
+        raise RuntimeError(f'{file1}: {ex}')
+
 
 
 if __name__ == '__main__':

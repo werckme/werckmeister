@@ -1,3 +1,4 @@
+-- #skip-event-plausibility-test
 using "./lua/voicings/voicelead.lua";
 using "./chords/default.chords";
 

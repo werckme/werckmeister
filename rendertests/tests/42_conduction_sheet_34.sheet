@@ -10,6 +10,7 @@ instrumentDef: piano SC1 0 0 0;
 instrument: piano;
 {
     /signature: 3 4/
+    \ppp
     c & & | c & & 
 }
 ]

@@ -421,10 +421,10 @@ namespace fm {
 			}
 			bool isNoteEvent1 = t1 == NoteOn || t1 == NoteOff;
 			bool isNoteEvent2 = t2 == NoteOn || t2 == NoteOff;
-			if (isNoteEvent1) {
+			if (isNoteEvent1 && !isNoteEvent2) {
 				return false; // note1 < other
 			}
-			if (isNoteEvent2) {
+			if (isNoteEvent2 && !isNoteEvent1) {
 				return true; // other > note2
 			}
 			return (int)t1<(int)t2;
@@ -448,9 +448,6 @@ namespace fm {
 			if (midiConfig()->skipMetaEvents && event.eventType() == MetaEvent) {
 				return;
 			}
-			// if (contains(event)) {
-			// 	return;
-			// }
 			_container.push_back(event);
 		}
 		void EventContainer::remove(const Event &event)

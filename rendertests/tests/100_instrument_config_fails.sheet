@@ -1,3 +1,4 @@
+-- #skip-event-plausibility-test
 using "chords/default.chords";
 using "pitchmaps/defaultMidiDrumMap.pitchmap";
 using "lua/mods/swing.lua";

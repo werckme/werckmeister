@@ -1,3 +1,4 @@
+-- #skip-event-plausibility-test
 using "./chords/default.chords";
 device: SC1 midi 5;
 
