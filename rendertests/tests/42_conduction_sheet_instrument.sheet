@@ -1,26 +1,9 @@
-using "./lua/voicings/voicelead.lua";
 using "./chords/default.chords";
 using "42_myConductions_instrument.conductions";
 
 tempo: 120;
 device: SC1 midi 4;
-instrumentDef: pianoL SC1 _ch=0 _pc=0;
-instrumentDef: pianoR SC1 _ch=1 _pc=11;
 instrumentDef: rhythm SC1 _ch=2 _pc=0;
-
-[
-instrument: pianoL;
-{
-    c d e f | g a b c' |
-}
-]
-
-[
-instrument: pianoR;
-{
-    c d e f | g a b c' |
-}
-]
 
 [
 type: template;
@@ -35,6 +18,6 @@ instrument: rhythm;
 [
 type: accomp;
 {
-    A-7 | D7 |
+    A-7 | D-7 |
 }
 ]

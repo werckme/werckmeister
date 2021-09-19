@@ -3,6 +3,6 @@ instrument(pianoR) {
     velocity += 15%;
 }
 
-instrument(rhtyhm)  {
+instrument(rhythm)  {
     velocity = 127;
 }
