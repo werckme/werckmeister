@@ -11,10 +11,10 @@ namespace sheet
         ///     Changes the pitch of an event.
         /// ## example: 
         /// ```
-        /// atBeat(1) {
+        /// onBeat(1) {
         ///   pitch = 60;
         /// }
-        /// atBeat(3) {
+        /// onBeat(3) {
         ///   pitch += 25%;
         /// }        
         /// ```
@@ -24,7 +24,7 @@ namespace sheet
         class PitchDecl : public ADeclaration
         {
         public:
-            virtual void perform(fm::midi::Event*, fm::midi::Event*) const override;
+            virtual void perform(const Events &events) const override;
             virtual ~PitchDecl() = default;
         };
     }

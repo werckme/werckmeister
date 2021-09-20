@@ -11,10 +11,10 @@ namespace sheet
         ///     Changes the duration of an event. 
         /// ## example: 
         /// ```
-        /// atBeat(1) {
+        /// onBeat(1) {
         ///   duration += 0.125; -- 1/8 longer
         /// }
-        /// atBeat(3) {
+        /// onBeat(3) {
         ///   duration -= 25%;
         /// }        
         /// ```
@@ -24,7 +24,7 @@ namespace sheet
         class Duration : public ADeclaration
         {
         public:
-            virtual void perform(fm::midi::Event*, fm::midi::Event*) const override;
+            virtual void perform(const Events &events) const override;
             virtual ~Duration() = default;
         };
     }

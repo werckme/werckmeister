@@ -105,7 +105,8 @@ namespace sheet {
 			
 					current_pos_.setStartPos(begin);
 					start.name("conduction sheet");
-
+					selector_.name("selector");
+					declaration_.name("declaration");
 					numberArgument_ %= 
 						  double_[at_c<ArTickValue>(_val) = qi::_1] >> attr(PitchDef()) >> attr(fm::String())
 					;
@@ -142,6 +143,12 @@ namespace sheet {
 						>> attr(sourceId_)
 						>> SHEET_CONDUCTOR_SEL__ON_BEAT >> attr(SHEET_CONDUCTOR_SEL__ON_BEAT) >> "(" >> +numberArgument_ >> ")"
 					)
+					|
+					(
+						current_pos_.current_pos 
+						>> attr(sourceId_)
+						>> SHEET_CONDUCTOR_SEL__NOT_ON_BEAT >> attr(SHEET_CONDUCTOR_SEL__NOT_ON_BEAT) >> "(" >> +numberArgument_ >> ")"
+					)					
 					|
 					(
 						current_pos_.current_pos
@@ -221,8 +228,12 @@ namespace sheet {
 					)
 					|
 					(
-						"=" >> attr(ConductionRule::Declaration::OperationSet)
+						"=&" >> attr(ConductionRule::Declaration::OperationFollowUp)
 					)
+					|						
+					(
+						"=" >> attr(ConductionRule::Declaration::OperationSet)
+					)				
 					;
 
 					valueUnit_ %= 

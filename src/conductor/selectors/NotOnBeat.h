@@ -1,5 +1,5 @@
-#ifndef SEL_ATBEAT_H
-#define SEL_ATBEAT_H
+#ifndef SEL_NOT_ON_BEAT_H
+#define SEL_NOT_ON_BEAT_H
 
 #include "ISelector.h"
 
@@ -7,19 +7,18 @@ namespace sheet
 {
     namespace conductor
     {
-        /// <selector name="onBeat">
-        ///     Selects an event which appears on a given beat or a list of beats
-        /// ## example, select the events at beat 1 and 3: 
+        /// <selector name="notOnBeat">
+        ///     Selects an event which does not appear on a given beat or a list of beats
         /// ```
-        /// onBeat(1 3) {...}
+        /// notOnBeat(1 3) {...}
         /// ```
         /// </selector>
         /// <param name="beat" type="quarters+"></param>
-        class OnBeat : public ISelector
+        class NotOnBeat : public ISelector
         {
         public:
             virtual bool isMatch(const ConductionSelector::Arguments&, const EventWithMetaInfo&) const override;
-            virtual ~OnBeat() = default;
+            virtual ~NotOnBeat() = default;
         };
     }
 }

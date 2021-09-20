@@ -11,10 +11,10 @@ namespace sheet
         ///     Changes the velocity of an event.
         /// ## example: 
         /// ```
-        /// atBeat(1) {
+        /// onBeat(1) {
         ///   velocity = 127;
         /// }
-        /// atBeat(3) {
+        /// onBeat(3) {
         ///   velocity += 25%;
         /// }        
         /// ```
@@ -24,7 +24,7 @@ namespace sheet
         class Velocity : public ADeclaration
         {
         public:
-            virtual void perform(fm::midi::Event*, fm::midi::Event*) const override;
+            virtual void perform(const Events &events) const override;
             virtual ~Velocity() = default;
         };
     }

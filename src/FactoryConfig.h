@@ -156,6 +156,7 @@ namespace sheet
 // Conductor
 #include <conductor/conductorNames.h>
 #include <conductor/selectors/OnBeat.h>
+#include <conductor/selectors/NotOnBeat.h>
 #include <conductor/selectors/FromPosition.h>
 #include <conductor/selectors/ToPosition.h>
 #include <conductor/selectors/Pitch.h>
@@ -183,6 +184,7 @@ namespace sheet
         fm::String selNamespace_ = "conductor.sel.";
         fm::String declNamespace_ = "conductor.decl.";
         register_<OnBeat>(selNamespace_ + SHEET_CONDUCTOR_SEL__ON_BEAT);
+        register_<NotOnBeat>(selNamespace_ + SHEET_CONDUCTOR_SEL__NOT_ON_BEAT);
         register_<FromPosition>(selNamespace_ + SHEET_CONDUCTOR_SEL__FROM_POSITION);
         register_<ToPosition>(selNamespace_ + SHEET_CONDUCTOR_SEL__TO_POSITION);
         register_<Pitch>(selNamespace_ + SHEET_CONDUCTOR_SEL__PITCH);

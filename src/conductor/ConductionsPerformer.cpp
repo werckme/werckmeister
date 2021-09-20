@@ -25,12 +25,44 @@ namespace sheet
 					{
 						continue;
 					}
-					if (it->parameter1() == noteOn->parameter1())
+					if (it->parameter1() == noteOn->parameter1() && it->channel() == noteOn->channel())
 					{
 						return &(*it);
 					}
 				}
 				return nullptr;
+			}
+
+			/// finds predecsessor note on and off of the same picth and chanel as the given note, or null
+			std::pair<fm::midi::Event*, fm::midi::Event*> findPredecessorOfSamePitch(fm::midi::EventContainer::Iterator note, fm::midi::EventContainer::Iterator begin)
+			{
+				auto it = note;
+				fm::midi::Event* noteOn = nullptr;
+				fm::midi::Event* noteOff = nullptr;
+				do
+				{
+					if (it->eventType() != fm::midi::NoteOn && it->eventType() != fm::midi::NoteOff)
+					{
+						continue;
+					}
+					if (it->parameter1() != note->parameter1() || it->channel() != note->channel())
+					{
+						continue;
+					}
+					if (it->eventType() == fm::midi::NoteOff) 
+					{
+						noteOff = &(*it);
+					}
+					if (it->eventType() == fm::midi::NoteOn) 
+					{
+						noteOn = &(*it);
+					}
+					if (noteOn && noteOff) {
+						return std::make_pair(noteOn, noteOff);
+					}
+				} while (it-- != begin);	
+
+				return std::make_pair(nullptr, nullptr);
 			}
 
 			inline fm::Ticks calculateBarNumber(fm::Ticks quarters, TimeSignature signature)
@@ -54,6 +86,7 @@ namespace sheet
 			{
 				auto it = track->events().container().begin();
 				auto end = track->events().container().end();
+				auto begin = track->events().container().begin();
 				TimeSignature timeSignature = {4, 4};
 				fm::Ticks signatureChangeBarOffset = 0;
 				fm::String instrumentName;
@@ -94,7 +127,12 @@ namespace sheet
 					if (selectorImpl->isMatch(selector.arguments, eventWithMetaInfo))
 					{
 						auto noteOff = findCorrespondingNoteOffEvent(it, end);
-						eventWithMetaInfo.noteOff = noteOff;
+						if (it != begin) {
+							auto predecessor = findPredecessorOfSamePitch(it-1, begin);
+							eventWithMetaInfo.noteOff = noteOff;
+							eventWithMetaInfo.predecessorNoteOn = predecessor.first;
+							eventWithMetaInfo.predecessorNoteOff = predecessor.second;
+						}
 						result.emplace_back(eventWithMetaInfo);
 					}
 				}
@@ -195,7 +233,12 @@ namespace sheet
 					{
 						try 
 						{
-							declaration->perform(eventAndMetaInfo.noteOn, eventAndMetaInfo.noteOff);
+							declaration->perform({
+								eventAndMetaInfo.noteOn, 
+								eventAndMetaInfo.noteOff,
+								eventAndMetaInfo.predecessorNoteOn,
+								eventAndMetaInfo.predecessorNoteOff,
+							});
 						}
 						catch(fm::Exception &ex)
 						{
