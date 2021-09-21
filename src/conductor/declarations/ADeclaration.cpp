@@ -4,12 +4,12 @@ namespace sheet
 {
     namespace conductor
     {
-        int ADeclaration::priority() const
+        double ADeclaration::specificity() const
         {
             if (declaration.operation == ConductionRule::Declaration::OperationFollowUpAdd || 
                 declaration.operation == ConductionRule::Declaration::OperationFollowUpSubstract) 
             {
-                return 0;
+                return 0.0;
             }
             return _specificity;
         }

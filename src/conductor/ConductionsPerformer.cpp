@@ -133,7 +133,6 @@ namespace sheet
 							eventWithMetaInfo.noteOff = noteOff;
 							eventWithMetaInfo.predecessorNoteOn = predecessor.first;
 							eventWithMetaInfo.predecessorNoteOff = predecessor.second;
-							eventWithMetaInfo.specificity++;
 						}
 						result.emplace_back(eventWithMetaInfo);
 					}
@@ -146,7 +145,7 @@ namespace sheet
 		{
 			Events result;
 			auto &wm = fm::getWerckmeister();
-			for (const auto &eventAndMetaInfo : events)
+			for (auto eventAndMetaInfo : events)
 			{
 				if (!isEventOfInterest(*eventAndMetaInfo.noteOn))
 				{
@@ -159,9 +158,7 @@ namespace sheet
 				}
 				if (selectorImpl->isMatch(selector.arguments, eventAndMetaInfo))
 				{
-					auto copy = eventAndMetaInfo;
-					copy.specificity++;
-					result.emplace_back(copy);
+					result.push_back(eventAndMetaInfo);
 				}
 			}
 			return result;
@@ -172,10 +169,17 @@ namespace sheet
 			auto &wm = fm::getWerckmeister();
 			auto result = EventsAndDeclarationsCollection();
 
+			int nthRule = 0;
+			int totalRules = 0;
+			for (const auto &cs : _document->conductionSheets) 
+			{
+				totalRules += cs.rules.size();
+			}
 			for (const auto &cs : _document->conductionSheets)
 			{
 				for (auto const &rule : cs.rules)
 				{
+					++nthRule;
 					EventsAndDeclarations newValue;
 					result.emplace_back(newValue);
 					auto eventsAndDeclarations = &result.back();
@@ -213,7 +217,10 @@ namespace sheet
 							{
 								FM_THROW(compiler::Exception, "declaration not found: " + declaration.property);
 							}
+							double orderScore = nthRule / double((totalRules + 1)); // shold not be >= 1
+							double specificity = double(rule.selectors.size()) + orderScore;
 							declarationImpl->setDeclarationData(declaration);
+							declarationImpl->specificity(specificity);
 							eventsAndDeclarations->declarations.push_back(declarationImpl);
 						}
 						catch (fm::Exception& ex)
@@ -277,20 +284,21 @@ namespace sheet
 				{
 					IDeclarationPtr aDecl = a.second;
 					IDeclarationPtr bDecl = b.second;
-					return aDecl->priority() < bDecl->priority();
+					return aDecl->specificity() < bDecl->specificity();
 				});
 				// 3.
 				for (const DeclarationData &declarationData : declarationDataContainer)
 				{
 					IDeclarationPtr declaration = declarationData.second;
 					const EventWithMetaInfo &eventAndMetaInfo = *declarationData.first;
+					// _logger->error(WMLogLambda(log << eventAndMetaInfo.noteOn->absPosition() << " : " << declaration->priority()));
 					try 
 					{
 						declaration->perform({
 							eventAndMetaInfo.noteOn, 
 							eventAndMetaInfo.noteOff,
 							eventAndMetaInfo.predecessorNoteOn,
-							eventAndMetaInfo.predecessorNoteOff
+							eventAndMetaInfo.predecessorNoteOff,
 						});
 					}
 					catch(fm::Exception &ex)

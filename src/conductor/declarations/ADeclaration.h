@@ -16,8 +16,8 @@ namespace sheet
             virtual void setDeclarationData(const ConductionRule::Declaration &val) override { declaration = val; }
             virtual const ConductionRule::Declaration &getDeclarationData() const override { return declaration; }
             // priority of a declaration higher values means higher priority
-            virtual int priority() const override;
-            virtual void setSpecificity(int val) override { _specificity = val; }
+            virtual double specificity() const override;
+            virtual void specificity(double val) override { _specificity = val; }
         protected:
             ConductionRule::Declaration declaration;
             typedef std::function<double()> FGetValue;
@@ -33,7 +33,7 @@ namespace sheet
                              const FSetValue &setNoteOnValue,
                              const FSetValue &setNoteOffValue) const;
         private:
-            int _specificity = 0;
+            double _specificity = 0;
         };
     }
 }
