@@ -6,9 +6,17 @@ namespace sheet
     {
         int ADeclaration::priority() const
         {
-            if (declaration.operation == ConductionRule::Declaration::OperationSet) 
+            if (declaration.operation == ConductionRule::Declaration::OperationAdd) 
             {
                 return 1;
+            }
+            if (declaration.operation == ConductionRule::Declaration::OperationSubstract) 
+            {
+                return 1;
+            }            
+            if (declaration.operation == ConductionRule::Declaration::OperationSet) 
+            {
+                return 2;
             }
             return 0;
         }

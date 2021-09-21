@@ -10,6 +10,10 @@ pitch("ht") onBeat(2 4) {
     velocity = 100;
 }
 
+pitch("ht") onBeat(1.5 2.5 3.5 4.5) {
+    velocity += 10%;
+}
+
 pitch("ht") fromBeat(1) toBeat(3) {
     velocity =& -28%;
 }
