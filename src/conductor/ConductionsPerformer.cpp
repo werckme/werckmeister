@@ -6,7 +6,8 @@
 #include <fm/tools.h>
 #include <compiler/context/MidiContext.h>
 #include <compiler/error.hpp>
-
+#include <map>
+#include <algorithm>
 
 namespace sheet
 {
@@ -223,31 +224,82 @@ namespace sheet
 			return result;
 		}
 
+		namespace 
+		{
+			struct EventComparer
+			{
+				bool operator()(const fm::midi::Event* a, const fm::midi::Event* b) const
+				{
+					if (a == b) 
+					{
+						return false;
+					}
+					return a->absPosition() < b->absPosition();
+				}
+			};
+		}
+
 		void ConductionsPerformer::perform(const EventsAndDeclarationsCollection &collection) const
 		{
+			// 1. collect all declarations per note on event
+			// 2. order ascending by declaration prio (higher prio values comes last)
+			// 3. perform
+			typedef std::pair<const EventWithMetaInfo*, IDeclarationPtr> DeclarationData;
+			std::multimap<const fm::midi::Event*, DeclarationData, EventComparer> eventsWithDeclarations;
+			// 1.
 			for (const auto &eventsAndDeclarations : collection)
 			{
-				for (auto eventAndMetaInfo : eventsAndDeclarations.events)
+				for (const auto &eventAndMetaInfo : eventsAndDeclarations.events)
 				{
 					for (auto declaration : eventsAndDeclarations.declarations)
 					{
-						try 
-						{
-							declaration->perform({
-								eventAndMetaInfo.noteOn, 
-								eventAndMetaInfo.noteOff,
-								eventAndMetaInfo.predecessorNoteOn,
-								eventAndMetaInfo.predecessorNoteOff,
-							});
-						}
-						catch(fm::Exception &ex)
-						{
-							ex << compiler::ex_sheet_source_info(declaration->getDeclarationData());
-							throw ex;
-						}
+						eventsWithDeclarations.insert({eventAndMetaInfo.noteOn, {&eventAndMetaInfo, declaration}});
 					}
 				}
 			}
+
+			auto it = eventsWithDeclarations.begin();
+			while(it != eventsWithDeclarations.end()) 
+			{
+				const fm::midi::Event* event = it->first;
+				auto rangeIts = eventsWithDeclarations.equal_range(event);
+				std::vector<DeclarationData> declarationDataContainer;
+				declarationDataContainer.reserve(eventsWithDeclarations.count(event));
+				for(auto it = rangeIts.first; it != rangeIts.second; ++it) 
+				{
+					declarationDataContainer.push_back(it->second);
+				}
+				// 2.
+				std::sort(declarationDataContainer.begin(), declarationDataContainer.end(), [this](const auto &a, const auto &b) -> bool
+				{
+					IDeclarationPtr aDecl = a.second;
+					IDeclarationPtr bDecl = b.second;
+					return aDecl->priority() < bDecl->priority();
+				});
+				// 3.
+				for (const DeclarationData &declarationData : declarationDataContainer)
+				{
+					IDeclarationPtr declaration = declarationData.second;
+					const EventWithMetaInfo &eventAndMetaInfo = *declarationData.first;
+					// _logger->error(WMLogLambda(log << eventAndMetaInfo.noteOn->absPosition() << " : " << declaration->priority()));
+					try 
+					{
+						declaration->perform({
+							eventAndMetaInfo.noteOn, 
+							eventAndMetaInfo.noteOff,
+							eventAndMetaInfo.predecessorNoteOn,
+							eventAndMetaInfo.predecessorNoteOff,
+						});
+					}
+					catch(fm::Exception &ex)
+					{
+						ex << compiler::ex_sheet_source_info(declaration->getDeclarationData());
+						throw ex;
+					}
+				}
+				it = rangeIts.second;
+			}
+			
 		}
 
 		bool ConductionsPerformer::isEventOfInterest(const fm::midi::Event &event) const

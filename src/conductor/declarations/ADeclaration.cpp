@@ -4,6 +4,14 @@ namespace sheet
 {
     namespace conductor
     {
+        int ADeclaration::priority() const
+        {
+            if (declaration.operation == ConductionRule::Declaration::OperationSet) 
+            {
+                return 1;
+            }
+            return 0;
+        }
         void ADeclaration::performImpl(fm::midi::Event *noteOn,
                                        fm::midi::Event *noteOff,
                                        double inputValue,

@@ -9,6 +9,7 @@
 #include <vector>
 #include <conductor/declarations/IDeclaration.h>
 #include <conductor/selectors/ISelector.h>
+#include <fm/ILogger.h>
 
 namespace sheet
 {
@@ -27,8 +28,8 @@ namespace sheet
 			typedef std::vector<EventsAndDeclarations> EventsAndDeclarationsCollection;
 			EventsAndDeclarationsCollection selectEvents() const;
 		public:
-			ConductionsPerformer(fm::midi::MidiPtr midifile, sheet::DocumentPtr document) : 
-				_midifile(midifile), _document(document) {}
+			ConductionsPerformer(fm::midi::MidiPtr midifile, sheet::DocumentPtr document, fm::ILoggerPtr logger) : 
+				_midifile(midifile), _document(document), _logger(logger) {}
 			virtual void applyConductions() override;
 		private:
 			bool isEventOfInterest(const fm::midi::Event&) const;
@@ -37,6 +38,7 @@ namespace sheet
 			void perform(const EventsAndDeclarationsCollection&) const;
 			fm::midi::MidiPtr _midifile;
 			sheet::DocumentPtr _document;
+			fm::ILoggerPtr _logger;
 		};
 	}
 }

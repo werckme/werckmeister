@@ -15,7 +15,8 @@ namespace sheet
             virtual ~ADeclaration() = default;
             virtual void setDeclarationData(const ConductionRule::Declaration &val) override { declaration = val; }
             virtual const ConductionRule::Declaration &getDeclarationData() const override { return declaration; }
-
+            // priority of a declaration higher values means higher priority
+            virtual int priority() const override;
         protected:
             ConductionRule::Declaration declaration;
             typedef std::function<double()> FGetValue;
