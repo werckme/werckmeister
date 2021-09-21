@@ -19,6 +19,7 @@ namespace sheet
             TimeSignature timeSignature = {4, 4};
             fm::String instrumentName;
             fm::Ticks barNumber = 0;
+            int specificity = 0;
         };
         class ISelector : public fm::IRegisterable
         {

@@ -133,6 +133,7 @@ namespace sheet
 							eventWithMetaInfo.noteOff = noteOff;
 							eventWithMetaInfo.predecessorNoteOn = predecessor.first;
 							eventWithMetaInfo.predecessorNoteOff = predecessor.second;
+							eventWithMetaInfo.specificity++;
 						}
 						result.emplace_back(eventWithMetaInfo);
 					}
@@ -145,7 +146,7 @@ namespace sheet
 		{
 			Events result;
 			auto &wm = fm::getWerckmeister();
-			for (auto eventAndMetaInfo : events)
+			for (const auto &eventAndMetaInfo : events)
 			{
 				if (!isEventOfInterest(*eventAndMetaInfo.noteOn))
 				{
@@ -158,7 +159,9 @@ namespace sheet
 				}
 				if (selectorImpl->isMatch(selector.arguments, eventAndMetaInfo))
 				{
-					result.push_back(eventAndMetaInfo);
+					auto copy = eventAndMetaInfo;
+					copy.specificity++;
+					result.emplace_back(copy);
 				}
 			}
 			return result;
@@ -281,14 +284,13 @@ namespace sheet
 				{
 					IDeclarationPtr declaration = declarationData.second;
 					const EventWithMetaInfo &eventAndMetaInfo = *declarationData.first;
-					// _logger->error(WMLogLambda(log << eventAndMetaInfo.noteOn->absPosition() << " : " << declaration->priority()));
 					try 
 					{
 						declaration->perform({
 							eventAndMetaInfo.noteOn, 
 							eventAndMetaInfo.noteOff,
 							eventAndMetaInfo.predecessorNoteOn,
-							eventAndMetaInfo.predecessorNoteOff,
+							eventAndMetaInfo.predecessorNoteOff
 						});
 					}
 					catch(fm::Exception &ex)

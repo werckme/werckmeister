@@ -26,6 +26,7 @@ namespace sheet
             virtual void perform(const Events &events) const = 0;
             // priority of a declaration higher values means higher priority
             virtual int priority() const = 0;
+            virtual void setSpecificity(int val) = 0;
             virtual ~IDeclaration() = default;
         };
         typedef std::shared_ptr<IDeclaration> IDeclarationPtr;

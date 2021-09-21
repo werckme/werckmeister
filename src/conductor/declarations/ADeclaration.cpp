@@ -6,19 +6,12 @@ namespace sheet
     {
         int ADeclaration::priority() const
         {
-            if (declaration.operation == ConductionRule::Declaration::OperationAdd) 
+            if (declaration.operation == ConductionRule::Declaration::OperationFollowUpAdd || 
+                declaration.operation == ConductionRule::Declaration::OperationFollowUpSubstract) 
             {
-                return 1;
+                return 0;
             }
-            if (declaration.operation == ConductionRule::Declaration::OperationSubstract) 
-            {
-                return 1;
-            }            
-            if (declaration.operation == ConductionRule::Declaration::OperationSet) 
-            {
-                return 2;
-            }
-            return 0;
+            return _specificity;
         }
         void ADeclaration::performImpl(fm::midi::Event *noteOn,
                                        fm::midi::Event *noteOff,
