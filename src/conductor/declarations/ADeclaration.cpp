@@ -45,13 +45,16 @@ namespace sheet
                 auto originalValue = getOriginalValue();
                 inputValue = originalValue - inputValue;
             }
-            if (declaration.operation == ConductionRule::Declaration::OperationFollowUp)
+            if (declaration.operation == ConductionRule::Declaration::OperationFollowUpAdd 
+             || declaration.operation == ConductionRule::Declaration::OperationFollowUpSubstract)
             {
                 auto predecessorValue = getPredecessorValue();
                 if (!predecessorValue.has_value()) 
                 {
                     return;
                 }
+                inputValue = declaration.operation == ConductionRule::Declaration::OperationFollowUpSubstract 
+                    ? -inputValue : inputValue;
                 inputValue = predecessorValue.value() + inputValue;
             }
             inputValue = std::max(min, std::min(inputValue, max));

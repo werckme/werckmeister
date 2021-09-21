@@ -15,14 +15,14 @@ BOOST_AUTO_TEST_CASE(parse_empty_succeeds)
 	auto defs = parser.parse(text);
 }
 
-// BOOST_AUTO_TEST_CASE(parse_invalid_fails)
-// {
-// 	using namespace fm;
-// 	using sheet::PitchDef;
-// 	fm::String text = FM_STRING("0123456");
-// 	sheet::compiler::ConductionSheetParser parser;
-// 	BOOST_CHECK_THROW(parser.parse(text), sheet::compiler::Exception);
-// }
+BOOST_AUTO_TEST_CASE(parse_invalid_fails)
+{
+	using namespace fm;
+	using sheet::PitchDef;
+	fm::String text = FM_STRING("0123456");
+	sheet::compiler::ConductionSheetParser parser;
+	BOOST_CHECK_THROW(parser.parse(text), sheet::compiler::Exception);
+}
 
 BOOST_AUTO_TEST_CASE(parse_oneSelector_emptyDeclarations)
 {
@@ -139,4 +139,120 @@ BOOST_AUTO_TEST_CASE(parse_oneSelectorWithNameArgument)
 	BOOST_CHECK_EQUAL(defs.rules[0].selectors[0].type, "instrument");
 	BOOST_CHECK_EQUAL(defs.rules[0].selectors[0].arguments.size(), size_t(1));
 	BOOST_CHECK_EQUAL(defs.rules[0].selectors[0].arguments[0].name, fm::String("myInstrument"));
+}
+
+
+BOOST_AUTO_TEST_CASE(parse_oneSelector_followUpOperator_1)
+{
+	using namespace fm;
+	using sheet::PitchDef;
+	fm::String text = FM_STRING("\
+	onBeat(1) {\
+		velocity =& +10;\
+	}\
+");
+	sheet::compiler::ConductionSheetParser parser;
+	auto defs = parser.parse(text);
+	BOOST_CHECK_EQUAL(defs.rules.size(), size_t(1));
+	BOOST_CHECK_EQUAL(defs.rules[0].selectors.size(), size_t(1));
+	BOOST_CHECK_EQUAL(defs.rules[0].selectors[0].type, "onBeat");
+	BOOST_CHECK_EQUAL(defs.rules[0].selectors[0].arguments.size(), size_t(1));
+	BOOST_CHECK_EQUAL(defs.rules[0].selectors[0].arguments[0].numberValue, fm::Ticks(1));
+	BOOST_CHECK_EQUAL(defs.rules[0].declarations.size(), size_t(1));
+	BOOST_CHECK_EQUAL(defs.rules[0].declarations[0].property, "velocity");
+	BOOST_CHECK_EQUAL(defs.rules[0].declarations[0].operation, sheet::ConductionRule::Declaration::OperationFollowUpAdd);
+	BOOST_CHECK_EQUAL(defs.rules[0].declarations[0].value, double(10));
+	BOOST_CHECK_EQUAL(defs.rules[0].declarations[0].unit, sheet::ConductionRule::Declaration::UnitAbsolute);
+}
+
+BOOST_AUTO_TEST_CASE(parse_oneSelector_followUpOperator_2)
+{
+	using namespace fm;
+	using sheet::PitchDef;
+	fm::String text = FM_STRING("\
+	onBeat(1) {\
+		velocity = &+10;\
+	}\
+");
+	sheet::compiler::ConductionSheetParser parser;
+	auto defs = parser.parse(text);
+	BOOST_CHECK_EQUAL(defs.rules.size(), size_t(1));
+	BOOST_CHECK_EQUAL(defs.rules[0].selectors.size(), size_t(1));
+	BOOST_CHECK_EQUAL(defs.rules[0].selectors[0].type, "onBeat");
+	BOOST_CHECK_EQUAL(defs.rules[0].selectors[0].arguments.size(), size_t(1));
+	BOOST_CHECK_EQUAL(defs.rules[0].selectors[0].arguments[0].numberValue, fm::Ticks(1));
+	BOOST_CHECK_EQUAL(defs.rules[0].declarations.size(), size_t(1));
+	BOOST_CHECK_EQUAL(defs.rules[0].declarations[0].property, "velocity");
+	BOOST_CHECK_EQUAL(defs.rules[0].declarations[0].operation, sheet::ConductionRule::Declaration::OperationFollowUpAdd);
+	BOOST_CHECK_EQUAL(defs.rules[0].declarations[0].value, double(10));
+	BOOST_CHECK_EQUAL(defs.rules[0].declarations[0].unit, sheet::ConductionRule::Declaration::UnitAbsolute);
+}
+
+BOOST_AUTO_TEST_CASE(parse_oneSelector_followUpOperator_3)
+{
+	using namespace fm;
+	using sheet::PitchDef;
+	fm::String text = FM_STRING("\
+	onBeat(1) {\
+		velocity = & + 10;\
+	}\
+");
+	sheet::compiler::ConductionSheetParser parser;
+	auto defs = parser.parse(text);
+	BOOST_CHECK_EQUAL(defs.rules.size(), size_t(1));
+	BOOST_CHECK_EQUAL(defs.rules[0].selectors.size(), size_t(1));
+	BOOST_CHECK_EQUAL(defs.rules[0].selectors[0].type, "onBeat");
+	BOOST_CHECK_EQUAL(defs.rules[0].selectors[0].arguments.size(), size_t(1));
+	BOOST_CHECK_EQUAL(defs.rules[0].selectors[0].arguments[0].numberValue, fm::Ticks(1));
+	BOOST_CHECK_EQUAL(defs.rules[0].declarations.size(), size_t(1));
+	BOOST_CHECK_EQUAL(defs.rules[0].declarations[0].property, "velocity");
+	BOOST_CHECK_EQUAL(defs.rules[0].declarations[0].operation, sheet::ConductionRule::Declaration::OperationFollowUpAdd);
+	BOOST_CHECK_EQUAL(defs.rules[0].declarations[0].value, double(10));
+	BOOST_CHECK_EQUAL(defs.rules[0].declarations[0].unit, sheet::ConductionRule::Declaration::UnitAbsolute);
+}
+
+BOOST_AUTO_TEST_CASE(parse_oneSelector_followUpOperator_4)
+{
+	using namespace fm;
+	using sheet::PitchDef;
+	fm::String text = FM_STRING("\
+	onBeat(1) {\
+		velocity = & - 10;\
+	}\
+");
+	sheet::compiler::ConductionSheetParser parser;
+	auto defs = parser.parse(text);
+	BOOST_CHECK_EQUAL(defs.rules.size(), size_t(1));
+	BOOST_CHECK_EQUAL(defs.rules[0].selectors.size(), size_t(1));
+	BOOST_CHECK_EQUAL(defs.rules[0].selectors[0].type, "onBeat");
+	BOOST_CHECK_EQUAL(defs.rules[0].selectors[0].arguments.size(), size_t(1));
+	BOOST_CHECK_EQUAL(defs.rules[0].selectors[0].arguments[0].numberValue, fm::Ticks(1));
+	BOOST_CHECK_EQUAL(defs.rules[0].declarations.size(), size_t(1));
+	BOOST_CHECK_EQUAL(defs.rules[0].declarations[0].property, "velocity");
+	BOOST_CHECK_EQUAL(defs.rules[0].declarations[0].operation, sheet::ConductionRule::Declaration::OperationFollowUpSubstract);
+	BOOST_CHECK_EQUAL(defs.rules[0].declarations[0].value, double(10));
+	BOOST_CHECK_EQUAL(defs.rules[0].declarations[0].unit, sheet::ConductionRule::Declaration::UnitAbsolute);
+}
+
+BOOST_AUTO_TEST_CASE(parse_oneSelector_followUpOperator_5)
+{
+	using namespace fm;
+	using sheet::PitchDef;
+	fm::String text = FM_STRING("\
+	onBeat(1) {\
+		velocity = & -10;\
+	}\
+");
+	sheet::compiler::ConductionSheetParser parser;
+	auto defs = parser.parse(text);
+	BOOST_CHECK_EQUAL(defs.rules.size(), size_t(1));
+	BOOST_CHECK_EQUAL(defs.rules[0].selectors.size(), size_t(1));
+	BOOST_CHECK_EQUAL(defs.rules[0].selectors[0].type, "onBeat");
+	BOOST_CHECK_EQUAL(defs.rules[0].selectors[0].arguments.size(), size_t(1));
+	BOOST_CHECK_EQUAL(defs.rules[0].selectors[0].arguments[0].numberValue, fm::Ticks(1));
+	BOOST_CHECK_EQUAL(defs.rules[0].declarations.size(), size_t(1));
+	BOOST_CHECK_EQUAL(defs.rules[0].declarations[0].property, "velocity");
+	BOOST_CHECK_EQUAL(defs.rules[0].declarations[0].operation, sheet::ConductionRule::Declaration::OperationFollowUpSubstract);
+	BOOST_CHECK_EQUAL(defs.rules[0].declarations[0].value, double(10));
+	BOOST_CHECK_EQUAL(defs.rules[0].declarations[0].unit, sheet::ConductionRule::Declaration::UnitAbsolute);
 }

@@ -228,8 +228,12 @@ namespace sheet {
 					)
 					|
 					(
-						"=&" >> attr(ConductionRule::Declaration::OperationFollowUp)
+						"=" >> lit("&") >> lit("+") >> attr(ConductionRule::Declaration::OperationFollowUpAdd)
 					)
+					|
+					(
+						"=" >> lit("&") >> lit("-") >> attr(ConductionRule::Declaration::OperationFollowUpSubstract)
+					)					
 					|						
 					(
 						"=" >> attr(ConductionRule::Declaration::OperationSet)

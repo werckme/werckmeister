@@ -26,7 +26,8 @@ namespace sheet {
 				OperationAdd,
 				OperationSubstract,
 				OperationSet,
-				OperationFollowUp
+				OperationFollowUpAdd,
+				OperationFollowUpSubstract
 			};
 			enum ValueUnit {
 				UnitAbsolute,
