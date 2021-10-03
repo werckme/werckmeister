@@ -28,7 +28,7 @@ namespace sheet
                 return (predecessorNoteOff->absPosition() - predecessorNoteOn->absPosition()) / fm::PPQ; 
             };
             double inputValue = declaration.value;
-            constexpr double min = -std::numeric_limits<double>::max();
+            constexpr double min = 0.000000001;
             constexpr double max = std::numeric_limits<double>::max();
             performImpl(noteOn, noteOff, inputValue, min, max, getOriginalValue, getPercentBase, getPredecessorValue, setNoteOn, setNoteOff);
         }

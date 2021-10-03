@@ -13,7 +13,7 @@ namespace sheet
                 FM_THROW(compiler::Exception, "missing argument for selector FromPosition");
             }
             auto eventPosition = ev.absPosition() / fm::PPQ;
-            auto value = arguments[0].numberValue - 1;
+            auto value = arguments[0].numberValue;
             return eventPosition >= value;
         }
     }

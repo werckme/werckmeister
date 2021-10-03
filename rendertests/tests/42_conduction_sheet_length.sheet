@@ -3,7 +3,7 @@ using "./chords/default.chords";
 using "42_myConductions_length.conductions";
 
 tempo: 120;
-device: SC1 midi 4;
+device: SC1 midi 3;
 instrumentDef: piano SC1 0 0 0;
 
 [
