@@ -18,7 +18,7 @@ namespace sheet
             FGetValue getOriginalValue = [noteOn, noteOff]() { return (noteOff->absPosition() - noteOn->absPosition()) / fm::PPQ; };
             FGetValue getPercentBase = [noteOn, noteOff]() { return (noteOff->absPosition() - noteOn->absPosition()) / fm::PPQ; };
             FSetValue setNoteOn = [](fm::midi::Event* noteOn, double val) {};
-            FSetValue setNoteOff = [noteOn](fm::midi::Event* noteOff, double val) { noteOff->absPosition(noteOff->absPosition() + val * fm::PPQ); };
+            FSetValue setNoteOff = [noteOn](fm::midi::Event* noteOff, double val) { noteOff->absPosition(noteOn->absPosition() + val * fm::PPQ); };
             FGetOptionalValue getPredecessorValue = [predecessorNoteOn, predecessorNoteOff]() -> std::optional<double>
             {
                 if (!predecessorNoteOn || !predecessorNoteOff) 
