@@ -4,6 +4,7 @@ import os
 from compare_midi import compare
 from blessed import Terminal
 import re
+import itertools
 
 compiler_path = '../build/sheetc'
 if os.name == 'nt':
@@ -21,12 +22,19 @@ def get_test_tags(sheetfile) -> list:
             is_comment_line_or_empty = re.match('\s*--.*$', line) or len(line.strip()) == 0
             if not is_comment_line_or_empty:
                 break
-            tags_matched = re.findall('#([a-zA-Z0-9_-]+)*', line, re.DOTALL)
+            tags_matched = re.findall('#([a-zA-Z0-9_()=, -]+)*', line, re.DOTALL)
             if not tags_matched:
                 continue
             tags.extend(tags_matched)
     return list(set(tags))
             
+def get_args_from_tags(test_tags: list) -> None:
+    args_tags = [tag for tag in test_tags if tag.startswith('compiler-args')]
+    args = [re.findall('compiler-args\((.*)\)', arg_tag, re.DOTALL) for arg_tag in args_tags]
+    args = [arg[0].split(',') for arg in args if arg]
+    args = list(itertools.chain(*args))
+    args = [arg.strip() for arg in args]
+    return args
 
 if __name__ == '__main__':
     term = Terminal()
@@ -45,9 +53,12 @@ if __name__ == '__main__':
         test_tags = get_test_tags(infile)
         midifile = f"{testfile}.mid"
         reffile = os.path.abspath(os.path.join(refdir,midifile))
+        compiler_args = [infile]
+        test_args = get_args_from_tags(test_tags)
+        compiler_args.extend(test_args)
         try:
             print(f"testing '{testfile}' ...", end=' ')
-            os.system(f"{compiler} {infile}")
+            os.system(f"{compiler} {' '.join(compiler_args)}")
             compare(reffile, midifile, test_tags)
             print(term.green + "OK" + term.normal)
         except Exception as ex:
