@@ -1,4 +1,4 @@
-# WM_DOWNLOAD_EXTERNALS=1 WM_LINUX_LINK_STATIC=1 cmake ..
+# WM_DOWNLOAD_EXTERNALS=1 WM_LINUX_LINK_STATIC=1 cmake .. -DCMAKE_BUILD_TYPE=Debug
 cmake_minimum_required(VERSION 3.11)
 
 execute_process(COMMAND git --work-tree=. log --pretty=format:%h -n 1

@@ -47,9 +47,9 @@ namespace sheet {
 		}
 
 		MidiContext::MidiContext(fm::midi::MidiPtr midiFile, fm::IDefinitionsServerPtr definitionsServer, ICompilerVisitorPtr compilerVisitor,
-			fm::ILoggerPtr logger, ICompilerProgramOptionsPtr options) : 
+			fm::ILoggerPtr logger) : 
 			Base(definitionsServer), midi_(midiFile),
-			_compilerVisitor(compilerVisitor), _logger(logger), _options(options)
+			_compilerVisitor(compilerVisitor), _logger(logger)
 		{
 		}
 
@@ -141,19 +141,8 @@ namespace sheet {
 			auto voiceConfig = voiceMetaData<MidiContext::VoiceMetaData>();
 			if (voiceConfig)
 			{
-				fm::Ticks renderRangeBegin = _options->isBeginSet() ? (_options->getBegin() * fm::PPQ) : 0;
-				fm::Ticks renderRangeEnd = _options->isEndSet() ? (_options->getEnd() * fm::PPQ) : INT_MAX;
-				bool isInRange = voiceConfig->position >= renderRangeBegin && voiceConfig->position < renderRangeEnd;
-				bool canBeSkipped = ev.eventType() == fm::midi::NoteOn 
-					|| ev.eventType() == fm::midi::NoteOff;
-				if (!isInRange && canBeSkipped) {
-					return;
-				}
 				auto evCopy = ev;
 				auto absPos = evCopy.absPosition() * voiceConfig->tempoFactor + voiceConfig->positionOffset;
-				if (canBeSkipped) {
-					absPos -= renderRangeBegin;
-				}
 				evCopy.absPosition(absPos);
 				midi_->tracks().at(trackId)->events().add(evCopy);
 				return;
@@ -438,8 +427,7 @@ namespace sheet {
 				midiFile, 
 				definitionsServer_, 
 				_compilerVisitor, 
-				_logger,
-				_options
+				_logger
 			);
 			return midiContext;
 		}

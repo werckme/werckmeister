@@ -679,5 +679,33 @@ namespace fm {
 			}
 			_sealed = true;
 		}
+
+		void Midi::crop(fm::Ticks begin, fm::Ticks end)
+		{
+			for (auto &track : _container) 
+			{
+				auto &originalContainer = track->events().container();
+				fm::midi::EventContainer::TContainer copy;
+				copy.reserve(originalContainer.size());
+				for (auto &midiEvent : originalContainer)
+				{
+					fm::Ticks midiEventPosition = midiEvent.absPosition();
+					bool canBeSkipped = midiEvent.eventType() == fm::midi::NoteOn 
+						|| midiEvent.eventType() == fm::midi::NoteOff;
+					bool isInRange = midiEventPosition >= begin && midiEventPosition < end;
+					if (canBeSkipped && !isInRange) {
+						continue;
+					}
+					if (!canBeSkipped && (midiEventPosition < begin)) {
+						midiEvent.absPosition(0);
+
+					} else {
+						midiEvent.absPosition( midiEvent.absPosition() - begin);
+					}
+					copy.push_back(midiEvent);
+				}
+				originalContainer.swap(copy);
+			}
+		}
 	}
 }

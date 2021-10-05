@@ -76,7 +76,6 @@ namespace sheet
 		{
 			auto eventAndOperations = selectEvents();
 			perform(eventAndOperations);
-			_midifile->seal();
 		}
 
 		ConductionsPerformer::Events ConductionsPerformer::findMatches(const sheet::ConductionSelector &selector) const

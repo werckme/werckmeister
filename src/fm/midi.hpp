@@ -252,6 +252,7 @@ namespace fm {
 			 * seal before write
 			 */
 			void seal();
+			void crop(fm::Ticks begin, fm::Ticks end);
 		private:
 			BPM bpm_ = fm::DefaultTempo;
 			Ticks _ppq = 0;

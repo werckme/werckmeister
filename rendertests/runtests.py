@@ -58,6 +58,7 @@ if __name__ == '__main__':
         compiler_args.extend(test_args)
         try:
             print(f"testing '{testfile}' ...", end=' ')
+            #print (f"{compiler} {' '.join(compiler_args)}")
             os.system(f"{compiler} {' '.join(compiler_args)}")
             compare(reffile, midifile, test_tags)
             print(term.green + "OK" + term.normal)
