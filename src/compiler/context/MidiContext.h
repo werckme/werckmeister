@@ -9,7 +9,6 @@
 #include <fm/config.hpp>
 #include <fm/ILogger.h>
 #include <compiler/ICompilerVisitor.h>
-#include <ICompilerProgramOptions.h>
 
 #define SHEET_MASTER_TRACKNAME "master track"
 
@@ -29,8 +28,7 @@ namespace sheet {
 			MidiContext(fm::midi::MidiPtr midiFile,
 				fm::IDefinitionsServerPtr definitionsServer,
 				ICompilerVisitorPtr compilerVisitor,
-				fm::ILoggerPtr logger,
-				ICompilerProgramOptionsPtr options);
+				fm::ILoggerPtr logger);
 
 			struct VoiceMetaData : sheet::compiler::VoiceMetaData {
 				fm::Ticks positionOffset = 0;
@@ -79,7 +77,6 @@ namespace sheet {
 			void setInstrument(std::shared_ptr<InstrumentSectionDef> def);
 		private:
 			InstrumentDefs instrumentDefs_;
-			ICompilerProgramOptionsPtr _options;
         };
 		typedef std::shared_ptr<MidiContext> MidiContextPtr;
     }

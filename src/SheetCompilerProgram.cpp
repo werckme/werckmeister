@@ -62,6 +62,12 @@ void SheetCompilerProgram::compile()
     try {
         _logger->babble(WMLogLambda(log << "aplying conduction rules"));
         _conductionsPerformer->applyConductions();
+        if (_programOptions->isBeginSet() || _programOptions->isEndSet()) {
+            auto beginTicks = _programOptions->isBeginSet() ? _programOptions->getBegin() * fm::PPQ : 0;
+            auto endTicks = _programOptions->isEndSet() ? _programOptions->getEnd() * fm::PPQ : fm::Ticks(INT_MAX);
+            _midiFile->crop(beginTicks, endTicks);
+        }
+        _midiFile->seal();
     } catch(fm::Exception &ex) {
         ex << sheet::compiler::ex_sheet_document(document);
         throw;
