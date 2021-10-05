@@ -1,3 +1,4 @@
+-- #skip-event-plausibility-test
 using "lua/mods/staccato.lua";
 using "./chords/default.chords";
 

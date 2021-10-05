@@ -21,7 +21,7 @@
 #include <sheet/AliasPitchDef.h>
 #include <sheet/objects/Grouped.h>
 #include <fm/tools.h>
-#include "extendedPitchSymbols.h"
+#include "pitchParser.h"
 
 BOOST_FUSION_ADAPT_STRUCT(
 	sheet::DocumentUsing,
@@ -37,18 +37,6 @@ BOOST_FUSION_ADAPT_STRUCT(
 BOOST_FUSION_ADAPT_STRUCT(
 	sheet::Voice,
 	(sheet::Voice::Events, events)
-)
-
-BOOST_FUSION_ADAPT_STRUCT(
-	sheet::PitchDef,
-	(sheet::PitchDef::Pitch, pitch)
-	(sheet::PitchDef::Octave, octave)
-	(bool, forceDegree)
-)
-
-BOOST_FUSION_ADAPT_STRUCT(
-	sheet::AliasPitchDef,
-	(fm::String, alias)
 )
 
 BOOST_FUSION_ADAPT_STRUCT(
@@ -136,7 +124,7 @@ namespace sheet {
 			namespace ascii = boost::spirit::ascii;
 			///////////////////////////////////////////////////////////////////
 			template <typename Iterator>
-			struct _SheetParser : qi::grammar<Iterator, SheetDef(), ascii::space_type>
+			struct _SheetParser : PitchParser, qi::grammar<Iterator, SheetDef(), ascii::space_type>
 			{
 
 				void initArgumentParser() 
@@ -227,8 +215,6 @@ namespace sheet {
 					using boost::phoenix::push_back;
 					using boost::phoenix::insert;
 					
-					_impl::initExtendedPitches(extendedPitch_);
-
 					start.name("sheet");
 					bar_volta_.name("bar jump mark");
 					event_.name("event");
@@ -406,8 +392,9 @@ namespace sheet {
 				}
 
 				_SheetParser(Iterator begin, Event::SourceId sourceId = Event::UndefinedSource) : 
-					 _SheetParser::base_type(start, "sheet")
-					,sourceId_(sourceId)
+					PitchParser(),
+					_SheetParser::base_type(start, "sheet"),
+					sourceId_(sourceId)
 				{
 					using qi::on_error;
 					using qi::fail;
@@ -435,9 +422,6 @@ namespace sheet {
 				Event::SourceId sourceId_ = Event::UndefinedSource;
 				qi::rule<Iterator, PitchDef(), ascii::space_type> degree_;
 				qi::rule<Iterator, SheetDef(), ascii::space_type> start;
-				qi::rule<Iterator, PitchDef(), ascii::space_type> pitch_;
-				qi::rule<Iterator, AliasPitchDef(), ascii::space_type> extendedPitch_;
-				qi::rule<Iterator, PitchDef(), ascii::space_type> pitchOrAlias_;
 				qi::rule<Iterator, Argument(), ascii::space_type> argument_;
 				qi::rule<Iterator, Argument(), ascii::space_type> expression_argument_;
 				qi::rule<Iterator, Track(), ascii::space_type> track;

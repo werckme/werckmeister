@@ -1,0 +1,23 @@
+using "./chords/default.chords";
+using "42_myConductions_instrument.conductions";
+
+tempo: 120;
+device: SC1 midi 4;
+instrumentDef: rhythm SC1 _ch=2 _pc=0;
+
+[
+type: template;
+name: myAccomp;
+instrument: rhythm;
+{
+    \p
+    <III, V, VII, II>1 | 
+}
+]
+
+[
+type: accomp;
+{
+    A-7 | D-7 |
+}
+]

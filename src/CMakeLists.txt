@@ -27,7 +27,8 @@ SET (SRC_FETZER_LIB
     parser/sheetParser.cpp
     parser/documentParser.cpp
     parser/pitchmapParser.cpp
-    parser/extendedPitchSymbols.cpp
+    parser/conductionSheetParser.cpp
+    parser/pitchParser.cpp
     compiler/context/MidiContext.cpp
     compiler/context/AContext.cpp
     compiler/Preprocessor.cpp
@@ -85,6 +86,28 @@ SET (SRC_FETZER_LIB
     compiler/commands/Cue.cpp
     compiler/commands/Fill.cpp
     compiler/commands/DefineInstrumentSection.cpp
+    conductor/ConductionsPerformer.cpp
+    conductor/selectors/OnBeat.cpp
+    conductor/selectors/NotOnBeat.cpp
+    conductor/selectors/FromPosition.cpp
+    conductor/selectors/FromPosition.cpp
+    conductor/selectors/ToPosition.cpp
+    conductor/selectors/Instrument.cpp
+    conductor/selectors/FromPitch.cpp
+    conductor/selectors/ToPitch.cpp
+    conductor/selectors/Pitch.cpp
+    conductor/selectors/Channel.cpp
+    conductor/selectors/FromBeat.cpp
+    conductor/selectors/ToBeat.cpp
+    conductor/selectors/FromBar.cpp
+    conductor/selectors/ToBar.cpp
+    conductor/selectors/OnBar.cpp
+    conductor/selectors/NthBar.cpp
+    conductor/declarations/ADeclaration.cpp
+    conductor/declarations/Velocity.cpp
+    conductor/declarations/Pitch.cpp
+    conductor/declarations/TimeOffset.cpp
+    conductor/declarations/Duration.cpp
 )
 
 add_definitions( -DGIT_VERSION="${GIT_VERSION}" )
@@ -101,6 +124,7 @@ SET (SRC_FETZER_TESTS
     tests/test_bugfixes.cpp
     tests/testhelper.cpp
     tests/test_document.cpp
+    tests/test_conduction_parser.cpp
 )
 
 ## FMAPP

@@ -31,6 +31,8 @@
 #include <fmapp/UdpSender.hpp>
 #include <fmapp/NullStringSender.hpp>
 #include <compiler/SheetNavigator.h>
+#include <conductor/ConductionsPerformer.h>
+#include "FactoryConfig.h"
 
 #ifdef SHEET_USE_BOOST_TIMER
 #include "fmapp/boostTimer.h"
@@ -96,6 +98,7 @@ int startPlayer(std::shared_ptr<PlayerProgramOptions> programOptionsPtr)
 {
 	namespace di = boost::di;
 	namespace cp = sheet::compiler;
+	namespace co = sheet::conductor;
 	fmapp::SheetWatcherHandlersPtr sheetWatcherHandlers = std::make_shared<fmapp::SheetWatcherHandlers>();
 	auto documentPtr = std::make_shared<sheet::Document>();
 	auto midiFile = fm::getWerckmeister().createMidi();
@@ -110,6 +113,7 @@ int startPlayer(std::shared_ptr<PlayerProgramOptions> programOptionsPtr)
 		, di::bind<cp::IContext>()											 .to<cp::MidiContext>()				.in(di::extension::scoped)
 		, di::bind<cp::IPreprocessor>()										 .to<cp::Preprocessor>()			.in(di::extension::scoped)
 		, di::bind<cp::ISheetNavigator>()									 .to<cp::SheetNavigator>()			.in(di::extension::scoped)
+		, di::bind<co::IConductionsPerformer>()								 .to<co::ConductionsPerformer>()	.in(di::extension::scoped)
 		, di::bind<ICompilerProgramOptions>()								 .to(programOptionsPtr)
 		, di::bind<sheet::Document>()										 .to(documentPtr)
 		, di::bind<fm::IDefinitionsServer>()								 .to<fm::DefinitionsServer>()		.in(di::extension::scoped)
@@ -159,7 +163,8 @@ int startPlayer(std::shared_ptr<PlayerProgramOptions> programOptionsPtr)
 			std::shared_ptr<fmapp::Funkfeuer> vis = injector.create<std::unique_ptr<fmapp::Funkfeuer>>();
 			loopVisitors.container.push_back(vis);
 		}
-
+		sheet::FactoryConfig factory(injector);
+		factory.init();
 		auto program = injector.create<SheetPlayerProgram*>();
 		sheetWatcherHandlers->container.push_back(program);
 		program->prepareEnvironment();

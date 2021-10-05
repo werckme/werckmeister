@@ -1,0 +1,9 @@
+fromPosition(0) toPosition(7) onBeat(1) {
+    velocity = 127;
+}
+fromPosition(0) toPosition(7) onBeat(3) {
+    velocity = 100;
+}
+fromPosition(7) toPosition(15) onBeat(2 4) {
+    velocity = 127;
+}

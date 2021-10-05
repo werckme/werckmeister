@@ -11,11 +11,13 @@
 #include <compiler/ICompilerVisitor.h>
 #include <ICompilerProgramOptions.h>
 
+#define SHEET_MASTER_TRACKNAME "master track"
+
 namespace sheet {
     namespace compiler {
         class MidiContext : public AContext {
-			friend class MidiInstrumentDef;
-			friend class InstrumentSectionDef;
+			friend struct MidiInstrumentDef;
+			friend struct InstrumentSectionDef;
 		private:
 			fm::midi::MidiPtr midi_;
 			ICompilerVisitorPtr _compilerVisitor;
@@ -60,17 +62,18 @@ namespace sheet {
 			 * sends a custom meta event containing a device name
 			 */
 			virtual void addDeviceChangeEvent(const fm::String &deviceName, fm::Ticks position);
+			virtual void addSetInstrumentEvent(const fm::String& instrumentName, fm::Ticks position);
 			virtual AInstrumentDefPtr getInstrumentDef(const fm::String &uname) override;
 			virtual AInstrumentDefPtr currentInstrumentDef() override;
 			const InstrumentDefs & instrumentDefs() const { return this->instrumentDefs_; }
 			virtual IContextPtr createNewContext() const;
 			virtual void clear() override;
+			static int toMidiPitch(const PitchDef &pitch);
 		protected:
 			virtual Base::VoiceMetaDataPtr createVoiceMetaData() override;
 			virtual Base::TrackMetaDataPtr createTrackMetaData() override;
 			void addInstrumentDef(const fm::String &uname, AInstrumentDefPtr def);
 			virtual TrackId createMasterTrack() override;
-			int getAbsolutePitch(const PitchDef &pitch);
 			int toMidiVelocity(double velocity);
 			void setInstrument(std::shared_ptr<MidiInstrumentDef> def);
 			void setInstrument(std::shared_ptr<InstrumentSectionDef> def);

@@ -11,6 +11,7 @@
 #define PITCHMAP_DEF_EXTENSION ".pitchmap"
 #define LUA_DEF_EXTENSION ".lua"
 #define SHEET_CONFIG ".config"
+#define CONDUCTIONS_SHEET ".conductions"
 
 #define FM_CHARSET "@FM_CHARSET@"
 #define LIB_FLUIDSYNTH_FILENAME "@LIB_FLUIDSYNTH_FILENAME@"

@@ -6,8 +6,8 @@ namespace fm {
     
     ConfigServer & getConfigServer()
     {
-        typedef Loki::SingletonHolder<ConfigServer> Holder;
-		return Holder::Instance();
+        static ConfigServer instance;
+		return instance;
     }
     
     void ConfigServer::addDevice(const DeviceConfig &config)

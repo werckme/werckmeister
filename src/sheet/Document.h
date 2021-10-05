@@ -9,6 +9,8 @@
 #include <memory>
 #include <boost/bimap.hpp>
 #include <memory>
+#include "objects/ConductionSheetDef.h"
+#include <list>
 
 namespace sheet {
 	class Document: public std::enable_shared_from_this<Document> {
@@ -22,6 +24,7 @@ namespace sheet {
 		SheetDef sheetDef;
 		ChordDefs chordDefs;
 		PitchmapDefs pitchmapDefs;
+		std::list<ConductionSheetDef> conductionSheets;
 		Sources sources;
 		Event::SourceId addSource(const Path &path);
 		Path findSourcePath(Event::SourceId id) const;

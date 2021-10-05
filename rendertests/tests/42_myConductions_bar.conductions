@@ -1,0 +1,23 @@
+onBar(2) {
+    velocity = 5;
+}
+
+onBar(5) {
+    velocity = 100;
+}
+
+onBar(11) {
+    velocity = 100;
+}
+
+onBar(8) {
+    velocity = 5;
+}
+
+onBar(14) {
+    velocity = 5;
+}
+
+fromBar(16) toBar(17) {
+   velocity = 127;
+}

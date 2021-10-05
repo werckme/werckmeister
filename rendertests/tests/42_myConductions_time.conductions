@@ -1,0 +1,9 @@
+fromPosition(1) toPosition(4) onBeat(2) {
+    timeOffset += 100%;
+    velocity = 95;
+}
+
+fromPosition(4) toPosition(8) onBeat(2) {
+    timeOffset += 2;
+    velocity = 95;
+}

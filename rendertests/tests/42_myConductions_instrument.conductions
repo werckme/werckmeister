@@ -1,0 +1,8 @@
+instrument(pianoR) {
+    timeOffset += 50%;
+    velocity += 15%;
+}
+
+instrument(rhythm)  {
+    velocity = 127;
+}

@@ -4,6 +4,7 @@
 #include <fm/common.hpp>
 #include <vector>
 #include <sheet/objects/ChordDef.h>
+#include <sheet/objects/ConductionSheetDef.h>
 #include "sheet/SheetDef.h"
 #include "sheet/Pitchmap.h"
 #include "sheet/DocumentUsing.h"
@@ -53,6 +54,16 @@ namespace sheet {
 				fm::CharType const* cstr = str.c_str();
 				return parse(cstr, cstr + str.length(), sourceId);
 			}
+		};
+
+		struct ConductionSheetParser {
+			ConductionSheetDef parse(fm::CharType const* first, fm::CharType const* last, Event::SourceId sourceId = Event::UndefinedSource);
+			ConductionSheetDef parse(const fm::String& str, Event::SourceId sourceId = Event::UndefinedSource)
+			{
+				fm::CharType const* cstr = str.c_str();
+				return parse(cstr, cstr + str.length(), sourceId);
+			}
+			virtual ~ConductionSheetParser() = default;
 		};
 
 		class DocumentParser : public IDocumentParser {

@@ -21,6 +21,8 @@
 #include <compiler/DefaultCompilerVisitor.h>
 #include <fmapp/TimelineVisitor.hpp>
 #include <compiler/SheetNavigator.h>
+#include <conductor/ConductionsPerformer.h>
+#include "FactoryConfig.h"
 
 #ifdef _MSC_VER
 #define _CRTDBG_MAP_ALLOC
@@ -31,6 +33,7 @@
 typedef sheet::compiler::EventLogger<fm::ConsoleLogger> 			   LoggerImpl;
 typedef sheet::compiler::LoggerAndWarningsCollector<fm::ConsoleLogger> WarningsCollectorWithConsoleLogger;
 
+
 int main(int argc, const char** argv)
 {
 #ifdef _MSC_VER
@@ -38,6 +41,7 @@ int main(int argc, const char** argv)
 #endif
 	namespace di = boost::di;
 	namespace cp = sheet::compiler;
+	namespace co = sheet::conductor;
 	auto programOptionsPtr = std::make_shared<CompilerProgramOptions>();
 	try {
 		programOptionsPtr->parseProgrammArgs(argc, argv);
@@ -58,11 +62,12 @@ int main(int argc, const char** argv)
 		, di::bind<cp::IContext>()					.to<cp::MidiContext>()				.in(di::singleton)
 		, di::bind<cp::IPreprocessor>()				.to<cp::Preprocessor>()				.in(di::singleton)
 		, di::bind<cp::ISheetNavigator>()			.to<cp::SheetNavigator>()			.in(di::singleton)
+		, di::bind<co::IConductionsPerformer>()		.to<co::ConductionsPerformer>()		.in(di::singleton)
 		, di::bind<ICompilerProgramOptions>()		.to(programOptionsPtr)
 		, di::bind<sheet::Document>()				.to(documentPtr)
 		, di::bind<fm::IDefinitionsServer>()		.to<fm::DefinitionsServer>()		.in(di::singleton)
 		, di::bind<fm::midi::Midi>()				.to(midiFile)
-		, di::bind<fmapp::IDocumentWriter>()		.to([&](const auto &injector) -> fmapp::IDocumentWriterPtr 
+		, di::bind<fmapp::IDocumentWriter>()		.to([&](const auto &injector) -> fmapp::IDocumentWriterPtr
 		{
 			if (programOptionsPtr->isJsonModeSet() || programOptionsPtr->isJsonDocInfoMode()) {
 				return injector.template create<std::shared_ptr<fmapp::JsonWriter>>();
@@ -84,6 +89,8 @@ int main(int argc, const char** argv)
 			return injector.template create<std::shared_ptr<WarningsCollectorWithConsoleLogger>>();
 		})
 	);
+	sheet::FactoryConfig factory(injector);
+	factory.init();
 	auto program = injector.create<SheetCompilerProgram>();
 	program.prepareEnvironment();
 	return program.execute();

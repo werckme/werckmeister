@@ -1,0 +1,3 @@
+onBeat(1) {
+    velocity = 127;
+}
