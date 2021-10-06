@@ -438,7 +438,6 @@ Then you have to add a tempo [Meta Event](#meta-events) to your voice.
 
 Here we play four voices on one track, with four different tempo configurations:
 
-**There seems to be a bug on the webplayer (first notes are missing)**
 ```language=Werckmeister,type=partial
 tempo: 120;
 [
@@ -765,6 +764,31 @@ type: accomp;
 * [guitar](#guitar)
 * [simple](#simple)
 * [voicelead](#voicelead)
+
+## Conductor
+### Selectors
+* [channel](#channel)
+* [fromBar](#frombar)
+* [fromBeat](#frombeat)
+* [fromPitch](#frompitch)
+* [fromPosition](#fromposition)
+* [instrument](#instrument)
+* [notOnBeat](#notonbeat)
+* [nthBar](#nthbar)
+* [onBar](#onbar)
+* [onBeat](#onbeat)
+* [pitch](#pitch)
+* [toBar](#tobar)
+* [toBeat](#tobeat)
+* [toPitch](#topitch)
+* [toPosition](#toposition)
+
+## Conductor
+### Declarations
+* [duration](#duration)
+* [pitch](#pitch)
+* [timeOffset](#timeoffset)
+* [velocity](#velocity)
 
 ## Commands
 ### `cue`
@@ -1209,7 +1233,7 @@ Jumps to a previous defined mark See [mark](manual/#mark).
 |:--- |:--- |:--- |:--- |
 | to | 1 | the destination marker | text |
 | ignore |  | Ignores the jump N times | 0..100 |
-| repreat |  | Repeats the jump N times. (A repeat value of 1 performs 2 jumps) | 0..100 |
+| repeat |  | Repeats the jump N times. (A repeat value of 1 performs 2 jumps) | 0..100 |
 
 <br><br><br>
 
@@ -1895,6 +1919,388 @@ type: accomp;
 #### include extension
 `using "lua/voicings/voicelead.lua";`
 
+<br><br><br>
+
+
+### Conductor Selectors
+### `channel`
+Selects an event where its channel is equal to one the given numbers.
+
+ ```
+
+ channel(0 1 2) {...}
+
+ ```
+
+#### parameters
+| name | position | description | type |
+|:--- |:--- |:--- |:--- |
+| channel | - |  | midi channel+ |
+
+<br><br><br>
+
+### `fromBar`
+Selects an event where its bar time is equal or greater.
+
+ ```
+
+ fromBar(1) {...}
+
+ ```
+
+ see also: [toBar](#toBar), [onBar](#onBar), [nthBar](#nthBar).
+
+#### parameters
+| name | position | description | type |
+|:--- |:--- |:--- |:--- |
+| bar | - |  | bar number |
+
+<br><br><br>
+
+### `fromBeat`
+Selects an event where its beat time is equal or greater.
+
+ ```
+
+ fromBeat(1) {...}
+
+ ```
+
+#### parameters
+| name | position | description | type |
+|:--- |:--- |:--- |:--- |
+| beat | - |  | quarters |
+
+<br><br><br>
+
+### `fromPitch`
+Selects any event where its pitch is higher or equal than the given pitch.
+
+ see also: [toPitch](#toPitch), [pitch](#pitch).
+
+ ```
+
+ fromPitch(c,) {...}
+
+ ```
+
+#### parameters
+| name | position | description | type |
+|:--- |:--- |:--- |:--- |
+| pitch | - |  | pitch |
+
+<br><br><br>
+
+### `fromPosition`
+Selects any event where its position is after a given time.
+
+ see also: [toPosition](#toPosition).
+
+ ## example, select the events after time >= 8 quarters: 
+
+ ```
+
+ fromPosition(8) {...}
+
+ ```
+
+#### parameters
+| name | position | description | type |
+|:--- |:--- |:--- |:--- |
+| beat | - |  | quarters |
+
+<br><br><br>
+
+### `instrument`
+Selects any event which belongs to one of the given instruments.
+
+ ## example, select the events after time >= 8 quarters: 
+
+ ```
+
+ instrument(bass) {...}
+
+ instrument(bass drums) {...}
+
+ ```
+
+#### parameters
+| name | position | description | type |
+|:--- |:--- |:--- |:--- |
+| instrument name | - |  | instrumentName+ |
+
+<br><br><br>
+
+### `notOnBeat`
+Selects an event which does not appear on a given beat or a list of beats
+
+ ```
+
+ notOnBeat(1 3) {...}
+
+ ```
+
+#### parameters
+| name | position | description | type |
+|:--- |:--- |:--- |:--- |
+| beat | - |  | quarters+ |
+
+<br><br><br>
+
+### `nthBar`
+Selects an event which is located within in one of the give n-th bar.
+
+     >> Heads Up:  The nth bar is not affetced by any other selector.
+
+     >> for example here: `fromBar(1) nthBar(2) {}`, the nth bar selector
+
+     >> will consider its decision counting from bar 0, not from the selected bar 1.
+
+ ```
+
+ nthBar(1 3 5) {...}
+
+ ```
+
+ see also: [fromBar](#fromBar), [toBar](#toBar), [onBar](#onBar).
+
+#### parameters
+| name | position | description | type |
+|:--- |:--- |:--- |:--- |
+| beat | - |  | bar number+ |
+
+<br><br><br>
+
+### `onBar`
+Selects an event on a given bar number or a list of bar numbers
+
+ ```
+
+ onBar(1 3) {...}
+
+ ```
+
+ see also: [fromBar](#fromBar), [toBar](#toBar), [nthBar](#nthBar).
+
+#### parameters
+| name | position | description | type |
+|:--- |:--- |:--- |:--- |
+| beat | - |  | bar number+ |
+
+<br><br><br>
+
+### `onBeat`
+Selects an event which appears on a given beat or a list of beats
+
+ ## example, select the events at beat 1 and 3: 
+
+ ```
+
+ onBeat(1 3) {...}
+
+ ```
+
+#### parameters
+| name | position | description | type |
+|:--- |:--- |:--- |:--- |
+| beat | - |  | quarters+ |
+
+<br><br><br>
+
+### `pitch`
+Selects any event where its pitch is equal to one of the given pitches.
+
+ see also: [fromPitch](#fromPitch), [toPitch](#toPitch).
+
+ ```
+
+ pitch(c) {...}
+
+ pitch(c, c c') {...}
+
+ ```
+
+#### parameters
+| name | position | description | type |
+|:--- |:--- |:--- |:--- |
+| pitch | - |  | pitch+ |
+
+<br><br><br>
+
+### `toBar`
+Selects an event where its bar time is equal or less.
+
+ ```
+
+ toBar(4) {...}
+
+ ```
+
+ see also: [fromBar](#toBar), [onBar](#onBar), [nthBar](#nthBar).
+
+#### parameters
+| name | position | description | type |
+|:--- |:--- |:--- |:--- |
+| bar | - |  | bar number |
+
+<br><br><br>
+
+### `toBeat`
+Selects an event where its beat time is equal or less.
+
+ ```
+
+ toBeat(4) {...}
+
+ ```
+
+#### parameters
+| name | position | description | type |
+|:--- |:--- |:--- |:--- |
+| beat | - |  | quarters |
+
+<br><br><br>
+
+### `toPitch`
+Selects any event where its pitch is lower or equal than the given pitch.
+
+ see also: [fromPitch](#fromPitch), [pitch](#pitch).
+
+ ```
+
+ toPitch(c,) {...}
+
+ ```
+
+#### parameters
+| name | position | description | type |
+|:--- |:--- |:--- |:--- |
+| pitch | - |  | pitch |
+
+<br><br><br>
+
+### `toPosition`
+Selects any event where its position is after a given time.
+
+ see also: [toPosition](#toPosition).
+
+ ## example, select the events before time <= 8 quarters: 
+
+ ```
+
+ toPosition(8) {...}
+
+ ```
+
+#### parameters
+| name | position | description | type |
+|:--- |:--- |:--- |:--- |
+| beat | - |  | quarters |
+
+<br><br><br>
+
+
+### Conductor Declarations
+### `duration`
+Changes the duration of an event. 
+
+ ## example: 
+
+ ```
+
+ onBeat(1) {
+
+   duration += 0.125; -- 1/8 longer
+
+ }
+
+ onBeat(3) {
+
+   duration -= 25%;
+
+ }        
+
+ ```
+
+#### parameters
+*no parameters*
+<br><br><br>
+
+### `pitch`
+Changes the pitch of an event.
+
+ ## example: 
+
+ ```
+
+ onBeat(1) {
+
+   pitch = 60;
+
+ }
+
+ onBeat(3) {
+
+   pitch += 25%;
+
+ }        
+
+ ```
+
+#### parameters
+*no parameters*
+<br><br><br>
+
+### `timeOffset`
+Changes the time position of an event. 
+
+ **Since this is an offset value, the set operation(=) has the same effect as the add(+=) or substract(-=) operation.** 
+
+ ## example: 
+
+ ```
+
+ onBeat(1) {
+
+   timeOffset += 0.125; -- 1/8 offset
+
+ }
+
+ onBeat(3) {
+
+   timeOffset -= 25%;
+
+ }        
+
+ ```
+
+#### parameters
+*no parameters*
+<br><br><br>
+
+### `velocity`
+Changes the velocity of an event.
+
+ ## example: 
+
+ ```
+
+ onBeat(1) {
+
+   velocity = 127;
+
+ }
+
+ onBeat(3) {
+
+   velocity += 25%;
+
+ }        
+
+ ```
+
+#### parameters
+*no parameters*
 <br><br><br>
 
 

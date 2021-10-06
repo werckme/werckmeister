@@ -5,10 +5,21 @@ import xml.etree.ElementTree as ET
 import sys
 heading_level = 3
 
+SUPPORTED_DOC_TAGS = ['command', 'selector', 'declaration'] 
+
 class CommandType:
     UNDEFINED          = 0
     INTERNAL_COMMAND   = 1
     LUA_EXTENSION      = 2
+    SELECTOR           = 3
+    DECLARATION        = 4
+
+TAG_TYPE_MAP = {
+    'command': CommandType.INTERNAL_COMMAND,
+    'selector': CommandType.SELECTOR,
+    'declaration': CommandType.DECLARATION
+}
+
 
 def processHeader(file_str):
     import CppHeaderParser
@@ -21,8 +32,6 @@ def processHeader(file_str):
     comments = class_['doxygen']
     comments_parser = DocParser(file_str)
     command = comments_parser.parse(comments)
-    if command != None:
-        command.type = CommandType.INTERNAL_COMMAND
     return command
 
 def processLua(file_str):
@@ -58,8 +67,8 @@ class DocParser:
         return "\n".join(lines)
 
     def parse(self, str:str):
-        txt = lambda node: node \
-            .text \
+        raw_txt = lambda node: node.text if node.text else ""
+        txt = lambda node: raw_txt(node) \
             .strip() \
             .replace('\\n\n', '$nl') \
             .replace('\n', '\n\n') \
@@ -71,13 +80,16 @@ class DocParser:
             doc_tree = ET.fromstring(f'<root>{str}</root>')
         except Exception as ex:
             raise RuntimeError(f"failed to parse xml with file: {self.file_str} -> {ex}")
-        command_node = doc_tree.find('command')
-        if command_node == None:
+        doc_nodes = [doc_tree.find(tag) for tag in SUPPORTED_DOC_TAGS]
+        doc_nodes = [node for node in doc_nodes if node is not None]
+        if len(doc_nodes) == 0:
             return
-        command = CommandDto(attr(command_node, 'name'))
-        command.include = attr(command_node, 'using')
-        command.summary = txt(command_node)
-        command.where = attr(command_node, 'where')
+        doc_node = doc_nodes[0] # there is only one allowed
+        docDto = DocDto(attr(doc_node, 'name'))
+        docDto.type = TAG_TYPE_MAP[doc_node.tag]
+        docDto.include = attr(doc_node, 'using')
+        docDto.summary = txt(doc_node)
+        docDto.where = attr(doc_node, 'where')
         for param in doc_tree.findall("param"):
             argument = ArgumentDto(attr(param, "name"))
             argument.summary = txt(param)
@@ -87,8 +99,8 @@ class DocParser:
                 posVal = int(argument.position) + 1
                 argument.position = posVal
             except: pass
-            command.args.append(argument)
-        return command
+            docDto.args.append(argument)
+        return docDto
 
 class ArgumentDto:
     def __init__(self, arg_name):
@@ -97,7 +109,7 @@ class ArgumentDto:
         self.position = "-"
         self.type = "-"
 
-class CommandDto:
+class DocDto:
     def __init__(self, command_name):
         self.command_name = command_name
         self.summary = ""
@@ -166,13 +178,21 @@ def printCommands(commands):
     lua_mods  = [cmd for cmd in commands if cmd.type == CommandType.LUA_EXTENSION and cmd.where == "mod"]
     lua_mods.sort(key=lambda x: x.command_name)
     lua_voicings  = [cmd for cmd in commands if cmd.type == CommandType.LUA_EXTENSION and cmd.where == "voicingStrategy"]
-    lua_voicings.sort(key=lambda x: x.command_name)    
+    lua_voicings.sort(key=lambda x: x.command_name)
+    conductor_selectors = [cmd for cmd in commands if cmd.type == CommandType.SELECTOR]
+    conductor_selectors.sort(key=lambda x: x.command_name)
+    conductor_declaration = [cmd for cmd in commands if cmd.type == CommandType.DECLARATION]
+    conductor_declaration.sort(key=lambda x: x.command_name)    
     printToc('Commands', None, internal)
     print('')
     printToc('Lua Extensions', 'Modifications', lua_mods)
     print('')
     printToc('Lua Extensions', 'Voicing Strategies', lua_voicings)
     print('')    
+    printToc('Conductor', 'Selectors', conductor_selectors)
+    print('')    
+    printToc('Conductor', 'Declarations', conductor_declaration)
+    print('')            
     print('## Commands')
     for command in internal:
         printer = Printer(command)
@@ -187,8 +207,17 @@ def printCommands(commands):
     print('### Voicing Strategies')
     for command in lua_voicings:
         printer = Printer(command)
-        print(printer)                
-
+        print(printer)
+    print('')
+    print('### Conductor Selectors')
+    for command in conductor_selectors:
+        printer = Printer(command)
+        print(printer)                        
+    print('')
+    print('### Conductor Declarations')
+    for command in conductor_declaration:
+        printer = Printer(command)
+        print(printer)        
 
 
 
@@ -211,8 +240,12 @@ if __name__ == '__main__':
     files = [file for file in files if isfile(file) and (is_header(file) or is_lua(file))]
     commands = []
     for file in files:
-        ext = splitext(file)[1]
-        command = file_handler[ext](file)
-        commands.append(command)
+        try:
+            ext = splitext(file)[1]
+            command = file_handler[ext](file)
+            commands.append(command)
+        except Exception as ex:
+            print(f"failed processing file: {file}")
+            raise ex
     commands = [command for command in commands if command != None]
     printCommands(commands)
