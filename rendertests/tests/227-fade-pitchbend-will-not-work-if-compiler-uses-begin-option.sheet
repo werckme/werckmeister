@@ -1,0 +1,21 @@
+-- #compiler-args(--begin=4)
+-- (because we skip note off here):
+-- #skip-event-plausibility-test
+tempo: 140;
+device: MyDevice  midi _usePort=3;
+instrumentDef:lead    _onDevice=MyDevice  _ch=0 _pc=16;
+instrumentDef:rhythm _onDevice=MyDevice  _ch=1 _pc=0;
+instrumentDef:bass    _onDevice=MyDevice  _ch=2 _pc=32;
+
+-- melody track
+[
+instrument: lead;
+{
+    \fff
+   /instrument: bass/
+   /instrument: lead/
+   c d e f  | g a b /doOnce: bend _from=0/ c' |
+   /instrument: bass/
+   c d e f  | g a b /doOnce: bend _from=0/ c' |
+}
+]
