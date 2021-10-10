@@ -329,7 +329,7 @@ g a b c'
 
 For sake of understanding the meaning of statements, it's recommended to use named parameters if the meaning of a parameter isn't obvious.
 
-**do'nt**<br>
+**don't**<br>
 `instrumentDef: piano MyMidiDevice 1 2 3;`
 
 **do**<br>
@@ -643,12 +643,12 @@ Since a delimited string like "bd" is harder to read than a single character, th
 * predefined events can **not** be overwritten in a pitchmap
 
 ## Conduction Rules
-
+### The Problem
 A score document contains basically two informations:
 * what notes to play
-* and how to play these notes
+* and how to perform these notes
 
-On a regular score you have a tool set of articulations to apply to a note.
+The regular score notation has a set of articulations to apply to a note.
 
 ![examples of articulation.](https://upload.wikimedia.org/wikipedia/commons/0/0e/Notation_accents1.png)
 
@@ -657,26 +657,27 @@ In werckmeister you also have such options, for example: `!ffff c ` to play the 
 
 Unfortunately these kind of notation has the potential to destroy the readablility of a source file.
 
-A good example for that is a 16th note high hat figure:
+A good example is this 16th note high hat figure:
 
-*(`h` = `high hat`, see [Pitchmaps](##pitchmaps))*
+*(`h` = `high hat`, see [Pitchmaps](#pitchmaps))*
 ```
 h16 h h h  h h h h  h h h h  h h h h | 
 ```
 
-Now, if you want to add some articulation to that, the result would be much harder to read:
+If you want to add some articulation to that, the result is much more harder to read:
 
 ```
 !pph16 !pph !ffh !pph  !pph !pph !ffh !pph  !pph !pph !ffh !pph  !pph !pph !ffh !pph |
 ```
 
-The solution for that problem are the "Conduction Rules".
 
-The conduction rules separate between the **what** and the **how**. 
+### Conduction Rules trying to fix that.
+
+The conduction rules separate between **what** and **how**. 
 
 >If you are familiar with HTML and CSS, you already know the concept. Conduction rules are what CSS is for HTML.
 
-So you can achieve the same result using these rules:
+You can achieve the same result, from above, using these rules:
 ```
 instrument(drums) pitch(h) { 
     velocity = 51;
@@ -687,7 +688,7 @@ instrument(drums) pitch(h) onBeat(1.5 2.5 3.5 4.5) {
 ```
 Find the full example [here](https://werckme.github.io/editor?wid=conductor16thHighHat).
 
-A condcution rule starts with a list of selectors, followed by a set of declartions embraced by `{}`.
+A condcution rule starts with a list of selectors, followed by a set of declartions.
 
 A **selector** defines on which notes the rule applies. 
 
@@ -701,10 +702,30 @@ Find [here](#conductor-rules) a complete list of all supported selectors and dec
 
 A declaration knows 3 types of value assignment:
 
+### Assign
+```
+  aDeclaration = newValue; 
+```
 
+### Add
+```
+  aDeclaration = newValue; 
+```
+### Substract
+```
+  aDeclaration -= newValue; 
+```
 
-#### Follow Up
+### Follow Up
+```
+  aDeclaration = & - newValue; 
+```
+The `Follow Up` assignment allows you to refer to the prevoious event of the same pitch. 
 
+Example:
+```
+velocity = & - 10;
+```
 Means: the new velocity value is 10 units less than the velocity of its predecessor.
 
 This usefull if you want to achieve something like this:
@@ -843,7 +864,7 @@ type: accomp;
 * [fromBeat](#frombeat)
 * [fromPitch](#frompitch)
 * [fromPosition](#fromposition)
-* [instrument](#instrument)
+* [instrumentSelector](#instrumentselector)
 * [notOnBeat](#notonbeat)
 * [nthBar](#nthbar)
 * [onBar](#onbar)
@@ -1950,7 +1971,7 @@ Selects any event where its position is after a given time.
 
 <br><br><br>
 
-### `instrument`
+### `instrumentSelector`
 Selects any event which belongs to one of the given instruments.
 
  *there is a known [issue](https://github.com/werckme/werckmeister/issues/230) related to instrumentSection*
@@ -1988,8 +2009,8 @@ Selects an event which does not appear on a given beat or a list of beats
 
 ### `nthBar`
 Selects an event which is located within in one of the give n-th bar.
- > Heads Up:  The nth bar is not affetced by any other selector.
- > for example here: `fromBar(1) nthBar(2) ...`, the nth bar selector
+ > Heads Up:  The nth bar is not affected by any other selector.
+ > Here for example: `fromBar(1) nthBar(2) ...`, the nth bar selector
  will consider its decision counting from bar 0, not from the selected bar 1.
  ```
 

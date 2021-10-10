@@ -9,8 +9,8 @@ namespace sheet
     {
         /// <selector name="nthBar">
         /// Selects an event which is located within in one of the give n-th bar.\n
-        /// > Heads Up:  The nth bar is not affetced by any other selector.\n
-        /// > for example here: `fromBar(1) nthBar(2) ...`, the nth bar selector\n
+        /// > Heads Up:  The nth bar is not affected by any other selector.\n
+        /// > Here for example: `fromBar(1) nthBar(2) ...`, the nth bar selector\n
         /// will consider its decision counting from bar 0, not from the selected bar 1.\n
         /// ```
         /// nthBar(1 3 5) {...}
