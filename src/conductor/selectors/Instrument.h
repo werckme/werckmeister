@@ -8,11 +8,12 @@ namespace sheet
     namespace conductor
     {
         /// <selector name="instrument">
-        ///     Selects any event which belongs to one of the given instruments.
-        /// ## example, select the events after time >= 8 quarters: 
+        /// Selects any event which belongs to one of the given instruments.
+        /// *there is a known [issue](https://github.com/werckme/werckmeister/issues/230) related to instrumentSection*
+        /// ## example:
         /// ```
-        /// instrument(bass) {...}
-        /// instrument(bass drums) {...}
+        /// instrument(bass) {...}\n
+        /// instrument(bass drums) {...}\n
         /// ```
         /// </selector>
         /// <param name="instrument name" type="instrumentName+"></param>

@@ -8,7 +8,8 @@ namespace sheet
     namespace conductor
     {
         /// <selector name="fromBeat">
-        ///     Selects an event where its beat time is equal or greater.
+        ///Selects an event where its beat time is equal or greater.
+        // see also: [toBeat](#toBeat), [onBeat](#onBeat).
         /// ```
         /// fromBeat(1) {...}
         /// ```

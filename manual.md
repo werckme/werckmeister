@@ -198,6 +198,8 @@ I want to ...
 
 [... write for drums](#write-for-drums)
 
+[... applying articulation while remaining a readable code](#conduction-rules)
+
 [... accomp my melodies](#accomp-my-melodies)
 
 [... setup my own chord symbols](#chords)
@@ -639,6 +641,49 @@ Since a delimited string like "bd" is harder to read than a single character, th
 * single character notes can be followed by the octave symbols `'` or `,`
 * the characters c, d, e, f, g, a, b, r, t are predefined events
 * predefined events can **not** be overwritten in a pitchmap
+
+## Conduction Rules
+
+A score document contains basically two informations:
+* what notes to play
+* and how to play these notes
+
+On a regular score you have a tool set of articulations to apply to a note.
+
+![examples of articulation.](https://upload.wikimedia.org/wikipedia/commons/0/0e/Notation_accents1.png)
+
+In werckmeister you also appy such articulations, for example
+```
+!ffff c
+```
+to play the note c louder.
+
+Unfortunately these kind of notation has the potential to destroy the readablility of a source file.
+
+A good example for that is a 16th note high hat figure:
+(`h` = `high hat`, see [Pitchmaps](##pitchmaps))
+```
+h16 h h h  h h h h  h h h h  h h h h | 
+```
+Now, if you want to add some articulation to that, the result would be much harder to read:
+```
+!pph16 !pph !ffh !pph  !pph !pph !ffh !pph  !pph !pph !ffh !pph  !pph !pph !ffh !pph |
+```
+
+The solution for that problem are the "Conduction Rules".
+
+The conduction rules separate between the **what** and the **how**. If you are familiar with HTML and CSS, you already know the concept. Conduction rules are what CSS is for HTML.
+
+So you can achieve the same result using these rules:
+```
+instrument(drumsUsingConductionRules) pitch(h) { 
+    velocity = 51;
+}
+instrument(drumsUsingConductionRules) pitch(h) onBeat(1.5 2.5 3.5 4.5) { 
+    velocity = 89;
+}
+```
+Find the full example [here](https://werckme.github.io/editor?wid=conductor16thHighHat).
 
 
 
@@ -1882,14 +1927,14 @@ Selects any event where its position is after a given time.
 ### `instrument`
 Selects any event which belongs to one of the given instruments.
 
- ## example, select the events after time >= 8 quarters: 
+ *there is a known [issue](https://github.com/werckme/werckmeister/issues/230) related to instrumentSection*
+
+ ## example:
 
  ```
 
  instrument(bass) {...}
-
  instrument(bass drums) {...}
-
  ```
 
 #### parameters
@@ -1917,13 +1962,9 @@ Selects an event which does not appear on a given beat or a list of beats
 
 ### `nthBar`
 Selects an event which is located within in one of the give n-th bar.
-
-     >> Heads Up:  The nth bar is not affetced by any other selector.
-
-     >> for example here: `fromBar(1) nthBar(2) {}`, the nth bar selector
-
-     >> will consider its decision counting from bar 0, not from the selected bar 1.
-
+ > Heads Up:  The nth bar is not affetced by any other selector.
+ > for example here: `fromBar(1) nthBar(2) ...`, the nth bar selector
+ will consider its decision counting from bar 0, not from the selected bar 1.
  ```
 
  nthBar(1 3 5) {...}
@@ -1959,6 +2000,8 @@ Selects an event on a given bar number or a list of bar numbers
 
 ### `onBeat`
 Selects an event which appears on a given beat or a list of beats
+
+ see also: [fromBeat](#fromBeat), [toBeat](#toBeat).
 
  ## example, select the events at beat 1 and 3: 
 
@@ -2015,6 +2058,8 @@ Selects an event where its bar time is equal or less.
 
 ### `toBeat`
 Selects an event where its beat time is equal or less.
+
+ see also: [fromBeat](#fromBeat), [onBeat](#onBeat).
 
  ```
 
