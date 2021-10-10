@@ -9,10 +9,6 @@ namespace sheet {
         /// <command name="instrument" where="trackConfig, track">
         /// Set or change the instrument of a track.
         /// ### examples
-        /// **positional:** 
-        /// `instrument: myInstrument;`
-        /// **named:**
-        /// `instrument: _use=myInstrument;`
         /// **set an instrument for a track**
         /// ```
         /// [ \n

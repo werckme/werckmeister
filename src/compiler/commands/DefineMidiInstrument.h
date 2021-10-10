@@ -8,14 +8,9 @@ namespace sheet {
     namespace compiler {
         /// <command name="instrumentDef" where="document">
         /// Adds a new MIDI instrument.
-        /// ### examples
-        /// **positional:** 
-        /// `instrumentDef: drums MyDevice 9 0 3;`
-        /// **named:**
-        /// `instrumentDef: _setName=drums _onDevice=MyDevice _ch=9 _cc=0 _pc=3;`
-        /// **a complete example**
-        /// define an device, an instrument and set it to a track.
         /// see [instrument](#instrument), [device](#device)
+        /// ### example
+        /// define an device, an instrument and assign it to a track.
         /// ```
         /// device: MyDevice midi 0;
         /// instrumentDef: organ _onDevice=MyDevice _ch=0 _pc=16; \n

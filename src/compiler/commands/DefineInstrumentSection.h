@@ -8,15 +8,10 @@
 namespace sheet {
     namespace compiler {
         /// <command name="instrumentSection" where="document">
-        /// Combines several instruments into a new one.
-        /// ### examples
-        /// **positional:** 
-        /// `instrumentSection: bass piano ebass`; 
-        /// **named:**
-        /// `instrumentSection: _setName=bass piano ebass`; 
-        /// **a complete example**
-        /// define an device, an instrument and set it to a track.
+        /// Layers arbitrary instruments into one.
         /// see [instrumentDef](#instrumentDef), [instrument](#instrument), [device](#device)
+        /// ### example
+        /// create 3 instruments and assign them to the section `myNewInstrument`.
         /// <![CDATA[
         /// ```language=Werckmeister\n
         /// tempo: 120;\n

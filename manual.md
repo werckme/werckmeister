@@ -808,21 +808,11 @@ adds a cue meta message to the corresponding midi track
 ### `device`
 Defines a device which can be used when adding instruments (see [instrumentDef](#instrumentDef))
 
- ### examples
+ see [instrumentDef](#instrumentDef), [instrument](#instrument)
 
- **positional:** 
-
- `device: MyDevice midi 0 offset 100;`
-
- **named:**
-
- `device: _setName=MyDevice _isType=midi _usePort=0 _withOffset=100;`   
-
- **a complete example**
+ ### example
 
  define an device, an instrument and assign it to a track.
-
- see [instrumentDef](#instrumentDef), [instrument](#instrument)
 
  ```
 
@@ -862,15 +852,9 @@ Such as [mod](#mod)&nbsp;`do` adds a modification to the track.
 
  `do` replaces the previous modification. 
 
- ### examples
-
- **positional:** 
+ ### example
 
  `/do: arpeggio/`
-
- **named:**
-
- `/do: _use=arpeggio/`
 
 #### parameters
 | name | position | description | type |
@@ -882,15 +866,9 @@ Such as [mod](#mod)&nbsp;`do` adds a modification to the track.
 ### `doOnce`
 Like [do](#do). But with the difference, that the loaded mod will be only executed once for the following event.
 
- ### examples
-
- **positional:** 
+ ### example
 
  `/doOnce: arpeggio/`
-
- **named:**
-
- `/doOnce: _use=arpeggio/`
 
 #### parameters
 | name | position | description | type |
@@ -902,21 +880,7 @@ Like [do](#do). But with the difference, that the loaded mod will be only execut
 ### `fade`
 Fades the volume over a given duration in quarters.
 
- ### examples
-
- **positional:**
-
- Fades from 0 to 50 in 2 quarters:
-
- `/fade: 2 0 50/`
-
- **named:**
-
- Fades from 0 to 50 in 2 quarters:
-
- `/fade: _duration=2 _from=0 _to=50/`
-
- Optionally a fade curve type can be set.
+ ### example
 
  ```language=Werckmeister,type=full
 
@@ -1017,14 +981,6 @@ Set or change the instrument of a track.
 
  ### examples
 
- **positional:** 
-
- `instrument: myInstrument;`
-
- **named:**
-
- `instrument: _use=myInstrument;`
-
  **set an instrument for a track**
 
  ```
@@ -1078,23 +1034,11 @@ With `instrumentConf` you are able to setup a specific instrument.
 
  #### mixed settings
 
- **positional:** 
-
  `instrumentConf: piano volume 100 pan 50;`
-
- **named:**
-
- `instrumentConf: _for=piano _set=volume _to=50 _set=pan _to=50;`
 
  #### setup a mod
 
- **positional:** 
-
- `instrumentConf: piano mod myLuaMod bar; --the bar argument belongs to "myLuaMod"`
-
- **named:**
-
- `instrumentConf: _for=piano _set=mod _use=myLuaMod _myLuaModFoo=bar;`
+ `instrumentConf: piano mod myLuaMod someValue; --the `someValue` argument belongs to "myLuaMod"`
 
  #### setup a velocity remap
 
@@ -1104,13 +1048,7 @@ With `instrumentConf` you are able to setup a specific instrument.
 
  The value range is 0..100. (100=127 Midi velocity)
 
- **named:**
-
  `instrumentConf: _set=remapVelocity _p=100 _f=10;`
-
- **positional:**
-
- `remapVelocity` dosen't supports positional arguments
 
 #### parameters
 | name | position | description | type |
@@ -1122,21 +1060,11 @@ With `instrumentConf` you are able to setup a specific instrument.
 ### `instrumentDef`
 Adds a new MIDI instrument.
 
- ### examples
-
- **positional:** 
-
- `instrumentDef: drums MyDevice 9 0 3;`
-
- **named:**
-
- `instrumentDef: _setName=drums _onDevice=MyDevice _ch=9 _cc=0 _pc=3;`
-
- **a complete example**
-
- define an device, an instrument and set it to a track.
-
  see [instrument](#instrument), [device](#device)
+
+ ### example
+
+ define an device, an instrument and assign it to a track.
 
  ```
 
@@ -1163,23 +1091,13 @@ Adds a new MIDI instrument.
 <br><br><br>
 
 ### `instrumentSection`
-Combines several instruments into a new one.
-
- ### examples
-
- **positional:** 
-
- `instrumentSection: bass piano ebass`; 
-
- **named:**
-
- `instrumentSection: _setName=bass piano ebass`; 
-
- **a complete example**
-
- define an device, an instrument and set it to a track.
+Layers arbitrary instruments into one.
 
  see [instrumentDef](#instrumentDef), [instrument](#instrument), [device](#device)
+
+ ### example
+
+ create 3 instruments and assign them to the section `myNewInstrument`.
 
  
 
@@ -1209,7 +1127,7 @@ Combines several instruments into a new one.
 ### `jump`
 Jumps to a previous defined mark See [mark](manual/#mark).
 
- ### examples
+ ### example
 
  
 
@@ -1238,7 +1156,7 @@ Jumps to a previous defined mark See [mark](manual/#mark).
 <br><br><br>
 
 ### `mark`
-adds a mark to the voice. Why you want to do that? See [jump](manual/#jump).
+adds a mark to the voice. Us it in combination with [jump](manual/#jump).
 
  ### examples
 
@@ -1273,13 +1191,7 @@ Adds a modification to the track. Every `mod` statement adds a further modificat
 
  ### examples
 
- **positional:** 
-
  `/mod: arpeggio/`
-
- **named:**
-
- `/mod: _use=arpeggio/`  
 
  Mods can be external lua scripts, or one of theese internal mods:
 
@@ -1311,13 +1223,7 @@ Like [mod](#mod). But with the difference, that the loaded mod will be only exec
 
  ### examples
 
- **positional:** 
-
  `/modOnce: arpeggio/`
-
- **named:**
-
- `/modOnce: _use=arpeggio/`
 
 #### parameters
 | name | position | description | type |
@@ -1329,15 +1235,9 @@ Like [mod](#mod). But with the difference, that the loaded mod will be only exec
 ### `pan`
 set the pan of the current track
 
- ### examples
-
- **positional:** 
+ ### example
 
  `/pan: 50/`
-
- **named:**
-
- `/pan: _to=50/`
 
 #### parameters
 | name | position | description | type |
@@ -1349,15 +1249,9 @@ set the pan of the current track
 ### `signature`
 Set the time signature of the current track.
 
- ### examples
-
- **positional:** 
+ ### example
 
  `/signature: 3 4/`
-
- **named:**
-
- `/signature: _upper=3 _lower=4/`
 
 #### parameters
 | name | position | description | type |
@@ -1370,23 +1264,9 @@ Set the time signature of the current track.
 ### `tempo`
 `tempo` defines or changes the current tempo.
 
- ### examples
-
- **positional:** 
+ ### example
 
  `tempo: 120;`
-
- **named:**
-
- `tempo: _bpm=120;`
-
- This command can be used as document config:
-
- `tempo: 120;`
-
- or within a track
-
- `/tempo: 120/`
 
  It is also possible to set different tempo values for several tracks:
 
@@ -1402,15 +1282,9 @@ Set the time signature of the current track.
 ### `voicingStrategy`
 Adds a modification to the track.
 
- ### examples
-
- **positional:** 
+ ### example
 
  `/voicingStrategy: asNotated/` 
-
- **named:**
-
- `/voicingStrategy: _use=asNotated/`  
 
  Voicing strategies can be external lua scripts, or one of theese internal strategies:
 
@@ -1430,13 +1304,7 @@ set the volume of the current track
 
  ### examples
 
- **positional:** 
-
  `/volume: 50/`
-
- **named:**
-
- `/volume: _to=50/`
 
 #### parameters
 | name | position | description | type |

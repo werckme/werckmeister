@@ -8,11 +8,8 @@ namespace sheet {
     namespace compiler {
         /// <command name="signature">
         /// Set the time signature of the current track.
-        /// ### examples
-        /// **positional:** 
+        /// ### example
         /// `/signature: 3 4/`
-        /// **named:**
-        /// `/signature: _upper=3 _lower=4/`
         /// </command>
         /// <param name="upper" position="0">The upper value of the signature.</param>
         /// <param name="lower" position="1">The lower value of the signature.</param>

@@ -8,14 +8,7 @@ namespace sheet {
     namespace compiler {
         /// <command name="fade" where="track">
         ///     Fades the volume over a given duration in quarters.
-        /// ### examples
-        /// **positional:**
-        /// Fades from 0 to 50 in 2 quarters:
-        /// `/fade: 2 0 50/`
-        /// **named:**
-        /// Fades from 0 to 50 in 2 quarters:
-        /// `/fade: _duration=2 _from=0 _to=50/`
-        /// Optionally a fade curve type can be set.
+        /// ### example
         /// ```language=Werckmeister,type=full
         /// device: myDevice midi _usePort=0;\n
         /// instrumentDef: organ  myDevice _ch=0 _pc=16;\n
