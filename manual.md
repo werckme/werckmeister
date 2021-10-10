@@ -198,7 +198,7 @@ I want to ...
 
 [... write for drums](#write-for-drums)
 
-[... applying articulation while remaining a readable code](#conduction-rules)
+[... applying articulation while remaining readable](#conduction-rules)
 
 [... accomp my melodies](#accomp-my-melodies)
 
