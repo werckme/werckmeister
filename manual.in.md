@@ -689,19 +689,43 @@ Find the full example [here](https://werckme.github.io/editor?wid=conductor16thH
 
 A condcution rule starts with a list of selectors, followed by a set of declartions embraced by `{}`.
 
-The **selectors** defines on which notes the rule applies. The **declarations** describes what needs to be changed.
+A **selector** defines on which notes the rule applies. 
 
-Referring to the rules above `istrument(drums) pitch(h)` selects every `h` pitch of the instrument `drums`.
+A **declaration** describes what needs to be changed.
 
-`velocity = 51;` set the velocity to the value `51` to the selected notes.
+Referring to the rules above the selector `instrument(drums) pitch(h)` selects every `h` pitch of the instrument `drums`.
+
+The declaration `velocity = 51;` set the velocity to the value `51` to the selected notes.
+
+Find [here](#conductor-rules) a complete list of all supported selectors and declarations.
 
 A declaration knows 3 types of value assignment:
 
-* Assign (=)
-* Add (+=)
-* Substract (-=)
-* Follow Up (=&)
+### Assign
+```
+  aDeclaration = newVakue; 
+```
 
+### Add
+```
+  aDeclaration = newVakue; 
+```
+
+### Assign
+```
+  aDeclaration += newVakue; 
+```
+
+### Substract
+```
+  aDeclaration -= newVakue; 
+```
+
+
+### Follow Up
+```
+  aDeclaration = & - newVakue; 
+```
 The `Follow Up` assignment allows you to refer to the prevoious event of the same pitch. 
 
 Example:
@@ -709,6 +733,9 @@ Example:
 velocity = & - 10;
 ```
 Means: the new velocity value is 10 units less than the velocity of its predecessor.
+
+This usefull if you want to achieve something like this:
+![linear decreasing velocity values](https://raw.githubusercontent.com/werckme/werckmeister/main/assets/follow-up-velocity.png)
 
 Find the full example [here](https://werckme.github.io/editor?wid=conductor16thHighHatFollowUp).
 

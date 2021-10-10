@@ -100,6 +100,11 @@ class DocParser:
                 argument.position = posVal
             except: pass
             docDto.args.append(argument)
+        for param in doc_tree.findall("value"):
+            argument = ArgumentDto(attr(param, "name"))
+            argument.summary = txt(param)
+            argument.type = attr(param, 'type', "-")
+            docDto.values.append(argument)            
         return docDto
 
 class ArgumentDto:
@@ -116,6 +121,7 @@ class DocDto:
         self.type = CommandType.UNDEFINED
         self.include = None 
         self.args = []
+        self.values = [] # for conductor declarations
         self.where = ""
 
 class Printer:
@@ -144,6 +150,18 @@ class Printer:
         for arg in self.dto.args:
             table.append(arg.name, arg.position, arg.summary, arg.type)
         writer.write(table)
+    
+    def print_values(self, writer):
+        if len(self.dto.values) == 0:
+            return
+        writer.write_heading("Value Types", self.heading_level + 1)
+        table = mg.Table()
+        table.add_column('name')
+        table.add_column('description')
+        table.add_column('type')
+        for arg in self.dto.values:
+            table.append(arg.name, arg.summary, arg.type)
+        writer.write(table)
 
 
     def print(self):
@@ -152,7 +170,10 @@ class Printer:
             writer.write_heading(f'`{self.dto.command_name}`', self.heading_level)
             writer.writeline(self.dto.summary)
             writer.writeline('')
-            self.print_parameters(writer)
+            if len(self.dto.values) > 0:
+                self.print_values(writer)
+            else:
+                self.print_parameters(writer)
             self.print_include(writer)
             writer.writeline('<br>'*3)
             #finito
@@ -189,9 +210,9 @@ def printCommands(commands):
     print('')
     printToc('Lua Extensions', 'Voicing Strategies', lua_voicings)
     print('')    
-    printToc('Conductor', 'Selectors', conductor_selectors)
+    printToc('Conductor Rules', 'Selectors', conductor_selectors)
     print('')    
-    printToc('Conductor', 'Declarations', conductor_declaration)
+    printToc('Conductor Rules', 'Declarations', conductor_declaration)
     print('')            
     print('## Commands')
     for command in internal:

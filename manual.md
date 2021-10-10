@@ -652,39 +652,65 @@ On a regular score you have a tool set of articulations to apply to a note.
 
 ![examples of articulation.](https://upload.wikimedia.org/wikipedia/commons/0/0e/Notation_accents1.png)
 
-In werckmeister you also appy such articulations, for example
-```
-!ffff c
-```
-to play the note c louder.
+In werckmeister you also have such options, for example: `!ffff c ` to play the note c louder.
+
 
 Unfortunately these kind of notation has the potential to destroy the readablility of a source file.
 
 A good example for that is a 16th note high hat figure:
-(`h` = `high hat`, see [Pitchmaps](##pitchmaps))
+
+*(`h` = `high hat`, see [Pitchmaps](##pitchmaps))*
 ```
 h16 h h h  h h h h  h h h h  h h h h | 
 ```
+
 Now, if you want to add some articulation to that, the result would be much harder to read:
+
 ```
 !pph16 !pph !ffh !pph  !pph !pph !ffh !pph  !pph !pph !ffh !pph  !pph !pph !ffh !pph |
 ```
 
 The solution for that problem are the "Conduction Rules".
 
-The conduction rules separate between the **what** and the **how**. If you are familiar with HTML and CSS, you already know the concept. Conduction rules are what CSS is for HTML.
+The conduction rules separate between the **what** and the **how**. 
+
+>If you are familiar with HTML and CSS, you already know the concept. Conduction rules are what CSS is for HTML.
 
 So you can achieve the same result using these rules:
 ```
-instrument(drumsUsingConductionRules) pitch(h) { 
+instrument(drums) pitch(h) { 
     velocity = 51;
 }
-instrument(drumsUsingConductionRules) pitch(h) onBeat(1.5 2.5 3.5 4.5) { 
+instrument(drums) pitch(h) onBeat(1.5 2.5 3.5 4.5) { 
     velocity = 89;
 }
 ```
 Find the full example [here](https://werckme.github.io/editor?wid=conductor16thHighHat).
 
+A condcution rule starts with a list of selectors, followed by a set of declartions embraced by `{}`.
+
+A **selector** defines on which notes the rule applies. 
+
+A **declaration** describes what needs to be changed.
+
+Referring to the rules above the selector `instrument(drums) pitch(h)` selects every `h` pitch of the instrument `drums`.
+
+The declaration `velocity = 51;` set the velocity to the value `51` to the selected notes.
+
+Find [here](#conductor-rules) a complete list of all supported selectors and declarations.
+
+A declaration knows 3 types of value assignment:
+
+
+
+#### Follow Up
+
+Means: the new velocity value is 10 units less than the velocity of its predecessor.
+
+This usefull if you want to achieve something like this:
+![linear decreasing velocity values](https://raw.githubusercontent.com/werckme/werckmeister/main/assets/follow-up-velocity.png)
+
+Find the full example [here](https://werckme.github.io/editor?wid=conductor16thHighHatFollowUp).
 
 
 ## Accomp My Melodies
@@ -810,7 +836,7 @@ type: accomp;
 * [simple](#simple)
 * [voicelead](#voicelead)
 
-## Conductor
+## Conductor Rules
 ### Selectors
 * [channel](#channel)
 * [fromBar](#frombar)
@@ -828,7 +854,7 @@ type: accomp;
 * [toPitch](#topitch)
 * [toPosition](#toposition)
 
-## Conductor
+## Conductor Rules
 ### Declarations
 * [duration](#duration)
 * [pitch](#pitch)
@@ -2135,8 +2161,12 @@ Changes the duration of an event.
 
  ```
 
-#### parameters
-*no parameters*
+#### Value Types
+| name | description | type |
+|:--- |:--- |:--- |
+| absolute |  | 0..N |
+| percent | percent base value is the events length | 0..N% |
+
 <br><br><br>
 
 ### `pitch`
@@ -2160,8 +2190,12 @@ Changes the pitch of an event.
 
  ```
 
-#### parameters
-*no parameters*
+#### Value Types
+| name | description | type |
+|:--- |:--- |:--- |
+| absolute |  | 0..127 |
+| percent | percent base value is events pitch | 0%..100% |
+
 <br><br><br>
 
 ### `timeOffset`
@@ -2187,8 +2221,12 @@ Changes the time position of an event.
 
  ```
 
-#### parameters
-*no parameters*
+#### Value Types
+| name | description | type |
+|:--- |:--- |:--- |
+| absolute |  | 0..N |
+| percent | percent base value is the events length | 0%..N% |
+
 <br><br><br>
 
 ### `velocity`
@@ -2212,8 +2250,12 @@ Changes the velocity of an event.
 
  ```
 
-#### parameters
-*no parameters*
+#### Value Types
+| name | description | type |
+|:--- |:--- |:--- |
+| absolute |  | 0..127 |
+| percent | percent base value is events velocity | 0%..100% |
+
 <br><br><br>
 
 
