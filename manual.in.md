@@ -438,7 +438,6 @@ Then you have to add a tempo [Meta Event](#meta-events) to your voice.
 
 Here we play four voices on one track, with four different tempo configurations:
 
-**There seems to be a bug on the webplayer (first notes are missing)**
 ```language=Werckmeister,type=partial
 tempo: 120;
 [

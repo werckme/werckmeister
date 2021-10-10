@@ -18,7 +18,7 @@ namespace sheet
         ///   velocity += 25%;
         /// }        
         /// ```
-        /// </selector>
+        /// </declaration>
         /// <value name="absolute" type="0..127"></value>
         /// <value name="percent"  type="0%..100%">percent base value is events velocity</value>
         class Velocity : public ADeclaration

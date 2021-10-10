@@ -2,7 +2,7 @@
 import subprocess
 
 doc_creator            = "./scripts/doccreator/createDoc.py"
-doc_creator_dirs       = ["src/compiler/commands", "examples/lua/mods", "examples/lua/voicings"]
+doc_creator_dirs       = ["src/compiler/commands", "examples/lua/mods", "examples/lua/voicings", "src/conductor/declarations", "src/conductor/selectors"]
 autogen_references_key = '{autogen_references}'
 infile_path            = "./manual.in.md"
 outfile_path           = "./manual.md"

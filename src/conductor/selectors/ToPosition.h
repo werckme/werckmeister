@@ -10,7 +10,7 @@ namespace sheet
         /// <selector name="toPosition">
         ///     Selects any event where its position is after a given time.
         /// see also: [toPosition](#toPosition).
-        /// ## example, select the events before time <= 8 quarters: 
+        /// ## example, select the events before time &lt;= 8 quarters: 
         /// ```
         /// toPosition(8) {...}
         /// ```

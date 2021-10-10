@@ -18,7 +18,7 @@ namespace sheet
         ///   duration -= 25%;
         /// }        
         /// ```
-        /// </selector>
+        /// </declaration>
         /// <value name="absolute" type="0..N"></value>
         /// <value name="percent"  type="0..N%">percent base value is the events length</value>
         class Duration : public ADeclaration

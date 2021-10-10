@@ -438,7 +438,6 @@ Then you have to add a tempo [Meta Event](#meta-events) to your voice.
 
 Here we play four voices on one track, with four different tempo configurations:
 
-**There seems to be a bug on the webplayer (first notes are missing)**
 ```language=Werckmeister,type=partial
 tempo: 120;
 [
@@ -766,6 +765,31 @@ type: accomp;
 * [simple](#simple)
 * [voicelead](#voicelead)
 
+## Conductor
+### Selectors
+* [channel](#channel)
+* [fromBar](#frombar)
+* [fromBeat](#frombeat)
+* [fromPitch](#frompitch)
+* [fromPosition](#fromposition)
+* [instrument](#instrument)
+* [notOnBeat](#notonbeat)
+* [nthBar](#nthbar)
+* [onBar](#onbar)
+* [onBeat](#onbeat)
+* [pitch](#pitch)
+* [toBar](#tobar)
+* [toBeat](#tobeat)
+* [toPitch](#topitch)
+* [toPosition](#toposition)
+
+## Conductor
+### Declarations
+* [duration](#duration)
+* [pitch](#pitch)
+* [timeOffset](#timeoffset)
+* [velocity](#velocity)
+
 ## Commands
 ### `cue`
 adds a cue meta message to the corresponding midi track
@@ -784,21 +808,11 @@ adds a cue meta message to the corresponding midi track
 ### `device`
 Defines a device which can be used when adding instruments (see [instrumentDef](#instrumentDef))
 
- ### examples
+ see [instrumentDef](#instrumentDef), [instrument](#instrument)
 
- **positional:** 
-
- `device: MyDevice midi 0 offset 100;`
-
- **named:**
-
- `device: _setName=MyDevice _isType=midi _usePort=0 _withOffset=100;`   
-
- **a complete example**
+ ### example
 
  define an device, an instrument and assign it to a track.
-
- see [instrumentDef](#instrumentDef), [instrument](#instrument)
 
  ```
 
@@ -838,15 +852,9 @@ Such as [mod](#mod)&nbsp;`do` adds a modification to the track.
 
  `do` replaces the previous modification. 
 
- ### examples
-
- **positional:** 
+ ### example
 
  `/do: arpeggio/`
-
- **named:**
-
- `/do: _use=arpeggio/`
 
 #### parameters
 | name | position | description | type |
@@ -858,15 +866,9 @@ Such as [mod](#mod)&nbsp;`do` adds a modification to the track.
 ### `doOnce`
 Like [do](#do). But with the difference, that the loaded mod will be only executed once for the following event.
 
- ### examples
-
- **positional:** 
+ ### example
 
  `/doOnce: arpeggio/`
-
- **named:**
-
- `/doOnce: _use=arpeggio/`
 
 #### parameters
 | name | position | description | type |
@@ -878,21 +880,7 @@ Like [do](#do). But with the difference, that the loaded mod will be only execut
 ### `fade`
 Fades the volume over a given duration in quarters.
 
- ### examples
-
- **positional:**
-
- Fades from 0 to 50 in 2 quarters:
-
- `/fade: 2 0 50/`
-
- **named:**
-
- Fades from 0 to 50 in 2 quarters:
-
- `/fade: _duration=2 _from=0 _to=50/`
-
- Optionally a fade curve type can be set.
+ ### example
 
  ```language=Werckmeister,type=full
 
@@ -993,14 +981,6 @@ Set or change the instrument of a track.
 
  ### examples
 
- **positional:** 
-
- `instrument: myInstrument;`
-
- **named:**
-
- `instrument: _use=myInstrument;`
-
  **set an instrument for a track**
 
  ```
@@ -1054,23 +1034,11 @@ With `instrumentConf` you are able to setup a specific instrument.
 
  #### mixed settings
 
- **positional:** 
-
  `instrumentConf: piano volume 100 pan 50;`
-
- **named:**
-
- `instrumentConf: _for=piano _set=volume _to=50 _set=pan _to=50;`
 
  #### setup a mod
 
- **positional:** 
-
- `instrumentConf: piano mod myLuaMod bar; --the bar argument belongs to "myLuaMod"`
-
- **named:**
-
- `instrumentConf: _for=piano _set=mod _use=myLuaMod _myLuaModFoo=bar;`
+ `instrumentConf: piano mod myLuaMod someValue; --the `someValue` argument belongs to "myLuaMod"`
 
  #### setup a velocity remap
 
@@ -1080,13 +1048,7 @@ With `instrumentConf` you are able to setup a specific instrument.
 
  The value range is 0..100. (100=127 Midi velocity)
 
- **named:**
-
  `instrumentConf: _set=remapVelocity _p=100 _f=10;`
-
- **positional:**
-
- `remapVelocity` dosen't supports positional arguments
 
 #### parameters
 | name | position | description | type |
@@ -1098,21 +1060,11 @@ With `instrumentConf` you are able to setup a specific instrument.
 ### `instrumentDef`
 Adds a new MIDI instrument.
 
- ### examples
-
- **positional:** 
-
- `instrumentDef: drums MyDevice 9 0 3;`
-
- **named:**
-
- `instrumentDef: _setName=drums _onDevice=MyDevice _ch=9 _cc=0 _pc=3;`
-
- **a complete example**
-
- define an device, an instrument and set it to a track.
-
  see [instrument](#instrument), [device](#device)
+
+ ### example
+
+ define an device, an instrument and assign it to a track.
 
  ```
 
@@ -1139,23 +1091,13 @@ Adds a new MIDI instrument.
 <br><br><br>
 
 ### `instrumentSection`
-Combines several instruments into a new one.
-
- ### examples
-
- **positional:** 
-
- `instrumentSection: bass piano ebass`; 
-
- **named:**
-
- `instrumentSection: _setName=bass piano ebass`; 
-
- **a complete example**
-
- define an device, an instrument and set it to a track.
+Layers arbitrary instruments into one.
 
  see [instrumentDef](#instrumentDef), [instrument](#instrument), [device](#device)
+
+ ### example
+
+ create 3 instruments and assign them to the section `myNewInstrument`.
 
  
 
@@ -1185,7 +1127,7 @@ Combines several instruments into a new one.
 ### `jump`
 Jumps to a previous defined mark See [mark](manual/#mark).
 
- ### examples
+ ### example
 
  
 
@@ -1209,12 +1151,12 @@ Jumps to a previous defined mark See [mark](manual/#mark).
 |:--- |:--- |:--- |:--- |
 | to | 1 | the destination marker | text |
 | ignore |  | Ignores the jump N times | 0..100 |
-| repreat |  | Repeats the jump N times. (A repeat value of 1 performs 2 jumps) | 0..100 |
+| repeat |  | Repeats the jump N times. (A repeat value of 1 performs 2 jumps) | 0..100 |
 
 <br><br><br>
 
 ### `mark`
-adds a mark to the voice. Why you want to do that? See [jump](manual/#jump).
+adds a mark to the voice. Us it in combination with [jump](manual/#jump).
 
  ### examples
 
@@ -1249,13 +1191,7 @@ Adds a modification to the track. Every `mod` statement adds a further modificat
 
  ### examples
 
- **positional:** 
-
  `/mod: arpeggio/`
-
- **named:**
-
- `/mod: _use=arpeggio/`  
 
  Mods can be external lua scripts, or one of theese internal mods:
 
@@ -1287,13 +1223,7 @@ Like [mod](#mod). But with the difference, that the loaded mod will be only exec
 
  ### examples
 
- **positional:** 
-
  `/modOnce: arpeggio/`
-
- **named:**
-
- `/modOnce: _use=arpeggio/`
 
 #### parameters
 | name | position | description | type |
@@ -1305,15 +1235,9 @@ Like [mod](#mod). But with the difference, that the loaded mod will be only exec
 ### `pan`
 set the pan of the current track
 
- ### examples
-
- **positional:** 
+ ### example
 
  `/pan: 50/`
-
- **named:**
-
- `/pan: _to=50/`
 
 #### parameters
 | name | position | description | type |
@@ -1325,15 +1249,9 @@ set the pan of the current track
 ### `signature`
 Set the time signature of the current track.
 
- ### examples
-
- **positional:** 
+ ### example
 
  `/signature: 3 4/`
-
- **named:**
-
- `/signature: _upper=3 _lower=4/`
 
 #### parameters
 | name | position | description | type |
@@ -1346,23 +1264,9 @@ Set the time signature of the current track.
 ### `tempo`
 `tempo` defines or changes the current tempo.
 
- ### examples
-
- **positional:** 
+ ### example
 
  `tempo: 120;`
-
- **named:**
-
- `tempo: _bpm=120;`
-
- This command can be used as document config:
-
- `tempo: 120;`
-
- or within a track
-
- `/tempo: 120/`
 
  It is also possible to set different tempo values for several tracks:
 
@@ -1378,15 +1282,9 @@ Set the time signature of the current track.
 ### `voicingStrategy`
 Adds a modification to the track.
 
- ### examples
-
- **positional:** 
+ ### example
 
  `/voicingStrategy: asNotated/` 
-
- **named:**
-
- `/voicingStrategy: _use=asNotated/`  
 
  Voicing strategies can be external lua scripts, or one of theese internal strategies:
 
@@ -1406,13 +1304,7 @@ set the volume of the current track
 
  ### examples
 
- **positional:** 
-
  `/volume: 50/`
-
- **named:**
-
- `/volume: _to=50/`
 
 #### parameters
 | name | position | description | type |
@@ -1895,6 +1787,388 @@ type: accomp;
 #### include extension
 `using "lua/voicings/voicelead.lua";`
 
+<br><br><br>
+
+
+### Conductor Selectors
+### `channel`
+Selects an event where its channel is equal to one the given numbers.
+
+ ```
+
+ channel(0 1 2) {...}
+
+ ```
+
+#### parameters
+| name | position | description | type |
+|:--- |:--- |:--- |:--- |
+| channel | - |  | midi channel+ |
+
+<br><br><br>
+
+### `fromBar`
+Selects an event where its bar time is equal or greater.
+
+ ```
+
+ fromBar(1) {...}
+
+ ```
+
+ see also: [toBar](#toBar), [onBar](#onBar), [nthBar](#nthBar).
+
+#### parameters
+| name | position | description | type |
+|:--- |:--- |:--- |:--- |
+| bar | - |  | bar number |
+
+<br><br><br>
+
+### `fromBeat`
+Selects an event where its beat time is equal or greater.
+
+ ```
+
+ fromBeat(1) {...}
+
+ ```
+
+#### parameters
+| name | position | description | type |
+|:--- |:--- |:--- |:--- |
+| beat | - |  | quarters |
+
+<br><br><br>
+
+### `fromPitch`
+Selects any event where its pitch is higher or equal than the given pitch.
+
+ see also: [toPitch](#toPitch), [pitch](#pitch).
+
+ ```
+
+ fromPitch(c,) {...}
+
+ ```
+
+#### parameters
+| name | position | description | type |
+|:--- |:--- |:--- |:--- |
+| pitch | - |  | pitch |
+
+<br><br><br>
+
+### `fromPosition`
+Selects any event where its position is after a given time.
+
+ see also: [toPosition](#toPosition).
+
+ ## example, select the events after time >= 8 quarters: 
+
+ ```
+
+ fromPosition(8) {...}
+
+ ```
+
+#### parameters
+| name | position | description | type |
+|:--- |:--- |:--- |:--- |
+| beat | - |  | quarters |
+
+<br><br><br>
+
+### `instrument`
+Selects any event which belongs to one of the given instruments.
+
+ ## example, select the events after time >= 8 quarters: 
+
+ ```
+
+ instrument(bass) {...}
+
+ instrument(bass drums) {...}
+
+ ```
+
+#### parameters
+| name | position | description | type |
+|:--- |:--- |:--- |:--- |
+| instrument name | - |  | instrumentName+ |
+
+<br><br><br>
+
+### `notOnBeat`
+Selects an event which does not appear on a given beat or a list of beats
+
+ ```
+
+ notOnBeat(1 3) {...}
+
+ ```
+
+#### parameters
+| name | position | description | type |
+|:--- |:--- |:--- |:--- |
+| beat | - |  | quarters+ |
+
+<br><br><br>
+
+### `nthBar`
+Selects an event which is located within in one of the give n-th bar.
+
+     >> Heads Up:  The nth bar is not affetced by any other selector.
+
+     >> for example here: `fromBar(1) nthBar(2) {}`, the nth bar selector
+
+     >> will consider its decision counting from bar 0, not from the selected bar 1.
+
+ ```
+
+ nthBar(1 3 5) {...}
+
+ ```
+
+ see also: [fromBar](#fromBar), [toBar](#toBar), [onBar](#onBar).
+
+#### parameters
+| name | position | description | type |
+|:--- |:--- |:--- |:--- |
+| beat | - |  | bar number+ |
+
+<br><br><br>
+
+### `onBar`
+Selects an event on a given bar number or a list of bar numbers
+
+ ```
+
+ onBar(1 3) {...}
+
+ ```
+
+ see also: [fromBar](#fromBar), [toBar](#toBar), [nthBar](#nthBar).
+
+#### parameters
+| name | position | description | type |
+|:--- |:--- |:--- |:--- |
+| beat | - |  | bar number+ |
+
+<br><br><br>
+
+### `onBeat`
+Selects an event which appears on a given beat or a list of beats
+
+ ## example, select the events at beat 1 and 3: 
+
+ ```
+
+ onBeat(1 3) {...}
+
+ ```
+
+#### parameters
+| name | position | description | type |
+|:--- |:--- |:--- |:--- |
+| beat | - |  | quarters+ |
+
+<br><br><br>
+
+### `pitch`
+Selects any event where its pitch is equal to one of the given pitches.
+
+ see also: [fromPitch](#fromPitch), [toPitch](#toPitch).
+
+ ```
+
+ pitch(c) {...}
+
+ pitch(c, c c') {...}
+
+ ```
+
+#### parameters
+| name | position | description | type |
+|:--- |:--- |:--- |:--- |
+| pitch | - |  | pitch+ |
+
+<br><br><br>
+
+### `toBar`
+Selects an event where its bar time is equal or less.
+
+ ```
+
+ toBar(4) {...}
+
+ ```
+
+ see also: [fromBar](#toBar), [onBar](#onBar), [nthBar](#nthBar).
+
+#### parameters
+| name | position | description | type |
+|:--- |:--- |:--- |:--- |
+| bar | - |  | bar number |
+
+<br><br><br>
+
+### `toBeat`
+Selects an event where its beat time is equal or less.
+
+ ```
+
+ toBeat(4) {...}
+
+ ```
+
+#### parameters
+| name | position | description | type |
+|:--- |:--- |:--- |:--- |
+| beat | - |  | quarters |
+
+<br><br><br>
+
+### `toPitch`
+Selects any event where its pitch is lower or equal than the given pitch.
+
+ see also: [fromPitch](#fromPitch), [pitch](#pitch).
+
+ ```
+
+ toPitch(c,) {...}
+
+ ```
+
+#### parameters
+| name | position | description | type |
+|:--- |:--- |:--- |:--- |
+| pitch | - |  | pitch |
+
+<br><br><br>
+
+### `toPosition`
+Selects any event where its position is after a given time.
+
+ see also: [toPosition](#toPosition).
+
+ ## example, select the events before time <= 8 quarters: 
+
+ ```
+
+ toPosition(8) {...}
+
+ ```
+
+#### parameters
+| name | position | description | type |
+|:--- |:--- |:--- |:--- |
+| beat | - |  | quarters |
+
+<br><br><br>
+
+
+### Conductor Declarations
+### `duration`
+Changes the duration of an event. 
+
+ ## example: 
+
+ ```
+
+ onBeat(1) {
+
+   duration += 0.125; -- 1/8 longer
+
+ }
+
+ onBeat(3) {
+
+   duration -= 25%;
+
+ }        
+
+ ```
+
+#### parameters
+*no parameters*
+<br><br><br>
+
+### `pitch`
+Changes the pitch of an event.
+
+ ## example: 
+
+ ```
+
+ onBeat(1) {
+
+   pitch = 60;
+
+ }
+
+ onBeat(3) {
+
+   pitch += 25%;
+
+ }        
+
+ ```
+
+#### parameters
+*no parameters*
+<br><br><br>
+
+### `timeOffset`
+Changes the time position of an event. 
+
+ **Since this is an offset value, the set operation(=) has the same effect as the add(+=) or substract(-=) operation.** 
+
+ ## example: 
+
+ ```
+
+ onBeat(1) {
+
+   timeOffset += 0.125; -- 1/8 offset
+
+ }
+
+ onBeat(3) {
+
+   timeOffset -= 25%;
+
+ }        
+
+ ```
+
+#### parameters
+*no parameters*
+<br><br><br>
+
+### `velocity`
+Changes the velocity of an event.
+
+ ## example: 
+
+ ```
+
+ onBeat(1) {
+
+   velocity = 127;
+
+ }
+
+ onBeat(3) {
+
+   velocity += 25%;
+
+ }        
+
+ ```
+
+#### parameters
+*no parameters*
 <br><br><br>
 
 

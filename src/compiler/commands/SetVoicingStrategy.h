@@ -9,11 +9,8 @@ namespace sheet {
     namespace compiler {
         /// <command name="voicingStrategy" where="track">
         /// Adds a modification to the track.
-        /// ### examples
-        /// **positional:** 
+        /// ### example
         /// `/voicingStrategy: asNotated/` 
-        /// **named:**
-        /// `/voicingStrategy: _use=asNotated/`  
         /// Voicing strategies can be external lua scripts, or one of theese internal strategies:
         /// * asNotated
         /// * simpleGuitar
