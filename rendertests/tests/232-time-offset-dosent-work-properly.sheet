@@ -1,0 +1,17 @@
+-- TITLE: Bruder Jakob
+-- CREATORID: johannes.unger@vstforx.de
+using "./232-time-offset-dosent-work-properly.conductions";
+
+tempo: 140;
+device: MyDevice  midi _usePort=1;
+instrumentDef:ia    _onDevice=MyDevice  _ch=0 _pc=0;
+instrumentDef:ib    _onDevice=MyDevice  _ch=1 _pc=0;
+instrumentSection: lead ia ib; 
+
+-- melody track
+[
+instrument: lead;
+{
+	g4 a b g | g a b g |  b c' d'2 | b4 c' d'2 | d'8 e' d' c' b4 g4 | d'8 e' d' c' b4 g4 | g d g2 | g4 d g2 :|
+}
+]

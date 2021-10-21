@@ -233,28 +233,13 @@ namespace sheet
 			return result;
 		}
 
-		namespace 
-		{
-			struct EventComparer
-			{
-				bool operator()(const fm::midi::Event* a, const fm::midi::Event* b) const
-				{
-					if (a == b) 
-					{
-						return false;
-					}
-					return a->absPosition() < b->absPosition();
-				}
-			};
-		}
-
 		void ConductionsPerformer::perform(const EventsAndDeclarationsCollection &collection) const
 		{
 			// 1. collect all declarations per note on event
 			// 2. order ascending by declaration prio (higher prio values comes last)
 			// 3. perform
 			typedef std::pair<const EventWithMetaInfo*, IDeclarationPtr> DeclarationData;
-			std::multimap<const fm::midi::Event*, DeclarationData, EventComparer> eventsWithDeclarations;
+			std::multimap<const fm::midi::Event*, DeclarationData> eventsWithDeclarations;
 			// 1.
 			for (const auto &eventsAndDeclarations : collection)
 			{
