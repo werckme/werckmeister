@@ -198,6 +198,8 @@ I want to ...
 
 [... write for drums](#write-for-drums)
 
+[... applying articulation while remaining readable](#conduction-rules)
+
 [... accomp my melodies](#accomp-my-melodies)
 
 [... setup my own chord symbols](#chords)
@@ -327,7 +329,7 @@ g a b c'
 
 For sake of understanding the meaning of statements, it's recommended to use named parameters if the meaning of a parameter isn't obvious.
 
-**do'nt**<br>
+**don't**<br>
 `instrumentDef: piano MyMidiDevice 1 2 3;`
 
 **do**<br>
@@ -438,7 +440,6 @@ Then you have to add a tempo [Meta Event](#meta-events) to your voice.
 
 Here we play four voices on one track, with four different tempo configurations:
 
-**There seems to be a bug on the webplayer (first notes are missing)**
 ```language=Werckmeister,type=partial
 tempo: 120;
 [
@@ -608,20 +609,129 @@ c4 d e f |^1 g a b ab :|^2 c'1
 
 ```language=Werckmeister,type=single,tempo=200
 c2 d2 |^1 c#2 d# :|^2 e2 f2 :|^3 c#'2 d#'2 | c'2 d'2 | c,,2 d,, :|
--- c4 d e f |^1 g a b ab :|^2 g# a# c#' d# :| c'1
 ```
 
 ##### Mark/Jump
 For more complex musical navigation you can use the [mark](#mark)/[jump](#jump) commands.
 In combination with its ignore argument you are able to implement - for example - a coda:
 ```language=Werckmeister,type=single,tempo=200
--- tbd
+/mark: begin/
+c d e f | 
+/jump: coda _ignore=1/
+g a b c' |
+d' e' f' g' |
+/mark: coda/
+g' f' e' d' |
+/jump: begin/
+c'1 |
 ```
 
 ## Write for drums
 ### Pitchmaps
+With pitchmaps you are able to define own note symbols. This is useful espacially for drum notes.<br>
+In a pitchmap file you can define note symbols like that:
+```
+"sn": c'  -- snare
+"bd": c,  -- bass drum
+```
+Since a delimited string like "bd" is harder to read than a single character, there are the following rules:
 
-tbd.
+* every single lowercase alphabetic character is allowed as note
+* a note can also have more than one character but then a delimiter is neccessary
+* single character notes can be followed by the octave symbols `'` or `,`
+* the characters c, d, e, f, g, a, b, r, t are predefined events
+* predefined events can **not** be overwritten in a pitchmap
+
+## Conduction Rules
+### The Problem
+A score document contains basically two informations:
+* what notes to play
+* and how to perform these notes
+
+The regular score notation has a set of articulations to apply to a note.
+
+![examples of articulation.](https://upload.wikimedia.org/wikipedia/commons/0/0e/Notation_accents1.png)
+
+In werckmeister you also have such options, for example: `!ffff c ` to play the note c louder.
+
+
+Unfortunately these kind of notation has the potential to destroy the readablility of a source file.
+
+A good example is this 16th note high hat figure:
+
+*(`h` = `high hat`, see [Pitchmaps](#pitchmaps))*
+```
+h16 h h h  h h h h  h h h h  h h h h | 
+```
+
+If you want to add some articulation to that, the result is much more harder to read:
+
+```
+!pph16 !pph !ffh !pph  !pph !pph !ffh !pph  !pph !pph !ffh !pph  !pph !pph !ffh !pph |
+```
+
+
+### Conduction Rules trying to fix that.
+
+The conduction rules separate between **what** and **how**. 
+
+>If you are familiar with HTML and CSS, you already know the concept. Conduction rules are what CSS is for HTML.
+
+You can achieve the same result, from above, using these rules:
+```
+instrument(drums) pitch(h) { 
+    velocity = 51;
+}
+instrument(drums) pitch(h) onBeat(1.5 2.5 3.5 4.5) { 
+    velocity = 89;
+}
+```
+Find the full example [here](https://werckme.github.io/editor?wid=conductor16thHighHat).
+
+A condcution rule starts with a list of selectors, followed by a set of declartions.
+
+A **selector** defines on which notes the rule applies. 
+
+A **declaration** describes what needs to be changed.
+
+Referring to the rules above the selector `instrument(drums) pitch(h)` selects every `h` pitch of the instrument `drums`.
+
+The declaration `velocity = 51;` set the velocity to the value `51` to the selected notes.
+
+Find [here](#conductor-rules) a complete list of all supported selectors and declarations.
+
+A declaration knows 3 types of value assignment:
+
+### Assign
+```
+  aDeclaration = newValue; 
+```
+
+### Add
+```
+  aDeclaration = newValue; 
+```
+### Substract
+```
+  aDeclaration -= newValue; 
+```
+
+### Follow Up
+```
+  aDeclaration = & - newValue; 
+```
+The `Follow Up` assignment allows you to refer to the prevoious event of the same pitch. 
+
+Example:
+```
+velocity = & - 10;
+```
+Means: the new velocity value is 10 units less than the velocity of its predecessor.
+
+This usefull if you want to achieve something like this:
+![linear decreasing velocity values](https://raw.githubusercontent.com/werckme/werckmeister/main/assets/follow-up-velocity.png)
+
+Find the full example [here](https://werckme.github.io/editor?wid=conductor16thHighHatFollowUp).
 
 
 ## Accomp My Melodies
@@ -712,12 +822,16 @@ type: accomp;
 
 ## References
 ## Commands
+* [cue](#cue)
 * [device](#device)
 * [do](#do)
 * [doOnce](#doonce)
+* [fade](#fade)
+* [fill](#fill)
 * [instrument](#instrument)
 * [instrumentConf](#instrumentconf)
 * [instrumentDef](#instrumentdef)
+* [instrumentSection](#instrumentsection)
 * [jump](#jump)
 * [mark](#mark)
 * [mod](#mod)
@@ -743,25 +857,54 @@ type: accomp;
 * [simple](#simple)
 * [voicelead](#voicelead)
 
+## Conductor Rules
+### Selectors
+* [channel](#channel)
+* [fromBar](#frombar)
+* [fromBeat](#frombeat)
+* [fromPitch](#frompitch)
+* [fromPosition](#fromposition)
+* [instrumentSelector](#instrumentselector)
+* [notOnBeat](#notonbeat)
+* [nthBar](#nthbar)
+* [onBar](#onbar)
+* [onBeat](#onbeat)
+* [pitch](#pitch)
+* [toBar](#tobar)
+* [toBeat](#tobeat)
+* [toPitch](#topitch)
+* [toPosition](#toposition)
+
+## Conductor Rules
+### Declarations
+* [duration](#duration)
+* [pitch](#pitch)
+* [timeOffset](#timeoffset)
+* [velocity](#velocity)
+
 ## Commands
-### `device`
-Defines a device which can be used when adding instruments (see [instrumentDef](#instrumentDef))
+### `cue`
+adds a cue meta message to the corresponding midi track
 
  ### examples
 
- **positional:** 
+ `/cue: _text="cue text"/`
 
- `device: MyDevice midi 0 offset 100;`
+#### parameters
+| name | position | description | type |
+|:--- |:--- |:--- |:--- |
+| text | - | the text which appears in the MIDI message | text |
 
- **named:**
+<br><br><br>
 
- `device: _setName=MyDevice _isType=midi _usePort=0 _withOffset=100;`   
-
- **a complete example**
-
- define an device, an instrument and assign it to a track.
+### `device`
+Defines a device which can be used when adding instruments (see [instrumentDef](#instrumentDef))
 
  see [instrumentDef](#instrumentDef), [instrument](#instrument)
+
+ ### example
+
+ define an device, an instrument and assign it to a track.
 
  ```
 
@@ -786,7 +929,7 @@ Defines a device which can be used when adding instruments (see [instrumentDef](
 #### parameters
 | name | position | description | type |
 |:--- |:--- |:--- |:--- |
-| setName | 1 | An arbitary name. | word |
+| setName | 1 | An arbitary name. | text |
 | isType | 2 | The type of the device. | [midi,fluidSynth] |
 | usePort | 3 | The midi port id of your device. You can get a list of your connected devices, by executing `sheetp --list` | 0..N |
 | withOffset |  | Defines an offset in milliseconds. Can be used to keep different devices in sync. | 0..N |
@@ -801,40 +944,127 @@ Such as [mod](#mod)&nbsp;`do` adds a modification to the track.
 
  `do` replaces the previous modification. 
 
- ### examples
-
- **positional:** 
+ ### example
 
  `/do: arpeggio/`
-
- **named:**
-
- `/do: _use=arpeggio/`
 
 #### parameters
 | name | position | description | type |
 |:--- |:--- |:--- |:--- |
-| use | 1 | The name of the modification to load. This is the only "unique" parameter for this command. All further parameters are specific to its related modification. | word |
+| use | 1 | The name of the modification to load. This is the only "unique" parameter for this command. All further parameters are specific to its related modification. | text |
 
 <br><br><br>
 
 ### `doOnce`
 Like [do](#do). But with the difference, that the loaded mod will be only executed once for the following event.
 
- ### examples
-
- **positional:** 
+ ### example
 
  `/doOnce: arpeggio/`
-
- **named:**
-
- `/doOnce: _use=arpeggio/`
 
 #### parameters
 | name | position | description | type |
 |:--- |:--- |:--- |:--- |
-| use | 1 | The name of the modification to load. This is the only "unique" parameter for this command. All further parameters are specific to its related modification. | word |
+| use | 1 | The name of the modification to load. This is the only "unique" parameter for this command. All further parameters are specific to its related modification. | text |
+
+<br><br><br>
+
+### `fade`
+Fades the volume over a given duration in quarters.
+
+ ### example
+
+ ```language=Werckmeister,type=full
+
+ device: myDevice midi _usePort=0;
+ instrumentDef: organ  myDevice _ch=0 _pc=16;
+ tempo: 75;
+ [
+ instrument: organ;
+ {
+     \fff
+     /fade: _from=0 _to=100 _duration=4/
+     c1 |
+     /fade: _from=0 _to=100 _duration=4 _curve="quad"/
+     c1 |
+     /fade: _from=0 _to=100 _duration=4 _curve="cub"/
+     c1 |
+     /fade: _from=0 _to=100 _duration=4 _curve="quart"/
+     c1 |
+     /fade: _from=0 _to=100 _duration=4 _curve="quint"/
+     c1 |
+     /fade: _from=0 _to=100 _duration=4 _curve="exp"/
+     c1 |
+ }
+ ]
+ ```
+
+ ![supported curve types](https://raw.githubusercontent.com/werckme/werckmeister/main/assets/curve-types.png)
+
+#### parameters
+| name | position | description | type |
+|:--- |:--- |:--- |:--- |
+| duration | 1 | the duration in quarters. | 0..N |
+| from | 2 | The source volume value. | 0..100 |
+| to | 3 | The target volume value. | 0..100 |
+| curve | 4 | The fade curve type. | lin,quad,cub,quart,quint,exp |
+
+<br><br><br>
+
+### `fill`
+Plays a template only once. Is also able to replace the performance of another template during its playback.
+
+ Useful for fill ins.
+
+ 
+
+ ```language=Werckmeister
+using "chords/default.chords";
+tempo: 90;
+device: MyDevice  midi _usePort=0;
+instrumentDef:drums    _onDevice=MyDevice  _ch=9 _pc=0;
+
+[
+type: template;
+name: drums.fill;
+instrument: drums;
+{
+  (c, & &)4 (b,, & &)4 (a,, & &)4 (g,, & &)4 |
+}
+]
+
+[
+type: template;
+name: drums.main;
+instrument: drums;
+{
+  r8 f#,, r & r & r & |
+}
+{
+   r4 d,, r4 & | 
+}
+{
+  c,,4 r & r |
+}
+]
+
+[
+type: accomp;
+{
+ /template: drums.main/
+ C |
+ /fill: drums.fill/ -- play fill and drum beat together
+ C | C |
+ /fill: drums.fill _replace="drums.main"/ -- play only the fill in
+ C | C |
+}
+]
+ ```
+
+#### parameters
+| name | position | description | type |
+|:--- |:--- |:--- |:--- |
+| replace | - | the name of the template to be replaced by the fill | text |
 
 <br><br><br>
 
@@ -842,14 +1072,6 @@ Like [do](#do). But with the difference, that the loaded mod will be only execut
 Set or change the instrument of a track.
 
  ### examples
-
- **positional:** 
-
- `instrument: myInstrument;`
-
- **named:**
-
- `instrument: _use=myInstrument;`
 
  **set an instrument for a track**
 
@@ -881,7 +1103,7 @@ Set or change the instrument of a track.
 #### parameters
 | name | position | description | type |
 |:--- |:--- |:--- |:--- |
-| use | 1 | The instrument name. | word |
+| use | 1 | The instrument name. | text |
 
 <br><br><br>
 
@@ -904,23 +1126,11 @@ With `instrumentConf` you are able to setup a specific instrument.
 
  #### mixed settings
 
- **positional:** 
-
  `instrumentConf: piano volume 100 pan 50;`
-
- **named:**
-
- `instrumentConf: _for=piano _set=volume _to=50 _set=pan _to=50;`
 
  #### setup a mod
 
- **positional:** 
-
- `instrumentConf: piano mod myLuaMod bar; --the bar argument belongs to "myLuaMod"`
-
- **named:**
-
- `instrumentConf: _for=piano _set=mod _use=myLuaMod _myLuaModFoo=bar;`
+ `instrumentConf: piano mod myLuaMod someValue; --the `someValue` argument belongs to "myLuaMod"`
 
  #### setup a velocity remap
 
@@ -930,13 +1140,7 @@ With `instrumentConf` you are able to setup a specific instrument.
 
  The value range is 0..100. (100=127 Midi velocity)
 
- **named:**
-
  `instrumentConf: _set=remapVelocity _p=100 _f=10;`
-
- **positional:**
-
- `remapVelocity` dosen't supports positional arguments
 
 #### parameters
 | name | position | description | type |
@@ -948,21 +1152,11 @@ With `instrumentConf` you are able to setup a specific instrument.
 ### `instrumentDef`
 Adds a new MIDI instrument.
 
- ### examples
-
- **positional:** 
-
- `instrumentDef: drums MyDevice 9 0 3;`
-
- **named:**
-
- `instrumentDef: _setName=drums _onDevice=MyDevice _ch=9 _cc=0 _pc=3;`
-
- **a complete example**
-
- define an device, an instrument and set it to a track.
-
  see [instrument](#instrument), [device](#device)
+
+ ### example
+
+ define an device, an instrument and assign it to a track.
 
  ```
 
@@ -980,18 +1174,52 @@ Adds a new MIDI instrument.
 #### parameters
 | name | position | description | type |
 |:--- |:--- |:--- |:--- |
-| setName | 1 | An arbitary name. | word |
-| onDevice | 2 | The device which to use (The name of the device, see [device](#device)). | word |
+| setName | 1 | An arbitary name. | text |
+| onDevice | 2 | The device which to use (The name of the device, see [device](#device)). | text |
 | ch | 3 | The MIDI channel. | 0..15 |
 | cc | 4 | A MIDI `control change` value. | 0..127 |
 | pc | 5 | A MIDI `program change` value. | 0..127 |
 
 <br><br><br>
 
+### `instrumentSection`
+Layers arbitrary instruments into one.
+
+ see [instrumentDef](#instrumentDef), [instrument](#instrument), [device](#device)
+
+ ### example
+
+ create 3 instruments and assign them to the section `myNewInstrument`.
+
+ 
+
+ ```language=Werckmeister
+ tempo: 120;
+ device: MyDevice  midi _usePort=0;
+ instrumentDef:piano    _onDevice=MyDevice  _ch=0 _pc=0;
+ instrumentDef:guitar   _onDevice=MyDevice _ch=1  _pc=29;
+ instrumentDef:organ   _onDevice=MyDevice _ch=2  _pc=16;
+ instrumentSection: myNewInstrument piano guitar organ;
+ 
+ [
+ instrument: myNewInstrument;
+ {
+  a,,1 | a, | d#,~ | &
+ }
+ ]
+ ```
+
+#### parameters
+| name | position | description | type |
+|:--- |:--- |:--- |:--- |
+| setName | 1 | An arbitary name. | text |
+
+<br><br><br>
+
 ### `jump`
 Jumps to a previous defined mark See [mark](manual/#mark).
 
- ### examples
+ ### example
 
  
 
@@ -1013,14 +1241,14 @@ Jumps to a previous defined mark See [mark](manual/#mark).
 #### parameters
 | name | position | description | type |
 |:--- |:--- |:--- |:--- |
-| to | 1 | the destination marker | word |
+| to | 1 | the destination marker | text |
 | ignore |  | Ignores the jump N times | 0..100 |
-| repreat |  | Repeats the jump N times. (A repeat value of 1 performs 2 jumps) | 0..100 |
+| repeat |  | Repeats the jump N times. (A repeat value of 1 performs 2 jumps) | 0..100 |
 
 <br><br><br>
 
 ### `mark`
-adds a mark to the voice. Why you want to do that? See [jump](manual/#jump).
+adds a mark to the voice. Us it in combination with [jump](manual/#jump).
 
  ### examples
 
@@ -1055,28 +1283,30 @@ Adds a modification to the track. Every `mod` statement adds a further modificat
 
  ### examples
 
- **positional:** 
-
  `/mod: arpeggio/`
-
- **named:**
-
- `/mod: _use=arpeggio/`  
 
  Mods can be external lua scripts, or one of theese internal mods:
 
  #### Bend
 
- `/mod: bend _from=0/`
+ Performs a pitch bend from or to the pitch of a note. The value range is 0..100 where 50 means the pichbend center.
+
+ ```language=Werckmeister,type=single,tempo=140
+
+/doOnce: bend _from=0/ c1 | /doOnce: bend _to=0/ c1
+
+ ```
 
  #### Arpeggio
 
- `/mod: arpeggio/`
+ Performs an arpeggio over a given chord.
+
+ **Arpeggio is deprecated. Use the lua mod [myArpeggio](#myarpeggio) instead.**
 
 #### parameters
 | name | position | description | type |
 |:--- |:--- |:--- |:--- |
-| use | 1 | The name of the modification to load. This is the only "unique" parameter for this command. All further parameters are specific to its related modification. | word |
+| use | 1 | The name of the modification to load. This is the only "unique" parameter for this command. All further parameters are specific to its related modification. | text |
 
 <br><br><br>
 
@@ -1085,33 +1315,21 @@ Like [mod](#mod). But with the difference, that the loaded mod will be only exec
 
  ### examples
 
- **positional:** 
-
  `/modOnce: arpeggio/`
-
- **named:**
-
- `/modOnce: _use=arpeggio/`
 
 #### parameters
 | name | position | description | type |
 |:--- |:--- |:--- |:--- |
-| use | 1 | The name of the modification to load. This is the only "unique" parameter for this command. All further parameters are specific to its related modification. | word |
+| use | 1 | The name of the modification to load. This is the only "unique" parameter for this command. All further parameters are specific to its related modification. | text |
 
 <br><br><br>
 
 ### `pan`
 set the pan of the current track
 
- ### examples
-
- **positional:** 
+ ### example
 
  `/pan: 50/`
-
- **named:**
-
- `/pan: _to=50/`
 
 #### parameters
 | name | position | description | type |
@@ -1123,15 +1341,9 @@ set the pan of the current track
 ### `signature`
 Set the time signature of the current track.
 
- ### examples
-
- **positional:** 
+ ### example
 
  `/signature: 3 4/`
-
- **named:**
-
- `/signature: _upper=3 _lower=4/`
 
 #### parameters
 | name | position | description | type |
@@ -1144,23 +1356,9 @@ Set the time signature of the current track.
 ### `tempo`
 `tempo` defines or changes the current tempo.
 
- ### examples
-
- **positional:** 
+ ### example
 
  `tempo: 120;`
-
- **named:**
-
- `tempo: _bpm=120;`
-
- This command can be used as document config:
-
- `tempo: 120;`
-
- or within a track
-
- `/tempo: 120/`
 
  It is also possible to set different tempo values for several tracks:
 
@@ -1176,15 +1374,9 @@ Set the time signature of the current track.
 ### `voicingStrategy`
 Adds a modification to the track.
 
- ### examples
-
- **positional:** 
+ ### example
 
  `/voicingStrategy: asNotated/` 
-
- **named:**
-
- `/voicingStrategy: _use=asNotated/`  
 
  Voicing strategies can be external lua scripts, or one of theese internal strategies:
 
@@ -1195,7 +1387,7 @@ Adds a modification to the track.
 #### parameters
 | name | position | description | type |
 |:--- |:--- |:--- |:--- |
-| use | 1 | The name of the strategy to load. This is the only "unique" parameter for this command. All further parameters are specific to its related strategy. | word |
+| use | 1 | The name of the strategy to load. This is the only "unique" parameter for this command. All further parameters are specific to its related strategy. | text |
 
 <br><br><br>
 
@@ -1204,13 +1396,7 @@ set the volume of the current track
 
  ### examples
 
- **positional:** 
-
  `/volume: 50/`
-
- **named:**
-
- `/volume: _to=50/`
 
 #### parameters
 | name | position | description | type |
@@ -1477,7 +1663,7 @@ instrument: piano;
 #### parameters
 | name | position | description | type |
 |:--- |:--- |:--- |:--- |
-| forTag | - | Specifies a tag name. If set only events with this tag name will be affected by the legato mod. | word |
+| forTag | - | Specifies a tag name. If set only events with this tag name will be affected by the legato mod. | text |
 | amount | - | The ammount of the legato effect | 0..100 |
 
 #### include extension
@@ -1540,7 +1726,7 @@ instrument: piano;
 #### parameters
 | name | position | description | type |
 |:--- |:--- |:--- |:--- |
-| forTag | - | Specifies a tag name. If set only events with this tag name will be affected by the staccato mod. | word |
+| forTag | - | Specifies a tag name. If set only events with this tag name will be affected by the staccato mod. | text |
 | amount | - | The ammount of the staccato effect | 0..100 |
 
 #### include extension
@@ -1692,6 +1878,404 @@ type: accomp;
 
 #### include extension
 `using "lua/voicings/voicelead.lua";`
+
+<br><br><br>
+
+
+### Conductor Selectors
+### `channel`
+Selects an event where its channel is equal to one the given numbers.
+
+ ```
+
+ channel(0 1 2) {...}
+
+ ```
+
+#### parameters
+| name | position | description | type |
+|:--- |:--- |:--- |:--- |
+| channel | - |  | midi channel+ |
+
+<br><br><br>
+
+### `fromBar`
+Selects an event where its bar time is equal or greater.
+
+ ```
+
+ fromBar(1) {...}
+
+ ```
+
+ see also: [toBar](#toBar), [onBar](#onBar), [nthBar](#nthBar).
+
+#### parameters
+| name | position | description | type |
+|:--- |:--- |:--- |:--- |
+| bar | - |  | bar number |
+
+<br><br><br>
+
+### `fromBeat`
+Selects an event where its beat time is equal or greater.
+
+ ```
+
+ fromBeat(1) {...}
+
+ ```
+
+#### parameters
+| name | position | description | type |
+|:--- |:--- |:--- |:--- |
+| beat | - |  | quarters |
+
+<br><br><br>
+
+### `fromPitch`
+Selects any event where its pitch is higher or equal than the given pitch.
+
+ see also: [toPitch](#toPitch), [pitch](#pitch).
+
+ ```
+
+ fromPitch(c,) {...}
+
+ ```
+
+#### parameters
+| name | position | description | type |
+|:--- |:--- |:--- |:--- |
+| pitch | - |  | pitch |
+
+<br><br><br>
+
+### `fromPosition`
+Selects any event where its position is after a given time.
+
+ see also: [toPosition](#toPosition).
+
+ ## example, select the events after time >= 8 quarters: 
+
+ ```
+
+ fromPosition(8) {...}
+
+ ```
+
+#### parameters
+| name | position | description | type |
+|:--- |:--- |:--- |:--- |
+| beat | - |  | quarters |
+
+<br><br><br>
+
+### `instrumentSelector`
+Selects any event which belongs to one of the given instruments.
+
+ *there is a known [issue](https://github.com/werckme/werckmeister/issues/230) related to instrumentSection*
+
+ ## example:
+
+ ```
+
+ instrument(bass) {...}
+ instrument(bass drums) {...}
+ ```
+
+#### parameters
+| name | position | description | type |
+|:--- |:--- |:--- |:--- |
+| instrument name | - |  | instrumentName+ |
+
+<br><br><br>
+
+### `notOnBeat`
+Selects an event which does not appear on a given beat or a list of beats
+
+ ```
+
+ notOnBeat(1 3) {...}
+
+ ```
+
+#### parameters
+| name | position | description | type |
+|:--- |:--- |:--- |:--- |
+| beat | - |  | quarters+ |
+
+<br><br><br>
+
+### `nthBar`
+Selects an event which is located within in one of the give n-th bar.
+ > Heads Up:  The nth bar is not affected by any other selector.
+ > Here for example: `fromBar(1) nthBar(2) ...`, the nth bar selector
+ will consider its decision counting from bar 0, not from the selected bar 1.
+ ```
+
+ nthBar(1 3 5) {...}
+
+ ```
+
+ see also: [fromBar](#fromBar), [toBar](#toBar), [onBar](#onBar).
+
+#### parameters
+| name | position | description | type |
+|:--- |:--- |:--- |:--- |
+| beat | - |  | bar number+ |
+
+<br><br><br>
+
+### `onBar`
+Selects an event on a given bar number or a list of bar numbers
+
+ ```
+
+ onBar(1 3) {...}
+
+ ```
+
+ see also: [fromBar](#fromBar), [toBar](#toBar), [nthBar](#nthBar).
+
+#### parameters
+| name | position | description | type |
+|:--- |:--- |:--- |:--- |
+| beat | - |  | bar number+ |
+
+<br><br><br>
+
+### `onBeat`
+Selects an event which appears on a given beat or a list of beats
+
+ see also: [fromBeat](#fromBeat), [toBeat](#toBeat).
+
+ ## example, select the events at beat 1 and 3: 
+
+ ```
+
+ onBeat(1 3) {...}
+
+ ```
+
+#### parameters
+| name | position | description | type |
+|:--- |:--- |:--- |:--- |
+| beat | - |  | quarters+ |
+
+<br><br><br>
+
+### `pitch`
+Selects any event where its pitch is equal to one of the given pitches.
+
+ see also: [fromPitch](#fromPitch), [toPitch](#toPitch).
+
+ ```
+
+ pitch(c) {...}
+
+ pitch(c, c c') {...}
+
+ ```
+
+#### parameters
+| name | position | description | type |
+|:--- |:--- |:--- |:--- |
+| pitch | - |  | pitch+ |
+
+<br><br><br>
+
+### `toBar`
+Selects an event where its bar time is equal or less.
+
+ ```
+
+ toBar(4) {...}
+
+ ```
+
+ see also: [fromBar](#toBar), [onBar](#onBar), [nthBar](#nthBar).
+
+#### parameters
+| name | position | description | type |
+|:--- |:--- |:--- |:--- |
+| bar | - |  | bar number |
+
+<br><br><br>
+
+### `toBeat`
+Selects an event where its beat time is equal or less.
+
+ see also: [fromBeat](#fromBeat), [onBeat](#onBeat).
+
+ ```
+
+ toBeat(4) {...}
+
+ ```
+
+#### parameters
+| name | position | description | type |
+|:--- |:--- |:--- |:--- |
+| beat | - |  | quarters |
+
+<br><br><br>
+
+### `toPitch`
+Selects any event where its pitch is lower or equal than the given pitch.
+
+ see also: [fromPitch](#fromPitch), [pitch](#pitch).
+
+ ```
+
+ toPitch(c,) {...}
+
+ ```
+
+#### parameters
+| name | position | description | type |
+|:--- |:--- |:--- |:--- |
+| pitch | - |  | pitch |
+
+<br><br><br>
+
+### `toPosition`
+Selects any event where its position is after a given time.
+
+ see also: [toPosition](#toPosition).
+
+ ## example, select the events before time <= 8 quarters: 
+
+ ```
+
+ toPosition(8) {...}
+
+ ```
+
+#### parameters
+| name | position | description | type |
+|:--- |:--- |:--- |:--- |
+| beat | - |  | quarters |
+
+<br><br><br>
+
+
+### Conductor Declarations
+### `duration`
+Changes the duration of an event. 
+
+ ## example: 
+
+ ```
+
+ onBeat(1) {
+
+   duration += 0.125; -- 1/8 longer
+
+ }
+
+ onBeat(3) {
+
+   duration -= 25%;
+
+ }        
+
+ ```
+
+#### Value Types
+| name | description | type |
+|:--- |:--- |:--- |
+| absolute |  | 0..N |
+| percent | percent base value is the events length | 0..N% |
+
+<br><br><br>
+
+### `pitch`
+Changes the pitch of an event.
+
+ ## example: 
+
+ ```
+
+ onBeat(1) {
+
+   pitch = 60;
+
+ }
+
+ onBeat(3) {
+
+   pitch += 25%;
+
+ }        
+
+ ```
+
+#### Value Types
+| name | description | type |
+|:--- |:--- |:--- |
+| absolute |  | 0..127 |
+| percent | percent base value is events pitch | 0%..100% |
+
+<br><br><br>
+
+### `timeOffset`
+Changes the time position of an event. 
+
+ **Since this is an offset value, the set operation(=) has the same effect as the add(+=) or substract(-=) operation.** 
+
+ ## example: 
+
+ ```
+
+ onBeat(1) {
+
+   timeOffset += 0.125; -- 1/8 offset
+
+ }
+
+ onBeat(3) {
+
+   timeOffset -= 25%;
+
+ }        
+
+ ```
+
+#### Value Types
+| name | description | type |
+|:--- |:--- |:--- |
+| absolute |  | 0..N |
+| percent | percent base value is the events length | 0%..N% |
+
+<br><br><br>
+
+### `velocity`
+Changes the velocity of an event.
+
+ ## example: 
+
+ ```
+
+ onBeat(1) {
+
+   velocity = 127;
+
+ }
+
+ onBeat(3) {
+
+   velocity += 25%;
+
+ }        
+
+ ```
+
+#### Value Types
+| name | description | type |
+|:--- |:--- |:--- |
+| absolute |  | 0..127 |
+| percent | percent base value is events velocity | 0%..100% |
 
 <br><br><br>
 

@@ -1,0 +1,15 @@
+using "./lua/voicings/voicelead.lua";
+using "./chords/default.chords";
+using "42_myConductions_time.conductions";
+
+tempo: 120;
+device: SC1 midi 4;
+instrumentDef: piano SC1 0 0 0;
+
+[
+instrument: piano;
+{
+    \ppp
+    c d r r | e f r r
+}
+]

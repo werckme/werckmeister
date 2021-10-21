@@ -5,7 +5,9 @@ on:
     branches: 
         - main
         - feature/* 
+        - bugfix/* 
         - develop
+        - bugfix/*
   pull_request:
     branches: [ develop ]
 
@@ -44,4 +46,6 @@ jobs:
     - uses: actions/upload-artifact@v2
       with:
         name: werckmeister-linux-${{ github.sha }}
-        path: build/werckmeister-*-Linux.sh
+        path: |
+          build/werckmeister-*-Linux.sh
+          rendertests/*.mid

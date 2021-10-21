@@ -14,6 +14,7 @@
 #include <unordered_map>
 #include <fm/config/configServer.h>
 #include <algorithm>
+#include <iostream>
 
 namespace fmapp {
 
@@ -228,7 +229,12 @@ namespace fmapp {
 		if (!playerTimer_) {
 			playerTimer_ = std::make_unique<TTimer>([this]() {
 				updateElapsedTime();
-				onProcess();
+				try {
+					onProcess();
+				}
+				catch (...) {
+					std::cerr << __FILE__ << " unexpected exception" << std::endl;
+				}
 			});
 		}
 		playerTimer_->start(milliseconds(1));

@@ -8,14 +8,9 @@ namespace sheet {
     namespace compiler {
         /// <command name="instrumentDef" where="document">
         /// Adds a new MIDI instrument.
-        /// ### examples
-        /// **positional:** 
-        /// `instrumentDef: drums MyDevice 9 0 3;`
-        /// **named:**
-        /// `instrumentDef: _setName=drums _onDevice=MyDevice _ch=9 _cc=0 _pc=3;`
-        /// **a complete example**
-        /// define an device, an instrument and set it to a track.
         /// see [instrument](#instrument), [device](#device)
+        /// ### example
+        /// define an device, an instrument and assign it to a track.
         /// ```
         /// device: MyDevice midi 0;
         /// instrumentDef: organ _onDevice=MyDevice _ch=0 _pc=16; \n
@@ -27,8 +22,8 @@ namespace sheet {
         /// ] \n
         /// ```
         /// </command>
-        /// <param name="setName"  position="0" type="word">An arbitary name.</param>
-        /// <param name="onDevice" position="1" type="word">The device which to use (The name of the device, see [device](#device)).</param>
+        /// <param name="setName"  position="0" type="text">An arbitary name.</param>
+        /// <param name="onDevice" position="1" type="text">The device which to use (The name of the device, see [device](#device)).</param>
         /// <param name="ch"       position="2" type="0..15">The MIDI channel.</param>
         /// <param name="cc"       position="3" type="0..127">A MIDI `control change` value.</param>
         /// <param name="pc"       position="4" type="0..127">A MIDI `program change` value.</param>

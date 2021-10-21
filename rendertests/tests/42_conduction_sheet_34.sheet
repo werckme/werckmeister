@@ -1,0 +1,16 @@
+using "./lua/voicings/voicelead.lua";
+using "./chords/default.chords";
+using "42_myConductions_34.conductions";
+
+tempo: 120;
+device: SC1 midi 3;
+instrumentDef: piano SC1 0 0 0;
+
+[
+instrument: piano;
+{
+    /signature: 3 4/
+    \ppp
+    c & & | c & & 
+}
+]

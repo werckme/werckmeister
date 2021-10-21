@@ -24,9 +24,10 @@ public:
         sheet::compiler::IContextPtr             context,
         sheet::compiler::IPreprocessorPtr        preprocessor,
         fm::midi::MidiPtr                        midiFile,
-        fmapp::IDocumentWriterPtr                documentWriter
+        fmapp::IDocumentWriterPtr                documentWriter,
+        sheet::conductor::IConductionsPerformerPtr          conductionsPerformer
     ) : 
-        Base(programOptions, logger, documentParser, compiler, context, preprocessor, midiFile, documentWriter)
+        Base(programOptions, logger, documentParser, compiler, context, preprocessor, midiFile, documentWriter, conductionsPerformer)
       , _programOptions(std::dynamic_pointer_cast<IPlayerProgramOptions>(programOptions))
       , _logger(logger)
       , _midiPlayerPtr(std::dynamic_pointer_cast<fmapp::MidiPlayer>(documentWriter))

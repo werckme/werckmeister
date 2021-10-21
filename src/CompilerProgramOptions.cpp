@@ -8,6 +8,8 @@
 #define ARG_VERSION "version"
 #define ARG_VERBOSE "verbose"
 #define ARG_DEBUG "debug"
+#define ARG_BEGIN "begin"
+#define ARG_END "end"
 
 void CompilerProgramOptions::parseProgrammArgs(size_t argc, const char **argv)
 {
@@ -22,6 +24,8 @@ Validate mode checks for errors and returns the validation result as json object
         (ARG_VERSION, "prints the werckmeister version")
         (ARG_VERBOSE, "prints further informations to the output")
         (ARG_DEBUG, "prints debug informations to the output")
+        (ARG_BEGIN, po::value<double>(), "start postition in quarter notes. E.g.: 1.2")
+        (ARG_END,   po::value<double>(), "end postition in quarter notes. E.g.: 1.2")
         ;
     po::positional_options_description p;
     p.add(ARG_INPUT, -1);
@@ -94,4 +98,20 @@ bool CompilerProgramOptions::isJsonDocInfoMode() const
 bool CompilerProgramOptions::isVersionSet() const 
 { 
     return !!variables.count(ARG_VERSION); 
+}
+
+bool CompilerProgramOptions::isBeginSet() const {
+    return !!variables.count(ARG_BEGIN);
+}
+
+bool CompilerProgramOptions::isEndSet() const {
+    return !!variables.count(ARG_END);
+}
+
+double CompilerProgramOptions::getBegin() const {
+    return variables[ARG_BEGIN].as<double>();
+}
+
+double CompilerProgramOptions::getEnd() const {
+    return variables[ARG_END].as<double>();
 }

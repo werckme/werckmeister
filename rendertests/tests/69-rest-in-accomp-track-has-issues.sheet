@@ -1,0 +1,38 @@
+-- #skip-event-plausibility-test
+using "./lua/voicings/voicelead.lua";
+using "./chords/default.chords";
+
+tempo: 120;
+device: SC1 midi 4;
+instrumentDef: piano SC1 3 0 0;
+
+[
+instrument: piano;
+{
+\ffff
+d8 eb e f~ f2 | g8 g# a bb~ bb2 | f8 g f e eb e, c# d~ |
+d8t db4t c2 r4 | g8 g# a bb~ bb2 | bb8 b c' db'~ db'2 |
+f8 g f e eb e, c# d~ | d2. f8t f f | f8 f,~ f2. |
+f8 g f e eb e, c# d~ | d4 f8 g f e eb e, | c# d~ d2 r4 |
+}
+]
+
+[
+type: accomp;
+{
+r Bb | Eb | Bb |
+Bb7 | Eb | Eb |
+Bb | Bb | F7 |
+F7 | Bb | Bb |
+}
+]
+
+[
+type: template;
+name: chords;
+instrument: piano;
+{
+I,,2. V,,4 |
+I,,2. V,,,4|
+}
+]

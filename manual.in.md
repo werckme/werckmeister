@@ -198,6 +198,8 @@ I want to ...
 
 [... write for drums](#write-for-drums)
 
+[... applying articulation while remaining readable](#conduction-rules)
+
 [... accomp my melodies](#accomp-my-melodies)
 
 [... setup my own chord symbols](#chords)
@@ -327,7 +329,7 @@ g a b c'
 
 For sake of understanding the meaning of statements, it's recommended to use named parameters if the meaning of a parameter isn't obvious.
 
-**do'nt**<br>
+**don't**<br>
 `instrumentDef: piano MyMidiDevice 1 2 3;`
 
 **do**<br>
@@ -438,7 +440,6 @@ Then you have to add a tempo [Meta Event](#meta-events) to your voice.
 
 Here we play four voices on one track, with four different tempo configurations:
 
-**There seems to be a bug on the webplayer (first notes are missing)**
 ```language=Werckmeister,type=partial
 tempo: 120;
 [
@@ -608,20 +609,129 @@ c4 d e f |^1 g a b ab :|^2 c'1
 
 ```language=Werckmeister,type=single,tempo=200
 c2 d2 |^1 c#2 d# :|^2 e2 f2 :|^3 c#'2 d#'2 | c'2 d'2 | c,,2 d,, :|
--- c4 d e f |^1 g a b ab :|^2 g# a# c#' d# :| c'1
 ```
 
 ##### Mark/Jump
 For more complex musical navigation you can use the [mark](#mark)/[jump](#jump) commands.
 In combination with its ignore argument you are able to implement - for example - a coda:
 ```language=Werckmeister,type=single,tempo=200
--- tbd
+/mark: begin/
+c d e f | 
+/jump: coda _ignore=1/
+g a b c' |
+d' e' f' g' |
+/mark: coda/
+g' f' e' d' |
+/jump: begin/
+c'1 |
 ```
 
 ## Write for drums
 ### Pitchmaps
+With pitchmaps you are able to define own note symbols. This is useful espacially for drum notes.<br>
+In a pitchmap file you can define note symbols like that:
+```
+"sn": c'  -- snare
+"bd": c,  -- bass drum
+```
+Since a delimited string like "bd" is harder to read than a single character, there are the following rules:
 
-tbd.
+* every single lowercase alphabetic character is allowed as note
+* a note can also have more than one character but then a delimiter is neccessary
+* single character notes can be followed by the octave symbols `'` or `,`
+* the characters c, d, e, f, g, a, b, r, t are predefined events
+* predefined events can **not** be overwritten in a pitchmap
+
+## Conduction Rules
+### The Problem
+A score document contains basically two informations:
+* what notes to play
+* and how to perform these notes
+
+The regular score notation has a set of articulations to apply to a note.
+
+![examples of articulation.](https://upload.wikimedia.org/wikipedia/commons/0/0e/Notation_accents1.png)
+
+In werckmeister you also have such options, for example: `!ffff c ` to play the note c louder.
+
+
+Unfortunately these kind of notation has the potential to destroy the readablility of a source file.
+
+A good example is this 16th note high hat figure:
+
+*(`h` = `high hat`, see [Pitchmaps](#pitchmaps))*
+```
+h16 h h h  h h h h  h h h h  h h h h | 
+```
+
+If you want to add some articulation to that, the result is much more harder to read:
+
+```
+!pph16 !pph !ffh !pph  !pph !pph !ffh !pph  !pph !pph !ffh !pph  !pph !pph !ffh !pph |
+```
+
+
+### Conduction Rules trying to fix that.
+
+The conduction rules separate between **what** and **how**. 
+
+>If you are familiar with HTML and CSS, you already know the concept. Conduction rules are what CSS is for HTML.
+
+You can achieve the same result, from above, using these rules:
+```
+instrument(drums) pitch(h) { 
+    velocity = 51;
+}
+instrument(drums) pitch(h) onBeat(1.5 2.5 3.5 4.5) { 
+    velocity = 89;
+}
+```
+Find the full example [here](https://werckme.github.io/editor?wid=conductor16thHighHat).
+
+A condcution rule starts with a list of selectors, followed by a set of declartions.
+
+A **selector** defines on which notes the rule applies. 
+
+A **declaration** describes what needs to be changed.
+
+Referring to the rules above the selector `instrument(drums) pitch(h)` selects every `h` pitch of the instrument `drums`.
+
+The declaration `velocity = 51;` set the velocity to the value `51` to the selected notes.
+
+Find [here](#conductor-rules) a complete list of all supported selectors and declarations.
+
+A declaration knows 3 types of value assignment:
+
+### Assign
+```
+  aDeclaration = newValue; 
+```
+
+### Add
+```
+  aDeclaration = newValue; 
+```
+### Substract
+```
+  aDeclaration -= newValue; 
+```
+
+### Follow Up
+```
+  aDeclaration = & - newValue; 
+```
+The `Follow Up` assignment allows you to refer to the prevoious event of the same pitch. 
+
+Example:
+```
+velocity = & - 10;
+```
+Means: the new velocity value is 10 units less than the velocity of its predecessor.
+
+This usefull if you want to achieve something like this:
+![linear decreasing velocity values](https://raw.githubusercontent.com/werckme/werckmeister/main/assets/follow-up-velocity.png)
+
+Find the full example [here](https://werckme.github.io/editor?wid=conductor16thHighHatFollowUp).
 
 
 ## Accomp My Melodies

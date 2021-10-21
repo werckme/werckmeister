@@ -12,9 +12,9 @@
 #include <boost/filesystem.hpp>
 #include <exception>
 #include <fm/config.hpp>
-#include "FactoryConfig.h"
 #include <fmapp/JsonStringInputReader.hpp>
 #include <boost/algorithm/string/join.hpp>
+#include <compiler/error.hpp>
 
 void SheetCompilerProgram::prepareEnvironment()
 {
@@ -59,6 +59,19 @@ void SheetCompilerProgram::compile()
     }
     _logger->babble(WMLogLambda(log << "compiling '" << file << "'"));    
     _compiler->compile(document);
+    try {
+        _logger->babble(WMLogLambda(log << "aplying conduction rules"));
+        _conductionsPerformer->applyConductions();
+        if (_programOptions->isBeginSet() || _programOptions->isEndSet()) {
+            auto beginTicks = _programOptions->isBeginSet() ? _programOptions->getBegin() * fm::PPQ : 0;
+            auto endTicks = _programOptions->isEndSet() ? _programOptions->getEnd() * fm::PPQ : fm::Ticks(INT_MAX);
+            _midiFile->crop(beginTicks, endTicks);
+        }
+        _midiFile->seal();
+    } catch(fm::Exception &ex) {
+        ex << sheet::compiler::ex_sheet_document(document);
+        throw;
+    }
     _logger->babble(WMLogLambda(log << "write document"));   
     _documentWriter->write(document);
 }

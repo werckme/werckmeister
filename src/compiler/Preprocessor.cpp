@@ -6,6 +6,7 @@
 #include <sheet/Document.h>
 #include "metaCommands.h"
 #include <fm/tools.h>
+#include <algorithm>
 
 namespace sheet {
 	namespace compiler {
@@ -54,6 +55,37 @@ namespace sheet {
 				}
 			}
 
+			template<typename EventIteator>
+			void determineTiedDuration(EventIteator eventIt, EventIteator end)
+			{
+				Event &startEvent = *eventIt;
+				if (startEvent.tiedDurationTotal != Event::NoDuration) {
+					// already processed
+					return;
+				}
+				std::vector<Event*> totalDurations;
+				totalDurations.reserve(end - eventIt);
+				startEvent.tiedDurationTotal = startEvent.duration;
+				while((++eventIt) != end) {
+					Event &event = *eventIt;
+					bool isSamePitch = event.pitches.size() >= startEvent.pitches.size() &&
+						std::is_permutation(startEvent.pitches.begin(), startEvent.pitches.end(), event.pitches.begin());
+					startEvent.tiedDurationTotal += event.duration;
+					if (!isSamePitch) {
+						continue;
+					}
+					totalDurations.push_back(&event);
+					event.tiedDuration = startEvent.tiedDurationTotal;
+					if (!event.isTied()) {
+						break;
+					}
+				}
+				for(auto *event : totalDurations) {
+					event->tiedDurationTotal = startEvent.tiedDurationTotal;
+					event->tiedDuration = event->tiedDurationTotal - (event->tiedDuration - startEvent.duration);
+				}
+				startEvent.tiedDuration = startEvent.tiedDurationTotal;
+			}
 		}
 
         void Preprocessor::process(Track &track)
@@ -80,11 +112,21 @@ namespace sheet {
 					lastEvent = end - 1;
 				}
 				processData.lastDuration = VoiceMetaData::DefaultDuration;
+				// first pass
 				for (; it!=end; ++it)
 				{
 					auto &ev = *it;
 					processEvent(ev, processData);
 				}
+				it = voice.events.begin();
+				// second pass (repeat symbols are resolved now)
+				for (; it!=end; ++it)
+				{
+					auto &ev = *it;
+					if (ev.isTied()) {
+						determineTiedDuration(it, end);
+					}
+				}				
 				if (!processData.hasTimeConsumingEvents) {
 					// no need to do anything
 					voice.events.clear();
@@ -112,7 +154,9 @@ namespace sheet {
 			};
 			while (it != end) {
 				if (it->type == Event::Meta) {
-					_renderer->handleMetaEvent(*it);
+					if (it->stringValue != SHEET_META__ADD_CUE) {
+						_renderer->handleMetaEvent(*it);
+					}
 				}					
 				if (it->type == Event::EOB) {
 					processEob();
@@ -140,7 +184,7 @@ namespace sheet {
 				for (auto& voice : track.voices) {
 					_sheetNavigator->processNavigation(voice);
 				}
-				fm::String type = fm::getFirstMetaArgumentWithKeyName(SHEET_META__TRACK_META_KEY_TYPE, track.trackConfigs).value;
+				fm::String type = fm::getFirstMetaArgumentForKey(SHEET_META__TRACK_META_KEY_TYPE, track.trackConfigs).value;
 				bool isNoteEventTrack = type.empty();
 				bool isTemplateTrack  = type ==  SHEET_META__SET_SHEET_TEMPLATE;
 				if (isNoteEventTrack || isTemplateTrack) {

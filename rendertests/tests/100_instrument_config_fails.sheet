@@ -1,3 +1,4 @@
+-- #skip-event-plausibility-test
 using "chords/default.chords";
 using "pitchmaps/defaultMidiDrumMap.pitchmap";
 using "lua/mods/swing.lua";
@@ -23,7 +24,7 @@ type: template;
 name: x;    
 instrument: organ;
 {
-    <I II III IV V VI VIII>8 & & & & & & & |
+    <I II III IV V VI VII>8 & & & & & & & |
 }
 ]
 

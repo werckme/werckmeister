@@ -27,6 +27,8 @@ SET (SRC_FETZER_LIB
     parser/sheetParser.cpp
     parser/documentParser.cpp
     parser/pitchmapParser.cpp
+    parser/conductionSheetParser.cpp
+    parser/pitchParser.cpp
     compiler/context/MidiContext.cpp
     compiler/context/AContext.cpp
     compiler/Preprocessor.cpp
@@ -41,6 +43,7 @@ SET (SRC_FETZER_LIB
     compiler/voicings/SimpleGuitar.cpp
     compiler/voicings/Lua.cpp
     compiler/metaData.cpp
+    compiler/Instrument.cpp
     compiler/SheetTemplateRenderer.cpp
     compiler/error.cpp
     compiler/Warning.cpp
@@ -49,17 +52,15 @@ SET (SRC_FETZER_LIB
     compiler/lua/luaTimeInfo.cpp
     sheet/objects/Event.cpp
     sheet/objects/ChordDef.cpp
+    sheet/objects/Track.cpp
     sheet/Document.cpp
+    sheet/SheetTemplate.cpp
     compiler/commands/ACommand.cpp
     compiler/commands/ACanSpecifyInstrument.cpp
     compiler/commands/DefineMidiInstrument.cpp
     compiler/commands/SetVolume.cpp
     compiler/commands/SetPan.cpp
-    compiler/commands/SetTrackType.cpp
-    compiler/commands/SetTrackName.cpp
     compiler/commands/AddVorschlag.cpp
-    compiler/commands/SetTemplatePosition.cpp
-    compiler/commands/SetTemplate.cpp
     compiler/commands/SetExpression.cpp
     compiler/commands/SetExpressionPlayedOnce.cpp
     compiler/commands/SetSignature.cpp
@@ -81,6 +82,32 @@ SET (SRC_FETZER_LIB
     compiler/commands/AddDevice.cpp
     compiler/commands/Mark.cpp    
     compiler/commands/Jump.cpp 
+    compiler/commands/SetFade.cpp
+    compiler/commands/Cue.cpp
+    compiler/commands/Fill.cpp
+    compiler/commands/DefineInstrumentSection.cpp
+    conductor/ConductionsPerformer.cpp
+    conductor/selectors/OnBeat.cpp
+    conductor/selectors/NotOnBeat.cpp
+    conductor/selectors/FromPosition.cpp
+    conductor/selectors/FromPosition.cpp
+    conductor/selectors/ToPosition.cpp
+    conductor/selectors/Instrument.cpp
+    conductor/selectors/FromPitch.cpp
+    conductor/selectors/ToPitch.cpp
+    conductor/selectors/Pitch.cpp
+    conductor/selectors/Channel.cpp
+    conductor/selectors/FromBeat.cpp
+    conductor/selectors/ToBeat.cpp
+    conductor/selectors/FromBar.cpp
+    conductor/selectors/ToBar.cpp
+    conductor/selectors/OnBar.cpp
+    conductor/selectors/NthBar.cpp
+    conductor/declarations/ADeclaration.cpp
+    conductor/declarations/Velocity.cpp
+    conductor/declarations/Pitch.cpp
+    conductor/declarations/TimeOffset.cpp
+    conductor/declarations/Duration.cpp
 )
 
 add_definitions( -DGIT_VERSION="${GIT_VERSION}" )
@@ -97,6 +124,7 @@ SET (SRC_FETZER_TESTS
     tests/test_bugfixes.cpp
     tests/testhelper.cpp
     tests/test_document.cpp
+    tests/test_conduction_parser.cpp
 )
 
 ## FMAPP
@@ -167,7 +195,7 @@ endif()
 if(${BUILD_SHEETJS})
     add_executable(werckmeister sheetjs_main.cpp SheetCompilerProgramJs.cpp SheetCompilerProgram.cpp)
     target_link_libraries (werckmeister ${SHEET_LIBS} emscripten_boost_libs)
-    set_target_properties(werckmeister PROPERTIES LINK_FLAGS "-Oz -s MODULARIZE=1 -s EXPORT_NAME=\"startWerckmeisterJs\" -s DISABLE_EXCEPTION_CATCHING=0 -s EXTRA_EXPORTED_RUNTIME_METHODS=\"['cwrap', 'UTF8ToString', 'FS']\" -s EXPORTED_FUNCTIONS=\"['_main', '_create_compile_result']\"")
+    set_target_properties(werckmeister PROPERTIES LINK_FLAGS "-Oz -s MODULARIZE=1 -s EXPORT_NAME=\"startWerckmeisterJs\" -s DISABLE_EXCEPTION_CATCHING=0 -s EXPORTED_RUNTIME_METHODS=\"['cwrap', 'UTF8ToString', 'FS']\" -s EXPORTED_FUNCTIONS=\"['_main', '_create_compile_result']\"")
     install(FILES ${CMAKE_BINARY_DIR}/werckmeister.wasm DESTINATION .)
     install(FILES ${CMAKE_BINARY_DIR}/package.json DESTINATION .)
     install(FILES ${PROJECT_SOURCE_DIR}/LICENSE DESTINATION .)

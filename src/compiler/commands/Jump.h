@@ -8,7 +8,7 @@ namespace sheet {
     namespace compiler {
         /// <command name="jump" where="voice">
         ///     Jumps to a previous defined mark See [mark](manual/#mark).
-        /// ### examples
+        /// ### example
         /// <![CDATA[
         /// ```language=Werckmeister\n
         /// device: _usePort=0 _setName=MyDevice  _isType=midi;\n
@@ -26,9 +26,9 @@ namespace sheet {
         /// ```
         /// ]]>
         /// </command>
-        /// <param name="to"      position="0" type="word">the destination marker</param>  
+        /// <param name="to"      position="0" type="text">the destination marker</param>  
         /// <param name="ignore"  position="" optional="1" type="0..100">Ignores the jump N times</param>   
-        /// <param name="repreat" position="" optional="1" type="0..100">Repeats the jump N times. (A repeat value of 1 performs 2 jumps)</param>   
+        /// <param name="repeat" position="" optional="1" type="0..100">Repeats the jump N times. (A repeat value of 1 performs 2 jumps)</param>   
         class Jump : public ACommand
         {
         public:

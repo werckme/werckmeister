@@ -42,14 +42,14 @@ option(RTMIDI_API_CORE "Compile with CoreMIDI support." ${APPLE})
 
 # Add -Wall if possible
 if (CMAKE_COMPILER_IS_GNUCXX)
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
+  #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
 endif (CMAKE_COMPILER_IS_GNUCXX)
 
 # Add debug flags
 if (CMAKE_BUILD_TYPE STREQUAL "Debug")
   add_definitions(-D__RTMIDI_DEBUG__)
   if (CMAKE_COMPILER_IS_GNUCXX)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Werror")
+    #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Werror")
   endif (CMAKE_COMPILER_IS_GNUCXX)
 endif ()
 

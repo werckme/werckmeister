@@ -7,6 +7,7 @@
 #include "ASheetEventRenderer.h"
 #include <fm/ILogger.h>
 #include "ICompilerVisitor.h"
+#include <list>
 
 namespace sheet {
     namespace compiler {

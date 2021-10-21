@@ -1527,3 +1527,166 @@ BOOST_AUTO_TEST_CASE(test_repeats_fail_duplicated_multiplier_colon_3)
 	BOOST_CHECK_THROW(parser.parse(text), sheet::compiler::Exception);
 
 }
+
+BOOST_AUTO_TEST_CASE(test_extended_note_events)
+{
+	using namespace fm;
+	using sheet::PitchDef;
+	fm::String text = FM_STRING("\n\
+[\n\
+{\n\
+	h i j k l m n o p q s u v w x y z \n\
+}\n\
+]\n\
+");
+	sheet::compiler::SheetDefParser parser;
+	auto defs = parser.parse(text);
+	BOOST_CHECK(defs.tracks.size() == 1);
+	BOOST_CHECK(defs.tracks[0].voices.size() == 1);
+	BOOST_CHECK_EQUAL(defs.tracks[0].voices[0].events.size(), 17);
+	const auto& events = defs.tracks[0].voices[0].events;
+	int c = 0;
+	BOOST_CHECK_EQUAL(events[c].type, sheet::Event::Note);
+	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, fm::String("h"));
+	BOOST_CHECK_EQUAL(events[c].type, sheet::Event::Note);
+	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, fm::String("i"));
+	BOOST_CHECK_EQUAL(events[c].type, sheet::Event::Note);
+	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, fm::String("j"));
+	BOOST_CHECK_EQUAL(events[c].type, sheet::Event::Note);
+	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, fm::String("k"));
+	BOOST_CHECK_EQUAL(events[c].type, sheet::Event::Note);
+	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, fm::String("l"));
+	BOOST_CHECK_EQUAL(events[c].type, sheet::Event::Note);
+	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, fm::String("m"));
+	BOOST_CHECK_EQUAL(events[c].type, sheet::Event::Note);
+	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, fm::String("n"));
+	BOOST_CHECK_EQUAL(events[c].type, sheet::Event::Note);
+	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, fm::String("o"));
+	BOOST_CHECK_EQUAL(events[c].type, sheet::Event::Note);
+	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, fm::String("p"));
+	BOOST_CHECK_EQUAL(events[c].type, sheet::Event::Note);
+	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, fm::String("q"));
+	BOOST_CHECK_EQUAL(events[c].type, sheet::Event::Note);
+	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, fm::String("s"));
+	BOOST_CHECK_EQUAL(events[c].type, sheet::Event::Note);
+	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, fm::String("u"));
+	BOOST_CHECK_EQUAL(events[c].type, sheet::Event::Note);
+	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, fm::String("v"));
+	BOOST_CHECK_EQUAL(events[c].type, sheet::Event::Note);
+	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, fm::String("w"));
+	BOOST_CHECK_EQUAL(events[c].type, sheet::Event::Note);
+	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, fm::String("x"));
+	BOOST_CHECK_EQUAL(events[c].type, sheet::Event::Note);
+	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, fm::String("y"));
+	BOOST_CHECK_EQUAL(events[c].type, sheet::Event::Note);
+	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, fm::String("z"));
+}
+
+BOOST_AUTO_TEST_CASE(test_extended_note_events_2)
+{
+	using namespace fm;
+	using sheet::PitchDef;
+	fm::String text = FM_STRING("\n\
+[\n\
+{\n\
+	hijklmnopqsuvwxyz\n\
+}\n\
+]\n\
+");
+	sheet::compiler::SheetDefParser parser;
+	auto defs = parser.parse(text);
+	BOOST_CHECK(defs.tracks.size() == 1);
+	BOOST_CHECK(defs.tracks[0].voices.size() == 1);
+	BOOST_CHECK_EQUAL(defs.tracks[0].voices[0].events.size(), 17);
+	const auto& events = defs.tracks[0].voices[0].events;
+	int c = 0;
+	BOOST_CHECK_EQUAL(events[c].type, sheet::Event::Note);
+	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, fm::String("h"));
+	BOOST_CHECK_EQUAL(events[c].type, sheet::Event::Note);
+	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, fm::String("i"));
+	BOOST_CHECK_EQUAL(events[c].type, sheet::Event::Note);
+	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, fm::String("j"));
+	BOOST_CHECK_EQUAL(events[c].type, sheet::Event::Note);
+	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, fm::String("k"));
+	BOOST_CHECK_EQUAL(events[c].type, sheet::Event::Note);
+	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, fm::String("l"));
+	BOOST_CHECK_EQUAL(events[c].type, sheet::Event::Note);
+	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, fm::String("m"));
+	BOOST_CHECK_EQUAL(events[c].type, sheet::Event::Note);
+	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, fm::String("n"));
+	BOOST_CHECK_EQUAL(events[c].type, sheet::Event::Note);
+	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, fm::String("o"));
+	BOOST_CHECK_EQUAL(events[c].type, sheet::Event::Note);
+	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, fm::String("p"));
+	BOOST_CHECK_EQUAL(events[c].type, sheet::Event::Note);
+	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, fm::String("q"));
+	BOOST_CHECK_EQUAL(events[c].type, sheet::Event::Note);
+	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, fm::String("s"));
+	BOOST_CHECK_EQUAL(events[c].type, sheet::Event::Note);
+	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, fm::String("u"));
+	BOOST_CHECK_EQUAL(events[c].type, sheet::Event::Note);
+	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, fm::String("v"));
+	BOOST_CHECK_EQUAL(events[c].type, sheet::Event::Note);
+	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, fm::String("w"));
+	BOOST_CHECK_EQUAL(events[c].type, sheet::Event::Note);
+	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, fm::String("x"));
+	BOOST_CHECK_EQUAL(events[c].type, sheet::Event::Note);
+	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, fm::String("y"));
+	BOOST_CHECK_EQUAL(events[c].type, sheet::Event::Note);
+	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, fm::String("z"));
+}
+
+BOOST_AUTO_TEST_CASE(test_extended_note_events_octaves)
+{
+	using namespace fm;
+	using sheet::PitchDef;
+	fm::String text = FM_STRING("\n\
+[\n\
+{\n\
+	h' i'' j''' k'''' l''''' m, n,, o,,, p,,,, q,,,,, s' u' v' w' x' y' z' \n\
+}\n\
+]\n\
+");
+	sheet::compiler::SheetDefParser parser;
+	auto defs = parser.parse(text);
+	BOOST_CHECK(defs.tracks.size() == 1);
+	BOOST_CHECK(defs.tracks[0].voices.size() == 1);
+	BOOST_CHECK_EQUAL(defs.tracks[0].voices[0].events.size(), 17);
+	const auto& events = defs.tracks[0].voices[0].events;
+	int c = 0;
+	BOOST_CHECK_EQUAL(events[c].type, sheet::Event::Note);
+	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, fm::String("h'"));
+	BOOST_CHECK_EQUAL(events[c].type, sheet::Event::Note);
+	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, fm::String("i''"));
+	BOOST_CHECK_EQUAL(events[c].type, sheet::Event::Note);
+	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, fm::String("j'''"));
+	BOOST_CHECK_EQUAL(events[c].type, sheet::Event::Note);
+	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, fm::String("k''''"));
+	BOOST_CHECK_EQUAL(events[c].type, sheet::Event::Note);
+	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, fm::String("l'''''"));
+	BOOST_CHECK_EQUAL(events[c].type, sheet::Event::Note);
+	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, fm::String("m,"));
+	BOOST_CHECK_EQUAL(events[c].type, sheet::Event::Note);
+	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, fm::String("n,,"));
+	BOOST_CHECK_EQUAL(events[c].type, sheet::Event::Note);
+	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, fm::String("o,,,"));
+	BOOST_CHECK_EQUAL(events[c].type, sheet::Event::Note);
+	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, fm::String("p,,,,"));
+	BOOST_CHECK_EQUAL(events[c].type, sheet::Event::Note);
+	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, fm::String("q,,,,,"));
+	BOOST_CHECK_EQUAL(events[c].type, sheet::Event::Note);
+	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, fm::String("s'"));
+	BOOST_CHECK_EQUAL(events[c].type, sheet::Event::Note);
+	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, fm::String("u'"));
+	BOOST_CHECK_EQUAL(events[c].type, sheet::Event::Note);
+	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, fm::String("v'"));
+	BOOST_CHECK_EQUAL(events[c].type, sheet::Event::Note);
+	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, fm::String("w'"));
+	BOOST_CHECK_EQUAL(events[c].type, sheet::Event::Note);
+	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, fm::String("x'"));
+	BOOST_CHECK_EQUAL(events[c].type, sheet::Event::Note);
+	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, fm::String("y'"));
+	BOOST_CHECK_EQUAL(events[c].type, sheet::Event::Note);
+	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, fm::String("z'"));
+}
+

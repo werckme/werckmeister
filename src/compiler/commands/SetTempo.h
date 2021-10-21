@@ -8,15 +8,8 @@ namespace sheet {
     namespace compiler {
         /// <command name="tempo" where="document, track">
         /// `tempo` defines or changes the current tempo.
-        /// ### examples
-        /// **positional:** 
+        /// ### example
         /// `tempo: 120;`
-        /// **named:**
-        /// `tempo: _bpm=120;`
-        /// This command can be used as document config:
-        /// `tempo: 120;`
-        /// or within a track
-        /// `/tempo: 120/`
         /// It is also possible to set different tempo values for several tracks:
         /// [see here](/manual#tempo)
         /// </command>

@@ -8,11 +8,8 @@ namespace sheet {
     namespace compiler {
         /// <command name="pan" where="track">
         ///     set the pan of the current track
-        /// ### examples
-        /// **positional:** 
+        /// ### example
         /// `/pan: 50/`
-        /// **named:**
-        /// `/pan: _to=50/`   
         /// </command>
         /// <param name="to" position="0" type="0..100">The pan value. Where 50 means the center</param>   
         class SetPan : public ACommand

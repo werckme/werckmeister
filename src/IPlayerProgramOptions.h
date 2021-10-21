@@ -6,10 +6,6 @@
 struct IPlayerProgramOptions : public virtual ICompilerProgramOptions {
 	virtual bool isListDevicesSet() const = 0;
 	virtual bool isLoopSet() const = 0;
-	virtual bool isBeginSet() const = 0;
-	virtual double getBegin() const = 0;
-	virtual bool isEndSet() const = 0;
-	virtual double getEnd() const = 0;		
 	virtual bool isWatchSet() const = 0;
 	virtual bool isUdpSet() const = 0;
 	virtual fm::String getUdpHostname() const = 0;

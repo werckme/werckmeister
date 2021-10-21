@@ -25,7 +25,7 @@ namespace fmapp {
 
 	void MidiProvider::getEvents(Millis millis, Events &out, const TrackOffsets &offsets)
 	{
-		for (auto track : midi_->tracks()) {
+		for (auto track : midi_->ctracks()) {
 			auto trackId = reinterpret_cast<TrackId>(track.get());
 			auto offset = getOffset(offsets, trackId);
 			auto at = millisToTicks(millis - offset);
@@ -47,7 +47,7 @@ namespace fmapp {
 
 	void MidiProvider::iterate(const IterateFunction &f)
 	{
-		for (auto track : midi_->tracks()) {
+		for (auto track : midi_->ctracks()) {
 			auto end = track->events().end();
 			EventIt &it = *getEventIt(track);
 			while (it != end) {

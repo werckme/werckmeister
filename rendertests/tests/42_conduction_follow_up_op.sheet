@@ -1,0 +1,24 @@
+using "./lua/voicings/voicelead.lua";
+using "./chords/default.chords";
+using "./42_myConductions_follow_up_op.conductions";
+using "./pitchmaps/defaultMidiDrumMap.pitchmap";
+
+tempo: 120;
+device: SC1 midi 3;
+instrumentDef: piano SC1 _ch=9 _pc=0;
+
+[
+instrument: piano;
+{
+    "ht"16&&& &&&& &&&& &&&& | 
+    "ht"16&&& &&&& &&&& &&&& |
+    "ht"16&&& &&&& &&&& &&&& |
+    "ht"16&&& &&&& &&&& &&&& |     
+}
+{
+    "bd"4 "sn"4 "bd"4 "sn"4 |
+    "bd"4 "sn"4 "bd"4 "sn"4 |
+    "bd"4 "sn"4 "bd"4 "sn"4 |
+    "bd"4 "sn"4 "bd"4 "sn"4 |
+}
+]

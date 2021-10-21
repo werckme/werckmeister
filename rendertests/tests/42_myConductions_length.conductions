@@ -1,0 +1,4 @@
+fromPosition(1) toPosition(4) onBeat(2) {
+    duration -= 90%;
+    velocity = 100;
+}

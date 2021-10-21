@@ -1,18 +1,21 @@
-# WM_DOWNLOAD_EXTERNALS=1 WM_LINUX_LINK_STATIC=1 cmake ..
+# WM_DOWNLOAD_EXTERNALS=1 WM_LINUX_LINK_STATIC=1 cmake .. -DCMAKE_BUILD_TYPE=Debug
 cmake_minimum_required(VERSION 3.11)
 
 execute_process(COMMAND git --work-tree=. log --pretty=format:%h -n 1
               OUTPUT_VARIABLE GIT_VERSION)
+execute_process(COMMAND git branch --show-current OUTPUT_VARIABLE GIT_BRANCH_NAME)   
+
 # Project name.
 project(werckmeister)
 
 SET(WERCKMEISTER_VERSION_MAJOR 0)
 SET(WERCKMEISTER_VERSION_MINOR 1)
-SET(WERCKMEISTER_VERSION_PATCH 56)
+SET(WERCKMEISTER_VERSION_PATCH 60)
 
 # Add this project's cmake/ directory to the module path.
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
+set (CMAKE_CXX_STANDARD 17)
 
 # PROJECT CONFIG
 set(FM_CHARSET "ISO-8859-1")
@@ -23,7 +26,7 @@ set(FLUIDSYNTH_VERSION "2.1.0")
 
 set (INSTALL_AUX 1)
 
-if ("${CMAKE_SYSTEM}" MATCHES "Emscripten*")
+if (EMSCRIPTEN)
     MESSAGE("using emscripten")
     SET(USE_EMSCRIPTEN 1)
     SET (INSTALL_AUX 0)
@@ -39,7 +42,7 @@ set(LIB_FLUIDSYNTH_SEARCH_PATHS "")
 IF(UNIX)
   SET (LIB_FLUIDSYNTH_FILENAME "libfluidsynth.so")
   SET (LIB_FLUIDSYNTH_SEARCH_PATHS "{\"/usr/lib\", \"/usr/local/lib\"}")
-  SET (CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "-std=c++14 -Wall -Wno-unused-function")
+  SET (CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "-std=c++17 -Wall -Wno-unused-function")
   add_definitions( -DSHEET_USE_BOOST_TIMER )
   add_definitions( -DSHEET_OS_UNIX )
   if ($ENV{WM_LINUX_LINK_STATIC})
@@ -117,7 +120,7 @@ ELSEIF(UNIX)
       /usr/lib/x86_64-linux-gnu/libicudata.a  
       dl)
   endif ($ENV{WM_LINUX_LINK_STATIC})
-ENDIF(UNIX)
+ENDIF(APPLE)
 
 
 INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIRS})
@@ -150,9 +153,15 @@ add_subdirectory(submodules/lua)
 
 configure_file("${PROJECT_SOURCE_DIR}/src/fm/config.hpp.in" "${PROJECT_SOURCE_DIR}/src/fm/config.hpp")
 
-if (${USE_EMSCRIPTEN})
+#if (${USE_EMSCRIPTEN})
+  if(${GIT_BRANCH_NAME} MATCHES "main[ \t\r\n]*")
+    SET(BUILD_NR $ENV{BUILD_NR}) 
+  else()
+    SET(BUILD_NR dev-$ENV{BUILD_NR}) 
+  endif()
+  
   configure_file("package.in.json" "${CMAKE_BINARY_DIR}/package.json")
-endif()
+#endif()
 
 include(InstallRequiredSystemLibraries)
 set(CPACK_PACKAGE_VENDOR "Samba Godschynski")

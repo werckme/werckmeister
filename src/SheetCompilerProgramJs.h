@@ -13,7 +13,8 @@ public:
         sheet::compiler::IContextPtr             context,
         sheet::compiler::IPreprocessorPtr        preprocessor,
         fm::midi::MidiPtr                        midiFile,
-        fmapp::IDocumentWriterPtr                documentWriter
+        fmapp::IDocumentWriterPtr                documentWriter,
+        sheet::conductor::IConductionsPerformerPtr          conductionsPerformer
     ) : SheetCompilerProgram(programOptions
         , logger
         , documentParser
@@ -22,6 +23,7 @@ public:
         , preprocessor
         , midiFile
         , documentWriter
+        , conductionsPerformer
     )
     {
     }

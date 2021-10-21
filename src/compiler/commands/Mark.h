@@ -7,7 +7,7 @@
 namespace sheet {
     namespace compiler {
         /// <command name="mark" where="voice">
-        ///     adds a mark to the voice. Why you want to do that? See [jump](manual/#jump).
+        ///     adds a mark to the voice. Us it in combination with [jump](manual/#jump).
         /// ### examples
         /// <![CDATA[
         /// ```language=Werckmeister\n

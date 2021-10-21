@@ -7,18 +7,8 @@
 #include "deviceConfig.h"
 #include <fm/common.hpp>
 
-#if defined(__GNUC__) || defined(__GNUG__)
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-#include <loki/Singleton.h>
-#pragma GCC diagnostic pop
-#else
-#include <loki/Singleton.h>
-#endif
-
 namespace fm {
     class ConfigServer {
-    friend struct Loki::CreateUsingNew<ConfigServer>;
     public:
         typedef std::unordered_map<fm::String, DeviceConfig> Devices;
         ConfigServer();

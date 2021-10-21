@@ -21,6 +21,7 @@
 #include <sheet/AliasPitchDef.h>
 #include <sheet/objects/Grouped.h>
 #include <fm/tools.h>
+#include "pitchParser.h"
 
 BOOST_FUSION_ADAPT_STRUCT(
 	sheet::DocumentUsing,
@@ -36,18 +37,6 @@ BOOST_FUSION_ADAPT_STRUCT(
 BOOST_FUSION_ADAPT_STRUCT(
 	sheet::Voice,
 	(sheet::Voice::Events, events)
-)
-
-BOOST_FUSION_ADAPT_STRUCT(
-	sheet::PitchDef,
-	(sheet::PitchDef::Pitch, pitch)
-	(sheet::PitchDef::Octave, octave)
-	(bool, forceDegree)
-)
-
-BOOST_FUSION_ADAPT_STRUCT(
-	sheet::AliasPitchDef,
-	(fm::String, alias)
 )
 
 BOOST_FUSION_ADAPT_STRUCT(
@@ -126,7 +115,8 @@ namespace sheet {
 			DurationSymbols durationSymbols_;
 			ExpressionSymbols expressionSymbols_;
 			const std::string ALLOWED_META_ARGUMENT = "a-zA-Z0-9."; 
-			const std::string ALLOWED_TAG_ARGUMENT = "a-zA-Z0-9";
+			const std::string ALLOWED_ARGUMENT_NAME_SYMBOLS = "a-zA-Z0-9";
+			const std::string ALLOWED_EVENT_TAG_ARGUMENT = "a-zA-Z0-9,`':;?.!()[]<>+*/=$%&@\\^_|~-";
 		}
 
 		namespace {
@@ -134,7 +124,7 @@ namespace sheet {
 			namespace ascii = boost::spirit::ascii;
 			///////////////////////////////////////////////////////////////////
 			template <typename Iterator>
-			struct _SheetParser : qi::grammar<Iterator, SheetDef(), ascii::space_type>
+			struct _SheetParser : PitchParser, qi::grammar<Iterator, SheetDef(), ascii::space_type>
 			{
 
 				void initArgumentParser() 
@@ -143,7 +133,7 @@ namespace sheet {
 					using qi::attr;
 					using qi::lexeme;
 					using ascii::char_;
-					argument_ = ((("_" >> +char_(ALLOWED_TAG_ARGUMENT) >> "=") | attr("")) >> meta_arg_value_) ;
+					argument_ = ((("_" >> +char_(ALLOWED_ARGUMENT_NAME_SYMBOLS) >> "=") | attr("")) >> meta_arg_value_) ;
 					expression_argument_ = attr("") >> expressionSymbols_;
 				}
 
@@ -206,12 +196,11 @@ namespace sheet {
 					documentUsing_ %= usings_;
 				}
 
-
-
 				void initSheetParser()
 				{
 					using qi::int_;
 					using qi::_1;
+					using qi::_a;
 					using qi::lit;
 					using qi::string;
 					using qi::space;
@@ -225,7 +214,7 @@ namespace sheet {
 					using boost::phoenix::at_c;
 					using boost::phoenix::push_back;
 					using boost::phoenix::insert;
-
+					
 					start.name("sheet");
 					bar_volta_.name("bar jump mark");
 					event_.name("event");
@@ -239,13 +228,13 @@ namespace sheet {
 					degree_ %= (degreeSymbols_ >> (octaveSymbols_ | attr(PitchDef::DefaultOctave)) >> attr(false));
 					pitch_ %= pitchSymbols_ >> (octaveSymbols_ | attr(PitchDef::DefaultOctave));
 					alias_ %= lexeme['"' >> +(char_ - '"') >> '"'];
-					pitchOrAlias_ %= pitch_ | alias_;
+					pitchOrAlias_ %= pitch_ | alias_ | extendedPitch_;
 					event_ %= 
 					( // NOTE
 						current_pos_.current_pos 
 						>> attr(sourceId_)
 						>> attr(Event::Note)
-						>> (("\"" >> +(lexeme[+char_(ALLOWED_TAG_ARGUMENT)]) >> "\"" >> "@") | attr(Event::Tags()))
+						>> (("\"" >> +(lexeme[+char_(ALLOWED_EVENT_TAG_ARGUMENT)]) >> "\"" >> "@") | attr(Event::Tags()))
 						>> (pitchOrAlias_ | ("<" >> +pitchOrAlias_ >> ">"))
 						>> (durationSymbols_ | attr(Event::NoDuration))  
 						>> attr("")
@@ -261,7 +250,7 @@ namespace sheet {
 						current_pos_.current_pos 
 						>> attr(sourceId_)
 						>> attr(Event::Degree)
-						>> (("\"" >> +(lexeme[+char_(ALLOWED_TAG_ARGUMENT)]) >> "\"" >> "@") | attr(Event::Tags()))
+						>> (("\"" >> +(lexeme[+char_(ALLOWED_EVENT_TAG_ARGUMENT)]) >> "\"" >> "@") | attr(Event::Tags()))
 						>> (degree_ | ("<" >> +degree_ >> ">"))
 						>> (durationSymbols_ | attr(Event::NoDuration))  
 						>> attr("")
@@ -403,8 +392,9 @@ namespace sheet {
 				}
 
 				_SheetParser(Iterator begin, Event::SourceId sourceId = Event::UndefinedSource) : 
-					 _SheetParser::base_type(start, "sheet")
-					,sourceId_(sourceId)
+					PitchParser(),
+					_SheetParser::base_type(start, "sheet"),
+					sourceId_(sourceId)
 				{
 					using qi::on_error;
 					using qi::fail;
@@ -428,12 +418,10 @@ namespace sheet {
 					on_error<fail>(start, onError);
 
 				}
-			private:
+			protected:
 				Event::SourceId sourceId_ = Event::UndefinedSource;
 				qi::rule<Iterator, PitchDef(), ascii::space_type> degree_;
 				qi::rule<Iterator, SheetDef(), ascii::space_type> start;
-				qi::rule<Iterator, PitchDef(), ascii::space_type> pitch_;
-				qi::rule<Iterator, PitchDef(), ascii::space_type> pitchOrAlias_;
 				qi::rule<Iterator, Argument(), ascii::space_type> argument_;
 				qi::rule<Iterator, Argument(), ascii::space_type> expression_argument_;
 				qi::rule<Iterator, Track(), ascii::space_type> track;
@@ -452,6 +440,32 @@ namespace sheet {
 				qi::rule<Iterator, fm::String(), ascii::space_type> bar_volta_;
 				CurrentPos<Iterator> current_pos_;
 			};
+			
+			template <typename Iterator>
+			struct _ConfigParser : public _SheetParser<Iterator> {
+				typedef _SheetParser<Iterator> Base;
+				_ConfigParser(Iterator begin, Event::SourceId sourceId = Event::UndefinedSource) : _SheetParser<Iterator>(begin, sourceId)
+				{
+					using qi::on_error;
+					using qi::fail;
+					using qi::attr;
+					Base::initArgumentParser();
+					Base::createDocumentConfigRules(Base::documentConfig_);
+					Base::initDocumentUsingParser();
+					Base::current_pos_.setStartPos(begin);
+
+					Base::documentConfig_.name("document config");
+					Base::documentUsing_.name("document config");
+
+					Base::start %= (Base::documentUsing_ | attr(DocumentUsing()))
+							> *Base::documentConfig_
+							> attr(Track())
+							> boost::spirit::eoi;
+
+					auto onError = boost::bind(&handler::errorHandler<Iterator>, _1, Base::sourceId_);
+					on_error<fail>(Base::start, onError);
+				}
+			};
 
 
 			void _parse(const fm::String &source, SheetDef &def, Event::SourceId sourceId)
@@ -462,6 +476,7 @@ namespace sheet {
 				SheetParserType g(source.begin(), sourceId);
 				phrase_parse(source.begin(), source.end(), g, space, def);
 			}
+
 		}
 
 
@@ -471,6 +486,21 @@ namespace sheet {
 			fm::String source(first, last);
 			fm::removeComments(source.begin(), source.end());
 			_parse(source, result, sourceId);
+			return result;
+		}
+
+		SheetDef ConfigParser::parse(fm::CharType const* first, fm::CharType const* last, Event::SourceId sourceId)
+		{
+			SheetDef result;
+			fm::String source(first, last);
+			fm::removeComments(source.begin(), source.end());
+
+			using boost::spirit::ascii::space;
+			typedef _ConfigParser<fm::String::const_iterator> ConfigParserType;
+
+			ConfigParserType g(source.begin(), sourceId);
+			phrase_parse(source.cbegin(), source.cend(), g, space, result);
+
 			return result;
 		}
 	}

@@ -4,6 +4,7 @@
 #include <cstddef>
 #include "units.hpp"
 #include <set>
+#include <list>
 #include <vector>
 #include <unordered_map>
 #include <boost/cstdint.hpp>
@@ -20,6 +21,7 @@ namespace fm {
 			enum Type {
 				Undefined,
 				SetDevice,
+				SetInstrument,
 				MaxTypeId = 0xFF
 			};
 			typedef std::vector<Byte> Data;
@@ -122,10 +124,12 @@ namespace fm {
 			static Event NoteOff(Channel, Ticks, Pitch);
 			static Event MetaTempo(double bpm);
 			static Event MetaSignature(Byte nominator, Byte denominator, Byte clocksBetweenMetronomeClick = 24, Byte nth32PerQuarter = 8 );
+			static std::pair<Byte, Byte> MetaGetSignatureValue(const Byte *data, size_t length);
 			static Event CCVolume(Channel channel, Byte volume);
 			static Event CCPan(Channel channel, Byte volume);
 			static Event MetaInstrument(const std::string &name);
 			static Event MetaTrack(const std::string &name);
+			static Event MetaCue(const std::string &name);
 			static Event MetaCustom(const CustomMetaData &custom);
 			static std::vector<Byte> MetaCreateStringData(const std::string &string);
 			static std::string MetaGetStringValue(const Byte *data, size_t length);
@@ -167,7 +171,7 @@ namespace fm {
 		};
 		class EventContainer {
 		public:
-			typedef std::multiset<Event, EventCompare> TContainer;
+			typedef std::vector<Event> TContainer;
 			typedef TContainer::iterator Iterator;
 			typedef TContainer::const_iterator ConstIterator;
 			void add(const Event &event);
@@ -175,18 +179,16 @@ namespace fm {
 			void addNote(Channel, Ticks absPosition, Pitch, Velocity, Ticks length);
 			ConstIterator begin() const;
 			ConstIterator end() const;
-			ConstIterator from(Ticks absTicks) const;
-			ConstIterator to(Ticks absTicks) const;
+
 			size_t read(const Byte *, size_t length);
 			size_t write(Byte *, size_t maxByteSize, fm::Ticks *outWrittenDuration = nullptr) const;
 			size_t byteSize() const;
 			size_t numEvents() const { return _container.size(); }
-			bool contains(const Event &event) const;
 			const TContainer & container() const { return _container; }
 			TContainer & container() { return _container; }
 			const MidiConfig * midiConfig() const;
 			void midiConfig (const MidiConfig *midiConfig) { this->_midiConfig = midiConfig; }
-			
+			void sort();
 		private:
 			const MidiConfig *_midiConfig = nullptr;
 			TContainer _container;
@@ -205,7 +207,7 @@ namespace fm {
 			const EventContainer & events() const { return _container; }
 			EventContainer & events() { return _container; }
 			size_t read(const Byte *, size_t length);
-			size_t write(Byte *, size_t maxByteSize) const;
+			size_t write(Byte *, size_t maxByteSize);
 			size_t byteSize() const { return _container.byteSize() + sizeof(Header) + EoTSize; }
 			/**
 				values will not be written to midi file
@@ -236,19 +238,26 @@ namespace fm {
 			size_t byteSize() const;
 			void addTrack(TrackPtr track);
 			TrackPtr createTrack() const;
-			const TrackContainer & tracks() const { return _container; }
-			TrackContainer & tracks() { return _container; }
-			void write(const char* filename) const;
-			void write(std::ostream&) const;
+			const TrackContainer& tracks() const { return _container; }
+			const TrackContainer& ctracks() const { return _container; }
+			TrackContainer & tracks();
+			void write(const char* filename);
+			void write(std::ostream&);
 			Ticks duration() const;
 			BPM bpm() const { return bpm_; }
 			void bpm(BPM bpm) { bpm_ = bpm; }
 			MidiConfig midiConfig;
 			void clear();
+			/**
+			 * seal before write
+			 */
+			void seal();
+			void crop(fm::Ticks begin, fm::Ticks end);
 		private:
 			BPM bpm_ = fm::DefaultTempo;
 			Ticks _ppq = 0;
 			TrackContainer _container;
+			bool _sealed = false;
 		};
 	}
 }

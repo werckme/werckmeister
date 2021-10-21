@@ -9,10 +9,6 @@ namespace sheet {
         /// <command name="instrument" where="trackConfig, track">
         /// Set or change the instrument of a track.
         /// ### examples
-        /// **positional:** 
-        /// `instrument: myInstrument;`
-        /// **named:**
-        /// `instrument: _use=myInstrument;`
         /// **set an instrument for a track**
         /// ```
         /// [ \n
@@ -33,7 +29,7 @@ namespace sheet {
         /// ] \n
         /// ```       
         /// </command>
-        /// <param name="use" position="0" type="word">The instrument name.</param>
+        /// <param name="use" position="0" type="text">The instrument name.</param>
         class SetInstrument : public ACommand
         {
         public:

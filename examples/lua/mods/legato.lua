@@ -16,7 +16,7 @@
 --]\n
 -- ```
 -- </command>
--- <param name="forTag" optional="1" type="word">Specifies a tag name. If set only events with this tag name will be affected by the legato mod.</param>
+-- <param name="forTag" optional="1" type="text">Specifies a tag name. If set only events with this tag name will be affected by the legato mod.</param>
 -- <param name="amount" optional="1" type="0..100">The ammount of the legato effect</param>
 
 require "lua/com/com"

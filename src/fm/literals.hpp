@@ -22,6 +22,33 @@ namespace fm {
     Ticks operator "" _N64p(long double);
     Ticks operator "" _N128p(long double);
 
+    Ticks operator "" _N1pp(long double);
+    Ticks operator "" _N2pp(long double);
+    Ticks operator "" _N4pp(long double);
+    Ticks operator "" _N8pp(long double);
+    Ticks operator "" _N16pp(long double);
+    Ticks operator "" _N32pp(long double);
+    Ticks operator "" _N64pp(long double);
+    Ticks operator "" _N128pp(long double);
+
+    Ticks operator "" _N1ppp(long double);
+    Ticks operator "" _N2ppp(long double);
+    Ticks operator "" _N4ppp(long double);
+    Ticks operator "" _N8ppp(long double);
+    Ticks operator "" _N16ppp(long double);
+    Ticks operator "" _N32ppp(long double);
+    Ticks operator "" _N64ppp(long double);
+    Ticks operator "" _N128ppp(long double);
+
+    Ticks operator "" _N1pppp(long double);
+    Ticks operator "" _N2pppp(long double);
+    Ticks operator "" _N4pppp(long double);
+    Ticks operator "" _N8pppp(long double);
+    Ticks operator "" _N16pppp(long double);
+    Ticks operator "" _N32pppp(long double);
+    Ticks operator "" _N64pppp(long double);
+    Ticks operator "" _N128pppp(long double);            
+
     Ticks operator "" _N1t(long double);
     Ticks operator "" _N2t(long double);
     Ticks operator "" _N4t(long double);

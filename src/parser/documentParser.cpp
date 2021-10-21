@@ -19,8 +19,11 @@ namespace sheet {
 			typedef std::set<std::string> Extensions;
 			void useChordDef(DocumentPtr doc, const fm::String &path, Event::SourceId);
 			void usePitchmapDef(DocumentPtr doc, const fm::String &path, Event::SourceId);
+			void useConductionSheet(DocumentPtr doc, const fm::String &path, Event::SourceId);
 			void useLuaScript(DocumentPtr doc, const fm::String &path, Event::SourceId);
+			void useLuaScript(DocumentPtr doc, const fm::String& path, Event::SourceId);
 			void useSheetTemplateDef(DocumentPtr doc, const fm::String &path, Event::SourceId);
+			void useConfig(DocumentPtr doc, const fm::String& path, Event::SourceId sourceId);
 			void processUsings(DocumentPtr doc, 
 				const sheet::DocumentUsing &documentUsing, 
 				const Extensions &allowedExtendions,
@@ -30,14 +33,18 @@ namespace sheet {
 				{ CHORD_DEF_EXTENSION , &useChordDef },
 				{ SHEET_TEMPLATE_DEF_EXTENSION , &useSheetTemplateDef },
 				{ PITCHMAP_DEF_EXTENSION , &usePitchmapDef },
-				{ LUA_DEF_EXTENSION , &useLuaScript }
+				{ LUA_DEF_EXTENSION , &useLuaScript },
+				{ SHEET_CONFIG , &useConfig },
+				{ CONDUCTIONS_SHEET , &useConductionSheet }
 			});
 			
 			const Extensions AllSupportedExtensions = {
 				CHORD_DEF_EXTENSION,
 				SHEET_TEMPLATE_DEF_EXTENSION,
 				PITCHMAP_DEF_EXTENSION,
-				LUA_DEF_EXTENSION
+				LUA_DEF_EXTENSION,
+				SHEET_CONFIG,
+				CONDUCTIONS_SHEET
 			};
 
 			void append(DocumentPtr doc, const SheetDef &sheetDef)
@@ -71,6 +78,17 @@ namespace sheet {
 					doc->pitchmapDefs[x.name] = x.pitch;
 				}
 			}
+			void useConductionSheet(DocumentPtr doc, const fm::String &path, Event::SourceId sourceId)
+			{
+				
+				auto filestream = fm::getWerckmeister().openResource(path);
+				fm::StreamBuffIterator begin(*filestream);
+				fm::StreamBuffIterator end;
+				fm::String documentText(begin, end);
+				ConductionSheetParser parser;
+				auto conductionSheet = parser.parse(documentText, sourceId);
+				doc->conductionSheets.push_back(conductionSheet);
+			}
 			void useLuaScript(DocumentPtr doc, const fm::String &path, Event::SourceId sourceId)
 			{
 				auto &wm = fm::getWerckmeister();
@@ -90,6 +108,29 @@ namespace sheet {
 					append(doc, sheetDef);
 					processUsings(doc, sheetDef.documentUsing, {LUA_DEF_EXTENSION, PITCHMAP_DEF_EXTENSION}, path);
 				} catch (Exception &ex) {
+					ex << ex_error_source_file(path);
+					throw;
+				}
+			}
+
+			void useConfig(DocumentPtr doc, const fm::String& path, Event::SourceId sourceId)
+			{
+				try {
+					auto filestream = fm::getWerckmeister().openResource(path);
+					fm::StreamBuffIterator begin(*filestream);
+					fm::StreamBuffIterator end;
+					fm::String documentText(begin, end);
+					ConfigParser configParser;
+					auto configDef = configParser.parse(documentText, sourceId);
+					fm::append(doc->sheetDef.documentConfigs, configDef.documentConfigs);
+					processUsings(doc, configDef.documentUsing, {
+						LUA_DEF_EXTENSION, 
+						PITCHMAP_DEF_EXTENSION, 
+						CHORD_DEF_EXTENSION,
+						SHEET_TEMPLATE_DEF_EXTENSION
+					}, path);
+				}
+				catch (Exception& ex) {
 					ex << ex_error_source_file(path);
 					throw;
 				}

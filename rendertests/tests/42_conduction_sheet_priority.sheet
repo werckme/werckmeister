@@ -1,0 +1,47 @@
+using "./chords/default.chords";
+using "lua/mods/staccato.lua";
+using "lua/voicings/guitar.lua";
+using "./42_conduction_sheet_priority.conductions";
+
+tempo: 120;
+device: MyDevice  midi _usePort=3;
+instrumentDef:rhythm _onDevice=MyDevice  _ch=1 _pc=28;
+instrumentDef:rhythm2 _onDevice=MyDevice  _ch=3 _pc=50;
+instrumentDef:bass    _onDevice=MyDevice  _ch=2 _pc=38;
+instrumentConf: rhythm volume 95 mod staccato voicingStrategy guitar _range=alto;
+instrumentConf: rhythm2 volume 100 mod staccato _amount=100 voicingStrategy guitar _range=baritone;
+instrumentConf: bass volume 80;
+
+[
+type: template;
+name: rhythm;
+instrument: rhythm;
+{
+	\p
+	<I II III IV V VI VII>16&&&&&&& &8&8 r4 | 
+    &16&&&&&&& &8&8 r8 !f& | 
+    &16&&&&&&& &8&8 r8 !f&16 & | 
+}
+]
+
+[
+type: template;
+name: rhythm2;
+instrument: rhythm2;
+{
+	\ppp
+	<I II III IV V VI VII>4
+    <I II III IV V VI VII>4
+    <I II III IV V VI VII>4
+    <I II III IV V VI VII>4
+}
+]
+
+
+[
+type: accomp;
+{   
+	/template: rhythm rhythm2/
+    C | C | Cmin | Cb7 | E | D | G | F | A B |
+}
+]

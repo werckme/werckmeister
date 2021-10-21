@@ -4,7 +4,8 @@ on:
   push:
     branches: 
         - main
-        - feature/* 
+        - feature/*
+        - bugfix/* 
         - develop
   pull_request:
     branches: [ develop ]
@@ -23,6 +24,8 @@ jobs:
     - name: configure
       run: source ../third_party/emsdk/emsdk_env.sh && emcmake cmake -DCMAKE_BUILD_TYPE=Release ..
       working-directory: build
+      env: 
+        BUILD_NR: ${{ github.run_number }}
     - name: build
       run: cmake --build .
       working-directory: build  
@@ -33,3 +36,15 @@ jobs:
       with:
         name: werckmeister-linux-${{ github.sha }}
         path: build/werckmeister-*-Emscripten.zip
+    - uses: actions/setup-node@v1
+      with:
+        node-version: 14
+    - name: Publish
+      run: |
+          unzip werckmeister-*-Emscripten.zip
+          cd werckmeister-*-Emscripten
+          npm config set //registry.npmjs.org/:_authToken ${NPM_TOKEN}
+          npm publish --ignore-scripts --access=public
+      working-directory: build
+      env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}

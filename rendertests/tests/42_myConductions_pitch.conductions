@@ -1,0 +1,3 @@
+fromPitch(c') toPitch(f')  {
+    velocity = 127;
+}

@@ -1,0 +1,7 @@
+pitch(c') {
+    pitch += 12;
+}
+
+pitch(c d e f g a b) {
+    pitch -= 12;
+}

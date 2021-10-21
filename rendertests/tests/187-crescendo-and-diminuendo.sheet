@@ -1,0 +1,27 @@
+
+device: SC1 midi 4;
+instrumentDef: organ  SC1 _ch=0 _pc=16;
+
+tempo: 75;
+
+[
+instrument: organ;
+{
+    \fff
+    /fade: _from=0 _to=100 _duration=4/
+    c1 |
+    /fade: _from=0 _to=100 _duration=4 _curve="quad"/
+    c1 |
+    /fade: _from=0 _to=100 _duration=4 _curve="cub"/
+    c1 |
+    /fade: _from=0 _to=100 _duration=4 _curve="quart"/
+    c1 |
+    /fade: _from=0 _to=100 _duration=4 _curve="quint"/
+    c1 |    
+    /fade: _from=0 _to=100 _duration=4 _curve="exp"/
+    c1 |                    
+}
+]
+
+
+

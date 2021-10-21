@@ -14,26 +14,17 @@
 #include <functional>
 #include <fm/IRegisterable.h>
 #include <fm/exception.hpp>
-
-#if defined(__GNUC__) || defined(__GNUG__)
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-#include <loki/Singleton.h>
-#pragma GCC diagnostic pop
-#else
-#include <loki/Singleton.h>
-#endif            
+#include <list>
 
 namespace fm {
     class Werckmeister {
-        friend struct Loki::CreateUsingNew<Werckmeister>;
     public:
         Werckmeister() {}
 		Werckmeister(const Werckmeister&&) = delete;
 		Werckmeister& operator=(const Werckmeister&&) = delete;
 		typedef std::istream StreamType;
 		typedef std::unique_ptr<StreamType> ResourceStream;
-		typedef std::set<Path> Paths;
+		typedef std::list<Path> Paths;
 		typedef std::function<sheet::compiler::AContextPtr()> CreateContextFunction;
         /*
             creates a default sheet. if werk parameter set, it will added to the werk after creation.

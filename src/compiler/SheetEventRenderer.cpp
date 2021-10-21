@@ -8,6 +8,7 @@
 #include <compiler/commands/AUsingAnEvent.h>
 #include <compiler/Warning.hpp>
 #include "IEventLogger.h"
+#include <compiler/Instrument.h>
 
 namespace sheet {
     namespace compiler {
@@ -177,20 +178,20 @@ namespace sheet {
 				mod->perform(ctx_, events);
 			}
 			auto instrument = ctx_->currentInstrumentDef();
-			if (instrument && !instrument->modifications.empty()) {
-				for (auto mod : instrument->modifications) {
-					mod->perform(ctx_, events);
-				}						
+			if (instrument) {
+				instrument->renderEvents(this, events);
+			} else {
+				for (const auto& event : events) {
+					if (event.isPitchBend()) {
+						renderPitchBendEvent(event);
+					}
+					else {
+						renderEventPitches(event);
+					}
+				}
 			}
 			meta->modificationsOnce.clear();
 			meta->expression = tmpExpression;
-			for (const auto &event : events) {
-				if (event.isPitchBend()) {
-					renderPitchBendEvent(event);
-				} else {
-					renderEventPitches(event);
-				}
-			}
 			ctx_->seek(ev.duration);
 		}
 
@@ -224,15 +225,15 @@ namespace sheet {
 			try {
 				auto &wm = fm::getWerckmeister();
 				auto command = wm.solveOrDefault<ACommand>(commandName);
-				if (command) {
-					auto *usingAnEvent = dynamic_cast<AUsingAnEvent*>(command.get());
-					if (usingAnEvent) {
-						usingAnEvent->event(metaEvent);
-					}
-					command->setArguments(args);
-					command->execute(ctx_);
-					return;
+				if (!command) {
+					FM_THROW(Exception, "command not found: " + commandName);
 				}
+				auto *usingAnEvent = dynamic_cast<AUsingAnEvent*>(command.get());
+				if (usingAnEvent) {
+					usingAnEvent->event(metaEvent);
+				}
+				command->setArguments(args);
+				command->execute(ctx_);
 			} catch(const std::exception &ex) {
 				FM_THROW(Exception, "failed to process \"" + commandName 
 									+"\", \n" + ex.what());

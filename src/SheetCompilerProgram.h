@@ -8,6 +8,7 @@
 #include <compiler/ICompiler.h>
 #include <compiler/context/MidiContext.h>
 #include <compiler/IPreprocessor.h>
+#include <conductor/IConductionsPerformer.h>
 #include <fm/ILogger.h>
 #include <ostream>
 #include <fmapp/IDocumentWriter.h>
@@ -22,6 +23,7 @@ protected:
     sheet::compiler::IPreprocessorPtr    _preprocessor;
     fm::midi::MidiPtr                    _midiFile;
     fmapp::IDocumentWriterPtr            _documentWriter;
+    sheet::conductor::IConductionsPerformerPtr      _conductionsPerformer;
 
 public:
     SheetCompilerProgram(
@@ -32,7 +34,8 @@ public:
         sheet::compiler::IContextPtr             context,
         sheet::compiler::IPreprocessorPtr        preprocessor,
         fm::midi::MidiPtr                        midiFile,
-        fmapp::IDocumentWriterPtr                documentWriter
+        fmapp::IDocumentWriterPtr                documentWriter,
+        sheet::conductor::IConductionsPerformerPtr          conductionsPerformer
     ) : _programOptions(programOptions),
         _logger(logger),
         _documentParser(documentParser),
@@ -40,7 +43,8 @@ public:
         _context(context),
         _preprocessor(preprocessor),
         _midiFile(midiFile),
-        _documentWriter(documentWriter)
+        _documentWriter(documentWriter),
+        _conductionsPerformer(conductionsPerformer)
     {
     }
     virtual int execute();

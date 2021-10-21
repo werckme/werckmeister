@@ -1,0 +1,17 @@
+using "./lua/voicings/voicelead.lua";
+using "./chords/default.chords";
+using "42_myConductions_nthbar_1.conductions";
+
+tempo: 200;
+device: SC1 midi 4;
+instrumentDef: piano SC1 0 0 0;
+
+[
+instrument: piano;
+{
+    \p
+    c8& d& e& f& | g& a& b& c'& | c8& d& e& f& |
+    c8& d& e& f& | g& a& b& c'& | c8& d& e& f& |
+    c8& d& e& f& | g& a& b& c'& | c8& d& e& f& |
+}
+]

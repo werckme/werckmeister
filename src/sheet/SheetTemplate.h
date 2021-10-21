@@ -21,6 +21,9 @@ namespace sheet {
             return name == b.name;
         }
         bool operator!=(const SheetTemplate &b)	const { return !(*this == b); }
+        bool isFill = false;
+        fm::Ticks ignoreUnitlPosition = -1.0;
+        fm::Ticks maxLength() const;
     };
 
 }
