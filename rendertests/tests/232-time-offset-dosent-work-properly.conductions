@@ -1,0 +1,4 @@
+channel(1) {
+	pitch -= 12;
+    timeOffset += 4;
+}
