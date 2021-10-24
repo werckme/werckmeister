@@ -1,0 +1,14 @@
+-- issue: rules apply although instrument name dosen't match
+
+using "myPitchmap.pitchmap";
+using "./instrument_selector_issue.conductions"; 
+
+tempo: 110;
+device: MyDevice  midi _usePort=3;
+instrumentDef:drums    _onDevice=MyDevice  _ch=9 _pc=50;
+[
+instrument: drums;
+{   
+    h16 h h h  h h h h  h h h h  h h h h |
+}
+]
