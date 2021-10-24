@@ -197,7 +197,7 @@ namespace sheet
 							}
 							if (matchedMidiEvents.empty())
 							{
-								continue;
+								break;
 							}
 							eventsAndDeclarations->events.swap(matchedMidiEvents);
 						}
