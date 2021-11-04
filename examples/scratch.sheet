@@ -9,56 +9,13 @@ using "./lua/mods/myArpeggio.lua";
 using "./lua/mods/swing.lua";
 using "./lua/mods/staccato.lua";
 
-instrumentDef: _setName=piano _onDevice=MyDevice _ch=0 _pc=1 _cc=8;
-instrumentDef: _setName=pianoRH _onDevice=MyDevice _ch=0 _pc=1 _cc=8;
-instrumentDef: _setName=pianoLH _onDevice=MyDevice _ch=1 _pc=1 _cc=8;
+instrumentDef: _setName=piano _onDevice=MyDevice _ch=0 _pc=0 _bankMsb=81 _bankLsb=1;
 
-instrumentConf: pianoRH
-    volume 100 
-    pan    0
-    mod swing _offset=80
-    _set=remapVelocity _ppppp=100
-;
-
-instrumentConf: _for=pianoLH 
-    _set=volume _to=100 
-    _set=pan    _to=0
-    _set=mod _use=staccato _amount=100 _forTag=here
-    _set=mod _use=guitarStroke _value=32  _direction=down
-    _set=voicingStrategy _use=guitar --_range=alto
-;
 
 tempo: 130;
 [
-instrument: pianoRH;
+instrument: piano;
 {
-    \ppppp 
-    r1 | r1
-    | c2 d |e2~ e | r2 c#->c4 d4 | e4 e g c | d#2 d#4 d | 
-    c2 bb4 a 
-    | g2  g4 a | bb c' bb a | ab2 ab4 bb | c' ab,4 ab,4  bb,~ | <bb, c> ab ab bb | c' c' eb'8 d' c' d' 
-    | b2 b, | r1 | r4 b4 b4 c' | d' d' d' d' | d' d' e'8 d' c' b | c#'->c'1 
-}
-]
-
-[
-type: template;
-name: myTemplate;
-instrument: pianoLH;
-{
-    \ff
-
-    "here"@<I, II, III, VI, V, VI, VII,>2 &2 |
-}
-]
-
-[
-type: accomp;
-{
-    /template: myTemplate/
-
-    Cmaj7 | Cmaj7 | Cmaj7 | Cmaj7 | Cmaj7 | Cmaj7 | Ebmaj7 | Ebmaj7 | 
-    Ebmaj7 | Ebmaj7 | Abmaj7 | Abmaj7 | Abmaj7 | Abmaj7 | G7 
-    | G7 | G7 | G7 | G7 | C | C | Cmin | Cmin | 
+    c d e f | g a b c'
 }
 ]

@@ -224,19 +224,40 @@ namespace sheet {
 			addEvent(sigEvent);
 		}
 
-		void MidiContext::selectMidiSound(int cc, int pc)
+		void MidiContext::selectMidiSound(int bankMsb, int bankLsb, int pc)
 		{
 			auto trackMeta = trackMetaData<MidiContext::TrackMetaData>();
 			if (!trackMeta) {
 				FM_THROW(Exception, "meta data = null");
-			}				
+			}
+			auto channel = getChannel(*trackMeta);
+			auto position = currentPosition();
+			// msb
+			if (bankMsb >= 0) 
+			{
+				auto ev = fm::midi::Event();
+				ev.absPosition(position);
+				ev.channel(channel);
+				ev.eventType(fm::midi::Controller);
+				ev.parameter1(0);
+				ev.parameter2(bankMsb);
+				addEvent(ev);
+			}
+			// lsb
+			if (bankLsb >= 0)
+			{
+				auto ev = fm::midi::Event();
+				ev.absPosition(position);
+				ev.channel(channel);
+				ev.eventType(fm::midi::Controller);
+				ev.parameter1(32);
+				ev.parameter2(bankLsb);
+				addEvent(ev);
+			}
+			// pc
 			auto ev = fm::midi::Event();
-			ev.channel(getChannel(*trackMeta));
-			ev.eventType(fm::midi::Controller);
-			ev.parameter1(0);
-			ev.parameter2(cc);
-			ev.absPosition(currentPosition());
-			addEvent(ev);
+			ev.absPosition(position);
+			ev.channel(channel);
 			ev.eventType(fm::midi::ProgramChange);
 			ev.parameter1(pc);
 			ev.parameter2(0);
@@ -330,7 +351,7 @@ namespace sheet {
 			if (!instrumentDef->deviceName.empty()) {
 				addDeviceChangeEvent(instrumentDef->deviceName, 0);
 			}
-			selectMidiSound(instrumentDef->cc, instrumentDef->pc);
+			selectMidiSound(instrumentDef->bankMsb, instrumentDef->bankLsb, instrumentDef->pc);
 			// volume
 			addEvent(__createVolumeEvent(*instrumentDef, currentPosition()));
 			// pan
@@ -391,17 +412,18 @@ namespace sheet {
 			addInstrumentDef(uname, def);
 		}
 
-		void MidiContext::defineMidiInstrument(const fm::String &uname, int channel, int cc, int pc)
+		void MidiContext::defineMidiInstrument(const fm::String &uname, int channel, int bankMsb, int bankLsb, int pc)
 		{
-			defineMidiInstrument(uname, fm::String(), channel, cc, pc);
+			defineMidiInstrument(uname, fm::String(), channel, bankMsb, bankLsb, pc);
 		}
 
-		void MidiContext::defineMidiInstrument(const fm::String &uname, const fm::String &deviceName, int channel, int cc, int pc)
+		void MidiContext::defineMidiInstrument(const fm::String &uname, const fm::String &deviceName, int channel, int bankMsb, int bankLsb, int pc)
 		{
 			auto def = std::make_shared<MidiInstrumentDef>();
 			def->uname = uname;
 			def->channel = channel;
-			def->cc = cc;
+			def->bankMsb = bankMsb;
+			def->bankLsb = bankLsb;
 			def->pc = pc;
 			def->deviceName = deviceName;
 			auto& config = fm::getConfigServer();

@@ -46,10 +46,10 @@ namespace sheet {
 			virtual void renderPitchbend(double value, fm::Ticks absolutePosition) override;
 			virtual void startEvent(const PitchDef &pitch, fm::Ticks absolutePosition, double velocity) override;
 			virtual void stopEvent(const PitchDef &pitch, fm::Ticks absolutePosition) override;
-			virtual void selectMidiSound(int cc, int pc);
+			virtual void selectMidiSound(int bankMsb, int bankLsb, int pc);
 			virtual void defineInstrumentSection(const fm::String& uname, std::list<fm::String> &sectionInstrumentUNames);
-			virtual void defineMidiInstrument(const fm::String &uname, int channel, int cc, int pc);
-			virtual void defineMidiInstrument(const fm::String &uname, const fm::String &deviceName, int channel, int cc, int pc);
+			virtual void defineMidiInstrument(const fm::String &uname, int channel, int bankMsb, int bankLsb, int pc);
+			virtual void defineMidiInstrument(const fm::String &uname, const fm::String &deviceName, int channel, int bankMsb, int bankLsb, int pc);
 			virtual void setInstrument(const fm::String &uname) override;
 			virtual void setTempo(double bpm) override;
 			virtual void setVolume(double volume, fm::Ticks relativePosition = 0) override;

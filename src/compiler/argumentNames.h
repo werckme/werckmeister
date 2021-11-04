@@ -19,8 +19,10 @@ struct ArgumentNames {
         std::string WithName                = "setName";
         std::string OnDevice                = "onDevice";
         std::string Ch                      = "ch";
-        std::string Cc                      = "cc";
+        std::string BankMsb                 = "bankMsb";
+        std::string BankLsb                 = "bankLsb";
         std::string Pc                      = "pc";
+        std::string Cc                      = "cc";
     } InstrumentDef;
 
     struct {
@@ -60,6 +62,8 @@ struct ArgumentNames {
 
     struct {
         std::string CC                     = "cc";
+        std::string BankLsb                = "bankLsb";
+        std::string BankMsb                = "bankMsb";
         std::string PC                     = "pc";
     } SelectMidiSound;
 
