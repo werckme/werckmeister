@@ -20,7 +20,7 @@ namespace sheet
 			fm::midi::Event *findCorrespondingNoteOffEvent(fm::midi::EventContainer::Iterator noteOn, fm::midi::EventContainer::Iterator end)
 			{
 				auto it = noteOn;
-				while (it++ != end)
+				for (auto it=noteOn; it!=end; ++it)
 				{
 					if (it->eventType() != fm::midi::NoteOff)
 					{
@@ -37,10 +37,9 @@ namespace sheet
 			/// finds predecsessor note on and off of the same picth and chanel as the given note, or null
 			std::pair<fm::midi::Event*, fm::midi::Event*> findPredecessorOfSamePitch(fm::midi::EventContainer::Iterator note, fm::midi::EventContainer::Iterator begin)
 			{
-				auto it = note;
 				fm::midi::Event* noteOn = nullptr;
 				fm::midi::Event* noteOff = nullptr;
-				do
+				for(auto it=note; it != begin; --it)
 				{
 					if (it->eventType() != fm::midi::NoteOn && it->eventType() != fm::midi::NoteOff)
 					{
@@ -61,7 +60,7 @@ namespace sheet
 					if (noteOn && noteOff) {
 						return std::make_pair(noteOn, noteOff);
 					}
-				} while (it-- != begin);	
+				}	
 
 				return std::make_pair(nullptr, nullptr);
 			}
