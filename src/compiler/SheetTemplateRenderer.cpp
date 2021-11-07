@@ -465,7 +465,7 @@ namespace sheet {
 
 							Chords chordsPerBar;
 							fm::String lastChord;
-							std::function<bool(const Event*)> renderChord = [&](const Event* chord) {
+							std::function<bool(const Event*)> renderBarOrCollectEvent = [&](const Event* chord) {
 								if (chord->type == Event::EOB) {
 									const auto* eobEvent = chord;
 									__renderOneBar(ctx_, sheetEventRenderer.get(), eventServer, chordsPerBar, lastChord);
@@ -487,7 +487,7 @@ namespace sheet {
 
 							for (const auto& chord : templateAndChords.chords)
 							{
-								bool continue_ = renderChord(chord);
+								bool continue_ = renderBarOrCollectEvent(chord);
 								if (!continue_) {
 									break;
 								}
@@ -497,10 +497,14 @@ namespace sheet {
 								while (eventServer.hasFurtherEvents()) {
 									for (const auto& chord : templateAndChords.chords)
 									{
-										bool continue_ = renderChord(chord);
+										bool continue_ = renderBarOrCollectEvent(chord);
 										if (!continue_) {
 											break;
 										}
+									}
+									// make sure we render all remainings (#237)
+									if (!chordsPerBar.empty()) {
+										__renderOneBar(ctx_, sheetEventRenderer.get(), eventServer, chordsPerBar, lastChord);
 									}
 								}
 							}

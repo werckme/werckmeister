@@ -1,0 +1,33 @@
+using "./chords/default.chords";
+
+device: MyDevice midi 0;
+instrumentDef: piano       midi _onDevice="MyDevice" _ch=1  _pc=0;
+
+tempo: 120;
+
+[
+type: template;
+name: fill;
+{
+    I4 &&& |
+}
+]
+
+[
+type: template;
+name: normal;
+{
+    V4 &&& |
+}
+]
+
+
+[
+type: accomp;
+{
+    /fill: fill/
+    A 
+    /template: normal/
+    | B 
+}
+]
