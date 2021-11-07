@@ -810,7 +810,7 @@ type: accomp;
 }
 ]
 ```
-
+> the `template` command should always appear at the begining of a bar, not at the end.
 
 ## Advanced techniques
 (tbd.)
