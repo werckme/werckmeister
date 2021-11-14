@@ -34,7 +34,8 @@ namespace sheet {
         struct MidiInstrumentDef : public AInstrumentDef {
 			fm::String deviceName;
 			int channel = 0;
-			int cc = 0;
+			int bankMsb = -1;
+			int bankLsb = -1;
 			int pc = 0;
 			virtual ~MidiInstrumentDef() = default;
 			virtual void setToContext(IContext* context) override;
