@@ -28,7 +28,7 @@ namespace sheet {
         /// <param name="bankMsb"  position="3" type="0..127">A MIDI `bank select MSB` value.</param>
         /// <param name="pc"       position="4" type="0..127">A MIDI `program change` value.</param>
         /// <param name="bankLsb"  type="0..127">A MIDI `bank select LSB` value.</param>
-        /// <param name="cc"       type="0..127">A MIDI `bank select MSB. Deprecated use bankMsb instead` value.</param>
+        /// <param name="cc"       type="0..127" deprecated="use bankMsb instead">A MIDI `bank select MSB. Deprecated use bankMsb instead` value.</param>
         class DefineMidiInstrument : public AMidiContextCommand
         {
         public:
