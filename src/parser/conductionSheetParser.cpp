@@ -17,6 +17,7 @@
 #include "parserPositionIt.h"
 #include "pitchParser.h"
 #include <conductor/conductorNames.h>
+#include "parserSymbols.h"
 
 BOOST_FUSION_ADAPT_STRUCT(
 	sheet::ConductionSelector::ArgumentValue,
@@ -81,7 +82,7 @@ namespace sheet {
 		namespace {
 			namespace qi = boost::spirit::qi;
 			namespace ascii = boost::spirit::ascii;
-
+			ExpressionSymbols expressionSymbols_;
 			template <typename Iterator>
 			struct _ConductionParser : PitchParser, qi::grammar<Iterator, ConductionSheetDef(), ascii::space_type>
 			{
@@ -173,7 +174,6 @@ namespace sheet {
 						>> attr(sourceId_)
 						>> SHEET_CONDUCTOR_SEL__PITCH >> attr(SHEET_CONDUCTOR_SEL__PITCH) >> "(" >> +pitchArgument_ >> ")"
 					)
-
 					|
 					(
 						current_pos_.current_pos 
@@ -216,6 +216,12 @@ namespace sheet {
 						>> attr(sourceId_)
 						>> SHEET_CONDUCTOR_SEL__CHANNEL >> attr(SHEET_CONDUCTOR_SEL__CHANNEL) >> "(" >> +numberArgument_ >> ")"
 					)
+					|
+					(
+						current_pos_.current_pos 
+						>> attr(sourceId_)
+						>> SHEET_CONDUCTOR_SEL__EXPRESSION >> attr(SHEET_CONDUCTOR_SEL__EXPRESSION) >> "(" >> +stringArgument_ >> ")"
+					)					
 					;
 
 					operationType_ %= 

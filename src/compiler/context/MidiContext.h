@@ -68,6 +68,7 @@ namespace sheet {
 			virtual void clear() override;
 			static int toMidiPitch(const PitchDef &pitch);
 		protected:
+			void applyContextInfo(fm::midi::Event &ev) const;
 			virtual Base::VoiceMetaDataPtr createVoiceMetaData() override;
 			virtual Base::TrackMetaDataPtr createTrackMetaData() override;
 			void addInstrumentDef(const fm::String &uname, AInstrumentDefPtr def);

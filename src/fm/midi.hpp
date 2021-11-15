@@ -93,6 +93,10 @@ namespace fm {
 			CustomMetaEvent = 0x7F
 		};
 		struct Event {
+			struct ContextInformation {
+				fm::Expression expression = fm::expression::Default;
+			};
+			ContextInformation contextInformation;
 			Ticks relDelta(Ticks deltaOffset) const;
 			void absPosition(Ticks ticks) { _deltaTime = ticks; }
 			Ticks absPosition() const { return _deltaTime; }

@@ -1,0 +1,21 @@
+using "./241_expression_selector_compose.conductions";
+
+-- expected that the notes on beat 1.5 2.5 3.5 4.5, in the ff section, does not appear,
+-- to prove that the conduction rules apply correctly:
+-- notes on 1, 2, 3, 4 will be set to velocity = 100
+-- all other notes are 50 less than its predecessors
+-- all notes with the expression ff will be decreased by velocity 50 
+
+tempo: 200;
+device: SC1 midi 3;
+instrumentDef: piano SC1 _ch=9 _pc=0;
+
+[
+instrument: piano;
+{
+    \f
+    e,,8& e,,8& e,,8& e,,8& |
+    \ff
+    e,,8& e,,8& e,,8& e,,8& |
+}
+]

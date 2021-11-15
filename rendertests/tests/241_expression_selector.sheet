@@ -1,0 +1,13 @@
+using "./241_expression_selector.conductions";
+
+tempo: 200;
+device: SC1 midi 3;
+instrumentDef: piano SC1 0 0 0;
+
+[
+instrument: piano;
+{
+    \p
+    c d e f~ | f !pppg4 a b  | c'1  
+}
+]

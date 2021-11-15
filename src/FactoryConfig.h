@@ -170,6 +170,7 @@ namespace sheet
 #include <conductor/selectors/OnBar.h>
 #include <conductor/selectors/NthBar.h>
 #include <conductor/selectors/Channel.h>
+#include <conductor/selectors/Expression.h>
 #include <conductor/declarations/Velocity.h>
 #include <conductor/declarations/TimeOffset.h>
 #include <conductor/declarations/Duration.h>
@@ -198,6 +199,7 @@ namespace sheet
         register_<ToBeat>(selNamespace_ + SHEET_CONDUCTOR_SEL__TO_BEAT);
         register_<OnBar>(selNamespace_ + SHEET_CONDUCTOR_SEL__ON_BAR);
         register_<NthBar>(selNamespace_ + SHEET_CONDUCTOR_SEL__NTH_BAR);
+        register_<Expression>(selNamespace_ + SHEET_CONDUCTOR_SEL__EXPRESSION);
         register_<Velocity>(declNamespace_ + SHEET_CONDUCTOR_DEC__VELOCITY);
         register_<TimeOffset>(declNamespace_ + SHEET_CONDUCTOR_DEC__TIME_OFFSET);
         register_<Duration>(declNamespace_ + SHEET_CONDUCTOR_DEC__LENGTH);
