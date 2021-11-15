@@ -17,11 +17,11 @@ namespace sheet {
 				{ FM_STRING("fffff"), fm::expression::FFFFF }
         };
 
-        fm::Expression SetExpression::getExpressionForString(const fm::String &expressionStr)
+        fm::Expression SetExpression::getExpressionForString(const fm::String &expressionStr, fm::Expression returnIfNotFound)
         {
             auto it = _ExpressionMap.find(expressionStr);
             if (it == _ExpressionMap.end()) {
-                return fm::expression::Default;
+                return returnIfNotFound;
             }
             return it->second;
         }

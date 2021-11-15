@@ -100,6 +100,7 @@ namespace fm {
 	}
 	namespace expression {
 		enum {
+			Undefined = -1,
 			PPPPP = 1,
 			PPPP = 2,
 			PPP = 3,

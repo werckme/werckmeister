@@ -82,12 +82,19 @@ namespace sheet {
 				toMidiPitch(pitch), 
 				toMidiVelocity(velocity)
 			);
+			applyContextInfo(event);
 			addEvent(event);
 			event = fm::midi::Event::NoteOff(instrumentDef->channel, 
 				absolutePosition + duration, 
 				toMidiPitch(pitch)
 			);
 			addEvent(event);
+		}
+
+		void MidiContext::applyContextInfo(fm::midi::Event &ev) const
+		{
+			auto meta = voiceMetaData();
+			ev.contextInformation.expression = meta->expression;
 		}
 
 		void MidiContext::startEvent(const PitchDef &pitch, fm::Ticks absolutePosition, double velocity)
@@ -105,6 +112,7 @@ namespace sheet {
 				toMidiPitch(pitch), 
 				toMidiVelocity(velocity)
 			);
+			applyContextInfo(event);
 			addEvent(event);
 		}
 

@@ -20,6 +20,7 @@
 #define SHEET_CONDUCTOR_SEL__ON_BAR    FM_STRING("onBar")
 #define SHEET_CONDUCTOR_SEL__NTH_BAR   FM_STRING("nthBar")
 #define SHEET_CONDUCTOR_SEL__CHANNEL   FM_STRING("channel")
+#define SHEET_CONDUCTOR_SEL__EXPRESSION  FM_STRING("expression")
 
 // declarartions
 #define SHEET_CONDUCTOR_DEC__VELOCITY FM_STRING("velocity")
