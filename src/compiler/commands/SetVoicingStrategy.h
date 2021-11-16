@@ -11,7 +11,7 @@ namespace sheet {
         /// Adds a modification to the track.
         /// ### example
         /// `/voicingStrategy: asNotated/` 
-        /// Voicing strategies can be external lua scripts, or one of theese internal strategies:
+        /// Voicing strategies can be external lua scripts, or one of these internal strategies:
         /// * asNotated
         /// * simpleGuitar
         /// </command>

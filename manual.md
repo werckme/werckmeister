@@ -810,7 +810,7 @@ type: accomp;
 }
 ]
 ```
-
+> the `template` command should always appear at the begining of a bar, not at the end.
 
 ## Advanced techniques
 (tbd.)
@@ -869,6 +869,7 @@ type: accomp;
 * [nthBar](#nthbar)
 * [onBar](#onbar)
 * [onBeat](#onbeat)
+* [pitch](#pitch)
 * [pitch](#pitch)
 * [toBar](#tobar)
 * [toBeat](#tobeat)
@@ -1177,8 +1178,10 @@ Adds a new MIDI instrument.
 | setName | 1 | An arbitary name. | text |
 | onDevice | 2 | The device which to use (The name of the device, see [device](#device)). | text |
 | ch | 3 | The MIDI channel. | 0..15 |
-| cc | 4 | A MIDI `control change` value. | 0..127 |
+| bankMsb | 4 | A MIDI `bank select MSB` value. | 0..127 |
 | pc | 5 | A MIDI `program change` value. | 0..127 |
+| bankLsb | - | A MIDI `bank select LSB` value. | 0..127 |
+| cc | - | A MIDI `bank select MSB. Deprecated use bankMsb instead` value. | 0..127 |
 
 <br><br><br>
 
@@ -1378,7 +1381,7 @@ Adds a modification to the track.
 
  `/voicingStrategy: asNotated/` 
 
- Voicing strategies can be external lua scripts, or one of theese internal strategies:
+ Voicing strategies can be external lua scripts, or one of these internal strategies:
 
  * asNotated
 
@@ -1632,7 +1635,7 @@ instrument: piano;
 | name | position | description | type |
 |:--- |:--- |:--- |:--- |
 | direction | - | Specifies the start direction of the stroke | [up,down] |
-| value | - | the duration of one aprgeggio event. (Default=64) | [1,2,4,8,...] |
+| value | - | the duration of one arpeggio event. (Default=64) | [1,2,4,8,...] |
 | mode | - | Perform only one stroke direction (normal) or alternates between up and down. (Default=normal) | [normal,alternate] |
 
 #### include extension
@@ -2062,6 +2065,24 @@ Selects an event which appears on a given beat or a list of beats
 | name | position | description | type |
 |:--- |:--- |:--- |:--- |
 | beat | - |  | quarters+ |
+
+<br><br><br>
+
+### `pitch`
+Select events via its applied expressions.
+
+ ```
+
+ expression(p) {...}
+
+ expression(p f ff) {...}
+
+ ```
+
+#### parameters
+| name | position | description | type |
+|:--- |:--- |:--- |:--- |
+| expression | - |  | expression+ |
 
 <br><br><br>
 

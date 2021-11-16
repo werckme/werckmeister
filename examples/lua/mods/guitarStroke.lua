@@ -31,7 +31,7 @@
 -- ]]>
 -- </command>
 -- <param name="direction" optional="1" type="[up,down]">Specifies the start direction of the stroke</param>
--- <param name="value" optional="1" type="[1,2,4,8,...]">the duration of one aprgeggio event. (Default=64)</param>
+-- <param name="value" optional="1" type="[1,2,4,8,...]">the duration of one arpeggio event. (Default=64)</param>
 -- <param name="mode" optional="1" type="[normal,alternate]">Perform only one stroke direction (normal) or alternates between up and down. (Default=normal)</param>
 
 require "lua/com/com"

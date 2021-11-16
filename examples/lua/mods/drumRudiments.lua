@@ -2,7 +2,7 @@
 -- <![CDATA[
 -- Implements a collection of different drum rudiments. ([see Wikipedia](https://en.wikipedia.org/wiki/Drum_rudiment))
 -- You can specify which notes are for `L` and `R` and performing duration.
--- This will be achived by using an chord as source material.
+-- This will be achieved by using an chord as source material.
 -- The chord pitches will be used for `L` and `R`.
 -- The length of the chord event defines over which time the rudiment will be peformed.
 -- An event tag specifies which rudiment will be performed.

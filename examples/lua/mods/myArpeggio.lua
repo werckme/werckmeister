@@ -20,7 +20,7 @@
 -- ]]>
 -- </command>
 -- <param name="style" optional="1" type="[normal,legato]">Performs the arpeggio normal or legato</param>
--- <param name="direction" optional="1" type="[up,down]">the direction of the aprgeggio. (Default=up)</param>
+-- <param name="direction" optional="1" type="[up,down]">the direction of the arpeggio. (Default=up)</param>
 
 require "lua/com/com"
 require "_events"

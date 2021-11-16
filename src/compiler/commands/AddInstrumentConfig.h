@@ -24,7 +24,7 @@ namespace sheet {
         /// `instrumentConf: piano mod myLuaMod someValue; --the `someValue` argument belongs to "myLuaMod"`
         /// #### setup a velocity remap
         /// With `remapVelocity` you are able to change the velocity values behind `ppppp..fffff` for a specific instrument.
-        /// In the example below the velcity for `p` will be set to 100 and the value for `f` will be set to 10.
+        /// In the example below the velocity for `p` will be set to 100 and the value for `f` will be set to 10.
         /// The value range is 0..100. (100=127 Midi velocity)
         /// `instrumentConf: _set=remapVelocity _p=100 _f=10;`
         /// </command>

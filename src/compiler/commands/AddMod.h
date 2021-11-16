@@ -12,7 +12,7 @@ namespace sheet {
         /// If you want to use ony one modification at the time use [do](#do) instead.
         /// ### examples
         /// `/mod: arpeggio/`
-        /// Mods can be external lua scripts, or one of theese internal mods:
+        /// Mods can be external lua scripts, or one of these internal mods:
         /// #### Bend
         /// Performs a pitch bend from or to the pitch of a note. The value range is 0..100 where 50 means the pichbend center.
         /// ```language=Werckmeister,type=single,tempo=140

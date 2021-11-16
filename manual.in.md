@@ -120,7 +120,7 @@ Getting Started
 ## Download & Installation
 Have a look [here](https://werckme.github.io/getwerckmeister).
 
-Find the download and follow the installtion instructions regarding to your OS.
+Find the download and follow the installation instructions regarding to your OS.
 
 
 ## Installation is done, what now?
@@ -244,7 +244,7 @@ instrument: piano;
 ```
 ## Tracks and Voices
 
-A track in Werckmeister has excactly the same meanig as it has in a MIDI file.
+A track in Werckmeister has exactly the same meanig as it has in a MIDI file.
 It is related to an instrument and contains events.
 
 A track begins with a `[` and ends with a `]`.
@@ -258,7 +258,7 @@ A track begins with a `[` and ends with a `]`.
 ]
 ```
 
-All events of a track are releated at least to one voice. A voice starts with `{` and ends with `}`.
+All events of a track are related at least to one voice. A voice starts with `{` and ends with `}`.
 If you want to write polyphonic melody lines, you can add more voices to your track. 
 
 
@@ -297,7 +297,7 @@ I II III IV V VI VII
 ```
 
 ### Chord Events
-Events which are related to a name. They also store the information which interval is used for a degree. These informations are stored in a [chord definiton file](#chords).
+Events which are related to a name. They also store the information which interval is used for a degree. These informations are stored in a [chord definition file](#chords).
 ```language=Werckmeister,type=mute
 C7 D-7 E-7 F7 Gmaj7 A-7
 ```
@@ -433,10 +433,10 @@ tempo: 120;
 ]
 ```
 
-Sometimes you want to setup diffent tempi for for several voices.
+Sometimes you want to setup different tempi for for several voices.
 Then you have to add a tempo [Meta Event](#meta-events) to your voice.
 
-*since MIDI doesn't support simultaneous tempi, we achive this effect by streching or shrinking the note durations in relation to the main tempo (Augmentation/Diminution). As an simple example: on double time we pay eights instead of fourths.*
+*since MIDI doesn't support simultaneous tempo, we achieve this effect by stretching or shrinking the note durations in relation to the main tempo (Augmentation/Diminution). As an simple example: on double time we pay eights instead of fourths.*
 
 Here we play four voices on one track, with four different tempo configurations:
 
@@ -570,7 +570,7 @@ c2. c4 | c2~ c4 c
 
 ### Tuplets
 
-To write tuplets of any kind you just have to write notes encloded by parentheses followed by a duration value. For example: `(c c c)4`.
+To write tuplets of any kind you just have to write notes enclosed by parentheses followed by a duration value. For example: `(c c c)4`.
 These three notes will now be played in the time of one quarter.
 
 It doesn't matter if you write `(c2 c2 c2)4` or `(c8 c8 c8)4` because you have three notes with equal durations to be played in the time of one quarter.
@@ -655,7 +655,7 @@ The regular score notation has a set of articulations to apply to a note.
 In werckmeister you also have such options, for example: `!ffff c ` to play the note c louder.
 
 
-Unfortunately these kind of notation has the potential to destroy the readablility of a source file.
+Unfortunately these kind of notation has the potential to destroy the readability of a source file.
 
 A good example is this 16th note high hat figure:
 
@@ -688,7 +688,7 @@ instrument(drums) pitch(h) onBeat(1.5 2.5 3.5 4.5) {
 ```
 Find the full example [here](https://werckme.github.io/editor?wid=conductor16thHighHat).
 
-A condcution rule starts with a list of selectors, followed by a set of declartions.
+A conduction rule starts with a list of selectors, followed by a set of declarations.
 
 A **selector** defines on which notes the rule applies. 
 
@@ -780,9 +780,9 @@ There are the same rules as for writing absolute [notes](#notes):
 such as:
 
 * use `#` or `b` for sharp or flat
-* to perform inervals use angle brackes. For example a triad: `<I III V>`
+* to perform intervals use angle brackes. For example a triad: `<I III V>`
 * use `~` for tied and `.` for dotted notes
-* create tuplets using parantheses
+* create tuplets using parentheses
 
 
 ```language=Werckmeister,type=full
