@@ -38,7 +38,7 @@ That and the fact that all music I have written is "locked in" in a proprietary 
 
 > Fun Fact: If I had known [MuseScore](https://musescore.org/) during that time, maybe there would be no werckmeister today
 
-So eventually I found [LilypPond](https://lilypond.org/). I loved the idea behind it: writing music just with text. It addressed the problem having usless (score) files, because having no program that can read it. 
+So eventually I found [LilypPond](https://lilypond.org/). I loved the idea behind it: writing music just with text. It addressed the problem having useless (score) files, because having no program that can read it. 
 
 Unfortunately lilypond dosen't fullfill all my needs. It is made with a focus on "music engraving", not creating music in a way I would do with a regulary scorewriter *(in terms of trying things out, experimenting with ideas)*. 
 
@@ -70,7 +70,7 @@ has to be one voice.
 A track is embraced by brackets (`[]`), a voice by curled braces (`{}`).
 The shortest valid Werckmeister piece would be: `[{}]`
 ### Notation
-The syntax is loosely inspired by the [lilypond](http://lilypond.org) notaion syntax. A note is written by letter followed by a number for its duration. If a note has no duration, the last given duration will be used.
+The syntax is loosely inspired by the [lilypond](http://lilypond.org) notation syntax. A note is written by letter followed by a number for its duration. If a note has no duration, the last given duration will be used.
 
 
 
