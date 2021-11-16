@@ -16,7 +16,7 @@ Performs every note staccato. It is also possible to tag single notes.
 | name | position | description | range |
 |:--- |:--- |:--- |:--- |
 | forTag | - | Specifies a tag name | [a-zA-Z0-9.]+ |
-| amount | - | The ammount of the staccato | 0..100 |
+| amount | - | The amount of the staccato | 0..100 |
 
 <br><br><br>
 
