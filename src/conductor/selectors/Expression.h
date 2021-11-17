@@ -8,7 +8,7 @@ namespace sheet
 {
     namespace conductor
     {
-        /// <selector name="pitch">
+        /// <selector name="expression">
         ///     Select events via its applied expressions.
         /// ```
         /// expression(p) {...}

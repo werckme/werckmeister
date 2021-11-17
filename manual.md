@@ -860,6 +860,7 @@ type: accomp;
 ## Conductor Rules
 ### Selectors
 * [channel](#channel)
+* [expression](#expression)
 * [fromBar](#frombar)
 * [fromBeat](#frombeat)
 * [fromPitch](#frompitch)
@@ -869,7 +870,6 @@ type: accomp;
 * [nthBar](#nthbar)
 * [onBar](#onbar)
 * [onBeat](#onbeat)
-* [pitch](#pitch)
 * [pitch](#pitch)
 * [toBar](#tobar)
 * [toBeat](#tobeat)
@@ -1902,6 +1902,24 @@ Selects an event where its channel is equal to one the given numbers.
 
 <br><br><br>
 
+### `expression`
+Select events via its applied expressions.
+
+ ```
+
+ expression(p) {...}
+
+ expression(p f ff) {...}
+
+ ```
+
+#### parameters
+| name | position | description | type |
+|:--- |:--- |:--- |:--- |
+| expression | - |  | expression+ |
+
+<br><br><br>
+
 ### `fromBar`
 Selects an event where its bar time is equal or greater.
 
@@ -2065,24 +2083,6 @@ Selects an event which appears on a given beat or a list of beats
 | name | position | description | type |
 |:--- |:--- |:--- |:--- |
 | beat | - |  | quarters+ |
-
-<br><br><br>
-
-### `pitch`
-Select events via its applied expressions.
-
- ```
-
- expression(p) {...}
-
- expression(p f ff) {...}
-
- ```
-
-#### parameters
-| name | position | description | type |
-|:--- |:--- |:--- |:--- |
-| expression | - |  | expression+ |
 
 <br><br><br>
 
