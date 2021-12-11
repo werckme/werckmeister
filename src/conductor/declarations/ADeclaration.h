@@ -22,9 +22,9 @@ namespace sheet
             ConductionRule::Declaration declaration;
             typedef std::function<double()> FGetValue;
             typedef std::function<std::optional<double>()> FGetOptionalValue;
-            typedef std::function<void(fm::midi::Event *, double)> FSetValue;
-            void performImpl(fm::midi::Event *noteOn,
-                             fm::midi::Event *noteOff,
+            typedef std::function<void(com::midi::Event *, double)> FSetValue;
+            void performImpl(com::midi::Event *noteOn,
+                             com::midi::Event *noteOff,
                              double inputValue,
                              double min, double max,
                              const FGetValue &getOriginalValue,

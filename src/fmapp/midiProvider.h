@@ -2,12 +2,12 @@
 #define MIDI_PROVIDER
 
 #include <list>
-#include <fm/midi.hpp>
+#include <com/midi.hpp>
 #include <map>
 #include <climits>
 #include <functional>
-#include <fm/config.hpp>
-#include <fm/units.hpp>
+#include <com/config.hpp>
+#include <com/units.hpp>
 
 namespace fmapp {
 	namespace {
@@ -21,34 +21,34 @@ namespace fmapp {
 		typedef long double Millis;
 		struct Event {
 			TrackId trackId;
-			fm::midi::Event event;
+			com::midi::Event event;
 		};
 		typedef std::unordered_map<TrackId, int> TrackOffsets;
 		typedef std::list<Event> Events;
-		typedef std::function<bool(fm::Ticks, const Event &)> IterateFunction;
+		typedef std::function<bool(com::Ticks, const Event &)> IterateFunction;
 		void getEvents(Millis at, Events &out, const TrackOffsets &offsets);
 		void iterate(const IterateFunction &f);
 		virtual ~MidiProvider() = default;
-		void midi(fm::midi::MidiPtr midi);
-		fm::midi::MidiPtr midi() const;
+		void midi(com::midi::MidiPtr midi);
+		com::midi::MidiPtr midi() const;
 		void reset();
-		inline fm::Ticks millisToTicks(Millis millis) const {
-			return static_cast<fm::Ticks>( millis * bpm() * fm::PPQ / (MINUTE * ONE_SECOND_MILLIS) );
+		inline com::Ticks millisToTicks(Millis millis) const {
+			return static_cast<com::Ticks>( millis * bpm() * com::PPQ / (MINUTE * ONE_SECOND_MILLIS) );
 		}
-		inline Millis ticksToMillis(fm::Ticks ticks) const {
-			return MINUTE * ONE_SECOND_MILLIS * ticks / (bpm() * fm::PPQ);
+		inline Millis ticksToMillis(com::Ticks ticks) const {
+			return MINUTE * ONE_SECOND_MILLIS * ticks / (bpm() * com::PPQ);
 		}
 	protected:
-		inline fm::BPM bpm() const { return std::max(bpm_, 1.0); }
-		void bpm(fm::BPM bpm) { bpm_ = bpm; }	
+		inline com::BPM bpm() const { return std::max(bpm_, 1.0); }
+		void bpm(com::BPM bpm) { bpm_ = bpm; }	
 		void seek(Millis millis, const TrackOffsets &offsets);
 	private:
-		fm::midi::MidiPtr midi_ = nullptr;
-		typedef fm::midi::EventContainer::ConstIterator EventIt;
-		typedef std::unordered_map<fm::midi::TrackPtr, EventIt> TrackEventIts;
+		com::midi::MidiPtr midi_ = nullptr;
+		typedef com::midi::EventContainer::ConstIterator EventIt;
+		typedef std::unordered_map<com::midi::TrackPtr, EventIt> TrackEventIts;
 		TrackEventIts trackEventIts_;
-		EventIt* getEventIt(fm::midi::TrackPtr trackPtr);
-		fm::BPM bpm_ = fm::DefaultTempo;
+		EventIt* getEventIt(com::midi::TrackPtr trackPtr);
+		com::BPM bpm_ = com::DefaultTempo;
 	};
 
 }

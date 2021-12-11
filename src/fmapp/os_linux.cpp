@@ -47,7 +47,7 @@ namespace fmapp {
 
 			sigaction(SIGINT, &sigIntHandler, NULL);
 		}
-		fm::String getExecutablePath()
+		com::String getExecutablePath()
 		{
 			char *bff = readlink_malloc("/proc/self/exe");
 			if (bff == NULL) {

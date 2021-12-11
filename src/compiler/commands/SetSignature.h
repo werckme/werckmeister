@@ -16,7 +16,7 @@ namespace sheet {
         class SetSignature : public ACommand
         {
         public:
-            fm::IHasParameter::ParametersByNames parameters = {
+            com::IHasParameter::ParametersByNames parameters = {
                 FM_PARAMETER_DEF		    (argumentNames.SetSignature.Upper, 	0),
                 FM_PARAMETER_DEF		    (argumentNames.SetSignature.Lower, 	1)
             };

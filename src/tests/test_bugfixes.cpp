@@ -2,20 +2,20 @@
 #include <iostream>
 #include "parser/parser.h"
 #include "compiler/error.hpp"
-#include <fm/literals.hpp>
-#include <fm/units.hpp>
+#include <com/literals.hpp>
+#include <com/units.hpp>
 
 #include "parser/lexer.h"
 #include <boost/spirit/include/lex_lexertl.hpp>
-#include "fm/common.hpp"
+#include "com/common.hpp"
 #include "testhelper.h"
-#include <fm/tools.h>
+#include <com/tools.h>
 
 BOOST_AUTO_TEST_CASE(issue_9_As_und_Es_werden_nicht_erkannt)
 {
-	using namespace fm;
+	using namespace com;
 	using sheet::PitchDef;
-	fm::String text = FM_STRING("\
+	com::String text = FM_STRING("\
 [\n\
 type: sheet;\n\
 {\n\
@@ -40,32 +40,32 @@ type: sheet;\n\
 
 
 	auto chordelements = chords[0].chordElements();
-	BOOST_CHECK(std::get<0>(chordelements) == fm::notes::AS);
+	BOOST_CHECK(std::get<0>(chordelements) == com::notes::AS);
 	BOOST_CHECK(std::get<1>(chordelements) == FM_STRING(""));
 	BOOST_CHECK(chords[0].chordDefName() == FM_STRING("X"));
 
 	chordelements = chords[1].chordElements();
-	BOOST_CHECK(std::get<0>(chordelements) == fm::notes::ES);
+	BOOST_CHECK(std::get<0>(chordelements) == com::notes::ES);
 	BOOST_CHECK(std::get<1>(chordelements) == FM_STRING(""));
 	BOOST_CHECK(chords[1].chordDefName() == FM_STRING("X"));
 
 	chordelements = chords[2].chordElements();
-	BOOST_CHECK(std::get<0>(chordelements) == fm::notes::AS);
+	BOOST_CHECK(std::get<0>(chordelements) == com::notes::AS);
 	BOOST_CHECK(std::get<1>(chordelements) == FM_STRING("7"));
 	BOOST_CHECK(chords[2].chordDefName() == FM_STRING("X7"));
 
 	chordelements = chords[3].chordElements();
-	BOOST_CHECK(std::get<0>(chordelements) == fm::notes::ES);
+	BOOST_CHECK(std::get<0>(chordelements) == com::notes::ES);
 	BOOST_CHECK(std::get<1>(chordelements) == FM_STRING("7"));
 	BOOST_CHECK(chords[3].chordDefName() == FM_STRING("X7"));
 
 	chordelements = chords[4].chordElements();
-	BOOST_CHECK(std::get<0>(chordelements) == fm::notes::GES);
+	BOOST_CHECK(std::get<0>(chordelements) == com::notes::GES);
 	BOOST_CHECK(std::get<1>(chordelements) == FM_STRING(""));
 	BOOST_CHECK(chords[4].chordDefName() == FM_STRING("X"));
 
 	chordelements = chords[5].chordElements();
-	BOOST_CHECK(std::get<0>(chordelements) == fm::notes::GES);
+	BOOST_CHECK(std::get<0>(chordelements) == com::notes::GES);
 	BOOST_CHECK(std::get<1>(chordelements) == FM_STRING("7"));
 	BOOST_CHECK(chords[5].chordDefName() == FM_STRING("X7"));
 
@@ -73,9 +73,9 @@ type: sheet;\n\
 
 BOOST_AUTO_TEST_CASE(issue_87_asus_chords_will_not_be_recognized)
 {
-	using namespace fm;
+	using namespace com;
 	using sheet::PitchDef;
-	fm::String text = FM_STRING("\
+	com::String text = FM_STRING("\
 [\n\
 type: sheet;\n\
 {\n\
@@ -96,12 +96,12 @@ type: sheet;\n\
 
 
 	auto chordelements = chords[0].chordElements();
-	BOOST_CHECK(std::get<0>(chordelements) == fm::notes::B);
+	BOOST_CHECK(std::get<0>(chordelements) == com::notes::B);
 	BOOST_CHECK(std::get<1>(chordelements) == FM_STRING("sus2"));
 	BOOST_CHECK(chords[0].chordDefName() == FM_STRING("Xsus2"));
 
 	chordelements = chords[1].chordElements();
-	BOOST_CHECK(std::get<0>(chordelements) == fm::notes::A);
+	BOOST_CHECK(std::get<0>(chordelements) == com::notes::A);
 	BOOST_CHECK(std::get<1>(chordelements) == FM_STRING("sus2"));
 	BOOST_CHECK(chords[1].chordDefName() == FM_STRING("Xsus2"));
 
@@ -124,8 +124,8 @@ BOOST_AUTO_TEST_CASE(issue_100_mod_gt_1_in_instrument_config_fails)
 		makeArg("mod"), makeArg("swing"),
 		makeArg("volume"), makeArg("63")
 	};
-	std::vector<fm::String> keywords = {"mod", "volume"};
-	auto keywordsAndValues = fm::mapArgumentsByKeywords(args, keywords);
+	std::vector<com::String> keywords = {"mod", "volume"};
+	auto keywordsAndValues = com::mapArgumentsByKeywords(args, keywords);
 	BOOST_CHECK(keywordsAndValues.size() == 4);
 	BOOST_CHECK(keywordsAndValues.count("") == 1);
 

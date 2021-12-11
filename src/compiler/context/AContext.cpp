@@ -1,26 +1,26 @@
 #include "AContext.h"
 #include <compiler/error.hpp>
-#include <fm/werckmeister.hpp>
+#include <com/werckmeister.hpp>
 #include <algorithm>
-#include <fm/common.hpp>
+#include <com/common.hpp>
 #include <compiler/spielanweisung/ASpielanweisung.h>
 #include <compiler/spielanweisung/spielanweisungen.h>
 #include <compiler/modification/AModification.h>
-#include <fm/literals.hpp>
-#include <fm/config/configServer.h>
+#include <com/literals.hpp>
+#include <com/config/configServer.h>
 #include <sheet/objects/Track.h>
-#include <fm/tools.h>
+#include <com/tools.h>
 #include <sstream>
-#include <fm/config/configServer.h>
+#include <com/config/configServer.h>
 
 namespace sheet {
 
 	namespace compiler {
-		using namespace fm;
+		using namespace com;
 		const double AContext::PitchbendMiddle = 0.5;
 		const Ticks AContext::TickTolerance = 0.5;
 		
-		AContext::AContext(fm::IDefinitionsServerPtr definitionsServer)
+		AContext::AContext(com::IDefinitionsServerPtr definitionsServer)
 			: definitionsServer_(definitionsServer)
 		{
 		}
@@ -111,7 +111,7 @@ namespace sheet {
 			FM_THROW(Exception, msg + " at voice " + std::to_string(voice()) + " bar: " + std::to_string(meta->position / meta->barLength));
 		}
 
-		fm::Ticks AContext::currentPosition() const
+		com::Ticks AContext::currentPosition() const
 		{
 			auto voiceMeta = voiceMetaData();
 			if (!voiceMeta) {
@@ -120,9 +120,9 @@ namespace sheet {
 			return voiceMeta->position;
 		}
 
-		fm::Ticks AContext::maxPosition() const
+		com::Ticks AContext::maxPosition() const
 		{
-			fm::Ticks position = 0;
+			com::Ticks position = 0;
 			for (const auto &keyValue : voiceMetaDataMap_) {
 				const auto &meta = keyValue.second;
 				position = std::max(position, meta->position);
@@ -151,9 +151,9 @@ namespace sheet {
 			}
 			meta->waitForTieBuffer.clear();
 		}
-		void AContext::renderPitch(const PitchDef &rawPitch, fm::Ticks duration, double velocity, bool tying)
+		void AContext::renderPitch(const PitchDef &rawPitch, com::Ticks duration, double velocity, bool tying)
 		{
-			using namespace fm;
+			using namespace com;
 			PitchDef pitch = definitionsServer_->resolvePitch(rawPitch);
 			auto meta = voiceMetaData();
 			if (tying) {
@@ -175,25 +175,25 @@ namespace sheet {
 			renderPitch(pitch, meta->position, velocity, duration);
 		}
 
-		void AContext::startEvent(const PitchDef &pitch, fm::Ticks absolutePosition, double velocity)
+		void AContext::startEvent(const PitchDef &pitch, com::Ticks absolutePosition, double velocity)
 		{
 			auto meta = voiceMetaData();
 			meta->startedEvents.insert(pitch);
 		}
 
-		void AContext::stopEvent(const PitchDef &pitch, fm::Ticks absolutePosition)
+		void AContext::stopEvent(const PitchDef &pitch, com::Ticks absolutePosition)
 		{
 			auto meta = voiceMetaData();
 			meta->startedEvents.erase(pitch);
 		}
 
-		fm::Ticks AContext::barPos() const
+		com::Ticks AContext::barPos() const
 		{
 			auto meta = voiceMetaData();
 			return meta->barPosition;
 		}
 
-		void AContext::seek(fm::Ticks duration)
+		void AContext::seek(com::Ticks duration)
 		{
 			auto meta = voiceMetaData();
 			meta->position += duration;
@@ -210,8 +210,8 @@ namespace sheet {
 		void AContext::newBar()
 		{
 			auto meta = voiceMetaData();
-			if (!fm::compareTolerant(meta->barPosition, meta->barLength, fm::Ticks(TickTolerance))) {
-				auto errorInQuaters = -(meta->barLength - meta->barPosition) / fm::PPQ;
+			if (!com::compareTolerant(meta->barPosition, meta->barLength, com::Ticks(TickTolerance))) {
+				auto errorInQuaters = -(meta->barLength - meta->barPosition) / com::PPQ;
 				seek(-(meta->barPosition - meta->barLength));
 				std::stringstream ss;
 				std::string toLong = errorInQuaters > 0 ? "too long" : "too short";
@@ -222,12 +222,12 @@ namespace sheet {
 			++(meta->barCount);
 		}
 
-		void AContext::rest(fm::Ticks duration)
+		void AContext::rest(com::Ticks duration)
 		{
 			auto meta = voiceMetaData();
 			seek(duration);
 		}
-		void AContext::setVolume(double volume, fm::Ticks relativePosition)
+		void AContext::setVolume(double volume, com::Ticks relativePosition)
 		{
 			auto meta = voiceMetaData();
 			meta->volume = std::max(std::min(volume, 100.0), 0.0);
@@ -239,18 +239,18 @@ namespace sheet {
 			meta->pan = std::max(std::min(val, 100.0), 0.0);
 		}		
 
-		void AContext::setExpression(fm::Expression expr)
+		void AContext::setExpression(com::Expression expr)
 		{
-			if (expr == fm::expression::Default) {
+			if (expr == com::expression::Default) {
 				return;
 			}
 			auto meta = voiceMetaData();
 			meta->expression = expr;
 		}
 
-		void AContext::setExpressionPlayedOnce(fm::Expression expr)
+		void AContext::setExpressionPlayedOnce(com::Expression expr)
 		{
-			if (expr == fm::expression::Default) {
+			if (expr == com::expression::Default) {
 				return;
 			}
 			auto meta = voiceMetaData();
@@ -259,11 +259,11 @@ namespace sheet {
 
 		void AContext::setSignature(int upper, int lower)
 		{
-			using namespace fm;
+			using namespace com;
 			auto meta = voiceMetaData();
 			meta->signatureNumerator = upper;
 			meta->signatureDenominator = lower;
-			meta->barLength = (1.0_N1 / (fm::Ticks)lower) * (fm::Ticks)upper;
+			meta->barLength = (1.0_N1 / (com::Ticks)lower) * (com::Ticks)upper;
 		}
 
 		void AContext::setChordTrackTarget()
@@ -279,7 +279,7 @@ namespace sheet {
 		{
 			TimeInfo result;
 			auto meta = voiceMetaData();
-			result.quarterPosition = meta->position / (double)fm::PPQ;
+			result.quarterPosition = meta->position / (double)com::PPQ;
 			result.signatureNumerator = meta->signatureNumerator;
 			result.sinatureDenominator = meta->signatureDenominator;
 			return result;
@@ -302,7 +302,7 @@ namespace sheet {
 		{
 			auto meta = voiceMetaData();
 			if (!defaultVoiceStrategy_) {
-				defaultVoiceStrategy_ = fm::getWerckmeister().getDefaultVoicingStrategy();
+				defaultVoiceStrategy_ = com::getWerckmeister().getDefaultVoicingStrategy();
 			}
 			if (meta->voicingStrategy) { // first voice setup
 				return meta->voicingStrategy;
@@ -316,7 +316,7 @@ namespace sheet {
 
 		void AContext::clear()
 		{
-			masterTempo_ = fm::DefaultTempo;
+			masterTempo_ = com::DefaultTempo;
 			defaultVoiceStrategy_ = nullptr;
 			currentSheetTemplates_.clear();
 			TrackId trackId_ = INVALID_TRACK_ID;
@@ -328,7 +328,7 @@ namespace sheet {
 			trackMetaDataMap_.clear();
 		}
 
-		void AContext::setInstrument(const fm::String& uname)
+		void AContext::setInstrument(const com::String& uname)
 		{
 		}
 	}

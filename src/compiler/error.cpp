@@ -3,9 +3,9 @@
 #include <sheet/objects/Event.h>
 #include <sheet/Document.h>
 #include <memory>
-#include <fm/tools.h>
-#include <fm/werckmeister.hpp>
-#include <fm/common.hpp>
+#include <com/tools.h>
+#include <com/werckmeister.hpp>
+#include <com/common.hpp>
 #include <iostream>
 #include <sheet/objects/ParserSourceInfo.h>
 
@@ -16,7 +16,7 @@ namespace sheet {
 			const std::shared_ptr<Document> document, 
 			const ASheetObjectWithSourceInfo* sourceInf) const
 		{
-			return fm::documentMessage(ss, document, sourceInf->sourceId, sourceInf->sourcePositionBegin, msg_);
+			return com::documentMessage(ss, document, sourceInf->sourceId, sourceInf->sourcePositionBegin, msg_);
 		}
 
 		const ASheetObjectWithSourceInfo * Exception::getSourceInfo() const
@@ -40,14 +40,14 @@ namespace sheet {
 			std::stringstream ss;
 			const auto *sourceInf 							 = boost::get_error_info<ex_sheet_source_info>(*this);
 			const std::shared_ptr<Document> * rawDocumentPtr = boost::get_error_info<ex_sheet_document>(*this);
-			const fm::String *sourceFile 					 = boost::get_error_info<ex_error_source_file>(*this);
+			const com::String *sourceFile 					 = boost::get_error_info<ex_error_source_file>(*this);
 			if (sourceInf && rawDocumentPtr && sourceInf->sourceId != Event::UndefinedSource) {
 				strSheetError(ss, *rawDocumentPtr, sourceInf);
 				return ss.str();
 			}
 			if (sourceFile) {
-				fm::documentMessageWhere(ss, *sourceFile) << std::endl;
-				fm::documentMessageWhat(ss, msg_) << std::endl;
+				com::documentMessageWhere(ss, *sourceFile) << std::endl;
+				com::documentMessageWhat(ss, msg_) << std::endl;
 				return ss.str();
 			}
 			return Base::toString();
@@ -62,7 +62,7 @@ namespace sheet {
 			{
 				std::string line;
 				int linePos = 0;
-				std::tie(line, linePos) = fm::getLineAndPosition<std::string>(source, errorPos, false);
+				std::tie(line, linePos) = com::getLineAndPosition<std::string>(source, errorPos, false);
 				auto sourceInfo = ParserSourceInfo();
 				sourceInfo.sourceId = sourceId;
 				sourceInfo.sourcePositionBegin = errorPos;

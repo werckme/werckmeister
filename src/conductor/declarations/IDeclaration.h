@@ -1,8 +1,8 @@
 #ifndef IDECLARATION_H
 #define IDECLARATION_H
 
-#include <fm/IRegisterable.h>
-#include <fm/midi.hpp>
+#include <com/IRegisterable.h>
+#include <com/midi.hpp>
 #include <sheet/objects/ConductionSheetDef.h>
 #include <memory>
 #include <functional>
@@ -12,14 +12,14 @@ namespace sheet
 {
     namespace conductor
     {
-        class IDeclaration : public fm::IRegisterable
+        class IDeclaration : public com::IRegisterable
         {
         public:
             struct Events {
-                fm::midi::Event* noteOn = nullptr;
-                fm::midi::Event* noteOff = nullptr;
-                fm::midi::Event* predecessorNoteOn = nullptr;
-                fm::midi::Event* predecessorNoteOff = nullptr;
+                com::midi::Event* noteOn = nullptr;
+                com::midi::Event* noteOff = nullptr;
+                com::midi::Event* predecessorNoteOn = nullptr;
+                com::midi::Event* predecessorNoteOff = nullptr;
             };
             virtual void setDeclarationData(const ConductionRule::Declaration&) = 0;
             virtual const ConductionRule::Declaration& getDeclarationData() const = 0;

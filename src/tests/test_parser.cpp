@@ -2,15 +2,15 @@
 #include <iostream>
 #include "parser/parser.h"
 #include "compiler/error.hpp"
-#include <fm/literals.hpp>
-#include <fm/units.hpp>
+#include <com/literals.hpp>
+#include <com/units.hpp>
 #include "testhelper.h"
 
 BOOST_AUTO_TEST_CASE(test_argQuoted)
 {
-	using namespace fm;
+	using namespace com;
 	using sheet::PitchDef;
-	fm::String text = FM_STRING("\
+	com::String text = FM_STRING("\
 key: \"value\";		\
 [{			    \
 }]			    \
@@ -24,9 +24,9 @@ key: \"value\";		\
 
 BOOST_AUTO_TEST_CASE(test_argNameQuotedValue)
 {
-	using namespace fm;
+	using namespace com;
 	using sheet::PitchDef;
-	fm::String text = FM_STRING("\
+	com::String text = FM_STRING("\
 key: _name=\"value\";	 	\
 [{			    \
 }]			    \
@@ -41,9 +41,9 @@ key: _name=\"value\";	 	\
 
 BOOST_AUTO_TEST_CASE(test_argNameValue)
 {
-	using namespace fm;
+	using namespace com;
 	using sheet::PitchDef;
-	fm::String text = FM_STRING("\
+	com::String text = FM_STRING("\
 key: _name=value;		\
 [{			    \
 }]			    \
@@ -58,9 +58,9 @@ key: _name=value;		\
 
 BOOST_AUTO_TEST_CASE(test_argUnqouted)
 {
-	using namespace fm;
+	using namespace com;
 	using sheet::PitchDef;
-	fm::String text = FM_STRING("\
+	com::String text = FM_STRING("\
 key: value;		\
 [{			    \
 }]			    \
@@ -74,9 +74,9 @@ key: value;		\
 
 BOOST_AUTO_TEST_CASE(test_argNameValue2)
 {
-	using namespace fm;
+	using namespace com;
 	using sheet::PitchDef;
-	fm::String text = FM_STRING("\
+	com::String text = FM_STRING("\
 key: _name=value _name2=value2;		\
 [{			    \
 }]			    \
@@ -93,9 +93,9 @@ key: _name=value _name2=value2;		\
 
 BOOST_AUTO_TEST_CASE(test_argNameValue3)
 {
-	using namespace fm;
+	using namespace com;
 	using sheet::PitchDef;
-	fm::String text = FM_STRING("\
+	com::String text = FM_STRING("\
 key: myArpeggio direction down _style=legato2;		\
 [{			    \
 }]			    \
@@ -119,9 +119,9 @@ key: myArpeggio direction down _style=legato2;		\
 
 BOOST_AUTO_TEST_CASE(test_trackArgQuoted)
 {
-	using namespace fm;
+	using namespace com;
 	using sheet::PitchDef;
-	fm::String text = FM_STRING("\
+	com::String text = FM_STRING("\
 [				\
 key: \"value\";		\
 {			    \
@@ -135,9 +135,9 @@ key: \"value\";		\
 
 BOOST_AUTO_TEST_CASE(test_trackArgQuoted2)
 {
-	using namespace fm;
+	using namespace com;
 	using sheet::PitchDef;
-	fm::String text = FM_STRING("\
+	com::String text = FM_STRING("\
 [				\
 key: \"value two\";		\
 {			    \
@@ -151,9 +151,9 @@ key: \"value two\";		\
 
 BOOST_AUTO_TEST_CASE(test_trackArgUnquoted)
 {
-	using namespace fm;
+	using namespace com;
 	using sheet::PitchDef;
-	fm::String text = FM_STRING("\
+	com::String text = FM_STRING("\
 [				\
 key: value;		\
 {			    \
@@ -167,7 +167,7 @@ key: value;		\
 
 BOOST_AUTO_TEST_CASE(test_chordDefparser)
 {
-	fm::String str(FM_STRING("--here goes comment 1\n\
+	com::String str(FM_STRING("--here goes comment 1\n\
   \t@import 'old.chdef';\r\n\
 @import 'old2.chdef'; --here goes comment 2\n\
 @import 'old3.chdef'; \n\
@@ -183,7 +183,7 @@ X/V: I=1 III=5 V=-6  --quinte im bass\
 "));
 
 	sheet::compiler::ChordDefParser defParser;
-	using namespace fm::degrees;
+	using namespace com::degrees;
 
 	auto chordDefs = defParser.parse(str);
 	BOOST_CHECK(chordDefs.size() == 5);
@@ -270,9 +270,9 @@ X/V: I=1 III=5 V=-6  --quinte im bass\
 
 BOOST_AUTO_TEST_CASE(test_SheetDefParser)
 {
-	using namespace fm;
+	using namespace com;
 	using sheet::PitchDef;
-	fm::String text = FM_STRING("\
+	com::String text = FM_STRING("\
 	--some useless comment\n\
 [--a track\n\
 	{\n\
@@ -330,9 +330,9 @@ BOOST_AUTO_TEST_CASE(test_SheetDefParser)
 
 BOOST_AUTO_TEST_CASE(test_SheetDefParser_mixed_with_absolute_notes)
 {
-	using namespace fm;
+	using namespace com;
 	using sheet::PitchDef;
-	fm::String text = FM_STRING("\
+	com::String text = FM_STRING("\
 	--some useless comment\n\
 [--a track\n\
 	{\n\
@@ -354,18 +354,18 @@ BOOST_AUTO_TEST_CASE(test_SheetDefParser_mixed_with_absolute_notes)
 	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[3], sheet::Event::Degree, 4, 0, 1.0_N32));
 
 	BOOST_CHECK(defs.tracks[0].voices[1].events.size() == 4);
-	BOOST_CHECK(checkNote(defs.tracks[0].voices[1].events[0], sheet::Event::Note, fm::notes::C, 0, 1.0_N4));
-	BOOST_CHECK(checkNote(defs.tracks[0].voices[1].events[1], sheet::Event::Note, fm::notes::D, 0, 1.0_N4));
-	BOOST_CHECK(checkNote(defs.tracks[0].voices[1].events[2], sheet::Event::Note, fm::notes::E, 0, 1.0_N4));
-	BOOST_CHECK(checkNote(defs.tracks[0].voices[1].events[3], sheet::Event::Note, fm::notes::F, 0, 1.0_N4));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[1].events[0], sheet::Event::Note, com::notes::C, 0, 1.0_N4));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[1].events[1], sheet::Event::Note, com::notes::D, 0, 1.0_N4));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[1].events[2], sheet::Event::Note, com::notes::E, 0, 1.0_N4));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[1].events[3], sheet::Event::Note, com::notes::F, 0, 1.0_N4));
 }
 
 
 BOOST_AUTO_TEST_CASE(test_alias_notes)
 {
-	using namespace fm;
+	using namespace com;
 	using sheet::PitchDef;
-	fm::String text = FM_STRING("\
+	com::String text = FM_STRING("\
 		[\n\
 			{\n\
 				\"bd\"4 \"sn\"8	<\"ht\" \"cymbal1\" >8\n\
@@ -385,9 +385,9 @@ BOOST_AUTO_TEST_CASE(test_alias_notes)
 
 BOOST_AUTO_TEST_CASE(test_alias_sheetdef)
 {
-	using namespace fm;
+	using namespace com;
 	using sheet::PitchDef;
-	fm::String text = FM_STRING("\
+	com::String text = FM_STRING("\
 		[\n\
 			{\n\
 				\"bd\"4 \"sn\"8	<\"ht\" \"cymbal1\" >8\n\
@@ -407,9 +407,9 @@ BOOST_AUTO_TEST_CASE(test_alias_sheetdef)
 
 BOOST_AUTO_TEST_CASE(test_SheetDefParser_fail)
 {
-	using namespace fm;
+	using namespace com;
 	using sheet::PitchDef;
-	fm::String text = FM_STRING("\
+	com::String text = FM_STRING("\
 	--some useless comment\n\
 [--a track\n\
 	{\n\
@@ -431,9 +431,9 @@ BOOST_AUTO_TEST_CASE(test_SheetDefParser_fail)
 
 BOOST_AUTO_TEST_CASE(test_sheetDefParser)
 {
-	using namespace fm;
+	using namespace com;
 	using sheet::PitchDef;
-	fm::String text = FM_STRING("\
+	com::String text = FM_STRING("\
 [\n\
 	{\n\
 		/ soundselect: 0 0 /\n\
@@ -505,32 +505,32 @@ type: sheet;\n\
 	BOOST_CHECK(checkChord(chords[15], FM_STRING("Ai")));
 
 	auto chordelements = chords[2].chordElements();
-	BOOST_CHECK(std::get<0>(chordelements) == fm::notes::C);
+	BOOST_CHECK(std::get<0>(chordelements) == com::notes::C);
 	BOOST_CHECK(std::get<1>(chordelements) == FM_STRING("maj"));
 	BOOST_CHECK(chords[2].chordDefName() == FM_STRING("Xmaj"));
 
 	chordelements = chords[5].chordElements();
-	BOOST_CHECK(std::get<0>(chordelements) == fm::notes::C);
+	BOOST_CHECK(std::get<0>(chordelements) == com::notes::C);
 	BOOST_CHECK(std::get<1>(chordelements) == FM_STRING("7"));
 	BOOST_CHECK(chords[5].chordDefName() == FM_STRING("X7"));
 
 	chordelements = chords[8].chordElements();
-	BOOST_CHECK(std::get<0>(chordelements) == fm::notes::G);
+	BOOST_CHECK(std::get<0>(chordelements) == com::notes::G);
 	BOOST_CHECK(std::get<1>(chordelements) == FM_STRING(""));
 	BOOST_CHECK(chords[8].chordDefName() == FM_STRING("X"));
 
 	chordelements = chords[10].chordElements();
-	BOOST_CHECK(std::get<0>(chordelements) == fm::notes::AIS);
+	BOOST_CHECK(std::get<0>(chordelements) == com::notes::AIS);
 	BOOST_CHECK(std::get<1>(chordelements) == FM_STRING(""));
 	BOOST_CHECK(chords[10].chordDefName() == FM_STRING("X"));
 
 	chordelements = chords[13].chordElements();
-	BOOST_CHECK(std::get<0>(chordelements) == fm::notes::CIS);
+	BOOST_CHECK(std::get<0>(chordelements) == com::notes::CIS);
 	BOOST_CHECK(std::get<1>(chordelements) == FM_STRING("maj79"));
 	BOOST_CHECK(chords[13].chordDefName() == FM_STRING("Xmaj79"));
 
 	chordelements = chords[15].chordElements();
-	BOOST_CHECK(std::get<0>(chordelements) == fm::notes::A);
+	BOOST_CHECK(std::get<0>(chordelements) == com::notes::A);
 	BOOST_CHECK(std::get<1>(chordelements) == FM_STRING("i"));
 	BOOST_CHECK(chords[15].chordDefName() == FM_STRING("Xi"));
 
@@ -538,9 +538,9 @@ type: sheet;\n\
 
 BOOST_AUTO_TEST_CASE(test_sheetDefParser_02)
 {
-	using namespace fm;
+	using namespace com;
 	using sheet::PitchDef;
-	fm::String text = FM_STRING("\
+	com::String text = FM_STRING("\
 [\n\
 	{\n\
 		/ soundselect: 0 0 /\n\
@@ -571,9 +571,9 @@ BOOST_AUTO_TEST_CASE(test_sheetDefParser_02)
 
 BOOST_AUTO_TEST_CASE(test_sheetDefParser_03)
 {
-	using namespace fm;
+	using namespace com;
 	using sheet::PitchDef;
-	fm::String text = FM_STRING("\
+	com::String text = FM_STRING("\
 [\n\
 	{\n\
 	  -- Antônio Carlos Jobim\n\
@@ -623,9 +623,9 @@ BOOST_AUTO_TEST_CASE(test_sheetDefParser_03)
 
 BOOST_AUTO_TEST_CASE(test_expression_meta)
 {
-	using namespace fm;
+	using namespace com;
 	using sheet::PitchDef;
-	fm::String text = FM_STRING("\
+	com::String text = FM_STRING("\
 [\n\
 	{\n\
 		c4\\pp d4 e4 f4 | \\ffff c'4 d'4 e'4 !p f'4 |\n\
@@ -638,27 +638,27 @@ BOOST_AUTO_TEST_CASE(test_expression_meta)
 	BOOST_CHECK(defs.tracks[0].voices.size() == 1);
 	BOOST_CHECK(defs.tracks[0].voices[0].events.size() == 13);
 
-	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[0], sheet::Event::Note, fm::notes::C, 0, 1.0_N4));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[0], sheet::Event::Note, com::notes::C, 0, 1.0_N4));
 	BOOST_CHECK(checkMetaEvent(defs.tracks[0].voices[0].events[1], FM_STRING("expression"), sheet::Event::Args({ makeArg("pp") })));
-	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[2], sheet::Event::Note, fm::notes::D, 0, 1.0_N4));
-	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[3], sheet::Event::Note, fm::notes::E, 0, 1.0_N4));
-	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[4], sheet::Event::Note, fm::notes::F, 0, 1.0_N4));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[2], sheet::Event::Note, com::notes::D, 0, 1.0_N4));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[3], sheet::Event::Note, com::notes::E, 0, 1.0_N4));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[4], sheet::Event::Note, com::notes::F, 0, 1.0_N4));
 	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[5], sheet::Event::EOB));
 	BOOST_CHECK(checkMetaEvent(defs.tracks[0].voices[0].events[6], FM_STRING("expression"), sheet::Event::Args({ makeArg("ffff") })));
-	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[7], sheet::Event::Note, fm::notes::C, 1, 1.0_N4));
-	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[8], sheet::Event::Note, fm::notes::D, 1, 1.0_N4));
-	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[9], sheet::Event::Note, fm::notes::E, 1, 1.0_N4));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[7], sheet::Event::Note, com::notes::C, 1, 1.0_N4));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[8], sheet::Event::Note, com::notes::D, 1, 1.0_N4));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[9], sheet::Event::Note, com::notes::E, 1, 1.0_N4));
 	BOOST_CHECK(checkMetaEvent(defs.tracks[0].voices[0].events[10], FM_STRING("expressionPlayedOnce"), sheet::Event::Args({ makeArg("p") })));
-	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[11], sheet::Event::Note, fm::notes::F, 1, 1.0_N4));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[11], sheet::Event::Note, com::notes::F, 1, 1.0_N4));
 	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[12], sheet::Event::EOB));
 
 }
 
 BOOST_AUTO_TEST_CASE(test_vorschlag)
 {
-	using namespace fm;
+	using namespace com;
 	using sheet::PitchDef;
-	fm::String text = FM_STRING("\
+	com::String text = FM_STRING("\
 [\n\
 	{\n\
 	 d'32 -> c'4 r2.|\n\
@@ -672,17 +672,17 @@ BOOST_AUTO_TEST_CASE(test_vorschlag)
 	BOOST_CHECK(defs.tracks[0].voices[0].events.size() == 4);
 
 	BOOST_CHECK(checkMetaEvent(defs.tracks[0].voices[0].events[0], FM_STRING("addVorschlag"), sheet::Event::Args({})));
-	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[0], sheet::Event::Meta, fm::notes::D, 1, 1.0_N32));
-	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[1], sheet::Event::Note, fm::notes::C, 1, 1.0_N4));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[0], sheet::Event::Meta, com::notes::D, 1, 1.0_N32));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[1], sheet::Event::Note, com::notes::C, 1, 1.0_N4));
 	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[2], sheet::Event::Rest, sheet::PitchDef::NoPitch, 0, 1.0_N2p));
 	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[3], sheet::Event::EOB));
 }
 
 BOOST_AUTO_TEST_CASE(test_alias_vorschlag)
 {
-	using namespace fm;
+	using namespace com;
 	using sheet::PitchDef;
-	fm::String text = FM_STRING("\
+	com::String text = FM_STRING("\
 [\n\
 	{\n\
 	 \"bd\"32->c'4 r2.|\n\
@@ -697,7 +697,7 @@ BOOST_AUTO_TEST_CASE(test_alias_vorschlag)
 
 	BOOST_CHECK(checkMetaEvent(defs.tracks[0].voices[0].events[0], FM_STRING("addVorschlag"), sheet::Event::Args({})));
 	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[0], sheet::Event::Meta, FM_STRING("bd"), 1.0_N32));
-	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[1], sheet::Event::Note, fm::notes::C, 1, 1.0_N4));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[1], sheet::Event::Note, com::notes::C, 1, 1.0_N4));
 	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[2], sheet::Event::Rest, sheet::PitchDef::NoPitch, 0, 1.0_N2p));
 	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[3], sheet::Event::EOB));
 }
@@ -706,9 +706,9 @@ BOOST_AUTO_TEST_CASE(test_alias_vorschlag)
 
 BOOST_AUTO_TEST_CASE(test_SheetDefParser_vorschlag)
 {
-	using namespace fm;
+	using namespace com;
 	using sheet::PitchDef;
-	fm::String text = FM_STRING("\
+	com::String text = FM_STRING("\
 [\n\
 	{\n\
 		I#4->I4 I4 I4 I4 |\n\
@@ -724,9 +724,9 @@ BOOST_AUTO_TEST_CASE(test_SheetDefParser_vorschlag)
 
 BOOST_AUTO_TEST_CASE(test_sheetDefParser_tie)
 {
-	using namespace fm;
+	using namespace com;
 	using sheet::PitchDef;
-	fm::String text = FM_STRING("\
+	com::String text = FM_STRING("\
 [\n\
 	{\n\
 		c1~ | c1 \n\
@@ -743,8 +743,8 @@ BOOST_AUTO_TEST_CASE(test_sheetDefParser_tie)
 
 BOOST_AUTO_TEST_CASE(test_documentUsingParser)
 {
-	using namespace fm;
-	fm::String text = FM_STRING("\
+	using namespace com;
+	com::String text = FM_STRING("\
 using \"Chords1.chords\"; \n\
 using \"Chords.chords\"; \n\
 using \"simplePianoSheetTemplate.sheetTemplate\"; \n\
@@ -770,8 +770,8 @@ using \"C:\\drivers\\Intel Rapid Storage Technology Driver\"; \n\
 
 BOOST_AUTO_TEST_CASE(test_documentUsingParser_empty)
 {
-	using namespace fm;
-	fm::String text = FM_STRING("\
+	using namespace com;
+	com::String text = FM_STRING("\
 \n\
 	[\n\
 	{\n\
@@ -801,8 +801,8 @@ BOOST_AUTO_TEST_CASE(test_documentUsingParser_empty)
 
 BOOST_AUTO_TEST_CASE(test_pitchmap_parser)
 {
-	using namespace fm;
-	fm::String str(FM_STRING("\
+	using namespace com;
+	com::String str(FM_STRING("\
 \"bd\": c,,\n\
 \"sn\": e,\n\
 "));
@@ -810,20 +810,20 @@ BOOST_AUTO_TEST_CASE(test_pitchmap_parser)
 	auto defs = parser.parse(str);
 	BOOST_CHECK(defs.size() == 2);
 	BOOST_CHECK(defs[0].name == FM_STRING("bd"));
-	BOOST_CHECK(defs[0].pitch.pitch == fm::notes::C);
+	BOOST_CHECK(defs[0].pitch.pitch == com::notes::C);
 	BOOST_CHECK(defs[0].pitch.octave == -2);
 
 	BOOST_CHECK(defs[1].name == FM_STRING("sn"));
-	BOOST_CHECK(defs[1].pitch.pitch == fm::notes::E);
+	BOOST_CHECK(defs[1].pitch.pitch == com::notes::E);
 	BOOST_CHECK(defs[1].pitch.octave == -1);
 }
 
 
 BOOST_AUTO_TEST_CASE(test_trackinfo)
 {
-	using namespace fm;
+	using namespace com;
 	using sheet::PitchDef;
-	fm::String text = FM_STRING("\
+	com::String text = FM_STRING("\
 [\n\
 type: notation; \n\
 uname: bass; \n\
@@ -862,9 +862,9 @@ command: 01 02 03; \n\
 
 BOOST_AUTO_TEST_CASE(test_docmentInfo)
 {
-	using namespace fm;
+	using namespace com;
 	using sheet::PitchDef;
-	fm::String text = FM_STRING("\
+	com::String text = FM_STRING("\
 instrumentDef: drums  SC1 9 0 32; \n\
 command: 01 02 03; \n\
 [\n\
@@ -903,9 +903,9 @@ command: 01 02 03; \n\
 
 BOOST_AUTO_TEST_CASE(test_tied_degree_failed)
 {
-	using namespace fm;
+	using namespace com;
 	using sheet::PitchDef;
-	fm::String text = FM_STRING("\
+	com::String text = FM_STRING("\
 [\n\
 	{\n\
 		I1~ | I1 | \n\
@@ -918,9 +918,9 @@ BOOST_AUTO_TEST_CASE(test_tied_degree_failed)
 	BOOST_CHECK(defs.tracks[0].voices.size() == 1);
 	BOOST_CHECK(defs.tracks[0].voices[0].events.size() == 4);
 
-	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[0], sheet::Event::TiedDegree, fm::degrees::I, 0, 1.0_N1));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[0], sheet::Event::TiedDegree, com::degrees::I, 0, 1.0_N1));
 	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[1], sheet::Event::EOB));
-	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[2], sheet::Event::Degree, fm::degrees::I, 0, 1.0_N1));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[2], sheet::Event::Degree, com::degrees::I, 0, 1.0_N1));
 	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[3], sheet::Event::EOB));
 }
 
@@ -928,9 +928,9 @@ BOOST_AUTO_TEST_CASE(test_tied_degree_failed)
 
 BOOST_AUTO_TEST_CASE(test_event_positions)
 {
-	using namespace fm;
+	using namespace com;
 	using sheet::PitchDef;
-	fm::String text = FM_STRING("\
+	com::String text = FM_STRING("\
 \n\
 \n\
 sheetInfo: xyz; \n\
@@ -982,9 +982,9 @@ sheetInfo: xyz; \n\
 
 BOOST_AUTO_TEST_CASE(test_event_positions2)
 {
-	using namespace fm;
+	using namespace com;
 	using sheet::PitchDef;
-	fm::String text = FM_STRING("\
+	com::String text = FM_STRING("\
 \n\
 \n\
 documentConfig: xyz; \n\
@@ -1023,9 +1023,9 @@ documentConfig: xyz; \n\
 
 BOOST_AUTO_TEST_CASE(test_source_id)
 {
-	using namespace fm;
+	using namespace com;
 	using sheet::PitchDef;
-	fm::String text = FM_STRING("[\n\
+	com::String text = FM_STRING("[\n\
 	{\n\
 		/ soundselect: 0 0/ -- another comment\n\
 		/ channel : 1 /\n\
@@ -1044,9 +1044,9 @@ BOOST_AUTO_TEST_CASE(test_source_id)
 
 BOOST_AUTO_TEST_CASE(test_x_repeat)
 {
-	using namespace fm;
+	using namespace com;
 	using sheet::PitchDef;
-	fm::String text = FM_STRING("\
+	com::String text = FM_STRING("\
 		[\n\
 			{\n\
 				c4 & & & | &1 \n\
@@ -1058,7 +1058,7 @@ BOOST_AUTO_TEST_CASE(test_x_repeat)
 	BOOST_CHECK(defs.tracks.size() == 1);
 	BOOST_CHECK(defs.tracks[0].voices.size() == 1);
 	BOOST_CHECK(defs.tracks[0].voices[0].events.size() == 6);
-	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[0], sheet::Event::Note, fm::notes::C, 0, 1.0_N4));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[0], sheet::Event::Note, com::notes::C, 0, 1.0_N4));
 	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[1], sheet::Event::Repeat, sheet::PitchDef::NoPitch, 0, 0));
 	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[2], sheet::Event::Repeat, sheet::PitchDef::NoPitch, 0, 0));
 	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[3], sheet::Event::Repeat, sheet::PitchDef::NoPitch, 0, 0));
@@ -1068,9 +1068,9 @@ BOOST_AUTO_TEST_CASE(test_x_repeat)
 
 BOOST_AUTO_TEST_CASE(test_x_repeat_degree)
 {
-	using namespace fm;
+	using namespace com;
 	using sheet::PitchDef;
-	fm::String text = FM_STRING("\
+	com::String text = FM_STRING("\
 		[\n\
 			{\n\
 				I4 & & & | &1 \n\
@@ -1082,7 +1082,7 @@ BOOST_AUTO_TEST_CASE(test_x_repeat_degree)
 	BOOST_CHECK(defs.tracks.size() == 1);
 	BOOST_CHECK(defs.tracks[0].voices.size() == 1);
 	BOOST_CHECK(defs.tracks[0].voices[0].events.size() == 6);
-	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[0], sheet::Event::Degree, fm::degrees::I, 0, 1.0_N4));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[0], sheet::Event::Degree, com::degrees::I, 0, 1.0_N4));
 	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[1], sheet::Event::Repeat, sheet::PitchDef::NoPitch, 0, 0));
 	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[2], sheet::Event::Repeat, sheet::PitchDef::NoPitch, 0, 0));
 	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[3], sheet::Event::Repeat, sheet::PitchDef::NoPitch, 0, 0));
@@ -1092,9 +1092,9 @@ BOOST_AUTO_TEST_CASE(test_x_repeat_degree)
 
 BOOST_AUTO_TEST_CASE(test_x_tied_repeat)
 {
-	using namespace fm;
+	using namespace com;
 	using sheet::PitchDef;
-	fm::String text = FM_STRING("\
+	com::String text = FM_STRING("\
 		[\n\
 			{\n\
 				c4 &~ &~ &~ | &1 \n\
@@ -1106,7 +1106,7 @@ BOOST_AUTO_TEST_CASE(test_x_tied_repeat)
 	BOOST_CHECK(defs.tracks.size() == 1);
 	BOOST_CHECK(defs.tracks[0].voices.size() == 1);
 	BOOST_CHECK(defs.tracks[0].voices[0].events.size() == 6);
-	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[0], sheet::Event::Note, fm::notes::C, 0, 1.0_N4));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[0], sheet::Event::Note, com::notes::C, 0, 1.0_N4));
 	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[1], sheet::Event::TiedRepeat, sheet::PitchDef::NoPitch, 0, 0));
 	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[2], sheet::Event::TiedRepeat, sheet::PitchDef::NoPitch, 0, 0));
 	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[3], sheet::Event::TiedRepeat, sheet::PitchDef::NoPitch, 0, 0));
@@ -1116,9 +1116,9 @@ BOOST_AUTO_TEST_CASE(test_x_tied_repeat)
 
 BOOST_AUTO_TEST_CASE(test_x_vorschlag_repeat)
 {
-	using namespace fm;
+	using namespace com;
 	using sheet::PitchDef;
-	fm::String text = FM_STRING("\
+	com::String text = FM_STRING("\
 		[\n\
 			{\n\
 				c4 &->d4~ &~ | &1 \n\
@@ -1134,9 +1134,9 @@ BOOST_AUTO_TEST_CASE(test_x_vorschlag_repeat)
 
 BOOST_AUTO_TEST_CASE(test_x_repeat_degree_2)
 {
-	using namespace fm;
+	using namespace com;
 	using sheet::PitchDef;
-	fm::String text = FM_STRING("\
+	com::String text = FM_STRING("\
 		[\n\
 			{\n\
 				I4&&&|&1 \n\
@@ -1148,7 +1148,7 @@ BOOST_AUTO_TEST_CASE(test_x_repeat_degree_2)
 	BOOST_CHECK(defs.tracks.size() == 1);
 	BOOST_CHECK(defs.tracks[0].voices.size() == 1);
 	BOOST_CHECK(defs.tracks[0].voices[0].events.size() == 6);
-	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[0], sheet::Event::Degree, fm::degrees::I, 0, 1.0_N4));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[0], sheet::Event::Degree, com::degrees::I, 0, 1.0_N4));
 	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[1], sheet::Event::Repeat, sheet::PitchDef::NoPitch, 0, 0));
 	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[2], sheet::Event::Repeat, sheet::PitchDef::NoPitch, 0, 0));
 	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[3], sheet::Event::Repeat, sheet::PitchDef::NoPitch, 0, 0));
@@ -1160,9 +1160,9 @@ BOOST_AUTO_TEST_CASE(test_x_repeat_degree_2)
 
 BOOST_AUTO_TEST_CASE(test_degree_accendentials)
 {
-	using namespace fm;
+	using namespace com;
 	using sheet::PitchDef;
-	fm::String text = FM_STRING("\
+	com::String text = FM_STRING("\
 [\n\
 	{\n\
 		I4 I# I## I### Ib Ibb Ibbb I#4 I##4 I###4 Ib4 Ibb4 Ibbb4 \n\
@@ -1178,9 +1178,9 @@ BOOST_AUTO_TEST_CASE(test_degree_accendentials)
 
 BOOST_AUTO_TEST_CASE(test_tags)
 {
-	using namespace fm;
+	using namespace com;
 	using sheet::PitchDef;
-	fm::String text = FM_STRING("\
+	com::String text = FM_STRING("\
 [\n\
 	{\n\
 		\"tag1\"@c4 \"tag1 tag2\"@d4 \"tag1 tag2 tag3\"@ e4 \" tag1 tag2 \" @ f4 | c'4 d'4 e'4 f'4 |\n\
@@ -1206,34 +1206,34 @@ BOOST_AUTO_TEST_CASE(test_tags)
 	{
 		const auto &ev = defs.tracks[0].voices[0].events[0];
 		BOOST_CHECK(ev.tags.size() == 1);
-		BOOST_CHECK( ev.tags.find(fm::String("tag1")) != ev.tags.end() );
+		BOOST_CHECK( ev.tags.find(com::String("tag1")) != ev.tags.end() );
 	}
 	{
 		const auto &ev = defs.tracks[0].voices[0].events[1];
 		BOOST_CHECK(ev.tags.size() == 2);
-		BOOST_CHECK( ev.tags.find(fm::String("tag1")) != ev.tags.end() );
-		BOOST_CHECK( ev.tags.find(fm::String("tag2")) != ev.tags.end() );
+		BOOST_CHECK( ev.tags.find(com::String("tag1")) != ev.tags.end() );
+		BOOST_CHECK( ev.tags.find(com::String("tag2")) != ev.tags.end() );
 	}
 	{
 		const auto &ev = defs.tracks[0].voices[0].events[2];
 		BOOST_CHECK(ev.tags.size() == 3);
-		BOOST_CHECK( ev.tags.find(fm::String("tag1")) != ev.tags.end() );
-		BOOST_CHECK( ev.tags.find(fm::String("tag2")) != ev.tags.end() );
-		BOOST_CHECK( ev.tags.find(fm::String("tag3")) != ev.tags.end() );
+		BOOST_CHECK( ev.tags.find(com::String("tag1")) != ev.tags.end() );
+		BOOST_CHECK( ev.tags.find(com::String("tag2")) != ev.tags.end() );
+		BOOST_CHECK( ev.tags.find(com::String("tag3")) != ev.tags.end() );
 	}
 	{
 		const auto &ev = defs.tracks[0].voices[0].events[3];
 		BOOST_CHECK(ev.tags.size() == 2);
-		BOOST_CHECK( ev.tags.find(fm::String("tag1")) != ev.tags.end() );
-		BOOST_CHECK( ev.tags.find(fm::String("tag2")) != ev.tags.end() );
+		BOOST_CHECK( ev.tags.find(com::String("tag1")) != ev.tags.end() );
+		BOOST_CHECK( ev.tags.find(com::String("tag2")) != ev.tags.end() );
 	}
 }
 
 BOOST_AUTO_TEST_CASE(test_tags_degree)
 {
-	using namespace fm;
+	using namespace com;
 	using sheet::PitchDef;
-	fm::String text = FM_STRING("\
+	com::String text = FM_STRING("\
 [\n\
 	{\n\
 		\"tag1\"@I4 \"tag1 tag2\"@II4 \"tag1 tag2 tag3\"@ III4 \" tag1 tag2 \" @ IV4 | I'4 II'4 III'4 IV'4 |\n\
@@ -1245,49 +1245,49 @@ BOOST_AUTO_TEST_CASE(test_tags_degree)
 	BOOST_CHECK(defs.tracks.size() == 1);
 	BOOST_CHECK(defs.tracks[0].voices.size() == 1);
 	BOOST_CHECK(defs.tracks[0].voices[0].events.size() == 10);
-	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[0], sheet::Event::Degree, fm::degrees::I, 0, 1.0_N4));
-	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[1], sheet::Event::Degree, fm::degrees::II, 0, 1.0_N4));
-	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[2], sheet::Event::Degree, fm::degrees::III, 0, 1.0_N4));
-	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[3], sheet::Event::Degree, fm::degrees::IV, 0, 1.0_N4));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[0], sheet::Event::Degree, com::degrees::I, 0, 1.0_N4));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[1], sheet::Event::Degree, com::degrees::II, 0, 1.0_N4));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[2], sheet::Event::Degree, com::degrees::III, 0, 1.0_N4));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[3], sheet::Event::Degree, com::degrees::IV, 0, 1.0_N4));
 	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[4], sheet::Event::EOB));
-	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[5], sheet::Event::Degree, fm::degrees::I, 1, 1.0_N4));
-	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[6], sheet::Event::Degree, fm::degrees::II, 1, 1.0_N4));
-	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[7], sheet::Event::Degree, fm::degrees::III, 1, 1.0_N4));
-	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[8], sheet::Event::Degree, fm::degrees::IV, 1, 1.0_N4));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[5], sheet::Event::Degree, com::degrees::I, 1, 1.0_N4));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[6], sheet::Event::Degree, com::degrees::II, 1, 1.0_N4));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[7], sheet::Event::Degree, com::degrees::III, 1, 1.0_N4));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[8], sheet::Event::Degree, com::degrees::IV, 1, 1.0_N4));
 	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[9], sheet::Event::EOB));
 
 	{
 		const auto &ev = defs.tracks[0].voices[0].events[0];
 		BOOST_CHECK(ev.tags.size() == 1);
-		BOOST_CHECK( ev.tags.find(fm::String("tag1")) != ev.tags.end() );
+		BOOST_CHECK( ev.tags.find(com::String("tag1")) != ev.tags.end() );
 	}
 	{
 		const auto &ev = defs.tracks[0].voices[0].events[1];
 		BOOST_CHECK(ev.tags.size() == 2);
-		BOOST_CHECK( ev.tags.find(fm::String("tag1")) != ev.tags.end() );
-		BOOST_CHECK( ev.tags.find(fm::String("tag2")) != ev.tags.end() );
+		BOOST_CHECK( ev.tags.find(com::String("tag1")) != ev.tags.end() );
+		BOOST_CHECK( ev.tags.find(com::String("tag2")) != ev.tags.end() );
 	}
 	{
 		const auto &ev = defs.tracks[0].voices[0].events[2];
 		BOOST_CHECK(ev.tags.size() == 3);
-		BOOST_CHECK( ev.tags.find(fm::String("tag1")) != ev.tags.end() );
-		BOOST_CHECK( ev.tags.find(fm::String("tag2")) != ev.tags.end() );
-		BOOST_CHECK( ev.tags.find(fm::String("tag3")) != ev.tags.end() );
+		BOOST_CHECK( ev.tags.find(com::String("tag1")) != ev.tags.end() );
+		BOOST_CHECK( ev.tags.find(com::String("tag2")) != ev.tags.end() );
+		BOOST_CHECK( ev.tags.find(com::String("tag3")) != ev.tags.end() );
 	}
 	{
 		const auto &ev = defs.tracks[0].voices[0].events[3];
 		BOOST_CHECK(ev.tags.size() == 2);
-		BOOST_CHECK( ev.tags.find(fm::String("tag1")) != ev.tags.end() );
-		BOOST_CHECK( ev.tags.find(fm::String("tag2")) != ev.tags.end() );
+		BOOST_CHECK( ev.tags.find(com::String("tag1")) != ev.tags.end() );
+		BOOST_CHECK( ev.tags.find(com::String("tag2")) != ev.tags.end() );
 	}
 }
 
 
 BOOST_AUTO_TEST_CASE(test_ntolen)
 {
-	using namespace fm;
+	using namespace com;
 	using sheet::PitchDef;
-	fm::String text = FM_STRING("\
+	com::String text = FM_STRING("\
 [\n\
 	{\n\
 		(c4 d16 e8)4 \n\
@@ -1303,16 +1303,16 @@ BOOST_AUTO_TEST_CASE(test_ntolen)
 	BOOST_CHECK(event.type == sheet::Event::Group);
 	BOOST_CHECK(event.duration == 1.0_N4);
 	BOOST_CHECK(event.eventGroup.size() == 3);
-	BOOST_CHECK(checkNote(event.eventGroup[0], sheet::Event::Note, fm::notes::C, 0, 1.0_N4));
-	BOOST_CHECK(checkNote(event.eventGroup[1], sheet::Event::Note, fm::notes::D, 0, 1.0_N16));
-	BOOST_CHECK(checkNote(event.eventGroup[2], sheet::Event::Note, fm::notes::E, 0, 1.0_N8));
+	BOOST_CHECK(checkNote(event.eventGroup[0], sheet::Event::Note, com::notes::C, 0, 1.0_N4));
+	BOOST_CHECK(checkNote(event.eventGroup[1], sheet::Event::Note, com::notes::D, 0, 1.0_N16));
+	BOOST_CHECK(checkNote(event.eventGroup[2], sheet::Event::Note, com::notes::E, 0, 1.0_N8));
 }
 
 BOOST_AUTO_TEST_CASE(test_nested_ntolen)
 {
-	using namespace fm;
+	using namespace com;
 	using sheet::PitchDef;
-	fm::String text = FM_STRING("\
+	com::String text = FM_STRING("\
 [\n\
 	{\n\
 		( (c d e)8 (f~ g a)16 (I~ II III)32 )4 \n\
@@ -1332,30 +1332,30 @@ BOOST_AUTO_TEST_CASE(test_nested_ntolen)
 	const auto &g1 = event.eventGroup[0];
 	BOOST_CHECK(g1.eventGroup.size() == 3);
 	BOOST_CHECK(g1.duration == 1.0_N8);
-	BOOST_CHECK(checkNote(g1.eventGroup[0], sheet::Event::Note, fm::notes::C, 0, sheet::Event::NoDuration));
-	BOOST_CHECK(checkNote(g1.eventGroup[1], sheet::Event::Note, fm::notes::D, 0, sheet::Event::NoDuration));
-	BOOST_CHECK(checkNote(g1.eventGroup[2], sheet::Event::Note, fm::notes::E, 0, sheet::Event::NoDuration));
+	BOOST_CHECK(checkNote(g1.eventGroup[0], sheet::Event::Note, com::notes::C, 0, sheet::Event::NoDuration));
+	BOOST_CHECK(checkNote(g1.eventGroup[1], sheet::Event::Note, com::notes::D, 0, sheet::Event::NoDuration));
+	BOOST_CHECK(checkNote(g1.eventGroup[2], sheet::Event::Note, com::notes::E, 0, sheet::Event::NoDuration));
 
 	const auto &g2 = event.eventGroup[1];
 	BOOST_CHECK(g2.eventGroup.size() == 3);
 	BOOST_CHECK(g2.duration == 1.0_N16);
-	BOOST_CHECK(checkNote(g2.eventGroup[0], sheet::Event::TiedNote, fm::notes::F, 0, sheet::Event::NoDuration));
-	BOOST_CHECK(checkNote(g2.eventGroup[1], sheet::Event::Note, fm::notes::G, 0, sheet::Event::NoDuration));
-	BOOST_CHECK(checkNote(g2.eventGroup[2], sheet::Event::Note, fm::notes::A, 0, sheet::Event::NoDuration));
+	BOOST_CHECK(checkNote(g2.eventGroup[0], sheet::Event::TiedNote, com::notes::F, 0, sheet::Event::NoDuration));
+	BOOST_CHECK(checkNote(g2.eventGroup[1], sheet::Event::Note, com::notes::G, 0, sheet::Event::NoDuration));
+	BOOST_CHECK(checkNote(g2.eventGroup[2], sheet::Event::Note, com::notes::A, 0, sheet::Event::NoDuration));
 
 	const auto &g3 = event.eventGroup[2];
 	BOOST_CHECK(g3.eventGroup.size() == 3);
 	BOOST_CHECK(g3.duration == 1.0_N32);
-	BOOST_CHECK(checkNote(g3.eventGroup[0], sheet::Event::TiedDegree, fm::degrees::I, 0, sheet::Event::NoDuration));
-	BOOST_CHECK(checkNote(g3.eventGroup[1], sheet::Event::Degree, fm::degrees::II, 0, sheet::Event::NoDuration));
-	BOOST_CHECK(checkNote(g3.eventGroup[2], sheet::Event::Degree, fm::degrees::III, 0, sheet::Event::NoDuration));
+	BOOST_CHECK(checkNote(g3.eventGroup[0], sheet::Event::TiedDegree, com::degrees::I, 0, sheet::Event::NoDuration));
+	BOOST_CHECK(checkNote(g3.eventGroup[1], sheet::Event::Degree, com::degrees::II, 0, sheet::Event::NoDuration));
+	BOOST_CHECK(checkNote(g3.eventGroup[2], sheet::Event::Degree, com::degrees::III, 0, sheet::Event::NoDuration));
 }
 
 BOOST_AUTO_TEST_CASE(test_issue_102_delimiter_for_meta_args)
 {
-	using namespace fm;
+	using namespace com;
 	using sheet::PitchDef;
-	fm::String text = FM_STRING("\
+	com::String text = FM_STRING("\
 	dconf: abc \"1 2 3\"; \n\
 	[\n\
 	tconf: abc 1 2 3; \n\
@@ -1372,9 +1372,9 @@ BOOST_AUTO_TEST_CASE(test_issue_102_delimiter_for_meta_args)
 
 BOOST_AUTO_TEST_CASE(test_repeats)
 {
-	using namespace fm;
+	using namespace com;
 	using sheet::PitchDef;
-	fm::String text = FM_STRING("\n\
+	com::String text = FM_STRING("\n\
 [\n\
 {\n\
 | c d e f :|\n\
@@ -1433,9 +1433,9 @@ BOOST_AUTO_TEST_CASE(test_repeats)
 
 BOOST_AUTO_TEST_CASE(test_repeat_mark_fail_white_space)
 {
-	using namespace fm;
+	using namespace com;
 	using sheet::PitchDef;
-	fm::String text = FM_STRING("\n\
+	com::String text = FM_STRING("\n\
 [\n\
 {\n\
 |: c d e f :|^ 1: r1 \n\
@@ -1450,9 +1450,9 @@ BOOST_AUTO_TEST_CASE(test_repeat_mark_fail_white_space)
 
 BOOST_AUTO_TEST_CASE(test_repeat_volta_fail_02)
 {
-	using namespace fm;
+	using namespace com;
 	using sheet::PitchDef;
-	fm::String text = FM_STRING("\n\
+	com::String text = FM_STRING("\n\
 [\n\
 {\n\
 |: c d e f :|^1 ^2: r1 \n\
@@ -1465,9 +1465,9 @@ BOOST_AUTO_TEST_CASE(test_repeat_volta_fail_02)
 }
 BOOST_AUTO_TEST_CASE(test_repeat_volta_fail_03)
 {
-	using namespace fm;
+	using namespace com;
 	using sheet::PitchDef;
-	fm::String text = FM_STRING("\n\
+	com::String text = FM_STRING("\n\
 [\n\
 {\n\
 |: c d e f :|^1 2: r1 \n\
@@ -1482,9 +1482,9 @@ BOOST_AUTO_TEST_CASE(test_repeat_volta_fail_03)
 
 BOOST_AUTO_TEST_CASE(test_repeats_fail_duplicated_multiplier_colon)
 {
-	using namespace fm;
+	using namespace com;
 	using sheet::PitchDef;
-	fm::String text = FM_STRING("\n\
+	com::String text = FM_STRING("\n\
 [\n\
 {\n\
 |:: c d e f | r1 \n\
@@ -1498,9 +1498,9 @@ BOOST_AUTO_TEST_CASE(test_repeats_fail_duplicated_multiplier_colon)
 
 BOOST_AUTO_TEST_CASE(test_repeats_fail_duplicated_multiplier_colon_2)
 {
-	using namespace fm;
+	using namespace com;
 	using sheet::PitchDef;
-	fm::String text = FM_STRING("\n\
+	com::String text = FM_STRING("\n\
 [\n\
 {\n\
 |: c d e f ::| r1 \n\
@@ -1514,9 +1514,9 @@ BOOST_AUTO_TEST_CASE(test_repeats_fail_duplicated_multiplier_colon_2)
 
 BOOST_AUTO_TEST_CASE(test_repeats_fail_duplicated_multiplier_colon_3)
 {
-	using namespace fm;
+	using namespace com;
 	using sheet::PitchDef;
-	fm::String text = FM_STRING("\n\
+	com::String text = FM_STRING("\n\
 [\n\
 {\n\
 |: c d e f :|:: r1 \n\
@@ -1530,9 +1530,9 @@ BOOST_AUTO_TEST_CASE(test_repeats_fail_duplicated_multiplier_colon_3)
 
 BOOST_AUTO_TEST_CASE(test_extended_note_events)
 {
-	using namespace fm;
+	using namespace com;
 	using sheet::PitchDef;
-	fm::String text = FM_STRING("\n\
+	com::String text = FM_STRING("\n\
 [\n\
 {\n\
 	h i j k l m n o p q s u v w x y z \n\
@@ -1547,46 +1547,46 @@ BOOST_AUTO_TEST_CASE(test_extended_note_events)
 	const auto& events = defs.tracks[0].voices[0].events;
 	int c = 0;
 	BOOST_CHECK_EQUAL(events[c].type, sheet::Event::Note);
-	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, fm::String("h"));
+	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, com::String("h"));
 	BOOST_CHECK_EQUAL(events[c].type, sheet::Event::Note);
-	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, fm::String("i"));
+	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, com::String("i"));
 	BOOST_CHECK_EQUAL(events[c].type, sheet::Event::Note);
-	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, fm::String("j"));
+	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, com::String("j"));
 	BOOST_CHECK_EQUAL(events[c].type, sheet::Event::Note);
-	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, fm::String("k"));
+	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, com::String("k"));
 	BOOST_CHECK_EQUAL(events[c].type, sheet::Event::Note);
-	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, fm::String("l"));
+	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, com::String("l"));
 	BOOST_CHECK_EQUAL(events[c].type, sheet::Event::Note);
-	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, fm::String("m"));
+	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, com::String("m"));
 	BOOST_CHECK_EQUAL(events[c].type, sheet::Event::Note);
-	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, fm::String("n"));
+	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, com::String("n"));
 	BOOST_CHECK_EQUAL(events[c].type, sheet::Event::Note);
-	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, fm::String("o"));
+	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, com::String("o"));
 	BOOST_CHECK_EQUAL(events[c].type, sheet::Event::Note);
-	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, fm::String("p"));
+	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, com::String("p"));
 	BOOST_CHECK_EQUAL(events[c].type, sheet::Event::Note);
-	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, fm::String("q"));
+	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, com::String("q"));
 	BOOST_CHECK_EQUAL(events[c].type, sheet::Event::Note);
-	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, fm::String("s"));
+	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, com::String("s"));
 	BOOST_CHECK_EQUAL(events[c].type, sheet::Event::Note);
-	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, fm::String("u"));
+	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, com::String("u"));
 	BOOST_CHECK_EQUAL(events[c].type, sheet::Event::Note);
-	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, fm::String("v"));
+	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, com::String("v"));
 	BOOST_CHECK_EQUAL(events[c].type, sheet::Event::Note);
-	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, fm::String("w"));
+	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, com::String("w"));
 	BOOST_CHECK_EQUAL(events[c].type, sheet::Event::Note);
-	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, fm::String("x"));
+	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, com::String("x"));
 	BOOST_CHECK_EQUAL(events[c].type, sheet::Event::Note);
-	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, fm::String("y"));
+	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, com::String("y"));
 	BOOST_CHECK_EQUAL(events[c].type, sheet::Event::Note);
-	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, fm::String("z"));
+	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, com::String("z"));
 }
 
 BOOST_AUTO_TEST_CASE(test_extended_note_events_2)
 {
-	using namespace fm;
+	using namespace com;
 	using sheet::PitchDef;
-	fm::String text = FM_STRING("\n\
+	com::String text = FM_STRING("\n\
 [\n\
 {\n\
 	hijklmnopqsuvwxyz\n\
@@ -1601,46 +1601,46 @@ BOOST_AUTO_TEST_CASE(test_extended_note_events_2)
 	const auto& events = defs.tracks[0].voices[0].events;
 	int c = 0;
 	BOOST_CHECK_EQUAL(events[c].type, sheet::Event::Note);
-	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, fm::String("h"));
+	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, com::String("h"));
 	BOOST_CHECK_EQUAL(events[c].type, sheet::Event::Note);
-	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, fm::String("i"));
+	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, com::String("i"));
 	BOOST_CHECK_EQUAL(events[c].type, sheet::Event::Note);
-	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, fm::String("j"));
+	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, com::String("j"));
 	BOOST_CHECK_EQUAL(events[c].type, sheet::Event::Note);
-	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, fm::String("k"));
+	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, com::String("k"));
 	BOOST_CHECK_EQUAL(events[c].type, sheet::Event::Note);
-	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, fm::String("l"));
+	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, com::String("l"));
 	BOOST_CHECK_EQUAL(events[c].type, sheet::Event::Note);
-	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, fm::String("m"));
+	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, com::String("m"));
 	BOOST_CHECK_EQUAL(events[c].type, sheet::Event::Note);
-	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, fm::String("n"));
+	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, com::String("n"));
 	BOOST_CHECK_EQUAL(events[c].type, sheet::Event::Note);
-	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, fm::String("o"));
+	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, com::String("o"));
 	BOOST_CHECK_EQUAL(events[c].type, sheet::Event::Note);
-	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, fm::String("p"));
+	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, com::String("p"));
 	BOOST_CHECK_EQUAL(events[c].type, sheet::Event::Note);
-	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, fm::String("q"));
+	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, com::String("q"));
 	BOOST_CHECK_EQUAL(events[c].type, sheet::Event::Note);
-	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, fm::String("s"));
+	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, com::String("s"));
 	BOOST_CHECK_EQUAL(events[c].type, sheet::Event::Note);
-	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, fm::String("u"));
+	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, com::String("u"));
 	BOOST_CHECK_EQUAL(events[c].type, sheet::Event::Note);
-	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, fm::String("v"));
+	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, com::String("v"));
 	BOOST_CHECK_EQUAL(events[c].type, sheet::Event::Note);
-	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, fm::String("w"));
+	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, com::String("w"));
 	BOOST_CHECK_EQUAL(events[c].type, sheet::Event::Note);
-	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, fm::String("x"));
+	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, com::String("x"));
 	BOOST_CHECK_EQUAL(events[c].type, sheet::Event::Note);
-	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, fm::String("y"));
+	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, com::String("y"));
 	BOOST_CHECK_EQUAL(events[c].type, sheet::Event::Note);
-	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, fm::String("z"));
+	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, com::String("z"));
 }
 
 BOOST_AUTO_TEST_CASE(test_extended_note_events_octaves)
 {
-	using namespace fm;
+	using namespace com;
 	using sheet::PitchDef;
-	fm::String text = FM_STRING("\n\
+	com::String text = FM_STRING("\n\
 [\n\
 {\n\
 	h' i'' j''' k'''' l''''' m, n,, o,,, p,,,, q,,,,, s' u' v' w' x' y' z' \n\
@@ -1655,38 +1655,38 @@ BOOST_AUTO_TEST_CASE(test_extended_note_events_octaves)
 	const auto& events = defs.tracks[0].voices[0].events;
 	int c = 0;
 	BOOST_CHECK_EQUAL(events[c].type, sheet::Event::Note);
-	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, fm::String("h'"));
+	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, com::String("h'"));
 	BOOST_CHECK_EQUAL(events[c].type, sheet::Event::Note);
-	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, fm::String("i''"));
+	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, com::String("i''"));
 	BOOST_CHECK_EQUAL(events[c].type, sheet::Event::Note);
-	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, fm::String("j'''"));
+	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, com::String("j'''"));
 	BOOST_CHECK_EQUAL(events[c].type, sheet::Event::Note);
-	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, fm::String("k''''"));
+	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, com::String("k''''"));
 	BOOST_CHECK_EQUAL(events[c].type, sheet::Event::Note);
-	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, fm::String("l'''''"));
+	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, com::String("l'''''"));
 	BOOST_CHECK_EQUAL(events[c].type, sheet::Event::Note);
-	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, fm::String("m,"));
+	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, com::String("m,"));
 	BOOST_CHECK_EQUAL(events[c].type, sheet::Event::Note);
-	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, fm::String("n,,"));
+	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, com::String("n,,"));
 	BOOST_CHECK_EQUAL(events[c].type, sheet::Event::Note);
-	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, fm::String("o,,,"));
+	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, com::String("o,,,"));
 	BOOST_CHECK_EQUAL(events[c].type, sheet::Event::Note);
-	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, fm::String("p,,,,"));
+	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, com::String("p,,,,"));
 	BOOST_CHECK_EQUAL(events[c].type, sheet::Event::Note);
-	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, fm::String("q,,,,,"));
+	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, com::String("q,,,,,"));
 	BOOST_CHECK_EQUAL(events[c].type, sheet::Event::Note);
-	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, fm::String("s'"));
+	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, com::String("s'"));
 	BOOST_CHECK_EQUAL(events[c].type, sheet::Event::Note);
-	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, fm::String("u'"));
+	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, com::String("u'"));
 	BOOST_CHECK_EQUAL(events[c].type, sheet::Event::Note);
-	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, fm::String("v'"));
+	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, com::String("v'"));
 	BOOST_CHECK_EQUAL(events[c].type, sheet::Event::Note);
-	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, fm::String("w'"));
+	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, com::String("w'"));
 	BOOST_CHECK_EQUAL(events[c].type, sheet::Event::Note);
-	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, fm::String("x'"));
+	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, com::String("x'"));
 	BOOST_CHECK_EQUAL(events[c].type, sheet::Event::Note);
-	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, fm::String("y'"));
+	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, com::String("y'"));
 	BOOST_CHECK_EQUAL(events[c].type, sheet::Event::Note);
-	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, fm::String("z'"));
+	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, com::String("z'"));
 }
 

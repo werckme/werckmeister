@@ -2,7 +2,7 @@
 #define SEL_EXPRESSION_H
 
 #include "ISelector.h"
-#include <fm/IDefinitionsServer.h>
+#include <com/IDefinitionsServer.h>
 
 namespace sheet
 {

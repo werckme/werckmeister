@@ -4,43 +4,43 @@
 #include <sheet/objects/Event.h>
 #include <memory>
 #include <unordered_map>
-#include <fm/units.hpp>
-#include <fm/literals.hpp>
+#include <com/units.hpp>
+#include <com/literals.hpp>
 #include <map>
 #include <unordered_map>
 #include <sheet/objects/ChordDef.h>
-#include <fm/IDefinitionsServer.h>
+#include <com/IDefinitionsServer.h>
 #include "compiler/voicings/VoicingStrategy.h"
-#include <fm/common.hpp>
+#include <com/common.hpp>
 #include <list>
 #include "forward.hpp"
 
 namespace sheet {
     namespace compiler {
         struct TrackMetaData {
-            fm::String instrument;
-            fm::String uname;
+            com::String instrument;
+            com::String uname;
             virtual ~TrackMetaData() = default;
         };
         struct VoiceMetaData {
             typedef std::set<PitchDef> PitchDefSet;
-            static const fm::Ticks DefaultDuration;
-			static const fm::Ticks DefaultBarLength;
-            typedef std::map<PitchDef, fm::Ticks> WaitForTieBuffer;
+            static const com::Ticks DefaultDuration;
+			static const com::Ticks DefaultBarLength;
+            typedef std::map<PitchDef, com::Ticks> WaitForTieBuffer;
             typedef std::list<ASpielanweisungPtr> Spielanweisungen;
             typedef std::list<AModificationPtr> Modifications;
-            typedef std::unordered_map<fm::String, AModificationPtr> ModificationCache;
-            fm::Ticks position = 0;
-            fm::Ticks barLength = DefaultBarLength;
+            typedef std::unordered_map<com::String, AModificationPtr> ModificationCache;
+            com::Ticks position = 0;
+            com::Ticks barLength = DefaultBarLength;
             int signatureNumerator = 4;
             int signatureDenominator = 4;
-            fm::Ticks barPosition = 0;
+            com::Ticks barPosition = 0;
             double tempoFactor = 1;
             int barCount = 0;
             long long eventCount = 0;
             long long eventOffset = 0;
-            fm::Expression expression = fm::expression::FF;
-            fm::Expression expressionPlayedOnce = fm::expression::Default;
+            com::Expression expression = com::expression::FF;
+            com::Expression expressionPlayedOnce = com::expression::Default;
             WaitForTieBuffer waitForTieBuffer;
             VoicingStrategyPtr voicingStrategy = nullptr;
             virtual ~VoiceMetaData() = default;

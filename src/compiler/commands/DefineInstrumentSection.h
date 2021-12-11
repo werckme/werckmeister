@@ -35,13 +35,13 @@ namespace sheet {
         {
         public:
             typedef AMidiContextCommand Base;
-            fm::IHasParameter::ParametersByNames parameters = {
+            com::IHasParameter::ParametersByNames parameters = {
                 FM_PARAMETER_DEF		    (argumentNames.InstrumentSection.WithName, 	0),
             };
             virtual ParametersByNames & getParameters() { return this->parameters; }
             virtual void execute(IContextPtr );
             virtual void setArguments(const Arguments &args) override;
-            std::list<fm::String> sectionInstruments;
+            std::list<com::String> sectionInstruments;
         };
     }
 }

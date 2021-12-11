@@ -2,14 +2,14 @@
 #define CONDUCTIONS_PERFORMER_H
 
 #include "IConductionsPerformer.h"
-#include <fm/common.hpp>
+#include <com/common.hpp>
 #include <forward.hpp>
 #include <memory>
-#include <fm/midi.hpp>
+#include <com/midi.hpp>
 #include <vector>
 #include <conductor/declarations/IDeclaration.h>
 #include <conductor/selectors/ISelector.h>
-#include <fm/ILogger.h>
+#include <com/ILogger.h>
 
 namespace sheet
 {
@@ -28,17 +28,17 @@ namespace sheet
 			typedef std::vector<EventsAndDeclarations> EventsAndDeclarationsCollection;
 			EventsAndDeclarationsCollection selectEvents() const;
 		public:
-			ConductionsPerformer(fm::midi::MidiPtr midifile, sheet::DocumentPtr document, fm::ILoggerPtr logger) : 
+			ConductionsPerformer(com::midi::MidiPtr midifile, sheet::DocumentPtr document, com::ILoggerPtr logger) : 
 				_midifile(midifile), _document(document), _logger(logger) {}
 			virtual void applyConductions() override;
 		private:
-			bool isEventOfInterest(const fm::midi::Event&) const;
+			bool isEventOfInterest(const com::midi::Event&) const;
 			Events findMatches(const sheet::ConductionSelector &) const;
 			Events findMatches(const sheet::ConductionSelector&, Events&) const;
 			void perform(const EventsAndDeclarationsCollection&) const;
-			fm::midi::MidiPtr _midifile;
+			com::midi::MidiPtr _midifile;
 			sheet::DocumentPtr _document;
-			fm::ILoggerPtr _logger;
+			com::ILoggerPtr _logger;
 		};
 	}
 }

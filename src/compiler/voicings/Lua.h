@@ -2,10 +2,10 @@
 #define VOICINGS_LUA_SCRIPT_HPP
 
 #include "VoicingStrategy.h"
-#include <fm/lua/ALuaScript.h>
-#include <fm/common.hpp>
+#include <com/lua/ALuaScript.h>
+#include <com/common.hpp>
 #include <forward.hpp>
-#include <fm/lua/ALuaWithParameter.h>
+#include <com/lua/ALuaWithParameter.h>
 
 #define LUA_VOICING_STRATEGY_FENTRY "solve"
 
@@ -13,12 +13,12 @@ namespace sheet {
     namespace compiler {
         class LuaVoicingStrategy : public VoicingStrategy, 
             public lua::ALuaScript, 
-            public fm::lua::ALuaWithParameter
+            public com::lua::ALuaWithParameter
     {
         public:
             typedef VoicingStrategy Base;
             typedef lua::ALuaScript LuaBase;
-            LuaVoicingStrategy(const fm::String &path);
+            LuaVoicingStrategy(const com::String &path);
             virtual ~LuaVoicingStrategy() = default;
             virtual bool canExecute() const override;
             virtual void assertCanExecute() const override;

@@ -46,13 +46,13 @@ namespace fmapp {
 
 	void RtMidiBackend::panic() 
 	{
-		fm::Byte message[3] = {0}; 
+		com::Byte message[3] = {0}; 
 		for(auto &rtOut : midiOuts) {
 			if (rtOut.get() == nullptr || !rtOut->isPortOpen()) {
 				continue;
 			}
-			for (fm::midi::Channel channel=0; channel <= fm::midi::MaxChannel; ++channel) {
-				message[0] = static_cast<fm::Byte>((0xB << 4) | channel);
+			for (com::midi::Channel channel=0; channel <= com::midi::MaxChannel; ++channel) {
+				message[0] = static_cast<com::Byte>((0xB << 4) | channel);
 				message[1] = 0x7B; // all notes off
 				message[2] = 0;
 				rtOut->sendMessage(&message[0], 3);
@@ -72,7 +72,7 @@ namespace fmapp {
 
 
 
-	void RtMidiBackend::send(const fm::midi::Event &ev, const Output *output)
+	void RtMidiBackend::send(const com::midi::Event &ev, const Output *output)
 	{
 		if (output == nullptr) {
 			output = &output_;
@@ -83,10 +83,10 @@ namespace fmapp {
 		
 		auto port = getRtOutputReadyForSend(output->portid);
 		const unsigned int StaticBufferSize = 255;
-		fm::Byte buffer[StaticBufferSize];
-		std::vector<fm::Byte> fallback;
+		com::Byte buffer[StaticBufferSize];
+		std::vector<com::Byte> fallback;
 		auto eventSize = ev.payloadSize();
-		fm::Byte *bff = &buffer[0];
+		com::Byte *bff = &buffer[0];
 		if (eventSize > StaticBufferSize) {
 			fallback.resize(eventSize, 0);
 			bff = fallback.data();

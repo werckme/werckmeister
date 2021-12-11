@@ -18,7 +18,7 @@ BOOST_FUSION_ADAPT_STRUCT(
 
 BOOST_FUSION_ADAPT_STRUCT(
 	sheet::Pitchmap,
-	(fm::String, name)
+	(com::String, name)
 	(sheet::PitchDef, pitch)
 )
 
@@ -62,21 +62,21 @@ namespace sheet {
 				}
 				qi::rule<Iterator, Pitchmap(), ascii::space_type> start;
 				qi::rule<Iterator, PitchDef(), ascii::space_type> pitch_;
-				qi::rule<Iterator, fm::String(), ascii::space_type> alias_;
+				qi::rule<Iterator, com::String(), ascii::space_type> alias_;
 			};
 
 
-			void _parse(const fm::String &defStr, Pitchmap &def)
+			void _parse(const com::String &defStr, Pitchmap &def)
 			{
 				using boost::spirit::ascii::space;
-				typedef _PitchmapParser<fm::String::const_iterator> PitchmapParserType;
+				typedef _PitchmapParser<com::String::const_iterator> PitchmapParserType;
 				PitchmapParserType g;
 				phrase_parse(defStr.begin(), defStr.end(), g, space, def);
 			}
 		}
 
 
-		PitchmapParser::PitchmapDefs PitchmapParser::parse(fm::CharType const* first, fm::CharType const* last)
+		PitchmapParser::PitchmapDefs PitchmapParser::parse(com::CharType const* first, com::CharType const* last)
 		{
 
 			PitchmapDefs result;

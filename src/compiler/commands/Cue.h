@@ -15,7 +15,7 @@ namespace sheet {
         class Cue : public ACommand
         {
         public:
-            fm::IHasParameter::ParametersByNames parameters = {
+            com::IHasParameter::ParametersByNames parameters = {
                 FM_PARAMETER_DEF		    (argumentNames.Cue.Text, 	0)
             };
             virtual ParametersByNames & getParameters() { return this->parameters; }

@@ -32,7 +32,7 @@ namespace sheet {
         class DefineMidiInstrument : public AMidiContextCommand
         {
         public:
-            fm::IHasParameter::ParametersByNames parameters = {
+            com::IHasParameter::ParametersByNames parameters = {
                 FM_PARAMETER_DEF		    (argumentNames.InstrumentDef.WithName, 	0),
                 FM_PARAMETER_DEF		    (argumentNames.InstrumentDef.OnDevice, 	1),
                 FM_PARAMETER_DEF	        (argumentNames.InstrumentDef.Ch, 	    2),

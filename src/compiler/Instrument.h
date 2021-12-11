@@ -1,9 +1,9 @@
 #ifndef COMPILER_MIDI_INSTRUMENT_H
 #define COMPILER_MIDI_INSTRUMENT_H
 
-#include <fm/common.hpp>
+#include <com/common.hpp>
 #include <forward.hpp>
-#include <fm/units.hpp>
+#include <com/units.hpp>
 #include "compiler/voicings/VoicingStrategy.h"
 #include <unordered_map>
 #include <list>
@@ -14,13 +14,13 @@ namespace sheet {
 		class SheetEventRenderer;
 		struct AInstrumentDef : std::enable_shared_from_this<AInstrumentDef> {
 			int id = 0;
-			fm::String uname;
+			com::String uname;
 			double volume = 100.0;
 			double pan = 50.0;
 			VoicingStrategyPtr voicingStrategy;
 			typedef std::list<AModificationPtr> Modifications;
 			Modifications modifications;			
-			typedef std::unordered_map<fm::Expression, double> VelocityOverride;
+			typedef std::unordered_map<com::Expression, double> VelocityOverride;
 			VelocityOverride velocityOverride;
 			virtual ~AInstrumentDef() = default;
 			virtual void setToContext(IContext *context) = 0;
@@ -32,7 +32,7 @@ namespace sheet {
 		};
 		typedef std::shared_ptr<AInstrumentDef> AInstrumentDefPtr;
         struct MidiInstrumentDef : public AInstrumentDef {
-			fm::String deviceName;
+			com::String deviceName;
 			int channel = 0;
 			int bankMsb = -1;
 			int bankLsb = -1;
@@ -45,7 +45,7 @@ namespace sheet {
 
 		struct InstrumentSectionDef : public AInstrumentDef {
             int id = 0;
-			std::list<fm::String> instrumentNames;
+			std::list<com::String> instrumentNames;
 			virtual ~InstrumentSectionDef() = default;
 			virtual void setToContext(IContext* context) override;
 			virtual void renderEvents(SheetEventRenderer* renderer, std::list<Event>& events) override;

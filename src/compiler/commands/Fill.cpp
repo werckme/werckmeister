@@ -1,6 +1,6 @@
 #include "Fill.h"
 #include <compiler/context/IContext.h>
-#include <fm/common.hpp>
+#include <com/common.hpp>
 
 namespace sheet {
     namespace compiler {
@@ -9,14 +9,14 @@ namespace sheet {
             // does nothing
             // will be processed via SheetTemplateRenderer
         }
-        fm::String Fill::templateName()
+        com::String Fill::templateName()
         {
-            auto name = parameters[argumentNames.Fill.Template].value<fm::String>();
+            auto name = parameters[argumentNames.Fill.Template].value<com::String>();
             return name;
         }
-        fm::String Fill::replaceTemplateName()
+        com::String Fill::replaceTemplateName()
         {
-            auto name = parameters[argumentNames.Fill.Replace].value<fm::String>();
+            auto name = parameters[argumentNames.Fill.Replace].value<com::String>();
             return name;
         }
     }

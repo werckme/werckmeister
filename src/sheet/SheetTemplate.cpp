@@ -2,9 +2,9 @@
 #include <algorithm>
 
 namespace sheet {
-    fm::Ticks SheetTemplate::maxLength() const
+    com::Ticks SheetTemplate::maxLength() const
     {
-        fm::Ticks max = 0;
+        com::Ticks max = 0;
         for (const auto &track : tracks) {
             max = std::max(max, track->maxLength());
 		}

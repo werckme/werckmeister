@@ -1,14 +1,14 @@
 #ifndef SHEET_ARGUMENT_H
 #define SHEET_ARGUMENT_H
 
-#include <fm/common.hpp>
+#include <com/common.hpp>
 
 namespace sheet {
 
     struct Argument
     {
-        fm::String value;
-        fm::String name;
+        com::String value;
+        com::String name;
 
         template<typename TValue>
         TValue parseValue() const;
@@ -17,16 +17,16 @@ namespace sheet {
     namespace
     {
         template<typename TValue>
-        TValue _convertStrValue(const fm::String strValue)
+        TValue _convertStrValue(const com::String strValue)
         {
             TValue result;
-            fm::StringStream ss;
+            com::StringStream ss;
             ss << strValue;
             ss >> result;
             return result;
         }
         template<>
-        fm::String _convertStrValue<fm::String>(const fm::String strValue)
+        com::String _convertStrValue<com::String>(const com::String strValue)
         {
             return strValue;
         }

@@ -1,16 +1,16 @@
 #include "PlayerTimePrinter.h"
 #include <boost/format.hpp>
 #include <iostream>
-#include <fm/config.hpp>
+#include <com/config.hpp>
 
 namespace fmapp {
-    void PlayerTimePrinter::visit(fm::Ticks elapsed)
+    void PlayerTimePrinter::visit(com::Ticks elapsed)
     {
         using boost::format;
         using boost::str;
         using boost::io::group;
 
-        std::string strOut = "[" + str(format("%.3f") % (elapsed / (double)fm::PPQ)) + "]";
+        std::string strOut = "[" + str(format("%.3f") % (elapsed / (double)com::PPQ)) + "]";
         clearLine();
         std::cout 
             << strOut 

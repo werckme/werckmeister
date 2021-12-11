@@ -1,7 +1,7 @@
 #ifndef COMPILER_SPIELANWEISUNGEN_H
 #define COMPILER_SPIELANWEISUNGEN_H
 
-#include <fm/common.hpp>
+#include <com/common.hpp>
 #define SHEET_SPIELANWEISUNG_ARPEGGIO FM_STRING("arpeggio")
 #define SHEET_SPIELANWEISUNG_VORSCHLAG FM_STRING("vorschlag")
 #endif

@@ -1,22 +1,22 @@
 #include "Event.h"
 #include <exception>
-#include <fm/common.hpp>
+#include <com/common.hpp>
 #include <boost/algorithm/string.hpp>
 #include <unordered_map>
 #include <locale>
-#include <fm/exception.hpp>
+#include <com/exception.hpp>
 
 namespace sheet {
 
 	namespace {
 		const std::unordered_map<wchar_t, int> _name2pitch = {
-			 { FM_CHAR('c'), fm::notes::C }
-			,{ FM_CHAR('d'), fm::notes::D }
-			,{ FM_CHAR('e'), fm::notes::E }
-			,{ FM_CHAR('f'), fm::notes::F }
-			,{ FM_CHAR('g'), fm::notes::G }
-			,{ FM_CHAR('a'), fm::notes::A }
-			,{ FM_CHAR('b'), fm::notes::B }
+			 { FM_CHAR('c'), com::notes::C }
+			,{ FM_CHAR('d'), com::notes::D }
+			,{ FM_CHAR('e'), com::notes::E }
+			,{ FM_CHAR('f'), com::notes::F }
+			,{ FM_CHAR('g'), com::notes::G }
+			,{ FM_CHAR('a'), com::notes::A }
+			,{ FM_CHAR('b'), com::notes::B }
 		};
 	}
 
@@ -32,13 +32,13 @@ namespace sheet {
 		PitchDef::Pitch pitch = 0;
 		auto nameLower = stringValue;
 		if (nameLower.length() == 0) {
-			FM_THROW(fm::Exception, "empty chord");
+			FM_THROW(com::Exception, "empty chord");
 		}
 		boost::algorithm::to_lower(nameLower);
-		fm::String::const_iterator it = nameLower.begin();
+		com::String::const_iterator it = nameLower.begin();
 		auto pitchIt = _name2pitch.find(*it);
 		if (pitchIt == _name2pitch.end()) {
-			FM_THROW(fm::Exception, "ivalid chord: " + stringValue);
+			FM_THROW(com::Exception, "ivalid chord: " + stringValue);
 		}
 		pitch = pitchIt->second;
 		++it;
@@ -57,22 +57,22 @@ namespace sheet {
 		return std::make_tuple(pitch, Options(stringValue.begin() + idxOptionsStart,  stringValue.end()));
 	}
 
-	fm::String Event::chordDefName() const 
+	com::String Event::chordDefName() const 
 	{
 		std::locale loc;
 		auto elements = chordElements();
-		fm::String::const_iterator it = stringValue.begin();
+		com::String::const_iterator it = stringValue.begin();
 		if (std::isupper(*it, loc)) {
 			return FM_STRING("X") + std::get<1>(elements);
 		}
 		else {
-			FM_THROW(fm::Exception, "lowercase chords are not allowed: " + stringValue);
+			FM_THROW(com::Exception, "lowercase chords are not allowed: " + stringValue);
 		}
 	}
 
-	fm::String Event::toString() const 
+	com::String Event::toString() const 
 	{
-		fm::StringStream ss;
+		com::StringStream ss;
 		switch (type)
 		{
 			case Rest: ss << "Rest"; break;

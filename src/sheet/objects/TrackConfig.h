@@ -1,7 +1,7 @@
 #ifndef TRACKCONFIG_H
 #define TRACKCONFIG_H
 
-#include <fm/common.hpp>
+#include <com/common.hpp>
 #include <vector>
 #include "ASheetObjectWithSourceInfo.h"
 #include <sheet/Argument.h>
@@ -10,7 +10,7 @@ namespace sheet {
 
 	struct TrackConfig : public ASheetObjectWithSourceInfo {
 		typedef std::vector<sheet::Argument> Args;
-		fm::String name;
+		com::String name;
 		Args args;
 	};
 

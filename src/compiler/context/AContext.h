@@ -3,12 +3,12 @@
 
 #include <memory>
 #include <unordered_map>
-#include <fm/units.hpp>
-#include <fm/literals.hpp>
+#include <com/units.hpp>
+#include <com/literals.hpp>
 #include <map>
 #include <unordered_map>
-#include <fm/IDefinitionsServer.h>
-#include <fm/common.hpp>
+#include <com/IDefinitionsServer.h>
+#include <com/common.hpp>
 #include <compiler/metaCommands.h>
 #include <list>
 #include <forward.hpp>
@@ -22,13 +22,13 @@ namespace sheet {
     namespace compiler {
         class AContext : public IContext {
         public:
-			AContext(fm::IDefinitionsServerPtr definitionsServer);
+			AContext(com::IDefinitionsServerPtr definitionsServer);
 			static const double PitchbendMiddle;
 			enum { INVALID_TRACK_ID = -1, INVALID_VOICE_ID = -1, MAX_VOLUME = 100, MAX_PAN = 100 };
 			/**
 			 * for rounding errors e.g. for triplets
 			 */
-			static const fm::Ticks TickTolerance;
+			static const com::Ticks TickTolerance;
 			virtual void setTrack(TrackId trackId);
 			virtual void setVoice(VoiceId voice);
 			TrackId track() const;
@@ -96,27 +96,27 @@ namespace sheet {
 			virtual void currentSheetTemplate(const SheetTemplates &sheetTemplate);
 			virtual VoicingStrategyPtr currentVoicingStrategy();
 			virtual AModificationPtr spielanweisung();
-			virtual AInstrumentDefPtr getInstrumentDef(const fm::String &uname) = 0;
+			virtual AInstrumentDefPtr getInstrumentDef(const com::String &uname) = 0;
 			virtual AInstrumentDefPtr currentInstrumentDef() = 0;
-			virtual fm::Ticks currentPosition() const;
-			virtual fm::Ticks maxPosition() const;
+			virtual com::Ticks currentPosition() const;
+			virtual com::Ticks maxPosition() const;
 			TimeInfo getTimeInfo() const;
-			virtual void setInstrument(const fm::String& uname);
-			virtual void setExpression(fm::Expression value);
-			virtual void setExpressionPlayedOnce(fm::Expression expr);
+			virtual void setInstrument(const com::String& uname);
+			virtual void setExpression(com::Expression value);
+			virtual void setExpressionPlayedOnce(com::Expression expr);
 			virtual void setTempo(double bpm) {}
 			virtual void setSignature(int upper, int lower);
-			virtual void setVolume(double volume, fm::Ticks relativePosition = 0);
+			virtual void setVolume(double volume, com::Ticks relativePosition = 0);
 			virtual void setPan(double val);
 			/////// actual context stuff
-			virtual void renderPitch(const PitchDef &pitch, fm::Ticks duration, double velocity, bool tying);
-			virtual void renderPitch(const PitchDef &pitch, fm::Ticks absolutePosition, double velocity, fm::Ticks duration) = 0;
+			virtual void renderPitch(const PitchDef &pitch, com::Ticks duration, double velocity, bool tying);
+			virtual void renderPitch(const PitchDef &pitch, com::Ticks absolutePosition, double velocity, com::Ticks duration) = 0;
 			/*
 			 * value = 0..1, 0.5 is the middle position => no bending
 			 */
-			virtual void renderPitchbend(double value, fm::Ticks absolutePosition) = 0;			
-			virtual void startEvent(const PitchDef &pitch, fm::Ticks absolutePosition, double velocity);
-			virtual void stopEvent(const PitchDef &pitch, fm::Ticks absolutePosition);
+			virtual void renderPitchbend(double value, com::Ticks absolutePosition) = 0;			
+			virtual void startEvent(const PitchDef &pitch, com::Ticks absolutePosition, double velocity);
+			virtual void stopEvent(const PitchDef &pitch, com::Ticks absolutePosition);
 			/**
 			 * sends note off to all pitches where its tie process wasn't completed yet
 			 */
@@ -124,10 +124,10 @@ namespace sheet {
 			/**
 			 * if duration == 0 the last event duration will be used
 			 */ 
-			virtual void seek(fm::Ticks duration);
+			virtual void seek(com::Ticks duration);
 			virtual void newBar();
-			virtual void rest(fm::Ticks duration);
-			virtual fm::Ticks barPos() const;
+			virtual void rest(com::Ticks duration);
+			virtual com::Ticks barPos() const;
 			/**
 			 * the documents master tempo
 			 */
@@ -137,7 +137,7 @@ namespace sheet {
              * @return the current velocity value between 0..1
              */
             virtual double velocity();
-			virtual fm::IDefinitionsServerPtr definitionsServer() { return definitionsServer_; }
+			virtual com::IDefinitionsServerPtr definitionsServer() { return definitionsServer_; }
 			virtual void warningHandler(const WarningHandler &handler) { _warningHandler = handler; }
 			virtual WarningHandler& warningHandler() { return _warningHandler; }
 			virtual void clear() override;
@@ -147,10 +147,10 @@ namespace sheet {
 			virtual VoiceMetaDataPtr createVoiceMetaData() = 0;
 			virtual TrackMetaDataPtr createTrackMetaData() = 0;
 			virtual TrackId createMasterTrack();
-			fm::IDefinitionsServerPtr definitionsServer_;
+			com::IDefinitionsServerPtr definitionsServer_;
 		private:
 			WarningHandler _warningHandler;
-			double masterTempo_ = fm::DefaultTempo;			
+			double masterTempo_ = com::DefaultTempo;			
 			VoicingStrategyPtr defaultVoiceStrategy_;
 			SheetTemplates currentSheetTemplates_;
 			TrackId trackId_ = INVALID_TRACK_ID, 

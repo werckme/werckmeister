@@ -10,8 +10,8 @@ namespace sheet
         {
             const auto& ev = *evm.noteOn;
             for (const auto& argument : arguments) {
-                auto argumentExpression = compiler::SetExpression::getExpressionForString(argument.name, fm::expression::Undefined);
-                if (argumentExpression == fm::expression::Undefined) 
+                auto argumentExpression = compiler::SetExpression::getExpressionForString(argument.name, com::expression::Undefined);
+                if (argumentExpression == com::expression::Undefined) 
                 {
                     FM_THROW(compiler::Exception, "unknown expression symbol: " + argument.name);
                 }

@@ -10,7 +10,7 @@ namespace sheet {
                 FM_THROW(Exception, "missing instruments for this section");
             }
             auto midiContext = getMidiContext(context);
-            auto name = parameters[argumentNames.InstrumentSection.WithName].value<fm::String>();
+            auto name = parameters[argumentNames.InstrumentSection.WithName].value<com::String>();
             midiContext->defineInstrumentSection(name, sectionInstruments);
         }
 

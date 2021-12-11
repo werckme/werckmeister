@@ -1,7 +1,7 @@
 #ifndef CONDUCTOR_NAMES_H
 #define CONDUCTOR_NAMES_H
 
-#include <fm/common.hpp>
+#include <com/common.hpp>
 
 // selectors
 #define SHEET_CONDUCTOR_SEL__FROM_POSITION FM_STRING("fromPosition")

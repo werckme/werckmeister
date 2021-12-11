@@ -2,11 +2,11 @@
 #define DOCUMENT_CONFIG_HPP
 
 #include <vector>
-#include <fm/common.hpp>
+#include <com/common.hpp>
 
 namespace sheet {
 	struct DocumentUsing {
-		typedef fm::String Using;
+		typedef com::String Using;
 		typedef std::vector<Using> Usings;
 		Usings usings;
 	};

@@ -1,6 +1,6 @@
 #include "MidiFileWriter.h"
 #include <fstream>
-#include <fm/midi.hpp>
+#include <com/midi.hpp>
 #include <boost/filesystem.hpp>
 
 namespace fmapp {

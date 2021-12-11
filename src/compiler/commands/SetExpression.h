@@ -4,21 +4,21 @@
 #include "ACommand.h"
 #include <compiler/argumentNames.h>
 #include <map>
-#include <fm/units.hpp>
+#include <com/units.hpp>
 
 namespace sheet {
     namespace compiler {
         class SetExpression : public ACommand
         {
         public:
-            fm::IHasParameter::ParametersByNames parameters = {
+            com::IHasParameter::ParametersByNames parameters = {
                 FM_PARAMETER_DEF		    (argumentNames.SetExpression.Value, 	0)
             };
             virtual ParametersByNames & getParameters() { return this->parameters; }
             virtual void execute(IContextPtr );
-            fm::Expression static getExpressionForString(const fm::String &expressionStr, fm::Expression returnIfNotFound = fm::expression::Default);
+            com::Expression static getExpressionForString(const com::String &expressionStr, com::Expression returnIfNotFound = com::expression::Default);
         private:
-            typedef std::map<fm::String, fm::Expression> ExpressionMap;
+            typedef std::map<com::String, com::Expression> ExpressionMap;
             static const ExpressionMap _ExpressionMap;
         };
     }

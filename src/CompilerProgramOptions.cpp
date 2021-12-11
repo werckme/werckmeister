@@ -59,7 +59,7 @@ bool CompilerProgramOptions::isInputSet() const
     return !!variables.count(ARG_INPUT); 
 }
 
-fm::String CompilerProgramOptions::getInput() const 
+com::String CompilerProgramOptions::getInput() const 
 { 
     return variables[ARG_INPUT].as<std::string>(); 
 }
@@ -74,7 +74,7 @@ bool CompilerProgramOptions::isNoMetaSet() const
     return !!variables.count(ARG_NOMETA); 
 }
 
-fm::String CompilerProgramOptions::getOutput() const 
+com::String CompilerProgramOptions::getOutput() const 
 { 
     return variables[ARG_OUTPUT].as<std::string>(); 
 }

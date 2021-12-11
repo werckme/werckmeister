@@ -1,21 +1,21 @@
 #include <boost/test/unit_test.hpp>
-#include <fm/config.hpp>
-#include <fm/literals.hpp>
-#include <fm/midi.hpp>
+#include <com/config.hpp>
+#include <com/literals.hpp>
+#include <com/midi.hpp>
 #include <stdexcept>
 #include <vector>
 #include <algorithm>
 #include <string>
 #include <fstream>
-#include <fm/common.hpp>
+#include <com/common.hpp>
 #include <iostream>
-#include <fm/exception.hpp>
+#include <com/exception.hpp>
 
 #define TEST_MIDI_FILE "testmidi.mid"
 
 BOOST_AUTO_TEST_CASE(literals)
 {
-	using namespace fm;
+	using namespace com;
 	Ticks ganze = PPQ * 4;
 	BOOST_CHECK(ganze == 1.0_N1);
 	BOOST_CHECK(ganze / 2 == 1.0_N2);
@@ -48,7 +48,7 @@ BOOST_AUTO_TEST_CASE(literals)
 
 BOOST_AUTO_TEST_CASE(write_variable_required_size)
 {
-	using namespace fm;
+	using namespace com;
 	BOOST_CHECK(midi::variableLengthRequiredSize(0) == 1);
 	BOOST_CHECK(midi::variableLengthRequiredSize(0b01111111) == 1);
 	BOOST_CHECK(midi::variableLengthRequiredSize(0b10000000) == 2);
@@ -57,12 +57,12 @@ BOOST_AUTO_TEST_CASE(write_variable_required_size)
 	BOOST_CHECK(midi::variableLengthRequiredSize(0b011111111111111111111111) == 4);
 	BOOST_CHECK(midi::variableLengthRequiredSize(0b100000000000000000000000) == 4);
 	BOOST_CHECK(midi::variableLengthRequiredSize(midi::MaxTickValue) == 4);
-	BOOST_CHECK_THROW(midi::variableLengthRequiredSize(midi::MaxTickValue + 1), fm::Exception);
+	BOOST_CHECK_THROW(midi::variableLengthRequiredSize(midi::MaxTickValue + 1), com::Exception);
 }
 
 BOOST_AUTO_TEST_CASE(write_variable_length)
 {
-	using namespace fm;
+	using namespace com;
 	{
 		Byte val[4] = { 0 };
 		BOOST_CHECK(1 == midi::variableLengthWrite(0, val, 4));
@@ -101,7 +101,7 @@ BOOST_AUTO_TEST_CASE(event_heap_issue)
 {
 	// bug was incorrect byte size for the variable length tick value
 	// so we got a corrupt heap message here (on windows VSC++ 2015)
-	using namespace fm;
+	using namespace com;
 	midi::Event ev;
 	ev.absPosition(12.0_N1);
 	ev.eventType(midi::NoteOff);
@@ -114,16 +114,16 @@ BOOST_AUTO_TEST_CASE(event_heap_issue)
 
 BOOST_AUTO_TEST_CASE(read_variable_length_fail)
 {
-	using namespace fm;
+	using namespace com;
 	{
 		Byte val[] = { 0xFF, 0xFF, 0xFF, 0xFF };
-		BOOST_CHECK_THROW(midi::variableLengthRead(val, 4), fm::Exception);
+		BOOST_CHECK_THROW(midi::variableLengthRead(val, 4), com::Exception);
 	}
 }
 
 BOOST_AUTO_TEST_CASE(read_variable_length)
 {
-	using namespace fm;
+	using namespace com;
 	{
 		Byte val[4] = { 0 };
 		BOOST_CHECK(midi::variableLengthRead(val, 4) == 0);
@@ -152,7 +152,7 @@ BOOST_AUTO_TEST_CASE(read_variable_length)
 
 BOOST_AUTO_TEST_CASE(midi_event_size)
 {
-	using namespace fm;
+	using namespace com;
 	midi::Event event;
 	BOOST_CHECK(event.byteSize(0) == 4);
 	BOOST_CHECK(event.byteSize(-128) == 5);
@@ -163,18 +163,18 @@ BOOST_AUTO_TEST_CASE(midi_event_size)
 
 BOOST_AUTO_TEST_CASE(write_midi_event_fail)
 {
-	using namespace fm;
+	using namespace com;
 	midi::Event event;
 	event.absPosition(midi::MaxTickValue);
 	Ticks deltaOffset = 0;
 	constexpr size_t size = 4; // 5 are needed
 	Byte bytes[size] = { 0 };
-	BOOST_CHECK_THROW(event.write(deltaOffset, &bytes[0], size), fm::Exception);
+	BOOST_CHECK_THROW(event.write(deltaOffset, &bytes[0], size), com::Exception);
 }
 
 BOOST_AUTO_TEST_CASE(write_midi_event_0)
 {
-	using namespace fm;
+	using namespace com;
 	midi::Event event;
 	event.channel(1);
 	event.eventType(midi::NoteOn);
@@ -194,7 +194,7 @@ BOOST_AUTO_TEST_CASE(write_midi_event_0)
 
 BOOST_AUTO_TEST_CASE(write_midi_event_1)
 {
-	using namespace fm;
+	using namespace com;
 	midi::Event event;
 	event.channel(1);
 	event.eventType(midi::NoteOn);
@@ -217,7 +217,7 @@ BOOST_AUTO_TEST_CASE(write_midi_event_1)
 
 BOOST_AUTO_TEST_CASE(write_midi_event_program_change)
 {
-	using namespace fm;
+	using namespace com;
 	midi::Event event;
 	event.channel(1);
 	event.eventType(midi::ProgramChange);
@@ -234,7 +234,7 @@ BOOST_AUTO_TEST_CASE(write_midi_event_program_change)
 
 BOOST_AUTO_TEST_CASE(write_read_event_0)
 {
-	using namespace fm;
+	using namespace com;
 	midi::Event event;
 	Byte bytes[] = { 0xFF, 0xFF, 0xFF, 0x7F, 0x91, 64, 100 };
 	Ticks deltaOffset = 15;
@@ -248,7 +248,7 @@ BOOST_AUTO_TEST_CASE(write_read_event_0)
 
 BOOST_AUTO_TEST_CASE(write_read_program_change)
 {
-	using namespace fm;
+	using namespace com;
 	midi::Event event;
 	Byte bytes[] = { 0x0, 0xC1, 0x22 };
 	BOOST_CHECK(event.read(0, &bytes[0], 3) == 3);
@@ -261,7 +261,7 @@ BOOST_AUTO_TEST_CASE(write_read_program_change)
 
 BOOST_AUTO_TEST_CASE(write_midi_event_container)
 {
-	using namespace fm;
+	using namespace com;
 	midi::MidiConfig config;
 	midi::EventContainer events;
 	events.midiConfig(&config);
@@ -270,7 +270,7 @@ BOOST_AUTO_TEST_CASE(write_midi_event_container)
 
 BOOST_AUTO_TEST_CASE(write_midi_event_container_write_fail)
 {
-	using namespace fm;
+	using namespace com;
 	midi::MidiConfig config;
 	midi::EventContainer events;
 	events.midiConfig(&config);
@@ -279,12 +279,12 @@ BOOST_AUTO_TEST_CASE(write_midi_event_container_write_fail)
 	events.add(midi::Event::NoteOn(0, 2.0_N4, 26, 100));
 	events.add(midi::Event::NoteOn(0, 3.0_N4, 27, 100));
 	Byte bytes[1];
-	BOOST_CHECK_THROW(events.write(&bytes[0], 3), fm::Exception);
+	BOOST_CHECK_THROW(events.write(&bytes[0], 3), com::Exception);
 }
 
 BOOST_AUTO_TEST_CASE(write_midi_event_container_write)
 {
-	using namespace fm;
+	using namespace com;
 	midi::MidiConfig config;
 	midi::EventContainer events;
 	events.midiConfig(&config);
@@ -309,7 +309,7 @@ BOOST_AUTO_TEST_CASE(write_midi_event_container_write)
 
 BOOST_AUTO_TEST_CASE(write_midi_event_container_read_n_write)
 {
-	using namespace fm;
+	using namespace com;
 	Byte *bytes;
 	size_t byteSize;
 	// write
@@ -353,7 +353,7 @@ BOOST_AUTO_TEST_CASE(write_midi_event_container_read_n_write)
 
 BOOST_AUTO_TEST_CASE(write_midi_event_pc_cc_before_notes)
 {
-	using namespace fm;
+	using namespace com;
 	Byte *bytes;
 	size_t byteSize;
 	// write
@@ -411,7 +411,7 @@ BOOST_AUTO_TEST_CASE(write_midi_event_pc_cc_before_notes)
 
 BOOST_AUTO_TEST_CASE(write_midi_event_track_write_fail)
 {
-	using namespace fm;
+	using namespace com;
 	midi::Track track;
 	midi::MidiConfig config;
 	auto &events = track.events();
@@ -422,12 +422,12 @@ BOOST_AUTO_TEST_CASE(write_midi_event_track_write_fail)
 
 	constexpr size_t byteSize = 20;
 	Byte bytes[byteSize];
-	BOOST_CHECK_THROW(track.write(&bytes[0], byteSize - 1), fm::Exception);
+	BOOST_CHECK_THROW(track.write(&bytes[0], byteSize - 1), com::Exception);
 }
 
 BOOST_AUTO_TEST_CASE(write_midi_event_track_write)
 {
-	using namespace fm;
+	using namespace com;
 	midi::Track track;
 	midi::MidiConfig config;
 	auto &events = track.events();
@@ -457,7 +457,7 @@ BOOST_AUTO_TEST_CASE(write_midi_event_track_write)
 
 BOOST_AUTO_TEST_CASE(write_midi_write_fail)
 {
-	using namespace fm;
+	using namespace com;
 	midi::Midi midi(PPQ);
 	midi::TrackPtr track = std::make_shared<midi::Track>();
 	auto &events = track->events();
@@ -471,12 +471,12 @@ BOOST_AUTO_TEST_CASE(write_midi_write_fail)
 	constexpr size_t byteSize = 14 + 8 + 4 * 3;
 	Byte bytes[byteSize];
 	midi.seal();
-	BOOST_CHECK_THROW(midi.write(&bytes[0], byteSize - 1), fm::Exception);
+	BOOST_CHECK_THROW(midi.write(&bytes[0], byteSize - 1), com::Exception);
 }
 
 BOOST_AUTO_TEST_CASE(write_midi_write)
 {
-	using namespace fm;
+	using namespace com;
 	midi::Midi midi(PPQ);
 	{
 		midi::TrackPtr track = std::make_shared<midi::Track>();
@@ -560,7 +560,7 @@ BOOST_AUTO_TEST_CASE(write_midi_write)
 
 BOOST_AUTO_TEST_CASE(write_midi_write_to_file)
 {
-	using namespace fm;
+	using namespace com;
 	midi::Midi midi(PPQ);
 	{
 		midi::TrackPtr track = std::make_shared<midi::Track>();
@@ -600,7 +600,7 @@ BOOST_AUTO_TEST_CASE(write_midi_write_to_file)
 
 BOOST_AUTO_TEST_CASE(meta_event_write_1)
 {
-	using namespace fm;
+	using namespace com;
 	constexpr size_t eventSize = 7;
 	auto tempo = midi::Event::MetaTempo(120.0);
 	BOOST_CHECK( tempo.eventType() == midi::MetaEvent );
@@ -609,7 +609,7 @@ BOOST_AUTO_TEST_CASE(meta_event_write_1)
 	BOOST_CHECK( tempo.payloadSize() == 6);
 	
 	Byte bff[eventSize];
-	BOOST_CHECK_THROW(tempo.write(0, &bff[0], eventSize-1), fm::Exception);
+	BOOST_CHECK_THROW(tempo.write(0, &bff[0], eventSize-1), com::Exception);
 	tempo.write(0, &bff[0], eventSize);
 	
 	BOOST_CHECK(bff[0] == 0);
@@ -623,14 +623,14 @@ BOOST_AUTO_TEST_CASE(meta_event_write_1)
 
 BOOST_AUTO_TEST_CASE(meta_event_read_1)
 {
-	using namespace fm;
+	using namespace com;
 	constexpr size_t eventSize = 7;
 	auto tempo = midi::Event::MetaTempo(120.0);	
 	Byte bff[eventSize];
 	tempo.write(0, &bff[0], eventSize);
 	
 	auto readTempo = midi::Event();
-	BOOST_CHECK_THROW(readTempo.read(0, &bff[0], eventSize-1), fm::Exception);
+	BOOST_CHECK_THROW(readTempo.read(0, &bff[0], eventSize-1), com::Exception);
 	readTempo.read(0, &bff[0], eventSize);
 
 	BOOST_CHECK(readTempo.eventType() == midi::MetaEvent);
@@ -643,7 +643,7 @@ BOOST_AUTO_TEST_CASE(meta_event_read_1)
 
 BOOST_AUTO_TEST_CASE(meta_event_read_write_1)
 {
-	using namespace fm;
+	using namespace com;
 	constexpr size_t eventSize = 8;
 	auto metaOrg = midi::Event::MetaInstrument("bass");
 	BOOST_CHECK( metaOrg.eventType() == midi::MetaEvent );
@@ -664,7 +664,7 @@ extern const char * LongString1001;
 
 BOOST_AUTO_TEST_CASE(meta_event_read_write_long_string)
 {
-	using namespace fm;
+	using namespace com;
 	constexpr size_t eventSize = 5 + 1001;
 	auto metaOrg = midi::Event::MetaInstrument(LongString1001);
 	BOOST_CHECK( metaOrg.eventType() == midi::MetaEvent );
@@ -673,12 +673,12 @@ BOOST_AUTO_TEST_CASE(meta_event_read_write_long_string)
 	BOOST_CHECK( metaOrg.payloadSize() == 4 + 1001);
 
 	Byte bff[eventSize];
-	BOOST_CHECK_THROW(metaOrg.write(0, &bff[0], eventSize-1), fm::Exception);
+	BOOST_CHECK_THROW(metaOrg.write(0, &bff[0], eventSize-1), com::Exception);
 	auto written = metaOrg.write(0, &bff[0], eventSize);
 	BOOST_CHECK(written == eventSize);
 
 	auto dst = midi::Event();
-	BOOST_CHECK_THROW(dst.read(0, bff, eventSize-1), fm::Exception);
+	BOOST_CHECK_THROW(dst.read(0, bff, eventSize-1), com::Exception);
 	size_t bytesRead = dst.read(0, bff, eventSize);
 	BOOST_CHECK(written == bytesRead);
 	auto name = midi::Event::MetaGetStringValue(dst.metaData(), dst.metaDataSize());
@@ -687,7 +687,7 @@ BOOST_AUTO_TEST_CASE(meta_event_read_write_long_string)
 
 BOOST_AUTO_TEST_CASE(meta_event_read_write_custom_meta)
 {
-	using namespace fm;
+	using namespace com;
 	constexpr size_t dataSize = 1001 + 1;
 	constexpr size_t eventSize = 5 + dataSize;
 	midi::CustomMetaData data;
@@ -714,7 +714,7 @@ BOOST_AUTO_TEST_CASE(meta_event_read_write_custom_meta)
 
 BOOST_AUTO_TEST_CASE(meta_event_read_write_custom_meta_0)
 {
-	using namespace fm;
+	using namespace com;
 	constexpr size_t dataSize = 1;
 	constexpr size_t eventSize = 4 + dataSize;
 	midi::CustomMetaData data;

@@ -13,8 +13,8 @@ namespace sheet
             }
             return _specificity;
         }
-        void ADeclaration::performImpl(fm::midi::Event *noteOn,
-                                       fm::midi::Event *noteOff,
+        void ADeclaration::performImpl(com::midi::Event *noteOn,
+                                       com::midi::Event *noteOff,
                                        double inputValue,
                                        double min, double max,
                                        const FGetValue &getOriginalValue,

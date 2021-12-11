@@ -5,7 +5,7 @@
 #include <functional>
 #include <sheet/Document.h>
 #include "metaCommands.h"
-#include <fm/tools.h>
+#include <com/tools.h>
 #include <algorithm>
 
 namespace sheet {
@@ -16,7 +16,7 @@ namespace sheet {
 			struct ProcessData {
 				Event lastNoRepeat;
 				bool hasTimeConsumingEvents;
-				fm::Ticks lastDuration;
+				com::Ticks lastDuration;
 			};
 
 			inline Event::Type resolveRepeatType(const Event &lastNoRepeat, const Event &repeat) 
@@ -136,7 +136,7 @@ namespace sheet {
 	
 		void Preprocessor::preprocessChordTrack(Track& sheetTrack)
 		{
-			using namespace fm;
+			using namespace com;
 			auto voice = sheetTrack.voices.begin(); 
 			auto it = voice->events.begin();
 			auto end = voice->events.end();
@@ -184,7 +184,7 @@ namespace sheet {
 				for (auto& voice : track.voices) {
 					_sheetNavigator->processNavigation(voice);
 				}
-				fm::String type = fm::getFirstMetaArgumentForKey(SHEET_META__TRACK_META_KEY_TYPE, track.trackConfigs).value;
+				com::String type = com::getFirstMetaArgumentForKey(SHEET_META__TRACK_META_KEY_TYPE, track.trackConfigs).value;
 				bool isNoteEventTrack = type.empty();
 				bool isTemplateTrack  = type ==  SHEET_META__SET_SHEET_TEMPLATE;
 				if (isNoteEventTrack || isTemplateTrack) {

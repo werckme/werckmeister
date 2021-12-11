@@ -33,7 +33,7 @@ namespace fmapp {
 	{
 
 	}
-	void FluidSynthBackend::send(const fm::midi::Event &event, const Output *output)
+	void FluidSynthBackend::send(const com::midi::Event &event, const Output *output)
 	{
 		_synths.begin()->second->send(event);
 	}

@@ -17,7 +17,7 @@ namespace sheet {
         class SetTempo : public ACommand
         {
         public:
-            fm::IHasParameter::ParametersByNames parameters = {
+            com::IHasParameter::ParametersByNames parameters = {
                 FM_PARAMETER_DEF		    (argumentNames.SetTempo.Bpm, 	0)
             };
             virtual ParametersByNames & getParameters() { return this->parameters; }

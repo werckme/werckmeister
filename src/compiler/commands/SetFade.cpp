@@ -1,25 +1,25 @@
 #include "SetFade.h"
 #include <compiler/context/IContext.h>
-#include <fm/tween.h>
-#include <fm/literals.hpp>
+#include <com/tween.h>
+#include <com/literals.hpp>
 #include <compiler/error.hpp>
 
 namespace sheet {
     namespace compiler {
-        const fm::String SetFade::CurveTypeLin = "lin";
-        const fm::String SetFade::CurveTypeQuad = "quad";
-        const fm::String SetFade::CurveTypeCub = "cub";
-        const fm::String SetFade::CurveTypeQuart = "quart";
-        const fm::String SetFade::CurveTypeQuint = "quint";
-        const fm::String SetFade::CurveTypeExp = "exp";
+        const com::String SetFade::CurveTypeLin = "lin";
+        const com::String SetFade::CurveTypeQuad = "quad";
+        const com::String SetFade::CurveTypeCub = "cub";
+        const com::String SetFade::CurveTypeQuart = "quart";
+        const com::String SetFade::CurveTypeQuint = "quint";
+        const com::String SetFade::CurveTypeExp = "exp";
         namespace {
             template<class TTween>
-            void _perform(const TTween &tween, fm::Ticks duration, IContextPtr  context)
+            void _perform(const TTween &tween, com::Ticks duration, IContextPtr  context)
             {
-                using namespace fm;
+                using namespace com;
                 for (double t=0; t<=duration; t+= double(1.0_N128) ) {
                     auto value = tween.calc(t);
-                    context->setVolume(value, fm::Ticks(t));
+                    context->setVolume(value, com::Ticks(t));
                 }
             }
         }
@@ -28,30 +28,30 @@ namespace sheet {
             auto from = parameters[argumentNames.SetFade.FadeFrom].value<double>();
             auto to = parameters[argumentNames.SetFade.FadeTo].value<double>();
             auto duration = parameters[argumentNames.SetFade.FadeDuration].value<double>();
-            auto curveType = parameters[argumentNames.SetFade.Curve].value<fm::String>();
-            duration *= fm::PPQ;
+            auto curveType = parameters[argumentNames.SetFade.Curve].value<com::String>();
+            duration *= com::PPQ;
             if (curveType == CurveTypeLin)  {
-                fm::Tween<double, fm::TweenTypeLin> tween(from, to, duration);
+                com::Tween<double, com::TweenTypeLin> tween(from, to, duration);
                 _perform(tween, duration, context);
             }
             else if (curveType == CurveTypeQuad)  {
-                fm::Tween<double, fm::TweenTypeQuad> tween(from, to, duration);
+                com::Tween<double, com::TweenTypeQuad> tween(from, to, duration);
                 _perform(tween, duration, context);
             }
             else if (curveType == CurveTypeCub)  {
-                fm::Tween<double, fm::TweenTypeCub> tween(from, to, duration);
+                com::Tween<double, com::TweenTypeCub> tween(from, to, duration);
                 _perform(tween, duration, context);
             }
             else if (curveType == CurveTypeQuart)  {
-                fm::Tween<double, fm::TweenTypeQuart> tween(from, to, duration);
+                com::Tween<double, com::TweenTypeQuart> tween(from, to, duration);
                 _perform(tween, duration, context);
             }
             else if (curveType == CurveTypeQuint)  {
-                fm::Tween<double, fm::TweenTypeQuint> tween(from, to, duration);
+                com::Tween<double, com::TweenTypeQuint> tween(from, to, duration);
                 _perform(tween, duration, context);
             }   
             else if (curveType == CurveTypeExp)  {
-                fm::Tween<double, fm::TweenTypeExp> tween(from, to, duration);
+                com::Tween<double, com::TweenTypeExp> tween(from, to, duration);
                 _perform(tween, duration, context);
             } else {
                 FM_THROW(Exception, "unsupported curve type: " + curveType); 

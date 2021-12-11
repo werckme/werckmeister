@@ -21,7 +21,7 @@ namespace sheet {
         {
         public:
             typedef ACommand Base;
-            fm::IHasParameter::ParametersByNames parameters = {
+            com::IHasParameter::ParametersByNames parameters = {
                 FM_PARAMETER_DEF		    (argumentNames.SetVoicingStrategy.Use, 	    0)
             };
             virtual ParametersByNames & getParameters() { return this->parameters; }

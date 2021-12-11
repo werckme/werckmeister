@@ -5,7 +5,7 @@
 #include "context/IContext.h"
 #include <compiler/error.hpp>
 #include "ASheetEventRenderer.h"
-#include <fm/ILogger.h>
+#include <com/ILogger.h>
 #include "ICompilerVisitor.h"
 #include <list>
 
@@ -13,7 +13,7 @@ namespace sheet {
     namespace compiler {
         class SheetEventRenderer : public ASheetEventRenderer {
         public:
-            SheetEventRenderer(IContextPtr ctx, ICompilerVisitorPtr compilerVisitor, fm::ILoggerPtr logger) 
+            SheetEventRenderer(IContextPtr ctx, ICompilerVisitorPtr compilerVisitor, com::ILoggerPtr logger) 
                 : ctx_(ctx), compilerVisitor_(compilerVisitor), logger_(logger) 
             {}
             virtual ~SheetEventRenderer() = default;
@@ -25,10 +25,10 @@ namespace sheet {
             virtual void renderPitchBendEvent(const Event &pitchBendEvent);
             virtual std::shared_ptr<ASheetEventRenderer> createNewSheetEventRenderer(IContextPtr ctx);
         protected:
-            void onWarning(const fm::String &message, const Event &event);
+            void onWarning(const com::String &message, const Event &event);
         private:
             IContextPtr ctx_;
-            fm::ILoggerPtr logger_;
+            com::ILoggerPtr logger_;
             ICompilerVisitorPtr compilerVisitor_;
         };
     }

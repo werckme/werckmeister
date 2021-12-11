@@ -10,8 +10,8 @@ namespace sheet {
         class InstrumentConfigVelocityRemap : public ACommand, public ACanSpecifyInstrument
         {
         public:
-            static const fm::String VelocityNotSet;
-            fm::IHasParameter::ParametersByNames parameters = {
+            static const com::String VelocityNotSet;
+            com::IHasParameter::ParametersByNames parameters = {
                 FM_PARAMETER_DEFAULT_DEF(argumentNames.VelocityRemap.PPPPP, 	0, VelocityNotSet),
                 FM_PARAMETER_DEFAULT_DEF(argumentNames.VelocityRemap.PPPP , 	1, VelocityNotSet),
                 FM_PARAMETER_DEFAULT_DEF(argumentNames.VelocityRemap.PPP  , 	2, VelocityNotSet),

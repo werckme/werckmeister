@@ -1,7 +1,7 @@
 #ifndef COMPILER_CONTEXT_METACOMMANDS_H
 #define COMPILER_CONTEXT_METACOMMANDS_H
 
-#include <fm/common.hpp>
+#include <com/common.hpp>
 
 // TRACK META INFO
 #define SHEET_META__INSTRUMENT FM_STRING("instrument")

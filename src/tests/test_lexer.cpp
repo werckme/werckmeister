@@ -2,14 +2,14 @@
 #include "parser/lexer.h"
 #include <boost/spirit/include/lex_lexertl.hpp>
 #include <iostream>
-#include "fm/common.hpp"
+#include "com/common.hpp"
 
 BOOST_AUTO_TEST_CASE(test_chorddef)
 {
 	using namespace sheet::compiler;
 	ChordDefTokenizer<LexerType> chordDefTok;
 
-	fm::String str(FM_STRING("--here goes comment 1\n\
+	com::String str(FM_STRING("--here goes comment 1\n\
   \t@import 'old.chdef';\r\n\
 @import 'old2.chdef'; --here goes comment 2\n\
 @import 'old3.chdef'; \n\
@@ -24,8 +24,8 @@ X7: I=1 III=5 V=8 VII=10 --as usual\n\
 	X7 + : Xmaj7\n\
 "));
 	
-	fm::CharType const* first = str.c_str();
-	fm::CharType const* last = &first[str.size()];
+	com::CharType const* first = str.c_str();
+	com::CharType const* last = &first[str.size()];
 
 	LexerType::iterator_type iter = chordDefTok.begin(first, last);
 	LexerType::iterator_type end = chordDefTok.end();
@@ -46,13 +46,13 @@ BOOST_AUTO_TEST_CASE(test_pitchmap)
 	using namespace sheet::compiler;
 	PitchmapTokenizer<LexerType> pitchmapTok;
 
-	fm::String str(FM_STRING("\
+	com::String str(FM_STRING("\
 \"bd\": c,,\n\
 \"sn\": e,\n\
 "));
 
-	fm::CharType const* first = str.c_str();
-	fm::CharType const* last = &first[str.size()];
+	com::CharType const* first = str.c_str();
+	com::CharType const* last = &first[str.size()];
 
 	LexerType::iterator_type iter = pitchmapTok.begin(first, last);
 	LexerType::iterator_type end = pitchmapTok.end();

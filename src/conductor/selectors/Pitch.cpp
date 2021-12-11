@@ -10,7 +10,7 @@ namespace sheet
             const auto& ev = *evm.noteOn;
             for (const auto& argument : arguments) {
                 auto pitchdef = _definitionServer->resolvePitch(argument.pitch);
-                fm::Byte midiPitch = fm::Byte(compiler::MidiContext::toMidiPitch(pitchdef));
+                com::Byte midiPitch = com::Byte(compiler::MidiContext::toMidiPitch(pitchdef));
                 if (ev.parameter1() == midiPitch) {
                     return true;
                 }

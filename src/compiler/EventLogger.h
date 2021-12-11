@@ -2,11 +2,11 @@
 #define EVENTLOGGER_H
 
 #include "IEventLogger.h"
-#include <fm/ConsoleLogger.h>
+#include <com/ConsoleLogger.h>
 #include "Warning.hpp"
 #include <sstream>
 #include <forward.hpp>
-#include <fm/tools.h>
+#include <com/tools.h>
 
 namespace sheet {
 	struct Event;
@@ -27,7 +27,7 @@ namespace sheet {
             std::stringstream messageStream;
             f(messageStream);
             TLoggerBase::warn([&](auto &log) {  
-                fm::documentMessage(log, _document, sourceObject.sourceId, sourceObject.sourcePositionBegin, messageStream.str());
+                com::documentMessage(log, _document, sourceObject.sourceId, sourceObject.sourcePositionBegin, messageStream.str());
             });
         }
     }

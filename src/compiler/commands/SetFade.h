@@ -41,13 +41,13 @@ namespace sheet {
         class SetFade : public ACommand
         {
         public:
-            static const fm::String CurveTypeLin;
-            static const fm::String CurveTypeQuad;
-            static const fm::String CurveTypeCub;
-            static const fm::String CurveTypeQuart;
-            static const fm::String CurveTypeQuint;
-            static const fm::String CurveTypeExp;
-            fm::IHasParameter::ParametersByNames parameters = {
+            static const com::String CurveTypeLin;
+            static const com::String CurveTypeQuad;
+            static const com::String CurveTypeCub;
+            static const com::String CurveTypeQuart;
+            static const com::String CurveTypeQuint;
+            static const com::String CurveTypeExp;
+            com::IHasParameter::ParametersByNames parameters = {
                 FM_PARAMETER_DEF		    (argumentNames.SetFade.FadeDuration, 	0),
                 FM_PARAMETER_DEFAULT_DEF    (argumentNames.SetFade.FadeFrom,    	1, "0"),
                 FM_PARAMETER_DEFAULT_DEF	(argumentNames.SetFade.FadeTo, 	        2, "100"),

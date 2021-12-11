@@ -1,11 +1,11 @@
 #include "Vorschlag.h"
-#include <fm/literals.hpp>
+#include <com/literals.hpp>
 #include <compiler/context/AContext.h>
 
 namespace sheet {
     namespace compiler {
-        using namespace fm;
-        const fm::Ticks Vorschlag::defaultDuration = 1.0_N64;
+        using namespace com;
+        const com::Ticks Vorschlag::defaultDuration = 1.0_N64;
         void Vorschlag::perform(IContextPtr ctx, Events &events)
         {
             if (events.empty()) {

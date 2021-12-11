@@ -151,7 +151,7 @@ endif(APPLE)
 add_subdirectory(src)
 add_subdirectory(submodules/lua)
 
-configure_file("${PROJECT_SOURCE_DIR}/src/fm/config.hpp.in" "${PROJECT_SOURCE_DIR}/src/fm/config.hpp")
+configure_file("${PROJECT_SOURCE_DIR}/src/com/config.hpp.in" "${PROJECT_SOURCE_DIR}/src/com/config.hpp")
 
 #if (${USE_EMSCRIPTEN})
   if(${GIT_BRANCH_NAME} MATCHES "main[ \t\r\n]*")

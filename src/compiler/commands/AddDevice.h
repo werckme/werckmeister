@@ -34,7 +34,7 @@ namespace sheet {
         class AddDevice : public ACommand
         {
         public:
-            fm::IHasParameter::ParametersByNames parameters = {
+            com::IHasParameter::ParametersByNames parameters = {
                 FM_PARAMETER_DEF		    (argumentNames.Device.WithName, 	        0),
                 FM_PARAMETER_DEF		    (argumentNames.Device.IsType, 	            1),
                 FM_PARAMETER_DEF		    (argumentNames.Device.UsePort, 	            2),
@@ -46,8 +46,8 @@ namespace sheet {
             virtual ParametersByNames & getParameters() { return this->parameters; }
             virtual void execute(IContextPtr );
         private:
-            void addMidiDevice(const fm::String& uname, const fm::String& deviceId, int offsetMillis);
-            void addFluidSynthDevice(const fm::String& uname, const fm::String &soundfontPath, int offsetMillis);
+            void addMidiDevice(const com::String& uname, const com::String& deviceId, int offsetMillis);
+            void addFluidSynthDevice(const com::String& uname, const com::String &soundfontPath, int offsetMillis);
         };
     }
 }

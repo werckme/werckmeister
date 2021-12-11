@@ -13,7 +13,7 @@ namespace sheet {
 		  typedef VoicingStrategy Base;
       virtual ~DirectVoicingStrategy() = default;
       virtual Pitches get(const Event &chord, const ChordDef &def, const Degrees &degreeIntervals, const TimeInfo&) override;
-      fm::IHasParameter::ParametersByNames parameters = {};
+      com::IHasParameter::ParametersByNames parameters = {};
       virtual ParametersByNames & getParameters() { return this->parameters; }
     };
 }

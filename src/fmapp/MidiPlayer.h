@@ -4,7 +4,7 @@
 #include "IDocumentWriter.h"
 #include <forward.hpp>
 #include <IPlayerProgramOptions.h>
-#include <fm/ILogger.h>
+#include <com/ILogger.h>
 #include <fmapp/IPlayerLoopVisitor.h>
 #include <vector>
 #include <fmapp/DiContainerWrapper.h>
@@ -32,15 +32,15 @@ namespace fmapp {
         enum State { Stopped, Playing };
     private:
         IPlayerProgramOptionsPtr   _programOptions;
-        fm::midi::MidiPtr          _midifile;
+        com::midi::MidiPtr          _midifile;
         LoopVisitors               _loopVisitors;
-        fm::ILoggerPtr             _logger;
+        com::ILoggerPtr             _logger;
     public:
         MidiPlayer(
             ICompilerProgramOptionsPtr  programOptions, 
-            fm::midi::MidiPtr           midiFile,
+            com::midi::MidiPtr           midiFile,
             LoopVisitors                loopVisitors,
-            fm::ILoggerPtr              logger) 
+            com::ILoggerPtr              logger) 
             : ADocumentWriter(logger),
               _programOptions(std::dynamic_pointer_cast<IPlayerProgramOptions>(programOptions)),
               _midifile      (midiFile),
@@ -55,13 +55,13 @@ namespace fmapp {
         /**
          * stops the player and returns the last tick position
          */
-        virtual fm::Ticks stop();
+        virtual com::Ticks stop();
     private:
         enum VisitorMessage { Loop, BeginLoop, EndLoop };
         void initMidiBackends();
         void initFluidSynthInstances();
         void execLoop(sheet::DocumentPtr document);
-        void visitVisitors(VisitorMessage, fm::Ticks elapsed);
+        void visitVisitors(VisitorMessage, com::Ticks elapsed);
         State state = Stopped;
         MidiplayerImpl _midiPlayerImpl;
         

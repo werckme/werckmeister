@@ -6,9 +6,9 @@
 #include <vector>
 #include "SheetPlayerProgram.h"
 #include <parser/parser.h>
-#include <fm/werckmeister.hpp>
+#include <com/werckmeister.hpp>
 #include <PlayerProgramOptions.h>
-#include <fm/ConsoleLogger.h>
+#include <com/ConsoleLogger.h>
 #include <compiler/LoggerAndWarningsCollector.h>
 #include <compiler/SheetEventRenderer.h>
 #include <compiler/SheetTemplateRenderer.h>
@@ -17,8 +17,8 @@
 #include <compiler/Preprocessor.h>
 #include <compiler/EventLogger.h>
 #include <sheet/Document.h>
-#include <fm/DefinitionsServer.h>
-#include <fm/midi.hpp>
+#include <com/DefinitionsServer.h>
+#include <com/midi.hpp>
 #include <fmapp/MidiPlayer.h>
 #include <fmapp/JsonWriter.h>
 #include <compiler/DefaultCompilerVisitor.h>
@@ -46,8 +46,8 @@
 #include <crtdbg.h>
 #endif
 
-typedef sheet::compiler::EventLogger<fm::ConsoleLogger> 			   LoggerImpl;
-typedef sheet::compiler::LoggerAndWarningsCollector<fm::ConsoleLogger> WarningsCollectorWithConsoleLogger;
+typedef sheet::compiler::EventLogger<com::ConsoleLogger> 			   LoggerImpl;
+typedef sheet::compiler::LoggerAndWarningsCollector<com::ConsoleLogger> WarningsCollectorWithConsoleLogger;
 
 int startPlayer(std::shared_ptr<PlayerProgramOptions> programOptionsPtr);
 
@@ -101,7 +101,7 @@ int startPlayer(std::shared_ptr<PlayerProgramOptions> programOptionsPtr)
 	namespace co = sheet::conductor;
 	fmapp::SheetWatcherHandlersPtr sheetWatcherHandlers = std::make_shared<fmapp::SheetWatcherHandlers>();
 	auto documentPtr = std::make_shared<sheet::Document>();
-	auto midiFile = fm::getWerckmeister().createMidi();
+	auto midiFile = com::getWerckmeister().createMidi();
 	bool needTimeline = programOptionsPtr->isUdpSet();
 	fmapp::DiContainerWrapper<fmapp::IPlayerLoopVisitorPtr> loopVisitors;
 	bool writeWarningsToConsole = !(programOptionsPtr->isJsonModeSet() || programOptionsPtr->isJsonDocInfoMode());
@@ -116,8 +116,8 @@ int startPlayer(std::shared_ptr<PlayerProgramOptions> programOptionsPtr)
 		, di::bind<co::IConductionsPerformer>()								 .to<co::ConductionsPerformer>()	.in(di::extension::scoped)
 		, di::bind<ICompilerProgramOptions>()								 .to(programOptionsPtr)
 		, di::bind<sheet::Document>()										 .to(documentPtr)
-		, di::bind<fm::IDefinitionsServer>()								 .to<fm::DefinitionsServer>()		.in(di::extension::scoped)
-		, di::bind<fm::midi::Midi>()										 .to(midiFile)
+		, di::bind<com::IDefinitionsServer>()								 .to<com::DefinitionsServer>()		.in(di::extension::scoped)
+		, di::bind<com::midi::Midi>()										 .to(midiFile)
 		, di::bind<fmapp::SheetWatcherHandlers>()							 .to(sheetWatcherHandlers)
 		, di::bind<fmapp::DiContainerWrapper<fmapp::IPlayerLoopVisitorPtr>>().to(loopVisitors)
 		, di::bind<fmapp::IDocumentWriter>()		.to([&](const auto &injector) -> fmapp::IDocumentWriterPtr
@@ -134,7 +134,7 @@ int startPlayer(std::shared_ptr<PlayerProgramOptions> programOptionsPtr)
 			}
 			return injector.template create< std::unique_ptr<cp::DefaultCompilerVisitor>>();
 		})
-		, di::bind<fm::ILogger>()					.to([&](const auto &injector) -> fm::ILoggerPtr 
+		, di::bind<com::ILogger>()					.to([&](const auto &injector) -> com::ILoggerPtr 
 		{
 			if (writeWarningsToConsole) {
 				return injector.template create<std::shared_ptr<LoggerImpl>>();
@@ -172,7 +172,7 @@ int startPlayer(std::shared_ptr<PlayerProgramOptions> programOptionsPtr)
 		sheetWatcherHandlers->container.clear();
 		delete program;
 		return result;
-	} catch (const fm::Exception &ex) {
+	} catch (const com::Exception &ex) {
 		std::cerr << ex.toString() << std::endl;
 		return 1;
 	} catch (const std::exception &ex) {

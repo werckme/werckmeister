@@ -3,9 +3,9 @@
 #include <memory>
 #include "SheetCompilerProgramJs.h"
 #include <parser/parser.h>
-#include <fm/werckmeister.hpp>
+#include <com/werckmeister.hpp>
 #include <CompilerProgramOptions.h>
-#include <fm/ConsoleLogger.h>
+#include <com/ConsoleLogger.h>
 #include <compiler/LoggerAndWarningsCollector.h>
 #include <compiler/SheetEventRenderer.h>
 #include <compiler/SheetTemplateRenderer.h>
@@ -14,8 +14,8 @@
 #include <compiler/Preprocessor.h>
 #include <compiler/EventLogger.h>
 #include <sheet/Document.h>
-#include <fm/DefinitionsServer.h>
-#include <fm/midi.hpp>
+#include <com/DefinitionsServer.h>
+#include <com/midi.hpp>
 #include <fmapp/MidiFileWriter.h>
 #include <fmapp/JsonWriter.h>
 #include <compiler/DefaultCompilerVisitor.h>
@@ -34,18 +34,18 @@
 
 // #define LOCAL_TEST_RUN
 
-typedef sheet::compiler::EventLogger<fm::ConsoleLogger> 			   LoggerImpl;
-typedef sheet::compiler::LoggerAndWarningsCollector<fm::ConsoleLogger> WarningsCollectorWithConsoleLogger;
+typedef sheet::compiler::EventLogger<com::ConsoleLogger> 			   LoggerImpl;
+typedef sheet::compiler::LoggerAndWarningsCollector<com::ConsoleLogger> WarningsCollectorWithConsoleLogger;
 
 class JsProgramOptions : public ICompilerProgramOptions
 {
 public:
 	virtual bool isHelpSet() const { return false; }
 	virtual bool isInputSet() const { return true; }
-	virtual fm::String getInput() const { return input; }
+	virtual com::String getInput() const { return input; }
 	virtual bool isOutputSet() const { return false; }
 	virtual bool isNoMetaSet() const { return false; }
-	virtual fm::String getOutput() const { return ""; }
+	virtual com::String getOutput() const { return ""; }
 	virtual bool isJsonModeSet() const { return true; }
 	virtual bool isJsonDocInfoMode() const { return false; }
 	virtual bool isVersionSet() const { return false; }
@@ -87,7 +87,7 @@ extern "C" const char * create_compile_result(const char *file, double beginQuar
 	programOptionsPtr->begin = beginQuarters;
 
 	auto documentPtr = std::make_shared<sheet::Document>();
-	auto midiFile = fm::getWerckmeister().createMidi();
+	auto midiFile = com::getWerckmeister().createMidi();
 	auto logger = std::make_shared<WarningsCollectorWithConsoleLogger>();
 	auto injector = di::make_injector(
 		  di::bind<cp::IDocumentParser>()			.to<cp::DocumentParser>()			.in(di::extension::scoped)
@@ -100,8 +100,8 @@ extern "C" const char * create_compile_result(const char *file, double beginQuar
 		, di::bind<co::IConductionsPerformer>()		.to<co::ConductionsPerformer>()		.in(di::extension::scoped)
 		, di::bind<ICompilerProgramOptions>()		.to(programOptionsPtr)
 		, di::bind<sheet::Document>()				.to(documentPtr)
-		, di::bind<fm::IDefinitionsServer>()		.to<fm::DefinitionsServer>()		.in(di::extension::scoped)
-		, di::bind<fm::midi::Midi>()				.to(midiFile)
+		, di::bind<com::IDefinitionsServer>()		.to<com::DefinitionsServer>()		.in(di::extension::scoped)
+		, di::bind<com::midi::Midi>()				.to(midiFile)
 		, di::bind<fmapp::IDocumentWriter>()		.to([&](const auto &injector) -> fmapp::IDocumentWriterPtr 
 		{
 			return injector.template create<std::unique_ptr<fmapp::JsonWriter>>();
@@ -110,7 +110,7 @@ extern "C" const char * create_compile_result(const char *file, double beginQuar
 		{
 			return injector.template create< std::shared_ptr<fmapp::DefaultTimeline>>();
 		})
-		, di::bind<fm::ILogger>()					.to(logger)
+		, di::bind<com::ILogger>()					.to(logger)
 	);
 	sheet::FactoryConfig factory(injector);
 	factory.init();
@@ -144,6 +144,6 @@ int main(int argc, const char** argv)
 #else
 int main(int argc, const char** argv)
 {
-	std::cout << fm::getWerckmeister().version() << std::endl;
+	std::cout << com::getWerckmeister().version() << std::endl;
 }
 #endif

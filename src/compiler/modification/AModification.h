@@ -1,16 +1,16 @@
 #ifndef AMODIFICTAION_HPP
 #define AMODIFICTAION_HPP
 
-#include <fm/units.hpp>
+#include <com/units.hpp>
 #include <sheet/objects/Event.h>
 #include <list>
-#include <fm/IRegisterable.h>
-#include <fm/AConvertsArgumentsToParameter.h>
+#include <com/IRegisterable.h>
+#include <com/AConvertsArgumentsToParameter.h>
 #include <compiler/context/IContext.h>
 
 namespace sheet {
     namespace compiler {
-        class AModification : public fm::IRegisterable, public fm::AConvertsArgumentsToParameter {
+        class AModification : public com::IRegisterable, public com::AConvertsArgumentsToParameter {
         protected:
             AModification() = default;
         public:

@@ -1,7 +1,7 @@
 #include "FluidSynthWrapper.h"
 #include <boost/dll.hpp>
-#include <fm/werckmeister.hpp>
-#include <fm/config.hpp>
+#include <com/werckmeister.hpp>
+#include <com/config.hpp>
 #include <iostream>
 namespace fmapp {
     FluidSynth::FluidSynth(const std::string &soundfontPath)
@@ -68,9 +68,9 @@ namespace fmapp {
 
     std::string FluidSynth::findFluidSynthLibraryPath() const
     {
-        auto& wm = fm::getWerckmeister();
+        auto& wm = com::getWerckmeister();
         std::string libraryPath(LIB_FLUIDSYNTH_FILENAME);
-        const auto &searchPaths = fm::LibfluidSynthSearchPaths();
+        const auto &searchPaths = com::LibfluidSynthSearchPaths();
         for (const auto& searchPath : searchPaths) {
             wm.addSearchPath(searchPath);
         }
@@ -89,23 +89,23 @@ namespace fmapp {
         }
     }
 
-    void FluidSynth::send(const fm::midi::Event& event)
+    void FluidSynth::send(const com::midi::Event& event)
     {
         switch (event.eventType()) {
-        case fm::midi::NoteOn:
+        case com::midi::NoteOn:
             _fluid_synth_noteon(synth, event.channel(), event.parameter1(), event.parameter2());
             break;
-        case fm::midi::NoteOff:
+        case com::midi::NoteOff:
             _fluid_synth_noteoff(synth, event.channel(), event.parameter1());
             break;
-        case fm::midi::ProgramChange:
+        case com::midi::ProgramChange:
             _fluid_synth_program_change(synth, event.channel(), event.parameter1());
             break;
-        case fm::midi::Controller:
+        case com::midi::Controller:
             _fluid_synth_cc(synth, event.channel(), event.parameter1(), event.parameter2());
             break;
-        case fm::midi::PitchBend:
-            _fluid_synth_pitch_bend(synth, event.channel(), event.pitchBend() * (double)fm::midi::MaxPitchbend );
+        case com::midi::PitchBend:
+            _fluid_synth_pitch_bend(synth, event.channel(), event.pitchBend() * (double)com::midi::MaxPitchbend );
             break;
         default: break;
         }

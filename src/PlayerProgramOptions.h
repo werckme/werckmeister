@@ -1,7 +1,7 @@
 #ifndef PLAYERPROGRAMOPTIONS_HPP
 #define PLAYERPROGRAMOPTIONS_HPP
 
-#include <fm/common.hpp>
+#include <com/common.hpp>
 #include <boost/program_options.hpp>
 #include <IPlayerProgramOptions.h>
 #include <CompilerProgramOptions.h>
@@ -16,7 +16,7 @@ struct PlayerProgramOptions : public CompilerProgramOptions, public IPlayerProgr
 	virtual double getResumeAtPosition() override { return resumeAtPosition; }
 	virtual bool isWatchSet() const override;
 	virtual bool isUdpSet() const override;
-	virtual fm::String getUdpHostname() const override;
+	virtual com::String getUdpHostname() const override;
 	virtual bool isNoTimePrintSet() const override;
 	virtual bool isSigintWorkaroundSet() const override;
 	virtual bool isJsonDocInfoMode() const override;
@@ -25,7 +25,7 @@ struct PlayerProgramOptions : public CompilerProgramOptions, public IPlayerProgr
 	virtual bool isJsonModeSet() const override { return false; }
 	virtual bool isOutputSet() const override { return false; }
 	virtual bool isNoMetaSet() const override { return false; }
-	virtual fm::String getOutput() const override { return ""; }
+	virtual com::String getOutput() const override { return ""; }
 private:
 	double resumeAtPosition = 0;
 };

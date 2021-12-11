@@ -1,6 +1,6 @@
 #include "Pitch.h"
 #include <compiler/error.hpp>
-#include <fm/midi.hpp>
+#include <com/midi.hpp>
 
 namespace sheet
 {
@@ -8,17 +8,17 @@ namespace sheet
     {
         void PitchDecl::perform(const Events &events) const
         {
-            fm::midi::Event* noteOn = events.noteOn;
-            fm::midi::Event* noteOff = events.noteOff;
-            fm::midi::Event* predecessorNoteOn = events.predecessorNoteOn;
+            com::midi::Event* noteOn = events.noteOn;
+            com::midi::Event* noteOff = events.noteOff;
+            com::midi::Event* predecessorNoteOn = events.predecessorNoteOn;
             if (!noteOff) 
             {
                 return;
             }
             FGetValue getOriginalValue = [noteOn]() { return noteOn->parameter1(); };
             FGetValue getPercentBase = [noteOn]() { return noteOn->parameter1(); };
-            FSetValue setNoteOn = [](fm::midi::Event* noteOn, double val) { noteOn->parameter1(fm::Byte(val)); };
-            FSetValue setNoteOff = [](fm::midi::Event* noteOff, double val) { noteOff->parameter1(fm::Byte(val)); };
+            FSetValue setNoteOn = [](com::midi::Event* noteOn, double val) { noteOn->parameter1(com::Byte(val)); };
+            FSetValue setNoteOff = [](com::midi::Event* noteOff, double val) { noteOff->parameter1(com::Byte(val)); };
             FGetOptionalValue getPredecessorValue = [predecessorNoteOn]() -> std::optional<double>
             {
                 if (!predecessorNoteOn) 
@@ -29,7 +29,7 @@ namespace sheet
             };
             double inputValue = declaration.value;
             constexpr double min = 0.0;
-            constexpr double max = double(fm::midi::MaxMidiValue);
+            constexpr double max = double(com::midi::MaxMidiValue);
             performImpl(noteOn, noteOff, inputValue, min, max, getOriginalValue, getPercentBase, getPredecessorValue, setNoteOn, setNoteOff);
         }
     }

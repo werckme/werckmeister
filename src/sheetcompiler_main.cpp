@@ -3,9 +3,9 @@
 #include <memory>
 #include "SheetCompilerProgram.h"
 #include <parser/parser.h>
-#include <fm/werckmeister.hpp>
+#include <com/werckmeister.hpp>
 #include <CompilerProgramOptions.h>
-#include <fm/ConsoleLogger.h>
+#include <com/ConsoleLogger.h>
 #include <compiler/LoggerAndWarningsCollector.h>
 #include <compiler/SheetEventRenderer.h>
 #include <compiler/SheetTemplateRenderer.h>
@@ -14,8 +14,8 @@
 #include <compiler/Preprocessor.h>
 #include <compiler/EventLogger.h>
 #include <sheet/Document.h>
-#include <fm/DefinitionsServer.h>
-#include <fm/midi.hpp>
+#include <com/DefinitionsServer.h>
+#include <com/midi.hpp>
 #include <fmapp/MidiFileWriter.h>
 #include <fmapp/JsonWriter.h>
 #include <compiler/DefaultCompilerVisitor.h>
@@ -30,8 +30,8 @@
 #include <crtdbg.h>
 #endif
 
-typedef sheet::compiler::EventLogger<fm::ConsoleLogger> 			   LoggerImpl;
-typedef sheet::compiler::LoggerAndWarningsCollector<fm::ConsoleLogger> WarningsCollectorWithConsoleLogger;
+typedef sheet::compiler::EventLogger<com::ConsoleLogger> 			   LoggerImpl;
+typedef sheet::compiler::LoggerAndWarningsCollector<com::ConsoleLogger> WarningsCollectorWithConsoleLogger;
 
 
 int main(int argc, const char** argv)
@@ -51,7 +51,7 @@ int main(int argc, const char** argv)
 	}
 
 	auto documentPtr = std::make_shared<sheet::Document>();
-	auto midiFile = fm::getWerckmeister().createMidi();
+	auto midiFile = com::getWerckmeister().createMidi();
 	bool needTimeline = programOptionsPtr->isJsonModeSet();
 	bool writeWarningsToConsole = !(programOptionsPtr->isJsonModeSet() || programOptionsPtr->isJsonDocInfoMode());
 	auto injector = di::make_injector(
@@ -65,8 +65,8 @@ int main(int argc, const char** argv)
 		, di::bind<co::IConductionsPerformer>()		.to<co::ConductionsPerformer>()		.in(di::singleton)
 		, di::bind<ICompilerProgramOptions>()		.to(programOptionsPtr)
 		, di::bind<sheet::Document>()				.to(documentPtr)
-		, di::bind<fm::IDefinitionsServer>()		.to<fm::DefinitionsServer>()		.in(di::singleton)
-		, di::bind<fm::midi::Midi>()				.to(midiFile)
+		, di::bind<com::IDefinitionsServer>()		.to<com::DefinitionsServer>()		.in(di::singleton)
+		, di::bind<com::midi::Midi>()				.to(midiFile)
 		, di::bind<fmapp::IDocumentWriter>()		.to([&](const auto &injector) -> fmapp::IDocumentWriterPtr
 		{
 			if (programOptionsPtr->isJsonModeSet() || programOptionsPtr->isJsonDocInfoMode()) {
@@ -81,7 +81,7 @@ int main(int argc, const char** argv)
 			}
 			return injector.template create< std::shared_ptr<cp::DefaultCompilerVisitor>>();
 		})
-		, di::bind<fm::ILogger>()					.to([&](const auto &injector) -> fm::ILoggerPtr 
+		, di::bind<com::ILogger>()					.to([&](const auto &injector) -> com::ILoggerPtr 
 		{
 			if (writeWarningsToConsole) {
 				return injector.template create<std::shared_ptr<LoggerImpl>>();

@@ -9,7 +9,7 @@ namespace sheet {
         class $NAME : public ACommand
         {
         public:
-            fm::IHasParameter::ParametersByNames parameters = {
+            com::IHasParameter::ParametersByNames parameters = {
                 //FM_PARAMETER_DEF		    (argumentNames.XYZ, 	0)
             };
             virtual ParametersByNames & getParameters() { return this->parameters; }

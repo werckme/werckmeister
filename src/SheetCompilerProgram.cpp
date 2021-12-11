@@ -1,6 +1,6 @@
 #include "SheetCompilerProgram.h"
-#include <fm/werckmeister.hpp>
-#include <fm/common.hpp>
+#include <com/werckmeister.hpp>
+#include <com/common.hpp>
 #include "sheet/Document.h"
 #include "compiler/Compiler.h"
 #include "parser/parser.h"
@@ -11,7 +11,7 @@
 #include <iostream>
 #include <boost/filesystem.hpp>
 #include <exception>
-#include <fm/config.hpp>
+#include <com/config.hpp>
 #include <fmapp/JsonStringInputReader.hpp>
 #include <boost/algorithm/string/join.hpp>
 #include <compiler/error.hpp>
@@ -19,10 +19,10 @@
 void SheetCompilerProgram::prepareEnvironment()
 {
     if (_programOptions->isDebugSet()) {
-        _logger->logLevel(fm::ILogger::LevelDebug);
+        _logger->logLevel(com::ILogger::LevelDebug);
     }
     else if (_programOptions->isVerboseSet()) {
-        _logger->logLevel(fm::ILogger::LevelBabble);
+        _logger->logLevel(com::ILogger::LevelBabble);
     }
     _logger->babble(WMLogLambda(printIntro(log)));
     prepareSearchPaths();
@@ -40,7 +40,7 @@ void SheetCompilerProgram::printIntro(std::ostream &os)
        << "\t(c) Samba Godschynski "                          << std::endl
        << "\thttps://werckme.github.io"                       << std::endl
        << "\tversion: "                   << SHEET_VERSION    << std::endl
-       << "\tMIDI ppq value: "            << fm::PPQ          << std::endl
+       << "\tMIDI ppq value: "            << com::PPQ          << std::endl
     ;
 }
 
@@ -54,7 +54,7 @@ void SheetCompilerProgram::compile()
     auto file = _programOptions->getInput();
     _logger->babble(WMLogLambda(log << "parsing '" << file << "'"));
     auto document =_documentParser->parse(file);
-    if (_logger->logLevel() >= fm::ILogger::LevelBabble) {
+    if (_logger->logLevel() >= com::ILogger::LevelBabble) {
         printSearchPaths();
     }
     _logger->babble(WMLogLambda(log << "compiling '" << file << "'"));    
@@ -63,12 +63,12 @@ void SheetCompilerProgram::compile()
         _logger->babble(WMLogLambda(log << "aplying conduction rules"));
         _conductionsPerformer->applyConductions();
         if (_programOptions->isBeginSet() || _programOptions->isEndSet()) {
-            auto beginTicks = _programOptions->isBeginSet() ? _programOptions->getBegin() * fm::PPQ : 0;
-            auto endTicks = _programOptions->isEndSet() ? _programOptions->getEnd() * fm::PPQ : fm::Ticks(INT_MAX);
+            auto beginTicks = _programOptions->isBeginSet() ? _programOptions->getBegin() * com::PPQ : 0;
+            auto endTicks = _programOptions->isEndSet() ? _programOptions->getEnd() * com::PPQ : com::Ticks(INT_MAX);
             _midiFile->crop(beginTicks, endTicks);
         }
         _midiFile->seal();
-    } catch(fm::Exception &ex) {
+    } catch(com::Exception &ex) {
         ex << sheet::compiler::ex_sheet_document(document);
         throw;
     }
@@ -76,9 +76,9 @@ void SheetCompilerProgram::compile()
     _documentWriter->write(document);
 }
 
-void SheetCompilerProgram::addSearchPath(const fm::String &path)
+void SheetCompilerProgram::addSearchPath(const com::String &path)
 {
-    auto &wm = fm::getWerckmeister();
+    auto &wm = com::getWerckmeister();
     wm.addSearchPath(path);
 }
 
@@ -97,7 +97,7 @@ void SheetCompilerProgram::prepareSearchPaths()
 
 void SheetCompilerProgram::printSearchPaths() const
 {
-    const auto& paths = fm::getWerckmeister().searchPaths();
+    const auto& paths = com::getWerckmeister().searchPaths();
     auto strSearchPaths = boost::algorithm::join(paths, "\n");
     _logger->babble(WMLogLambda(log << "search paths:" << std::endl << strSearchPaths << std::endl));
 }
@@ -110,7 +110,7 @@ int SheetCompilerProgram::execute() {
             return 0;
         }  
         if (_programOptions->isVersionSet()) {
-            auto &wm = fm::getWerckmeister();
+            auto &wm = com::getWerckmeister();
             std::cout << wm.version() << std::endl;
             return 0;
         }
@@ -120,7 +120,7 @@ int SheetCompilerProgram::execute() {
         compile();
         return 0;
     }
-    catch (const fm::Exception &ex)
+    catch (const com::Exception &ex)
 	{
         _documentWriter->writeException(ex);
 	}

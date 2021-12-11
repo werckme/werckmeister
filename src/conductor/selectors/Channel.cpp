@@ -9,7 +9,7 @@ namespace sheet
             const auto &ev = *evm.noteOn;
             for (const auto &argument : arguments)
             {
-                if (ev.channel() == fm::Byte(argument.numberValue))
+                if (ev.channel() == com::Byte(argument.numberValue))
                 {
                     return true;
                 }

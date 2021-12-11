@@ -1,9 +1,9 @@
 #ifndef PARSER_SYMBOLS_HPP
 #define PARSER_SYMBOLS_HPP
 
-#include <fm/units.hpp>
-#include <fm/literals.hpp>
-#include <fm/common.hpp>
+#include <com/units.hpp>
+#include <com/literals.hpp>
+#include <com/common.hpp>
 #include <boost/spirit/include/qi.hpp>
 #include <sheet/objects/Event.h>
 
@@ -15,66 +15,66 @@ namespace sheet {
 			DegreeSymbols()
 			{
 				add
-				("I", fm::degrees::I)
-				("II", fm::degrees::II)
-				("III", fm::degrees::III)
-				("IV", fm::degrees::IV)
-				("V", fm::degrees::V)
-				("VI", fm::degrees::VI)
-				("VII", fm::degrees::VII)
+				("I", com::degrees::I)
+				("II", com::degrees::II)
+				("III", com::degrees::III)
+				("IV", com::degrees::IV)
+				("V", com::degrees::V)
+				("VI", com::degrees::VI)
+				("VII", com::degrees::VII)
 
-				("I#", fm::degrees::Iis)
-				("II#", fm::degrees::IIis)
-				("III#", fm::degrees::IIIis)
-				("IV#", fm::degrees::IVis)
-				("V#", fm::degrees::Vis)
-				("VI#", fm::degrees::VIis)
-				("VII#", fm::degrees::VIIis)
+				("I#", com::degrees::Iis)
+				("II#", com::degrees::IIis)
+				("III#", com::degrees::IIIis)
+				("IV#", com::degrees::IVis)
+				("V#", com::degrees::Vis)
+				("VI#", com::degrees::VIis)
+				("VII#", com::degrees::VIIis)
 
-				("Ib", fm::degrees::Ies)
-				("IIb", fm::degrees::IIes)
-				("IIIb", fm::degrees::IIIes)
-				("IVb", fm::degrees::IVes)
-				("Vb", fm::degrees::Ves)
-				("VIb", fm::degrees::VIes)
-				("VIIb", fm::degrees::VIIes)
+				("Ib", com::degrees::Ies)
+				("IIb", com::degrees::IIes)
+				("IIIb", com::degrees::IIIes)
+				("IVb", com::degrees::IVes)
+				("Vb", com::degrees::Ves)
+				("VIb", com::degrees::VIes)
+				("VIIb", com::degrees::VIIes)
 
-				("I##", fm::degrees::Iisis)
-				("II##", fm::degrees::IIisis)
-				("III##", fm::degrees::IIIisis)
-				("IV##", fm::degrees::IVisis)
-				("V##", fm::degrees::Visis)
-				("VI##", fm::degrees::VIisis)
-				("VII##", fm::degrees::VIIisis)
+				("I##", com::degrees::Iisis)
+				("II##", com::degrees::IIisis)
+				("III##", com::degrees::IIIisis)
+				("IV##", com::degrees::IVisis)
+				("V##", com::degrees::Visis)
+				("VI##", com::degrees::VIisis)
+				("VII##", com::degrees::VIIisis)
 
-				("Ibb", fm::degrees::Ieses)
-				("IIbb", fm::degrees::IIeses)
-				("IIIbb", fm::degrees::IIIeses)
-				("IVbb", fm::degrees::IVeses)
-				("Vbb", fm::degrees::Veses)
-				("VIbb", fm::degrees::VIeses)
-				("VIIbb", fm::degrees::VIIeses)
+				("Ibb", com::degrees::Ieses)
+				("IIbb", com::degrees::IIeses)
+				("IIIbb", com::degrees::IIIeses)
+				("IVbb", com::degrees::IVeses)
+				("Vbb", com::degrees::Veses)
+				("VIbb", com::degrees::VIeses)
+				("VIIbb", com::degrees::VIIeses)
 
-				("I###", fm::degrees::Iisisis)
-				("II###", fm::degrees::IIisisis)
-				("III###", fm::degrees::IIIisisis)
-				("IV###", fm::degrees::IVisisis)
-				("V###", fm::degrees::Visisis)
-				("VI###", fm::degrees::VIisisis)
-				("VII###", fm::degrees::VIIisisis)
+				("I###", com::degrees::Iisisis)
+				("II###", com::degrees::IIisisis)
+				("III###", com::degrees::IIIisisis)
+				("IV###", com::degrees::IVisisis)
+				("V###", com::degrees::Visisis)
+				("VI###", com::degrees::VIisisis)
+				("VII###", com::degrees::VIIisisis)
 
-				("Ibbb", fm::degrees::Ieseses)
-				("IIbbb", fm::degrees::IIeseses)
-				("IIIbbb", fm::degrees::IIIeseses)
-				("IVbbb", fm::degrees::IVeseses)
-				("Vbbb", fm::degrees::Veseses)
-				("VIbbb", fm::degrees::VIeseses)
-				("VIIbbb", fm::degrees::VIIeseses)				
+				("Ibbb", com::degrees::Ieseses)
+				("IIbbb", com::degrees::IIeseses)
+				("IIIbbb", com::degrees::IIIeseses)
+				("IVbbb", com::degrees::IVeseses)
+				("Vbbb", com::degrees::Veseses)
+				("VIbbb", com::degrees::VIeseses)
+				("VIIbbb", com::degrees::VIIeseses)				
 				;
 			}
 		};
 
-		struct ExpressionSymbols : boost::spirit::qi::symbols<char, fm::String>
+		struct ExpressionSymbols : boost::spirit::qi::symbols<char, com::String>
 		{
 			ExpressionSymbols()
 			{
@@ -99,27 +99,27 @@ namespace sheet {
 			PitchSymbols()
 			{
 				add
-				("c", fm::notes::C)
-				("c#", fm::notes::CIS)
-				("db", fm::notes::DES)
-				("d", fm::notes::D)
-				("d#", fm::notes::DIS)
-				("eb", fm::notes::ES)
-				("e", fm::notes::E)
-				("fb", fm::notes::FES)
-				("e#", fm::notes::F)
-				("f", fm::notes::F)
-				("f#", fm::notes::FIS)
-				("gb", fm::notes::GES)
-				("g", fm::notes::G)
-				("g#", fm::notes::GIS)
-				("ab", fm::notes::AS)
-				("a", fm::notes::A)
-				("a#", fm::notes::AIS)
-				("bb", fm::notes::BES)
-				("b", fm::notes::B)
-				("cb", fm::notes::CES)
-				("b#", fm::notes::C)
+				("c", com::notes::C)
+				("c#", com::notes::CIS)
+				("db", com::notes::DES)
+				("d", com::notes::D)
+				("d#", com::notes::DIS)
+				("eb", com::notes::ES)
+				("e", com::notes::E)
+				("fb", com::notes::FES)
+				("e#", com::notes::F)
+				("f", com::notes::F)
+				("f#", com::notes::FIS)
+				("gb", com::notes::GES)
+				("g", com::notes::G)
+				("g#", com::notes::GIS)
+				("ab", com::notes::AS)
+				("a", com::notes::A)
+				("a#", com::notes::AIS)
+				("bb", com::notes::BES)
+				("b", com::notes::B)
+				("cb", com::notes::CES)
+				("b#", com::notes::C)
 				;
 			}
 
@@ -145,11 +145,11 @@ namespace sheet {
 
 		};
 
-		struct DurationSymbols : boost::spirit::qi::symbols<char, fm::Ticks>
+		struct DurationSymbols : boost::spirit::qi::symbols<char, com::Ticks>
 		{
 			DurationSymbols()
 			{
-				using namespace fm;
+				using namespace com;
 				add
 				("1", 1.0_N1)
 				("2", 1.0_N2)

@@ -1,9 +1,9 @@
 #include "ConductionsPerformer.h"
 #include <sheet/Document.h>
-#include <fm/werckmeister.hpp>
+#include <com/werckmeister.hpp>
 #include "selectors/ISelector.h"
 #include <compiler/error.hpp>
-#include <fm/tools.h>
+#include <com/tools.h>
 #include <compiler/context/MidiContext.h>
 #include <compiler/error.hpp>
 #include <map>
@@ -15,14 +15,14 @@ namespace sheet
 	{
 		namespace
 		{
-			fm::String selNamespace_ = "conductor.sel.";
-        	fm::String declNamespace_ = "conductor.decl.";
-			fm::midi::Event *findCorrespondingNoteOffEvent(fm::midi::EventContainer::Iterator noteOn, fm::midi::EventContainer::Iterator end)
+			com::String selNamespace_ = "conductor.sel.";
+        	com::String declNamespace_ = "conductor.decl.";
+			com::midi::Event *findCorrespondingNoteOffEvent(com::midi::EventContainer::Iterator noteOn, com::midi::EventContainer::Iterator end)
 			{
 				auto it = noteOn;
 				for (auto it=noteOn; it!=end; ++it)
 				{
-					if (it->eventType() != fm::midi::NoteOff)
+					if (it->eventType() != com::midi::NoteOff)
 					{
 						continue;
 					}
@@ -35,13 +35,13 @@ namespace sheet
 			}
 
 			/// finds predecsessor note on and off of the same picth and chanel as the given note, or null
-			std::pair<fm::midi::Event*, fm::midi::Event*> findPredecessorOfSamePitch(fm::midi::EventContainer::Iterator note, fm::midi::EventContainer::Iterator begin)
+			std::pair<com::midi::Event*, com::midi::Event*> findPredecessorOfSamePitch(com::midi::EventContainer::Iterator note, com::midi::EventContainer::Iterator begin)
 			{
-				fm::midi::Event* noteOn = nullptr;
-				fm::midi::Event* noteOff = nullptr;
+				com::midi::Event* noteOn = nullptr;
+				com::midi::Event* noteOff = nullptr;
 				for(auto it=note; it != begin; --it)
 				{
-					if (it->eventType() != fm::midi::NoteOn && it->eventType() != fm::midi::NoteOff)
+					if (it->eventType() != com::midi::NoteOn && it->eventType() != com::midi::NoteOff)
 					{
 						continue;
 					}
@@ -49,11 +49,11 @@ namespace sheet
 					{
 						continue;
 					}
-					if (it->eventType() == fm::midi::NoteOff) 
+					if (it->eventType() == com::midi::NoteOff) 
 					{
 						noteOff = &(*it);
 					}
-					if (it->eventType() == fm::midi::NoteOn) 
+					if (it->eventType() == com::midi::NoteOn) 
 					{
 						noteOn = &(*it);
 					}
@@ -65,7 +65,7 @@ namespace sheet
 				return std::make_pair(nullptr, nullptr);
 			}
 
-			inline fm::Ticks calculateBarNumber(fm::Ticks quarters, TimeSignature signature)
+			inline com::Ticks calculateBarNumber(com::Ticks quarters, TimeSignature signature)
 			{
 				return (quarters * signature.second) / (4.0 * signature.first);
 			}
@@ -80,39 +80,39 @@ namespace sheet
 		ConductionsPerformer::Events ConductionsPerformer::findMatches(const sheet::ConductionSelector &selector) const
 		{
 			Events result;
-			auto &wm = fm::getWerckmeister();
+			auto &wm = com::getWerckmeister();
 			for (auto &track : _midifile->tracks())
 			{
 				auto it = track->events().container().begin();
 				auto end = track->events().container().end();
 				auto begin = track->events().container().begin();
 				TimeSignature timeSignature = {4, 4};
-				fm::Ticks signatureChangeBarOffset = 0;
-				fm::String instrumentName;
+				com::Ticks signatureChangeBarOffset = 0;
+				com::String instrumentName;
 				for (; it != end; ++it)
 				{
-					if (it->eventType() == fm::midi::MetaEvent && it->metaEventType() == fm::midi::TimeSignature)
+					if (it->eventType() == com::midi::MetaEvent && it->metaEventType() == com::midi::TimeSignature)
 					{
-						fm::Ticks quarters = it->absPosition() / fm::PPQ;
-						fm::Ticks oldBarNumber = calculateBarNumber(quarters, timeSignature);
-						timeSignature = fm::midi::Event::MetaGetSignatureValue(it->metaData(), it->metaDataSize());
-						fm::Ticks newBarNumber = calculateBarNumber(quarters, timeSignature);
+						com::Ticks quarters = it->absPosition() / com::PPQ;
+						com::Ticks oldBarNumber = calculateBarNumber(quarters, timeSignature);
+						timeSignature = com::midi::Event::MetaGetSignatureValue(it->metaData(), it->metaDataSize());
+						com::Ticks newBarNumber = calculateBarNumber(quarters, timeSignature);
 						signatureChangeBarOffset += oldBarNumber - newBarNumber;
 					}
-					if (it->eventType() == fm::midi::MetaEvent && it->metaEventType() == fm::midi::CustomMetaEvent)
+					if (it->eventType() == com::midi::MetaEvent && it->metaEventType() == com::midi::CustomMetaEvent)
 					{
-						auto customEvent = fm::midi::Event::MetaGetCustomData(it->metaData(), it->metaDataSize());
-						if (customEvent.type == fm::midi::CustomMetaData::SetInstrument)
+						auto customEvent = com::midi::Event::MetaGetCustomData(it->metaData(), it->metaDataSize());
+						if (customEvent.type == com::midi::CustomMetaData::SetInstrument)
 						{
-							instrumentName = fm::String(customEvent.data.begin(), customEvent.data.end());
+							instrumentName = com::String(customEvent.data.begin(), customEvent.data.end());
 						}
 					}
-					fm::midi::Event &event = *it;
+					com::midi::Event &event = *it;
 					if (!isEventOfInterest(event))
 					{
 						continue;
 					}
-					fm::Ticks quarters = it->absPosition() / fm::PPQ;
+					com::Ticks quarters = it->absPosition() / com::PPQ;
 					auto selectorImpl = wm.solveOrDefault<ISelector>(selNamespace_ + selector.type);
 					if (!selectorImpl)
 					{
@@ -142,7 +142,7 @@ namespace sheet
 		ConductionsPerformer::Events ConductionsPerformer::findMatches(const sheet::ConductionSelector &selector, Events &events) const
 		{
 			Events result;
-			auto &wm = fm::getWerckmeister();
+			auto &wm = com::getWerckmeister();
 			for (auto eventAndMetaInfo : events)
 			{
 				if (!isEventOfInterest(*eventAndMetaInfo.noteOn))
@@ -164,7 +164,7 @@ namespace sheet
 
 		ConductionsPerformer::EventsAndDeclarationsCollection ConductionsPerformer::selectEvents() const
 		{
-			auto &wm = fm::getWerckmeister();
+			auto &wm = com::getWerckmeister();
 			auto result = EventsAndDeclarationsCollection();
 
 			int nthRule = 0;
@@ -200,7 +200,7 @@ namespace sheet
 							}
 							eventsAndDeclarations->events.swap(matchedMidiEvents);
 						}
-						catch (fm::Exception& ex)
+						catch (com::Exception& ex)
 						{
 							ex << compiler::ex_sheet_source_info(selector);
 							throw;
@@ -221,7 +221,7 @@ namespace sheet
 							declarationImpl->specificity(specificity);
 							eventsAndDeclarations->declarations.push_back(declarationImpl);
 						}
-						catch (fm::Exception& ex)
+						catch (com::Exception& ex)
 						{
 							ex << compiler::ex_sheet_source_info(declaration);
 							throw;
@@ -238,7 +238,7 @@ namespace sheet
 			// 2. order ascending by declaration prio (higher prio values comes last)
 			// 3. perform
 			typedef std::pair<const EventWithMetaInfo*, IDeclarationPtr> DeclarationData;
-			std::multimap<const fm::midi::Event*, DeclarationData> eventsWithDeclarations;
+			std::multimap<const com::midi::Event*, DeclarationData> eventsWithDeclarations;
 			// 1.
 			for (const auto &eventsAndDeclarations : collection)
 			{
@@ -254,7 +254,7 @@ namespace sheet
 			auto it = eventsWithDeclarations.begin();
 			while(it != eventsWithDeclarations.end()) 
 			{
-				const fm::midi::Event* event = it->first;
+				const com::midi::Event* event = it->first;
 				auto rangeIts = eventsWithDeclarations.equal_range(event);
 				std::vector<DeclarationData> declarationDataContainer;
 				declarationDataContainer.reserve(eventsWithDeclarations.count(event));
@@ -284,7 +284,7 @@ namespace sheet
 							eventAndMetaInfo.predecessorNoteOff,
 						});
 					}
-					catch(fm::Exception &ex)
+					catch(com::Exception &ex)
 					{
 						ex << compiler::ex_sheet_source_info(declaration->getDeclarationData());
 						throw ex;
@@ -295,9 +295,9 @@ namespace sheet
 			
 		}
 
-		bool ConductionsPerformer::isEventOfInterest(const fm::midi::Event &event) const
+		bool ConductionsPerformer::isEventOfInterest(const com::midi::Event &event) const
 		{
-			return event.eventType() == fm::midi::NoteOn;
+			return event.eventType() == com::midi::NoteOn;
 		}
 	}
 }

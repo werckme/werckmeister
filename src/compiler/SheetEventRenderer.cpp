@@ -3,7 +3,7 @@
 #include "spielanweisung/spielanweisungen.h"
 #include "spielanweisung/Vorschlag.h"
 #include "modification/AModification.h"
-#include <fm/werckmeister.hpp>
+#include <com/werckmeister.hpp>
 #include <compiler/commands/ACommand.h>
 #include <compiler/commands/AUsingAnEvent.h>
 #include <compiler/Warning.hpp>
@@ -104,18 +104,18 @@ namespace sheet {
 			template<>
 			bool renderEvent<Event::Group>(SheetEventRenderer* renderer, const Event *ev)
 			{
-				const fm::Ticks eventDuration = ev->duration;
+				const com::Ticks eventDuration = ev->duration;
 				if (eventDuration == 0) {
 					return true;
 				}
-				fm::Ticks totalGroupEventDuration = 0;
+				com::Ticks totalGroupEventDuration = 0;
 				for (const auto &groupedEvent : ev->eventGroup) {
 					totalGroupEventDuration += groupedEvent.duration;
 				}
 				if (totalGroupEventDuration == 0) {
 					return true;
 				}
-				const fm::Ticks div = totalGroupEventDuration / eventDuration;
+				const com::Ticks div = totalGroupEventDuration / eventDuration;
 				for (const auto &groupedEvent : ev->eventGroup) {
 					Event copy = groupedEvent;
 					copy.duration /= div;
@@ -139,13 +139,13 @@ namespace sheet {
 				ctx_->warningHandler(std::bind(&SheetEventRenderer::onWarning, this, std::placeholders::_1, ev));
 				_addEvent(this, &ev);
 				ctx_->warningHandler(nullptr);
-			} catch(fm::Exception &ex) {
+			} catch(com::Exception &ex) {
 				ex << ex_sheet_source_info(ev);
 				throw;
 			}
 		}
 
-		void SheetEventRenderer::onWarning(const fm::String &message, const Event &event)
+		void SheetEventRenderer::onWarning(const com::String &message, const Event &event)
 		{
 			IEventLoggerPtr eventLogger = std::dynamic_pointer_cast<IEventLogger>(logger_);
 			if (!eventLogger) {
@@ -160,10 +160,10 @@ namespace sheet {
 			Event ev = _ev;
 			auto meta = ctx_->voiceMetaData();
 			auto tmpExpression = meta->expression;
-			if (meta->expressionPlayedOnce != fm::expression::Default) {
+			if (meta->expressionPlayedOnce != com::expression::Default) {
 				tmpExpression = meta->expression;
 				meta->expression = meta->expressionPlayedOnce;
-				meta->expressionPlayedOnce = fm::expression::Default;
+				meta->expressionPlayedOnce = com::expression::Default;
 			}
 			ev.velocity = ctx_->velocity();
 			AModification::Events events = { ev };
@@ -214,7 +214,7 @@ namespace sheet {
 		{
 			auto ctx = context();
             auto meta = ctx->voiceMetaData();
-			auto position = meta->position + static_cast<fm::Ticks>(pitchBendEvent.offset);
+			auto position = meta->position + static_cast<com::Ticks>(pitchBendEvent.offset);
 			ctx->renderPitchbend(pitchBendEvent.pitchBendValue, position);
 		}
 
@@ -223,7 +223,7 @@ namespace sheet {
 			const auto &args = metaEvent.metaArgs;
 			const auto &commandName = metaEvent.stringValue;
 			try {
-				auto &wm = fm::getWerckmeister();
+				auto &wm = com::getWerckmeister();
 				auto command = wm.solveOrDefault<ACommand>(commandName);
 				if (!command) {
 					FM_THROW(Exception, "command not found: " + commandName);

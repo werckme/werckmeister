@@ -1,26 +1,26 @@
 #ifndef ISELECTOR_H
 #define ISELECTOR_H
 
-#include <fm/IRegisterable.h>
-#include <fm/midi.hpp>
+#include <com/IRegisterable.h>
+#include <com/midi.hpp>
 #include <sheet/objects/ConductionSheetDef.h>
 
 namespace sheet
 {
     namespace conductor
     {
-        typedef std::pair<fm::Byte, fm::Byte> TimeSignature;
+        typedef std::pair<com::Byte, com::Byte> TimeSignature;
         struct EventWithMetaInfo
         {
-            fm::midi::Event* noteOn = nullptr;
-            fm::midi::Event* noteOff = nullptr;
-            fm::midi::Event* predecessorNoteOn = nullptr; // of same channel & pitch
-            fm::midi::Event* predecessorNoteOff = nullptr; // of same channel & pitch
+            com::midi::Event* noteOn = nullptr;
+            com::midi::Event* noteOff = nullptr;
+            com::midi::Event* predecessorNoteOn = nullptr; // of same channel & pitch
+            com::midi::Event* predecessorNoteOff = nullptr; // of same channel & pitch
             TimeSignature timeSignature = {4, 4};
-            fm::String instrumentName;
-            fm::Ticks barNumber = 0;
+            com::String instrumentName;
+            com::Ticks barNumber = 0;
         };
-        class ISelector : public fm::IRegisterable
+        class ISelector : public com::IRegisterable
         {
         public:
             virtual bool isMatch(const ConductionSelector::Arguments&, const EventWithMetaInfo&) const = 0;

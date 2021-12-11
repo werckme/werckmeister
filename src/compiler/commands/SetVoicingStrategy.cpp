@@ -1,6 +1,6 @@
 #include "SetVoicingStrategy.h"
 #include <compiler/context/IContext.h>
-#include <fm/werckmeister.hpp>
+#include <com/werckmeister.hpp>
 
 namespace sheet {
     namespace compiler {
@@ -17,8 +17,8 @@ namespace sheet {
         void SetVoicingStrategy::setArguments(const Arguments &args)
         {
             Base::setArguments(args);
-            auto voicingStrategyName = parameters[argumentNames.SetVoicingStrategy.Use].value<fm::String>();
-            this->voicingStrategy = fm::getWerckmeister().getVoicingStrategy(voicingStrategyName);
+            auto voicingStrategyName = parameters[argumentNames.SetVoicingStrategy.Use].value<com::String>();
+            this->voicingStrategy = com::getWerckmeister().getVoicingStrategy(voicingStrategyName);
             if (args.size() <= 1) {
                 return;
             }

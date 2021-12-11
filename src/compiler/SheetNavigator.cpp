@@ -3,23 +3,23 @@
 #include <sheet/objects/Voice.h>
 #include <algorithm>
 #include <unordered_map>
-#include <fm/common.hpp>
+#include <com/common.hpp>
 #include <compiler/metaCommands.h>
-#include <fm/config.hpp>
-#include <fm/werckmeister.hpp>
+#include <com/config.hpp>
+#include <com/werckmeister.hpp>
 #include <compiler/commands/ACommand.h>
 #include <compiler/argumentNames.h>
-#include <fm/IHasParameter.h>
+#include <com/IHasParameter.h>
 #include <sstream>
 #include "error.hpp"
 #include <list>
 
 namespace {
-    const fm::String RepeatBegin("__repeat_begin_");
-    const fm::String RepeatEnd("__repeat_end_");
-    const fm::String RepeatBeginAndEnd("__repeat_begin_and_end_");
+    const com::String RepeatBegin("__repeat_begin_");
+    const com::String RepeatEnd("__repeat_end_");
+    const com::String RepeatBeginAndEnd("__repeat_begin_and_end_");
     struct Jump {
-        fm::String to;
+        com::String to;
         int numVisited = 0;
         int numVisitedTotal = 0;
         int numPerformed = 0;
@@ -27,13 +27,13 @@ namespace {
         int numPerform = 0;
     };
     typedef std::unordered_map<size_t, Jump> Jumps;
-    typedef std::unordered_map<fm::String, size_t> Marks;
+    typedef std::unordered_map<com::String, size_t> Marks;
     void registerMark(size_t eventContainerIndex, const sheet::Event& event, Marks &marks)
     {
-        auto markCommand = fm::getWerckmeister().solve<sheet::compiler::ACommand>(event.stringValue);
+        auto markCommand = com::getWerckmeister().solve<sheet::compiler::ACommand>(event.stringValue);
         markCommand->setArguments(event.metaArgs);
-        fm::IHasParameter::ParametersByNames &parameters = markCommand->getParameters();
-        fm::String name = parameters[argumentNames.Mark.Name].value<fm::String>();
+        com::IHasParameter::ParametersByNames &parameters = markCommand->getParameters();
+        com::String name = parameters[argumentNames.Mark.Name].value<com::String>();
         auto it = marks.find(name);
         if (it == marks.end()) {
             marks.insert(std::make_pair(name, eventContainerIndex));
@@ -52,15 +52,15 @@ namespace {
         if (it != jumps.end()) {
             return it->second;
         }
-        auto jumpCommand = fm::getWerckmeister().solve<sheet::compiler::ACommand>(event.stringValue);
+        auto jumpCommand = com::getWerckmeister().solve<sheet::compiler::ACommand>(event.stringValue);
         jumpCommand->setArguments(event.metaArgs);
-        fm::IHasParameter::ParametersByNames& parameters = jumpCommand->getParameters();
+        com::IHasParameter::ParametersByNames& parameters = jumpCommand->getParameters();
         Jump jump;
-        jump.to = parameters[argumentNames.Jump.To].value<fm::String>();
+        jump.to = parameters[argumentNames.Jump.To].value<com::String>();
         int repeatValue = parameters[argumentNames.Jump.Repeat].value<int>();
-        if (repeatValue+1 > fm::SheetNavigationMaxJumps) {
+        if (repeatValue+1 > com::SheetNavigationMaxJumps) {
             std::stringstream ss;
-            ss << "max repeat size exceeded = " << fm::SheetNavigationMaxJumps << " repeats";
+            ss << "max repeat size exceeded = " << com::SheetNavigationMaxJumps << " repeats";
             sheet::compiler::Exception exception(ss.str());
             exception << sheet::compiler::ex_sheet_source_info(event);
             throw exception;
@@ -81,7 +81,7 @@ namespace {
         return ss.str();
     }
 
-    sheet::Event createMarkerEvent(const fm::String& id)
+    sheet::Event createMarkerEvent(const com::String& id)
     {
         sheet::Event event;
         event.stringValue = SHEET_META__MARK;
@@ -93,7 +93,7 @@ namespace {
         return event;
     }
 
-    sheet::Event createJumpEvent(const fm::String &id, int repeat = 0, int ignore = 0)
+    sheet::Event createJumpEvent(const com::String &id, int repeat = 0, int ignore = 0)
     {
         sheet::Event event;
         event.type = sheet::Event::Meta;
@@ -197,9 +197,9 @@ namespace sheet {
                 if (jump.numVisited <= jump.numIgnore) {
                     continue;
                 }
-                if ((jump.numVisitedTotal) > fm::SheetNavigationMaxJumps) {
+                if ((jump.numVisitedTotal) > com::SheetNavigationMaxJumps) {
                     std::stringstream ss;
-                    ss << "max jump size exceeded = " << fm::SheetNavigationMaxJumps << " jumps";
+                    ss << "max jump size exceeded = " << com::SheetNavigationMaxJumps << " jumps";
                     sheet::compiler::Exception exception(ss.str());
                     exception << sheet::compiler::ex_sheet_source_info(event);
                     throw exception;

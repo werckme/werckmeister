@@ -30,7 +30,7 @@ namespace sheet {
         class Mark : public ACommand
         {
         public:
-            fm::IHasParameter::ParametersByNames parameters = {
+            com::IHasParameter::ParametersByNames parameters = {
                 FM_PARAMETER_DEF(argumentNames.Mark.Name, 	0), 
             };
             virtual ParametersByNames & getParameters() { return this->parameters; }

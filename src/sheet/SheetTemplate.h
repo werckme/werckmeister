@@ -12,18 +12,18 @@ namespace sheet {
     {
         typedef std::vector<const Track*> Tracks;
         SheetTemplate() = default;
-        SheetTemplate(const fm::String &name) : name(name) {}
+        SheetTemplate(const com::String &name) : name(name) {}
         Tracks tracks;
         bool empty() const { return tracks.empty(); }
-        fm::String name;
+        com::String name;
         bool operator==(const SheetTemplate &b) const 
         {
             return name == b.name;
         }
         bool operator!=(const SheetTemplate &b)	const { return !(*this == b); }
         bool isFill = false;
-        fm::Ticks ignoreUnitlPosition = -1.0;
-        fm::Ticks maxLength() const;
+        com::Ticks ignoreUnitlPosition = -1.0;
+        com::Ticks maxLength() const;
     };
 
 }

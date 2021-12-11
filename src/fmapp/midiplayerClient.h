@@ -4,15 +4,15 @@
 #include <vector>
 #include <string>
 #include <memory>
-#include <fm/config.hpp>
-#include <fm/units.hpp>
+#include <com/config.hpp>
+#include <com/units.hpp>
 #include <chrono>
 #include <mutex>
 #include <algorithm>
-#include <fm/midi.hpp>
+#include <com/midi.hpp>
 #include <list>
 #include <unordered_map>
-#include <fm/config/configServer.h>
+#include <com/config/configServer.h>
 #include <algorithm>
 #include <iostream>
 
@@ -40,19 +40,19 @@ namespace fmapp {
 		Outputs getOutputs() const;
 		bool isPlaying() const { return state_ == Playing; }
 		void play();
-		void play(fm::Ticks ticks);
+		void play(com::Ticks ticks);
 		void panic();
 		void stop();
-		fm::Ticks elapsed() const { return MidiProvider::millisToTicks(elapsedMillis_); }
+		com::Ticks elapsed() const { return MidiProvider::millisToTicks(elapsedMillis_); }
 		void reset();
-		void send(const fm::midi::Event &ev, const Output *output = nullptr);
-		inline fm::BPM bpm() const { return MidiProvider::bpm(); }
-		void bpm(fm::BPM bpm);
-		void updateOutputMapping(const fm::ConfigServer::Devices &devices);
+		void send(const com::midi::Event &ev, const Output *output = nullptr);
+		inline com::BPM bpm() const { return MidiProvider::bpm(); }
+		void bpm(com::BPM bpm);
+		void updateOutputMapping(const com::ConfigServer::Devices &devices);
 		OutputInfo getOutputInfo(const std::string &deviceName) const;
 	private:
 		const OutputInfo * getOutputInfo() const;
-		void handleMetaEvent(const fm::midi::Event &ev);
+		void handleMetaEvent(const com::midi::Event &ev);
 		void changeDevice(const std::string &deviceId);
 		typedef std::recursive_mutex Lock;
 		/**
@@ -85,7 +85,7 @@ namespace fmapp {
 	}
 
 	template<class TBackend, class TMidiProvider, class TTimer>
-	void MidiplayerClient<TBackend, TMidiProvider, TTimer>::bpm(fm::BPM bpm)
+	void MidiplayerClient<TBackend, TMidiProvider, TTimer>::bpm(com::BPM bpm)
 	{
 		auto elapsedTicks = elapsed();
 		MidiProvider::bpm(bpm);
@@ -93,7 +93,7 @@ namespace fmapp {
 	}
 
 	template<class TBackend, class TMidiProvider, class TTimer>
-	void MidiplayerClient<TBackend, TMidiProvider, TTimer>::updateOutputMapping(const fm::ConfigServer::Devices &devices)
+	void MidiplayerClient<TBackend, TMidiProvider, TTimer>::updateOutputMapping(const com::ConfigServer::Devices &devices)
 	{
 		outputMap_.clear();
 		auto outputs = getOutputs();
@@ -137,7 +137,7 @@ namespace fmapp {
 		}
 		using namespace std::chrono;
 		auto t = Clock::now();
-		elapsedMillis_ += duration_cast<duration<fm::Ticks, std::milli>>(t - elapsed_time_).count();
+		elapsedMillis_ += duration_cast<duration<com::Ticks, std::milli>>(t - elapsed_time_).count();
 		elapsed_time_ = t;
 	}
 
@@ -173,9 +173,9 @@ namespace fmapp {
 	}
 
 	template<class TBackend, class TMidiProvider, class TTimer>
-	void MidiplayerClient<TBackend, TMidiProvider, TTimer>::handleMetaEvent(const fm::midi::Event &ev)
+	void MidiplayerClient<TBackend, TMidiProvider, TTimer>::handleMetaEvent(const com::midi::Event &ev)
 	{
-		using namespace fm;
+		using namespace com;
 		if (ev.metaEventType() == midi::Tempo) {
 			auto metaIntValue = midi::Event::MetaGetIntValue(ev.metaData(), ev.metaDataSize());
 			bpm(midi::MicrosecondsPerMinute/(double)metaIntValue);
@@ -190,9 +190,9 @@ namespace fmapp {
 	}
 
 	template<class TBackend, class TMidiProvider, class TTimer>
-	void MidiplayerClient<TBackend, TMidiProvider, TTimer>::send(const fm::midi::Event &ev, const Output *output)
+	void MidiplayerClient<TBackend, TMidiProvider, TTimer>::send(const com::midi::Event &ev, const Output *output)
 	{
-		if (ev.eventType() == fm::midi::MetaEvent) {
+		if (ev.eventType() == com::midi::MetaEvent) {
 			this->handleMetaEvent(ev);
 			return;
 		}
@@ -241,17 +241,17 @@ namespace fmapp {
 	}
 
 	template<class TBackend, class TMidiProvider, class TTimer>
-	void MidiplayerClient<TBackend, TMidiProvider, TTimer>::play(fm::Ticks ticks)
+	void MidiplayerClient<TBackend, TMidiProvider, TTimer>::play(com::Ticks ticks)
 	{
 		std::lock_guard<Lock> lockGuard(lock);
-		MidiProvider::iterate([this, ticks](fm::Ticks pos, const typename MidiProvider::Event &ev) 
+		MidiProvider::iterate([this, ticks](com::Ticks pos, const typename MidiProvider::Event &ev) 
 		{	// consume all events except NoteOn and NoteOff
 			if (pos >= ticks) {
 				currentTrack_ = MidiProvider::INVALID_TRACKID;
 				return false; // aka break
 			}
-			if (ev.event.eventType() == fm::midi::NoteOn
-				|| ev.event.eventType() == fm::midi::NoteOff)
+			if (ev.event.eventType() == com::midi::NoteOn
+				|| ev.event.eventType() == com::midi::NoteOff)
 			{
 				return true; // aka continue
 			}

@@ -1,11 +1,11 @@
 #ifndef COMPILER_PREPROCESSOR_H
 #define COMPILER_PREPROCESSOR_H
 
-#include <fm/common.hpp>
+#include <com/common.hpp>
 #include "IPreprocessor.h"
 #include "ASheetEventRenderer.h"
 #include <compiler/context/IContext.h>
-#include <fm/IDefinitionsServer.h>
+#include <com/IDefinitionsServer.h>
 #include <forward.hpp>
 #include "ISheetNavigator.h"
 
@@ -16,12 +16,12 @@ namespace sheet {
 		private:
 			IContextPtr 			_context;
 			ASheetEventRendererPtr _renderer;
-			fm::IDefinitionsServerPtr _definitionServer;
+			com::IDefinitionsServerPtr _definitionServer;
 			ISheetNavigatorPtr		_sheetNavigator;
 		public:
 			Preprocessor(IContextPtr context, 
 				ASheetEventRendererPtr renderer, 
-				fm::IDefinitionsServerPtr definitionServer,
+				com::IDefinitionsServerPtr definitionServer,
 				ISheetNavigatorPtr		sheetNavigator
 			)
 				: _context(context)

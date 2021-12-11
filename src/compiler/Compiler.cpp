@@ -7,7 +7,7 @@
 #include "metaCommands.h"
 #include "error.hpp"
 #include <boost/exception/get_error_info.hpp>
-#include <fm/tools.h>
+#include <com/tools.h>
 #include <functional>
 
 namespace sheet {
@@ -36,7 +36,7 @@ namespace sheet {
 						return metaEvent;
 					 }
 				);
-			} catch (fm::Exception &ex) {
+			} catch (com::Exception &ex) {
 				ex << ex_sheet_document(document);
 				throw;
 			}
@@ -45,7 +45,7 @@ namespace sheet {
 				preprocessor_->preprocess(document);
 				renderAccompTrack();
 				renderTracks();
-			} catch (const fm::Exception &ex) {			
+			} catch (const com::Exception &ex) {			
 				ex << ex_sheet_document(document);
 				throw;
 			} catch(...) {
@@ -61,7 +61,7 @@ namespace sheet {
 			auto document = document_.lock();
 			for (auto &track : document->sheetDef.tracks)
 			{
-				fm::String type = fm::getFirstMetaArgumentForKey(SHEET_META__TRACK_META_KEY_TYPE, track.trackConfigs).value;
+				com::String type = com::getFirstMetaArgumentForKey(SHEET_META__TRACK_META_KEY_TYPE, track.trackConfigs).value;
 				bool isNoteEventTrack = type.empty();
 				if (!isNoteEventTrack) {
 					continue;
@@ -92,7 +92,7 @@ namespace sheet {
 		namespace {
 			void consumeChords(Track* sheetTrack, ASheetEventRenderer *sheetEventRenderer, IContext *ctx) 
 			{
-				using namespace fm;
+				using namespace com;
 				auto voice = sheetTrack->voices.begin(); 
 				std::list<Event*> barEvents;
 				ctx->setChordTrackTarget();
@@ -110,7 +110,7 @@ namespace sheet {
 
 			bool isAccompTrack(const Track &track) 
 			{
-				return fm::getFirstMetaArgumentForKey(SHEET_META__TRACK_META_KEY_TYPE, track.trackConfigs)
+				return com::getFirstMetaArgumentForKey(SHEET_META__TRACK_META_KEY_TYPE, track.trackConfigs)
 					.value == SHEET_META__TRACK_META_VALUE_TYPE_ACCOMP;
 			}
 		}

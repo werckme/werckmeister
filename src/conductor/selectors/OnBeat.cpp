@@ -2,7 +2,7 @@
 #include <cmath>
 
 namespace {
-    const fm::Ticks Tolerance = 0.0001;
+    const com::Ticks Tolerance = 0.0001;
 }
 
 namespace sheet
@@ -13,10 +13,10 @@ namespace sheet
         {
             const auto& ev = *evm.noteOn;
             for (const auto &argument : arguments) {
-                auto quarters = ev.absPosition() / fm::PPQ;
-                auto nominator = fm::Ticks(evm.timeSignature.first);
-                auto denominator = fm::Ticks(evm.timeSignature.second);
-                auto beat = ::fmod(quarters, nominator/denominator * fm::Ticks(4.0));
+                auto quarters = ev.absPosition() / com::PPQ;
+                auto nominator = com::Ticks(evm.timeSignature.first);
+                auto denominator = com::Ticks(evm.timeSignature.second);
+                auto beat = ::fmod(quarters, nominator/denominator * com::Ticks(4.0));
                 auto valueToMatch = argument.numberValue - 1;
                 if (::fabs(beat - valueToMatch) <= Tolerance) {
                     return true;

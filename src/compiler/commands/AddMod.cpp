@@ -1,7 +1,7 @@
 #include "AddMod.h"
 #include <compiler/context/IContext.h>
 #include <compiler/modification/AModification.h>
-#include <fm/werckmeister.hpp>
+#include <com/werckmeister.hpp>
 #include <algorithm>
 
 namespace sheet {
@@ -15,8 +15,8 @@ namespace sheet {
         void AddMod::setArguments(const Arguments &args)
         {
             Base::setArguments(args);
-            fm::String modName = parameters[argumentNames.AddMod.Use].value<fm::String>();
-            auto &wm = fm::getWerckmeister();
+            com::String modName = parameters[argumentNames.AddMod.Use].value<com::String>();
+            auto &wm = com::getWerckmeister();
             theModification = wm.getModification(modName);
             // remove "use" Argument from collection
             Arguments copy (args.size());

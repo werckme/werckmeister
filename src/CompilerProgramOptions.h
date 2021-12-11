@@ -1,7 +1,7 @@
 #ifndef COMPILERPROGRAMOPTIONS_HPP
 #define COMPILERPROGRAMOPTIONS_HPP
 
-#include <fm/common.hpp>
+#include <com/common.hpp>
 #include <boost/program_options.hpp>
 #include <ICompilerProgramOptions.h>
 
@@ -12,10 +12,10 @@ struct CompilerProgramOptions : public virtual ICompilerProgramOptions {
 	virtual bool isInputSet() const;
 	virtual bool isVerboseSet() const;
 	virtual bool isDebugSet() const;
-	virtual fm::String getInput() const;
+	virtual com::String getInput() const;
 	virtual bool isOutputSet() const;
 	virtual bool isNoMetaSet() const;
-	virtual fm::String getOutput() const;
+	virtual com::String getOutput() const;
 	virtual bool isJsonModeSet() const;
 	virtual bool isJsonDocInfoMode() const;
 	virtual bool isVersionSet() const;

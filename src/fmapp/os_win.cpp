@@ -52,11 +52,11 @@ namespace fmapp {
 			sigtermHandler_ = sigtermHandler;
 			::SetConsoleCtrlHandler(ConsoleHandler, TRUE);
 		}
-		fm::String getExecutablePath()
+		com::String getExecutablePath()
 		{
 			CHAR szFileName[MAX_PATH + 1];
 			GetModuleFileNameA(NULL, szFileName, MAX_PATH + 1);
-			auto strPath = fm::String(szFileName);
+			auto strPath = com::String(szFileName);
 			return boost::filesystem::path(strPath).parent_path().string();
 		}
 		int getPId() {

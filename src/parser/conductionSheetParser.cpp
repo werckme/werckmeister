@@ -13,7 +13,7 @@
 #include <boost/bind.hpp>
 #include "error.hpp"
 #include "parserSymbols.h"
-#include <fm/tools.h>
+#include <com/tools.h>
 #include "parserPositionIt.h"
 #include "pitchParser.h"
 #include <conductor/conductorNames.h>
@@ -21,9 +21,9 @@
 
 BOOST_FUSION_ADAPT_STRUCT(
 	sheet::ConductionSelector::ArgumentValue,
-	(fm::Ticks, numberValue)
+	(com::Ticks, numberValue)
 	(sheet::PitchDef, pitch)
-	(fm::String, name)
+	(com::String, name)
 )
 
 namespace {
@@ -38,7 +38,7 @@ BOOST_FUSION_ADAPT_STRUCT(
 	sheet::ConductionSelector,
 	(unsigned int, sourcePositionBegin)
 	(sheet::ASheetObjectWithSourceInfo::SourceId, sourceId)
-	(fm::String, type)
+	(com::String, type)
 	(sheet::ConductionSelector::Arguments, arguments)
 )
 
@@ -54,7 +54,7 @@ BOOST_FUSION_ADAPT_STRUCT(
 	sheet::ConductionRule::Declaration,
 	(unsigned int, sourcePositionBegin)
 	(sheet::ASheetObjectWithSourceInfo::SourceId, sourceId)
-	(fm::String, property)
+	(com::String, property)
 	(sheet::ConductionRule::Declaration::OperationType, operation)
 	(double, value)
 	(sheet::ConductionRule::Declaration::ValueUnit, unit)
@@ -109,11 +109,11 @@ namespace sheet {
 					selector_.name("selector");
 					declaration_.name("declaration");
 					numberArgument_ %= 
-						  double_[at_c<ArTickValue>(_val) = qi::_1] >> attr(PitchDef()) >> attr(fm::String())
+						  double_[at_c<ArTickValue>(_val) = qi::_1] >> attr(PitchDef()) >> attr(com::String())
 					;
 
 					pitchArgument_ %= 
-						  attr(0) >> pitchOrAlias_[at_c<ArPitch>(_val) = qi::_1] >> attr(fm::String())
+						  attr(0) >> pitchOrAlias_[at_c<ArPitch>(_val) = qi::_1] >> attr(com::String())
 					;
 
 					stringArgument_ %= 
@@ -298,10 +298,10 @@ namespace sheet {
 			};
 
 
-			void _parse(const fm::String &source, ConductionSheetDef &def, ConductionSheetDef::SourceId sourceId)
+			void _parse(const com::String &source, ConductionSheetDef &def, ConductionSheetDef::SourceId sourceId)
 			{
 				using boost::spirit::ascii::space;
-				typedef _ConductionParser<fm::String::const_iterator> ConductionParserType;
+				typedef _ConductionParser<com::String::const_iterator> ConductionParserType;
 				
 				ConductionParserType g(source.begin(), sourceId);
 				phrase_parse(source.begin(), source.end(), g, space, def);
@@ -309,12 +309,12 @@ namespace sheet {
 		}
 
 
-		ConductionSheetDef ConductionSheetParser::parse(fm::CharType const* first, fm::CharType const* last, ConductionSheetDef::SourceId sourceId)
+		ConductionSheetDef ConductionSheetParser::parse(com::CharType const* first, com::CharType const* last, ConductionSheetDef::SourceId sourceId)
 		{
 			
 			ConductionSheetDef result;
-			fm::String source(first, last);
-			fm::removeComments(source.begin(), source.end());
+			com::String source(first, last);
+			com::removeComments(source.begin(), source.end());
 			_parse(source, result, sourceId);
 			return result;
 		}

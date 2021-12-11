@@ -1,7 +1,7 @@
 #ifndef VOICE_H
 #define VOICE_H
 
-#include <fm/common.hpp>
+#include <com/common.hpp>
 #include <vector>
 #include "Event.h"
 #include "ASheetObject.h"

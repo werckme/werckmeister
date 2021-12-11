@@ -28,7 +28,7 @@ namespace sheet {
                 const Event &metaEvent = fGetMetaEvent(x);
                 try {
                     handleMetaEvent(metaEvent);
-                } catch(const fm::Exception &ex) {
+                } catch(const com::Exception &ex) {
                     ex << ex_sheet_source_info(x);
                     throw;
                 }

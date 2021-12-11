@@ -11,8 +11,8 @@
 #include <boost/spirit/include/phoenix_fusion.hpp>
 #include <boost/spirit/include/phoenix_stl.hpp>
 
-#include <fm/literals.hpp>
-#include <fm/units.hpp>
+#include <com/literals.hpp>
+#include <com/units.hpp>
 #include "error.hpp"
 #include <sstream>
 #include "parserSymbols.h"
@@ -20,7 +20,7 @@
 #include <sheet/DocumentUsing.h>
 #include <sheet/AliasPitchDef.h>
 #include <sheet/objects/Grouped.h>
-#include <fm/tools.h>
+#include <com/tools.h>
 #include "pitchParser.h"
 
 BOOST_FUSION_ADAPT_STRUCT(
@@ -30,8 +30,8 @@ BOOST_FUSION_ADAPT_STRUCT(
 
 BOOST_FUSION_ADAPT_STRUCT(
 	sheet::Argument,
-	(fm::String, name)
-	(fm::String, value)
+	(com::String, name)
+	(com::String, value)
 )
 
 BOOST_FUSION_ADAPT_STRUCT(
@@ -47,7 +47,7 @@ BOOST_FUSION_ADAPT_STRUCT(
 	(sheet::Event::Tags, tags)
 	(sheet::Event::Pitches, pitches)
 	(sheet::Event::Duration, duration)
-	(fm::String, stringValue)
+	(com::String, stringValue)
 	(sheet::Event::Args, metaArgs)
 	(unsigned int, sourcePositionEnd)
 )
@@ -77,7 +77,7 @@ BOOST_FUSION_ADAPT_STRUCT(
 	sheet::TrackConfig,
 	(unsigned int, sourcePositionBegin)
 	(sheet::ASheetObjectWithSourceInfo::SourceId, sourceId)
-	(fm::String, name)
+	(com::String, name)
 	(sheet::Event::Args, args)
 )
 
@@ -93,7 +93,7 @@ BOOST_FUSION_ADAPT_STRUCT(
 	sheet::DocumentConfig,
 	(unsigned int, sourcePositionBegin)
 	(sheet::ASheetObjectWithSourceInfo::SourceId, sourceId)
-	(fm::String, name)
+	(com::String, name)
 	(sheet::Event::Args, args)
 )
 
@@ -433,11 +433,11 @@ namespace sheet {
 				qi::rule<Iterator, DocumentConfig(), ascii::space_type> documentConfig_;
 				qi::rule<Iterator, TrackConfig(), ascii::space_type> trackConfig_;
 				qi::rule<Iterator, DocumentUsing(), ascii::space_type> documentUsing_;
-				qi::rule<Iterator, fm::String(), ascii::space_type> quoted_string;
-				qi::rule<Iterator, fm::String(), ascii::space_type> meta_arg_value_;
-				qi::rule<Iterator, fm::String(), ascii::space_type> using_;
+				qi::rule<Iterator, com::String(), ascii::space_type> quoted_string;
+				qi::rule<Iterator, com::String(), ascii::space_type> meta_arg_value_;
+				qi::rule<Iterator, com::String(), ascii::space_type> using_;
 				qi::rule<Iterator, DocumentUsing::Usings, ascii::space_type> usings_;
-				qi::rule<Iterator, fm::String(), ascii::space_type> bar_volta_;
+				qi::rule<Iterator, com::String(), ascii::space_type> bar_volta_;
 				CurrentPos<Iterator> current_pos_;
 			};
 			
@@ -468,10 +468,10 @@ namespace sheet {
 			};
 
 
-			void _parse(const fm::String &source, SheetDef &def, Event::SourceId sourceId)
+			void _parse(const com::String &source, SheetDef &def, Event::SourceId sourceId)
 			{
 				using boost::spirit::ascii::space;
-				typedef _SheetParser<fm::String::const_iterator> SheetParserType;
+				typedef _SheetParser<com::String::const_iterator> SheetParserType;
 				
 				SheetParserType g(source.begin(), sourceId);
 				phrase_parse(source.begin(), source.end(), g, space, def);
@@ -480,23 +480,23 @@ namespace sheet {
 		}
 
 
-		SheetDef SheetDefParser::parse(fm::CharType const* first, fm::CharType const* last, Event::SourceId sourceId)
+		SheetDef SheetDefParser::parse(com::CharType const* first, com::CharType const* last, Event::SourceId sourceId)
 		{
 			SheetDef result;
-			fm::String source(first, last);
-			fm::removeComments(source.begin(), source.end());
+			com::String source(first, last);
+			com::removeComments(source.begin(), source.end());
 			_parse(source, result, sourceId);
 			return result;
 		}
 
-		SheetDef ConfigParser::parse(fm::CharType const* first, fm::CharType const* last, Event::SourceId sourceId)
+		SheetDef ConfigParser::parse(com::CharType const* first, com::CharType const* last, Event::SourceId sourceId)
 		{
 			SheetDef result;
-			fm::String source(first, last);
-			fm::removeComments(source.begin(), source.end());
+			com::String source(first, last);
+			com::removeComments(source.begin(), source.end());
 
 			using boost::spirit::ascii::space;
-			typedef _ConfigParser<fm::String::const_iterator> ConfigParserType;
+			typedef _ConfigParser<com::String::const_iterator> ConfigParserType;
 
 			ConfigParserType g(source.begin(), sourceId);
 			phrase_parse(source.cbegin(), source.cend(), g, space, result);

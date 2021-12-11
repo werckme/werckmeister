@@ -9,19 +9,19 @@ endif()
 
 ## lib
 SET (SRC_FETZER_LIB
-    fm/literals.cpp
-    fm/werckmeister.cpp
-    fm/midi.cpp
-    fm/common.cpp
-    fm/exception.cpp
-    fm/AConvertsArgumentsToParameter.cpp
-    fm/config/configServer.cpp
-    fm/lua/ALuaObject.cpp
-    fm/lua/ALuaScript.cpp
-    fm/lua/ALuaWithParameter.cpp
-    fm/DefinitionsServer.cpp
-    fm/tools.cpp
-    fm/ConsoleLogger.cpp
+    com/literals.cpp
+    com/werckmeister.cpp
+    com/midi.cpp
+    com/common.cpp
+    com/exception.cpp
+    com/AConvertsArgumentsToParameter.cpp
+    com/config/configServer.cpp
+    com/lua/ALuaObject.cpp
+    com/lua/ALuaScript.cpp
+    com/lua/ALuaWithParameter.cpp
+    com/DefinitionsServer.cpp
+    com/tools.cpp
+    com/ConsoleLogger.cpp
     compiler/Compiler.cpp
     parser/chordDefParser.cpp
     parser/sheetParser.cpp

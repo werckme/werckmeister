@@ -12,7 +12,7 @@ namespace sheet {
             virtual void beginCompile() override {}
             virtual void endCompile() override {}
             virtual void visit(IContext *context, const sheet::Event &ev) override {}
-            virtual void visit(IContext *context, const fm::midi::Event &ev, IContext::TrackId trackId) override {}
+            virtual void visit(IContext *context, const com::midi::Event &ev, IContext::TrackId trackId) override {}
             virtual ~DefaultCompilerVisitor() = default;
         };
     }

@@ -1,15 +1,15 @@
 #include "Bend.h"
 #include "compiler/context/IContext.h"
 #include <algorithm>
-#include <fm/literals.hpp>
-#include <fm/tools.h>
+#include <com/literals.hpp>
+#include <com/tools.h>
 
 namespace sheet {
     namespace compiler {
 
         void Bend::perform(IContextPtr ctx, Events &events)
         {
-            using namespace fm;
+            using namespace com;
             prepareValues();
             if (events.empty()) {
                 return;
@@ -55,7 +55,7 @@ namespace sheet {
             }
             
             value = parameters[argumentNames.Bend.Value].value<int>() / 100.;
-            auto modestr = parameters[argumentNames.Bend.Mode].value<fm::String>();
+            auto modestr = parameters[argumentNames.Bend.Mode].value<com::String>();
             if (modestr == FM_STRING("from")) {
                 mode = From;
             } else {

@@ -4,7 +4,7 @@
 #include <memory>
 #include <functional>
 #include <unordered_map>
-#include <fm/midi.hpp>
+#include <com/midi.hpp>
 #include "FluidSynthWrapper.h"
 #include "AMidiBackend.h"
 
@@ -16,7 +16,7 @@ namespace fmapp {
 		FluidSynthBackend& operator=(const FluidSynthBackend&&) = delete;
 		virtual Outputs getOutputs() const override;
 		virtual ~FluidSynthBackend();
-		virtual void send(const fm::midi::Event &event, const Output *output) override;
+		virtual void send(const com::midi::Event &event, const Output *output) override;
 		virtual void tearDown() override;
 		virtual void panic() override;
 		static void createInstance(const std::string &deviceId, const std::string& soundfontPath);

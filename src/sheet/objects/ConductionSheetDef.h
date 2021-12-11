@@ -2,19 +2,19 @@
 #define SHEET_CONDUCTION_SHEET_H
 
 #include "ASheetObjectWithSourceInfo.h"
-#include <fm/common.hpp>
+#include <com/common.hpp>
 #include <vector>
 #include <sheet/PitchDef.h>
 
 namespace sheet {
 	struct ConductionSelector :  public ASheetObjectWithSourceInfo {
 		struct ArgumentValue {
-			fm::Ticks numberValue = 0;
+			com::Ticks numberValue = 0;
 			PitchDef pitch;
-			fm::String name;
+			com::String name;
 		};
 		typedef std::vector<ArgumentValue> Arguments; 
-		fm::String type;
+		com::String type;
 		Arguments arguments; 
 	};
 
@@ -33,7 +33,7 @@ namespace sheet {
 				UnitAbsolute,
 				UnitPercent	
 			};
-			fm::String property = "";
+			com::String property = "";
 			OperationType operation = OperationUnknown;
 			ValueUnit unit = UnitAbsolute;
 			double value = 0;

@@ -5,7 +5,7 @@
 #include <vector>
 #include <fluidsynth.h>
 #include <boost/dll.hpp>
-#include <fm/midi.hpp>
+#include <com/midi.hpp>
 
 #if FLUIDSYNTH_VERSION_MAJOR < 2
 #error "Fluidsynth version >2 required"
@@ -33,7 +33,7 @@ namespace fmapp {
 		FluidSynth(const FluidSynth&&) = delete;
 		FluidSynth& operator=(const FluidSynth&&) = delete;
 		virtual ~FluidSynth();
-		void send(const fm::midi::Event& event);
+		void send(const com::midi::Event& event);
 	private:
         void initSynth(const std::string soundFondPath);
         void tearDownSynth();

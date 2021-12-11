@@ -8,7 +8,7 @@ struct IPlayerProgramOptions : public virtual ICompilerProgramOptions {
 	virtual bool isLoopSet() const = 0;
 	virtual bool isWatchSet() const = 0;
 	virtual bool isUdpSet() const = 0;
-	virtual fm::String getUdpHostname() const = 0;
+	virtual com::String getUdpHostname() const = 0;
 	virtual bool isNoTimePrintSet() const = 0;
 	virtual bool isSigintWorkaroundSet() const = 0;
 	virtual void setResumeAtPosition(double quarters) = 0;

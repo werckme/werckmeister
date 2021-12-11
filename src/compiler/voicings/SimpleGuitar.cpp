@@ -1,5 +1,5 @@
 #include "SimpleGuitar.h"
-#include <fm/tools.h>
+#include <com/tools.h>
 
 namespace sheet {
 
@@ -7,48 +7,48 @@ namespace sheet {
 	{
 		if (has7(def) && has9(def) && has11(def) && has13(def)) {
 			return  OctaveMap({
-				{fm::degrees::I, -1},
-				{fm::degrees::IV, -1},
-				{fm::degrees::VII, -1},
-				{fm::degrees::II, 0},
-				{fm::degrees::VI, 0},
+				{com::degrees::I, -1},
+				{com::degrees::IV, -1},
+				{com::degrees::VII, -1},
+				{com::degrees::II, 0},
+				{com::degrees::VI, 0},
 			});
 		}		
 		if (has7(def) && has9(def) && has11(def)) {
 			return  OctaveMap({
-				{fm::degrees::I, -1},
-				{fm::degrees::IV, -1},
-				{fm::degrees::VII, -1},
-				{fm::degrees::II, 0},
-				{fm::degrees::V, 0},
+				{com::degrees::I, -1},
+				{com::degrees::IV, -1},
+				{com::degrees::VII, -1},
+				{com::degrees::II, 0},
+				{com::degrees::V, 0},
 			});
 		}
 		if (has7(def) && has9(def)) {
 			return  OctaveMap({
-				{fm::degrees::I, -1},
-				{fm::degrees::III, -1},
-				{fm::degrees::VII, -1},
-				{fm::degrees::II, 0},
-				{fm::degrees::V, 0},
+				{com::degrees::I, -1},
+				{com::degrees::III, -1},
+				{com::degrees::VII, -1},
+				{com::degrees::II, 0},
+				{com::degrees::V, 0},
 			});
 		}
 		if (has7(def)) {
 			return  OctaveMap({
-				{fm::degrees::I, -1},
-				{fm::degrees::V, -1},
-				{fm::degrees::VII, -1},
-				{fm::degrees::III, 0},
-				{fm::degrees::V, 0},
-				{fm::degrees::I, 1},
+				{com::degrees::I, -1},
+				{com::degrees::V, -1},
+				{com::degrees::VII, -1},
+				{com::degrees::III, 0},
+				{com::degrees::V, 0},
+				{com::degrees::I, 1},
 			});
 		}
 		return  OctaveMap({
-			{fm::degrees::I, -1},
-			{fm::degrees::V, -1},
-			{fm::degrees::I, 0},
-			{fm::degrees::III, 0},
-			{fm::degrees::V, 0},
-			{fm::degrees::I, 1},
+			{com::degrees::I, -1},
+			{com::degrees::V, -1},
+			{com::degrees::I, 0},
+			{com::degrees::III, 0},
+			{com::degrees::V, 0},
+			{com::degrees::I, 1},
 		});
 	}
 
@@ -58,14 +58,14 @@ namespace sheet {
 		if (degreeIntervals.size() < 3) {
 			return Base::get(chord, def, degreeIntervals, timeInfo);
 		}
-		bool lowerRange = parameters[argumentNames.SimpleGuitarVoicingStrategy.Range].value<fm::String>() == "lowerRange";
+		bool lowerRange = parameters[argumentNames.SimpleGuitarVoicingStrategy.Range].value<com::String>() == "lowerRange";
 		Pitches result;
 		auto chordElements = chord.chordElements();
 		auto root = std::get<0>(chordElements);
 		PitchDef x;
 		auto octaves = createOctaveMap(def);
 		int transpose = 0;
-		if (root > fm::notes::D && lowerRange) {
+		if (root > com::notes::D && lowerRange) {
 			transpose = -1;
 		}
 		for (const auto& degree : degreeIntervals) {

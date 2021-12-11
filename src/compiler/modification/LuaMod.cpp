@@ -1,12 +1,12 @@
 #include "LuaMod.h"
 #include <lua.hpp>
-#include <fm/lua/ALuaObject.h>
-#include <fm/tools.h>
+#include <com/lua/ALuaObject.h>
+#include <com/tools.h>
 #include <compiler/error.hpp>
 #include <algorithm>
 #include <compiler/lua/luaTimeInfo.h>
 #include <compiler/context/IContext.h>
-#include <fm/lua/luaHelper.h>
+#include <com/lua/luaHelper.h>
 
 static const char * LUA_EVENT_TYPE_NOTE = "note";
 static const char * LUA_EVENT_TYPE_DEGREE = "degree";
@@ -56,19 +56,19 @@ namespace sheet {
 			pushTags(L);
 			lua_settable(L, top);
             // offset
-            sheet::lua::setTableValue(L, LUA_EVENT_PROPETRY_OFFSET, top, event->offset / fm::PPQ);            
+            sheet::lua::setTableValue(L, LUA_EVENT_PROPETRY_OFFSET, top, event->offset / com::PPQ);            
             // velocity
             sheet::lua::setTableValue(L, LUA_EVENT_PROPETRY_VELOCITY, top, event->velocity);      
             // duration
-            sheet::lua::setTableValue(L, LUA_EVENT_PROPETRY_DURATION, top, event->duration / fm::PPQ);
+            sheet::lua::setTableValue(L, LUA_EVENT_PROPETRY_DURATION, top, event->duration / com::PPQ);
             // is tied
             sheet::lua::setTableValue(L, LUA_EVENT_PROPETRY_TYING, top, event->isTied());
             // pitchbend value
             pushPitchBendValue(L, top, *event);
             // totalTiedDuration
-            sheet::lua::setTableValue(L, LUA_EVENT_PROPETRY_TOAL_TIED_DURATION, top, event->tiedDurationTotal / fm::PPQ);    
+            sheet::lua::setTableValue(L, LUA_EVENT_PROPETRY_TOAL_TIED_DURATION, top, event->tiedDurationTotal / com::PPQ);    
             // tiedDuration
-            sheet::lua::setTableValue(L, LUA_EVENT_PROPERTY_TIED_DURATION, top, event->tiedDuration / fm::PPQ);
+            sheet::lua::setTableValue(L, LUA_EVENT_PROPERTY_TIED_DURATION, top, event->tiedDuration / com::PPQ);
         }
 
         void LuaEvent::pushPitchBendValue(lua_State *L, int top, const Event &event)
@@ -134,7 +134,7 @@ namespace sheet {
 
 namespace sheet {
     namespace compiler {
-        LuaModification::LuaModification(const fm::String &path) : LuaBase(path)
+        LuaModification::LuaModification(const com::String &path) : LuaBase(path)
         {
         }
 
@@ -146,7 +146,7 @@ namespace sheet {
         void LuaModification::assertCanExecute() const 
         {
             if (!canExecute()) {
-                FM_THROW(Exception, fm::String("missing '") + LUA_MODIFICATION_FENTRY + "' function");
+                FM_THROW(Exception, com::String("missing '") + LUA_MODIFICATION_FENTRY + "' function");
             }
         }
 
@@ -156,14 +156,14 @@ namespace sheet {
             sheet::lua::getTableValue(L, LUA_EVENT_PROPETRY_OFFSET, event.offset);
             sheet::lua::getTableValue(L, LUA_EVENT_PROPETRY_TOAL_TIED_DURATION, event.tiedDurationTotal);
             sheet::lua::getTableValue(L, LUA_EVENT_PROPERTY_TIED_DURATION, event.tiedDuration);
-            event.offset *= fm::PPQ;
-            event.tiedDuration *= fm::PPQ;
-            event.tiedDurationTotal *= fm::PPQ;
+            event.offset *= com::PPQ;
+            event.tiedDuration *= com::PPQ;
+            event.tiedDurationTotal *= com::PPQ;
             sheet::lua::getTableValue(L, LUA_EVENT_PROPETRY_DURATION, event.duration);
             bool isTied = false;
             sheet::lua::getTableValue(L, LUA_EVENT_PROPETRY_TYING, isTied);
             event.isTied(isTied);
-            event.duration *= fm::PPQ;            
+            event.duration *= com::PPQ;            
             lua_pushstring(L, LUA_EVENT_PROPETRY_PITCHES);
             lua_gettable(L, -2);
             if (!lua_istable(L, -1)) {
@@ -202,7 +202,7 @@ namespace sheet {
         {
             sheet::lua::getTableValue(L, LUA_EVENT_PROPETRY_PITCHBENDVALUE, event.pitchBendValue);
             sheet::lua::getTableValue(L, LUA_EVENT_PROPETRY_OFFSET, event.offset);
-            event.offset *= fm::PPQ;
+            event.offset *= com::PPQ;
             sheet::lua::getTableValue(L, LUA_EVENT_PROPETRY_DURATION, event.duration);
         }
 
@@ -219,7 +219,7 @@ namespace sheet {
                     lua_pop(L, 1);
                     continue;
                 }
-                fm::String type;
+                com::String type;
                 sheet::lua::getTableValue(L, LUA_EVENT_PROPETRY_TYPE, type);
                 if (type == LUA_EVENT_TYPE_NOTE || type == LUA_EVENT_TYPE_DEGREE) {
                     Event event;
@@ -263,7 +263,7 @@ namespace sheet {
 
         LuaModification::ParametersByNames & LuaModification::getParameters()
         {
-            return fm::lua::ALuaWithParameter::getParameters(L);
+            return com::lua::ALuaWithParameter::getParameters(L);
         }
     }
 }

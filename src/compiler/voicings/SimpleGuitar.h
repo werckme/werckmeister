@@ -16,14 +16,14 @@ namespace sheet {
      */
     class SimpleGuitar : public DirectVoicingStrategy {
     public:
-        typedef fm::Pitch Degree;
+        typedef com::Pitch Degree;
         typedef int Octave;
         typedef std::multimap<Degree, Octave> OctaveMap; 
 		typedef DirectVoicingStrategy Base;
         virtual ~SimpleGuitar() = default;
 		virtual Pitches get(const Event &chord, const ChordDef &def, const Degrees &degreeIntervals, const TimeInfo&) override;
         OctaveMap createOctaveMap(const ChordDef &def) const;
-        fm::IHasParameter::ParametersByNames parameters = {
+        com::IHasParameter::ParametersByNames parameters = {
             FM_PARAMETER_DEFAULT_DEF	(argumentNames.SimpleGuitarVoicingStrategy.Range, 	    0,  "higherRange"),
         };
         virtual ParametersByNames & getParameters() { return this->parameters; }        

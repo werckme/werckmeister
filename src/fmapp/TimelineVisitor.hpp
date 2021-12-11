@@ -3,7 +3,7 @@
 
 
 #include <forward.hpp>
-#include <fm/midi.hpp>
+#include <com/midi.hpp>
 #include <map>
 #include <vector>
 #include <memory>
@@ -11,7 +11,7 @@
 #include <sheet/objects/ASheetObject.h>
 #include <compiler/ICompilerVisitor.h>
 #include <compiler/context/MidiContext.h>
-#include <fm/ILogger.h>
+#include <com/ILogger.h>
 
 namespace fmapp {
     /*
@@ -21,9 +21,9 @@ namespace fmapp {
     template<class TIntervalContainer>
     class TimelineVisitor : public sheet::compiler::ICompilerVisitor {
     private:
-        fm::ILoggerPtr _logger;
+        com::ILoggerPtr _logger;
     public:
-        TimelineVisitor(fm::ILoggerPtr logger) : _logger(logger) {}
+        TimelineVisitor(com::ILoggerPtr logger) : _logger(logger) {}
         typedef typename TIntervalContainer::value_type::second_type TSet;
         typedef typename TIntervalContainer::interval_type IntervalType;
         typedef typename TSet::value_type EventInfo;
@@ -34,7 +34,7 @@ namespace fmapp {
         virtual void beginCompile() override { intervalContainer_.clear(); }
         virtual void endCompile() override {}
         virtual void visit(sheet::compiler::IContext *context, const sheet::Event &ev) override;
-        virtual void visit(sheet::compiler::IContext *context, const fm::midi::Event &ev, TrackId trackId) override;    
+        virtual void visit(sheet::compiler::IContext *context, const com::midi::Event &ev, TrackId trackId) override;    
     private:
         TIntervalContainer intervalContainer_;
         std::shared_ptr<EventInfo> currentEventInfo_;
@@ -56,8 +56,8 @@ namespace fmapp {
 
     typedef std::vector<EventInfo> EventInfos;
     typedef std::set<EventInfo> TextPositionSet;
-    typedef boost::icl::interval_map<fm::Ticks, TextPositionSet> EventTimeline;
-    typedef boost::icl::interval<fm::Ticks> TicksInterval;
+    typedef boost::icl::interval_map<com::Ticks, TextPositionSet> EventTimeline;
+    typedef boost::icl::interval<com::Ticks> TicksInterval;
     typedef TimelineVisitor<EventTimeline> DefaultTimeline;
     typedef std::shared_ptr<DefaultTimeline> DefaultTimelinePtr;
 
@@ -86,10 +86,10 @@ namespace fmapp {
     }
 
     template<class TIntervalContainer>
-    void TimelineVisitor<TIntervalContainer>::visit(sheet::compiler::IContext *ctx, const fm::midi::Event &ev, TrackId trackId)
+    void TimelineVisitor<TIntervalContainer>::visit(sheet::compiler::IContext *ctx, const com::midi::Event &ev, TrackId trackId)
     {
         // TODO: #89
-        //if (ev.eventType() != fm::midi::NoteOn) {
+        //if (ev.eventType() != com::midi::NoteOn) {
         //    return;
         //}
         //if (!this->currentEventInfo_) {

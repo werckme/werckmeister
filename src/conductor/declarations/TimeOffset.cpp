@@ -8,16 +8,16 @@ namespace sheet
     {
         void TimeOffset::perform(const Events &events) const
         {
-            fm::midi::Event* noteOn = events.noteOn;
-            fm::midi::Event* noteOff = events.noteOff;
+            com::midi::Event* noteOn = events.noteOn;
+            com::midi::Event* noteOff = events.noteOff;
             if (!noteOff) 
             {
                 return;
             }
             FGetValue getOriginalValue = [noteOn]() { return 0; };
-            FGetValue getPercentBase = [noteOn, noteOff]() { return (noteOff->absPosition() - noteOn->absPosition()) / fm::PPQ; };
-            FSetValue setNoteOn = [](fm::midi::Event* noteOn, double val) { noteOn->absPosition(std::max(fm::Ticks(0), (noteOn->absPosition() + val * fm::PPQ))); };
-            FSetValue setNoteOff = [noteOn](fm::midi::Event* noteOff, double val) { noteOff->absPosition(std::max(fm::Ticks(0), (noteOff->absPosition() + val * fm::PPQ))); };
+            FGetValue getPercentBase = [noteOn, noteOff]() { return (noteOff->absPosition() - noteOn->absPosition()) / com::PPQ; };
+            FSetValue setNoteOn = [](com::midi::Event* noteOn, double val) { noteOn->absPosition(std::max(com::Ticks(0), (noteOn->absPosition() + val * com::PPQ))); };
+            FSetValue setNoteOff = [noteOn](com::midi::Event* noteOff, double val) { noteOff->absPosition(std::max(com::Ticks(0), (noteOff->absPosition() + val * com::PPQ))); };
             FGetOptionalValue getPredecessorValue = []() -> std::optional<double>
             {
                 FM_THROW(compiler::Exception, "the follow up operator isn't supported by timeOffset");

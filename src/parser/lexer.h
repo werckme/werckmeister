@@ -10,7 +10,7 @@
 #include <boost/bind.hpp>
 #include <boost/algorithm/string.hpp>
 #include <vector>
-#include <fm/common.hpp>
+#include <com/common.hpp>
 #include <exception>
 
 #include <iostream>
@@ -20,9 +20,9 @@
 namespace sheet {
 
 	namespace compiler {
-		typedef fm::CharType CharType;
-		typedef fm::String StringType;
-		typedef fm::StringStream StringStream;
+		typedef com::CharType CharType;
+		typedef com::String StringType;
+		typedef com::StringStream StringStream;
 		typedef
 			boost::spirit::lex::lexertl::token<CharType const*, boost::spirit::lex::omit, boost::mpl::false_> TokenType;
 
@@ -115,7 +115,7 @@ namespace sheet {
 			StringStream documentUsings;
 			void onDocDef(CharType const *begin, CharType const *end) 
 			{
-				documentUsings << fm::String(begin, end) << std::endl;
+				documentUsings << com::String(begin, end) << std::endl;
 			}
 		};
 

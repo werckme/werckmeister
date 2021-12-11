@@ -13,12 +13,12 @@ namespace fmapp {
 		}
 	}
 
-	void MidiProvider::midi(fm::midi::MidiPtr midi)
+	void MidiProvider::midi(com::midi::MidiPtr midi)
 	{
 		midi_ = midi;
 	}
 	
-	fm::midi::MidiPtr MidiProvider::midi() const
+	com::midi::MidiPtr MidiProvider::midi() const
 	{
 		return midi_;
 	}
@@ -63,7 +63,7 @@ namespace fmapp {
 		}
 	}
 
-	MidiProvider::EventIt* MidiProvider::getEventIt(fm::midi::TrackPtr trackPtr)
+	MidiProvider::EventIt* MidiProvider::getEventIt(com::midi::TrackPtr trackPtr)
 	{
 		auto it = trackEventIts_.find(trackPtr);
 		if (it == trackEventIts_.end()) {

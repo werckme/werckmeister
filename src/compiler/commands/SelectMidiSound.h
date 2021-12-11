@@ -9,7 +9,7 @@ namespace sheet {
         class SelectMidiSound : public AMidiContextCommand
         {
         public:
-            fm::IHasParameter::ParametersByNames parameters = {
+            com::IHasParameter::ParametersByNames parameters = {
                 FM_PARAMETER_DEFAULT_DEF		    (argumentNames.SelectMidiSound.BankMsb, 0, -1),
                 FM_PARAMETER_DEF	           	    (argumentNames.SelectMidiSound.PC, 	    1),
                 FM_PARAMETER_DEFAULT_DEF		    (argumentNames.SelectMidiSound.CC, 	    2, -1),

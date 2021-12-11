@@ -10,9 +10,9 @@ namespace sheet {
 		return 0xff & (int)degree;
 	}
 
-	fm::degrees::Flag getFlag(int degree)
+	com::degrees::Flag getFlag(int degree)
 	{
-		return static_cast<fm::degrees::Flag>((degree) >> 8);
+		return static_cast<com::degrees::Flag>((degree) >> 8);
 	}
 
 	DegreeDef ChordDef::getDegreeDef(const PitchDef &eventPitch) const
@@ -28,22 +28,22 @@ namespace sheet {
 			return DegreeDef::invalid();
 		}
 		resultDegree = *it;
-		if (getFlag(degreeValue) == fm::degrees::Sharp) {
+		if (getFlag(degreeValue) == com::degrees::Sharp) {
 			resultDegree.value += 1;
 		}
-		if (getFlag(degreeValue) == fm::degrees::DoubleSharp) {
+		if (getFlag(degreeValue) == com::degrees::DoubleSharp) {
 			resultDegree.value += 2;
 		}	
-		if (getFlag(degreeValue) == fm::degrees::TrippleSharp) {
+		if (getFlag(degreeValue) == com::degrees::TrippleSharp) {
 			resultDegree.value += 3;
 		}				
-		if (getFlag(degreeValue) == fm::degrees::Flat) {
+		if (getFlag(degreeValue) == com::degrees::Flat) {
 			resultDegree.value -= 1;
 		}
-		if (getFlag(degreeValue) == fm::degrees::DoubleFlat) {
+		if (getFlag(degreeValue) == com::degrees::DoubleFlat) {
 			resultDegree.value -= 2;
 		}	
-		if (getFlag(degreeValue) == fm::degrees::TrippleFlat) {
+		if (getFlag(degreeValue) == com::degrees::TrippleFlat) {
 			resultDegree.value -= 3;
 		}				
 		return resultDegree;
@@ -51,19 +51,19 @@ namespace sheet {
 
 	bool has7(const ChordDef &def)
 	{
-		return std::any_of(def.intervals.begin(), def.intervals.end(), [](const auto &DegreeDef){ return DegreeDef.degree == fm::degrees::VII; });
+		return std::any_of(def.intervals.begin(), def.intervals.end(), [](const auto &DegreeDef){ return DegreeDef.degree == com::degrees::VII; });
 	}
 	bool has9(const ChordDef &def)
 	{
-		return std::any_of(def.intervals.begin(), def.intervals.end(), [](const auto &DegreeDef){ return DegreeDef.degree == fm::degrees::II; });
+		return std::any_of(def.intervals.begin(), def.intervals.end(), [](const auto &DegreeDef){ return DegreeDef.degree == com::degrees::II; });
 	}
 	bool has11(const ChordDef &def)
 	{
-		return std::any_of(def.intervals.begin(), def.intervals.end(), [](const auto &DegreeDef){ return DegreeDef.degree == fm::degrees::IV; });
+		return std::any_of(def.intervals.begin(), def.intervals.end(), [](const auto &DegreeDef){ return DegreeDef.degree == com::degrees::IV; });
 	}
 	bool has13(const ChordDef &def)
 	{
-		return std::any_of(def.intervals.begin(), def.intervals.end(), [](const auto &DegreeDef){ return DegreeDef.degree == fm::degrees::VI; });
+		return std::any_of(def.intervals.begin(), def.intervals.end(), [](const auto &DegreeDef){ return DegreeDef.degree == com::degrees::VI; });
 	}
 
 }

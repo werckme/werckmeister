@@ -1,7 +1,7 @@
 #ifndef PARSER_H
 #define PARSER_H
 #include "IDocumentParser.h"
-#include <fm/common.hpp>
+#include <com/common.hpp>
 #include <vector>
 #include <sheet/objects/ChordDef.h>
 #include <sheet/objects/ConductionSheetDef.h>
@@ -19,48 +19,48 @@ namespace sheet {
 		struct ChordDefParser {
 			static const char* ALLOWED_CHORD_SYMBOLS_REGEX;
 			typedef std::vector<ChordDef> ChordDefs;
-			ChordDefs parse(fm::CharType const* first, fm::CharType const* last);
-			ChordDefs parse(const fm::String &str)
+			ChordDefs parse(com::CharType const* first, com::CharType const* last);
+			ChordDefs parse(const com::String &str)
 			{
-				fm::CharType const* cstr = str.c_str();
+				com::CharType const* cstr = str.c_str();
 				return parse(cstr, cstr + str.length());
 			}
 		};
 		struct PitchmapParser {
 			typedef std::vector<Pitchmap> PitchmapDefs;
-			PitchmapDefs parse(fm::CharType const* first, fm::CharType const* last);
-			PitchmapDefs parse(const fm::String &str)
+			PitchmapDefs parse(com::CharType const* first, com::CharType const* last);
+			PitchmapDefs parse(const com::String &str)
 			{
-				fm::CharType const* cstr = str.c_str();
+				com::CharType const* cstr = str.c_str();
 				return parse(cstr, cstr + str.length());
 			}
 		};
 
 		struct SheetDefParser {
 
-			SheetDef parse(fm::CharType const* first, fm::CharType const* last, Event::SourceId sourceId = Event::UndefinedSource);
-			SheetDef parse(const fm::String &str, Event::SourceId sourceId = Event::UndefinedSource)
+			SheetDef parse(com::CharType const* first, com::CharType const* last, Event::SourceId sourceId = Event::UndefinedSource);
+			SheetDef parse(const com::String &str, Event::SourceId sourceId = Event::UndefinedSource)
 			{
-				fm::CharType const* cstr = str.c_str();
+				com::CharType const* cstr = str.c_str();
 				return parse(cstr, cstr + str.length(), sourceId);
 			}
 		};
 
 
 		struct ConfigParser {
-			SheetDef parse(fm::CharType const* first, fm::CharType const* last, Event::SourceId sourceId = Event::UndefinedSource);
-			SheetDef parse(const fm::String& str, Event::SourceId sourceId = Event::UndefinedSource)
+			SheetDef parse(com::CharType const* first, com::CharType const* last, Event::SourceId sourceId = Event::UndefinedSource);
+			SheetDef parse(const com::String& str, Event::SourceId sourceId = Event::UndefinedSource)
 			{
-				fm::CharType const* cstr = str.c_str();
+				com::CharType const* cstr = str.c_str();
 				return parse(cstr, cstr + str.length(), sourceId);
 			}
 		};
 
 		struct ConductionSheetParser {
-			ConductionSheetDef parse(fm::CharType const* first, fm::CharType const* last, Event::SourceId sourceId = Event::UndefinedSource);
-			ConductionSheetDef parse(const fm::String& str, Event::SourceId sourceId = Event::UndefinedSource)
+			ConductionSheetDef parse(com::CharType const* first, com::CharType const* last, Event::SourceId sourceId = Event::UndefinedSource);
+			ConductionSheetDef parse(const com::String& str, Event::SourceId sourceId = Event::UndefinedSource)
 			{
-				fm::CharType const* cstr = str.c_str();
+				com::CharType const* cstr = str.c_str();
 				return parse(cstr, cstr + str.length(), sourceId);
 			}
 			virtual ~ConductionSheetParser() = default;
@@ -69,9 +69,9 @@ namespace sheet {
 		class DocumentParser : public IDocumentParser {
 		public:
 			DocumentParser(DocumentPtr document) : _document(document) {} 
-			typedef std::vector<fm::String> Usings;
-			virtual DocumentPtr parse(const fm::String &path);
-			virtual DocumentPtr parseString(const fm::String &text);
+			typedef std::vector<com::String> Usings;
+			virtual DocumentPtr parse(const com::String &path);
+			virtual DocumentPtr parseString(const com::String &text);
 			virtual ~DocumentParser() = default;
 		private:
 			DocumentPtr _document;

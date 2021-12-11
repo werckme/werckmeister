@@ -4,13 +4,13 @@
 #include <sheet/objects/Event.h>
 #include <memory>
 #include <unordered_map>
-#include <fm/units.hpp>
-#include <fm/literals.hpp>
+#include <com/units.hpp>
+#include <com/literals.hpp>
 #include <map>
 #include <unordered_map>
 #include <sheet/objects/ChordDef.h>
 #include "compiler/voicings/VoicingStrategy.h"
-#include <fm/common.hpp>
+#include <com/common.hpp>
 #include "metaCommands.h"
 #include <list>
 #include "forward.hpp"
@@ -30,9 +30,9 @@ namespace sheet {
             IContextPtr context() const { return this->ctx_; }
             ASheetEventRendererPtr sheetEventRenderer;
         private:
-            typedef fm::String ContainerKeyType;
+            typedef com::String ContainerKeyType;
             void setTargetCreateIfNotExists(const Track &track, const Voice &voice);
-            typedef std::unordered_map<fm::String, IContext::Id> Container2ContextElementId;
+            typedef std::unordered_map<com::String, IContext::Id> Container2ContextElementId;
             ContainerKeyType getKey(const Track&) const;
             ContainerKeyType getKey(const Voice&) const;
             IContextPtr ctx_;

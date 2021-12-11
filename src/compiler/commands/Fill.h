@@ -58,14 +58,14 @@ namespace sheet {
         class Fill : public ACommand
         {
         public:
-            fm::IHasParameter::ParametersByNames parameters = {
+            com::IHasParameter::ParametersByNames parameters = {
                 FM_PARAMETER_DEF(argumentNames.Fill.Template, 	        0    ),
                 FM_PARAMETER_DEFAULT_DEF(argumentNames.Fill.Replace, 	1, "NO_VALID_FILL_REPLACE_VALUE"),
             };
             virtual ParametersByNames & getParameters() { return this->parameters; }
             virtual void execute(IContextPtr);
-            fm::String templateName();
-            fm::String replaceTemplateName();
+            com::String templateName();
+            com::String replaceTemplateName();
         };
     }
 }

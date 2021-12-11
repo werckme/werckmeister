@@ -1,8 +1,8 @@
 #include "testhelper.h"
 
-#include <fm/literals.hpp>
-#include <fm/units.hpp>
-#include "fm/common.hpp"
+#include <com/literals.hpp>
+#include <com/units.hpp>
+#include "com/common.hpp"
 
 bool checkNote(const sheet::Event &ev,
     sheet::Event::Type type,
@@ -24,7 +24,7 @@ bool checkNote(const sheet::Event &ev,
 
 bool checkNote(const sheet::Event &ev,
     sheet::Event::Type type,
-    const fm::String &alias,
+    const com::String &alias,
     sheet::Event::Duration duration)
 {
     if (ev.pitches.empty()) {
@@ -65,12 +65,12 @@ bool checkNote(const sheet::Event &ev,
     return true;
 }
 
-bool checkChord(const sheet::Event &ev, fm::String chordName)
+bool checkChord(const sheet::Event &ev, com::String chordName)
 {
     return ev.type == sheet::Event::Chord && ev.stringValue == chordName;
 }
 
-bool checkMetaEvent(const sheet::Event &ev, const fm::String &command, const sheet::Event::Args &args)
+bool checkMetaEvent(const sheet::Event &ev, const com::String &command, const sheet::Event::Args &args)
 {
     bool pre = ev.type == sheet::Event::Meta && ev.stringValue == command;
     if (!pre) {
@@ -92,13 +92,13 @@ bool checkMetaEvent(const sheet::Event &ev, const fm::String &command, const she
     return true;
 }
 
-sheet::Argument makeArg(fm::String value) {
+sheet::Argument makeArg(com::String value) {
     sheet::Argument argument;
     argument.value = value;
     argument.name = "";
     return argument;
 }
-sheet::Argument makeArg(fm::String name, fm::String value) {
+sheet::Argument makeArg(com::String name, com::String value) {
     auto argument = makeArg(value);
     argument.name = name;
     return argument;

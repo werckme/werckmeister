@@ -2,38 +2,38 @@
 #define SHEET_COMPILER_PROGRAM_HPP
 
 #include <parser/IDocumentParser.h>
-#include <fm/common.hpp>
+#include <com/common.hpp>
 #include <forward.hpp>
 #include "ICompilerProgramOptions.h"
 #include <compiler/ICompiler.h>
 #include <compiler/context/MidiContext.h>
 #include <compiler/IPreprocessor.h>
 #include <conductor/IConductionsPerformer.h>
-#include <fm/ILogger.h>
+#include <com/ILogger.h>
 #include <ostream>
 #include <fmapp/IDocumentWriter.h>
 
 class SheetCompilerProgram {
 protected:
     ICompilerProgramOptionsPtr _programOptions;
-    fm::ILoggerPtr _logger;
+    com::ILoggerPtr _logger;
     sheet::compiler::IDocumentParserPtr  _documentParser;
     sheet::compiler::ICompilerPtr        _compiler;
     sheet::compiler::IContextPtr         _context;
     sheet::compiler::IPreprocessorPtr    _preprocessor;
-    fm::midi::MidiPtr                    _midiFile;
+    com::midi::MidiPtr                    _midiFile;
     fmapp::IDocumentWriterPtr            _documentWriter;
     sheet::conductor::IConductionsPerformerPtr      _conductionsPerformer;
 
 public:
     SheetCompilerProgram(
         ICompilerProgramOptionsPtr               programOptions,
-        fm::ILoggerPtr                           logger,
+        com::ILoggerPtr                           logger,
         sheet::compiler::IDocumentParserPtr      documentParser,
         sheet::compiler::ICompilerPtr            compiler,
         sheet::compiler::IContextPtr             context,
         sheet::compiler::IPreprocessorPtr        preprocessor,
-        fm::midi::MidiPtr                        midiFile,
+        com::midi::MidiPtr                        midiFile,
         fmapp::IDocumentWriterPtr                documentWriter,
         sheet::conductor::IConductionsPerformerPtr          conductionsPerformer
     ) : _programOptions(programOptions),
@@ -54,11 +54,11 @@ protected:
     virtual void prepareContext();
     virtual void printIntro(std::ostream &os);
     virtual void prepareSearchPaths();
-    virtual void addSearchPath(const fm::String &path);
+    virtual void addSearchPath(const com::String &path);
     virtual void printSearchPaths() const;
     virtual void compile();
 private:
-    fm::Path prepareJSONInput(const std::string &base64JsonInputStr);
+    com::Path prepareJSONInput(const std::string &base64JsonInputStr);
 };
 
 #endif

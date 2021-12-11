@@ -13,13 +13,13 @@
 
 BOOST_FUSION_ADAPT_STRUCT(
 	sheet::DegreeDef,
-	(fm::Pitch, degree)
+	(com::Pitch, degree)
 	(int, value)
 )
 
 BOOST_FUSION_ADAPT_STRUCT(
 	sheet::ChordDef,
-	(fm::String, name)
+	(com::String, name)
 	(sheet::ChordDef::Intervals, intervals)
 )
 
@@ -64,22 +64,22 @@ namespace sheet {
 				}
 				qi::rule<Iterator, DegreeDef(), ascii::space_type> interval;
 				qi::rule<Iterator, Intervals(), ascii::space_type> intervals;
-				qi::rule<Iterator, fm::String(), ascii::space_type> chordName;
+				qi::rule<Iterator, com::String(), ascii::space_type> chordName;
 				qi::rule<Iterator, ChordDef(), ascii::space_type> start;
 			};
 
 
-			void _parse(const fm::String &defStr, ChordDef &def) 
+			void _parse(const com::String &defStr, ChordDef &def) 
 			{
 				using boost::spirit::ascii::space;
-				typedef _SectionParser<fm::String::const_iterator> ChordParserType;
+				typedef _SectionParser<com::String::const_iterator> ChordParserType;
 				ChordParserType g;
 				phrase_parse(defStr.begin(), defStr.end(), g, space, def);
 			}
 		}
 
 
-		ChordDefParser::ChordDefs ChordDefParser::parse(fm::CharType const* first, fm::CharType const* last)
+		ChordDefParser::ChordDefs ChordDefParser::parse(com::CharType const* first, com::CharType const* last)
 		{
 			
 			ChordDefs result;

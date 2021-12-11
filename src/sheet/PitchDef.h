@@ -1,9 +1,9 @@
 #ifndef PITCHDEF_H
 #define PITCHDEF_H
 
-#include <fm/common.hpp>
-#include <fm/units.hpp>
-#include <fm/config.hpp>
+#include <com/common.hpp>
+#include <com/units.hpp>
+#include <com/config.hpp>
 #include <vector>
 #include <set>
 #include <tuple>
@@ -12,11 +12,11 @@
 namespace sheet {
 
 	namespace {
-		std::hash<fm::String> hash_fn;
+		std::hash<com::String> hash_fn;
 	}
 
 	struct PitchDef {
-		typedef fm::Pitch Pitch;
+		typedef com::Pitch Pitch;
 		typedef int Octave;
 		enum {
 			NoPitch = -1,
@@ -24,16 +24,16 @@ namespace sheet {
 		};
 		Pitch pitch = NoPitch;
 		Octave octave = DefaultOctave;
-		fm::String alias;
+		com::String alias;
 		bool forceDegree = false;
-		PitchDef(const fm::String &alias) : alias(alias) {}
+		PitchDef(const com::String &alias) : alias(alias) {}
 		PitchDef(Pitch p = NoPitch, Octave o = DefaultOctave) : pitch(p), octave(o) {}
 		int id() const 
 		{
 			if (!alias.empty()) {
 				return static_cast<int>(hash_fn(alias));
 			}
-			return pitch + (octave * fm::NotesPerOctave);
+			return pitch + (octave * com::NotesPerOctave);
 		}
 		bool operator<(const PitchDef& b) const
 		{

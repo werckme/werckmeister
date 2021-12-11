@@ -5,7 +5,7 @@ namespace fmapp {
     {
         _logger->error(WMLogLambda(log << ex.what() ));
     }
-    void ADocumentWriter::writeException(const fm::Exception &ex) 
+    void ADocumentWriter::writeException(const com::Exception &ex) 
     {
          _logger->error(WMLogLambda(log << ex.toString() ));
     }

@@ -3,10 +3,10 @@
 
 
 #include "IPlayerLoopVisitor.h"
-#include <fm/ILogger.h>
+#include <com/ILogger.h>
 #include "TimelineVisitor.hpp"
 #include <memory>
-#include <fm/exception.hpp>
+#include <com/exception.hpp>
 #include "JsonIOBase.h"
 #include <forward.hpp>
 #include "IStringSender.hpp"
@@ -18,25 +18,25 @@ namespace fmapp {
      */
     class Funkfeuer : public JsonIOBase, public IPlayerLoopVisitor {
     private:
-        fm::ILoggerPtr         _logger;
+        com::ILoggerPtr         _logger;
         DefaultTimelinePtr     _timelineVisitor;
         IStringSenderPtr       _sender;
     public:
         typedef JsonIOBase Base;
         Funkfeuer(sheet::compiler::ICompilerVisitorPtr compilerVisitor,
-            fm::ILoggerPtr logger,
+            com::ILoggerPtr logger,
             IStringSenderPtr sender)
             :_logger(logger)
             , _timelineVisitor(std::dynamic_pointer_cast<fmapp::DefaultTimeline>(compilerVisitor))
             , _sender(sender)
         {
             if (!_timelineVisitor)
-            FM_THROW(fm::Exception, "expected a time line visitor instance");
+            FM_THROW(com::Exception, "expected a time line visitor instance");
             lastTimelineEvent = _timelineVisitor->intervalContainer().end();
         }
         virtual void loopBegin() override {}
         virtual void loopEnd() override {}
-        virtual void visit(fm::Ticks elapsed) override;  
+        virtual void visit(com::Ticks elapsed) override;  
         virtual ~Funkfeuer() = default;
     private:
         fmapp::EventTimeline::const_iterator lastTimelineEvent;

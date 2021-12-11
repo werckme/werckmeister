@@ -4,12 +4,12 @@
 #include "UdpSender.hpp"
 
 namespace fmapp {
-    void Funkfeuer::visit(fm::Ticks elapsed) 
+    void Funkfeuer::visit(com::Ticks elapsed) 
     {
         std::stringstream ss;
         lastUpdateTimestamp = (unsigned long)time(NULL);
         const auto &timeline = _timelineVisitor->intervalContainer();
-        auto elapsedQuarter = elapsed / (double)fm::PPQ;
+        auto elapsedQuarter = elapsed / (double)com::PPQ;
         auto ev = timeline.find(elapsed);
         EventInfos eventInfos;
         if (ev == lastTimelineEvent || ev == timeline.end()) {

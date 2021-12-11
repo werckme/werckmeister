@@ -12,7 +12,7 @@ namespace sheet {
             virtual void perform(IContextPtr ctx, Events &events) override;
             enum Direction { Up, Down };
             Direction direction = Up;
-            fm::IHasParameter::ParametersByNames parameters = {
+            com::IHasParameter::ParametersByNames parameters = {
             };
             virtual ParametersByNames & getParameters() { return this->parameters; }            
         };

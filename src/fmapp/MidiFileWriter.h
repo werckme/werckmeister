@@ -4,21 +4,21 @@
 #include "IDocumentWriter.h"
 #include <forward.hpp>
 #include <ICompilerProgramOptions.h>
-#include <fm/ILogger.h>
+#include <com/ILogger.h>
 #include "ADocumentWriter.h"
 
 namespace fmapp {
     class MidiFileWriter : public ADocumentWriter {
     private:
         ICompilerProgramOptionsPtr _programOptions;
-        fm::midi::MidiPtr          _midifile;
-        fm::ILoggerPtr             _logger;
+        com::midi::MidiPtr          _midifile;
+        com::ILoggerPtr             _logger;
         
     public:
         MidiFileWriter(
             ICompilerProgramOptionsPtr  programOptions, 
-            fm::midi::MidiPtr           midiFile,
-            fm::ILoggerPtr              logger) 
+            com::midi::MidiPtr           midiFile,
+            com::ILoggerPtr              logger) 
             : ADocumentWriter(logger),
               _programOptions(programOptions), 
               _midifile      (midiFile),

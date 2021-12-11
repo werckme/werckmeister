@@ -1,14 +1,14 @@
 #ifndef SHEET_EVENT_H
 #define SHEET_EVENT_H
 
-#include <fm/common.hpp>
-#include <fm/units.hpp>
-#include <fm/config.hpp>
+#include <com/common.hpp>
+#include <com/units.hpp>
+#include <com/config.hpp>
 #include <vector>
 #include <set>
 #include <tuple>
 #include <functional>
-#include <fm/exception.hpp>
+#include <com/exception.hpp>
 #include "ASheetObjectWithSourceInfo.h"
 #include <sheet/Argument.h>
 #include <sheet/PitchDef.h>
@@ -37,16 +37,16 @@ namespace sheet {
 			Group,
 			NumEvents
 		};
-		typedef fm::Ticks Duration;
+		typedef com::Ticks Duration;
 		typedef std::vector<PitchDef> Pitches;
 		typedef std::vector<sheet::Argument> Args;
 		typedef std::vector<Event> EventGroup;
-		typedef std::set<fm::String> Tags;
-		typedef fm::String Options;
+		typedef std::set<com::String> Tags;
+		typedef com::String Options;
 		typedef std::tuple<PitchDef::Pitch, Options> ChordElements;
 		
 		ChordElements chordElements() const;
-		fm::String chordDefName() const;	
+		com::String chordDefName() const;	
 		Pitches pitches;
 		Type type = Unknown;
 		Duration duration = NoDuration;
@@ -61,7 +61,7 @@ namespace sheet {
 		/**
 		 *  can be for instance a meta event command or a chordname
 		 */
-		fm::String stringValue;
+		com::String stringValue;
 		Args metaArgs;
 		Tags tags;
 		EventGroup eventGroup;
@@ -69,7 +69,7 @@ namespace sheet {
 		 * the event velocity value in a range 0..1, will be set during rendering
 		 */
 		double velocity = 0;
-		fm::Ticks offset = 0;
+		com::Ticks offset = 0;
 		double pitchBendValue = 0;
 		bool isTimeConsuming() const {
 			return type == Rest 
@@ -106,7 +106,7 @@ namespace sheet {
 			return type == PitchBend;
 		}
 
-		fm::String toString() const;
+		com::String toString() const;
 	};
 }
 

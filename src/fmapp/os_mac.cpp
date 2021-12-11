@@ -31,12 +31,12 @@ namespace {
 			size *= 2;
 		}
 	}
-        fm::String _getExecutablePath()
+        com::String _getExecutablePath()
         {
         	char path[1024];
                 uint32_t size = sizeof(path);
                 if (_NSGetExecutablePath(&path[0], &size) == 0) {
-		  return fm::String(&path[0]);
+		  return com::String(&path[0]);
 		}
 		char* dynamicStr = new char[size];
 		if (_NSGetExecutablePath(dynamicStr, &size) != 0) {
@@ -64,7 +64,7 @@ namespace fmapp {
 
 			sigaction(SIGINT, &sigIntHandler, NULL);
 		}
-		fm::String getExecutablePath()
+		com::String getExecutablePath()
 		{
 		  auto strPath = _getExecutablePath();
 		  return boost::filesystem::path(strPath).parent_path().string();

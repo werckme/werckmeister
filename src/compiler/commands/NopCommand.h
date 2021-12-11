@@ -9,7 +9,7 @@ namespace sheet {
         class NopCommand : public ACommand
         {
         public:
-            fm::IHasParameter::ParametersByNames parameters = {};
+            com::IHasParameter::ParametersByNames parameters = {};
             virtual ParametersByNames & getParameters() { return this->parameters; }
             virtual void execute(IContextPtr) {}
         };

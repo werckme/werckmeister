@@ -4,7 +4,7 @@
 
 #include "IPlayerLoopVisitor.h"
 #include <unordered_map>
-#include <fm/common.hpp>
+#include <com/common.hpp>
 #include <time.h>
 #include <forward.hpp>
 #include "ISheetWatcherHandler.h"
@@ -23,13 +23,13 @@ namespace fmapp {
         {}
         virtual void loopBegin() override {}
         virtual void loopEnd() override {}
-        virtual void visit(fm::Ticks elapsed);
+        virtual void visit(com::Ticks elapsed);
         virtual ~SheetWatcher() = default;
     private:
-        typedef std::unordered_map<fm::String, time_t> Timestamps;
+        typedef std::unordered_map<com::String, time_t> Timestamps;
         Timestamps timestamps;
         void updateLastChangedTimestamp();
-        time_t getTimestamp(const fm::String &sheetPath);
+        time_t getTimestamp(const com::String &sheetPath);
         bool hasChanges();
         unsigned long _lastUpdateTimestamp = 0;
         bool firstVisit = true;

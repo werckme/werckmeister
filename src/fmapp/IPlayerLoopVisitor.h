@@ -2,12 +2,12 @@
 #define FMAPP_IPLAYERLOOPVISITOR_HPP
 
 
-#include <fm/common.hpp>
+#include <com/common.hpp>
 #include <memory>
 namespace fmapp {
     class IPlayerLoopVisitor {
     public:
-        virtual void visit(fm::Ticks elapsed) = 0;
+        virtual void visit(com::Ticks elapsed) = 0;
         virtual void loopBegin() = 0;
         virtual void loopEnd() = 0;
         virtual ~IPlayerLoopVisitor() = default;

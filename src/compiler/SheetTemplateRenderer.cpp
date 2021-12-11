@@ -1,13 +1,13 @@
 #include "SheetTemplateRenderer.h"
 #include "error.hpp"
-#include <fm/tools.h>
+#include <com/tools.h>
 #include <iostream>
 #include <boost/exception/get_error_info.hpp>
 #include "SheetEventRenderer.h"
 #include <algorithm>
 #include <functional>
-#include <fm/werckmeister.hpp>
-#include <fm/IDefinitionsServer.h>
+#include <com/werckmeister.hpp>
+#include <com/IDefinitionsServer.h>
 #include <compiler/commands/Fill.h>
 
 #define DEBUGX(x)
@@ -21,7 +21,7 @@ namespace sheet {
 				typedef IContext::SheetTemplates Templates;
 				Chords chords;
 				Templates templates;
-				fm::Ticks offset = 0;
+				com::Ticks offset = 0;
 				double tempoFactor = 1;
 			};
 			class DegreeEventServer {
@@ -30,12 +30,12 @@ namespace sheet {
 				void degrees(const Voice::Events* degrees);
 			public:
 				bool templateIsFill = false;
-				fm::Ticks ignoreUntilPosition = -1.0;
+				com::Ticks ignoreUntilPosition = -1.0;
 				typedef std::function<void()> OnLoop;
 				OnLoop onLoop;
 				DegreeEventServer(const Voice::Events* degrees);
-				std::pair<const Event*, fm::Ticks> nextEvent(IContextPtr ctx);
-				void seek(fm::Ticks);
+				std::pair<const Event*, com::Ticks> nextEvent(IContextPtr ctx);
+				void seek(com::Ticks);
 				bool hasFurtherEvents() const
 				{
 					return this->it_ != degrees_->end();
@@ -51,7 +51,7 @@ namespace sheet {
 				this->degrees_ = degrees;
 				it_ = this->degrees_->begin();
 			}
-			std::pair<const Event*, fm::Ticks> DegreeEventServer::nextEvent(IContextPtr ctx)
+			std::pair<const Event*, com::Ticks> DegreeEventServer::nextEvent(IContextPtr ctx)
 			{
 				if (it_ == degrees_->end()) {
 					if (this->templateIsFill) {
@@ -69,7 +69,7 @@ namespace sheet {
 				}
 				return std::make_pair(ev, ev->duration);
 			}
-			void DegreeEventServer::seek(fm::Ticks ticks)
+			void DegreeEventServer::seek(com::Ticks ticks)
 			{
 				if (ticks != 0) {
 					FM_THROW(Exception, "missing implementation for seeking to value != 0");
@@ -80,7 +80,7 @@ namespace sheet {
 				it_ = degrees_->begin();
 			}
 
-			sheet::SheetTemplate __getTemplate(SheetTemplateRenderer& sheetTemplateRenderer, const fm::String& sheetTemplateName)
+			sheet::SheetTemplate __getTemplate(SheetTemplateRenderer& sheetTemplateRenderer, const com::String& sheetTemplateName)
 			{
 				auto ctx = sheetTemplateRenderer.context();
 				auto sheetTemplate = ctx->definitionsServer()->getSheetTemplate(sheetTemplateName);
@@ -95,7 +95,7 @@ namespace sheet {
 				auto ctx = sheetTemplateRenderer.context();
 				IContext::SheetTemplates templates;
 				for (size_t idx = 0; idx < metaEvent.metaArgs.size(); ++idx) {
-					auto sheetTemplateName = fm::getArgumentValue<fm::String>(metaEvent, idx);
+					auto sheetTemplateName = com::getArgumentValue<com::String>(metaEvent, idx);
 					auto sheetTemplate = __getTemplate(sheetTemplateRenderer, sheetTemplateName);
 					templates.push_back(sheetTemplate);
 				}
@@ -105,7 +105,7 @@ namespace sheet {
 			template<class TCommand>
 			std::shared_ptr<TCommand> __getCommand(const Event& ev)
 			{
-				auto& wm = fm::getWerckmeister();
+				auto& wm = com::getWerckmeister();
 				auto fillCommand = wm.solveOrDefault<TCommand>(ev.stringValue);
 				if (!fillCommand) {
 					FM_THROW(Exception, "expecting command");
@@ -120,7 +120,7 @@ namespace sheet {
 				std::list<TemplatesAndItsChords> templatesAndItsChords;
 				templatesAndItsChords.emplace_back(TemplatesAndItsChords());
 				templatesAndItsChords.back().templates = ctx->currentSheetTemplates();
-				auto& wm = fm::getWerckmeister();
+				auto& wm = com::getWerckmeister();
 				auto tmpContext = ctx->createNewContext();
 				tmpContext->masterTempo(ctx->masterTempo());
 				tmpContext->setChordTrackTarget();
@@ -134,7 +134,7 @@ namespace sheet {
 						bool isTemplateEvent = ev.stringValue == SHEET_META__SET_SHEET_TEMPLATE;
 						if (isTemplateEvent) {
 							TemplatesAndItsChords::Templates prevTemplates;							
-							fm::Ticks prevOffset = -1;
+							com::Ticks prevOffset = -1;
 							if (!templatesAndItsChords.empty()) {
 								prevTemplates = templatesAndItsChords.back().templates;
 								prevOffset = templatesAndItsChords.back().offset;
@@ -159,7 +159,7 @@ namespace sheet {
 						else if (isFillTemplate) {
 							auto fillCommand = __getCommand<Fill>(ev);
 							TemplatesAndItsChords::Templates prevTemplates;
-							fm::Ticks prevOffset = -1;
+							com::Ticks prevOffset = -1;
 							if (!templatesAndItsChords.empty()) {
 								prevTemplates = templatesAndItsChords.back().templates;
 								prevOffset = templatesAndItsChords.back().offset;
@@ -171,7 +171,7 @@ namespace sheet {
 							newTemplateAndChords.templates = { fillTemplate };
 							newTemplateAndChords.offset = tmpContext->currentPosition();
 							newTemplateAndChords.tempoFactor = tmpContext->voiceMetaData()->tempoFactor;
-							fm::String replaceTemplateName = fillCommand->replaceTemplateName();
+							com::String replaceTemplateName = fillCommand->replaceTemplateName();
 							for (auto& prevTemplate : prevTemplates) {
 								// add running templates
 								if (prevTemplate.isFill && (prevOffset >= 0 && prevOffset != newTemplateAndChords.offset)) {
@@ -247,17 +247,17 @@ namespace sheet {
 				try {
 					const auto& args = metaEvent.metaArgs;
 					if (args.empty()) {
-						FM_THROW(Exception, fm::String("no args for: ") + SHEET_META__SHEET_TEMPLATE_POSITION);
+						FM_THROW(Exception, com::String("no args for: ") + SHEET_META__SHEET_TEMPLATE_POSITION);
 					}
 					auto arg = args.front();
 					if (arg.value == SHEET_META__SHEET_TEMPLATE_POSITION_CMD_RESET) {
 						eventServer.seek(0);
 					}
 					else {
-						FM_THROW(Exception, fm::String("invalid arg for: ") + SHEET_META__SHEET_TEMPLATE_POSITION + ": " + arg.value);
+						FM_THROW(Exception, com::String("invalid arg for: ") + SHEET_META__SHEET_TEMPLATE_POSITION + ": " + arg.value);
 					}
 				}
-				catch (fm::Exception& ex) {
+				catch (com::Exception& ex) {
 					ex << ex_sheet_source_info(metaEvent);
 					throw;
 				}
@@ -280,19 +280,19 @@ namespace sheet {
 			}
 
 			typedef std::list<const Event*> Chords;
-			fm::Ticks __renderOneBar(IContextPtr ctx,
+			com::Ticks __renderOneBar(IContextPtr ctx,
 				ASheetEventRenderer* sheetEventRenderer,
 				DegreeEventServer& eventServer,
 				const Chords& chords,
-				fm::String& out_lastChord)
+				com::String& out_lastChord)
 			{
-				fm::Ticks leftover = 0;
-				fm::Ticks written = 0;
+				com::Ticks leftover = 0;
+				com::Ticks written = 0;
 				int numberOfChords = std::count_if(chords.begin(), chords.end(), [](auto& ev) {
 					return ev->type == Event::Chord;
 					});
 				for (const Event* chord : chords) {
-					using namespace fm;
+					using namespace com;
 					if (chord->type == Event::Rest && numberOfChords == 0) {
 						// if the bar just contains this one rest we can skip the whole thing
 						ctx->seek(chord->duration);
@@ -312,10 +312,10 @@ namespace sheet {
 						out_lastChord = chord->stringValue;
 						ctx->stopAllPendingTies();
 					}
-					fm::Ticks ticksToWrite = chord->duration;
+					com::Ticks ticksToWrite = chord->duration;
 					while (ticksToWrite > 1.0_N128) {
 						const Event* degree = nullptr;
-						fm::Ticks degreeDuration;
+						com::Ticks degreeDuration;
 						std::tie(degree, degreeDuration) = eventServer.nextEvent(ctx);
 						if (degree == nullptr && degreeDuration == 0) {
 							// no more events to come
@@ -373,7 +373,7 @@ namespace sheet {
 
 		SheetTemplateRenderer::ContainerKeyType SheetTemplateRenderer::getKey(const Track& track) const
 		{
-			auto instrumentName = fm::getFirstMetaArgumentForKey(SHEET_META__INSTRUMENT, track.trackConfigs);
+			auto instrumentName = com::getFirstMetaArgumentForKey(SHEET_META__INSTRUMENT, track.trackConfigs);
 			if (instrumentName.value.empty()) {
 				return std::to_string((long long)(&track));
 			}
@@ -422,7 +422,7 @@ namespace sheet {
 						}
 					);
 				}
-				catch (fm::Exception& ex) {
+				catch (com::Exception& ex) {
 					throw;
 				}
 			}
@@ -464,7 +464,7 @@ namespace sheet {
 							});
 
 							Chords chordsPerBar;
-							fm::String lastChord;
+							com::String lastChord;
 							std::function<bool(const Event*)> renderBarOrCollectEvent = [&](const Event* chord) {
 								if (chord->type == Event::EOB) {
 									const auto* eobEvent = chord;

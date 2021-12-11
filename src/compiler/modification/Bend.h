@@ -16,7 +16,7 @@ namespace sheet {
             double value = 0.5;
             enum BendMode { To, From };
             BendMode mode = To;
-            fm::IHasParameter::ParametersByNames parameters = {
+            com::IHasParameter::ParametersByNames parameters = {
                 FM_PARAMETER_DEFAULT_DEF	(argumentNames.Bend.Mode, 	    0,  "to"),
                 FM_PARAMETER_DEFAULT_DEF	(argumentNames.Bend.Value, 	    1,  "50"),
                 FM_PARAMETER_DEFAULT_DEF	(argumentNames.Bend.BendTo,	    2,  FM_BEND_ALTERNAIVE_PARAM_VALUE_NOT_SET),

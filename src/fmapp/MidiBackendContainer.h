@@ -2,7 +2,7 @@
 #define FM_MIDIBACKENDCONTAINER_HPP
 
 #include <vector>
-#include <fm/midi.hpp>
+#include <com/midi.hpp>
 #include <rtmidi/RtMidi.h>
 #include "AMidiBackend.h"
 #include <unordered_map>
@@ -17,7 +17,7 @@ namespace fmapp {
 		MidiBackendContainer& operator=(const MidiBackendContainer&&) = delete;
 		Outputs getOutputs() const;
 		virtual ~MidiBackendContainer();
-		virtual void send(const fm::midi::Event &event, const Output *output) override;
+		virtual void send(const com::midi::Event &event, const Output *output) override;
 		virtual void tearDown() override;
 		virtual void panic() override;
 		void addBackend(AMidiBackendPtr);

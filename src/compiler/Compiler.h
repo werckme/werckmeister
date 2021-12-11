@@ -7,7 +7,7 @@
 #include <compiler/context/IContext.h>
 #include "ICompilerVisitor.h"
 #include "IPreprocessor.h"
-#include <fm/ILogger.h>
+#include <com/ILogger.h>
 
 namespace sheet {
 	struct Event;
@@ -19,7 +19,7 @@ namespace sheet {
 			ASheetEventRendererPtr sheetEventRenderer_;
 			ISheetTemplateRendererPtr sheetTemplateRenderer_;
 			ICompilerVisitorPtr	compilerVisitorPtr_;
-			fm::ILoggerPtr	logger_;
+			com::ILoggerPtr	logger_;
 			IPreprocessorPtr preprocessor_;
 		public:
 			Compiler(
@@ -27,7 +27,7 @@ namespace sheet {
 				ASheetEventRendererPtr sheetEventRenderer,
 				ISheetTemplateRendererPtr sheetTemplateRenderer,
 				ICompilerVisitorPtr	compilerVisitorPtr,
-				fm::ILoggerPtr logger,
+				com::ILoggerPtr logger,
 				IPreprocessorPtr preprocessor
 			) :   context_(context)
 				, sheetEventRenderer_(sheetEventRenderer)

@@ -30,7 +30,7 @@ namespace sheet {
 	typedef std::shared_ptr<VoicingStrategy> VoicingStrategyPtr;
 }
 
-namespace fm {
+namespace com {
 	namespace midi {
 		class Midi;
 		typedef std::shared_ptr<Midi> MidiPtr;

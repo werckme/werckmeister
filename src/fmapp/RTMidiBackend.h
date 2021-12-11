@@ -3,7 +3,7 @@
 
 #include <memory>
 #include <vector>
-#include <fm/midi.hpp>
+#include <com/midi.hpp>
 #include <rtmidi/RtMidi.h>
 #include "AMidiBackend.h"
 
@@ -15,7 +15,7 @@ namespace fmapp {
 		RtMidiBackend& operator=(const RtMidiBackend&&) = delete;
 		virtual Outputs getOutputs() const override;
 		virtual ~RtMidiBackend();
-		virtual void send(const fm::midi::Event &event, const Output *output) override;
+		virtual void send(const com::midi::Event &event, const Output *output) override;
 		virtual void tearDown() override { closeAllPorts(); }
 		virtual void panic() override;
 	private:

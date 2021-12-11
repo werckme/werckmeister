@@ -5,14 +5,14 @@
 #include <boost/fusion/include/vector.hpp>
 #include <boost/fusion/include/at_c.hpp>
 #include <boost/spirit/home/support/info.hpp>
-#include <fm/exception.hpp>
+#include <com/exception.hpp>
 #include <string>
 #include <list>
 #include <boost/exception/info.hpp>
 #include <sheet/objects/ASheetObject.h>
 #include <algorithm>
 #include <sstream>
-#include <fm/common.hpp>
+#include <com/common.hpp>
 #include "Warning.hpp"
 
 namespace sheet {
@@ -20,10 +20,10 @@ namespace sheet {
 	namespace compiler {
 		typedef boost::error_info<struct tag_sheet_event, ASheetObjectWithSourceInfo> ex_sheet_source_info;
 		typedef boost::error_info<struct tag_sheet_document, std::shared_ptr<Document>> ex_sheet_document;
-		typedef boost::error_info<struct tag_error_source_file, fm::String> ex_error_source_file;
-		class Exception : public fm::Exception
+		typedef boost::error_info<struct tag_error_source_file, com::String> ex_error_source_file;
+		class Exception : public com::Exception
 		{
-		typedef fm::Exception Base;
+		typedef com::Exception Base;
 		public:
 			explicit Exception(const std::string& what_) : Base(what_) {} 
 			explicit Exception(const std::string& what_, const char *filename, int line) 

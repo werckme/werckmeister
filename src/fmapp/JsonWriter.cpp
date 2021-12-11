@@ -3,7 +3,7 @@
 #include <sheet/Document.h>
 
 namespace {
-    rapidjson::Document documentInfosToJSONDoc(sheet::DocumentPtr sheetDoc, fm::Ticks duration, const sheet::Warnings &warnings)
+    rapidjson::Document documentInfosToJSONDoc(sheet::DocumentPtr sheetDoc, com::Ticks duration, const sheet::Warnings &warnings)
     {
         rapidjson::Document doc;
         doc.SetObject();
@@ -67,7 +67,7 @@ namespace fmapp {
         exceptionToJSON(ostream(), ex);
     }
 
-    void JsonWriter::writeException(const fm::Exception &ex)
+    void JsonWriter::writeException(const com::Exception &ex)
     {
         exceptionToJSON(ostream(), ex);
     }
@@ -131,7 +131,7 @@ namespace fmapp {
         bool first = true;
         for (const auto &timelineEntry : _timeline->intervalContainer()) {
             fmapp::EventInfos eventInfos;
-            fm::Ticks eventsBeginTime = timelineEntry.first.lower() / (double)fm::PPQ;
+            com::Ticks eventsBeginTime = timelineEntry.first.lower() / (double)com::PPQ;
             eventInfos.reserve(timelineEntry.second.size());
             for (const auto &x : timelineEntry.second) {
                 eventInfos.push_back(x);

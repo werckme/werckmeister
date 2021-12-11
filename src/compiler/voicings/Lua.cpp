@@ -1,7 +1,7 @@
 #include "Lua.h"
 #include <lua.hpp>
-#include <fm/lua/ALuaObject.h>
-#include <fm/tools.h>
+#include <com/lua/ALuaObject.h>
+#include <com/tools.h>
 #include <compiler/error.hpp>
 #include <algorithm>
 #include <compiler/lua/luaTimeInfo.h>
@@ -26,7 +26,7 @@ namespace sheet {
                 auto chordElements = chordEvent->chordElements();
                 auto base = std::get<0>(chordElements);
                 auto options = std::get<1>(chordElements);
-                auto strBase = fm::pitchToString(base);
+                auto strBase = com::pitchToString(base);
                 int top = lua_gettop(L);
                 lua_pushstring(L, "strOptions");
                 lua_pushstring(L, options.c_str());
@@ -191,7 +191,7 @@ namespace sheet {
 
 namespace sheet {
     namespace compiler {
-        LuaVoicingStrategy::LuaVoicingStrategy(const fm::String &path) : LuaBase(path)
+        LuaVoicingStrategy::LuaVoicingStrategy(const com::String &path) : LuaBase(path)
         {
         }
 
@@ -203,7 +203,7 @@ namespace sheet {
         void LuaVoicingStrategy::assertCanExecute() const 
         {
             if (!canExecute()) {
-                FM_THROW(Exception, fm::String("missing '") + LUA_VOICING_STRATEGY_FENTRY + "' function");
+                FM_THROW(Exception, com::String("missing '") + LUA_VOICING_STRATEGY_FENTRY + "' function");
             }
         }
         
@@ -255,7 +255,7 @@ namespace sheet {
                 call(4, 1);
                 return popPitches(L);
             } catch (const std::exception &ex) {
-                fm::StringStream ss;
+                com::StringStream ss;
                 ss << "failed to process lua script: '" << path() << "'" << std::endl;
                 ss << "failed to execute voicing function: '" << LUA_VOICING_STRATEGY_FENTRY << "'" << std::endl;
                 ss << ex.what();
@@ -265,7 +265,7 @@ namespace sheet {
 
         LuaVoicingStrategy::ParametersByNames & LuaVoicingStrategy::getParameters()
         {
-            return fm::lua::ALuaWithParameter::getParameters(L);
+            return com::lua::ALuaWithParameter::getParameters(L);
         }
     }
 }

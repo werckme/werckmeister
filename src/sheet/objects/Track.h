@@ -1,7 +1,7 @@
 #ifndef SHEET_TRACK_H
 #define SHEET_TRACK_H
 
-#include <fm/common.hpp>
+#include <com/common.hpp>
 #include <vector>
 #include "Event.h"
 #include "ASheetObjectWithSourceInfo.h"
@@ -17,7 +17,7 @@ namespace sheet {
 		typedef std::vector<TrackConfig> TrackConfigs;
 		TrackConfigs trackConfigs;
 		Voices voices;
-		fm::Ticks maxLength() const;
+		com::Ticks maxLength() const;
 	};
 
 }

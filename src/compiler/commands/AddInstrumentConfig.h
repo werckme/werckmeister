@@ -34,20 +34,20 @@ namespace sheet {
         {
         public:
             typedef ACommand Base;
-            static const std::vector<fm::String> SupportedConfigCommands;
-            fm::IHasParameter::ParametersByNames parameters = {
+            static const std::vector<com::String> SupportedConfigCommands;
+            com::IHasParameter::ParametersByNames parameters = {
                 FM_PARAMETER_DEF		    (argumentNames.InstrumentConf.ForInstrument, 	0)
             };
             virtual ParametersByNames & getParameters() { return this->parameters; }
             virtual void execute(IContextPtr );
             virtual void setArguments(const Arguments &args) override;
         private:
-            typedef fm::String CommandName;
+            typedef com::String CommandName;
             typedef std::pair<CommandName, std::shared_ptr<ACommand>> ConfigCommand;
             typedef std::list<ConfigCommand> ConfigCommands;
             ConfigCommands _configCommands;
         };
-        inline fm::String InstrumentConfigCommandName(const fm::String &cmdName) 
+        inline com::String InstrumentConfigCommandName(const com::String &cmdName) 
         {
             return "InstrumentConfigCommandPrefix_" + cmdName;
         }

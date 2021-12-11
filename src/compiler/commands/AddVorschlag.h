@@ -10,7 +10,7 @@ namespace sheet {
         class AddVorschlag : public ACommand, public AUsingAnEvent
         {
         public:
-            fm::IHasParameter::ParametersByNames parameters = {};
+            com::IHasParameter::ParametersByNames parameters = {};
             virtual ParametersByNames & getParameters() { return this->parameters; }
             virtual void execute(IContextPtr );
         };

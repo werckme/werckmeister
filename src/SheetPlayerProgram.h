@@ -9,7 +9,7 @@
 class SheetPlayerProgram : public SheetCompilerProgram, public fmapp::ISheetWatcherHandler {
 private:
     IPlayerProgramOptionsPtr                     _programOptions;
-    fm::ILoggerPtr                               _logger;
+    com::ILoggerPtr                               _logger;
     fmapp::MidiPlayerPtr                         _midiPlayerPtr;
 public:
     enum { 
@@ -18,12 +18,12 @@ public:
     typedef SheetCompilerProgram Base;
     SheetPlayerProgram(
         ICompilerProgramOptionsPtr               programOptions,
-        fm::ILoggerPtr                           logger,
+        com::ILoggerPtr                           logger,
         sheet::compiler::IDocumentParserPtr      documentParser,
         sheet::compiler::ICompilerPtr            compiler,
         sheet::compiler::IContextPtr             context,
         sheet::compiler::IPreprocessorPtr        preprocessor,
-        fm::midi::MidiPtr                        midiFile,
+        com::midi::MidiPtr                        midiFile,
         fmapp::IDocumentWriterPtr                documentWriter,
         sheet::conductor::IConductionsPerformerPtr          conductionsPerformer
     ) : 

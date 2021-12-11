@@ -1,7 +1,7 @@
 #include "SheetWatcher.h"
 #include <boost/filesystem.hpp>
 #include <sheet/Document.h>
-#include <fm/werckmeister.hpp>
+#include <com/werckmeister.hpp>
 #include <iostream>
 
 namespace fmapp {
@@ -11,7 +11,7 @@ namespace fmapp {
         _lastUpdateTimestamp = (unsigned long)time(NULL);
     }
 
-    time_t SheetWatcher::getTimestamp(const fm::String &sheetPath)
+    time_t SheetWatcher::getTimestamp(const com::String &sheetPath)
     {
         auto path = boost::filesystem::path(sheetPath);
         return boost::filesystem::last_write_time(path);
@@ -19,7 +19,7 @@ namespace fmapp {
 
     bool SheetWatcher::hasChanges()
     {
-        auto changed = [&] (const fm::String &path) {
+        auto changed = [&] (const com::String &path) {
             time_t new_timestamp = getTimestamp(path);
             auto it = timestamps.find(path);
             if (it == timestamps.end()) {
@@ -35,13 +35,13 @@ namespace fmapp {
         bool result = changed(_document->path);
         // check all files, to update their timestamps
         for(const auto &p : _document->sheetDef.documentUsing.usings) {
-            auto fullPath = fm::getWerckmeister().resolvePath(p);
+            auto fullPath = com::getWerckmeister().resolvePath(p);
             result |= changed(fullPath);
         }
         return result;
     }
 
-    void SheetWatcher::visit(fm::Ticks elapsed)
+    void SheetWatcher::visit(com::Ticks elapsed)
     {
         if (!this->hasChanges()) {
             return;

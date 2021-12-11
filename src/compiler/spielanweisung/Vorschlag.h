@@ -9,12 +9,12 @@ namespace sheet {
         class Vorschlag : public ASpielanweisung {
         public:
             typedef AModification Base;
-            static const fm::Ticks defaultDuration;
+            static const com::Ticks defaultDuration;
             Vorschlag() = default;
             virtual ~Vorschlag() = default;
             virtual void perform(IContextPtr ctx, Events &events) override;
             Event vorschlagNote;
-            fm::IHasParameter::ParametersByNames parameters = {
+            com::IHasParameter::ParametersByNames parameters = {
             };
             virtual ParametersByNames & getParameters() { return this->parameters; }            
         };

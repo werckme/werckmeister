@@ -1,7 +1,7 @@
 #include "MidiPlayer.h"
-#include <fm/config.hpp>
+#include <com/config.hpp>
 #include <fmapp/os.hpp>
-#include <fm/config.hpp>
+#include <com/config.hpp>
 #include <thread>
 #include <iostream>
 #include <algorithm>
@@ -45,16 +45,16 @@ namespace fmapp {
 
     void MidiPlayer::execLoop(sheet::DocumentPtr)
     {
-        fm::Ticks resume = 0;
-        fm::Ticks begin = 0;
-        fm::Ticks end = _midifile->duration();
+        com::Ticks resume = 0;
+        com::Ticks begin = 0;
+        com::Ticks end = _midifile->duration();
         if (_programOptions->getResumeAtPosition() > 0) {
-            resume = _programOptions->getResumeAtPosition() * fm::PPQ;
+            resume = _programOptions->getResumeAtPosition() * com::PPQ;
             _programOptions->setResumeAtPosition(0);
         }        
         _logger->babble(WMLogLambda(log << "begin at tick: " << begin));
         initFluidSynthInstances();
-        _midiPlayerImpl.updateOutputMapping(fm::getConfigServer().getDevices());
+        _midiPlayerImpl.updateOutputMapping(com::getConfigServer().getDevices());
         _midiPlayerImpl.midi(_midifile);
         _midiPlayerImpl.play(resume > 0 ? resume : begin);
 
@@ -100,9 +100,9 @@ namespace fmapp {
 
     }
 
-    void MidiPlayer::visitVisitors(VisitorMessage msg, fm::Ticks elapsed)
+    void MidiPlayer::visitVisitors(VisitorMessage msg, com::Ticks elapsed)
     {
-        fm::Ticks renderRangeBegin = _programOptions->isBeginSet() ? (_programOptions->getBegin() * fm::PPQ) : 0;
+        com::Ticks renderRangeBegin = _programOptions->isBeginSet() ? (_programOptions->getBegin() * com::PPQ) : 0;
         for(auto visitor : _loopVisitors.container) {
             switch (msg)
             {
@@ -118,7 +118,7 @@ namespace fmapp {
         }
     }
 
-    fm::Ticks MidiPlayer::stop()
+    com::Ticks MidiPlayer::stop()
     {
         if (state == Stopped) {
             return 0;
@@ -131,10 +131,10 @@ namespace fmapp {
 
     void MidiPlayer::initFluidSynthInstances()
     {
-        const auto& deviceConfigs = fm::getConfigServer().getDevices();
+        const auto& deviceConfigs = com::getConfigServer().getDevices();
         for (const auto& idConfPair : deviceConfigs) {
             const auto& conf = idConfPair.second;
-            if (conf.type != fm::DeviceConfig::FluidSynth) {
+            if (conf.type != com::DeviceConfig::FluidSynth) {
                 continue;
             }
             const auto& soundFontFile = conf.deviceId;

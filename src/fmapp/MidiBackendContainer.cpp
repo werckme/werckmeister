@@ -23,7 +23,7 @@ namespace fmapp {
     MidiBackendContainer::~MidiBackendContainer()
     {
     }
-    void MidiBackendContainer::send(const fm::midi::Event &event, const Output *_output)
+    void MidiBackendContainer::send(const com::midi::Event &event, const Output *_output)
     {
         if (_output == nullptr) {
             return;

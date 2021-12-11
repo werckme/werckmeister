@@ -5,7 +5,7 @@
 
 namespace sheet {
 	struct DegreeDef : public Interval {
-		fm::Pitch degree;
+		com::Pitch degree;
 		bool operator <(const DegreeDef &b) const { return degree < b.degree; }
 		static DegreeDef invalid() {
 			DegreeDef res;

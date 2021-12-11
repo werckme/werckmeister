@@ -1,21 +1,21 @@
 #include "Document.h"
 #include <algorithm>
 #include <boost/filesystem.hpp>
-#include <fm/tools.h>
+#include <com/tools.h>
 #include <compiler/metaCommands.h>
 #include <compiler/error.hpp>
 #include <functional>
-#include <fm/werckmeister.hpp>
+#include <com/werckmeister.hpp>
 #include <compiler/Preprocessor.h>
 #include <compiler/error.hpp>
 
 namespace sheet {
 
 
-	fm::String Document::getAbsolutePath(const fm::String &path) const
+	com::String Document::getAbsolutePath(const com::String &path) const
 	{
 		sheet::ConstDocumentPtr thisPtr = shared_from_this();
-		return fm::getWerckmeister().resolvePath(path);
+		return com::getWerckmeister().resolvePath(path);
 	}
 
 	Event::SourceId Document::addSource(const Path &_path)

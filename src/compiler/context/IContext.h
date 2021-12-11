@@ -3,15 +3,15 @@
 
 #include <memory>
 #include <unordered_map>
-#include <fm/units.hpp>
-#include <fm/literals.hpp>
+#include <com/units.hpp>
+#include <com/literals.hpp>
 #include <map>
 #include <unordered_map>
-#include <fm/common.hpp>
+#include <com/common.hpp>
 #include <list>
 #include <forward.hpp>
 #include <functional>
-#include <fm/IDefinitionsServer.h>
+#include <com/IDefinitionsServer.h>
 #include <compiler/timeInfo.h>
 #include <compiler/metaData.h>
 #include <compiler/Instrument.h>
@@ -28,7 +28,7 @@ namespace sheet {
 			typedef std::shared_ptr<TrackMetaData> TrackMetaDataPtr;
 			typedef std::unordered_map<VoiceId, VoiceMetaDataPtr> VoiceMetaDataMap;
 			typedef std::unordered_map<TrackId, TrackMetaDataPtr> TrackMetaDataMap;
-			typedef std::function<void(fm::String)> WarningHandler;
+			typedef std::function<void(com::String)> WarningHandler;
 			typedef std::vector<sheet::SheetTemplate> SheetTemplates;
 			virtual void warningHandler(const WarningHandler &) = 0;
 			virtual WarningHandler& warningHandler() = 0;
@@ -66,35 +66,35 @@ namespace sheet {
 			virtual const SheetTemplates & currentSheetTemplates() = 0;
 			virtual VoicingStrategyPtr currentVoicingStrategy() = 0;
 			virtual AModificationPtr spielanweisung() = 0;
-			virtual AInstrumentDefPtr getInstrumentDef(const fm::String &uname) = 0;
+			virtual AInstrumentDefPtr getInstrumentDef(const com::String &uname) = 0;
 			virtual AInstrumentDefPtr currentInstrumentDef() = 0;
-			virtual fm::Ticks currentPosition() const = 0;
-			virtual fm::Ticks maxPosition() const = 0;
+			virtual com::Ticks currentPosition() const = 0;
+			virtual com::Ticks maxPosition() const = 0;
 			virtual TimeInfo getTimeInfo() const = 0;
-			virtual void setInstrument(const fm::String &uname) = 0;
-			virtual void setExpression(fm::Expression value) = 0;
-			virtual void setExpressionPlayedOnce(fm::Expression expr) = 0;
+			virtual void setInstrument(const com::String &uname) = 0;
+			virtual void setExpression(com::Expression value) = 0;
+			virtual void setExpressionPlayedOnce(com::Expression expr) = 0;
 			virtual void setTempo(double bpm) = 0;
 			virtual void setSignature(int upper, int lower) = 0;
-			virtual void setVolume(double volume, fm::Ticks relativePosition = 0) = 0;
+			virtual void setVolume(double volume, com::Ticks relativePosition = 0) = 0;
 			virtual void setPan(double val) = 0;
-			virtual void addCue(const fm::String &text, fm::Ticks absolutePosition) = 0;
+			virtual void addCue(const com::String &text, com::Ticks absolutePosition) = 0;
 			/////// actual context stuff
-			virtual void renderPitch(const PitchDef &pitch, fm::Ticks duration, double velocity, bool tying) = 0;
-			virtual void renderPitch(const PitchDef &pitch, fm::Ticks absolutePosition, double velocity, fm::Ticks duration) = 0;
+			virtual void renderPitch(const PitchDef &pitch, com::Ticks duration, double velocity, bool tying) = 0;
+			virtual void renderPitch(const PitchDef &pitch, com::Ticks absolutePosition, double velocity, com::Ticks duration) = 0;
 			/*
 			 * value = 0..1, 0.5 is the middle position => no bending
 			 */
-			virtual void renderPitchbend(double value, fm::Ticks absolutePosition) = 0;			
-			virtual void startEvent(const PitchDef &pitch, fm::Ticks absolutePosition, double velocity) = 0;
-			virtual void stopEvent(const PitchDef &pitch, fm::Ticks absolutePosition) = 0;
+			virtual void renderPitchbend(double value, com::Ticks absolutePosition) = 0;			
+			virtual void startEvent(const PitchDef &pitch, com::Ticks absolutePosition, double velocity) = 0;
+			virtual void stopEvent(const PitchDef &pitch, com::Ticks absolutePosition) = 0;
 			/**
 			 * if duration == 0 the last event duration will be used
 			 */ 
-			virtual void seek(fm::Ticks duration) = 0;
+			virtual void seek(com::Ticks duration) = 0;
 			virtual void newBar() = 0;
-			virtual void rest(fm::Ticks duration) = 0;
-			virtual fm::Ticks barPos() const = 0;
+			virtual void rest(com::Ticks duration) = 0;
+			virtual com::Ticks barPos() const = 0;
 			/**
 			 * the documents master tempo
 			 */
@@ -104,7 +104,7 @@ namespace sheet {
              * @return the current velocity value between 0..1
              */
             virtual double velocity() = 0;
-			virtual fm::IDefinitionsServerPtr definitionsServer() = 0;
+			virtual com::IDefinitionsServerPtr definitionsServer() = 0;
 			/**
 			 * clears all contents, resets settings  
 			 */

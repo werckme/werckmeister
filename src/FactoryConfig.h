@@ -1,4 +1,4 @@
-#include <fm/werckmeister.hpp>
+#include <com/werckmeister.hpp>
 #include <memory>
 
 namespace sheet
@@ -36,9 +36,9 @@ namespace sheet
             return std::shared_ptr<TRegisterable>(uniquePtr.release());
         }
         template <class TRegisterable>
-        void register_(const fm::String &name)
+        void register_(const com::String &name)
         {
-            fm::getWerckmeister().register_<TRegisterable>(name, [this]()
+            com::getWerckmeister().register_<TRegisterable>(name, [this]()
                                                            { return create<TRegisterable>(); });
         }
     };
@@ -182,8 +182,8 @@ namespace sheet
     void FactoryConfig<TInjector>::initConductor()
     {
         using namespace conductor;
-        fm::String selNamespace_ = "conductor.sel.";
-        fm::String declNamespace_ = "conductor.decl.";
+        com::String selNamespace_ = "conductor.sel.";
+        com::String declNamespace_ = "conductor.decl.";
         register_<OnBeat>(selNamespace_ + SHEET_CONDUCTOR_SEL__ON_BEAT);
         register_<NotOnBeat>(selNamespace_ + SHEET_CONDUCTOR_SEL__NOT_ON_BEAT);
         register_<FromPosition>(selNamespace_ + SHEET_CONDUCTOR_SEL__FROM_POSITION);

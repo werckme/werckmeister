@@ -5,7 +5,7 @@
 
 namespace sheet {
     namespace compiler {
-        const fm::String InstrumentConfigVelocityRemap::VelocityNotSet = "NoRemapValueSet";
+        const com::String InstrumentConfigVelocityRemap::VelocityNotSet = "NoRemapValueSet";
 
         void InstrumentConfigVelocityRemap::execute(IContextPtr  context)
         {

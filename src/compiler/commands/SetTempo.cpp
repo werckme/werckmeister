@@ -21,7 +21,7 @@ namespace sheet {
                 return;
             }			
             
-            fm::BPM bpm = tempoParameter.value<fm::BPM>();	
+            com::BPM bpm = tempoParameter.value<com::BPM>();	
             context->setTempo(bpm);
         }
     }

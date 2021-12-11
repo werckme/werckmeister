@@ -13,7 +13,7 @@ bool checkNote(const sheet::Event &ev,
 
 bool checkNote(const sheet::Event &ev,
     sheet::Event::Type type,
-    const fm::String &alias,
+    const com::String &alias,
     sheet::Event::Duration duration = sheet::Event::NoDuration);
 
 
@@ -22,12 +22,12 @@ bool checkNote(const sheet::Event &ev,
     const sheet::Event::Pitches &pitches,
     sheet::Event::Duration duration = sheet::Event::NoDuration);
 
-bool checkChord(const sheet::Event &ev, fm::String chordName);
+bool checkChord(const sheet::Event &ev, com::String chordName);
 
-bool checkMetaEvent(const sheet::Event &ev, const fm::String &command, const sheet::Event::Args &args);
+bool checkMetaEvent(const sheet::Event &ev, const com::String &command, const sheet::Event::Args &args);
 
-sheet::Argument makeArg(fm::String value);
-sheet::Argument makeArg(fm::String name, fm::String value);
+sheet::Argument makeArg(com::String value);
+sheet::Argument makeArg(com::String name, com::String value);
 
 
 #endif

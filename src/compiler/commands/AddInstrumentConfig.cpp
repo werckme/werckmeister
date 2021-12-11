@@ -1,16 +1,16 @@
 #include "AddInstrumentConfig.h"
 #include <compiler/context/IContext.h>
 #include <compiler/metaCommands.h>
-#include <fm/tools.h>
+#include <com/tools.h>
 #include <compiler/error.hpp>
-#include <fm/werckmeister.hpp>
+#include <com/werckmeister.hpp>
 #include "ICanSpecifyInstrument.h"
 #include <iostream>
 
 namespace sheet {
     namespace compiler {
 
-        const std::vector<fm::String> AddInstrumentConfig::SupportedConfigCommands = {
+        const std::vector<com::String> AddInstrumentConfig::SupportedConfigCommands = {
             SHEET_META__SET_INSTRUMENT_CONFIG_VOLUME,
             SHEET_META__SET_INSTRUMENT_CONFIG_PAN,
             SHEET_META__SET_VOICING_STRATEGY,
@@ -23,7 +23,7 @@ namespace sheet {
             if (this->_configCommands.empty()) {
                 return;
             }
-            auto uname = parameters[argumentNames.InstrumentConf.ForInstrument].value<fm::String>();
+            auto uname = parameters[argumentNames.InstrumentConf.ForInstrument].value<com::String>();
 			auto instrumentDef = context->getInstrumentDef(uname);
 			if (instrumentDef == nullptr) {
 				FM_THROW(Exception, "instrument not found: " + uname);
@@ -39,7 +39,7 @@ namespace sheet {
                 try {
                     commandObject->execute(context);
                 } catch (const std::exception &ex) {
-                    fm::StringStream ss;
+                    com::StringStream ss;
                     ss << "failed to process: " << name << std::endl;
                     ss << ex.what();
                     FM_THROW(Exception, ss.str()); 
@@ -50,13 +50,13 @@ namespace sheet {
 
         void AddInstrumentConfig::setArguments(const Arguments &args) 
         {
-            auto &wm = fm::getWerckmeister();
+            auto &wm = com::getWerckmeister();
             Base::setArguments(args);
-            auto uname = parameters[argumentNames.InstrumentConf.ForInstrument].value<fm::String>();
+            auto uname = parameters[argumentNames.InstrumentConf.ForInstrument].value<com::String>();
             if (args.size() < 3) {
-				FM_THROW(Exception, "not enough values for " + fm::String(SHEET_META__SET_INSTRUMENT_CONFIG) +  ": " + uname);
+				FM_THROW(Exception, "not enough values for " + com::String(SHEET_META__SET_INSTRUMENT_CONFIG) +  ": " + uname);
 			}
-            auto argsMappedByKeyword = fm::mapArgumentsByKeywords(args, SupportedConfigCommands);
+            auto argsMappedByKeyword = com::mapArgumentsByKeywords(args, SupportedConfigCommands);
             for (auto configCommandName : SupportedConfigCommands) {
                 auto argsRange = argsMappedByKeyword.equal_range(configCommandName);
                 if (argsRange.first == argsRange.second) {

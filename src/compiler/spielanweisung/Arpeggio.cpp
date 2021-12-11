@@ -1,7 +1,7 @@
 #include "Arpeggio.h"
 #include "compiler/context/IContext.h"
 #include <algorithm>
-#include <fm/tools.h>
+#include <com/tools.h>
 
 namespace sheet {
     namespace compiler {
@@ -35,7 +35,7 @@ namespace sheet {
 				arpNote.pitches.clear();
 				arpNote.pitches.push_back(pitch);
 				arpNote.duration = arpduration;
-				arpNote.offset = arpduration * static_cast<fm::Ticks>(noteNumber++);
+				arpNote.offset = arpduration * static_cast<com::Ticks>(noteNumber++);
 				result.push_back(arpNote);
 			}
 			events.swap(result);

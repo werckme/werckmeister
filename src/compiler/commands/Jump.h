@@ -32,7 +32,7 @@ namespace sheet {
         class Jump : public ACommand
         {
         public:
-            fm::IHasParameter::ParametersByNames parameters = {
+            com::IHasParameter::ParametersByNames parameters = {
                 FM_PARAMETER_DEF            (argumentNames.Jump.To, 	    0),
                 FM_PARAMETER_DEFAULT_DEF    (argumentNames.Jump.Ignore, 	1, 0),
                 FM_PARAMETER_DEFAULT_DEF    (argumentNames.Jump.Repeat, 	2, 0)

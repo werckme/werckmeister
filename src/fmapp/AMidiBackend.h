@@ -3,7 +3,7 @@
 
 #include <memory>
 #include <vector>
-#include <fm/midi.hpp>
+#include <com/midi.hpp>
 
 
 namespace fmapp {
@@ -21,7 +21,7 @@ namespace fmapp {
         template<class TEvents>
 		void send(const TEvents &events, const Output *output);
 		virtual Outputs getOutputs() const = 0;
-		virtual void send(const fm::midi::Event &event, const Output *output) = 0;
+		virtual void send(const com::midi::Event &event, const Output *output) = 0;
 		virtual void tearDown() = 0;
 		virtual void panic() = 0;
 	};

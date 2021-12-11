@@ -2,20 +2,20 @@
 #define COMPILER_CONTEXT_EVENTS_HPP
 
 #include <sheet/objects/Event.h>
-#include <fm/units.hpp>
-#include <fm/literals.hpp>
+#include <com/units.hpp>
+#include <com/literals.hpp>
 #include <sheet/objects/ChordDef.h>
-#include <fm/common.hpp>
+#include <com/common.hpp>
 #include "forward.hpp"
 #include "timeInfo.h"
 
 namespace sheet {
     namespace compiler {
 		struct NoteEvent {
-			fm::Pitch pitch = 0;
+			com::Pitch pitch = 0;
 			PitchDef::Octave octave = 0;
-			fm::Ticks duration = 0;
-			fm::Ticks absPosition = 0;
+			com::Ticks duration = 0;
+			com::Ticks absPosition = 0;
 		};
     }
 }

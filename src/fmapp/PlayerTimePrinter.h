@@ -9,7 +9,7 @@ namespace fmapp {
     public:
         virtual void loopBegin() override {}
         virtual void loopEnd() override;
-        virtual void visit(fm::Ticks elapsed) override;  
+        virtual void visit(com::Ticks elapsed) override;  
         virtual ~PlayerTimePrinter() = default;
         void clearLine();
     private:

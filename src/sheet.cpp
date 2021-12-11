@@ -1,5 +1,5 @@
-#include <fm/werckmeister.hpp>
-#include <fm/common.hpp>
+#include <com/werckmeister.hpp>
+#include <com/common.hpp>
 #include "sheet/Document.h"
 #include "compiler/Compiler.h"
 #include "parser/parser.h"
@@ -17,7 +17,7 @@ namespace sheet {
         {
             using boost::filesystem::path;
             using boost::filesystem::system_complete;
-            auto &wm = fm::getWerckmeister();
+            auto &wm = com::getWerckmeister();
             auto execPath = path(fmapp::os::getExecutablePath());
             wm.addSearchPath(execPath.string());
             wm.addSearchPath(system_complete(execPath / path("../share/werckmeister")).string());
@@ -27,15 +27,15 @@ namespace sheet {
         }
     }
 
-    std::pair<fm::midi::MidiPtr, sheet::DocumentPtr> processFile(const std::string &file, sheet::Warnings &outWarnings, const fm::midi::MidiConfig *midiConfig)
+    std::pair<com::midi::MidiPtr, sheet::DocumentPtr> processFile(const std::string &file, sheet::Warnings &outWarnings, const com::midi::MidiConfig *midiConfig)
     {
         auto doc = createDocument(file);
         return std::make_pair(processFile(doc, outWarnings, midiConfig), doc);
     }
 
-    fm::midi::MidiPtr processFile(sheet::DocumentPtr doc, sheet::Warnings &outWarnings, const fm::midi::MidiConfig *midiConfig) 
+    com::midi::MidiPtr processFile(sheet::DocumentPtr doc, sheet::Warnings &outWarnings, const com::midi::MidiConfig *midiConfig) 
     {
-        auto &wm = fm::getWerckmeister();
+        auto &wm = com::getWerckmeister();
         auto context = std::dynamic_pointer_cast<sheet::compiler::MidiContext>( wm.createContext() );
         // there is one case where context and event renderer is one object -> TimelineVisitor
         auto eventRenderer = std::dynamic_pointer_cast<sheet::compiler::SheetEventRenderer>( context );
@@ -59,7 +59,7 @@ namespace sheet {
         return doc;
     }
 
-    void onCompilerError(const fm::Exception &ex)
+    void onCompilerError(const com::Exception &ex)
     {
         std::cerr << ex.toString() << std::endl;
     }

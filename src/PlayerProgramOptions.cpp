@@ -70,7 +70,7 @@ bool PlayerProgramOptions::isUdpSet() const {
     return !!variables.count(ARG_UDP);
 }
 
-fm::String PlayerProgramOptions::getUdpHostname() const {
+com::String PlayerProgramOptions::getUdpHostname() const {
     return variables[ARG_UDP].as<std::string>();
 }
 

@@ -2,12 +2,12 @@
 #include <rapidjson/writer.h>
 #include <rapidjson/stringbuffer.h>
 #include <rapidjson/ostreamwrapper.h>
-#include <fm/midi.hpp>
+#include <com/midi.hpp>
 #include <iostream>
 #include <sheet/Document.h>
 #include <compiler/error.hpp>
 #include <boost/beast/core/detail/base64.hpp>
-#include <fm/midi.hpp>
+#include <com/midi.hpp>
 #include <fmapp/os.hpp>
 
 
@@ -29,11 +29,11 @@ namespace fmapp {
         return ::toStream(os, doc);
     }
 
-    std::string JsonIOBase::midiToBase64(fm::midi::MidiPtr midi)
+    std::string JsonIOBase::midiToBase64(com::midi::MidiPtr midi)
     {
         size_t nbytes = midi->byteSize();
         size_t nBase64 = boost::beast::detail::base64::encoded_size(nbytes);
-        fm::Byte *bff = new fm::Byte[nbytes];
+        com::Byte *bff = new com::Byte[nbytes];
         char *base64 = new char[nBase64];
         midi->write(bff, nbytes);
         auto writtenBytes = boost::beast::detail::base64::encode(base64, bff, nbytes);
@@ -65,7 +65,7 @@ namespace fmapp {
     }
 
     void JsonIOBase::eventInfoToJSON(std::ostream& os,
-        fm::Ticks elapsedTime, 
+        com::Ticks elapsedTime, 
         unsigned long lastUpdateTimestamp, 
         const std::vector<fmapp::DefaultTimeline::EventInfo> &eventInfos, 
         bool ignoreTimestamp)
