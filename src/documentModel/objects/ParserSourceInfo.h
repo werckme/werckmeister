@@ -3,7 +3,7 @@
 
 #include "ASheetObjectWithSourceInfo.h"
 
-namespace sheet {
+namespace documentModel {
     class ParserSourceInfo : public ASheetObjectWithSourceInfo {};
 }
 

@@ -2,7 +2,7 @@
 #include <compiler/context/IContext.h>
 #include <compiler/metaCommands.h>
 
-namespace sheet {
+namespace documentModel {
     namespace compiler {
         void SetTempo::execute(IContextPtr  context)
         {

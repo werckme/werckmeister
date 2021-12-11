@@ -1,6 +1,6 @@
 #include "SheetNavigator.h"
 #include <stdlib.h>
-#include <sheet/objects/Voice.h>
+#include <documentModel/objects/Voice.h>
 #include <algorithm>
 #include <unordered_map>
 #include <com/common.hpp>
@@ -28,9 +28,9 @@ namespace {
     };
     typedef std::unordered_map<size_t, Jump> Jumps;
     typedef std::unordered_map<com::String, size_t> Marks;
-    void registerMark(size_t eventContainerIndex, const sheet::Event& event, Marks &marks)
+    void registerMark(size_t eventContainerIndex, const documentModel::Event& event, Marks &marks)
     {
-        auto markCommand = com::getWerckmeister().solve<sheet::compiler::ACommand>(event.stringValue);
+        auto markCommand = com::getWerckmeister().solve<documentModel::compiler::ACommand>(event.stringValue);
         markCommand->setArguments(event.metaArgs);
         com::IHasParameter::ParametersByNames &parameters = markCommand->getParameters();
         com::String name = parameters[argumentNames.Mark.Name].value<com::String>();
@@ -41,18 +41,18 @@ namespace {
         else if (it->second != eventContainerIndex) {
             std::stringstream ss;
             ss << "marker duplicate with \"" << name << "\"";
-            sheet::compiler::Exception exception(ss.str());
-            exception << sheet::compiler::ex_sheet_source_info(event);
+            documentModel::compiler::Exception exception(ss.str());
+            exception << documentModel::compiler::ex_sheet_source_info(event);
             throw exception;
         }
     }
-    Jump & getJump(size_t eventContainerIndex, const sheet::Event& event, Jumps& jumps)
+    Jump & getJump(size_t eventContainerIndex, const documentModel::Event& event, Jumps& jumps)
     {
         auto it = jumps.find(eventContainerIndex);
         if (it != jumps.end()) {
             return it->second;
         }
-        auto jumpCommand = com::getWerckmeister().solve<sheet::compiler::ACommand>(event.stringValue);
+        auto jumpCommand = com::getWerckmeister().solve<documentModel::compiler::ACommand>(event.stringValue);
         jumpCommand->setArguments(event.metaArgs);
         com::IHasParameter::ParametersByNames& parameters = jumpCommand->getParameters();
         Jump jump;
@@ -61,8 +61,8 @@ namespace {
         if (repeatValue+1 > com::SheetNavigationMaxJumps) {
             std::stringstream ss;
             ss << "max repeat size exceeded = " << com::SheetNavigationMaxJumps << " repeats";
-            sheet::compiler::Exception exception(ss.str());
-            exception << sheet::compiler::ex_sheet_source_info(event);
+            documentModel::compiler::Exception exception(ss.str());
+            exception << documentModel::compiler::ex_sheet_source_info(event);
             throw exception;
         }
         jump.numPerform = repeatValue + 1;
@@ -81,37 +81,37 @@ namespace {
         return ss.str();
     }
 
-    sheet::Event createMarkerEvent(const com::String& id)
+    documentModel::Event createMarkerEvent(const com::String& id)
     {
-        sheet::Event event;
+        documentModel::Event event;
         event.stringValue = SHEET_META__MARK;
-        event.type = sheet::Event::Meta;
-        sheet::Argument arg;
+        event.type = documentModel::Event::Meta;
+        documentModel::Argument arg;
         arg.name = argumentNames.Mark.Name;
         arg.value = id;
         event.metaArgs.emplace_back(arg);
         return event;
     }
 
-    sheet::Event createJumpEvent(const com::String &id, int repeat = 0, int ignore = 0)
+    documentModel::Event createJumpEvent(const com::String &id, int repeat = 0, int ignore = 0)
     {
-        sheet::Event event;
-        event.type = sheet::Event::Meta;
+        documentModel::Event event;
+        event.type = documentModel::Event::Meta;
         event.stringValue = SHEET_META__JUMP;
         {
-            sheet::Argument arg;
+            documentModel::Argument arg;
             arg.name = argumentNames.Jump.To;
             arg.value = id;
             event.metaArgs.emplace_back(arg);
         }
         {
-            sheet::Argument arg;
+            documentModel::Argument arg;
             arg.name = argumentNames.Jump.Ignore;
             arg.value = std::to_string(ignore);
             event.metaArgs.emplace_back(arg);
         }
         {
-            sheet::Argument arg;
+            documentModel::Argument arg;
             arg.name = argumentNames.Jump.Repeat;
             arg.value = std::to_string(repeat);
             event.metaArgs.emplace_back(arg);
@@ -119,15 +119,15 @@ namespace {
         return event;
     }
 
-    sheet::Event createVoltaJumpEvent(int srcVoltaNr, int voltaGrp)
+    documentModel::Event createVoltaJumpEvent(int srcVoltaNr, int voltaGrp)
     {
-        sheet::Event event = createJumpEvent(createInternalMarkerName(srcVoltaNr, voltaGrp), 0, srcVoltaNr-1);
+        documentModel::Event event = createJumpEvent(createInternalMarkerName(srcVoltaNr, voltaGrp), 0, srcVoltaNr-1);
         return event;
     }
 
-    int getVoltaNr(const sheet::Event &event)
+    int getVoltaNr(const documentModel::Event &event)
     {
-        if (event.type != sheet::Event::EOB) {
+        if (event.type != documentModel::Event::EOB) {
             return -1;
         }
         if (event.tags.empty()) {
@@ -145,7 +145,7 @@ namespace {
     }
 }
 
-namespace sheet {
+namespace documentModel {
     namespace compiler {
         void SheetNavigator::processNavigation(Voice& voice)
         {
@@ -160,7 +160,7 @@ namespace sheet {
             Jumps jumps;
             Marks marks;
             Voice::Events& src = voice.events;
-            std::list<sheet::Event> dst;
+            std::list<documentModel::Event> dst;
             size_t length = src.size();
             // register marks
             for (size_t idx = 0; idx < length; ++idx) {
@@ -182,8 +182,8 @@ namespace sheet {
                 if (markIt == marks.end()) {
                     std::stringstream ss;
                     ss << "marker not found: \"" << jump.to << "\"";
-                    sheet::compiler::Exception exception(ss.str());
-                    exception << sheet::compiler::ex_sheet_source_info(event);
+                    documentModel::compiler::Exception exception(ss.str());
+                    exception << documentModel::compiler::ex_sheet_source_info(event);
                     throw exception;
                 }
                 bool jumpForward = markIt->second > idx;
@@ -200,8 +200,8 @@ namespace sheet {
                 if ((jump.numVisitedTotal) > com::SheetNavigationMaxJumps) {
                     std::stringstream ss;
                     ss << "max jump size exceeded = " << com::SheetNavigationMaxJumps << " jumps";
-                    sheet::compiler::Exception exception(ss.str());
-                    exception << sheet::compiler::ex_sheet_source_info(event);
+                    documentModel::compiler::Exception exception(ss.str());
+                    exception << documentModel::compiler::ex_sheet_source_info(event);
                     throw exception;
                 }
                 if (jumpForward) {
@@ -224,7 +224,7 @@ namespace sheet {
                 return;
             }
             Voice::Events& src = voice.events;
-            std::list<sheet::Event> dst;
+            std::list<documentModel::Event> dst;
             size_t length = src.size();
             int markCounter = 0;
             auto markAtBegin = createMarkerEvent(createInternalMarkerName(markCounter++));
@@ -252,8 +252,8 @@ namespace sheet {
                     if (voltaNr - lastVoltaNr != 1) {
                         std::stringstream ss;
                         ss << "volta sequence is out of order with value '" << voltaNr << "'";
-                        sheet::compiler::Exception exception(ss.str());
-                        exception << sheet::compiler::ex_sheet_source_info(event);
+                        documentModel::compiler::Exception exception(ss.str());
+                        exception << documentModel::compiler::ex_sheet_source_info(event);
                         throw exception;
                     }
                     if (voltaNr > 1) { // peform a jump from the first volta mark to the current location

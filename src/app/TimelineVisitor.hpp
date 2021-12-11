@@ -8,7 +8,7 @@
 #include <vector>
 #include <memory>
 #include <boost/icl/interval_map.hpp>
-#include <sheet/objects/ASheetObject.h>
+#include <documentModel/objects/ASheetObject.h>
 #include <compiler/ICompilerVisitor.h>
 #include <compiler/context/MidiContext.h>
 #include <com/ILogger.h>
@@ -19,7 +19,7 @@ namespace app {
     * this context creates such timeline
     */
     template<class TIntervalContainer>
-    class TimelineVisitor : public sheet::compiler::ICompilerVisitor {
+    class TimelineVisitor : public documentModel::compiler::ICompilerVisitor {
     private:
         com::ILoggerPtr _logger;
     public:
@@ -27,14 +27,14 @@ namespace app {
         typedef typename TIntervalContainer::value_type::second_type TSet;
         typedef typename TIntervalContainer::interval_type IntervalType;
         typedef typename TSet::value_type EventInfo;
-        typedef sheet::compiler::IContext::TrackId TrackId;
+        typedef documentModel::compiler::IContext::TrackId TrackId;
         virtual ~TimelineVisitor() = default;
         TIntervalContainer &intervalContainer() { return intervalContainer_; }
         const TIntervalContainer &intervalContainer() const { return intervalContainer_; }
         virtual void beginCompile() override { intervalContainer_.clear(); }
         virtual void endCompile() override {}
-        virtual void visit(sheet::compiler::IContext *context, const sheet::Event &ev) override;
-        virtual void visit(sheet::compiler::IContext *context, const com::midi::Event &ev, TrackId trackId) override;    
+        virtual void visit(documentModel::compiler::IContext *context, const documentModel::Event &ev) override;
+        virtual void visit(documentModel::compiler::IContext *context, const com::midi::Event &ev, TrackId trackId) override;    
     private:
         TIntervalContainer intervalContainer_;
         std::shared_ptr<EventInfo> currentEventInfo_;
@@ -45,7 +45,7 @@ namespace app {
     struct EventInfo {
         int beginPosition = -1;
         int endPosition = -1;
-        sheet::Event::SourceId sourceId = sheet::Event::UndefinedSource;
+        documentModel::Event::SourceId sourceId = documentModel::Event::UndefinedSource;
         int eventNr = -1;
         std::vector<int> pitches;
         int channel = -1;
@@ -63,12 +63,12 @@ namespace app {
 
     ///////////////////////////////////////////////////////////////////////////  
     template<class TIntervalContainer>
-    void TimelineVisitor<TIntervalContainer>::visit(sheet::compiler::IContext *ctx, const sheet::Event &ev)
+    void TimelineVisitor<TIntervalContainer>::visit(documentModel::compiler::IContext *ctx, const documentModel::Event &ev)
     {
         if (!ev.isTimeConsuming()) {
             return;
         }
-        if (ev.type == sheet::Event::Group) {
+        if (ev.type == documentModel::Event::Group) {
             return;
         }
         auto meta = ctx->voiceMetaData();
@@ -76,7 +76,7 @@ namespace app {
         auto evEndPos = (meta->position + ev.duration) * meta->tempoFactor;
         this->currentEventInfo_ = std::make_shared<EventInfo>();
 		currentEventInfo_->beginPosition = ev.sourcePositionBegin;
-        if (ev.sourcePositionEnd != sheet::ASheetObjectWithSourceInfo::UndefinedPosition) {
+        if (ev.sourcePositionEnd != documentModel::ASheetObjectWithSourceInfo::UndefinedPosition) {
             currentEventInfo_->endPosition = ev.sourcePositionEnd;
         }
 		currentEventInfo_->sourceId = ev.sourceId;
@@ -86,7 +86,7 @@ namespace app {
     }
 
     template<class TIntervalContainer>
-    void TimelineVisitor<TIntervalContainer>::visit(sheet::compiler::IContext *ctx, const com::midi::Event &ev, TrackId trackId)
+    void TimelineVisitor<TIntervalContainer>::visit(documentModel::compiler::IContext *ctx, const com::midi::Event &ev, TrackId trackId)
     {
         // TODO: #89
         //if (ev.eventType() != com::midi::NoteOn) {
@@ -97,7 +97,7 @@ namespace app {
         //}
         //this->currentEventInfo_->pitches.push_back(ev.parameter1());
         //this->currentEventInfo_->channel = ev.channel();
-        //typedef sheet::compiler::MidiContext::TrackMetaData MidiTrackMetaData;
+        //typedef documentModel::compiler::MidiContext::TrackMetaData MidiTrackMetaData;
         //auto trackMeta = std::dynamic_pointer_cast<MidiTrackMetaData>(ctx->trackMetaData(trackId));
         //if (trackMeta) {
         //    this->currentEventInfo_->instrumentId = trackMeta->instrument.id;

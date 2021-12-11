@@ -16,7 +16,7 @@
 #include "compiler/spielanweisung/Vorschlag.h"
 #include "compiler/spielanweisung/spielanweisungen.h"
 #include "compiler/modification/LuaMod.h"
-#include <sheet/Document.h>
+#include <documentModel/Document.h>
 
 namespace com {
     
@@ -71,17 +71,17 @@ namespace com {
 		return boost::filesystem::exists(path);
 	}
 
-	sheet::VoicingStrategyPtr Werckmeister::getDefaultVoicingStrategy()
+	documentModel::VoicingStrategyPtr Werckmeister::getDefaultVoicingStrategy()
 	{
 		return getVoicingStrategy(SHEET_VOICING_STRATEGY_DEFAULT);
 	}
 
-	sheet::VoicingStrategyPtr Werckmeister::getVoicingStrategy(const com::String &name)
+	documentModel::VoicingStrategyPtr Werckmeister::getVoicingStrategy(const com::String &name)
 	{
-		sheet::VoicingStrategyPtr result;
+		documentModel::VoicingStrategyPtr result;
 		const Path *scriptPath = findScriptPathByName(name);
 		if (scriptPath != nullptr) {
-			auto anw = std::make_shared<sheet::compiler::LuaVoicingStrategy>(*scriptPath);
+			auto anw = std::make_shared<documentModel::compiler::LuaVoicingStrategy>(*scriptPath);
 			try {
 				anw->assertCanExecute();
 			} catch (const Exception &ex) {
@@ -94,21 +94,21 @@ namespace com {
 			result->name(name);
 			return result;
 		}
-		result = solve<sheet::VoicingStrategy>(name);
+		result = solve<documentModel::VoicingStrategy>(name);
 		result->name(name);
 		return result;
 	}
 
-	sheet::compiler::AModificationPtr Werckmeister::getSpielanweisung(const com::String &name)
+	documentModel::compiler::AModificationPtr Werckmeister::getSpielanweisung(const com::String &name)
 	{
 		return getModification(name);
 	}
 
-	sheet::compiler::AModificationPtr Werckmeister::getModification(const com::String &name)
+	documentModel::compiler::AModificationPtr Werckmeister::getModification(const com::String &name)
 	{	
 		const Path *scriptPath = findScriptPathByName(name);
 		if (scriptPath != nullptr) {
-			auto anw = std::make_shared<sheet::compiler::LuaModification>(*scriptPath);
+			auto anw = std::make_shared<documentModel::compiler::LuaModification>(*scriptPath);
 			try {
 				anw->assertCanExecute();
 			} catch (const Exception &ex) {
@@ -120,7 +120,7 @@ namespace com {
 			return anw;
 		}
 		
-		auto result = solve<sheet::compiler::AModification>(name);
+		auto result = solve<documentModel::compiler::AModification>(name);
 		return result;
 	}
 
@@ -196,7 +196,7 @@ namespace com {
 
 	bool Werckmeister::fileIsSheet(const Path &path) const 
 	{
-		return boost::filesystem::extension(path) == ".sheet";
+		return boost::filesystem::extension(path) == ".documentModel";
 	}
 
 	Werckmeister::~Werckmeister() = default;

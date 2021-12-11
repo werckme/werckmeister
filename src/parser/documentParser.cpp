@@ -1,5 +1,5 @@
 #include "parser.h"
-#include "sheet/Document.h"
+#include "documentModel/Document.h"
 #include <boost/filesystem.hpp>
 #include "com/config.hpp"
 #include <unordered_map>
@@ -11,7 +11,7 @@
 #include <set>
 
 
-namespace sheet {
+namespace documentModel {
 	namespace compiler {
 
 		namespace {
@@ -25,7 +25,7 @@ namespace sheet {
 			void useSheetTemplateDef(DocumentPtr doc, const com::String &path, Event::SourceId);
 			void useConfig(DocumentPtr doc, const com::String& path, Event::SourceId sourceId);
 			void processUsings(DocumentPtr doc, 
-				const sheet::DocumentUsing &documentUsing, 
+				const documentModel::DocumentUsing &documentUsing, 
 				const Extensions &allowedExtendions,
 				const com::String &sourcePath = com::String());
 			
@@ -137,7 +137,7 @@ namespace sheet {
 			}
 
 			void processUsings(DocumentPtr doc, 
-				const sheet::DocumentUsing &documentUsing,
+				const documentModel::DocumentUsing &documentUsing,
 				const Extensions &allowedExtendions,
 				const com::String &sourcePath)
 			{

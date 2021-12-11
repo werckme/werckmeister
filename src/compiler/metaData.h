@@ -1,21 +1,21 @@
 #ifndef COMPILER_METADATA_H
 #define COMPILER_METADATA_H
 
-#include <sheet/objects/Event.h>
+#include <documentModel/objects/Event.h>
 #include <memory>
 #include <unordered_map>
 #include <com/units.hpp>
 #include <com/literals.hpp>
 #include <map>
 #include <unordered_map>
-#include <sheet/objects/ChordDef.h>
+#include <documentModel/objects/ChordDef.h>
 #include <com/IDefinitionsServer.h>
 #include "compiler/voicings/VoicingStrategy.h"
 #include <com/common.hpp>
 #include <list>
 #include "forward.hpp"
 
-namespace sheet {
+namespace documentModel {
     namespace compiler {
         struct TrackMetaData {
             com::String instrument;

@@ -9,7 +9,7 @@
 #include <boost/phoenix/operator/arithmetic.hpp>
 #include "parserSymbols.h"
 
-namespace sheet {
+namespace documentModel {
     namespace compiler {
         namespace {
 			PitchSymbols pitchSymbols_;

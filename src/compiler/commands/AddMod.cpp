@@ -4,7 +4,7 @@
 #include <com/werckmeister.hpp>
 #include <algorithm>
 
-namespace sheet {
+namespace documentModel {
     namespace compiler {
         void AddMod::execute(IContextPtr  context)
         {

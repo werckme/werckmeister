@@ -15,10 +15,10 @@ namespace app {
      */
     class SheetWatcher : public IPlayerLoopVisitor {
     private:
-        sheet::DocumentPtr               _document;
+        documentModel::DocumentPtr               _document;
         app::SheetWatcherHandlersPtr   _sheetWatcherHandlers;
     public:
-        SheetWatcher(sheet::DocumentPtr document, app::SheetWatcherHandlersPtr sheetWatcherHandlers) 
+        SheetWatcher(documentModel::DocumentPtr document, app::SheetWatcherHandlersPtr sheetWatcherHandlers) 
         : _document(document), _sheetWatcherHandlers(sheetWatcherHandlers)
         {}
         virtual void loopBegin() override {}

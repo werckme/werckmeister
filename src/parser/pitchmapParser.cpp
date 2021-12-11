@@ -11,19 +11,19 @@
 #include "error.hpp"
 
 BOOST_FUSION_ADAPT_STRUCT(
-	sheet::PitchDef,
-	(sheet::PitchDef::Pitch, pitch)
-	(sheet::PitchDef::Octave, octave)
+	documentModel::PitchDef,
+	(documentModel::PitchDef::Pitch, pitch)
+	(documentModel::PitchDef::Octave, octave)
 )
 
 BOOST_FUSION_ADAPT_STRUCT(
-	sheet::Pitchmap,
+	documentModel::Pitchmap,
 	(com::String, name)
-	(sheet::PitchDef, pitch)
+	(documentModel::PitchDef, pitch)
 )
 
 
-namespace sheet {
+namespace documentModel {
 	namespace compiler {
 
 		namespace {

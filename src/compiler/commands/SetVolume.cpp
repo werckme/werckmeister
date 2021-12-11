@@ -1,7 +1,7 @@
 #include "SetVolume.h"
 #include <compiler/context/IContext.h>
 
-namespace sheet {
+namespace documentModel {
     namespace compiler {
         void SetVolume::execute(IContextPtr  context)
         {

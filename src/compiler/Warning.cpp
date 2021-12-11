@@ -1,9 +1,9 @@
 #include "Warning.hpp"
-#include <sheet/Document.h>
+#include <documentModel/Document.h>
 #include <sstream>
 #include <com/tools.h>
 
-namespace sheet {
+namespace documentModel {
     std::string Warning::toString(std::shared_ptr<Document> document) const
     {
         std::stringstream ss;

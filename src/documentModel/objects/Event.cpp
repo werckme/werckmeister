@@ -6,7 +6,7 @@
 #include <locale>
 #include <com/exception.hpp>
 
-namespace sheet {
+namespace documentModel {
 
 	namespace {
 		const std::unordered_map<wchar_t, int> _name2pitch = {

@@ -2,10 +2,10 @@
 #define ASPIELANWEISUNG_HPP
 
 #include <com/units.hpp>
-#include <sheet/objects/Event.h>
+#include <documentModel/objects/Event.h>
 #include <compiler/modification/AModification.h>
 
-namespace sheet {
+namespace documentModel {
     namespace compiler {
         class AContext;
         class ASpielanweisung : public AModification {

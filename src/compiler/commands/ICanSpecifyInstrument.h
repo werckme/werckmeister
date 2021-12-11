@@ -3,7 +3,7 @@
 
 #include <compiler/Instrument.h>
 
-namespace sheet {
+namespace documentModel {
     namespace compiler {
         class ICanSpecifyInstrument
         {

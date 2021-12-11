@@ -2,7 +2,7 @@
 #include <compiler/context/MidiContext.h>
 
 
-namespace sheet {
+namespace documentModel {
     namespace compiler {
         void SelectMidiSound::execute(IContextPtr  context)
         {

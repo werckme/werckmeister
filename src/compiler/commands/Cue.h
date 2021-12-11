@@ -4,7 +4,7 @@
 #include "ACommand.h"
 #include <compiler/argumentNames.h>
 
-namespace sheet {
+namespace documentModel {
     namespace compiler {
         /// <command name="cue" where="track">
         ///     adds a cue meta message to the corresponding midi track

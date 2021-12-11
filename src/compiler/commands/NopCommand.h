@@ -4,7 +4,7 @@
 #include "ACommand.h"
 #include <compiler/argumentNames.h>
 
-namespace sheet {
+namespace documentModel {
     namespace compiler {
         class NopCommand : public ACommand
         {

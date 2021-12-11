@@ -5,7 +5,7 @@
 #include <compiler/argumentNames.h>
 #include <compiler/voicings/VoicingStrategy.h>
 
-namespace sheet {
+namespace documentModel {
     namespace compiler {
         /// <command name="voicingStrategy" where="track">
         /// Adds a modification to the track.

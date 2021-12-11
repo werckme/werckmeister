@@ -5,18 +5,18 @@
 
 struct lua_State;
 
-namespace sheet {
+namespace documentModel {
     namespace lua {
 
         class LuaTimeInfo {
         public:
-            LuaTimeInfo(const sheet::TimeInfo &timeInfo) : timeInfo_(timeInfo)
+            LuaTimeInfo(const documentModel::TimeInfo &timeInfo) : timeInfo_(timeInfo)
             {
 
             }
             void push(lua_State *L);
         protected:
-            const sheet::TimeInfo &timeInfo_;
+            const documentModel::TimeInfo &timeInfo_;
         };
     }
 }

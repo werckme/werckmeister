@@ -3,7 +3,7 @@
 
 #include "Event.h"
 
-namespace sheet {
+namespace documentModel {
 	struct Grouped : public Event {
 		Grouped() {
 			this->type = Group;

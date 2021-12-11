@@ -20,9 +20,9 @@
 #include "parserSymbols.h"
 
 BOOST_FUSION_ADAPT_STRUCT(
-	sheet::ConductionSelector::ArgumentValue,
+	documentModel::ConductionSelector::ArgumentValue,
 	(com::Ticks, numberValue)
-	(sheet::PitchDef, pitch)
+	(documentModel::PitchDef, pitch)
 	(com::String, name)
 )
 
@@ -35,11 +35,11 @@ namespace {
 
 
 BOOST_FUSION_ADAPT_STRUCT(
-	sheet::ConductionSelector,
+	documentModel::ConductionSelector,
 	(unsigned int, sourcePositionBegin)
-	(sheet::ASheetObjectWithSourceInfo::SourceId, sourceId)
+	(documentModel::ASheetObjectWithSourceInfo::SourceId, sourceId)
 	(com::String, type)
-	(sheet::ConductionSelector::Arguments, arguments)
+	(documentModel::ConductionSelector::Arguments, arguments)
 )
 
 namespace {
@@ -51,32 +51,32 @@ namespace {
 }
 
 BOOST_FUSION_ADAPT_STRUCT(
-	sheet::ConductionRule::Declaration,
+	documentModel::ConductionRule::Declaration,
 	(unsigned int, sourcePositionBegin)
-	(sheet::ASheetObjectWithSourceInfo::SourceId, sourceId)
+	(documentModel::ASheetObjectWithSourceInfo::SourceId, sourceId)
 	(com::String, property)
-	(sheet::ConductionRule::Declaration::OperationType, operation)
+	(documentModel::ConductionRule::Declaration::OperationType, operation)
 	(double, value)
-	(sheet::ConductionRule::Declaration::ValueUnit, unit)
+	(documentModel::ConductionRule::Declaration::ValueUnit, unit)
 )
 
 
 BOOST_FUSION_ADAPT_STRUCT(
-	sheet::ConductionRule,
+	documentModel::ConductionRule,
 	(unsigned int, sourcePositionBegin)
-	(sheet::ASheetObjectWithSourceInfo::SourceId, sourceId)
-	(sheet::ConductionRule::Selectors, selectors)
-	(sheet::ConductionRule::Declarations, declarations)
+	(documentModel::ASheetObjectWithSourceInfo::SourceId, sourceId)
+	(documentModel::ConductionRule::Selectors, selectors)
+	(documentModel::ConductionRule::Declarations, declarations)
 )
 
 BOOST_FUSION_ADAPT_STRUCT(
-	sheet::ConductionSheetDef,
+	documentModel::ConductionSheetDef,
 	(unsigned int, sourcePositionBegin)
-	(sheet::ConductionSheetDef::Rules, rules)
+	(documentModel::ConductionSheetDef::Rules, rules)
 )
 
 
-namespace sheet {
+namespace documentModel {
 	namespace compiler {
 
 		namespace {
@@ -105,7 +105,7 @@ namespace sheet {
 					using qi::_val;
 			
 					current_pos_.setStartPos(begin);
-					start.name("conduction sheet");
+					start.name("conduction documentModel");
 					selector_.name("selector");
 					declaration_.name("declaration");
 					numberArgument_ %= 
@@ -288,12 +288,12 @@ namespace sheet {
 				qi::rule<Iterator, ConductionSheetDef(), ascii::space_type> start;
 				qi::rule<Iterator, ConductionSelector(), ascii::space_type> selector_;
 				qi::rule<Iterator, ConductionRule(), ascii::space_type> rules_;
-				qi::rule<Iterator, sheet::ConductionSelector::ArgumentValue(), ascii::space_type> numberArgument_;
-				qi::rule<Iterator, sheet::ConductionSelector::ArgumentValue(), ascii::space_type> pitchArgument_;
-				qi::rule<Iterator, sheet::ConductionSelector::ArgumentValue(), ascii::space_type> stringArgument_;
-				qi::rule<Iterator, sheet::ConductionRule::Declaration(), ascii::space_type> declaration_;
-				qi::rule<Iterator, sheet::ConductionRule::Declaration::OperationType(), ascii::space_type> operationType_;
-				qi::rule<Iterator, sheet::ConductionRule::Declaration::ValueUnit(), ascii::space_type> valueUnit_;
+				qi::rule<Iterator, documentModel::ConductionSelector::ArgumentValue(), ascii::space_type> numberArgument_;
+				qi::rule<Iterator, documentModel::ConductionSelector::ArgumentValue(), ascii::space_type> pitchArgument_;
+				qi::rule<Iterator, documentModel::ConductionSelector::ArgumentValue(), ascii::space_type> stringArgument_;
+				qi::rule<Iterator, documentModel::ConductionRule::Declaration(), ascii::space_type> declaration_;
+				qi::rule<Iterator, documentModel::ConductionRule::Declaration::OperationType(), ascii::space_type> operationType_;
+				qi::rule<Iterator, documentModel::ConductionRule::Declaration::ValueUnit(), ascii::space_type> valueUnit_;
 				CurrentPos<Iterator> current_pos_;
 			};
 

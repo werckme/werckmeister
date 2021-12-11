@@ -1,7 +1,7 @@
 #include "FromBeat.h"
 #include <cmath>
 
-namespace sheet
+namespace documentModel
 {
     namespace conductor
     {

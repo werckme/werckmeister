@@ -1,6 +1,6 @@
 #include "tools.h"
-#include <sheet/objects/Event.h>
-#include <sheet/Document.h>
+#include <documentModel/objects/Event.h>
+#include <documentModel/Document.h>
 #include <com/werckmeister.hpp>
 
 
@@ -9,7 +9,7 @@ namespace com {
         namespace {
 			auto _lineAndPos(const com::String &file, unsigned int sourcePos)
 			{
-				if (sourcePos == sheet::ASheetObjectWithSourceInfo::UndefinedPosition) {
+				if (sourcePos == documentModel::ASheetObjectWithSourceInfo::UndefinedPosition) {
 					sourcePos = 0;
 				}
 				try {
@@ -26,7 +26,7 @@ namespace com {
 			}
 		}
 
-    void argumentsToParameters(const std::vector<sheet::Argument> arguments, IHasParameter::ParametersByNames &outParameters)
+    void argumentsToParameters(const std::vector<documentModel::Argument> arguments, IHasParameter::ParametersByNames &outParameters)
     {
         if (arguments.empty()) {
             return;
@@ -59,11 +59,11 @@ namespace com {
 
     namespace toolsimpl {
 
-        const std::vector<sheet::Argument> & getMetaArgs(const sheet::Event &metaEvent)
+        const std::vector<documentModel::Argument> & getMetaArgs(const documentModel::Event &metaEvent)
         {
             return metaEvent.metaArgs;
         }
-        const com::String & getMetaCommand(const sheet::Event &metaEvent)
+        const com::String & getMetaCommand(const documentModel::Event &metaEvent)
         {
             return metaEvent.stringValue;
         }
@@ -104,8 +104,8 @@ namespace com {
     }
 
     std::ostream & documentMessage(std::ostream &ss, 
-        const std::shared_ptr<sheet::Document> document, 
-        sheet::ASheetObjectWithSourceInfo::SourceId sourceId,
+        const std::shared_ptr<documentModel::Document> document, 
+        documentModel::ASheetObjectWithSourceInfo::SourceId sourceId,
         unsigned int sourcePosition,
         const std::string &message)
     {

@@ -4,7 +4,7 @@
 #include "ACommand.h"
 #include <compiler/argumentNames.h>
 
-namespace sheet {
+namespace documentModel {
     namespace compiler {
         /// <command name="pan" where="track">
         ///     set the pan of the current track

@@ -4,7 +4,7 @@
 #include <rapidjson/ostreamwrapper.h>
 #include <com/midi.hpp>
 #include <iostream>
-#include <sheet/Document.h>
+#include <documentModel/Document.h>
 #include <compiler/error.hpp>
 #include <boost/beast/core/detail/base64.hpp>
 #include <com/midi.hpp>
@@ -102,12 +102,12 @@ namespace app {
 
     void JsonIOBase::exceptionToJSON(std::ostream& os,const std::exception &ex)
     {
-        typedef sheet::compiler::Exception SheetException;
+        typedef documentModel::compiler::Exception SheetException;
         rapidjson::Document doc;
         doc.SetObject();
         rapidjson::Value errorMessage;
         const SheetException *fmex                       = dynamic_cast<const SheetException*>(&ex);
-        const sheet::ASheetObjectWithSourceInfo *docInfo = fmex ? fmex->getSourceInfo() : nullptr;
+        const documentModel::ASheetObjectWithSourceInfo *docInfo = fmex ? fmex->getSourceInfo() : nullptr;
         if (fmex && docInfo) {
             const auto sourceFile = fmex->getSourceFile(); 
             rapidjson::Value sourceId(docInfo->sourceId);
@@ -115,10 +115,10 @@ namespace app {
             rapidjson::Value positionEnd(docInfo->sourcePositionEnd);
             errorMessage.SetString(fmex->what(), doc.GetAllocator());
             doc.AddMember("sourceId", sourceId, doc.GetAllocator());
-            if (docInfo->sourcePositionBegin != sheet::ASheetObjectWithSourceInfo::UndefinedPosition) {
+            if (docInfo->sourcePositionBegin != documentModel::ASheetObjectWithSourceInfo::UndefinedPosition) {
                 doc.AddMember("positionBegin", positionBegin, doc.GetAllocator());
             }
-            if (docInfo->sourcePositionEnd != sheet::ASheetObjectWithSourceInfo::UndefinedPosition) {
+            if (docInfo->sourcePositionEnd != documentModel::ASheetObjectWithSourceInfo::UndefinedPosition) {
                 doc.AddMember("positionEnd", positionEnd, doc.GetAllocator());
             }
             if (true) {

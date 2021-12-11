@@ -4,16 +4,16 @@
 #include <com/units.hpp>
 #include "com/common.hpp"
 
-bool checkNote(const sheet::Event &ev,
-    sheet::Event::Type type,
-    sheet::PitchDef::Pitch pitch,
-    sheet::PitchDef::Octave octave,
-    sheet::Event::Duration duration)
+bool checkNote(const documentModel::Event &ev,
+    documentModel::Event::Type type,
+    documentModel::PitchDef::Pitch pitch,
+    documentModel::PitchDef::Octave octave,
+    documentModel::Event::Duration duration)
 {
-    if (ev.pitches.empty() && pitch != sheet::PitchDef::NoPitch) {
+    if (ev.pitches.empty() && pitch != documentModel::PitchDef::NoPitch) {
         return false;
     }
-    if (pitch != sheet::PitchDef::NoPitch) {
+    if (pitch != documentModel::PitchDef::NoPitch) {
         auto first = ev.pitches.begin();
         if (first->pitch != pitch || first->octave != octave) {
             return false;
@@ -22,10 +22,10 @@ bool checkNote(const sheet::Event &ev,
     return ev.type == type && ev.duration == duration;
 }
 
-bool checkNote(const sheet::Event &ev,
-    sheet::Event::Type type,
+bool checkNote(const documentModel::Event &ev,
+    documentModel::Event::Type type,
     const com::String &alias,
-    sheet::Event::Duration duration)
+    documentModel::Event::Duration duration)
 {
     if (ev.pitches.empty()) {
         return false;
@@ -40,10 +40,10 @@ bool checkNote(const sheet::Event &ev,
 
 
 
-bool checkNote(const sheet::Event &ev,
-    sheet::Event::Type type,
-    const sheet::Event::Pitches &pitches,
-    sheet::Event::Duration duration)
+bool checkNote(const documentModel::Event &ev,
+    documentModel::Event::Type type,
+    const documentModel::Event::Pitches &pitches,
+    documentModel::Event::Duration duration)
 {
     bool pre = ev.type == type && ev.duration == duration;
     if (!pre) {
@@ -65,14 +65,14 @@ bool checkNote(const sheet::Event &ev,
     return true;
 }
 
-bool checkChord(const sheet::Event &ev, com::String chordName)
+bool checkChord(const documentModel::Event &ev, com::String chordName)
 {
-    return ev.type == sheet::Event::Chord && ev.stringValue == chordName;
+    return ev.type == documentModel::Event::Chord && ev.stringValue == chordName;
 }
 
-bool checkMetaEvent(const sheet::Event &ev, const com::String &command, const sheet::Event::Args &args)
+bool checkMetaEvent(const documentModel::Event &ev, const com::String &command, const documentModel::Event::Args &args)
 {
-    bool pre = ev.type == sheet::Event::Meta && ev.stringValue == command;
+    bool pre = ev.type == documentModel::Event::Meta && ev.stringValue == command;
     if (!pre) {
         return false;
     }
@@ -92,13 +92,13 @@ bool checkMetaEvent(const sheet::Event &ev, const com::String &command, const sh
     return true;
 }
 
-sheet::Argument makeArg(com::String value) {
-    sheet::Argument argument;
+documentModel::Argument makeArg(com::String value) {
+    documentModel::Argument argument;
     argument.value = value;
     argument.name = "";
     return argument;
 }
-sheet::Argument makeArg(com::String name, com::String value) {
+documentModel::Argument makeArg(com::String name, com::String value) {
     auto argument = makeArg(value);
     argument.name = name;
     return argument;

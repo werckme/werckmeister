@@ -1,7 +1,7 @@
 #ifndef COMPILER_SHEET_EVENT_RENDERER_H
 #define COMPILER_SHEET_EVENT_RENDERER_H
 
-#include <sheet/objects/Event.h>
+#include <documentModel/objects/Event.h>
 #include "context/IContext.h"
 #include <compiler/error.hpp>
 #include "ASheetEventRenderer.h"
@@ -9,7 +9,7 @@
 #include "ICompilerVisitor.h"
 #include <list>
 
-namespace sheet {
+namespace documentModel {
     namespace compiler {
         class SheetEventRenderer : public ASheetEventRenderer {
         public:

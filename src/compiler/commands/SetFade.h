@@ -4,7 +4,7 @@
 #include "ACommand.h"
 #include <compiler/argumentNames.h>
 
-namespace sheet {
+namespace documentModel {
     namespace compiler {
         /// <command name="fade" where="track">
         ///     Fades the volume over a given duration in quarters.

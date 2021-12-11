@@ -50,11 +50,11 @@ SET (SRC_FETZER_LIB
     compiler/argumentNames.cpp
     compiler/SheetNavigator.cpp
     compiler/lua/luaTimeInfo.cpp
-    sheet/objects/Event.cpp
-    sheet/objects/ChordDef.cpp
-    sheet/objects/Track.cpp
-    sheet/Document.cpp
-    sheet/SheetTemplate.cpp
+    documentModel/objects/Event.cpp
+    documentModel/objects/ChordDef.cpp
+    documentModel/objects/Track.cpp
+    documentModel/Document.cpp
+    documentModel/SheetTemplate.cpp
     compiler/commands/ACommand.cpp
     compiler/commands/ACanSpecifyInstrument.cpp
     compiler/commands/DefineMidiInstrument.cpp
@@ -112,7 +112,7 @@ SET (SRC_FETZER_LIB
 )
 
 add_definitions( -DGIT_VERSION="${GIT_VERSION}" )
-add_library(sheet ${SRC_FETZER_LIB})
+add_library(documentModel ${SRC_FETZER_LIB})
 
 ## TESTS
 SET (SRC_FETZER_TESTS
@@ -168,7 +168,7 @@ SET (SRC_SHEET_PLAYER
     PlayerProgramOptions.cpp
 )
 
-SET (SHEET_LIBS ${SHEET_LIBS} app sheet lua ${Boost_LIBRARIES})
+SET (SHEET_LIBS ${SHEET_LIBS} app documentModel lua ${Boost_LIBRARIES})
 
 if(WIN32)
     SET (SHEET_LIBS ${SHEET_LIBS} Bcrypt.lib)

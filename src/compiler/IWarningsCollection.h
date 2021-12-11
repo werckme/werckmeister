@@ -5,7 +5,7 @@
 #include "Warning.hpp"
 #include <memory>
 
-namespace sheet {
+namespace documentModel {
 	namespace compiler {
         class IWarningsCollection {
         private:

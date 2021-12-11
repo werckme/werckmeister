@@ -3,9 +3,9 @@
 
 #include <com/IRegisterable.h>
 #include <com/midi.hpp>
-#include <sheet/objects/ConductionSheetDef.h>
+#include <documentModel/objects/ConductionSheetDef.h>
 
-namespace sheet
+namespace documentModel
 {
     namespace conductor
     {

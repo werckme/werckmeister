@@ -4,7 +4,7 @@
 #include <climits>
 #include "ASheetObject.h"
 
-namespace sheet {
+namespace documentModel {
 
     class ASheetObjectWithSourceInfo : public ASheetObject {
     public:

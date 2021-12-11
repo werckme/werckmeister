@@ -3,7 +3,7 @@
 
 #include "ISheetNavigator.h"
 
-namespace sheet {
+namespace documentModel {
 	namespace compiler {
 		/// Is responsible for solving navigation commands such as mark/jump etc.
 		class SheetNavigator : public ISheetNavigator {

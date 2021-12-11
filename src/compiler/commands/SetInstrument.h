@@ -4,7 +4,7 @@
 #include "ACommand.h"
 #include <compiler/argumentNames.h>
 
-namespace sheet {
+namespace documentModel {
     namespace compiler {
         /// <command name="instrument" where="trackConfig, track">
         /// Set or change the instrument of a track.

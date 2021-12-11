@@ -3,7 +3,7 @@
 
 void SheetPlayerProgram::onSheetChanged()
 {
-    _logger->babble(WMLogLambda(log << "sheet document changed"));
+    _logger->babble(WMLogLambda(log << "documentModel document changed"));
     auto ticksStopped = _midiPlayerPtr->stop();
     _programOptions->setResumeAtPosition(ticksStopped / com::PPQ );
     documentWasChanged = true;

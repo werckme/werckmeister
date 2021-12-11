@@ -3,11 +3,11 @@
 
 
 #include <list>
-#include <sheet/objects/ASheetObjectWithSourceInfo.h>
+#include <documentModel/objects/ASheetObjectWithSourceInfo.h>
 #include <string>
 #include <memory>
 
-namespace sheet {
+namespace documentModel {
     class Document;
     struct Warning
     {

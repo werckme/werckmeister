@@ -1,10 +1,10 @@
 #ifndef SPIELANWEISUNG_VORSCHLAG_HPP
 #define SPIELANWEISUNG_VORSCHLAG_HPP
 
-#include <sheet/objects/Event.h>
+#include <documentModel/objects/Event.h>
 #include "ASpielanweisung.h"
 
-namespace sheet {
+namespace documentModel {
     namespace compiler {
         class Vorschlag : public ASpielanweisung {
         public:

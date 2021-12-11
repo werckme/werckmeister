@@ -12,18 +12,18 @@
 
 
 BOOST_FUSION_ADAPT_STRUCT(
-	sheet::DegreeDef,
+	documentModel::DegreeDef,
 	(com::Pitch, degree)
 	(int, value)
 )
 
 BOOST_FUSION_ADAPT_STRUCT(
-	sheet::ChordDef,
+	documentModel::ChordDef,
 	(com::String, name)
-	(sheet::ChordDef::Intervals, intervals)
+	(documentModel::ChordDef::Intervals, intervals)
 )
 
-namespace sheet {
+namespace documentModel {
 	namespace compiler {
 
 

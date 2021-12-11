@@ -9,7 +9,7 @@
 
 #define LUA_MODIFICATION_FENTRY "perform"
 
-namespace sheet {
+namespace documentModel {
     namespace compiler {
         class LuaModification : 
             public AModification, 

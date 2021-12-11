@@ -9,12 +9,12 @@
 #include <compiler/Preprocessor.h>
 #include <compiler/error.hpp>
 
-namespace sheet {
+namespace documentModel {
 
 
 	com::String Document::getAbsolutePath(const com::String &path) const
 	{
-		sheet::ConstDocumentPtr thisPtr = shared_from_this();
+		documentModel::ConstDocumentPtr thisPtr = shared_from_this();
 		return com::getWerckmeister().resolvePath(path);
 	}
 

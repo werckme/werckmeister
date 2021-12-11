@@ -1,7 +1,7 @@
 #include "InstrumentConfigSetVoicingStrategy.h"
 #include <compiler/context/IContext.h>
 
-namespace sheet {
+namespace documentModel {
     namespace compiler {
         void InstrumentConfigSetVoicingStrategy::execute(IContextPtr  context)
         {

@@ -7,12 +7,12 @@
 #include <vector>
 #include <tuple>
 #include <boost/algorithm/string.hpp>
-#include <sheet/objects/ASheetObjectWithSourceInfo.h>
-#include <sheet/Argument.h>
+#include <documentModel/objects/ASheetObjectWithSourceInfo.h>
+#include <documentModel/Argument.h>
 #include <com/IHasParameter.h>
 #include <ostream>
 
-namespace sheet {
+namespace documentModel {
     struct Event;
     class Document;
 }
@@ -21,7 +21,7 @@ namespace com {
 
     enum { NO_ARG_POSITION = -1 }; 
 
-    void argumentsToParameters(const std::vector<sheet::Argument> arguments, IHasParameter::ParametersByNames &outParameters);
+    void argumentsToParameters(const std::vector<documentModel::Argument> arguments, IHasParameter::ParametersByNames &outParameters);
 
     template<class TString>
     struct NewLine {
@@ -39,15 +39,15 @@ namespace com {
     };
 
     namespace toolsimpl {
-        const std::vector<sheet::Argument> & getMetaArgs(const sheet::Event &metaEvent);
-        const com::String & getMetaCommand(const sheet::Event &metaEvent);
+        const std::vector<documentModel::Argument> & getMetaArgs(const documentModel::Event &metaEvent);
+        const com::String & getMetaCommand(const documentModel::Event &metaEvent);
     }
 
     namespace {
         struct MissingArgument {};
 
         template<typename TArgs>
-        const sheet::Argument * __getArgument(const TArgs &args, int idx) 
+        const documentModel::Argument * __getArgument(const TArgs &args, int idx) 
         {
             if (idx >= (int)args.size()) {
                 return nullptr;
@@ -65,7 +65,7 @@ namespace com {
                 }                
                 throw MissingArgument();
             }
-            const sheet::Argument *argument = __getArgument(args, idx);
+            const documentModel::Argument *argument = __getArgument(args, idx);
             if (!argument) {
                 if (defaultValue) {
                     return *defaultValue;
@@ -78,7 +78,7 @@ namespace com {
     }
     
     template<typename TArg>
-    TArg getArgumentValue(const sheet::Event &metaEvent, int idx, TArg *defaultValue = nullptr) 
+    TArg getArgumentValue(const documentModel::Event &metaEvent, int idx, TArg *defaultValue = nullptr) 
     {
         try {
             return __getArgumentValue<TArg>(toolsimpl::getMetaArgs(metaEvent), idx, defaultValue);
@@ -98,7 +98,7 @@ namespace com {
     }
 
     template<typename TArgs>
-    sheet::Argument getArgument(const TArgs &args, int idx) 
+    documentModel::Argument getArgument(const TArgs &args, int idx) 
     {
         auto result = __getArgument<TArgs>(args, idx);
         if (!result) {
@@ -123,12 +123,12 @@ namespace com {
     } 
     
     template<class TMetaInfoContainer>
-    sheet::Argument getFirstMetaArgumentForKey(const com::String &name, const TMetaInfoContainer& container, bool required = false)
+    documentModel::Argument getFirstMetaArgumentForKey(const com::String &name, const TMetaInfoContainer& container, bool required = false)
     {
         auto values = getMetaArgumentsForKey(name, container, required);
         if (values.empty()) {
             // no required check needed here (getMetaArgumentsForKey throws already)
-            return sheet::Argument();
+            return documentModel::Argument();
         }
         return *values.begin();
     }
@@ -192,10 +192,10 @@ namespace com {
      * for: "value0 keyword1 value1 value2 keyword 1 value2 value3 keyword2 value4 value5"
      **/
     template<class TArgContainer, class TKeywordContainer>
-    std::multimap<com::String, std::vector<sheet::Argument>> 
+    std::multimap<com::String, std::vector<documentModel::Argument>> 
     mapArgumentsByKeywords(const TArgContainer &args, const TKeywordContainer &keywords)
     {
-        std::multimap<com::String, std::vector<sheet::Argument>> result;
+        std::multimap<com::String, std::vector<documentModel::Argument>> result;
         auto it = args.begin();
         auto end = args.end();
         com::String keyword = "";
@@ -396,8 +396,8 @@ namespace com {
     std::ostream & documentMessageWhere(std::ostream &ss, const std::string filename, int line=-1);
     std::ostream & documentMessageWhat(std::ostream &ss, const std::string &what);
     std::ostream & documentMessage(std::ostream &ss, 
-        const std::shared_ptr<sheet::Document>, 
-        sheet::ASheetObjectWithSourceInfo::SourceId,
+        const std::shared_ptr<documentModel::Document>, 
+        documentModel::ASheetObjectWithSourceInfo::SourceId,
         unsigned int sourcePosition,
         const std::string &message);
 

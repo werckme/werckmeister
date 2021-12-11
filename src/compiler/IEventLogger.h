@@ -3,7 +3,7 @@
 
 #include <com/ILogger.h>
 
-namespace sheet {
+namespace documentModel {
 	struct Event;
 	namespace compiler {
         /**

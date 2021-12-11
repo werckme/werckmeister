@@ -1,9 +1,9 @@
 #include "JsonWriter.h"
 #include <iostream>
-#include <sheet/Document.h>
+#include <documentModel/Document.h>
 
 namespace {
-    rapidjson::Document documentInfosToJSONDoc(sheet::DocumentPtr sheetDoc, com::Ticks duration, const sheet::Warnings &warnings)
+    rapidjson::Document documentInfosToJSONDoc(documentModel::DocumentPtr sheetDoc, com::Ticks duration, const documentModel::Warnings &warnings)
     {
         rapidjson::Document doc;
         doc.SetObject();
@@ -52,7 +52,7 @@ namespace app {
         this->_ostream = &os;
     }
 
-    void JsonWriter::write(sheet::DocumentPtr document)
+    void JsonWriter::write(documentModel::DocumentPtr document)
     {
         if (_programOptions->isJsonModeSet()) {
             writeDocumentToJson(document);
@@ -78,16 +78,16 @@ namespace app {
         exceptionToJSON(ostream(), ex);
     }
 
-    sheet::compiler::IWarningsCollectionPtr JsonWriter::getWarnings()
+    documentModel::compiler::IWarningsCollectionPtr JsonWriter::getWarnings()
     {
-        auto waningsCollection = std::dynamic_pointer_cast<sheet::compiler::IWarningsCollection>(_logger);
+        auto waningsCollection = std::dynamic_pointer_cast<documentModel::compiler::IWarningsCollection>(_logger);
         return waningsCollection;
     }
 
-    void JsonWriter::writeValidationJson(sheet::DocumentPtr document)
+    void JsonWriter::writeValidationJson(documentModel::DocumentPtr document)
     {
-        sheet::Warnings __warnings;
-        const sheet::Warnings *warnings = &__warnings;
+        documentModel::Warnings __warnings;
+        const documentModel::Warnings *warnings = &__warnings;
         auto waningsCollection = getWarnings();
         if (waningsCollection) {
             warnings = &(waningsCollection->warnings());
@@ -95,7 +95,7 @@ namespace app {
         rapidjson::Document doc = documentInfosToJSONDoc(document, _midifile->duration(), *warnings);
         toStream(ostream(), doc);
     }
-    void JsonWriter::writeDocumentToJson(sheet::DocumentPtr document)
+    void JsonWriter::writeDocumentToJson(documentModel::DocumentPtr document)
     {
         ostream() 
         << "{" 
@@ -107,10 +107,10 @@ namespace app {
         << std::endl
         ;
     }
-    void JsonWriter::docToJson(std::ostream& os, sheet::DocumentPtr document)
+    void JsonWriter::docToJson(std::ostream& os, documentModel::DocumentPtr document)
     {
-        sheet::Warnings __warnings;
-        const sheet::Warnings *warnings = &__warnings;
+        documentModel::Warnings __warnings;
+        const documentModel::Warnings *warnings = &__warnings;
         auto waningsCollection = getWarnings();
         if (waningsCollection) {
             warnings = &(waningsCollection->warnings());
@@ -124,7 +124,7 @@ namespace app {
         toStream(os, doc);
     }
 
-    void JsonWriter::eventInfosToJson(std::ostream &os, sheet::DocumentPtr document)
+    void JsonWriter::eventInfosToJson(std::ostream &os, documentModel::DocumentPtr document)
     {
         os << "[" << std::endl;
         

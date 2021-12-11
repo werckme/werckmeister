@@ -6,7 +6,7 @@
 #include <compiler/context/MidiContext.h>
 #include <compiler/error.hpp>
 
-namespace sheet {
+namespace documentModel {
     namespace compiler {
         class AMidiContextCommand : public ACommand
         {

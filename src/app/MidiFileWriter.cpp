@@ -4,7 +4,7 @@
 #include <boost/filesystem.hpp>
 
 namespace app {
-    void MidiFileWriter::write(sheet::DocumentPtr)
+    void MidiFileWriter::write(documentModel::DocumentPtr)
     {
         using namespace std;
         std::string outfile = "unnamed.mid";

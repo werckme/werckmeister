@@ -17,46 +17,46 @@
 #include <sstream>
 #include "parserSymbols.h"
 #include "parserPositionIt.h"
-#include <sheet/DocumentUsing.h>
-#include <sheet/AliasPitchDef.h>
-#include <sheet/objects/Grouped.h>
+#include <documentModel/DocumentUsing.h>
+#include <documentModel/AliasPitchDef.h>
+#include <documentModel/objects/Grouped.h>
 #include <com/tools.h>
 #include "pitchParser.h"
 
 BOOST_FUSION_ADAPT_STRUCT(
-	sheet::DocumentUsing,
-	(sheet::DocumentUsing::Usings, usings)
+	documentModel::DocumentUsing,
+	(documentModel::DocumentUsing::Usings, usings)
 )
 
 BOOST_FUSION_ADAPT_STRUCT(
-	sheet::Argument,
+	documentModel::Argument,
 	(com::String, name)
 	(com::String, value)
 )
 
 BOOST_FUSION_ADAPT_STRUCT(
-	sheet::Voice,
-	(sheet::Voice::Events, events)
+	documentModel::Voice,
+	(documentModel::Voice::Events, events)
 )
 
 BOOST_FUSION_ADAPT_STRUCT(
-	sheet::Event,
+	documentModel::Event,
 	(unsigned int, sourcePositionBegin)
-	(sheet::ASheetObjectWithSourceInfo::SourceId, sourceId)
-	(sheet::Event::Type, type)
-	(sheet::Event::Tags, tags)
-	(sheet::Event::Pitches, pitches)
-	(sheet::Event::Duration, duration)
+	(documentModel::ASheetObjectWithSourceInfo::SourceId, sourceId)
+	(documentModel::Event::Type, type)
+	(documentModel::Event::Tags, tags)
+	(documentModel::Event::Pitches, pitches)
+	(documentModel::Event::Duration, duration)
 	(com::String, stringValue)
-	(sheet::Event::Args, metaArgs)
+	(documentModel::Event::Args, metaArgs)
 	(unsigned int, sourcePositionEnd)
 )
 
 BOOST_FUSION_ADAPT_STRUCT(
-	sheet::Grouped,
-	(sheet::ASheetObjectWithSourceInfo::SourceId, sourceId)
-	(sheet::Event::EventGroup, eventGroup)
-	(sheet::Event::Duration, duration)
+	documentModel::Grouped,
+	(documentModel::ASheetObjectWithSourceInfo::SourceId, sourceId)
+	(documentModel::Event::EventGroup, eventGroup)
+	(documentModel::Event::Duration, duration)
 )
 
 namespace {
@@ -74,38 +74,38 @@ namespace {
 }
 
 BOOST_FUSION_ADAPT_STRUCT(
-	sheet::TrackConfig,
+	documentModel::TrackConfig,
 	(unsigned int, sourcePositionBegin)
-	(sheet::ASheetObjectWithSourceInfo::SourceId, sourceId)
+	(documentModel::ASheetObjectWithSourceInfo::SourceId, sourceId)
 	(com::String, name)
-	(sheet::Event::Args, args)
+	(documentModel::Event::Args, args)
 )
 
 BOOST_FUSION_ADAPT_STRUCT(
-	sheet::Track,
+	documentModel::Track,
 	(unsigned int, sourcePositionBegin)
-	(sheet::ASheetObjectWithSourceInfo::SourceId, sourceId)
-	(sheet::Track::TrackConfigs, trackConfigs)
-	(sheet::Track::Voices, voices)
+	(documentModel::ASheetObjectWithSourceInfo::SourceId, sourceId)
+	(documentModel::Track::TrackConfigs, trackConfigs)
+	(documentModel::Track::Voices, voices)
 )
 
 BOOST_FUSION_ADAPT_STRUCT(
-	sheet::DocumentConfig,
+	documentModel::DocumentConfig,
 	(unsigned int, sourcePositionBegin)
-	(sheet::ASheetObjectWithSourceInfo::SourceId, sourceId)
+	(documentModel::ASheetObjectWithSourceInfo::SourceId, sourceId)
 	(com::String, name)
-	(sheet::Event::Args, args)
+	(documentModel::Event::Args, args)
 )
 
 BOOST_FUSION_ADAPT_STRUCT(
-	sheet::SheetDef,
-	(sheet::DocumentUsing, documentUsing)
-	(sheet::SheetDef::DocumentConfigs, documentConfigs)
-	(sheet::SheetDef::Tracks, tracks)
+	documentModel::SheetDef,
+	(documentModel::DocumentUsing, documentUsing)
+	(documentModel::SheetDef::DocumentConfigs, documentConfigs)
+	(documentModel::SheetDef::Tracks, tracks)
 )
 
 
-namespace sheet {
+namespace documentModel {
 	namespace compiler {
 
 		namespace {
@@ -215,7 +215,7 @@ namespace sheet {
 					using boost::phoenix::push_back;
 					using boost::phoenix::insert;
 					
-					start.name("sheet");
+					start.name("documentModel");
 					bar_volta_.name("bar jump mark");
 					event_.name("event");
 					groupedEvent_.name("eventGroup");
@@ -393,7 +393,7 @@ namespace sheet {
 
 				_SheetParser(Iterator begin, Event::SourceId sourceId = Event::UndefinedSource) : 
 					PitchParser(),
-					_SheetParser::base_type(start, "sheet"),
+					_SheetParser::base_type(start, "documentModel"),
 					sourceId_(sourceId)
 				{
 					using qi::on_error;

@@ -4,7 +4,7 @@
 #include "IDeclaration.h"
 #include <optional>
 
-namespace sheet
+namespace documentModel
 {
     namespace conductor
     {

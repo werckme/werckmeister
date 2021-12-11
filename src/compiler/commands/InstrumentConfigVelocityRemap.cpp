@@ -3,7 +3,7 @@
 #include <compiler/error.hpp>
 #include <compiler/commands/SetExpression.h>
 
-namespace sheet {
+namespace documentModel {
     namespace compiler {
         const com::String InstrumentConfigVelocityRemap::VelocityNotSet = "NoRemapValueSet";
 

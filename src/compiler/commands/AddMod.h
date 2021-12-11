@@ -5,7 +5,7 @@
 #include <compiler/argumentNames.h>
 #include <forward.hpp>
 
-namespace sheet {
+namespace documentModel {
     namespace compiler {
         /// <command name="mod" where="track">
         /// Adds a modification to the track. Every `mod` statement adds a further modification to the related voice.

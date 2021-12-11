@@ -6,7 +6,7 @@
 #include <algorithm>
 #include <compiler/lua/luaTimeInfo.h>
 
-namespace sheet {
+namespace documentModel {
     namespace compiler {
         namespace luaChord {
             struct LuaChord : lua::ALuaObject {
@@ -81,7 +81,7 @@ namespace sheet {
             }
             template <int Degree>
             static int luaHas7 (lua_State *L) {
-                using namespace sheet::lua;
+                using namespace documentModel::lua;
                 auto luaChord = ALuaObject::getObject<LuaChord>(L, -1);
                 lua_pushboolean(L, hasDegreeImpl<Degree>(*(luaChord->chordDef)));
                 return 1;
@@ -189,7 +189,7 @@ namespace sheet {
     }
 }
 
-namespace sheet {
+namespace documentModel {
     namespace compiler {
         LuaVoicingStrategy::LuaVoicingStrategy(const com::String &path) : LuaBase(path)
         {

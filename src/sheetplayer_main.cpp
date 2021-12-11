@@ -16,7 +16,7 @@
 #include <compiler/context/MidiContext.h>
 #include <compiler/Preprocessor.h>
 #include <compiler/EventLogger.h>
-#include <sheet/Document.h>
+#include <documentModel/Document.h>
 #include <com/DefinitionsServer.h>
 #include <com/midi.hpp>
 #include <app/MidiPlayer.h>
@@ -46,8 +46,8 @@
 #include <crtdbg.h>
 #endif
 
-typedef sheet::compiler::EventLogger<com::ConsoleLogger> 			   LoggerImpl;
-typedef sheet::compiler::LoggerAndWarningsCollector<com::ConsoleLogger> WarningsCollectorWithConsoleLogger;
+typedef documentModel::compiler::EventLogger<com::ConsoleLogger> 			   LoggerImpl;
+typedef documentModel::compiler::LoggerAndWarningsCollector<com::ConsoleLogger> WarningsCollectorWithConsoleLogger;
 
 int startPlayer(std::shared_ptr<PlayerProgramOptions> programOptionsPtr);
 
@@ -97,10 +97,10 @@ int main(int argc, const char** argv)
 int startPlayer(std::shared_ptr<PlayerProgramOptions> programOptionsPtr)
 {
 	namespace di = boost::di;
-	namespace cp = sheet::compiler;
-	namespace co = sheet::conductor;
+	namespace cp = documentModel::compiler;
+	namespace co = documentModel::conductor;
 	app::SheetWatcherHandlersPtr sheetWatcherHandlers = std::make_shared<app::SheetWatcherHandlers>();
-	auto documentPtr = std::make_shared<sheet::Document>();
+	auto documentPtr = std::make_shared<documentModel::Document>();
 	auto midiFile = com::getWerckmeister().createMidi();
 	bool needTimeline = programOptionsPtr->isUdpSet();
 	app::DiContainerWrapper<app::IPlayerLoopVisitorPtr> loopVisitors;
@@ -115,7 +115,7 @@ int startPlayer(std::shared_ptr<PlayerProgramOptions> programOptionsPtr)
 		, di::bind<cp::ISheetNavigator>()									 .to<cp::SheetNavigator>()			.in(di::extension::scoped)
 		, di::bind<co::IConductionsPerformer>()								 .to<co::ConductionsPerformer>()	.in(di::extension::scoped)
 		, di::bind<ICompilerProgramOptions>()								 .to(programOptionsPtr)
-		, di::bind<sheet::Document>()										 .to(documentPtr)
+		, di::bind<documentModel::Document>()										 .to(documentPtr)
 		, di::bind<com::IDefinitionsServer>()								 .to<com::DefinitionsServer>()		.in(di::extension::scoped)
 		, di::bind<com::midi::Midi>()										 .to(midiFile)
 		, di::bind<app::SheetWatcherHandlers>()							 .to(sheetWatcherHandlers)
@@ -163,7 +163,7 @@ int startPlayer(std::shared_ptr<PlayerProgramOptions> programOptionsPtr)
 			std::shared_ptr<app::Funkfeuer> vis = injector.create<std::unique_ptr<app::Funkfeuer>>();
 			loopVisitors.container.push_back(vis);
 		}
-		sheet::FactoryConfig factory(injector);
+		documentModel::FactoryConfig factory(injector);
 		factory.init();
 		auto program = injector.create<SheetPlayerProgram*>();
 		sheetWatcherHandlers->container.push_back(program);

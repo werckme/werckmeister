@@ -7,7 +7,7 @@
 #include <memory>
 
 
-namespace sheet {
+namespace documentModel {
     namespace compiler {
         /// <command name="instrumentConf" where="document">
         /// With `instrumentConf` you are able to setup a specific instrument.

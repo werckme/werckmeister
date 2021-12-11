@@ -23,7 +23,7 @@ namespace app {
         IStringSenderPtr       _sender;
     public:
         typedef JsonIOBase Base;
-        Funkfeuer(sheet::compiler::ICompilerVisitorPtr compilerVisitor,
+        Funkfeuer(documentModel::compiler::ICompilerVisitorPtr compilerVisitor,
             com::ILoggerPtr logger,
             IStringSenderPtr sender)
             :_logger(logger)

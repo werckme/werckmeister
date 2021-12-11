@@ -7,7 +7,7 @@
 #include "objects/Interval.h"
 #include "objects/Event.h"
 
-namespace sheet {
+namespace documentModel {
 
     struct Pitchmap {
         com::String name;

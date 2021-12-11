@@ -3,7 +3,7 @@
 
 #include "VoicingStrategy.h"
 
-namespace sheet {
+namespace documentModel {
 
     /**
      * voicing as notated 

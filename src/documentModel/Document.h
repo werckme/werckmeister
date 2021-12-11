@@ -12,7 +12,7 @@
 #include "objects/ConductionSheetDef.h"
 #include <list>
 
-namespace sheet {
+namespace documentModel {
 	class Document: public std::enable_shared_from_this<Document> {
 	public:
 		typedef std::unordered_map<com::String, ChordDef> ChordDefs;

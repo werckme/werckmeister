@@ -4,13 +4,13 @@
 
 #include <com/IHasParameter.h>
 #include <vector>
-#include <sheet/Argument.h>
+#include <documentModel/Argument.h>
 
 namespace com {
     class AConvertsArgumentsToParameter : public com::IHasParameter
     {
     public:
-        typedef std::vector<sheet::Argument> Arguments;
+        typedef std::vector<documentModel::Argument> Arguments;
         virtual ~AConvertsArgumentsToParameter() = default;
         virtual void setArguments(const Arguments &args);
     };

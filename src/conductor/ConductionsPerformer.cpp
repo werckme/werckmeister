@@ -1,5 +1,5 @@
 #include "ConductionsPerformer.h"
-#include <sheet/Document.h>
+#include <documentModel/Document.h>
 #include <com/werckmeister.hpp>
 #include "selectors/ISelector.h"
 #include <compiler/error.hpp>
@@ -9,7 +9,7 @@
 #include <map>
 #include <algorithm>
 
-namespace sheet
+namespace documentModel
 {
 	namespace conductor
 	{
@@ -77,7 +77,7 @@ namespace sheet
 			perform(eventAndOperations);
 		}
 
-		ConductionsPerformer::Events ConductionsPerformer::findMatches(const sheet::ConductionSelector &selector) const
+		ConductionsPerformer::Events ConductionsPerformer::findMatches(const documentModel::ConductionSelector &selector) const
 		{
 			Events result;
 			auto &wm = com::getWerckmeister();
@@ -139,7 +139,7 @@ namespace sheet
 			return result;
 		}
 
-		ConductionsPerformer::Events ConductionsPerformer::findMatches(const sheet::ConductionSelector &selector, Events &events) const
+		ConductionsPerformer::Events ConductionsPerformer::findMatches(const documentModel::ConductionSelector &selector, Events &events) const
 		{
 			Events result;
 			auto &wm = com::getWerckmeister();

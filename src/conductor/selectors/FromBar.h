@@ -3,7 +3,7 @@
 
 #include "ISelector.h"
 
-namespace sheet
+namespace documentModel
 {
     namespace conductor
     {

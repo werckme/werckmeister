@@ -3,7 +3,7 @@
 #include <algorithm>
 #include <com/tools.h>
 
-namespace sheet {
+namespace documentModel {
     namespace compiler {
 
         void Arpeggio::perform(IContextPtr ctx, Events &events)

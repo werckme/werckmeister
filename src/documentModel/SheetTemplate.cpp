@@ -1,7 +1,7 @@
 #include "SheetTemplate.h"
 #include <algorithm>
 
-namespace sheet {
+namespace documentModel {
     com::Ticks SheetTemplate::maxLength() const
     {
         com::Ticks max = 0;

@@ -1,15 +1,15 @@
 #include "error.hpp"
 #include <boost/exception/get_error_info.hpp>
-#include <sheet/objects/Event.h>
-#include <sheet/Document.h>
+#include <documentModel/objects/Event.h>
+#include <documentModel/Document.h>
 #include <memory>
 #include <com/tools.h>
 #include <com/werckmeister.hpp>
 #include <com/common.hpp>
 #include <iostream>
-#include <sheet/objects/ParserSourceInfo.h>
+#include <documentModel/objects/ParserSourceInfo.h>
 
-namespace sheet {
+namespace documentModel {
 	namespace compiler {
 
 		std::ostream & Exception::strSheetError(std::ostream &ss, 

@@ -3,7 +3,7 @@
 
 #include "PitchDef.h"
 
-namespace sheet {
+namespace documentModel {
 	struct AliasPitchDef : public PitchDef {};
 }
 

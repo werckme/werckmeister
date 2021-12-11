@@ -9,7 +9,7 @@
 #include "objects/ASheetObject.h"
 #include "objects/DocumentConfig.h"
 
-namespace sheet {
+namespace documentModel {
 
 	struct SheetDef {
 		typedef std::vector<Track> Tracks;

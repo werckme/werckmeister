@@ -9,7 +9,7 @@
 #include <compiler/modification/AModification.h>
 #include <com/config/configServer.h>
 
-namespace sheet {
+namespace documentModel {
 	namespace compiler {
 
 		namespace {
@@ -452,7 +452,7 @@ namespace sheet {
 		IContextPtr MidiContext::createNewContext() const
 		{
 			auto midiFile 	= std::make_shared<com::midi::Midi>(com::PPQ);
-			auto midiContext = std::make_shared<sheet::compiler::MidiContext>
+			auto midiContext = std::make_shared<documentModel::compiler::MidiContext>
 			(
 				midiFile, 
 				definitionsServer_, 

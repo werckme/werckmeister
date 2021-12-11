@@ -1,6 +1,6 @@
 #include "metaData.h"
 
-namespace sheet {
+namespace documentModel {
 	namespace compiler {
 		using namespace com;
 		const Ticks VoiceMetaData::DefaultDuration = 1.0_N4;

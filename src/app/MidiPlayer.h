@@ -50,7 +50,7 @@ namespace app {
             initMidiBackends();
         }
         void listDevices(std::ostream&);
-        virtual void write(sheet::DocumentPtr document);
+        virtual void write(documentModel::DocumentPtr document);
         virtual ~MidiPlayer() = default;
         /**
          * stops the player and returns the last tick position
@@ -60,7 +60,7 @@ namespace app {
         enum VisitorMessage { Loop, BeginLoop, EndLoop };
         void initMidiBackends();
         void initFluidSynthInstances();
-        void execLoop(sheet::DocumentPtr document);
+        void execLoop(documentModel::DocumentPtr document);
         void visitVisitors(VisitorMessage, com::Ticks elapsed);
         State state = Stopped;
         MidiplayerImpl _midiPlayerImpl;

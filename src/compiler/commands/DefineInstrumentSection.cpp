@@ -2,7 +2,7 @@
 #include <compiler/context/MidiContext.h>
 #include <compiler/error.hpp>
 
-namespace sheet {
+namespace documentModel {
     namespace compiler {
         void DefineInstrumentSection::execute(IContextPtr  context)
         {

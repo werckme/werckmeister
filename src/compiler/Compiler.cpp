@@ -1,6 +1,6 @@
 #include "Compiler.h"
-#include "sheet/Document.h"
-#include <sheet/objects/Event.h>
+#include "documentModel/Document.h"
+#include <documentModel/objects/Event.h>
 #include <type_traits>
 #include <algorithm>
 #include <list>
@@ -10,7 +10,7 @@
 #include <com/tools.h>
 #include <functional>
 
-namespace sheet {
+namespace documentModel {
 
 	namespace compiler {
 		void Compiler::compile(DocumentPtr document)
@@ -29,8 +29,8 @@ namespace sheet {
 				std::vector<DocumentConfig> configs(priorisedDocumentConfigs.begin(), priorisedDocumentConfigs.end());
 				sheetEventRenderer()->handleMetaEvents(configs,
 					[](const auto &x) { 
-						sheet::Event metaEvent;
-						metaEvent.type = sheet::Event::Meta;
+						documentModel::Event metaEvent;
+						metaEvent.type = documentModel::Event::Meta;
 						metaEvent.stringValue = x.name;
 						metaEvent.metaArgs = x.args;
 						return metaEvent;
@@ -70,8 +70,8 @@ namespace sheet {
 				ctx->setTrack(trackId);
 				renderer->handleMetaEvents(track.trackConfigs, 
 					[](const auto &x) { 
-						sheet::Event metaEvent;
-						metaEvent.type = sheet::Event::Meta;
+						documentModel::Event metaEvent;
+						metaEvent.type = documentModel::Event::Meta;
 						metaEvent.stringValue = x.name;
 						metaEvent.metaArgs = x.args;
 						return metaEvent;
@@ -120,7 +120,7 @@ namespace sheet {
 		{
 			auto ctx = context();
 			auto document = document_.lock();
-			for (sheet::Track &track : document->sheetDef.tracks) {
+			for (documentModel::Track &track : document->sheetDef.tracks) {
 				if (!isAccompTrack(track)) {
 					continue;
 				}

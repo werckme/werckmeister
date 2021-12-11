@@ -3,7 +3,7 @@
 
 #include "Interval.h"
 
-namespace sheet {
+namespace documentModel {
 	struct DegreeDef : public Interval {
 		com::Pitch degree;
 		bool operator <(const DegreeDef &b) const { return degree < b.degree; }

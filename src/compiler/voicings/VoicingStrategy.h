@@ -1,8 +1,8 @@
 #ifndef VOICE_STATEGY_HPP
 #define VOICE_STATEGY_HPP
 
-#include <sheet/objects/ChordDef.h>
-#include <sheet/objects/Event.h>
+#include <documentModel/objects/ChordDef.h>
+#include <documentModel/objects/Event.h>
 #include <memory>
 #include <com/common.hpp>
 #include <com/Parameter.h>
@@ -10,7 +10,7 @@
 #include <com/IRegisterable.h>
 #include <com/AConvertsArgumentsToParameter.h>
 
-namespace sheet {
+namespace documentModel {
 
     class VoicingStrategy : public com::IRegisterable, public com::AConvertsArgumentsToParameter {
     public:

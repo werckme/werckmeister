@@ -4,7 +4,7 @@
 #include "AMidiContextCommand.h"
 #include <compiler/argumentNames.h>
 
-namespace sheet {
+namespace documentModel {
     namespace compiler {
         class SelectMidiSound : public AMidiContextCommand
         {

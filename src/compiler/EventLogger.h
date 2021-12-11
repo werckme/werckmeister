@@ -8,7 +8,7 @@
 #include <forward.hpp>
 #include <com/tools.h>
 
-namespace sheet {
+namespace documentModel {
 	struct Event;
 	namespace compiler {
         template <class TLoggerBase>

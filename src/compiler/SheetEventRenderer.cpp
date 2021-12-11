@@ -10,7 +10,7 @@
 #include "IEventLogger.h"
 #include <compiler/Instrument.h>
 
-namespace sheet {
+namespace documentModel {
     namespace compiler {
         namespace {
 			template<int EventType>

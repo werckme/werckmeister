@@ -1,7 +1,7 @@
 #include <com/werckmeister.hpp>
 #include <memory>
 
-namespace sheet
+namespace documentModel
 {
     template <class TInjector>
     class FactoryConfig
@@ -49,7 +49,7 @@ namespace sheet
 #include <compiler/voicings/DirectVoicingStrategy.h>
 #include <compiler/voicings/SimpleGuitar.h>
 
-namespace sheet
+namespace documentModel
 {
     template <class TInjector>
     void FactoryConfig<TInjector>::initVoicingStrategies()
@@ -67,7 +67,7 @@ namespace sheet
 #include <compiler/modification/modifications.h>
 #include <compiler/modification/Bend.h>
 
-namespace sheet
+namespace documentModel
 {
     template <class TInjector>
     void FactoryConfig<TInjector>::initModifications()
@@ -111,7 +111,7 @@ namespace sheet
 #include <compiler/commands/Fill.h>
 #include <compiler/commands/DefineInstrumentSection.h>
 
-namespace sheet
+namespace documentModel
 {
     template <class TInjector>
     void FactoryConfig<TInjector>::initCommands()
@@ -176,7 +176,7 @@ namespace sheet
 #include <conductor/declarations/Duration.h>
 #include <conductor/declarations/Pitch.h>
 
-namespace sheet
+namespace documentModel
 {
     template <class TInjector>
     void FactoryConfig<TInjector>::initConductor()

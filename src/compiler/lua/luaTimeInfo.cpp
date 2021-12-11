@@ -1,7 +1,7 @@
 #include "luaTimeInfo.h"
 #include <lua.hpp>
 
-namespace sheet {
+namespace documentModel {
 
     namespace lua {
         void LuaTimeInfo::push(lua_State *L)

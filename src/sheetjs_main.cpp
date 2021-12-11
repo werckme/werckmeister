@@ -13,7 +13,7 @@
 #include <compiler/context/MidiContext.h>
 #include <compiler/Preprocessor.h>
 #include <compiler/EventLogger.h>
-#include <sheet/Document.h>
+#include <documentModel/Document.h>
 #include <com/DefinitionsServer.h>
 #include <com/midi.hpp>
 #include <app/MidiFileWriter.h>
@@ -34,8 +34,8 @@
 
 // #define LOCAL_TEST_RUN
 
-typedef sheet::compiler::EventLogger<com::ConsoleLogger> 			   LoggerImpl;
-typedef sheet::compiler::LoggerAndWarningsCollector<com::ConsoleLogger> WarningsCollectorWithConsoleLogger;
+typedef documentModel::compiler::EventLogger<com::ConsoleLogger> 			   LoggerImpl;
+typedef documentModel::compiler::LoggerAndWarningsCollector<com::ConsoleLogger> WarningsCollectorWithConsoleLogger;
 
 class JsProgramOptions : public ICompilerProgramOptions
 {
@@ -80,13 +80,13 @@ const char * create_c_str(const std::string &input)
 extern "C" const char * create_compile_result(const char *file, double beginQuarters)
 {
 	namespace di = boost::di;
-	namespace cp = sheet::compiler;
-	namespace co = sheet::conductor;
+	namespace cp = documentModel::compiler;
+	namespace co = documentModel::conductor;
 	auto programOptionsPtr = std::make_shared<JsProgramOptions>();
 	programOptionsPtr->input = file;
 	programOptionsPtr->begin = beginQuarters;
 
-	auto documentPtr = std::make_shared<sheet::Document>();
+	auto documentPtr = std::make_shared<documentModel::Document>();
 	auto midiFile = com::getWerckmeister().createMidi();
 	auto logger = std::make_shared<WarningsCollectorWithConsoleLogger>();
 	auto injector = di::make_injector(
@@ -99,7 +99,7 @@ extern "C" const char * create_compile_result(const char *file, double beginQuar
 		, di::bind<cp::ISheetNavigator>()			.to<cp::SheetNavigator>()			.in(di::extension::scoped)
 		, di::bind<co::IConductionsPerformer>()		.to<co::ConductionsPerformer>()		.in(di::extension::scoped)
 		, di::bind<ICompilerProgramOptions>()		.to(programOptionsPtr)
-		, di::bind<sheet::Document>()				.to(documentPtr)
+		, di::bind<documentModel::Document>()				.to(documentPtr)
 		, di::bind<com::IDefinitionsServer>()		.to<com::DefinitionsServer>()		.in(di::extension::scoped)
 		, di::bind<com::midi::Midi>()				.to(midiFile)
 		, di::bind<app::IDocumentWriter>()		.to([&](const auto &injector) -> app::IDocumentWriterPtr 
@@ -112,7 +112,7 @@ extern "C" const char * create_compile_result(const char *file, double beginQuar
 		})
 		, di::bind<com::ILogger>()					.to(logger)
 	);
-	sheet::FactoryConfig factory(injector);
+	documentModel::FactoryConfig factory(injector);
 	factory.init();
 	auto program = injector.create<SheetCompilerProgramJs>();
 	auto jsonWriterPtr = std::dynamic_pointer_cast<app::JsonWriter>(program.documentWriter());

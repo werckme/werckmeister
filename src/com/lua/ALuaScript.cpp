@@ -4,7 +4,7 @@
 #include <sstream>
 #include <boost/filesystem.hpp>
 #include <com/werckmeister.hpp>
-namespace sheet {
+namespace documentModel {
     
     namespace lua {
 

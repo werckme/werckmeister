@@ -1,7 +1,7 @@
 #include "Track.h"
 #include <algorithm>
 
-namespace sheet {
+namespace documentModel {
     com::Ticks Track::maxLength() const
     {
 		com::Ticks max = 0;

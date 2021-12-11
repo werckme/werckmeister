@@ -1,7 +1,7 @@
 #include "SetExpression.h"
 #include <compiler/context/IContext.h>
 
-namespace sheet {
+namespace documentModel {
     namespace compiler {
 
         const SetExpression::ExpressionMap SetExpression::_ExpressionMap = {

@@ -1,7 +1,7 @@
 #ifndef SHEET_TIMEINFO_H
 #define SHEET_TIMEINFO_H
 
-namespace sheet {
+namespace documentModel {
     struct TimeInfo {
         double quarterPosition  = 0;
         int signatureNumerator  = 0;

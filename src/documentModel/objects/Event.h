@@ -10,10 +10,10 @@
 #include <functional>
 #include <com/exception.hpp>
 #include "ASheetObjectWithSourceInfo.h"
-#include <sheet/Argument.h>
-#include <sheet/PitchDef.h>
+#include <documentModel/Argument.h>
+#include <documentModel/PitchDef.h>
 
-namespace sheet {
+namespace documentModel {
 
 	struct Event : public ASheetObjectWithSourceInfo {
 		typedef ASheetObjectWithSourceInfo Base;
@@ -39,7 +39,7 @@ namespace sheet {
 		};
 		typedef com::Ticks Duration;
 		typedef std::vector<PitchDef> Pitches;
-		typedef std::vector<sheet::Argument> Args;
+		typedef std::vector<documentModel::Argument> Args;
 		typedef std::vector<Event> EventGroup;
 		typedef std::set<com::String> Tags;
 		typedef com::String Options;

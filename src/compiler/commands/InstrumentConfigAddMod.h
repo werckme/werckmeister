@@ -5,7 +5,7 @@
 #include "ACanSpecifyInstrument.h"
 #include <compiler/argumentNames.h>
 
-namespace sheet {
+namespace documentModel {
     namespace compiler {
         class InstrumentConfigAddMod : public AddMod, public ACanSpecifyInstrument
         {

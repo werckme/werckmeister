@@ -4,7 +4,7 @@
 #include <com/literals.hpp>
 #include <compiler/error.hpp>
 
-namespace sheet {
+namespace documentModel {
     namespace compiler {
         const com::String SetFade::CurveTypeLin = "lin";
         const com::String SetFade::CurveTypeQuad = "quad";

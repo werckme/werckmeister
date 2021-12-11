@@ -4,7 +4,7 @@
 #include <com/config/configServer.h>
 #include <com/werckmeister.hpp>
 
-namespace sheet {
+namespace documentModel {
     namespace compiler {
         void AddDevice::execute(IContextPtr  context)
         {

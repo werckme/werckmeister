@@ -12,7 +12,7 @@
 
 #define SHEET_MASTER_TRACKNAME "master track"
 
-namespace sheet {
+namespace documentModel {
     namespace compiler {
         class MidiContext : public AContext {
 			friend struct MidiInstrumentDef;
@@ -30,10 +30,10 @@ namespace sheet {
 				ICompilerVisitorPtr compilerVisitor,
 				com::ILoggerPtr logger);
 
-			struct VoiceMetaData : sheet::compiler::VoiceMetaData {
+			struct VoiceMetaData : documentModel::compiler::VoiceMetaData {
 				com::Ticks positionOffset = 0;
 			};
-			struct TrackMetaData : sheet::compiler::TrackMetaData {
+			struct TrackMetaData : documentModel::compiler::TrackMetaData {
 				TrackMetaData();
 				AInstrumentDefPtr instrument;
 			};

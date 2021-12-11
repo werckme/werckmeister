@@ -1,7 +1,7 @@
 #include "SetSignature.h"
 #include <compiler/context/IContext.h>
 
-namespace sheet {
+namespace documentModel {
     namespace compiler {
         void SetSignature::execute(IContextPtr  context)
         {

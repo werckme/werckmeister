@@ -9,7 +9,7 @@
 
 #define LUA_VOICING_STRATEGY_FENTRY "solve"
 
-namespace sheet {
+namespace documentModel {
     namespace compiler {
         class LuaVoicingStrategy : public VoicingStrategy, 
             public lua::ALuaScript, 

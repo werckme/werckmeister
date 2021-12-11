@@ -6,7 +6,7 @@
 #include <map>
 #include <com/units.hpp>
 
-namespace sheet {
+namespace documentModel {
     namespace compiler {
         class SetExpression : public ACommand
         {

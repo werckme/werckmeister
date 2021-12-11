@@ -5,7 +5,7 @@
 #include <compiler/argumentNames.h>
 #include "ACanSpecifyInstrument.h"
 
-namespace sheet {
+namespace documentModel {
     namespace compiler {
         class InstrumentConfigSetVoicingStrategy : public SetVoicingStrategy, public ACanSpecifyInstrument
         {

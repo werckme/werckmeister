@@ -32,11 +32,11 @@ namespace app {
         {
             initOutputStream();
         }
-        void docToJson(std::ostream &, sheet::DocumentPtr document);
-        void eventInfosToJson(std::ostream &os, sheet::DocumentPtr document);
-        virtual void write(sheet::DocumentPtr document) override;
-        void writeDocumentToJson(sheet::DocumentPtr document);
-        void writeValidationJson(sheet::DocumentPtr document);
+        void docToJson(std::ostream &, documentModel::DocumentPtr document);
+        void eventInfosToJson(std::ostream &os, documentModel::DocumentPtr document);
+        virtual void write(documentModel::DocumentPtr document) override;
+        void writeDocumentToJson(documentModel::DocumentPtr document);
+        void writeValidationJson(documentModel::DocumentPtr document);
         virtual void writeException(const std::exception &ex) override;
         virtual void writeException(const com::Exception &ex) override;
         virtual void writeUnknownException() override;        
@@ -46,7 +46,7 @@ namespace app {
         void initOutputStream();
         inline std::ostream & ostream() { return *_ostream; }
     private:
-        sheet::compiler::IWarningsCollectionPtr getWarnings();
+        documentModel::compiler::IWarningsCollectionPtr getWarnings();
         std::ostream *_ostream = nullptr;
     };
 }

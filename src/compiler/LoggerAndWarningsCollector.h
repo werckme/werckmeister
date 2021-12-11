@@ -6,7 +6,7 @@
 #include <sstream>
 #include "IWarningsCollection.h"
 
-namespace sheet {
+namespace documentModel {
 	struct Event;
 	namespace compiler {
         template <class TLoggerBase>

@@ -5,7 +5,7 @@
 #include <climits>
 #include "ASheetObject.h"
 
-namespace sheet {
+namespace documentModel {
     struct Interval : public ASheetObject {
 		enum { INVALID_VALUE = INT_MAX };
         int value;

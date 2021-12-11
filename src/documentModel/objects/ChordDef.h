@@ -6,9 +6,9 @@
 #include <set>
 #include "Interval.h"
 #include "ASheetObject.h"
-#include <sheet/objects/DegreeDef.h>
+#include <documentModel/objects/DegreeDef.h>
 
-namespace sheet {
+namespace documentModel {
     struct PitchDef;
     struct ChordDef : public ASheetObject {
         typedef std::set<DegreeDef> Intervals;

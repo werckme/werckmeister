@@ -9,7 +9,7 @@ extern "C" {
     struct lua_State;
 }
 
-namespace sheet {
+namespace documentModel {
 
     namespace lua {
 

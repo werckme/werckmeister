@@ -3,15 +3,15 @@
 #include "IDocumentParser.h"
 #include <com/common.hpp>
 #include <vector>
-#include <sheet/objects/ChordDef.h>
-#include <sheet/objects/ConductionSheetDef.h>
-#include "sheet/SheetDef.h"
-#include "sheet/Pitchmap.h"
-#include "sheet/DocumentUsing.h"
+#include <documentModel/objects/ChordDef.h>
+#include <documentModel/objects/ConductionSheetDef.h>
+#include "documentModel/SheetDef.h"
+#include "documentModel/Pitchmap.h"
+#include "documentModel/DocumentUsing.h"
 #include "forward.hpp"
 #include <tuple>
 
-namespace sheet {
+namespace documentModel {
 	namespace compiler {
 		struct AParser {
 			virtual ~AParser() = default;

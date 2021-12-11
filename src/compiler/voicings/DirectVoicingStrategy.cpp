@@ -1,6 +1,6 @@
 #include "DirectVoicingStrategy.h"
 
-namespace sheet {
+namespace documentModel {
 	DirectVoicingStrategy::Pitches DirectVoicingStrategy::get(const Event &chord, const ChordDef &def, const Degrees &degreeIntervals, const TimeInfo&)
 	{
 		Pitches result;

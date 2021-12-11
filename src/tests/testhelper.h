@@ -2,32 +2,32 @@
 #ifndef SHEET_TEST_HELPER_H
 #define SHEET_TEST_HELPER_H
 
-#include <sheet/objects/Event.h>
-#include <sheet/Argument.h>
+#include <documentModel/objects/Event.h>
+#include <documentModel/Argument.h>
 
-bool checkNote(const sheet::Event &ev,
-    sheet::Event::Type type,
-    sheet::PitchDef::Pitch pitch = sheet::PitchDef::NoPitch,
-    sheet::PitchDef::Octave octave = sheet::PitchDef::DefaultOctave,
-    sheet::Event::Duration duration = sheet::Event::NoDuration);
+bool checkNote(const documentModel::Event &ev,
+    documentModel::Event::Type type,
+    documentModel::PitchDef::Pitch pitch = documentModel::PitchDef::NoPitch,
+    documentModel::PitchDef::Octave octave = documentModel::PitchDef::DefaultOctave,
+    documentModel::Event::Duration duration = documentModel::Event::NoDuration);
 
-bool checkNote(const sheet::Event &ev,
-    sheet::Event::Type type,
+bool checkNote(const documentModel::Event &ev,
+    documentModel::Event::Type type,
     const com::String &alias,
-    sheet::Event::Duration duration = sheet::Event::NoDuration);
+    documentModel::Event::Duration duration = documentModel::Event::NoDuration);
 
 
-bool checkNote(const sheet::Event &ev,
-    sheet::Event::Type type,
-    const sheet::Event::Pitches &pitches,
-    sheet::Event::Duration duration = sheet::Event::NoDuration);
+bool checkNote(const documentModel::Event &ev,
+    documentModel::Event::Type type,
+    const documentModel::Event::Pitches &pitches,
+    documentModel::Event::Duration duration = documentModel::Event::NoDuration);
 
-bool checkChord(const sheet::Event &ev, com::String chordName);
+bool checkChord(const documentModel::Event &ev, com::String chordName);
 
-bool checkMetaEvent(const sheet::Event &ev, const com::String &command, const sheet::Event::Args &args);
+bool checkMetaEvent(const documentModel::Event &ev, const com::String &command, const documentModel::Event::Args &args);
 
-sheet::Argument makeArg(com::String value);
-sheet::Argument makeArg(com::String name, com::String value);
+documentModel::Argument makeArg(com::String value);
+documentModel::Argument makeArg(com::String name, com::String value);
 
 
 #endif

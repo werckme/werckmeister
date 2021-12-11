@@ -1,14 +1,14 @@
 #ifndef COMPILER_SHEET_TEMPLATERENDERER_H
 #define COMPILER_SHEET_TEMPLATERENDERER_H
 
-#include <sheet/objects/Event.h>
+#include <documentModel/objects/Event.h>
 #include <memory>
 #include <unordered_map>
 #include <com/units.hpp>
 #include <com/literals.hpp>
 #include <map>
 #include <unordered_map>
-#include <sheet/objects/ChordDef.h>
+#include <documentModel/objects/ChordDef.h>
 #include "compiler/voicings/VoicingStrategy.h"
 #include <com/common.hpp>
 #include "metaCommands.h"
@@ -19,7 +19,7 @@
 #include "ISheetTemplateRenderer.h"
 #include "ASheetEventRenderer.h"
 
-namespace sheet {
+namespace documentModel {
     namespace compiler {
 
         class SheetTemplateRenderer : public ISheetTemplateRenderer {

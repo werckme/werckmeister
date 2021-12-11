@@ -11,7 +11,7 @@ extern "C" {
 #include <string>
 #include <stdexcept>
 
-namespace sheet {
+namespace documentModel {
 
     namespace lua {
 

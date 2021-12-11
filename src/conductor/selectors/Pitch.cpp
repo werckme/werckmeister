@@ -1,7 +1,7 @@
 #include "Pitch.h"
 #include <compiler/context/MidiContext.h>
 
-namespace sheet
+namespace documentModel
 {
     namespace conductor
     {

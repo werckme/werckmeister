@@ -2,7 +2,7 @@
 #include <compiler/error.hpp>
 #include <com/midi.hpp>
 
-namespace sheet
+namespace documentModel
 {
     namespace conductor
     {

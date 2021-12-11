@@ -9,13 +9,13 @@
 #include <string>
 #include <list>
 #include <boost/exception/info.hpp>
-#include <sheet/objects/ASheetObject.h>
+#include <documentModel/objects/ASheetObject.h>
 #include <algorithm>
 #include <sstream>
 #include <com/common.hpp>
 #include "Warning.hpp"
 
-namespace sheet {
+namespace documentModel {
 	class Document;
 	namespace compiler {
 		typedef boost::error_info<struct tag_sheet_event, ASheetObjectWithSourceInfo> ex_sheet_source_info;

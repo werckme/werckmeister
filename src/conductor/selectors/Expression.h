@@ -4,7 +4,7 @@
 #include "ISelector.h"
 #include <com/IDefinitionsServer.h>
 
-namespace sheet
+namespace documentModel
 {
     namespace conductor
     {

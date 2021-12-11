@@ -9,7 +9,7 @@
 #include <tuple>
 #include <functional>
 
-namespace sheet {
+namespace documentModel {
 
 	namespace {
 		std::hash<com::String> hash_fn;

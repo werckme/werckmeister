@@ -1,7 +1,7 @@
 #include "Duration.h"
 #include <compiler/error.hpp>
 
-namespace sheet
+namespace documentModel
 {
     namespace conductor
     {

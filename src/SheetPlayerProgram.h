@@ -19,13 +19,13 @@ public:
     SheetPlayerProgram(
         ICompilerProgramOptionsPtr               programOptions,
         com::ILoggerPtr                           logger,
-        sheet::compiler::IDocumentParserPtr      documentParser,
-        sheet::compiler::ICompilerPtr            compiler,
-        sheet::compiler::IContextPtr             context,
-        sheet::compiler::IPreprocessorPtr        preprocessor,
+        documentModel::compiler::IDocumentParserPtr      documentParser,
+        documentModel::compiler::ICompilerPtr            compiler,
+        documentModel::compiler::IContextPtr             context,
+        documentModel::compiler::IPreprocessorPtr        preprocessor,
         com::midi::MidiPtr                        midiFile,
         app::IDocumentWriterPtr                documentWriter,
-        sheet::conductor::IConductionsPerformerPtr          conductionsPerformer
+        documentModel::conductor::IConductionsPerformerPtr          conductionsPerformer
     ) : 
         Base(programOptions, logger, documentParser, compiler, context, preprocessor, midiFile, documentWriter, conductionsPerformer)
       , _programOptions(std::dynamic_pointer_cast<IPlayerProgramOptions>(programOptions))

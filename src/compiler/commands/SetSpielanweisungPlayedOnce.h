@@ -4,7 +4,7 @@
 #include "SetSpielanweisung.h"
 
 
-namespace sheet {
+namespace documentModel {
     namespace compiler {
         /// <command name="doOnce" where="track">
         /// Like [do](#do). But with the difference, that the loaded mod will be only executed once for the following event.

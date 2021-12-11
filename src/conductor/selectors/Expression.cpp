@@ -2,7 +2,7 @@
 #include <compiler/commands/SetExpression.h>
 #include <compiler/error.hpp>
 
-namespace sheet
+namespace documentModel
 {
     namespace conductor
     {

@@ -1,15 +1,15 @@
 #ifndef COMPILER_CONTEXT_EVENTS_HPP
 #define COMPILER_CONTEXT_EVENTS_HPP
 
-#include <sheet/objects/Event.h>
+#include <documentModel/objects/Event.h>
 #include <com/units.hpp>
 #include <com/literals.hpp>
-#include <sheet/objects/ChordDef.h>
+#include <documentModel/objects/ChordDef.h>
 #include <com/common.hpp>
 #include "forward.hpp"
 #include "timeInfo.h"
 
-namespace sheet {
+namespace documentModel {
     namespace compiler {
 		struct NoteEvent {
 			com::Pitch pitch = 0;

@@ -4,7 +4,7 @@
 #include "DirectVoicingStrategy.h"
 #include <map>
 #include <compiler/argumentNames.h>
-namespace sheet {
+namespace documentModel {
 
     /**
      * A naive voicing implementation which approaches the chord voicing on a guitar:

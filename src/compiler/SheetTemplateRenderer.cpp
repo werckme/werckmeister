@@ -12,7 +12,7 @@
 
 #define DEBUGX(x)
 
-namespace sheet {
+namespace documentModel {
 	namespace compiler {
 
 		namespace {
@@ -80,7 +80,7 @@ namespace sheet {
 				it_ = degrees_->begin();
 			}
 
-			sheet::SheetTemplate __getTemplate(SheetTemplateRenderer& sheetTemplateRenderer, const com::String& sheetTemplateName)
+			documentModel::SheetTemplate __getTemplate(SheetTemplateRenderer& sheetTemplateRenderer, const com::String& sheetTemplateName)
 			{
 				auto ctx = sheetTemplateRenderer.context();
 				auto sheetTemplate = ctx->definitionsServer()->getSheetTemplate(sheetTemplateName);
@@ -414,8 +414,8 @@ namespace sheet {
 				try {
 					sheetEventRenderer->handleMetaEvents(track.trackConfigs,
 						[](const auto& x) {
-							sheet::Event metaEvent;
-							metaEvent.type = sheet::Event::Meta;
+							documentModel::Event metaEvent;
+							metaEvent.type = documentModel::Event::Meta;
 							metaEvent.stringValue = x.name;
 							metaEvent.metaArgs = x.args;
 							return metaEvent;

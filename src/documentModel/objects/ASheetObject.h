@@ -2,7 +2,7 @@
 #define ASHEET_OBJECT_H
 
 
-namespace sheet {
+namespace documentModel {
     class ASheetObject {
     };
 }

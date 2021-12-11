@@ -5,9 +5,9 @@
 #include <com/literals.hpp>
 #include <com/common.hpp>
 #include <boost/spirit/include/qi.hpp>
-#include <sheet/objects/Event.h>
+#include <documentModel/objects/Event.h>
 
-namespace sheet {
+namespace documentModel {
 	namespace compiler {
 
 		struct DegreeSymbols : boost::spirit::qi::symbols<char, PitchDef::Pitch >

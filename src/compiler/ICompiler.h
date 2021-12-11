@@ -5,7 +5,7 @@
 #include "forward.hpp"
 #include <memory>
 
-namespace sheet {
+namespace documentModel {
 	struct Event;
 	namespace compiler {
 		class ICompiler {

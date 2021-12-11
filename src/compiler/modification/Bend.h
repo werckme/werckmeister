@@ -6,7 +6,7 @@
 
 #define FM_BEND_ALTERNAIVE_PARAM_VALUE_NOT_SET "-1"
 
-namespace sheet {
+namespace documentModel {
     namespace compiler {
         class Bend : public AModification {
         public:

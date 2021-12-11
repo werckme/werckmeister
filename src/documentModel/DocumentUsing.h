@@ -4,7 +4,7 @@
 #include <vector>
 #include <com/common.hpp>
 
-namespace sheet {
+namespace documentModel {
 	struct DocumentUsing {
 		typedef com::String Using;
 		typedef std::vector<Using> Usings;

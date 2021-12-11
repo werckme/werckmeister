@@ -6,7 +6,7 @@
 #include <memory>
 #include <compiler/context/IContext.h>
 
-namespace sheet {
+namespace documentModel {
     struct Event;
     namespace compiler {
         class ASheetEventRenderer {
@@ -16,13 +16,13 @@ namespace sheet {
             virtual std::shared_ptr<ASheetEventRenderer> createNewSheetEventRenderer(IContextPtr ctx) = 0;
             template<class TContainer>
             void handleMetaEvents(const TContainer &container, 
-                            std::function<sheet::Event(const typename TContainer::value_type&)> fGetMetaEvent);        
+                            std::function<documentModel::Event(const typename TContainer::value_type&)> fGetMetaEvent);        
         };
         typedef std::shared_ptr<ASheetEventRenderer> ASheetEventRendererPtr; 
         //---------------------------------------------------------------------
         template<class TContainer>
         void ASheetEventRenderer::handleMetaEvents(const TContainer &container, 
-                        std::function<sheet::Event(const typename TContainer::value_type&)> fGetMetaEvent)
+                        std::function<documentModel::Event(const typename TContainer::value_type&)> fGetMetaEvent)
         {
             for(const auto &x : container) {
                 const Event &metaEvent = fGetMetaEvent(x);

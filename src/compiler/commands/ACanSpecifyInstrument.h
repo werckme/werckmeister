@@ -4,7 +4,7 @@
 
 #include "ICanSpecifyInstrument.h"
 
-namespace sheet {
+namespace documentModel {
     namespace compiler {
         class ACanSpecifyInstrument : public ICanSpecifyInstrument
         {

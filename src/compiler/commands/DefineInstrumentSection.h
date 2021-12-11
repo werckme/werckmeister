@@ -5,7 +5,7 @@
 #include <compiler/argumentNames.h>
 #include <list>
 
-namespace sheet {
+namespace documentModel {
     namespace compiler {
         /// <command name="instrumentSection" where="document">
         /// Layers arbitrary instruments into one.

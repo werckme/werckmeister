@@ -4,9 +4,9 @@
 #include "ASheetObjectWithSourceInfo.h"
 #include <com/common.hpp>
 #include <vector>
-#include <sheet/PitchDef.h>
+#include <documentModel/PitchDef.h>
 
-namespace sheet {
+namespace documentModel {
 	struct ConductionSelector :  public ASheetObjectWithSourceInfo {
 		struct ArgumentValue {
 			com::Ticks numberValue = 0;

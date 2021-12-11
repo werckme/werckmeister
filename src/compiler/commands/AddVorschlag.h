@@ -5,7 +5,7 @@
 #include <compiler/argumentNames.h>
 #include "AUsingAnEvent.h"
 
-namespace sheet {
+namespace documentModel {
     namespace compiler {
         class AddVorschlag : public ACommand, public AUsingAnEvent
         {

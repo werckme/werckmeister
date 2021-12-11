@@ -3,11 +3,11 @@
 
 #include <com/IRegisterable.h>
 #include <com/AConvertsArgumentsToParameter.h>
-#include <sheet/Argument.h>
+#include <documentModel/Argument.h>
 #include <vector>
 #include <compiler/context/IContext.h>
 
-namespace sheet {
+namespace documentModel {
     namespace compiler {
         class ACommand : public com::IRegisterable, public com::AConvertsArgumentsToParameter
         {

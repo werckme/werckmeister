@@ -4,7 +4,7 @@
 #include "ACommand.h"
 #include <compiler/argumentNames.h>
 
-namespace sheet {
+namespace documentModel {
     namespace compiler {
         /// <command name="device" where="document">
         ///     Defines a device which can be used when adding instruments (see [instrumentDef](#instrumentDef))

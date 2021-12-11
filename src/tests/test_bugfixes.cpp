@@ -14,16 +14,16 @@
 BOOST_AUTO_TEST_CASE(issue_9_As_und_Es_werden_nicht_erkannt)
 {
 	using namespace com;
-	using sheet::PitchDef;
+	using documentModel::PitchDef;
 	com::String text = FM_STRING("\
 [\n\
-type: sheet;\n\
+type: documentModel;\n\
 {\n\
 	Ab Eb Ab7 Eb7 Gb Gb7 \n\
 }\n\
 ] \n\
 ");
-	sheet::compiler::SheetDefParser parser;
+	documentModel::compiler::SheetDefParser parser;
 	auto defs = parser.parse(text);
 	BOOST_CHECK(defs.tracks.size() == 1);
 	BOOST_CHECK(defs.tracks[0].voices.size() == 1);
@@ -74,16 +74,16 @@ type: sheet;\n\
 BOOST_AUTO_TEST_CASE(issue_87_asus_chords_will_not_be_recognized)
 {
 	using namespace com;
-	using sheet::PitchDef;
+	using documentModel::PitchDef;
 	com::String text = FM_STRING("\
 [\n\
-type: sheet;\n\
+type: documentModel;\n\
 {\n\
 	Bsus2 Asus2 \n\
 }\n\
 ] \n\
 ");
-	sheet::compiler::SheetDefParser parser;
+	documentModel::compiler::SheetDefParser parser;
 	auto defs = parser.parse(text);
 	BOOST_CHECK(defs.tracks.size() == 1);
 	BOOST_CHECK(defs.tracks[0].voices.size() == 1);
@@ -118,7 +118,7 @@ BOOST_AUTO_TEST_CASE(issue_100_mod_gt_1_in_instrument_config_fails)
     volume 63
 ;
 	*/
-	std::vector<sheet::Argument> args = {
+	std::vector<documentModel::Argument> args = {
 		makeArg("organ"), 
 		makeArg("mod"), makeArg("staccato"), 
 		makeArg("mod"), makeArg("swing"),

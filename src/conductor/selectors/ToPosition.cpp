@@ -2,7 +2,7 @@
 #include <cmath>
 #include <compiler/error.hpp>
 
-namespace sheet
+namespace documentModel
 {
     namespace conductor
     {

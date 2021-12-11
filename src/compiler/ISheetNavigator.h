@@ -4,7 +4,7 @@
 #include "forward.hpp"
 #include <memory>
 
-namespace sheet {
+namespace documentModel {
 	struct Voice;
 	namespace compiler {
 		/// Is responsible for solving navigation commands such as mark/jump etc.

@@ -5,7 +5,7 @@
 #include <vector>
 #include "ASheetObject.hpp"
 
-namespace sheet {
+namespace documentModel {
 
 	struct DocumentConfig : public ASheetObjectWithSourceInfo {
 		typedef std::vector<com::String> Args;

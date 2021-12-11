@@ -1,12 +1,12 @@
 #ifndef SHEET_TEMPLATEDEF_HPP
 #define SHEET_TEMPLATEDEF_HPP
 
-#include <sheet/objects/ChordDef.h>
-#include <sheet/SheetDef.h>
+#include <documentModel/objects/ChordDef.h>
+#include <documentModel/SheetDef.h>
 #include <vector>
 #include <forward.hpp>
 
-namespace sheet {
+namespace documentModel {
 
     struct SheetTemplate
     {

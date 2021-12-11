@@ -2,7 +2,7 @@
 #include <compiler/context/IContext.h>
 #include <com/werckmeister.hpp>
 
-namespace sheet {
+namespace documentModel {
     namespace compiler {
         void SetVoicingStrategy::execute(IContextPtr  context)
         {

@@ -9,7 +9,7 @@
 #include "IPreprocessor.h"
 #include <com/ILogger.h>
 
-namespace sheet {
+namespace documentModel {
 	struct Event;
 	namespace compiler {
 		class Compiler : public ICompiler {

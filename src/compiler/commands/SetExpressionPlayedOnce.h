@@ -4,7 +4,7 @@
 #include "SetExpression.h"
 #include <compiler/argumentNames.h>
 
-namespace sheet {
+namespace documentModel {
     namespace compiler {
         class SetExpressionPlayedOnce : public SetExpression
         {

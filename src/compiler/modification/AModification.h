@@ -2,13 +2,13 @@
 #define AMODIFICTAION_HPP
 
 #include <com/units.hpp>
-#include <sheet/objects/Event.h>
+#include <documentModel/objects/Event.h>
 #include <list>
 #include <com/IRegisterable.h>
 #include <com/AConvertsArgumentsToParameter.h>
 #include <compiler/context/IContext.h>
 
-namespace sheet {
+namespace documentModel {
     namespace compiler {
         class AModification : public com::IRegisterable, public com::AConvertsArgumentsToParameter {
         protected:

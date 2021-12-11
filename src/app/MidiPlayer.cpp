@@ -25,7 +25,7 @@ namespace app {
         }
     }
 
-    void MidiPlayer::write(sheet::DocumentPtr doc)
+    void MidiPlayer::write(documentModel::DocumentPtr doc)
     {
         if (state > Stopped) {
             return;
@@ -43,7 +43,7 @@ namespace app {
         _midiPlayerImpl.addBackend(std::make_shared<FluidSynthBackend>());
     }
 
-    void MidiPlayer::execLoop(sheet::DocumentPtr)
+    void MidiPlayer::execLoop(documentModel::DocumentPtr)
     {
         com::Ticks resume = 0;
         com::Ticks begin = 0;

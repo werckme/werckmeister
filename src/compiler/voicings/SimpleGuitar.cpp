@@ -1,7 +1,7 @@
 #include "SimpleGuitar.h"
 #include <com/tools.h>
 
-namespace sheet {
+namespace documentModel {
 
  	SimpleGuitar::OctaveMap SimpleGuitar::createOctaveMap(const ChordDef &def) const
 	{

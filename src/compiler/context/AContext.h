@@ -18,7 +18,7 @@
 #include <compiler/timeInfo.h>
 #include "IContext.h"
 
-namespace sheet {
+namespace documentModel {
     namespace compiler {
         class AContext : public IContext {
         public:

@@ -11,7 +11,7 @@
 #include <conductor/selectors/ISelector.h>
 #include <com/ILogger.h>
 
-namespace sheet
+namespace documentModel
 {
 	namespace conductor
 	{
@@ -28,16 +28,16 @@ namespace sheet
 			typedef std::vector<EventsAndDeclarations> EventsAndDeclarationsCollection;
 			EventsAndDeclarationsCollection selectEvents() const;
 		public:
-			ConductionsPerformer(com::midi::MidiPtr midifile, sheet::DocumentPtr document, com::ILoggerPtr logger) : 
+			ConductionsPerformer(com::midi::MidiPtr midifile, documentModel::DocumentPtr document, com::ILoggerPtr logger) : 
 				_midifile(midifile), _document(document), _logger(logger) {}
 			virtual void applyConductions() override;
 		private:
 			bool isEventOfInterest(const com::midi::Event&) const;
-			Events findMatches(const sheet::ConductionSelector &) const;
-			Events findMatches(const sheet::ConductionSelector&, Events&) const;
+			Events findMatches(const documentModel::ConductionSelector &) const;
+			Events findMatches(const documentModel::ConductionSelector&, Events&) const;
 			void perform(const EventsAndDeclarationsCollection&) const;
 			com::midi::MidiPtr _midifile;
-			sheet::DocumentPtr _document;
+			documentModel::DocumentPtr _document;
 			com::ILoggerPtr _logger;
 		};
 	}

@@ -4,7 +4,7 @@
 #include <lua.hpp>
 #include <com/common.hpp>
 
-namespace sheet {
+namespace documentModel {
 
     namespace lua {
 

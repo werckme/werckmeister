@@ -4,7 +4,7 @@
 #include "AMidiContextCommand.h"
 #include <compiler/argumentNames.h>
 
-namespace sheet {
+namespace documentModel {
     namespace compiler {
         /// <command name="instrumentDef" where="document">
         /// Adds a new MIDI instrument.

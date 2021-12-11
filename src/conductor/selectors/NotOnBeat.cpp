@@ -5,7 +5,7 @@ namespace {
     const com::Ticks Tolerance = 0.0001;
 }
 
-namespace sheet
+namespace documentModel
 {
     namespace conductor
     {

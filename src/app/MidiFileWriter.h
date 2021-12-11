@@ -24,7 +24,7 @@ namespace app {
               _midifile      (midiFile),
               _logger        (logger)
         {}
-        virtual void write(sheet::DocumentPtr document);
+        virtual void write(documentModel::DocumentPtr document);
         virtual ~MidiFileWriter() = default;
     };
 }

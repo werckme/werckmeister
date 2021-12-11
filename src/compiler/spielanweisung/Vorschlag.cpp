@@ -2,7 +2,7 @@
 #include <com/literals.hpp>
 #include <compiler/context/AContext.h>
 
-namespace sheet {
+namespace documentModel {
     namespace compiler {
         using namespace com;
         const com::Ticks Vorschlag::defaultDuration = 1.0_N64;

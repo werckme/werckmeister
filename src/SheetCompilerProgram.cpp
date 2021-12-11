@@ -1,11 +1,10 @@
 #include "SheetCompilerProgram.h"
 #include <com/werckmeister.hpp>
 #include <com/common.hpp>
-#include "sheet/Document.h"
+#include "documentModel/Document.h"
 #include "compiler/Compiler.h"
 #include "parser/parser.h"
 #include "compiler/context/MidiContext.h"
-#include "sheet.h"
 #include "compiler/SheetEventRenderer.h"
 #include <app/os.hpp>
 #include <iostream>
@@ -69,7 +68,7 @@ void SheetCompilerProgram::compile()
         }
         _midiFile->seal();
     } catch(com::Exception &ex) {
-        ex << sheet::compiler::ex_sheet_document(document);
+        ex << documentModel::compiler::ex_sheet_document(document);
         throw;
     }
     _logger->babble(WMLogLambda(log << "write document"));   

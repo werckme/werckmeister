@@ -3,12 +3,12 @@
 
 #include <com/IRegisterable.h>
 #include <com/midi.hpp>
-#include <sheet/objects/ConductionSheetDef.h>
+#include <documentModel/objects/ConductionSheetDef.h>
 #include <memory>
 #include <functional>
 #include <compiler/error.hpp>
 
-namespace sheet
+namespace documentModel
 {
     namespace conductor
     {

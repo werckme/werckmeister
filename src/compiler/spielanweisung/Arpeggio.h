@@ -3,7 +3,7 @@
 
 #include "ASpielanweisung.h"
 
-namespace sheet {
+namespace documentModel {
     namespace compiler {
         class Arpeggio : public ASpielanweisung {
         public:

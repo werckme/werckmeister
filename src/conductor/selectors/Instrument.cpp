@@ -1,6 +1,6 @@
 #include "Instrument.h"
 
-namespace sheet
+namespace documentModel
 {
     namespace conductor
     {

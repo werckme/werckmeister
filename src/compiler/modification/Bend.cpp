@@ -4,7 +4,7 @@
 #include <com/literals.hpp>
 #include <com/tools.h>
 
-namespace sheet {
+namespace documentModel {
     namespace compiler {
 
         void Bend::perform(IContextPtr ctx, Events &events)

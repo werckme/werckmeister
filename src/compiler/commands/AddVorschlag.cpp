@@ -5,7 +5,7 @@
 #include <compiler/spielanweisung/Vorschlag.h>
 
 
-namespace sheet {
+namespace documentModel {
     namespace compiler {
         void AddVorschlag::execute(IContextPtr  context)
         {

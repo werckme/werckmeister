@@ -1,8 +1,8 @@
 #include "ChordDef.h"
 #include <algorithm>
-#include <sheet/objects/Event.h>
+#include <documentModel/objects/Event.h>
 
-namespace sheet {
+namespace documentModel {
 
 
 	int getDegreeValue(int degree)

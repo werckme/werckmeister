@@ -1,7 +1,7 @@
 #include "InstrumentConfigSetVolume.h"
 #include <compiler/context/IContext.h>
 
-namespace sheet {
+namespace documentModel {
     namespace compiler {
         void InstrumentConfigSetVolume::execute(IContextPtr  context)
         {

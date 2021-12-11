@@ -1,10 +1,10 @@
 #ifndef SHEET_AUSINGANEVENT_HPP
 #define SHEET_AUSINGANEVENT_HPP
 
-#include <sheet/objects/Event.h>
+#include <documentModel/objects/Event.h>
 #include <compiler/error.hpp>
 
-namespace sheet {
+namespace documentModel {
     namespace compiler {
         class AUsingAnEvent
         {

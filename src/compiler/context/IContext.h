@@ -17,7 +17,7 @@
 #include <compiler/Instrument.h>
 #include <memory>
 
-namespace sheet {
+namespace documentModel {
     namespace compiler {
         class IContext {
         public:
@@ -29,7 +29,7 @@ namespace sheet {
 			typedef std::unordered_map<VoiceId, VoiceMetaDataPtr> VoiceMetaDataMap;
 			typedef std::unordered_map<TrackId, TrackMetaDataPtr> TrackMetaDataMap;
 			typedef std::function<void(com::String)> WarningHandler;
-			typedef std::vector<sheet::SheetTemplate> SheetTemplates;
+			typedef std::vector<documentModel::SheetTemplate> SheetTemplates;
 			virtual void warningHandler(const WarningHandler &) = 0;
 			virtual WarningHandler& warningHandler() = 0;
 			virtual void setTrack(TrackId trackId) = 0;

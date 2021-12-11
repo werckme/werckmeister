@@ -7,7 +7,7 @@
 #include "ICanSpecifyInstrument.h"
 #include <iostream>
 
-namespace sheet {
+namespace documentModel {
     namespace compiler {
 
         const std::vector<com::String> AddInstrumentConfig::SupportedConfigCommands = {

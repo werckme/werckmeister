@@ -5,10 +5,10 @@
 #include <vector>
 #include "Event.h"
 #include "ASheetObject.h"
-#include <sheet/Argument.h>
+#include <documentModel/Argument.h>
 #include "Event.h"
 
-namespace sheet {
+namespace documentModel {
 
 	struct Voice : public ASheetObject {
 		typedef std::vector<Event> Events;

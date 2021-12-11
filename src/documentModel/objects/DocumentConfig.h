@@ -4,12 +4,12 @@
 #include <com/common.hpp>
 #include <vector>
 #include "ASheetObject.h"
-#include <sheet/Argument.h>
+#include <documentModel/Argument.h>
 
-namespace sheet {
+namespace documentModel {
 
 	struct DocumentConfig : public ASheetObjectWithSourceInfo {
-		typedef std::vector<sheet::Argument> Args;
+		typedef std::vector<documentModel::Argument> Args;
 		com::String name;
 		Args args;
 	};

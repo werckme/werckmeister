@@ -13,7 +13,7 @@
 #include <compiler/context/MidiContext.h>
 #include <compiler/Preprocessor.h>
 #include <compiler/EventLogger.h>
-#include <sheet/Document.h>
+#include <documentModel/Document.h>
 #include <com/DefinitionsServer.h>
 #include <com/midi.hpp>
 #include <app/MidiFileWriter.h>
@@ -30,8 +30,8 @@
 #include <crtdbg.h>
 #endif
 
-typedef sheet::compiler::EventLogger<com::ConsoleLogger> 			   LoggerImpl;
-typedef sheet::compiler::LoggerAndWarningsCollector<com::ConsoleLogger> WarningsCollectorWithConsoleLogger;
+typedef documentModel::compiler::EventLogger<com::ConsoleLogger> 			   LoggerImpl;
+typedef documentModel::compiler::LoggerAndWarningsCollector<com::ConsoleLogger> WarningsCollectorWithConsoleLogger;
 
 
 int main(int argc, const char** argv)
@@ -40,8 +40,8 @@ int main(int argc, const char** argv)
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 #endif
 	namespace di = boost::di;
-	namespace cp = sheet::compiler;
-	namespace co = sheet::conductor;
+	namespace cp = documentModel::compiler;
+	namespace co = documentModel::conductor;
 	auto programOptionsPtr = std::make_shared<CompilerProgramOptions>();
 	try {
 		programOptionsPtr->parseProgrammArgs(argc, argv);
@@ -50,7 +50,7 @@ int main(int argc, const char** argv)
 		return 1;
 	}
 
-	auto documentPtr = std::make_shared<sheet::Document>();
+	auto documentPtr = std::make_shared<documentModel::Document>();
 	auto midiFile = com::getWerckmeister().createMidi();
 	bool needTimeline = programOptionsPtr->isJsonModeSet();
 	bool writeWarningsToConsole = !(programOptionsPtr->isJsonModeSet() || programOptionsPtr->isJsonDocInfoMode());
@@ -64,7 +64,7 @@ int main(int argc, const char** argv)
 		, di::bind<cp::ISheetNavigator>()			.to<cp::SheetNavigator>()			.in(di::singleton)
 		, di::bind<co::IConductionsPerformer>()		.to<co::ConductionsPerformer>()		.in(di::singleton)
 		, di::bind<ICompilerProgramOptions>()		.to(programOptionsPtr)
-		, di::bind<sheet::Document>()				.to(documentPtr)
+		, di::bind<documentModel::Document>()				.to(documentPtr)
 		, di::bind<com::IDefinitionsServer>()		.to<com::DefinitionsServer>()		.in(di::singleton)
 		, di::bind<com::midi::Midi>()				.to(midiFile)
 		, di::bind<app::IDocumentWriter>()		.to([&](const auto &injector) -> app::IDocumentWriterPtr
@@ -89,7 +89,7 @@ int main(int argc, const char** argv)
 			return injector.template create<std::shared_ptr<WarningsCollectorWithConsoleLogger>>();
 		})
 	);
-	sheet::FactoryConfig factory(injector);
+	documentModel::FactoryConfig factory(injector);
 	factory.init();
 	auto program = injector.create<SheetCompilerProgram>();
 	program.prepareEnvironment();

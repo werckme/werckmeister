@@ -5,7 +5,7 @@
 #include <compiler/argumentNames.h>
 #include <compiler/commands/ACanSpecifyInstrument.h>
 
-namespace sheet {
+namespace documentModel {
     namespace compiler {
         class InstrumentConfigVelocityRemap : public ACommand, public ACanSpecifyInstrument
         {

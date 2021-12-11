@@ -4,7 +4,7 @@
 #include "ACommand.h"
 #include <compiler/argumentNames.h>
 
-namespace sheet {
+namespace documentModel {
     namespace compiler {
         /// <command name="mark" where="voice">
         ///     adds a mark to the voice. Us it in combination with [jump](manual/#jump).

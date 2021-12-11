@@ -17,7 +17,7 @@
 
 #define BEGIN_DOCUMENT_CONFIG_LINE_CHAR '@'
 
-namespace sheet {
+namespace documentModel {
 
 	namespace compiler {
 		typedef com::CharType CharType;

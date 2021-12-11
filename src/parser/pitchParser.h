@@ -1,6 +1,6 @@
 #include <boost/spirit/include/qi.hpp>
-#include <sheet/PitchDef.h>
-#include <sheet/AliasPitchDef.h>
+#include <documentModel/PitchDef.h>
+#include <documentModel/AliasPitchDef.h>
 #include <com/common.hpp>
 #include <boost/spirit/include/phoenix_operator.hpp>
 #include <boost/spirit/include/phoenix_object.hpp>
@@ -12,18 +12,18 @@
 #include <boost/phoenix/operator/arithmetic.hpp>
 
 BOOST_FUSION_ADAPT_STRUCT(
-	sheet::PitchDef,
-	(sheet::PitchDef::Pitch, pitch)
-	(sheet::PitchDef::Octave, octave)
+	documentModel::PitchDef,
+	(documentModel::PitchDef::Pitch, pitch)
+	(documentModel::PitchDef::Octave, octave)
 )
 
 BOOST_FUSION_ADAPT_STRUCT(
-	sheet::AliasPitchDef,
+	documentModel::AliasPitchDef,
 	(com::String, alias)
 )
 
 
-namespace sheet {
+namespace documentModel {
     namespace compiler {
         struct PitchParser {
             typedef com::String::const_iterator Iterator;
