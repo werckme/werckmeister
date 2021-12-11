@@ -1,5 +1,4 @@
-#ifndef SHEET_SETPAN_HPP
-#define SHEET_SETPAN_HPP
+#pragma once
 
 #include "ACommand.h"
 #include <compiler/argumentNames.h>
@@ -24,4 +23,3 @@ namespace documentModel {
     }
 }
 
-#endif

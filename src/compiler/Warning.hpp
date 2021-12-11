@@ -1,5 +1,4 @@
-#ifndef COMPILER_WARNING_HPP
-#define COMPILER_WARNING_HPP
+#pragma once
 
 
 #include <list>
@@ -19,4 +18,3 @@ namespace documentModel {
 	typedef std::list<Warning> Warnings;
 }
 
-#endif

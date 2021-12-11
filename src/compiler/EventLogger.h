@@ -1,5 +1,4 @@
-#ifndef EVENTLOGGER_H
-#define EVENTLOGGER_H
+#pragma once
 
 #include "IEventLogger.h"
 #include <com/ConsoleLogger.h>
@@ -33,4 +32,3 @@ namespace documentModel {
     }
 }
 
-#endif

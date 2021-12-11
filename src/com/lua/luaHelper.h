@@ -1,5 +1,4 @@
-#ifndef FM_LUA_HELPER_H
-#define FM_LUA_HELPER_H
+#pragma once
 
 #include <lua.hpp>
 #include <com/common.hpp>
@@ -84,4 +83,4 @@ namespace documentModel {
     }
 }
 
-#endif
+

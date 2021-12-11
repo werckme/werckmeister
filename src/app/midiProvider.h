@@ -1,5 +1,4 @@
-#ifndef MIDI_PROVIDER
-#define MIDI_PROVIDER
+#pragma once
 
 #include <list>
 #include <com/midi.hpp>
@@ -53,4 +52,3 @@ namespace app {
 
 }
 
-#endif

@@ -1,5 +1,4 @@
-#ifndef SEL_NTH_BAR
-#define SEL_NTH_BAR
+#pragma once
 
 #include "ISelector.h"
 
@@ -27,4 +26,3 @@ namespace documentModel
     }
 }
 
-#endif

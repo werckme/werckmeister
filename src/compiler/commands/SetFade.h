@@ -1,5 +1,4 @@
-#ifndef SHEET_SETFADE_HPP
-#define SHEET_SETFADE_HPP
+#pragma once
 
 #include "ACommand.h"
 #include <compiler/argumentNames.h>
@@ -59,4 +58,3 @@ namespace documentModel {
     }
 }
 
-#endif

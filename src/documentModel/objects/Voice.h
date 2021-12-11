@@ -1,5 +1,4 @@
-#ifndef VOICE_H
-#define VOICE_H
+#pragma once
 
 #include <com/common.hpp>
 #include <vector>
@@ -17,4 +16,3 @@ namespace documentModel {
 
 }
 
-#endif

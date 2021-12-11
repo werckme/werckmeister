@@ -1,5 +1,4 @@
-#ifndef COMPILER_CONTEXT_EVENTS_HPP
-#define COMPILER_CONTEXT_EVENTS_HPP
+#pragma once
 
 #include <documentModel/objects/Event.h>
 #include <com/units.hpp>
@@ -20,4 +19,3 @@ namespace documentModel {
     }
 }
 
-#endif

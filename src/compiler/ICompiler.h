@@ -1,5 +1,4 @@
-#ifndef ICOMPILER_H
-#define ICOMPILER_H
+#pragma once
 
 #include <com/common.hpp>
 #include "forward.hpp"
@@ -17,4 +16,3 @@ namespace documentModel {
 	
 }
 
-#endif

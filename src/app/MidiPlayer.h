@@ -1,5 +1,4 @@
-#ifndef FMAPP_MIDIPLAYER_HPP
-#define FMAPP_MIDIPLAYER_HPP
+#pragma once
 
 #include "IDocumentWriter.h"
 #include <forward.hpp>
@@ -68,4 +67,3 @@ namespace app {
     };
     typedef std::shared_ptr<MidiPlayer> MidiPlayerPtr;
 }
-#endif

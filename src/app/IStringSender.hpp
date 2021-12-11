@@ -1,5 +1,4 @@
-#ifndef ISTRINGSENDER_HPP
-#define ISTRINGSENDER_HPP
+#pragma once
 
 #include <string>
 #include <memory>
@@ -13,4 +12,3 @@ namespace app  {
     typedef std::shared_ptr<IStringSender> IStringSenderPtr;
 }
 
-#endif

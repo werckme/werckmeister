@@ -1,5 +1,4 @@
-#ifndef SHEET_COMPILER_PROGRAM_HPP
-#define SHEET_COMPILER_PROGRAM_HPP
+#pragma once
 
 #include <parser/IDocumentParser.h>
 #include <com/common.hpp>
@@ -61,4 +60,4 @@ private:
     com::Path prepareJSONInput(const std::string &base64JsonInputStr);
 };
 
-#endif
+

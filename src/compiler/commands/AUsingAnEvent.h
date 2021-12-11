@@ -1,5 +1,4 @@
-#ifndef SHEET_AUSINGANEVENT_HPP
-#define SHEET_AUSINGANEVENT_HPP
+#pragma once
 
 #include <documentModel/objects/Event.h>
 #include <compiler/error.hpp>
@@ -24,4 +23,3 @@ namespace documentModel {
     }
 }
 
-#endif

@@ -1,5 +1,4 @@
-#ifndef SHEET_JUMP_HPP
-#define SHEET_JUMP_HPP
+#pragma once
 
 #include "ACommand.h"
 #include <compiler/argumentNames.h>
@@ -43,4 +42,3 @@ namespace documentModel {
     }
 }
 
-#endif

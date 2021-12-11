@@ -1,5 +1,4 @@
-#ifndef FMAPP_TIMELINECONTEXT_H
-#define FMAPP_TIMELINECONTEXT_H
+#pragma once
 
 
 #include <forward.hpp>
@@ -105,4 +104,3 @@ namespace app {
     }
 }
 
-#endif

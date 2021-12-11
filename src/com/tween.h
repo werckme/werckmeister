@@ -1,5 +1,4 @@
-#ifndef FM_TWEEN_H
-#define FM_TWEEN_H
+#pragma once
 
 #include <cmath>
 #include "TemplateMetaHelper.h"
@@ -32,4 +31,3 @@ namespace com {
     };
 }
 
-#endif

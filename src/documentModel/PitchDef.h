@@ -1,5 +1,4 @@
-#ifndef PITCHDEF_H
-#define PITCHDEF_H
+#pragma once
 
 #include <com/common.hpp>
 #include <com/units.hpp>
@@ -54,4 +53,3 @@ namespace documentModel {
 	};
 }
 
-#endif

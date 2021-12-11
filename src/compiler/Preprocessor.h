@@ -1,5 +1,4 @@
-#ifndef COMPILER_PREPROCESSOR_H
-#define COMPILER_PREPROCESSOR_H
+#pragma once
 
 #include <com/common.hpp>
 #include "IPreprocessor.h"
@@ -39,4 +38,3 @@ namespace documentModel {
 	}
 }
 
-#endif

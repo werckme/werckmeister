@@ -1,5 +1,4 @@
-#ifndef SPIELANWEISUNG_ARPEGGIO_HPP
-#define SPIELANWEISUNG_ARPEGGIO_HPP
+#pragma once
 
 #include "ASpielanweisung.h"
 
@@ -19,4 +18,3 @@ namespace documentModel {
     }
 }
 
-#endif

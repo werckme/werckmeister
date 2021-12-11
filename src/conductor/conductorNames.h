@@ -1,5 +1,4 @@
-#ifndef CONDUCTOR_NAMES_H
-#define CONDUCTOR_NAMES_H
+#pragma once
 
 #include <com/common.hpp>
 
@@ -28,4 +27,3 @@
 #define SHEET_CONDUCTOR_DEC__LENGTH FM_STRING("duration")
 #define SHEET_CONDUCTOR_DEC__PITCH FM_STRING("pitch")
 
-#endif

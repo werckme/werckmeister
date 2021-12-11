@@ -1,5 +1,4 @@
-#ifndef SETEXPRESSIONPLAYEDONCE_HPP
-#define SETEXPRESSIONPLAYEDONCE_HPP
+#pragma once
 
 #include "SetExpression.h"
 #include <compiler/argumentNames.h>
@@ -15,4 +14,3 @@ namespace documentModel {
     }
 }
 
-#endif

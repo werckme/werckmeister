@@ -1,5 +1,4 @@
-#ifndef PARSER_H
-#define PARSER_H
+#pragma once
 #include "IDocumentParser.h"
 #include <com/common.hpp>
 #include <vector>
@@ -80,4 +79,3 @@ namespace documentModel {
 }
 
 
-#endif

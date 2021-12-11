@@ -1,5 +1,4 @@
-#ifndef SHEET_ACOMMAND_HPP
-#define SHEET_ACOMMAND_HPP
+#pragma once
 
 #include <com/IRegisterable.h>
 #include <com/AConvertsArgumentsToParameter.h>
@@ -20,4 +19,3 @@ namespace documentModel {
     }
 }
 
-#endif

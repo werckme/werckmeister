@@ -1,5 +1,4 @@
-#ifndef GROUPED_H
-#define GROUPED_H
+#pragma once
 
 #include "Event.h"
 
@@ -11,4 +10,3 @@ namespace documentModel {
 	};
 }
 
-#endif

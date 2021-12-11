@@ -1,5 +1,4 @@
-#ifndef SHEET_EVENT_H
-#define SHEET_EVENT_H
+#pragma once
 
 #include <com/common.hpp>
 #include <com/units.hpp>
@@ -110,4 +109,3 @@ namespace documentModel {
 	};
 }
 
-#endif

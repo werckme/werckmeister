@@ -1,5 +1,4 @@
-#ifndef FMAPP_MIDIPLAYER_CLIENT_HPP
-#define FMAPP_MIDIPLAYER_CLIENT_HPP
+#pragma once
 
 #include <vector>
 #include <string>
@@ -284,4 +283,3 @@ namespace app {
 
 
 }
-#endif

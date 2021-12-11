@@ -1,5 +1,4 @@
-#ifndef IWARNINGSCOLLECTION_H
-#define IWARNINGSCOLLECTION_H
+#pragma once
 
 
 #include "Warning.hpp"
@@ -15,4 +14,3 @@ namespace documentModel {
         typedef std::shared_ptr<IWarningsCollection> IWarningsCollectionPtr;
     }
 }
-#endif

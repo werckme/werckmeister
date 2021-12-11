@@ -1,5 +1,4 @@
-#ifndef DECLARATION_VELOCITY_H
-#define DECLARATION_VELOCITY_H
+#pragma once
 
 #include "ADeclaration.h"
 
@@ -30,4 +29,3 @@ namespace documentModel
     }
 }
 
-#endif

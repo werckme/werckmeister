@@ -1,5 +1,4 @@
-#ifndef CONFIGSERVER_H
-#define CONFIGSERVER_H
+#pragma once
 
 #include <unordered_map>
 #include <string>
@@ -26,4 +25,3 @@ namespace com {
     };
     ConfigServer & getConfigServer();
 }
-#endif

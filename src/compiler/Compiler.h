@@ -1,5 +1,4 @@
-#ifndef COMPILER_H
-#define COMPILER_H
+#pragma once
 
 #include "ICompiler.h"
 #include "ISheetTemplateRenderer.h"
@@ -50,4 +49,3 @@ namespace documentModel {
 	}
 }
 
-#endif

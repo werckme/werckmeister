@@ -1,5 +1,4 @@
-#ifndef FMAPP_ADOCUMENTWRITER_H
-#define FMAPP_ADOCUMENTWRITER_H
+#pragma once
 
 #include "IDocumentWriter.h"
 #include <com/ILogger.h>
@@ -16,4 +15,3 @@ namespace app {
     };
 }
 
-#endif

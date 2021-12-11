@@ -1,5 +1,4 @@
-#ifndef SHEET_AMIDICONTEXTCOMMAND_HPP
-#define SHEET_AMIDICONTEXTCOMMAND_HPP
+#pragma once
 
 
 #include "ACommand.h"
@@ -23,4 +22,3 @@ namespace documentModel {
     }
 }
 
-#endif

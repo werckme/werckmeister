@@ -1,5 +1,4 @@
-#ifndef IREGISTERABLE_H
-#define IREGISTERABLE_H
+#pragma once
 
 namespace com {
     class IRegisterable {
@@ -9,4 +8,3 @@ namespace com {
 }
 
 
-#endif

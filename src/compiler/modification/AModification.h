@@ -1,5 +1,4 @@
-#ifndef AMODIFICTAION_HPP
-#define AMODIFICTAION_HPP
+#pragma once
 
 #include <com/units.hpp>
 #include <documentModel/objects/Event.h>
@@ -21,4 +20,3 @@ namespace documentModel {
     }
 }
 
-#endif

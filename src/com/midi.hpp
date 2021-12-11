@@ -1,5 +1,4 @@
-#ifndef FM_MIDI_HPP
-#define FM_MIDI_HPP
+#pragma once
 
 #include <cstddef>
 #include "units.hpp"
@@ -266,4 +265,4 @@ namespace com {
 	}
 }
 
-#endif
+

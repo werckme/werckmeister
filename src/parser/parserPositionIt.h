@@ -1,5 +1,4 @@
-#ifndef SHEET_PARSER_POSITION_IT
-#define SHEET_PARSER_POSITION_IT
+#pragma once
 
 #include <boost/spirit/include/phoenix.hpp>
 #include <boost/spirit/include/qi.hpp>
@@ -39,4 +38,3 @@ namespace documentModel {
     }
 }
 
-#endif

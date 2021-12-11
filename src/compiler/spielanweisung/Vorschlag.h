@@ -1,5 +1,4 @@
-#ifndef SPIELANWEISUNG_VORSCHLAG_HPP
-#define SPIELANWEISUNG_VORSCHLAG_HPP
+#pragma once
 
 #include <documentModel/objects/Event.h>
 #include "ASpielanweisung.h"
@@ -21,4 +20,3 @@ namespace documentModel {
     }
 }
 
-#endif

@@ -1,5 +1,4 @@
-#ifndef NULLSTRINGSENDER_HPP
-#define NULLSTRINGSENDER_HPP
+#pragma once
 
 #include "IStringSender.hpp"
 
@@ -11,4 +10,3 @@ namespace app  {
     };
 }
 
-#endif

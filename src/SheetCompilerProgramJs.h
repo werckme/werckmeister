@@ -1,5 +1,4 @@
-#ifndef SHEET_COMPILER_PROGRAMJS_HPP
-#define SHEET_COMPILER_PROGRAMJS_HPP
+#pragma once
 
 #include "SheetCompilerProgram.h"
 
@@ -34,4 +33,4 @@ protected:
     virtual void prepareSearchPaths();
 };
 
-#endif
+

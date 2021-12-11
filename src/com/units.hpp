@@ -1,5 +1,4 @@
-#ifndef FM_UNITS_HPP
-#define FM_UNITS_HPP
+#pragma once
 namespace com {
 	typedef long double Ticks;
 	typedef int Pitch;
@@ -116,4 +115,3 @@ namespace com {
 	}
 }
 
-#endif

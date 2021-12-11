@@ -1,5 +1,4 @@
-#ifndef FMAPP_JSON_READER
-#define FMAPP_JSON_READER
+#pragma once
 
 #include <com/common.hpp>
 #include <forward.hpp>
@@ -28,4 +27,3 @@ namespace app {
     };
 }
 
-#endif

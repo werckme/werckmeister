@@ -1,5 +1,4 @@
-#ifndef SHEET_MARK_HPP
-#define SHEET_MARK_HPP
+#pragma once
 
 #include "ACommand.h"
 #include <compiler/argumentNames.h>
@@ -39,4 +38,3 @@ namespace documentModel {
     }
 }
 
-#endif

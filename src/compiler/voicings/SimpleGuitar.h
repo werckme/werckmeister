@@ -1,5 +1,4 @@
-#ifndef SIMPLE_GUITAR_STATEGY_HPP
-#define SIMPLE_GUITAR_STATEGY_HPP
+#pragma once
 
 #include "DirectVoicingStrategy.h"
 #include <map>
@@ -30,4 +29,3 @@ namespace documentModel {
     };
 }
 
-#endif

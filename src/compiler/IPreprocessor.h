@@ -1,5 +1,4 @@
-#ifndef ICOMPILER_PREPROCESSOR_H
-#define ICOMPILER_PREPROCESSOR_H
+#pragma once
 
 #include <com/common.hpp>
 #include "ASheetEventRenderer.h"
@@ -28,4 +27,3 @@ namespace documentModel {
 	}
 }
 
-#endif

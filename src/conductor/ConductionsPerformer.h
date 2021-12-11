@@ -1,5 +1,4 @@
-#ifndef CONDUCTIONS_PERFORMER_H
-#define CONDUCTIONS_PERFORMER_H
+#pragma once
 
 #include "IConductionsPerformer.h"
 #include <com/common.hpp>
@@ -43,4 +42,3 @@ namespace documentModel
 	}
 }
 
-#endif

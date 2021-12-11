@@ -1,6 +1,4 @@
-
-#ifndef SHEET_TEST_HELPER_H
-#define SHEET_TEST_HELPER_H
+#pragma once
 
 #include <documentModel/objects/Event.h>
 #include <documentModel/Argument.h>
@@ -30,4 +28,3 @@ documentModel::Argument makeArg(com::String value);
 documentModel::Argument makeArg(com::String name, com::String value);
 
 
-#endif

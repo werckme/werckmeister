@@ -1,5 +1,4 @@
-#ifndef SHEET_DOCUMENT_HPP
-#define SHEET_DOCUMENT_HPP
+#pragma once
 
 #include <com/common.hpp>
 #include "objects/ChordDef.h"
@@ -37,4 +36,3 @@ namespace documentModel {
 }
 
 
-#endif

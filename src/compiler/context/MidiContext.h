@@ -1,5 +1,4 @@
-#ifndef COMPILER_MIDICONTEXT_H
-#define COMPILER_MIDICONTEXT_H
+#pragma once
 
 #include "AContext.h"
 #include "forward.hpp"
@@ -83,4 +82,3 @@ namespace documentModel {
     }
 }
 
-#endif

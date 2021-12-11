@@ -1,5 +1,4 @@
-#ifndef FM_PARAMETER_H
-#define FM_PARAMETER_H
+#pragma once
 
 #include "common.hpp"
 #include "exception.hpp"
@@ -78,4 +77,3 @@ namespace com
 }
 
 
-#endif

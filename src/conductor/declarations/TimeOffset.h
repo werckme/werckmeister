@@ -1,5 +1,4 @@
-#ifndef DECLARATION_TIME_H
-#define DECLARATION_TIME_H
+#pragma once
 
 #include "ADeclaration.h"
 
@@ -31,4 +30,3 @@ namespace documentModel
     }
 }
 
-#endif

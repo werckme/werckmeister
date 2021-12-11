@@ -1,5 +1,4 @@
-#ifndef SEL_FROM_PITCH_H
-#define SEL_FROM_PITCH_H
+#pragma once
 
 #include "ISelector.h"
 #include <com/IDefinitionsServer.h>
@@ -28,4 +27,3 @@ namespace documentModel
     }
 }
 
-#endif

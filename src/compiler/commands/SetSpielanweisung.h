@@ -1,5 +1,4 @@
-#ifndef SETSPIELANWEISUNG_HPP
-#define SETSPIELANWEISUNG_HPP
+#pragma once
 
 #include "AddMod.h"
 #include <compiler/argumentNames.h>
@@ -25,4 +24,3 @@ namespace documentModel {
     }
 }
 
-#endif

@@ -1,5 +1,4 @@
-#ifndef FMAPP_NET_UDPSEND_HPP
-#define FMAPP_NET_UDPSEND_HPP
+#pragma once
 
 #include <tuple>
 #include <memory>
@@ -38,4 +37,4 @@ namespace funk {
 	};
 }
 
-#endif
+

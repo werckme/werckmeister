@@ -1,5 +1,4 @@
-#ifndef FMAPP_PLAYERTIMEPRINTER_HPP
-#define FMAPP_PLAYERTIMEPRINTER_HPP
+#pragma once
 
 
 #include "IPlayerLoopVisitor.h"
@@ -16,4 +15,3 @@ namespace app {
         std::string _lastOutput;
     };
 }
-#endif

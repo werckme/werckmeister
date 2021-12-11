@@ -1,5 +1,4 @@
-#ifndef FM_RTMIDI_BACKEND_HPP
-#define FM_RTMIDI_BACKEND_HPP
+#pragma once
 
 #include <memory>
 #include <vector>
@@ -28,4 +27,3 @@ namespace app {
 	};
 }
 
-#endif

@@ -1,5 +1,4 @@
-#ifndef ACOMPILER_SHEET_EVENT_RENDERER_H
-#define ACOMPILER_SHEET_EVENT_RENDERER_H
+#pragma once
 
 #include <functional>
 #include <compiler/error.hpp>
@@ -37,4 +36,3 @@ namespace documentModel {
     }
 }
 
-#endif

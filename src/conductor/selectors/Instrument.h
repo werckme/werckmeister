@@ -1,5 +1,4 @@
-#ifndef SEL_INSTRUMENT_H
-#define SEL_INSTRUMENT_H
+#pragma once
 
 #include "ISelector.h"
 
@@ -26,4 +25,3 @@ namespace documentModel
     }
 }
 
-#endif

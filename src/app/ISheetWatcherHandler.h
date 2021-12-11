@@ -1,5 +1,4 @@
-#ifndef FMAPP_ISHEETWATCHER_HANDLER_HPP
-#define FMAPP_ISHEETWATCHER_HANDLER_HPP
+#pragma once
 
 
 #include "DiContainerWrapper.h"
@@ -16,4 +15,3 @@ namespace app {
     typedef DiContainerWrapper<ISheetWatcherHandler*> SheetWatcherHandlers;
     typedef std::shared_ptr<SheetWatcherHandlers> SheetWatcherHandlersPtr;
 }
-#endif

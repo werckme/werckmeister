@@ -1,5 +1,4 @@
-#ifndef FM_COMMON_HPP
-#define FM_COMMON_HPP
+#pragma once
 
 #define FM_STRING(str) str
 #define FM_CHAR(str) str
@@ -56,4 +55,3 @@ namespace com {
 
 }
 
-#endif

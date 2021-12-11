@@ -1,5 +1,4 @@
-#ifndef FMAPP_IPLAYERLOOPVISITOR_HPP
-#define FMAPP_IPLAYERLOOPVISITOR_HPP
+#pragma once
 
 
 #include <com/common.hpp>
@@ -14,4 +13,3 @@ namespace app {
     };
     typedef std::shared_ptr<IPlayerLoopVisitor> IPlayerLoopVisitorPtr;
 }
-#endif

@@ -1,5 +1,4 @@
-#ifndef INSTRUMENTCONFIGSETPAN_HPP
-#define INSTRUMENTCONFIGSETPAN_HPP
+#pragma once
 
 #include "SetPan.h"
 #include <compiler/argumentNames.h>
@@ -15,4 +14,3 @@ namespace documentModel {
     }
 }
 
-#endif

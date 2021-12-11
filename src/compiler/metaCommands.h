@@ -1,5 +1,4 @@
-#ifndef COMPILER_CONTEXT_METACOMMANDS_H
-#define COMPILER_CONTEXT_METACOMMANDS_H
+#pragma once
 
 #include <com/common.hpp>
 
@@ -44,4 +43,3 @@
 #define SHEET_META__SET_FILL_TEMPLATE FM_STRING("fill")
 #define SHEET_META__ADD_CUE FM_STRING("cue")
 
-#endif

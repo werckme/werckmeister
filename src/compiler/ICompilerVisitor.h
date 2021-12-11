@@ -1,5 +1,4 @@
-#ifndef ICOMPILER_VISITOR_H
-#define ICOMPILER_VISITOR_H
+#pragma once
 
 namespace com {
     namespace midi {
@@ -23,4 +22,3 @@ namespace documentModel {
     }
 }
 
-#endif

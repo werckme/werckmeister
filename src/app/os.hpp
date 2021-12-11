@@ -1,5 +1,4 @@
-#ifndef FM_OS_HPP
-#define FM_OS_HPP
+#pragma once
 
 #include "com/common.hpp"
 #include <functional>
@@ -26,4 +25,4 @@ namespace app {
 	}
 }
 
-#endif
+

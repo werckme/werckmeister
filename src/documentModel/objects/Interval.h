@@ -1,5 +1,4 @@
-#ifndef INTERVAL_H
-#define INTERVAL_H
+#pragma once
 
 #include <com/units.hpp>
 #include <climits>
@@ -14,4 +13,3 @@ namespace documentModel {
     };
 }
 
-#endif

@@ -1,5 +1,4 @@
-#ifndef SHEET_NAVIGATOR_H
-#define SHEET_NAVIGATOR_H
+#pragma once
 
 #include "ISheetNavigator.h"
 
@@ -16,4 +15,3 @@ namespace documentModel {
 	}
 }
 
-#endif

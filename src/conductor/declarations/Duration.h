@@ -1,5 +1,4 @@
-#ifndef DECLARATION_LENGTH_H
-#define DECLARATION_LENGTH_H
+#pragma once
 
 #include "ADeclaration.h"
 
@@ -30,4 +29,3 @@ namespace documentModel
     }
 }
 
-#endif

@@ -1,5 +1,4 @@
-#ifndef SHEET_PLAYER_PROGRAM_HPP
-#define SHEET_PLAYER_PROGRAM_HPP
+#pragma once
 
 #include <SheetCompilerProgram.h>
 #include <IPlayerProgramOptions.h>
@@ -41,4 +40,4 @@ private:
     bool documentWasChanged = false;
 };
 
-#endif
+

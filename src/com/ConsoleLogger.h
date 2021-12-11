@@ -1,5 +1,4 @@
-#ifndef CONSOLELOGGER_H
-#define CONSOLELOGGER_H
+#pragma once
 
 #include "ILogger.h"
 #include <ostream>
@@ -21,4 +20,3 @@ namespace com {
     };
 }
 
-#endif

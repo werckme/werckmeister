@@ -1,5 +1,4 @@
-#ifndef ICOMPILER_SHEET_TEMPLATERENDERER_H
-#define ICOMPILER_SHEET_TEMPLATERENDERER_H
+#pragma once
 
 #include <memory>
 
@@ -14,4 +13,3 @@ namespace documentModel {
     }
 }
 
-#endif

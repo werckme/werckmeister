@@ -1,5 +1,4 @@
-#ifndef VOICE_STATEGY_HPP
-#define VOICE_STATEGY_HPP
+#pragma once
 
 #include <documentModel/objects/ChordDef.h>
 #include <documentModel/objects/Event.h>
@@ -27,4 +26,3 @@ namespace documentModel {
 }
 
 
-#endif

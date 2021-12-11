@@ -1,5 +1,4 @@
-#ifndef DEGREEDEF_H
-#define DEGREEDEF_H
+#pragma once
 
 #include "Interval.h"
 
@@ -15,4 +14,3 @@ namespace documentModel {
 	};
 }
 
-#endif

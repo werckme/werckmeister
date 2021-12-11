@@ -1,5 +1,4 @@
-#ifndef LUA_TIMEINFO_H
-#define LUA_TIMEINFO_H
+#pragma once
 
 #include <compiler/timeInfo.h>
 
@@ -21,4 +20,3 @@ namespace documentModel {
     }
 }
 
-#endif

@@ -1,5 +1,4 @@
-#ifndef FM_ALUAOBJECT_H
-#define FM_ALUAOBJECT_H
+#pragma once
 
 #define LUA_OBJECT_REF_TABLE_KEY "__luaobjectref"
 
@@ -53,4 +52,3 @@ namespace documentModel {
 }
 
 
-#endif

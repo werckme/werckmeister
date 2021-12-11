@@ -1,5 +1,4 @@
-#ifndef DOCUMENT_CONFIG_HPP
-#define DOCUMENT_CONFIG_HPP
+#pragma once
 
 #include <vector>
 #include <com/common.hpp>
@@ -12,4 +11,3 @@ namespace documentModel {
 	};
 }
 
-#endif

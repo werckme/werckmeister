@@ -1,5 +1,4 @@
-#ifndef FM_AMIDIBACKEND_HPP
-#define FM_AMIDIBACKEND_HPP
+#pragma once
 
 #include <memory>
 #include <vector>
@@ -40,4 +39,3 @@ namespace app {
 	}
 }
 
-#endif

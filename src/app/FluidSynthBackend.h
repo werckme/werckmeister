@@ -1,5 +1,4 @@
-#ifndef FM_FLUIDSYNTH_BACKEND_HPP
-#define FM_FLUIDSYNTH_BACKEND_HPP
+#pragma once
 
 #include <memory>
 #include <functional>
@@ -25,4 +24,3 @@ namespace app {
 	};
 }
 
-#endif

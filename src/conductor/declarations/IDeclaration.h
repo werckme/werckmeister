@@ -1,5 +1,4 @@
-#ifndef IDECLARATION_H
-#define IDECLARATION_H
+#pragma once
 
 #include <com/IRegisterable.h>
 #include <com/midi.hpp>
@@ -33,4 +32,3 @@ namespace documentModel
     }
 }
 
-#endif

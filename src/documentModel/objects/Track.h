@@ -1,5 +1,4 @@
-#ifndef SHEET_TRACK_H
-#define SHEET_TRACK_H
+#pragma once
 
 #include <com/common.hpp>
 #include <vector>
@@ -22,4 +21,3 @@ namespace documentModel {
 
 }
 
-#endif

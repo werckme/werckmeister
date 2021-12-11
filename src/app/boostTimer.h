@@ -1,5 +1,4 @@
-#ifndef BOOST_TIMER_IMPL_H
-#define BOOST_TIMER_IMPL_H
+#pragma once
 
 #include <functional>
 #include <chrono>
@@ -28,4 +27,3 @@ namespace app {
 	};
 }
 
-#endif

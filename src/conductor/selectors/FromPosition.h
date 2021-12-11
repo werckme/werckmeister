@@ -1,5 +1,4 @@
-#ifndef SEL_FROM_POSIITON_H
-#define SEL_FROM_POSIITON_H
+#pragma once
 
 #include "ISelector.h"
 
@@ -25,4 +24,3 @@ namespace documentModel
     }
 }
 
-#endif

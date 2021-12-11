@@ -1,5 +1,4 @@
-#ifndef INSTRUMENTCONFIGSETVOICINGSTRATEGY_HPP
-#define INSTRUMENTCONFIGSETVOICINGSTRATEGY_HPP
+#pragma once
 
 #include "SetVoicingStrategy.h"
 #include <compiler/argumentNames.h>
@@ -15,4 +14,3 @@ namespace documentModel {
     }
 }
 
-#endif

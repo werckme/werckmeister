@@ -1,5 +1,4 @@
-#ifndef IPLAYERPROGRAMOPTIONS_HPP
-#define IPLAYERPROGRAMOPTIONS_HPP
+#pragma once
 
 #include "ICompilerProgramOptions.h"
 
@@ -17,4 +16,3 @@ struct IPlayerProgramOptions : public virtual ICompilerProgramOptions {
 
 typedef std::shared_ptr<IPlayerProgramOptions> IPlayerProgramOptionsPtr;
 
-#endif

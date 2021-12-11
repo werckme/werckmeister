@@ -1,5 +1,4 @@
-#ifndef FM_EXCEPTION_HPP
-#define FM_EXCEPTION_HPP
+#pragma once
 
 #include <exception>
 #include <string>
@@ -24,4 +23,3 @@ namespace com {
 }
 
 
-#endif

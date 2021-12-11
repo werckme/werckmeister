@@ -1,5 +1,4 @@
-#ifndef ASHEET_OBJECT_H
-#define ASHEET_OBJECT_H
+#pragma once
 
 
 namespace documentModel {
@@ -7,4 +6,3 @@ namespace documentModel {
     };
 }
 
-#endif

@@ -1,5 +1,4 @@
-#ifndef SETSPIELANWEISUNGPLAYEDONCE_HPP
-#define SETSPIELANWEISUNGPLAYEDONCE_HPP
+#pragma once
 
 #include "SetSpielanweisung.h"
 
@@ -21,4 +20,3 @@ namespace documentModel {
     }
 }
 
-#endif

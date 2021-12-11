@@ -1,5 +1,4 @@
-#ifndef SELECTMIDISOUND_HPP
-#define SELECTMIDISOUND_HPP
+#pragma once
 
 #include "AMidiContextCommand.h"
 #include <compiler/argumentNames.h>
@@ -21,4 +20,3 @@ namespace documentModel {
     }
 }
 
-#endif

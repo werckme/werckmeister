@@ -1,5 +1,4 @@
-#ifndef COMPILERPROGRAMOPTIONS_HPP
-#define COMPILERPROGRAMOPTIONS_HPP
+#pragma once
 
 #include <com/common.hpp>
 #include <boost/program_options.hpp>
@@ -31,4 +30,3 @@ struct CompilerProgramOptions : public virtual ICompilerProgramOptions {
 	Variables variables;
 };
 
-#endif

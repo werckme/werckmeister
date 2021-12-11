@@ -1,5 +1,4 @@
-#ifndef DEVICE_CONFIG_H
-#define DEVICE_CONFIG_H
+#pragma once
 
 #include <string>
 
@@ -18,4 +17,3 @@ namespace com {
     };
 }
 
-#endif

@@ -1,5 +1,4 @@
-#ifndef NAMED_ARGUMENTS_H
-#define NAMED_ARGUMENTS_H
+#pragma once
 
 #include <string>
 
@@ -127,4 +126,3 @@ struct ArgumentNames {
 
 extern ArgumentNames argumentNames;  
 
-#endif

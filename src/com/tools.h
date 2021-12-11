@@ -1,5 +1,4 @@
-#ifndef SHEET_TOOLS_H
-#define SHEET_TOOLS_H
+#pragma once
 
 #include <com/common.hpp>
 #include <com/exception.hpp>
@@ -403,4 +402,3 @@ namespace com {
 
 }
 
-#endif

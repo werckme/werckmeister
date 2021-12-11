@@ -1,5 +1,4 @@
-#ifndef ASPIELANWEISUNG_HPP
-#define ASPIELANWEISUNG_HPP
+#pragma once
 
 #include <com/units.hpp>
 #include <documentModel/objects/Event.h>
@@ -17,4 +16,3 @@ namespace documentModel {
     }
 }
 
-#endif

@@ -1,5 +1,4 @@
-#ifndef LOGGERANDWARNINGSCOLLECTOR_H
-#define LOGGERANDWARNINGSCOLLECTOR_H
+#pragma once
 
 #include "IEventLogger.h"
 #include "Warning.hpp"
@@ -32,4 +31,3 @@ namespace documentModel {
         }
     }
 }
-#endif

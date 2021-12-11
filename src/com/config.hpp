@@ -1,5 +1,4 @@
-#ifndef FM_CONFIG_HPP
-#define FM_CONFIG_HPP
+#pragma once
 
 #include "units.hpp"
 #include <vector>
@@ -28,4 +27,4 @@ namespace com {
     }
 }
 
-#endif
+

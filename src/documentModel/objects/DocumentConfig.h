@@ -1,5 +1,4 @@
-#ifndef SHEET_DOCUMENT_CONFIG_H
-#define SHEET_DOCUMENT_CONFIG_H
+#pragma once
 
 #include <com/common.hpp>
 #include <vector>
@@ -16,4 +15,3 @@ namespace documentModel {
 
 }
 
-#endif

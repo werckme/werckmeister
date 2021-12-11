@@ -1,5 +1,4 @@
-#ifndef INSTRUMENTCONFIGADDMOD_HPP
-#define INSTRUMENTCONFIGADDMOD_HPP
+#pragma once
 
 #include "AddMod.h"
 #include "ACanSpecifyInstrument.h"
@@ -15,4 +14,3 @@ namespace documentModel {
     }
 }
 
-#endif

@@ -1,5 +1,4 @@
-#ifndef PARSER_SYMBOLS_HPP
-#define PARSER_SYMBOLS_HPP
+#pragma once
 
 #include <com/units.hpp>
 #include <com/literals.hpp>
@@ -230,4 +229,3 @@ namespace documentModel {
 	}
 }
 
-#endif

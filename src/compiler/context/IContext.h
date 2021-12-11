@@ -1,5 +1,4 @@
-#ifndef COMPILER_ICONTEXT_H
-#define COMPILER_ICONTEXT_H
+#pragma once
 
 #include <memory>
 #include <unordered_map>
@@ -119,4 +118,3 @@ namespace documentModel {
     }
 }
 
-#endif

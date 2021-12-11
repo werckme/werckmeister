@@ -1,5 +1,4 @@
-#ifndef SHEET_DEFINEINSTRUMENTSECTION_HPP
-#define SHEET_DEFINEINSTRUMENTSECTION_HPP
+#pragma once
 
 #include "AMidiContextCommand.h"
 #include <compiler/argumentNames.h>
@@ -46,4 +45,3 @@ namespace documentModel {
     }
 }
 
-#endif

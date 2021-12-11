@@ -1,5 +1,4 @@
-#ifndef SEL_CHANNEL_H
-#define SEL_CHANNEL_H
+#pragma once
 
 #include "ISelector.h"
 
@@ -23,4 +22,3 @@ namespace documentModel
     }
 }
 
-#endif

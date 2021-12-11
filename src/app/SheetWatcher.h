@@ -1,5 +1,4 @@
-#ifndef FMAPP_SHEETWATCHER_HPP
-#define FMAPP_SHEETWATCHER_HPP
+#pragma once
 
 
 #include "IPlayerLoopVisitor.h"
@@ -35,4 +34,3 @@ namespace app {
         bool firstVisit = true;
     };
 }
-#endif

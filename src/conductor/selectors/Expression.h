@@ -1,5 +1,4 @@
-#ifndef SEL_EXPRESSION_H
-#define SEL_EXPRESSION_H
+#pragma once
 
 #include "ISelector.h"
 #include <com/IDefinitionsServer.h>
@@ -26,4 +25,3 @@ namespace documentModel
     }
 }
 
-#endif

@@ -1,5 +1,4 @@
-#ifndef CHORD_DEF_H
-#define CHORD_DEF_H
+#pragma once
 
 #include <com/common.hpp>
 #include <com/units.hpp>
@@ -25,4 +24,3 @@ namespace documentModel {
     com::degrees::Flag getFlag(int degree);
 }
 
-#endif

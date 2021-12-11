@@ -1,5 +1,4 @@
-#ifndef FM_MIDIBACKENDCONTAINER_HPP
-#define FM_MIDIBACKENDCONTAINER_HPP
+#pragma once
 
 #include <vector>
 #include <com/midi.hpp>
@@ -30,4 +29,3 @@ namespace app {
 	};
 }
 
-#endif

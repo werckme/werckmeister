@@ -1,5 +1,4 @@
-#ifndef SEL_NOT_ON_BEAT_H
-#define SEL_NOT_ON_BEAT_H
+#pragma once
 
 #include "ISelector.h"
 
@@ -23,4 +22,3 @@ namespace documentModel
     }
 }
 
-#endif

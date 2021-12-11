@@ -1,5 +1,4 @@
-#ifndef FM_WERKMEISTER_HPP
-#define FM_WERKMEISTER_HPP
+#pragma once
 
 #include "units.hpp"
 #include "config.hpp"
@@ -109,4 +108,3 @@ namespace com {
 	}	
 }
 
-#endif

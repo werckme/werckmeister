@@ -1,5 +1,4 @@
-#ifndef SHEET_DOCUMENTPARSER_HPP
-#define SHEET_DOCUMENTPARSER_HPP
+#pragma once
 
 #include "forward.hpp"
 #include <com/common.hpp>
@@ -16,4 +15,3 @@ namespace documentModel {
     }
 }
 
-#endif

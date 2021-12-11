@@ -1,5 +1,4 @@
-#ifndef ILOGGER_H
-#define ILOGGER_H
+#pragma once
 
 #include <ostream>
 #include <functional>
@@ -22,4 +21,3 @@ namespace com {
     typedef std::shared_ptr<ILogger> ILoggerPtr;
 }
 
-#endif

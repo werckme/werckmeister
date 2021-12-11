@@ -1,5 +1,4 @@
-#ifndef FMAPP_DICONTAINER_WRAPPER_HPP
-#define FMAPP_DICONTAINER_WRAPPER_HPP
+#pragma once
 
 
 #include <vector>
@@ -22,4 +21,3 @@ namespace app {
         Container container;
     };
 }
-#endif

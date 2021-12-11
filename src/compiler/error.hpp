@@ -1,5 +1,4 @@
-#ifndef COMPILER_ERROR_HPP
-#define COMPILER_ERROR_HPP
+#pragma once
 
 #include <exception>
 #include <boost/fusion/include/vector.hpp>
@@ -84,4 +83,3 @@ namespace documentModel {
 }
 
 
-#endif

@@ -1,5 +1,4 @@
-#ifndef SETSIGNATURE_HPP
-#define SETSIGNATURE_HPP
+#pragma once
 
 #include "ACommand.h"
 #include <compiler/argumentNames.h>
@@ -26,4 +25,3 @@ namespace documentModel {
     }
 }
 
-#endif

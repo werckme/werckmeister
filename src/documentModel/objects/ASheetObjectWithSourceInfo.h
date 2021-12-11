@@ -1,5 +1,4 @@
-#ifndef ASHEET_OBJECT_WITH_SOURCE_INFO_H
-#define ASHEET_OBJECT_WITH_SOURCE_INFO_H
+#pragma once
 
 #include <climits>
 #include "ASheetObject.h"
@@ -22,4 +21,3 @@ namespace documentModel {
     };
 }
 
-#endif

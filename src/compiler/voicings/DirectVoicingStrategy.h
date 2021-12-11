@@ -1,5 +1,4 @@
-#ifndef SIMPLE_VOICE_STATEGY_HPP
-#define SIMPLE_VOICE_STATEGY_HPP
+#pragma once
 
 #include "VoicingStrategy.h"
 
@@ -18,4 +17,3 @@ namespace documentModel {
     };
 }
 
-#endif

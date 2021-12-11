@@ -1,5 +1,4 @@
-#ifndef SHEET_CUE_HPP
-#define SHEET_CUE_HPP
+#pragma once
 
 #include "ACommand.h"
 #include <compiler/argumentNames.h>
@@ -24,4 +23,3 @@ namespace documentModel {
     }
 }
 
-#endif

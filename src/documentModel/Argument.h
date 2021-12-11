@@ -1,5 +1,4 @@
-#ifndef SHEET_ARGUMENT_H
-#define SHEET_ARGUMENT_H
+#pragma once
 
 #include <com/common.hpp>
 
@@ -40,4 +39,3 @@ namespace documentModel {
 
 }
 
-#endif

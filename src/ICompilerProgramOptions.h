@@ -1,5 +1,4 @@
-#ifndef ICOMPILERPROGRAMOPTIONS_HPP
-#define ICOMPILERPROGRAMOPTIONS_HPP
+#pragma once
 
 #include <com/common.hpp>
 #include <ostream>
@@ -27,4 +26,3 @@ struct ICompilerProgramOptions {
 
 typedef std::shared_ptr<ICompilerProgramOptions> ICompilerProgramOptionsPtr;
 
-#endif

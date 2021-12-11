@@ -1,5 +1,4 @@
-#ifndef ADDMOD_HPP
-#define ADDMOD_HPP
+#pragma once
 
 #include "ACommand.h"
 #include <compiler/argumentNames.h>
@@ -38,4 +37,3 @@ namespace documentModel {
     }
 }
 
-#endif

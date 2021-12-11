@@ -1,5 +1,4 @@
-#ifndef FMAPP_JSONWRITERBASE_H
-#define FMAPP_JSONWRITERBASE_H
+#pragma once
 
 #include <forward.hpp>
 #include <rapidjson/document.h>
@@ -20,4 +19,3 @@ namespace app {
     };
 }
 
-#endif

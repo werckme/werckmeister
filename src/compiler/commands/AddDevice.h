@@ -1,5 +1,4 @@
-#ifndef ADDDEVICE_HPP
-#define ADDDEVICE_HPP
+#pragma once
 
 #include "ACommand.h"
 #include <compiler/argumentNames.h>
@@ -52,4 +51,3 @@ namespace documentModel {
     }
 }
 
-#endif

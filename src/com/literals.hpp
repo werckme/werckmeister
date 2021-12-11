@@ -1,5 +1,4 @@
-#ifndef FM_LITERALS_HPP
-#define FM_LITERALS_HPP
+#pragma once
 
 #include "units.hpp"
 
@@ -86,4 +85,3 @@ namespace com {
     Ticks operator "" _N128n9(long double);
 }
 
-#endif

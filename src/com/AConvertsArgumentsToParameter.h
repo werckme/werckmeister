@@ -1,5 +1,4 @@
-#ifndef SHEET_ACONVERTSARGUMENTSTOPARAMETER_HPP
-#define SHEET_ACONVERTSARGUMENTSTOPARAMETER_HPP
+#pragma once
 
 
 #include <com/IHasParameter.h>
@@ -16,4 +15,3 @@ namespace com {
     };
 }
 
-#endif

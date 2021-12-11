@@ -1,5 +1,4 @@
-#ifndef FM_TEMPLATE_HELPER_H
-#define FM_TEMPLATE_HELPER_H
+#pragma once
 
 namespace com {
     template <int TValue>
@@ -8,4 +7,3 @@ namespace com {
     };
 }
 
-#endif

@@ -1,5 +1,4 @@
-#ifndef SHEET_TEMPLATEDEF_SERVER_HPP
-#define SHEET_TEMPLATEDEF_SERVER_HPP
+#pragma once
 
 #include <documentModel/objects/ChordDef.h>
 #include <documentModel/SheetDef.h>
@@ -38,4 +37,3 @@ namespace com {
 
 }
 
-#endif

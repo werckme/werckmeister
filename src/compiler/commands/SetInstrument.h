@@ -1,5 +1,4 @@
-#ifndef SETINSTRUMENT_HPP
-#define SETINSTRUMENT_HPP
+#pragma once
 
 #include "ACommand.h"
 #include <compiler/argumentNames.h>
@@ -42,4 +41,3 @@ namespace documentModel {
     }
 }
 
-#endif

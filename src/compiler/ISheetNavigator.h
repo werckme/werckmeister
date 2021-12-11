@@ -1,5 +1,4 @@
-#ifndef ISHEET_NAVIGATOR_H
-#define ISHEET_NAVIGATOR_H
+#pragma once
 
 #include "forward.hpp"
 #include <memory>
@@ -16,4 +15,3 @@ namespace documentModel {
 	}
 }
 
-#endif

@@ -1,5 +1,4 @@
-#ifndef MODIFICATION_LUA_SCRIPT_HPP
-#define MODIFICATION_LUA_SCRIPT_HPP
+#pragma once
 
 #include "AModification.h"
 #include <com/lua/ALuaScript.h>
@@ -36,4 +35,3 @@ namespace documentModel {
     }
 }
 
-#endif

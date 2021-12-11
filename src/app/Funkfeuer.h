@@ -1,5 +1,4 @@
-#ifndef FMAPP_FUNKFEUER_HPP
-#define FMAPP_FUNKFEUER_HPP
+#pragma once
 
 
 #include "IPlayerLoopVisitor.h"
@@ -43,4 +42,3 @@ namespace app {
         unsigned long lastUpdateTimestamp = 0;
     };
 }
-#endif

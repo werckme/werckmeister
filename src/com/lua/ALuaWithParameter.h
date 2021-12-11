@@ -1,5 +1,4 @@
-#ifndef FM_ALUAWITHPARAMETER_H
-#define FM_ALUAWITHPARAMETER_H
+#pragma once
 
 
 
@@ -28,4 +27,3 @@ namespace com {
     }
 }
 
-#endif

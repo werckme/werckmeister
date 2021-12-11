@@ -1,5 +1,4 @@
-#ifndef FMAPP_JSONFILEWRITER_H
-#define FMAPP_JSONFILEWRITER_H
+#pragma once
 
 #include <forward.hpp>
 #include <ICompilerProgramOptions.h>
@@ -51,4 +50,3 @@ namespace app {
     };
 }
 
-#endif

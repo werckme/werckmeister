@@ -1,5 +1,4 @@
-#ifndef FMAPP_IDOCUMENTWRITER_H
-#define FMAPP_IDOCUMENTWRITER_H
+#pragma once
 
 #include <forward.hpp>
 #include <exception>
@@ -16,4 +15,3 @@ namespace app {
     typedef std::shared_ptr<IDocumentWriter> IDocumentWriterPtr; 
 }
 
-#endif

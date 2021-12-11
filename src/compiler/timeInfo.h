@@ -1,5 +1,4 @@
-#ifndef SHEET_TIMEINFO_H
-#define SHEET_TIMEINFO_H
+#pragma once
 
 namespace documentModel {
     struct TimeInfo {
@@ -9,4 +8,3 @@ namespace documentModel {
     };
 }
 
-#endif

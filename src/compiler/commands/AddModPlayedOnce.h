@@ -1,5 +1,4 @@
-#ifndef ADDMODPLAYEDONCE_HPP
-#define ADDMODPLAYEDONCE_HPP
+#pragma once
 
 #include "AddMod.h"
 #include <compiler/argumentNames.h>
@@ -20,4 +19,3 @@ namespace documentModel {
     }
 }
 
-#endif

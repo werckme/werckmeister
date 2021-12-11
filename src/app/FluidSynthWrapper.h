@@ -1,5 +1,4 @@
-#ifndef FM_FLUIDSYNTHWRAPPER_BACKEND_HPP
-#define FM_FLUIDSYNTHWRAPPER_BACKEND_HPP
+#pragma once
 
 #include <memory>
 #include <vector>
@@ -61,4 +60,3 @@ namespace app {
     typedef std::shared_ptr<FluidSynth> FluidSynthPtr;
 }
 
-#endif

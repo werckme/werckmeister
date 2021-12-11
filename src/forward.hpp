@@ -1,5 +1,4 @@
-#ifndef SHEET_FORWARD_HPP
-#define SHEET_FORWARD_HPP
+#pragma once
 
 #include <memory>
 
@@ -46,4 +45,4 @@ namespace funk {
 	typedef std::shared_ptr<UdpSender> UdpSenderPtr;
 }
 
-#endif
+

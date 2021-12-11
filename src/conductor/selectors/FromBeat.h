@@ -1,5 +1,4 @@
-#ifndef SEL_FROMBEAT_H
-#define SEL_FROMBEAT_H
+#pragma once
 
 #include "ISelector.h"
 
@@ -24,4 +23,3 @@ namespace documentModel
     }
 }
 
-#endif

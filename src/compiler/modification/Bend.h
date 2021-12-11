@@ -1,5 +1,4 @@
-#ifndef MODIFICTAION_BEND_HPP
-#define MODIFICTAION_BEND_HPP
+#pragma once
 
 #include "AModification.h"
 #include <compiler/argumentNames.h>
@@ -29,4 +28,3 @@ namespace documentModel {
     }
 }
 
-#endif

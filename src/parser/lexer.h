@@ -1,5 +1,4 @@
-#ifndef FM_LEXER_HPP
-#define FM_LEXER_HPP
+#pragma once
 
 #include <algorithm>
 #include <boost/spirit/include/lex_lexertl.hpp>
@@ -132,4 +131,4 @@ namespace documentModel {
 	}
 }
 
-#endif
+

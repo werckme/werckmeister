@@ -1,5 +1,4 @@
-#ifndef COMPILER_SHEET_EVENT_RENDERER_H
-#define COMPILER_SHEET_EVENT_RENDERER_H
+#pragma once
 
 #include <documentModel/objects/Event.h>
 #include "context/IContext.h"
@@ -33,4 +32,3 @@ namespace documentModel {
         };
     }
 }
-#endif

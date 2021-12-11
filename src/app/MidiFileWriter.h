@@ -1,5 +1,4 @@
-#ifndef FMAPP_MIDIFILEWRITER_H
-#define FMAPP_MIDIFILEWRITER_H
+#pragma once
 
 #include "IDocumentWriter.h"
 #include <forward.hpp>
@@ -29,4 +28,3 @@ namespace app {
     };
 }
 
-#endif

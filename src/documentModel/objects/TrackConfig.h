@@ -1,5 +1,4 @@
-#ifndef TRACKCONFIG_H
-#define TRACKCONFIG_H
+#pragma once
 
 #include <com/common.hpp>
 #include <vector>
@@ -16,4 +15,3 @@ namespace documentModel {
 
 }
 
-#endif

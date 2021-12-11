@@ -1,5 +1,4 @@
-#ifndef SHEET_SHEETDEF_H
-#define SHEET_SHEETDEF_H
+#pragma once
 
 #include <com/common.hpp>
 #include "objects/Track.h"
@@ -21,4 +20,3 @@ namespace documentModel {
 
 }
 
-#endif

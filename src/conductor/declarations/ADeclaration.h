@@ -1,5 +1,4 @@
-#ifndef ADECLARATION_H
-#define ADECLARATION_H
+#pragma once
 
 #include "IDeclaration.h"
 #include <optional>
@@ -38,4 +37,3 @@ namespace documentModel
     }
 }
 
-#endif

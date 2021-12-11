@@ -1,5 +1,4 @@
-#ifndef SHEET_CONDUCTION_SHEET_H
-#define SHEET_CONDUCTION_SHEET_H
+#pragma once
 
 #include "ASheetObjectWithSourceInfo.h"
 #include <com/common.hpp>
@@ -50,4 +49,3 @@ namespace documentModel {
 
 }
 
-#endif

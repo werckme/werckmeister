@@ -1,5 +1,4 @@
-#ifndef COMPILER_SHEET_TEMPLATERENDERER_H
-#define COMPILER_SHEET_TEMPLATERENDERER_H
+#pragma once
 
 #include <documentModel/objects/Event.h>
 #include <memory>
@@ -41,4 +40,3 @@ namespace documentModel {
     }
 }
 
-#endif

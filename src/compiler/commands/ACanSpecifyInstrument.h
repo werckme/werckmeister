@@ -1,5 +1,4 @@
-#ifndef SHEET_ACANSPECIFYINSTRUMENT_HPP
-#define SHEET_ACANSPECIFYINSTRUMENT_HPP
+#pragma once
 
 
 #include "ICanSpecifyInstrument.h"
@@ -19,4 +18,3 @@ namespace documentModel {
     }
 }
 
-#endif

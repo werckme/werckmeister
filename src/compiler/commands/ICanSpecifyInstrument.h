@@ -1,5 +1,4 @@
-#ifndef SHEET_ICANSPECIFYINSTRUMENT_HPP
-#define SHEET_ICANSPECIFYINSTRUMENT_HPP
+#pragma once
 
 #include <compiler/Instrument.h>
 
@@ -16,4 +15,3 @@ namespace documentModel {
     }
 }
 
-#endif

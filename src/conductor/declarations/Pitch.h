@@ -1,5 +1,4 @@
-#ifndef DECLARATION_PITCH_H
-#define DECLARATION_PITCH_H
+#pragma once
 
 #include "ADeclaration.h"
 
@@ -30,4 +29,3 @@ namespace documentModel
     }
 }
 
-#endif

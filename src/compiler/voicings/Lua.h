@@ -1,5 +1,4 @@
-#ifndef VOICINGS_LUA_SCRIPT_HPP
-#define VOICINGS_LUA_SCRIPT_HPP
+#pragma once
 
 #include "VoicingStrategy.h"
 #include <com/lua/ALuaScript.h>
@@ -33,4 +32,3 @@ namespace documentModel {
     }
 }
 
-#endif

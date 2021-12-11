@@ -1,5 +1,4 @@
-#ifndef SEL_ATBEAT_H
-#define SEL_ATBEAT_H
+#pragma once
 
 #include "ISelector.h"
 
@@ -25,4 +24,3 @@ namespace documentModel
     }
 }
 
-#endif

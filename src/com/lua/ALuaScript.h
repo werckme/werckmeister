@@ -1,5 +1,4 @@
-#ifndef FM_ALUA_SCRIPT_H
-#define FM_ALUA_SCRIPT_H
+#pragma once
 
 
 #include <com/common.hpp>
@@ -33,4 +32,4 @@ namespace documentModel {
     }
 }
 
-#endif
+

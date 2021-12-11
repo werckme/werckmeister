@@ -1,5 +1,4 @@
-#ifndef FM_IHAS_PARAMETER_H
-#define FM_IHAS_PARAMETER_H
+#pragma once
 
 #include "Parameter.h"
 #include <unordered_map>
@@ -33,4 +32,3 @@ namespace com
 }
 
 
-#endif

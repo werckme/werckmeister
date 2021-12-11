@@ -1,5 +1,4 @@
-#ifndef ISELECTOR_H
-#define ISELECTOR_H
+#pragma once
 
 #include <com/IRegisterable.h>
 #include <com/midi.hpp>
@@ -29,4 +28,3 @@ namespace documentModel
     }
 }
 
-#endif

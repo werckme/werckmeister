@@ -1,5 +1,4 @@
-#ifndef SHEET_ITEMPLATEDEF_SERVER_HPP
-#define SHEET_ITEMPLATEDEF_SERVER_HPP
+#pragma once
 
 #include <documentModel/objects/ChordDef.h>
 #include <documentModel/SheetDef.h>
@@ -27,4 +26,3 @@ namespace com {
 	typedef std::shared_ptr<IDefinitionsServer> IDefinitionsServerPtr;
 }
 
-#endif

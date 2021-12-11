@@ -1,5 +1,4 @@
-#ifndef COMPILER_MIDI_INSTRUMENT_H
-#define COMPILER_MIDI_INSTRUMENT_H
+#pragma once
 
 #include <com/common.hpp>
 #include <forward.hpp>
@@ -56,4 +55,3 @@ namespace documentModel {
 		typedef std::shared_ptr<InstrumentSectionDef> InstrumentSectionDefPtr;
     }
 }
-#endif

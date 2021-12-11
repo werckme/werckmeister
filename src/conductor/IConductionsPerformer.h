@@ -1,5 +1,4 @@
-#ifndef ICONDUCTIONS_PERFORMER_H
-#define ICONDUCTIONS_PERFORMER_H
+#pragma once
 
 #include <com/common.hpp>
 #include <forward.hpp>
@@ -18,4 +17,3 @@ namespace documentModel
 	}
 }
 
-#endif

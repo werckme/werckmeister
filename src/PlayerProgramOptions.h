@@ -1,5 +1,4 @@
-#ifndef PLAYERPROGRAMOPTIONS_HPP
-#define PLAYERPROGRAMOPTIONS_HPP
+#pragma once
 
 #include <com/common.hpp>
 #include <boost/program_options.hpp>
@@ -30,4 +29,3 @@ private:
 	double resumeAtPosition = 0;
 };
 
-#endif

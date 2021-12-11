@@ -1,5 +1,4 @@
-#ifndef SEL_TOBAR_H
-#define SEL_TOBAR_H
+#pragma once
 
 #include "ISelector.h"
 
@@ -24,4 +23,3 @@ namespace documentModel
     }
 }
 
-#endif

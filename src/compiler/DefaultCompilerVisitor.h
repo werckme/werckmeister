@@ -1,5 +1,4 @@
-#ifndef DEFAULT_COMPILER_VISITOR_H
-#define DEFAULT_COMPILER_VISITOR_H
+#pragma once
 
 
 #include "ICompilerVisitor.h"
@@ -18,4 +17,3 @@ namespace documentModel {
     }
 }
 
-#endif

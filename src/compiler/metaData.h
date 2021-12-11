@@ -1,5 +1,4 @@
-#ifndef COMPILER_METADATA_H
-#define COMPILER_METADATA_H
+#pragma once
 
 #include <documentModel/objects/Event.h>
 #include <memory>
@@ -57,4 +56,3 @@ namespace documentModel {
     }
 }
 
-#endif

@@ -1,5 +1,4 @@
-#ifndef INSTRUMENTCONFIGSETVOLUME_HPP
-#define INSTRUMENTCONFIGSETVOLUME_HPP
+#pragma once
 
 #include "SetVolume.h"
 #include <compiler/argumentNames.h>
@@ -15,4 +14,3 @@ namespace documentModel {
     }
 }
 
-#endif
