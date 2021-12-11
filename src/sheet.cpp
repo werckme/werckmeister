@@ -6,7 +6,7 @@
 #include "compiler/context/MidiContext.h"
 #include "sheet.h"
 #include "compiler/SheetEventRenderer.h"
-#include <fmapp/os.hpp>
+#include <app/os.hpp>
 #include <iostream>
 #include <boost/filesystem.hpp>
 
@@ -18,7 +18,7 @@ namespace sheet {
             using boost::filesystem::path;
             using boost::filesystem::system_complete;
             auto &wm = com::getWerckmeister();
-            auto execPath = path(fmapp::os::getExecutablePath());
+            auto execPath = path(app::os::getExecutablePath());
             wm.addSearchPath(execPath.string());
             wm.addSearchPath(system_complete(execPath / path("../share/werckmeister")).string());
 #ifndef WIN32

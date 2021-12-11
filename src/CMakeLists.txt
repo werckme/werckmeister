@@ -130,37 +130,37 @@ SET (SRC_FETZER_TESTS
 
 ## FMAPP
 SET (SRC_SHEET_FMAPP
-    fmapp/boostTimer.cpp
-    fmapp/ADocumentWriter.cpp
-    fmapp/MidiFileWriter.cpp
-    fmapp/midiProvider.cpp
-    fmapp/UdpSender.cpp
-    fmapp/JsonWriter.cpp
-    fmapp/JsonStringInputReader.cpp
-    fmapp/JsonIOBase.cpp
-    fmapp/SheetWatcher.cpp
-    fmapp/PlayerTimePrinter.cpp
-    fmapp/Funkfeuer.cpp
+    app/boostTimer.cpp
+    app/ADocumentWriter.cpp
+    app/MidiFileWriter.cpp
+    app/midiProvider.cpp
+    app/UdpSender.cpp
+    app/JsonWriter.cpp
+    app/JsonStringInputReader.cpp
+    app/JsonIOBase.cpp
+    app/SheetWatcher.cpp
+    app/PlayerTimePrinter.cpp
+    app/Funkfeuer.cpp
 )
 
 if (WIN32)
-  SET(SRC_SHEET_FMAPP ${SRC_SHEET_FMAPP}  fmapp/os_win.cpp)
+  SET(SRC_SHEET_FMAPP ${SRC_SHEET_FMAPP}  app/os_win.cpp)
 endif(WIN32)
 
 if (APPLE)
-  SET(SRC_SHEET_FMAPP ${SRC_SHEET_FMAPP}  fmapp/os_mac.cpp)
+  SET(SRC_SHEET_FMAPP ${SRC_SHEET_FMAPP}  app/os_mac.cpp)
 elseif(UNIX)
-  SET(SRC_SHEET_FMAPP ${SRC_SHEET_FMAPP}  fmapp/os_linux.cpp)
+  SET(SRC_SHEET_FMAPP ${SRC_SHEET_FMAPP}  app/os_linux.cpp)
 endif(APPLE)
 
 
 ## PLAYER
 SET (SRC_SHEET_PLAYER
-    fmapp/MidiPlayer.cpp
-    fmapp/RTMidiBackend.cpp
-    fmapp/FluidSynthBackend.cpp
-    fmapp/FluidSynthWrapper.cpp
-    fmapp/MidiBackendContainer.cpp
+    app/MidiPlayer.cpp
+    app/RTMidiBackend.cpp
+    app/FluidSynthBackend.cpp
+    app/FluidSynthWrapper.cpp
+    app/MidiBackendContainer.cpp
     sheetplayer_main.cpp 
     SheetCompilerProgram.cpp 
     SheetPlayerProgram.cpp 
@@ -168,13 +168,13 @@ SET (SRC_SHEET_PLAYER
     PlayerProgramOptions.cpp
 )
 
-SET (SHEET_LIBS ${SHEET_LIBS} fmapp sheet lua ${Boost_LIBRARIES})
+SET (SHEET_LIBS ${SHEET_LIBS} app sheet lua ${Boost_LIBRARIES})
 
 if(WIN32)
     SET (SHEET_LIBS ${SHEET_LIBS} Bcrypt.lib)
 endif(WIN32)
 
-add_library(fmapp ${SRC_SHEET_FMAPP})
+add_library(app ${SRC_SHEET_FMAPP})
 
 if(${BUILD_REHEARSE})
     add_executable(rehearse ${SRC_FETZER_TESTS})

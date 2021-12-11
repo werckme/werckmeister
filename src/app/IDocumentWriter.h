@@ -1,0 +1,19 @@
+#ifndef FMAPP_IDOCUMENTWRITER_H
+#define FMAPP_IDOCUMENTWRITER_H
+
+#include <forward.hpp>
+#include <exception>
+#include <com/exception.hpp>
+
+namespace app {
+    class IDocumentWriter {
+    public:
+        virtual void write(sheet::DocumentPtr document) = 0;
+        virtual void writeException(const std::exception &ex) = 0;
+        virtual void writeException(const com::Exception &ex) = 0;
+        virtual void writeUnknownException() = 0;
+    };
+    typedef std::shared_ptr<IDocumentWriter> IDocumentWriterPtr; 
+}
+
+#endif

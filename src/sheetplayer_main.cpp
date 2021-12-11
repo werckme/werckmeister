@@ -19,25 +19,25 @@
 #include <sheet/Document.h>
 #include <com/DefinitionsServer.h>
 #include <com/midi.hpp>
-#include <fmapp/MidiPlayer.h>
-#include <fmapp/JsonWriter.h>
+#include <app/MidiPlayer.h>
+#include <app/JsonWriter.h>
 #include <compiler/DefaultCompilerVisitor.h>
-#include <fmapp/TimelineVisitor.hpp>
-#include <fmapp/SheetWatcher.h>
-#include <fmapp/PlayerTimePrinter.h>
-#include <fmapp/DiContainerWrapper.h>
-#include <fmapp/ISheetWatcherHandler.h>
-#include <fmapp/Funkfeuer.h>
-#include <fmapp/UdpSender.hpp>
-#include <fmapp/NullStringSender.hpp>
+#include <app/TimelineVisitor.hpp>
+#include <app/SheetWatcher.h>
+#include <app/PlayerTimePrinter.h>
+#include <app/DiContainerWrapper.h>
+#include <app/ISheetWatcherHandler.h>
+#include <app/Funkfeuer.h>
+#include <app/UdpSender.hpp>
+#include <app/NullStringSender.hpp>
 #include <compiler/SheetNavigator.h>
 #include <conductor/ConductionsPerformer.h>
 #include "FactoryConfig.h"
 
 #ifdef SHEET_USE_BOOST_TIMER
-#include "fmapp/boostTimer.h"
+#include "app/boostTimer.h"
 #else
-#include "fmapp/os.hpp"
+#include "app/os.hpp"
 #endif
 
 #ifdef _MSC_VER
@@ -75,7 +75,7 @@ int main(int argc, const char** argv)
 	
 #ifdef SHEET_USE_BOOST_TIMER
        std::thread boost_asio_([] {
-           fmapp::BoostTimer::io_run();
+           app::BoostTimer::io_run();
        });
 #endif
 
@@ -85,7 +85,7 @@ int main(int argc, const char** argv)
 	
 
 #ifdef SHEET_USE_BOOST_TIMER
-	fmapp::BoostTimer::io_stop();
+	app::BoostTimer::io_stop();
 	boost_asio_.join();
 #endif
 	if (_udpSender) {
@@ -99,11 +99,11 @@ int startPlayer(std::shared_ptr<PlayerProgramOptions> programOptionsPtr)
 	namespace di = boost::di;
 	namespace cp = sheet::compiler;
 	namespace co = sheet::conductor;
-	fmapp::SheetWatcherHandlersPtr sheetWatcherHandlers = std::make_shared<fmapp::SheetWatcherHandlers>();
+	app::SheetWatcherHandlersPtr sheetWatcherHandlers = std::make_shared<app::SheetWatcherHandlers>();
 	auto documentPtr = std::make_shared<sheet::Document>();
 	auto midiFile = com::getWerckmeister().createMidi();
 	bool needTimeline = programOptionsPtr->isUdpSet();
-	fmapp::DiContainerWrapper<fmapp::IPlayerLoopVisitorPtr> loopVisitors;
+	app::DiContainerWrapper<app::IPlayerLoopVisitorPtr> loopVisitors;
 	bool writeWarningsToConsole = !(programOptionsPtr->isJsonModeSet() || programOptionsPtr->isJsonDocInfoMode());
 	auto injector = di::make_injector(
 		  di::bind<cp::IDocumentParser>()									 .to<cp::DocumentParser>()			.in(di::extension::scoped)
@@ -118,19 +118,19 @@ int startPlayer(std::shared_ptr<PlayerProgramOptions> programOptionsPtr)
 		, di::bind<sheet::Document>()										 .to(documentPtr)
 		, di::bind<com::IDefinitionsServer>()								 .to<com::DefinitionsServer>()		.in(di::extension::scoped)
 		, di::bind<com::midi::Midi>()										 .to(midiFile)
-		, di::bind<fmapp::SheetWatcherHandlers>()							 .to(sheetWatcherHandlers)
-		, di::bind<fmapp::DiContainerWrapper<fmapp::IPlayerLoopVisitorPtr>>().to(loopVisitors)
-		, di::bind<fmapp::IDocumentWriter>()		.to([&](const auto &injector) -> fmapp::IDocumentWriterPtr
+		, di::bind<app::SheetWatcherHandlers>()							 .to(sheetWatcherHandlers)
+		, di::bind<app::DiContainerWrapper<app::IPlayerLoopVisitorPtr>>().to(loopVisitors)
+		, di::bind<app::IDocumentWriter>()		.to([&](const auto &injector) -> app::IDocumentWriterPtr
 		{
 			if (programOptionsPtr->isJsonModeSet() || programOptionsPtr->isJsonDocInfoMode()) {
-				return injector.template create<std::unique_ptr<fmapp::JsonWriter>>();
+				return injector.template create<std::unique_ptr<app::JsonWriter>>();
 			}
-			return injector.template create<std::unique_ptr<fmapp::MidiPlayer>>();
+			return injector.template create<std::unique_ptr<app::MidiPlayer>>();
 		})
 		, di::bind<cp::ICompilerVisitor>()			.to([&](const auto &injector) -> cp::ICompilerVisitorPtr 
 		{
 			if (needTimeline) {
-				return injector.template create< std::shared_ptr<fmapp::DefaultTimeline>>();
+				return injector.template create< std::shared_ptr<app::DefaultTimeline>>();
 			}
 			return injector.template create< std::unique_ptr<cp::DefaultCompilerVisitor>>();
 		})
@@ -141,26 +141,26 @@ int startPlayer(std::shared_ptr<PlayerProgramOptions> programOptionsPtr)
 			}
 			return injector.template create<std::shared_ptr<WarningsCollectorWithConsoleLogger>>();
 		})
-		, di::bind<fmapp::IStringSender>()					.to([&](const auto &injector) -> fmapp::IStringSenderPtr 
+		, di::bind<app::IStringSender>()					.to([&](const auto &injector) -> app::IStringSenderPtr 
 		{
 			if (programOptionsPtr->isUdpSet()) {
 				return _udpSender;
 			}
-			return injector.template create<std::shared_ptr<fmapp::NullStringSender>>();
+			return injector.template create<std::shared_ptr<app::NullStringSender>>();
 		})		
 	);
 	try {
 		if (!programOptionsPtr->isNoTimePrintSet()) {
 			// unique_ptr to shared_ptr is for purpose: create shared_ptr means singleton, but in this case we need unique
-			std::shared_ptr<fmapp::PlayerTimePrinter> vis = injector.create<std::unique_ptr<fmapp::PlayerTimePrinter>>();
+			std::shared_ptr<app::PlayerTimePrinter> vis = injector.create<std::unique_ptr<app::PlayerTimePrinter>>();
 			loopVisitors.container.push_back(vis);
 		}
 		if (programOptionsPtr->isWatchSet()) {
-			std::shared_ptr<fmapp::SheetWatcher> vis = injector.create<std::unique_ptr<fmapp::SheetWatcher>>();
+			std::shared_ptr<app::SheetWatcher> vis = injector.create<std::unique_ptr<app::SheetWatcher>>();
 			loopVisitors.container.push_back(vis);
 		}
 		if (programOptionsPtr->isUdpSet()) {
-			std::shared_ptr<fmapp::Funkfeuer> vis = injector.create<std::unique_ptr<fmapp::Funkfeuer>>();
+			std::shared_ptr<app::Funkfeuer> vis = injector.create<std::unique_ptr<app::Funkfeuer>>();
 			loopVisitors.container.push_back(vis);
 		}
 		sheet::FactoryConfig factory(injector);

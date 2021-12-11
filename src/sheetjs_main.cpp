@@ -16,10 +16,10 @@
 #include <sheet/Document.h>
 #include <com/DefinitionsServer.h>
 #include <com/midi.hpp>
-#include <fmapp/MidiFileWriter.h>
-#include <fmapp/JsonWriter.h>
+#include <app/MidiFileWriter.h>
+#include <app/JsonWriter.h>
 #include <compiler/DefaultCompilerVisitor.h>
-#include <fmapp/TimelineVisitor.hpp>
+#include <app/TimelineVisitor.hpp>
 #include <boost/di/extension/scopes/scoped.hpp>
 #include <compiler/SheetNavigator.h>
 #include <conductor/ConductionsPerformer.h>
@@ -102,20 +102,20 @@ extern "C" const char * create_compile_result(const char *file, double beginQuar
 		, di::bind<sheet::Document>()				.to(documentPtr)
 		, di::bind<com::IDefinitionsServer>()		.to<com::DefinitionsServer>()		.in(di::extension::scoped)
 		, di::bind<com::midi::Midi>()				.to(midiFile)
-		, di::bind<fmapp::IDocumentWriter>()		.to([&](const auto &injector) -> fmapp::IDocumentWriterPtr 
+		, di::bind<app::IDocumentWriter>()		.to([&](const auto &injector) -> app::IDocumentWriterPtr 
 		{
-			return injector.template create<std::unique_ptr<fmapp::JsonWriter>>();
+			return injector.template create<std::unique_ptr<app::JsonWriter>>();
 		})
 		, di::bind<cp::ICompilerVisitor>()                      .to([&](const auto &injector) -> cp::ICompilerVisitorPtr 
 		{
-			return injector.template create< std::shared_ptr<fmapp::DefaultTimeline>>();
+			return injector.template create< std::shared_ptr<app::DefaultTimeline>>();
 		})
 		, di::bind<com::ILogger>()					.to(logger)
 	);
 	sheet::FactoryConfig factory(injector);
 	factory.init();
 	auto program = injector.create<SheetCompilerProgramJs>();
-	auto jsonWriterPtr = std::dynamic_pointer_cast<fmapp::JsonWriter>(program.documentWriter());
+	auto jsonWriterPtr = std::dynamic_pointer_cast<app::JsonWriter>(program.documentWriter());
 	if (!jsonWriterPtr) {
 		return nullptr;
 	}

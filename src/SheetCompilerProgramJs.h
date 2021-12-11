@@ -13,7 +13,7 @@ public:
         sheet::compiler::IContextPtr             context,
         sheet::compiler::IPreprocessorPtr        preprocessor,
         com::midi::MidiPtr                        midiFile,
-        fmapp::IDocumentWriterPtr                documentWriter,
+        app::IDocumentWriterPtr                documentWriter,
         sheet::conductor::IConductionsPerformerPtr          conductionsPerformer
     ) : SheetCompilerProgram(programOptions
         , logger
@@ -27,7 +27,7 @@ public:
     )
     {
     }
-    fmapp::IDocumentWriterPtr documentWriter() const { return _documentWriter; }
+    app::IDocumentWriterPtr documentWriter() const { return _documentWriter; }
     virtual ~SheetCompilerProgramJs() = default;
 
 protected:

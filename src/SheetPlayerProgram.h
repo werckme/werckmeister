@@ -3,14 +3,14 @@
 
 #include <SheetCompilerProgram.h>
 #include <IPlayerProgramOptions.h>
-#include <fmapp/ISheetWatcherHandler.h>
-#include <fmapp/MidiPlayer.h>
+#include <app/ISheetWatcherHandler.h>
+#include <app/MidiPlayer.h>
 
-class SheetPlayerProgram : public SheetCompilerProgram, public fmapp::ISheetWatcherHandler {
+class SheetPlayerProgram : public SheetCompilerProgram, public app::ISheetWatcherHandler {
 private:
     IPlayerProgramOptionsPtr                     _programOptions;
     com::ILoggerPtr                               _logger;
-    fmapp::MidiPlayerPtr                         _midiPlayerPtr;
+    app::MidiPlayerPtr                         _midiPlayerPtr;
 public:
     enum { 
         RetCodeRestart = 100 // restart right after exiting, for example when a document was changed
@@ -24,13 +24,13 @@ public:
         sheet::compiler::IContextPtr             context,
         sheet::compiler::IPreprocessorPtr        preprocessor,
         com::midi::MidiPtr                        midiFile,
-        fmapp::IDocumentWriterPtr                documentWriter,
+        app::IDocumentWriterPtr                documentWriter,
         sheet::conductor::IConductionsPerformerPtr          conductionsPerformer
     ) : 
         Base(programOptions, logger, documentParser, compiler, context, preprocessor, midiFile, documentWriter, conductionsPerformer)
       , _programOptions(std::dynamic_pointer_cast<IPlayerProgramOptions>(programOptions))
       , _logger(logger)
-      , _midiPlayerPtr(std::dynamic_pointer_cast<fmapp::MidiPlayer>(documentWriter))
+      , _midiPlayerPtr(std::dynamic_pointer_cast<app::MidiPlayer>(documentWriter))
     {
     }
     virtual ~SheetPlayerProgram() = default;

@@ -7,12 +7,12 @@
 #include "compiler/context/MidiContext.h"
 #include "sheet.h"
 #include "compiler/SheetEventRenderer.h"
-#include <fmapp/os.hpp>
+#include <app/os.hpp>
 #include <iostream>
 #include <boost/filesystem.hpp>
 #include <exception>
 #include <com/config.hpp>
-#include <fmapp/JsonStringInputReader.hpp>
+#include <app/JsonStringInputReader.hpp>
 #include <boost/algorithm/string/join.hpp>
 #include <compiler/error.hpp>
 
@@ -87,7 +87,7 @@ void SheetCompilerProgram::prepareSearchPaths()
     using boost::filesystem::path;
     using boost::filesystem::system_complete;
     
-    auto execPath = path(fmapp::os::getExecutablePath());
+    auto execPath = path(app::os::getExecutablePath());
     addSearchPath(execPath.string());
     addSearchPath(system_complete(execPath / path("../share/werckmeister")).string());
 #ifndef WIN32

@@ -11,7 +11,7 @@
 #include <conductor/IConductionsPerformer.h>
 #include <com/ILogger.h>
 #include <ostream>
-#include <fmapp/IDocumentWriter.h>
+#include <app/IDocumentWriter.h>
 
 class SheetCompilerProgram {
 protected:
@@ -22,7 +22,7 @@ protected:
     sheet::compiler::IContextPtr         _context;
     sheet::compiler::IPreprocessorPtr    _preprocessor;
     com::midi::MidiPtr                    _midiFile;
-    fmapp::IDocumentWriterPtr            _documentWriter;
+    app::IDocumentWriterPtr            _documentWriter;
     sheet::conductor::IConductionsPerformerPtr      _conductionsPerformer;
 
 public:
@@ -34,7 +34,7 @@ public:
         sheet::compiler::IContextPtr             context,
         sheet::compiler::IPreprocessorPtr        preprocessor,
         com::midi::MidiPtr                        midiFile,
-        fmapp::IDocumentWriterPtr                documentWriter,
+        app::IDocumentWriterPtr                documentWriter,
         sheet::conductor::IConductionsPerformerPtr          conductionsPerformer
     ) : _programOptions(programOptions),
         _logger(logger),

@@ -1,6 +1,6 @@
 #include "SheetCompilerProgramJs.h"
 #include <boost/filesystem.hpp>
-#include <fmapp/os.hpp>
+#include <app/os.hpp>
 
 void SheetCompilerProgramJs::prepareSearchPaths()
 {

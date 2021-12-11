@@ -3,7 +3,7 @@
     https://github.com/SambaGodschynski/werckmeister/issues/101
 */
 
-#include "fmapp/os_win_ipc_kill_handler.hpp"
+#include "app/os_win_ipc_kill_handler.hpp"
 #include <iostream>
 #include <windows.h>
 
@@ -14,7 +14,7 @@ int main(int argc, char **argv) {
     }
     int pid = atoi(argv[1]);
     try {
-        fmapp::os::InterProcessMessageQueue queue(pid);
+        app::os::InterProcessMessageQueue queue(pid);
         queue.sendSigint();
     }
     catch (const boost::interprocess::interprocess_exception) 
