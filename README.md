@@ -2,7 +2,7 @@
 ![Windows Build](https://github.com/werckme/werckmeister/workflows/Windows%20Build/badge.svg)
 ![Mac Build](https://github.com/werckme/werckmeister/workflows/Mac%20Build/badge.svg)
 
-<img src="https://raw.githubusercontent.com/SambaGodschynski/werckmeister/main/assets/Logo_med.png" style="display: block; margin: auto">
+<img src="https://raw.githubusercontent.com/SambaGodschynski/werckmeister/main/assets/Logo2.png" style="margin: -90px auto; height: 500px">
 
 ## An open source Sheet Music MIDI Compiler
 
@@ -141,3 +141,5 @@ There are several optional arguments:
 - `--loop` -> play as loop
 - `--list` -> lists your detected MIDI devices
 
+# Architecture
+![Werckmeister Architecture](https://raw.githubusercontent.com/SambaGodschynski/werckmeister/main/assets/architecture.png)
