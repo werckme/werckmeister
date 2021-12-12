@@ -2,20 +2,21 @@
 
 #include <com/common.hpp>
 
-namespace documentModel {
+namespace documentModel
+{
 
     struct Argument
     {
         com::String value;
         com::String name;
 
-        template<typename TValue>
+        template <typename TValue>
         TValue parseValue() const;
     };
 
     namespace
     {
-        template<typename TValue>
+        template <typename TValue>
         TValue _convertStrValue(const com::String strValue)
         {
             TValue result;
@@ -24,18 +25,17 @@ namespace documentModel {
             ss >> result;
             return result;
         }
-        template<>
+        template <>
         com::String _convertStrValue<com::String>(const com::String strValue)
         {
             return strValue;
         }
     }
 
-    template<typename TValue>
+    template <typename TValue>
     TValue Argument::parseValue() const
     {
         return _convertStrValue<TValue>(this->value);
     }
 
 }
-

@@ -1,23 +1,22 @@
 #include "NthBar.h"
 #include <compiler/error.hpp>
 
-namespace documentModel
+namespace conductor
 {
-    namespace conductor
+    bool NthBar::isMatch(const ConductionSelector::Arguments &arguments, const EventWithMetaInfo &evm) const
     {
-        bool NthBar::isMatch(const ConductionSelector::Arguments& arguments, const EventWithMetaInfo& evm) const 
+        for (const auto &argument : arguments)
         {
-            for (const auto& argument : arguments) {
-                int valueToMatch = int(argument.numberValue);
-                if (valueToMatch <= 1)
-                {
-                    FM_THROW(compiler::Exception, "nth bar value \"" + std::to_string(valueToMatch) + "\" can not be less than 2");
-                }
-                if (int(evm.barNumber) % (valueToMatch) == 0) {
-                    return true;
-                }
+            int valueToMatch = int(argument.numberValue);
+            if (valueToMatch <= 1)
+            {
+                FM_THROW(compiler::Exception, "nth bar value \"" + std::to_string(valueToMatch) + "\" can not be less than 2");
             }
-            return false;
+            if (int(evm.barNumber) % (valueToMatch) == 0)
+            {
+                return true;
+            }
         }
+        return false;
     }
 }

@@ -9,25 +9,28 @@
 #include "ADocumentWriter.h"
 #include <ostream>
 
-namespace app {
-    class JsonWriter : public JsonIOBase, public ADocumentWriter {
+namespace app
+{
+    class JsonWriter : public JsonIOBase, public ADocumentWriter
+    {
     private:
         ICompilerProgramOptionsPtr _programOptions;
-        com::midi::MidiPtr          _midifile;
-        app::DefaultTimelinePtr  _timeline;
-        com::ILoggerPtr             _logger;
+        com::midi::MidiPtr _midifile;
+        app::DefaultTimelinePtr _timeline;
+        com::ILoggerPtr _logger;
+
     public:
         typedef JsonIOBase Base;
         JsonWriter(
-            ICompilerProgramOptionsPtr  programOptions, 
-            com::midi::MidiPtr           midiFile,
-            app::DefaultTimelinePtr   timeline,
-            com::ILoggerPtr              logger) 
+            ICompilerProgramOptionsPtr programOptions,
+            com::midi::MidiPtr midiFile,
+            app::DefaultTimelinePtr timeline,
+            com::ILoggerPtr logger)
             : ADocumentWriter(logger),
-              _programOptions(programOptions), 
-              _midifile      (midiFile),
-              _timeline      (timeline),
-              _logger        (logger)
+              _programOptions(programOptions),
+              _midifile(midiFile),
+              _timeline(timeline),
+              _logger(logger)
         {
             initOutputStream();
         }
@@ -38,15 +41,16 @@ namespace app {
         void writeValidationJson(documentModel::DocumentPtr document);
         virtual void writeException(const std::exception &ex) override;
         virtual void writeException(const com::Exception &ex) override;
-        virtual void writeUnknownException() override;        
+        virtual void writeUnknownException() override;
         virtual ~JsonWriter() = default;
         void setOutputStream(std::ostream &os);
+
     protected:
         void initOutputStream();
-        inline std::ostream & ostream() { return *_ostream; }
+        inline std::ostream &ostream() { return *_ostream; }
+
     private:
         documentModel::compiler::IWarningsCollectionPtr getWarnings();
         std::ostream *_ostream = nullptr;
     };
 }
-

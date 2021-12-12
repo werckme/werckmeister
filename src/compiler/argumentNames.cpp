@@ -1,3 +1,3 @@
 #include "argumentNames.h"
 
-ArgumentNames argumentNames;  
+ArgumentNames argumentNames;

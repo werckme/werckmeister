@@ -4,33 +4,40 @@
 #include <compiler/metaCommands.h>
 #include <compiler/error.hpp>
 
-namespace com {
-    namespace {
-        template<typename TContainer>
-        auto _findByName(const com::String &name, const TContainer &container)
-        {
-            typename TContainer::const_iterator it;
-            if (name == FM_STRING("?")) {
-                it = container.begin();
-            } else {
-                it = container.find(name);
-            }
-            return it;			
-        }
-    }
-    documentModel::SheetTemplate * DefinitionsServer::findSheetTemplate(const com::String &sheetTemplateName)
+namespace com
+{
+	namespace
+	{
+		template <typename TContainer>
+		auto _findByName(const com::String &name, const TContainer &container)
+		{
+			typename TContainer::const_iterator it;
+			if (name == FM_STRING("?"))
+			{
+				it = container.begin();
+			}
+			else
+			{
+				it = container.find(name);
+			}
+			return it;
+		}
+	}
+	documentModel::SheetTemplate *DefinitionsServer::findSheetTemplate(const com::String &sheetTemplateName)
 	{
 		SheetTemplates &sheetTemplates = *sheetTemplates_;
 		SheetTemplates::iterator it = sheetTemplates.find(sheetTemplateName);
-		if (it == sheetTemplates.end()) {
+		if (it == sheetTemplates.end())
+		{
 			return nullptr;
 		}
 		return &(it->second);
 	}
 
-	DefinitionsServer::SheetTemplates & DefinitionsServer::sheetTemplates()
+	DefinitionsServer::SheetTemplates &DefinitionsServer::sheetTemplates()
 	{
-		if (!sheetTemplates_) {
+		if (!sheetTemplates_)
+		{
 			prepareTemplateDefinitions();
 		}
 		return *sheetTemplates_;
@@ -41,7 +48,8 @@ namespace com {
 		const SheetTemplates &sheetTemplates = this->sheetTemplates();
 		// find sheetTemplate by name
 		SheetTemplates::const_iterator it = _findByName(name, sheetTemplates);
-		if (it == sheetTemplates.end()) {
+		if (it == sheetTemplates.end())
+		{
 			return documentModel::SheetTemplate();
 		}
 		return it->second;
@@ -50,13 +58,16 @@ namespace com {
 	IDefinitionsServer::ConstChordValueType DefinitionsServer::getChord(const com::String &name)
 	{
 		documentModel::Document::ChordDefs::const_iterator it;
-		if (name == FM_STRING("?")) {
+		if (name == FM_STRING("?"))
+		{
 			it = document_->chordDefs.begin();
 		}
-		else {
+		else
+		{
 			it = document_->chordDefs.find(name);
 		}
-		if (it == document_->chordDefs.end()) {
+		if (it == document_->chordDefs.end())
+		{
 			return nullptr;
 		}
 		return &(it->second);
@@ -66,8 +77,9 @@ namespace com {
 	{
 		documentModel::Document::PitchmapDefs::const_iterator it;
 		it = document_->pitchmapDefs.find(alias);
-		
-		if (it == document_->pitchmapDefs.end()) {
+
+		if (it == document_->pitchmapDefs.end())
+		{
 			return nullptr;
 		}
 		return &(it->second);
@@ -75,11 +87,13 @@ namespace com {
 
 	documentModel::PitchDef DefinitionsServer::resolvePitch(const documentModel::PitchDef &pitch)
 	{
-		if (pitch.alias.empty()) {
+		if (pitch.alias.empty())
+		{
 			return pitch;
 		}
 		const documentModel::PitchDef *result = getAlias(pitch.alias);
-		if (result == nullptr) {
+		if (result == nullptr)
+		{
 			FM_THROW(documentModel::compiler::Exception, "could not resolve alias: " + pitch.alias);
 		}
 		return *result;
@@ -89,23 +103,30 @@ namespace com {
 	{
 		sheetTemplates_ = std::make_unique<SheetTemplates>();
 		SheetTemplates &sheetTemplates = *sheetTemplates_;
-		for(auto &track : this->document_->sheetDef.tracks) {
-			try {
+		for (auto &track : this->document_->sheetDef.tracks)
+		{
+			try
+			{
 				com::String type = com::getFirstMetaArgumentForKey(SHEET_META__TRACK_META_KEY_TYPE, track.trackConfigs).value;
-				if (type != SHEET_META__TRACK_META_VALUE_TYPE_SHEET_TEMPLATE) {
+				if (type != SHEET_META__TRACK_META_VALUE_TYPE_SHEET_TEMPLATE)
+				{
 					continue;
 				}
 				com::String sheetTemplateName = com::getFirstMetaArgumentForKey(SHEET_META__TRACK_META_KEY_NAME, track.trackConfigs).value;
-				if (sheetTemplateName.empty()) {
+				if (sheetTemplateName.empty())
+				{
 					FM_THROW(documentModel::compiler::Exception, "missing 'name' for sheetTemplate track");
-				}					
+				}
 				auto sheetTemplate = findSheetTemplate(sheetTemplateName);
-				if (sheetTemplate == nullptr) {
+				if (sheetTemplate == nullptr)
+				{
 					sheetTemplates[sheetTemplateName] = SheetTemplate(sheetTemplateName);
 					sheetTemplate = &(sheetTemplates[sheetTemplateName]);
 				}
 				sheetTemplate->tracks.push_back(&track);
-			} catch(const com::Exception &ex) {
+			}
+			catch (const com::Exception &ex)
+			{
 				ex << documentModel::compiler::ex_sheet_source_info(track);
 				throw;
 			}

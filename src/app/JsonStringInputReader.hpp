@@ -8,22 +8,24 @@
 #include <list>
 #include <app/JsonIOBase.h>
 
-struct VirtualFileDto {
+struct VirtualFileDto
+{
     std::string path;
     std::string data;
 };
 
-namespace app {
+namespace app
+{
     /**
      * creates a list of virtual files via a json string.
      * Needed if the compiler is in Json mode.
      */
-    class JsonStringInputReader : public JsonIOBase {
+    class JsonStringInputReader : public JsonIOBase
+    {
     public:
         JsonStringInputReader() = default;
-        JsonStringInputReader(const JsonStringInputReader&) = delete;
-        JsonStringInputReader& operator= (const JsonStringInputReader&) = delete;
-        std::list<VirtualFileDto> readVirtualFS(const std::string & jsonData);
+        JsonStringInputReader(const JsonStringInputReader &) = delete;
+        JsonStringInputReader &operator=(const JsonStringInputReader &) = delete;
+        std::list<VirtualFileDto> readVirtualFS(const std::string &jsonData);
     };
 }
-

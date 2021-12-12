@@ -22,10 +22,11 @@
 #define _FLUIDSYNTH_AUDIO_H
 
 #ifdef __cplusplus
-extern "C" {
+extern "C"
+{
 #endif
 
-/**
+        /**
  * @file audio.h
  * @brief Functions for audio driver output.
  * @defgroup AudioFunctions Functions for audio output
@@ -39,7 +40,7 @@ extern "C" {
  * @sa @ref CreatingAudioDriver
  */
 
-/**
+        /**
  * Callback function type used with new_fluid_audio_driver2() to allow for
  * custom user audio processing before the audio is sent to the driver. This
  * function is responsible for rendering the audio to the buffers. For details
@@ -52,25 +53,25 @@ extern "C" {
  * @param out Array of buffers to store (dry) audio to. Buffers may alias with buffers of \c fx.
  * @return Should return #FLUID_OK on success, #FLUID_FAILED if an error occured.
  */
-typedef int (*fluid_audio_func_t)(void *data, int len,
-                                  int nfx, float *fx[],
-                                  int nout, float *out[]);
+        typedef int (*fluid_audio_func_t)(void *data, int len,
+                                          int nfx, float *fx[],
+                                          int nout, float *out[]);
 
-FLUIDSYNTH_API fluid_audio_driver_t *new_fluid_audio_driver(fluid_settings_t *settings,
-        fluid_synth_t *synth);
+        FLUIDSYNTH_API fluid_audio_driver_t *new_fluid_audio_driver(fluid_settings_t *settings,
+                                                                    fluid_synth_t *synth);
 
-FLUIDSYNTH_API fluid_audio_driver_t *new_fluid_audio_driver2(fluid_settings_t *settings,
-        fluid_audio_func_t func,
-        void *data);
+        FLUIDSYNTH_API fluid_audio_driver_t *new_fluid_audio_driver2(fluid_settings_t *settings,
+                                                                     fluid_audio_func_t func,
+                                                                     void *data);
 
-FLUIDSYNTH_API void delete_fluid_audio_driver(fluid_audio_driver_t *driver);
+        FLUIDSYNTH_API void delete_fluid_audio_driver(fluid_audio_driver_t *driver);
 
-FLUIDSYNTH_API fluid_file_renderer_t *new_fluid_file_renderer(fluid_synth_t *synth);
-FLUIDSYNTH_API int fluid_file_renderer_process_block(fluid_file_renderer_t *dev);
-FLUIDSYNTH_API void delete_fluid_file_renderer(fluid_file_renderer_t *dev);
-FLUIDSYNTH_API int fluid_file_set_encoding_quality(fluid_file_renderer_t *dev, double q);
+        FLUIDSYNTH_API fluid_file_renderer_t *new_fluid_file_renderer(fluid_synth_t *synth);
+        FLUIDSYNTH_API int fluid_file_renderer_process_block(fluid_file_renderer_t *dev);
+        FLUIDSYNTH_API void delete_fluid_file_renderer(fluid_file_renderer_t *dev);
+        FLUIDSYNTH_API int fluid_file_set_encoding_quality(fluid_file_renderer_t *dev, double q);
 
-FLUIDSYNTH_API int fluid_audio_driver_register(const char **adrivers);
+        FLUIDSYNTH_API int fluid_audio_driver_register(const char **adrivers);
 
 #ifdef __cplusplus
 }

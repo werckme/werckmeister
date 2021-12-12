@@ -6,16 +6,13 @@
 #include <vector>
 #include <compiler/context/IContext.h>
 
-namespace documentModel {
-    namespace compiler {
-        class ACommand : public com::IRegisterable, public com::AConvertsArgumentsToParameter
-        {
-        public:
-            typedef std::vector<Argument> Arguments;
-            virtual ~ACommand() = default;
-            virtual void execute(IContextPtr ) = 0;
-            
-        };
-    }
+namespace compiler
+{
+    class ACommand : public com::IRegisterable, public com::AConvertsArgumentsToParameter
+    {
+    public:
+        typedef std::vector<Argument> Arguments;
+        virtual ~ACommand() = default;
+        virtual void execute(IContextPtr) = 0;
+    };
 }
-

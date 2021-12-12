@@ -22,10 +22,11 @@
 #define _FLUIDSYNTH_VOICE_H
 
 #ifdef __cplusplus
-extern "C" {
+extern "C"
+{
 #endif
 
-/**
+    /**
  * @file voice.h
  * @brief Synthesis voice manipulation functions.
  *
@@ -35,38 +36,35 @@ extern "C" {
  * such as the SoundFont loader's noteon method.
  */
 
-
-/**
+    /**
  * Enum used with fluid_voice_add_mod() to specify how to handle duplicate modulators.
  */
-enum fluid_voice_add_mod
-{
-    FLUID_VOICE_OVERWRITE,        /**< Overwrite any existing matching modulator */
-    FLUID_VOICE_ADD,              /**< Add (sum) modulator amounts */
-    FLUID_VOICE_DEFAULT           /**< For default modulators only, no need to check for duplicates */
-};
+    enum fluid_voice_add_mod
+    {
+        FLUID_VOICE_OVERWRITE, /**< Overwrite any existing matching modulator */
+        FLUID_VOICE_ADD,       /**< Add (sum) modulator amounts */
+        FLUID_VOICE_DEFAULT    /**< For default modulators only, no need to check for duplicates */
+    };
 
-FLUIDSYNTH_API void fluid_voice_add_mod(fluid_voice_t *voice, fluid_mod_t *mod, int mode);
-FLUIDSYNTH_API float fluid_voice_gen_get(fluid_voice_t *voice, int gen);
-FLUIDSYNTH_API void fluid_voice_gen_set(fluid_voice_t *voice, int gen, float val);
-FLUIDSYNTH_API void fluid_voice_gen_incr(fluid_voice_t *voice, int gen, float val);
+    FLUIDSYNTH_API void fluid_voice_add_mod(fluid_voice_t *voice, fluid_mod_t *mod, int mode);
+    FLUIDSYNTH_API float fluid_voice_gen_get(fluid_voice_t *voice, int gen);
+    FLUIDSYNTH_API void fluid_voice_gen_set(fluid_voice_t *voice, int gen, float val);
+    FLUIDSYNTH_API void fluid_voice_gen_incr(fluid_voice_t *voice, int gen, float val);
 
-FLUIDSYNTH_API unsigned int fluid_voice_get_id(const fluid_voice_t *voice);
-FLUIDSYNTH_API int fluid_voice_get_channel(const fluid_voice_t *voice);
-FLUIDSYNTH_API int fluid_voice_get_key(const fluid_voice_t *voice);
-FLUIDSYNTH_API int fluid_voice_get_actual_key(const fluid_voice_t *voice);
-FLUIDSYNTH_API int fluid_voice_get_velocity(const fluid_voice_t *voice);
-FLUIDSYNTH_API int fluid_voice_get_actual_velocity(const fluid_voice_t *voice);
-FLUIDSYNTH_API int fluid_voice_is_playing(const fluid_voice_t *voice);
-FLUIDSYNTH_API int fluid_voice_is_on(const fluid_voice_t *voice);
-FLUIDSYNTH_API int fluid_voice_is_sustained(const fluid_voice_t *voice);
-FLUIDSYNTH_API int fluid_voice_is_sostenuto(const fluid_voice_t *voice);
-FLUIDSYNTH_API int fluid_voice_optimize_sample(fluid_sample_t *s);
-FLUIDSYNTH_API void fluid_voice_update_param(fluid_voice_t *voice, int gen);
-
+    FLUIDSYNTH_API unsigned int fluid_voice_get_id(const fluid_voice_t *voice);
+    FLUIDSYNTH_API int fluid_voice_get_channel(const fluid_voice_t *voice);
+    FLUIDSYNTH_API int fluid_voice_get_key(const fluid_voice_t *voice);
+    FLUIDSYNTH_API int fluid_voice_get_actual_key(const fluid_voice_t *voice);
+    FLUIDSYNTH_API int fluid_voice_get_velocity(const fluid_voice_t *voice);
+    FLUIDSYNTH_API int fluid_voice_get_actual_velocity(const fluid_voice_t *voice);
+    FLUIDSYNTH_API int fluid_voice_is_playing(const fluid_voice_t *voice);
+    FLUIDSYNTH_API int fluid_voice_is_on(const fluid_voice_t *voice);
+    FLUIDSYNTH_API int fluid_voice_is_sustained(const fluid_voice_t *voice);
+    FLUIDSYNTH_API int fluid_voice_is_sostenuto(const fluid_voice_t *voice);
+    FLUIDSYNTH_API int fluid_voice_optimize_sample(fluid_sample_t *s);
+    FLUIDSYNTH_API void fluid_voice_update_param(fluid_voice_t *voice, int gen);
 
 #ifdef __cplusplus
 }
 #endif
 #endif /* _FLUIDSYNTH_VOICE_H */
-

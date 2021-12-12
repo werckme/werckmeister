@@ -21,13 +21,12 @@
 #ifndef _FLUIDSYNTH_LOG_H
 #define _FLUIDSYNTH_LOG_H
 
-
 #ifdef __cplusplus
-extern "C" {
+extern "C"
+{
 #endif
 
-
-/**
+    /**
  * @file log.h
  * @brief Logging interface
  *
@@ -49,40 +48,39 @@ extern "C" {
  * @endcode
  */
 
-/**
+    /**
  * FluidSynth log levels.
  */
-enum fluid_log_level
-{
-    FLUID_PANIC,   /**< The synth can't function correctly any more */
-    FLUID_ERR,     /**< Serious error occurred */
-    FLUID_WARN,    /**< Warning */
-    FLUID_INFO,    /**< Verbose informational messages */
-    FLUID_DBG,     /**< Debugging messages */
+    enum fluid_log_level
+    {
+        FLUID_PANIC, /**< The synth can't function correctly any more */
+        FLUID_ERR,   /**< Serious error occurred */
+        FLUID_WARN,  /**< Warning */
+        FLUID_INFO,  /**< Verbose informational messages */
+        FLUID_DBG,   /**< Debugging messages */
 #ifndef __DOXYGEN__
-    LAST_LOG_LEVEL /**< @warning This symbol is not part of the public API and ABI stability guarantee and may change at any time! */
+        LAST_LOG_LEVEL /**< @warning This symbol is not part of the public API and ABI stability guarantee and may change at any time! */
 #endif
-};
+    };
 
-/**
+    /**
  * Log function handler callback type used by fluid_set_log_function().
  * @param level Log level (#fluid_log_level)
  * @param message Log message text
  * @param data User data pointer supplied to fluid_set_log_function().
  */
-typedef void (*fluid_log_function_t)(int level, const char *message, void *data);
+    typedef void (*fluid_log_function_t)(int level, const char *message, void *data);
 
-FLUIDSYNTH_API
-fluid_log_function_t fluid_set_log_function(int level, fluid_log_function_t fun, void *data);
+    FLUIDSYNTH_API
+    fluid_log_function_t fluid_set_log_function(int level, fluid_log_function_t fun, void *data);
 
-FLUIDSYNTH_API void fluid_default_log_function(int level, const char *message, void *data);
+    FLUIDSYNTH_API void fluid_default_log_function(int level, const char *message, void *data);
 
-FLUIDSYNTH_API int fluid_log(int level, const char *fmt, ...)
+    FLUIDSYNTH_API int fluid_log(int level, const char *fmt, ...)
 #if defined(__clang__) || defined(__GNUC__) || defined(__GNUG__)
-__attribute__ ((format (printf, 2, 3)))
+        __attribute__((format(printf, 2, 3)))
 #endif
-;
-
+        ;
 
 #ifdef __cplusplus
 }

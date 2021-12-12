@@ -4,19 +4,18 @@
 
 struct lua_State;
 
-namespace documentModel {
-    namespace lua {
+namespace lua
+{
 
-        class LuaTimeInfo {
-        public:
-            LuaTimeInfo(const documentModel::TimeInfo &timeInfo) : timeInfo_(timeInfo)
-            {
+    class LuaTimeInfo
+    {
+    public:
+        LuaTimeInfo(const documentModel::TimeInfo &timeInfo) : timeInfo_(timeInfo)
+        {
+        }
+        void push(lua_State *L);
 
-            }
-            void push(lua_State *L);
-        protected:
-            const documentModel::TimeInfo &timeInfo_;
-        };
-    }
+    protected:
+        const documentModel::TimeInfo &timeInfo_;
+    };
 }
-

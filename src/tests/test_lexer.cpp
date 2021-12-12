@@ -23,15 +23,15 @@ X7: I=1 III=5 V=8 VII=10 --as usual\n\
 	Xmaj7 : I=1 III=5 V=8 VII=11\n\
 	X7 + : Xmaj7\n\
 "));
-	
-	com::CharType const* first = str.c_str();
-	com::CharType const* last = &first[str.size()];
+
+	com::CharType const *first = str.c_str();
+	com::CharType const *last = &first[str.size()];
 
 	LexerType::iterator_type iter = chordDefTok.begin(first, last);
 	LexerType::iterator_type end = chordDefTok.end();
 
 	boost::spirit::lex::tokenize(first, last, chordDefTok);
-	BOOST_CHECK( chordDefTok.documentUsings.size() == 3 );
+	BOOST_CHECK(chordDefTok.documentUsings.size() == 3);
 	//for (const auto &x : chordDefTok.documentUsings) {
 	//	FM_COUT << x << std::endl;
 	//}
@@ -51,8 +51,8 @@ BOOST_AUTO_TEST_CASE(test_pitchmap)
 \"sn\": e,\n\
 "));
 
-	com::CharType const* first = str.c_str();
-	com::CharType const* last = &first[str.size()];
+	com::CharType const *first = str.c_str();
+	com::CharType const *last = &first[str.size()];
 
 	LexerType::iterator_type iter = pitchmapTok.begin(first, last);
 	LexerType::iterator_type end = pitchmapTok.end();

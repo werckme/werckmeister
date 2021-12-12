@@ -9,8 +9,8 @@
 #include <compiler/Preprocessor.h>
 #include <compiler/error.hpp>
 
-namespace documentModel {
-
+namespace documentModel
+{
 
 	com::String Document::getAbsolutePath(const com::String &path) const
 	{
@@ -22,7 +22,8 @@ namespace documentModel {
 	{
 		auto path = getAbsolutePath(_path);
 		auto sourceId = findSourceId(path);
-		if (sourceId != Event::UndefinedSource) {
+		if (sourceId != Event::UndefinedSource)
+		{
 			return sourceId;
 		}
 		sourceId = getSourceId(path);
@@ -33,7 +34,8 @@ namespace documentModel {
 	Document::Path Document::findSourcePath(Event::SourceId id) const
 	{
 		auto it = sources.left.find(id);
-		if (it == sources.left.end()) {
+		if (it == sources.left.end())
+		{
 			return Document::Path();
 		}
 		return it->second;
@@ -42,7 +44,8 @@ namespace documentModel {
 	Event::SourceId Document::findSourceId(const Path &path) const
 	{
 		auto it = sources.right.find(getAbsolutePath(path));
-		if (it == sources.right.end()) {
+		if (it == sources.right.end())
+		{
 			return Event::UndefinedSource;
 		}
 		return it->second;

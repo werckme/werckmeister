@@ -3,7 +3,8 @@
 
 #include "FluidSynthBackend.h"
 
-namespace app {
+namespace app
+{
 
 	std::unordered_map<std::string, FluidSynthPtr> FluidSynthBackend::_synths;
 
@@ -11,7 +12,7 @@ namespace app {
 	{
 	}
 
-	void FluidSynthBackend::createInstance(const std::string& deviceId, const std::string& soundfontPath)
+	void FluidSynthBackend::createInstance(const std::string &deviceId, const std::string &soundfontPath)
 	{
 		_synths.insert(std::make_pair(deviceId, std::make_shared<FluidSynth>(soundfontPath)));
 	}
@@ -20,7 +21,8 @@ namespace app {
 	{
 		FluidSynthBackend::Outputs result;
 		result.reserve(_synths.size());
-		for (const auto& idSynthPair : _synths) {
+		for (const auto &idSynthPair : _synths)
+		{
 			Output output;
 			output.id = idSynthPair.first;
 			output.name = output.id;
@@ -31,7 +33,6 @@ namespace app {
 	}
 	FluidSynthBackend::~FluidSynthBackend()
 	{
-
 	}
 	void FluidSynthBackend::send(const com::midi::Event &event, const Output *output)
 	{
@@ -43,7 +44,6 @@ namespace app {
 	}
 	void FluidSynthBackend::panic()
 	{
-
 	}
 }
 

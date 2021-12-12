@@ -8,16 +8,20 @@
 #include <tuple>
 #include <functional>
 
-namespace documentModel {
+namespace documentModel
+{
 
-	namespace {
+	namespace
+	{
 		std::hash<com::String> hash_fn;
 	}
 
-	struct PitchDef {
+	struct PitchDef
+	{
 		typedef com::Pitch Pitch;
 		typedef int Octave;
-		enum {
+		enum
+		{
 			NoPitch = -1,
 			DefaultOctave = 0,
 		};
@@ -27,29 +31,29 @@ namespace documentModel {
 		bool forceDegree = false;
 		PitchDef(const com::String &alias) : alias(alias) {}
 		PitchDef(Pitch p = NoPitch, Octave o = DefaultOctave) : pitch(p), octave(o) {}
-		int id() const 
+		int id() const
 		{
-			if (!alias.empty()) {
+			if (!alias.empty())
+			{
 				return static_cast<int>(hash_fn(alias));
 			}
 			return pitch + (octave * com::NotesPerOctave);
 		}
-		bool operator<(const PitchDef& b) const
+		bool operator<(const PitchDef &b) const
 		{
 			return id() < b.id();
 		}
-		bool operator>(const PitchDef& b) const
+		bool operator>(const PitchDef &b) const
 		{
 			return id() > b.id();
 		}
-		bool operator==(const PitchDef& b) const
+		bool operator==(const PitchDef &b) const
 		{
 			return id() == b.id();
 		}
-		bool operator!=(const PitchDef& b) const
+		bool operator!=(const PitchDef &b) const
 		{
 			return id() != b.id();
-		}		
+		}
 	};
 }
-

@@ -141,7 +141,6 @@ BOOST_AUTO_TEST_CASE(parse_oneSelectorWithNameArgument)
 	BOOST_CHECK_EQUAL(defs.rules[0].selectors[0].arguments[0].name, com::String("myInstrument"));
 }
 
-
 BOOST_AUTO_TEST_CASE(parse_oneSelector_followUpOperator_1)
 {
 	using namespace com;

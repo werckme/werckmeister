@@ -5,22 +5,28 @@
 #include <vector>
 #include <documentModel/PitchDef.h>
 
-namespace documentModel {
-	struct ConductionSelector :  public ASheetObjectWithSourceInfo {
-		struct ArgumentValue {
+namespace documentModel
+{
+	struct ConductionSelector : public ASheetObjectWithSourceInfo
+	{
+		struct ArgumentValue
+		{
 			com::Ticks numberValue = 0;
 			PitchDef pitch;
 			com::String name;
 		};
-		typedef std::vector<ArgumentValue> Arguments; 
+		typedef std::vector<ArgumentValue> Arguments;
 		com::String type;
-		Arguments arguments; 
+		Arguments arguments;
 	};
 
-	struct ConductionRule : public ASheetObjectWithSourceInfo {
+	struct ConductionRule : public ASheetObjectWithSourceInfo
+	{
 		typedef std::vector<ConductionSelector> Selectors;
-		struct Declaration : public ASheetObjectWithSourceInfo {
-			enum OperationType {
+		struct Declaration : public ASheetObjectWithSourceInfo
+		{
+			enum OperationType
+			{
 				OperationUnknown,
 				OperationAdd,
 				OperationSubstract,
@@ -28,9 +34,10 @@ namespace documentModel {
 				OperationFollowUpAdd,
 				OperationFollowUpSubstract
 			};
-			enum ValueUnit {
+			enum ValueUnit
+			{
 				UnitAbsolute,
-				UnitPercent	
+				UnitPercent
 			};
 			com::String property = "";
 			OperationType operation = OperationUnknown;
@@ -42,10 +49,10 @@ namespace documentModel {
 		Declarations declarations;
 	};
 
-	struct ConductionSheetDef : public ASheetObjectWithSourceInfo {
+	struct ConductionSheetDef : public ASheetObjectWithSourceInfo
+	{
 		typedef std::vector<ConductionRule> Rules;
 		Rules rules;
 	};
 
 }
-

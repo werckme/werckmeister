@@ -3,11 +3,14 @@
 #include <climits>
 #include "ASheetObject.h"
 
-namespace documentModel {
+namespace documentModel
+{
 
-    class ASheetObjectWithSourceInfo : public ASheetObject {
-    public:
-		enum {
+	class ASheetObjectWithSourceInfo : public ASheetObject
+	{
+	public:
+		enum
+		{
 			UndefinedSource = 0,
 			UndefinedPosition = INT_MAX
 		};
@@ -18,6 +21,5 @@ namespace documentModel {
 		 */
 		unsigned int sourcePositionBegin = UndefinedPosition;
 		unsigned int sourcePositionEnd = UndefinedPosition;
-    };
+	};
 }
-

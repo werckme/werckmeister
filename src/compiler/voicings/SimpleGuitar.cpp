@@ -1,21 +1,24 @@
 #include "SimpleGuitar.h"
 #include <com/tools.h>
 
-namespace documentModel {
+namespace compiler
+{
 
- 	SimpleGuitar::OctaveMap SimpleGuitar::createOctaveMap(const ChordDef &def) const
+	SimpleGuitar::OctaveMap SimpleGuitar::createOctaveMap(const ChordDef &def) const
 	{
-		if (has7(def) && has9(def) && has11(def) && has13(def)) {
-			return  OctaveMap({
+		if (has7(def) && has9(def) && has11(def) && has13(def))
+		{
+			return OctaveMap({
 				{com::degrees::I, -1},
 				{com::degrees::IV, -1},
 				{com::degrees::VII, -1},
 				{com::degrees::II, 0},
 				{com::degrees::VI, 0},
 			});
-		}		
-		if (has7(def) && has9(def) && has11(def)) {
-			return  OctaveMap({
+		}
+		if (has7(def) && has9(def) && has11(def))
+		{
+			return OctaveMap({
 				{com::degrees::I, -1},
 				{com::degrees::IV, -1},
 				{com::degrees::VII, -1},
@@ -23,8 +26,9 @@ namespace documentModel {
 				{com::degrees::V, 0},
 			});
 		}
-		if (has7(def) && has9(def)) {
-			return  OctaveMap({
+		if (has7(def) && has9(def))
+		{
+			return OctaveMap({
 				{com::degrees::I, -1},
 				{com::degrees::III, -1},
 				{com::degrees::VII, -1},
@@ -32,8 +36,9 @@ namespace documentModel {
 				{com::degrees::V, 0},
 			});
 		}
-		if (has7(def)) {
-			return  OctaveMap({
+		if (has7(def))
+		{
+			return OctaveMap({
 				{com::degrees::I, -1},
 				{com::degrees::V, -1},
 				{com::degrees::VII, -1},
@@ -42,7 +47,7 @@ namespace documentModel {
 				{com::degrees::I, 1},
 			});
 		}
-		return  OctaveMap({
+		return OctaveMap({
 			{com::degrees::I, -1},
 			{com::degrees::V, -1},
 			{com::degrees::I, 0},
@@ -52,10 +57,11 @@ namespace documentModel {
 		});
 	}
 
-	SimpleGuitar::Pitches SimpleGuitar::get(const Event &chord, const ChordDef &def, const Degrees &degreeIntervals, const TimeInfo& timeInfo)
+	SimpleGuitar::Pitches SimpleGuitar::get(const Event &chord, const ChordDef &def, const Degrees &degreeIntervals, const TimeInfo &timeInfo)
 	{
 
-		if (degreeIntervals.size() < 3) {
+		if (degreeIntervals.size() < 3)
+		{
 			return Base::get(chord, def, degreeIntervals, timeInfo);
 		}
 		bool lowerRange = parameters[argumentNames.SimpleGuitarVoicingStrategy.Range].value<com::String>() == "lowerRange";
@@ -65,23 +71,27 @@ namespace documentModel {
 		PitchDef x;
 		auto octaves = createOctaveMap(def);
 		int transpose = 0;
-		if (root > com::notes::D && lowerRange) {
+		if (root > com::notes::D && lowerRange)
+		{
 			transpose = -1;
 		}
-		for (const auto& degree : degreeIntervals) {
+		for (const auto &degree : degreeIntervals)
+		{
 			auto interval = def.getDegreeDef(degree);
-			if (!interval.valid()) {
+			if (!interval.valid())
+			{
 				continue;
 			}
 			x.pitch = root + (interval.value % 12);
 			auto octaveRange = octaves.equal_range(degree.pitch);
 			auto octave = octaveRange.first;
-			for(; octave != octaveRange.second; ++octave) { // some degrees may be twice (lower I & upper I)
+			for (; octave != octaveRange.second; ++octave)
+			{ // some degrees may be twice (lower I & upper I)
 				x.octave = octave->second + transpose;
 				result.push_back(x);
 			}
 		}
 
-        return result;
+		return result;
 	}
 }

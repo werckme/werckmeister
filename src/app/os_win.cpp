@@ -5,16 +5,20 @@
 #include <thread>
 #include <process.h>
 
-namespace {
+namespace
+{
 	VOID CALLBACK WaitOrTimerCallback(PVOID lpParam, BOOLEAN TimerOrWaitFired);
 	BOOL WINAPI ConsoleHandler(DWORD signal);
 }
 
-namespace app {
-	namespace os {
-		void MMTimer::start(std::chrono::milliseconds millis) 
+namespace app
+{
+	namespace os
+	{
+		void MMTimer::start(std::chrono::milliseconds millis)
 		{
-			if (handle_) {
+			if (handle_)
+			{
 				return;
 			}
 			auto due = static_cast<DWORD>(millis.count());
@@ -25,26 +29,29 @@ namespace app {
 				&this->callback_,
 				due,
 				due,
-				WT_EXECUTEDEFAULT
-			);
+				WT_EXECUTEDEFAULT);
 		}
 		void MMTimer::stop()
 		{
-			if (!handle_) {
+			if (!handle_)
+			{
 				return;
 			}
 			// accoding to doc:
-			// If this parameter is INVALID_HANDLE_VALUE, the function 
+			// If this parameter is INVALID_HANDLE_VALUE, the function
 			// waits for any running timer callback functions to complete before returning.
-			::DeleteTimerQueueTimer(NULL, handle_, INVALID_HANDLE_VALUE); 
+			::DeleteTimerQueueTimer(NULL, handle_, INVALID_HANDLE_VALUE);
 			handle_ = nullptr;
 		}
 	}
 }
 
-namespace app {
-	namespace os {
-		namespace {
+namespace app
+{
+	namespace os
+	{
+		namespace
+		{
 			SigtermHandler sigtermHandler_;
 		}
 		void setSigtermHandler(const SigtermHandler &sigtermHandler)
@@ -59,22 +66,25 @@ namespace app {
 			auto strPath = com::String(szFileName);
 			return boost::filesystem::path(strPath).parent_path().string();
 		}
-		int getPId() {
+		int getPId()
+		{
 			return ::_getpid();
 		}
 	}
 }
 
-namespace {
+namespace
+{
 	VOID CALLBACK WaitOrTimerCallback(PVOID lpParam, BOOLEAN TimerOrWaitFired)
 	{
-		auto *callback = reinterpret_cast<app::os::MMTimer::Callback*>(lpParam);
+		auto *callback = reinterpret_cast<app::os::MMTimer::Callback *>(lpParam);
 		(*callback)();
 	}
 
 	BOOL WINAPI ConsoleHandler(DWORD signal)
 	{
-		if (signal == CTRL_C_EVENT && !!app::os::sigtermHandler_) {
+		if (signal == CTRL_C_EVENT && !!app::os::sigtermHandler_)
+		{
 			app::os::sigtermHandler_();
 		}
 		return TRUE;

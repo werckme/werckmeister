@@ -3,7 +3,8 @@
 #include <sstream>
 #include <com/tools.h>
 
-namespace documentModel {
+namespace compiler
+{
     std::string Warning::toString(std::shared_ptr<Document> document) const
     {
         std::stringstream ss;

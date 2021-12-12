@@ -11,8 +11,10 @@
 #include "objects/ConductionSheetDef.h"
 #include <list>
 
-namespace documentModel {
-	class Document: public std::enable_shared_from_this<Document> {
+namespace documentModel
+{
+	class Document : public std::enable_shared_from_this<Document>
+	{
 	public:
 		typedef std::unordered_map<com::String, ChordDef> ChordDefs;
 		typedef std::unordered_map<com::String, PitchDef> PitchmapDefs;
@@ -29,10 +31,9 @@ namespace documentModel {
 		Path findSourcePath(Event::SourceId id) const;
 		Event::SourceId findSourceId(const Path &path) const;
 		static Event::SourceId getSourceId(const Path &path);
+
 	protected:
 		com::String getAbsolutePath(const com::String &path) const;
 	};
-	
+
 }
-
-

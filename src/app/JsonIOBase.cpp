@@ -10,21 +10,21 @@
 #include <com/midi.hpp>
 #include <app/os.hpp>
 
-
-namespace {
-    void toStream(std::ostream& os, rapidjson::Document &doc) 
+namespace
+{
+    void toStream(std::ostream &os, rapidjson::Document &doc)
     {
         rapidjson::OStreamWrapper osw(os);
         rapidjson::Writer<rapidjson::OStreamWrapper> writer(osw);
         doc.Accept(writer);
         os << std::endl;
-    }    
+    }
 }
 
+namespace app
+{
 
-namespace app {
-
-    void JsonIOBase::toStream(std::ostream& os, rapidjson::Document &doc) 
+    void JsonIOBase::toStream(std::ostream &os, rapidjson::Document &doc)
     {
         return ::toStream(os, doc);
     }
@@ -38,8 +38,8 @@ namespace app {
         midi->write(bff, nbytes);
         auto writtenBytes = boost::beast::detail::base64::encode(base64, bff, nbytes);
         std::string result(base64, writtenBytes);
-        delete []bff;
-        delete []base64;
+        delete[] bff;
+        delete[] base64;
         return result;
     }
 
@@ -50,7 +50,7 @@ namespace app {
         char *base64 = new char[nBase64];
         auto writtenBytes = boost::beast::detail::base64::encode(base64, data.c_str(), nbytes);
         std::string result(base64, writtenBytes);
-        delete []base64;
+        delete[] base64;
         return result;
     }
     std::string JsonIOBase::base64Decode(const std::string &base64)
@@ -60,35 +60,38 @@ namespace app {
         char *data = new char[nbytes];
         auto writtenBytes = boost::beast::detail::base64::decode(data, base64.c_str(), nBase64);
         std::string result(data, writtenBytes.first);
-        delete []data;
+        delete[] data;
         return result;
     }
 
-    void JsonIOBase::eventInfoToJSON(std::ostream& os,
-        com::Ticks elapsedTime, 
-        unsigned long lastUpdateTimestamp, 
-        const std::vector<app::DefaultTimeline::EventInfo> &eventInfos, 
-        bool ignoreTimestamp)
+    void JsonIOBase::eventInfoToJSON(std::ostream &os,
+                                     com::Ticks elapsedTime,
+                                     unsigned long lastUpdateTimestamp,
+                                     const std::vector<app::DefaultTimeline::EventInfo> &eventInfos,
+                                     bool ignoreTimestamp)
     {
         rapidjson::Document doc;
         doc.SetObject();
         rapidjson::Value elapsed;
         elapsed.SetDouble(elapsedTime);
         rapidjson::Value lastUpdate;
-		lastUpdate.SetUint(lastUpdateTimestamp);
+        lastUpdate.SetUint(lastUpdateTimestamp);
         rapidjson::Value pid;
         pid.SetInt(app::os::getPId());
         doc.AddMember("sheetTime", elapsed, doc.GetAllocator());
         doc.AddMember("pid", pid, doc.GetAllocator());
-        if (!ignoreTimestamp) {
+        if (!ignoreTimestamp)
+        {
             doc.AddMember("lastUpdateTimestamp", lastUpdate, doc.GetAllocator());
         }
         rapidjson::Value array(rapidjson::kArrayType);
-        for (const auto &eventInfo : eventInfos) {
+        for (const auto &eventInfo : eventInfos)
+        {
             rapidjson::Value object(rapidjson::kObjectType);
             rapidjson::Value beginPosition(eventInfo.beginPosition);
             object.AddMember("beginPosition", beginPosition, doc.GetAllocator());
-            if (eventInfo.endPosition > 0) {
+            if (eventInfo.endPosition > 0)
+            {
                 rapidjson::Value endPosition(eventInfo.endPosition);
                 object.AddMember("endPosition", endPosition, doc.GetAllocator());
             }
@@ -100,33 +103,39 @@ namespace app {
         toStream(os, doc);
     }
 
-    void JsonIOBase::exceptionToJSON(std::ostream& os,const std::exception &ex)
+    void JsonIOBase::exceptionToJSON(std::ostream &os, const std::exception &ex)
     {
         typedef documentModel::compiler::Exception SheetException;
         rapidjson::Document doc;
         doc.SetObject();
         rapidjson::Value errorMessage;
-        const SheetException *fmex                       = dynamic_cast<const SheetException*>(&ex);
+        const SheetException *fmex = dynamic_cast<const SheetException *>(&ex);
         const documentModel::ASheetObjectWithSourceInfo *docInfo = fmex ? fmex->getSourceInfo() : nullptr;
-        if (fmex && docInfo) {
-            const auto sourceFile = fmex->getSourceFile(); 
+        if (fmex && docInfo)
+        {
+            const auto sourceFile = fmex->getSourceFile();
             rapidjson::Value sourceId(docInfo->sourceId);
             rapidjson::Value positionBegin(docInfo->sourcePositionBegin);
             rapidjson::Value positionEnd(docInfo->sourcePositionEnd);
             errorMessage.SetString(fmex->what(), doc.GetAllocator());
             doc.AddMember("sourceId", sourceId, doc.GetAllocator());
-            if (docInfo->sourcePositionBegin != documentModel::ASheetObjectWithSourceInfo::UndefinedPosition) {
+            if (docInfo->sourcePositionBegin != documentModel::ASheetObjectWithSourceInfo::UndefinedPosition)
+            {
                 doc.AddMember("positionBegin", positionBegin, doc.GetAllocator());
             }
-            if (docInfo->sourcePositionEnd != documentModel::ASheetObjectWithSourceInfo::UndefinedPosition) {
+            if (docInfo->sourcePositionEnd != documentModel::ASheetObjectWithSourceInfo::UndefinedPosition)
+            {
                 doc.AddMember("positionEnd", positionEnd, doc.GetAllocator());
             }
-            if (true) {
+            if (true)
+            {
                 rapidjson::Value jsonSourceFile;
                 jsonSourceFile.SetString(sourceFile.c_str(), doc.GetAllocator());
                 doc.AddMember("sourceFile", jsonSourceFile, doc.GetAllocator());
             }
-        } else {
+        }
+        else
+        {
             errorMessage.SetString(ex.what(), doc.GetAllocator());
         }
         doc.AddMember("errorMessage", errorMessage, doc.GetAllocator());

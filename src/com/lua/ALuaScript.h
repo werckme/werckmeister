@@ -1,18 +1,21 @@
 #pragma once
 
-
 #include <com/common.hpp>
 #include <string>
 
-extern "C" {
+extern "C"
+{
     struct lua_State;
 }
 
-namespace documentModel {
+namespace documentModel
+{
 
-    namespace lua {
+    namespace lua
+    {
 
-        class ALuaScript {
+        class ALuaScript
+        {
         public:
             ALuaScript(const com::String &path);
             virtual ~ALuaScript();
@@ -21,15 +24,15 @@ namespace documentModel {
             virtual void assertCanExecute() const = 0;
             virtual void call(size_t numArgs, size_t numResult);
             virtual void addPackagePath(const com::String &path);
-            const com::String & path() const { return _path; }
+            const com::String &path() const { return _path; }
+
         protected:
-            void error (const std::string &msg);
+            void error(const std::string &msg);
             lua_State *L = nullptr;
+
         private:
             const com::String &_path;
             void addSearchPaths();
         };
     }
 }
-
-

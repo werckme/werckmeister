@@ -1,11 +1,11 @@
 #pragma once
 
-
 #include <com/IHasParameter.h>
 #include <vector>
 #include <documentModel/Argument.h>
 
-namespace com {
+namespace com
+{
     class AConvertsArgumentsToParameter : public com::IHasParameter
     {
     public:
@@ -14,4 +14,3 @@ namespace com {
         virtual void setArguments(const Arguments &args);
     };
 }
-

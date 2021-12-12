@@ -6,12 +6,13 @@
 #include "objects/Interval.h"
 #include "objects/Event.h"
 
-namespace documentModel {
+namespace documentModel
+{
 
-    struct Pitchmap {
+    struct Pitchmap
+    {
         com::String name;
-		PitchDef pitch;
-	};
+        PitchDef pitch;
+    };
 
 }
-

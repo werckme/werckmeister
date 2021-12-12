@@ -14,11 +14,13 @@
 #include "error.hpp"
 #include <list>
 
-namespace {
+namespace
+{
     const com::String RepeatBegin("__repeat_begin_");
     const com::String RepeatEnd("__repeat_end_");
     const com::String RepeatBeginAndEnd("__repeat_begin_and_end_");
-    struct Jump {
+    struct Jump
+    {
         com::String to;
         int numVisited = 0;
         int numVisitedTotal = 0;
@@ -28,17 +30,19 @@ namespace {
     };
     typedef std::unordered_map<size_t, Jump> Jumps;
     typedef std::unordered_map<com::String, size_t> Marks;
-    void registerMark(size_t eventContainerIndex, const documentModel::Event& event, Marks &marks)
+    void registerMark(size_t eventContainerIndex, const documentModel::Event &event, Marks &marks)
     {
         auto markCommand = com::getWerckmeister().solve<documentModel::compiler::ACommand>(event.stringValue);
         markCommand->setArguments(event.metaArgs);
         com::IHasParameter::ParametersByNames &parameters = markCommand->getParameters();
         com::String name = parameters[argumentNames.Mark.Name].value<com::String>();
         auto it = marks.find(name);
-        if (it == marks.end()) {
+        if (it == marks.end())
+        {
             marks.insert(std::make_pair(name, eventContainerIndex));
         }
-        else if (it->second != eventContainerIndex) {
+        else if (it->second != eventContainerIndex)
+        {
             std::stringstream ss;
             ss << "marker duplicate with \"" << name << "\"";
             documentModel::compiler::Exception exception(ss.str());
@@ -46,19 +50,21 @@ namespace {
             throw exception;
         }
     }
-    Jump & getJump(size_t eventContainerIndex, const documentModel::Event& event, Jumps& jumps)
+    Jump &getJump(size_t eventContainerIndex, const documentModel::Event &event, Jumps &jumps)
     {
         auto it = jumps.find(eventContainerIndex);
-        if (it != jumps.end()) {
+        if (it != jumps.end())
+        {
             return it->second;
         }
         auto jumpCommand = com::getWerckmeister().solve<documentModel::compiler::ACommand>(event.stringValue);
         jumpCommand->setArguments(event.metaArgs);
-        com::IHasParameter::ParametersByNames& parameters = jumpCommand->getParameters();
+        com::IHasParameter::ParametersByNames &parameters = jumpCommand->getParameters();
         Jump jump;
         jump.to = parameters[argumentNames.Jump.To].value<com::String>();
         int repeatValue = parameters[argumentNames.Jump.Repeat].value<int>();
-        if (repeatValue+1 > com::SheetNavigationMaxJumps) {
+        if (repeatValue + 1 > com::SheetNavigationMaxJumps)
+        {
             std::stringstream ss;
             ss << "max repeat size exceeded = " << com::SheetNavigationMaxJumps << " repeats";
             documentModel::compiler::Exception exception(ss.str());
@@ -75,13 +81,14 @@ namespace {
     {
         std::stringstream ss;
         ss << "__wm_" << id << "__";
-        if (voltaSequenceNr > 0) {
+        if (voltaSequenceNr > 0)
+        {
             ss << "vg" << voltaSequenceNr;
         }
         return ss.str();
     }
 
-    documentModel::Event createMarkerEvent(const com::String& id)
+    documentModel::Event createMarkerEvent(const com::String &id)
     {
         documentModel::Event event;
         event.stringValue = SHEET_META__MARK;
@@ -121,21 +128,24 @@ namespace {
 
     documentModel::Event createVoltaJumpEvent(int srcVoltaNr, int voltaGrp)
     {
-        documentModel::Event event = createJumpEvent(createInternalMarkerName(srcVoltaNr, voltaGrp), 0, srcVoltaNr-1);
+        documentModel::Event event = createJumpEvent(createInternalMarkerName(srcVoltaNr, voltaGrp), 0, srcVoltaNr - 1);
         return event;
     }
 
     int getVoltaNr(const documentModel::Event &event)
     {
-        if (event.type != documentModel::Event::EOB) {
-            return -1;
-        }
-        if (event.tags.empty()) {
-            return -1;
-        }
-        for (const auto& tag : event.tags)
+        if (event.type != documentModel::Event::EOB)
         {
-            if (tag.empty()) {
+            return -1;
+        }
+        if (event.tags.empty())
+        {
+            return -1;
+        }
+        for (const auto &tag : event.tags)
+        {
+            if (tag.empty())
+            {
                 continue;
             }
             int voltaNr = atoi(tag.c_str());
@@ -145,138 +155,159 @@ namespace {
     }
 }
 
-namespace documentModel {
-    namespace compiler {
-        void SheetNavigator::processNavigation(Voice& voice)
+namespace compiler
+{
+    void SheetNavigator::processNavigation(Voice &voice)
+    {
+        processRepeats(voice);
+        processJumps(voice);
+    }
+    void SheetNavigator::processJumps(Voice &voice)
+    {
+        if (voice.events.empty())
         {
-            processRepeats(voice);
-            processJumps(voice);
+            return;
         }
-        void SheetNavigator::processJumps(Voice& voice)
+        Jumps jumps;
+        Marks marks;
+        Voice::Events &src = voice.events;
+        std::list<documentModel::Event> dst;
+        size_t length = src.size();
+        // register marks
+        for (size_t idx = 0; idx < length; ++idx)
         {
-            if (voice.events.empty()) {
-                return;
+            const auto &event = src.at(idx);
+            if (event.type != Event::Meta || event.stringValue != SHEET_META__MARK)
+            {
+                continue;
             }
-            Jumps jumps;
-            Marks marks;
-            Voice::Events& src = voice.events;
-            std::list<documentModel::Event> dst;
-            size_t length = src.size();
-            // register marks
-            for (size_t idx = 0; idx < length; ++idx) {
-                const auto& event = src.at(idx);
-                if (event.type != Event::Meta || event.stringValue != SHEET_META__MARK) {
-                    continue;
-                }
-                registerMark(idx, event, marks);
-            }
-            // execute jumps
-            for (size_t idx = 0; idx < length; ++idx) {
-                const auto& event = src.at(idx);
-                if (event.type != Event::Meta || event.stringValue != SHEET_META__JUMP) {
-                    dst.push_back(event);
-                    continue;
-                }
-                auto& jump = getJump(idx, event, jumps);
-                auto markIt = marks.find(jump.to);
-                if (markIt == marks.end()) {
-                    std::stringstream ss;
-                    ss << "marker not found: \"" << jump.to << "\"";
-                    documentModel::compiler::Exception exception(ss.str());
-                    exception << documentModel::compiler::ex_sheet_source_info(event);
-                    throw exception;
-                }
-                bool jumpForward = markIt->second > idx;
-                ++jump.numVisited;
-                ++jump.numVisitedTotal;
-                if (jump.numPerformed >= jump.numPerform) { // the jump has been perfomed
-                    jump.numPerformed = 0; // reset the counter for revisiting
-                    jump.numVisited = 0;
-                    continue;
-                }
-                if (jump.numVisited <= jump.numIgnore) {
-                    continue;
-                }
-                if ((jump.numVisitedTotal) > com::SheetNavigationMaxJumps) {
-                    std::stringstream ss;
-                    ss << "max jump size exceeded = " << com::SheetNavigationMaxJumps << " jumps";
-                    documentModel::compiler::Exception exception(ss.str());
-                    exception << documentModel::compiler::ex_sheet_source_info(event);
-                    throw exception;
-                }
-                if (jumpForward) {
-                    // in case of a forwad jump, reset counter imediately
-                    jump.numPerformed = 0;
-                    jump.numVisited = 0;
-                }
-                else {
-                    ++jump.numPerformed;
-                }
-                idx = markIt->second;
-            }
-            Voice::Events copy(dst.begin(), dst.end());
-            copy.swap(src);
+            registerMark(idx, event, marks);
         }
-        
-        void SheetNavigator::processRepeats(Voice& voice)
+        // execute jumps
+        for (size_t idx = 0; idx < length; ++idx)
         {
-            if (voice.events.empty()) {
-                return;
-            }
-            Voice::Events& src = voice.events;
-            std::list<documentModel::Event> dst;
-            size_t length = src.size();
-            int markCounter = 0;
-            auto markAtBegin = createMarkerEvent(createInternalMarkerName(markCounter++));
-            dst.emplace_front(markAtBegin);
-            int voltaSequenceNr = 1;
-            int lastVoltaNr = 0;
-            auto voltaSeqBegin = dst.end();
-            for (size_t idx = 0; idx < length; ++idx) {
-                const auto& event = src.at(idx);
+            const auto &event = src.at(idx);
+            if (event.type != Event::Meta || event.stringValue != SHEET_META__JUMP)
+            {
                 dst.push_back(event);
-                if (event.type != Event::EOB) {
-                    continue;
-                }
-                int voltaNr = getVoltaNr(event);
-                if (voltaNr != -1) { // we have a volta
-                    if (lastVoltaNr > 1 && voltaNr == 1) {  // a new volta sequence begins
-                        ++voltaSequenceNr;
-                        lastVoltaNr = 0;
-                    }
-                    if (voltaNr == 1) { // remember the position of the first volta
-                        // add a dummy event be one behind the EOB
-                        dst.emplace_back(createMarkerEvent(createInternalMarkerName(0, voltaSequenceNr)));
-                        voltaSeqBegin = --dst.end();
-                    }
-                    if (voltaNr - lastVoltaNr != 1) {
-                        std::stringstream ss;
-                        ss << "volta sequence is out of order with value '" << voltaNr << "'";
-                        documentModel::compiler::Exception exception(ss.str());
-                        exception << documentModel::compiler::ex_sheet_source_info(event);
-                        throw exception;
-                    }
-                    if (voltaNr > 1) { // peform a jump from the first volta mark to the current location
-                        dst.emplace_back(createMarkerEvent(createInternalMarkerName(voltaNr, voltaSequenceNr)));
-                        auto voltaJump = createVoltaJumpEvent(voltaNr, voltaSequenceNr);
-                        voltaSeqBegin = dst.insert(voltaSeqBegin, voltaJump);
-                    }
-                    lastVoltaNr = voltaNr;
-                }
-                // handle the repeats
-                if (event.stringValue == RepeatBegin) {
-                    dst.emplace_back(createMarkerEvent(createInternalMarkerName(markCounter++)));
-                }
-                if (event.stringValue == RepeatEnd) {
-                    dst.emplace_back(createJumpEvent(createInternalMarkerName(markCounter - 1)));
-                }
-                if (event.stringValue == RepeatBeginAndEnd) {
-                    dst.emplace_back(createJumpEvent(createInternalMarkerName(markCounter - 1)));
-                    dst.emplace_back(createMarkerEvent(createInternalMarkerName(markCounter++)));
-                }
+                continue;
             }
-            Voice::Events copy(dst.begin(), dst.end());
-            copy.swap(src);
+            auto &jump = getJump(idx, event, jumps);
+            auto markIt = marks.find(jump.to);
+            if (markIt == marks.end())
+            {
+                std::stringstream ss;
+                ss << "marker not found: \"" << jump.to << "\"";
+                documentModel::compiler::Exception exception(ss.str());
+                exception << documentModel::compiler::ex_sheet_source_info(event);
+                throw exception;
+            }
+            bool jumpForward = markIt->second > idx;
+            ++jump.numVisited;
+            ++jump.numVisitedTotal;
+            if (jump.numPerformed >= jump.numPerform)
+            {                          // the jump has been perfomed
+                jump.numPerformed = 0; // reset the counter for revisiting
+                jump.numVisited = 0;
+                continue;
+            }
+            if (jump.numVisited <= jump.numIgnore)
+            {
+                continue;
+            }
+            if ((jump.numVisitedTotal) > com::SheetNavigationMaxJumps)
+            {
+                std::stringstream ss;
+                ss << "max jump size exceeded = " << com::SheetNavigationMaxJumps << " jumps";
+                documentModel::compiler::Exception exception(ss.str());
+                exception << documentModel::compiler::ex_sheet_source_info(event);
+                throw exception;
+            }
+            if (jumpForward)
+            {
+                // in case of a forwad jump, reset counter imediately
+                jump.numPerformed = 0;
+                jump.numVisited = 0;
+            }
+            else
+            {
+                ++jump.numPerformed;
+            }
+            idx = markIt->second;
         }
+        Voice::Events copy(dst.begin(), dst.end());
+        copy.swap(src);
+    }
+
+    void SheetNavigator::processRepeats(Voice &voice)
+    {
+        if (voice.events.empty())
+        {
+            return;
+        }
+        Voice::Events &src = voice.events;
+        std::list<documentModel::Event> dst;
+        size_t length = src.size();
+        int markCounter = 0;
+        auto markAtBegin = createMarkerEvent(createInternalMarkerName(markCounter++));
+        dst.emplace_front(markAtBegin);
+        int voltaSequenceNr = 1;
+        int lastVoltaNr = 0;
+        auto voltaSeqBegin = dst.end();
+        for (size_t idx = 0; idx < length; ++idx)
+        {
+            const auto &event = src.at(idx);
+            dst.push_back(event);
+            if (event.type != Event::EOB)
+            {
+                continue;
+            }
+            int voltaNr = getVoltaNr(event);
+            if (voltaNr != -1)
+            { // we have a volta
+                if (lastVoltaNr > 1 && voltaNr == 1)
+                { // a new volta sequence begins
+                    ++voltaSequenceNr;
+                    lastVoltaNr = 0;
+                }
+                if (voltaNr == 1)
+                { // remember the position of the first volta
+                    // add a dummy event be one behind the EOB
+                    dst.emplace_back(createMarkerEvent(createInternalMarkerName(0, voltaSequenceNr)));
+                    voltaSeqBegin = --dst.end();
+                }
+                if (voltaNr - lastVoltaNr != 1)
+                {
+                    std::stringstream ss;
+                    ss << "volta sequence is out of order with value '" << voltaNr << "'";
+                    documentModel::compiler::Exception exception(ss.str());
+                    exception << documentModel::compiler::ex_sheet_source_info(event);
+                    throw exception;
+                }
+                if (voltaNr > 1)
+                { // peform a jump from the first volta mark to the current location
+                    dst.emplace_back(createMarkerEvent(createInternalMarkerName(voltaNr, voltaSequenceNr)));
+                    auto voltaJump = createVoltaJumpEvent(voltaNr, voltaSequenceNr);
+                    voltaSeqBegin = dst.insert(voltaSeqBegin, voltaJump);
+                }
+                lastVoltaNr = voltaNr;
+            }
+            // handle the repeats
+            if (event.stringValue == RepeatBegin)
+            {
+                dst.emplace_back(createMarkerEvent(createInternalMarkerName(markCounter++)));
+            }
+            if (event.stringValue == RepeatEnd)
+            {
+                dst.emplace_back(createJumpEvent(createInternalMarkerName(markCounter - 1)));
+            }
+            if (event.stringValue == RepeatBeginAndEnd)
+            {
+                dst.emplace_back(createJumpEvent(createInternalMarkerName(markCounter - 1)));
+                dst.emplace_back(createMarkerEvent(createInternalMarkerName(markCounter++)));
+            }
+        }
+        Voice::Events copy(dst.begin(), dst.end());
+        copy.swap(src);
     }
 }

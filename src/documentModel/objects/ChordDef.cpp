@@ -2,8 +2,8 @@
 #include <algorithm>
 #include <documentModel/objects/Event.h>
 
-namespace documentModel {
-
+namespace documentModel
+{
 
 	int getDegreeValue(int degree)
 	{
@@ -19,51 +19,60 @@ namespace documentModel {
 	{
 		DegreeDef resultDegree;
 		auto degreeValue = eventPitch.pitch;
-		Intervals::const_iterator it = 
-			std::find_if(intervals.begin(), intervals.end(), [degreeValue](const auto &x) 
-			{ 
-				return getDegreeValue(x.degree) == getDegreeValue(degreeValue); 
-			});
-		if (it == intervals.end()) {
+		Intervals::const_iterator it =
+			std::find_if(intervals.begin(), intervals.end(), [degreeValue](const auto &x)
+						 { return getDegreeValue(x.degree) == getDegreeValue(degreeValue); });
+		if (it == intervals.end())
+		{
 			return DegreeDef::invalid();
 		}
 		resultDegree = *it;
-		if (getFlag(degreeValue) == com::degrees::Sharp) {
+		if (getFlag(degreeValue) == com::degrees::Sharp)
+		{
 			resultDegree.value += 1;
 		}
-		if (getFlag(degreeValue) == com::degrees::DoubleSharp) {
+		if (getFlag(degreeValue) == com::degrees::DoubleSharp)
+		{
 			resultDegree.value += 2;
-		}	
-		if (getFlag(degreeValue) == com::degrees::TrippleSharp) {
+		}
+		if (getFlag(degreeValue) == com::degrees::TrippleSharp)
+		{
 			resultDegree.value += 3;
-		}				
-		if (getFlag(degreeValue) == com::degrees::Flat) {
+		}
+		if (getFlag(degreeValue) == com::degrees::Flat)
+		{
 			resultDegree.value -= 1;
 		}
-		if (getFlag(degreeValue) == com::degrees::DoubleFlat) {
+		if (getFlag(degreeValue) == com::degrees::DoubleFlat)
+		{
 			resultDegree.value -= 2;
-		}	
-		if (getFlag(degreeValue) == com::degrees::TrippleFlat) {
+		}
+		if (getFlag(degreeValue) == com::degrees::TrippleFlat)
+		{
 			resultDegree.value -= 3;
-		}				
+		}
 		return resultDegree;
 	}
 
 	bool has7(const ChordDef &def)
 	{
-		return std::any_of(def.intervals.begin(), def.intervals.end(), [](const auto &DegreeDef){ return DegreeDef.degree == com::degrees::VII; });
+		return std::any_of(def.intervals.begin(), def.intervals.end(), [](const auto &DegreeDef)
+						   { return DegreeDef.degree == com::degrees::VII; });
 	}
 	bool has9(const ChordDef &def)
 	{
-		return std::any_of(def.intervals.begin(), def.intervals.end(), [](const auto &DegreeDef){ return DegreeDef.degree == com::degrees::II; });
+		return std::any_of(def.intervals.begin(), def.intervals.end(), [](const auto &DegreeDef)
+						   { return DegreeDef.degree == com::degrees::II; });
 	}
 	bool has11(const ChordDef &def)
 	{
-		return std::any_of(def.intervals.begin(), def.intervals.end(), [](const auto &DegreeDef){ return DegreeDef.degree == com::degrees::IV; });
+		return std::any_of(def.intervals.begin(), def.intervals.end(), [](const auto &DegreeDef)
+						   { return DegreeDef.degree == com::degrees::IV; });
 	}
 	bool has13(const ChordDef &def)
 	{
-		return std::any_of(def.intervals.begin(), def.intervals.end(), [](const auto &DegreeDef){ return DegreeDef.degree == com::degrees::VI; });
+		return std::any_of(def.intervals.begin(), def.intervals.end(), [](const auto &DegreeDef)
+						   { return DegreeDef.degree == com::degrees::VI; });
 	}
 
 }

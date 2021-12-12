@@ -4,18 +4,21 @@
 #include <sstream>
 #include <boost/filesystem.hpp>
 #include <com/werckmeister.hpp>
-namespace documentModel {
-    
-    namespace lua {
+namespace documentModel
+{
+
+    namespace lua
+    {
 
         ALuaScript::ALuaScript(const com::String &path) : _path(path)
         {
-            L= luaL_newstate();
+            L = luaL_newstate();
             luaL_openlibs(L);
             auto dir = boost::filesystem::path(path).parent_path().generic_string();
             addPackagePath(dir);
             addSearchPaths();
-            if (luaL_dofile(L, path.c_str())) {
+            if (luaL_dofile(L, path.c_str()))
+            {
                 error(std::string(lua_tostring(L, -1)));
             }
         }
@@ -23,7 +26,8 @@ namespace documentModel {
         void ALuaScript::addSearchPaths()
         {
             auto paths = com::getWerckmeister().searchPaths();
-            for (const auto &path : paths) {
+            for (const auto &path : paths)
+            {
                 auto genericPath = boost::filesystem::path(path).generic_string();
                 addPackagePath(genericPath);
             }
@@ -41,10 +45,11 @@ namespace documentModel {
             lua_close(L);
         }
 
-        bool ALuaScript::hasFunction(const std::string &name) const 
+        bool ALuaScript::hasFunction(const std::string &name) const
         {
             lua_getglobal(L, name.c_str());
-            if (lua_isfunction(L, -1) == 1) {
+            if (lua_isfunction(L, -1) == 1)
+            {
                 return true;
             }
             return false;
@@ -60,7 +65,8 @@ namespace documentModel {
 
         void ALuaScript::call(std::size_t numArgs, std::size_t numResult)
         {
-            if (lua_pcall(L, numArgs, numResult, 0)) {
+            if (lua_pcall(L, numArgs, numResult, 0))
+            {
                 error(std::string(lua_tostring(L, -1)));
             }
         }

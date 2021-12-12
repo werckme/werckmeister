@@ -22,30 +22,16 @@
 void PlayerProgramOptions::parseProgrammArgs(size_t argc, const char **argv)
 {
     namespace po = boost::program_options;
-    optionsDescription.add_options()
-        (ARG_HELP, "produce help message")
-        (ARG_INPUT, po::value<std::string>(), "input file")
-        (ARG_LIST, "list midi devices")
-        (ARG_LOOP, "activates playback loop")
-        (ARG_WATCH, "checks the input file for changes and recompiles if any")
-        (ARG_UDP, po::value<std::string>(), "activates an udp sender, which sends documentModel info periodically to to given host")
-        (ARG_NOSTDOUT, "disable printing time on stdout")
-        (ARG_INFO, "prints documentModel info as json")
-        (ARG_VERSION, "prints the werckmeister version")
-        (ARG_VERBOSE, "prints informations to the output")
-        (ARG_DEBUG, "prints debug informations to the output")
-        (ARG_BEGIN, po::value<double>(), "start postition in quarter notes. E.g.: 1.2")
-        (ARG_END,   po::value<double>(), "end postition in quarter notes. E.g.: 1.2")
+    optionsDescription.add_options()(ARG_HELP, "produce help message")(ARG_INPUT, po::value<std::string>(), "input file")(ARG_LIST, "list midi devices")(ARG_LOOP, "activates playback loop")(ARG_WATCH, "checks the input file for changes and recompiles if any")(ARG_UDP, po::value<std::string>(), "activates an udp sender, which sends documentModel info periodically to to given host")(ARG_NOSTDOUT, "disable printing time on stdout")(ARG_INFO, "prints documentModel info as json")(ARG_VERSION, "prints the werckmeister version")(ARG_VERBOSE, "prints informations to the output")(ARG_DEBUG, "prints debug informations to the output")(ARG_BEGIN, po::value<double>(), "start postition in quarter notes. E.g.: 1.2")(ARG_END, po::value<double>(), "end postition in quarter notes. E.g.: 1.2")
 #ifdef SIGINT_WORKAROUND
         (ARG_WIN32_SIGINT_WORKAROUND, "uses a ipc workaround for the lack of a proper SIGINT signal handling in windows. \
 (an ipc handler will be created before the player starts. If the handler will receive a ipc message, called by a separate program, the player will be stopped.)")
 
 #endif
-    ;
+        ;
     po::positional_options_description p;
     p.add(ARG_INPUT, -1);
-    po::store(po::command_line_parser((int)argc, argv).
-        options(optionsDescription).positional(p).run(), variables);
+    po::store(po::command_line_parser((int)argc, argv).options(optionsDescription).positional(p).run(), variables);
     po::notify(variables);
 }
 
@@ -54,30 +40,37 @@ bool PlayerProgramOptions::isJsonDocInfoMode() const
     return !!variables.count(ARG_INFO);
 }
 
-bool PlayerProgramOptions::isListDevicesSet() const {
+bool PlayerProgramOptions::isListDevicesSet() const
+{
     return !!variables.count(ARG_LIST);
 }
 
-bool PlayerProgramOptions::isLoopSet() const {
+bool PlayerProgramOptions::isLoopSet() const
+{
     return !!variables.count(ARG_LOOP);
 }
 
-bool PlayerProgramOptions::isWatchSet() const {
+bool PlayerProgramOptions::isWatchSet() const
+{
     return !!variables.count(ARG_WATCH);
 }
 
-bool PlayerProgramOptions::isUdpSet() const {
+bool PlayerProgramOptions::isUdpSet() const
+{
     return !!variables.count(ARG_UDP);
 }
 
-com::String PlayerProgramOptions::getUdpHostname() const {
+com::String PlayerProgramOptions::getUdpHostname() const
+{
     return variables[ARG_UDP].as<std::string>();
 }
 
-bool PlayerProgramOptions::isNoTimePrintSet() const {
+bool PlayerProgramOptions::isNoTimePrintSet() const
+{
     return !!variables.count(ARG_NOSTDOUT);
 }
 
-bool PlayerProgramOptions::isSigintWorkaroundSet() const {
+bool PlayerProgramOptions::isSigintWorkaroundSet() const
+{
     return !!variables.count(ARG_WIN32_SIGINT_WORKAROUND);
 }

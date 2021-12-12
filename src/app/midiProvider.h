@@ -8,17 +8,25 @@
 #include <com/config.hpp>
 #include <com/units.hpp>
 
-namespace app {
-	namespace {
+namespace app
+{
+	namespace
+	{
 		const double MINUTE = 60.0;
 		const double ONE_SECOND_MILLIS = 1000.0;
 	}
-	class MidiProvider  {
+	class MidiProvider
+	{
 	public:
-		enum { NO_TICK = INT_MAX, INVALID_TRACKID = 0 };
+		enum
+		{
+			NO_TICK = INT_MAX,
+			INVALID_TRACKID = 0
+		};
 		typedef long TrackId;
 		typedef long double Millis;
-		struct Event {
+		struct Event
+		{
 			TrackId trackId;
 			com::midi::Event event;
 		};
@@ -31,24 +39,27 @@ namespace app {
 		void midi(com::midi::MidiPtr midi);
 		com::midi::MidiPtr midi() const;
 		void reset();
-		inline com::Ticks millisToTicks(Millis millis) const {
-			return static_cast<com::Ticks>( millis * bpm() * com::PPQ / (MINUTE * ONE_SECOND_MILLIS) );
+		inline com::Ticks millisToTicks(Millis millis) const
+		{
+			return static_cast<com::Ticks>(millis * bpm() * com::PPQ / (MINUTE * ONE_SECOND_MILLIS));
 		}
-		inline Millis ticksToMillis(com::Ticks ticks) const {
+		inline Millis ticksToMillis(com::Ticks ticks) const
+		{
 			return MINUTE * ONE_SECOND_MILLIS * ticks / (bpm() * com::PPQ);
 		}
+
 	protected:
 		inline com::BPM bpm() const { return std::max(bpm_, 1.0); }
-		void bpm(com::BPM bpm) { bpm_ = bpm; }	
+		void bpm(com::BPM bpm) { bpm_ = bpm; }
 		void seek(Millis millis, const TrackOffsets &offsets);
+
 	private:
 		com::midi::MidiPtr midi_ = nullptr;
 		typedef com::midi::EventContainer::ConstIterator EventIt;
 		typedef std::unordered_map<com::midi::TrackPtr, EventIt> TrackEventIts;
 		TrackEventIts trackEventIts_;
-		EventIt* getEventIt(com::midi::TrackPtr trackPtr);
+		EventIt *getEventIt(com::midi::TrackPtr trackPtr);
 		com::BPM bpm_ = com::DefaultTempo;
 	};
 
 }
-

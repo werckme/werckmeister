@@ -18,25 +18,25 @@
 #include "ISheetTemplateRenderer.h"
 #include "ASheetEventRenderer.h"
 
-namespace documentModel {
-    namespace compiler {
+namespace compiler
+{
 
-        class SheetTemplateRenderer : public ISheetTemplateRenderer {
-        public:
-            SheetTemplateRenderer(IContextPtr ctx, ASheetEventRendererPtr renderer);
-            virtual ~SheetTemplateRenderer();
-            void render(Track * sheetTrack);
-            IContextPtr context() const { return this->ctx_; }
-            ASheetEventRendererPtr sheetEventRenderer;
-        private:
-            typedef com::String ContainerKeyType;
-            void setTargetCreateIfNotExists(const Track &track, const Voice &voice);
-            typedef std::unordered_map<com::String, IContext::Id> Container2ContextElementId;
-            ContainerKeyType getKey(const Track&) const;
-            ContainerKeyType getKey(const Voice&) const;
-            IContextPtr ctx_;
-			Container2ContextElementId _contextElementIdMap;
-        };
-    }
+    class SheetTemplateRenderer : public ISheetTemplateRenderer
+    {
+    public:
+        SheetTemplateRenderer(IContextPtr ctx, ASheetEventRendererPtr renderer);
+        virtual ~SheetTemplateRenderer();
+        void render(Track *sheetTrack);
+        IContextPtr context() const { return this->ctx_; }
+        ASheetEventRendererPtr sheetEventRenderer;
+
+    private:
+        typedef com::String ContainerKeyType;
+        void setTargetCreateIfNotExists(const Track &track, const Voice &voice);
+        typedef std::unordered_map<com::String, IContext::Id> Container2ContextElementId;
+        ContainerKeyType getKey(const Track &) const;
+        ContainerKeyType getKey(const Voice &) const;
+        IContextPtr ctx_;
+        Container2ContextElementId _contextElementIdMap;
+    };
 }
-

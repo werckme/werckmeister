@@ -7,12 +7,13 @@
 #include <documentModel/Argument.h>
 #include "Event.h"
 
-namespace documentModel {
+namespace documentModel
+{
 
-	struct Voice : public ASheetObject {
+	struct Voice : public ASheetObject
+	{
 		typedef std::vector<Event> Events;
 		Events events;
 	};
 
 }
-

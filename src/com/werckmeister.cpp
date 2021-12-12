@@ -18,29 +18,29 @@
 #include "compiler/modification/LuaMod.h"
 #include <documentModel/Document.h>
 
-namespace com {
-    
-	
-	Werckmeister & getWerckmeister()
-    {
-        static Werckmeister instance;
-		return instance;
-    }
+namespace com
+{
 
-    const char * Werckmeister::version() const
-    {
-        return SHEET_VERSION;
-    }
+	Werckmeister &getWerckmeister()
+	{
+		static Werckmeister instance;
+		return instance;
+	}
+
+	const char *Werckmeister::version() const
+	{
+		return SHEET_VERSION;
+	}
 
 	midi::MidiPtr Werckmeister::createMidi()
 	{
 		return std::make_shared<midi::Midi>(PPQ);
 	}
 
-
 	Werckmeister::ResourceStream Werckmeister::openResourceImpl(const Path &path)
 	{
-		if (path.empty()) {
+		if (path.empty())
+		{
 			FM_THROW(Exception, "tried to load an empty path");
 		}
 		auto fpath = boost::filesystem::system_complete(path);
@@ -55,7 +55,8 @@ namespace com {
 
 	void Werckmeister::saveResource(const Path &path, const com::String &dataAsStr)
 	{
-		if (path.empty()) {
+		if (path.empty())
+		{
 			FM_THROW(Exception, "tried to save an empty path");
 		}
 		auto fpath = boost::filesystem::system_complete(path);
@@ -80,14 +81,19 @@ namespace com {
 	{
 		documentModel::VoicingStrategyPtr result;
 		const Path *scriptPath = findScriptPathByName(name);
-		if (scriptPath != nullptr) {
+		if (scriptPath != nullptr)
+		{
 			auto anw = std::make_shared<documentModel::compiler::LuaVoicingStrategy>(*scriptPath);
-			try {
+			try
+			{
 				anw->assertCanExecute();
-			} catch (const Exception &ex) {
+			}
+			catch (const Exception &ex)
+			{
 				com::StringStream ss;
-				ss << "'" << *scriptPath << "'" << ": failed to execute script:" << std::endl;
-				ss << "  "  << ex.what();
+				ss << "'" << *scriptPath << "'"
+				   << ": failed to execute script:" << std::endl;
+				ss << "  " << ex.what();
 				FM_THROW(Exception, ss.str());
 			}
 			result = anw;
@@ -105,21 +111,26 @@ namespace com {
 	}
 
 	documentModel::compiler::AModificationPtr Werckmeister::getModification(const com::String &name)
-	{	
+	{
 		const Path *scriptPath = findScriptPathByName(name);
-		if (scriptPath != nullptr) {
+		if (scriptPath != nullptr)
+		{
 			auto anw = std::make_shared<documentModel::compiler::LuaModification>(*scriptPath);
-			try {
+			try
+			{
 				anw->assertCanExecute();
-			} catch (const Exception &ex) {
+			}
+			catch (const Exception &ex)
+			{
 				com::StringStream ss;
-				ss << "'" << *scriptPath << "'" << ": failed to execute script:" << std::endl;
-				ss << "  "  << ex.what();
+				ss << "'" << *scriptPath << "'"
+				   << ": failed to execute script:" << std::endl;
+				ss << "  " << ex.what();
 				FM_THROW(Exception, ss.str());
 			}
 			return anw;
 		}
-		
+
 		auto result = solve<documentModel::compiler::AModification>(name);
 		return result;
 	}
@@ -127,17 +138,19 @@ namespace com {
 	void Werckmeister::registerLuaScript(const Path &path)
 	{
 		auto fpath = boost::filesystem::system_complete(path);
-		if(!boost::filesystem::exists(fpath)) {
+		if (!boost::filesystem::exists(fpath))
+		{
 			FM_THROW(Exception, "file does not exists " + path);
 		}
 		auto name = boost::filesystem::path(path).filename().stem().string();
 		_scriptMap[name] = path;
 	}
 
-	const Path * Werckmeister::findScriptPathByName(const com::String &name) const
+	const Path *Werckmeister::findScriptPathByName(const com::String &name) const
 	{
 		auto it = _scriptMap.find(name);
-		if (it == _scriptMap.end()) {
+		if (it == _scriptMap.end())
+		{
 			return nullptr;
 		}
 		return &it->second;
@@ -146,16 +159,20 @@ namespace com {
 	Path Werckmeister::resolvePath(const Path &strRelPath) const
 	{
 		auto rel = boost::filesystem::path(strRelPath);
-		if (rel.is_absolute()) {
-			if (!boost::filesystem::exists(rel)) {
+		if (rel.is_absolute())
+		{
+			if (!boost::filesystem::exists(rel))
+			{
 				FM_THROW(Exception, com::String("could not resolve " + strRelPath));
 			}
 			return strRelPath;
 		}
-		for (const auto &searchPath : _searchPaths) {
+		for (const auto &searchPath : _searchPaths)
+		{
 			auto base = boost::filesystem::path(searchPath);
 			auto x = boost::filesystem::absolute(rel, base);
-			if (!boost::filesystem::exists(x)) {
+			if (!boost::filesystem::exists(x))
+			{
 				continue;
 			}
 			x = boost::filesystem::canonical(rel, base);
@@ -170,21 +187,22 @@ namespace com {
 		return boost::filesystem::system_complete(relPath).string();
 	}
 
-	const Werckmeister::Paths & Werckmeister::searchPaths() const
+	const Werckmeister::Paths &Werckmeister::searchPaths() const
 	{
 		return _searchPaths;
 	}
 
-	void Werckmeister::addSearchPath(const Path & searchPath)
+	void Werckmeister::addSearchPath(const Path &searchPath)
 	{
 		auto path = boost::filesystem::path(searchPath);
-		if (!boost::filesystem::is_directory(path)) {
+		if (!boost::filesystem::is_directory(path))
+		{
 			path = path.parent_path();
 		}
 		_searchPaths.push_front(path.string());
 	}
 
-	const Werckmeister::CreateContextFunction & Werckmeister::createContextHandler() const
+	const Werckmeister::CreateContextFunction &Werckmeister::createContextHandler() const
 	{
 		return this->_createContextHandler;
 	}
@@ -194,7 +212,7 @@ namespace com {
 		this->_createContextHandler = createContextHandler;
 	}
 
-	bool Werckmeister::fileIsSheet(const Path &path) const 
+	bool Werckmeister::fileIsSheet(const Path &path) const
 	{
 		return boost::filesystem::extension(path) == ".documentModel";
 	}
