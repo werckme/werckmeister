@@ -1,0 +1,44 @@
+using "./chords/default.chords";
+
+tempo: 140;
+device: MyDevice  midi _usePort=0;
+instrumentDef:lead    _onDevice=MyDevice  _ch=0 _pc=0;
+
+[
+type: template;
+name: 4bar;
+instrument: lead;
+{
+   c, d, e, f, | g, a, b, c |
+   c  d  e  f  | g  a  b  c' |
+}
+]
+
+[
+type: template;
+name: 1barPartA;
+instrument: lead;
+{
+	I,,2 V,,, |
+}
+]
+
+[
+type: template;
+name: 1barPartB;
+instrument: lead;
+{
+	V,,,2 I,, |
+}
+]
+
+-- accomp track
+[
+type: accomp;
+{   
+	/template: 4bar 1barPartA/
+    C | C |
+    /template: 4bar 1barPartB/
+    C | C |
+}
+]

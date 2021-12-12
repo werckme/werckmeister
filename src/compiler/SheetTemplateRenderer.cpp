@@ -9,6 +9,8 @@
 #include <com/werckmeister.hpp>
 #include <com/IDefinitionsServer.h>
 #include <compiler/commands/Fill.h>
+#include <unordered_map>
+#include <memory>
 
 #define DEBUGX(x)
 
@@ -32,7 +34,6 @@ namespace compiler
 			const Voice::Events *degrees_;
 			Voice::Events::const_iterator it_;
 			void degrees(const Voice::Events *degrees);
-
 		public:
 			bool templateIsFill = false;
 			com::Ticks ignoreUntilPosition = -1.0;
@@ -89,7 +90,7 @@ namespace compiler
 			}
 			it_ = degrees_->begin();
 		}
-
+		typedef std::unordered_map<com::String, std::shared_ptr<DegreeEventServer>> DegreeEventServers;
 		documentModel::SheetTemplate __getTemplate(SheetTemplateRenderer &sheetTemplateRenderer, const com::String &sheetTemplateName)
 		{
 			auto ctx = sheetTemplateRenderer.context();
@@ -490,8 +491,21 @@ namespace compiler
 		}
 	}
 
+	DegreeEventServer& findDegreeEventServer(DegreeEventServers &inOutServers, const com::String& templateName, const Voice::Events* degrees)
+	{
+		auto it = inOutServers.find(templateName);
+		if (it != inOutServers.end()) 
+		{
+			return *it->second;
+		}
+		auto newServer = std::make_shared<DegreeEventServer>(degrees);
+		inOutServers.insert(std::make_pair(templateName, newServer));
+		return *(newServer.get());
+	}
+
 	void SheetTemplateRenderer::render(Track *sheetTrack)
 	{
+		DegreeEventServers degreeEventServers;
 		auto sheetMeta = ctx_->voiceMetaData(ctx_->chordVoiceId());
 		auto templatesAndItsChords = __collectChordsPerTemplate(*this, sheetTrack);
 		for (auto const &templateAndChords : templatesAndItsChords)
@@ -511,7 +525,7 @@ namespace compiler
 						{
 							continue;
 						}
-						DegreeEventServer eventServer(&(voice.events));
+						DegreeEventServer &eventServer = findDegreeEventServer(degreeEventServers, tmpl.name, &(voice.events));
 						eventServer.templateIsFill = tmpl.isFill;
 						eventServer.ignoreUntilPosition = tmpl.ignoreUnitlPosition;
 						eventServer.onLoop = [this]()
@@ -550,6 +564,7 @@ namespace compiler
 							}
 							if (chord->type == Event::Chord || chord->type == Event::Meta || chord->type == Event::Rest)
 							{
+								// collect these events to be processed during the next iteration
 								chordsPerBar.push_back(chord);
 							}
 							return true;
