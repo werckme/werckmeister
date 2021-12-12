@@ -5,10 +5,13 @@ from compare_midi import compare
 from blessed import Terminal
 import re
 import itertools
-
+from sys import argv
 compiler_path = '../build/sheetc'
 if os.name == 'nt':
-    compiler_path = '../build/Release/sheetc.exe'
+    if "--debug" in argv:
+        compiler_path = '../build/Debug/sheetc.exe'
+    else:
+        compiler_path = '../build/Release/sheetc.exe'
 
 
 def get_test_tags(sheetfile) -> list:
