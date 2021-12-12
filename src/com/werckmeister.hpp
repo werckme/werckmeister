@@ -26,17 +26,17 @@ namespace com
 		typedef std::istream StreamType;
 		typedef std::unique_ptr<StreamType> ResourceStream;
 		typedef std::list<Path> Paths;
-		typedef std::function<documentModel::compiler::AContextPtr()> CreateContextFunction;
+		typedef std::function<compiler::AContextPtr()> CreateContextFunction;
 		/*
             creates a default documentModel. if werk parameter set, it will added to the werk after creation.
         */
 		midi::MidiPtr createMidi();
 		virtual ~Werckmeister();
 		const char *version() const;
-		documentModel::compiler::AModificationPtr getSpielanweisung(const String &name);
-		documentModel::compiler::AModificationPtr getModification(const String &name);
-		documentModel::VoicingStrategyPtr getDefaultVoicingStrategy();
-		documentModel::VoicingStrategyPtr getVoicingStrategy(const String &name);
+		compiler::AModificationPtr getSpielanweisung(const String &name);
+		compiler::AModificationPtr getModification(const String &name);
+		compiler::VoicingStrategyPtr getDefaultVoicingStrategy();
+		compiler::VoicingStrategyPtr getVoicingStrategy(const String &name);
 		void registerLuaScript(const Path &path);
 		const Paths &searchPaths() const;
 		void addSearchPath(const Path &path);

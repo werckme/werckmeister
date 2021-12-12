@@ -4,8 +4,8 @@ namespace conductor
 {
     double ADeclaration::specificity() const
     {
-        if (declaration.operation == ConductionRule::Declaration::OperationFollowUpAdd ||
-            declaration.operation == ConductionRule::Declaration::OperationFollowUpSubstract)
+        if (declaration.operation == documentModel::ConductionRule::Declaration::OperationFollowUpAdd ||
+            declaration.operation == documentModel::ConductionRule::Declaration::OperationFollowUpSubstract)
         {
             return 0.0;
         }
@@ -21,29 +21,29 @@ namespace conductor
                                    const FSetValue &setNoteOnValue,
                                    const FSetValue &setNoteOffValue) const
     {
-        if (declaration.unit == ConductionRule::Declaration::UnitPercent)
+        if (declaration.unit == documentModel::ConductionRule::Declaration::UnitPercent)
         {
             auto percentBaseValue = getPercentBaseValue();
             inputValue = inputValue * percentBaseValue / 100;
         }
-        if (declaration.operation == ConductionRule::Declaration::OperationAdd)
+        if (declaration.operation == documentModel::ConductionRule::Declaration::OperationAdd)
         {
             auto originalValue = getOriginalValue();
             inputValue = originalValue + inputValue;
         }
-        if (declaration.operation == ConductionRule::Declaration::OperationSubstract)
+        if (declaration.operation == documentModel::ConductionRule::Declaration::OperationSubstract)
         {
             auto originalValue = getOriginalValue();
             inputValue = originalValue - inputValue;
         }
-        if (declaration.operation == ConductionRule::Declaration::OperationFollowUpAdd || declaration.operation == ConductionRule::Declaration::OperationFollowUpSubstract)
+        if (declaration.operation == documentModel::ConductionRule::Declaration::OperationFollowUpAdd || declaration.operation == documentModel::ConductionRule::Declaration::OperationFollowUpSubstract)
         {
             auto predecessorValue = getPredecessorValue();
             if (!predecessorValue.has_value())
             {
                 return;
             }
-            inputValue = declaration.operation == ConductionRule::Declaration::OperationFollowUpSubstract
+            inputValue = declaration.operation == documentModel::ConductionRule::Declaration::OperationFollowUpSubstract
                              ? -inputValue
                              : inputValue;
             inputValue = predecessorValue.value() + inputValue;

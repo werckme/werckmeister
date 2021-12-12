@@ -32,14 +32,14 @@ namespace compiler
         for (double t = 0; t < ev.duration; t += static_cast<double>(1.0_N64))
         {
             double x = c * t / d + b;
-            Event pitchBendEvent;
-            pitchBendEvent.type = Event::PitchBend;
+            documentModel::Event pitchBendEvent;
+            pitchBendEvent.type = documentModel::Event::PitchBend;
             pitchBendEvent.pitchBendValue = x;
             pitchBendEvent.offset = t;
             events.push_back(pitchBendEvent);
         }
-        Event finalResetPitchBend;
-        finalResetPitchBend.type = Event::PitchBend;
+        documentModel::Event finalResetPitchBend;
+        finalResetPitchBend.type = documentModel::Event::PitchBend;
         finalResetPitchBend.pitchBendValue = 0.5;
         finalResetPitchBend.offset = ev.duration + 1;
         events.push_back(finalResetPitchBend);

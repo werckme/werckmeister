@@ -32,7 +32,7 @@ namespace
     typedef std::unordered_map<com::String, size_t> Marks;
     void registerMark(size_t eventContainerIndex, const documentModel::Event &event, Marks &marks)
     {
-        auto markCommand = com::getWerckmeister().solve<documentModel::compiler::ACommand>(event.stringValue);
+        auto markCommand = com::getWerckmeister().solve<compiler::ACommand>(event.stringValue);
         markCommand->setArguments(event.metaArgs);
         com::IHasParameter::ParametersByNames &parameters = markCommand->getParameters();
         com::String name = parameters[argumentNames.Mark.Name].value<com::String>();
@@ -45,8 +45,8 @@ namespace
         {
             std::stringstream ss;
             ss << "marker duplicate with \"" << name << "\"";
-            documentModel::compiler::Exception exception(ss.str());
-            exception << documentModel::compiler::ex_sheet_source_info(event);
+            compiler::Exception exception(ss.str());
+            exception << compiler::ex_sheet_source_info(event);
             throw exception;
         }
     }
@@ -57,7 +57,7 @@ namespace
         {
             return it->second;
         }
-        auto jumpCommand = com::getWerckmeister().solve<documentModel::compiler::ACommand>(event.stringValue);
+        auto jumpCommand = com::getWerckmeister().solve<compiler::ACommand>(event.stringValue);
         jumpCommand->setArguments(event.metaArgs);
         com::IHasParameter::ParametersByNames &parameters = jumpCommand->getParameters();
         Jump jump;
@@ -67,8 +67,8 @@ namespace
         {
             std::stringstream ss;
             ss << "max repeat size exceeded = " << com::SheetNavigationMaxJumps << " repeats";
-            documentModel::compiler::Exception exception(ss.str());
-            exception << documentModel::compiler::ex_sheet_source_info(event);
+            compiler::Exception exception(ss.str());
+            exception << compiler::ex_sheet_source_info(event);
             throw exception;
         }
         jump.numPerform = repeatValue + 1;
@@ -157,12 +157,12 @@ namespace
 
 namespace compiler
 {
-    void SheetNavigator::processNavigation(Voice &voice)
+    void SheetNavigator::processNavigation(documentModel::Voice &voice)
     {
         processRepeats(voice);
         processJumps(voice);
     }
-    void SheetNavigator::processJumps(Voice &voice)
+    void SheetNavigator::processJumps(documentModel::Voice &voice)
     {
         if (voice.events.empty())
         {
@@ -170,14 +170,14 @@ namespace compiler
         }
         Jumps jumps;
         Marks marks;
-        Voice::Events &src = voice.events;
+        documentModel::Voice::Events &src = voice.events;
         std::list<documentModel::Event> dst;
         size_t length = src.size();
         // register marks
         for (size_t idx = 0; idx < length; ++idx)
         {
             const auto &event = src.at(idx);
-            if (event.type != Event::Meta || event.stringValue != SHEET_META__MARK)
+            if (event.type != documentModel::Event::Meta || event.stringValue != SHEET_META__MARK)
             {
                 continue;
             }
@@ -187,7 +187,7 @@ namespace compiler
         for (size_t idx = 0; idx < length; ++idx)
         {
             const auto &event = src.at(idx);
-            if (event.type != Event::Meta || event.stringValue != SHEET_META__JUMP)
+            if (event.type != documentModel::Event::Meta || event.stringValue != SHEET_META__JUMP)
             {
                 dst.push_back(event);
                 continue;
@@ -198,8 +198,8 @@ namespace compiler
             {
                 std::stringstream ss;
                 ss << "marker not found: \"" << jump.to << "\"";
-                documentModel::compiler::Exception exception(ss.str());
-                exception << documentModel::compiler::ex_sheet_source_info(event);
+                compiler::Exception exception(ss.str());
+                exception << compiler::ex_sheet_source_info(event);
                 throw exception;
             }
             bool jumpForward = markIt->second > idx;
@@ -219,8 +219,8 @@ namespace compiler
             {
                 std::stringstream ss;
                 ss << "max jump size exceeded = " << com::SheetNavigationMaxJumps << " jumps";
-                documentModel::compiler::Exception exception(ss.str());
-                exception << documentModel::compiler::ex_sheet_source_info(event);
+                compiler::Exception exception(ss.str());
+                exception << compiler::ex_sheet_source_info(event);
                 throw exception;
             }
             if (jumpForward)
@@ -235,17 +235,17 @@ namespace compiler
             }
             idx = markIt->second;
         }
-        Voice::Events copy(dst.begin(), dst.end());
+        documentModel::Voice::Events copy(dst.begin(), dst.end());
         copy.swap(src);
     }
 
-    void SheetNavigator::processRepeats(Voice &voice)
+    void SheetNavigator::processRepeats(documentModel::Voice &voice)
     {
         if (voice.events.empty())
         {
             return;
         }
-        Voice::Events &src = voice.events;
+        documentModel::Voice::Events &src = voice.events;
         std::list<documentModel::Event> dst;
         size_t length = src.size();
         int markCounter = 0;
@@ -258,7 +258,7 @@ namespace compiler
         {
             const auto &event = src.at(idx);
             dst.push_back(event);
-            if (event.type != Event::EOB)
+            if (event.type != documentModel::Event::EOB)
             {
                 continue;
             }
@@ -280,8 +280,8 @@ namespace compiler
                 {
                     std::stringstream ss;
                     ss << "volta sequence is out of order with value '" << voltaNr << "'";
-                    documentModel::compiler::Exception exception(ss.str());
-                    exception << documentModel::compiler::ex_sheet_source_info(event);
+                    compiler::Exception exception(ss.str());
+                    exception << compiler::ex_sheet_source_info(event);
                     throw exception;
                 }
                 if (voltaNr > 1)
@@ -307,7 +307,7 @@ namespace compiler
                 dst.emplace_back(createMarkerEvent(createInternalMarkerName(markCounter++)));
             }
         }
-        Voice::Events copy(dst.begin(), dst.end());
+        documentModel::Voice::Events copy(dst.begin(), dst.end());
         copy.swap(src);
     }
 }

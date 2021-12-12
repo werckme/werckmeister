@@ -14,6 +14,7 @@ namespace compiler
 {
 	namespace
 	{
+		using namespace documentModel;
 		template <int EventType>
 		bool renderEvent(SheetEventRenderer *renderer, const Event *ev)
 		{

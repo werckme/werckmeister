@@ -25,9 +25,9 @@ namespace parser
     {
         typedef com::String::const_iterator Iterator;
         PitchParser();
-        boost::spirit::qi::rule<Iterator, PitchDef(), boost::spirit::ascii::space_type> pitchOrAlias_;
-        boost::spirit::qi::rule<Iterator, AliasPitchDef(), boost::spirit::ascii::space_type> extendedPitch_;
-        boost::spirit::qi::rule<Iterator, AliasPitchDef(), boost::spirit::ascii::space_type> alias_;
-        boost::spirit::qi::rule<Iterator, PitchDef(), boost::spirit::ascii::space_type> pitch_;
+        boost::spirit::qi::rule<Iterator, documentModel::PitchDef(), boost::spirit::ascii::space_type> pitchOrAlias_;
+        boost::spirit::qi::rule<Iterator, documentModel::AliasPitchDef(), boost::spirit::ascii::space_type> extendedPitch_;
+        boost::spirit::qi::rule<Iterator, documentModel::AliasPitchDef(), boost::spirit::ascii::space_type> alias_;
+        boost::spirit::qi::rule<Iterator, documentModel::PitchDef(), boost::spirit::ascii::space_type> pitch_;
     };
 }

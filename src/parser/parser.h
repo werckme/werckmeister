@@ -19,7 +19,7 @@ namespace parser
 	struct ChordDefParser
 	{
 		static const char *ALLOWED_CHORD_SYMBOLS_REGEX;
-		typedef std::vector<ChordDef> ChordDefs;
+		typedef std::vector<documentModel::ChordDef> ChordDefs;
 		ChordDefs parse(com::CharType const *first, com::CharType const *last);
 		ChordDefs parse(const com::String &str)
 		{
@@ -29,7 +29,7 @@ namespace parser
 	};
 	struct PitchmapParser
 	{
-		typedef std::vector<Pitchmap> PitchmapDefs;
+		typedef std::vector<documentModel::Pitchmap> PitchmapDefs;
 		PitchmapDefs parse(com::CharType const *first, com::CharType const *last);
 		PitchmapDefs parse(const com::String &str)
 		{
@@ -41,8 +41,8 @@ namespace parser
 	struct SheetDefParser
 	{
 
-		SheetDef parse(com::CharType const *first, com::CharType const *last, Event::SourceId sourceId = Event::UndefinedSource);
-		SheetDef parse(const com::String &str, Event::SourceId sourceId = Event::UndefinedSource)
+		documentModel::SheetDef parse(com::CharType const *first, com::CharType const *last, documentModel::Event::SourceId sourceId = documentModel::Event::UndefinedSource);
+		documentModel::SheetDef parse(const com::String &str, documentModel::Event::SourceId sourceId = documentModel::Event::UndefinedSource)
 		{
 			com::CharType const *cstr = str.c_str();
 			return parse(cstr, cstr + str.length(), sourceId);
@@ -51,8 +51,8 @@ namespace parser
 
 	struct ConfigParser
 	{
-		SheetDef parse(com::CharType const *first, com::CharType const *last, Event::SourceId sourceId = Event::UndefinedSource);
-		SheetDef parse(const com::String &str, Event::SourceId sourceId = Event::UndefinedSource)
+		documentModel::SheetDef parse(com::CharType const *first, com::CharType const *last, documentModel::Event::SourceId sourceId = documentModel::Event::UndefinedSource);
+		documentModel::SheetDef parse(const com::String &str, documentModel::Event::SourceId sourceId = documentModel::Event::UndefinedSource)
 		{
 			com::CharType const *cstr = str.c_str();
 			return parse(cstr, cstr + str.length(), sourceId);
@@ -61,8 +61,8 @@ namespace parser
 
 	struct ConductionSheetParser
 	{
-		ConductionSheetDef parse(com::CharType const *first, com::CharType const *last, Event::SourceId sourceId = Event::UndefinedSource);
-		ConductionSheetDef parse(const com::String &str, Event::SourceId sourceId = Event::UndefinedSource)
+		documentModel::ConductionSheetDef parse(com::CharType const *first, com::CharType const *last, documentModel::Event::SourceId sourceId = documentModel::Event::UndefinedSource);
+		documentModel::ConductionSheetDef parse(const com::String &str, documentModel::Event::SourceId sourceId = documentModel::Event::UndefinedSource)
 		{
 			com::CharType const *cstr = str.c_str();
 			return parse(cstr, cstr + str.length(), sourceId);
@@ -73,13 +73,13 @@ namespace parser
 	class DocumentParser : public IDocumentParser
 	{
 	public:
-		DocumentParser(DocumentPtr document) : _document(document) {}
+		DocumentParser(documentModel::DocumentPtr document) : _document(document) {}
 		typedef std::vector<com::String> Usings;
-		virtual DocumentPtr parse(const com::String &path);
-		virtual DocumentPtr parseString(const com::String &text);
+		virtual documentModel::DocumentPtr parse(const com::String &path);
+		virtual documentModel::DocumentPtr parseString(const com::String &text);
 		virtual ~DocumentParser() = default;
 
 	private:
-		DocumentPtr _document;
+		documentModel::DocumentPtr _document;
 	};
 }

@@ -8,6 +8,7 @@ namespace compiler
     const com::Ticks Vorschlag::defaultDuration = 1.0_N64;
     void Vorschlag::perform(IContextPtr ctx, Events &events)
     {
+        using namespace documentModel;
         if (events.empty())
         {
             return;

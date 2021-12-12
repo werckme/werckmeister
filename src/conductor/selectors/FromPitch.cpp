@@ -2,7 +2,7 @@
 #include <compiler/context/MidiContext.h>
 namespace conductor
 {
-	bool FromPitch::isMatch(const ConductionSelector::Arguments &arguments, const EventWithMetaInfo &evm) const
+	bool FromPitch::isMatch(const documentModel::ConductionSelector::Arguments &arguments, const EventWithMetaInfo &evm) const
 	{
 		for (const auto &arg : arguments)
 		{

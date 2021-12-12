@@ -4,7 +4,7 @@
 namespace compiler
 {
 
-	SimpleGuitar::OctaveMap SimpleGuitar::createOctaveMap(const ChordDef &def) const
+	SimpleGuitar::OctaveMap SimpleGuitar::createOctaveMap(const documentModel::ChordDef &def) const
 	{
 		if (has7(def) && has9(def) && has11(def) && has13(def))
 		{
@@ -57,7 +57,7 @@ namespace compiler
 		});
 	}
 
-	SimpleGuitar::Pitches SimpleGuitar::get(const Event &chord, const ChordDef &def, const Degrees &degreeIntervals, const TimeInfo &timeInfo)
+	SimpleGuitar::Pitches SimpleGuitar::get(const documentModel::Event &chord, const documentModel::ChordDef &def, const Degrees &degreeIntervals, const TimeInfo &timeInfo)
 	{
 
 		if (degreeIntervals.size() < 3)
@@ -68,7 +68,7 @@ namespace compiler
 		Pitches result;
 		auto chordElements = chord.chordElements();
 		auto root = std::get<0>(chordElements);
-		PitchDef x;
+		documentModel::PitchDef x;
 		auto octaves = createOctaveMap(def);
 		int transpose = 0;
 		if (root > com::notes::D && lowerRange)

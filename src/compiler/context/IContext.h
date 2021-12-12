@@ -80,14 +80,14 @@ namespace compiler
 		virtual void setPan(double val) = 0;
 		virtual void addCue(const com::String &text, com::Ticks absolutePosition) = 0;
 		/////// actual context stuff
-		virtual void renderPitch(const PitchDef &pitch, com::Ticks duration, double velocity, bool tying) = 0;
-		virtual void renderPitch(const PitchDef &pitch, com::Ticks absolutePosition, double velocity, com::Ticks duration) = 0;
+		virtual void renderPitch(const documentModel::PitchDef &pitch, com::Ticks duration, double velocity, bool tying) = 0;
+		virtual void renderPitch(const documentModel::PitchDef &pitch, com::Ticks absolutePosition, double velocity, com::Ticks duration) = 0;
 		/*
 			* value = 0..1, 0.5 is the middle position => no bending
 			*/
 		virtual void renderPitchbend(double value, com::Ticks absolutePosition) = 0;
-		virtual void startEvent(const PitchDef &pitch, com::Ticks absolutePosition, double velocity) = 0;
-		virtual void stopEvent(const PitchDef &pitch, com::Ticks absolutePosition) = 0;
+		virtual void startEvent(const documentModel::PitchDef &pitch, com::Ticks absolutePosition, double velocity) = 0;
+		virtual void stopEvent(const documentModel::PitchDef &pitch, com::Ticks absolutePosition) = 0;
 		/**
 		 * if duration == 0 the last event duration will be used
 		 */

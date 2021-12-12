@@ -26,16 +26,16 @@ namespace compiler
     public:
         SheetTemplateRenderer(IContextPtr ctx, ASheetEventRendererPtr renderer);
         virtual ~SheetTemplateRenderer();
-        void render(Track *sheetTrack);
+        void render(documentModel::Track *sheetTrack);
         IContextPtr context() const { return this->ctx_; }
         ASheetEventRendererPtr sheetEventRenderer;
 
     private:
         typedef com::String ContainerKeyType;
-        void setTargetCreateIfNotExists(const Track &track, const Voice &voice);
+        void setTargetCreateIfNotExists(const documentModel::Track &track, const documentModel::Voice &voice);
         typedef std::unordered_map<com::String, IContext::Id> Container2ContextElementId;
-        ContainerKeyType getKey(const Track &) const;
-        ContainerKeyType getKey(const Voice &) const;
+        ContainerKeyType getKey(const documentModel::Track &) const;
+        ContainerKeyType getKey(const documentModel::Voice &) const;
         IContextPtr ctx_;
         Container2ContextElementId _contextElementIdMap;
     };

@@ -12,13 +12,13 @@
 
 namespace compiler
 {
-	void Compiler::compile(DocumentPtr document)
+	void Compiler::compile(documentModel::DocumentPtr document)
 	{
 		this->compilerVisitorPtr_->beginCompile();
 		this->document_ = document;
 		try
 		{
-			std::list<DocumentConfig> priorisedDocumentConfigs;
+			std::list<documentModel::DocumentConfig> priorisedDocumentConfigs;
 			for (auto &conf : document->sheetDef.documentConfigs)
 			{
 				if (conf.name == SHEET_META__SET_DEVICE)
@@ -28,7 +28,7 @@ namespace compiler
 				}
 				priorisedDocumentConfigs.push_back(conf);
 			}
-			std::vector<DocumentConfig> configs(priorisedDocumentConfigs.begin(), priorisedDocumentConfigs.end());
+			std::vector<documentModel::DocumentConfig> configs(priorisedDocumentConfigs.begin(), priorisedDocumentConfigs.end());
 			sheetEventRenderer()->handleMetaEvents(configs,
 												   [](const auto &x)
 												   {
@@ -101,11 +101,11 @@ namespace compiler
 
 	namespace
 	{
-		void consumeChords(Track *sheetTrack, ASheetEventRenderer *sheetEventRenderer, IContext *ctx)
+		void consumeChords(documentModel::Track *sheetTrack, ASheetEventRenderer *sheetEventRenderer, IContext *ctx)
 		{
 			using namespace com;
 			auto voice = sheetTrack->voices.begin();
-			std::list<Event *> barEvents;
+			std::list<documentModel::Event *> barEvents;
 			ctx->setChordTrackTarget();
 			auto voiceMetaData = ctx->voiceMetaData();
 			// since we process the chord track a second time later, we reset all vital values
@@ -120,7 +120,7 @@ namespace compiler
 			}
 		}
 
-		bool isAccompTrack(const Track &track)
+		bool isAccompTrack(const documentModel::Track &track)
 		{
 			return com::getFirstMetaArgumentForKey(SHEET_META__TRACK_META_KEY_TYPE, track.trackConfigs)
 					   .value == SHEET_META__TRACK_META_VALUE_TYPE_ACCOMP;

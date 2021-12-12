@@ -9,7 +9,7 @@
 namespace parser
 {
 
-	struct DegreeSymbols : boost::spirit::qi::symbols<char, PitchDef::Pitch>
+	struct DegreeSymbols : boost::spirit::qi::symbols<char, documentModel::PitchDef::Pitch>
 	{
 		DegreeSymbols()
 		{
@@ -79,7 +79,7 @@ namespace parser
 		}
 	};
 
-	struct PitchSymbols : boost::spirit::qi::symbols<char, PitchDef::Pitch>
+	struct PitchSymbols : boost::spirit::qi::symbols<char, documentModel::PitchDef::Pitch>
 	{
 		PitchSymbols()
 		{
@@ -87,7 +87,7 @@ namespace parser
 		}
 	};
 
-	struct OctaveSymbols : boost::spirit::qi::symbols<char, PitchDef::Octave>
+	struct OctaveSymbols : boost::spirit::qi::symbols<char, documentModel::PitchDef::Octave>
 	{
 		OctaveSymbols()
 		{

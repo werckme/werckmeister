@@ -16,7 +16,7 @@ namespace compiler
     class IEventLogger : public virtual com::ILogger
     {
     public:
-        virtual void warn(const WriteToStreamF &, const Event &theRelatedEvent) = 0;
+        virtual void warn(const WriteToStreamF &, const documentModel::Event &theRelatedEvent) = 0;
     };
     typedef std::shared_ptr<IEventLogger> IEventLoggerPtr;
 }

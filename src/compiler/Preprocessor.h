@@ -32,9 +32,9 @@ namespace compiler
 		}
 		Preprocessor(const Preprocessor &) = delete;
 		Preprocessor &operator=(const Preprocessor &) = delete;
-		virtual void process(Track &track);
-		virtual void preprocessChordTrack(Track &sheetTrack);
-		virtual void preprocess(DocumentPtr document);
+		virtual void process(documentModel::Track &track);
+		virtual void preprocessChordTrack(documentModel::Track &sheetTrack);
+		virtual void preprocess(documentModel::DocumentPtr document);
 		virtual ~Preprocessor() = default;
 	};
 }

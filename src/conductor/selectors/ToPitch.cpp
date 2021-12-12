@@ -3,7 +3,7 @@
 
 namespace conductor
 {
-	bool ToPitch::isMatch(const ConductionSelector::Arguments &arguments, const EventWithMetaInfo &evm) const
+	bool ToPitch::isMatch(const documentModel::ConductionSelector::Arguments &arguments, const EventWithMetaInfo &evm) const
 	{
 		for (const auto &arg : arguments)
 		{

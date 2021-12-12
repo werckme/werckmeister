@@ -18,7 +18,7 @@ namespace compiler
 	{
 	private:
 		IContextPtr context_;
-		DocumentWPtr document_;
+		documentModel::DocumentWPtr document_;
 		ASheetEventRendererPtr sheetEventRenderer_;
 		ISheetTemplateRendererPtr sheetTemplateRenderer_;
 		ICompilerVisitorPtr compilerVisitorPtr_;
@@ -38,7 +38,7 @@ namespace compiler
 		Compiler(const Compiler &) = delete;
 		Compiler &operator=(const Compiler &) = delete;
 		IContextPtr context() const { return context_; }
-		virtual void compile(DocumentPtr document) override;
+		virtual void compile(documentModel::DocumentPtr document) override;
 		virtual ~Compiler() = default;
 		ASheetEventRendererPtr sheetEventRenderer();
 

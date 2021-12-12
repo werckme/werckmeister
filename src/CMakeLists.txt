@@ -16,9 +16,9 @@ SET (SRC_FETZER_LIB
     com/exception.cpp
     com/AConvertsArgumentsToParameter.cpp
     com/config/configServer.cpp
-    com/lua/ALuaObject.cpp
-    com/lua/ALuaScript.cpp
-    com/lua/ALuaWithParameter.cpp
+    lua/ALuaObject.cpp
+    lua/ALuaScript.cpp
+    lua/ALuaWithParameter.cpp
     com/DefinitionsServer.cpp
     com/tools.cpp
     com/ConsoleLogger.cpp
@@ -112,7 +112,7 @@ SET (SRC_FETZER_LIB
 )
 
 add_definitions( -DGIT_VERSION="${GIT_VERSION}" )
-add_library(documentModel ${SRC_FETZER_LIB})
+add_library(werckmeistercore ${SRC_FETZER_LIB})
 
 ## TESTS
 SET (SRC_FETZER_TESTS
@@ -168,7 +168,7 @@ SET (SRC_SHEET_PLAYER
     PlayerProgramOptions.cpp
 )
 
-SET (SHEET_LIBS ${SHEET_LIBS} app documentModel lua ${Boost_LIBRARIES})
+SET (SHEET_LIBS ${SHEET_LIBS} app werckmeistercore lua ${Boost_LIBRARIES})
 
 if(WIN32)
     SET (SHEET_LIBS ${SHEET_LIBS} Bcrypt.lib)

@@ -92,6 +92,7 @@ namespace parser
 
 	namespace
 	{
+		using namespace documentModel;
 		namespace qi = boost::spirit::qi;
 		namespace ascii = boost::spirit::ascii;
 		///////////////////////////////////////////////////////////////////
@@ -246,7 +247,7 @@ namespace parser
 
 				start %= (documentUsing_ | attr(DocumentUsing())) > *documentConfig_ > *track > boost::spirit::eoi;
 
-				auto onError = boost::bind(&handler::errorHandler<Iterator>, _1, sourceId_);
+				auto onError = boost::bind(&compiler::handler::errorHandler<Iterator>, _1, sourceId_);
 				on_error<fail>(start, onError);
 			}
 
@@ -292,7 +293,7 @@ namespace parser
 
 				Base::start %= (Base::documentUsing_ | attr(DocumentUsing())) > *Base::documentConfig_ > attr(Track()) > boost::spirit::eoi;
 
-				auto onError = boost::bind(&handler::errorHandler<Iterator>, _1, Base::sourceId_);
+				auto onError = boost::bind(&compiler::handler::errorHandler<Iterator>, _1, Base::sourceId_);
 				on_error<fail>(Base::start, onError);
 			}
 		};

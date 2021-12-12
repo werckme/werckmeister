@@ -15,6 +15,7 @@ namespace parser
 
 	namespace
 	{
+		using namespace documentModel;
 		typedef std::function<void(DocumentPtr, const com::String &, Event::SourceId)> ExtHandler;
 		typedef std::set<std::string> Extensions;
 		void useChordDef(DocumentPtr doc, const com::String &path, Event::SourceId);
@@ -108,9 +109,9 @@ namespace parser
 				append(doc, sheetDef);
 				processUsings(doc, sheetDef.documentUsing, {LUA_DEF_EXTENSION, PITCHMAP_DEF_EXTENSION}, path);
 			}
-			catch (Exception &ex)
+			catch (compiler::Exception &ex)
 			{
-				ex << ex_error_source_file(path);
+				ex << compiler::ex_error_source_file(path);
 				throw;
 			}
 		}
@@ -128,9 +129,9 @@ namespace parser
 				com::append(doc->sheetDef.documentConfigs, configDef.documentConfigs);
 				processUsings(doc, configDef.documentUsing, {LUA_DEF_EXTENSION, PITCHMAP_DEF_EXTENSION, CHORD_DEF_EXTENSION, SHEET_TEMPLATE_DEF_EXTENSION}, path);
 			}
-			catch (Exception &ex)
+			catch (compiler::Exception &ex)
 			{
-				ex << ex_error_source_file(path);
+				ex << compiler::ex_error_source_file(path);
 				throw;
 			}
 		}
@@ -148,11 +149,11 @@ namespace parser
 				auto it = exthandlers.find(ext);
 				if (it == exthandlers.end())
 				{
-					FM_THROW(Exception, "unsupported file type: " + x);
+					FM_THROW(compiler::Exception, "unsupported file type: " + x);
 				}
 				if (allowedExtendions.find(ext) == allowedExtendions.end())
 				{
-					FM_THROW(Exception, "document type not allowed: " + x);
+					FM_THROW(compiler::Exception, "document type not allowed: " + x);
 				}
 				com::String absolutePath;
 				wm.addSearchPath(sourcePath);
@@ -186,7 +187,7 @@ namespace parser
 		}
 		catch (com::Exception &ex)
 		{
-			ex << ex_sheet_document(_document);
+			ex << compiler::ex_sheet_document(_document);
 			throw;
 		}
 		wm.addSearchPath(_document->path);
@@ -206,7 +207,7 @@ namespace parser
 		}
 		catch (com::Exception &ex)
 		{
-			ex << ex_sheet_document(_document);
+			ex << compiler::ex_sheet_document(_document);
 			throw;
 		}
 		return _document;

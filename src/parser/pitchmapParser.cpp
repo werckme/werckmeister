@@ -31,7 +31,7 @@ namespace parser
 	{
 		namespace qi = boost::spirit::qi;
 		namespace ascii = boost::spirit::ascii;
-
+		using namespace documentModel;
 		template <typename Iterator>
 		struct _PitchmapParser : qi::grammar<Iterator, Pitchmap(), ascii::space_type>
 		{
@@ -54,7 +54,7 @@ namespace parser
 
 				start %= alias_ > ':' > pitch_;
 
-				auto onError = boost::bind(&handler::errorHandler<Iterator>, _1);
+				auto onError = boost::bind(&compiler::handler::errorHandler<Iterator>, _1);
 				on_error<fail>(start, onError);
 			}
 			qi::rule<Iterator, Pitchmap(), ascii::space_type> start;

@@ -3,7 +3,7 @@
 
 namespace conductor
 {
-    bool FromPosition::isMatch(const ConductionSelector::Arguments &arguments, const EventWithMetaInfo &evm) const
+    bool FromPosition::isMatch(const documentModel::ConductionSelector::Arguments &arguments, const EventWithMetaInfo &evm) const
     {
         const auto &ev = *evm.noteOn;
         if (arguments.empty())

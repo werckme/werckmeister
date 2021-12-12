@@ -17,6 +17,7 @@ namespace compiler
 
 	namespace
 	{
+		using namespace documentModel;
 		struct TemplatesAndItsChords
 		{
 			typedef std::vector<Event *> Chords;

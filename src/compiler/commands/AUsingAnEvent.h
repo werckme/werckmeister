@@ -9,12 +9,12 @@ namespace compiler
     {
     public:
         virtual ~AUsingAnEvent() = default;
-        const Event &event() const
+        const documentModel::Event &event() const
         {
             checkEvent();
             return *_event;
         }
-        void event(const Event &event) { this->_event = &event; }
+        void event(const documentModel::Event &event) { this->_event = &event; }
 
     private:
         void checkEvent() const
@@ -24,6 +24,6 @@ namespace compiler
                 FM_THROW(Exception, "related event == null");
             }
         }
-        const Event *_event = nullptr;
+        const documentModel::Event *_event = nullptr;
     };
 }

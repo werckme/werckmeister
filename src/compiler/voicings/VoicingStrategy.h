@@ -15,9 +15,9 @@ namespace compiler
     class VoicingStrategy : public com::IRegisterable, public com::AConvertsArgumentsToParameter
     {
     public:
-        typedef Event::Pitches Degrees;
+        typedef documentModel::Event::Pitches Degrees;
         typedef Degrees Pitches;
-        virtual Pitches get(const Event &chord, const ChordDef &def, const Degrees &degreeIntervals, const TimeInfo &) = 0;
+        virtual Pitches get(const documentModel::Event &chord, const documentModel::ChordDef &def, const Degrees &degreeIntervals, const TimeInfo &) = 0;
         virtual ~VoicingStrategy() = default;
         com::String name() const { return name_; }
         void name(const com::String &name) { name_ = name; }

@@ -20,8 +20,8 @@ namespace documentModel
 }
 namespace compiler
 {
-	typedef boost::error_info<struct tag_sheet_event, ASheetObjectWithSourceInfo> ex_sheet_source_info;
-	typedef boost::error_info<struct tag_sheet_document, std::shared_ptr<Document>> ex_sheet_document;
+	typedef boost::error_info<struct tag_sheet_event, documentModel::ASheetObjectWithSourceInfo> ex_sheet_source_info;
+	typedef boost::error_info<struct tag_sheet_document, std::shared_ptr<documentModel::Document>> ex_sheet_document;
 	typedef boost::error_info<struct tag_error_source_file, com::String> ex_error_source_file;
 	class Exception : public com::Exception
 	{
@@ -35,11 +35,11 @@ namespace compiler
 		}
 		virtual ~Exception() throw() = default;
 		virtual std::string toString() const override;
-		const ASheetObjectWithSourceInfo *getSourceInfo() const;
+		const documentModel::ASheetObjectWithSourceInfo *getSourceInfo() const;
 		const std::string getSourceFile() const;
 
 	protected:
-		std::ostream &strSheetError(std::ostream &ss, const std::shared_ptr<Document>, const ASheetObjectWithSourceInfo *) const;
+		std::ostream &strSheetError(std::ostream &ss, const std::shared_ptr<documentModel::Document>, const documentModel::ASheetObjectWithSourceInfo *) const;
 	};
 
 	namespace handler
@@ -48,7 +48,7 @@ namespace compiler
 		void errorHandler(const std::string &source,
 						  const std::string &what,
 						  int errorPos,
-						  ASheetObjectWithSourceInfo::SourceId sourceId);
+						  documentModel::ASheetObjectWithSourceInfo::SourceId sourceId);
 
 		template <class Iterator>
 		void errorHandler(const boost::fusion::vector<
@@ -56,7 +56,7 @@ namespace compiler
 							  Iterator,
 							  Iterator,
 							  boost::spirit::info> &args,
-						  ASheetObjectWithSourceInfo::SourceId sourceId)
+							  documentModel::ASheetObjectWithSourceInfo::SourceId sourceId)
 		{
 			using boost::fusion::at_c;
 			auto first = at_c<0>(args);

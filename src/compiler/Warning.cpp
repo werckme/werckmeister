@@ -5,7 +5,7 @@
 
 namespace compiler
 {
-    std::string Warning::toString(std::shared_ptr<Document> document) const
+    std::string Warning::toString(std::shared_ptr<documentModel::Document> document) const
     {
         std::stringstream ss;
         ss << "[WARNING] ";
@@ -13,7 +13,7 @@ namespace compiler
         return ss.str();
     }
 
-    std::string Warning::getSourceFile(std::shared_ptr<Document> document) const
+    std::string Warning::getSourceFile(std::shared_ptr<documentModel::Document> document) const
     {
         return document->findSourcePath(sourceObject.sourceId);
     }

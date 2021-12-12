@@ -20,7 +20,7 @@ namespace conductor
     class ISelector : public com::IRegisterable
     {
     public:
-        virtual bool isMatch(const ConductionSelector::Arguments &, const EventWithMetaInfo &) const = 0;
+        virtual bool isMatch(const documentModel::ConductionSelector::Arguments &, const EventWithMetaInfo &) const = 0;
         virtual ~ISelector() = default;
     };
 }

@@ -10,12 +10,12 @@ namespace lua
     class LuaTimeInfo
     {
     public:
-        LuaTimeInfo(const documentModel::TimeInfo &timeInfo) : timeInfo_(timeInfo)
+        LuaTimeInfo(const compiler::TimeInfo &timeInfo) : timeInfo_(timeInfo)
         {
         }
         void push(lua_State *L);
 
     protected:
-        const documentModel::TimeInfo &timeInfo_;
+        const compiler::TimeInfo &timeInfo_;
     };
 }

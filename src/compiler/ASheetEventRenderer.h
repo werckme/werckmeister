@@ -14,8 +14,8 @@ namespace compiler
     class ASheetEventRenderer
     {
     public:
-        virtual void addEvent(const Event &event) = 0;
-        virtual void handleMetaEvent(const Event &_ev) = 0;
+        virtual void addEvent(const documentModel::Event &event) = 0;
+        virtual void handleMetaEvent(const documentModel::Event &_ev) = 0;
         virtual std::shared_ptr<ASheetEventRenderer> createNewSheetEventRenderer(IContextPtr ctx) = 0;
         template <class TContainer>
         void handleMetaEvents(const TContainer &container,
@@ -29,7 +29,7 @@ namespace compiler
     {
         for (const auto &x : container)
         {
-            const Event &metaEvent = fGetMetaEvent(x);
+            const documentModel::Event &metaEvent = fGetMetaEvent(x);
             try
             {
                 handleMetaEvent(metaEvent);

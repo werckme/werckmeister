@@ -72,18 +72,18 @@ namespace com
 		return boost::filesystem::exists(path);
 	}
 
-	documentModel::VoicingStrategyPtr Werckmeister::getDefaultVoicingStrategy()
+	compiler::VoicingStrategyPtr Werckmeister::getDefaultVoicingStrategy()
 	{
 		return getVoicingStrategy(SHEET_VOICING_STRATEGY_DEFAULT);
 	}
 
-	documentModel::VoicingStrategyPtr Werckmeister::getVoicingStrategy(const com::String &name)
+	compiler::VoicingStrategyPtr Werckmeister::getVoicingStrategy(const com::String &name)
 	{
-		documentModel::VoicingStrategyPtr result;
+		compiler::VoicingStrategyPtr result;
 		const Path *scriptPath = findScriptPathByName(name);
 		if (scriptPath != nullptr)
 		{
-			auto anw = std::make_shared<documentModel::compiler::LuaVoicingStrategy>(*scriptPath);
+			auto anw = std::make_shared<compiler::LuaVoicingStrategy>(*scriptPath);
 			try
 			{
 				anw->assertCanExecute();
@@ -100,22 +100,22 @@ namespace com
 			result->name(name);
 			return result;
 		}
-		result = solve<documentModel::VoicingStrategy>(name);
+		result = solve<compiler::VoicingStrategy>(name);
 		result->name(name);
 		return result;
 	}
 
-	documentModel::compiler::AModificationPtr Werckmeister::getSpielanweisung(const com::String &name)
+	compiler::AModificationPtr Werckmeister::getSpielanweisung(const com::String &name)
 	{
 		return getModification(name);
 	}
 
-	documentModel::compiler::AModificationPtr Werckmeister::getModification(const com::String &name)
+	compiler::AModificationPtr Werckmeister::getModification(const com::String &name)
 	{
 		const Path *scriptPath = findScriptPathByName(name);
 		if (scriptPath != nullptr)
 		{
-			auto anw = std::make_shared<documentModel::compiler::LuaModification>(*scriptPath);
+			auto anw = std::make_shared<compiler::LuaModification>(*scriptPath);
 			try
 			{
 				anw->assertCanExecute();
@@ -131,7 +131,7 @@ namespace com
 			return anw;
 		}
 
-		auto result = solve<documentModel::compiler::AModification>(name);
+		auto result = solve<compiler::AModification>(name);
 		return result;
 	}
 

@@ -19,8 +19,8 @@ namespace conductor
             com::midi::Event *predecessorNoteOn = nullptr;
             com::midi::Event *predecessorNoteOff = nullptr;
         };
-        virtual void setDeclarationData(const ConductionRule::Declaration &) = 0;
-        virtual const ConductionRule::Declaration &getDeclarationData() const = 0;
+        virtual void setDeclarationData(const documentModel::ConductionRule::Declaration &) = 0;
+        virtual const documentModel::ConductionRule::Declaration &getDeclarationData() const = 0;
         virtual void perform(const Events &events) const = 0;
         // priority of a declaration higher values means higher priority
         virtual double specificity() const = 0;

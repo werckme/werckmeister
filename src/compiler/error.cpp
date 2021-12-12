@@ -13,13 +13,13 @@ namespace compiler
 {
 
 	std::ostream &Exception::strSheetError(std::ostream &ss,
-										   const std::shared_ptr<Document> document,
-										   const ASheetObjectWithSourceInfo *sourceInf) const
+										   const std::shared_ptr<documentModel::Document> document,
+										   const documentModel::ASheetObjectWithSourceInfo *sourceInf) const
 	{
 		return com::documentMessage(ss, document, sourceInf->sourceId, sourceInf->sourcePositionBegin, msg_);
 	}
 
-	const ASheetObjectWithSourceInfo *Exception::getSourceInfo() const
+	const documentModel::ASheetObjectWithSourceInfo *Exception::getSourceInfo() const
 	{
 		return boost::get_error_info<ex_sheet_source_info>(*this);
 	}
@@ -27,7 +27,7 @@ namespace compiler
 	const std::string Exception::getSourceFile() const
 	{
 		const auto *sourceInf = boost::get_error_info<ex_sheet_source_info>(*this);
-		const std::shared_ptr<Document> *rawDocumentPtr = boost::get_error_info<ex_sheet_document>(*this);
+		const std::shared_ptr<documentModel::Document> *rawDocumentPtr = boost::get_error_info<ex_sheet_document>(*this);
 		if (!rawDocumentPtr)
 		{
 			return "";
@@ -40,9 +40,9 @@ namespace compiler
 	{
 		std::stringstream ss;
 		const auto *sourceInf = boost::get_error_info<ex_sheet_source_info>(*this);
-		const std::shared_ptr<Document> *rawDocumentPtr = boost::get_error_info<ex_sheet_document>(*this);
+		const std::shared_ptr<documentModel::Document> *rawDocumentPtr = boost::get_error_info<ex_sheet_document>(*this);
 		const com::String *sourceFile = boost::get_error_info<ex_error_source_file>(*this);
-		if (sourceInf && rawDocumentPtr && sourceInf->sourceId != Event::UndefinedSource)
+		if (sourceInf && rawDocumentPtr && sourceInf->sourceId != documentModel::Event::UndefinedSource)
 		{
 			strSheetError(ss, *rawDocumentPtr, sourceInf);
 			return ss.str();
@@ -62,12 +62,12 @@ namespace compiler
 		void errorHandler(const std::string &source,
 						  const std::string &what,
 						  int errorPos,
-						  ASheetObjectWithSourceInfo::SourceId sourceId)
+						  documentModel::ASheetObjectWithSourceInfo::SourceId sourceId)
 		{
 			std::string line;
 			int linePos = 0;
 			std::tie(line, linePos) = com::getLineAndPosition<std::string>(source, errorPos, false);
-			auto sourceInfo = ParserSourceInfo();
+			auto sourceInfo = documentModel::ParserSourceInfo();
 			sourceInfo.sourceId = sourceId;
 			sourceInfo.sourcePositionBegin = errorPos;
 			throw Exception("syntax error") << ex_sheet_source_info(sourceInfo);

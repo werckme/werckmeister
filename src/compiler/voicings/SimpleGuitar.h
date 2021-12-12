@@ -22,8 +22,8 @@ namespace compiler
         typedef std::multimap<Degree, Octave> OctaveMap;
         typedef DirectVoicingStrategy Base;
         virtual ~SimpleGuitar() = default;
-        virtual Pitches get(const Event &chord, const ChordDef &def, const Degrees &degreeIntervals, const TimeInfo &) override;
-        OctaveMap createOctaveMap(const ChordDef &def) const;
+        virtual Pitches get(const documentModel::Event &chord, const documentModel::ChordDef &def, const Degrees &degreeIntervals, const TimeInfo &) override;
+        OctaveMap createOctaveMap(const documentModel::ChordDef &def) const;
         com::IHasParameter::ParametersByNames parameters = {
             FM_PARAMETER_DEFAULT_DEF(argumentNames.SimpleGuitarVoicingStrategy.Range, 0, "higherRange"),
         };

@@ -19,15 +19,15 @@ namespace compiler
         }
         virtual ~SheetEventRenderer() = default;
         IContextPtr context() const { return this->ctx_; }
-        virtual void addEvent(const Event &event);
-        virtual void handleMetaEvent(const Event &_ev);
-        virtual void renderEvent(const Event &_ev);
-        virtual void renderEventPitches(const Event &noteEvent);
-        virtual void renderPitchBendEvent(const Event &pitchBendEvent);
+        virtual void addEvent(const documentModel::Event &event);
+        virtual void handleMetaEvent(const documentModel::Event &_ev);
+        virtual void renderEvent(const documentModel::Event &_ev);
+        virtual void renderEventPitches(const documentModel::Event &noteEvent);
+        virtual void renderPitchBendEvent(const documentModel::Event &pitchBendEvent);
         virtual std::shared_ptr<ASheetEventRenderer> createNewSheetEventRenderer(IContextPtr ctx);
 
     protected:
-        void onWarning(const com::String &message, const Event &event);
+        void onWarning(const com::String &message, const documentModel::Event &event);
 
     private:
         IContextPtr ctx_;

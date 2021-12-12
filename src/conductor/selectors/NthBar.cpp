@@ -3,7 +3,7 @@
 
 namespace conductor
 {
-    bool NthBar::isMatch(const ConductionSelector::Arguments &arguments, const EventWithMetaInfo &evm) const
+    bool NthBar::isMatch(const documentModel::ConductionSelector::Arguments &arguments, const EventWithMetaInfo &evm) const
     {
         for (const auto &argument : arguments)
         {

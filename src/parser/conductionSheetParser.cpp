@@ -67,9 +67,9 @@ namespace parser
 		namespace ascii = boost::spirit::ascii;
 		ExpressionSymbols expressionSymbols_;
 		template <typename Iterator>
-		struct _ConductionParser : PitchParser, qi::grammar<Iterator, ConductionSheetDef(), ascii::space_type>
+		struct _ConductionParser : PitchParser, qi::grammar<Iterator, documentModel::ConductionSheetDef(), ascii::space_type>
 		{
-			_ConductionParser(Iterator begin, ConductionSheetDef::SourceId sourceId = ConductionSheetDef::UndefinedSource) : PitchParser(),
+			_ConductionParser(Iterator begin, documentModel::ConductionSheetDef::SourceId sourceId = documentModel::ConductionSheetDef::UndefinedSource) : PitchParser(),
 																															 _ConductionParser::base_type(start, "conduction"),
 																															 sourceId_(sourceId)
 			{
@@ -85,19 +85,19 @@ namespace parser
 				using qi::lexeme;
 				using qi::lit;
 				using qi::on_error;
-
+				using namespace documentModel;
 				current_pos_.setStartPos(begin);
 				start.name("conduction documentModel");
 				selector_.name("selector");
 				declaration_.name("declaration");
 				numberArgument_ %=
-					double_[at_c<ArTickValue>(_val) = qi::_1] >> attr(PitchDef()) >> attr(com::String());
+					double_[at_c<ArTickValue>(_val) = qi::_1] >> attr(documentModel::PitchDef()) >> attr(com::String());
 
 				pitchArgument_ %=
 					attr(0) >> pitchOrAlias_[at_c<ArPitch>(_val) = qi::_1] >> attr(com::String());
 
 				stringArgument_ %=
-					attr(0) >> attr(PitchDef()) >> +char_("a-zA-Z0-9");
+					attr(0) >> attr(documentModel::PitchDef()) >> +char_("a-zA-Z0-9");
 
 				selector_ %=
 					(current_pos_.current_pos >> attr(sourceId_) >> SHEET_CONDUCTOR_SEL__FROM_POSITION >> attr(SHEET_CONDUCTOR_SEL__FROM_POSITION) >> "(" >> numberArgument_ >> ")") |
@@ -138,13 +138,13 @@ namespace parser
 				start %=
 					current_pos_.current_pos > *rules_ > boost::spirit::eoi;
 
-				auto onError = boost::bind(&handler::errorHandler<Iterator>, _1, sourceId_);
+				auto onError = boost::bind(&compiler::handler::errorHandler<Iterator>, _1, sourceId_);
 				on_error<fail>(start, onError);
 			}
-			ConductionSheetDef::SourceId sourceId_ = ConductionSheetDef::UndefinedSource;
-			qi::rule<Iterator, ConductionSheetDef(), ascii::space_type> start;
-			qi::rule<Iterator, ConductionSelector(), ascii::space_type> selector_;
-			qi::rule<Iterator, ConductionRule(), ascii::space_type> rules_;
+			documentModel::ConductionSheetDef::SourceId sourceId_ = documentModel::ConductionSheetDef::UndefinedSource;
+			qi::rule<Iterator, documentModel::ConductionSheetDef(), ascii::space_type> start;
+			qi::rule<Iterator, documentModel::ConductionSelector(), ascii::space_type> selector_;
+			qi::rule<Iterator, documentModel::ConductionRule(), ascii::space_type> rules_;
 			qi::rule<Iterator, documentModel::ConductionSelector::ArgumentValue(), ascii::space_type> numberArgument_;
 			qi::rule<Iterator, documentModel::ConductionSelector::ArgumentValue(), ascii::space_type> pitchArgument_;
 			qi::rule<Iterator, documentModel::ConductionSelector::ArgumentValue(), ascii::space_type> stringArgument_;
@@ -154,7 +154,7 @@ namespace parser
 			CurrentPos<Iterator> current_pos_;
 		};
 
-		void _parse(const com::String &source, ConductionSheetDef &def, ConductionSheetDef::SourceId sourceId)
+		void _parse(const com::String &source, documentModel::ConductionSheetDef &def, documentModel::ConductionSheetDef::SourceId sourceId)
 		{
 			using boost::spirit::ascii::space;
 			typedef _ConductionParser<com::String::const_iterator> ConductionParserType;
@@ -164,10 +164,10 @@ namespace parser
 		}
 	}
 
-	ConductionSheetDef ConductionSheetParser::parse(com::CharType const *first, com::CharType const *last, ConductionSheetDef::SourceId sourceId)
+	documentModel::ConductionSheetDef ConductionSheetParser::parse(com::CharType const *first, com::CharType const *last, documentModel::ConductionSheetDef::SourceId sourceId)
 	{
 
-		ConductionSheetDef result;
+		documentModel::ConductionSheetDef result;
 		com::String source(first, last);
 		com::removeComments(source.begin(), source.end());
 		_parse(source, result, sourceId);

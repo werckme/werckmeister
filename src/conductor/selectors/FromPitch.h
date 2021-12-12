@@ -17,7 +17,7 @@ namespace conductor
     {
     public:
         FromPitch(com::IDefinitionsServerPtr definitionServer) : _definitionServer(definitionServer) {}
-        virtual bool isMatch(const ConductionSelector::Arguments &, const EventWithMetaInfo &) const override;
+        virtual bool isMatch(const documentModel::ConductionSelector::Arguments &, const EventWithMetaInfo &) const override;
         virtual ~FromPitch() = default;
 
     private:

@@ -13,7 +13,7 @@ namespace compiler
 	class ICompiler
 	{
 	public:
-		virtual void compile(DocumentPtr document) = 0;
+		virtual void compile(documentModel::DocumentPtr document) = 0;
 	};
 	typedef std::shared_ptr<ICompiler> ICompilerPtr;
 }

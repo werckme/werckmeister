@@ -1,6 +1,6 @@
 #include "Lua.h"
 #include <lua.hpp>
-#include <com/lua/ALuaObject.h>
+#include <lua/ALuaObject.h>
 #include <com/tools.h>
 #include <compiler/error.hpp>
 #include <algorithm>
@@ -13,16 +13,16 @@ namespace compiler
         struct LuaChord : lua::ALuaObject
         {
             typedef lua::ALuaObject Base;
-            const ChordDef *chordDef;
-            const Event *chordEvent;
-            LuaChord(const ChordDef *chordDef, const Event *chordEvent)
+            const documentModel::ChordDef *chordDef;
+            const documentModel::Event *chordEvent;
+            LuaChord(const documentModel::ChordDef *chordDef, const documentModel::Event *chordEvent)
                 : chordDef(chordDef), chordEvent(chordEvent)
             {
             }
             void push(lua_State *L);
             void pushChordName(lua_State *L);
             void pushChordDegrees(lua_State *L);
-            void pushChordDegree(lua_State *L, const DegreeDef &DegreeDef);
+            void pushChordDegree(lua_State *L, const documentModel::DegreeDef &DegreeDef);
         };
         void LuaChord::pushChordName(lua_State *L)
         {
@@ -43,7 +43,7 @@ namespace compiler
             lua_pushinteger(L, base);
             lua_settable(L, top);
         }
-        void LuaChord::pushChordDegree(lua_State *L, const DegreeDef &DegreeDef)
+        void LuaChord::pushChordDegree(lua_State *L, const documentModel::DegreeDef &DegreeDef)
         {
             auto top = lua_gettop(L);
             lua_pushinteger(L, DegreeDef.degree);
@@ -63,34 +63,34 @@ namespace compiler
         }
 
         template <int Degree>
-        bool hasDegreeImpl(const ChordDef &def)
+        bool hasDegreeImpl(const documentModel::ChordDef &def)
         {
             return false;
         }
         template <>
-        bool hasDegreeImpl<7>(const ChordDef &def)
+        bool hasDegreeImpl<7>(const documentModel::ChordDef &def)
         {
             return has7(def);
         }
         template <>
-        bool hasDegreeImpl<9>(const ChordDef &def)
+        bool hasDegreeImpl<9>(const documentModel::ChordDef &def)
         {
             return has9(def);
         }
         template <>
-        bool hasDegreeImpl<11>(const ChordDef &def)
+        bool hasDegreeImpl<11>(const documentModel::ChordDef &def)
         {
             return has11(def);
         }
         template <>
-        bool hasDegreeImpl<13>(const ChordDef &def)
+        bool hasDegreeImpl<13>(const documentModel::ChordDef &def)
         {
             return has13(def);
         }
         template <int Degree>
         static int luaHas7(lua_State *L)
         {
-            using namespace documentModel::lua;
+            using namespace lua;
             auto luaChord = ALuaObject::getObject<LuaChord>(L, -1);
             lua_pushboolean(L, hasDegreeImpl<Degree>(*(luaChord->chordDef)));
             return 1;
@@ -123,20 +123,20 @@ namespace compiler
         struct LuaPitches : lua::ALuaObject
         {
             typedef lua::ALuaObject Base;
-            const ChordDef *chordDef;
-            const Event *chordEvent;
+            const documentModel::ChordDef *chordDef;
+            const documentModel::Event *chordEvent;
             const LuaVoicingStrategy::Degrees *degrees;
-            LuaPitches(const ChordDef *chordDef, const Event *chordEvent, const VoicingStrategy::Degrees *degrees)
+            LuaPitches(const documentModel::ChordDef *chordDef, const documentModel::Event *chordEvent, const VoicingStrategy::Degrees *degrees)
                 : chordDef(chordDef), chordEvent(chordEvent), degrees(degrees)
             {
             }
             void push(lua_State *L);
             void pushDegrees(lua_State *L);
-            void pushDegrees(lua_State *L, PitchDef::Pitch root, int degreeValue, const std::vector<PitchDef> &degrees);
-            void pushDegree(lua_State *L, PitchDef::Pitch root, int degreeValue, PitchDef::Octave octave);
+            void pushDegrees(lua_State *L, documentModel::PitchDef::Pitch root, int degreeValue, const std::vector<documentModel::PitchDef> &degrees);
+            void pushDegree(lua_State *L, documentModel::PitchDef::Pitch root, int degreeValue, documentModel::PitchDef::Octave octave);
         };
 
-        void LuaPitches::pushDegree(lua_State *L, PitchDef::Pitch root, int degreeValue, PitchDef::Octave octave)
+        void LuaPitches::pushDegree(lua_State *L, documentModel::PitchDef::Pitch root, int degreeValue, documentModel::PitchDef::Octave octave)
         {
             lua_createtable(L, 2, 0);
             auto top = lua_gettop(L);
@@ -155,6 +155,7 @@ namespace compiler
 
         void LuaPitches::pushDegrees(lua_State *L)
         {
+            using namespace documentModel;
             if (degrees->empty())
             {
                 return;
@@ -178,7 +179,7 @@ namespace compiler
             }
         }
 
-        void LuaPitches::pushDegrees(lua_State *L, PitchDef::Pitch root, int degreeValue, const std::vector<PitchDef> &degrees_)
+        void LuaPitches::pushDegrees(lua_State *L, documentModel::PitchDef::Pitch root, int degreeValue, const std::vector<documentModel::PitchDef> &degrees_)
         {
             auto luaStackMainTable = lua_gettop(L);
             lua_pushinteger(L, degreeValue);
@@ -226,9 +227,9 @@ namespace compiler
         }
     }
 
-    PitchDef LuaVoicingStrategy::popPitch(lua_State *L)
+    documentModel::PitchDef LuaVoicingStrategy::popPitch(lua_State *L)
     {
-        PitchDef result;
+        documentModel::PitchDef result;
         lua_pushstring(L, luaPitches::LuaPitchKeyOctave);
         lua_gettable(L, -2);
         result.octave = lua_tointeger(L, -1);
@@ -261,8 +262,8 @@ namespace compiler
         return result;
     }
 
-    LuaVoicingStrategy::Pitches LuaVoicingStrategy::get(const Event &chord,
-                                                        const ChordDef &def,
+    LuaVoicingStrategy::Pitches LuaVoicingStrategy::get(const documentModel::Event &chord,
+                                                        const documentModel::ChordDef &def,
                                                         const Degrees &degreeIntervals,
                                                         const TimeInfo &t)
     {
@@ -290,6 +291,6 @@ namespace compiler
 
     LuaVoicingStrategy::ParametersByNames &LuaVoicingStrategy::getParameters()
     {
-        return com::lua::ALuaWithParameter::getParameters(L);
+        return lua::ALuaWithParameter::getParameters(L);
     }
 }

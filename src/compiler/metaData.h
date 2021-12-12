@@ -24,10 +24,10 @@ namespace compiler
     };
     struct VoiceMetaData
     {
-        typedef std::set<PitchDef> PitchDefSet;
+        typedef std::set<documentModel::PitchDef> PitchDefSet;
         static const com::Ticks DefaultDuration;
         static const com::Ticks DefaultBarLength;
-        typedef std::map<PitchDef, com::Ticks> WaitForTieBuffer;
+        typedef std::map<documentModel::PitchDef, com::Ticks> WaitForTieBuffer;
         typedef std::list<ASpielanweisungPtr> Spielanweisungen;
         typedef std::list<AModificationPtr> Modifications;
         typedef std::unordered_map<com::String, AModificationPtr> ModificationCache;

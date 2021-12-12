@@ -156,10 +156,10 @@ namespace compiler
 		}
 		meta->waitForTieBuffer.clear();
 	}
-	void AContext::renderPitch(const PitchDef &rawPitch, com::Ticks duration, double velocity, bool tying)
+	void AContext::renderPitch(const documentModel::PitchDef &rawPitch, com::Ticks duration, double velocity, bool tying)
 	{
 		using namespace com;
-		PitchDef pitch = definitionsServer_->resolvePitch(rawPitch);
+		documentModel::PitchDef pitch = definitionsServer_->resolvePitch(rawPitch);
 		auto meta = voiceMetaData();
 		if (tying)
 		{
@@ -184,13 +184,13 @@ namespace compiler
 		renderPitch(pitch, meta->position, velocity, duration);
 	}
 
-	void AContext::startEvent(const PitchDef &pitch, com::Ticks absolutePosition, double velocity)
+	void AContext::startEvent(const documentModel::PitchDef &pitch, com::Ticks absolutePosition, double velocity)
 	{
 		auto meta = voiceMetaData();
 		meta->startedEvents.insert(pitch);
 	}
 
-	void AContext::stopEvent(const PitchDef &pitch, com::Ticks absolutePosition)
+	void AContext::stopEvent(const documentModel::PitchDef &pitch, com::Ticks absolutePosition)
 	{
 		auto meta = voiceMetaData();
 		meta->startedEvents.erase(pitch);

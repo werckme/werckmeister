@@ -13,7 +13,7 @@ namespace compiler
 	class ISheetNavigator
 	{
 	public:
-		virtual void processNavigation(Voice &) = 0;
+		virtual void processNavigation(documentModel::Voice &) = 0;
 	};
-	typedef std::shared_ptr<ISheetNavigator> ISheetNavigatorPtr;
+	typedef std::shared_ptr<compiler::ISheetNavigator> ISheetNavigatorPtr;
 }

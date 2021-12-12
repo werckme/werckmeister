@@ -15,7 +15,7 @@ namespace conductor
     class FromBeat : public ISelector
     {
     public:
-        virtual bool isMatch(const ConductionSelector::Arguments &, const EventWithMetaInfo &) const override;
+        virtual bool isMatch(const documentModel::ConductionSelector::Arguments &, const EventWithMetaInfo &) const override;
         virtual ~FromBeat() = default;
     };
 }

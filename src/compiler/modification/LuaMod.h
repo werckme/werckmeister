@@ -1,10 +1,10 @@
 #pragma once
 
 #include "AModification.h"
-#include <com/lua/ALuaScript.h>
+#include <lua/ALuaScript.h>
 #include <com/common.hpp>
 #include <forward.hpp>
-#include <com/lua/ALuaWithParameter.h>
+#include <lua/ALuaWithParameter.h>
 
 #define LUA_MODIFICATION_FENTRY "perform"
 
@@ -12,7 +12,7 @@ namespace compiler
 {
     class LuaModification : public AModification,
                             public lua::ALuaScript,
-                            public com::lua::ALuaWithParameter
+                            public lua::ALuaWithParameter
     {
     public:
         typedef VoicingStrategy Base;
@@ -27,10 +27,10 @@ namespace compiler
     protected:
         void pushEvents(IContextPtr ctx, const Events &events);
         Events popEvents();
-        void popNoteEvent(Event &event);
-        void popPitchBendEvent(Event &event);
+        void popNoteEvent(documentModel::Event &event);
+        void popPitchBendEvent(documentModel::Event &event);
 
     private:
-        Event::Args args_;
+        documentModel::Event::Args args_;
     };
 }

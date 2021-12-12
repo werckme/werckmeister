@@ -11,7 +11,7 @@ namespace compiler
     class ACommand : public com::IRegisterable, public com::AConvertsArgumentsToParameter
     {
     public:
-        typedef std::vector<Argument> Arguments;
+        typedef std::vector<documentModel::Argument> Arguments;
         virtual ~ACommand() = default;
         virtual void execute(IContextPtr) = 0;
     };

@@ -32,6 +32,7 @@ namespace parser
         using qi::attr;
         using qi::lexeme;
         using qi::lit;
+        using namespace documentModel;
         extendedPitch_.name("extended pitch");
         extendedPitch_ %= "" >> char_("hijklmnopqsuvwxyz") >> repeat(0, 5)[lit("'")[push_back(at_c<0>(_val), '\'')]] >> repeat(0, 5)[lit(",")[push_back(at_c<0>(_val), ',')]];
 

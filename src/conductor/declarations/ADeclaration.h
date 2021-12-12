@@ -10,14 +10,14 @@ namespace conductor
     public:
         virtual void perform(const Events &events) const = 0;
         virtual ~ADeclaration() = default;
-        virtual void setDeclarationData(const ConductionRule::Declaration &val) override { declaration = val; }
-        virtual const ConductionRule::Declaration &getDeclarationData() const override { return declaration; }
+        virtual void setDeclarationData(const documentModel::ConductionRule::Declaration &val) override { declaration = val; }
+        virtual const documentModel::ConductionRule::Declaration &getDeclarationData() const override { return declaration; }
         // priority of a declaration higher values means higher priority
         virtual double specificity() const override;
         virtual void specificity(double val) override { _specificity = val; }
 
     protected:
-        ConductionRule::Declaration declaration;
+        documentModel::ConductionRule::Declaration declaration;
         typedef std::function<double()> FGetValue;
         typedef std::function<std::optional<double>()> FGetOptionalValue;
         typedef std::function<void(com::midi::Event *, double)> FSetValue;

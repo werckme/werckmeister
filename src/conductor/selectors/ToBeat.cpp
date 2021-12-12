@@ -3,7 +3,7 @@
 
 namespace conductor
 {
-	bool ToBeat::isMatch(const ConductionSelector::Arguments &arguments, const EventWithMetaInfo &evm) const
+	bool ToBeat::isMatch(const documentModel::ConductionSelector::Arguments &arguments, const EventWithMetaInfo &evm) const
 	{
 		const auto &ev = *evm.noteOn;
 		for (const auto &argument : arguments)

@@ -16,13 +16,14 @@ namespace compiler
 
 		struct ProcessData
 		{
-			Event lastNoRepeat;
+			documentModel::Event lastNoRepeat;
 			bool hasTimeConsumingEvents;
 			com::Ticks lastDuration;
 		};
 
-		inline Event::Type resolveRepeatType(const Event &lastNoRepeat, const Event &repeat)
+		inline documentModel::Event::Type resolveRepeatType(const documentModel::Event &lastNoRepeat, const documentModel::Event &repeat)
 		{
+			using namespace documentModel;
 			if (lastNoRepeat.isRelativeDegree())
 			{
 				return repeat.type == Event::Repeat ? Event::Degree : Event::TiedDegree;
@@ -30,8 +31,9 @@ namespace compiler
 			return repeat.type == Event::Repeat ? Event::Note : Event::TiedNote;
 		}
 
-		void processEvent(Event &ev, ProcessData &processData)
+		void processEvent(documentModel::Event &ev, ProcessData &processData)
 		{
+			using namespace documentModel;
 			if (!ev.isTimeConsuming())
 			{
 				return;
@@ -70,6 +72,7 @@ namespace compiler
 		template <typename EventIteator>
 		void determineTiedDuration(EventIteator eventIt, EventIteator end)
 		{
+			using namespace documentModel;
 			Event &startEvent = *eventIt;
 			if (startEvent.tiedDurationTotal != Event::NoDuration)
 			{
@@ -105,8 +108,9 @@ namespace compiler
 		}
 	}
 
-	void Preprocessor::process(Track &track)
+	void Preprocessor::process(documentModel::Track &track)
 	{
+		using namespace documentModel;
 		for (auto &voice : track.voices)
 		{
 			if (voice.events.empty())
@@ -155,8 +159,9 @@ namespace compiler
 		}
 	}
 
-	void Preprocessor::preprocessChordTrack(Track &sheetTrack)
+	void Preprocessor::preprocessChordTrack(documentModel::Track &sheetTrack)
 	{
+		using namespace documentModel;
 		using namespace com;
 		auto voice = sheetTrack.voices.begin();
 		auto it = voice->events.begin();
@@ -206,7 +211,7 @@ namespace compiler
 		voice->events.push_back(eob); // then modify source container
 	}
 
-	void Preprocessor::preprocess(DocumentPtr document)
+	void Preprocessor::preprocess(documentModel::DocumentPtr document)
 	{
 
 		for (auto &track : document->sheetDef.tracks)

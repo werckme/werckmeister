@@ -32,11 +32,11 @@ namespace compiler
 					ICompilerVisitorPtr compilerVisitor,
 					com::ILoggerPtr logger);
 
-		struct VoiceMetaData : documentModel::compiler::VoiceMetaData
+		struct VoiceMetaData : compiler::VoiceMetaData
 		{
 			com::Ticks positionOffset = 0;
 		};
-		struct TrackMetaData : documentModel::compiler::TrackMetaData
+		struct TrackMetaData : compiler::TrackMetaData
 		{
 			TrackMetaData();
 			AInstrumentDefPtr instrument;
@@ -44,12 +44,12 @@ namespace compiler
 		com::midi::MidiPtr midiFile() const { return midi_; }
 		virtual TrackId createTrackImpl() override;
 		virtual VoiceId createVoiceImpl() override;
-		virtual void renderPitch(const PitchDef &pitch, com::Ticks absolutePosition, double velocity, com::Ticks duration) override;
+		virtual void renderPitch(const documentModel::PitchDef &pitch, com::Ticks absolutePosition, double velocity, com::Ticks duration) override;
 		virtual void addEvent(const com::midi::Event &ev);
 		virtual void addEvent(const com::midi::Event &ev, TrackId trackId);
 		virtual void renderPitchbend(double value, com::Ticks absolutePosition) override;
-		virtual void startEvent(const PitchDef &pitch, com::Ticks absolutePosition, double velocity) override;
-		virtual void stopEvent(const PitchDef &pitch, com::Ticks absolutePosition) override;
+		virtual void startEvent(const documentModel::PitchDef &pitch, com::Ticks absolutePosition, double velocity) override;
+		virtual void stopEvent(const documentModel::PitchDef &pitch, com::Ticks absolutePosition) override;
 		virtual void selectMidiSound(int bankMsb, int bankLsb, int pc);
 		virtual void defineInstrumentSection(const com::String &uname, std::list<com::String> &sectionInstrumentUNames);
 		virtual void defineMidiInstrument(const com::String &uname, int channel, int bankMsb, int bankLsb, int pc);
@@ -70,7 +70,7 @@ namespace compiler
 		const InstrumentDefs &instrumentDefs() const { return this->instrumentDefs_; }
 		virtual IContextPtr createNewContext() const;
 		virtual void clear() override;
-		static int toMidiPitch(const PitchDef &pitch);
+		static int toMidiPitch(const documentModel::PitchDef &pitch);
 
 	protected:
 		void applyContextInfo(com::midi::Event &ev) const;

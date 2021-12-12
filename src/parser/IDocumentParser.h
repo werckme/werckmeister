@@ -10,7 +10,7 @@ namespace parser
 	class IDocumentParser
 	{
 	public:
-		virtual DocumentPtr parse(const com::String &path) = 0;
+		virtual documentModel::DocumentPtr parse(const com::String &path) = 0;
 	};
 	typedef std::shared_ptr<IDocumentParser> IDocumentParserPtr;
 }

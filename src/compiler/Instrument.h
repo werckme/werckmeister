@@ -24,7 +24,7 @@ namespace compiler
 		VelocityOverride velocityOverride;
 		virtual ~AInstrumentDef() = default;
 		virtual void setToContext(IContext *context) = 0;
-		virtual void renderEvents(SheetEventRenderer *renderer, std::list<Event> &events) = 0;
+		virtual void renderEvents(SheetEventRenderer *renderer, std::list<documentModel::Event> &events) = 0;
 		virtual std::shared_ptr<AInstrumentDef> activeInstrument() = 0;
 
 	protected:
@@ -41,7 +41,7 @@ namespace compiler
 		int pc = 0;
 		virtual ~MidiInstrumentDef() = default;
 		virtual void setToContext(IContext *context) override;
-		virtual void renderEvents(SheetEventRenderer *renderer, std::list<Event> &events) override;
+		virtual void renderEvents(SheetEventRenderer *renderer, std::list<documentModel::Event> &events) override;
 		virtual std::shared_ptr<AInstrumentDef> activeInstrument() override { return shared_from_this(); }
 	};
 
@@ -51,7 +51,7 @@ namespace compiler
 		std::list<com::String> instrumentNames;
 		virtual ~InstrumentSectionDef() = default;
 		virtual void setToContext(IContext *context) override;
-		virtual void renderEvents(SheetEventRenderer *renderer, std::list<Event> &events) override;
+		virtual void renderEvents(SheetEventRenderer *renderer, std::list<documentModel::Event> &events) override;
 		virtual std::shared_ptr<AInstrumentDef> activeInstrument() override { return _currentInstrument.lock(); }
 
 	private:

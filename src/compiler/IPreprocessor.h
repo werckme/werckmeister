@@ -25,7 +25,7 @@ namespace compiler
 		 * set implicit EOB
 		 * processes navigation commands such as mark/jump
 		 */
-		virtual void preprocess(DocumentPtr document) = 0;
+		virtual void preprocess(documentModel::DocumentPtr document) = 0;
 	};
 	typedef std::shared_ptr<IPreprocessor> IPreprocessorPtr;
 }

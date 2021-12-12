@@ -14,9 +14,9 @@ namespace compiler
     struct Warning
     {
         std::string message;
-        ASheetObjectWithSourceInfo sourceObject;
-        std::string toString(std::shared_ptr<Document> doc) const;
-        std::string getSourceFile(std::shared_ptr<Document> doc) const;
+        documentModel::ASheetObjectWithSourceInfo sourceObject;
+        std::string toString(std::shared_ptr<documentModel::Document> doc) const;
+        std::string getSourceFile(std::shared_ptr<documentModel::Document> doc) const;
     };
     typedef std::list<Warning> Warnings;
 }

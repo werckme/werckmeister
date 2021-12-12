@@ -94,7 +94,7 @@ namespace com
 		const documentModel::PitchDef *result = getAlias(pitch.alias);
 		if (result == nullptr)
 		{
-			FM_THROW(documentModel::compiler::Exception, "could not resolve alias: " + pitch.alias);
+			FM_THROW(compiler::Exception, "could not resolve alias: " + pitch.alias);
 		}
 		return *result;
 	}
@@ -115,7 +115,7 @@ namespace com
 				com::String sheetTemplateName = com::getFirstMetaArgumentForKey(SHEET_META__TRACK_META_KEY_NAME, track.trackConfigs).value;
 				if (sheetTemplateName.empty())
 				{
-					FM_THROW(documentModel::compiler::Exception, "missing 'name' for sheetTemplate track");
+					FM_THROW(compiler::Exception, "missing 'name' for sheetTemplate track");
 				}
 				auto sheetTemplate = findSheetTemplate(sheetTemplateName);
 				if (sheetTemplate == nullptr)
@@ -127,7 +127,7 @@ namespace com
 			}
 			catch (const com::Exception &ex)
 			{
-				ex << documentModel::compiler::ex_sheet_source_info(track);
+				ex << compiler::ex_sheet_source_info(track);
 				throw;
 			}
 		}

@@ -34,9 +34,9 @@ namespace parser
 		namespace ascii = boost::spirit::ascii;
 
 		template <typename Iterator>
-		struct _SectionParser : qi::grammar<Iterator, ChordDef(), ascii::space_type>
+		struct _SectionParser : qi::grammar<Iterator, documentModel::ChordDef(), ascii::space_type>
 		{
-			typedef ChordDef::Intervals Intervals;
+			typedef documentModel::ChordDef::Intervals Intervals;
 			_SectionParser() : _SectionParser::base_type(start, "chord def")
 			{
 				using ascii::char_;
@@ -55,16 +55,16 @@ namespace parser
 				intervals %= +(interval);
 				start %= chordName > ':' > intervals;
 
-				auto onError = boost::bind(&handler::errorHandler<Iterator>, _1);
+				auto onError = boost::bind(&compiler::handler::errorHandler<Iterator>, _1);
 				on_error<fail>(start, onError);
 			}
-			qi::rule<Iterator, DegreeDef(), ascii::space_type> interval;
+			qi::rule<Iterator, documentModel::DegreeDef(), ascii::space_type> interval;
 			qi::rule<Iterator, Intervals(), ascii::space_type> intervals;
 			qi::rule<Iterator, com::String(), ascii::space_type> chordName;
-			qi::rule<Iterator, ChordDef(), ascii::space_type> start;
+			qi::rule<Iterator, documentModel::ChordDef(), ascii::space_type> start;
 		};
 
-		void _parse(const com::String &defStr, ChordDef &def)
+		void _parse(const com::String &defStr, documentModel::ChordDef &def)
 		{
 			using boost::spirit::ascii::space;
 			typedef _SectionParser<com::String::const_iterator> ChordParserType;
@@ -83,7 +83,7 @@ namespace parser
 		boost::spirit::lex::tokenize(first, last, chordDefTok);
 		for (const auto &defStr : chordDefTok.chordDefs)
 		{
-			ChordDef def;
+			documentModel::ChordDef def;
 			_parse(defStr, def);
 			result.push_back(def);
 		}

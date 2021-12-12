@@ -15,7 +15,7 @@ namespace compiler
 		midiContext->setInstrument(getThis<MidiInstrumentDef>());
 	}
 
-	void MidiInstrumentDef::renderEvents(SheetEventRenderer *renderer, std::list<Event> &events)
+	void MidiInstrumentDef::renderEvents(SheetEventRenderer *renderer, std::list<documentModel::Event> &events)
 	{
 		auto ctx_ = renderer->context();
 		auto meta = ctx_->voiceMetaData();
@@ -66,7 +66,7 @@ namespace compiler
 		midiContext->setInstrument(getThis<InstrumentSectionDef>());
 	}
 
-	void InstrumentSectionDef::renderEvents(SheetEventRenderer *renderer, std::list<Event> &events)
+	void InstrumentSectionDef::renderEvents(SheetEventRenderer *renderer, std::list<documentModel::Event> &events)
 	{
 		auto ctx_ = renderer->context();
 		VoiceMetaData voiceMetaCopy = *ctx_->voiceMetaData();
@@ -78,7 +78,7 @@ namespace compiler
 				FM_THROW(Exception, "section instrument not found: " + uname);
 			}
 			_currentInstrument = instrumentDef;
-			std::list<Event> copy = events; // we like it original here
+			std::list<documentModel::Event> copy = events; // we like it original here
 			auto contextMetaPtr = ctx_->voiceMetaData();
 			*contextMetaPtr = voiceMetaCopy;
 			instrumentDef->renderEvents(renderer, copy);

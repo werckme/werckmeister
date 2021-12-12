@@ -56,7 +56,7 @@ namespace compiler
 	{
 	}
 
-	int MidiContext::toMidiPitch(const PitchDef &pitch)
+	int MidiContext::toMidiPitch(const documentModel::PitchDef &pitch)
 	{
 		auto value = MidiSchluesselCOffset + pitch.pitch + (pitch.octave * com::NotesPerOctave);
 		if (value < 0 || value > 127)
@@ -72,7 +72,7 @@ namespace compiler
 		return std::min(127, std::max(0, result));
 	}
 
-	void MidiContext::renderPitch(const PitchDef &pitch, com::Ticks absolutePosition, double velocity, com::Ticks duration)
+	void MidiContext::renderPitch(const documentModel::PitchDef &pitch, com::Ticks absolutePosition, double velocity, com::Ticks duration)
 	{
 		assertMidi(midi_);
 		auto voiceConfig = voiceMetaData<MidiContext::VoiceMetaData>();
@@ -100,7 +100,7 @@ namespace compiler
 		ev.contextInformation.expression = meta->expression;
 	}
 
-	void MidiContext::startEvent(const PitchDef &pitch, com::Ticks absolutePosition, double velocity)
+	void MidiContext::startEvent(const documentModel::PitchDef &pitch, com::Ticks absolutePosition, double velocity)
 	{
 		Base::startEvent(pitch, absolutePosition, velocity);
 		assertMidi(midi_);
@@ -119,7 +119,7 @@ namespace compiler
 		addEvent(event);
 	}
 
-	void MidiContext::stopEvent(const PitchDef &pitch, com::Ticks absolutePosition)
+	void MidiContext::stopEvent(const documentModel::PitchDef &pitch, com::Ticks absolutePosition)
 	{
 		Base::stopEvent(pitch, absolutePosition);
 		assertMidi(midi_);
@@ -471,7 +471,7 @@ namespace compiler
 	IContextPtr MidiContext::createNewContext() const
 	{
 		auto midiFile = std::make_shared<com::midi::Midi>(com::PPQ);
-		auto midiContext = std::make_shared<documentModel::compiler::MidiContext>(
+		auto midiContext = std::make_shared<compiler::MidiContext>(
 			midiFile,
 			definitionsServer_,
 			_compilerVisitor,

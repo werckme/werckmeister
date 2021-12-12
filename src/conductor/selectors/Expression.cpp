@@ -4,7 +4,7 @@
 
 namespace conductor
 {
-    bool Expression::isMatch(const ConductionSelector::Arguments &arguments, const EventWithMetaInfo &evm) const
+    bool Expression::isMatch(const documentModel::ConductionSelector::Arguments &arguments, const EventWithMetaInfo &evm) const
     {
         const auto &ev = *evm.noteOn;
         for (const auto &argument : arguments)

@@ -116,14 +116,14 @@ namespace compiler
 		virtual void setVolume(double volume, com::Ticks relativePosition = 0);
 		virtual void setPan(double val);
 		/////// actual context stuff
-		virtual void renderPitch(const PitchDef &pitch, com::Ticks duration, double velocity, bool tying);
-		virtual void renderPitch(const PitchDef &pitch, com::Ticks absolutePosition, double velocity, com::Ticks duration) = 0;
+		virtual void renderPitch(const documentModel::PitchDef &pitch, com::Ticks duration, double velocity, bool tying);
+		virtual void renderPitch(const documentModel::PitchDef &pitch, com::Ticks absolutePosition, double velocity, com::Ticks duration) = 0;
 		/*
 			* value = 0..1, 0.5 is the middle position => no bending
 			*/
 		virtual void renderPitchbend(double value, com::Ticks absolutePosition) = 0;
-		virtual void startEvent(const PitchDef &pitch, com::Ticks absolutePosition, double velocity);
-		virtual void stopEvent(const PitchDef &pitch, com::Ticks absolutePosition);
+		virtual void startEvent(const documentModel::PitchDef &pitch, com::Ticks absolutePosition, double velocity);
+		virtual void stopEvent(const documentModel::PitchDef &pitch, com::Ticks absolutePosition);
 		/**
 		 * sends note off to all pitches where its tie process wasn't completed yet
 		 */

@@ -13,7 +13,7 @@ namespace compiler
         Vorschlag() = default;
         virtual ~Vorschlag() = default;
         virtual void perform(IContextPtr ctx, Events &events) override;
-        Event vorschlagNote;
+        documentModel::Event vorschlagNote;
         com::IHasParameter::ParametersByNames parameters = {};
         virtual ParametersByNames &getParameters() { return this->parameters; }
     };

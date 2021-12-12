@@ -8,10 +8,10 @@ namespace compiler
 	class SheetNavigator : public ISheetNavigator
 	{
 	public:
-		virtual void processNavigation(Voice &) override;
+		virtual void processNavigation(documentModel::Voice &) override;
 
 	private:
-		void processJumps(Voice &);
-		void processRepeats(Voice &);
+		void processJumps(documentModel::Voice &);
+		void processRepeats(documentModel::Voice &);
 	};
 }

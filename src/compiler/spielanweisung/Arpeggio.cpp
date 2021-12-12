@@ -20,7 +20,7 @@ namespace compiler
 		{
 			return;
 		}
-		std::vector<PitchDef> pitchesCopy(pitches.begin(), pitches.end());
+		std::vector<documentModel::PitchDef> pitchesCopy(pitches.begin(), pitches.end());
 
 		std::sort(pitchesCopy.begin(), pitchesCopy.end(), [this](const auto &a, const auto &b)
 				  {
@@ -35,7 +35,7 @@ namespace compiler
 		int noteNumber = 0;
 		for (const auto &pitch : pitchesCopy)
 		{
-			Event arpNote = ev;
+			documentModel::Event arpNote = ev;
 			arpNote.pitches.clear();
 			arpNote.pitches.push_back(pitch);
 			arpNote.duration = arpduration;
