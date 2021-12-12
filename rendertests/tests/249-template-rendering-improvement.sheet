@@ -1,7 +1,7 @@
 using "./chords/default.chords";
 
 tempo: 140;
-device: MyDevice  midi _usePort=0;
+device: MyDevice  midi _usePort=5;
 instrumentDef:lead    _onDevice=MyDevice  _ch=0 _pc=0;
 
 [

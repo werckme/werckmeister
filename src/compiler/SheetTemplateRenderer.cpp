@@ -28,7 +28,19 @@ namespace compiler
 			Templates templates;
 			com::Ticks offset = 0;
 			double tempoFactor = 1;
+			bool containsTrack(const com::String &trackName) const;
 		};
+		bool TemplatesAndItsChords::containsTrack(const com::String &trackName) const
+		{
+			for(const auto &tmpl : templates) 
+			{
+				if(tmpl.name == trackName) 
+				{
+					return true;
+				} 
+			}
+			return false;
+		}
 		class DegreeEventServer
 		{
 			const Voice::Events *degrees_;
@@ -508,6 +520,7 @@ namespace compiler
 		DegreeEventServers degreeEventServers;
 		auto sheetMeta = ctx_->voiceMetaData(ctx_->chordVoiceId());
 		auto templatesAndItsChords = __collectChordsPerTemplate(*this, sheetTrack);
+		const TemplatesAndItsChords *previousTemplateAndChords = nullptr;
 		for (auto const &templateAndChords : templatesAndItsChords)
 		{
 			if (templateAndChords.chords.empty())
@@ -516,6 +529,8 @@ namespace compiler
 			}
 			for (const auto &tmpl : templateAndChords.templates)
 			{
+				bool templateWasUsedPreviously = previousTemplateAndChords != nullptr && previousTemplateAndChords->containsTrack(tmpl.name);
+				bool isStartTemplateFromBegin = tmpl.isFill || !templateWasUsedPreviously;
 				const auto &sheetTemplateTracks = tmpl.tracks;
 				for (const auto &track : sheetTemplateTracks)
 				{
@@ -525,8 +540,12 @@ namespace compiler
 						{
 							continue;
 						}
-						DegreeEventServer &eventServer = findDegreeEventServer(degreeEventServers, tmpl.name, &(voice.events));
+						auto templateDegreeServerId = std::to_string((long)(&voice));
+						DegreeEventServer &eventServer = findDegreeEventServer(degreeEventServers, templateDegreeServerId, &(voice.events));
 						eventServer.templateIsFill = tmpl.isFill;
+						if (isStartTemplateFromBegin) {
+							eventServer.seek(0);
+						}
 						eventServer.ignoreUntilPosition = tmpl.ignoreUnitlPosition;
 						eventServer.onLoop = [this]()
 						{
@@ -600,6 +619,7 @@ namespace compiler
 					}
 				}
 			}
+			previousTemplateAndChords = &templateAndChords;
 		}
 	}
 }
