@@ -5,22 +5,25 @@ void SheetPlayerProgram::onSheetChanged()
 {
     _logger->babble(WMLogLambda(log << "documentModel document changed"));
     auto ticksStopped = _midiPlayerPtr->stop();
-    _programOptions->setResumeAtPosition(ticksStopped / com::PPQ );
+    _programOptions->setResumeAtPosition(ticksStopped / com::PPQ);
     documentWasChanged = true;
     _logger->babble(WMLogLambda(log << "resume at tick: " << ticksStopped));
 }
 
 int SheetPlayerProgram::execute()
 {
-    if (_programOptions->isListDevicesSet()) {
+    if (_programOptions->isListDevicesSet())
+    {
         _midiPlayerPtr->listDevices(std::cout);
         return 0;
     }
     int result = Base::execute();
-    if (result != 0) {
+    if (result != 0)
+    {
         return result;
     }
-    if (documentWasChanged) {
+    if (documentWasChanged)
+    {
         return RetCodeRestart;
     }
     return 0;

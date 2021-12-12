@@ -5,13 +5,14 @@
 #include "ASheetObjectWithSourceInfo.h"
 #include <documentModel/Argument.h>
 
-namespace documentModel {
+namespace documentModel
+{
 
-	struct TrackConfig : public ASheetObjectWithSourceInfo {
+	struct TrackConfig : public ASheetObjectWithSourceInfo
+	{
 		typedef std::vector<documentModel::Argument> Args;
 		com::String name;
 		Args args;
 	};
 
 }
-

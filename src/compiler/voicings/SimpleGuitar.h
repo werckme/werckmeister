@@ -3,7 +3,8 @@
 #include "DirectVoicingStrategy.h"
 #include <map>
 #include <compiler/argumentNames.h>
-namespace documentModel {
+namespace compiler
+{
 
     /**
      * A naive voicing implementation which approaches the chord voicing on a guitar:
@@ -13,19 +14,19 @@ namespace documentModel {
 	 * I IV VII II V: 11
 	 * I IV VII III VI: 13    
      */
-    class SimpleGuitar : public DirectVoicingStrategy {
+    class SimpleGuitar : public DirectVoicingStrategy
+    {
     public:
         typedef com::Pitch Degree;
         typedef int Octave;
-        typedef std::multimap<Degree, Octave> OctaveMap; 
-		typedef DirectVoicingStrategy Base;
+        typedef std::multimap<Degree, Octave> OctaveMap;
+        typedef DirectVoicingStrategy Base;
         virtual ~SimpleGuitar() = default;
-		virtual Pitches get(const Event &chord, const ChordDef &def, const Degrees &degreeIntervals, const TimeInfo&) override;
-        OctaveMap createOctaveMap(const ChordDef &def) const;
+        virtual Pitches get(const documentModel::Event &chord, const documentModel::ChordDef &def, const Degrees &degreeIntervals, const TimeInfo &) override;
+        OctaveMap createOctaveMap(const documentModel::ChordDef &def) const;
         com::IHasParameter::ParametersByNames parameters = {
-            FM_PARAMETER_DEFAULT_DEF	(argumentNames.SimpleGuitarVoicingStrategy.Range, 	    0,  "higherRange"),
+            FM_PARAMETER_DEFAULT_DEF(argumentNames.SimpleGuitarVoicingStrategy.Range, 0, "higherRange"),
         };
-        virtual ParametersByNames & getParameters() { return this->parameters; }        
+        virtual ParametersByNames &getParameters() { return this->parameters; }
     };
 }
-

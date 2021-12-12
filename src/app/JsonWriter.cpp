@@ -2,15 +2,17 @@
 #include <iostream>
 #include <documentModel/Document.h>
 
-namespace {
-    rapidjson::Document documentInfosToJSONDoc(documentModel::DocumentPtr sheetDoc, com::Ticks duration, const documentModel::Warnings &warnings)
+namespace
+{
+    rapidjson::Document documentInfosToJSONDoc(documentModel::DocumentPtr sheetDoc, com::Ticks duration, const compiler::Warnings &warnings)
     {
         rapidjson::Document doc;
         doc.SetObject();
         rapidjson::Value array(rapidjson::kArrayType);
         rapidjson::Value warningsArray(rapidjson::kArrayType);
         rapidjson::Value durationValue((double)duration);
-        for (const auto &source : sheetDoc->sources.left) {
+        for (const auto &source : sheetDoc->sources.left)
+        {
             rapidjson::Value object(rapidjson::kObjectType);
             rapidjson::Value sourceId(source.first);
             object.AddMember("sourceId", sourceId, doc.GetAllocator());
@@ -18,8 +20,9 @@ namespace {
             path.SetString(rapidjson::StringRef(source.second.c_str()));
             object.AddMember("path", path, doc.GetAllocator());
             array.PushBack(object, doc.GetAllocator());
-	    }
-        for (const auto &warning : warnings) {
+        }
+        for (const auto &warning : warnings)
+        {
             rapidjson::Value object(rapidjson::kObjectType);
             rapidjson::Value message;
             rapidjson::Value path;
@@ -40,7 +43,8 @@ namespace {
     }
 }
 
-namespace app {
+namespace app
+{
 
     void JsonWriter::initOutputStream()
     {
@@ -54,10 +58,12 @@ namespace app {
 
     void JsonWriter::write(documentModel::DocumentPtr document)
     {
-        if (_programOptions->isJsonModeSet()) {
+        if (_programOptions->isJsonModeSet())
+        {
             writeDocumentToJson(document);
         }
-        if (_programOptions->isJsonDocInfoMode()) {
+        if (_programOptions->isJsonDocInfoMode())
+        {
             writeValidationJson(document);
         }
     }
@@ -78,18 +84,19 @@ namespace app {
         exceptionToJSON(ostream(), ex);
     }
 
-    documentModel::compiler::IWarningsCollectionPtr JsonWriter::getWarnings()
+    compiler::IWarningsCollectionPtr JsonWriter::getWarnings()
     {
-        auto waningsCollection = std::dynamic_pointer_cast<documentModel::compiler::IWarningsCollection>(_logger);
+        auto waningsCollection = std::dynamic_pointer_cast<compiler::IWarningsCollection>(_logger);
         return waningsCollection;
     }
 
     void JsonWriter::writeValidationJson(documentModel::DocumentPtr document)
     {
-        documentModel::Warnings __warnings;
-        const documentModel::Warnings *warnings = &__warnings;
+        compiler::Warnings __warnings;
+        const compiler::Warnings *warnings = &__warnings;
         auto waningsCollection = getWarnings();
-        if (waningsCollection) {
+        if (waningsCollection)
+        {
             warnings = &(waningsCollection->warnings());
         }
         rapidjson::Document doc = documentInfosToJSONDoc(document, _midifile->duration(), *warnings);
@@ -97,22 +104,22 @@ namespace app {
     }
     void JsonWriter::writeDocumentToJson(documentModel::DocumentPtr document)
     {
-        ostream() 
-        << "{" 
-        << "\"midi\": ";
+        ostream()
+            << "{"
+            << "\"midi\": ";
         docToJson(ostream(), document);
         ostream() << ", \"eventInfos\": ";
         eventInfosToJson(ostream(), document);
-        ostream() << "}" 
-        << std::endl
-        ;
+        ostream() << "}"
+                  << std::endl;
     }
-    void JsonWriter::docToJson(std::ostream& os, documentModel::DocumentPtr document)
+    void JsonWriter::docToJson(std::ostream &os, documentModel::DocumentPtr document)
     {
-        documentModel::Warnings __warnings;
-        const documentModel::Warnings *warnings = &__warnings;
+        compiler::Warnings __warnings;
+        const compiler::Warnings *warnings = &__warnings;
         auto waningsCollection = getWarnings();
-        if (waningsCollection) {
+        if (waningsCollection)
+        {
             warnings = &(waningsCollection->warnings());
         }
         rapidjson::Document doc = documentInfosToJSONDoc(document, _midifile->duration(), *warnings);
@@ -127,19 +134,22 @@ namespace app {
     void JsonWriter::eventInfosToJson(std::ostream &os, documentModel::DocumentPtr document)
     {
         os << "[" << std::endl;
-        
+
         bool first = true;
-        for (const auto &timelineEntry : _timeline->intervalContainer()) {
+        for (const auto &timelineEntry : _timeline->intervalContainer())
+        {
             app::EventInfos eventInfos;
             com::Ticks eventsBeginTime = timelineEntry.first.lower() / (double)com::PPQ;
             eventInfos.reserve(timelineEntry.second.size());
-            for (const auto &x : timelineEntry.second) {
+            for (const auto &x : timelineEntry.second)
+            {
                 eventInfos.push_back(x);
             }
-            if (!first) {
+            if (!first)
+            {
                 os << ", ";
             }
-            eventInfoToJSON(os, eventsBeginTime, 0, eventInfos, true); 
+            eventInfoToJSON(os, eventsBeginTime, 0, eventInfos, true);
             first = false;
         }
         os << "]";

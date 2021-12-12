@@ -6,18 +6,13 @@
 #include <locale>
 #include <com/exception.hpp>
 
-namespace documentModel {
+namespace documentModel
+{
 
-	namespace {
+	namespace
+	{
 		const std::unordered_map<wchar_t, int> _name2pitch = {
-			 { FM_CHAR('c'), com::notes::C }
-			,{ FM_CHAR('d'), com::notes::D }
-			,{ FM_CHAR('e'), com::notes::E }
-			,{ FM_CHAR('f'), com::notes::F }
-			,{ FM_CHAR('g'), com::notes::G }
-			,{ FM_CHAR('a'), com::notes::A }
-			,{ FM_CHAR('b'), com::notes::B }
-		};
+			{FM_CHAR('c'), com::notes::C}, {FM_CHAR('d'), com::notes::D}, {FM_CHAR('e'), com::notes::E}, {FM_CHAR('f'), com::notes::F}, {FM_CHAR('g'), com::notes::G}, {FM_CHAR('a'), com::notes::A}, {FM_CHAR('b'), com::notes::B}};
 	}
 
 	/*
@@ -31,73 +26,105 @@ namespace documentModel {
 	{
 		PitchDef::Pitch pitch = 0;
 		auto nameLower = stringValue;
-		if (nameLower.length() == 0) {
+		if (nameLower.length() == 0)
+		{
 			FM_THROW(com::Exception, "empty chord");
 		}
 		boost::algorithm::to_lower(nameLower);
 		com::String::const_iterator it = nameLower.begin();
 		auto pitchIt = _name2pitch.find(*it);
-		if (pitchIt == _name2pitch.end()) {
+		if (pitchIt == _name2pitch.end())
+		{
 			FM_THROW(com::Exception, "ivalid chord: " + stringValue);
 		}
 		pitch = pitchIt->second;
 		++it;
 		// check for sharp or flat
-		if (nameLower.length() >= 2) {
-			if (*(it) == FM_CHAR('#')) {
+		if (nameLower.length() >= 2)
+		{
+			if (*(it) == FM_CHAR('#'))
+			{
 				pitch += 1;
 				it += 1;
 			}
-			else if (*(it) == FM_CHAR('b')) {
+			else if (*(it) == FM_CHAR('b'))
+			{
 				pitch -= 1;
 				it += 1;
 			}
 		}
 		auto idxOptionsStart = it - nameLower.begin();
-		return std::make_tuple(pitch, Options(stringValue.begin() + idxOptionsStart,  stringValue.end()));
+		return std::make_tuple(pitch, Options(stringValue.begin() + idxOptionsStart, stringValue.end()));
 	}
 
-	com::String Event::chordDefName() const 
+	com::String Event::chordDefName() const
 	{
 		std::locale loc;
 		auto elements = chordElements();
 		com::String::const_iterator it = stringValue.begin();
-		if (std::isupper(*it, loc)) {
+		if (std::isupper(*it, loc))
+		{
 			return FM_STRING("X") + std::get<1>(elements);
 		}
-		else {
+		else
+		{
 			FM_THROW(com::Exception, "lowercase chords are not allowed: " + stringValue);
 		}
 	}
 
-	com::String Event::toString() const 
+	com::String Event::toString() const
 	{
 		com::StringStream ss;
 		switch (type)
 		{
-			case Rest: ss << "Rest"; break;
-			case Degree: ss << "Degree"; break; 
-			case TiedDegree: ss << "TiedDegree"; break;
-			case Note: ss << "Note"; break;
-			case TiedNote: ss << "TiedNote"; break;
-			case Chord: ss << "Chord"; break;
-			case EOB: ss << "EOB"; break; 
-			case Meta: ss << "Meta"; break;
-			case Expression: ss << "Expression"; break;
-			case Unknown: 
-			default:	ss << "Unknown"; break;
+		case Rest:
+			ss << "Rest";
+			break;
+		case Degree:
+			ss << "Degree";
+			break;
+		case TiedDegree:
+			ss << "TiedDegree";
+			break;
+		case Note:
+			ss << "Note";
+			break;
+		case TiedNote:
+			ss << "TiedNote";
+			break;
+		case Chord:
+			ss << "Chord";
+			break;
+		case EOB:
+			ss << "EOB";
+			break;
+		case Meta:
+			ss << "Meta";
+			break;
+		case Expression:
+			ss << "Expression";
+			break;
+		case Unknown:
+		default:
+			ss << "Unknown";
+			break;
 		}
 		ss << "(" << duration << ")";
 		return ss.str();
 	}
 
-	void Event::isTied(bool val) {
-		if (type!=Note && type!=Degree && type != TiedNote && type != TiedDegree) {
+	void Event::isTied(bool val)
+	{
+		if (type != Note && type != Degree && type != TiedNote && type != TiedDegree)
+		{
 			throw std::runtime_error("set isTied property failed: event is not a note nor a degree type");
 		}
-		if (val) {
+		if (val)
+		{
 			type = isAbsoluteNote() ? TiedNote : TiedDegree;
-		} else {
+		}
+		else
+		{
 			type = isAbsoluteNote() ? Note : Degree;
 		}
 	}

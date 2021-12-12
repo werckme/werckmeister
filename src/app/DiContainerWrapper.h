@@ -1,9 +1,9 @@
 #pragma once
 
-
 #include <vector>
 
-namespace app {
+namespace app
+{
     /**
      * Boost.DI has several examples for "Bind multiple bindings", but none of them 
      * shows how to create multiple bindingy dynamically. I've tried several approaches, to get this to work.
@@ -16,7 +16,8 @@ namespace app {
      *  
      **/
     template <typename T>
-    struct DiContainerWrapper {
+    struct DiContainerWrapper
+    {
         typedef std::vector<T> Container;
         Container container;
     };

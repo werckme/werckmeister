@@ -1,8 +1,8 @@
 #pragma once
 
-
-namespace documentModel {
-    class ASheetObject {
+namespace documentModel
+{
+    class ASheetObject
+    {
     };
 }
-

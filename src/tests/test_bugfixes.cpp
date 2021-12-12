@@ -11,6 +11,8 @@
 #include "testhelper.h"
 #include <com/tools.h>
 
+using namespace parser;
+
 BOOST_AUTO_TEST_CASE(issue_9_As_und_Es_werden_nicht_erkannt)
 {
 	using namespace com;
@@ -23,12 +25,12 @@ type: documentModel;\n\
 }\n\
 ] \n\
 ");
-	documentModel::compiler::SheetDefParser parser;
+	SheetDefParser parser;
 	auto defs = parser.parse(text);
 	BOOST_CHECK(defs.tracks.size() == 1);
 	BOOST_CHECK(defs.tracks[0].voices.size() == 1);
 	BOOST_CHECK(defs.tracks[0].voices[0].events.size() == 6);
-	
+
 	const auto &chords = defs.tracks[0].voices.begin()->events;
 
 	BOOST_CHECK(checkChord(chords[0], FM_STRING("Ab")));
@@ -37,7 +39,6 @@ type: documentModel;\n\
 	BOOST_CHECK(checkChord(chords[3], FM_STRING("Eb7")));
 	BOOST_CHECK(checkChord(chords[4], FM_STRING("Gb")));
 	BOOST_CHECK(checkChord(chords[5], FM_STRING("Gb7")));
-
 
 	auto chordelements = chords[0].chordElements();
 	BOOST_CHECK(std::get<0>(chordelements) == com::notes::AS);
@@ -68,7 +69,6 @@ type: documentModel;\n\
 	BOOST_CHECK(std::get<0>(chordelements) == com::notes::GES);
 	BOOST_CHECK(std::get<1>(chordelements) == FM_STRING("7"));
 	BOOST_CHECK(chords[5].chordDefName() == FM_STRING("X7"));
-
 }
 
 BOOST_AUTO_TEST_CASE(issue_87_asus_chords_will_not_be_recognized)
@@ -83,17 +83,16 @@ type: documentModel;\n\
 }\n\
 ] \n\
 ");
-	documentModel::compiler::SheetDefParser parser;
+	SheetDefParser parser;
 	auto defs = parser.parse(text);
 	BOOST_CHECK(defs.tracks.size() == 1);
 	BOOST_CHECK(defs.tracks[0].voices.size() == 1);
 	BOOST_CHECK(defs.tracks[0].voices[0].events.size() == 2);
-	
+
 	const auto &chords = defs.tracks[0].voices.begin()->events;
 
 	BOOST_CHECK(checkChord(chords[0], FM_STRING("Bsus2")));
 	BOOST_CHECK(checkChord(chords[1], FM_STRING("Asus2")));
-
 
 	auto chordelements = chords[0].chordElements();
 	BOOST_CHECK(std::get<0>(chordelements) == com::notes::B);
@@ -104,10 +103,7 @@ type: documentModel;\n\
 	BOOST_CHECK(std::get<0>(chordelements) == com::notes::A);
 	BOOST_CHECK(std::get<1>(chordelements) == FM_STRING("sus2"));
 	BOOST_CHECK(chords[1].chordDefName() == FM_STRING("Xsus2"));
-
-
 }
-
 
 BOOST_AUTO_TEST_CASE(issue_100_mod_gt_1_in_instrument_config_fails)
 {
@@ -119,11 +115,10 @@ BOOST_AUTO_TEST_CASE(issue_100_mod_gt_1_in_instrument_config_fails)
 ;
 	*/
 	std::vector<documentModel::Argument> args = {
-		makeArg("organ"), 
-		makeArg("mod"), makeArg("staccato"), 
+		makeArg("organ"),
+		makeArg("mod"), makeArg("staccato"),
 		makeArg("mod"), makeArg("swing"),
-		makeArg("volume"), makeArg("63")
-	};
+		makeArg("volume"), makeArg("63")};
 	std::vector<com::String> keywords = {"mod", "volume"};
 	auto keywordsAndValues = com::mapArgumentsByKeywords(args, keywords);
 	BOOST_CHECK(keywordsAndValues.size() == 4);
@@ -144,5 +139,4 @@ BOOST_AUTO_TEST_CASE(issue_100_mod_gt_1_in_instrument_config_fails)
 	argsIt = keywordsAndValues.equal_range("volume").first;
 	it = argsIt->second.begin();
 	BOOST_CHECK((*it++).value == "63");
-
 }

@@ -22,48 +22,60 @@ typedef app::BoostTimer TimerImpl;
 typedef app::os::MMTimer TimerImpl;
 #endif
 
-
-namespace app {
-    class MidiPlayer : public ADocumentWriter {
+namespace app
+{
+    class MidiPlayer : public ADocumentWriter
+    {
     public:
         typedef DiContainerWrapper<IPlayerLoopVisitorPtr> LoopVisitors;
         typedef MidiplayerClient<MidiBackendContainer, app::MidiProvider, TimerImpl> MidiplayerImpl;
-        enum State { Stopped, Playing };
+        enum State
+        {
+            Stopped,
+            Playing
+        };
+
     private:
-        IPlayerProgramOptionsPtr   _programOptions;
-        com::midi::MidiPtr          _midifile;
-        LoopVisitors               _loopVisitors;
-        com::ILoggerPtr             _logger;
+        IPlayerProgramOptionsPtr _programOptions;
+        com::midi::MidiPtr _midifile;
+        LoopVisitors _loopVisitors;
+        com::ILoggerPtr _logger;
+
     public:
         MidiPlayer(
-            ICompilerProgramOptionsPtr  programOptions, 
-            com::midi::MidiPtr           midiFile,
-            LoopVisitors                loopVisitors,
-            com::ILoggerPtr              logger) 
+            ICompilerProgramOptionsPtr programOptions,
+            com::midi::MidiPtr midiFile,
+            LoopVisitors loopVisitors,
+            com::ILoggerPtr logger)
             : ADocumentWriter(logger),
               _programOptions(std::dynamic_pointer_cast<IPlayerProgramOptions>(programOptions)),
-              _midifile      (midiFile),
-              _loopVisitors  (loopVisitors),
-              _logger        (logger)
+              _midifile(midiFile),
+              _loopVisitors(loopVisitors),
+              _logger(logger)
         {
             initMidiBackends();
         }
-        void listDevices(std::ostream&);
+        void listDevices(std::ostream &);
         virtual void write(documentModel::DocumentPtr document);
         virtual ~MidiPlayer() = default;
         /**
          * stops the player and returns the last tick position
          */
         virtual com::Ticks stop();
+
     private:
-        enum VisitorMessage { Loop, BeginLoop, EndLoop };
+        enum VisitorMessage
+        {
+            Loop,
+            BeginLoop,
+            EndLoop
+        };
         void initMidiBackends();
         void initFluidSynthInstances();
         void execLoop(documentModel::DocumentPtr document);
         void visitVisitors(VisitorMessage, com::Ticks elapsed);
         State state = Stopped;
         MidiplayerImpl _midiPlayerImpl;
-        
     };
     typedef std::shared_ptr<MidiPlayer> MidiPlayerPtr;
 }

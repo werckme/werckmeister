@@ -7,28 +7,25 @@
 #include <functional>
 #include <compiler/error.hpp>
 
-namespace documentModel
+namespace conductor
 {
-    namespace conductor
+    class IDeclaration : public com::IRegisterable
     {
-        class IDeclaration : public com::IRegisterable
+    public:
+        struct Events
         {
-        public:
-            struct Events {
-                com::midi::Event* noteOn = nullptr;
-                com::midi::Event* noteOff = nullptr;
-                com::midi::Event* predecessorNoteOn = nullptr;
-                com::midi::Event* predecessorNoteOff = nullptr;
-            };
-            virtual void setDeclarationData(const ConductionRule::Declaration&) = 0;
-            virtual const ConductionRule::Declaration& getDeclarationData() const = 0;
-            virtual void perform(const Events &events) const = 0;
-            // priority of a declaration higher values means higher priority
-            virtual double specificity() const = 0;
-            virtual void specificity(double val) = 0;
-            virtual ~IDeclaration() = default;
+            com::midi::Event *noteOn = nullptr;
+            com::midi::Event *noteOff = nullptr;
+            com::midi::Event *predecessorNoteOn = nullptr;
+            com::midi::Event *predecessorNoteOff = nullptr;
         };
-        typedef std::shared_ptr<IDeclaration> IDeclarationPtr;
-    }
+        virtual void setDeclarationData(const documentModel::ConductionRule::Declaration &) = 0;
+        virtual const documentModel::ConductionRule::Declaration &getDeclarationData() const = 0;
+        virtual void perform(const Events &events) const = 0;
+        // priority of a declaration higher values means higher priority
+        virtual double specificity() const = 0;
+        virtual void specificity(double val) = 0;
+        virtual ~IDeclaration() = default;
+    };
+    typedef std::shared_ptr<IDeclaration> IDeclarationPtr;
 }
-

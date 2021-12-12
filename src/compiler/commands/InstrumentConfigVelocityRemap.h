@@ -4,27 +4,25 @@
 #include <compiler/argumentNames.h>
 #include <compiler/commands/ACanSpecifyInstrument.h>
 
-namespace documentModel {
-    namespace compiler {
-        class InstrumentConfigVelocityRemap : public ACommand, public ACanSpecifyInstrument
-        {
-        public:
-            static const com::String VelocityNotSet;
-            com::IHasParameter::ParametersByNames parameters = {
-                FM_PARAMETER_DEFAULT_DEF(argumentNames.VelocityRemap.PPPPP, 	0, VelocityNotSet),
-                FM_PARAMETER_DEFAULT_DEF(argumentNames.VelocityRemap.PPPP , 	1, VelocityNotSet),
-                FM_PARAMETER_DEFAULT_DEF(argumentNames.VelocityRemap.PPP  , 	2, VelocityNotSet),
-                FM_PARAMETER_DEFAULT_DEF(argumentNames.VelocityRemap.PP   , 	3, VelocityNotSet),
-                FM_PARAMETER_DEFAULT_DEF(argumentNames.VelocityRemap.P    , 	4, VelocityNotSet),
-                FM_PARAMETER_DEFAULT_DEF(argumentNames.VelocityRemap.F    , 	5, VelocityNotSet),
-                FM_PARAMETER_DEFAULT_DEF(argumentNames.VelocityRemap.FF   , 	6, VelocityNotSet),
-                FM_PARAMETER_DEFAULT_DEF(argumentNames.VelocityRemap.FFF  , 	7, VelocityNotSet),
-                FM_PARAMETER_DEFAULT_DEF(argumentNames.VelocityRemap.FFFF , 	8, VelocityNotSet),
-                FM_PARAMETER_DEFAULT_DEF(argumentNames.VelocityRemap.FFFFF, 	9, VelocityNotSet),
-            };
-            virtual ParametersByNames & getParameters() { return this->parameters; }
-            virtual void execute(IContextPtr );
+namespace compiler
+{
+    class InstrumentConfigVelocityRemap : public ACommand, public ACanSpecifyInstrument
+    {
+    public:
+        static const com::String VelocityNotSet;
+        com::IHasParameter::ParametersByNames parameters = {
+            FM_PARAMETER_DEFAULT_DEF(argumentNames.VelocityRemap.PPPPP, 0, VelocityNotSet),
+            FM_PARAMETER_DEFAULT_DEF(argumentNames.VelocityRemap.PPPP, 1, VelocityNotSet),
+            FM_PARAMETER_DEFAULT_DEF(argumentNames.VelocityRemap.PPP, 2, VelocityNotSet),
+            FM_PARAMETER_DEFAULT_DEF(argumentNames.VelocityRemap.PP, 3, VelocityNotSet),
+            FM_PARAMETER_DEFAULT_DEF(argumentNames.VelocityRemap.P, 4, VelocityNotSet),
+            FM_PARAMETER_DEFAULT_DEF(argumentNames.VelocityRemap.F, 5, VelocityNotSet),
+            FM_PARAMETER_DEFAULT_DEF(argumentNames.VelocityRemap.FF, 6, VelocityNotSet),
+            FM_PARAMETER_DEFAULT_DEF(argumentNames.VelocityRemap.FFF, 7, VelocityNotSet),
+            FM_PARAMETER_DEFAULT_DEF(argumentNames.VelocityRemap.FFFF, 8, VelocityNotSet),
+            FM_PARAMETER_DEFAULT_DEF(argumentNames.VelocityRemap.FFFFF, 9, VelocityNotSet),
         };
-    }
+        virtual ParametersByNames &getParameters() { return this->parameters; }
+        virtual void execute(IContextPtr);
+    };
 }
-

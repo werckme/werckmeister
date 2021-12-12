@@ -8,22 +8,26 @@
 #include <sys/types.h>
 #include <unistd.h>
 
-namespace {
+namespace
+{
 	void signalCallback(int signal);
-	char * readlink_malloc (const char *filename)
+	char *readlink_malloc(const char *filename)
 	{
 		// http://www.delorie.com/gnu/docs/glibc/libc_279.html
 		int size = 255;
 		char *buffer = NULL;
 
-		while (1) {
-			buffer = (char *) realloc (buffer, size);
-			int nchars = readlink (filename, buffer, size);
-			if (nchars < 0) {
-				free (buffer);
+		while (1)
+		{
+			buffer = (char *)realloc(buffer, size);
+			int nchars = readlink(filename, buffer, size);
+			if (nchars < 0)
+			{
+				free(buffer);
 				return NULL;
 			}
-			if (nchars < size) {
+			if (nchars < size)
+			{
 				buffer[nchars] = 0;
 				return buffer;
 			}
@@ -32,9 +36,12 @@ namespace {
 	}
 }
 
-namespace app {
-	namespace os {
-		namespace {
+namespace app
+{
+	namespace os
+	{
+		namespace
+		{
 			SigtermHandler sigtermHandler_;
 		}
 		void setSigtermHandler(const SigtermHandler &sigtermHandler)
@@ -50,7 +57,8 @@ namespace app {
 		com::String getExecutablePath()
 		{
 			char *bff = readlink_malloc("/proc/self/exe");
-			if (bff == NULL) {
+			if (bff == NULL)
+			{
 				throw std::runtime_error("Error resolving symlink /proc/self/exe.");
 			}
 			auto result = boost::filesystem::path(bff);
@@ -64,7 +72,8 @@ namespace app {
 	}
 }
 
-namespace {
+namespace
+{
 	void signalCallback(int signal)
 	{
 		app::os::sigtermHandler_();

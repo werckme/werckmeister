@@ -8,9 +8,11 @@
 #include "objects/ASheetObject.h"
 #include "objects/DocumentConfig.h"
 
-namespace documentModel {
+namespace documentModel
+{
 
-	struct SheetDef {
+	struct SheetDef
+	{
 		typedef std::vector<Track> Tracks;
 		typedef std::vector<DocumentConfig> DocumentConfigs;
 		DocumentUsing documentUsing;
@@ -19,4 +21,3 @@ namespace documentModel {
 	};
 
 }
-

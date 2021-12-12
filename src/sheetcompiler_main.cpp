@@ -30,22 +30,25 @@
 #include <crtdbg.h>
 #endif
 
-typedef documentModel::compiler::EventLogger<com::ConsoleLogger> 			   LoggerImpl;
-typedef documentModel::compiler::LoggerAndWarningsCollector<com::ConsoleLogger> WarningsCollectorWithConsoleLogger;
+typedef compiler::EventLogger<com::ConsoleLogger> LoggerImpl;
+typedef compiler::LoggerAndWarningsCollector<com::ConsoleLogger> WarningsCollectorWithConsoleLogger;
 
-
-int main(int argc, const char** argv)
+int main(int argc, const char **argv)
 {
 #ifdef _MSC_VER
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 #endif
 	namespace di = boost::di;
-	namespace cp = documentModel::compiler;
-	namespace co = documentModel::conductor;
+	namespace cp = compiler;
+	namespace co = conductor;
+	namespace pr = parser;
 	auto programOptionsPtr = std::make_shared<CompilerProgramOptions>();
-	try {
+	try
+	{
 		programOptionsPtr->parseProgrammArgs(argc, argv);
-	} catch (const std::exception &ex) {
+	}
+	catch (const std::exception &ex)
+	{
 		std::cerr << ex.what() << std::endl;
 		return 1;
 	}
@@ -55,41 +58,31 @@ int main(int argc, const char** argv)
 	bool needTimeline = programOptionsPtr->isJsonModeSet();
 	bool writeWarningsToConsole = !(programOptionsPtr->isJsonModeSet() || programOptionsPtr->isJsonDocInfoMode());
 	auto injector = di::make_injector(
-		  di::bind<cp::IDocumentParser>()			.to<cp::DocumentParser>()			.in(di::singleton)
-		, di::bind<cp::ICompiler>()					.to<cp::Compiler>()					.in(di::singleton)
-		, di::bind<cp::ISheetTemplateRenderer>()	.to<cp::SheetTemplateRenderer>()	.in(di::singleton)
-		, di::bind<cp::ASheetEventRenderer>()		.to<cp::SheetEventRenderer>()		.in(di::singleton)
-		, di::bind<cp::IContext>()					.to<cp::MidiContext>()				.in(di::singleton)
-		, di::bind<cp::IPreprocessor>()				.to<cp::Preprocessor>()				.in(di::singleton)
-		, di::bind<cp::ISheetNavigator>()			.to<cp::SheetNavigator>()			.in(di::singleton)
-		, di::bind<co::IConductionsPerformer>()		.to<co::ConductionsPerformer>()		.in(di::singleton)
-		, di::bind<ICompilerProgramOptions>()		.to(programOptionsPtr)
-		, di::bind<documentModel::Document>()				.to(documentPtr)
-		, di::bind<com::IDefinitionsServer>()		.to<com::DefinitionsServer>()		.in(di::singleton)
-		, di::bind<com::midi::Midi>()				.to(midiFile)
-		, di::bind<app::IDocumentWriter>()		.to([&](const auto &injector) -> app::IDocumentWriterPtr
-		{
-			if (programOptionsPtr->isJsonModeSet() || programOptionsPtr->isJsonDocInfoMode()) {
-				return injector.template create<std::shared_ptr<app::JsonWriter>>();
-			}
-			return injector.template create<std::shared_ptr<app::MidiFileWriter>>();
-		})
-		, di::bind<cp::ICompilerVisitor>()			.to([&](const auto &injector) -> cp::ICompilerVisitorPtr 
-		{
-			if (needTimeline) {
-				return injector.template create< std::shared_ptr<app::DefaultTimeline>>();
-			}
-			return injector.template create< std::shared_ptr<cp::DefaultCompilerVisitor>>();
-		})
-		, di::bind<com::ILogger>()					.to([&](const auto &injector) -> com::ILoggerPtr 
-		{
-			if (writeWarningsToConsole) {
-				return injector.template create<std::shared_ptr<LoggerImpl>>();
-			}
-			return injector.template create<std::shared_ptr<WarningsCollectorWithConsoleLogger>>();
-		})
-	);
-	documentModel::FactoryConfig factory(injector);
+		di::bind<pr::IDocumentParser>().to<pr::DocumentParser>().in(di::singleton), di::bind<cp::ICompiler>().to<cp::Compiler>().in(di::singleton), di::bind<cp::ISheetTemplateRenderer>().to<cp::SheetTemplateRenderer>().in(di::singleton), di::bind<cp::ASheetEventRenderer>().to<cp::SheetEventRenderer>().in(di::singleton), di::bind<cp::IContext>().to<cp::MidiContext>().in(di::singleton), di::bind<cp::IPreprocessor>().to<cp::Preprocessor>().in(di::singleton), di::bind<cp::ISheetNavigator>().to<cp::SheetNavigator>().in(di::singleton), di::bind<co::IConductionsPerformer>().to<co::ConductionsPerformer>().in(di::singleton), di::bind<ICompilerProgramOptions>().to(programOptionsPtr), di::bind<documentModel::Document>().to(documentPtr), di::bind<com::IDefinitionsServer>().to<com::DefinitionsServer>().in(di::singleton), di::bind<com::midi::Midi>().to(midiFile), di::bind<app::IDocumentWriter>().to([&](const auto &injector) -> app::IDocumentWriterPtr
+																																																																																																																																																																																																																																  {
+																																																																																																																																																																																																																																	  if (programOptionsPtr->isJsonModeSet() || programOptionsPtr->isJsonDocInfoMode())
+																																																																																																																																																																																																																																	  {
+																																																																																																																																																																																																																																		  return injector.template create<std::shared_ptr<app::JsonWriter>>();
+																																																																																																																																																																																																																																	  }
+																																																																																																																																																																																																																																	  return injector.template create<std::shared_ptr<app::MidiFileWriter>>();
+																																																																																																																																																																																																																																  }),
+		di::bind<cp::ICompilerVisitor>().to([&](const auto &injector) -> cp::ICompilerVisitorPtr
+											{
+												if (needTimeline)
+												{
+													return injector.template create<std::shared_ptr<app::DefaultTimeline>>();
+												}
+												return injector.template create<std::shared_ptr<cp::DefaultCompilerVisitor>>();
+											}),
+		di::bind<com::ILogger>().to([&](const auto &injector) -> com::ILoggerPtr
+									{
+										if (writeWarningsToConsole)
+										{
+											return injector.template create<std::shared_ptr<LoggerImpl>>();
+										}
+										return injector.template create<std::shared_ptr<WarningsCollectorWithConsoleLogger>>();
+									}));
+	FactoryConfig factory(injector);
 	factory.init();
 	auto program = injector.create<SheetCompilerProgram>();
 	program.prepareEnvironment();

@@ -45,7 +45,6 @@ BOOST_AUTO_TEST_CASE(literals)
 	BOOST_CHECK(1.0_N64 / 3 == 1.0_N128t);
 }
 
-
 BOOST_AUTO_TEST_CASE(write_variable_required_size)
 {
 	using namespace com;
@@ -64,34 +63,34 @@ BOOST_AUTO_TEST_CASE(write_variable_length)
 {
 	using namespace com;
 	{
-		Byte val[4] = { 0 };
+		Byte val[4] = {0};
 		BOOST_CHECK(1 == midi::variableLengthWrite(0, val, 4));
 		BOOST_CHECK((val[0] == 0 && val[1] == 0 && val[2] == 0 && val[3] == 0));
 	}
 	{
-		Byte val[4] = { 0 };
+		Byte val[4] = {0};
 		BOOST_CHECK(1 == midi::variableLengthWrite(127, val, 4));
 		BOOST_CHECK((val[0] == 127 && val[1] == 0 && val[2] == 0 && val[3] == 0));
 	}
 	{
-		Byte val[4] = { 0 };
+		Byte val[4] = {0};
 		BOOST_CHECK(2 == midi::variableLengthWrite(128, val, 4));
 		BOOST_CHECK(val[0] == 0b10000001);
 		BOOST_CHECK(val[1] == 0b00000000);
 		BOOST_CHECK((val[2] == 0 && val[3] == 0));
 	}
 	{
-		Byte val[4] = { 0 };
+		Byte val[4] = {0};
 		BOOST_CHECK(2 == midi::variableLengthWrite(0xC8, val, 4));
 		BOOST_CHECK((val[0] == 0b10000001 && val[1] == 0b01001000 && val[2] == 0 && val[3] == 0));
 	}
 	{
-		Byte val[4] = { 0 };
+		Byte val[4] = {0};
 		BOOST_CHECK(3 == midi::variableLengthWrite(0x100000, val, 4));
 		BOOST_CHECK((val[0] == 0b11000000 && val[1] == 0b10000000 && val[2] == 0 && val[3] == 0));
 	}
 	{
-		Byte val[4] = { 0 };
+		Byte val[4] = {0};
 		BOOST_CHECK(4 == midi::variableLengthWrite(midi::MaxTickValue, val, 4));
 		BOOST_CHECK((val[0] == 0xFF && val[1] == 0xFF && val[2] == 0xFF && val[3] == 0x7F));
 	}
@@ -116,7 +115,7 @@ BOOST_AUTO_TEST_CASE(read_variable_length_fail)
 {
 	using namespace com;
 	{
-		Byte val[] = { 0xFF, 0xFF, 0xFF, 0xFF };
+		Byte val[] = {0xFF, 0xFF, 0xFF, 0xFF};
 		BOOST_CHECK_THROW(midi::variableLengthRead(val, 4), com::Exception);
 	}
 }
@@ -125,27 +124,27 @@ BOOST_AUTO_TEST_CASE(read_variable_length)
 {
 	using namespace com;
 	{
-		Byte val[4] = { 0 };
+		Byte val[4] = {0};
 		BOOST_CHECK(midi::variableLengthRead(val, 4) == 0);
 	}
 	{
-		Byte val[4] = { 127, 0, 0, 0 };
+		Byte val[4] = {127, 0, 0, 0};
 		BOOST_CHECK(midi::variableLengthRead(val, 4) == 127);
 	}
 	{
-		Byte val[4] = { 0b10000001, 0b0000000, 0, 0 };
+		Byte val[4] = {0b10000001, 0b0000000, 0, 0};
 		BOOST_CHECK(midi::variableLengthRead(val, 4) == 128);
 	}
 	{
-		Byte val[4] = { 0b10000001, 0b01001000, 0, 0 };
+		Byte val[4] = {0b10000001, 0b01001000, 0, 0};
 		BOOST_CHECK(midi::variableLengthRead(val, 4) == 0xC8);
 	}
 	{
-		Byte val[4] = { 0b11000000, 0b10000000, 0, 0 };
+		Byte val[4] = {0b11000000, 0b10000000, 0, 0};
 		BOOST_CHECK(midi::variableLengthRead(val, 4) == 0x100000);
 	}
 	{
-		Byte val[4] = { 0xFF, 0xFF, 0xFF, 0x7F };
+		Byte val[4] = {0xFF, 0xFF, 0xFF, 0x7F};
 		BOOST_CHECK(midi::variableLengthRead(val, 4) == midi::MaxTickValue);
 	}
 }
@@ -160,7 +159,6 @@ BOOST_AUTO_TEST_CASE(midi_event_size)
 	BOOST_CHECK(event.byteSize(0) == 7);
 }
 
-
 BOOST_AUTO_TEST_CASE(write_midi_event_fail)
 {
 	using namespace com;
@@ -168,7 +166,7 @@ BOOST_AUTO_TEST_CASE(write_midi_event_fail)
 	event.absPosition(midi::MaxTickValue);
 	Ticks deltaOffset = 0;
 	constexpr size_t size = 4; // 5 are needed
-	Byte bytes[size] = { 0 };
+	Byte bytes[size] = {0};
 	BOOST_CHECK_THROW(event.write(deltaOffset, &bytes[0], size), com::Exception);
 }
 
@@ -223,7 +221,7 @@ BOOST_AUTO_TEST_CASE(write_midi_event_program_change)
 	event.eventType(midi::ProgramChange);
 	event.parameter1(64);
 	constexpr size_t size = 3;
-	Byte bytes[size] = { 0 };
+	Byte bytes[size] = {0};
 	BOOST_CHECK(event.write(0, &bytes[0], size) == size);
 	BOOST_CHECK(bytes[0] == 0);
 	BOOST_CHECK((bytes[1] & 0xC0) >> 4 == midi::ProgramChange);
@@ -231,12 +229,11 @@ BOOST_AUTO_TEST_CASE(write_midi_event_program_change)
 	BOOST_CHECK(bytes[2] == 64);
 }
 
-
 BOOST_AUTO_TEST_CASE(write_read_event_0)
 {
 	using namespace com;
 	midi::Event event;
-	Byte bytes[] = { 0xFF, 0xFF, 0xFF, 0x7F, 0x91, 64, 100 };
+	Byte bytes[] = {0xFF, 0xFF, 0xFF, 0x7F, 0x91, 64, 100};
 	Ticks deltaOffset = 15;
 	BOOST_CHECK(event.read(deltaOffset, &bytes[0], 7) == 7);
 	BOOST_CHECK(event.absPosition() == midi::MaxTickValue + deltaOffset);
@@ -250,7 +247,7 @@ BOOST_AUTO_TEST_CASE(write_read_program_change)
 {
 	using namespace com;
 	midi::Event event;
-	Byte bytes[] = { 0x0, 0xC1, 0x22 };
+	Byte bytes[] = {0x0, 0xC1, 0x22};
 	BOOST_CHECK(event.read(0, &bytes[0], 3) == 3);
 	BOOST_CHECK(event.absPosition() == 0);
 	BOOST_CHECK(event.eventType() == midi::ProgramChange);
@@ -298,13 +295,29 @@ BOOST_AUTO_TEST_CASE(write_midi_event_container_write)
 	Byte bytes[byteSize];
 	BOOST_CHECK_EQUAL(events.write(&bytes[0], byteSize), byteSize);
 	int c = 0;
-	BOOST_CHECK(bytes[c] == 1); BOOST_CHECK((bytes[c + 1] & 0xF0) >> 4 == midi::NoteOn); BOOST_CHECK((bytes[c + 1] & 0xF) == 0); BOOST_CHECK(bytes[c + 2] == 24); BOOST_CHECK(bytes[c + 3] == 100);
+	BOOST_CHECK(bytes[c] == 1);
+	BOOST_CHECK((bytes[c + 1] & 0xF0) >> 4 == midi::NoteOn);
+	BOOST_CHECK((bytes[c + 1] & 0xF) == 0);
+	BOOST_CHECK(bytes[c + 2] == 24);
+	BOOST_CHECK(bytes[c + 3] == 100);
 	c += 4;
-	BOOST_CHECK(bytes[c] == 0); BOOST_CHECK((bytes[c + 1] & 0xF0) >> 4 == midi::NoteOn); BOOST_CHECK((bytes[c + 1] & 0xF) == 0); BOOST_CHECK(bytes[c + 2] == 48); BOOST_CHECK(bytes[c + 3] == 100);
+	BOOST_CHECK(bytes[c] == 0);
+	BOOST_CHECK((bytes[c + 1] & 0xF0) >> 4 == midi::NoteOn);
+	BOOST_CHECK((bytes[c + 1] & 0xF) == 0);
+	BOOST_CHECK(bytes[c + 2] == 48);
+	BOOST_CHECK(bytes[c + 3] == 100);
 	c += 4;
-	BOOST_CHECK(bytes[c] == 49); BOOST_CHECK((bytes[c + 1] & 0xF0) >> 4 == midi::NoteOn); BOOST_CHECK((bytes[c + 1] & 0xF) == 1); BOOST_CHECK(bytes[c + 2] == 25); BOOST_CHECK(bytes[c + 3] == 101);
+	BOOST_CHECK(bytes[c] == 49);
+	BOOST_CHECK((bytes[c + 1] & 0xF0) >> 4 == midi::NoteOn);
+	BOOST_CHECK((bytes[c + 1] & 0xF) == 1);
+	BOOST_CHECK(bytes[c + 2] == 25);
+	BOOST_CHECK(bytes[c + 3] == 101);
 	c += 4;
-	BOOST_CHECK(bytes[c] == 50); BOOST_CHECK((bytes[c + 1] & 0xF0) >> 4 == midi::NoteOn); BOOST_CHECK((bytes[c + 1] & 0xF) == 2); BOOST_CHECK(bytes[c + 2] == 26); BOOST_CHECK(bytes[c + 3] == 102);
+	BOOST_CHECK(bytes[c] == 50);
+	BOOST_CHECK((bytes[c + 1] & 0xF0) >> 4 == midi::NoteOn);
+	BOOST_CHECK((bytes[c + 1] & 0xF) == 2);
+	BOOST_CHECK(bytes[c + 2] == 26);
+	BOOST_CHECK(bytes[c + 3] == 102);
 }
 
 BOOST_AUTO_TEST_CASE(write_midi_event_container_read_n_write)
@@ -336,17 +349,29 @@ BOOST_AUTO_TEST_CASE(write_midi_event_container_read_n_write)
 		std::vector<midi::Event> bff(events.numEvents());
 		std::copy(events.begin(), events.end(), bff.begin());
 		int c = 0;
-		BOOST_CHECK(bff[c].channel() == 0); BOOST_CHECK(bff[c].absPosition() == 0); BOOST_CHECK(bff[c].eventType() == midi::NoteOn);
-		BOOST_CHECK(bff[c].parameter1() == 24); BOOST_CHECK(bff[c].parameter2() == 101);
+		BOOST_CHECK(bff[c].channel() == 0);
+		BOOST_CHECK(bff[c].absPosition() == 0);
+		BOOST_CHECK(bff[c].eventType() == midi::NoteOn);
+		BOOST_CHECK(bff[c].parameter1() == 24);
+		BOOST_CHECK(bff[c].parameter2() == 101);
 		++c;
-		BOOST_CHECK(bff[c].channel() == 1); BOOST_CHECK(bff[c].absPosition() == 1.0_N4); BOOST_CHECK(bff[c].eventType() == midi::NoteOff);
-		BOOST_CHECK(bff[c].parameter1() == 25); BOOST_CHECK(bff[c].parameter2() == 0);
+		BOOST_CHECK(bff[c].channel() == 1);
+		BOOST_CHECK(bff[c].absPosition() == 1.0_N4);
+		BOOST_CHECK(bff[c].eventType() == midi::NoteOff);
+		BOOST_CHECK(bff[c].parameter1() == 25);
+		BOOST_CHECK(bff[c].parameter2() == 0);
 		++c;
-		BOOST_CHECK(bff[c].channel() == 2); BOOST_CHECK(bff[c].absPosition() == 2.0_N4); BOOST_CHECK(bff[c].eventType() == midi::NoteOn);
-		BOOST_CHECK(bff[c].parameter1() == 26); BOOST_CHECK(bff[c].parameter2() == 103);
+		BOOST_CHECK(bff[c].channel() == 2);
+		BOOST_CHECK(bff[c].absPosition() == 2.0_N4);
+		BOOST_CHECK(bff[c].eventType() == midi::NoteOn);
+		BOOST_CHECK(bff[c].parameter1() == 26);
+		BOOST_CHECK(bff[c].parameter2() == 103);
 		++c;
-		BOOST_CHECK(bff[c].channel() == 3); BOOST_CHECK(bff[c].absPosition() == 3.0_N4); BOOST_CHECK(bff[c].eventType() == midi::NoteOff);
-		BOOST_CHECK(bff[c].parameter1() == 27); BOOST_CHECK(bff[c].parameter2() == 0);
+		BOOST_CHECK(bff[c].channel() == 3);
+		BOOST_CHECK(bff[c].absPosition() == 3.0_N4);
+		BOOST_CHECK(bff[c].eventType() == midi::NoteOff);
+		BOOST_CHECK(bff[c].parameter1() == 27);
+		BOOST_CHECK(bff[c].parameter2() == 0);
 	}
 	delete[] bytes;
 }
@@ -394,17 +419,28 @@ BOOST_AUTO_TEST_CASE(write_midi_event_pc_cc_before_notes)
 		std::vector<midi::Event> bff(events.numEvents());
 		std::copy(events.begin(), events.end(), bff.begin());
 		int c = 0;
-		BOOST_CHECK(bff[c].channel() == 0); BOOST_CHECK(bff[c].absPosition() == 0); BOOST_CHECK(bff[c].eventType() == midi::Controller);
-		BOOST_CHECK(bff[c].parameter1() == 0); BOOST_CHECK(bff[c].parameter2() == 10);
+		BOOST_CHECK(bff[c].channel() == 0);
+		BOOST_CHECK(bff[c].absPosition() == 0);
+		BOOST_CHECK(bff[c].eventType() == midi::Controller);
+		BOOST_CHECK(bff[c].parameter1() == 0);
+		BOOST_CHECK(bff[c].parameter2() == 10);
 		++c;
-		BOOST_CHECK(bff[c].channel() == 0); BOOST_CHECK(bff[c].absPosition() == 0); BOOST_CHECK(bff[c].eventType() == midi::ProgramChange);
+		BOOST_CHECK(bff[c].channel() == 0);
+		BOOST_CHECK(bff[c].absPosition() == 0);
+		BOOST_CHECK(bff[c].eventType() == midi::ProgramChange);
 		BOOST_CHECK(bff[c].parameter1() == 5);
 		++c;
-		BOOST_CHECK(bff[c].channel() == 0); BOOST_CHECK(bff[c].absPosition() == 0); BOOST_CHECK(bff[c].eventType() == midi::NoteOn);
-		BOOST_CHECK(bff[c].parameter1() == 100); BOOST_CHECK(bff[c].parameter2() == 100);
+		BOOST_CHECK(bff[c].channel() == 0);
+		BOOST_CHECK(bff[c].absPosition() == 0);
+		BOOST_CHECK(bff[c].eventType() == midi::NoteOn);
+		BOOST_CHECK(bff[c].parameter1() == 100);
+		BOOST_CHECK(bff[c].parameter2() == 100);
 		++c;
-		BOOST_CHECK(bff[c].channel() == 0); BOOST_CHECK(bff[c].absPosition() == 1.0_N4); BOOST_CHECK(bff[c].eventType() == midi::NoteOff);
-		BOOST_CHECK(bff[c].parameter1() == 100); BOOST_CHECK(bff[c].parameter2() == 0);
+		BOOST_CHECK(bff[c].channel() == 0);
+		BOOST_CHECK(bff[c].absPosition() == 1.0_N4);
+		BOOST_CHECK(bff[c].eventType() == midi::NoteOff);
+		BOOST_CHECK(bff[c].parameter1() == 100);
+		BOOST_CHECK(bff[c].parameter2() == 0);
 	}
 	delete[] bytes;
 }
@@ -441,18 +477,30 @@ BOOST_AUTO_TEST_CASE(write_midi_event_track_write)
 	Byte bytes[byteSize];
 	BOOST_CHECK(track.write(&bytes[0], byteSize) == byteSize);
 	int c = 0;
-	BOOST_CHECK(std::string(reinterpret_cast<char*>(&bytes[c]), 4) == "MTrk");
+	BOOST_CHECK(std::string(reinterpret_cast<char *>(&bytes[c]), 4) == "MTrk");
 	c += 4;
 	BOOST_CHECK((bytes[c] == 0 && bytes[c + 1] == 0 && bytes[c + 2] == 0 && bytes[c + 3] == 16));
 	c += 4;
-	BOOST_CHECK(bytes[c] == 0); BOOST_CHECK((bytes[c + 1] & 0xF0) >> 4 == midi::NoteOn); BOOST_CHECK((bytes[c + 1] & 0xF) == 0); BOOST_CHECK(bytes[c + 2] == 24); BOOST_CHECK(bytes[c + 3] == 100);
+	BOOST_CHECK(bytes[c] == 0);
+	BOOST_CHECK((bytes[c + 1] & 0xF0) >> 4 == midi::NoteOn);
+	BOOST_CHECK((bytes[c + 1] & 0xF) == 0);
+	BOOST_CHECK(bytes[c + 2] == 24);
+	BOOST_CHECK(bytes[c + 3] == 100);
 	c += 4;
-	BOOST_CHECK(bytes[c] == 50); BOOST_CHECK((bytes[c + 1] & 0xF0) >> 4 == midi::NoteOn); BOOST_CHECK((bytes[c + 1] & 0xF) == 1); BOOST_CHECK(bytes[c + 2] == 25); BOOST_CHECK(bytes[c + 3] == 101);
+	BOOST_CHECK(bytes[c] == 50);
+	BOOST_CHECK((bytes[c + 1] & 0xF0) >> 4 == midi::NoteOn);
+	BOOST_CHECK((bytes[c + 1] & 0xF) == 1);
+	BOOST_CHECK(bytes[c + 2] == 25);
+	BOOST_CHECK(bytes[c + 3] == 101);
 	c += 4;
-	BOOST_CHECK(bytes[c] == 50); BOOST_CHECK((bytes[c + 1] & 0xF0) >> 4 == midi::NoteOn); BOOST_CHECK((bytes[c + 1] & 0xF) == 2); BOOST_CHECK(bytes[c + 2] == 26); BOOST_CHECK(bytes[c + 3] == 102);
-	BOOST_CHECK(bytes[21] == 0xFF); 
-	BOOST_CHECK(bytes[22] == 0x2F); 
-	BOOST_CHECK(bytes[23] == 0x00); 
+	BOOST_CHECK(bytes[c] == 50);
+	BOOST_CHECK((bytes[c + 1] & 0xF0) >> 4 == midi::NoteOn);
+	BOOST_CHECK((bytes[c + 1] & 0xF) == 2);
+	BOOST_CHECK(bytes[c + 2] == 26);
+	BOOST_CHECK(bytes[c + 3] == 102);
+	BOOST_CHECK(bytes[21] == 0xFF);
+	BOOST_CHECK(bytes[22] == 0x2F);
+	BOOST_CHECK(bytes[23] == 0x00);
 }
 
 BOOST_AUTO_TEST_CASE(write_midi_write_fail)
@@ -505,7 +553,7 @@ BOOST_AUTO_TEST_CASE(write_midi_write)
 	BOOST_CHECK(midi.write(&bytes[0], byteSize) == byteSize);
 	int c = 0;
 	// Midi Header
-	BOOST_CHECK(std::string(reinterpret_cast<char*>(&bytes[c]), 4) == "MThd");
+	BOOST_CHECK(std::string(reinterpret_cast<char *>(&bytes[c]), 4) == "MThd");
 	c += 4;
 	BOOST_CHECK((bytes[c] == 0 && bytes[c + 1] == 0 && bytes[c + 2] == 0 && bytes[c + 3] == 6));
 	c += 4;
@@ -514,22 +562,35 @@ BOOST_AUTO_TEST_CASE(write_midi_write)
 	BOOST_CHECK((bytes[c] == 0 && bytes[c + 1] == 2));
 	c += 2;
 	midi::Word ppq = static_cast<midi::Word>(0x7FFF) & static_cast<midi::Word>(PPQ);
-	if (isLittleEndian()) {
+	if (isLittleEndian())
+	{
 		endswap(&ppq);
 	}
-	BOOST_CHECK((*reinterpret_cast<midi::Word*>(&bytes[c])) == ppq);
+	BOOST_CHECK((*reinterpret_cast<midi::Word *>(&bytes[c])) == ppq);
 	c += 2;
 
 	// Track 1
-	BOOST_CHECK(std::string(reinterpret_cast<char*>(&bytes[c]), 4) == "MTrk");
+	BOOST_CHECK(std::string(reinterpret_cast<char *>(&bytes[c]), 4) == "MTrk");
 	c += 4;
 	BOOST_CHECK((bytes[c] == 0 && bytes[c + 1] == 0 && bytes[c + 2] == 0 && bytes[c + 3] == 16));
 	c += 4;
-	BOOST_CHECK(bytes[c] == 0); BOOST_CHECK((bytes[c + 1] & 0xF0) >> 4 == midi::NoteOn); BOOST_CHECK((bytes[c + 1] & 0xF) == 0); BOOST_CHECK(bytes[c + 2] == 24); BOOST_CHECK(bytes[c + 3] == 100);
+	BOOST_CHECK(bytes[c] == 0);
+	BOOST_CHECK((bytes[c + 1] & 0xF0) >> 4 == midi::NoteOn);
+	BOOST_CHECK((bytes[c + 1] & 0xF) == 0);
+	BOOST_CHECK(bytes[c + 2] == 24);
+	BOOST_CHECK(bytes[c + 3] == 100);
 	c += 4;
-	BOOST_CHECK(bytes[c] == 50); BOOST_CHECK((bytes[c + 1] & 0xF0) >> 4 == midi::NoteOn); BOOST_CHECK((bytes[c + 1] & 0xF) == 1); BOOST_CHECK(bytes[c + 2] == 25); BOOST_CHECK(bytes[c + 3] == 101);
+	BOOST_CHECK(bytes[c] == 50);
+	BOOST_CHECK((bytes[c + 1] & 0xF0) >> 4 == midi::NoteOn);
+	BOOST_CHECK((bytes[c + 1] & 0xF) == 1);
+	BOOST_CHECK(bytes[c + 2] == 25);
+	BOOST_CHECK(bytes[c + 3] == 101);
 	c += 4;
-	BOOST_CHECK(bytes[c] == 50); BOOST_CHECK((bytes[c + 1] & 0xF0) >> 4 == midi::NoteOn); BOOST_CHECK((bytes[c + 1] & 0xF) == 2); BOOST_CHECK(bytes[c + 2] == 26); BOOST_CHECK(bytes[c + 3] == 102);
+	BOOST_CHECK(bytes[c] == 50);
+	BOOST_CHECK((bytes[c + 1] & 0xF0) >> 4 == midi::NoteOn);
+	BOOST_CHECK((bytes[c + 1] & 0xF) == 2);
+	BOOST_CHECK(bytes[c + 2] == 26);
+	BOOST_CHECK(bytes[c + 3] == 102);
 	c += 5;
 	// end of track sequence
 	BOOST_CHECK(bytes[c] == 0xFF);
@@ -537,25 +598,37 @@ BOOST_AUTO_TEST_CASE(write_midi_write)
 	BOOST_CHECK(bytes[c] == 0x2F);
 	c += 1;
 	BOOST_CHECK(bytes[c] == 0x00);
-	c += 1;		
+	c += 1;
 
 	// Track 2
-	BOOST_CHECK(std::string(reinterpret_cast<char*>(&bytes[c]), 4) == "MTrk");
+	BOOST_CHECK(std::string(reinterpret_cast<char *>(&bytes[c]), 4) == "MTrk");
 	c += 4;
 	BOOST_CHECK((bytes[c] == 0 && bytes[c + 1] == 0 && bytes[c + 2] == 0 && bytes[c + 3] == 16));
 	c += 4;
-	BOOST_CHECK(bytes[c] == 0); BOOST_CHECK((bytes[c + 1] & 0xF0) >> 4 == midi::NoteOn); BOOST_CHECK((bytes[c + 1] & 0xF) == 3); BOOST_CHECK(bytes[c + 2] == 48); BOOST_CHECK(bytes[c + 3] == 103);
+	BOOST_CHECK(bytes[c] == 0);
+	BOOST_CHECK((bytes[c + 1] & 0xF0) >> 4 == midi::NoteOn);
+	BOOST_CHECK((bytes[c + 1] & 0xF) == 3);
+	BOOST_CHECK(bytes[c + 2] == 48);
+	BOOST_CHECK(bytes[c + 3] == 103);
 	c += 4;
-	BOOST_CHECK(bytes[c] == 50); BOOST_CHECK((bytes[c + 1] & 0xF0) >> 4 == midi::NoteOn); BOOST_CHECK((bytes[c + 1] & 0xF) == 4); BOOST_CHECK(bytes[c + 2] == 50); BOOST_CHECK(bytes[c + 3] == 104);
+	BOOST_CHECK(bytes[c] == 50);
+	BOOST_CHECK((bytes[c + 1] & 0xF0) >> 4 == midi::NoteOn);
+	BOOST_CHECK((bytes[c + 1] & 0xF) == 4);
+	BOOST_CHECK(bytes[c + 2] == 50);
+	BOOST_CHECK(bytes[c + 3] == 104);
 	c += 4;
-	BOOST_CHECK(bytes[c] == 50); BOOST_CHECK((bytes[c + 1] & 0xF0) >> 4 == midi::NoteOn); BOOST_CHECK((bytes[c + 1] & 0xF) == 5); BOOST_CHECK(bytes[c + 2] == 52); BOOST_CHECK(bytes[c + 3] == 105);
-	c +=5;
+	BOOST_CHECK(bytes[c] == 50);
+	BOOST_CHECK((bytes[c + 1] & 0xF0) >> 4 == midi::NoteOn);
+	BOOST_CHECK((bytes[c + 1] & 0xF) == 5);
+	BOOST_CHECK(bytes[c + 2] == 52);
+	BOOST_CHECK(bytes[c + 3] == 105);
+	c += 5;
 	// end of track sequence
 	BOOST_CHECK(bytes[c] == 0xFF);
 	c += 1;
 	BOOST_CHECK(bytes[c] == 0x2F);
 	c += 1;
-	BOOST_CHECK(bytes[c] == 0x00); 
+	BOOST_CHECK(bytes[c] == 0x00);
 }
 
 BOOST_AUTO_TEST_CASE(write_midi_write_to_file)
@@ -597,21 +670,20 @@ BOOST_AUTO_TEST_CASE(write_midi_write_to_file)
 	midifile.seekg(std::ios::beg);
 }
 
-
 BOOST_AUTO_TEST_CASE(meta_event_write_1)
 {
 	using namespace com;
 	constexpr size_t eventSize = 7;
 	auto tempo = midi::Event::MetaTempo(120.0);
-	BOOST_CHECK( tempo.eventType() == midi::MetaEvent );
-	BOOST_CHECK( tempo.metaEventType() == midi::Tempo);
-	BOOST_CHECK( tempo.byteSize(0) == 7 );
-	BOOST_CHECK( tempo.payloadSize() == 6);
-	
+	BOOST_CHECK(tempo.eventType() == midi::MetaEvent);
+	BOOST_CHECK(tempo.metaEventType() == midi::Tempo);
+	BOOST_CHECK(tempo.byteSize(0) == 7);
+	BOOST_CHECK(tempo.payloadSize() == 6);
+
 	Byte bff[eventSize];
-	BOOST_CHECK_THROW(tempo.write(0, &bff[0], eventSize-1), com::Exception);
+	BOOST_CHECK_THROW(tempo.write(0, &bff[0], eventSize - 1), com::Exception);
 	tempo.write(0, &bff[0], eventSize);
-	
+
 	BOOST_CHECK(bff[0] == 0);
 	BOOST_CHECK(bff[1] == 0xFF);
 	BOOST_CHECK(bff[2] == 0x51);
@@ -625,12 +697,12 @@ BOOST_AUTO_TEST_CASE(meta_event_read_1)
 {
 	using namespace com;
 	constexpr size_t eventSize = 7;
-	auto tempo = midi::Event::MetaTempo(120.0);	
+	auto tempo = midi::Event::MetaTempo(120.0);
 	Byte bff[eventSize];
 	tempo.write(0, &bff[0], eventSize);
-	
+
 	auto readTempo = midi::Event();
-	BOOST_CHECK_THROW(readTempo.read(0, &bff[0], eventSize-1), com::Exception);
+	BOOST_CHECK_THROW(readTempo.read(0, &bff[0], eventSize - 1), com::Exception);
 	readTempo.read(0, &bff[0], eventSize);
 
 	BOOST_CHECK(readTempo.eventType() == midi::MetaEvent);
@@ -646,39 +718,39 @@ BOOST_AUTO_TEST_CASE(meta_event_read_write_1)
 	using namespace com;
 	constexpr size_t eventSize = 8;
 	auto metaOrg = midi::Event::MetaInstrument("bass");
-	BOOST_CHECK( metaOrg.eventType() == midi::MetaEvent );
-	BOOST_CHECK( metaOrg.metaEventType() == midi::InstrumentName );
-	BOOST_CHECK( metaOrg.byteSize(0) == 8 );
-	BOOST_CHECK( metaOrg.payloadSize() == 7);
+	BOOST_CHECK(metaOrg.eventType() == midi::MetaEvent);
+	BOOST_CHECK(metaOrg.metaEventType() == midi::InstrumentName);
+	BOOST_CHECK(metaOrg.byteSize(0) == 8);
+	BOOST_CHECK(metaOrg.payloadSize() == 7);
 
 	Byte bff[eventSize];
 	metaOrg.write(0, &bff[0], eventSize);
-	
+
 	auto dst = midi::Event();
 	dst.read(0, bff, eventSize);
 	auto name = midi::Event::MetaGetStringValue(dst.metaData(), dst.metaDataSize());
 	BOOST_CHECK(name == "bass");
 }
 
-extern const char * LongString1001;
+extern const char *LongString1001;
 
 BOOST_AUTO_TEST_CASE(meta_event_read_write_long_string)
 {
 	using namespace com;
 	constexpr size_t eventSize = 5 + 1001;
 	auto metaOrg = midi::Event::MetaInstrument(LongString1001);
-	BOOST_CHECK( metaOrg.eventType() == midi::MetaEvent );
-	BOOST_CHECK( metaOrg.metaEventType() == midi::InstrumentName );
-	BOOST_CHECK( metaOrg.byteSize(0) == 5 + 1001 );
-	BOOST_CHECK( metaOrg.payloadSize() == 4 + 1001);
+	BOOST_CHECK(metaOrg.eventType() == midi::MetaEvent);
+	BOOST_CHECK(metaOrg.metaEventType() == midi::InstrumentName);
+	BOOST_CHECK(metaOrg.byteSize(0) == 5 + 1001);
+	BOOST_CHECK(metaOrg.payloadSize() == 4 + 1001);
 
 	Byte bff[eventSize];
-	BOOST_CHECK_THROW(metaOrg.write(0, &bff[0], eventSize-1), com::Exception);
+	BOOST_CHECK_THROW(metaOrg.write(0, &bff[0], eventSize - 1), com::Exception);
 	auto written = metaOrg.write(0, &bff[0], eventSize);
 	BOOST_CHECK(written == eventSize);
 
 	auto dst = midi::Event();
-	BOOST_CHECK_THROW(dst.read(0, bff, eventSize-1), com::Exception);
+	BOOST_CHECK_THROW(dst.read(0, bff, eventSize - 1), com::Exception);
 	size_t bytesRead = dst.read(0, bff, eventSize);
 	BOOST_CHECK(written == bytesRead);
 	auto name = midi::Event::MetaGetStringValue(dst.metaData(), dst.metaDataSize());
@@ -696,9 +768,9 @@ BOOST_AUTO_TEST_CASE(meta_event_read_write_custom_meta)
 	data.data = midi::CustomMetaData::Data(longString.begin(), longString.end());
 	auto org = midi::Event::MetaCustom(data);
 
-	BOOST_CHECK( org.eventType() == midi::MetaEvent );
-	BOOST_CHECK( org.metaEventType() == midi::CustomMetaEvent );
-	BOOST_CHECK( org.byteSize(0) == eventSize );
+	BOOST_CHECK(org.eventType() == midi::MetaEvent);
+	BOOST_CHECK(org.metaEventType() == midi::CustomMetaEvent);
+	BOOST_CHECK(org.byteSize(0) == eventSize);
 
 	Byte bff[eventSize];
 	org.write(0, bff, eventSize);
@@ -707,9 +779,9 @@ BOOST_AUTO_TEST_CASE(meta_event_read_write_custom_meta)
 	copy.read(0, &bff[0], eventSize);
 
 	midi::CustomMetaData dataCopy = midi::Event::MetaGetCustomData(copy.metaData(), copy.metaDataSize());
-	BOOST_CHECK( dataCopy.type == midi::CustomMetaData::SetDevice );
+	BOOST_CHECK(dataCopy.type == midi::CustomMetaData::SetDevice);
 	std::string dataCopyAsString(dataCopy.data.begin(), dataCopy.data.end());
-	BOOST_CHECK( longString == dataCopyAsString );
+	BOOST_CHECK(longString == dataCopyAsString);
 }
 
 BOOST_AUTO_TEST_CASE(meta_event_read_write_custom_meta_0)
@@ -721,9 +793,9 @@ BOOST_AUTO_TEST_CASE(meta_event_read_write_custom_meta_0)
 	data.type = midi::CustomMetaData::SetDevice;
 	auto org = midi::Event::MetaCustom(data);
 
-	BOOST_CHECK( org.eventType() == midi::MetaEvent );
-	BOOST_CHECK( org.metaEventType() == midi::CustomMetaEvent );
-	BOOST_CHECK( org.byteSize(0) == eventSize );
+	BOOST_CHECK(org.eventType() == midi::MetaEvent);
+	BOOST_CHECK(org.metaEventType() == midi::CustomMetaEvent);
+	BOOST_CHECK(org.byteSize(0) == eventSize);
 
 	Byte bff[eventSize];
 	org.write(0, bff, eventSize);
@@ -732,6 +804,6 @@ BOOST_AUTO_TEST_CASE(meta_event_read_write_custom_meta_0)
 	copy.read(0, &bff[0], eventSize);
 
 	midi::CustomMetaData dataCopy = midi::Event::MetaGetCustomData(copy.metaData(), copy.metaDataSize());
-	BOOST_CHECK( dataCopy.type == midi::CustomMetaData::SetDevice );
-	BOOST_CHECK( dataCopy.data.size() == 0 );
+	BOOST_CHECK(dataCopy.type == midi::CustomMetaData::SetDevice);
+	BOOST_CHECK(dataCopy.data.size() == 0);
 }

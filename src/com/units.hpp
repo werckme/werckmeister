@@ -1,11 +1,14 @@
 #pragma once
-namespace com {
+namespace com
+{
 	typedef long double Ticks;
 	typedef int Pitch;
 	typedef int Expression;
 	typedef double BPM;
-	namespace notes {
-		enum Note {
+	namespace notes
+	{
+		enum Note
+		{
 			C = 0,
 			CIS = 1,
 			DES = 1,
@@ -27,19 +30,22 @@ namespace com {
 			CES = 11,
 		};
 	}
-	namespace degrees {
-		enum Flag {
+	namespace degrees
+	{
+		enum Flag
+		{
 			Normal,
 			Sharp,
 			Flat,
 			DoubleSharp,
 			DoubleFlat,
 			TrippleSharp,
-			TrippleFlat,			
+			TrippleFlat,
 		};
 
-		enum Degree {
-			// Flag << 8 | value 
+		enum Degree
+		{
+			// Flag << 8 | value
 			I = (Normal << 8) | 1,
 			II = (Normal << 8) | 2,
 			III = (Normal << 8) | 3,
@@ -97,8 +103,10 @@ namespace com {
 			VIIeseses = (TrippleFlat << 8) | 7,
 		};
 	}
-	namespace expression {
-		enum {
+	namespace expression
+	{
+		enum
+		{
 			Undefined = -1,
 			PPPPP = 1,
 			PPPP = 2,
@@ -114,4 +122,3 @@ namespace com {
 		};
 	}
 }
-

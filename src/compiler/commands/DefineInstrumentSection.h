@@ -4,44 +4,42 @@
 #include <compiler/argumentNames.h>
 #include <list>
 
-namespace documentModel {
-    namespace compiler {
-        /// <command name="instrumentSection" where="document">
-        /// Layers arbitrary instruments into one.
-        /// see [instrumentDef](#instrumentDef), [instrument](#instrument), [device](#device)
-        /// ### example
-        /// create 3 instruments and assign them to the section `myNewInstrument`.
-        /// <![CDATA[
-        /// ```language=Werckmeister\n
-        /// tempo: 120;\n
-        /// device: MyDevice  midi _usePort=0;\n
-        /// instrumentDef:piano    _onDevice=MyDevice  _ch=0 _pc=0;\n
-        /// instrumentDef:guitar   _onDevice=MyDevice _ch=1  _pc=29;\n
-        /// instrumentDef:organ   _onDevice=MyDevice _ch=2  _pc=16;\n
-        /// instrumentSection: myNewInstrument piano guitar organ;\n
-        /// \n
-        /// [\n
-        /// instrument: myNewInstrument;\n
-        /// {\n
-        ///  a,,1 | a, | d#,~ | &\n
-        /// }\n
-        /// ]\n
-        /// ```
-        /// ]]>
-        /// </command>
-        /// <param name="setName"  position="0" type="text">An arbitary name.</param>
-        class DefineInstrumentSection : public AMidiContextCommand
-        {
-        public:
-            typedef AMidiContextCommand Base;
-            com::IHasParameter::ParametersByNames parameters = {
-                FM_PARAMETER_DEF		    (argumentNames.InstrumentSection.WithName, 	0),
-            };
-            virtual ParametersByNames & getParameters() { return this->parameters; }
-            virtual void execute(IContextPtr );
-            virtual void setArguments(const Arguments &args) override;
-            std::list<com::String> sectionInstruments;
+namespace compiler
+{
+    /// <command name="instrumentSection" where="document">
+    /// Layers arbitrary instruments into one.
+    /// see [instrumentDef](#instrumentDef), [instrument](#instrument), [device](#device)
+    /// ### example
+    /// create 3 instruments and assign them to the section `myNewInstrument`.
+    /// <![CDATA[
+    /// ```language=Werckmeister\n
+    /// tempo: 120;\n
+    /// device: MyDevice  midi _usePort=0;\n
+    /// instrumentDef:piano    _onDevice=MyDevice  _ch=0 _pc=0;\n
+    /// instrumentDef:guitar   _onDevice=MyDevice _ch=1  _pc=29;\n
+    /// instrumentDef:organ   _onDevice=MyDevice _ch=2  _pc=16;\n
+    /// instrumentSection: myNewInstrument piano guitar organ;\n
+    /// \n
+    /// [\n
+    /// instrument: myNewInstrument;\n
+    /// {\n
+    ///  a,,1 | a, | d#,~ | &\n
+    /// }\n
+    /// ]\n
+    /// ```
+    /// ]]>
+    /// </command>
+    /// <param name="setName"  position="0" type="text">An arbitary name.</param>
+    class DefineInstrumentSection : public AMidiContextCommand
+    {
+    public:
+        typedef AMidiContextCommand Base;
+        com::IHasParameter::ParametersByNames parameters = {
+            FM_PARAMETER_DEF(argumentNames.InstrumentSection.WithName, 0),
         };
-    }
+        virtual ParametersByNames &getParameters() { return this->parameters; }
+        virtual void execute(IContextPtr);
+        virtual void setArguments(const Arguments &args) override;
+        std::list<com::String> sectionInstruments;
+    };
 }
-

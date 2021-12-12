@@ -6,12 +6,14 @@
 #include <com/units.hpp>
 #include "testhelper.h"
 
+using namespace parser;
+
 BOOST_AUTO_TEST_CASE(parse_empty_succeeds)
 {
 	using namespace com;
 	using documentModel::PitchDef;
 	com::String text = FM_STRING("");
-	documentModel::compiler::ConductionSheetParser parser;
+	ConductionSheetParser parser;
 	auto defs = parser.parse(text);
 }
 
@@ -20,8 +22,8 @@ BOOST_AUTO_TEST_CASE(parse_invalid_fails)
 	using namespace com;
 	using documentModel::PitchDef;
 	com::String text = FM_STRING("0123456");
-	documentModel::compiler::ConductionSheetParser parser;
-	BOOST_CHECK_THROW(parser.parse(text), documentModel::compiler::Exception);
+	ConductionSheetParser parser;
+	BOOST_CHECK_THROW(parser.parse(text), Exception);
 }
 
 BOOST_AUTO_TEST_CASE(parse_oneSelector_emptyDeclarations)
@@ -31,7 +33,7 @@ BOOST_AUTO_TEST_CASE(parse_oneSelector_emptyDeclarations)
 	com::String text = FM_STRING("\
 	onBeat(1){} \
 ");
-	documentModel::compiler::ConductionSheetParser parser;
+	ConductionSheetParser parser;
 	auto defs = parser.parse(text);
 	BOOST_CHECK_EQUAL(defs.rules.size(), size_t(1));
 	BOOST_CHECK_EQUAL(defs.rules[0].selectors.size(), size_t(1));
@@ -47,7 +49,7 @@ BOOST_AUTO_TEST_CASE(parse_twoSlector_emptyDeclarations)
 	com::String text = FM_STRING("\
 	onBeat(1) pitch(c d' x \"bd\"){} \
 ");
-	documentModel::compiler::ConductionSheetParser parser;
+	ConductionSheetParser parser;
 	auto defs = parser.parse(text);
 	BOOST_CHECK_EQUAL(defs.rules.size(), size_t(1));
 	BOOST_CHECK_EQUAL(defs.rules[0].selectors.size(), size_t(2));
@@ -73,7 +75,7 @@ BOOST_AUTO_TEST_CASE(parse_oneSelector_oneDeclaration)
 		velocity+=10;\
 	}\
 ");
-	documentModel::compiler::ConductionSheetParser parser;
+	ConductionSheetParser parser;
 	auto defs = parser.parse(text);
 	BOOST_CHECK_EQUAL(defs.rules.size(), size_t(1));
 	BOOST_CHECK_EQUAL(defs.rules[0].selectors.size(), size_t(1));
@@ -97,7 +99,7 @@ BOOST_AUTO_TEST_CASE(parse_oneSelector_twoDeclarations)
 		time=2%;\
 	}\
 ");
-	documentModel::compiler::ConductionSheetParser parser;
+	ConductionSheetParser parser;
 	auto defs = parser.parse(text);
 	BOOST_CHECK_EQUAL(defs.rules.size(), size_t(1));
 	BOOST_CHECK_EQUAL(defs.rules[0].selectors.size(), size_t(1));
@@ -121,8 +123,8 @@ BOOST_AUTO_TEST_CASE(parse_noDeclarationBody_fails)
 	using namespace com;
 	using documentModel::PitchDef;
 	com::String text = FM_STRING("onBeat(1)");
-	documentModel::compiler::ConductionSheetParser parser;
-	BOOST_CHECK_THROW(parser.parse(text), documentModel::compiler::Exception);
+	ConductionSheetParser parser;
+	BOOST_CHECK_THROW(parser.parse(text), Exception);
 }
 
 BOOST_AUTO_TEST_CASE(parse_oneSelectorWithNameArgument)
@@ -132,7 +134,7 @@ BOOST_AUTO_TEST_CASE(parse_oneSelectorWithNameArgument)
 	com::String text = FM_STRING("\
 	instrument(myInstrument) {} \
 ");
-	documentModel::compiler::ConductionSheetParser parser;
+	ConductionSheetParser parser;
 	auto defs = parser.parse(text);
 	BOOST_CHECK_EQUAL(defs.rules.size(), size_t(1));
 	BOOST_CHECK_EQUAL(defs.rules[0].selectors.size(), size_t(1));
@@ -140,7 +142,6 @@ BOOST_AUTO_TEST_CASE(parse_oneSelectorWithNameArgument)
 	BOOST_CHECK_EQUAL(defs.rules[0].selectors[0].arguments.size(), size_t(1));
 	BOOST_CHECK_EQUAL(defs.rules[0].selectors[0].arguments[0].name, com::String("myInstrument"));
 }
-
 
 BOOST_AUTO_TEST_CASE(parse_oneSelector_followUpOperator_1)
 {
@@ -151,7 +152,7 @@ BOOST_AUTO_TEST_CASE(parse_oneSelector_followUpOperator_1)
 		velocity =& +10;\
 	}\
 ");
-	documentModel::compiler::ConductionSheetParser parser;
+	ConductionSheetParser parser;
 	auto defs = parser.parse(text);
 	BOOST_CHECK_EQUAL(defs.rules.size(), size_t(1));
 	BOOST_CHECK_EQUAL(defs.rules[0].selectors.size(), size_t(1));
@@ -174,7 +175,7 @@ BOOST_AUTO_TEST_CASE(parse_oneSelector_followUpOperator_2)
 		velocity = &+10;\
 	}\
 ");
-	documentModel::compiler::ConductionSheetParser parser;
+	ConductionSheetParser parser;
 	auto defs = parser.parse(text);
 	BOOST_CHECK_EQUAL(defs.rules.size(), size_t(1));
 	BOOST_CHECK_EQUAL(defs.rules[0].selectors.size(), size_t(1));
@@ -197,7 +198,7 @@ BOOST_AUTO_TEST_CASE(parse_oneSelector_followUpOperator_3)
 		velocity = & + 10;\
 	}\
 ");
-	documentModel::compiler::ConductionSheetParser parser;
+	ConductionSheetParser parser;
 	auto defs = parser.parse(text);
 	BOOST_CHECK_EQUAL(defs.rules.size(), size_t(1));
 	BOOST_CHECK_EQUAL(defs.rules[0].selectors.size(), size_t(1));
@@ -220,7 +221,7 @@ BOOST_AUTO_TEST_CASE(parse_oneSelector_followUpOperator_4)
 		velocity = & - 10;\
 	}\
 ");
-	documentModel::compiler::ConductionSheetParser parser;
+	ConductionSheetParser parser;
 	auto defs = parser.parse(text);
 	BOOST_CHECK_EQUAL(defs.rules.size(), size_t(1));
 	BOOST_CHECK_EQUAL(defs.rules[0].selectors.size(), size_t(1));
@@ -243,7 +244,7 @@ BOOST_AUTO_TEST_CASE(parse_oneSelector_followUpOperator_5)
 		velocity = & -10;\
 	}\
 ");
-	documentModel::compiler::ConductionSheetParser parser;
+	ConductionSheetParser parser;
 	auto defs = parser.parse(text);
 	BOOST_CHECK_EQUAL(defs.rules.size(), size_t(1));
 	BOOST_CHECK_EQUAL(defs.rules[0].selectors.size(), size_t(1));

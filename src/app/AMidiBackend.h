@@ -4,12 +4,17 @@
 #include <vector>
 #include <com/midi.hpp>
 
-
-namespace app {
-	class AMidiBackend {
+namespace app
+{
+	class AMidiBackend
+	{
 	public:
-		enum { UNKNOWN_PORT = -1 };
-		struct Output {
+		enum
+		{
+			UNKNOWN_PORT = -1
+		};
+		struct Output
+		{
 			typedef std::string IdType;
 			int portid = UNKNOWN_PORT;
 			IdType id;
@@ -17,7 +22,7 @@ namespace app {
 		};
 		typedef std::vector<Output> Outputs;
 		virtual ~AMidiBackend() = default;
-        template<class TEvents>
+		template <class TEvents>
 		void send(const TEvents &events, const Output *output);
 		virtual Outputs getOutputs() const = 0;
 		virtual void send(const com::midi::Event &event, const Output *output) = 0;
@@ -27,15 +32,16 @@ namespace app {
 	typedef std::shared_ptr<AMidiBackend> AMidiBackendPtr;
 	///////////////////////////////////////////////////////////////////////////////
 	// Impl.
-	template<class TEvents>
+	template <class TEvents>
 	void AMidiBackend::send(const TEvents &events, const Output *output)
 	{
-		if (events.empty()) {
+		if (events.empty())
+		{
 			return;
 		}
-		for (auto &ev : events) {
+		for (auto &ev : events)
+		{
 			send(ev, output);
 		}
 	}
 }
-

@@ -6,23 +6,29 @@
 #include <com/exception.hpp>
 #include <math.h>
 
-namespace com {
-	namespace midi {
+namespace com
+{
+	namespace midi
+	{
 
 		const MetaValue NoMetaValue = "not_a_meta_value";
 
 		size_t variableLengthRequiredSize(MidiLong value)
 		{
-			if (value <= 0x7F) {
+			if (value <= 0x7F)
+			{
 				return 1;
 			}
-			if (value <= 0x3fff) {
+			if (value <= 0x3fff)
+			{
 				return 2;
 			}
-			if (value <= 0x1fffff) {
+			if (value <= 0x1fffff)
+			{
 				return 3;
 			}
-			if (value <= 0x0FFFFFFF) {
+			if (value <= 0x0FFFFFFF)
+			{
 				return 4;
 			}
 			FM_THROW(com::Exception, "invalid tick length");
@@ -33,10 +39,12 @@ namespace com {
 			{
 				return 0;
 			}
-			if (size == 0) {
+			if (size == 0)
+			{
 				FM_THROW(com::Exception, "buffer too small");
 			}
-			if (value < 128) {
+			if (value < 128)
+			{
 				outval[0] = static_cast<Byte>(value);
 				return 1;
 			}
@@ -48,15 +56,19 @@ namespace com {
 				buffer |= ((value & 0x7F) | 0x80);
 			}
 			int c = 0;
-			while (true) {
-				if (c >= (int)size) {
+			while (true)
+			{
+				if (c >= (int)size)
+				{
 					FM_THROW(com::Exception, "buffer too small");
 				}
 				outval[c++] = (Byte)buffer;
-				if (buffer & 0x80) {
+				if (buffer & 0x80)
+				{
 					buffer >>= 8;
 				}
-				else {
+				else
+				{
 					break;
 				}
 			}
@@ -68,20 +80,25 @@ namespace com {
 			MidiLong value;
 			Byte c;
 			int idx = 0;
-			if ((value = inval[idx++]) & 0x80) {
+			if ((value = inval[idx++]) & 0x80)
+			{
 				value &= 0x7F;
-				do {
-					if (idx >= 4) {
+				do
+				{
+					if (idx >= 4)
+					{
 						FM_THROW(com::Exception, "invalid midi stream");
 					}
-					if (idx >= (int)maxSize) {
+					if (idx >= (int)maxSize)
+					{
 						FM_THROW(com::Exception, "buffer too small");
 					}
 					c = inval[idx++];
 					value = (value << 7) + (c & 0x7F);
 				} while (c & 0x80);
 			}
-			if (outReadBytes) {
+			if (outReadBytes)
+			{
 				*outReadBytes = idx;
 			}
 			return value;
@@ -92,14 +109,16 @@ namespace com {
 			return absPosition() - deltaOffset;
 		}
 
-		Channel Event::channel() const {
+		Channel Event::channel() const
+		{
 			return _ch % MaxChannel;
 		}
 		///////////////////////////////////////////////////////////////////////////
 		// Event
 		size_t Event::read(Ticks deltaOffset, const Byte *bytes, size_t maxByteSize)
 		{
-			if (maxByteSize < MinEventSize) {
+			if (maxByteSize < MinEventSize)
+			{
 				FM_THROW(com::Exception, "buffer to small");
 			}
 			size_t c = 0;
@@ -108,8 +127,9 @@ namespace com {
 		}
 		size_t Event::readPayload(const Byte *bytes, size_t maxByteSize)
 		{
-			
-			if (*bytes != MetaEvent) {
+
+			if (*bytes != MetaEvent)
+			{
 				return readPayloadDefault(bytes, maxByteSize);
 			}
 			eventType(MetaEvent);
@@ -119,10 +139,11 @@ namespace com {
 		size_t Event::readPayloadDefault(const Byte *bytes, size_t maxByteSize)
 		{
 			size_t c = 0;
-			eventType(static_cast<EventType>((*(bytes) & 0xF0) >> 4));
+			eventType(static_cast<EventType>((*(bytes)&0xF0) >> 4));
 			channel((bytes[c++] & 0xF));
 			parameter1(bytes[c++]);
-			if (payloadSize() > 2) {
+			if (payloadSize() > 2)
+			{
 				parameter2(bytes[c++]);
 			}
 			return c;
@@ -133,12 +154,14 @@ namespace com {
 			size_t vlengthBytes = 0;
 			size_t metaTypeByteSize = 1;
 			_metaDataSize = variableLengthRead(bytes, maxByteSize - metaTypeByteSize, &vlengthBytes);
-			bytes+=vlengthBytes;
+			bytes += vlengthBytes;
 
-			if ((maxByteSize-vlengthBytes-metaTypeByteSize) < _metaDataSize) {
+			if ((maxByteSize - vlengthBytes - metaTypeByteSize) < _metaDataSize)
+			{
 				FM_THROW(com::Exception, "buffer to small");
 			}
-			if (_metaDataSize >= MaxVarLength) {
+			if (_metaDataSize >= MaxVarLength)
+			{
 				FM_THROW(com::Exception, "meta data bytes overflow");
 			}
 			_metaData = Bytes(new Byte[_metaDataSize]);
@@ -148,7 +171,8 @@ namespace com {
 		size_t Event::write(Ticks deltaOffset, Byte *bytes, size_t maxByteSize) const
 		{
 			size_t length = byteSize(deltaOffset);
-			if (length > maxByteSize) {
+			if (length > maxByteSize)
+			{
 				FM_THROW(com::Exception, "buffer to small");
 			}
 			MidiLong relOff = (MidiLong)::nearbyint(relDelta(deltaOffset));
@@ -158,20 +182,24 @@ namespace com {
 		}
 		size_t Event::writePayload(Byte *bytes, size_t maxByteSize) const
 		{
-			if (eventType()==MetaEvent) {
+			if (eventType() == MetaEvent)
+			{
 				return writePayloadMeta(bytes, maxByteSize);
 			}
 			return writePayloadDefault(bytes, maxByteSize);
 		}
 		size_t Event::writePayloadDefault(Byte *bytes, size_t maxByteSize) const
 		{
-			if (maxByteSize < 2) {
+			if (maxByteSize < 2)
+			{
 				FM_THROW(com::Exception, "buffer to small");
 			}
 			(*bytes++) = (eventType() << 4) | channel();
 			(*bytes++) = parameter1();
-			if (payloadSize() > 2) {
-				if (maxByteSize < 3) {
+			if (payloadSize() > 2)
+			{
+				if (maxByteSize < 3)
+				{
 					FM_THROW(com::Exception, "buffer to small");
 				}
 				(*bytes++) = parameter2();
@@ -182,7 +210,8 @@ namespace com {
 
 		size_t Event::writePayloadMeta(Byte *bytes, size_t maxByteSize) const
 		{
-			if (maxByteSize < payloadSize()) {
+			if (maxByteSize < payloadSize())
+			{
 				FM_THROW(com::Exception, "buffer to small");
 			}
 			(*bytes++) = eventType();
@@ -196,10 +225,14 @@ namespace com {
 		{
 			switch (eventType())
 			{
-			case ProgramChange: return 2;
-			case ChannelAftertouch: return 2;
-			case MetaEvent: return 2 + variableLengthRequiredSize(_metaDataSize) + _metaDataSize;
-			default:break;
+			case ProgramChange:
+				return 2;
+			case ChannelAftertouch:
+				return 2;
+			case MetaEvent:
+				return 2 + variableLengthRequiredSize(_metaDataSize) + _metaDataSize;
+			default:
+				break;
 			}
 			return 3;
 		}
@@ -215,7 +248,7 @@ namespace com {
 			ev.parameter1(0xA);
 			ev.parameter2(std::max(std::min(val, (Byte)MaxMidiValue), (Byte)0));
 			return ev;
-		}		
+		}
 		Event Event::CCVolume(Channel channel, Byte volume)
 		{
 			auto ev = com::midi::Event();
@@ -247,12 +280,12 @@ namespace com {
 		}
 		Event Event::PitchBend(Channel channel, Ticks absPos, double value)
 		{
-			int ivalue = static_cast<int>( (value * (double)MaxPitchbend) );
+			int ivalue = static_cast<int>((value * (double)MaxPitchbend));
 			Event ev;
 			ev.channel(channel);
 			ev.absPosition(absPos);
-			ev.parameter2( static_cast<Byte>(ivalue >> 7) );
-			ev.parameter1( static_cast<Byte>(ivalue & 0x7f) );
+			ev.parameter2(static_cast<Byte>(ivalue >> 7));
+			ev.parameter1(static_cast<Byte>(ivalue & 0x7f));
 			ev.eventType(midi::PitchBend);
 			return ev;
 		}
@@ -269,18 +302,19 @@ namespace com {
 			ev.metaData(Tempo, bytes.data(), bytes.size());
 			return ev;
 		}
-	 	Event Event::MetaSignature(Byte nominator, Byte denominator, Byte clocksBetweenMetronomeClick, Byte nth32PerQuarter)
+		Event Event::MetaSignature(Byte nominator, Byte denominator, Byte clocksBetweenMetronomeClick, Byte nth32PerQuarter)
 		{
 			auto ev = Event();
 			static const double log2 = 0.6931471805599453;
-			denominator = static_cast<Byte>( log(denominator) / log2);
-			std::vector<Byte> bytes = {nominator, denominator, clocksBetweenMetronomeClick, nth32PerQuarter };
+			denominator = static_cast<Byte>(log(denominator) / log2);
+			std::vector<Byte> bytes = {nominator, denominator, clocksBetweenMetronomeClick, nth32PerQuarter};
 			ev.metaData(TimeSignature, bytes.data(), bytes.size());
 			return ev;
 		}
 		std::pair<Byte, Byte> Event::MetaGetSignatureValue(const Byte *data, size_t length)
 		{
-			if (length != 4) {
+			if (length != 4)
+			{
 				throw std::runtime_error("invalid byte size for meta time signature");
 			}
 			static const double log2 = 0.6931471805599453;
@@ -308,10 +342,11 @@ namespace com {
 			auto bytes = MetaCreateStringData(name);
 			ev.metaData(CuePoint, bytes.data(), bytes.size());
 			return ev;
-		}		
+		}
 		void Event::metaData(MetaEventType type, Byte *data, size_t numBytes)
 		{
-			if (numBytes >= MaxVarLength) {
+			if (numBytes >= MaxVarLength)
+			{
 				FM_THROW(com::Exception, "meta data bytes overflow");
 			}
 			eventType(MetaEvent);
@@ -323,23 +358,27 @@ namespace com {
 		std::vector<Byte> Event::MetaCreateIntData(int value, size_t numBytes)
 		{
 			std::vector<Byte> result(numBytes);
-			for (size_t i=1; i<=numBytes; ++i) {
+			for (size_t i = 1; i <= numBytes; ++i)
+			{
 				auto byte = value & 0xFF;
-				result[numBytes-i] = byte;
+				result[numBytes - i] = byte;
 				value = value >> 8;
 			}
 			return result;
 		}
 		int Event::MetaGetIntValue(const Byte *data, size_t length)
 		{
-			if (length > sizeof(int)) {
+			if (length > sizeof(int))
+			{
 				FM_THROW(com::Exception, "to many bytes for meta data int value");
 			}
 			int result = 0;
 			size_t idx = 0;
-			while(true) {
+			while (true)
+			{
 				result |= data[idx++];
-				if (idx >= length) {
+				if (idx >= length)
+				{
 					break;
 				}
 				result = result << 8;
@@ -356,7 +395,8 @@ namespace com {
 		}
 		Event Event::MetaCustom(const CustomMetaData &custom)
 		{
-			if (custom.type == CustomMetaData::Undefined) {
+			if (custom.type == CustomMetaData::Undefined)
+			{
 				FM_THROW(com::Exception, "invalid meta custom data");
 			}
 			std::vector<Byte> bff(custom.data.size() + 1);
@@ -368,66 +408,71 @@ namespace com {
 		}
 		CustomMetaData Event::MetaGetCustomData(const Byte *data, size_t length)
 		{
-			if (length == 0) {
+			if (length == 0)
+			{
 				FM_THROW(com::Exception, "invalid meta custom data");
 			}
 			CustomMetaData result;
 			result.type = static_cast<CustomMetaData::Type>(data[0]);
-			if (length == 1) {
+			if (length == 1)
+			{
 				return result;
 			}
 			result.data = CustomMetaData::Data(&data[1], &data[length]);
 			return result;
 		}
-		bool Event::equals(const Event&b) const
+		bool Event::equals(const Event &b) const
 		{
-			bool res = absPosition() == b.absPosition()
-				&& eventType() == b.eventType()
-				&& channel() == b.channel()
-				&& parameter1() == b.parameter1()
-				&& parameter2() == b.parameter2();
-			if (eventType() != MetaEvent) {
+			bool res = absPosition() == b.absPosition() && eventType() == b.eventType() && channel() == b.channel() && parameter1() == b.parameter1() && parameter2() == b.parameter2();
+			if (eventType() != MetaEvent)
+			{
 				return res;
 			}
-			if (metaEventType() != b.metaEventType()) {
+			if (metaEventType() != b.metaEventType())
+			{
 				return false;
 			}
-			if (metaDataSize() != b.metaDataSize()) {
+			if (metaDataSize() != b.metaDataSize())
+			{
 				return false;
 			}
 			return ::memcmp(metaData(), b.metaData(), metaDataSize()) == 0;
 		}
 
-
 		///////////////////////////////////////////////////////////////////////////
 		// EventCompare
 		// events should be ordered by following order:
-		// (1)control changes, (2)program change then note-on / note-off 
+		// (1)control changes, (2)program change then note-on / note-off
 
-		bool EventCompare::operator() (const Event& a, const Event& b) const
+		bool EventCompare::operator()(const Event &a, const Event &b) const
 		{
 			auto pos1 = a.absPosition();
 			auto pos2 = b.absPosition();
-			if (pos1 != pos2) {
+			if (pos1 != pos2)
+			{
 				return pos1 < pos2;
 			}
 			int t1 = a.eventType();
 			int t2 = b.eventType();
-			if (t1==MetaEvent && t2!=MetaEvent ) { // could be custom meta: change device
+			if (t1 == MetaEvent && t2 != MetaEvent)
+			{ // could be custom meta: change device
 				return true;
 			}
-			if (t2==MetaEvent && t1!=MetaEvent) { // could be custom meta: change device
+			if (t2 == MetaEvent && t1 != MetaEvent)
+			{ // could be custom meta: change device
 				return false;
 			}
 			bool isNoteEvent1 = t1 == NoteOn || t1 == NoteOff;
 			bool isNoteEvent2 = t2 == NoteOn || t2 == NoteOff;
-			if (isNoteEvent1 && !isNoteEvent2) {
+			if (isNoteEvent1 && !isNoteEvent2)
+			{
 				return false; // note1 < other
 			}
-			if (isNoteEvent2 && !isNoteEvent1) {
+			if (isNoteEvent2 && !isNoteEvent1)
+			{
 				return true; // other > note2
 			}
-			return (int)t1<(int)t2;
+			return (int)t1 < (int)t2;
 		}
 
 		///////////////////////////////////////////////////////////////////////////
@@ -436,16 +481,18 @@ namespace com {
 		{
 			std::sort(_container.begin(), _container.end(), EventCompare());
 		}
-		const MidiConfig * EventContainer::midiConfig() const
+		const MidiConfig *EventContainer::midiConfig() const
 		{
-			if (!this->_midiConfig) {
+			if (!this->_midiConfig)
+			{
 				FM_THROW(com::Exception, "midiconfig == null");
 			}
 			return this->_midiConfig;
 		}
 		void EventContainer::add(const Event &event)
 		{
-			if (midiConfig()->skipMetaEvents && event.eventType() == MetaEvent) {
+			if (midiConfig()->skipMetaEvents && event.eventType() == MetaEvent)
+			{
 				return;
 			}
 			_container.push_back(event);
@@ -454,8 +501,10 @@ namespace com {
 		{
 			ConstIterator it = _container.begin();
 			ConstIterator end = _container.end();
-			for (; it != end; ++it) {
-				if (*it == event) {
+			for (; it != end; ++it)
+			{
+				if (*it == event)
+				{
 					_container.erase(it);
 					break;
 				}
@@ -473,14 +522,16 @@ namespace com {
 		{
 			Ticks offset = 0;
 			size_t startSize = byteSize;
-			while (true) {
+			while (true)
+			{
 				Event ev;
 				auto numBytes = ev.read(offset, bff, byteSize);
 				offset = ev.absPosition();
 				_container.push_back(ev);
 				bff += numBytes;
 				byteSize -= numBytes;
-				if (((int)byteSize - (int)MinEventSize) <= 0) {
+				if (((int)byteSize - (int)MinEventSize) <= 0)
+				{
 					break;
 				}
 			}
@@ -488,18 +539,21 @@ namespace com {
 		}
 		size_t EventContainer::write(Byte *bff, size_t maxByteSize, com::Ticks *outWrittenDuration) const
 		{
-			if (maxByteSize < byteSize()) {
+			if (maxByteSize < byteSize())
+			{
 				FM_THROW(com::Exception, "buffer to small");
 			}
 			size_t written = 0;
 			Ticks offset = 0;
-			for (const auto& ev : _container) {
+			for (const auto &ev : _container)
+			{
 				auto numBytes = ev.write(offset, bff, maxByteSize - written);
 				offset = ::nearbyint(ev.absPosition());
 				written += numBytes;
 				bff += numBytes;
 			}
-			if (outWrittenDuration) {
+			if (outWrittenDuration)
+			{
 				*outWrittenDuration = offset;
 			}
 			return written;
@@ -513,7 +567,8 @@ namespace com {
 		{
 			size_t result = 0;
 			Ticks offset = 0;
-			for (const auto& ev : _container) {
+			for (const auto &ev : _container)
+			{
 				result += ev.byteSize(offset);
 				offset = ev.absPosition();
 			}
@@ -533,12 +588,14 @@ namespace com {
 		size_t Track::write(Byte *bff, size_t maxByteSize)
 		{
 			size_t wrote = 0;
-			if (maxByteSize < byteSize()) {
+			if (maxByteSize < byteSize())
+			{
 				FM_THROW(com::Exception, "buffer to small");
 			}
 			Header header;
 			header.chunkSize = static_cast<DWord>(events().byteSize() + EoTSize);
-			if (isLittleEndian()) {
+			if (isLittleEndian())
+			{
 				endswap(&header.chunkSize);
 			}
 			::memcpy(bff, &header, HeaderSize);
@@ -562,14 +619,16 @@ namespace com {
 		MetaValue Track::getMetaData(const MetaKey &key) const
 		{
 			auto it = _metaDataContainer.find(key);
-			if (it == _metaDataContainer.end()) {
+			if (it == _metaDataContainer.end())
+			{
 				return NoMetaValue;
 			}
 			return it->second;
 		}
 		///////////////////////////////////////////////////////////////////////////
 		// MIDI
-		Midi::Midi(Ticks ppq) {
+		Midi::Midi(Ticks ppq)
+		{
 			_ppq = ppq;
 		}
 		size_t Midi::read(const Byte *, size_t length)
@@ -578,17 +637,20 @@ namespace com {
 		}
 		size_t Midi::write(Byte *bff, size_t maxByteSize) const
 		{
-			if (!_sealed) {
+			if (!_sealed)
+			{
 				throw std::runtime_error("seal midi file before writing");
 			}
 			size_t wrote = 0;
-			if (maxByteSize < byteSize()) {
+			if (maxByteSize < byteSize())
+			{
 				FM_THROW(com::Exception, "buffer to small");
 			}
 			Header header;
 			header.timeDivision = static_cast<Word>(0x7FFF) & static_cast<Word>(_ppq);
 			header.numberOfTracks = static_cast<Word>(tracks().size());
-			if (isLittleEndian()) {
+			if (isLittleEndian())
+			{
 				endswap(&header.chunkSize);
 				endswap(&header.formatType);
 				endswap(&header.numberOfTracks);
@@ -597,7 +659,8 @@ namespace com {
 			::memcpy(bff, &header, HeaderSize);
 			bff += HeaderSize;
 			wrote += HeaderSize;
-			for (const auto &track : _container) {
+			for (const auto &track : _container)
+			{
 				size_t bytes = track->write(bff, maxByteSize - wrote);
 				bff += bytes;
 				wrote += bytes;
@@ -606,30 +669,34 @@ namespace com {
 		}
 		size_t Midi::byteSize() const
 		{
-			if (!_sealed) {
+			if (!_sealed)
+			{
 				throw std::runtime_error("seal midi file before obtaining byte size");
 			}
 			size_t result = HeaderSize;
-			for (const auto &track : _container) {
+			for (const auto &track : _container)
+			{
 				result += track->byteSize();
 			}
 			return result;
 		}
 		void Midi::addTrack(TrackPtr track)
 		{
-			if (_sealed) {
+			if (_sealed)
+			{
 				throw std::runtime_error("midi file is sealed");
 			}
 			track->events().midiConfig(&this->midiConfig);
 			_container.push_back(track);
 		}
-		
-		Midi::TrackContainer & Midi::tracks() 
-		{ 
-			if (_sealed) {
+
+		Midi::TrackContainer &Midi::tracks()
+		{
+			if (_sealed)
+			{
 				throw std::runtime_error("midi file is sealed");
 			}
-			return _container; 
+			return _container;
 		}
 
 		TrackPtr Midi::createTrack() const
@@ -637,7 +704,7 @@ namespace com {
 			auto result = std::make_shared<Track>();
 			return result;
 		}
-		void Midi::write(const char* filename)
+		void Midi::write(const char *filename)
 		{
 			std::fstream stream(filename, std::ios::out | std::ios::trunc | std::ios::binary);
 			write(stream);
@@ -649,7 +716,7 @@ namespace com {
 			size_t size = byteSize();
 			Byte *bff = new Byte[size];
 			write(bff, size);
-			os.write(reinterpret_cast<char*>(bff), size);
+			os.write(reinterpret_cast<char *>(bff), size);
 			os.flush();
 			delete[] bff;
 		}
@@ -657,9 +724,11 @@ namespace com {
 		Ticks Midi::duration() const
 		{
 			Ticks duration = 0;
-			for (auto track : tracks()) {
+			for (auto track : tracks())
+			{
 				auto &events = track->events();
-				if (events.container().size() == 0) {
+				if (events.container().size() == 0)
+				{
 					continue;
 				}
 				auto last = --(events.end());
@@ -668,13 +737,16 @@ namespace com {
 			return duration;
 		}
 
-		void Midi::clear() {
+		void Midi::clear()
+		{
 			bpm_ = com::DefaultTempo;
 			_container.clear();
 		}
 
-		void Midi::seal() {
-			for (auto track : tracks()) {
+		void Midi::seal()
+		{
+			for (auto track : tracks())
+			{
 				track->events().sort();
 			}
 			_sealed = true;
@@ -682,7 +754,7 @@ namespace com {
 
 		void Midi::crop(com::Ticks begin, com::Ticks end)
 		{
-			for (auto &track : _container) 
+			for (auto &track : _container)
 			{
 				auto &originalContainer = track->events().container();
 				com::midi::EventContainer::TContainer copy;
@@ -690,17 +762,19 @@ namespace com {
 				for (auto &midiEvent : originalContainer)
 				{
 					com::Ticks midiEventPosition = midiEvent.absPosition();
-					bool canBeSkipped = midiEvent.eventType() == com::midi::NoteOn 
-						|| midiEvent.eventType() == com::midi::NoteOff;
+					bool canBeSkipped = midiEvent.eventType() == com::midi::NoteOn || midiEvent.eventType() == com::midi::NoteOff;
 					bool isInRange = midiEventPosition >= begin && midiEventPosition < end;
-					if (canBeSkipped && !isInRange) {
+					if (canBeSkipped && !isInRange)
+					{
 						continue;
 					}
-					if (!canBeSkipped && (midiEventPosition < begin)) {
+					if (!canBeSkipped && (midiEventPosition < begin))
+					{
 						midiEvent.absPosition(0);
-
-					} else {
-						midiEvent.absPosition( midiEvent.absPosition() - begin);
+					}
+					else
+					{
+						midiEvent.absPosition(midiEvent.absPosition() - begin);
 					}
 					copy.push_back(midiEvent);
 				}

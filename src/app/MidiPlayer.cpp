@@ -15,19 +15,22 @@
 #define SIGINT_WORKAROUND
 #endif
 
-namespace app {
+namespace app
+{
 
-    void MidiPlayer::listDevices(std::ostream& os)
+    void MidiPlayer::listDevices(std::ostream &os)
     {
         auto outputs = _midiPlayerImpl.getOutputs();
-        for (const auto &output : outputs) {
+        for (const auto &output : outputs)
+        {
             os << output.id << ": " << output.name << std::endl;
         }
     }
 
     void MidiPlayer::write(documentModel::DocumentPtr doc)
     {
-        if (state > Stopped) {
+        if (state > Stopped)
+        {
             return;
         }
         _logger->babble(WMLogLambda(log << "start playback"));
@@ -48,10 +51,11 @@ namespace app {
         com::Ticks resume = 0;
         com::Ticks begin = 0;
         com::Ticks end = _midifile->duration();
-        if (_programOptions->getResumeAtPosition() > 0) {
+        if (_programOptions->getResumeAtPosition() > 0)
+        {
             resume = _programOptions->getResumeAtPosition() * com::PPQ;
             _programOptions->setResumeAtPosition(0);
-        }        
+        }
         _logger->babble(WMLogLambda(log << "begin at tick: " << begin));
         initFluidSynthInstances();
         _midiPlayerImpl.updateOutputMapping(com::getConfigServer().getDevices());
@@ -59,34 +63,40 @@ namespace app {
         _midiPlayerImpl.play(resume > 0 ? resume : begin);
 
         state = Playing;
-        bool loop   = _programOptions->isLoopSet();
-        app::os::setSigtermHandler([&]{
-            state = Stopped;
-            _midiPlayerImpl.panic();
-            _logger->debug(WMLogLambda(log << "stopped via SIGTERM"));
-        });
-       
+        bool loop = _programOptions->isLoopSet();
+        app::os::setSigtermHandler([&]
+                                   {
+                                       state = Stopped;
+                                       _midiPlayerImpl.panic();
+                                       _logger->debug(WMLogLambda(log << "stopped via SIGTERM"));
+                                   });
+
 #ifdef SIGINT_WORKAROUND
-         std::unique_ptr<app::os::InterProcessMessageQueue> ipcMessageQueue = nullptr;
-         bool isSigintWorkaround = _programOptions->isSigintWorkaroundSet();
-         if (isSigintWorkaround) {
-             ipcMessageQueue = std::make_unique<app::os::InterProcessMessageQueue>();
-         }
-         _logger->debug(WMLogLambda(log << "using win32 sigterm ipc workaround"));
+        std::unique_ptr<app::os::InterProcessMessageQueue> ipcMessageQueue = nullptr;
+        bool isSigintWorkaround = _programOptions->isSigintWorkaroundSet();
+        if (isSigintWorkaround)
+        {
+            ipcMessageQueue = std::make_unique<app::os::InterProcessMessageQueue>();
+        }
+        _logger->debug(WMLogLambda(log << "using win32 sigterm ipc workaround"));
 #endif
         visitVisitors(BeginLoop, 0);
-        while (state > Stopped) {
+        while (state > Stopped)
+        {
             auto elapsed = _midiPlayerImpl.elapsed();
-            std::this_thread::sleep_for( std::chrono::milliseconds(UPDATE_THREAD_SLEEPTIME) );
+            std::this_thread::sleep_for(std::chrono::milliseconds(UPDATE_THREAD_SLEEPTIME));
 #ifdef SIGINT_WORKAROUND
-             if (ipcMessageQueue && ipcMessageQueue->sigintReceived()) {
-                 state = Stopped;
-                 _midiPlayerImpl.panic();
-                 _logger->debug(WMLogLambda(log << "stopped via win32 sigterm ipc workaround"));
-             }
+            if (ipcMessageQueue && ipcMessageQueue->sigintReceived())
+            {
+                state = Stopped;
+                _midiPlayerImpl.panic();
+                _logger->debug(WMLogLambda(log << "stopped via win32 sigterm ipc workaround"));
+            }
 #endif
-            if (elapsed >= end) {
-                if (!loop) {
+            if (elapsed >= end)
+            {
+                if (!loop)
+                {
                     break;
                 }
                 _midiPlayerImpl.play(begin);
@@ -96,31 +106,32 @@ namespace app {
         visitVisitors(EndLoop, 0);
         _midiPlayerImpl.stop();
         _midiPlayerImpl.panic();
-        _midiPlayerImpl.Backend:: tearDown();
-
+        _midiPlayerImpl.Backend::tearDown();
     }
 
     void MidiPlayer::visitVisitors(VisitorMessage msg, com::Ticks elapsed)
     {
         com::Ticks renderRangeBegin = _programOptions->isBeginSet() ? (_programOptions->getBegin() * com::PPQ) : 0;
-        for(auto visitor : _loopVisitors.container) {
+        for (auto visitor : _loopVisitors.container)
+        {
             switch (msg)
             {
-                case BeginLoop: 
-                    visitor->loopBegin();
-                    break;
-                case EndLoop:
-                    visitor->loopEnd();
-                    break;
-                case Loop:
-                    visitor->visit(elapsed + renderRangeBegin);
+            case BeginLoop:
+                visitor->loopBegin();
+                break;
+            case EndLoop:
+                visitor->loopEnd();
+                break;
+            case Loop:
+                visitor->visit(elapsed + renderRangeBegin);
             }
         }
     }
 
     com::Ticks MidiPlayer::stop()
     {
-        if (state == Stopped) {
+        if (state == Stopped)
+        {
             return 0;
         }
         auto position = _midiPlayerImpl.elapsed();
@@ -131,13 +142,15 @@ namespace app {
 
     void MidiPlayer::initFluidSynthInstances()
     {
-        const auto& deviceConfigs = com::getConfigServer().getDevices();
-        for (const auto& idConfPair : deviceConfigs) {
-            const auto& conf = idConfPair.second;
-            if (conf.type != com::DeviceConfig::FluidSynth) {
+        const auto &deviceConfigs = com::getConfigServer().getDevices();
+        for (const auto &idConfPair : deviceConfigs)
+        {
+            const auto &conf = idConfPair.second;
+            if (conf.type != com::DeviceConfig::FluidSynth)
+            {
                 continue;
             }
-            const auto& soundFontFile = conf.deviceId;
+            const auto &soundFontFile = conf.deviceId;
             FluidSynthBackend::createInstance(conf.deviceId, soundFontFile);
         }
     }

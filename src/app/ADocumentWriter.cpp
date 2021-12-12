@@ -1,16 +1,17 @@
 #include "ADocumentWriter.h"
 
-namespace app {
-    void ADocumentWriter::writeException(const std::exception &ex) 
+namespace app
+{
+    void ADocumentWriter::writeException(const std::exception &ex)
     {
-        _logger->error(WMLogLambda(log << ex.what() ));
+        _logger->error(WMLogLambda(log << ex.what()));
     }
-    void ADocumentWriter::writeException(const com::Exception &ex) 
+    void ADocumentWriter::writeException(const com::Exception &ex)
     {
-         _logger->error(WMLogLambda(log << ex.toString() ));
+        _logger->error(WMLogLambda(log << ex.toString()));
     }
-    void ADocumentWriter::writeUnknownException() 
+    void ADocumentWriter::writeUnknownException()
     {
-        _logger->error(WMLogLambda(log << "unkown error" ));
+        _logger->error(WMLogLambda(log << "unkown error"));
     }
 }

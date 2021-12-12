@@ -5,7 +5,8 @@
 #include <IPlayerProgramOptions.h>
 #include <CompilerProgramOptions.h>
 
-struct PlayerProgramOptions : public CompilerProgramOptions, public IPlayerProgramOptions {
+struct PlayerProgramOptions : public CompilerProgramOptions, public IPlayerProgramOptions
+{
 	virtual ~PlayerProgramOptions() = default;
 	virtual void parseProgrammArgs(size_t argc, const char **argv) override;
 
@@ -25,7 +26,7 @@ struct PlayerProgramOptions : public CompilerProgramOptions, public IPlayerProgr
 	virtual bool isOutputSet() const override { return false; }
 	virtual bool isNoMetaSet() const override { return false; }
 	virtual com::String getOutput() const override { return ""; }
+
 private:
 	double resumeAtPosition = 0;
 };
-

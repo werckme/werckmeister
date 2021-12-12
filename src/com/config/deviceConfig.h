@@ -2,9 +2,12 @@
 
 #include <string>
 
-namespace com {
-    struct DeviceConfig {
-        enum Type {
+namespace com
+{
+    struct DeviceConfig
+    {
+        enum Type
+        {
             Undefinded,
             Midi,
             FluidSynth
@@ -16,4 +19,3 @@ namespace com {
         DeviceId deviceId;
     };
 }
-

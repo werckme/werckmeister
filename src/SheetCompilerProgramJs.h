@@ -2,28 +2,19 @@
 
 #include "SheetCompilerProgram.h"
 
-class SheetCompilerProgramJs : public SheetCompilerProgram {
+class SheetCompilerProgramJs : public SheetCompilerProgram
+{
 public:
     SheetCompilerProgramJs(
-        ICompilerProgramOptionsPtr               programOptions,
-        com::ILoggerPtr                           logger,
-        documentModel::compiler::IDocumentParserPtr      documentParser,
-        documentModel::compiler::ICompilerPtr            compiler,
-        documentModel::compiler::IContextPtr             context,
-        documentModel::compiler::IPreprocessorPtr        preprocessor,
-        com::midi::MidiPtr                        midiFile,
-        app::IDocumentWriterPtr                documentWriter,
-        documentModel::conductor::IConductionsPerformerPtr          conductionsPerformer
-    ) : SheetCompilerProgram(programOptions
-        , logger
-        , documentParser
-        , compiler
-        , context
-        , preprocessor
-        , midiFile
-        , documentWriter
-        , conductionsPerformer
-    )
+        ICompilerProgramOptionsPtr programOptions,
+        com::ILoggerPtr logger,
+        parser::IDocumentParserPtr documentParser,
+        compiler::ICompilerPtr compiler,
+        compiler::IContextPtr context,
+        compiler::IPreprocessorPtr preprocessor,
+        com::midi::MidiPtr midiFile,
+        app::IDocumentWriterPtr documentWriter,
+        conductor::IConductionsPerformerPtr conductionsPerformer) : SheetCompilerProgram(programOptions, logger, documentParser, compiler, context, preprocessor, midiFile, documentWriter, conductionsPerformer)
     {
     }
     app::IDocumentWriterPtr documentWriter() const { return _documentWriter; }
@@ -32,5 +23,3 @@ public:
 protected:
     virtual void prepareSearchPaths();
 };
-
-

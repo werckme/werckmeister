@@ -1,15 +1,15 @@
 #include "InstrumentConfigSetPan.h"
 #include <compiler/context/IContext.h>
 
-namespace documentModel {
-    namespace compiler {
-        void InstrumentConfigSetPan::execute(IContextPtr  context)
+namespace compiler
+{
+    void InstrumentConfigSetPan::execute(IContextPtr context)
+    {
+        if (!this->hasInstrument())
         {
-            if (!this->hasInstrument()) {
-                return;
-            }
-            auto setTo = parameters[argumentNames.SetVolume.SetTo].value<double>();
-            this->getInstrument()->pan = setTo; 
+            return;
         }
+        auto setTo = parameters[argumentNames.SetVolume.SetTo].value<double>();
+        this->getInstrument()->pan = setTo;
     }
 }

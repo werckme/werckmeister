@@ -4,16 +4,12 @@
 #include <forward.hpp>
 #include <memory>
 
-namespace documentModel
+namespace conductor
 {
-	namespace conductor
+	class IConductionsPerformer
 	{
-		class IConductionsPerformer
-		{
-		public:
-			virtual void applyConductions() = 0;
-		};
-		typedef std::shared_ptr<IConductionsPerformer> IConductionsPerformerPtr;
-	}
+	public:
+		virtual void applyConductions() = 0;
+	};
+	typedef std::shared_ptr<IConductionsPerformer> IConductionsPerformerPtr;
 }
-

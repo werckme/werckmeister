@@ -4,7 +4,8 @@
 #include <ostream>
 #include <memory>
 
-struct ICompilerProgramOptions {
+struct ICompilerProgramOptions
+{
 	virtual bool isHelpSet() const = 0;
 	virtual bool isInputSet() const = 0;
 	virtual com::String getInput() const = 0;
@@ -20,9 +21,8 @@ struct ICompilerProgramOptions {
 	virtual bool isBeginSet() const = 0;
 	virtual double getBegin() const = 0;
 	virtual bool isEndSet() const = 0;
-	virtual double getEnd() const = 0;		
+	virtual double getEnd() const = 0;
 	virtual ~ICompilerProgramOptions() = default;
 };
 
 typedef std::shared_ptr<ICompilerProgramOptions> ICompilerProgramOptionsPtr;
-

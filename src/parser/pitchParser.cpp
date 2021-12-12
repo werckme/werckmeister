@@ -9,38 +9,35 @@
 #include <boost/phoenix/operator/arithmetic.hpp>
 #include "parserSymbols.h"
 
-namespace documentModel {
-    namespace compiler {
-        namespace {
-			PitchSymbols pitchSymbols_;
-			OctaveSymbols octaveSymbols_;
-			DurationSymbols durationSymbols_;
-		}
+namespace parser
+{
+    namespace
+    {
+        PitchSymbols pitchSymbols_;
+        OctaveSymbols octaveSymbols_;
+        DurationSymbols durationSymbols_;
+    }
 
-        PitchParser::PitchParser()
-        {
-            using namespace boost::phoenix;
-            namespace qi = boost::spirit::qi;
-            namespace ascii = boost::spirit::ascii;
-            using boost::spirit::qi::repeat;
-            using qi::lit;
-            using qi::_val;
-            using ascii::char_;
-            using boost::phoenix::at_c;
-            using qi::_1;
-            using qi::lexeme;
-            using boost::phoenix::push_back;
-            using qi::attr;
-            extendedPitch_.name("extended pitch");
-            extendedPitch_ %= "" 
-                >> char_("hijklmnopqsuvwxyz")
-                >> repeat(0, 5)[lit("'")[push_back(at_c<0>(_val), '\'')]]
-                >> repeat(0, 5)[lit(",")[push_back(at_c<0>(_val), ',')]]
-            ;
+    PitchParser::PitchParser()
+    {
+        using namespace boost::phoenix;
+        namespace qi = boost::spirit::qi;
+        namespace ascii = boost::spirit::ascii;
+        using ascii::char_;
+        using boost::phoenix::at_c;
+        using boost::phoenix::push_back;
+        using boost::spirit::qi::repeat;
+        using qi::_1;
+        using qi::_val;
+        using qi::attr;
+        using qi::lexeme;
+        using qi::lit;
+        using namespace documentModel;
+        extendedPitch_.name("extended pitch");
+        extendedPitch_ %= "" >> char_("hijklmnopqsuvwxyz") >> repeat(0, 5)[lit("'")[push_back(at_c<0>(_val), '\'')]] >> repeat(0, 5)[lit(",")[push_back(at_c<0>(_val), ',')]];
 
-            pitch_ %= pitchSymbols_ >> (octaveSymbols_ | attr(PitchDef::DefaultOctave));
-            alias_ %= lexeme['"' >> +(char_ - '"') >> '"'];
-            pitchOrAlias_ %= pitch_ | alias_ | extendedPitch_;
-        }
+        pitch_ %= pitchSymbols_ >> (octaveSymbols_ | attr(PitchDef::DefaultOctave));
+        alias_ %= lexeme['"' >> +(char_ - '"') >> '"'];
+        pitchOrAlias_ %= pitch_ | alias_ | extendedPitch_;
     }
 }

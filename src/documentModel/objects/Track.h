@@ -8,9 +8,11 @@
 #include "TrackConfig.h"
 #include "Voice.h"
 
-namespace documentModel {
+namespace documentModel
+{
 
-	struct Track : ASheetObjectWithSourceInfo {
+	struct Track : ASheetObjectWithSourceInfo
+	{
 		typedef ASheetObjectWithSourceInfo Base;
 		typedef std::vector<Voice> Voices;
 		typedef std::vector<TrackConfig> TrackConfigs;
@@ -20,4 +22,3 @@ namespace documentModel {
 	};
 
 }
-

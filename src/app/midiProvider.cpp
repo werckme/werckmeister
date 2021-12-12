@@ -1,12 +1,16 @@
 #include "midiProvider.h"
 
-namespace app {
+namespace app
+{
 
-	namespace {
-		template<class TOffsetMap, typename TId>
-		int getOffset(const TOffsetMap &map, const TId &id) {
+	namespace
+	{
+		template <class TOffsetMap, typename TId>
+		int getOffset(const TOffsetMap &map, const TId &id)
+		{
 			auto it = map.find(id);
-			if (it == map.end()) {
+			if (it == map.end())
+			{
 				return 0;
 			}
 			return it->second;
@@ -17,7 +21,7 @@ namespace app {
 	{
 		midi_ = midi;
 	}
-	
+
 	com::midi::MidiPtr MidiProvider::midi() const
 	{
 		return midi_;
@@ -25,15 +29,18 @@ namespace app {
 
 	void MidiProvider::getEvents(Millis millis, Events &out, const TrackOffsets &offsets)
 	{
-		for (auto track : midi_->ctracks()) {
+		for (auto track : midi_->ctracks())
+		{
 			auto trackId = reinterpret_cast<TrackId>(track.get());
 			auto offset = getOffset(offsets, trackId);
 			auto at = millisToTicks(millis - offset);
 			auto end = track->events().end();
 			EventIt &it = *getEventIt(track);
-			while (it != end) {
+			while (it != end)
+			{
 				auto pos = it->absPosition();
-				if (pos > at) {
+				if (pos > at)
+				{
 					break;
 				}
 				Event ev;
@@ -47,15 +54,18 @@ namespace app {
 
 	void MidiProvider::iterate(const IterateFunction &f)
 	{
-		for (auto track : midi_->ctracks()) {
+		for (auto track : midi_->ctracks())
+		{
 			auto end = track->events().end();
 			EventIt &it = *getEventIt(track);
-			while (it != end) {
+			while (it != end)
+			{
 				auto pos = it->absPosition();
 				Event ev;
 				ev.event = *it;
-				ev.trackId = reinterpret_cast<TrackId>(track.get()); 
-				if (!f(pos, ev)) {
+				ev.trackId = reinterpret_cast<TrackId>(track.get());
+				if (!f(pos, ev))
+				{
 					break;
 				}
 				++it;
@@ -63,10 +73,11 @@ namespace app {
 		}
 	}
 
-	MidiProvider::EventIt* MidiProvider::getEventIt(com::midi::TrackPtr trackPtr)
+	MidiProvider::EventIt *MidiProvider::getEventIt(com::midi::TrackPtr trackPtr)
 	{
 		auto it = trackEventIts_.find(trackPtr);
-		if (it == trackEventIts_.end()) {
+		if (it == trackEventIts_.end())
+		{
 			auto eventIt = trackPtr->events().begin();
 			it = trackEventIts_.insert({trackPtr, eventIt}).first;
 		}
@@ -77,13 +88,14 @@ namespace app {
 	{
 		trackEventIts_.clear();
 	}
-	
+
 	void MidiProvider::seek(Millis millis, const TrackOffsets &offsets)
 	{
 		trackEventIts_.clear();
 		Events events;
-		if (millis > 0) {
-			millis = std::max(millis-ticksToMillis(1), Millis(0.0));
+		if (millis > 0)
+		{
+			millis = std::max(millis - ticksToMillis(1), Millis(0.0));
 			getEvents(millis, events, offsets);
 		}
 	}

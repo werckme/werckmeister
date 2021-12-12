@@ -12,26 +12,22 @@
 #include <boost/phoenix/operator/arithmetic.hpp>
 
 BOOST_FUSION_ADAPT_STRUCT(
-	documentModel::PitchDef,
-	(documentModel::PitchDef::Pitch, pitch)
-	(documentModel::PitchDef::Octave, octave)
-)
+    documentModel::PitchDef,
+    (documentModel::PitchDef::Pitch, pitch)(documentModel::PitchDef::Octave, octave))
 
 BOOST_FUSION_ADAPT_STRUCT(
-	documentModel::AliasPitchDef,
-	(com::String, alias)
-)
+    documentModel::AliasPitchDef,
+    (com::String, alias))
 
-
-namespace documentModel {
-    namespace compiler {
-        struct PitchParser {
-            typedef com::String::const_iterator Iterator;
-            PitchParser();
-            boost::spirit::qi::rule<Iterator, PitchDef(), boost::spirit::ascii::space_type> pitchOrAlias_;
-            boost::spirit::qi::rule<Iterator, AliasPitchDef(), boost::spirit::ascii::space_type> extendedPitch_;
-            boost::spirit::qi::rule<Iterator, AliasPitchDef(), boost::spirit::ascii::space_type> alias_;
-            boost::spirit::qi::rule<Iterator, PitchDef(), boost::spirit::ascii::space_type> pitch_;
-        };
-    }
+namespace parser
+{
+    struct PitchParser
+    {
+        typedef com::String::const_iterator Iterator;
+        PitchParser();
+        boost::spirit::qi::rule<Iterator, documentModel::PitchDef(), boost::spirit::ascii::space_type> pitchOrAlias_;
+        boost::spirit::qi::rule<Iterator, documentModel::AliasPitchDef(), boost::spirit::ascii::space_type> extendedPitch_;
+        boost::spirit::qi::rule<Iterator, documentModel::AliasPitchDef(), boost::spirit::ascii::space_type> alias_;
+        boost::spirit::qi::rule<Iterator, documentModel::PitchDef(), boost::spirit::ascii::space_type> pitch_;
+    };
 }

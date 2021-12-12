@@ -2,7 +2,8 @@
 
 #include "ICompilerProgramOptions.h"
 
-struct IPlayerProgramOptions : public virtual ICompilerProgramOptions {
+struct IPlayerProgramOptions : public virtual ICompilerProgramOptions
+{
 	virtual bool isListDevicesSet() const = 0;
 	virtual bool isLoopSet() const = 0;
 	virtual bool isWatchSet() const = 0;
@@ -15,4 +16,3 @@ struct IPlayerProgramOptions : public virtual ICompilerProgramOptions {
 };
 
 typedef std::shared_ptr<IPlayerProgramOptions> IPlayerProgramOptionsPtr;
-

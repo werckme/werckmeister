@@ -1,6 +1,5 @@
 #pragma once
 
-
 #include "IPlayerLoopVisitor.h"
 #include <unordered_map>
 #include <com/common.hpp>
@@ -8,22 +7,27 @@
 #include <forward.hpp>
 #include "ISheetWatcherHandler.h"
 
-namespace app {
+namespace app
+{
     /**
      * watches a sheetfile and notify if any changes where done
      */
-    class SheetWatcher : public IPlayerLoopVisitor {
+    class SheetWatcher : public IPlayerLoopVisitor
+    {
     private:
-        documentModel::DocumentPtr               _document;
-        app::SheetWatcherHandlersPtr   _sheetWatcherHandlers;
+        documentModel::DocumentPtr _document;
+        app::SheetWatcherHandlersPtr _sheetWatcherHandlers;
+
     public:
-        SheetWatcher(documentModel::DocumentPtr document, app::SheetWatcherHandlersPtr sheetWatcherHandlers) 
-        : _document(document), _sheetWatcherHandlers(sheetWatcherHandlers)
-        {}
+        SheetWatcher(documentModel::DocumentPtr document, app::SheetWatcherHandlersPtr sheetWatcherHandlers)
+            : _document(document), _sheetWatcherHandlers(sheetWatcherHandlers)
+        {
+        }
         virtual void loopBegin() override {}
         virtual void loopEnd() override {}
         virtual void visit(com::Ticks elapsed);
         virtual ~SheetWatcher() = default;
+
     private:
         typedef std::unordered_map<com::String, time_t> Timestamps;
         Timestamps timestamps;

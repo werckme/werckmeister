@@ -1,11 +1,12 @@
-#pragma once
+#ifndef FM_CONFIG_HPP
+#define FM_CONFIG_HPP
 
 #include "units.hpp"
 #include <vector>
 #include <string>
 
-#define SHEET_VERSION "0.1.62@e139c8f"
-#define CHORD_DEF_EXTENSION  ".chords"
+#define SHEET_VERSION "0.1.62@432ec38"
+#define CHORD_DEF_EXTENSION ".chords"
 #define SHEET_TEMPLATE_DEF_EXTENSION ".template"
 #define PITCHMAP_DEF_EXTENSION ".pitchmap"
 #define LUA_DEF_EXTENSION ".lua"
@@ -15,9 +16,10 @@
 #define FM_CHARSET "ISO-8859-1"
 #define LIB_FLUIDSYNTH_FILENAME "libfluidsynth-2.dll"
 
-namespace com {
+namespace com
+{
     constexpr Ticks PPQ = 5000;
-	constexpr int NotesPerOctave = 12;
+    constexpr int NotesPerOctave = 12;
     constexpr int SheetNavigationMaxJumps = 200;
     constexpr double DefaultTempo = 120.0;
     constexpr unsigned int FUNK_MAX_SIGNAL_LENGTH = 255;
@@ -27,4 +29,4 @@ namespace com {
     }
 }
 
-
+#endif

@@ -7,17 +7,20 @@
 #include <memory>
 #include <mutex>
 
-namespace app {
-	struct BoostTimer {
+namespace app
+{
+	struct BoostTimer
+	{
 	public:
 		typedef std::recursive_mutex Lock;
 		typedef std::function<void()> Callback;
 		BoostTimer(const Callback &callback);
-		
+
 		void start(std::chrono::milliseconds millis);
 		void stop();
 		static void io_run();
 		static void io_stop();
+
 	private:
 		void *handle_ = nullptr;
 		Callback callback_;
@@ -26,4 +29,3 @@ namespace app {
 		Lock lock_;
 	};
 }
-

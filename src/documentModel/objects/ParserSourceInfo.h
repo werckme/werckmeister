@@ -2,7 +2,9 @@
 
 #include "ASheetObjectWithSourceInfo.h"
 
-namespace documentModel {
-    class ParserSourceInfo : public ASheetObjectWithSourceInfo {};
+namespace documentModel
+{
+    class ParserSourceInfo : public ASheetObjectWithSourceInfo
+    {
+    };
 }
-

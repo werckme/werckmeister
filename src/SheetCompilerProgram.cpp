@@ -17,10 +17,12 @@
 
 void SheetCompilerProgram::prepareEnvironment()
 {
-    if (_programOptions->isDebugSet()) {
+    if (_programOptions->isDebugSet())
+    {
         _logger->logLevel(com::ILogger::LevelDebug);
     }
-    else if (_programOptions->isVerboseSet()) {
+    else if (_programOptions->isVerboseSet())
+    {
         _logger->logLevel(com::ILogger::LevelBabble);
     }
     _logger->babble(WMLogLambda(printIntro(log)));
@@ -31,16 +33,16 @@ void SheetCompilerProgram::prepareEnvironment()
 void SheetCompilerProgram::printIntro(std::ostream &os)
 {
     static bool shown = false;
-    if (shown) {
+    if (shown)
+    {
         return;
     }
     shown = true;
-    os << "\tWERCKMEISTER "                                   << std::endl
-       << "\t(c) Samba Godschynski "                          << std::endl
-       << "\thttps://werckme.github.io"                       << std::endl
-       << "\tversion: "                   << SHEET_VERSION    << std::endl
-       << "\tMIDI ppq value: "            << com::PPQ          << std::endl
-    ;
+    os << "\tWERCKMEISTER " << std::endl
+       << "\t(c) Samba Godschynski " << std::endl
+       << "\thttps://werckme.github.io" << std::endl
+       << "\tversion: " << SHEET_VERSION << std::endl
+       << "\tMIDI ppq value: " << com::PPQ << std::endl;
 }
 
 void SheetCompilerProgram::prepareContext()
@@ -52,26 +54,31 @@ void SheetCompilerProgram::compile()
     _midiFile->midiConfig.skipMetaEvents = _programOptions->isNoMetaSet();
     auto file = _programOptions->getInput();
     _logger->babble(WMLogLambda(log << "parsing '" << file << "'"));
-    auto document =_documentParser->parse(file);
-    if (_logger->logLevel() >= com::ILogger::LevelBabble) {
+    auto document = _documentParser->parse(file);
+    if (_logger->logLevel() >= com::ILogger::LevelBabble)
+    {
         printSearchPaths();
     }
-    _logger->babble(WMLogLambda(log << "compiling '" << file << "'"));    
+    _logger->babble(WMLogLambda(log << "compiling '" << file << "'"));
     _compiler->compile(document);
-    try {
+    try
+    {
         _logger->babble(WMLogLambda(log << "aplying conduction rules"));
         _conductionsPerformer->applyConductions();
-        if (_programOptions->isBeginSet() || _programOptions->isEndSet()) {
+        if (_programOptions->isBeginSet() || _programOptions->isEndSet())
+        {
             auto beginTicks = _programOptions->isBeginSet() ? _programOptions->getBegin() * com::PPQ : 0;
             auto endTicks = _programOptions->isEndSet() ? _programOptions->getEnd() * com::PPQ : com::Ticks(INT_MAX);
             _midiFile->crop(beginTicks, endTicks);
         }
         _midiFile->seal();
-    } catch(com::Exception &ex) {
-        ex << documentModel::compiler::ex_sheet_document(document);
+    }
+    catch (com::Exception &ex)
+    {
+        ex << compiler::ex_sheet_document(document);
         throw;
     }
-    _logger->babble(WMLogLambda(log << "write document"));   
+    _logger->babble(WMLogLambda(log << "write document"));
     _documentWriter->write(document);
 }
 
@@ -85,7 +92,7 @@ void SheetCompilerProgram::prepareSearchPaths()
 {
     using boost::filesystem::path;
     using boost::filesystem::system_complete;
-    
+
     auto execPath = path(app::os::getExecutablePath());
     addSearchPath(execPath.string());
     addSearchPath(system_complete(execPath / path("../share/werckmeister")).string());
@@ -96,40 +103,46 @@ void SheetCompilerProgram::prepareSearchPaths()
 
 void SheetCompilerProgram::printSearchPaths() const
 {
-    const auto& paths = com::getWerckmeister().searchPaths();
+    const auto &paths = com::getWerckmeister().searchPaths();
     auto strSearchPaths = boost::algorithm::join(paths, "\n");
-    _logger->babble(WMLogLambda(log << "search paths:" << std::endl << strSearchPaths << std::endl));
+    _logger->babble(WMLogLambda(log << "search paths:" << std::endl
+                                    << strSearchPaths << std::endl));
 }
 
-int SheetCompilerProgram::execute() { 
-    try { 
-        if (_programOptions->isHelpSet()) {
+int SheetCompilerProgram::execute()
+{
+    try
+    {
+        if (_programOptions->isHelpSet())
+        {
             _programOptions->printHelpText(std::cout);
             std::cout << std::endl;
             return 0;
-        }  
-        if (_programOptions->isVersionSet()) {
+        }
+        if (_programOptions->isVersionSet())
+        {
             auto &wm = com::getWerckmeister();
             std::cout << wm.version() << std::endl;
             return 0;
         }
-        if (!_programOptions->isInputSet()) {
+        if (!_programOptions->isInputSet())
+        {
             throw std::runtime_error("missing input file");
-        }                              
+        }
         compile();
         return 0;
     }
     catch (const com::Exception &ex)
-	{
+    {
         _documentWriter->writeException(ex);
-	}
-	catch (const std::exception &ex)
-	{
+    }
+    catch (const std::exception &ex)
+    {
         _documentWriter->writeException(ex);
-	}
-	catch (...)
-	{
+    }
+    catch (...)
+    {
         _documentWriter->writeUnknownException();
-	}
+    }
     return -1;
 }

@@ -4,15 +4,16 @@
 #include "forward.hpp"
 #include <memory>
 
-namespace documentModel {
+namespace documentModel
+{
 	struct Event;
-	namespace compiler {
-		class ICompiler {
-		public:
-			virtual void compile(DocumentPtr document) = 0;
-		};
-		typedef std::shared_ptr<ICompiler> ICompilerPtr;
-	}
-	
 }
-
+namespace compiler
+{
+	class ICompiler
+	{
+	public:
+		virtual void compile(documentModel::DocumentPtr document) = 0;
+	};
+	typedef std::shared_ptr<ICompiler> ICompilerPtr;
+}

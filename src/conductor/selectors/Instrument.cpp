@@ -1,19 +1,16 @@
 #include "Instrument.h"
 
-namespace documentModel
+namespace conductor
 {
-    namespace conductor
+    bool Instrument::isMatch(const documentModel::ConductionSelector::Arguments &arguments, const EventWithMetaInfo &evm) const
     {
-        bool Instrument::isMatch(const ConductionSelector::Arguments& arguments, const EventWithMetaInfo& evm) const 
+        for (const auto &argument : arguments)
         {
-            for (const auto &argument : arguments) 
+            if (argument.name == evm.instrumentName)
             {
-                if (argument.name == evm.instrumentName) 
-                {
-                    return true;
-                }
+                return true;
             }
-            return false;
         }
+        return false;
     }
 }

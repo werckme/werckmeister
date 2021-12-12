@@ -3,64 +3,72 @@
 #include <com/werckmeister.hpp>
 #include <com/config.hpp>
 #include <iostream>
-namespace app {
+namespace app
+{
     FluidSynth::FluidSynth(const std::string &soundfontPath)
     {
         initLibraryFunctions();
         initSynth(soundfontPath);
     }
-    FluidSynth::~FluidSynth() 
+    FluidSynth::~FluidSynth()
     {
-        if (_library) {
+        if (_library)
+        {
             tearDownSynth();
             delete _library;
             _library = nullptr;
         }
-    }    
+    }
     void FluidSynth::initLibraryFunctions()
     {
         auto libPath = findFluidSynthLibraryPath();
-        try {
-            _library                     = new boost::dll::shared_library(libPath); 
-            _new_fluid_settings          = _library->get<new_fluid_settings_ftype>("new_fluid_settings");
-            _new_fluid_synth             = _library->get<new_fluid_synth_ftype>("new_fluid_synth");
-            _new_fluid_audio_driver      = _library->get<new_fluid_audio_driver_ftype>("new_fluid_audio_driver");
-            _fluid_synth_sfload          = _library->get<fluid_synth_sfload_ftype>("fluid_synth_sfload");
-            _fluid_synth_noteon          = _library->get<fluid_synth_noteon_ftype>("fluid_synth_noteon");
-            _fluid_synth_noteoff         = _library->get<fluid_synth_noteoff_ftype>("fluid_synth_noteoff");
-            _fluid_synth_program_change  = _library->get<fluid_synth_program_change_ftype>("fluid_synth_program_change");
-            _fluid_synth_cc              = _library->get<fluid_synth_cc_ftype>("fluid_synth_cc");
-            _fluid_synth_pitch_bend      = _library->get<fluid_synth_pitch_bend_ftype>("fluid_synth_pitch_bend");
-            _fluid_settings_setstr       = _library->get<fluid_settings_setstr_ftype>("fluid_settings_setstr");
+        try
+        {
+            _library = new boost::dll::shared_library(libPath);
+            _new_fluid_settings = _library->get<new_fluid_settings_ftype>("new_fluid_settings");
+            _new_fluid_synth = _library->get<new_fluid_synth_ftype>("new_fluid_synth");
+            _new_fluid_audio_driver = _library->get<new_fluid_audio_driver_ftype>("new_fluid_audio_driver");
+            _fluid_synth_sfload = _library->get<fluid_synth_sfload_ftype>("fluid_synth_sfload");
+            _fluid_synth_noteon = _library->get<fluid_synth_noteon_ftype>("fluid_synth_noteon");
+            _fluid_synth_noteoff = _library->get<fluid_synth_noteoff_ftype>("fluid_synth_noteoff");
+            _fluid_synth_program_change = _library->get<fluid_synth_program_change_ftype>("fluid_synth_program_change");
+            _fluid_synth_cc = _library->get<fluid_synth_cc_ftype>("fluid_synth_cc");
+            _fluid_synth_pitch_bend = _library->get<fluid_synth_pitch_bend_ftype>("fluid_synth_pitch_bend");
+            _fluid_settings_setstr = _library->get<fluid_settings_setstr_ftype>("fluid_settings_setstr");
             _fluid_audio_driver_register = _library->get<fluid_audio_driver_register_ftype>("fluid_audio_driver_register");
-            _delete_fluid_audio_driver   = _library->get<delete_fluid_audio_driver_ftype>("delete_fluid_audio_driver");
-            _delete_fluid_synth          = _library->get<delete_fluid_synth_ftype>("delete_fluid_synth");
-            _delete_fluid_settings       = _library->get<delete_fluid_settings_ftype>("delete_fluid_settings");
+            _delete_fluid_audio_driver = _library->get<delete_fluid_audio_driver_ftype>("delete_fluid_audio_driver");
+            _delete_fluid_synth = _library->get<delete_fluid_synth_ftype>("delete_fluid_synth");
+            _delete_fluid_settings = _library->get<delete_fluid_settings_ftype>("delete_fluid_settings");
         }
-        catch (const std::exception& ex) {
+        catch (const std::exception &ex)
+        {
             std::stringstream ss;
-            ss << "loading library \""+ libPath +"\" failed: " << std::endl << ex.what();
+            ss << "loading library \"" + libPath + "\" failed: " << std::endl
+               << ex.what();
             throw std::runtime_error(ss.str());
         }
-        catch (...) {
+        catch (...)
+        {
             std::stringstream ss;
             ss << "loading library \"" + libPath + "\" failed: unkown error";
             throw std::runtime_error(ss.str());
         }
-
     }
 
     void FluidSynth::tearDownSynth()
     {
-        if (adriver) {
+        if (adriver)
+        {
             _delete_fluid_audio_driver(adriver);
             adriver = nullptr;
         }
-        if (synth) {
+        if (synth)
+        {
             _delete_fluid_synth(synth);
             synth = nullptr;
         }
-        if (settings) {
+        if (settings)
+        {
             _delete_fluid_settings(settings);
             settings = nullptr;
         }
@@ -68,10 +76,11 @@ namespace app {
 
     std::string FluidSynth::findFluidSynthLibraryPath() const
     {
-        auto& wm = com::getWerckmeister();
+        auto &wm = com::getWerckmeister();
         std::string libraryPath(LIB_FLUIDSYNTH_FILENAME);
         const auto &searchPaths = com::LibfluidSynthSearchPaths();
-        for (const auto& searchPath : searchPaths) {
+        for (const auto &searchPath : searchPaths)
+        {
             wm.addSearchPath(searchPath);
         }
         return wm.resolvePath(libraryPath);
@@ -85,13 +94,14 @@ namespace app {
         auto sfont_id = _fluid_synth_sfload(synth, soundFondPath.c_str(), 1);
         if (sfont_id == FLUID_FAILED)
         {
-            throw std::runtime_error("Loading the SoundFont " + soundFondPath +  "  failed!");
+            throw std::runtime_error("Loading the SoundFont " + soundFondPath + "  failed!");
         }
     }
 
-    void FluidSynth::send(const com::midi::Event& event)
+    void FluidSynth::send(const com::midi::Event &event)
     {
-        switch (event.eventType()) {
+        switch (event.eventType())
+        {
         case com::midi::NoteOn:
             _fluid_synth_noteon(synth, event.channel(), event.parameter1(), event.parameter2());
             break;
@@ -105,10 +115,10 @@ namespace app {
             _fluid_synth_cc(synth, event.channel(), event.parameter1(), event.parameter2());
             break;
         case com::midi::PitchBend:
-            _fluid_synth_pitch_bend(synth, event.channel(), event.pitchBend() * (double)com::midi::MaxPitchbend );
+            _fluid_synth_pitch_bend(synth, event.channel(), event.pitchBend() * (double)com::midi::MaxPitchbend);
             break;
-        default: break;
+        default:
+            break;
         }
-
     }
 }

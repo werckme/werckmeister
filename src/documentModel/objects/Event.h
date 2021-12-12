@@ -12,17 +12,21 @@
 #include <documentModel/Argument.h>
 #include <documentModel/PitchDef.h>
 
-namespace documentModel {
+namespace documentModel
+{
 
-	struct Event : public ASheetObjectWithSourceInfo {
+	struct Event : public ASheetObjectWithSourceInfo
+	{
 		typedef ASheetObjectWithSourceInfo Base;
-		enum {
+		enum
+		{
 			NoDuration = 0,
 		};
-		enum Type { 
+		enum Type
+		{
 			Unknown,
 			Rest,
-			Degree, 
+			Degree,
 			TiedDegree,
 			Note,
 			TiedNote,
@@ -43,9 +47,9 @@ namespace documentModel {
 		typedef std::set<com::String> Tags;
 		typedef com::String Options;
 		typedef std::tuple<PitchDef::Pitch, Options> ChordElements;
-		
+
 		ChordElements chordElements() const;
-		com::String chordDefName() const;	
+		com::String chordDefName() const;
 		Pitches pitches;
 		Type type = Unknown;
 		Duration duration = NoDuration;
@@ -70,42 +74,38 @@ namespace documentModel {
 		double velocity = 0;
 		com::Ticks offset = 0;
 		double pitchBendValue = 0;
-		bool isTimeConsuming() const {
-			return type == Rest 
-				|| type == Note 
-				|| type == Degree 
-				|| type == TiedNote 
-				|| type == Chord 
-				|| type == TiedDegree
-				|| type == Repeat
-				|| type == TiedRepeat
-				|| type == Group;
-		}
-		
-		bool isRepeat() const {
-			return type == Repeat
-				|| type == TiedRepeat;
+		bool isTimeConsuming() const
+		{
+			return type == Rest || type == Note || type == Degree || type == TiedNote || type == Chord || type == TiedDegree || type == Repeat || type == TiedRepeat || type == Group;
 		}
 
-		bool isAbsoluteNote() const {
+		bool isRepeat() const
+		{
+			return type == Repeat || type == TiedRepeat;
+		}
+
+		bool isAbsoluteNote() const
+		{
 			return type == Note || type == TiedNote;
 		}
 
-		bool isRelativeDegree() const {
+		bool isRelativeDegree() const
+		{
 			return type == Degree || type == TiedDegree;
 		}
 
-		bool isTied() const {
+		bool isTied() const
+		{
 			return type == TiedNote || type == TiedDegree;
 		}
 
 		void isTied(bool val);
 
-		bool isPitchBend() const {
+		bool isPitchBend() const
+		{
 			return type == PitchBend;
 		}
 
 		com::String toString() const;
 	};
 }
-

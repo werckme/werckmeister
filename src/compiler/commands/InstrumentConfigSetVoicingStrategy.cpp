@@ -1,18 +1,19 @@
 #include "InstrumentConfigSetVoicingStrategy.h"
 #include <compiler/context/IContext.h>
 
-namespace documentModel {
-    namespace compiler {
-        void InstrumentConfigSetVoicingStrategy::execute(IContextPtr  context)
+namespace compiler
+{
+    void InstrumentConfigSetVoicingStrategy::execute(IContextPtr context)
+    {
+        if (!this->hasInstrument())
         {
-            if (!this->hasInstrument()) {
-                return;
-            }
-            bool isAlreadySet = getInstrument()->voicingStrategy && getInstrument()->voicingStrategy->name() == voicingStrategy->name();
-            if (isAlreadySet) {
-                return;
-            }
-            getInstrument()->voicingStrategy = this->voicingStrategy;
+            return;
         }
+        bool isAlreadySet = getInstrument()->voicingStrategy && getInstrument()->voicingStrategy->name() == voicingStrategy->name();
+        if (isAlreadySet)
+        {
+            return;
+        }
+        getInstrument()->voicingStrategy = this->voicingStrategy;
     }
 }

@@ -7,14 +7,16 @@
 #include "ASheetObject.h"
 #include <documentModel/objects/DegreeDef.h>
 
-namespace documentModel {
+namespace documentModel
+{
     struct PitchDef;
-    struct ChordDef : public ASheetObject {
+    struct ChordDef : public ASheetObject
+    {
         typedef std::set<DegreeDef> Intervals;
         com::String name;
-		Intervals intervals;
-		DegreeDef getDegreeDef(const PitchDef &eventPitch) const;
-	};
+        Intervals intervals;
+        DegreeDef getDegreeDef(const PitchDef &eventPitch) const;
+    };
 
     bool has7(const ChordDef &def);
     bool has9(const ChordDef &def);
@@ -23,4 +25,3 @@ namespace documentModel {
     int getDegreeValue(int degree);
     com::degrees::Flag getFlag(int degree);
 }
-

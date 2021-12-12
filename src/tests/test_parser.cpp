@@ -6,6 +6,8 @@
 #include <com/units.hpp>
 #include "testhelper.h"
 
+using namespace parser;
+
 BOOST_AUTO_TEST_CASE(test_argQuoted)
 {
 	using namespace com;
@@ -15,7 +17,7 @@ key: \"value\";		\
 [{			    \
 }]			    \
 ");
-	documentModel::compiler::SheetDefParser parser;
+	SheetDefParser parser;
 	auto defs = parser.parse(text);
 	BOOST_CHECK(defs.documentConfigs.size() == 1); 
 	auto const &meta = defs.documentConfigs[0];
@@ -31,7 +33,7 @@ key: _name=\"value\";	 	\
 [{			    \
 }]			    \
 ");
-	documentModel::compiler::SheetDefParser parser;
+	SheetDefParser parser;
 	auto defs = parser.parse(text);
 	BOOST_CHECK(defs.documentConfigs.size() == 1); 
 	auto const &meta = defs.documentConfigs[0];
@@ -48,7 +50,7 @@ key: _name=value;		\
 [{			    \
 }]			    \
 ");
-	documentModel::compiler::SheetDefParser parser;
+	SheetDefParser parser;
 	auto defs = parser.parse(text);
 	BOOST_CHECK(defs.documentConfigs.size() == 1); 
 	auto const &meta = defs.documentConfigs[0];
@@ -65,7 +67,7 @@ key: value;		\
 [{			    \
 }]			    \
 ");
-	documentModel::compiler::SheetDefParser parser;
+	SheetDefParser parser;
 	auto defs = parser.parse(text);
 	BOOST_CHECK(defs.documentConfigs.size() == 1); 
 	auto const &meta = defs.documentConfigs[0];
@@ -81,7 +83,7 @@ key: _name=value _name2=value2;		\
 [{			    \
 }]			    \
 ");
-	documentModel::compiler::SheetDefParser parser;
+	SheetDefParser parser;
 	auto defs = parser.parse(text);
 	auto const &meta = defs.documentConfigs[0];
 	BOOST_CHECK_EQUAL(meta.args.size(), (size_t)2); 
@@ -100,7 +102,7 @@ key: myArpeggio direction down _style=legato2;		\
 [{			    \
 }]			    \
 ");
-	documentModel::compiler::SheetDefParser parser;
+	SheetDefParser parser;
 	auto defs = parser.parse(text);
 	auto const &meta = defs.documentConfigs[0];
 	BOOST_CHECK_EQUAL(meta.args.size(), (size_t)4); 
@@ -128,7 +130,7 @@ key: \"value\";		\
 }				\
 ]			    \
 ");
-	documentModel::compiler::SheetDefParser parser;
+	SheetDefParser parser;
 	auto defs = parser.parse(text);
 	BOOST_CHECK(defs.tracks[0].trackConfigs[0].args[0].value == FM_STRING("value") );
 }
@@ -144,7 +146,7 @@ key: \"value two\";		\
 }				\
 ]			    \
 ");
-	documentModel::compiler::SheetDefParser parser;
+	SheetDefParser parser;
 	auto defs = parser.parse(text);
 	BOOST_CHECK(defs.tracks[0].trackConfigs[0].args[0].value == FM_STRING("value two"));
 }
@@ -160,7 +162,7 @@ key: value;		\
 }				\
 ]			    \
 ");
-	documentModel::compiler::SheetDefParser parser;
+	SheetDefParser parser;
 	auto defs = parser.parse(text);
 	BOOST_CHECK(defs.tracks[0].trackConfigs[0].args[0].value == FM_STRING("value") );
 }
@@ -182,7 +184,7 @@ X7+ : I=1 III=5 V=8 VII=11\n\
 X/V: I=1 III=5 V=-6  --quinte im bass\
 "));
 
-	documentModel::compiler::ChordDefParser defParser;
+	ChordDefParser defParser;
 	using namespace com::degrees;
 
 	auto chordDefs = defParser.parse(str);
@@ -286,7 +288,7 @@ BOOST_AUTO_TEST_CASE(test_SheetDefParser)
 	}-- further voice \n\
 ] \n\
 ");
-	documentModel::compiler::SheetDefParser parser;
+	SheetDefParser parser;
 	auto defs = parser.parse(text);
 	BOOST_CHECK(defs.tracks.size() == 1);
 	BOOST_CHECK(defs.tracks[0].voices.size() == 2);
@@ -343,7 +345,7 @@ BOOST_AUTO_TEST_CASE(test_SheetDefParser_mixed_with_absolute_notes)
 	}-- further voice \n\
 ] \n\
 ");
-	documentModel::compiler::SheetDefParser parser;
+	SheetDefParser parser;
 	auto defs = parser.parse(text);
 	BOOST_CHECK(defs.tracks.size() == 1);
 	BOOST_CHECK(defs.tracks[0].voices.size() == 2);
@@ -372,7 +374,7 @@ BOOST_AUTO_TEST_CASE(test_alias_notes)
 			}\n\
 		] \n\
 ");
-	documentModel::compiler::SheetDefParser parser;
+	SheetDefParser parser;
 	auto defs = parser.parse(text);
 	BOOST_CHECK(defs.tracks.size() == 1);
 	BOOST_CHECK(defs.tracks[0].voices.size() == 1);
@@ -394,7 +396,7 @@ BOOST_AUTO_TEST_CASE(test_alias_sheetdef)
 			}\n\
 		] \n\
 ");
-	documentModel::compiler::SheetDefParser parser;
+	SheetDefParser parser;
 	auto defs = parser.parse(text);
 	BOOST_CHECK(defs.tracks.size() == 1);
 	BOOST_CHECK(defs.tracks[0].voices.size() == 1);
@@ -424,8 +426,8 @@ BOOST_AUTO_TEST_CASE(test_SheetDefParser_fail)
 	}-- further voice \n\
 ] \n\
 ");
-	documentModel::compiler::SheetDefParser parser;
-	BOOST_CHECK_THROW(parser.parse(text), documentModel::compiler::Exception);
+	SheetDefParser parser;
+	BOOST_CHECK_THROW(parser.parse(text), Exception);
 }
 
 
@@ -454,7 +456,7 @@ type: documentModel;\n\
 }\n\
 ] \n\
 ");
-	documentModel::compiler::SheetDefParser parser;
+	SheetDefParser parser;
 	auto defs = parser.parse(text);
 	BOOST_CHECK(defs.tracks.size() == 2);
 	BOOST_CHECK(defs.tracks[0].voices.size() == 2);
@@ -549,7 +551,7 @@ BOOST_AUTO_TEST_CASE(test_sheetDefParser_02)
 	}\n\
 ]\n\
 ");
-	documentModel::compiler::SheetDefParser parser;
+	SheetDefParser parser;
 	auto defs = parser.parse(text);
 	BOOST_CHECK(defs.tracks.size() == 1);
 	BOOST_CHECK(defs.tracks[0].voices.size() == 1);
@@ -588,7 +590,7 @@ BOOST_AUTO_TEST_CASE(test_sheetDefParser_03)
 	}\n\
 ]\n\
 ");
-	documentModel::compiler::SheetDefParser parser;
+	SheetDefParser parser;
 	auto defs = parser.parse(text);
 	BOOST_CHECK(defs.tracks.size() == 2);
 	BOOST_CHECK(defs.tracks[0].voices.size() == 1);
@@ -632,7 +634,7 @@ BOOST_AUTO_TEST_CASE(test_expression_meta)
 	}\n\
 ]\n\
 ");
-	documentModel::compiler::SheetDefParser parser;
+	SheetDefParser parser;
 	auto defs = parser.parse(text);
 	BOOST_CHECK(defs.tracks.size() == 1);
 	BOOST_CHECK(defs.tracks[0].voices.size() == 1);
@@ -665,7 +667,7 @@ BOOST_AUTO_TEST_CASE(test_vorschlag)
 	}\n\
 ]\n\
 ");
-	documentModel::compiler::SheetDefParser parser;
+	SheetDefParser parser;
 	auto defs = parser.parse(text);
 	BOOST_CHECK(defs.tracks.size() == 1);
 	BOOST_CHECK(defs.tracks[0].voices.size() == 1);
@@ -689,7 +691,7 @@ BOOST_AUTO_TEST_CASE(test_alias_vorschlag)
 	}\n\
 ]\n\
 ");
-	documentModel::compiler::SheetDefParser parser;
+	SheetDefParser parser;
 	auto defs = parser.parse(text);
 	BOOST_CHECK(defs.tracks.size() == 1);
 	BOOST_CHECK(defs.tracks[0].voices.size() == 1);
@@ -715,7 +717,7 @@ BOOST_AUTO_TEST_CASE(test_SheetDefParser_vorschlag)
 	}\n\
 ] \n\
 ");
-	documentModel::compiler::SheetDefParser parser;
+	SheetDefParser parser;
 	auto defs = parser.parse(text);
 	BOOST_CHECK(defs.tracks.size() == 1);
 	BOOST_CHECK(defs.tracks[0].voices.size() == 1);
@@ -733,7 +735,7 @@ BOOST_AUTO_TEST_CASE(test_sheetDefParser_tie)
 	}\n\
 ]\n\
 ");
-	documentModel::compiler::SheetDefParser parser;
+	SheetDefParser parser;
 	auto defs = parser.parse(text);
 	BOOST_CHECK(defs.tracks[0].voices[0].events.size() == 3);
 	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[0], documentModel::Event::TiedNote, 0, 0, 1.0_N1));
@@ -753,7 +755,7 @@ using \"chords/Chords.chords\"; \n\
 using \"sheetTemplates/simplePianoSheetTemplate.sheetTemplate\"; \n\
 using \"C:\\drivers\\Intel Rapid Storage Technology Driver\"; \n\
 ");
-	documentModel::compiler::SheetDefParser parser;
+	SheetDefParser parser;
 	auto doc = parser.parse(text);
 	const auto &defs = doc.documentUsing;
 	BOOST_CHECK(defs.usings.size() == 7);
@@ -792,7 +794,7 @@ BOOST_AUTO_TEST_CASE(test_documentUsingParser_empty)
 	]\n\
 \n\
 ");
-	documentModel::compiler::SheetDefParser parser;
+	SheetDefParser parser;
 	auto doc = parser.parse(text);
 	BOOST_CHECK(doc.documentUsing.usings.size() == 0);
 
@@ -806,7 +808,7 @@ BOOST_AUTO_TEST_CASE(test_pitchmap_parser)
 \"bd\": c,,\n\
 \"sn\": e,\n\
 "));
-	documentModel::compiler::PitchmapParser parser;
+	PitchmapParser parser;
 	auto defs = parser.parse(str);
 	BOOST_CHECK(defs.size() == 2);
 	BOOST_CHECK(defs[0].name == FM_STRING("bd"));
@@ -835,7 +837,7 @@ command: 01 02 03; \n\
 	}\n\
 ]\n\
 ");
-	documentModel::compiler::SheetDefParser parser;
+	SheetDefParser parser;
 	auto defs = parser.parse(text);
 	BOOST_CHECK(defs.tracks.size() == 1);
 	BOOST_CHECK(defs.tracks[0].voices.size() == 1);
@@ -875,7 +877,7 @@ command: 01 02 03; \n\
 	}\n\
 ]\n\
 ");
-	documentModel::compiler::SheetDefParser parser;
+	SheetDefParser parser;
 	auto defs = parser.parse(text);
 	BOOST_CHECK(defs.tracks.size() == 1);
 	BOOST_CHECK(defs.tracks[0].voices.size() == 1);
@@ -912,7 +914,7 @@ BOOST_AUTO_TEST_CASE(test_tied_degree_failed)
 	}\n\
 ]\n\
 ");
-	documentModel::compiler::SheetDefParser parser;
+	SheetDefParser parser;
 	auto defs = parser.parse(text);
 	BOOST_CHECK(defs.tracks.size() == 1);
 	BOOST_CHECK(defs.tracks[0].voices.size() == 1);
@@ -947,7 +949,7 @@ sheetInfo: xyz; \n\
 	}\n\
 ]\n\
 ");
-	documentModel::compiler::SheetDefParser parser;
+	SheetDefParser parser;
 	auto defs = parser.parse(text);
 
 	// VOICE 1
@@ -999,7 +1001,7 @@ documentConfig: xyz; \n\
 	}\n\
 ]\n\
 ");
-	documentModel::compiler::SheetDefParser parser;
+	SheetDefParser parser;
 	auto defs = parser.parse(text);
 
 	// VOICE 2
@@ -1033,7 +1035,7 @@ BOOST_AUTO_TEST_CASE(test_source_id)
 	}\n\
 ]\n\
 ");
-	documentModel::compiler::SheetDefParser parser;
+	SheetDefParser parser;
 	auto defs = parser.parse(text, 101);
 	for(const auto &event : defs.tracks[0].voices[0].events) {
 		BOOST_CHECK( event.sourceId == 101 );
@@ -1053,7 +1055,7 @@ BOOST_AUTO_TEST_CASE(test_x_repeat)
 			}\n\
 		] \n\
 ");
-	documentModel::compiler::SheetDefParser parser;
+	SheetDefParser parser;
 	auto defs = parser.parse(text);
 	BOOST_CHECK(defs.tracks.size() == 1);
 	BOOST_CHECK(defs.tracks[0].voices.size() == 1);
@@ -1077,7 +1079,7 @@ BOOST_AUTO_TEST_CASE(test_x_repeat_degree)
 			}\n\
 		] \n\
 ");
-	documentModel::compiler::SheetDefParser parser;
+	SheetDefParser parser;
 	auto defs = parser.parse(text);
 	BOOST_CHECK(defs.tracks.size() == 1);
 	BOOST_CHECK(defs.tracks[0].voices.size() == 1);
@@ -1101,7 +1103,7 @@ BOOST_AUTO_TEST_CASE(test_x_tied_repeat)
 			}\n\
 		] \n\
 ");
-	documentModel::compiler::SheetDefParser parser;
+	SheetDefParser parser;
 	auto defs = parser.parse(text);
 	BOOST_CHECK(defs.tracks.size() == 1);
 	BOOST_CHECK(defs.tracks[0].voices.size() == 1);
@@ -1125,7 +1127,7 @@ BOOST_AUTO_TEST_CASE(test_x_vorschlag_repeat)
 			}\n\
 		] \n\
 ");
-	documentModel::compiler::SheetDefParser parser;
+	SheetDefParser parser;
 	auto defs = parser.parse(text);
 	BOOST_CHECK(defs.tracks.size() == 1);
 	BOOST_CHECK(defs.tracks[0].voices.size() == 1);
@@ -1143,7 +1145,7 @@ BOOST_AUTO_TEST_CASE(test_x_repeat_degree_2)
 			}\n\
 		] \n\
 ");
-	documentModel::compiler::SheetDefParser parser;
+	SheetDefParser parser;
 	auto defs = parser.parse(text);
 	BOOST_CHECK(defs.tracks.size() == 1);
 	BOOST_CHECK(defs.tracks[0].voices.size() == 1);
@@ -1169,7 +1171,7 @@ BOOST_AUTO_TEST_CASE(test_degree_accendentials)
 	}\n\
 ] \n\
 ");
-	documentModel::compiler::SheetDefParser parser;
+	SheetDefParser parser;
 	auto defs = parser.parse(text);
 	BOOST_CHECK(defs.tracks.size() == 1);
 	BOOST_CHECK(defs.tracks[0].voices.size() == 1);
@@ -1187,7 +1189,7 @@ BOOST_AUTO_TEST_CASE(test_tags)
 	}\n\
 ]\n\
 ");
-	documentModel::compiler::SheetDefParser parser;
+	SheetDefParser parser;
 	auto defs = parser.parse(text);
 	BOOST_CHECK(defs.tracks.size() == 1);
 	BOOST_CHECK(defs.tracks[0].voices.size() == 1);
@@ -1240,7 +1242,7 @@ BOOST_AUTO_TEST_CASE(test_tags_degree)
 	}\n\
 ]\n\
 ");
-	documentModel::compiler::SheetDefParser parser;
+	SheetDefParser parser;
 	auto defs = parser.parse(text);
 	BOOST_CHECK(defs.tracks.size() == 1);
 	BOOST_CHECK(defs.tracks[0].voices.size() == 1);
@@ -1294,7 +1296,7 @@ BOOST_AUTO_TEST_CASE(test_ntolen)
 	}\n\
 ]\n\
 ");
-	documentModel::compiler::SheetDefParser parser;
+	SheetDefParser parser;
 	auto defs = parser.parse(text);
 	BOOST_CHECK(defs.tracks.size() == 1);
 	BOOST_CHECK(defs.tracks[0].voices.size() == 1);
@@ -1319,7 +1321,7 @@ BOOST_AUTO_TEST_CASE(test_nested_ntolen)
 	}\n\
 ]\n\
 ");
-	documentModel::compiler::SheetDefParser parser;
+	SheetDefParser parser;
 	auto defs = parser.parse(text);
 	BOOST_CHECK(defs.tracks.size() == 1);
 	BOOST_CHECK(defs.tracks[0].voices.size() == 1);
@@ -1364,7 +1366,7 @@ BOOST_AUTO_TEST_CASE(test_issue_102_delimiter_for_meta_args)
 	}\n\
 ]\n\
 ");
-	documentModel::compiler::SheetDefParser parser;
+	SheetDefParser parser;
 	auto defs = parser.parse(text);
 	BOOST_CHECK(checkMetaEvent(defs.tracks[0].voices[0].events[0], FM_STRING("metacommand"), documentModel::Event::Args({ makeArg("abc"), makeArg("1 2 drei") })));
 	
@@ -1384,7 +1386,7 @@ BOOST_AUTO_TEST_CASE(test_repeats)
 }\n\
 ]\n\
 ");
-	documentModel::compiler::SheetDefParser parser;
+	SheetDefParser parser;
 	auto defs = parser.parse(text);
 	BOOST_CHECK(defs.tracks.size() == 1);
 	BOOST_CHECK(defs.tracks[0].voices.size() == 1);
@@ -1442,8 +1444,8 @@ BOOST_AUTO_TEST_CASE(test_repeat_mark_fail_white_space)
 }\n\
 ]\n\
 ");
-	documentModel::compiler::SheetDefParser parser;
-	BOOST_CHECK_THROW(parser.parse(text), documentModel::compiler::Exception);
+	SheetDefParser parser;
+	BOOST_CHECK_THROW(parser.parse(text), Exception);
 
 }
 
@@ -1459,8 +1461,8 @@ BOOST_AUTO_TEST_CASE(test_repeat_volta_fail_02)
 }\n\
 ]\n\
 ");
-	documentModel::compiler::SheetDefParser parser;
-	BOOST_CHECK_THROW(parser.parse(text), documentModel::compiler::Exception);
+	SheetDefParser parser;
+	BOOST_CHECK_THROW(parser.parse(text), Exception);
 
 }
 BOOST_AUTO_TEST_CASE(test_repeat_volta_fail_03)
@@ -1474,8 +1476,8 @@ BOOST_AUTO_TEST_CASE(test_repeat_volta_fail_03)
 }\n\
 ]\n\
 ");
-	documentModel::compiler::SheetDefParser parser;
-	BOOST_CHECK_THROW(parser.parse(text), documentModel::compiler::Exception);
+	SheetDefParser parser;
+	BOOST_CHECK_THROW(parser.parse(text), Exception);
 
 }
 
@@ -1491,8 +1493,8 @@ BOOST_AUTO_TEST_CASE(test_repeats_fail_duplicated_multiplier_colon)
 }\n\
 ]\n\
 ");
-	documentModel::compiler::SheetDefParser parser;
-	BOOST_CHECK_THROW(parser.parse(text), documentModel::compiler::Exception);
+	SheetDefParser parser;
+	BOOST_CHECK_THROW(parser.parse(text), Exception);
 
 }
 
@@ -1507,8 +1509,8 @@ BOOST_AUTO_TEST_CASE(test_repeats_fail_duplicated_multiplier_colon_2)
 }\n\
 ]\n\
 ");
-	documentModel::compiler::SheetDefParser parser;
-	BOOST_CHECK_THROW(parser.parse(text), documentModel::compiler::Exception);
+	SheetDefParser parser;
+	BOOST_CHECK_THROW(parser.parse(text), Exception);
 
 }
 
@@ -1523,8 +1525,8 @@ BOOST_AUTO_TEST_CASE(test_repeats_fail_duplicated_multiplier_colon_3)
 }\n\
 ]\n\
 ");
-	documentModel::compiler::SheetDefParser parser;
-	BOOST_CHECK_THROW(parser.parse(text), documentModel::compiler::Exception);
+	SheetDefParser parser;
+	BOOST_CHECK_THROW(parser.parse(text), Exception);
 
 }
 
@@ -1539,7 +1541,7 @@ BOOST_AUTO_TEST_CASE(test_extended_note_events)
 }\n\
 ]\n\
 ");
-	documentModel::compiler::SheetDefParser parser;
+	SheetDefParser parser;
 	auto defs = parser.parse(text);
 	BOOST_CHECK(defs.tracks.size() == 1);
 	BOOST_CHECK(defs.tracks[0].voices.size() == 1);
@@ -1593,7 +1595,7 @@ BOOST_AUTO_TEST_CASE(test_extended_note_events_2)
 }\n\
 ]\n\
 ");
-	documentModel::compiler::SheetDefParser parser;
+	SheetDefParser parser;
 	auto defs = parser.parse(text);
 	BOOST_CHECK(defs.tracks.size() == 1);
 	BOOST_CHECK(defs.tracks[0].voices.size() == 1);
@@ -1647,7 +1649,7 @@ BOOST_AUTO_TEST_CASE(test_extended_note_events_octaves)
 }\n\
 ]\n\
 ");
-	documentModel::compiler::SheetDefParser parser;
+	SheetDefParser parser;
 	auto defs = parser.parse(text);
 	BOOST_CHECK(defs.tracks.size() == 1);
 	BOOST_CHECK(defs.tracks[0].voices.size() == 1);
