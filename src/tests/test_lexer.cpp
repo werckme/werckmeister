@@ -4,9 +4,11 @@
 #include <iostream>
 #include "com/common.hpp"
 
+using namespace parser;
+
 BOOST_AUTO_TEST_CASE(test_chorddef)
 {
-	using namespace documentModel::compiler;
+
 	ChordDefTokenizer<LexerType> chordDefTok;
 
 	com::String str(FM_STRING("--here goes comment 1\n\
@@ -43,7 +45,6 @@ X7: I=1 III=5 V=8 VII=10 --as usual\n\
 
 BOOST_AUTO_TEST_CASE(test_pitchmap)
 {
-	using namespace documentModel::compiler;
 	PitchmapTokenizer<LexerType> pitchmapTok;
 
 	com::String str(FM_STRING("\

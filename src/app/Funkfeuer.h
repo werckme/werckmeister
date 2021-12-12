@@ -24,7 +24,7 @@ namespace app
 
     public:
         typedef JsonIOBase Base;
-        Funkfeuer(documentModel::compiler::ICompilerVisitorPtr compilerVisitor,
+        Funkfeuer(compiler::ICompilerVisitorPtr compilerVisitor,
                   com::ILoggerPtr logger,
                   IStringSenderPtr sender)
             : _logger(logger), _timelineVisitor(std::dynamic_pointer_cast<app::DefaultTimeline>(compilerVisitor)), _sender(sender)

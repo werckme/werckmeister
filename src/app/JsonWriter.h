@@ -50,7 +50,7 @@ namespace app
         inline std::ostream &ostream() { return *_ostream; }
 
     private:
-        documentModel::compiler::IWarningsCollectionPtr getWarnings();
+        compiler::IWarningsCollectionPtr getWarnings();
         std::ostream *_ostream = nullptr;
     };
 }

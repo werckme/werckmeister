@@ -4,7 +4,7 @@
 
 namespace
 {
-    rapidjson::Document documentInfosToJSONDoc(documentModel::DocumentPtr sheetDoc, com::Ticks duration, const documentModel::Warnings &warnings)
+    rapidjson::Document documentInfosToJSONDoc(documentModel::DocumentPtr sheetDoc, com::Ticks duration, const compiler::Warnings &warnings)
     {
         rapidjson::Document doc;
         doc.SetObject();
@@ -84,16 +84,16 @@ namespace app
         exceptionToJSON(ostream(), ex);
     }
 
-    documentModel::compiler::IWarningsCollectionPtr JsonWriter::getWarnings()
+    compiler::IWarningsCollectionPtr JsonWriter::getWarnings()
     {
-        auto waningsCollection = std::dynamic_pointer_cast<documentModel::compiler::IWarningsCollection>(_logger);
+        auto waningsCollection = std::dynamic_pointer_cast<compiler::IWarningsCollection>(_logger);
         return waningsCollection;
     }
 
     void JsonWriter::writeValidationJson(documentModel::DocumentPtr document)
     {
-        documentModel::Warnings __warnings;
-        const documentModel::Warnings *warnings = &__warnings;
+        compiler::Warnings __warnings;
+        const compiler::Warnings *warnings = &__warnings;
         auto waningsCollection = getWarnings();
         if (waningsCollection)
         {
@@ -115,8 +115,8 @@ namespace app
     }
     void JsonWriter::docToJson(std::ostream &os, documentModel::DocumentPtr document)
     {
-        documentModel::Warnings __warnings;
-        const documentModel::Warnings *warnings = &__warnings;
+        compiler::Warnings __warnings;
+        const compiler::Warnings *warnings = &__warnings;
         auto waningsCollection = getWarnings();
         if (waningsCollection)
         {

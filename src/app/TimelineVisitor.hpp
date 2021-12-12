@@ -18,7 +18,7 @@ namespace app
     * this context creates such timeline
     */
     template <class TIntervalContainer>
-    class TimelineVisitor : public documentModel::compiler::ICompilerVisitor
+    class TimelineVisitor : public compiler::ICompilerVisitor
     {
     private:
         com::ILoggerPtr _logger;
@@ -28,14 +28,14 @@ namespace app
         typedef typename TIntervalContainer::value_type::second_type TSet;
         typedef typename TIntervalContainer::interval_type IntervalType;
         typedef typename TSet::value_type EventInfo;
-        typedef documentModel::compiler::IContext::TrackId TrackId;
+        typedef compiler::IContext::TrackId TrackId;
         virtual ~TimelineVisitor() = default;
         TIntervalContainer &intervalContainer() { return intervalContainer_; }
         const TIntervalContainer &intervalContainer() const { return intervalContainer_; }
         virtual void beginCompile() override { intervalContainer_.clear(); }
         virtual void endCompile() override {}
-        virtual void visit(documentModel::compiler::IContext *context, const documentModel::Event &ev) override;
-        virtual void visit(documentModel::compiler::IContext *context, const com::midi::Event &ev, TrackId trackId) override;
+        virtual void visit(compiler::IContext *context, const documentModel::Event &ev) override;
+        virtual void visit(compiler::IContext *context, const com::midi::Event &ev, TrackId trackId) override;
 
     private:
         TIntervalContainer intervalContainer_;
@@ -65,7 +65,7 @@ namespace app
 
     ///////////////////////////////////////////////////////////////////////////
     template <class TIntervalContainer>
-    void TimelineVisitor<TIntervalContainer>::visit(documentModel::compiler::IContext *ctx, const documentModel::Event &ev)
+    void TimelineVisitor<TIntervalContainer>::visit(compiler::IContext *ctx, const documentModel::Event &ev)
     {
         if (!ev.isTimeConsuming())
         {
@@ -91,7 +91,7 @@ namespace app
     }
 
     template <class TIntervalContainer>
-    void TimelineVisitor<TIntervalContainer>::visit(documentModel::compiler::IContext *ctx, const com::midi::Event &ev, TrackId trackId)
+    void TimelineVisitor<TIntervalContainer>::visit(compiler::IContext *ctx, const com::midi::Event &ev, TrackId trackId)
     {
         // TODO: #89
         //if (ev.eventType() != com::midi::NoteOn) {

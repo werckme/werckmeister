@@ -105,7 +105,7 @@ namespace app
 
     void JsonIOBase::exceptionToJSON(std::ostream &os, const std::exception &ex)
     {
-        typedef documentModel::compiler::Exception SheetException;
+        typedef compiler::Exception SheetException;
         rapidjson::Document doc;
         doc.SetObject();
         rapidjson::Value errorMessage;

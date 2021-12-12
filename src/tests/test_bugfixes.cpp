@@ -11,6 +11,8 @@
 #include "testhelper.h"
 #include <com/tools.h>
 
+using namespace parser;
+
 BOOST_AUTO_TEST_CASE(issue_9_As_und_Es_werden_nicht_erkannt)
 {
 	using namespace com;
@@ -23,7 +25,7 @@ type: documentModel;\n\
 }\n\
 ] \n\
 ");
-	documentModel::compiler::SheetDefParser parser;
+	SheetDefParser parser;
 	auto defs = parser.parse(text);
 	BOOST_CHECK(defs.tracks.size() == 1);
 	BOOST_CHECK(defs.tracks[0].voices.size() == 1);
@@ -81,7 +83,7 @@ type: documentModel;\n\
 }\n\
 ] \n\
 ");
-	documentModel::compiler::SheetDefParser parser;
+	SheetDefParser parser;
 	auto defs = parser.parse(text);
 	BOOST_CHECK(defs.tracks.size() == 1);
 	BOOST_CHECK(defs.tracks[0].voices.size() == 1);
