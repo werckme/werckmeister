@@ -9,6 +9,8 @@
 #include <com/werckmeister.hpp>
 #include <com/IDefinitionsServer.h>
 #include <compiler/commands/Fill.h>
+#include <unordered_map>
+#include <memory>
 
 #define DEBUGX(x)
 
@@ -26,13 +28,24 @@ namespace compiler
 			Templates templates;
 			com::Ticks offset = 0;
 			double tempoFactor = 1;
+			bool containsTrack(const com::String &trackName) const;
 		};
+		bool TemplatesAndItsChords::containsTrack(const com::String &trackName) const
+		{
+			for(const auto &tmpl : templates) 
+			{
+				if(tmpl.name == trackName) 
+				{
+					return true;
+				} 
+			}
+			return false;
+		}
 		class DegreeEventServer
 		{
 			const Voice::Events *degrees_;
 			Voice::Events::const_iterator it_;
 			void degrees(const Voice::Events *degrees);
-
 		public:
 			bool templateIsFill = false;
 			com::Ticks ignoreUntilPosition = -1.0;
@@ -89,7 +102,7 @@ namespace compiler
 			}
 			it_ = degrees_->begin();
 		}
-
+		typedef std::unordered_map<const Voice::Events*, std::shared_ptr<DegreeEventServer>> DegreeEventServers;
 		documentModel::SheetTemplate __getTemplate(SheetTemplateRenderer &sheetTemplateRenderer, const com::String &sheetTemplateName)
 		{
 			auto ctx = sheetTemplateRenderer.context();
@@ -490,10 +503,24 @@ namespace compiler
 		}
 	}
 
+	DegreeEventServer& findDegreeEventServer(DegreeEventServers &inOutServers, const Voice::Events* degrees)
+	{
+		auto it = inOutServers.find(degrees);
+		if (it != inOutServers.end()) 
+		{
+			return *it->second;
+		}
+		auto newServer = std::make_shared<DegreeEventServer>(degrees);
+		inOutServers.insert(std::make_pair(degrees, newServer));
+		return *(newServer.get());
+	}
+
 	void SheetTemplateRenderer::render(Track *sheetTrack)
 	{
+		DegreeEventServers degreeEventServers;
 		auto sheetMeta = ctx_->voiceMetaData(ctx_->chordVoiceId());
 		auto templatesAndItsChords = __collectChordsPerTemplate(*this, sheetTrack);
+		const TemplatesAndItsChords *previousTemplateAndChords = nullptr;
 		for (auto const &templateAndChords : templatesAndItsChords)
 		{
 			if (templateAndChords.chords.empty())
@@ -502,6 +529,8 @@ namespace compiler
 			}
 			for (const auto &tmpl : templateAndChords.templates)
 			{
+				bool templateWasUsedPreviously = previousTemplateAndChords != nullptr && previousTemplateAndChords->containsTrack(tmpl.name);
+				bool isStartTemplateFromBegin = tmpl.isFill || !templateWasUsedPreviously;
 				const auto &sheetTemplateTracks = tmpl.tracks;
 				for (const auto &track : sheetTemplateTracks)
 				{
@@ -511,8 +540,11 @@ namespace compiler
 						{
 							continue;
 						}
-						DegreeEventServer eventServer(&(voice.events));
+						DegreeEventServer &eventServer = findDegreeEventServer(degreeEventServers, &(voice.events));
 						eventServer.templateIsFill = tmpl.isFill;
+						if (isStartTemplateFromBegin) {
+							eventServer.seek(0);
+						}
 						eventServer.ignoreUntilPosition = tmpl.ignoreUnitlPosition;
 						eventServer.onLoop = [this]()
 						{
@@ -550,6 +582,7 @@ namespace compiler
 							}
 							if (chord->type == Event::Chord || chord->type == Event::Meta || chord->type == Event::Rest)
 							{
+								// collect these events to be processed during the next iteration
 								chordsPerBar.push_back(chord);
 							}
 							return true;
@@ -585,6 +618,7 @@ namespace compiler
 					}
 				}
 			}
+			previousTemplateAndChords = &templateAndChords;
 		}
 	}
 }
