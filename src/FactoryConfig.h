@@ -49,6 +49,7 @@ private:
 template <class TInjector>
 void FactoryConfig<TInjector>::initVoicingStrategies()
 {
+    using namespace compiler;
     register_<DirectVoicingStrategy>(SHEET_VOICING_STRATEGY_AS_NOTATED);
     register_<SimpleGuitar>(SHEET_VOICING_STRATEGY_SIMPLE_GUITAR);
     register_<DirectVoicingStrategy>(SHEET_VOICING_STRATEGY_DEFAULT);

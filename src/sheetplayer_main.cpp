@@ -46,8 +46,8 @@
 #include <crtdbg.h>
 #endif
 
-typedef documentModel::compiler::EventLogger<com::ConsoleLogger> LoggerImpl;
-typedef documentModel::compiler::LoggerAndWarningsCollector<com::ConsoleLogger> WarningsCollectorWithConsoleLogger;
+typedef compiler::EventLogger<com::ConsoleLogger> LoggerImpl;
+typedef compiler::LoggerAndWarningsCollector<com::ConsoleLogger> WarningsCollectorWithConsoleLogger;
 
 int startPlayer(std::shared_ptr<PlayerProgramOptions> programOptionsPtr);
 
@@ -101,8 +101,9 @@ int main(int argc, const char **argv)
 int startPlayer(std::shared_ptr<PlayerProgramOptions> programOptionsPtr)
 {
 	namespace di = boost::di;
-	namespace cp = documentModel::compiler;
-	namespace co = documentModel::conductor;
+	namespace cp = compiler;
+	namespace pr = parser;
+	namespace co = conductor;
 	app::SheetWatcherHandlersPtr sheetWatcherHandlers = std::make_shared<app::SheetWatcherHandlers>();
 	auto documentPtr = std::make_shared<documentModel::Document>();
 	auto midiFile = com::getWerckmeister().createMidi();
@@ -110,7 +111,7 @@ int startPlayer(std::shared_ptr<PlayerProgramOptions> programOptionsPtr)
 	app::DiContainerWrapper<app::IPlayerLoopVisitorPtr> loopVisitors;
 	bool writeWarningsToConsole = !(programOptionsPtr->isJsonModeSet() || programOptionsPtr->isJsonDocInfoMode());
 	auto injector = di::make_injector(
-		di::bind<cp::IDocumentParser>().to<cp::DocumentParser>().in(di::extension::scoped), di::bind<cp::ICompiler>().to<cp::Compiler>().in(di::extension::scoped), di::bind<cp::ISheetTemplateRenderer>().to<cp::SheetTemplateRenderer>().in(di::extension::scoped), di::bind<cp::ASheetEventRenderer>().to<cp::SheetEventRenderer>().in(di::extension::scoped), di::bind<cp::IContext>().to<cp::MidiContext>().in(di::extension::scoped), di::bind<cp::IPreprocessor>().to<cp::Preprocessor>().in(di::extension::scoped), di::bind<cp::ISheetNavigator>().to<cp::SheetNavigator>().in(di::extension::scoped), di::bind<co::IConductionsPerformer>().to<co::ConductionsPerformer>().in(di::extension::scoped), di::bind<ICompilerProgramOptions>().to(programOptionsPtr), di::bind<documentModel::Document>().to(documentPtr), di::bind<com::IDefinitionsServer>().to<com::DefinitionsServer>().in(di::extension::scoped), di::bind<com::midi::Midi>().to(midiFile), di::bind<app::SheetWatcherHandlers>().to(sheetWatcherHandlers), di::bind<app::DiContainerWrapper<app::IPlayerLoopVisitorPtr>>().to(loopVisitors), di::bind<app::IDocumentWriter>().to([&](const auto &injector) -> app::IDocumentWriterPtr
+		di::bind<pr::IDocumentParser>().to<pr::DocumentParser>().in(di::extension::scoped), di::bind<cp::ICompiler>().to<cp::Compiler>().in(di::extension::scoped), di::bind<cp::ISheetTemplateRenderer>().to<cp::SheetTemplateRenderer>().in(di::extension::scoped), di::bind<cp::ASheetEventRenderer>().to<cp::SheetEventRenderer>().in(di::extension::scoped), di::bind<cp::IContext>().to<cp::MidiContext>().in(di::extension::scoped), di::bind<cp::IPreprocessor>().to<cp::Preprocessor>().in(di::extension::scoped), di::bind<cp::ISheetNavigator>().to<cp::SheetNavigator>().in(di::extension::scoped), di::bind<co::IConductionsPerformer>().to<co::ConductionsPerformer>().in(di::extension::scoped), di::bind<ICompilerProgramOptions>().to(programOptionsPtr), di::bind<documentModel::Document>().to(documentPtr), di::bind<com::IDefinitionsServer>().to<com::DefinitionsServer>().in(di::extension::scoped), di::bind<com::midi::Midi>().to(midiFile), di::bind<app::SheetWatcherHandlers>().to(sheetWatcherHandlers), di::bind<app::DiContainerWrapper<app::IPlayerLoopVisitorPtr>>().to(loopVisitors), di::bind<app::IDocumentWriter>().to([&](const auto &injector) -> app::IDocumentWriterPtr
 																																																																																																																																																																																																																																																																																							{
 																																																																																																																																																																																																																																																																																								if (programOptionsPtr->isJsonModeSet() || programOptionsPtr->isJsonDocInfoMode())
 																																																																																																																																																																																																																																																																																								{
@@ -160,7 +161,7 @@ int startPlayer(std::shared_ptr<PlayerProgramOptions> programOptionsPtr)
 			std::shared_ptr<app::Funkfeuer> vis = injector.create<std::unique_ptr<app::Funkfeuer>>();
 			loopVisitors.container.push_back(vis);
 		}
-		documentModel::FactoryConfig factory(injector);
+		FactoryConfig factory(injector);
 		factory.init();
 		auto program = injector.create<SheetPlayerProgram *>();
 		sheetWatcherHandlers->container.push_back(program);

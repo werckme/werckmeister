@@ -19,13 +19,13 @@ namespace compiler
 
     public:
         typedef TLoggerBase Base;
-        virtual void warn(const ILogger::WriteToStreamF &, const Event &theRelatedEvent) override;
+        virtual void warn(const ILogger::WriteToStreamF &, const documentModel::Event &theRelatedEvent) override;
         virtual const Warnings &warnings() const override { return _warnings; }
         virtual ~LoggerAndWarningsCollector() = default;
     };
     ///////////////////////////////////////////////////////////////////////
     template <class TLoggerBase>
-    void LoggerAndWarningsCollector<TLoggerBase>::warn(const ILogger::WriteToStreamF &f, const Event &sourceObject)
+    void LoggerAndWarningsCollector<TLoggerBase>::warn(const ILogger::WriteToStreamF &f, const documentModel::Event &sourceObject)
     {
         std::stringstream messageStream;
         f(messageStream);

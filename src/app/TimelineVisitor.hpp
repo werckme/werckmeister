@@ -102,7 +102,7 @@ namespace app
         //}
         //this->currentEventInfo_->pitches.push_back(ev.parameter1());
         //this->currentEventInfo_->channel = ev.channel();
-        //typedef documentModel::compiler::MidiContext::TrackMetaData MidiTrackMetaData;
+        //typedef compiler::MidiContext::TrackMetaData MidiTrackMetaData;
         //auto trackMeta = std::dynamic_pointer_cast<MidiTrackMetaData>(ctx->trackMetaData(trackId));
         //if (trackMeta) {
         //    this->currentEventInfo_->instrumentId = trackMeta->instrument.id;

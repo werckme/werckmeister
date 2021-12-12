@@ -17,16 +17,16 @@ namespace compiler
     class EventLogger : public TLoggerBase, public IEventLogger
     {
     private:
-        DocumentPtr _document;
+        documentModel::DocumentPtr _document;
 
     public:
-        EventLogger(DocumentPtr document) : _document(document) {}
+        EventLogger(documentModel::DocumentPtr document) : _document(document) {}
         typedef TLoggerBase Base;
-        virtual void warn(const ILogger::WriteToStreamF &, const Event &theRelatedEvent);
+        virtual void warn(const ILogger::WriteToStreamF &, const documentModel::Event &theRelatedEvent);
     };
     ///////////////////////////////////////////////////////////////////////
     template <class TLoggerBase>
-    void EventLogger<TLoggerBase>::warn(const ILogger::WriteToStreamF &f, const Event &sourceObject)
+    void EventLogger<TLoggerBase>::warn(const ILogger::WriteToStreamF &f, const documentModel::Event &sourceObject)
     {
         std::stringstream messageStream;
         f(messageStream);

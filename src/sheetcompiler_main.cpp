@@ -30,8 +30,8 @@
 #include <crtdbg.h>
 #endif
 
-typedef documentModel::compiler::EventLogger<com::ConsoleLogger> LoggerImpl;
-typedef documentModel::compiler::LoggerAndWarningsCollector<com::ConsoleLogger> WarningsCollectorWithConsoleLogger;
+typedef compiler::EventLogger<com::ConsoleLogger> LoggerImpl;
+typedef compiler::LoggerAndWarningsCollector<com::ConsoleLogger> WarningsCollectorWithConsoleLogger;
 
 int main(int argc, const char **argv)
 {
@@ -39,8 +39,9 @@ int main(int argc, const char **argv)
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 #endif
 	namespace di = boost::di;
-	namespace cp = documentModel::compiler;
-	namespace co = documentModel::conductor;
+	namespace cp = compiler;
+	namespace co = conductor;
+	namespace pr = parser;
 	auto programOptionsPtr = std::make_shared<CompilerProgramOptions>();
 	try
 	{
@@ -57,7 +58,7 @@ int main(int argc, const char **argv)
 	bool needTimeline = programOptionsPtr->isJsonModeSet();
 	bool writeWarningsToConsole = !(programOptionsPtr->isJsonModeSet() || programOptionsPtr->isJsonDocInfoMode());
 	auto injector = di::make_injector(
-		di::bind<cp::IDocumentParser>().to<cp::DocumentParser>().in(di::singleton), di::bind<cp::ICompiler>().to<cp::Compiler>().in(di::singleton), di::bind<cp::ISheetTemplateRenderer>().to<cp::SheetTemplateRenderer>().in(di::singleton), di::bind<cp::ASheetEventRenderer>().to<cp::SheetEventRenderer>().in(di::singleton), di::bind<cp::IContext>().to<cp::MidiContext>().in(di::singleton), di::bind<cp::IPreprocessor>().to<cp::Preprocessor>().in(di::singleton), di::bind<cp::ISheetNavigator>().to<cp::SheetNavigator>().in(di::singleton), di::bind<co::IConductionsPerformer>().to<co::ConductionsPerformer>().in(di::singleton), di::bind<ICompilerProgramOptions>().to(programOptionsPtr), di::bind<documentModel::Document>().to(documentPtr), di::bind<com::IDefinitionsServer>().to<com::DefinitionsServer>().in(di::singleton), di::bind<com::midi::Midi>().to(midiFile), di::bind<app::IDocumentWriter>().to([&](const auto &injector) -> app::IDocumentWriterPtr
+		di::bind<pr::IDocumentParser>().to<pr::DocumentParser>().in(di::singleton), di::bind<cp::ICompiler>().to<cp::Compiler>().in(di::singleton), di::bind<cp::ISheetTemplateRenderer>().to<cp::SheetTemplateRenderer>().in(di::singleton), di::bind<cp::ASheetEventRenderer>().to<cp::SheetEventRenderer>().in(di::singleton), di::bind<cp::IContext>().to<cp::MidiContext>().in(di::singleton), di::bind<cp::IPreprocessor>().to<cp::Preprocessor>().in(di::singleton), di::bind<cp::ISheetNavigator>().to<cp::SheetNavigator>().in(di::singleton), di::bind<co::IConductionsPerformer>().to<co::ConductionsPerformer>().in(di::singleton), di::bind<ICompilerProgramOptions>().to(programOptionsPtr), di::bind<documentModel::Document>().to(documentPtr), di::bind<com::IDefinitionsServer>().to<com::DefinitionsServer>().in(di::singleton), di::bind<com::midi::Midi>().to(midiFile), di::bind<app::IDocumentWriter>().to([&](const auto &injector) -> app::IDocumentWriterPtr
 																																																																																																																																																																																																																																  {
 																																																																																																																																																																																																																																	  if (programOptionsPtr->isJsonModeSet() || programOptionsPtr->isJsonDocInfoMode())
 																																																																																																																																																																																																																																	  {
@@ -81,7 +82,7 @@ int main(int argc, const char **argv)
 										}
 										return injector.template create<std::shared_ptr<WarningsCollectorWithConsoleLogger>>();
 									}));
-	documentModel::FactoryConfig factory(injector);
+	FactoryConfig factory(injector);
 	factory.init();
 	auto program = injector.create<SheetCompilerProgram>();
 	program.prepareEnvironment();

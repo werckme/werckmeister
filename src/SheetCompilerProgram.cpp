@@ -75,7 +75,7 @@ void SheetCompilerProgram::compile()
     }
     catch (com::Exception &ex)
     {
-        ex << documentModel::compiler::ex_sheet_document(document);
+        ex << compiler::ex_sheet_document(document);
         throw;
     }
     _logger->babble(WMLogLambda(log << "write document"));

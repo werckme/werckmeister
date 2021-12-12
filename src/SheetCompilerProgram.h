@@ -17,25 +17,25 @@ class SheetCompilerProgram
 protected:
     ICompilerProgramOptionsPtr _programOptions;
     com::ILoggerPtr _logger;
-    documentModel::compiler::IDocumentParserPtr _documentParser;
-    documentModel::compiler::ICompilerPtr _compiler;
-    documentModel::compiler::IContextPtr _context;
-    documentModel::compiler::IPreprocessorPtr _preprocessor;
+    parser::IDocumentParserPtr _documentParser;
+    compiler::ICompilerPtr _compiler;
+    compiler::IContextPtr _context;
+    compiler::IPreprocessorPtr _preprocessor;
     com::midi::MidiPtr _midiFile;
     app::IDocumentWriterPtr _documentWriter;
-    documentModel::conductor::IConductionsPerformerPtr _conductionsPerformer;
+    conductor::IConductionsPerformerPtr _conductionsPerformer;
 
 public:
     SheetCompilerProgram(
         ICompilerProgramOptionsPtr programOptions,
         com::ILoggerPtr logger,
-        documentModel::compiler::IDocumentParserPtr documentParser,
-        documentModel::compiler::ICompilerPtr compiler,
-        documentModel::compiler::IContextPtr context,
-        documentModel::compiler::IPreprocessorPtr preprocessor,
+        parser::IDocumentParserPtr documentParser,
+        compiler::ICompilerPtr compiler,
+        compiler::IContextPtr context,
+        compiler::IPreprocessorPtr preprocessor,
         com::midi::MidiPtr midiFile,
         app::IDocumentWriterPtr documentWriter,
-        documentModel::conductor::IConductionsPerformerPtr conductionsPerformer) : _programOptions(programOptions),
+        conductor::IConductionsPerformerPtr conductionsPerformer) : _programOptions(programOptions),
                                                                                    _logger(logger),
                                                                                    _documentParser(documentParser),
                                                                                    _compiler(compiler),
