@@ -102,7 +102,7 @@ namespace compiler
 			}
 			it_ = degrees_->begin();
 		}
-		typedef std::unordered_map<com::String, std::shared_ptr<DegreeEventServer>> DegreeEventServers;
+		typedef std::unordered_map<const Voice::Events*, std::shared_ptr<DegreeEventServer>> DegreeEventServers;
 		documentModel::SheetTemplate __getTemplate(SheetTemplateRenderer &sheetTemplateRenderer, const com::String &sheetTemplateName)
 		{
 			auto ctx = sheetTemplateRenderer.context();
@@ -503,15 +503,15 @@ namespace compiler
 		}
 	}
 
-	DegreeEventServer& findDegreeEventServer(DegreeEventServers &inOutServers, const com::String& templateName, const Voice::Events* degrees)
+	DegreeEventServer& findDegreeEventServer(DegreeEventServers &inOutServers, const Voice::Events* degrees)
 	{
-		auto it = inOutServers.find(templateName);
+		auto it = inOutServers.find(degrees);
 		if (it != inOutServers.end()) 
 		{
 			return *it->second;
 		}
 		auto newServer = std::make_shared<DegreeEventServer>(degrees);
-		inOutServers.insert(std::make_pair(templateName, newServer));
+		inOutServers.insert(std::make_pair(degrees, newServer));
 		return *(newServer.get());
 	}
 
@@ -540,8 +540,7 @@ namespace compiler
 						{
 							continue;
 						}
-						auto templateDegreeServerId = std::to_string((long)(&voice));
-						DegreeEventServer &eventServer = findDegreeEventServer(degreeEventServers, templateDegreeServerId, &(voice.events));
+						DegreeEventServer &eventServer = findDegreeEventServer(degreeEventServers, &(voice.events));
 						eventServer.templateIsFill = tmpl.isFill;
 						if (isStartTemplateFromBegin) {
 							eventServer.seek(0);
