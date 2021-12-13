@@ -24,6 +24,7 @@
 #include <compiler/SheetNavigator.h>
 #include <conductor/ConductionsPerformer.h>
 #include "FactoryConfig.h"
+#include <compiler/CompoundVisitor.hpp>
 
 #ifdef _MSC_VER
 #define _CRTDBG_MAP_ALLOC
@@ -88,10 +89,24 @@ extern "C" const char *create_compile_result(const char *file, double beginQuart
 	auto midiFile = com::getWerckmeister().createMidi();
 	auto logger = std::make_shared<WarningsCollectorWithConsoleLogger>();
 	auto injector = di::make_injector(
-		di::bind<pr::IDocumentParser>().to<pr::DocumentParser>().in(di::extension::scoped), di::bind<cp::ICompiler>().to<cp::Compiler>().in(di::extension::scoped), di::bind<cp::ISheetTemplateRenderer>().to<cp::SheetTemplateRenderer>().in(di::extension::scoped), di::bind<cp::ASheetEventRenderer>().to<cp::SheetEventRenderer>().in(di::extension::scoped), di::bind<cp::IContext>().to<cp::MidiContext>().in(di::extension::scoped), di::bind<cp::IPreprocessor>().to<cp::Preprocessor>().in(di::extension::scoped), di::bind<cp::ISheetNavigator>().to<cp::SheetNavigator>().in(di::extension::scoped), di::bind<co::IConductionsPerformer>().to<co::ConductionsPerformer>().in(di::extension::scoped), di::bind<ICompilerProgramOptions>().to(programOptionsPtr), di::bind<documentModel::Document>().to(documentPtr), di::bind<com::IDefinitionsServer>().to<com::DefinitionsServer>().in(di::extension::scoped), di::bind<com::midi::Midi>().to(midiFile), di::bind<app::IDocumentWriter>().to([&](const auto &injector) -> app::IDocumentWriterPtr
-																																																																																																																																																																																																																																																		  { return injector.template create<std::unique_ptr<app::JsonWriter>>(); }),
+		di::bind<pr::IDocumentParser>().to<pr::DocumentParser>().in(di::extension::scoped), 
+		di::bind<cp::ICompiler>().to<cp::Compiler>().in(di::extension::scoped), 
+		di::bind<cp::ISheetTemplateRenderer>().to<cp::SheetTemplateRenderer>().in(di::extension::scoped), 
+		di::bind<cp::ASheetEventRenderer>().to<cp::SheetEventRenderer>().in(di::extension::scoped), 
+		di::bind<cp::IContext>().to<cp::MidiContext>().in(di::extension::scoped), 
+		di::bind<cp::IPreprocessor>().to<cp::Preprocessor>().in(di::extension::scoped), 
+		di::bind<cp::ISheetNavigator>().to<cp::SheetNavigator>().in(di::extension::scoped), 
+		di::bind<co::IConductionsPerformer>().to<co::ConductionsPerformer>().in(di::extension::scoped), 
+		di::bind<ICompilerProgramOptions>().to(programOptionsPtr), di::bind<documentModel::Document>().to(documentPtr), 
+		di::bind<com::IDefinitionsServer>().to<com::DefinitionsServer>().in(di::extension::scoped), 
+		di::bind<com::midi::Midi>().to(midiFile), di::bind<app::IDocumentWriter>().to([&](const auto &injector) -> app::IDocumentWriterPtr
+		{ 
+			return injector.template create<std::unique_ptr<app::JsonWriter>>(); 
+		}),
 		di::bind<cp::ICompilerVisitor>().to([&](const auto &injector) -> cp::ICompilerVisitorPtr
-											{ return injector.template create<std::shared_ptr<app::DefaultTimeline>>(); }),
+		{ 
+			return injector.template create<std::shared_ptr< cp::CompoundVisitor_N1<app::DefaultTimeline> >>();
+		}),
 		di::bind<com::ILogger>().to(logger));
 	FactoryConfig factory(injector);
 	factory.init();

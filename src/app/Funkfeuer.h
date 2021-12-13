@@ -24,13 +24,15 @@ namespace app
 
     public:
         typedef JsonIOBase Base;
-        Funkfeuer(compiler::ICompilerVisitorPtr compilerVisitor,
+        Funkfeuer(std::shared_ptr<app::DefaultTimeline> compilerVisitor,
                   com::ILoggerPtr logger,
                   IStringSenderPtr sender)
-            : _logger(logger), _timelineVisitor(std::dynamic_pointer_cast<app::DefaultTimeline>(compilerVisitor)), _sender(sender)
+            : _logger(logger), _timelineVisitor(compilerVisitor), _sender(sender)
         {
-            if (!_timelineVisitor)
+            if (!_timelineVisitor) 
+            {
                 FM_THROW(com::Exception, "expected a time line visitor instance");
+            }
             lastTimelineEvent = _timelineVisitor->intervalContainer().end();
         }
         virtual void loopBegin() override {}
