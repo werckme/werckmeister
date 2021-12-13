@@ -9,7 +9,7 @@
 #include <conductor/declarations/IDeclaration.h>
 #include <conductor/selectors/ISelector.h>
 #include <com/ILogger.h>
-
+#include <compiler/IEventInformationServer.h>
 namespace conductor
 {
 	class ConductionsPerformer : public IConductionsPerformer
@@ -28,7 +28,16 @@ namespace conductor
 		EventsAndDeclarationsCollection selectEvents() const;
 
 	public:
-		ConductionsPerformer(com::midi::MidiPtr midifile, documentModel::DocumentPtr document, com::ILoggerPtr logger) : _midifile(midifile), _document(document), _logger(logger) {}
+		ConductionsPerformer(com::midi::MidiPtr midifile, 
+			documentModel::DocumentPtr document, 
+			com::ILoggerPtr logger,
+			compiler::IEventInformationServerPtr eventInformationServer) :
+			 _midifile(midifile), 
+			 _document(document), 
+			 _logger(logger),
+			 _eventInformationServer(eventInformationServer)
+		{
+		}
 		virtual void applyConductions() override;
 
 	private:
@@ -39,5 +48,6 @@ namespace conductor
 		com::midi::MidiPtr _midifile;
 		documentModel::DocumentPtr _document;
 		com::ILoggerPtr _logger;
+		compiler::IEventInformationServerPtr _eventInformationServer;
 	};
 }

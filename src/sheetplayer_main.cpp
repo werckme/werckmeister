@@ -34,6 +34,7 @@
 #include <conductor/ConductionsPerformer.h>
 #include "FactoryConfig.h"
 #include <compiler/CompoundVisitor.hpp>
+#include <compiler/EventInformationServer.h>
 
 #ifdef SHEET_USE_BOOST_TIMER
 #include "app/boostTimer.h"
@@ -79,8 +80,7 @@ int main(int argc, const char **argv)
 	int returnCode = 0;
 
 #ifdef SHEET_USE_BOOST_TIMER
-	std::thread boost_asio_([]
-							{ app::BoostTimer::io_run(); });
+	std::thread boost_asio_([] { app::BoostTimer::io_run(); });
 #endif
 
 	do
@@ -138,9 +138,9 @@ int startPlayer(std::shared_ptr<PlayerProgramOptions> programOptionsPtr)
 		{
 			if (needTimeline)
 			{
-				return injector.template create<std::shared_ptr< cp::CompoundVisitor_N1<app::DefaultTimeline> >>();
+				return injector.template create<std::shared_ptr< cp::CompoundVisitor_N2<app::DefaultTimeline, cp::EventInformationServer> >>();
 			}
-			return injector.template create<std::shared_ptr< cp::CompoundVisitor_N1<cp::DefaultCompilerVisitor>> >();
+			return injector.template create<std::shared_ptr<cp::EventInformationServer>>();
 		}),
 		di::bind<com::ILogger>().to([&](const auto &injector) -> com::ILoggerPtr
 		{

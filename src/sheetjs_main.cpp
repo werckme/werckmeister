@@ -25,6 +25,7 @@
 #include <conductor/ConductionsPerformer.h>
 #include "FactoryConfig.h"
 #include <compiler/CompoundVisitor.hpp>
+#include <compiler/EventInformationServer.h>
 
 #ifdef _MSC_VER
 #define _CRTDBG_MAP_ALLOC
@@ -105,7 +106,7 @@ extern "C" const char *create_compile_result(const char *file, double beginQuart
 		}),
 		di::bind<cp::ICompilerVisitor>().to([&](const auto &injector) -> cp::ICompilerVisitorPtr
 		{ 
-			return injector.template create<std::shared_ptr< cp::CompoundVisitor_N1<app::DefaultTimeline> >>();
+			return injector.template create<std::shared_ptr< cp::CompoundVisitor_N2<app::DefaultTimeline, cp::EventInformationServer> >>();
 		}),
 		di::bind<com::ILogger>().to(logger));
 	FactoryConfig factory(injector);

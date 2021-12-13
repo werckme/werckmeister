@@ -4,14 +4,14 @@
 
 namespace compiler
 {
-    template<class TVistor1>
+    template<class TVisitor1>
     class CompoundVisitor_N1 : public ICompilerVisitor
     {
     public:
-        typedef CompoundVisitor_N1<TVistor1> TClass;
-        typedef std::shared_ptr<TVistor1> TVistor1Ptr;
+        typedef CompoundVisitor_N1<TVisitor1> TClass;
+        typedef std::shared_ptr<TVisitor1> TVisitor1Ptr;
         typedef std::shared_ptr<TClass> TSharedPtr;
-        CompoundVisitor_N1(TVistor1Ptr visitor1) 
+        CompoundVisitor_N1(TVisitor1Ptr visitor1) 
             : visitor1(visitor1)
         {
         }
@@ -32,7 +32,45 @@ namespace compiler
         {
             visitor1->visit(context, ev, trackId);
         }
-        TVistor1Ptr visitor1 = nullptr;
+        TVisitor1Ptr visitor1 = nullptr;
+    };
+
+
+    template<class TVisitor1, class TVisitor2>
+    class CompoundVisitor_N2 : public CompoundVisitor_N1<TVisitor2>
+    {
+    public:
+        typedef CompoundVisitor_N1<TVisitor2> TBase;
+        typedef CompoundVisitor_N2<TVisitor1, TVisitor2> TClass;
+        typedef std::shared_ptr<TVisitor1> TVisitor1Ptr;
+        typedef std::shared_ptr<TVisitor2> TVisitor2Ptr;
+        typedef std::shared_ptr<TClass> TSharedPtr;
+        CompoundVisitor_N2(TVisitor1Ptr visitor1, TVisitor2Ptr visitor2)
+            : TBase(visitor2), visitor1(visitor1)
+        {
+        }
+        virtual ~CompoundVisitor_N2() = default;
+        virtual void beginCompile() override
+        {
+            visitor1->beginCompile();
+            TBase::beginCompile();
+        }
+        virtual void endCompile() override
+        {
+            visitor1->endCompile();
+            TBase::endCompile();
+        }
+        virtual void visit(IContext* context, const documentModel::Event& ev) override
+        {
+            visitor1->visit(context, ev);
+            TBase::visit(context, ev);
+        }
+        virtual void visit(IContext* context, const com::midi::Event& ev, IContext::TrackId trackId) override
+        {
+            visitor1->visit(context, ev, trackId);
+            TBase::visit(context, ev, trackId);
+        }
+        TVisitor1Ptr visitor1 = nullptr;
     };
     
 }
