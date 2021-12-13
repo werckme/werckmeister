@@ -37,11 +37,21 @@ BOOST_FUSION_ADAPT_STRUCT(
 
 BOOST_FUSION_ADAPT_STRUCT(
 	documentModel::Event,
-	(unsigned int, sourcePositionBegin)(documentModel::ASheetObjectWithSourceInfo::SourceId, sourceId)(documentModel::Event::Type, type)(documentModel::Event::Tags, tags)(documentModel::Event::Pitches, pitches)(documentModel::Event::Duration, duration)(com::String, stringValue)(documentModel::Event::Args, metaArgs)(unsigned int, sourcePositionEnd))
+	(unsigned int, sourcePositionBegin)
+	(documentModel::ASheetObjectWithSourceInfo::SourceId, sourceId)
+	(documentModel::Event::Type, type)
+	(documentModel::Event::Tags, tags)
+	(documentModel::Event::Pitches, pitches)
+	(documentModel::Event::Duration, duration)
+	(com::String, stringValue)
+	(documentModel::Event::Args, metaArgs)
+	(unsigned int, sourcePositionEnd))
 
 BOOST_FUSION_ADAPT_STRUCT(
 	documentModel::Grouped,
-	(documentModel::ASheetObjectWithSourceInfo::SourceId, sourceId)(documentModel::Event::EventGroup, eventGroup)(documentModel::Event::Duration, duration))
+	(documentModel::ASheetObjectWithSourceInfo::SourceId, sourceId)
+	(documentModel::Event::EventGroup, eventGroup)
+	(documentModel::Event::Duration, duration))
 
 namespace
 {
