@@ -257,3 +257,20 @@ BOOST_AUTO_TEST_CASE(parse_oneSelector_followUpOperator_5)
 	BOOST_CHECK_EQUAL(defs.rules[0].declarations[0].value, double(10));
 	BOOST_CHECK_EQUAL(defs.rules[0].declarations[0].unit, documentModel::ConductionRule::Declaration::UnitAbsolute);
 }
+
+BOOST_AUTO_TEST_CASE(parse_cue_position)
+{
+	using namespace com;
+	using documentModel::PitchDef;
+	com::String text = FM_STRING("\
+	fromPosition(@myCue) {\
+		velocity = 10;\
+	}\
+");
+	ConductionSheetParser parser;
+	auto defs = parser.parse(text);
+	BOOST_CHECK_EQUAL(defs.rules.size(), size_t(1));
+	BOOST_CHECK_EQUAL(defs.rules[0].selectors.size(), size_t(1));
+	BOOST_CHECK_EQUAL(defs.rules[0].selectors[0].type, "fromPosition");
+	BOOST_CHECK_EQUAL(defs.rules[0].selectors[0].arguments.size(), size_t(1));
+}
