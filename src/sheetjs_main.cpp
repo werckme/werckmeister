@@ -98,7 +98,7 @@ extern "C" const char *create_compile_result(const char *file, double beginQuart
 		di::bind<cp::IPreprocessor>().to<cp::Preprocessor>().in(di::extension::scoped), 
 		di::bind<cp::ISheetNavigator>().to<cp::SheetNavigator>().in(di::extension::scoped), 
 		di::bind<co::IConductionsPerformer>().to<co::ConductionsPerformer>().in(di::extension::scoped),
-		di::bind<cp::IEventInformationServer>().to<cp::EventInformationServer>().in(di::extension::scoped),
+		di::bind<cp::IEventInformationServer>().to<cp::EventInformationServer>().in(di::singleton),
 		di::bind<ICompilerProgramOptions>().to(programOptionsPtr), di::bind<documentModel::Document>().to(documentPtr), 
 		di::bind<com::IDefinitionsServer>().to<com::DefinitionsServer>().in(di::extension::scoped), 
 		di::bind<com::midi::Midi>().to(midiFile), di::bind<app::IDocumentWriter>().to([&](const auto &injector) -> app::IDocumentWriterPtr
