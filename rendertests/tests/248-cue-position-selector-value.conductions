@@ -1,0 +1,3 @@
+fromPosition(@secondBar) {
+    velocity = 10;
+}

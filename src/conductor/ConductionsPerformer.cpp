@@ -171,7 +171,7 @@ namespace conductor
 		int totalRules = 0;
 		for (const auto &cs : _document->conductionSheets)
 		{
-			totalRules += cs.rules.size();
+			totalRules += (int)cs.rules.size();
 		}
 		for (const auto &cs : _document->conductionSheets)
 		{

@@ -67,6 +67,7 @@ int main(int argc, const char **argv)
 		di::bind<cp::IPreprocessor>().to<cp::Preprocessor>().in(di::singleton), 
 		di::bind<cp::ISheetNavigator>().to<cp::SheetNavigator>().in(di::singleton), 
 		di::bind<co::IConductionsPerformer>().to<co::ConductionsPerformer>().in(di::singleton), 
+		di::bind<cp::IEventInformationServer>().to<cp::EventInformationServer>().in(di::singleton),
 		di::bind<ICompilerProgramOptions>().to(programOptionsPtr), 
 		di::bind<documentModel::Document>().to(documentPtr), 
 		di::bind<com::IDefinitionsServer>().to<com::DefinitionsServer>().in(di::singleton), 
