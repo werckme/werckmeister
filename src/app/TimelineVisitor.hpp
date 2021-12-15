@@ -24,8 +24,8 @@ namespace app
         com::ILoggerPtr _logger;
 
     public:
-        TimelineVisitor(com::ILoggerPtr logger) : _logger(logger) {
-            int halt = 0;
+        TimelineVisitor(com::ILoggerPtr logger) : _logger(logger) 
+        {
         }
         typedef typename TIntervalContainer::value_type::second_type TSet;
         typedef typename TIntervalContainer::interval_type IntervalType;

@@ -64,6 +64,8 @@ namespace compiler
 	{
 	}
 
+	EventInformationServer::~EventInformationServer() = default;
+
 	void EventInformationServer::beginCompile()
 	{
 		// we need to clear here, because this instance exists over the whole lifetime of 
