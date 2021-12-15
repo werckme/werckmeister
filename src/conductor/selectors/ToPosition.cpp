@@ -11,8 +11,17 @@ namespace conductor
         {
             FM_THROW(compiler::Exception, "missing argument for selector ToPosition");
         }
+        auto argument = arguments[0];
+        auto value = argument.numberValue;
+        if (argument.valueContext == documentModel::ConductionSelector::ArgumentValue::CueReference)
+        {
+            auto cueInfos = _eventInformationServer->findCueEvents(argument.name);
+            if (!cueInfos.empty())
+            {
+                value = cueInfos.begin()->absolutePosition / com::PPQ;
+            }
+        }
         auto eventPosition = ev.absPosition() / com::PPQ;
-        auto value = arguments[0].numberValue;
-        return eventPosition <= value;
+        return eventPosition < value;
     }
 }
