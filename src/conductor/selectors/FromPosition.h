@@ -6,7 +6,7 @@
 namespace conductor
 {
     /// <selector name="fromPosition">
-    ///     Selects any event where its position is equal or after a given time.
+    ///     Selects any event where its position is equal or after a given position in quarters.
     /// see also: [toPosition](#toPosition).
     /// ## example, select the events after time >= 8 quarters:
     /// ```
