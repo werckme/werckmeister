@@ -24,7 +24,9 @@ namespace app
         com::ILoggerPtr _logger;
 
     public:
-        TimelineVisitor(com::ILoggerPtr logger) : _logger(logger) {}
+        TimelineVisitor(com::ILoggerPtr logger) : _logger(logger) 
+        {
+        }
         typedef typename TIntervalContainer::value_type::second_type TSet;
         typedef typename TIntervalContainer::interval_type IntervalType;
         typedef typename TSet::value_type EventInfo;
@@ -93,19 +95,5 @@ namespace app
     template <class TIntervalContainer>
     void TimelineVisitor<TIntervalContainer>::visit(compiler::IContext *ctx, const com::midi::Event &ev, TrackId trackId)
     {
-        // TODO: #89
-        //if (ev.eventType() != com::midi::NoteOn) {
-        //    return;
-        //}
-        //if (!this->currentEventInfo_) {
-        //    return;
-        //}
-        //this->currentEventInfo_->pitches.push_back(ev.parameter1());
-        //this->currentEventInfo_->channel = ev.channel();
-        //typedef compiler::MidiContext::TrackMetaData MidiTrackMetaData;
-        //auto trackMeta = std::dynamic_pointer_cast<MidiTrackMetaData>(ctx->trackMetaData(trackId));
-        //if (trackMeta) {
-        //    this->currentEventInfo_->instrumentId = trackMeta->instrument.id;
-        //}
     }
 }

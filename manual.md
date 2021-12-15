@@ -939,11 +939,11 @@ Defines a device which can be used when adding instruments (see [instrumentDef](
 <br><br><br>
 
 ### `do`
-Such as [mod](#mod)&nbsp;`do` adds a modification to the track. 
+Such as [mod](#mod)&nbsp;`do` adds a modification to the track.
 
  The difference is: every `mod` command adds a further modification to a voice.
 
- `do` replaces the previous modification. 
+ `do` replaces the previous modification.
 
  ### example
 
@@ -1379,7 +1379,7 @@ Adds a modification to the track.
 
  ### example
 
- `/voicingStrategy: asNotated/` 
+ `/voicingStrategy: asNotated/`
 
  Voicing strategies can be external lua scripts, or one of these internal strategies:
 
@@ -1973,11 +1973,11 @@ Selects any event where its pitch is higher or equal than the given pitch.
 <br><br><br>
 
 ### `fromPosition`
-Selects any event where its position is after a given time.
+Selects any event where its position is equal or after a given position in quarters.
 
  see also: [toPosition](#toPosition).
 
- ## example, select the events after time >= 8 quarters: 
+ ## example, select the events after time >= 8 quarters:
 
  ```
 
@@ -2071,7 +2071,7 @@ Selects an event which appears on a given beat or a list of beats
 
  see also: [fromBeat](#fromBeat), [toBeat](#toBeat).
 
- ## example, select the events at beat 1 and 3: 
+ ## example, select the events at beat 1 and 3:
 
  ```
 
@@ -2161,11 +2161,11 @@ Selects any event where its pitch is lower or equal than the given pitch.
 <br><br><br>
 
 ### `toPosition`
-Selects any event where its position is after a given time.
+Selects any event where its position is before a given position in quarters.
 
  see also: [toPosition](#toPosition).
 
- ## example, select the events before time <= 8 quarters: 
+ ## example, select the events before time < 8 quarters:
 
  ```
 
@@ -2183,9 +2183,9 @@ Selects any event where its position is after a given time.
 
 ### Conductor Declarations
 ### `duration`
-Changes the duration of an event. 
+Changes the duration of an event.
 
- ## example: 
+ ## example:
 
  ```
 
@@ -2199,7 +2199,7 @@ Changes the duration of an event.
 
    duration -= 25%;
 
- }        
+ }
 
  ```
 
@@ -2214,7 +2214,7 @@ Changes the duration of an event.
 ### `pitch`
 Changes the pitch of an event.
 
- ## example: 
+ ## example:
 
  ```
 
@@ -2228,7 +2228,7 @@ Changes the pitch of an event.
 
    pitch += 25%;
 
- }        
+ }
 
  ```
 
@@ -2241,11 +2241,11 @@ Changes the pitch of an event.
 <br><br><br>
 
 ### `timeOffset`
-Changes the time position of an event. 
+Changes the time position of an event.
 
- **Since this is an offset value, the set operation(=) has the same effect as the add(+=) or substract(-=) operation.** 
+ **Since this is an offset value, the set operation(=) has the same effect as the add(+=) or substract(-=) operation.**
 
- ## example: 
+ ## example:
 
  ```
 
@@ -2259,7 +2259,7 @@ Changes the time position of an event.
 
    timeOffset -= 25%;
 
- }        
+ }
 
  ```
 
@@ -2274,7 +2274,7 @@ Changes the time position of an event.
 ### `velocity`
 Changes the velocity of an event.
 
- ## example: 
+ ## example:
 
  ```
 
@@ -2288,7 +2288,7 @@ Changes the velocity of an event.
 
    velocity += 25%;
 
- }        
+ }
 
  ```
 

@@ -1,0 +1,11 @@
+fromPosition(@secondBar) toPosition(@thirdBar) {
+    velocity = 10;
+}
+
+fromPosition(@thirdBar) toPosition(@fourthBar) {
+    velocity = 100;
+}
+
+fromPosition(@fourthBar) {
+    velocity = 10;
+}

@@ -11,9 +11,11 @@ namespace documentModel
 	{
 		struct ArgumentValue
 		{
+			enum ValueContext { Unspecified, CueReference };
 			com::Ticks numberValue = 0;
 			PitchDef pitch;
 			com::String name;
+			ValueContext valueContext = Unspecified;
 		};
 		typedef std::vector<ArgumentValue> Arguments;
 		com::String type;

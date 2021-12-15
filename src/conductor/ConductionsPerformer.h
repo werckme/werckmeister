@@ -28,7 +28,14 @@ namespace conductor
 		EventsAndDeclarationsCollection selectEvents() const;
 
 	public:
-		ConductionsPerformer(com::midi::MidiPtr midifile, documentModel::DocumentPtr document, com::ILoggerPtr logger) : _midifile(midifile), _document(document), _logger(logger) {}
+		ConductionsPerformer(com::midi::MidiPtr midifile, 
+			documentModel::DocumentPtr document, 
+			com::ILoggerPtr logger) :
+			 _midifile(midifile), 
+			 _document(document), 
+			 _logger(logger)
+		{
+		}
 		virtual void applyConductions() override;
 
 	private:

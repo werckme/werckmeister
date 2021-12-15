@@ -257,3 +257,56 @@ BOOST_AUTO_TEST_CASE(parse_oneSelector_followUpOperator_5)
 	BOOST_CHECK_EQUAL(defs.rules[0].declarations[0].value, double(10));
 	BOOST_CHECK_EQUAL(defs.rules[0].declarations[0].unit, documentModel::ConductionRule::Declaration::UnitAbsolute);
 }
+
+BOOST_AUTO_TEST_CASE(parse_cue_position)
+{
+	using namespace com;
+	using documentModel::PitchDef;
+	com::String text = FM_STRING("\
+	fromPosition(@myCue) {\
+		velocity = 10;\
+	}\
+");
+	ConductionSheetParser parser;
+	auto defs = parser.parse(text);
+	BOOST_CHECK_EQUAL(defs.rules.size(), size_t(1));
+	BOOST_CHECK_EQUAL(defs.rules[0].selectors.size(), size_t(1));
+	BOOST_CHECK_EQUAL(defs.rules[0].selectors[0].type, "fromPosition");
+	BOOST_CHECK_EQUAL(defs.rules[0].selectors[0].arguments.size(), size_t(1));
+	BOOST_CHECK_EQUAL(defs.rules[0].selectors[0].arguments.size(), size_t(1));
+	BOOST_CHECK_EQUAL(defs.rules[0].selectors[0].arguments[0].name, "myCue");
+	BOOST_CHECK_EQUAL(defs.rules[0].selectors[0].arguments[0].valueContext, documentModel::ConductionSelector::ArgumentValue::CueReference);
+}
+
+BOOST_AUTO_TEST_CASE(parse_quarters_position)
+{
+	using namespace com;
+	using documentModel::PitchDef;
+	com::String text = FM_STRING("\
+	fromPosition(1) {\
+		velocity = 10;\
+	}\
+");
+	ConductionSheetParser parser;
+	auto defs = parser.parse(text);
+	BOOST_CHECK_EQUAL(defs.rules.size(), size_t(1));
+	BOOST_CHECK_EQUAL(defs.rules[0].selectors.size(), size_t(1));
+	BOOST_CHECK_EQUAL(defs.rules[0].selectors[0].type, "fromPosition");
+	BOOST_CHECK_EQUAL(defs.rules[0].selectors[0].arguments.size(), size_t(1));
+	BOOST_CHECK_EQUAL(defs.rules[0].selectors[0].arguments.size(), size_t(1));
+	BOOST_CHECK_EQUAL(defs.rules[0].selectors[0].arguments[0].numberValue, com::Ticks(1));
+	BOOST_CHECK_EQUAL(defs.rules[0].selectors[0].arguments[0].valueContext, documentModel::ConductionSelector::ArgumentValue::Unspecified);
+}
+
+BOOST_AUTO_TEST_CASE(parse_position_fail)
+{
+	using namespace com;
+	using documentModel::PitchDef;
+	com::String text = FM_STRING("\
+	fromPosition(myCuew) {\
+		velocity = 10;\
+	}\
+");
+	ConductionSheetParser parser;
+	BOOST_CHECK_THROW(parser.parse(text), Exception);
+}

@@ -33,6 +33,8 @@
 #include <compiler/SheetNavigator.h>
 #include <conductor/ConductionsPerformer.h>
 #include "FactoryConfig.h"
+#include <compiler/CompoundVisitor.hpp>
+#include <compiler/EventInformationServer.h>
 
 #ifdef SHEET_USE_BOOST_TIMER
 #include "app/boostTimer.h"
@@ -78,8 +80,7 @@ int main(int argc, const char **argv)
 	int returnCode = 0;
 
 #ifdef SHEET_USE_BOOST_TIMER
-	std::thread boost_asio_([]
-							{ app::BoostTimer::io_run(); });
+	std::thread boost_asio_([] { app::BoostTimer::io_run(); });
 #endif
 
 	do
@@ -111,38 +112,53 @@ int startPlayer(std::shared_ptr<PlayerProgramOptions> programOptionsPtr)
 	app::DiContainerWrapper<app::IPlayerLoopVisitorPtr> loopVisitors;
 	bool writeWarningsToConsole = !(programOptionsPtr->isJsonModeSet() || programOptionsPtr->isJsonDocInfoMode());
 	auto injector = di::make_injector(
-		di::bind<pr::IDocumentParser>().to<pr::DocumentParser>().in(di::extension::scoped), di::bind<cp::ICompiler>().to<cp::Compiler>().in(di::extension::scoped), di::bind<cp::ISheetTemplateRenderer>().to<cp::SheetTemplateRenderer>().in(di::extension::scoped), di::bind<cp::ASheetEventRenderer>().to<cp::SheetEventRenderer>().in(di::extension::scoped), di::bind<cp::IContext>().to<cp::MidiContext>().in(di::extension::scoped), di::bind<cp::IPreprocessor>().to<cp::Preprocessor>().in(di::extension::scoped), di::bind<cp::ISheetNavigator>().to<cp::SheetNavigator>().in(di::extension::scoped), di::bind<co::IConductionsPerformer>().to<co::ConductionsPerformer>().in(di::extension::scoped), di::bind<ICompilerProgramOptions>().to(programOptionsPtr), di::bind<documentModel::Document>().to(documentPtr), di::bind<com::IDefinitionsServer>().to<com::DefinitionsServer>().in(di::extension::scoped), di::bind<com::midi::Midi>().to(midiFile), di::bind<app::SheetWatcherHandlers>().to(sheetWatcherHandlers), di::bind<app::DiContainerWrapper<app::IPlayerLoopVisitorPtr>>().to(loopVisitors), di::bind<app::IDocumentWriter>().to([&](const auto &injector) -> app::IDocumentWriterPtr
-																																																																																																																																																																																																																																																																																							{
-																																																																																																																																																																																																																																																																																								if (programOptionsPtr->isJsonModeSet() || programOptionsPtr->isJsonDocInfoMode())
-																																																																																																																																																																																																																																																																																								{
-																																																																																																																																																																																																																																																																																									return injector.template create<std::unique_ptr<app::JsonWriter>>();
-																																																																																																																																																																																																																																																																																								}
-																																																																																																																																																																																																																																																																																								return injector.template create<std::unique_ptr<app::MidiPlayer>>();
-																																																																																																																																																																																																																																																																																							}),
+		di::bind<pr::IDocumentParser>().to<pr::DocumentParser>().in(di::extension::scoped), 
+		di::bind<cp::ICompiler>().to<cp::Compiler>().in(di::extension::scoped), 
+		di::bind<cp::ISheetTemplateRenderer>().to<cp::SheetTemplateRenderer>().in(di::extension::scoped), 
+		di::bind<cp::ASheetEventRenderer>().to<cp::SheetEventRenderer>().in(di::extension::scoped), 
+		di::bind<cp::IContext>().to<cp::MidiContext>().in(di::extension::scoped), 
+		di::bind<cp::IPreprocessor>().to<cp::Preprocessor>().in(di::extension::scoped),
+		di::bind<cp::ISheetNavigator>().to<cp::SheetNavigator>().in(di::extension::scoped), 
+		di::bind<co::IConductionsPerformer>().to<co::ConductionsPerformer>().in(di::extension::scoped), 
+		di::bind<ICompilerProgramOptions>().to(programOptionsPtr), 
+		di::bind<documentModel::Document>().to(documentPtr),
+		di::bind<cp::IEventInformationServer>().to<cp::EventInformationServer>().in(di::singleton),
+		di::bind<com::IDefinitionsServer>().to<com::DefinitionsServer>().in(di::extension::scoped), 
+		di::bind<com::midi::Midi>().to(midiFile), 
+		di::bind<app::SheetWatcherHandlers>().to(sheetWatcherHandlers), 
+		di::bind<app::DiContainerWrapper<app::IPlayerLoopVisitorPtr>>().to(loopVisitors), 
+		di::bind<app::IDocumentWriter>().to([&](const auto &injector) -> app::IDocumentWriterPtr
+		{
+			if (programOptionsPtr->isJsonModeSet() || programOptionsPtr->isJsonDocInfoMode())
+			{
+				return injector.template create<std::unique_ptr<app::JsonWriter>>();
+			}
+			return injector.template create<std::unique_ptr<app::MidiPlayer>>();
+		}),
 		di::bind<cp::ICompilerVisitor>().to([&](const auto &injector) -> cp::ICompilerVisitorPtr
-											{
-												if (needTimeline)
-												{
-													return injector.template create<std::shared_ptr<app::DefaultTimeline>>();
-												}
-												return injector.template create<std::unique_ptr<cp::DefaultCompilerVisitor>>();
-											}),
+		{
+			if (needTimeline)
+			{
+				return injector.template create<std::shared_ptr< cp::CompoundVisitor_N2<app::DefaultTimeline, cp::EventInformationServer> >>();
+			}
+			return injector.template create<std::shared_ptr<cp::EventInformationServer>>();
+		}),
 		di::bind<com::ILogger>().to([&](const auto &injector) -> com::ILoggerPtr
-									{
-										if (writeWarningsToConsole)
-										{
-											return injector.template create<std::shared_ptr<LoggerImpl>>();
-										}
-										return injector.template create<std::shared_ptr<WarningsCollectorWithConsoleLogger>>();
-									}),
+		{
+			if (writeWarningsToConsole)
+			{
+				return injector.template create<std::shared_ptr<LoggerImpl>>();
+			}
+			return injector.template create<std::shared_ptr<WarningsCollectorWithConsoleLogger>>();
+		}),
 		di::bind<app::IStringSender>().to([&](const auto &injector) -> app::IStringSenderPtr
-										  {
-											  if (programOptionsPtr->isUdpSet())
-											  {
-												  return _udpSender;
-											  }
-											  return injector.template create<std::shared_ptr<app::NullStringSender>>();
-										  }));
+		{
+			if (programOptionsPtr->isUdpSet())
+			{
+				return _udpSender;
+			}
+			return injector.template create<std::shared_ptr<app::NullStringSender>>();
+		}));
 	try
 	{
 		if (!programOptionsPtr->isNoTimePrintSet())
