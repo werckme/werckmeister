@@ -1,0 +1,9 @@
+using "./235-conduction-config.config";
+
+[
+instrument: piano;
+{
+    \p
+    c d e f~ | f !pppg4 a b  | c'1  
+}
+]
