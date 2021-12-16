@@ -127,7 +127,15 @@ namespace parser
 				ConfigParser configParser;
 				auto configDef = configParser.parse(documentText, sourceId);
 				com::append(doc->sheetDef.documentConfigs, configDef.documentConfigs);
-				processUsings(doc, configDef.documentUsing, {LUA_DEF_EXTENSION, PITCHMAP_DEF_EXTENSION, CHORD_DEF_EXTENSION, SHEET_TEMPLATE_DEF_EXTENSION}, path);
+				processUsings(doc, configDef.documentUsing, 
+				{
+					LUA_DEF_EXTENSION, 
+					PITCHMAP_DEF_EXTENSION, 
+					CHORD_DEF_EXTENSION, 
+					SHEET_TEMPLATE_DEF_EXTENSION,
+					CONDUCTIONS_SHEET
+				}, 
+				path);
 			}
 			catch (compiler::Exception &ex)
 			{
