@@ -244,7 +244,7 @@ instrument: piano;
 ```
 ## Tracks and Voices
 
-A track in Werckmeister has exactly the same meanig as it has in a MIDI file.
+A track in Werckmeister has exactly the same meaning as it has in a MIDI file.
 It is related to an instrument and contains events.
 
 A track begins with a `[` and ends with a `]`.
