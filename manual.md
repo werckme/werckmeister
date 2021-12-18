@@ -244,7 +244,7 @@ instrument: piano;
 ```
 ## Tracks and Voices
 
-A track in Werckmeister has exactly the same meanig as it has in a MIDI file.
+A track in Werckmeister has exactly the same meaning as it has in a MIDI file.
 It is related to an instrument and contains events.
 
 A track begins with a `[` and ends with a `]`.
@@ -1973,11 +1973,11 @@ Selects any event where its pitch is higher or equal than the given pitch.
 <br><br><br>
 
 ### `fromPosition`
-Selects any event where its position is equal or after a given position in quarters.
+Selects any event where its position is equal or after a given position.
 
  see also: [toPosition](#toPosition).
 
- ## example, select the events after time >= 8 quarters:
+ ## example, select the events postion >=8 quarters:
 
  ```
 
@@ -1985,10 +1985,20 @@ Selects any event where its position is equal or after a given position in quart
 
  ```
 
+ ## using cue markers instead of quarter numbers
+
+ ```
+ c d e f | /cue: myMark/ g a b 'c
+ ```
+ ```
+ fromPosition(@myMark) {...}
+ ```
+ > In order to work properly, a cue name must occur only once in a document.
+
 #### parameters
 | name | position | description | type |
 |:--- |:--- |:--- |:--- |
-| beat | - |  | quarters |
+| position | - |  | quarters|cuename |
 
 <br><br><br>
 
@@ -2161,17 +2171,27 @@ Selects any event where its pitch is lower or equal than the given pitch.
 <br><br><br>
 
 ### `toPosition`
-Selects any event where its position is before a given position in quarters.
+Selects any event where its position is before a given position.
 
  see also: [toPosition](#toPosition).
 
- ## example, select the events before time < 8 quarters:
+ ## example, select the events position < 8 quarters:
 
  ```
 
  toPosition(8) {...}
 
  ```
+
+ ## using cue markers instead of quarter numbers
+
+ ```
+ c d e f | /cue: myMark/ g a b 'c
+ ```
+ ```
+ toPosition(@myMark) {...}
+ ```
+ > In order to work properly, a cue name must occur only once in a document.
 
 #### parameters
 | name | position | description | type |

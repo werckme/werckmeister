@@ -21,6 +21,8 @@ namespace compiler
         virtual void visit(IContext *context, const com::midi::Event &ev, IContext::TrackId trackId) override;
         virtual ~EventInformationServer();
         virtual EventInformationSet findCueEvents(const com::String& cueName) override;
+        virtual const EventInformation* find(const documentModel::Event &ev) const override;
+        virtual const EventInformation* find(const com::midi::Event &ev) const override;                
     private:
         std::unique_ptr<EventInformationDb> eventDb;
         const documentModel::Event *lastDocumentEvent = nullptr;

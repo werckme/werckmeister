@@ -5,6 +5,8 @@
 #include <algorithm>
 #include <com/exception.hpp>
 #include <math.h>
+#include <sstream>
+#include <boost/functional/hash.hpp>
 
 namespace com
 {
@@ -438,6 +440,12 @@ namespace com
 			}
 			return ::memcmp(metaData(), b.metaData(), metaDataSize()) == 0;
 		}
+		com::String Event::toString() const
+		{
+			std::stringstream ss;
+			ss << "pos(" << (int)absPosition() << ") " << "ch(" << (int)channel() << ") p1(" << (int)parameter1() << ") p2(" << (int)parameter2() << ")"; 
+			return ss.str();
+		}
 
 		///////////////////////////////////////////////////////////////////////////
 		// EventCompare
@@ -473,6 +481,20 @@ namespace com
 				return true; // other > note2
 			}
 			return (int)t1 < (int)t2;
+		}
+
+		size_t EventHasher::operator()(const Event &ev) const
+		{
+			using boost::hash_value;
+			using boost::hash_combine;
+			size_t seed = 0;
+			hash_combine(seed, hash_value(ev.absPosition()));
+			hash_combine(seed, hash_value(ev.channel()));
+			hash_combine(seed, hash_value(ev.eventType()));
+			hash_combine(seed, hash_value(ev.parameter1()));
+			hash_combine(seed, hash_value(ev.parameter2()));
+			hash_combine(seed, hash_value(ev.payloadSize()));
+			return seed;
 		}
 
 		///////////////////////////////////////////////////////////////////////////

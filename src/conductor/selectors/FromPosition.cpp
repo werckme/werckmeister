@@ -6,21 +6,25 @@ namespace conductor
     bool FromPosition::isMatch(const documentModel::ConductionSelector::Arguments &arguments, const EventWithMetaInfo &evm) const
     {
         const auto &ev = *evm.noteOn;
+        auto eventPosition = ev.absPosition() / com::PPQ;
         if (arguments.empty())
         {
             FM_THROW(compiler::Exception, "missing argument for selector FromPosition");
         }
         auto argument = arguments[0];
-        auto value = argument.numberValue;
-        if (argument.valueContext == documentModel::ConductionSelector::ArgumentValue::CueReference)
+        if (argument.valueContext != documentModel::ConductionSelector::ArgumentValue::CueReference)
         {
-            auto cueInfos = _eventInformationServer->findCueEvents(argument.name);
-            if (!cueInfos.empty())
-            {
-                value = cueInfos.begin()->absolutePosition / com::PPQ;
-            }
+            return eventPosition >= argument.numberValue;
         }
-        auto eventPosition = ev.absPosition() / com::PPQ;
-        return eventPosition >= value;
+        auto loopIndex = getLoopIndex(evm);
+        auto cueInfos = _eventInformationServer->findCueEvents(argument.name);
+        const auto &cueInfo = *cueInfos.begin();
+        const auto &cueInfoPositions = cueInfo.positions;
+        if (loopIndex >= cueInfoPositions.size()) 
+        {
+            FM_THROW(compiler::Exception, "invalid informations for this midi event: " + ev.toString());
+        }
+        const auto cuePosition = cueInfoPositions.at(loopIndex);
+        return eventPosition >= cuePosition/com::PPQ;
     }
 }

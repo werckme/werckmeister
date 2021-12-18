@@ -1,0 +1,17 @@
+using "./248-cue-position-selector-value-repeat.conductions";
+
+tempo: 140;
+device: MyDevice  midi _usePort=4;
+instrumentDef: piano _ch=0 _onDevice=MyDevice _pc=0;
+
+-- melody track
+[
+instrument: piano;
+{
+	c d e f | 
+    /cue: secondBar/
+    g a b c' |
+    /cue: thirdBar/
+    c' b a g |^1 f e d c  :|^2 c d e f :|
+}
+]

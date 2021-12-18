@@ -161,6 +161,7 @@ namespace com
 				writes the event excluding offset
 			*/
 			size_t writePayload(Byte *, size_t maxByteSize) const;
+			com::String toString() const;
 
 		protected:
 			size_t readPayload(const Byte *, size_t maxByteSize);
@@ -186,6 +187,10 @@ namespace com
 		{
 			bool operator()(const Event &a, const Event &b) const;
 		};
+		struct EventHasher
+		{
+			size_t operator()(const Event&) const;
+		};		
 		class EventContainer
 		{
 		public:

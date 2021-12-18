@@ -7,6 +7,7 @@
 #include <algorithm>
 #include <list>
 #include <compiler/metaCommands.h>
+#include <unordered_map>
 
 namespace compiler
 {
@@ -14,39 +15,84 @@ namespace compiler
 	using namespace boost::multi_index;
 	class EventInformationDb
 	{
+		struct Id {};
 		struct StringValue {};
 		typedef multi_index_container<
 			EventInformation,
 			indexed_by<
-				ordered_unique<member<EventInformation, std::string, &EventInformation::id>>,
-				ordered_non_unique<tag<StringValue>, member<EventInformation, com::String, &EventInformation::stringValue> >
+				ordered_unique<tag<Id>, member<EventInformation, std::string, &EventInformation::id>>,
+				ordered_non_unique<tag<StringValue>, member<EventInformation, com::String, &EventInformation::stringValue>>
 			>
 		> EventSet;
+		typedef std::unordered_map<com::midi::Event, EventInformation::Id, com::midi::EventHasher> MidiEventMap; // TODO: replace with unordered_map
 		EventSet events;
+		MidiEventMap midiEventMap;
 	public:
-		inline std::string createId(const documentModel::Event& ev) const
+		inline EventInformation::Id createId(const documentModel::Event& ev) const
 		{
 			return std::to_string(ev.sourceId) + "-" + std::to_string(ev.sourcePositionBegin);
 		}
-		void insert(const documentModel::Event&, const com::midi::Event&);
+		void insert(const EventInformation::Id &id, const documentModel::Event&, const com::midi::Event&);
+		void upsert(const documentModel::Event&, const com::midi::Event&);
+		const EventInformation* find(const documentModel::Event&);
+		const EventInformation* find(const com::midi::Event&);
+		const EventInformation* find(const EventInformation::Id &id);
 		void clear();
 		std::list<EventInformation> findEventInformationsByStringValue(const com::String&);
 	};
+	const EventInformation* EventInformationDb::find(const com::midi::Event& event)
+	{
+		auto infoIdIt = midiEventMap.find(event);
+		if (infoIdIt == midiEventMap.end())
+		{
+			return nullptr;
+		}
+		return find(infoIdIt->second);
+	}	
+	const EventInformation* EventInformationDb::find(const documentModel::Event& event)
+	{
+		auto id = createId(event);
+		return find(id);
 
-	void EventInformationDb::insert(const documentModel::Event& documentEvent, const com::midi::Event& midiEvent)
+	}
+	const EventInformation* EventInformationDb::find(const EventInformation::Id &id)
+	{
+		auto infoIt = events.find(id);
+		if (infoIt == events.end()) 
+		{
+			return nullptr;
+		}
+		return &(*infoIt);
+	}		
+	void EventInformationDb::insert(const EventInformation::Id &id, const documentModel::Event& documentEvent, const com::midi::Event& midiEvent)
 	{
 		EventInformation ei;
+		ei.id = id;
 		ei.eventType = documentEvent.type;
-		ei.id = createId(documentEvent);
 		ei.stringValue = documentEvent.stringValue;
-		ei.absolutePosition = midiEvent.absPosition();
+		ei.positions.push_back(midiEvent.absPosition());
 		ei.metaArgs = documentEvent.metaArgs;
 		events.insert(ei);
+	}
+
+	void EventInformationDb::upsert(const documentModel::Event& documentEvent, const com::midi::Event& midiEvent)
+	{
+		auto id = createId(documentEvent);
+		midiEventMap.insert({midiEvent, id});
+		auto infoIt = events.find(id);
+		if (infoIt == events.end()) 
+		{
+			return insert(id, documentEvent, midiEvent);
+		}
+		auto info = *infoIt;
+		info.positions.push_back(midiEvent.absPosition());
+		events.replace(infoIt, info);
 	}
 
 	void EventInformationDb::clear()
 	{
 		events.clear();
+		midiEventMap.clear();
 	}
 
 	std::list<EventInformation> EventInformationDb::findEventInformationsByStringValue(const com::String& stringValue)
@@ -92,7 +138,7 @@ namespace compiler
 		{
 			return;
 		}
-		eventDb->insert(*lastDocumentEvent, ev);
+		eventDb->upsert(*lastDocumentEvent, ev);
 	}
 
 	EventInformationServer::EventInformationSet EventInformationServer::findCueEvents(const com::String& cueName)
@@ -115,4 +161,13 @@ namespace compiler
 		}
 		return result;
 	}
+
+	const EventInformation* EventInformationServer::find(const documentModel::Event &ev) const
+	{
+		return eventDb->find(ev);
+	}
+	const EventInformation* EventInformationServer::find(const com::midi::Event &ev) const
+	{
+		return eventDb->find(ev);
+	} 
 }
