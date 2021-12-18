@@ -117,7 +117,7 @@ environment variable "BOOST_ROOT" is set.
 - run `cmake ..`
 - run `make`
 ### Windows
-- run `cmake --help' 
+- run `cmake --help`
 - look for your "generator" e.g. "Visual Studio 12 2013"
 - run `cmake .. -G "Visual Studio 12 2013"`
 - open the generated .sln file with Visual Studio
