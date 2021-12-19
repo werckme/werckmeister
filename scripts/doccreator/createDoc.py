@@ -168,13 +168,13 @@ class Printer:
         with StringIO() as stream:
             writer = mg.Writer(stream)
             writer.write_heading(f'`{self.dto.command_name}`', self.heading_level)
-            writer.writeline(self.dto.summary)
             writer.writeline('')
             if len(self.dto.values) > 0:
                 self.print_values(writer)
             else:
                 self.print_parameters(writer)
             self.print_include(writer)
+            writer.writeline(self.dto.summary)
             writer.writeline('<br>'*3)
             #finito
             stream.seek(0)
