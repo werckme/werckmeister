@@ -19,7 +19,7 @@ SET (SRC_FETZER_LIB
     lua/ALuaObject.cpp
     lua/ALuaScript.cpp
     lua/ALuaWithParameter.cpp
-    com/DefinitionsServer.cpp
+    compiler/DefinitionsServer.cpp
     com/tools.cpp
     com/ConsoleLogger.cpp
     compiler/Compiler.cpp
@@ -40,6 +40,7 @@ SET (SRC_FETZER_LIB
     compiler/modification/Bend.cpp
     compiler/modification/LuaMod.cpp
     compiler/voicings/DirectVoicingStrategy.cpp
+    compiler/voicings/VoicingStrategy.cpp
     compiler/voicings/SimpleGuitar.cpp
     compiler/voicings/Lua.cpp
     compiler/metaData.cpp

@@ -5,7 +5,7 @@
 #include <vector>
 #include <string>
 
-#define SHEET_VERSION "1.0.0@1094e9f"
+#define SHEET_VERSION "1.0.0@bd0fa28"
 #define CHORD_DEF_EXTENSION ".chords"
 #define SHEET_TEMPLATE_DEF_EXTENSION ".template"
 #define PITCHMAP_DEF_EXTENSION ".pitchmap"

@@ -4,7 +4,7 @@
 #include "IPreprocessor.h"
 #include "ASheetEventRenderer.h"
 #include <compiler/context/IContext.h>
-#include <com/IDefinitionsServer.h>
+#include <compiler/IDefinitionsServer.h>
 #include <forward.hpp>
 #include "ISheetNavigator.h"
 
@@ -19,13 +19,13 @@ namespace compiler
 	private:
 		IContextPtr _context;
 		ASheetEventRendererPtr _renderer;
-		com::IDefinitionsServerPtr _definitionServer;
+		compiler::IDefinitionsServerPtr _definitionServer;
 		ISheetNavigatorPtr _sheetNavigator;
 
 	public:
 		Preprocessor(IContextPtr context,
 					 ASheetEventRendererPtr renderer,
-					 com::IDefinitionsServerPtr definitionServer,
+					 compiler::IDefinitionsServerPtr definitionServer,
 					 ISheetNavigatorPtr sheetNavigator)
 			: _context(context), _renderer(renderer), _definitionServer(definitionServer), _sheetNavigator(sheetNavigator)
 		{

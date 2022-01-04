@@ -1,7 +1,7 @@
 #pragma once
 
 #include "ISelector.h"
-#include <com/IDefinitionsServer.h>
+#include <compiler/IDefinitionsServer.h>
 
 namespace conductor
 {

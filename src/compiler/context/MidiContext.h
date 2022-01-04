@@ -28,7 +28,7 @@ namespace compiler
 		typedef std::unordered_map<com::String, AInstrumentDefPtr> InstrumentDefs;
 		typedef std::vector<AInstrumentDefPtr> InstrumentDefContainer;
 		MidiContext(com::midi::MidiPtr midiFile,
-					com::IDefinitionsServerPtr definitionsServer,
+					compiler::IDefinitionsServerPtr definitionsServer,
 					ICompilerVisitorPtr compilerVisitor,
 					com::ILoggerPtr logger);
 

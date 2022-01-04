@@ -17,7 +17,7 @@
 #include <compiler/Preprocessor.h>
 #include <compiler/EventLogger.h>
 #include <documentModel/Document.h>
-#include <com/DefinitionsServer.h>
+#include <compiler/DefinitionsServer.h>
 #include <com/midi.hpp>
 #include <app/MidiPlayer.h>
 #include <app/JsonWriter.h>
@@ -123,7 +123,7 @@ int startPlayer(std::shared_ptr<PlayerProgramOptions> programOptionsPtr)
 		di::bind<ICompilerProgramOptions>().to(programOptionsPtr), 
 		di::bind<documentModel::Document>().to(documentPtr),
 		di::bind<cp::IEventInformationServer>().to<cp::EventInformationServer>().in(di::singleton),
-		di::bind<com::IDefinitionsServer>().to<com::DefinitionsServer>().in(di::extension::scoped), 
+		di::bind<compiler::IDefinitionsServer>().to<compiler::DefinitionsServer>().in(di::extension::scoped), 
 		di::bind<com::midi::Midi>().to(midiFile), 
 		di::bind<app::SheetWatcherHandlers>().to(sheetWatcherHandlers), 
 		di::bind<app::DiContainerWrapper<app::IPlayerLoopVisitorPtr>>().to(loopVisitors), 

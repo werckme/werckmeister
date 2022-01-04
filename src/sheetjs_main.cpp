@@ -14,7 +14,7 @@
 #include <compiler/Preprocessor.h>
 #include <compiler/EventLogger.h>
 #include <documentModel/Document.h>
-#include <com/DefinitionsServer.h>
+#include <compiler/DefinitionsServer.h>
 #include <com/midi.hpp>
 #include <app/MidiFileWriter.h>
 #include <app/JsonWriter.h>
@@ -100,7 +100,7 @@ extern "C" const char *create_compile_result(const char *file, double beginQuart
 		di::bind<co::IConductionsPerformer>().to<co::ConductionsPerformer>().in(di::extension::scoped),
 		di::bind<cp::IEventInformationServer>().to<cp::EventInformationServer>().in(di::singleton),
 		di::bind<ICompilerProgramOptions>().to(programOptionsPtr), di::bind<documentModel::Document>().to(documentPtr), 
-		di::bind<com::IDefinitionsServer>().to<com::DefinitionsServer>().in(di::extension::scoped), 
+		di::bind<compiler::IDefinitionsServer>().to<compiler::DefinitionsServer>().in(di::extension::scoped), 
 		di::bind<com::midi::Midi>().to(midiFile), di::bind<app::IDocumentWriter>().to([&](const auto &injector) -> app::IDocumentWriterPtr
 		{ 
 			return injector.template create<std::unique_ptr<app::JsonWriter>>(); 

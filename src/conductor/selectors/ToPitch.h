@@ -1,7 +1,7 @@
 #pragma once
 
 #include "ISelector.h"
-#include <com/IDefinitionsServer.h>
+#include <compiler/IDefinitionsServer.h>
 
 namespace conductor
 {
@@ -16,11 +16,11 @@ namespace conductor
     class ToPitch : public ISelector
     {
     public:
-        ToPitch(com::IDefinitionsServerPtr definitionServer) : _definitionServer(definitionServer) {}
+        ToPitch(compiler::IDefinitionsServerPtr definitionServer) : _definitionServer(definitionServer) {}
         virtual bool isMatch(const documentModel::ConductionSelector::Arguments &, const EventWithMetaInfo &) const override;
         virtual ~ToPitch() = default;
 
     private:
-        com::IDefinitionsServerPtr _definitionServer;
+        compiler::IDefinitionsServerPtr _definitionServer;
     };
 }

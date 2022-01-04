@@ -7,7 +7,7 @@
 #include <algorithm>
 #include <functional>
 #include <com/werckmeister.hpp>
-#include <com/IDefinitionsServer.h>
+#include <compiler/IDefinitionsServer.h>
 #include <compiler/commands/Fill.h>
 #include <unordered_map>
 #include <memory>

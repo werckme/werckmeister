@@ -8,7 +8,7 @@
 #include <map>
 #include <unordered_map>
 #include <documentModel/objects/ChordDef.h>
-#include <com/IDefinitionsServer.h>
+#include <compiler/IDefinitionsServer.h>
 #include "compiler/voicings/VoicingStrategy.h"
 #include <com/common.hpp>
 #include <list>

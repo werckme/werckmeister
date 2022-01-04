@@ -10,7 +10,7 @@
 #include <list>
 #include <forward.hpp>
 #include <functional>
-#include <com/IDefinitionsServer.h>
+#include <compiler/IDefinitionsServer.h>
 #include <compiler/timeInfo.h>
 #include <compiler/metaData.h>
 #include <compiler/Instrument.h>
@@ -104,7 +104,7 @@ namespace compiler
 		 * @return the current velocity value between 0..1
 		 */
 		virtual double velocity() = 0;
-		virtual com::IDefinitionsServerPtr definitionsServer() = 0;
+		virtual compiler::IDefinitionsServerPtr definitionsServer() = 0;
 		/**
 		 * clears all contents, resets settings  
 		 */

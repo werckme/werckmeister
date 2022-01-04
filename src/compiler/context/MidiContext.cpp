@@ -50,7 +50,7 @@ namespace compiler
 	{
 	}
 
-	MidiContext::MidiContext(com::midi::MidiPtr midiFile, com::IDefinitionsServerPtr definitionsServer, ICompilerVisitorPtr compilerVisitor,
+	MidiContext::MidiContext(com::midi::MidiPtr midiFile, compiler::IDefinitionsServerPtr definitionsServer, ICompilerVisitorPtr compilerVisitor,
 							 com::ILoggerPtr logger) : Base(definitionsServer), midi_(midiFile),
 													   _compilerVisitor(compilerVisitor), _logger(logger)
 	{

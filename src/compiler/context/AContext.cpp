@@ -19,7 +19,7 @@ namespace compiler
 	const double AContext::PitchbendMiddle = 0.5;
 	const Ticks AContext::TickTolerance = 0.5;
 
-	AContext::AContext(com::IDefinitionsServerPtr definitionsServer)
+	AContext::AContext(compiler::IDefinitionsServerPtr definitionsServer)
 		: definitionsServer_(definitionsServer)
 	{
 	}

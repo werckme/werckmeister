@@ -14,7 +14,7 @@
 #include <compiler/Preprocessor.h>
 #include <compiler/EventLogger.h>
 #include <documentModel/Document.h>
-#include <com/DefinitionsServer.h>
+#include <compiler/DefinitionsServer.h>
 #include <com/midi.hpp>
 #include <app/MidiFileWriter.h>
 #include <app/JsonWriter.h>
@@ -70,7 +70,7 @@ int main(int argc, const char **argv)
 		di::bind<cp::IEventInformationServer>().to<cp::EventInformationServer>().in(di::singleton),
 		di::bind<ICompilerProgramOptions>().to(programOptionsPtr), 
 		di::bind<documentModel::Document>().to(documentPtr), 
-		di::bind<com::IDefinitionsServer>().to<com::DefinitionsServer>().in(di::singleton), 
+		di::bind<compiler::IDefinitionsServer>().to<compiler::DefinitionsServer>().in(di::singleton), 
 		di::bind<com::midi::Midi>().to(midiFile), 
 		di::bind<app::IDocumentWriter>().to([&](const auto &injector) -> app::IDocumentWriterPtr
 		{

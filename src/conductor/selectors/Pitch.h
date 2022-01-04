@@ -1,7 +1,7 @@
 #pragma once
 
 #include "ISelector.h"
-#include <com/IDefinitionsServer.h>
+#include <compiler/IDefinitionsServer.h>
 
 namespace conductor
 {
@@ -17,11 +17,11 @@ namespace conductor
     class Pitch : public ISelector
     {
     public:
-        Pitch(com::IDefinitionsServerPtr definitionServer) : _definitionServer(definitionServer) {}
+        Pitch(compiler::IDefinitionsServerPtr definitionServer) : _definitionServer(definitionServer) {}
         virtual bool isMatch(const documentModel::ConductionSelector::Arguments &, const EventWithMetaInfo &) const override;
         virtual ~Pitch() = default;
 
     private:
-        com::IDefinitionsServerPtr _definitionServer;
+        compiler::IDefinitionsServerPtr _definitionServer;
     };
 }

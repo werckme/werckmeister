@@ -6,7 +6,7 @@
 #include <com/literals.hpp>
 #include <map>
 #include <unordered_map>
-#include <com/IDefinitionsServer.h>
+#include <compiler/IDefinitionsServer.h>
 #include <com/common.hpp>
 #include <compiler/metaCommands.h>
 #include <list>
@@ -22,7 +22,7 @@ namespace compiler
 	class AContext : public IContext
 	{
 	public:
-		AContext(com::IDefinitionsServerPtr definitionsServer);
+		AContext(compiler::IDefinitionsServerPtr definitionsServer);
 		static const double PitchbendMiddle;
 		enum
 		{
@@ -144,7 +144,7 @@ namespace compiler
 		 * @return the current velocity value between 0..1
 		 */
 		virtual double velocity();
-		virtual com::IDefinitionsServerPtr definitionsServer() { return definitionsServer_; }
+		virtual compiler::IDefinitionsServerPtr definitionsServer() { return definitionsServer_; }
 		virtual void warningHandler(const WarningHandler &handler) { _warningHandler = handler; }
 		virtual WarningHandler &warningHandler() { return _warningHandler; }
 		virtual void clear() override;
@@ -155,7 +155,7 @@ namespace compiler
 		virtual VoiceMetaDataPtr createVoiceMetaData() = 0;
 		virtual TrackMetaDataPtr createTrackMetaData() = 0;
 		virtual TrackId createMasterTrack();
-		com::IDefinitionsServerPtr definitionsServer_;
+		compiler::IDefinitionsServerPtr definitionsServer_;
 
 	private:
 		WarningHandler _warningHandler;

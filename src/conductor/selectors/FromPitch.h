@@ -1,7 +1,7 @@
 #pragma once
 
 #include "ISelector.h"
-#include <com/IDefinitionsServer.h>
+#include <compiler/IDefinitionsServer.h>
 
 namespace conductor
 {
@@ -16,11 +16,11 @@ namespace conductor
     class FromPitch : public ISelector
     {
     public:
-        FromPitch(com::IDefinitionsServerPtr definitionServer) : _definitionServer(definitionServer) {}
+        FromPitch(compiler::IDefinitionsServerPtr definitionServer) : _definitionServer(definitionServer) {}
         virtual bool isMatch(const documentModel::ConductionSelector::Arguments &, const EventWithMetaInfo &) const override;
         virtual ~FromPitch() = default;
 
     private:
-        com::IDefinitionsServerPtr _definitionServer;
+        compiler::IDefinitionsServerPtr _definitionServer;
     };
 }
