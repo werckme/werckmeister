@@ -5,9 +5,8 @@
 
 namespace conductor
 {
-    /// <selector name="withTag">
+    /// <selector name="all">
     ///     Selects all events.
-    /// ## example, select the event with the tag "myTag" assigned:
     /// ```\n
     /// all() {...}\n
     /// ```

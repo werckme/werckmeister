@@ -859,6 +859,7 @@ type: accomp;
 
 ## Conductor Rules
 ### Selectors
+* [all](#all)
 * [channel](#channel)
 * [expression](#expression)
 * [fromBar](#frombar)
@@ -1887,6 +1888,15 @@ type: accomp;
 
 
 ### Conductor Selectors
+### `all`
+
+Selects all events.
+
+ ```
+ all() {...}
+ ```
+<br><br><br>
+
 ### `channel`
 
 #### parameters
