@@ -1,0 +1,5 @@
+withTag(myTag) {
+    pitch += 12;
+    velocity = 127;
+    duration = 20%;
+}

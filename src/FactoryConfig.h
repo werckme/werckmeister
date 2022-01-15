@@ -160,6 +160,7 @@ void FactoryConfig<TInjector>::initCommands()
 #include <conductor/selectors/NthBar.h>
 #include <conductor/selectors/Channel.h>
 #include <conductor/selectors/Expression.h>
+#include <conductor/selectors/WithTag.h>
 #include <conductor/declarations/Velocity.h>
 #include <conductor/declarations/TimeOffset.h>
 #include <conductor/declarations/Duration.h>
@@ -186,6 +187,7 @@ void FactoryConfig<TInjector>::initConductor()
     register_<ToBeat>(selNamespace_ + SHEET_CONDUCTOR_SEL__TO_BEAT);
     register_<OnBar>(selNamespace_ + SHEET_CONDUCTOR_SEL__ON_BAR);
     register_<NthBar>(selNamespace_ + SHEET_CONDUCTOR_SEL__NTH_BAR);
+    register_<WithTag>(selNamespace_ + SHEET_CONDUCTOR_SEL__WITHTAG);
     register_<Expression>(selNamespace_ + SHEET_CONDUCTOR_SEL__EXPRESSION);
     register_<Velocity>(declNamespace_ + SHEET_CONDUCTOR_DEC__VELOCITY);
     register_<TimeOffset>(declNamespace_ + SHEET_CONDUCTOR_DEC__TIME_OFFSET);

@@ -1,0 +1,12 @@
+using "./257-tag-selector.conductions";
+
+device: MyDevice  midi _usePort=4;
+instrumentDef: piano _ch=0 _onDevice=MyDevice _pc=0;
+
+-- melody track
+[
+instrument: piano;
+{
+	c d e "myTag"@f | "myTag"@c d e f |
+}
+]

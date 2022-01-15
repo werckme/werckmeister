@@ -107,6 +107,7 @@ SET (SRC_FETZER_LIB
     conductor/selectors/OnBar.cpp
     conductor/selectors/NthBar.cpp
     conductor/selectors/Expression.cpp
+    conductor/selectors/WithTag.cpp
     conductor/declarations/ADeclaration.cpp
     conductor/declarations/Velocity.cpp
     conductor/declarations/Pitch.cpp

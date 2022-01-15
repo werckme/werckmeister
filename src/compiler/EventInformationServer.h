@@ -22,7 +22,8 @@ namespace compiler
         virtual ~EventInformationServer();
         virtual EventInformationSet findCueEvents(const com::String& cueName) override;
         virtual const EventInformation* find(const documentModel::Event &ev) const override;
-        virtual const EventInformation* find(const com::midi::Event &ev) const override;                
+        virtual const EventInformation* find(const com::midi::Event &ev) const override;
+        virtual Tags getTags(const com::midi::Event &ev) const override;          
     private:
         std::unique_ptr<EventInformationDb> eventDb;
         const documentModel::Event *lastDocumentEvent = nullptr;

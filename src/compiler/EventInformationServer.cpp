@@ -24,7 +24,7 @@ namespace compiler
 				ordered_non_unique<tag<StringValue>, member<EventInformation, com::String, &EventInformation::stringValue>>
 			>
 		> EventSet;
-		typedef std::unordered_map<com::midi::Event, EventInformation::Id, com::midi::EventHasher> MidiEventMap; // TODO: replace with unordered_map
+		typedef std::unordered_map<com::midi::Event, EventInformation::Id, com::midi::EventHasher> MidiEventMap;
 		EventSet events;
 		MidiEventMap midiEventMap;
 	public:
@@ -72,6 +72,7 @@ namespace compiler
 		ei.stringValue = documentEvent.stringValue;
 		ei.positions.push_back(midiEvent.absPosition());
 		ei.metaArgs = documentEvent.metaArgs;
+		ei.tags = documentEvent.tags;
 		events.insert(ei);
 	}
 
@@ -169,5 +170,15 @@ namespace compiler
 	const EventInformation* EventInformationServer::find(const com::midi::Event &ev) const
 	{
 		return eventDb->find(ev);
-	} 
+	}
+
+	IEventInformationServer::Tags EventInformationServer::getTags(const com::midi::Event &ev) const 
+	{
+		auto *evInformation = find(ev);
+		if (!evInformation) 
+		{
+			return IEventInformationServer::Tags();
+		}
+		return IEventInformationServer::Tags(evInformation->tags.begin(), evInformation->tags.end());
+	}
 }
