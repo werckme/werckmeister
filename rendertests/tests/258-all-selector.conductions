@@ -1,0 +1,4 @@
+all() {
+    pitch += 12;
+    duration = 125%;
+}
