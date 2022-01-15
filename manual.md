@@ -875,6 +875,7 @@ type: accomp;
 * [toBeat](#tobeat)
 * [toPitch](#topitch)
 * [toPosition](#toposition)
+* [withTag](#withtag)
 
 ## Conductor Rules
 ### Declarations
@@ -2192,6 +2193,25 @@ Selects any event where its position is before a given position.
  toPosition(@myMark) {...}
  ```
  > In order to work properly, a cue name must occur only once in a document.
+<br><br><br>
+
+### `withTag`
+
+#### parameters
+| name | position | description | type |
+|:--- |:--- |:--- |:--- |
+| tag | - |  | text |
+
+Selects any event which has a tag assigned matching to the given tag.
+
+ ## example, select the event with the tag "myTag" assigned:
+
+ ```
+ withTag(myTag) {...}
+ ```
+ ```
+ c d e "myTag"@f |
+ ```
 <br><br><br>
 
 

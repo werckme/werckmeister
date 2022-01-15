@@ -14,7 +14,7 @@ namespace conductor
     /// ```\n
     /// ```\n
     /// c d e "myTag"@f |\n
-    /// ```\n
+    /// ```
     /// </selector>
     /// <param name="tag" type="text"></param>
     class WithTag : public ASelectorBase
