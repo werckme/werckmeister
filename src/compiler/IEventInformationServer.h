@@ -20,6 +20,7 @@ namespace compiler
         typedef com::String Id;
         documentModel::Event::Type eventType = documentModel::Event::Unknown;
         documentModel::Event::Args metaArgs;
+        documentModel::Event::Tags tags;
         Id id;
         com::String stringValue;
         /**
@@ -33,8 +34,10 @@ namespace compiler
     class IEventInformationServer
     {
     public:
+        typedef std::vector<com::String> Tags;
         typedef std::set<EventInformation> EventInformationSet;
         virtual ~IEventInformationServer() = default;
+        virtual Tags getTags(const com::midi::Event &ev) const = 0;
         virtual EventInformationSet findCueEvents(const com::String& cueName) = 0;
         /**
          * @return nullptr if not found 
