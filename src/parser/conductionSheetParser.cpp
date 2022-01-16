@@ -137,6 +137,7 @@ namespace parser
 					(current_pos_.current_pos >> attr(sourceId_) >> SHEET_CONDUCTOR_SEL__NTH_BAR >> attr(SHEET_CONDUCTOR_SEL__NTH_BAR) >> "(" >> +numberArgument_ >> ")") |
 					(current_pos_.current_pos >> attr(sourceId_) >> SHEET_CONDUCTOR_SEL__CHANNEL >> attr(SHEET_CONDUCTOR_SEL__CHANNEL) >> "(" >> +numberArgument_ >> ")") |
 					(current_pos_.current_pos >> attr(sourceId_) >> SHEET_CONDUCTOR_SEL__EXPRESSION >> attr(SHEET_CONDUCTOR_SEL__EXPRESSION) >> "(" >> +stringArgument_ >> ")") |
+					(current_pos_.current_pos >> attr(sourceId_) >> SHEET_CONDUCTOR_SEL__ALL >> attr(SHEET_CONDUCTOR_SEL__ALL) >> "(" >> ")") |
 					(current_pos_.current_pos >> attr(sourceId_) >> SHEET_CONDUCTOR_SEL__WITHTAG >> attr(SHEET_CONDUCTOR_SEL__WITHTAG) >> "(" >> +stringArgument_ >> ")");
 
 				operationType_ %=
