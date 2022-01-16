@@ -5,7 +5,7 @@
 #include <vector>
 #include <string>
 
-#define SHEET_VERSION "1.0.0@18b474e"
+#define SHEET_VERSION "1.0.0@18a5369"
 #define CHORD_DEF_EXTENSION ".chords"
 #define SHEET_TEMPLATE_DEF_EXTENSION ".template"
 #define PITCHMAP_DEF_EXTENSION ".pitchmap"
@@ -14,7 +14,7 @@
 #define CONDUCTIONS_SHEET ".conductions"
 
 #define FM_CHARSET "ISO-8859-1"
-#define LIB_FLUIDSYNTH_FILENAME "libfluidsynth.so"
+#define LIB_FLUIDSYNTH_FILENAME "libfluidsynth-2.dll"
 
 namespace com
 {
@@ -25,7 +25,7 @@ namespace com
     constexpr unsigned int FUNK_MAX_SIGNAL_LENGTH = 255;
     inline auto LibfluidSynthSearchPaths()
     {
-        return std::vector<std::string> {"/usr/lib", "/usr/local/lib"};
+        return std::vector<std::string> {"C:\\Windows\\System32"};
     }
 }
 
