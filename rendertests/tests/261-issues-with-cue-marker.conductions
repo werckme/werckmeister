@@ -1,0 +1,17 @@
+-- bass staccato
+instrument(bass) fromPosition(@staccato) 
+{
+    duration -= 70%;
+}
+
+
+-- high hat velocity
+-- emphasize beat 1 2 3 4 ...
+instrument(drums) pitch(h) onBeat(1 2 3 4) {
+    velocity = 70;
+}
+
+-- ... otherwise 35% less than its predecessor
+instrument(drums) pitch(h) {
+    velocity = & - 35%; -- 
+}
