@@ -147,17 +147,17 @@ namespace compiler
 
 	void MidiContext::addEvent(const com::midi::Event &ev, TrackId trackId)
 	{
-		_compilerVisitor->visit(this, ev, trackId);
-
 		auto voiceConfig = voiceMetaData<MidiContext::VoiceMetaData>();
 		if (voiceConfig)
 		{
 			auto evCopy = ev;
 			auto absPos = evCopy.absPosition() * voiceConfig->tempoFactor + voiceConfig->positionOffset;
 			evCopy.absPosition(absPos);
+			_compilerVisitor->visit(this, evCopy, trackId);
 			midi_->tracks().at(trackId)->events().add(evCopy);
 			return;
 		}
+		_compilerVisitor->visit(this, ev, trackId);
 		midi_->tracks().at(trackId)->events().add(ev);
 	}
 
