@@ -138,10 +138,9 @@ class Printer:
         writer.writeline('')
 
     def print_parameters(self, writer):
-        writer.write_heading("parameters", self.heading_level + 1)
         if len(self.dto.args) == 0:
-            writer.writeline('*no parameters*')
             return
+        writer.write_heading("parameters", self.heading_level + 1)
         table = mg.Table()
         table.add_column('name')
         table.add_column('position')
