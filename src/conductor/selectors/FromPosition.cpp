@@ -18,11 +18,15 @@ namespace conductor
         }
         auto loopIndex = getLoopIndex(evm);
         auto cueInfos = _eventInformationServer->findCueEvents(argument.name);
+        if (cueInfos.empty())
+        {
+            return false;
+        }
         const auto &cueInfo = *cueInfos.begin();
         const auto &cueInfoPositions = cueInfo.positions;
         if (loopIndex >= cueInfoPositions.size()) 
         {
-            FM_THROW(compiler::Exception, "invalid informations for this midi event: " + ev.toString());
+            return false;
         }
         const auto cuePosition = cueInfoPositions.at(loopIndex);
         return eventPosition >= cuePosition/com::PPQ;
