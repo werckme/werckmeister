@@ -5,7 +5,7 @@
 
 namespace compiler
 {
-    /// <command name="instrument" where="trackConfig, track">
+    /// <command name="instrument" where="track, voice">
     /// Set or change the instrument of a track.
     /// ### examples
     /// **set an instrument for a track**
