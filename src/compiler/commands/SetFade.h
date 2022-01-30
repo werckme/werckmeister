@@ -5,7 +5,7 @@
 
 namespace compiler
 {
-    /// <command name="fade" where="track">
+    /// <command name="fade" where="voice">
     ///     Fades the volume over a given duration in quarters.
     /// ### example
     /// ```language=Werckmeister,type=full

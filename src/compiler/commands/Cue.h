@@ -5,7 +5,7 @@
 
 namespace compiler
 {
-    /// <command name="cue" where="track">
+    /// <command name="cue" where="voice">
     ///     adds a cue meta message to the corresponding midi track
     /// ### examples
     /// `/cue: _text="cue text"/`

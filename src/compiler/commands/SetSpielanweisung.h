@@ -6,7 +6,7 @@
 
 namespace compiler
 {
-    /// <command name="do" where="track">
+    /// <command name="do" where="voice">
     /// <![CDATA[
     /// Such as [mod](#mod)&nbsp;`do` adds a modification to the track.
     /// The difference is: every `mod` command adds a further modification to a voice.

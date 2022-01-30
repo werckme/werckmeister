@@ -4,7 +4,7 @@
 
 namespace compiler
 {
-    /// <command name="doOnce" where="track">
+    /// <command name="doOnce" where="voice">
     /// Like [do](#do). But with the difference, that the loaded mod will be only executed once for the following event.
     /// ### example
     /// `/doOnce: arpeggio/`

@@ -6,7 +6,7 @@
 
 namespace compiler
 {
-    /// <command name="voicingStrategy" where="track">
+    /// <command name="voicingStrategy" where="voice">
     /// Adds a modification to the track.
     /// ### example
     /// `/voicingStrategy: asNotated/`

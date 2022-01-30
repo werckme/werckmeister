@@ -5,7 +5,7 @@
 
 namespace compiler
 {
-    /// <command name="pan" where="track">
+    /// <command name="pan" where="voice">
     ///     set the pan of the current track
     /// ### example
     /// `/pan: 50/`

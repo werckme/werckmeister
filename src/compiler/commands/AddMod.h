@@ -6,7 +6,7 @@
 
 namespace compiler
 {
-    /// <command name="mod" where="track">
+    /// <command name="mod" where="voice">
     /// Adds a modification to the track. Every `mod` statement adds a further modification to the related voice.
     /// If you want to use ony one modification at the time use [do](#do) instead.
     /// ### examples
