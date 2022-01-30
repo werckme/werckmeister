@@ -1403,7 +1403,7 @@ Adds a modification to the track.
 |:--- |:--- |:--- |:--- |
 | to | 1 | The volume value. | 0..100 |
 
-set the volume of the current track
+set the volume of the current instrument
 
  ### examples
 

@@ -5,8 +5,8 @@
 
 namespace compiler
 {
-    /// <command name="volume" where="track">
-    ///     set the volume of the current track
+    /// <command name="volume" where="voice">
+    ///     set the volume of the current instrument
     /// ### examples
     /// `/volume: 50/`
     /// </command>
