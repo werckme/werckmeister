@@ -7,6 +7,6 @@ instrumentDef: piano _ch=0 _onDevice=MyDevice _pc=0;
 [
 instrument: piano;
 {
-	c d e "myTag"@f | "myTag"@c d e f |
+	c d e "myTag"@f | "a b c myTag"@c d e f |
 }
 ]
