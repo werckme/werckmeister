@@ -196,6 +196,7 @@ namespace conductor
 						}
 						if (matchedMidiEvents.empty())
 						{
+							eventsAndDeclarations->events.clear();
 							break;
 						}
 						eventsAndDeclarations->events.swap(matchedMidiEvents);
