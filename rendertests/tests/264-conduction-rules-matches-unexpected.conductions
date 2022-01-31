@@ -1,0 +1,6 @@
+
+
+-- high hat fromPosition
+instrument(drums) pitch(h,) {
+    velocity = 0;
+}
