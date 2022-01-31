@@ -1,7 +1,7 @@
 
 using "./264-conduction-rules-matches-unexpected.pitchmap";
 using "./264-conduction-rules-matches-unexpected.conductions";
-using "lua/mods/drumRudiments.lua";
+using "./lua/mods/drumRudiments.lua";
 
 tempo: 110;
 device: MyDevice  midi _usePort=2;
