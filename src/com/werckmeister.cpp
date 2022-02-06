@@ -161,11 +161,11 @@ namespace com
 		auto rel = boost::filesystem::path(strRelPath);
 		if (rel.is_absolute())
 		{
-			if (!boost::filesystem::exists(rel))
+			if (boost::filesystem::exists(rel))
 			{
-				FM_THROW(Exception, com::String("could not resolve " + strRelPath));
+				return strRelPath;
 			}
-			return strRelPath;
+			rel = boost::filesystem::path("." + strRelPath); // #212
 		}
 		for (const auto &searchPath : _searchPaths)
 		{
@@ -179,7 +179,7 @@ namespace com
 			return boost::filesystem::system_complete(x).string();
 		}
 		auto strSearchPaths = boost::algorithm::join(_searchPaths, "\n");
-		FM_THROW(Exception, com::String("could not resolve " + strRelPath + "\nsearched here:\n" + strSearchPaths));
+		FM_THROW(Exception, com::String("could not find " + strRelPath + "\nsearched here:\n" + strSearchPaths));
 	}
 
 	Path Werckmeister::absolutePath(const Path &relPath) const
