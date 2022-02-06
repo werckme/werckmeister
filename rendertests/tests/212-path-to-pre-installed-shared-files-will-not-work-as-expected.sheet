@@ -1,0 +1,10 @@
+using "/lua/mods/myArpeggio.lua";
+device: gm  _isType="midi" _usePort="4";
+instrumentDef: guitar _onDevice="gm" _ch=0 _pc="26";
+
+[
+instrument: guitar;
+{
+    /modOnce: myArpeggio/ <c e g b>1 | 
+}
+]
