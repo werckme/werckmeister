@@ -81,7 +81,7 @@ namespace app
 		}
 	}
 
-	void RtMidiBackend::send(const com::midi::Event &ev, const Output *output)
+	void RtMidiBackend::send(const com::midi::Event &ev, const Output *output, long double elapsedMillis)
 	{
 		if (output == nullptr)
 		{

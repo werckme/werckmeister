@@ -25,7 +25,7 @@ namespace app
     MidiBackendContainer::~MidiBackendContainer()
     {
     }
-    void MidiBackendContainer::send(const com::midi::Event &event, const Output *_output)
+    void MidiBackendContainer::send(const com::midi::Event &event, const Output *_output, long double elapsedMillis)
     {
         if (_output == nullptr)
         {
@@ -36,8 +36,15 @@ namespace app
         {
             throw new std::runtime_error("unexcpected midi backend error");
         }
-        backend->send(event, _output);
+        backend->send(event, _output, elapsedMillis);
     }
+    void MidiBackendContainer::seek(long double millis)
+    {
+        for (const auto backend : this->_midiBackends)
+        {
+            backend->seek(millis);
+        }
+    }    
     void MidiBackendContainer::tearDown()
     {
         for (const auto backend : this->_midiBackends)

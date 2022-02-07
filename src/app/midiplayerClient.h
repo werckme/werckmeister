@@ -220,7 +220,7 @@ namespace app
 			auto outputInfo = getOutputInfo();
 			output = &outputInfo->output;
 		}
-		Backend::send(ev, output);
+		Backend::send(ev, output, this->elapsedMillis_);
 	}
 
 	template <class TBackend, class TMidiProvider, class TTimer>
@@ -251,17 +251,17 @@ namespace app
 		if (!playerTimer_)
 		{
 			playerTimer_ = std::make_unique<TTimer>([this]()
-													{
-														updateElapsedTime();
-														try
-														{
-															onProcess();
-														}
-														catch (...)
-														{
-															std::cerr << __FILE__ << " unexpected exception" << std::endl;
-														}
-													});
+			{
+				updateElapsedTime();
+				try
+				{
+					onProcess();
+				}
+				catch (...)
+				{
+					std::cerr << __FILE__ << " unexpected exception" << std::endl;
+				}
+			});
 		}
 		playerTimer_->start(milliseconds(1));
 	}
@@ -286,6 +286,7 @@ namespace app
 		});
 		play();
 		elapsedMillis_ = MidiProvider::ticksToMillis(ticks);
+		Backend::seek(elapsedMillis_);
 		MidiProvider::seek(elapsedMillis_, trackOffsets_);
 	}
 

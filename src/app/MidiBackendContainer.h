@@ -18,7 +18,8 @@ namespace app
 		MidiBackendContainer &operator=(const MidiBackendContainer &&) = delete;
 		Outputs getOutputs() const;
 		virtual ~MidiBackendContainer();
-		virtual void send(const com::midi::Event &event, const Output *output) override;
+		virtual void send(const com::midi::Event &event, const Output *output, long double elapsedMillis) override;
+		virtual void seek(long double millis) override;
 		virtual void tearDown() override;
 		virtual void panic() override;
 		void addBackend(AMidiBackendPtr);

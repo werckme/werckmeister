@@ -34,9 +34,9 @@ namespace app
 	FluidSynthBackend::~FluidSynthBackend()
 	{
 	}
-	void FluidSynthBackend::send(const com::midi::Event &event, const Output *output)
+	void FluidSynthBackend::send(const com::midi::Event &event, const Output *output, long double elapsedMillis)
 	{
-		_synths.begin()->second->send(event);
+		_synths.begin()->second->send(event, elapsedMillis);
 	}
 	void FluidSynthBackend::tearDown()
 	{
@@ -44,6 +44,10 @@ namespace app
 	}
 	void FluidSynthBackend::panic()
 	{
+	}
+	void FluidSynthBackend::seek(long double millis)
+	{
+		_synths.begin()->second->seek(millis);
 	}
 }
 

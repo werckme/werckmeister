@@ -16,7 +16,7 @@ namespace app
 		RtMidiBackend &operator=(const RtMidiBackend &&) = delete;
 		virtual Outputs getOutputs() const override;
 		virtual ~RtMidiBackend();
-		virtual void send(const com::midi::Event &event, const Output *output) override;
+		virtual void send(const com::midi::Event &event, const Output *output, long double elapsedMillis) override;
 		virtual void tearDown() override { closeAllPorts(); }
 		virtual void panic() override;
 
