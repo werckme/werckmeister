@@ -36,6 +36,11 @@ namespace app
 	}
 	void FluidSynthBackend::send(const com::midi::Event &event, const Output *output, long double elapsedMillis)
 	{
+		if (_synths.empty())
+		{
+			return;
+		}
+		// TODO: handle different device ids
 		_synths.begin()->second->send(event, elapsedMillis);
 	}
 	void FluidSynthBackend::tearDown()
@@ -47,6 +52,11 @@ namespace app
 	}
 	void FluidSynthBackend::seek(long double millis)
 	{
+		if (_synths.empty()) 
+		{
+			return;
+		}
+		// TODO: handle different device ids
 		_synths.begin()->second->seek(millis);
 	}
 }
