@@ -117,6 +117,7 @@ namespace compiler
 	{
 		// we need to clear here, because this instance exists over the whole lifetime of 
 		// an application. It is possible that a document is will be compiled several times (e.g. player in watch mode)
+		lastDocumentEvent = nullptr;
 		eventDb->clear();
 	}
 
