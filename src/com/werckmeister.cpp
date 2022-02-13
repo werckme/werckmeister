@@ -17,6 +17,7 @@
 #include "compiler/spielanweisung/spielanweisungen.h"
 #include "compiler/modification/LuaMod.h"
 #include <documentModel/Document.h>
+#include <locale>
 
 namespace com
 {
@@ -156,10 +157,34 @@ namespace com
 		return &it->second;
 	}
 
+	namespace 
+	{
+		bool isAbsoluteWMPath(const Path& path)
+		{
+			static std::locale loc;
+			for (auto _char : path)
+			{
+				if (std::isspace(_char, loc))
+				{
+					continue;
+				}
+				if (_char == '/') 
+				{
+					return true;
+				}
+				else 
+				{
+					return false;
+				}
+			}
+			return false;
+		}
+	}
+
 	Path Werckmeister::resolvePath(const Path &strRelPath) const
 	{
 		auto rel = boost::filesystem::path(strRelPath);
-		if (rel.is_absolute())
+		if (isAbsoluteWMPath(strRelPath))
 		{
 			if (boost::filesystem::exists(rel))
 			{
