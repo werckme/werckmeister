@@ -6,9 +6,12 @@
 """
 
 TAG_SKIP_PLAUSIBILLITY_CHECK = 'skip-event-plausibility-test'
-
+import copy
 import sys
 from mido import MidiFile  # tick2second seems not to work properly
+from os import name as OSNAME
+
+MAX_TIME_DIFF = 0.019 if OSNAME == 'nt' else 0
 
 _tempo = 120
 _acceptedEventTypes = ['note_on', 'note_off']
@@ -16,7 +19,7 @@ _acceptedEventTypes = ['note_on', 'note_off']
 fticks_2_seconds = None
 
 def createKey(trackIdx, event, absTicks):
-    return (event.type, event.channel, event.note, event.velocity, absTicks)
+    return (event.type, event.channel, event.note, event.velocity, fticks_2_seconds(absTicks))
 
 def addEvent(trackIdx, container, event, absTicks):
     key = createKey(trackIdx, event, absTicks)
@@ -72,6 +75,13 @@ def check_for_plausibility(midifile):
         if len(noteon_by_pitches.values()) > 0:
             raise RuntimeError(f'{", ".join([str(x) for x in noteon_by_pitches.values()])} missing corresponding noteoff')
 
+def is_same_event_except_for_time(a, b):
+    a = copy.deepcopy(a)
+    b = copy.deepcopy(b)
+    a.time = 0
+    b.time = 0
+    return str(a) == str(b)
+
 def compare(file1, file2, test_tags):
     global fticks_2_seconds
     events_a = set()
@@ -84,12 +94,25 @@ def compare(file1, file2, test_tags):
     for trackIdx, event, absTicks in get_events(midi_a):
         addEvent(trackIdx, events_a, event, absTicks)
     
+    eventindex = 0
     for trackIdx, event, absTicks in get_events(midi_b):
         key = createKey(trackIdx, event, absTicks)
         if key in events_a:
             events_a.remove(key)
         else:
-            raise RuntimeError("%s's event(%s, time=%f) not found in %s" % (file2, str(event), fticks_2_seconds(absTicks), file1))
+            try:
+                neighborTrackIdx, neighbourEvent, neighbourAbsTicks = list(get_events(midi_a))[eventindex]
+                neighbourKey=createKey(neighborTrackIdx, neighbourEvent, neighbourAbsTicks)
+                if  is_same_event_except_for_time(event, neighbourEvent):
+                    timediff = abs(fticks_2_seconds(neighbourAbsTicks) - fticks_2_seconds(absTicks))
+                    if (timediff > MAX_TIME_DIFF):
+                        raise Exception(f"fallback compare failed: time diff = {timediff}")
+                    events_a.remove(neighbourKey)
+                else:
+                    raise Exception("fallback compare failed")
+            except Exception as ex:
+                raise RuntimeError("%s's event(%s, time=%f) not found in %s -> %s" % (file2, str(event), fticks_2_seconds(absTicks), file1, str(ex)))
+        eventindex += 1
 
     if len(events_a) > 0:
         raise RuntimeError("%s has %d more events than %s" % (file1, len(events_a), file2))
