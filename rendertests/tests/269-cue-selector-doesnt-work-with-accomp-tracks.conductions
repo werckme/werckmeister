@@ -1,0 +1,4 @@
+fromPosition(@myCue) {
+	pitch += 2;
+	velocity = 50;
+}

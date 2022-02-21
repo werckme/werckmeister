@@ -11,6 +11,7 @@
 #include <compiler/commands/Fill.h>
 #include <unordered_map>
 #include <memory>
+#include <array>
 
 #define DEBUGX(x)
 
@@ -19,6 +20,11 @@ namespace compiler
 
 	namespace
 	{
+		const std::array<const char*, 3> IGNORED_CHORD_META_EVENTS = {
+			SHEET_META__ADD_CUE,
+			SHEET_META__JUMP,
+			SHEET_META__MARK
+		};
 		using namespace documentModel;
 		struct TemplatesAndItsChords
 		{
@@ -326,6 +332,10 @@ namespace compiler
 			if (metaEvent.stringValue == SHEET_META__SHEET_TEMPLATE_POSITION)
 			{
 				__handleTemplatePositionCmd(metaEvent, eventServer);
+				return;
+			}
+			bool isIgnoreEvent = std::find(IGNORED_CHORD_META_EVENTS.begin(), IGNORED_CHORD_META_EVENTS.end(), metaEvent.stringValue) != IGNORED_CHORD_META_EVENTS.end();
+			if (isIgnoreEvent) {
 				return;
 			}
 			auto voiceId = ctx->voice();

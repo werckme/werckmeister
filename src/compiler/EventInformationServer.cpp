@@ -133,6 +133,9 @@ namespace compiler
 
 	void EventInformationServer::visit(IContext* context, const com::midi::Event& ev, IContext::TrackId trackId)
 	{
+		if (ev.eventType() == com::midi::MetaEvent) {
+			int halt = 0;
+		}
 		bool canProcess = !!lastDocumentEvent
 			&& lastDocumentEvent->sourcePositionBegin != documentModel::Event::UndefinedPosition
 			&& lastDocumentEvent->sourceId != documentModel::Event::UndefinedSource;

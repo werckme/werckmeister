@@ -26,7 +26,15 @@ namespace conductor
         const auto &cueInfoPositions = cueInfo.positions;
         if (loopIndex >= cueInfoPositions.size()) 
         {
-            return false;
+            if (cueInfoPositions.size() == 1) 
+            {
+                // #269
+                loopIndex = 0;
+            }
+            else 
+            {
+                return false;
+            }
         }
         const auto cuePosition = cueInfoPositions.at(loopIndex);
         return eventPosition >= cuePosition/com::PPQ;
