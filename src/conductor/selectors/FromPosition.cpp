@@ -16,27 +16,11 @@ namespace conductor
         {
             return eventPosition >= argument.numberValue;
         }
-        auto loopIndex = getLoopIndex(evm);
-        auto cueInfos = _eventInformationServer->findCueEvents(argument.name);
-        if (cueInfos.empty())
+        auto cuePosition = _eventInformationServer->findCueEventPosition(argument.name);
+        if (cuePosition == UndefinedTicks)
         {
             return false;
         }
-        const auto &cueInfo = *cueInfos.begin();
-        const auto &cueInfoPositions = cueInfo.positions;
-        if (loopIndex >= cueInfoPositions.size()) 
-        {
-            if (cueInfoPositions.size() == 1) 
-            {
-                // #269
-                loopIndex = 0;
-            }
-            else 
-            {
-                return false;
-            }
-        }
-        const auto cuePosition = cueInfoPositions.at(loopIndex);
         return eventPosition >= cuePosition/com::PPQ;
     }
 }

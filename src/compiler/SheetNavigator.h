@@ -12,6 +12,6 @@ namespace compiler
 
 	private:
 		void processJumps(documentModel::Voice &);
-		void processRepeats(documentModel::Voice &);
+		void createRepeatJumps(documentModel::Voice &);
 	};
 }

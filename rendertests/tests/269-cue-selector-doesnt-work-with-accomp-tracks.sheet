@@ -10,7 +10,7 @@ type: template;
 name: myTemplate;
 instrument: piano;
 {
-	<I, III, V,>1 |
+	<I, III, V,>2 <I, III, V,>2 |
 }
 ]
 
@@ -18,8 +18,11 @@ instrument: piano;
 [
 type: accomp;
 {
+
     C | C | F | A- | 
-    /cue: myCue/ 
+    /cue: fromHere/ 
     G | E- | D- | G | C 
+    /cue: toHere/:|
+    C r |
 }
 ]
