@@ -7,7 +7,7 @@ namespace conductor
 {
     /// <selector name="toPosition">
     ///     Selects any event where its position is before a given position.
-    /// see also: [toPosition](#toPosition).
+    /// see also: [fromPosition](#fromPosition).
     /// ## example, select the events position &lt; 8 quarters:
     /// ```\n
     /// toPosition(8) {...}\n
@@ -20,7 +20,7 @@ namespace conductor
     /// toPosition(@myMark) {...}\n
     /// ```\n
     /// &gt; In order to work properly, a cue name must occur only once in a document.
-    /// &gt; Please mind the [cue](/manual#cue) behaviour in combination with repeat and jumps.
+    /// &gt; Please mind the [cue](#cue) behaviour in combination with repeat and jumps.
     /// </selector>
     /// <param name="beat" type="quarters"></param>
     class ToPosition : public ASelectorBase

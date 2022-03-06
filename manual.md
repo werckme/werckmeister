@@ -897,7 +897,7 @@ adds a cue MIDI meta message to the corresponding midi track
 
  ### examples
 
- `/cue: cueTtext/`
+ `/cue: cueText/`
 
  > If a cue was visited several times during a repeat or jump an additional repeat index will be added.
  > For example:
@@ -2015,7 +2015,7 @@ Selects any event where its position is equal or after a given position.
  ```
  > In order to work properly, a cue name must occur only once in a document.
 
- > Please mind the [cue](/manual#cue) behaviour in combination with repeat and jumps.
+ > Please mind the [cue](#cue) behaviour in combination with repeat and jumps.
 <br><br><br>
 
 ### `instrumentSelector`
@@ -2195,7 +2195,7 @@ Selects any event where its pitch is lower or equal than the given pitch.
 
 Selects any event where its position is before a given position.
 
- see also: [toPosition](#toPosition).
+ see also: [fromPosition](#fromPosition).
 
  ## example, select the events position < 8 quarters:
 
@@ -2212,7 +2212,7 @@ Selects any event where its position is before a given position.
  ```
  > In order to work properly, a cue name must occur only once in a document.
 
- > Please mind the [cue](/manual#cue) behaviour in combination with repeat and jumps.
+ > Please mind the [cue](#cue) behaviour in combination with repeat and jumps.
 <br><br><br>
 
 ### `withTag`

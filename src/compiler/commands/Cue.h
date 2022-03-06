@@ -8,7 +8,7 @@ namespace compiler
     /// <command name="cue" where="voice">
     ///     adds a cue MIDI meta message to the corresponding midi track
     /// ### examples
-    /// `/cue: cueTtext/`
+    /// `/cue: cueText/`
     /// &gt; If a cue was visited several times during a repeat or jump an additional repeat index will be added.\n
     /// &gt; For example:\n
     /// &gt; `/cue: myCue/ c d e f :|` will create two cue MIDI messages: "myCue" and "myCue1"
