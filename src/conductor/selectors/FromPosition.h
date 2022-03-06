@@ -20,6 +20,7 @@ namespace conductor
     /// fromPosition(@myMark) {...}\n
     /// ```\n
     /// &gt; In order to work properly, a cue name must occur only once in a document.
+    /// &gt; Please mind the [cue](#cue) behaviour in combination with repeat and jumps.
     /// </selector>
     /// <param name="position" type="quarters|cuename"></param>
     class FromPosition : public ASelectorBase

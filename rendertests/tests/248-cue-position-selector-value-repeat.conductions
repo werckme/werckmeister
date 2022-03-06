@@ -1,3 +1,15 @@
 fromPosition(@secondBar) toPosition(@thirdBar) {
     velocity = 10;
 }
+
+fromPosition(@secondBar2) toPosition(@thirdBar2) {
+    velocity = 10;
+}
+
+fromPosition(@secondBar3) toPosition(@thirdBar3) {
+    velocity = 10;
+}
+
+fromPosition(@secondBar4) toPosition(@thirdBar4) {
+    velocity = 10;
+}

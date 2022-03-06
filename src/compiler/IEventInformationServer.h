@@ -38,7 +38,10 @@ namespace compiler
         typedef std::set<EventInformation> EventInformationSet;
         virtual ~IEventInformationServer() = default;
         virtual Tags getTags(const com::midi::Event &ev) const = 0;
-        virtual EventInformationSet findCueEvents(const com::String& cueName) = 0;
+        /**
+            @return -1 if not found
+        */
+        virtual com::Ticks findCueEventPosition(const com::String& cueName) = 0;
         /**
          * @return nullptr if not found 
          */

@@ -30,6 +30,8 @@ namespace
     };
     typedef std::unordered_map<size_t, Jump> Jumps;
     typedef std::unordered_map<com::String, size_t> Marks;
+    typedef unsigned int SourcePosition;
+    typedef std::unordered_map<SourcePosition, int> CueEventCountMap;
     void registerMark(size_t eventContainerIndex, const documentModel::Event &event, Marks &marks)
     {
         auto markCommand = com::getWerckmeister().solve<compiler::ACommand>(event.stringValue);
@@ -153,21 +155,45 @@ namespace
         }
         return -1;
     }
+
+    void renameIfCueReappears(CueEventCountMap &cueEventCountMap, documentModel::Event& event)
+    {
+        bool isCueEvent = event.type == documentModel::Event::Meta && event.stringValue == SHEET_META__ADD_CUE;
+        if (!isCueEvent) 
+        {
+            return;
+        }
+        auto mapIt = cueEventCountMap.find(event.sourcePositionBegin);
+        if (mapIt == cueEventCountMap.end()) 
+        {
+            mapIt = cueEventCountMap.insert(std::make_pair(event.sourcePositionBegin, 1)).first;
+        }
+        int numAppearances = mapIt->second;
+        ++mapIt->second;
+        if (numAppearances == 1) 
+        {
+            return;
+        }
+        event.metaArgs.front().value = event.metaArgs.front().value + std::to_string(numAppearances);
+    }
 }
 
 namespace compiler
 {
     void SheetNavigator::processNavigation(documentModel::Voice &voice)
     {
-        processRepeats(voice);
+        createRepeatJumps(voice);
         processJumps(voice);
+    
     }
+
     void SheetNavigator::processJumps(documentModel::Voice &voice)
     {
         if (voice.events.empty())
         {
             return;
         }
+        CueEventCountMap _cueEventCountMap;
         Jumps jumps;
         Marks marks;
         documentModel::Voice::Events &src = voice.events;
@@ -189,7 +215,9 @@ namespace compiler
             const auto &event = src.at(idx);
             if (event.type != documentModel::Event::Meta || event.stringValue != SHEET_META__JUMP)
             {
-                dst.push_back(event);
+                auto copy = event;
+                renameIfCueReappears(_cueEventCountMap, copy);
+                dst.emplace_back(copy);
                 continue;
             }
             auto &jump = getJump(idx, event, jumps);
@@ -239,7 +267,7 @@ namespace compiler
         copy.swap(src);
     }
 
-    void SheetNavigator::processRepeats(documentModel::Voice &voice)
+    void SheetNavigator::createRepeatJumps(documentModel::Voice &voice)
     {
         if (voice.events.empty())
         {

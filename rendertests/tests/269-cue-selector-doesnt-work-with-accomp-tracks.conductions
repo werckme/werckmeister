@@ -1,0 +1,7 @@
+fromPosition(@fromHere) toPosition(@toHere) {
+	velocity = 10;
+}
+
+fromPosition(@fromHere2 ) toPosition(@toHere2) {
+	velocity = 10;
+}

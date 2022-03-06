@@ -17,15 +17,11 @@ namespace conductor
         {
             return eventPosition < argument.numberValue;
         }
-        auto loopIndex = getLoopIndex(evm);
-        auto cueInfos = _eventInformationServer->findCueEvents(argument.name);
-        const auto &cueInfo = *cueInfos.begin();
-        const auto &cueInfoPositions = cueInfo.positions;
-        if (loopIndex >= cueInfoPositions.size()) 
+        auto cuePosition = _eventInformationServer->findCueEventPosition(argument.name);
+        if (cuePosition == UndefinedTicks)
         {
-            FM_THROW(compiler::Exception, "invalid informations for this midi event: " + ev.toString());
+            return false;
         }
-        const auto cuePosition = cueInfoPositions.at(loopIndex);
         return eventPosition < cuePosition/com::PPQ;
     }
 }

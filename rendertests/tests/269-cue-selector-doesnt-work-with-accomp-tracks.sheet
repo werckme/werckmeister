@@ -1,0 +1,28 @@
+using "./269-cue-selector-doesnt-work-with-accomp-tracks.conductions";
+using "./chords/default.chords";
+
+device: MyDevice  midi _usePort=0;
+instrumentDef: piano _ch=0 _onDevice=MyDevice _pc=0;
+
+-- melody track
+[
+type: template;
+name: myTemplate;
+instrument: piano;
+{
+	<I, III, V,>2 <I, III, V,>2 |
+}
+]
+
+
+[
+type: accomp;
+{
+
+    C | C | F | A- | 
+    /cue: fromHere/ 
+    G | E- | D- | G | C 
+    /cue: toHere/:|
+    C r |
+}
+]

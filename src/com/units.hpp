@@ -1,4 +1,7 @@
 #pragma once
+
+#define UndefinedTicks -1.0
+
 namespace com
 {
 	typedef long double Ticks;

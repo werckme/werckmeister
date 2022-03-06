@@ -25,20 +25,25 @@ namespace compiler
 			>
 		> EventSet;
 		typedef std::unordered_map<com::midi::Event, EventInformation::Id, com::midi::EventHasher> MidiEventMap;
+		typedef std::unordered_map<com::String, com::Ticks> CuePositionMap;
 		EventSet events;
 		MidiEventMap midiEventMap;
+		CuePositionMap cuePositionMap;
+	private:
+		void insert(const EventInformation::Id& id, const documentModel::Event&, const com::midi::Event&);
+		void updateCueEventMap(const com::midi::Event&);
 	public:
 		inline EventInformation::Id createId(const documentModel::Event& ev) const
 		{
 			return std::to_string(ev.sourceId) + "-" + std::to_string(ev.sourcePositionBegin);
 		}
-		void insert(const EventInformation::Id &id, const documentModel::Event&, const com::midi::Event&);
 		void upsert(const documentModel::Event&, const com::midi::Event&);
 		const EventInformation* find(const documentModel::Event&);
 		const EventInformation* find(const com::midi::Event&);
 		const EventInformation* find(const EventInformation::Id &id);
 		void clear();
 		std::list<EventInformation> findEventInformationsByStringValue(const com::String&);
+		com::Ticks findCueEventPositon(const com::String cueName);
 	};
 	const EventInformation* EventInformationDb::find(const com::midi::Event& event)
 	{
@@ -75,9 +80,18 @@ namespace compiler
 		ei.tags = documentEvent.tags;
 		events.insert(ei);
 	}
-
+	void EventInformationDb::updateCueEventMap(const com::midi::Event& midiEvent)
+	{
+		if (midiEvent.eventType() != com::midi::MetaEvent || midiEvent.metaEventType() != com::midi::CuePoint) 
+		{
+			return;
+		}
+		auto name = com::midi::Event::MetaGetStringValue(midiEvent.metaData(), midiEvent.metaDataSize());
+		cuePositionMap[name] = midiEvent.absPosition();
+	}
 	void EventInformationDb::upsert(const documentModel::Event& documentEvent, const com::midi::Event& midiEvent)
 	{
+		updateCueEventMap(midiEvent);
 		auto id = createId(documentEvent);
 		midiEventMap.insert({midiEvent, id});
 		auto infoIt = events.find(id);
@@ -103,6 +117,16 @@ namespace compiler
 		std::list<EventInformation> result;
 		std::copy(range.first, range.second, std::back_inserter(result));
 		return result;
+	}
+
+	com::Ticks EventInformationDb::findCueEventPositon(const com::String cueName)
+	{
+		auto cueMapIt = cuePositionMap.find(cueName);
+		if (cueMapIt == cuePositionMap.end()) 
+		{
+			return UndefinedTicks;
+		}
+		return cueMapIt->second;
 	}
 
 	///////////////////////////////////////////////////////////////////////////
@@ -133,6 +157,9 @@ namespace compiler
 
 	void EventInformationServer::visit(IContext* context, const com::midi::Event& ev, IContext::TrackId trackId)
 	{
+		if (ev.eventType() == com::midi::MetaEvent) {
+			int halt = 0;
+		}
 		bool canProcess = !!lastDocumentEvent
 			&& lastDocumentEvent->sourcePositionBegin != documentModel::Event::UndefinedPosition
 			&& lastDocumentEvent->sourceId != documentModel::Event::UndefinedSource;
@@ -143,25 +170,9 @@ namespace compiler
 		eventDb->upsert(*lastDocumentEvent, ev);
 	}
 
-	EventInformationServer::EventInformationSet EventInformationServer::findCueEvents(const com::String& cueName)
+	com::Ticks EventInformationServer::findCueEventPosition(const com::String& cueName)
 	{
-		EventInformationSet result;
-		auto eventInformations = eventDb->findEventInformationsByStringValue(SHEET_META__ADD_CUE);
-		for (const auto& eventInfo : eventInformations)
-		{
-			bool isInfoOfInterest = eventInfo.eventType == documentModel::Event::Meta;
-			if (!isInfoOfInterest)
-			{
-				continue;
-			}
-			bool containsCueName = std::find_if(eventInfo.metaArgs.begin(), eventInfo.metaArgs.end(), [cueName](auto x) { return cueName == x.value; }) != eventInfo.metaArgs.end();
-			if (!containsCueName) 
-			{
-				continue;
-			}
-			result.insert(eventInfo);
-		}
-		return result;
+		return eventDb->findCueEventPositon(cueName);
 	}
 
 	const EventInformation* EventInformationServer::find(const documentModel::Event &ev) const
