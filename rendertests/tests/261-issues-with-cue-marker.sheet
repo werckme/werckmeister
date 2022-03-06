@@ -9,7 +9,7 @@
 using "./261-issues-with-cue-marker.conductions";
 
 tempo: 200;
-device: MyDevice  midi _usePort=5;
+device: MyDevice  midi _usePort=4;
 instrumentDef: bass          _onDevice=MyDevice  _ch=0 _pc=38;
 instrumentDef: drums         _onDevice=MyDevice  _ch=9 _pc=0;
 
@@ -24,32 +24,16 @@ instrument: bass;
 	/instrument: bass/
     c,,4   c,  a,,, a,, |  bb,,, bb,,  r2 |  r1  |   r1 :|: f,,,4 f,, d,,, d,,  |  
     eb,,, eb,,  r2 |  r1  |^1 r1 :|^2 r2  (eb,, d,, db,,)2 |
-    /cue: staccato1/
+    /cue: staccatoa/
     c,,2    eb,,  |  d,,     ab,,, |  g,,,     db,,   |
     /cue: normal/
     (c,,  gb,,  f,,)2  (e,,  bb,,  a,,) |
-    /cue: staccato2/
+    /cue: staccatob/
     (ab,,     eb,,     b,,,)1           |
     (bb,,,    a,,,    ab,,,)1           |
+    /cue: endstaccatob/
     r1 | r1 | r1 | r1 | r1 | r1 |
 
     /jump: begin/
 }
 ]
-
--- [
--- instrument: drums;
--- {
---     /mark: begin/
---     h8 h  h h  h h  h h |
-    
---     /jump: begin _repeat=26/
--- }
--- {
---     /mark: begin/
-    
---     o2 x | o8 o o4 x r |
-    
---     /jump: begin _repeat=11/
--- }
--- ]
