@@ -20,7 +20,7 @@ set (CMAKE_CXX_STANDARD 17)
 # PROJECT CONFIG
 set(FM_CHARSET "ISO-8859-1")
 set(FM_PPQ 5000)
-set(BOOST_VERSION "1.76.0")
+set(BOOST_VERSION "1.78.0")
 set(FLUIDSYNTH_VERSION "2.1.0")
 #END PROJECT CONFIG
 
@@ -30,6 +30,7 @@ if (EMSCRIPTEN)
     MESSAGE("using emscripten")
     SET(USE_EMSCRIPTEN 1)
     SET (INSTALL_AUX 0)
+    set(BOOST_VERSION "1.76.0") # fails since 1.77 boost/boost_1_78_0/libs/filesystem/src/path.cpp:1442:75: error: no member named 'exchange' in 'std::locale'
     SET(CMAKE_INSTALL_PREFIX ${CMAKE_SOURCE_DIR}/werckmeisterjs)
 endif()
 
