@@ -31,6 +31,7 @@ namespace compiler
 		CuePositionMap cuePositionMap;
 	private:
 		void insert(const EventInformation::Id& id, const documentModel::Event&, const com::midi::Event&);
+		void update(const EventInformation&, const documentModel::Event&, const com::midi::Event&);
 		void updateCueEventMap(const com::midi::Event&);
 	public:
 		inline EventInformation::Id createId(const documentModel::Event& ev) const
@@ -38,6 +39,7 @@ namespace compiler
 			return std::to_string(ev.sourceId) + "-" + std::to_string(ev.sourcePositionBegin);
 		}
 		void upsert(const documentModel::Event&, const com::midi::Event&);
+		void registerDegreeEvent(const documentModel::Event&);
 		const EventInformation* find(const documentModel::Event&);
 		const EventInformation* find(const com::midi::Event&);
 		const EventInformation* find(const EventInformation::Id &id);
@@ -80,6 +82,25 @@ namespace compiler
 		ei.tags = documentEvent.tags;
 		events.insert(ei);
 	}
+	void EventInformationDb::update(const EventInformation& evinf, const documentModel::Event& documentEvent, const com::midi::Event& midiEvent)
+	{
+		auto ei = evinf;
+		ei.eventType = documentEvent.type;
+		ei.stringValue = documentEvent.stringValue;
+		ei.positions.push_back(midiEvent.absPosition());
+		ei.metaArgs = documentEvent.metaArgs;
+		ei.tags = documentEvent.tags;
+		auto it = events.find(ei.id);
+		events.replace(it, ei);
+	}
+	void EventInformationDb::registerDegreeEvent(const documentModel::Event& degreeEvent)
+	{
+		auto id = createId(degreeEvent);
+		EventInformation ei;
+		ei.id = id;
+		ei.degreeInfos = degreeEvent.pitches;
+		events.insert(ei);
+	}
 	void EventInformationDb::updateCueEventMap(const com::midi::Event& midiEvent)
 	{
 		if (midiEvent.eventType() != com::midi::MetaEvent || midiEvent.metaEventType() != com::midi::CuePoint) 
@@ -97,7 +118,10 @@ namespace compiler
 		auto infoIt = events.find(id);
 		if (infoIt == events.end()) 
 		{
-			return insert(id, documentEvent, midiEvent);
+			insert(id, documentEvent, midiEvent);
+			return;
+		} else {
+			update(*infoIt, documentEvent, midiEvent);
 		}
 		auto info = *infoIt;
 		info.positions.push_back(midiEvent.absPosition());
@@ -148,6 +172,11 @@ namespace compiler
 	void EventInformationServer::endCompile()
 	{
 
+	}
+
+	void EventInformationServer::visitDegree(const documentModel::Event &degreeEvent)
+	{
+		//eventDb->registerDegreeEvent(degreeEvent);
 	}
 
 	void EventInformationServer::visit(IContext* context, const documentModel::Event& ev)

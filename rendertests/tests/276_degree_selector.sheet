@@ -1,0 +1,24 @@
+
+using "./276_degree_selector.conductions";
+using "./chords/default.chords";
+
+device: MyDevice  midi _usePort=0;
+instrumentDef: piano _ch=0 _onDevice=MyDevice _pc=0;
+
+[
+type: template;
+name: myTemplate;
+instrument: piano;
+{
+	I III V I' | <I III V I'>1
+}
+]
+
+
+[
+type: accomp;
+{
+
+    C | C | F | A- | 
+}
+]

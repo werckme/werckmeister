@@ -21,6 +21,7 @@ namespace compiler
         documentModel::Event::Type eventType = documentModel::Event::Unknown;
         documentModel::Event::Args metaArgs;
         documentModel::Event::Tags tags;
+        documentModel::Event::Pitches degreeInfos;
         Id id;
         com::String stringValue;
         /**

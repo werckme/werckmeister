@@ -15,6 +15,7 @@ namespace compiler
         virtual void endCompile() override {}
         virtual void visit(IContext *context, const documentModel::Event &ev) override {}
         virtual void visit(IContext *context, const com::midi::Event &ev, IContext::TrackId trackId) override {}
+        virtual void visitDegree(const documentModel::Event &degreeEvent) override {};
         virtual ~DefaultCompilerVisitor() = default;
     };
 }

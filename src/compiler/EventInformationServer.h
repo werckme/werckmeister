@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ICompilerVisitor.h"
+#include "DefaultCompilerVisitor.h"
 #include "IEventInformationServer.h"
 #include <memory>
 
@@ -11,7 +11,7 @@ namespace documentModel
 namespace compiler
 {
     class EventInformationDb;
-    class EventInformationServer : public ICompilerVisitor, public IEventInformationServer
+    class EventInformationServer : public DefaultCompilerVisitor, public IEventInformationServer
     {
     public:
         EventInformationServer();
@@ -19,6 +19,7 @@ namespace compiler
         virtual void endCompile() override;
         virtual void visit(IContext *context, const documentModel::Event &ev) override;
         virtual void visit(IContext *context, const com::midi::Event &ev, IContext::TrackId trackId) override;
+        virtual void visitDegree(const documentModel::Event &degreeEvent) override;
         virtual ~EventInformationServer();
         virtual com::Ticks findCueEventPosition(const com::String& cueName) override;
         virtual const EventInformation* find(const documentModel::Event &ev) const override;

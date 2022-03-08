@@ -260,7 +260,7 @@ namespace compiler
 			return templatesAndItsChords;
 		}
 
-		Event &__degreeToAbsoluteNote(IContextPtr ctx, const Event &chordEvent, const Event &degreeEvent, Event &target)
+		Event &__degreeToAbsoluteNote(IContextPtr ctx, ICompilerVisitorPtr visitor, const Event &chordEvent, const Event &degreeEvent, Event &target)
 		{
 			try
 			{
@@ -271,7 +271,7 @@ namespace compiler
 					size_t index = 0;
 					for (const auto &groupedDegreeEvent : degreeEvent.eventGroup)
 					{
-						__degreeToAbsoluteNote(ctx, chordEvent, groupedDegreeEvent, target.eventGroup[index++]);
+						__degreeToAbsoluteNote(ctx, visitor, chordEvent, groupedDegreeEvent, target.eventGroup[index++]);
 					}
 					return target;
 				}
@@ -286,6 +286,7 @@ namespace compiler
 				}
 				auto voicingStratgy = ctx->currentVoicingStrategy();
 				auto pitches = voicingStratgy->get(chordEvent, *chordDef, degreeEvent.pitches, ctx->getTimeInfo());
+				visitor->visitDegree(degreeEvent);
 				target.type = Event::Note;
 				target.isTied(degreeEvent.isTied());
 				target.pitches.swap(pitches);
@@ -347,6 +348,7 @@ namespace compiler
 
 		typedef std::list<const Event *> Chords;
 		com::Ticks __renderOneBar(IContextPtr ctx,
+								  ICompilerVisitorPtr visitor,
 								  ASheetEventRenderer *sheetEventRenderer,
 								  DegreeEventServer &eventServer,
 								  const Chords &chords,
@@ -409,7 +411,7 @@ namespace compiler
 						}
 						else
 						{
-							copy = __degreeToAbsoluteNote(ctx, *chord, *degree, copy);
+							copy = __degreeToAbsoluteNote(ctx, visitor, *chord, *degree, copy);
 						}
 					}
 					bool isTimeConsuming = copy.isTimeConsuming();
@@ -440,7 +442,10 @@ namespace compiler
 		}
 	}
 
-	SheetTemplateRenderer::SheetTemplateRenderer(IContextPtr ctx, ASheetEventRendererPtr renderer) : sheetEventRenderer(renderer), ctx_(ctx)
+	SheetTemplateRenderer::SheetTemplateRenderer(IContextPtr ctx, ASheetEventRendererPtr renderer, ICompilerVisitorPtr compilerVisitor) : 
+		sheetEventRenderer(renderer), 
+		_ctx(ctx),
+		_compilerVisitor(compilerVisitor)
 	{
 	}
 
@@ -472,7 +477,7 @@ namespace compiler
 		bool trackIsNew = false;
 		if (it == _contextElementIdMap.end())
 		{
-			trackId = ctx_->createTrack();
+			trackId = _ctx->createTrack();
 			_contextElementIdMap[trackKey] = trackId;
 			trackIsNew = true;
 		}
@@ -484,14 +489,14 @@ namespace compiler
 		it = _contextElementIdMap.find(voiceKey);
 		if (it == _contextElementIdMap.end())
 		{
-			voiceId = ctx_->createVoice();
+			voiceId = _ctx->createVoice();
 			_contextElementIdMap[voiceKey] = voiceId;
 		}
 		else
 		{
 			voiceId = it->second;
 		}
-		ctx_->setTarget(trackId, voiceId);
+		_ctx->setTarget(trackId, voiceId);
 		if (trackIsNew)
 		{
 			try
@@ -528,7 +533,7 @@ namespace compiler
 	void SheetTemplateRenderer::render(Track *sheetTrack)
 	{
 		DegreeEventServers degreeEventServers;
-		auto sheetMeta = ctx_->voiceMetaData(ctx_->chordVoiceId());
+		auto sheetMeta = _ctx->voiceMetaData(_ctx->chordVoiceId());
 		auto templatesAndItsChords = __collectChordsPerTemplate(*this, sheetTrack);
 		const TemplatesAndItsChords *previousTemplateAndChords = nullptr;
 		for (auto const &templateAndChords : templatesAndItsChords)
@@ -559,18 +564,18 @@ namespace compiler
 						eventServer.onLoop = [this]()
 						{
 							// clear mods: https://github.com/SambaGodschynski/werckmeister/issues/99
-							ctx_->voiceMetaData()->modifications.clear();
+							_ctx->voiceMetaData()->modifications.clear();
 						};
 						setTargetCreateIfNotExists(*track, voice);
-						ctx_->voiceMetaData()->position = templateAndChords.offset;
-						ctx_->voiceMetaData()->tempoFactor = templateAndChords.tempoFactor;
-						ctx_->voiceMetaData()->barPosition = 0;
+						_ctx->voiceMetaData()->position = templateAndChords.offset;
+						_ctx->voiceMetaData()->tempoFactor = templateAndChords.tempoFactor;
+						_ctx->voiceMetaData()->barPosition = 0;
 
 						DEBUGX(
 							{
 								auto trackname = getMetaArgumentsForKey("name", track->trackConfigs).front();
-								auto position = ctx_->voiceMetaData()->position;
-								auto tempofac = ctx_->voiceMetaData()->tempoFactor;
+								auto position = _ctx->voiceMetaData()->position;
+								auto tempofac = _ctx->voiceMetaData()->tempoFactor;
 								std::cout << trackname << " ; " << position << " ; " << tempofac << std::endl;
 							});
 
@@ -581,7 +586,7 @@ namespace compiler
 							if (chord->type == Event::EOB)
 							{
 								const auto *eobEvent = chord;
-								__renderOneBar(ctx_, sheetEventRenderer.get(), eventServer, chordsPerBar, lastChord);
+								__renderOneBar(_ctx, _compilerVisitor, sheetEventRenderer.get(), eventServer, chordsPerBar, lastChord);
 								sheetEventRenderer->addEvent(*eobEvent);
 								chordsPerBar.clear();
 								if (eventServer.templateIsFill && !eventServer.hasFurtherEvents())
@@ -621,7 +626,7 @@ namespace compiler
 								// make sure we render all remainings (#237)
 								if (!chordsPerBar.empty())
 								{
-									__renderOneBar(ctx_, sheetEventRenderer.get(), eventServer, chordsPerBar, lastChord);
+									__renderOneBar(_ctx, _compilerVisitor, sheetEventRenderer.get(), eventServer, chordsPerBar, lastChord);
 								}
 							}
 						}

@@ -24,6 +24,7 @@ namespace compiler
         virtual void endCompile() = 0;
         virtual void visit(IContext *context, const documentModel::Event &ev) = 0;
         virtual void visit(IContext *context, const com::midi::Event &ev, IContext::TrackId trackId) = 0;
+        virtual void visitDegree(const documentModel::Event &degreeEvent) = 0;
     };
     typedef std::shared_ptr<ICompilerVisitor> ICompilerVisitorPtr;
 }

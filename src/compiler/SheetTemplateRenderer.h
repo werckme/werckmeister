@@ -17,6 +17,7 @@
 #include "context/IContext.h"
 #include "ISheetTemplateRenderer.h"
 #include "ASheetEventRenderer.h"
+#include "ICompilerVisitor.h"
 
 namespace compiler
 {
@@ -24,19 +25,19 @@ namespace compiler
     class SheetTemplateRenderer : public ISheetTemplateRenderer
     {
     public:
-        SheetTemplateRenderer(IContextPtr ctx, ASheetEventRendererPtr renderer);
+        SheetTemplateRenderer(IContextPtr ctx, ASheetEventRendererPtr renderer, ICompilerVisitorPtr compilerVisitor);
         virtual ~SheetTemplateRenderer();
         void render(documentModel::Track *sheetTrack);
-        IContextPtr context() const { return this->ctx_; }
+        IContextPtr context() const { return this->_ctx; }
         ASheetEventRendererPtr sheetEventRenderer;
-
     private:
         typedef com::String ContainerKeyType;
         void setTargetCreateIfNotExists(const documentModel::Track &track, const documentModel::Voice &voice);
         typedef std::unordered_map<com::String, IContext::Id> Container2ContextElementId;
         ContainerKeyType getKey(const documentModel::Track &) const;
         ContainerKeyType getKey(const documentModel::Voice &) const;
-        IContextPtr ctx_;
+        IContextPtr _ctx;
         Container2ContextElementId _contextElementIdMap;
+        ICompilerVisitorPtr _compilerVisitor;
     };
 }

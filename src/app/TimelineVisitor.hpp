@@ -7,7 +7,7 @@
 #include <memory>
 #include <boost/icl/interval_map.hpp>
 #include <documentModel/objects/ASheetObject.h>
-#include <compiler/ICompilerVisitor.h>
+#include <compiler/DefaultCompilerVisitor.h>
 #include <compiler/context/MidiContext.h>
 #include <com/ILogger.h>
 
@@ -18,7 +18,7 @@ namespace app
     * this context creates such timeline
     */
     template <class TIntervalContainer>
-    class TimelineVisitor : public compiler::ICompilerVisitor
+    class TimelineVisitor : public compiler::DefaultCompilerVisitor
     {
     private:
         com::ILoggerPtr _logger;

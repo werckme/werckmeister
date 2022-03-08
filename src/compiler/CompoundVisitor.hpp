@@ -32,6 +32,10 @@ namespace compiler
         {
             visitor1->visit(context, ev, trackId);
         }
+        virtual void visitDegree(const documentModel::Event &degreeEvent) override
+        {
+            visitor1->visitDegree(degreeEvent);
+        }
         TVisitor1Ptr visitor1 = nullptr;
     };
 
@@ -70,6 +74,11 @@ namespace compiler
             visitor1->visit(context, ev, trackId);
             TBase::visit(context, ev, trackId);
         }
+        virtual void visitDegree(const documentModel::Event &degreeEvent) override
+        {
+            visitor1->visitDegree(degreeEvent);
+            TBase::visitDegree(degreeEvent);
+        }        
         TVisitor1Ptr visitor1 = nullptr;
     };
     

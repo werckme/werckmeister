@@ -162,6 +162,7 @@ void FactoryConfig<TInjector>::initCommands()
 #include <conductor/selectors/Expression.h>
 #include <conductor/selectors/WithTag.h>
 #include <conductor/selectors/All.h>
+#include <conductor/selectors/Degree.h>
 #include <conductor/declarations/Velocity.h>
 #include <conductor/declarations/TimeOffset.h>
 #include <conductor/declarations/Duration.h>
@@ -190,6 +191,7 @@ void FactoryConfig<TInjector>::initConductor()
     register_<NthBar>(selNamespace_ + SHEET_CONDUCTOR_SEL__NTH_BAR);
     register_<WithTag>(selNamespace_ + SHEET_CONDUCTOR_SEL__WITHTAG);
     register_<All>(selNamespace_ + SHEET_CONDUCTOR_SEL__ALL);
+    register_<Degree>(selNamespace_ + SHEET_CONDUCTOR_SEL__DEGREE);
     register_<Expression>(selNamespace_ + SHEET_CONDUCTOR_SEL__EXPRESSION);
     register_<Velocity>(declNamespace_ + SHEET_CONDUCTOR_DEC__VELOCITY);
     register_<TimeOffset>(declNamespace_ + SHEET_CONDUCTOR_DEC__TIME_OFFSET);

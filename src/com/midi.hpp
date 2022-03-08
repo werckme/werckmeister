@@ -103,7 +103,7 @@ namespace com
 		{
 			struct ContextInformation
 			{
-				com::Expression expression = com::expression::Default;
+				com::Expression expression = com::expression::Default; // TODO: move this to the EventInformationServer
 			};
 			ContextInformation contextInformation;
 			Ticks relDelta(Ticks deltaOffset) const;
