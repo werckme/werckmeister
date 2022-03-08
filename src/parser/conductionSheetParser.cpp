@@ -12,10 +12,10 @@
 #include <boost/spirit/include/phoenix_stl.hpp>
 #include <boost/bind.hpp>
 #include "error.hpp"
-#include "parserSymbols.h"
 #include <com/tools.h>
 #include "parserPositionIt.h"
 #include "pitchParser.h"
+#include "parserSymbols.h"
 #include <conductor/conductorNames.h>
 
 BOOST_FUSION_ADAPT_STRUCT(
@@ -81,7 +81,6 @@ namespace parser
 		namespace qi = boost::spirit::qi;
 		namespace ascii = boost::spirit::ascii;
 		ExpressionSymbols expressionSymbols_;
-		DegreeSymbols degreeSymbols_;
 		template <typename Iterator>
 		struct _ConductionParser : PitchParser, qi::grammar<Iterator, documentModel::ConductionSheetDef(), ascii::space_type>
 		{
@@ -114,7 +113,7 @@ namespace parser
 					attr(0) >> pitchOrAlias_[at_c<ArPitch>(_val) = qi::_1] >> attr(com::String()) >> attr(ArgumentValue::ValueContext(ArgumentValue::Unspecified));
 
 				degreeArgument_ %=
-					attr(0) >> degreeSymbols_[at_c<ArPitch>(_val) = qi::_1] >> attr(com::String()) >> attr(ArgumentValue::ValueContext(ArgumentValue::Unspecified));
+					attr(0) >> degree_[at_c<ArPitch>(_val) = qi::_1] >> attr(com::String()) >> attr(ArgumentValue::ValueContext(ArgumentValue::Unspecified));
 
 				stringArgument_ %=
 					attr(0) >> attr(documentModel::PitchDef()) >> +char_("a-zA-Z0-9") >> attr(ArgumentValue::ValueContext(ArgumentValue::Unspecified));
