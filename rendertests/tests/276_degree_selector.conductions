@@ -1,3 +1,11 @@
-degree(III) {
+degree(I) {
+    timeOffset += 0.04;
+}
+
+onBar(1) degree(III) {
     pitch += 12;
+}
+
+onBar(2) degree(III) {
+    pitch -=12;
 }

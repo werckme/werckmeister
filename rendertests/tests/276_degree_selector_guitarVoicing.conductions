@@ -1,0 +1,4 @@
+
+degree(V) {
+    pitch -= 24;
+}

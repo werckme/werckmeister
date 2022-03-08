@@ -101,6 +101,8 @@ namespace com
 		};
 		struct Event
 		{
+			Event();
+			unsigned int id;
 			struct ContextInformation
 			{
 				com::Expression expression = com::expression::Default; // TODO: move this to the EventInformationServer

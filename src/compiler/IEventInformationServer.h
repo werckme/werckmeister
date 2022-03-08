@@ -4,6 +4,7 @@
 #include <set>
 #include <vector>
 #include <documentModel/objects/Event.h>
+#include <documentModel/objects/ChordDef.h>
 
 namespace com
 {
@@ -15,20 +16,24 @@ namespace com
 
 namespace compiler
 {
+    struct ChordRenderInfo {
+        documentModel::Event chordEvent;
+        documentModel::Event degreeEvent;
+        documentModel::ChordDef chordDef;
+    };
+    typedef std::shared_ptr<ChordRenderInfo> ChordRenderInfoPtr;
+
     struct EventInformation
     {
-        typedef com::String Id;
+        typedef unsigned int Id;
+        typedef com::String DocumentId;
         documentModel::Event::Type eventType = documentModel::Event::Unknown;
         documentModel::Event::Args metaArgs;
         documentModel::Event::Tags tags;
-        documentModel::Event::Pitches degreeInfos;
+        ChordRenderInfoPtr chordRenderInfo;
         Id id;
+        DocumentId documentId;
         com::String stringValue;
-        /**
-         * @brief an event can have several positions, in case of repeats and jumps
-         * 
-         */
-        std::vector<com::Ticks> positions;
         inline bool operator<(const EventInformation& ev) const { return id < ev.id; }
     };
 

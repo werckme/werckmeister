@@ -32,9 +32,17 @@ namespace compiler
         {
             visitor1->visit(context, ev, trackId);
         }
-        virtual void visitDegree(const documentModel::Event &degreeEvent) override
+        virtual void beginDegreeRendering() override
         {
-            visitor1->visitDegree(degreeEvent);
+            visitor1->beginDegreeRendering();
+        }        
+        virtual void visitDegree(const documentModel::Event& chord, const documentModel::ChordDef& def, const documentModel::Event& degreeEvent) override
+        {
+            visitor1->visitDegree(chord, def, degreeEvent);
+        }
+        virtual void endDegreeRendering() override
+        {
+            visitor1->endDegreeRendering();
         }
         TVisitor1Ptr visitor1 = nullptr;
     };
@@ -74,11 +82,21 @@ namespace compiler
             visitor1->visit(context, ev, trackId);
             TBase::visit(context, ev, trackId);
         }
-        virtual void visitDegree(const documentModel::Event &degreeEvent) override
+        virtual void beginDegreeRendering() override
         {
-            visitor1->visitDegree(degreeEvent);
-            TBase::visitDegree(degreeEvent);
-        }        
+            visitor1->beginDegreeRendering();
+            TBase::beginDegreeRendering();
+        }           
+        virtual void visitDegree(const documentModel::Event& chord, const documentModel::ChordDef& def, const documentModel::Event& degreeEvent) override
+        {
+            visitor1->visitDegree(chord, def, degreeEvent);
+            TBase::visitDegree(chord, def, degreeEvent);
+        }
+        virtual void endDegreeRendering() override
+        {
+            visitor1->endDegreeRendering();
+            TBase::endDegreeRendering();
+        }    
         TVisitor1Ptr visitor1 = nullptr;
     };
     

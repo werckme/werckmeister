@@ -19,7 +19,8 @@ namespace compiler
         virtual void endCompile() override;
         virtual void visit(IContext *context, const documentModel::Event &ev) override;
         virtual void visit(IContext *context, const com::midi::Event &ev, IContext::TrackId trackId) override;
-        virtual void visitDegree(const documentModel::Event &degreeEvent) override;
+        virtual void visitDegree(const documentModel::Event& chord, const documentModel::ChordDef& def, const documentModel::Event& degreeEvent) override;
+        virtual void endDegreeRendering() override;
         virtual ~EventInformationServer();
         virtual com::Ticks findCueEventPosition(const com::String& cueName) override;
         virtual const EventInformation* find(const documentModel::Event &ev) const override;
@@ -28,5 +29,7 @@ namespace compiler
     private:
         std::unique_ptr<EventInformationDb> eventDb;
         const documentModel::Event *lastDocumentEvent = nullptr;
+        ChordRenderInfoPtr lastChordRenderInfo;
+
     };
 }

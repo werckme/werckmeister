@@ -7,7 +7,8 @@
 namespace conductor
 {
     /// <selector name="degree">
-    ///     Selects a event which was rendered via a template degree.
+    ///     Selects an MIDI event which was rendered via a template degree.
+    ///     Octaves of a degree will not be considered.
     /// ```
     /// degree(I III) {...}
     /// ```

@@ -1,16 +1,18 @@
 
-using "./276_degree_selector.conductions";
+using "./276_degree_selector_guitarVoicing.conductions";
 using "./chords/default.chords";
+using "./voicings/guitar.lua";
 
 device: MyDevice  midi _usePort=0;
 instrumentDef: piano _ch=0 _onDevice=MyDevice _pc=0;
+instrumentConf: piano voicingStrategy guitar;
 
 [
 type: template;
 name: myTemplate;
 instrument: piano;
 {
-	I III8 e  V4 I' | <I III V I'>1
+	<I II III IV V VI VII>1 |
 }
 ]
 
@@ -19,6 +21,6 @@ instrument: piano;
 type: accomp;
 {
 
-    C | C | 
+    A | C | D | E | F | G|
 }
 ]

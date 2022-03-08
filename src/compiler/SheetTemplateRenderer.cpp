@@ -286,7 +286,7 @@ namespace compiler
 				}
 				auto voicingStratgy = ctx->currentVoicingStrategy();
 				auto pitches = voicingStratgy->get(chordEvent, *chordDef, degreeEvent.pitches, ctx->getTimeInfo());
-				visitor->visitDegree(degreeEvent);
+				visitor->visitDegree(chordEvent, *chordDef, degreeEvent);
 				target.type = Event::Note;
 				target.isTied(degreeEvent.isTied());
 				target.pitches.swap(pitches);
@@ -397,6 +397,7 @@ namespace compiler
 						break;
 					}
 					Event copy;
+					visitor->beginDegreeRendering();
 					if (degree == nullptr)
 					{
 						copy.duration = degreeDuration;
@@ -431,6 +432,7 @@ namespace compiler
 						continue;
 					}
 					sheetEventRenderer->addEvent(copy);
+					visitor->endDegreeRendering();
 					if (isTimeConsuming)
 					{
 						ticksToWrite -= copy.duration;
