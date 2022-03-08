@@ -17,7 +17,6 @@
 #include "parserPositionIt.h"
 #include "pitchParser.h"
 #include <conductor/conductorNames.h>
-#include "parserSymbols.h"
 
 BOOST_FUSION_ADAPT_STRUCT(
 	documentModel::ConductionSelector::ArgumentValue,
@@ -82,6 +81,7 @@ namespace parser
 		namespace qi = boost::spirit::qi;
 		namespace ascii = boost::spirit::ascii;
 		ExpressionSymbols expressionSymbols_;
+		DegreeSymbols degreeSymbols_;
 		template <typename Iterator>
 		struct _ConductionParser : PitchParser, qi::grammar<Iterator, documentModel::ConductionSheetDef(), ascii::space_type>
 		{
@@ -113,6 +113,9 @@ namespace parser
 				pitchArgument_ %=
 					attr(0) >> pitchOrAlias_[at_c<ArPitch>(_val) = qi::_1] >> attr(com::String()) >> attr(ArgumentValue::ValueContext(ArgumentValue::Unspecified));
 
+				degreeArgument_ %=
+					attr(0) >> degreeSymbols_[at_c<ArPitch>(_val) = qi::_1] >> attr(com::String()) >> attr(ArgumentValue::ValueContext(ArgumentValue::Unspecified));
+
 				stringArgument_ %=
 					attr(0) >> attr(documentModel::PitchDef()) >> +char_("a-zA-Z0-9") >> attr(ArgumentValue::ValueContext(ArgumentValue::Unspecified));
 
@@ -138,8 +141,8 @@ namespace parser
 					(current_pos_.current_pos >> attr(sourceId_) >> SHEET_CONDUCTOR_SEL__CHANNEL >> attr(SHEET_CONDUCTOR_SEL__CHANNEL) >> "(" >> +numberArgument_ >> ")") |
 					(current_pos_.current_pos >> attr(sourceId_) >> SHEET_CONDUCTOR_SEL__EXPRESSION >> attr(SHEET_CONDUCTOR_SEL__EXPRESSION) >> "(" >> +stringArgument_ >> ")") |
 					(current_pos_.current_pos >> attr(sourceId_) >> SHEET_CONDUCTOR_SEL__ALL >> attr(SHEET_CONDUCTOR_SEL__ALL) >> "(" >> ")") |
-					(current_pos_.current_pos >> attr(sourceId_) >> SHEET_CONDUCTOR_SEL__WITHTAG >> attr(SHEET_CONDUCTOR_SEL__WITHTAG) >> "(" >> +stringArgument_ >> ")");
-
+					(current_pos_.current_pos >> attr(sourceId_) >> SHEET_CONDUCTOR_SEL__WITHTAG >> attr(SHEET_CONDUCTOR_SEL__WITHTAG) >> "(" >> +stringArgument_ >> ")") |
+					(current_pos_.current_pos >> attr(sourceId_) >> SHEET_CONDUCTOR_SEL__DEGREE >> attr(SHEET_CONDUCTOR_SEL__DEGREE) >> "(" >> +degreeArgument_ >> ")");
 				operationType_ %=
 					("+=" >> attr(ConductionRule::Declaration::OperationAdd)) |
 					("-=" >> attr(ConductionRule::Declaration::OperationSubstract)) |
@@ -169,6 +172,7 @@ namespace parser
 			qi::rule<Iterator, documentModel::ConductionRule(), ascii::space_type> rules_;
 			qi::rule<Iterator, documentModel::ConductionSelector::ArgumentValue(), ascii::space_type> numberArgument_;
 			qi::rule<Iterator, documentModel::ConductionSelector::ArgumentValue(), ascii::space_type> pitchArgument_;
+			qi::rule<Iterator, documentModel::ConductionSelector::ArgumentValue(), ascii::space_type> degreeArgument_;
 			qi::rule<Iterator, documentModel::ConductionSelector::ArgumentValue(), ascii::space_type> stringArgument_;
 			qi::rule<Iterator, documentModel::ConductionSelector::ArgumentValue(), ascii::space_type> cueArgument_;
 			qi::rule<Iterator, documentModel::ConductionRule::Declaration(), ascii::space_type> declaration_;
