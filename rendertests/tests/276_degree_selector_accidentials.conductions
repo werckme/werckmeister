@@ -1,0 +1,8 @@
+
+degree(I#) {
+    pitch -= 1;
+}
+
+degree(Ib) {
+    pitch += 1;
+}

@@ -16,28 +16,29 @@ namespace compiler
 	class EventInformationDb
 	{
 		struct Id {};
+		struct DocumentId {};
 		struct StringValue {};
 		typedef multi_index_container<
 			EventInformation,
 			indexed_by<
-				ordered_unique<tag<Id>, member<EventInformation, std::string, &EventInformation::id>>,
+				ordered_unique<tag<Id>, member<EventInformation, EventInformation::Id, &EventInformation::id>>,
+				ordered_non_unique<tag<DocumentId>, member<EventInformation, com::String, &EventInformation::documentId>>,
 				ordered_non_unique<tag<StringValue>, member<EventInformation, com::String, &EventInformation::stringValue>>
 			>
 		> EventSet;
-		typedef std::unordered_map<com::midi::Event, EventInformation::Id, com::midi::EventHasher> MidiEventMap;
 		typedef std::unordered_map<com::String, com::Ticks> CuePositionMap;
 		EventSet events;
-		MidiEventMap midiEventMap;
 		CuePositionMap cuePositionMap;
 	private:
-		void insert(const EventInformation::Id& id, const documentModel::Event&, const com::midi::Event&);
+		void insert(const documentModel::Event&, const com::midi::Event&, ChordRenderInfoPtr chordRenderInfo);
+		void update(const EventInformation&, const documentModel::Event&, const com::midi::Event&, ChordRenderInfoPtr chordRenderInfo);
 		void updateCueEventMap(const com::midi::Event&);
 	public:
-		inline EventInformation::Id createId(const documentModel::Event& ev) const
+		inline EventInformation::DocumentId createDocumentId(const documentModel::Event& ev) const
 		{
 			return std::to_string(ev.sourceId) + "-" + std::to_string(ev.sourcePositionBegin);
 		}
-		void upsert(const documentModel::Event&, const com::midi::Event&);
+		void upsert(const documentModel::Event&, const com::midi::Event&, ChordRenderInfoPtr chordRenderInfo);
 		const EventInformation* find(const documentModel::Event&);
 		const EventInformation* find(const com::midi::Event&);
 		const EventInformation* find(const EventInformation::Id &id);
@@ -47,17 +48,17 @@ namespace compiler
 	};
 	const EventInformation* EventInformationDb::find(const com::midi::Event& event)
 	{
-		auto infoIdIt = midiEventMap.find(event);
-		if (infoIdIt == midiEventMap.end())
-		{
-			return nullptr;
-		}
-		return find(infoIdIt->second);
+		auto inf = events.find(event.id);
+		return &(*inf);
 	}	
 	const EventInformation* EventInformationDb::find(const documentModel::Event& event)
 	{
-		auto id = createId(event);
-		return find(id);
+		auto documentId = createDocumentId(event);
+		auto range = events.get<DocumentId>().equal_range(documentId);
+		if (range.first == range.second) {
+			return nullptr;
+		}
+		return &(*range.first);
 
 	}
 	const EventInformation* EventInformationDb::find(const EventInformation::Id &id)
@@ -69,17 +70,30 @@ namespace compiler
 		}
 		return &(*infoIt);
 	}		
-	void EventInformationDb::insert(const EventInformation::Id &id, const documentModel::Event& documentEvent, const com::midi::Event& midiEvent)
+	void EventInformationDb::insert(const documentModel::Event& documentEvent, const com::midi::Event& midiEvent, ChordRenderInfoPtr chordRenderInfo)
 	{
 		EventInformation ei;
-		ei.id = id;
+		ei.id = midiEvent.id;
+		ei.documentId = createDocumentId(documentEvent);
 		ei.eventType = documentEvent.type;
 		ei.stringValue = documentEvent.stringValue;
-		ei.positions.push_back(midiEvent.absPosition());
 		ei.metaArgs = documentEvent.metaArgs;
 		ei.tags = documentEvent.tags;
+		ei.chordRenderInfo = chordRenderInfo;
 		events.insert(ei);
 	}
+	void EventInformationDb::update(const EventInformation& evinf, const documentModel::Event& documentEvent, const com::midi::Event& midiEvent, ChordRenderInfoPtr chordRenderInfo)
+	{
+		auto copy = evinf;
+		copy.eventType = documentEvent.type;
+		copy.stringValue = documentEvent.stringValue;
+		copy.metaArgs = documentEvent.metaArgs;
+		copy.tags = documentEvent.tags;
+		copy.chordRenderInfo = chordRenderInfo;
+		auto it = events.find(copy.id);
+		events.replace(it, copy);
+	}
+
 	void EventInformationDb::updateCueEventMap(const com::midi::Event& midiEvent)
 	{
 		if (midiEvent.eventType() != com::midi::MetaEvent || midiEvent.metaEventType() != com::midi::CuePoint) 
@@ -89,30 +103,26 @@ namespace compiler
 		auto name = com::midi::Event::MetaGetStringValue(midiEvent.metaData(), midiEvent.metaDataSize());
 		cuePositionMap[name] = midiEvent.absPosition();
 	}
-	void EventInformationDb::upsert(const documentModel::Event& documentEvent, const com::midi::Event& midiEvent)
+	void EventInformationDb::upsert(const documentModel::Event& documentEvent, const com::midi::Event& midiEvent, ChordRenderInfoPtr chordRenderInfo)
 	{
 		updateCueEventMap(midiEvent);
-		auto id = createId(documentEvent);
-		midiEventMap.insert({midiEvent, id});
-		auto infoIt = events.find(id);
+		auto infoIt = events.find(midiEvent.id);
 		if (infoIt == events.end()) 
 		{
-			return insert(id, documentEvent, midiEvent);
+			insert(documentEvent, midiEvent, chordRenderInfo);
+		} else {
+			update(*infoIt, documentEvent, midiEvent, chordRenderInfo);
 		}
-		auto info = *infoIt;
-		info.positions.push_back(midiEvent.absPosition());
-		events.replace(infoIt, info);
 	}
 
 	void EventInformationDb::clear()
 	{
 		events.clear();
-		midiEventMap.clear();
+		cuePositionMap.clear();
 	}
 
 	std::list<EventInformation> EventInformationDb::findEventInformationsByStringValue(const com::String& stringValue)
 	{
-		typedef EventSet::index<StringValue>::type set_by_name;
 		auto range = events.get<StringValue>().equal_range(stringValue);
 		std::list<EventInformation> result;
 		std::copy(range.first, range.second, std::back_inserter(result));
@@ -167,7 +177,7 @@ namespace compiler
 		{
 			return;
 		}
-		eventDb->upsert(*lastDocumentEvent, ev);
+		eventDb->upsert(*lastDocumentEvent, ev, lastChordRenderInfo);
 	}
 
 	com::Ticks EventInformationServer::findCueEventPosition(const com::String& cueName)
@@ -192,5 +202,18 @@ namespace compiler
 			return IEventInformationServer::Tags();
 		}
 		return IEventInformationServer::Tags(evInformation->tags.begin(), evInformation->tags.end());
+	}
+
+	void EventInformationServer::visitDegree(const documentModel::Event& chord, const documentModel::ChordDef& def, const documentModel::Event& degreeEvent)
+	{
+		lastChordRenderInfo = std::make_shared<ChordRenderInfo>();
+		lastChordRenderInfo->chordDef = def;
+		lastChordRenderInfo->chordEvent = chord;
+		lastChordRenderInfo->degreeEvent = degreeEvent;
+	}
+
+	void EventInformationServer::endDegreeRendering()
+	{
+		this->lastChordRenderInfo.reset();
 	}
 }

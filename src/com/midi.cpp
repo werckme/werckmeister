@@ -8,6 +8,11 @@
 #include <sstream>
 #include <boost/functional/hash.hpp>
 
+namespace 
+{
+	unsigned int MidiIdCounter = 0;
+}
+
 namespace com
 {
 	namespace midi
@@ -649,6 +654,10 @@ namespace com
 		}
 		///////////////////////////////////////////////////////////////////////////
 		// MIDI
+		Event::Event() : id(MidiIdCounter++)
+		{
+
+		}
 		Midi::Midi(Ticks ppq)
 		{
 			_ppq = ppq;

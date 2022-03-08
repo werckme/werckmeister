@@ -273,7 +273,6 @@ BOOST_AUTO_TEST_CASE(parse_cue_position)
 	BOOST_CHECK_EQUAL(defs.rules[0].selectors.size(), size_t(1));
 	BOOST_CHECK_EQUAL(defs.rules[0].selectors[0].type, "fromPosition");
 	BOOST_CHECK_EQUAL(defs.rules[0].selectors[0].arguments.size(), size_t(1));
-	BOOST_CHECK_EQUAL(defs.rules[0].selectors[0].arguments.size(), size_t(1));
 	BOOST_CHECK_EQUAL(defs.rules[0].selectors[0].arguments[0].name, "myCue");
 	BOOST_CHECK_EQUAL(defs.rules[0].selectors[0].arguments[0].valueContext, documentModel::ConductionSelector::ArgumentValue::CueReference);
 }
@@ -293,7 +292,6 @@ BOOST_AUTO_TEST_CASE(parse_quarters_position)
 	BOOST_CHECK_EQUAL(defs.rules[0].selectors.size(), size_t(1));
 	BOOST_CHECK_EQUAL(defs.rules[0].selectors[0].type, "fromPosition");
 	BOOST_CHECK_EQUAL(defs.rules[0].selectors[0].arguments.size(), size_t(1));
-	BOOST_CHECK_EQUAL(defs.rules[0].selectors[0].arguments.size(), size_t(1));
 	BOOST_CHECK_EQUAL(defs.rules[0].selectors[0].arguments[0].numberValue, com::Ticks(1));
 	BOOST_CHECK_EQUAL(defs.rules[0].selectors[0].arguments[0].valueContext, documentModel::ConductionSelector::ArgumentValue::Unspecified);
 }
@@ -309,4 +307,61 @@ BOOST_AUTO_TEST_CASE(parse_position_fail)
 ");
 	ConductionSheetParser parser;
 	BOOST_CHECK_THROW(parser.parse(text), Exception);
+}
+
+
+BOOST_AUTO_TEST_CASE(parse_degree_selector)
+{
+	using namespace com;
+	using documentModel::PitchDef;
+	com::String text = FM_STRING("\
+	degree(I) {\
+		velocity = 10;\
+	}\
+");
+	ConductionSheetParser parser;
+	auto defs = parser.parse(text);
+	BOOST_CHECK_EQUAL(defs.rules.size(), size_t(1));
+	BOOST_CHECK_EQUAL(defs.rules[0].selectors.size(), size_t(1));
+	BOOST_CHECK_EQUAL(defs.rules[0].selectors[0].type, "degree");
+	BOOST_CHECK_EQUAL(defs.rules[0].selectors[0].arguments.size(), size_t(1));
+	BOOST_CHECK_EQUAL(defs.rules[0].selectors[0].arguments[0].pitch.pitch, com::degrees::I);
+}
+
+BOOST_AUTO_TEST_CASE(parse_degree_selector_two_args)
+{
+	using namespace com;
+	using documentModel::PitchDef;
+	com::String text = FM_STRING("\
+	degree(I V) {\
+		velocity = 10;\
+	}\
+");
+	ConductionSheetParser parser;
+	auto defs = parser.parse(text);
+	BOOST_CHECK_EQUAL(defs.rules.size(), size_t(1));
+	BOOST_CHECK_EQUAL(defs.rules[0].selectors.size(), size_t(1));
+	BOOST_CHECK_EQUAL(defs.rules[0].selectors[0].type, "degree");
+	BOOST_CHECK_EQUAL(defs.rules[0].selectors[0].arguments.size(), size_t(2));
+	BOOST_CHECK_EQUAL(defs.rules[0].selectors[0].arguments[0].pitch.pitch, com::degrees::I);
+	BOOST_CHECK_EQUAL(defs.rules[0].selectors[0].arguments[1].pitch.pitch, com::degrees::V);
+}
+
+BOOST_AUTO_TEST_CASE(parse_degree_selector_accidentals)
+{
+	using namespace com;
+	using documentModel::PitchDef;
+	com::String text = FM_STRING("\
+	degree(Ib V#) {\
+		velocity = 10;\
+	}\
+");
+	ConductionSheetParser parser;
+	auto defs = parser.parse(text);
+	BOOST_CHECK_EQUAL(defs.rules.size(), size_t(1));
+	BOOST_CHECK_EQUAL(defs.rules[0].selectors.size(), size_t(1));
+	BOOST_CHECK_EQUAL(defs.rules[0].selectors[0].type, "degree");
+	BOOST_CHECK_EQUAL(defs.rules[0].selectors[0].arguments.size(), size_t(2));
+	BOOST_CHECK_EQUAL(defs.rules[0].selectors[0].arguments[0].pitch.pitch, com::degrees::Ies);
+	BOOST_CHECK_EQUAL(defs.rules[0].selectors[0].arguments[1].pitch.pitch, com::degrees::Vis);
 }
