@@ -163,6 +163,7 @@ void FactoryConfig<TInjector>::initCommands()
 #include <conductor/selectors/WithTag.h>
 #include <conductor/selectors/All.h>
 #include <conductor/selectors/Degree.h>
+#include <conductor/selectors/Chord.h>
 #include <conductor/declarations/Velocity.h>
 #include <conductor/declarations/TimeOffset.h>
 #include <conductor/declarations/Duration.h>
@@ -192,6 +193,7 @@ void FactoryConfig<TInjector>::initConductor()
     register_<WithTag>(selNamespace_ + SHEET_CONDUCTOR_SEL__WITHTAG);
     register_<All>(selNamespace_ + SHEET_CONDUCTOR_SEL__ALL);
     register_<Degree>(selNamespace_ + SHEET_CONDUCTOR_SEL__DEGREE);
+    register_<conductor::Chord>(selNamespace_ + SHEET_CONDUCTOR_SEL__CHORD); // ambiguous symbol on win could be BOOL Chord(....)
     register_<Expression>(selNamespace_ + SHEET_CONDUCTOR_SEL__EXPRESSION);
     register_<Velocity>(declNamespace_ + SHEET_CONDUCTOR_DEC__VELOCITY);
     register_<TimeOffset>(declNamespace_ + SHEET_CONDUCTOR_DEC__TIME_OFFSET);

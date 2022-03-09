@@ -117,7 +117,7 @@ namespace parser
 					attr(0) >> degreeSymbols_[at_c<ArPitch>(_val) = qi::_1] >> attr(com::String()) >> attr(ArgumentValue::ValueContext(ArgumentValue::Unspecified));
 
 				stringArgument_ %=
-					attr(0) >> attr(documentModel::PitchDef()) >> +char_("a-zA-Z0-9") >> attr(ArgumentValue::ValueContext(ArgumentValue::Unspecified));
+					attr(0) >> attr(documentModel::PitchDef()) >> lexeme[+char_("a-zA-Z0-9")] >> attr(ArgumentValue::ValueContext(ArgumentValue::Unspecified));
 
 				cueArgument_ %=
 					attr(0) >> attr(documentModel::PitchDef()) >> "@" >> +char_("a-zA-Z0-9") >> attr(ArgumentValue::ValueContext(ArgumentValue::CueReference));
@@ -142,7 +142,8 @@ namespace parser
 					(current_pos_.current_pos >> attr(sourceId_) >> SHEET_CONDUCTOR_SEL__EXPRESSION >> attr(SHEET_CONDUCTOR_SEL__EXPRESSION) >> "(" >> +stringArgument_ >> ")") |
 					(current_pos_.current_pos >> attr(sourceId_) >> SHEET_CONDUCTOR_SEL__ALL >> attr(SHEET_CONDUCTOR_SEL__ALL) >> "(" >> ")") |
 					(current_pos_.current_pos >> attr(sourceId_) >> SHEET_CONDUCTOR_SEL__WITHTAG >> attr(SHEET_CONDUCTOR_SEL__WITHTAG) >> "(" >> +stringArgument_ >> ")") |
-					(current_pos_.current_pos >> attr(sourceId_) >> SHEET_CONDUCTOR_SEL__DEGREE >> attr(SHEET_CONDUCTOR_SEL__DEGREE) >> "(" >> +degreeArgument_ >> ")");
+					(current_pos_.current_pos >> attr(sourceId_) >> SHEET_CONDUCTOR_SEL__DEGREE >> attr(SHEET_CONDUCTOR_SEL__DEGREE) >> "(" >> +degreeArgument_ >> ")") |
+					(current_pos_.current_pos >> attr(sourceId_) >> SHEET_CONDUCTOR_SEL__CHORD >> attr(SHEET_CONDUCTOR_SEL__CHORD) >> "(" >> +stringArgument_ >> ")");;
 				operationType_ %=
 					("+=" >> attr(ConductionRule::Declaration::OperationAdd)) |
 					("-=" >> attr(ConductionRule::Declaration::OperationSubstract)) |

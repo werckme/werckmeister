@@ -18,8 +18,8 @@ namespace conductor
 			if (eventInformation->chordRenderInfo.get() == nullptr) {
 				continue;
 			}
-			const auto& chordInfos = *eventInformation->chordRenderInfo;
-			auto absolutePitches = voicingStrategy.get(chordInfos.chordEvent, chordInfos.chordDef, { arg.pitch }, compiler::TimeInfo());
+			auto chordInfos = eventInformation->chordRenderInfo;
+			auto absolutePitches = voicingStrategy.get(chordInfos->chordEvent, chordInfos->chordDef, { arg.pitch }, compiler::TimeInfo());
 			if (absolutePitches.empty()) 
 			{
 				continue;
