@@ -1,0 +1,4 @@
+chord(Db7) {
+    velocity = 127;
+    duration -= 70%;
+}
