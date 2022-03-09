@@ -143,6 +143,23 @@ BOOST_AUTO_TEST_CASE(parse_oneSelectorWithNameArgument)
 	BOOST_CHECK_EQUAL(defs.rules[0].selectors[0].arguments[0].name, com::String("myInstrument"));
 }
 
+BOOST_AUTO_TEST_CASE(parse_oneSelectorWithTwoNameArguments)
+{
+	using namespace com;
+	using documentModel::PitchDef;
+	com::String text = FM_STRING("\
+	instrument(ia ib) {} \
+");
+	ConductionSheetParser parser;
+	auto defs = parser.parse(text);
+	BOOST_CHECK_EQUAL(defs.rules.size(), size_t(1));
+	BOOST_CHECK_EQUAL(defs.rules[0].selectors.size(), size_t(1));
+	BOOST_CHECK_EQUAL(defs.rules[0].selectors[0].type, "instrument");
+	BOOST_CHECK_EQUAL(defs.rules[0].selectors[0].arguments.size(), size_t(2));
+	BOOST_CHECK_EQUAL(defs.rules[0].selectors[0].arguments[0].name, com::String("ia"));
+	BOOST_CHECK_EQUAL(defs.rules[0].selectors[0].arguments[1].name, com::String("ib"));
+}
+
 BOOST_AUTO_TEST_CASE(parse_oneSelector_followUpOperator_1)
 {
 	using namespace com;
@@ -383,4 +400,41 @@ BOOST_AUTO_TEST_CASE(parse_degree_selector_octaves)
 	BOOST_CHECK_EQUAL(defs.rules[0].selectors[0].arguments.size(), size_t(2));
 	BOOST_CHECK_EQUAL(defs.rules[0].selectors[0].arguments[0].pitch.octave, -1);
 	BOOST_CHECK_EQUAL(defs.rules[0].selectors[0].arguments[1].pitch.octave, 1);
+}
+
+BOOST_AUTO_TEST_CASE(parse_chord)
+{
+	using namespace com;
+	using documentModel::PitchDef;
+	com::String text = FM_STRING("\
+	chord(myChord7) {\
+		velocity = 10;\
+	}\
+");
+	ConductionSheetParser parser;
+	auto defs = parser.parse(text);
+	BOOST_CHECK_EQUAL(defs.rules.size(), size_t(1));
+	BOOST_CHECK_EQUAL(defs.rules[0].selectors.size(), size_t(1));
+	BOOST_CHECK_EQUAL(defs.rules[0].selectors[0].type, "chord");
+	BOOST_CHECK_EQUAL(defs.rules[0].selectors[0].arguments.size(), size_t(1));
+	BOOST_CHECK_EQUAL(defs.rules[0].selectors[0].arguments[0].name, com::String("myChord7"));
+}
+
+BOOST_AUTO_TEST_CASE(parse_chord_two_arguments)
+{
+	using namespace com;
+	using documentModel::PitchDef;
+	com::String text = FM_STRING("\
+	chord(myChord7 otherChord9) {\
+		velocity = 10;\
+	}\
+");
+	ConductionSheetParser parser;
+	auto defs = parser.parse(text);
+	BOOST_CHECK_EQUAL(defs.rules.size(), size_t(1));
+	BOOST_CHECK_EQUAL(defs.rules[0].selectors.size(), size_t(1));
+	BOOST_CHECK_EQUAL(defs.rules[0].selectors[0].type, "chord");
+	BOOST_CHECK_EQUAL(defs.rules[0].selectors[0].arguments.size(), size_t(2));
+	BOOST_CHECK_EQUAL(defs.rules[0].selectors[0].arguments[0].name, com::String("myChord7"));
+	BOOST_CHECK_EQUAL(defs.rules[0].selectors[0].arguments[1].name, com::String("otherChord9"));
 }
