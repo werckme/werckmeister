@@ -365,22 +365,3 @@ BOOST_AUTO_TEST_CASE(parse_degree_selector_accidentals)
 	BOOST_CHECK_EQUAL(defs.rules[0].selectors[0].arguments[0].pitch.pitch, com::degrees::Ies);
 	BOOST_CHECK_EQUAL(defs.rules[0].selectors[0].arguments[1].pitch.pitch, com::degrees::Vis);
 }
-
-BOOST_AUTO_TEST_CASE(parse_degree_selector_octaves)
-{
-	using namespace com;
-	using documentModel::PitchDef;
-	com::String text = FM_STRING("\
-	degree(I, V') {\
-		velocity = 10;\
-	}\
-");
-	ConductionSheetParser parser;
-	auto defs = parser.parse(text);
-	BOOST_CHECK_EQUAL(defs.rules.size(), size_t(1));
-	BOOST_CHECK_EQUAL(defs.rules[0].selectors.size(), size_t(1));
-	BOOST_CHECK_EQUAL(defs.rules[0].selectors[0].type, "degree");
-	BOOST_CHECK_EQUAL(defs.rules[0].selectors[0].arguments.size(), size_t(2));
-	BOOST_CHECK_EQUAL(defs.rules[0].selectors[0].arguments[0].pitch.octave, -1);
-	BOOST_CHECK_EQUAL(defs.rules[0].selectors[0].arguments[1].pitch.octave, 1);
-}

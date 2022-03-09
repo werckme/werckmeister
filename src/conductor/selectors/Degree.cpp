@@ -1,7 +1,6 @@
 #include "Degree.h"
 #include <compiler/context/MidiContext.h>
 #include <compiler/voicings/DirectVoicingStrategy.h>
-#include <compiler/context/MidiContext.h>
 
 namespace 
 {
@@ -26,8 +25,7 @@ namespace conductor
 				continue;
 			}
 			auto renderedArgumentDegree = absolutePitches.front();
-			int midiPitchOfRendredDegree = compiler::MidiContext::toMidiPitch(renderedArgumentDegree);
-			bool isSamePitchRegardlessOctave = midiPitchOfRendredDegree == (int)midiEvent.parameter1();
+			bool isSamePitchRegardlessOctave = renderedArgumentDegree.pitch % 12 == midiEvent.parameter1() % 12;
 			if (isSamePitchRegardlessOctave) 
 			{
 				return true;
