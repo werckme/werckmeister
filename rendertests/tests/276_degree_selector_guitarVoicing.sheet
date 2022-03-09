@@ -5,7 +5,7 @@ using "./voicings/guitar.lua";
 
 device: MyDevice  midi _usePort=0;
 instrumentDef: piano _ch=0 _onDevice=MyDevice _pc=0;
---instrumentConf: piano voicingStrategy guitar;
+instrumentConf: piano voicingStrategy guitar;
 
 [
 type: template;
@@ -16,9 +16,11 @@ instrument: piano;
 }
 ]
 
+
 [
 type: accomp;
 {
+
     A | C | D | E | F | G|
 }
 ]

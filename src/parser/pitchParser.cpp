@@ -16,7 +16,6 @@ namespace parser
         PitchSymbols pitchSymbols_;
         OctaveSymbols octaveSymbols_;
         DurationSymbols durationSymbols_;
-        DegreeSymbols degreeSymbols_;
     }
 
     PitchParser::PitchParser()
@@ -38,7 +37,6 @@ namespace parser
         extendedPitch_ %= "" >> char_("hijklmnopqsuvwxyz") >> repeat(0, 5)[lit("'")[push_back(at_c<0>(_val), '\'')]] >> repeat(0, 5)[lit(",")[push_back(at_c<0>(_val), ',')]];
 
         pitch_ %= pitchSymbols_ >> (octaveSymbols_ | attr(PitchDef::DefaultOctave));
-        degree_ %= degreeSymbols_ >> (octaveSymbols_ | attr(PitchDef::DefaultOctave));
         alias_ %= lexeme['"' >> +(char_ - '"') >> '"'];
         pitchOrAlias_ %= pitch_ | alias_ | extendedPitch_;
     }

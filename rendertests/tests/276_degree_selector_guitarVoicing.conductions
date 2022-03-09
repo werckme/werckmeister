@@ -1,4 +1,4 @@
 
 degree(V) {
-    duration -= 50%;
+    pitch -= 24;
 }
