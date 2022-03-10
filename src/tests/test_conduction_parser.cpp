@@ -419,3 +419,23 @@ BOOST_AUTO_TEST_CASE(parse_chord_selector_two_arguments)
 	BOOST_CHECK_EQUAL(defs.rules[0].selectors[0].arguments[0].name, com::String("myChord7"));
 	BOOST_CHECK_EQUAL(defs.rules[0].selectors[0].arguments[1].name, com::String("otherChord9"));
 }
+
+BOOST_AUTO_TEST_CASE(parse_octave_selector)
+{
+	using namespace com;
+	using documentModel::PitchDef;
+	com::String text = FM_STRING("\
+	octave(0 1 2) {\
+		velocity = 10;\
+	}\
+");
+	ConductionSheetParser parser;
+	auto defs = parser.parse(text);
+	BOOST_CHECK_EQUAL(defs.rules.size(), size_t(1));
+	BOOST_CHECK_EQUAL(defs.rules[0].selectors.size(), size_t(1));
+	BOOST_CHECK_EQUAL(defs.rules[0].selectors[0].type, "octave");
+	BOOST_CHECK_EQUAL(defs.rules[0].selectors[0].arguments.size(), size_t(3));
+	BOOST_CHECK_EQUAL(defs.rules[0].selectors[0].arguments[0].numberValue, 0.0);
+	BOOST_CHECK_EQUAL(defs.rules[0].selectors[0].arguments[1].numberValue, 1.0);
+	BOOST_CHECK_EQUAL(defs.rules[0].selectors[0].arguments[2].numberValue, 2.0);
+}

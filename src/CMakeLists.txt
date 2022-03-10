@@ -110,6 +110,7 @@ SET (SRC_FETZER_LIB
     conductor/selectors/WithTag.cpp
     conductor/selectors/Degree.cpp
     conductor/selectors/Chord.cpp
+    conductor/selectors/Octave.cpp
     conductor/declarations/ADeclaration.cpp
     conductor/declarations/Velocity.cpp
     conductor/declarations/Pitch.cpp
