@@ -17,6 +17,11 @@ namespace conductor
 			{
 				return true;
 			}
+			const auto chordQuality = chordInfos->chordEvent.chordDefName();
+			if (chordQuality == arg.name) 
+			{
+				return true;
+			}
 		}
 		return false;
 	}

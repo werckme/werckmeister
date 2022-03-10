@@ -1,0 +1,7 @@
+chord(X7) {
+    velocity = 20;
+}
+
+chord(X-) {
+    pitch += 24;
+}

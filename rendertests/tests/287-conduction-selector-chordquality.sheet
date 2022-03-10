@@ -1,0 +1,24 @@
+
+using "./287-conduction-selector-chordquality.conductions";
+using "./chords/default.chords";
+
+device: MyDevice  midi _usePort=4;
+instrumentDef: piano _ch=0 _onDevice=MyDevice _pc=0;
+
+[
+type: template;
+name: myTemplate;
+instrument: piano;
+{
+	<I III V VII>1
+}
+]
+
+
+[
+type: accomp;
+{
+
+    C | C7 | D-7 | F-7 | G7 | C-
+}
+]
