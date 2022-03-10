@@ -1,0 +1,25 @@
+
+using "./286-conduction-rule-selector-octave.conductions";
+using "./chords/default.chords";
+
+device: MyDevice  midi _usePort=4;
+instrumentDef: piano _ch=0 _onDevice=MyDevice _pc=0;
+
+[
+type: template;
+name: myTemplate;
+instrument: piano;
+{
+    \pppp
+	I, I I' I'' 
+}
+]
+
+
+[
+type: accomp;
+{
+
+    C | 
+}
+]
