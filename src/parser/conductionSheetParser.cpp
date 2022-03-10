@@ -119,6 +119,9 @@ namespace parser
 				stringArgument_ %=
 					attr(0) >> attr(documentModel::PitchDef()) >> lexeme[+char_("a-zA-Z0-9")] >> attr(ArgumentValue::ValueContext(ArgumentValue::Unspecified));
 
+				chordNameArgument_ %=
+					attr(0) >> attr(documentModel::PitchDef()) >> lexeme[+char_(ChordDefParser::ALLOWED_CHORD_SYMBOLS_REGEX)] >> attr(ArgumentValue::ValueContext(ArgumentValue::Unspecified));
+
 				cueArgument_ %=
 					attr(0) >> attr(documentModel::PitchDef()) >> "@" >> +char_("a-zA-Z0-9") >> attr(ArgumentValue::ValueContext(ArgumentValue::CueReference));
 
@@ -143,8 +146,8 @@ namespace parser
 					(current_pos_.current_pos >> attr(sourceId_) >> SHEET_CONDUCTOR_SEL__ALL >> attr(SHEET_CONDUCTOR_SEL__ALL) >> "(" >> ")") |
 					(current_pos_.current_pos >> attr(sourceId_) >> SHEET_CONDUCTOR_SEL__WITHTAG >> attr(SHEET_CONDUCTOR_SEL__WITHTAG) >> "(" >> +stringArgument_ >> ")") |
 					(current_pos_.current_pos >> attr(sourceId_) >> SHEET_CONDUCTOR_SEL__DEGREE >> attr(SHEET_CONDUCTOR_SEL__DEGREE) >> "(" >> +degreeArgument_ >> ")") |
-					(current_pos_.current_pos >> attr(sourceId_) >> SHEET_CONDUCTOR_SEL__CHORD >> attr(SHEET_CONDUCTOR_SEL__CHORD) >> "(" >> +stringArgument_ >> ")") |
-					(current_pos_.current_pos >> attr(sourceId_) >> SHEET_CONDUCTOR_SEL__OCTAVE >> attr(SHEET_CONDUCTOR_SEL__OCTAVE) >> "(" >> +numberArgument_ >> ")");
+					(current_pos_.current_pos >> attr(sourceId_) >> SHEET_CONDUCTOR_SEL__OCTAVE >> attr(SHEET_CONDUCTOR_SEL__OCTAVE) >> "(" >> +numberArgument_ >> ")") |
+					(current_pos_.current_pos >> attr(sourceId_) >> SHEET_CONDUCTOR_SEL__CHORD >> attr(SHEET_CONDUCTOR_SEL__CHORD) >> "(" >> +chordNameArgument_ >> ")");
 				operationType_ %=
 					("+=" >> attr(ConductionRule::Declaration::OperationAdd)) |
 					("-=" >> attr(ConductionRule::Declaration::OperationSubstract)) |
@@ -176,6 +179,7 @@ namespace parser
 			qi::rule<Iterator, documentModel::ConductionSelector::ArgumentValue(), ascii::space_type> pitchArgument_;
 			qi::rule<Iterator, documentModel::ConductionSelector::ArgumentValue(), ascii::space_type> degreeArgument_;
 			qi::rule<Iterator, documentModel::ConductionSelector::ArgumentValue(), ascii::space_type> stringArgument_;
+			qi::rule<Iterator, documentModel::ConductionSelector::ArgumentValue(), ascii::space_type> chordNameArgument_;
 			qi::rule<Iterator, documentModel::ConductionSelector::ArgumentValue(), ascii::space_type> cueArgument_;
 			qi::rule<Iterator, documentModel::ConductionRule::Declaration(), ascii::space_type> declaration_;
 			qi::rule<Iterator, documentModel::ConductionRule::Declaration::OperationType(), ascii::space_type> operationType_;
