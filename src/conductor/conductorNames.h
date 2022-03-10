@@ -23,6 +23,7 @@
 #define SHEET_CONDUCTOR_SEL__ALL FM_STRING("all")
 #define SHEET_CONDUCTOR_SEL__DEGREE FM_STRING("degree")
 #define SHEET_CONDUCTOR_SEL__CHORD FM_STRING("chord")
+#define SHEET_CONDUCTOR_SEL__OCTAVE FM_STRING("octave")
 
 // declarartions
 #define SHEET_CONDUCTOR_DEC__VELOCITY FM_STRING("velocity")
