@@ -861,6 +861,8 @@ type: accomp;
 ### Selectors
 * [all](#all)
 * [channel](#channel)
+* [chord](#chord)
+* [degree](#degree)
 * [expression](#expression)
 * [fromBar](#frombar)
 * [fromBeat](#frombeat)
@@ -869,6 +871,7 @@ type: accomp;
 * [instrumentSelector](#instrumentselector)
 * [notOnBeat](#notonbeat)
 * [nthBar](#nthbar)
+* [octave](#octave)
 * [onBar](#onbar)
 * [onBeat](#onbeat)
 * [pitch](#pitch)
@@ -1919,6 +1922,40 @@ Selects an event where its channel is equal to one the given numbers.
  ```
 <br><br><br>
 
+### `chord`
+
+#### parameters
+| name | position | description | type |
+|:--- |:--- |:--- |:--- |
+| chord name | - |  | string+ |
+
+Selects a MIDI event which was created during rendering a specific chord.
+
+ ```
+
+ chord(Cmaj7) {...}
+
+ ```
+<br><br><br>
+
+### `degree`
+
+#### parameters
+| name | position | description | type |
+|:--- |:--- |:--- |:--- |
+| degree | - |  | degree+ |
+
+Selects a MIDI event which was created during rendering a template and its degrees.
+
+     Octaves of a degree will not be considered.
+
+ ```
+
+ degree(I III) {...}
+
+ ```
+<br><br><br>
+
 ### `expression`
 
 #### parameters
@@ -2072,6 +2109,22 @@ Selects an event which is located within in one of the give n-th bar.
  ```
 
  see also: [fromBar](#fromBar), [toBar](#toBar), [onBar](#onBar).
+<br><br><br>
+
+### `octave`
+
+#### parameters
+| name | position | description | type |
+|:--- |:--- |:--- |:--- |
+| an octave number from 0 to 10 | - |  | number+ |
+
+Selects any event where its pitch is in the range of a given octave. The middle c is located in octave 5.
+
+ ```
+
+ octave(4) {...}
+
+ ```
 <br><br><br>
 
 ### `onBar`

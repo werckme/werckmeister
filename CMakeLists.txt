@@ -30,7 +30,7 @@ if (EMSCRIPTEN)
     MESSAGE("using emscripten")
     SET(USE_EMSCRIPTEN 1)
     SET (INSTALL_AUX 0)
-    set(BOOST_VERSION "1.76.0") # fails since 1.77 boost/boost_1_78_0/libs/filesystem/src/path.cpp:1442:75: error: no member named 'exchange' in 'std::locale'
+    set(BOOST_VERSION "1.72.0") # fails since 1.77 boost/boost_1_78_0/libs/filesystem/src/path.cpp:1442:75: error: no member named 'exchange' in 'std::locale'
     SET(CMAKE_INSTALL_PREFIX ${CMAKE_SOURCE_DIR}/werckmeisterjs)
 endif()
 
