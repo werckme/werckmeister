@@ -30,7 +30,7 @@ if (EMSCRIPTEN)
     MESSAGE("using emscripten")
     SET(USE_EMSCRIPTEN 1)
     SET (INSTALL_AUX 0)
-    set(BOOST_VERSION "1.72.0") # fails since 1.77 boost/boost_1_78_0/libs/filesystem/src/path.cpp:1442:75: error: no member named 'exchange' in 'std::locale'
+    set(BOOST_VERSION "1.72.0") # fails with other versions than 1.72.0, since emscripten uses its own CMake script with fixed cpp references. So we need to consider new versions in this script.
     SET(CMAKE_INSTALL_PREFIX ${CMAKE_SOURCE_DIR}/werckmeisterjs)
 endif()
 
