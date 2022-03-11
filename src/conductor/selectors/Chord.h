@@ -8,8 +8,13 @@ namespace conductor
 {
     /// <selector name="chord">
     ///     Selects a MIDI event which was created during rendering a specific chord.
+    /// ```\n
+    /// chord(Cmaj7) {...}\n
     /// ```
-    /// chord(Cmaj7) {...}
+    /// It is also possible to select "chord qualities". For example, if you want to select
+    /// every 7th chord you write:
+    /// ```\n
+    /// chord(X7) {...}\n
     /// ```
     /// </selector>
     /// <param name="chord name" type="string+"></param>

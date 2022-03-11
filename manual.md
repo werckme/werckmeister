@@ -1932,9 +1932,15 @@ Selects an event where its channel is equal to one the given numbers.
 Selects a MIDI event which was created during rendering a specific chord.
 
  ```
-
  chord(Cmaj7) {...}
+ ```
 
+ It is also possible to select "chord qualities". For example, if you want to select
+
+ every 7th chord you write:
+
+ ```
+ chord(X7) {...}
  ```
 <br><br><br>
 
