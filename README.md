@@ -22,6 +22,7 @@ Werckmeister compiles sheet music source code into a MIDI file.
 * sheet file MIDI player
 * vscode extension
 * accompaniment template rendering engine
+* css like [conduction rules](https://werckme.github.io/manual#conduction-rules)
 * Lua mods
 
 ## Motivation
