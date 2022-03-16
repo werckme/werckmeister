@@ -143,3 +143,8 @@ There are several optional arguments:
 
 # Architecture
 ![Werckmeister Architecture](https://raw.githubusercontent.com/SambaGodschynski/werckmeister/main/assets/architecture.png)
+
+# Other Cool Projects
+* https://welle.live/
+* https://asdfg.me/welle/
+
