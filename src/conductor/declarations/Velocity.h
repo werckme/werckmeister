@@ -6,7 +6,7 @@ namespace conductor
 {
     /// <declaration name="velocity">
     ///     Changes the velocity of an event.
-    /// ### example:
+    /// #### example:
     /// ```
     /// onBeat(1) {
     ///   velocity = 127;

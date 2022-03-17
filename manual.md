@@ -1980,12 +1980,12 @@ Selects any event where its position is equal or after a given position.
 
  see also: [toPosition](#toPosition).
 
- ### example, select the events postion >=8 quarters:
+ #### example, select the events postion >=8 quarters:
 
  ```
  fromPosition(8) {...}
  ```
- ### using cue markers instead of quarter numbers
+ #### using cue markers instead of quarter numbers
 
  ```
  c d e f | /cue: myMark/ g a b 'c
@@ -2009,7 +2009,7 @@ Selects any event which belongs to one of the given instruments.
 
  *there is a known [issue](https://github.com/werckme/werckmeister/issues/230) related to instrumentSection*
 
- ### example:
+ #### example:
 
  ```
 
@@ -2099,7 +2099,7 @@ Selects an event which appears on a given beat or a list of beats
 
  see also: [fromBeat](#fromBeat), [toBeat](#toBeat).
 
- ### example, select the events at beat 1 and 3:
+ #### example, select the events at beat 1 and 3:
 
  ```
 
@@ -2193,12 +2193,12 @@ Selects any event where its position is before a given position.
 
  see also: [fromPosition](#fromPosition).
 
- ### example, select the events position < 8 quarters:
+ #### example, select the events position < 8 quarters:
 
  ```
  toPosition(8) {...}
  ```
- ### using cue markers instead of quarter numbers
+ #### using cue markers instead of quarter numbers
 
  ```
  c d e f | /cue: myMark/ g a b 'c
@@ -2220,7 +2220,7 @@ Selects any event where its position is before a given position.
 
 Selects any event which has a tag assigned matching to the given tag.
 
- ### example, select the event with the tag "myTag" assigned:
+ #### example, select the event with the tag "myTag" assigned:
 
  ```
  withTag(myTag) {...}
@@ -2242,7 +2242,7 @@ Selects any event which has a tag assigned matching to the given tag.
 
 Changes the duration of an event.
 
- ### example:
+ #### example:
 
  ```
 
@@ -2271,7 +2271,7 @@ Changes the duration of an event.
 
 Changes the pitch of an event.
 
- ### example:
+ #### example:
 
  ```
 
@@ -2302,7 +2302,7 @@ Changes the time position of an event.
 
  **Since this is an offset value, the set operation(=) has the same effect as the add(+=) or substract(-=) operation.**
 
- ### example:
+ #### example:
 
  ```
 
@@ -2331,7 +2331,7 @@ Changes the time position of an event.
 
 Changes the velocity of an event.
 
- ### example:
+ #### example:
 
  ```
 
