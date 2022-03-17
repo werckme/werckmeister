@@ -8,7 +8,7 @@ namespace conductor
 {
     /// <selector name="withTag">
     ///     Selects any event which has a tag assigned matching to the given tag.
-    /// ## example, select the event with the tag "myTag" assigned:
+    /// ### example, select the event with the tag "myTag" assigned:
     /// ```\n
     /// withTag(myTag) {...}\n
     /// ```\n

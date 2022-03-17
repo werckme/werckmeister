@@ -8,7 +8,7 @@ namespace compiler
     /// <command name="device" where="document">
     ///     Defines a device which can be used when adding instruments (see [instrumentDef](#instrumentDef))
     /// see [instrumentDef](#instrumentDef), [instrument](#instrument)
-    /// ### example
+    /// #### example
     /// define an device, an instrument and assign it to a track.
     /// ```
     /// device: MyDevice midi 0;

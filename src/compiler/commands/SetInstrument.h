@@ -7,7 +7,7 @@ namespace compiler
 {
     /// <command name="instrument" where="track, voice">
     /// Set or change the instrument of a track.
-    /// ### examples
+    /// #### examples
     /// **set an instrument for a track**
     /// ```
     /// [ \n

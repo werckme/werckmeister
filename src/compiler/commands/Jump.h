@@ -7,7 +7,7 @@ namespace compiler
 {
     /// <command name="jump" where="voice">
     ///     Jumps to a previous defined mark See [mark](manual/#mark).
-    /// ### example
+    /// #### example
     /// <![CDATA[
     /// ```language=Werckmeister\n
     /// device: _usePort=0 _setName=MyDevice  _isType=midi;\n

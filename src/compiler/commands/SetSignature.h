@@ -7,7 +7,7 @@ namespace compiler
 {
     /// <command name="signature" where="voice">
     /// Set the time signature of the current track.
-    /// ### example
+    /// #### example
     /// `/signature: 3 4/`
     /// </command>
     /// <param name="upper" position="0">The upper value of the signature.</param>

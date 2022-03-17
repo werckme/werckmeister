@@ -7,7 +7,7 @@ namespace compiler
 {
     /// <command name="pan" where="voice">
     ///     set the pan of the current track
-    /// ### example
+    /// #### example
     /// `/pan: 50/`
     /// </command>
     /// <param name="to" position="0" type="0..100">The pan value. Where 50 means the center</param>

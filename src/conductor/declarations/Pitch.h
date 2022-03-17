@@ -6,7 +6,7 @@ namespace conductor
 {
     /// <declaration name="pitch">
     ///     Changes the pitch of an event.
-    /// ## example:
+    /// ### example:
     /// ```
     /// onBeat(1) {
     ///   pitch = 60;

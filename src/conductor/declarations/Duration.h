@@ -6,7 +6,7 @@ namespace conductor
 {
     /// <declaration name="duration">
     ///     Changes the duration of an event.
-    /// ## example:
+    /// ### example:
     /// ```
     /// onBeat(1) {
     ///   duration += 0.125; -- 1/8 longer

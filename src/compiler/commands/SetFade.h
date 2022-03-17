@@ -7,7 +7,7 @@ namespace compiler
 {
     /// <command name="fade" where="voice">
     ///     Fades the volume over a given duration in quarters.
-    /// ### example
+    /// #### example
     /// ```language=Werckmeister,type=full
     /// device: myDevice midi _usePort=0;\n
     /// instrumentDef: organ  myDevice _ch=0 _pc=16;\n

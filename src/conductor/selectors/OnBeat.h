@@ -7,7 +7,7 @@ namespace conductor
     /// <selector name="onBeat">
     /// Selects an event which appears on a given beat or a list of beats
     /// see also: [fromBeat](#fromBeat), [toBeat](#toBeat).
-    /// ## example, select the events at beat 1 and 3:
+    /// ### example, select the events at beat 1 and 3:
     /// ```
     /// onBeat(1 3) {...}
     /// ```

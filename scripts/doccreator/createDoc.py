@@ -186,6 +186,7 @@ class Printer:
         return str(self)
 
 def printToc(title, subtitle, commands):
+    return
     print(f'## {title}')
     if subtitle != None:
         print(f'### {subtitle}')
@@ -218,23 +219,22 @@ def printCommands(commands):
         printer = Printer(command)
         print(printer)
     print('')
-    print('## Lua Extensions')
-    print('### Modifications')
+    print('## Modifications')
     for command in lua_mods:
         printer = Printer(command)
         print(printer)
     print('')
-    print('### Voicing Strategies')
+    print('## Voicing Strategies')
     for command in lua_voicings:
         printer = Printer(command)
         print(printer)
     print('')
-    print('### Conductor Selectors')
+    print('## Conductor Selectors')
     for command in conductor_selectors:
         printer = Printer(command)
         print(printer)                        
     print('')
-    print('### Conductor Declarations')
+    print('## Conductor Declarations')
     for command in conductor_declaration:
         printer = Printer(command)
         print(printer)        

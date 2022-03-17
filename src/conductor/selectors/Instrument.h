@@ -7,7 +7,7 @@ namespace conductor
     /// <selector name="instrumentSelector">
     /// Selects any event which belongs to one of the given instruments.
     /// *there is a known [issue](https://github.com/werckme/werckmeister/issues/230) related to instrumentSection*
-    /// ## example:
+    /// ### example:
     /// ```
     /// instrument(bass) {...}\n
     /// instrument(bass drums) {...}\n

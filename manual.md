@@ -821,72 +821,10 @@ type: accomp;
 ##### Lua scripts
 
 ## References
-## Commands
-* [cue](#cue)
-* [device](#device)
-* [do](#do)
-* [doOnce](#doonce)
-* [fade](#fade)
-* [fill](#fill)
-* [instrument](#instrument)
-* [instrumentConf](#instrumentconf)
-* [instrumentDef](#instrumentdef)
-* [instrumentSection](#instrumentsection)
-* [jump](#jump)
-* [mark](#mark)
-* [mod](#mod)
-* [modOnce](#modonce)
-* [pan](#pan)
-* [signature](#signature)
-* [tempo](#tempo)
-* [voicingStrategy](#voicingstrategy)
-* [volume](#volume)
 
-## Lua Extensions
-### Modifications
-* [drumRudiments](#drumrudiments)
-* [guitarStroke](#guitarstroke)
-* [legato](#legato)
-* [myArpeggio](#myarpeggio)
-* [staccato](#staccato)
-* [swing](#swing)
 
-## Lua Extensions
-### Voicing Strategies
-* [guitar](#guitar)
-* [simple](#simple)
-* [voicelead](#voicelead)
 
-## Conductor Rules
-### Selectors
-* [all](#all)
-* [channel](#channel)
-* [chord](#chord)
-* [degree](#degree)
-* [expression](#expression)
-* [fromBar](#frombar)
-* [fromBeat](#frombeat)
-* [fromPitch](#frompitch)
-* [fromPosition](#fromposition)
-* [instrumentSelector](#instrumentselector)
-* [notOnBeat](#notonbeat)
-* [nthBar](#nthbar)
-* [octave](#octave)
-* [onBar](#onbar)
-* [onBeat](#onbeat)
-* [pitch](#pitch)
-* [toBar](#tobar)
-* [toBeat](#tobeat)
-* [toPitch](#topitch)
-* [toPosition](#toposition)
-* [withTag](#withtag)
 
-## Conductor Rules
-### Declarations
-* [duration](#duration)
-* [pitch](#pitch)
-* [timeOffset](#timeoffset)
-* [velocity](#velocity)
 
 ## Commands
 ### `cue`
@@ -898,7 +836,7 @@ type: accomp;
 
 adds a cue MIDI meta message to the corresponding midi track
 
- ### examples
+ #### examples
 
  `/cue: cueText/`
 
@@ -924,7 +862,7 @@ Defines a device which can be used when adding instruments (see [instrumentDef](
 
  see [instrumentDef](#instrumentDef), [instrument](#instrument)
 
- ### example
+ #### example
 
  define an device, an instrument and assign it to a track.
 
@@ -962,7 +900,7 @@ Such as [mod](#mod)&nbsp;`do` adds a modification to the track.
 
  `do` replaces the previous modification.
 
- ### example
+ #### example
 
  `/do: arpeggio/`
 <br><br><br>
@@ -976,7 +914,7 @@ Such as [mod](#mod)&nbsp;`do` adds a modification to the track.
 
 Like [do](#do). But with the difference, that the loaded mod will be only executed once for the following event.
 
- ### example
+ #### example
 
  `/doOnce: arpeggio/`
 <br><br><br>
@@ -993,7 +931,7 @@ Like [do](#do). But with the difference, that the loaded mod will be only execut
 
 Fades the volume over a given duration in quarters.
 
- ### example
+ #### example
 
  ```language=Werckmeister,type=full
 
@@ -1089,7 +1027,7 @@ type: accomp;
 
 Set or change the instrument of a track.
 
- ### examples
+ #### examples
 
  **set an instrument for a track**
 
@@ -1140,17 +1078,17 @@ With `instrumentConf` you are able to setup a specific instrument.
 
   * velocity remap
 
- ### examples
+ #### examples
 
- #### mixed settings
+ ##### mixed settings
 
  `instrumentConf: piano volume 100 pan 50;`
 
- #### setup a mod
+ ##### setup a mod
 
  `instrumentConf: piano mod myLuaMod someValue; --the `someValue` argument belongs to "myLuaMod"`
 
- #### setup a velocity remap
+ ##### setup a velocity remap
 
  With `remapVelocity` you are able to change the velocity values behind `ppppp..fffff` for a specific instrument.
 
@@ -1178,7 +1116,7 @@ Adds a new MIDI instrument.
 
  see [instrument](#instrument), [device](#device)
 
- ### example
+ #### example
 
  define an device, an instrument and assign it to a track.
 
@@ -1207,7 +1145,7 @@ Layers arbitrary instruments into one.
 
  see [instrumentDef](#instrumentDef), [instrument](#instrument), [device](#device)
 
- ### example
+ #### example
 
  create 3 instruments and assign them to the section `myNewInstrument`.
 
@@ -1241,7 +1179,7 @@ Layers arbitrary instruments into one.
 
 Jumps to a previous defined mark See [mark](manual/#mark).
 
- ### example
+ #### example
 
  
 
@@ -1270,7 +1208,7 @@ Jumps to a previous defined mark See [mark](manual/#mark).
 
 adds a mark to the voice. Us it in combination with [jump](manual/#jump).
 
- ### examples
+ #### examples
 
  
 
@@ -1301,13 +1239,13 @@ Adds a modification to the track. Every `mod` statement adds a further modificat
 
  If you want to use ony one modification at the time use [do](#do) instead.
 
- ### examples
+ #### examples
 
  `/mod: arpeggio/`
 
  Mods can be external lua scripts, or one of these internal mods:
 
- #### Bend
+ ##### Bend
 
  Performs a pitch bend from or to the pitch of a note. The value range is 0..100 where 50 means the pichbend center.
 
@@ -1317,7 +1255,7 @@ Adds a modification to the track. Every `mod` statement adds a further modificat
 
  ```
 
- #### Arpeggio
+ ##### Arpeggio
 
  Performs an arpeggio over a given chord.
 
@@ -1333,7 +1271,7 @@ Adds a modification to the track. Every `mod` statement adds a further modificat
 
 Like [mod](#mod). But with the difference, that the loaded mod will be only executed once for the following event.
 
- ### examples
+ #### examples
 
  `/modOnce: arpeggio/`
 <br><br><br>
@@ -1347,7 +1285,7 @@ Like [mod](#mod). But with the difference, that the loaded mod will be only exec
 
 set the pan of the current track
 
- ### example
+ #### example
 
  `/pan: 50/`
 <br><br><br>
@@ -1362,7 +1300,7 @@ set the pan of the current track
 
 Set the time signature of the current track.
 
- ### example
+ #### example
 
  `/signature: 3 4/`
 <br><br><br>
@@ -1376,7 +1314,7 @@ Set the time signature of the current track.
 
 `tempo` defines or changes the current tempo.
 
- ### example
+ #### example
 
  `tempo: 120;`
 
@@ -1394,7 +1332,7 @@ Set the time signature of the current track.
 
 Adds a modification to the track.
 
- ### example
+ #### example
 
  `/voicingStrategy: asNotated/`
 
@@ -1414,14 +1352,13 @@ Adds a modification to the track.
 
 set the volume of the current instrument
 
- ### examples
+ #### examples
 
  `/volume: 50/`
 <br><br><br>
 
 
-## Lua Extensions
-### Modifications
+## Modifications
 ### `drumRudiments`
 
 #### parameters
@@ -1778,7 +1715,7 @@ instrument: piano;
 <br><br><br>
 
 
-### Voicing Strategies
+## Voicing Strategies
 ### `guitar`
 
 #### parameters
@@ -1896,7 +1833,7 @@ type: accomp;
 <br><br><br>
 
 
-### Conductor Selectors
+## Conductor Selectors
 ### `all`
 
 Selects all events.
@@ -2043,12 +1980,12 @@ Selects any event where its position is equal or after a given position.
 
  see also: [toPosition](#toPosition).
 
- ## example, select the events postion >=8 quarters:
+ ### example, select the events postion >=8 quarters:
 
  ```
  fromPosition(8) {...}
  ```
- ## using cue markers instead of quarter numbers
+ ### using cue markers instead of quarter numbers
 
  ```
  c d e f | /cue: myMark/ g a b 'c
@@ -2072,7 +2009,7 @@ Selects any event which belongs to one of the given instruments.
 
  *there is a known [issue](https://github.com/werckme/werckmeister/issues/230) related to instrumentSection*
 
- ## example:
+ ### example:
 
  ```
 
@@ -2162,7 +2099,7 @@ Selects an event which appears on a given beat or a list of beats
 
  see also: [fromBeat](#fromBeat), [toBeat](#toBeat).
 
- ## example, select the events at beat 1 and 3:
+ ### example, select the events at beat 1 and 3:
 
  ```
 
@@ -2256,12 +2193,12 @@ Selects any event where its position is before a given position.
 
  see also: [fromPosition](#fromPosition).
 
- ## example, select the events position < 8 quarters:
+ ### example, select the events position < 8 quarters:
 
  ```
  toPosition(8) {...}
  ```
- ## using cue markers instead of quarter numbers
+ ### using cue markers instead of quarter numbers
 
  ```
  c d e f | /cue: myMark/ g a b 'c
@@ -2283,7 +2220,7 @@ Selects any event where its position is before a given position.
 
 Selects any event which has a tag assigned matching to the given tag.
 
- ## example, select the event with the tag "myTag" assigned:
+ ### example, select the event with the tag "myTag" assigned:
 
  ```
  withTag(myTag) {...}
@@ -2294,7 +2231,7 @@ Selects any event which has a tag assigned matching to the given tag.
 <br><br><br>
 
 
-### Conductor Declarations
+## Conductor Declarations
 ### `duration`
 
 #### Value Types
@@ -2305,7 +2242,7 @@ Selects any event which has a tag assigned matching to the given tag.
 
 Changes the duration of an event.
 
- ## example:
+ ### example:
 
  ```
 
@@ -2334,7 +2271,7 @@ Changes the duration of an event.
 
 Changes the pitch of an event.
 
- ## example:
+ ### example:
 
  ```
 
@@ -2365,7 +2302,7 @@ Changes the time position of an event.
 
  **Since this is an offset value, the set operation(=) has the same effect as the add(+=) or substract(-=) operation.**
 
- ## example:
+ ### example:
 
  ```
 
@@ -2394,7 +2331,7 @@ Changes the time position of an event.
 
 Changes the velocity of an event.
 
- ## example:
+ ### example:
 
  ```
 

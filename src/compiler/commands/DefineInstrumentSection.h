@@ -9,7 +9,7 @@ namespace compiler
     /// <command name="instrumentSection" where="document">
     /// Layers arbitrary instruments into one.
     /// see [instrumentDef](#instrumentDef), [instrument](#instrument), [device](#device)
-    /// ### example
+    /// #### example
     /// create 3 instruments and assign them to the section `myNewInstrument`.
     /// <![CDATA[
     /// ```language=Werckmeister\n

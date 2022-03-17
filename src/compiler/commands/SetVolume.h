@@ -7,7 +7,7 @@ namespace compiler
 {
     /// <command name="volume" where="voice">
     ///     set the volume of the current instrument
-    /// ### examples
+    /// #### examples
     /// `/volume: 50/`
     /// </command>
     /// <param name="to" position="0" type="0..100">The volume value.</param>

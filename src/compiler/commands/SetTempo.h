@@ -7,7 +7,7 @@ namespace compiler
 {
     /// <command name="tempo" where="document, track">
     /// `tempo` defines or changes the current tempo.
-    /// ### example
+    /// #### example
     /// `tempo: 120;`
     /// It is also possible to set different tempo values for several tracks:
     /// [see here](/manual#tempo)

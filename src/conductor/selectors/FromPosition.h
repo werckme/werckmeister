@@ -8,11 +8,11 @@ namespace conductor
     /// <selector name="fromPosition">
     ///     Selects any event where its position is equal or after a given position.
     /// see also: [toPosition](#toPosition).
-    /// ## example, select the events postion >=8 quarters:
+    /// ### example, select the events postion >=8 quarters:
     /// ```\n
     /// fromPosition(8) {...}\n
     /// ```\n
-    /// ## using cue markers instead of quarter numbers
+    /// ### using cue markers instead of quarter numbers
     /// ```\n
     /// c d e f | /cue: myMark/ g a b 'c\n
     /// ```\n

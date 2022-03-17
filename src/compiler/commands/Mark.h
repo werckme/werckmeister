@@ -7,7 +7,7 @@ namespace compiler
 {
     /// <command name="mark" where="voice">
     ///     adds a mark to the voice. Us it in combination with [jump](manual/#jump).
-    /// ### examples
+    /// #### examples
     /// <![CDATA[
     /// ```language=Werckmeister\n
     /// device: _usePort=0 _setName=MyDevice  _isType=midi;\n

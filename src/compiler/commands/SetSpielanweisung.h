@@ -11,7 +11,7 @@ namespace compiler
     /// Such as [mod](#mod)&nbsp;`do` adds a modification to the track.
     /// The difference is: every `mod` command adds a further modification to a voice.
     /// `do` replaces the previous modification.
-    /// ### example
+    /// #### example
     /// `/do: arpeggio/`
     /// ]]>
     /// </command>
