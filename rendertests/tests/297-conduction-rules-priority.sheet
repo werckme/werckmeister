@@ -1,0 +1,12 @@
+using "./297-conduction-rules-priority.conductions";
+
+device: MyDevice  midi _usePort=18;
+instrumentDef: piano _ch=0 _onDevice=MyDevice _pc=0;
+
+[
+instrument: piano;
+{
+    \fffff
+    c8& d& e& f& | g& a& b& c& 
+}
+]

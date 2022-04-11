@@ -13,6 +13,8 @@ namespace conductor
         com::midi::Event *noteOff = nullptr;
         com::midi::Event *predecessorNoteOn = nullptr;  // of same channel & pitch
         com::midi::Event *predecessorNoteOff = nullptr; // of same channel & pitch
+        com::midi::Event unmodifiedOriginalNoteOn;
+        com::midi::Event unmodifiedOriginalNoteOff;
         TimeSignature timeSignature = {4, 4};
         com::String instrumentName;
         com::Ticks barNumber = 0;
