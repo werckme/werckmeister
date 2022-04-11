@@ -1,0 +1,9 @@
+instrument(piano) {
+    velocity = 50%;
+    duration = 50%;
+}
+
+instrument(piano) onBeat(1.5 2.5 3.5 4.5) {
+    velocity = 100%;
+    duration = 100%;
+}

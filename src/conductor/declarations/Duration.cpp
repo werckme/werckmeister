@@ -9,14 +9,16 @@ namespace conductor
         com::midi::Event *noteOff = events.noteOff;
         com::midi::Event *predecessorNoteOn = events.predecessorNoteOn;
         com::midi::Event *predecessorNoteOff = events.predecessorNoteOff;
+        const com::midi::Event &originalNoteOn = events.unmodifiedOriginalNoteOn;
+        const com::midi::Event &originalNoteOff = events.unmodifiedOriginalNoteOff;
         if (!noteOff)
         {
             return;
         }
         FGetValue getOriginalValue = [noteOn, noteOff]()
         { return (noteOff->absPosition() - noteOn->absPosition()) / com::PPQ; };
-        FGetValue getPercentBase = [noteOn, noteOff]()
-        { return (noteOff->absPosition() - noteOn->absPosition()) / com::PPQ; };
+        FGetValue getPercentBase = [originalNoteOn, originalNoteOff]()
+        { return (originalNoteOff.absPosition() - originalNoteOn.absPosition()) / com::PPQ; };
         FSetValue setNoteOn = [](com::midi::Event *noteOn, double val) {};
         FSetValue setNoteOff = [noteOn](com::midi::Event *noteOff, double val)
         { noteOff->absPosition(noteOn->absPosition() + val * com::PPQ); };

@@ -120,6 +120,7 @@ namespace conductor
 				EventWithMetaInfo eventWithMetaInfo;
 				eventWithMetaInfo.timeSignature = timeSignature;
 				eventWithMetaInfo.noteOn = &event;
+				eventWithMetaInfo.unmodifiedOriginalNoteOn = event;
 				eventWithMetaInfo.instrumentName = instrumentName;
 				eventWithMetaInfo.barNumber = calculateBarNumber(quarters, timeSignature) + signatureChangeBarOffset;
 				if (selectorImpl->isMatch(selector.arguments, eventWithMetaInfo))
@@ -129,6 +130,7 @@ namespace conductor
 					{
 						auto predecessor = findPredecessorOfSamePitch(it - 1, begin);
 						eventWithMetaInfo.noteOff = noteOff;
+						eventWithMetaInfo.unmodifiedOriginalNoteOff = *noteOff;
 						eventWithMetaInfo.predecessorNoteOn = predecessor.first;
 						eventWithMetaInfo.predecessorNoteOff = predecessor.second;
 					}
@@ -283,6 +285,8 @@ namespace conductor
 						eventAndMetaInfo.noteOff,
 						eventAndMetaInfo.predecessorNoteOn,
 						eventAndMetaInfo.predecessorNoteOff,
+						eventAndMetaInfo.unmodifiedOriginalNoteOn,
+						eventAndMetaInfo.unmodifiedOriginalNoteOff
 					});
 				}
 				catch (com::Exception &ex)
