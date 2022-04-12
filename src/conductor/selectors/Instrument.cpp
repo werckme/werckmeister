@@ -6,7 +6,14 @@ namespace conductor
     {
         for (const auto &argument : arguments)
         {
-            if (argument.name == evm.instrumentName)
+            const auto *eventInfo = _eventInformationServer->find(*evm.noteOn);
+            if (!eventInfo) 
+            {
+                continue;
+            }
+            bool isMatch = eventInfo->instrumentName == argument.name
+                || eventInfo->instrumentSectionName == argument.name;
+            if (isMatch) 
             {
                 return true;
             }

@@ -12,7 +12,7 @@ namespace app
 	struct BoostTimer
 	{
 	public:
-		typedef std::recursive_mutex Lock;
+		typedef std::mutex Lock;
 		typedef std::function<void()> Callback;
 		BoostTimer(const Callback &callback);
 

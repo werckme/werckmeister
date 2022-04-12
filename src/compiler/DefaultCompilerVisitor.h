@@ -13,6 +13,7 @@ namespace compiler
     public:
         virtual void beginCompile() override {}
         virtual void endCompile() override {}
+        virtual void visitInstrument(const com::String &uname, const com::String instrumentSectionName) override {};
         virtual void visit(IContext *context, const documentModel::Event &ev) override {}
         virtual void visit(IContext *context, const com::midi::Event &ev, IContext::TrackId trackId) override {}
         virtual void beginDegreeRendering() override {}

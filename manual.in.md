@@ -819,7 +819,7 @@ type: accomp;
 
 ## Advanced techniques
 
-### Mods
+## Mods
 If you want do write your own modification you need to:
 * create a lua file
 * define parameters
@@ -827,14 +827,14 @@ If you want do write your own modification you need to:
 * include mod file
 * apply mod
 
-> [find some example implementations](https://werckme.github.io/examples?tag=custom-lua-mod)
+[find some example implementations](https://werckme.github.io/examples?tag=custom-lua-mod)
 
-#### create a lua file
+### create a lua file
 Since the name of the lua file is also the name of the modification in werckmeister you can not use any name you want for that file.
 * don't use special characters
 * avoid naming conflicts
 
-#### Define Mod Parameters
+### Define Mod Parameters
 If you want to use parameters in your modification, you need to define a global `parameters` table in your lua file. You can make a parameter optional by adding a default value.
 ```lua
 parameters = {
@@ -847,7 +847,7 @@ parameters = {
 /mod: myMod _myMandatoryParameter=100/
 ```
 
-#### The Perform Function
+### The Perform Function
 In the `perform` function you can implement your modification. Werckmeister expects a table with event informations to be returned from that function. This is the most minimalistic implementation you could write:
 
 ```lua
@@ -858,20 +858,26 @@ end
 
 The perform function has 3 arguments:
 
-#### `events` argument
+### `events` argument
 This table contains all input events.
 ```lua
 {
     {
         -- the duration of the event
-        duration = number, 
+        duration = number,
+
         -- whether event is tied or not
         isTied = boolean,
-         -- offset in quarters, affecting the position, can be used to let events appear earlier or later  
+
+         -- offset in quarters, affecting the position, 
+         -- can be used to let events appear earlier or later  
         offset = number, 
+
         -- a table containing event tags (see Event Tags)
         tags = { tag1, ..., tagN },
-        -- a table containing the events pitches, contains several if event is a chord
+
+        -- a table containing the events pitches, 
+        -- contains several if event is a chord
         pitches = {
             {
                 -- pitch alias if any. (see Pitchmaps)
@@ -882,52 +888,60 @@ This table contains all input events.
                 pitch = number
             },
             ...
-        }
+        },
+
         -- if notes are tied together the tiedDuration gives you the remaining
         -- duration of the current event in that "tie chain"
-        -- for example: "c4~c" the tiedDuration here would be 2 for the first event and 1 for the second
+        -- for example: "c4~c" 
+        -- the tiedDuration here would be 2 for the first event 
+        -- and 1 for the second
         tiedDuration = number, 
+
         -- the total duration of a "tie chain"
         totalTiedDuration = number,
+
         -- the event type
         type = string,
+
         -- the events velocity value in a range from 0 to 1
         velocity = number   
     }
     ...
 }
 ```
-#### `params` argument
+### `params` argument
 Contains the params if any. See [Define Mod Parameters](#define-mod-parameters)
 
-#### `timeinfo` argument
+### `timeinfo` argument
 Contains a table with informations about the current musical time.
 ```lua
 {
     -- the position of the current event in quarters
     quarterPostion = number,
+
     -- the numerator of the current time signature
     signatureNumerator = number,
+
     -- the denominator of the current time signature
     sinatureDenominator = number
 }
 ```
 
-#### return value
+### return value
 Returns a table containing events. See [events](#events-argument)
 
 
-#### include mod file
+### include mod file
 To use your modification you need to include your lua file.
 ```lua
 using "<<path to lua file>>"; -- path can be relative or absolute
 ```
-#### apply mod
+### apply mod
 You have two options to apply a mod: 
 * apply to a voice
 * apply to an instrument
 
-##### apply to a voice
+#### apply to a voice
 Use the mod command with the mod name. The mod name is also the [file](#create-a-lua-file) name of the lua script.
 **syntax**
 ```
@@ -938,7 +952,7 @@ Use the mod command with the mod name. The mod name is also the [file](#create-a
 ]
 ```
 
-##### apply to an instrument
+#### apply to an instrument
 **syntax**
 ```
 instrumentConf <<instrumentName>> mod <<modName>> [mod arguments]
@@ -951,7 +965,7 @@ instrumentConf: myInstrument
     mod myModY _modYParameter=2;
 ```
 
-### Event Tags
+## Event Tags
 You can add additional annotations to an event in werckmeister. These informations can be used in [conduction rules](#conduction-rules) or [modifications](#mods).
 
 **syntax**
@@ -965,14 +979,14 @@ sheet file:
     c d e f | g a b "mytag"@c'
 ```
 
-conduction rules:
+conduction rules file:
 ```
 withTag(myTag) {
     velocity = 127;
 }
 ```
 
-## TBD
+#### TBD
 ##### Chords
 ##### Voicing strategies
 

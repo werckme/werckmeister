@@ -17,6 +17,7 @@ namespace compiler
         EventInformationServer();
         virtual void beginCompile() override; 
         virtual void endCompile() override;
+        virtual void visitInstrument(const com::String& uname, const com::String instrumentSectionName) override;
         virtual void visit(IContext *context, const documentModel::Event &ev) override;
         virtual void visit(IContext *context, const com::midi::Event &ev, IContext::TrackId trackId) override;
         virtual void visitDegree(const documentModel::Event& chord, const documentModel::ChordDef& def, const documentModel::Event& degreeEvent) override;
@@ -30,6 +31,7 @@ namespace compiler
         std::unique_ptr<EventInformationDb> eventDb;
         const documentModel::Event *lastDocumentEvent = nullptr;
         ChordRenderInfoPtr lastChordRenderInfo;
-
+        com::String lastInstrument;
+        com::String lastInstrumentSectionName;
     };
 }

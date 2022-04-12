@@ -18,6 +18,8 @@ namespace conductor
             com::midi::Event *noteOff = nullptr;
             com::midi::Event *predecessorNoteOn = nullptr;
             com::midi::Event *predecessorNoteOff = nullptr;
+            com::midi::Event unmodifiedOriginalNoteOn;
+            com::midi::Event unmodifiedOriginalNoteOff;
         };
         virtual void setDeclarationData(const documentModel::ConductionRule::Declaration &) = 0;
         virtual const documentModel::ConductionRule::Declaration &getDeclarationData() const = 0;

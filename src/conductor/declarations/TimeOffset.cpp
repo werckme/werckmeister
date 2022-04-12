@@ -8,14 +8,16 @@ namespace conductor
     {
         com::midi::Event *noteOn = events.noteOn;
         com::midi::Event *noteOff = events.noteOff;
+        const com::midi::Event &originalNoteOn = events.unmodifiedOriginalNoteOn;
+        const com::midi::Event &originalNoteOff = events.unmodifiedOriginalNoteOff;
         if (!noteOff)
         {
             return;
         }
         FGetValue getOriginalValue = [noteOn]()
         { return 0; };
-        FGetValue getPercentBase = [noteOn, noteOff]()
-        { return (noteOff->absPosition() - noteOn->absPosition()) / com::PPQ; };
+        FGetValue getPercentBase = [originalNoteOn, originalNoteOff]()
+        { return (originalNoteOff.absPosition() - originalNoteOn.absPosition()) / com::PPQ; };
         FSetValue setNoteOn = [](com::midi::Event *noteOn, double val)
         { noteOn->absPosition(std::max(com::Ticks(0), (noteOn->absPosition() + val * com::PPQ))); };
         FSetValue setNoteOff = [noteOn](com::midi::Event *noteOff, double val)

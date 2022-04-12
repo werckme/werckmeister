@@ -30,15 +30,15 @@ namespace compiler
 		EventSet events;
 		CuePositionMap cuePositionMap;
 	private:
-		void insert(const documentModel::Event&, const com::midi::Event&, ChordRenderInfoPtr chordRenderInfo);
-		void update(const EventInformation&, const documentModel::Event&, const com::midi::Event&, ChordRenderInfoPtr chordRenderInfo);
+		void insert(const documentModel::Event&, const com::midi::Event&, ChordRenderInfoPtr chordRenderInfo, const com::String &instrumentName, const com::String& instrumentSectionName);
+		void update(const EventInformation&, const documentModel::Event&, const com::midi::Event&, ChordRenderInfoPtr chordRenderInfo, const com::String& instrumentName, const com::String& instrumentSectionName);
 		void updateCueEventMap(const com::midi::Event&);
 	public:
 		inline EventInformation::DocumentId createDocumentId(const documentModel::Event& ev) const
 		{
 			return std::to_string(ev.sourceId) + "-" + std::to_string(ev.sourcePositionBegin);
 		}
-		void upsert(const documentModel::Event&, const com::midi::Event&, ChordRenderInfoPtr chordRenderInfo);
+		void upsert(const documentModel::Event&, const com::midi::Event&, ChordRenderInfoPtr chordRenderInfo, const com::String& instrumentName, const com::String& instrumentSectionName);
 		const EventInformation* find(const documentModel::Event&);
 		const EventInformation* find(const com::midi::Event&);
 		const EventInformation* find(const EventInformation::Id &id);
@@ -70,7 +70,7 @@ namespace compiler
 		}
 		return &(*infoIt);
 	}		
-	void EventInformationDb::insert(const documentModel::Event& documentEvent, const com::midi::Event& midiEvent, ChordRenderInfoPtr chordRenderInfo)
+	void EventInformationDb::insert(const documentModel::Event& documentEvent, const com::midi::Event& midiEvent, ChordRenderInfoPtr chordRenderInfo, const com::String& instrumentName, const com::String& instrumentSectionName)
 	{
 		EventInformation ei;
 		ei.id = midiEvent.id;
@@ -80,9 +80,11 @@ namespace compiler
 		ei.metaArgs = documentEvent.metaArgs;
 		ei.tags = documentEvent.tags;
 		ei.chordRenderInfo = chordRenderInfo;
+		ei.instrumentName = instrumentName;
+		ei.instrumentSectionName = instrumentSectionName;
 		events.insert(ei);
 	}
-	void EventInformationDb::update(const EventInformation& evinf, const documentModel::Event& documentEvent, const com::midi::Event& midiEvent, ChordRenderInfoPtr chordRenderInfo)
+	void EventInformationDb::update(const EventInformation& evinf, const documentModel::Event& documentEvent, const com::midi::Event& midiEvent, ChordRenderInfoPtr chordRenderInfo, const com::String& instrumentName, const com::String& instrumentSectionName)
 	{
 		auto copy = evinf;
 		copy.eventType = documentEvent.type;
@@ -90,6 +92,8 @@ namespace compiler
 		copy.metaArgs = documentEvent.metaArgs;
 		copy.tags = documentEvent.tags;
 		copy.chordRenderInfo = chordRenderInfo;
+		copy.instrumentName = instrumentName;
+		copy.instrumentSectionName = instrumentSectionName;
 		auto it = events.find(copy.id);
 		events.replace(it, copy);
 	}
@@ -103,15 +107,15 @@ namespace compiler
 		auto name = com::midi::Event::MetaGetStringValue(midiEvent.metaData(), midiEvent.metaDataSize());
 		cuePositionMap[name] = midiEvent.absPosition();
 	}
-	void EventInformationDb::upsert(const documentModel::Event& documentEvent, const com::midi::Event& midiEvent, ChordRenderInfoPtr chordRenderInfo)
+	void EventInformationDb::upsert(const documentModel::Event& documentEvent, const com::midi::Event& midiEvent, ChordRenderInfoPtr chordRenderInfo, const com::String& instrumentName, const com::String& instrumentSectionName)
 	{
 		updateCueEventMap(midiEvent);
 		auto infoIt = events.find(midiEvent.id);
 		if (infoIt == events.end()) 
 		{
-			insert(documentEvent, midiEvent, chordRenderInfo);
+			insert(documentEvent, midiEvent, chordRenderInfo, instrumentName, instrumentSectionName);
 		} else {
-			update(*infoIt, documentEvent, midiEvent, chordRenderInfo);
+			update(*infoIt, documentEvent, midiEvent, chordRenderInfo, instrumentName, instrumentSectionName);
 		}
 	}
 
@@ -177,7 +181,7 @@ namespace compiler
 		{
 			return;
 		}
-		eventDb->upsert(*lastDocumentEvent, ev, lastChordRenderInfo);
+		eventDb->upsert(*lastDocumentEvent, ev, lastChordRenderInfo, lastInstrument, lastInstrumentSectionName);
 	}
 
 	com::Ticks EventInformationServer::findCueEventPosition(const com::String& cueName)
@@ -189,9 +193,16 @@ namespace compiler
 	{
 		return eventDb->find(ev);
 	}
+	
 	const EventInformation* EventInformationServer::find(const com::midi::Event &ev) const
 	{
 		return eventDb->find(ev);
+	}
+
+	void EventInformationServer::visitInstrument(const com::String& uname, const com::String instrumentSectionName)
+	{
+		lastInstrument = uname;
+		lastInstrumentSectionName = instrumentSectionName;
 	}
 
 	IEventInformationServer::Tags EventInformationServer::getTags(const com::midi::Event &ev) const 
