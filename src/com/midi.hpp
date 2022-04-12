@@ -103,11 +103,6 @@ namespace com
 		{
 			Event();
 			unsigned int id;
-			struct ContextInformation
-			{
-				com::Expression expression = com::expression::Default; // TODO: move this to the EventInformationServer
-			};
-			ContextInformation contextInformation;
 			Ticks relDelta(Ticks deltaOffset) const;
 			void absPosition(Ticks ticks) { _deltaTime = ticks; }
 			Ticks absPosition() const { return _deltaTime; }
