@@ -181,9 +181,6 @@ namespace compiler
 
 	void EventInformationServer::visit(IContext* context, const com::midi::Event& ev, IContext::TrackId trackId)
 	{
-		if (ev.eventType() == com::midi::MetaEvent) {
-			int halt = 0;
-		}
 		bool canProcess = !!lastDocumentEvent
 			&& lastDocumentEvent->sourcePositionBegin != documentModel::Event::UndefinedPosition
 			&& lastDocumentEvent->sourceId != documentModel::Event::UndefinedSource;
@@ -191,8 +188,9 @@ namespace compiler
 		{
 			return;
 		}
+		const auto contextMeta = context->voiceMetaData();
 		AdditionalEventInfos additionalEventInfos;
-		additionalEventInfos.expression = context->voiceMetaData()->expression;
+		additionalEventInfos.expression = contextMeta ? contextMeta->expression : com::expression::Undefined;
 		additionalEventInfos.chordRenderInfo = lastChordRenderInfo;
 		additionalEventInfos.instrumentName = &lastInstrument;
 		additionalEventInfos.instrumentSectionName = &lastInstrumentSectionName;
