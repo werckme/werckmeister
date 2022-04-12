@@ -14,7 +14,12 @@ namespace conductor
             {
                 FM_THROW(compiler::Exception, "unknown expression symbol: " + argument.name);
             }
-            if (argumentExpression == ev.contextInformation.expression)
+            const auto* eventInfo = _eventInformationServer->find(*evm.noteOn);
+            if (!eventInfo) 
+            {
+                return false;
+            }
+            if (argumentExpression == eventInfo->expression)
             {
                 return true;
             }

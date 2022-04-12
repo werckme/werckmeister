@@ -18,6 +18,7 @@ namespace compiler
 		ChordRenderInfoPtr chordRenderInfo; 
 		const com::String *instrumentName; 
 		const com::String *instrumentSectionName;
+		com::Expression expression;
 	};
 	class EventInformationDb
 	{
@@ -88,6 +89,7 @@ namespace compiler
 		ei.chordRenderInfo = additonalEventInfos.chordRenderInfo;
 		ei.instrumentName = *additonalEventInfos.instrumentName;
 		ei.instrumentSectionName = *additonalEventInfos.instrumentSectionName;
+		ei.expression = additonalEventInfos.expression;
 		events.insert(ei);
 	}
 	void EventInformationDb::update(const EventInformation& evinf, const documentModel::Event& documentEvent, const com::midi::Event& midiEvent, const AdditionalEventInfos& additonalEventInfos)
@@ -100,6 +102,7 @@ namespace compiler
 		copy.chordRenderInfo = additonalEventInfos.chordRenderInfo;
 		copy.instrumentName = *additonalEventInfos.instrumentName;
 		copy.instrumentSectionName = *additonalEventInfos.instrumentSectionName;
+		copy.expression = additonalEventInfos.expression;
 		auto it = events.find(copy.id);
 		events.replace(it, copy);
 	}
@@ -188,7 +191,8 @@ namespace compiler
 		{
 			return;
 		}
-		eventDb->upsert(*lastDocumentEvent, ev, { lastChordRenderInfo, &lastInstrument, &lastInstrumentSectionName });
+		auto expression = context->voiceMetaData()->expression;
+		eventDb->upsert(*lastDocumentEvent, ev, { lastChordRenderInfo, &lastInstrument, &lastInstrumentSectionName, expression });
 	}
 
 	com::Ticks EventInformationServer::findCueEventPosition(const com::String& cueName)

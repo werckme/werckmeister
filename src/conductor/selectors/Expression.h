@@ -2,6 +2,7 @@
 
 #include "ISelector.h"
 #include <compiler/IDefinitionsServer.h>
+#include <compiler/EventInformationServer.h>
 
 namespace conductor
 {
@@ -16,8 +17,10 @@ namespace conductor
     class Expression : public ISelector
     {
     public:
-        Expression() {}
+        Expression(compiler::IEventInformationServerPtr eventInformationServer) : _eventInformationServer(eventInformationServer) {}
         virtual bool isMatch(const documentModel::ConductionSelector::Arguments &, const EventWithMetaInfo &) const override;
         virtual ~Expression() = default;
+    protected:
+        compiler::IEventInformationServerPtr _eventInformationServer;
     };
 }

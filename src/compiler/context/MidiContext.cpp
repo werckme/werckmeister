@@ -86,18 +86,11 @@ namespace compiler
 											  absolutePosition,
 											  toMidiPitch(pitch),
 											  toMidiVelocity(velocity));
-		applyContextInfo(event);
 		addEvent(event);
 		event = com::midi::Event::NoteOff(instrumentDef->channel,
 										  absolutePosition + duration,
 										  toMidiPitch(pitch));
 		addEvent(event);
-	}
-
-	void MidiContext::applyContextInfo(com::midi::Event &ev) const
-	{
-		auto meta = voiceMetaData();
-		ev.contextInformation.expression = meta->expression;
 	}
 
 	void MidiContext::startEvent(const documentModel::PitchDef &pitch, com::Ticks absolutePosition, double velocity)
@@ -115,7 +108,6 @@ namespace compiler
 											  absolutePosition,
 											  toMidiPitch(pitch),
 											  toMidiVelocity(velocity));
-		applyContextInfo(event);
 		addEvent(event);
 	}
 
