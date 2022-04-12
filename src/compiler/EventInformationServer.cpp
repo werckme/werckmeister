@@ -191,8 +191,12 @@ namespace compiler
 		{
 			return;
 		}
-		auto expression = context->voiceMetaData()->expression;
-		eventDb->upsert(*lastDocumentEvent, ev, { lastChordRenderInfo, &lastInstrument, &lastInstrumentSectionName, expression });
+		AdditionalEventInfos additionalEventInfos;
+		additionalEventInfos.expression = context->voiceMetaData()->expression;
+		additionalEventInfos.chordRenderInfo = lastChordRenderInfo;
+		additionalEventInfos.instrumentName = &lastInstrument;
+		additionalEventInfos.instrumentSectionName = &lastInstrumentSectionName;
+		eventDb->upsert(*lastDocumentEvent, ev, additionalEventInfos);
 	}
 
 	com::Ticks EventInformationServer::findCueEventPosition(const com::String& cueName)
