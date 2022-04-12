@@ -1,0 +1,14 @@
+using "./230-conduction-selector-doesnt-work-with-instrument-sections.conductions";
+
+tempo: 120;
+device: SC1 midi 0;
+instrumentDef: piano SC1 _ch=0 _pc=0;
+instrumentDef: ebass  SC1 _ch=1 _pc=33;
+instrumentSection: _setName=bass ebass piano; 
+
+[
+instrument: bass;
+{
+    c4 d e f~ | & g2. |
+}
+]

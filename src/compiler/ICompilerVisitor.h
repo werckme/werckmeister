@@ -22,6 +22,7 @@ namespace compiler
     public:
         virtual void beginCompile() = 0;
         virtual void endCompile() = 0;
+        virtual void visitInstrument(const com::String &uname, const com::String instrumentSectionName = com::String()) = 0;
         virtual void visit(IContext *context, const documentModel::Event &ev) = 0;
         virtual void visit(IContext *context, const com::midi::Event &ev, IContext::TrackId trackId) = 0;
         virtual void beginDegreeRendering() = 0;
