@@ -2,7 +2,7 @@ using "./chords/default.chords";
 using "42_myConductions_instrument.conductions";
 
 tempo: 120;
-device: SC1 midi 3;
+device: SC1 midi 0;
 instrumentDef: rhythm SC1 _ch=2 _pc=0;
 
 [

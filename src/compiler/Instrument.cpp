@@ -2,6 +2,7 @@
 #include <compiler/context/MidiContext.h>
 #include <compiler/SheetEventRenderer.h>
 #include <compiler/modification/AModification.h>
+#include <compiler/ICompilerVisitor.h>
 
 namespace compiler
 {
@@ -15,10 +16,12 @@ namespace compiler
 		midiContext->setInstrument(getThis<MidiInstrumentDef>());
 	}
 
-	void MidiInstrumentDef::renderEvents(SheetEventRenderer *renderer, std::list<documentModel::Event> &events)
+	void MidiInstrumentDef::renderEvents(SheetEventRenderer *renderer, std::list<documentModel::Event> &events, const com::String& parentInsrtumentSectionName)
 	{
 		auto ctx_ = renderer->context();
 		auto meta = ctx_->voiceMetaData();
+		auto visitor = ctx_->compilerVisitor();
+		visitor->visitInstrument(uname, parentInsrtumentSectionName);
 		for (auto mod : modifications)
 		{
 			mod->perform(ctx_, events);
@@ -66,12 +69,14 @@ namespace compiler
 		midiContext->setInstrument(getThis<InstrumentSectionDef>());
 	}
 
-	void InstrumentSectionDef::renderEvents(SheetEventRenderer *renderer, std::list<documentModel::Event> &events)
+	void InstrumentSectionDef::renderEvents(SheetEventRenderer *renderer, std::list<documentModel::Event> &events, const com::String &parentInsrtumentSectionName)
 	{
 		auto ctx_ = renderer->context();
+		auto visitor = ctx_->compilerVisitor();
 		VoiceMetaData voiceMetaCopy = *ctx_->voiceMetaData();
 		for (const auto &uname : instrumentNames)
 		{
+			visitor->visitInstrument(uname, this->uname);
 			auto instrumentDef = ctx_->getInstrumentDef(uname);
 			if (!instrumentDef)
 			{
@@ -81,7 +86,7 @@ namespace compiler
 			std::list<documentModel::Event> copy = events; // we like it original here
 			auto contextMetaPtr = ctx_->voiceMetaData();
 			*contextMetaPtr = voiceMetaCopy;
-			instrumentDef->renderEvents(renderer, copy);
+			instrumentDef->renderEvents(renderer, copy, this->uname);
 		}
 		_currentInstrument.reset();
 	}

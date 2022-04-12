@@ -34,6 +34,8 @@ namespace compiler
         Id id;
         DocumentId documentId;
         com::String stringValue;
+        com::String instrumentName;
+        com::String instrumentSectionName;
         inline bool operator<(const EventInformation& ev) const { return id < ev.id; }
     };
 

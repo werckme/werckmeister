@@ -44,6 +44,10 @@ namespace compiler
         {
             visitor1->endDegreeRendering();
         }
+        virtual void visitInstrument(const com::String &uname, const com::String instrumentSectionName) override 
+        {
+            visitor1->visitInstrument(uname, instrumentSectionName);
+        }
         TVisitor1Ptr visitor1 = nullptr;
     };
 
@@ -96,7 +100,12 @@ namespace compiler
         {
             visitor1->endDegreeRendering();
             TBase::endDegreeRendering();
-        }    
+        }
+        virtual void visitInstrument(const com::String &uname, const com::String instrumentSectionName) override 
+        {
+            visitor1->visitInstrument(uname, instrumentSectionName);
+            TBase::visitInstrument(uname, instrumentSectionName);
+        }        
         TVisitor1Ptr visitor1 = nullptr;
     };
     

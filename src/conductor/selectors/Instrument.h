@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ISelector.h"
+#include <compiler/IEventInformationServer.h>
 
 namespace conductor
 {
@@ -17,7 +18,12 @@ namespace conductor
     class Instrument : public ISelector
     {
     public:
+        Instrument(compiler::IEventInformationServerPtr eventInformationServer) : _eventInformationServer(eventInformationServer)
+        {
+        }
         virtual bool isMatch(const documentModel::ConductionSelector::Arguments &, const EventWithMetaInfo &) const override;
         virtual ~Instrument() = default;
+    private:
+        compiler::IEventInformationServerPtr _eventInformationServer;
     };
 }

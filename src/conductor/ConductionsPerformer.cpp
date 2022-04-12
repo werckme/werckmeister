@@ -98,14 +98,6 @@ namespace conductor
 					com::Ticks newBarNumber = calculateBarNumber(quarters, timeSignature);
 					signatureChangeBarOffset += oldBarNumber - newBarNumber;
 				}
-				if (it->eventType() == com::midi::MetaEvent && it->metaEventType() == com::midi::CustomMetaEvent)
-				{
-					auto customEvent = com::midi::Event::MetaGetCustomData(it->metaData(), it->metaDataSize());
-					if (customEvent.type == com::midi::CustomMetaData::SetInstrument)
-					{
-						instrumentName = com::String(customEvent.data.begin(), customEvent.data.end());
-					}
-				}
 				com::midi::Event &event = *it;
 				if (!isEventOfInterest(event))
 				{
@@ -121,7 +113,6 @@ namespace conductor
 				eventWithMetaInfo.timeSignature = timeSignature;
 				eventWithMetaInfo.noteOn = &event;
 				eventWithMetaInfo.unmodifiedOriginalNoteOn = event;
-				eventWithMetaInfo.instrumentName = instrumentName;
 				eventWithMetaInfo.barNumber = calculateBarNumber(quarters, timeSignature) + signatureChangeBarOffset;
 				if (selectorImpl->isMatch(selector.arguments, eventWithMetaInfo))
 				{

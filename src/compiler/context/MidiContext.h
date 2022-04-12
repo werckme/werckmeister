@@ -71,6 +71,7 @@ namespace compiler
 		virtual IContextPtr createNewContext() const;
 		virtual void clear() override;
 		static int toMidiPitch(const documentModel::PitchDef &pitch);
+		virtual compiler::ICompilerVisitorPtr compilerVisitor() const override { return _compilerVisitor; }
 
 	protected:
 		void applyContextInfo(com::midi::Event &ev) const;

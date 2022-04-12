@@ -18,6 +18,7 @@
 
 namespace compiler
 {
+	class ICompilerVisitor;
 	class IContext
 	{
 	public:
@@ -113,6 +114,10 @@ namespace compiler
 		 * sends note off to all pitches where its tie process wasn't completed yet
 		 */
 		virtual void stopAllPendingTies() = 0;
+		/**
+		 * retunrs the current compiler visitor
+		 */
+		virtual std::shared_ptr<ICompilerVisitor> compilerVisitor() const = 0;
 	};
 	typedef std::shared_ptr<IContext> IContextPtr;
 
