@@ -74,7 +74,6 @@ namespace compiler
 		virtual compiler::ICompilerVisitorPtr compilerVisitor() const override { return _compilerVisitor; }
 
 	protected:
-		void applyContextInfo(com::midi::Event &ev) const;
 		virtual Base::VoiceMetaDataPtr createVoiceMetaData() override;
 		virtual Base::TrackMetaDataPtr createTrackMetaData() override;
 		void addInstrumentDef(const com::String &uname, AInstrumentDefPtr def);

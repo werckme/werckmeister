@@ -36,6 +36,7 @@ namespace compiler
         com::String stringValue;
         com::String instrumentName;
         com::String instrumentSectionName;
+        com::Expression expression;
         inline bool operator<(const EventInformation& ev) const { return id < ev.id; }
     };
 
