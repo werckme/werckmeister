@@ -21,6 +21,40 @@
 
 namespace com
 {
+	namespace 
+	{
+		typedef std::unordered_map<com::String, compiler::AModificationPtr> ModCache;
+		typedef std::unordered_map<com::String, compiler::AModificationPtr> VoicingStrategyCache;
+		ModCache _modCache;
+		VoicingStrategyCache _voicingStrategyCache;
+
+		template<class TMap>
+		typename TMap::mapped_type _find(TMap &map, const com::String& uniqueCallerId)
+		{
+			auto it = map.find(uniqueCallerId);
+			if (it == map.end())
+			{
+				return nullptr;
+			}
+			return it->second;
+		}
+
+		template<class TMap>
+		void _register(TMap &map, const com::String& uniqueCallerId, typename TMap::mapped_type value)
+		{
+			map.insert(std::make_pair(uniqueCallerId, value));
+		}
+
+		compiler::AModificationPtr _findMod(const com::String& uniqueCallerId)
+		{
+			return _find(_modCache, uniqueCallerId);
+		}
+
+		void _registerMod(const com::String& uniqueCallerId, compiler::AModificationPtr mod)
+		{
+			return _register(_modCache, uniqueCallerId, mod);
+		}
+	}
 
 	Werckmeister &getWerckmeister()
 	{
@@ -78,7 +112,7 @@ namespace com
 		return getVoicingStrategy(SHEET_VOICING_STRATEGY_DEFAULT);
 	}
 
-	compiler::VoicingStrategyPtr Werckmeister::getVoicingStrategy(const com::String &name)
+	compiler::VoicingStrategyPtr Werckmeister::getVoicingStrategy(const com::String &name, const String& uniqueCallerId)
 	{
 		compiler::VoicingStrategyPtr result;
 		const Path *scriptPath = findScriptPathByName(name);
@@ -106,12 +140,12 @@ namespace com
 		return result;
 	}
 
-	compiler::AModificationPtr Werckmeister::getSpielanweisung(const com::String &name)
+	compiler::AModificationPtr Werckmeister::getSpielanweisung(const com::String &name, const String& uniqueCallerId)
 	{
 		return getModification(name);
 	}
 
-	compiler::AModificationPtr Werckmeister::getModification(const com::String &name)
+	compiler::AModificationPtr Werckmeister::getModification(const com::String &name, const String& uniqueCallerId)
 	{
 		const Path *scriptPath = findScriptPathByName(name);
 		if (scriptPath != nullptr)
@@ -134,6 +168,12 @@ namespace com
 
 		auto result = solve<compiler::AModification>(name);
 		return result;
+	}
+
+	void Werckmeister::reset()
+	{
+		_modCache.clear();
+		_voicingStrategyCache.clear();
 	}
 
 	void Werckmeister::registerLuaScript(const Path &path)
