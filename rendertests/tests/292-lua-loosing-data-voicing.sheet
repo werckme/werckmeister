@@ -1,0 +1,24 @@
+
+using "./voicings/292voicingstrategy.lua";
+using "./chords/default.chords";
+
+device: MyDevice  midi _usePort=0;
+instrumentDef: piano _ch=0 _onDevice=MyDevice _pc=0;
+
+[
+type: template;
+name: p;
+instrument: piano;
+{
+    /voicingStrategy: 292voicingstrategy/
+    I III V I' :|
+}
+]
+
+[
+type: accomp;
+{
+    /template: p/
+   C | C | C | C | 
+}
+]
