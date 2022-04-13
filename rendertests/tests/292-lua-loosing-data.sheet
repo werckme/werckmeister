@@ -1,14 +1,50 @@
 
 using "./292lualoosingdata.lua";
+using "./chords/default.chords";
 
 device: MyDevice  midi _usePort=0;
 instrumentDef: piano _ch=0 _onDevice=MyDevice _pc=0;
+instrumentConf: piano mod 292lualoosingdata;
+instrumentDef: piano2 _ch=1 _onDevice=MyDevice _pc=0;
+instrumentDef: piano3 _ch=2 _onDevice=MyDevice _pc=0;
 
 [
 instrument: piano;
 {
+    r1 |: c4 d e f :|
+}
+]
+
+[
+instrument: piano2;
+{
     /mod: 292lualoosingdata/
-    c d e f :|
-    
+    r1 |: c,4 d, e, f, :|
+}
+]
+
+[
+instrument: piano2;
+{
+    /mod: 292lualoosingdata/
+    r1 |: c,,4 d,, e,, f,, :|
+}
+]
+
+[
+type: template;
+name: p;
+instrument: piano3;
+{
+    /mod: 292lualoosingdata/
+    I III V I' |
+}
+]
+
+[
+type: accomp;
+{
+    /template: p/
+    r | C | C | 
 }
 ]

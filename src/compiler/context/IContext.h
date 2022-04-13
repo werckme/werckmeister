@@ -22,6 +22,13 @@ namespace compiler
 	class IContext
 	{
 	public:
+		enum
+		{
+			INVALID_TRACK_ID = -1,
+			INVALID_VOICE_ID = -1,
+			MAX_VOLUME = 100,
+			MAX_PAN = 100
+		};
 		typedef int Id;
 		typedef Id TrackId;
 		typedef Id VoiceId;

@@ -43,7 +43,16 @@ namespace compiler
     AModificationPtr AddMod::loadMod(IContextPtr ctx, const com::String& modName)
     {
         auto& wm = com::getWerckmeister();
-        auto theModification = wm.getModification(modName);
+        auto voiceId = ctx->voice();
+        AModificationPtr theModification = nullptr;
+        if (voiceId != compiler::IContext::INVALID_VOICE_ID) {
+            auto uniqueCallerId = std::to_string(voiceId);
+            theModification = wm.getModification(modName, uniqueCallerId);
+        }
+        else
+        {
+            theModification = wm.getModification(modName);
+        }
         theModification->setArguments(modArgs);
         return theModification;
     }
