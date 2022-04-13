@@ -1,0 +1,14 @@
+
+using "./292lualoosingdata.lua";
+
+device: MyDevice  midi _usePort=0;
+instrumentDef: piano _ch=0 _onDevice=MyDevice _pc=0;
+
+[
+instrument: piano;
+{
+    /mod: 292lualoosingdata/
+    c d e f :|
+    
+}
+]
