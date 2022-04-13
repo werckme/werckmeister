@@ -33,16 +33,28 @@ namespace com
 		midi::MidiPtr createMidi();
 		virtual ~Werckmeister();
 		const char *version() const;
-		compiler::AModificationPtr getSpielanweisung(const String &name);
-		compiler::AModificationPtr getModification(const String &name);
+		/**
+		* @param uniqueCallerId, when called with the same id it returns the same mod
+		*/
+		compiler::AModificationPtr getSpielanweisung(const String &name, const String &uniqueCallerId);
+		compiler::AModificationPtr getSpielanweisung(const String& name);
+		/**
+		* @param uniqueCallerId, when called with the same id it returns the same mod
+		*/
+		compiler::AModificationPtr getModification(const String &name, const String& uniqueCallerId);
+		compiler::AModificationPtr getModification(const String& name);
 		compiler::VoicingStrategyPtr getDefaultVoicingStrategy();
-		compiler::VoicingStrategyPtr getVoicingStrategy(const String &name);
+		/**
+		* @param uniqueCallerId, when called with the same id it returns the same vocing strategy
+		*/
+		compiler::VoicingStrategyPtr getVoicingStrategy(const String &name, const String& uniqueCallerId);
+		compiler::VoicingStrategyPtr getVoicingStrategy(const String& name);
 		void registerLuaScript(const Path &path);
 		const Paths &searchPaths() const;
 		void addSearchPath(const Path &path);
 		const CreateContextFunction &createContextHandler() const;
 		void createContextHandler(const CreateContextFunction &createContextHandler);
-
+		void clearCache();
 	private:
 		typedef std::unordered_map<com::String, Path> ScriptMap;
 		typedef std::function<std::shared_ptr<com::IRegisterable>()> CreateIRegFunction;
