@@ -863,6 +863,10 @@ This table contains all input events.
 ```lua
 {
     {
+        -- a track id
+        trackId = number,
+        -- a voice id
+        voiceId = number,
         -- the duration of the event
         duration = number,
 

@@ -31,6 +31,8 @@ namespace compiler
         virtual ParametersByNames &getParameters() { return this->parameters; }
         virtual void execute(IContextPtr);
         virtual void setArguments(const Arguments &args) override;
-        AModificationPtr theModification;
+    protected:
+        Arguments modArgs;
+        AModificationPtr loadMod(IContextPtr ctx, const com::String& modName);
     };
 }

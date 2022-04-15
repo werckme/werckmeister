@@ -21,6 +21,50 @@
 
 namespace com
 {
+	namespace 
+	{
+		typedef std::unordered_map<com::String, compiler::AModificationPtr> ModCache;
+		typedef std::unordered_map<com::String, compiler::VoicingStrategyPtr> VoicingStrategyCache;
+		ModCache _modCache;
+		VoicingStrategyCache _voicingStrategyCache;
+
+		template<class TMap>
+		typename TMap::mapped_type _find(TMap &map, const com::String& key)
+		{
+			auto it = map.find(key);
+			if (it == map.end())
+			{
+				return nullptr;
+			}
+			return it->second;
+		}
+
+		template<class TMap>
+		void _register(TMap &map, const com::String& key, typename TMap::mapped_type value)
+		{
+			map.insert(std::make_pair(key, value));
+		}
+
+		compiler::AModificationPtr _findMod(const com::String& key)
+		{
+			return _find(_modCache, key);
+		}
+
+		void _registerMod(const com::String& key, compiler::AModificationPtr mod)
+		{
+			return _register(_modCache, key, mod);
+		}
+
+		compiler::VoicingStrategyPtr _findStrategy(const com::String& key)
+		{
+			return _find(_voicingStrategyCache, key);
+		}
+
+		void _registerStrategy(const com::String& key, compiler::VoicingStrategyPtr strategy)
+		{
+			return _register(_voicingStrategyCache, key, strategy);
+		}
+	}
 
 	Werckmeister &getWerckmeister()
 	{
@@ -78,6 +122,23 @@ namespace com
 		return getVoicingStrategy(SHEET_VOICING_STRATEGY_DEFAULT);
 	}
 
+	compiler::VoicingStrategyPtr Werckmeister::getVoicingStrategy(const com::String& name, const String& uniqueCallerId)
+	{
+		if (uniqueCallerId.empty())
+		{
+			return getVoicingStrategy(name);
+		}
+		auto cacheKey = name + uniqueCallerId;
+		auto strategy = _findStrategy(cacheKey);
+		if (strategy != nullptr)
+		{
+			return strategy;
+		}
+		strategy = getVoicingStrategy(name);
+		_registerStrategy(cacheKey, strategy);
+		return strategy;
+	}
+
 	compiler::VoicingStrategyPtr Werckmeister::getVoicingStrategy(const com::String &name)
 	{
 		compiler::VoicingStrategyPtr result;
@@ -111,6 +172,28 @@ namespace com
 		return getModification(name);
 	}
 
+	compiler::AModificationPtr Werckmeister::getSpielanweisung(const com::String& name, const String& uniqueCallerId)
+	{
+		return getModification(name, uniqueCallerId);
+	}
+
+	compiler::AModificationPtr Werckmeister::getModification(const com::String& name, const String& uniqueCallerId)
+	{
+		if (uniqueCallerId.empty())
+		{
+			return getModification(name);
+		}
+		auto cacheKey = name + uniqueCallerId;
+		auto mod = _findMod(cacheKey);
+		if (mod != nullptr)
+		{
+			return mod;
+		}
+		mod = getModification(name);
+		_registerMod(cacheKey, mod);
+		return mod;
+	}
+
 	compiler::AModificationPtr Werckmeister::getModification(const com::String &name)
 	{
 		const Path *scriptPath = findScriptPathByName(name);
@@ -134,6 +217,12 @@ namespace com
 
 		auto result = solve<compiler::AModification>(name);
 		return result;
+	}
+
+	void Werckmeister::clearCache()
+	{
+		_modCache.clear();
+		_voicingStrategyCache.clear();
 	}
 
 	void Werckmeister::registerLuaScript(const Path &path)

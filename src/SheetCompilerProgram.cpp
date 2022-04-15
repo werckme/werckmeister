@@ -72,6 +72,7 @@ void SheetCompilerProgram::compile()
             _midiFile->crop(beginTicks, endTicks);
         }
         _midiFile->seal();
+        com::getWerckmeister().clearCache();
     }
     catch (com::Exception &ex)
     {

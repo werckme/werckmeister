@@ -24,13 +24,6 @@ namespace compiler
 	public:
 		AContext(compiler::IDefinitionsServerPtr definitionsServer);
 		static const double PitchbendMiddle;
-		enum
-		{
-			INVALID_TRACK_ID = -1,
-			INVALID_VOICE_ID = -1,
-			MAX_VOLUME = 100,
-			MAX_PAN = 100
-		};
 		/**
 		 * for rounding errors e.g. for triplets
 		 */

@@ -25,6 +25,8 @@ static const char *LUA_EVENT_PITCH_PROPETRY_OCTAVE = "octave";
 static const char *LUA_EVENT_PITCH_PROPETRY_ALIAS = "alias";
 static const char *LUA_EVENT_PROPETRY_TOAL_TIED_DURATION = "totalTiedDuration";
 static const char *LUA_EVENT_PROPERTY_TIED_DURATION = "tiedDuration";
+static const char* LUA_EVENT_PROPERTY_TRACK_ID = "trackId";
+static const char* LUA_EVENT_PROPERTY_VOICE_ID = "voiceId";
 
 namespace compiler
 {
@@ -71,6 +73,12 @@ namespace compiler
         lua::setTableValue(L, LUA_EVENT_PROPETRY_TOAL_TIED_DURATION, top, event->tiedDurationTotal / com::PPQ);
         // tiedDuration
         lua::setTableValue(L, LUA_EVENT_PROPERTY_TIED_DURATION, top, event->tiedDuration / com::PPQ);
+        IContext::TrackId trackId = ctx->track();
+        // track id
+        lua::setTableValue(L, LUA_EVENT_PROPERTY_TRACK_ID, top, trackId);
+        IContext::TrackId voiceId = ctx->voice();
+        // voice id
+        lua::setTableValue(L, LUA_EVENT_PROPERTY_VOICE_ID, top, voiceId);
     }
 
     void LuaEvent::pushPitchBendValue(lua_State *L, int top, const documentModel::Event &event)
