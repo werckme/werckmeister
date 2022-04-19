@@ -14,12 +14,14 @@ namespace app
 	public:
 		typedef std::mutex Lock;
 		typedef std::function<void()> Callback;
+		typedef std::shared_ptr<BoostTimer> Ptr;
 		BoostTimer(const Callback &callback);
-
+		static Ptr Create(const Callback &callback);
 		void start(std::chrono::milliseconds millis);
 		void stop();
 		static void io_run();
 		static void io_stop();
+		static void cleanup();
 
 	private:
 		void *handle_ = nullptr;

@@ -2,6 +2,7 @@
 #include <boost/bind.hpp>
 #include <mutex>
 #include <memory>
+#include <list>
 
 namespace app
 {
@@ -11,6 +12,7 @@ namespace app
 		typedef std::lock_guard<BoostTimer::Lock> LockGuard;
 		typedef boost::asio::io_service::work Work;
 		typedef std::shared_ptr<Work> WorkPtr;
+		std::list<BoostTimer::Ptr> _gc;
 		boost::asio::io_context io;
 		WorkPtr work_ = WorkPtr(new Work(io));
 	}
@@ -32,6 +34,7 @@ namespace app
 
 	void BoostTimer::stop()
 	{
+		callback_ = nullptr;
 		LockGuard lock(lock_);
 		t_->cancel();
 		t_->wait();
@@ -41,11 +44,11 @@ namespace app
 	void BoostTimer::onCallback()
 	{
 		LockGuard lock(lock_);
-		if (!t_)
+		if (!t_ || !callback_)
 		{
 			return;
 		}
-		if (!!callback_)
+		else
 		{
 			callback_();
 		}
@@ -62,4 +65,15 @@ namespace app
 		work_.reset();
 	}
 
+	void BoostTimer::cleanup()
+	{
+		_gc.clear();
+	}
+
+	BoostTimer::Ptr BoostTimer::Create(const Callback &callback)
+	{
+		auto result = std::make_shared<BoostTimer>(callback);
+		_gc.push_back(result);
+		return result;
+	}
 }

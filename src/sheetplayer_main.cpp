@@ -91,6 +91,7 @@ int main(int argc, const char **argv)
 #ifdef SHEET_USE_BOOST_TIMER
 	app::BoostTimer::io_stop();
 	boost_asio_.join();
+	app::BoostTimer::cleanup();
 #endif
 	if (_udpSender)
 	{
