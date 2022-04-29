@@ -281,12 +281,16 @@ namespace compiler
 
 	void AContext::setChordTrackTarget()
 	{
-		if (chordTrack_ == INVALID_TRACK_ID)
+		if (chordTrack_ != INVALID_TRACK_ID)
 		{
-			chordTrack_ = createTrack();
-			chordVoice_ = createVoice();
+			setTarget(chordTrack_, chordVoice_);
+			return;
 		}
+		chordTrack_ = createTrack();
+		chordVoice_ = createVoice();
 		setTarget(chordTrack_, chordVoice_);
+		auto trackMeta = trackMetaData();
+		trackMeta->uname = "Accomp";
 	}
 
 	TimeInfo AContext::getTimeInfo() const
