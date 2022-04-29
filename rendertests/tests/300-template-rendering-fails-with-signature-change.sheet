@@ -1,0 +1,45 @@
+using "/chords/default.chords";
+
+tempo: 100;
+device: MyDevice  midi _usePort=0;
+
+instrumentDef:pno 		  _onDevice=MyDevice  _ch=5 _pc=5;
+instrumentConf:pno volume 70;
+-- drums
+instrumentDef:drums 	  _onDevice=MyDevice  _ch=9 _pc=0;
+instrumentConf:drums volume 60;
+------------------------------------------------------------------
+
+[
+type: template;
+name: piano;
+instrument: pno; 
+{
+	\pp
+    I,,8  V,,  I,  V,,  II,  V,,  III, r8  |
+}   
+]
+
+[
+type: template;
+name: drums;
+instrument: drums; 
+{
+    /signature: 2 4/  
+	\pp
+    e,,4 f,,   | b,,2
+}   
+]
+
+[
+type: accomp;
+{
+  /template: piano/
+  D9 |
+  /fill: drums/
+  /signature: 2 4/  
+  F9 |
+  /signature: 4 4/
+  C9 | C9 |
+}
+]
