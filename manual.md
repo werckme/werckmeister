@@ -863,6 +863,10 @@ This table contains all input events.
 ```lua
 {
     {
+        -- a track id
+        trackId = number,
+        -- a voice id
+        voiceId = number,
         -- the duration of the event
         duration = number,
 
@@ -2212,13 +2216,10 @@ Selects an event which does not appear on a given beat or a list of beats
 |:--- |:--- |:--- |:--- |
 | beat | - |  | bar number+ |
 
-Selects an event which is located within in one of the give n-th bar.
- > Heads Up:  The nth bar is not affected by any other selector.
- > Here for example: `fromBar(1) nthBar(2) ...`, the nth bar selector
- will consider its decision counting from bar 0, not from the selected bar 1.
+Selects the events of every nth bar, counting from the first bar.
  ```
 
- nthBar(1 3 5) {...}
+ nthBar(3 5) {...}
 
  ```
 
