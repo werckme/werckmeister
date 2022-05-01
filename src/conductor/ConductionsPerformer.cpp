@@ -85,19 +85,8 @@ namespace conductor
 			auto it = track->events().container().begin();
 			auto end = track->events().container().end();
 			auto begin = track->events().container().begin();
-			TimeSignature timeSignature = {4, 4};
-			com::Ticks signatureChangeBarOffset = 0;
-			com::String instrumentName;
 			for (; it != end; ++it)
 			{
-				if (it->eventType() == com::midi::MetaEvent && it->metaEventType() == com::midi::TimeSignature)
-				{
-					com::Ticks quarters = it->absPosition() / com::PPQ;
-					com::Ticks oldBarNumber = calculateBarNumber(quarters, timeSignature);
-					timeSignature = com::midi::Event::MetaGetSignatureValue(it->metaData(), it->metaDataSize());
-					com::Ticks newBarNumber = calculateBarNumber(quarters, timeSignature);
-					signatureChangeBarOffset += oldBarNumber - newBarNumber;
-				}
 				com::midi::Event &event = *it;
 				if (!isEventOfInterest(event))
 				{
@@ -110,10 +99,8 @@ namespace conductor
 					FM_THROW(compiler::Exception, "selector not found: " + selector.type);
 				}
 				EventWithMetaInfo eventWithMetaInfo;
-				eventWithMetaInfo.timeSignature = timeSignature;
 				eventWithMetaInfo.noteOn = &event;
 				eventWithMetaInfo.unmodifiedOriginalNoteOn = event;
-				eventWithMetaInfo.barNumber = calculateBarNumber(quarters, timeSignature) + signatureChangeBarOffset;
 				if (selectorImpl->isMatch(selector.arguments, eventWithMetaInfo))
 				{
 					auto noteOff = findCorrespondingNoteOffEvent(it, end);
