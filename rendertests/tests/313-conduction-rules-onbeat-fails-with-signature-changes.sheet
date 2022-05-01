@@ -1,0 +1,15 @@
+using "./313-conduction-rules-onbeat-fails-with-signature-changes.conductions";
+
+tempo: 140;
+device: MyDevice  midi _usePort=0;
+instrumentDef:lead    _onDevice=MyDevice  _ch=0 _pc=0;
+
+[
+instrument: lead;
+{
+	\ppp
+	c d c d | 
+    /signature: 2 4/ c d | 
+    /signature: 4 4/ c d c d | 
+}
+]

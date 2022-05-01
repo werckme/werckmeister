@@ -15,8 +15,6 @@ namespace conductor
         com::midi::Event *predecessorNoteOff = nullptr; // of same channel & pitch
         com::midi::Event unmodifiedOriginalNoteOn;
         com::midi::Event unmodifiedOriginalNoteOff;
-        TimeSignature timeSignature = {4, 4};
-        com::Ticks barNumber = 0;
     };
     class ISelector : public com::IRegisterable
     {

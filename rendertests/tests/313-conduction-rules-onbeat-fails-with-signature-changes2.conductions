@@ -1,0 +1,3 @@
+fromBeat(1) toBeat(3) {
+	velocity = 127;
+}
