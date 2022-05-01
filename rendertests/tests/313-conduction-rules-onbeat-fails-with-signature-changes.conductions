@@ -1,0 +1,8 @@
+onBeat(1) {
+	velocity = 127;
+}
+
+
+onBeat(3) {
+	pitch -= 12;
+}

@@ -31,12 +31,14 @@ namespace compiler
         documentModel::Event::Args metaArgs;
         documentModel::Event::Tags tags;
         ChordRenderInfoPtr chordRenderInfo;
-        Id id;
+        Id id = -1;
         DocumentId documentId;
         com::String stringValue;
         com::String instrumentName;
         com::String instrumentSectionName;
         com::Expression expression;
+        com::Ticks barPositionQuarters = -1;
+        int barNumber = -1;
         inline bool operator<(const EventInformation& ev) const { return id < ev.id; }
     };
 
