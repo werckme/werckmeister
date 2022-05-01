@@ -198,8 +198,8 @@ namespace compiler
 		additionalEventInfos.chordRenderInfo = lastChordRenderInfo;
 		additionalEventInfos.instrumentName = &lastInstrument;
 		additionalEventInfos.instrumentSectionName = &lastInstrumentSectionName;
-		additionalEventInfos.barPositionQuarters = contextMeta->barPosition / com::PPQ;
-		additionalEventInfos.barNumber = contextMeta->barCount;
+		additionalEventInfos.barPositionQuarters = contextMeta ? contextMeta->barPosition / com::PPQ : -1;
+		additionalEventInfos.barNumber = contextMeta ? contextMeta->barCount : -1;
 		eventDb->upsert(*lastDocumentEvent, ev, additionalEventInfos);
 	}
 
