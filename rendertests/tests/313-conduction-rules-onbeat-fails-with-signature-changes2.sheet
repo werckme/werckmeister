@@ -1,4 +1,4 @@
-using "./313-conduction-rules-onbeat-fails-with-signature-changes.conductions";
+using "./313-conduction-rules-onbeat-fails-with-signature-changes2.conductions";
 
 tempo: 140;
 device: MyDevice  midi _usePort=0;
