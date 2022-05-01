@@ -64,10 +64,6 @@ namespace conductor
 			return std::make_pair(nullptr, nullptr);
 		}
 
-		inline com::Ticks calculateBarNumber(com::Ticks quarters, TimeSignature signature)
-		{
-			return (quarters * signature.second) / (4.0 * signature.first);
-		}
 	}
 
 	void ConductionsPerformer::applyConductions()
