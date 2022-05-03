@@ -1,0 +1,86 @@
+[
+type: template;
+name: drums;
+instrument: drums;
+{
+    \pp
+    h16& && && && && && && && |
+    h16& && && && && && && && |
+    h16& && && && && && && && |
+    \pppp
+    h'4  h, & &  |
+}
+{
+    \p
+    x16&&&&&&&&&&&&&&& |
+    x16&&&&&&&&&&&&&&& |
+    x16&&&&&&&&&&&&&&& |
+    ^1 "4x sixStrokeRoll"@<x x'>1 :|
+    ^2 !ff "4x paradiddle"@<x u x' v x w>1 :|
+}
+{
+    o8. o8 r2 o8.  |
+}
+]
+
+[
+type: template;
+name: drums1a;
+instrument: drums;
+{
+    \pp
+    h16& && && && && && && && |
+    h16& && && && && && && && |
+    h16& && && && && && && && |
+    \pppp
+    h'4  h, & &  |
+}
+{
+    \p
+    x16&&&&&&&&&&&&&&& |
+    x16&&&&&&&&&&&&&&& |
+    x16&&&&&&&&&&&&&&& |
+    ^1 "4x sixStrokeRoll"@<x x'>1 :|
+    ^2 !ffff "4x paradiddle"@<x u x' v x w>1 :|
+}
+{
+    o8. o8 r2 o8.  |
+}
+]
+
+[
+type: template;
+name: drums2;
+instrument: drums;
+{
+    \pp
+     h16& && && && && && && && |
+}
+{
+    r1 | r1 | r1 | 
+    r2 "2x fiveStrokeRoll"@<x x'>2 |
+}
+{
+    o4.      o8 o4.           o8    |
+}
+]
+
+[
+type: template;
+name: drums2a;
+instrument: drums;
+{
+    \ppp
+    (h x h)8 (h x h)8 (<x h> r h)8 (h x h)8  (h x h)8 (h x h)8 (<x h> r h)8 (h x h)8  |
+    (h x h)8 (h x h)8 (<x h> r h)8 (h x h)8  (h x h)8 (h x h)8 (<x h> r h)8 (h x h)8  |
+    (h x h)8 (h x h)8 (<x h> r h)8 (h x h)8  (h x h)8 (h x h)8 (<x h> r h)8 (h x h)8  |
+    (h x h)8 (h x h)8 (<x h> r h)8 (h x h)8  !pppp h'2|
+}
+{
+    r1 | r1 | r1 | 
+    r2 !fff "2x paradiddlediddle"@<x v u x w x>2 |
+}
+{
+    o4.      o8 o4.           o8    |
+}
+]

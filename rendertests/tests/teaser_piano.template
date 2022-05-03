@@ -1,0 +1,9 @@
+[
+type: template;
+name: piano;
+instrument: piano;
+{
+    \pp
+    <I,, VII, III>2. r8 & | <I, III, VII,>1
+} 
+]

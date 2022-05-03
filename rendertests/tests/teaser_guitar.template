@@ -1,0 +1,23 @@
+[
+type: template;
+name: guitar;
+instrument: mutedGuitar;
+{
+    \f
+    I16 & r8 I16 r r4 \pI16&&&& r16 | r1 |
+} 
+]
+
+
+[
+type: template;
+name: guitar2;
+instrument: mutedGuitar;
+{
+    \f
+    r8 I r I   r I r I  |
+    ^1 r16r I& rr I&   r16r I& rr I&  :|
+    ^2 \ff
+    r16r I& I& rr I& rr I&& r  :|
+} 
+]
