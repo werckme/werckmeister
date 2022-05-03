@@ -1,0 +1,24 @@
+--Drums-------------------------
+--High Hat
+-- emphasize the off beat
+instrument(drums) pitch(h) onBeat(1 2 3 4) {
+    velocity = 70;
+}
+-- all other high hat strokes are 20 velocity units less than its predecessor
+instrument(drums) pitch(h) {
+    velocity = & - 5;
+}
+
+instrument(syn) {
+    duration = 20%;
+}
+
+instrument(synL) {
+    timeOffset = 0.09;
+}
+
+instrument(synR) {
+    timeOffset = 0.28;
+}
+
+

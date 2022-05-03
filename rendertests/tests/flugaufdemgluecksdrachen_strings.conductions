@@ -1,0 +1,38 @@
+instrument(Vl1 Vla Vcl) {
+    duration = 30%;
+}
+
+instrument(Vl2 pno) fromPosition(172) {
+  duration = 30%;
+}
+
+instrument(Vcl Vla) fromPosition(@partA) toPosition(@partB) onBeat(1.5 3 4.5) {
+  velocity = 80;
+}
+
+instrument(Vcl Vla) fromPosition(@partA) toPosition(@partB) nthBar(2) onBeat(1 2.5 4) {
+    velocity = 80;
+}
+
+instrument(Vcl Vla) fromPosition(@partA) toPosition(@partB) nthBar(2) onBeat(1.5 3 4.5) {
+  velocity = 64;
+}
+
+
+
+instrument(Vcl Vla) fromPosition(@partA2) toPosition(@fine) onBeat(1.5 3 4.5) {
+    velocity = 80;
+}
+
+instrument(Vcl Vla) fromPosition(@partA2) toPosition(@fine) nthBar(2) onBeat(1 2.5 4) {
+  velocity = 80;
+}
+
+instrument(Vcl Vla) fromPosition(@partA2) toPosition(@fine) nthBar(2) onBeat(1.5 3 4.5) {
+  velocity = 64;
+}
+
+
+instrument(Vla) {
+  pitch -= 12;
+}
