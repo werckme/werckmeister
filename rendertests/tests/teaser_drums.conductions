@@ -1,0 +1,53 @@
+instrument(drums) onBeat(1) {
+    velocity += 190%;
+}
+
+
+-- mute the 16th until bar 4
+instrument(drums) pitch(h) toBar(4) 
+onBeat(1.25 1.75 2.25 2.75 3.25 3.75 4.25 4.75) {
+    velocity = 0;
+}
+
+-- unmute the 16th until from bar 4
+instrument(drums) pitch(h) fromBar(4) 
+onBeat(1.25 1.75 2.25 2.75 3.25 3.75 4.25 4.75) {
+    velocity = 50%;
+}
+
+instrument(drums) pitch(h h' h,) fromBar(4) toPosition(110) onBeat(1 2 3 4) {
+    velocity = 150%;
+}
+
+instrument(drums) pitch(x) {
+    velocity = & - 20;
+}
+
+instrument(drums) fromBar(4) toPosition(@beginB) pitch(x) onBeat(2 4) {
+    velocity = 100;
+}
+
+instrument(drums) fromBar(4) fromPosition(@beginB) toPosition(110) pitch(x) onBeat(2 4) {
+    velocity = 80;
+}
+
+
+instrument(drums) fromBar(4) pitch(x) onBeat(1 3) {
+    velocity = 70;
+}
+
+instrument(drums) toBar(4) pitch(x) toPosition(110) onBeat(1 2 3 4) {
+    velocity = 70%;
+}
+
+instrument(drums) pitch(x) onBeat(1.5 2.5 3.5 4.5) {
+    velocity = 100%;
+}
+
+instrument(drums) fromPosition(110) pitch(x) onBeat(2 4) {
+    velocity = 110;
+}
+
+instrument(drums) fromPosition(110) pitch(h) onBeat(1 2 3 4) {
+    velocity = 100;
+}

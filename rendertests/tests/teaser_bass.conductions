@@ -1,0 +1,52 @@
+instrument(bass) toPosition(@beginB) {
+    velocity=90;
+    duration -=80%;
+    pitch -= 12;
+}
+ 
+instrument(bass) toPosition(@beginB) onBeat(1) {
+    velocity=120;
+    duration = 50%; 
+}
+
+instrument(bass) toPosition(@beginB) onBeat(2.5 3.5 4.5) {
+    velocity= 100;
+    duration = 50%; 
+}
+
+instrument(bass) fromPosition(@endB) {
+    velocity=90;
+    duration -=80%;
+    pitch -= 12;
+}
+ 
+instrument(bass) fromPosition(@endB) onBeat(1) {
+    velocity=120;
+    duration = 50%; 
+}
+
+instrument(bass) fromPosition(@endB) onBeat(2.5 3.5 4.5) {
+    velocity= 100;
+    duration = 50%; 
+}
+
+
+
+
+
+instrument(bass) withTag(legato) {
+    velocity=50;
+    duration = 100%; 
+}
+
+instrument(bass) fromPosition(@beginB) {
+    velocity = 90;
+    duration = 40%;
+}
+
+instrument(bass) fromPosition(@beginB) toPosition(@endB) onBeat(1.750 3.750) {
+    velocity = 110%;
+    duration = 30%;
+}
+
+

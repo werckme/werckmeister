@@ -1,0 +1,47 @@
+[
+type: template;
+name: bass;
+instrument: bass;
+{
+	c16& r  a,8&  g,16r&&    d, "legato"@e,  g,&&  | g,&&   e,r &&   g,,16 "legato"@g,, a,,16 c,8 g,,8  &16& |
+} 
+]
+
+[
+type: template;
+name: bass2;
+instrument: bass;
+{
+	I,,16 I#,, r V,,8   V,,,16& r I,,16 I#,, r V,,8   I,,,16& r |
+} 
+]
+
+[
+type: template;
+name: bass2a;
+instrument: bass;
+{
+	/mod: swing _grid=16 _offset=70/
+	I,,16 I#,, r V,,8   V,,,16& & I,,16 I#,, r V,,8   I,,,16& & |
+} 
+]
+
+
+[
+type: template;
+name: bass3;
+instrument: bass;
+{
+	c,,16&   g,,&   c,&   g,,&  c,&   g,,&  e,,&  d,,& |
+} 
+]
+
+-- [
+-- instrument: bass;
+-- {
+--     /mark: x/
+
+--     
+--     /jump: x _repeat=15/
+-- }
+-- ]
