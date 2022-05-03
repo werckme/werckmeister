@@ -20,7 +20,6 @@ namespace compiler
 		const com::String *instrumentSectionName;
 		com::Expression expression;
 		com::Ticks barPositionQuarters = -1;
-		int barNumber = -1;
 	};
 	class EventInformationDb
 	{
@@ -93,7 +92,6 @@ namespace compiler
 		ei.instrumentSectionName = *additonalEventInfos.instrumentSectionName;
 		ei.expression = additonalEventInfos.expression;
 		ei.barPositionQuarters = additonalEventInfos.barPositionQuarters;
-		ei.barNumber = additonalEventInfos.barNumber;
 		events.insert(ei);
 	}
 	void EventInformationDb::update(const EventInformation& evinf, const documentModel::Event& documentEvent, const com::midi::Event& midiEvent, const AdditionalEventInfos& additonalEventInfos)
@@ -199,7 +197,6 @@ namespace compiler
 		additionalEventInfos.instrumentName = &lastInstrument;
 		additionalEventInfos.instrumentSectionName = &lastInstrumentSectionName;
 		additionalEventInfos.barPositionQuarters = contextMeta ? contextMeta->barPosition / com::PPQ : -1;
-		additionalEventInfos.barNumber = contextMeta ? contextMeta->barCount : -1;
 		eventDb->upsert(*lastDocumentEvent, ev, additionalEventInfos);
 	}
 
