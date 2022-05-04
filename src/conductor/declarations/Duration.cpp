@@ -15,8 +15,8 @@ namespace conductor
         {
             return;
         }
-        FGetValue getOriginalValue = [noteOn, noteOff]()
-        { return (noteOff->absPosition() - noteOn->absPosition()) / com::PPQ; };
+        FGetValue getOriginalValue = [originalNoteOn, originalNoteOff]()
+        { return (originalNoteOff.absPosition() - originalNoteOn.absPosition()) / com::PPQ; };
         FGetValue getPercentBase = [originalNoteOn, originalNoteOff]()
         { return (originalNoteOff.absPosition() - originalNoteOn.absPosition()) / com::PPQ; };
         FSetValue setNoteOn = [](com::midi::Event *noteOn, double val) {};

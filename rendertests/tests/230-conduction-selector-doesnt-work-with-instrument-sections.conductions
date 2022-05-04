@@ -1,12 +1,14 @@
-instrument(ebass) {
-    pitch -= 24;
-}
-
 instrument(piano) {
     timeOffset = 0.0625;
 }
 
+instrument(ebass) {
+    pitch -= 24;
+}
+
 instrument(bass) {
     velocity = 127;
-    pitch += 1;
 }
+
+
+
