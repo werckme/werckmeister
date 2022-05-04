@@ -1,0 +1,14 @@
+using "./311-conduction-rules-value-mod-cascaded.conductions";
+
+tempo: 140;
+device: MyDevice  midi _usePort=18;
+instrumentDef:piano1    _onDevice=MyDevice  _ch=0 _pc=0;
+instrumentDef:piano2    _onDevice=MyDevice  _ch=0 _pc=0;
+instrumentSection: _setName="lead" piano1 piano2;
+
+[
+instrument: lead;
+{
+    c d e f | g a b c'
+}
+]
