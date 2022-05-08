@@ -41,6 +41,7 @@ namespace compiler
             FM_PARAMETER_DEF(argumentNames.Device.OffsetValue, 4),
             FM_PARAMETER_DEF(argumentNames.Device.WithOffset, 5),
             FM_PARAMETER_DEF(argumentNames.Device.UseFont, 6),
+            FM_PARAMETER_DEF(argumentNames.Device.UseRepo, 7),
         };
         virtual ParametersByNames &getParameters() { return this->parameters; }
         virtual void execute(IContextPtr);
@@ -48,5 +49,6 @@ namespace compiler
     private:
         void addMidiDevice(const com::String &uname, const com::String &deviceId, int offsetMillis);
         void addFluidSynthDevice(const com::String &uname, const com::String &soundfontPath, int offsetMillis);
+        void addWebRepo(const com::String &uname, const com::String &repoUrl);
     };
 }

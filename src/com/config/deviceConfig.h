@@ -10,7 +10,8 @@ namespace com
         {
             Undefinded,
             Midi,
-            FluidSynth
+            FluidSynth,
+            WebPlayer
         };
         std::string name;
         int offsetMillis = 0;

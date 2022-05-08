@@ -44,6 +44,15 @@ namespace com
         return cf;
     }
 
+    DeviceConfig ConfigServer::createWebPlayerConfig(const com::String &uname, const std::string &repoUrl)
+    {
+        DeviceConfig cf;
+        cf.name = uname;
+        cf.type = DeviceConfig::WebPlayer;
+        cf.deviceId = repoUrl;
+        return cf;
+    }
+
     void ConfigServer::clear()
     {
         this->devices.clear();

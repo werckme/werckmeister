@@ -1,7 +1,8 @@
 #include "JsonWriter.h"
 #include <iostream>
 #include <documentModel/Document.h>
-
+#include <com/config/configServer.h>
+#include <com/config.hpp>
 namespace
 {
     rapidjson::Document documentInfosToJSONDoc(documentModel::DocumentPtr sheetDoc, com::Ticks duration, const compiler::Warnings &warnings)
@@ -39,6 +40,19 @@ namespace
         doc.AddMember("sources", array, doc.GetAllocator());
         doc.AddMember("duration", durationValue, doc.GetAllocator());
         doc.AddMember("warnings", warningsArray, doc.GetAllocator());
+#if IS_EMSCRIPTEN_BUILD == 1
+        rapidjson::Value devicedArray(rapidjson::kArrayType);
+        for(const auto& device : com::getConfigServer().getDevices())
+        {
+            rapidjson::Value object(rapidjson::kObjectType);
+            rapidjson::Value name;
+            rapidjson::Value repoUrl;
+            name.SetString(device.second.name.c_str(), doc.GetAllocator());
+            repoUrl.SetString(device.second.deviceId.c_str(), doc.GetAllocator());
+            devicedArray.PushBack(object, doc.GetAllocator());
+        }
+        doc.AddMember("devices", devicedArray, doc.GetAllocator());
+#endif
         return doc;
     }
 }

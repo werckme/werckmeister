@@ -27,6 +27,7 @@
 #include <compiler/CompoundVisitor.hpp>
 #include <compiler/EventInformationServer.h>
 
+
 #ifdef _MSC_VER
 #define _CRTDBG_MAP_ALLOC
 #include <stdlib.h>

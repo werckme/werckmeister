@@ -3,6 +3,7 @@
 #include <compiler/error.hpp>
 #include <com/config/configServer.h>
 #include <com/werckmeister.hpp>
+#include <com/config.hpp>
 
 namespace compiler
 {
@@ -31,6 +32,14 @@ namespace compiler
             addFluidSynthDevice(name, font, offsetMillis);
             return;
         }
+#if IS_EMSCRIPTEN_BUILD == 1
+        if(type == "webPlayer")
+        {
+            auto font = parameters[argumentNames.Device.UseRepo].value<com::String>();
+            addWebRepo(name, font, offsetMillis);
+            return;
+        }
+#endif
         com::StringStream ss;
         ss << "device type: '" << type << "' is not supported.";
         FM_THROW(Exception, ss.str());
@@ -48,6 +57,13 @@ namespace compiler
         auto &cs = com::getConfigServer();
         auto resolvedPath = com::getWerckmeister().resolvePath(soundfontPath);
         auto device = cs.createFluidSynthDeviceConfig(uname, resolvedPath, offsetMillis);
+        cs.addDevice(device);
+    }
+
+    void AddDevice::addWebRepo(const com::String &uname, const com::String &repoUrl)
+    {
+        auto &cs = com::getConfigServer();
+        auto device = cs.createWebPlayerConfig(uname, repoUrl);
         cs.addDevice(device);
     }
 }
