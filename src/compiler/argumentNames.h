@@ -14,7 +14,6 @@ struct ArgumentNames
         std::string OffsetValue = "value";
         std::string WithOffset = "withOffset";
         std::string UseFont = "useFont";
-        std::string UseRepo = "useRepo";
     } Device;
 
     struct
