@@ -40,17 +40,17 @@ namespace
         doc.AddMember("sources", array, doc.GetAllocator());
         doc.AddMember("duration", durationValue, doc.GetAllocator());
         doc.AddMember("warnings", warningsArray, doc.GetAllocator());
-#if IS_EMSCRIPTEN_BUILD == 1
+#if IS_EMSCRIPTEN_BUILD == 0
         rapidjson::Value devicedArray(rapidjson::kArrayType);
         for(const auto& device : com::getConfigServer().getDevices())
         {
             rapidjson::Value object(rapidjson::kObjectType);
             rapidjson::Value name;
-            rapidjson::Value repoUrl;
+            rapidjson::Value fontName;
             name.SetString(device.second.name.c_str(), doc.GetAllocator());
-            repoUrl.SetString(device.second.deviceId.c_str(), doc.GetAllocator());
+            fontName.SetString(device.second.deviceId.c_str(), doc.GetAllocator());
             object.AddMember("name", name, doc.GetAllocator());
-            object.AddMember("repoUrl", repoUrl, doc.GetAllocator());
+            object.AddMember("fontName", fontName, doc.GetAllocator());
             devicedArray.PushBack(object, doc.GetAllocator());
         }
         doc.AddMember("devices", devicedArray, doc.GetAllocator());
