@@ -35,8 +35,8 @@ namespace compiler
 #if IS_EMSCRIPTEN_BUILD == 1
         if(type == "webPlayer")
         {
-            auto font = parameters[argumentNames.Device.UseRepo].value<com::String>();
-            addWebRepo(name, font, offsetMillis);
+            auto repo = parameters[argumentNames.Device.UseRepo].value<com::String>();
+            addWebRepo(name, repo);
             return;
         }
 #endif
