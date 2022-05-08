@@ -40,10 +40,13 @@ namespace
         doc.AddMember("sources", array, doc.GetAllocator());
         doc.AddMember("duration", durationValue, doc.GetAllocator());
         doc.AddMember("warnings", warningsArray, doc.GetAllocator());
-#if IS_EMSCRIPTEN_BUILD == 0
+#if IS_EMSCRIPTEN_BUILD == 1
         rapidjson::Value devicedArray(rapidjson::kArrayType);
         for(const auto& device : com::getConfigServer().getDevices())
         {
+            if (device.second.type != com::DeviceConfig::WebPlayer) {
+                continue;
+            }
             rapidjson::Value object(rapidjson::kObjectType);
             rapidjson::Value name;
             rapidjson::Value fontName;
