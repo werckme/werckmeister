@@ -49,6 +49,8 @@ namespace
             rapidjson::Value repoUrl;
             name.SetString(device.second.name.c_str(), doc.GetAllocator());
             repoUrl.SetString(device.second.deviceId.c_str(), doc.GetAllocator());
+            object.AddMember("name", name, doc.GetAllocator());
+            object.AddMember("repoUrl", repoUrl, doc.GetAllocator());
             devicedArray.PushBack(object, doc.GetAllocator());
         }
         doc.AddMember("devices", devicedArray, doc.GetAllocator());
