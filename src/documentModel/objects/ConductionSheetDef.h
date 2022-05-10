@@ -48,7 +48,6 @@ namespace documentModel
 			double value = 0;
 		};
 		typedef std::vector<Declaration> Declarations;
-		Selectors selectors;
 		SelectorsSet selectorsSet;
 		Declarations declarations;
 	};

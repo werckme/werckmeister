@@ -174,30 +174,35 @@ namespace conductor
 				EventsAndDeclarations newValue;
 				result.emplace_back(newValue);
 				auto eventsAndDeclarations = &result.back();
-				for (auto const &selector : rule.selectors)
+				int numberOfSelectors = 0;
+				for (auto const &selectors : rule.selectorsSet)
 				{
-					try
+					numberOfSelectors += selectors.size();
+					for(auto const &selector : selectors)
 					{
-						Events matchedMidiEvents;
-						if (eventsAndDeclarations->events.empty())
+						try
 						{
-							matchedMidiEvents = findMatches(selector);
+							Events matchedMidiEvents;
+							if (eventsAndDeclarations->events.empty())
+							{
+								matchedMidiEvents = findMatches(selector);
+							}
+							else
+							{
+								matchedMidiEvents = findMatches(selector, eventsAndDeclarations->events);
+							}
+							if (matchedMidiEvents.empty())
+							{
+								eventsAndDeclarations->events.clear();
+								break;
+							}
+							eventsAndDeclarations->events.swap(matchedMidiEvents);
 						}
-						else
+						catch (com::Exception &ex)
 						{
-							matchedMidiEvents = findMatches(selector, eventsAndDeclarations->events);
+							ex << compiler::ex_sheet_source_info(selector);
+							throw;
 						}
-						if (matchedMidiEvents.empty())
-						{
-							eventsAndDeclarations->events.clear();
-							break;
-						}
-						eventsAndDeclarations->events.swap(matchedMidiEvents);
-					}
-					catch (com::Exception &ex)
-					{
-						ex << compiler::ex_sheet_source_info(selector);
-						throw;
 					}
 				}
 				for (const auto &declaration : rule.declarations)
@@ -210,7 +215,7 @@ namespace conductor
 							FM_THROW(compiler::Exception, "declaration not found: " + declaration.property);
 						}
 						double orderScore = nthRule / double((totalRules + 1)); // shold not be >= 1
-						double specificity = double(rule.selectors.size()) + orderScore;
+						double specificity = double(numberOfSelectors) + orderScore;
 						declarationImpl->setDeclarationData(declaration);
 						declarationImpl->specificity(specificity);
 						eventsAndDeclarations->declarations.push_back(declarationImpl);
