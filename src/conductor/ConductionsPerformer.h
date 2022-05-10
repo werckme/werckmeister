@@ -15,7 +15,7 @@ namespace conductor
 	class ConductionsPerformer : public IConductionsPerformer
 	{
 	public:
-		typedef std::vector<EventWithMetaInfo> Events;
+		typedef std::list<EventWithMetaInfo> Events;
 		typedef std::vector<IDeclarationPtr> Declarations;
 
 	protected:

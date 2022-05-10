@@ -1,0 +1,13 @@
+using "./278-comma-separation-for-selectors.conductions";
+
+device: MyDevice  midi _usePort=18;
+instrumentDef: piano _ch=0 _onDevice=MyDevice _pc=0;
+
+-- melody track
+[
+instrument: piano;
+{
+    \ppp
+	c d e f | c d e f | c d e f
+}
+]
