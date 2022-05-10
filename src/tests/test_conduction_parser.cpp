@@ -440,7 +440,7 @@ BOOST_AUTO_TEST_CASE(parse_octave_selector)
 	BOOST_CHECK_EQUAL(defs.rules[0].selectorsSet[0][0].arguments[2].numberValue, 2.0);
 }
 
-BOOST_AUTO_TEST_CASE(parse_selectors_comma_separated)
+BOOST_AUTO_TEST_CASE(parse_selectors_two_selectors_comma_separated)
 {
 	using namespace com;
 	using documentModel::PitchDef;
@@ -457,4 +457,64 @@ BOOST_AUTO_TEST_CASE(parse_selectors_comma_separated)
 	BOOST_CHECK_EQUAL(defs.rules[0].selectorsSet[1][0].type, "onBar");
 	BOOST_CHECK_EQUAL(defs.rules[0].selectorsSet[1][0].arguments.size(), size_t(1));
 	BOOST_CHECK_EQUAL(defs.rules[0].selectorsSet[1][0].arguments[0].numberValue, com::Ticks(4));	
+}
+
+BOOST_AUTO_TEST_CASE(parse_selectors_two_selector_groups_comma_separated)
+{
+	using namespace com;
+	using documentModel::PitchDef;
+	com::String text = FM_STRING("\
+	onBeat(1) fromPosition(5), onBar(10) toPosition(100) {} \
+");
+	ConductionSheetParser parser;
+	auto defs = parser.parse(text);
+	BOOST_CHECK_EQUAL(defs.rules.size(), size_t(1));
+	BOOST_CHECK_EQUAL(defs.rules[0].selectorsSet.size(), size_t(2));
+	BOOST_CHECK_EQUAL(defs.rules[0].selectorsSet[0].size(), size_t(2));
+	BOOST_CHECK_EQUAL(defs.rules[0].selectorsSet[0][0].type, "onBeat");
+	BOOST_CHECK_EQUAL(defs.rules[0].selectorsSet[0][0].arguments.size(), size_t(1));
+	BOOST_CHECK_EQUAL(defs.rules[0].selectorsSet[0][0].arguments[0].numberValue, com::Ticks(1));
+	BOOST_CHECK_EQUAL(defs.rules[0].selectorsSet[0][1].type, "fromPosition");
+	BOOST_CHECK_EQUAL(defs.rules[0].selectorsSet[0][1].arguments.size(), size_t(1));
+	BOOST_CHECK_EQUAL(defs.rules[0].selectorsSet[0][1].arguments[0].numberValue, com::Ticks(5));
+
+	BOOST_CHECK_EQUAL(defs.rules[0].selectorsSet[1].size(), size_t(2));
+	BOOST_CHECK_EQUAL(defs.rules[0].selectorsSet[1][0].type, "onBar");
+	BOOST_CHECK_EQUAL(defs.rules[0].selectorsSet[1][0].arguments.size(), size_t(1));
+	BOOST_CHECK_EQUAL(defs.rules[0].selectorsSet[1][0].arguments[0].numberValue, com::Ticks(10));
+	BOOST_CHECK_EQUAL(defs.rules[0].selectorsSet[1][1].type, "toPosition");
+	BOOST_CHECK_EQUAL(defs.rules[0].selectorsSet[1][1].arguments.size(), size_t(1));
+	BOOST_CHECK_EQUAL(defs.rules[0].selectorsSet[1][1].arguments[0].numberValue, com::Ticks(100));	
+}
+
+BOOST_AUTO_TEST_CASE(parse_selectors_four_selectors_comma_separated)
+{
+	using namespace com;
+	using documentModel::PitchDef;
+	com::String text = FM_STRING("\
+	onBeat(1), fromPosition(5), onBar(10), toPosition(100) {} \
+");
+	ConductionSheetParser parser;
+	auto defs = parser.parse(text);
+	BOOST_CHECK_EQUAL(defs.rules.size(), size_t(1));
+	BOOST_CHECK_EQUAL(defs.rules[0].selectorsSet.size(), size_t(4));
+	BOOST_CHECK_EQUAL(defs.rules[0].selectorsSet[0].size(), size_t(1));
+	BOOST_CHECK_EQUAL(defs.rules[0].selectorsSet[0][0].type, "onBeat");
+	BOOST_CHECK_EQUAL(defs.rules[0].selectorsSet[0][0].arguments.size(), size_t(1));
+	BOOST_CHECK_EQUAL(defs.rules[0].selectorsSet[0][0].arguments[0].numberValue, com::Ticks(1));
+
+	BOOST_CHECK_EQUAL(defs.rules[0].selectorsSet[1].size(), size_t(1));
+	BOOST_CHECK_EQUAL(defs.rules[0].selectorsSet[1][0].type, "fromPosition");
+	BOOST_CHECK_EQUAL(defs.rules[0].selectorsSet[1][0].arguments.size(), size_t(1));
+	BOOST_CHECK_EQUAL(defs.rules[0].selectorsSet[1][0].arguments[0].numberValue, com::Ticks(5));
+
+	BOOST_CHECK_EQUAL(defs.rules[0].selectorsSet[2].size(), size_t(1));
+	BOOST_CHECK_EQUAL(defs.rules[0].selectorsSet[2][0].type, "onBar");
+	BOOST_CHECK_EQUAL(defs.rules[0].selectorsSet[2][0].arguments.size(), size_t(1));
+	BOOST_CHECK_EQUAL(defs.rules[0].selectorsSet[2][0].arguments[0].numberValue, com::Ticks(10));
+	
+	BOOST_CHECK_EQUAL(defs.rules[0].selectorsSet[3].size(), size_t(1));
+	BOOST_CHECK_EQUAL(defs.rules[0].selectorsSet[3][0].type, "toPosition");
+	BOOST_CHECK_EQUAL(defs.rules[0].selectorsSet[3][0].arguments.size(), size_t(1));
+	BOOST_CHECK_EQUAL(defs.rules[0].selectorsSet[3][0].arguments[0].numberValue, com::Ticks(100));	
 }
