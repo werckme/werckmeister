@@ -17,7 +17,6 @@ namespace conductor
 		com::String declNamespace_ = "conductor.decl.";
 		com::midi::Event *findCorrespondingNoteOffEvent(com::midi::EventContainer::Iterator noteOn, com::midi::EventContainer::Iterator end)
 		{
-			auto it = noteOn;
 			for (auto it = noteOn; it != end; ++it)
 			{
 				if (it->eventType() != com::midi::NoteOff)
@@ -175,34 +174,39 @@ namespace conductor
 				result.emplace_back(newValue);
 				auto eventsAndDeclarations = &result.back();
 				int numberOfSelectors = 0;
+				Events matchedMidiEvents;
 				for (auto const &selectors : rule.selectorsSet)
 				{
 					numberOfSelectors += selectors.size();
+					Events matchedSubset;
 					for(auto const &selector : selectors)
 					{
 						try
 						{
-							Events matchedMidiEvents;
-							if (eventsAndDeclarations->events.empty())
+							if (matchedSubset.empty())
 							{
-								matchedMidiEvents = findMatches(selector);
+								matchedSubset = findMatches(selector);
 							}
 							else
 							{
-								matchedMidiEvents = findMatches(selector, eventsAndDeclarations->events);
+								matchedSubset = findMatches(selector, matchedSubset);
 							}
-							if (matchedMidiEvents.empty())
+							bool selectorDoesentMatch = matchedSubset.empty();
+							if (selectorDoesentMatch)
 							{
-								eventsAndDeclarations->events.clear();
+								matchedSubset.clear();
 								break;
 							}
-							eventsAndDeclarations->events.swap(matchedMidiEvents);
 						}
 						catch (com::Exception &ex)
 						{
 							ex << compiler::ex_sheet_source_info(selector);
 							throw;
 						}
+					}
+					for(auto const &matchedEvents : matchedSubset)
+					{
+						eventsAndDeclarations->events.push_back(matchedEvents);
 					}
 				}
 				for (const auto &declaration : rule.declarations)
