@@ -54,7 +54,9 @@ namespace documentModel
 	struct ConductionSheetDef : public ASheetObjectWithSourceInfo
 	{
 		typedef std::vector<ConductionRule> Rules;
+		typedef std::vector<Rules> RulesSet;
 		Rules rules;
+		RulesSet rulesSet;
 	};
 
 }

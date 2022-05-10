@@ -71,7 +71,7 @@ BOOST_FUSION_ADAPT_STRUCT(
 BOOST_FUSION_ADAPT_STRUCT(
 	documentModel::ConductionSheetDef,
 	(unsigned int, sourcePositionBegin)
-	(documentModel::ConductionSheetDef::Rules, rules))
+	(documentModel::ConductionSheetDef::RulesSet, rulesSet))
 
 namespace parser
 {
@@ -165,8 +165,10 @@ namespace parser
 				rules_ %=
 					current_pos_.current_pos >> attr(sourceId_) >> +selector_ >> "{" >> *declaration_ > "}";
 
+				rulesSet_ %= rules_ >> *( "," >> rules_);
+
 				start %=
-					current_pos_.current_pos > *rules_ > boost::spirit::eoi;
+					current_pos_.current_pos > *rulesSet_ > boost::spirit::eoi;
 
 				auto onError = boost::bind(&compiler::handler::errorHandler<Iterator>, _1, sourceId_);
 				on_error<fail>(start, onError);
@@ -175,6 +177,7 @@ namespace parser
 			qi::rule<Iterator, documentModel::ConductionSheetDef(), ascii::space_type> start;
 			qi::rule<Iterator, documentModel::ConductionSelector(), ascii::space_type> selector_;
 			qi::rule<Iterator, documentModel::ConductionRule(), ascii::space_type> rules_;
+			qi::rule<Iterator, documentModel::ConductionSheetDef::Rules(), ascii::space_type> rulesSet_;
 			qi::rule<Iterator, documentModel::ConductionSelector::ArgumentValue(), ascii::space_type> numberArgument_;
 			qi::rule<Iterator, documentModel::ConductionSelector::ArgumentValue(), ascii::space_type> pitchArgument_;
 			qi::rule<Iterator, documentModel::ConductionSelector::ArgumentValue(), ascii::space_type> degreeArgument_;
