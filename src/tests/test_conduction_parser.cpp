@@ -518,3 +518,21 @@ BOOST_AUTO_TEST_CASE(parse_selectors_four_selectors_comma_separated)
 	BOOST_CHECK_EQUAL(defs.rules[0].selectorsSet[3][0].arguments.size(), size_t(1));
 	BOOST_CHECK_EQUAL(defs.rules[0].selectorsSet[3][0].arguments[0].numberValue, com::Ticks(100));	
 }
+
+BOOST_AUTO_TEST_CASE(parse_selector_fraction_value)
+{
+	using namespace com;
+	using documentModel::PitchDef;
+	com::String text = FM_STRING("\
+	onBeat(3/2 1 / 2) {} \
+");
+	ConductionSheetParser parser;
+	auto defs = parser.parse(text);
+	BOOST_CHECK_EQUAL(defs.rules.size(), size_t(1));
+	BOOST_CHECK_EQUAL(defs.rules[0].selectorsSet.size(), size_t(1));
+	BOOST_CHECK_EQUAL(defs.rules[0].selectorsSet[0].size(), size_t(1));
+	BOOST_CHECK_EQUAL(defs.rules[0].selectorsSet[0][0].type, "onBeat");
+	BOOST_CHECK_EQUAL(defs.rules[0].selectorsSet[0][0].arguments.size(), size_t(2));
+	BOOST_CHECK_EQUAL(defs.rules[0].selectorsSet[0][0].arguments[0].numberValue, com::Ticks(1.5));
+	BOOST_CHECK_EQUAL(defs.rules[0].selectorsSet[0][0].arguments[1].numberValue, com::Ticks(0.5));
+}

@@ -1,4 +1,4 @@
-#include "pitchParser.h"
+#include "valueParser.h"
 #include <boost/spirit/include/phoenix_operator.hpp>
 #include <boost/spirit/include/phoenix_object.hpp>
 #include <boost/spirit/include/phoenix_core.hpp>
@@ -18,7 +18,7 @@ namespace parser
         DurationSymbols durationSymbols_;
     }
 
-    PitchParser::PitchParser()
+    ValueParser::ValueParser()
     {
         using namespace boost::phoenix;
         namespace qi = boost::spirit::qi;
@@ -32,6 +32,7 @@ namespace parser
         using qi::attr;
         using qi::lexeme;
         using qi::lit;
+        using qi::int_;
         using namespace documentModel;
         extendedPitch_.name("extended pitch");
         extendedPitch_ %= "" >> char_("hijklmnopqsuvwxyz") >> repeat(0, 5)[lit("'")[push_back(at_c<0>(_val), '\'')]] >> repeat(0, 5)[lit(",")[push_back(at_c<0>(_val), ',')]];
@@ -39,5 +40,6 @@ namespace parser
         pitch_ %= pitchSymbols_ >> (octaveSymbols_ | attr(PitchDef::DefaultOctave));
         alias_ %= lexeme['"' >> +(char_ - '"') >> '"'];
         pitchOrAlias_ %= pitch_ | alias_ | extendedPitch_;
+        fraction_ %= int_ >> "/" >> int_;
     }
 }
