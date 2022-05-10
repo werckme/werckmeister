@@ -28,7 +28,7 @@ SET (SRC_FETZER_LIB
     parser/documentParser.cpp
     parser/pitchmapParser.cpp
     parser/conductionSheetParser.cpp
-    parser/pitchParser.cpp
+    parser/valueParser.cpp
     compiler/context/MidiContext.cpp
     compiler/context/AContext.cpp
     compiler/Preprocessor.cpp

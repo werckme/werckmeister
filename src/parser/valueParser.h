@@ -21,10 +21,10 @@ BOOST_FUSION_ADAPT_STRUCT(
 
 namespace parser
 {
-    struct PitchParser
+    struct ValueParser
     {
         typedef com::String::const_iterator Iterator;
-        PitchParser();
+        ValueParser();
         boost::spirit::qi::rule<Iterator, documentModel::PitchDef(), boost::spirit::ascii::space_type> pitchOrAlias_;
         boost::spirit::qi::rule<Iterator, documentModel::AliasPitchDef(), boost::spirit::ascii::space_type> extendedPitch_;
         boost::spirit::qi::rule<Iterator, documentModel::AliasPitchDef(), boost::spirit::ascii::space_type> alias_;

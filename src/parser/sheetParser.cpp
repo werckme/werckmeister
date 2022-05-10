@@ -21,7 +21,7 @@
 #include <documentModel/AliasPitchDef.h>
 #include <documentModel/objects/Grouped.h>
 #include <com/tools.h>
-#include "pitchParser.h"
+#include "valueParser.h"
 
 BOOST_FUSION_ADAPT_STRUCT(
 	documentModel::DocumentUsing,
@@ -107,7 +107,7 @@ namespace parser
 		namespace ascii = boost::spirit::ascii;
 		///////////////////////////////////////////////////////////////////
 		template <typename Iterator>
-		struct _SheetParser : PitchParser, qi::grammar<Iterator, SheetDef(), ascii::space_type>
+		struct _SheetParser : ValueParser, qi::grammar<Iterator, SheetDef(), ascii::space_type>
 		{
 
 			void initArgumentParser()
@@ -238,7 +238,7 @@ namespace parser
 				createDocumentConfigRules(documentConfig_);
 			}
 
-			_SheetParser(Iterator begin, Event::SourceId sourceId = Event::UndefinedSource) : PitchParser(),
+			_SheetParser(Iterator begin, Event::SourceId sourceId = Event::UndefinedSource) : ValueParser(),
 																							  _SheetParser::base_type(start, "documentModel"),
 																							  sourceId_(sourceId)
 			{

@@ -15,7 +15,7 @@
 #include "parserSymbols.h"
 #include <com/tools.h>
 #include "parserPositionIt.h"
-#include "pitchParser.h"
+#include "valueParser.h"
 #include <conductor/conductorNames.h>
 
 BOOST_FUSION_ADAPT_STRUCT(
@@ -83,9 +83,9 @@ namespace parser
 		ExpressionSymbols expressionSymbols_;
 		DegreeSymbols degreeSymbols_;
 		template <typename Iterator>
-		struct _ConductionParser : PitchParser, qi::grammar<Iterator, documentModel::ConductionSheetDef(), ascii::space_type>
+		struct _ConductionParser : ValueParser, qi::grammar<Iterator, documentModel::ConductionSheetDef(), ascii::space_type>
 		{
-			_ConductionParser(Iterator begin, documentModel::ConductionSheetDef::SourceId sourceId = documentModel::ConductionSheetDef::UndefinedSource) : PitchParser(),
+			_ConductionParser(Iterator begin, documentModel::ConductionSheetDef::SourceId sourceId = documentModel::ConductionSheetDef::UndefinedSource) : ValueParser(),
 				_ConductionParser::base_type(start, "conduction"),
 				sourceId_(sourceId)
 			{

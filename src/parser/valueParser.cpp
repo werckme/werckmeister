@@ -1,4 +1,4 @@
-#include "pitchParser.h"
+#include "valueParser.h"
 #include <boost/spirit/include/phoenix_operator.hpp>
 #include <boost/spirit/include/phoenix_object.hpp>
 #include <boost/spirit/include/phoenix_core.hpp>
@@ -18,7 +18,7 @@ namespace parser
         DurationSymbols durationSymbols_;
     }
 
-    PitchParser::PitchParser()
+    ValueParser::ValueParser()
     {
         using namespace boost::phoenix;
         namespace qi = boost::spirit::qi;
