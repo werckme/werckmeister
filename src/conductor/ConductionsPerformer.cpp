@@ -204,10 +204,7 @@ namespace conductor
 							throw;
 						}
 					}
-					for(auto const &matchedEvents : matchedSubset)
-					{
-						eventsAndDeclarations->events.push_back(matchedEvents);
-					}
+					std::copy(matchedSubset.begin(), matchedSubset.end(), std::back_inserter(eventsAndDeclarations->events));
 				}
 				for (const auto &declaration : rule.declarations)
 				{
