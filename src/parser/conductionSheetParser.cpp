@@ -108,7 +108,7 @@ namespace parser
 				selector_.name("selector");
 				declaration_.name("declaration");
 				numberArgument_ %=
-					double_[at_c<ArNumberValue>(_val) = qi::_1] >> attr(documentModel::PitchDef()) >> attr(com::String()) >> attr(ArgumentValue::ValueContext(ArgumentValue::Unspecified));
+					(fraction_[at_c<ArNumberValue>(_val) = qi::_1] | double_[at_c<ArNumberValue>(_val) = qi::_1]) >> attr(documentModel::PitchDef()) >> attr(com::String()) >> attr(ArgumentValue::ValueContext(ArgumentValue::Unspecified));
 
 				pitchArgument_ %=
 					attr(0) >> pitchOrAlias_[at_c<ArPitch>(_val) = qi::_1] >> attr(com::String()) >> attr(ArgumentValue::ValueContext(ArgumentValue::Unspecified));

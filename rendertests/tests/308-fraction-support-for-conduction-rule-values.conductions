@@ -1,0 +1,12 @@
+onBar(1) onBeat(3/2 5/2 7/2 9/2) {
+    velocity = 127;
+}
+
+onBar(2) onBeat(5/4 7/4 9/4 11/4 13/4 15/4 17/4 19/4) {
+    velocity = 127;
+}
+
+onBar(3) onBeat(4/3 7/3 10/3 13/3) {
+    pitch += 5;
+    velocity = 127;
+}
