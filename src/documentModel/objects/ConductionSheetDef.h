@@ -25,6 +25,7 @@ namespace documentModel
 	struct ConductionRule : public ASheetObjectWithSourceInfo
 	{
 		typedef std::vector<ConductionSelector> Selectors;
+		typedef std::vector<Selectors> SelectorsSet;
 		struct Declaration : public ASheetObjectWithSourceInfo
 		{
 			enum OperationType
@@ -48,15 +49,14 @@ namespace documentModel
 		};
 		typedef std::vector<Declaration> Declarations;
 		Selectors selectors;
+		SelectorsSet selectorsSet;
 		Declarations declarations;
 	};
 
 	struct ConductionSheetDef : public ASheetObjectWithSourceInfo
 	{
 		typedef std::vector<ConductionRule> Rules;
-		typedef std::vector<Rules> RulesSet;
 		Rules rules;
-		RulesSet rulesSet;
 	};
 
 }
