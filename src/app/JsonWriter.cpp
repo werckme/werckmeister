@@ -135,12 +135,6 @@ namespace app
         eventInfosToJson(ostream(), document);
         ostream() << "}" <<std::endl;
     }
-    void JsonWriter::writeDebugInfos()
-    {
-        rapidjson::Document doc;
-        doc.SetObject();
-        toStream(ostream(), doc);
-    }
     void JsonWriter::docToJson(std::ostream &os, documentModel::DocumentPtr document)
     {
         compiler::Warnings __warnings;
@@ -181,5 +175,12 @@ namespace app
             first = false;
         }
         os << "]";
+    }
+
+    void JsonWriter::writeDebugInfos()
+    {
+        rapidjson::Document doc;
+        doc.SetObject();
+        toStream(ostream(), doc);
     }
 }
