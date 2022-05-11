@@ -57,6 +57,9 @@ namespace compiler
 	const EventInformation* EventInformationDb::find(const com::midi::Event& event)
 	{
 		auto inf = events.find(event.id);
+		if (inf == events.end()) {
+			return nullptr;
+		}
 		return &(*inf);
 	}	
 	const EventInformation* EventInformationDb::find(const documentModel::Event& event)

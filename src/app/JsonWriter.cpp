@@ -180,7 +180,31 @@ namespace app
     void JsonWriter::writeDebugInfos()
     {
         rapidjson::Document doc;
-        doc.SetObject();
+        doc.SetArray();
+        int trackIndex = 0;
+        for (const auto track : _midifile->ctracks()) 
+        {
+            int eventIndex = 0;
+            for (const auto midiEvent : track->events()) 
+            {
+                const auto info = _eventInformationServer->find(midiEvent);
+                if (info == nullptr) 
+                {
+                    continue;
+                }
+                rapidjson::Value eventObject;
+                eventObject.SetObject();
+                rapidjson::Value trackId(trackIndex);
+                rapidjson::Value eventId(eventIndex);
+                rapidjson::Value documentSourceId(info->documentId.c_str(), doc.GetAllocator());
+                eventObject.AddMember("trackId", trackId, doc.GetAllocator());
+                eventObject.AddMember("eventId", eventId, doc.GetAllocator());
+                eventObject.AddMember("documentSourceId", documentSourceId, doc.GetAllocator());
+                doc.PushBack(eventObject, doc.GetAllocator());
+                ++eventIndex;
+            }
+            ++trackIndex;
+        }
         toStream(ostream(), doc);
     }
 }
