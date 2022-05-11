@@ -85,6 +85,10 @@ namespace app
         {
             writeValidationJson(document);
         }
+        if (_programOptions->isJsonDebugInfoMode())
+        {
+            writeDebugInfos();
+        }
     }
 
     void JsonWriter::writeException(const std::exception &ex)
@@ -129,8 +133,13 @@ namespace app
         docToJson(ostream(), document);
         ostream() << ", \"eventInfos\": ";
         eventInfosToJson(ostream(), document);
-        ostream() << "}"
-                  << std::endl;
+        ostream() << "}" <<std::endl;
+    }
+    void JsonWriter::writeDebugInfos()
+    {
+        rapidjson::Document doc;
+        doc.SetObject();
+        toStream(ostream(), doc);
     }
     void JsonWriter::docToJson(std::ostream &os, documentModel::DocumentPtr document)
     {

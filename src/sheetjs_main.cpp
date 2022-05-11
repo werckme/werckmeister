@@ -42,22 +42,23 @@ typedef compiler::LoggerAndWarningsCollector<com::ConsoleLogger> WarningsCollect
 class JsProgramOptions : public ICompilerProgramOptions
 {
 public:
-	virtual bool isHelpSet() const { return false; }
-	virtual bool isInputSet() const { return true; }
-	virtual com::String getInput() const { return input; }
-	virtual bool isOutputSet() const { return false; }
-	virtual bool isNoMetaSet() const { return false; }
-	virtual com::String getOutput() const { return ""; }
-	virtual bool isJsonModeSet() const { return true; }
-	virtual bool isJsonDocInfoMode() const { return false; }
-	virtual bool isVersionSet() const { return false; }
-	virtual void printHelpText(std::ostream &os) {}
-	virtual bool isVerboseSet() const { return false; }
-	virtual bool isDebugSet() const { return false; }
-	virtual bool isBeginSet() const { return begin > 0; }
-	virtual double getBegin() const { return begin; }
-	virtual bool isEndSet() const { return false; }
-	virtual double getEnd() const { return 0; }
+	virtual bool isHelpSet() const override { return false; }
+	virtual bool isInputSet() const override  { return true; }
+	virtual com::String getInput() const override  { return input; }
+	virtual bool isOutputSet() const override  { return false; }
+	virtual bool isNoMetaSet() const override  { return false; }
+	virtual com::String getOutput() const override  { return ""; }
+	virtual bool isJsonModeSet() const override  { return true; }
+	virtual bool isJsonDocInfoMode() const override  { return false; }
+	virtual bool isJsonDebugInfoMode() const override  { return false; }
+	virtual bool isVersionSet() const override  { return false; }
+	virtual void printHelpText(std::ostream &os) override {}
+	virtual bool isVerboseSet() const override  { return false; }
+	virtual bool isDebugSet() const override  { return false; }
+	virtual bool isBeginSet() const override  { return begin > 0; }
+	virtual double getBegin() const override  { return begin; }
+	virtual bool isEndSet() const override  { return false; }
+	virtual double getEnd() const override  { return 0; }
 	std::string input;
 	double begin = -1;
 };
