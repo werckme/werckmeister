@@ -16,13 +16,14 @@
 #include <compiler/Instrument.h>
 #include <compiler/timeInfo.h>
 #include "IContext.h"
+#include <compiler/ICompilerVisitor.h>
 
 namespace compiler
 {
 	class AContext : public IContext
 	{
 	public:
-		AContext(compiler::IDefinitionsServerPtr definitionsServer);
+		AContext(compiler::IDefinitionsServerPtr definitionsServer, ICompilerVisitorPtr compilerVisitor);
 		static const double PitchbendMiddle;
 		/**
 		 * for rounding errors e.g. for triplets
@@ -161,5 +162,6 @@ namespace compiler
 		VoiceId voiceId_ = INVALID_VOICE_ID, chordVoice_ = INVALID_VOICE_ID;
 		VoiceMetaDataMap voiceMetaDataMap_;
 		TrackMetaDataMap trackMetaDataMap_;
+		ICompilerVisitorPtr _compilerVisitor;
 	};
 }

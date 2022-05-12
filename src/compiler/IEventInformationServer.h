@@ -39,6 +39,10 @@ namespace compiler
         com::Expression expression;
         com::Ticks barPositionQuarters = -1;
         int barNumber = -1;
+        int sourcePositionBegin = -1;
+        int sourcePositionEnd = -1;
+        com::String pitchAlias;
+        documentModel::ASheetObjectWithSourceInfo::SourceId sourceId;
         inline bool operator<(const EventInformation& ev) const { return id < ev.id; }
     };
 

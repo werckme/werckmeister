@@ -48,6 +48,10 @@ namespace compiler
         {
             visitor1->visitInstrument(uname, instrumentSectionName);
         }
+        virtual void visit(const documentModel::PitchDef &pitch) override 
+        {
+            visitor1->visit(pitch);
+        }
         TVisitor1Ptr visitor1 = nullptr;
     };
 
@@ -105,6 +109,11 @@ namespace compiler
         {
             visitor1->visitInstrument(uname, instrumentSectionName);
             TBase::visitInstrument(uname, instrumentSectionName);
+        }
+        virtual void visit(const documentModel::PitchDef &pitch) override 
+        {
+            visitor1->visit(pitch);
+            TBase::visit(pitch);
         }        
         TVisitor1Ptr visitor1 = nullptr;
     };

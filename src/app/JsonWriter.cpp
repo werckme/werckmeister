@@ -188,19 +188,24 @@ namespace app
             for (const auto midiEvent : track->events()) 
             {
                 const auto info = _eventInformationServer->find(midiEvent);
-                if (info == nullptr) 
+                if (info != nullptr)
                 {
-                    continue;
+                    rapidjson::Value eventObject;
+                    eventObject.SetObject();
+                    rapidjson::Value trackId(trackIndex);
+                    rapidjson::Value eventId(eventIndex);
+                    rapidjson::Value documentSourceId(info->sourceId);
+                    rapidjson::Value sourcePositionBegin(info->sourcePositionBegin);
+                    rapidjson::Value sourcePositionEnd(info->sourcePositionEnd);
+                    rapidjson::Value pitchAlias(info->pitchAlias.c_str(), doc.GetAllocator());
+                    eventObject.AddMember("trackId", trackId, doc.GetAllocator());
+                    eventObject.AddMember("eventId", eventId, doc.GetAllocator());
+                    eventObject.AddMember("documentSourceId", documentSourceId, doc.GetAllocator());
+                    eventObject.AddMember("sourcePositionBegin", sourcePositionBegin, doc.GetAllocator());
+                    eventObject.AddMember("sourcePositionEnd", sourcePositionEnd, doc.GetAllocator());
+                    eventObject.AddMember("pitchAlias", pitchAlias, doc.GetAllocator());
+                    doc.PushBack(eventObject, doc.GetAllocator());
                 }
-                rapidjson::Value eventObject;
-                eventObject.SetObject();
-                rapidjson::Value trackId(trackIndex);
-                rapidjson::Value eventId(eventIndex);
-                rapidjson::Value documentSourceId(info->documentId.c_str(), doc.GetAllocator());
-                eventObject.AddMember("trackId", trackId, doc.GetAllocator());
-                eventObject.AddMember("eventId", eventId, doc.GetAllocator());
-                eventObject.AddMember("documentSourceId", documentSourceId, doc.GetAllocator());
-                doc.PushBack(eventObject, doc.GetAllocator());
                 ++eventIndex;
             }
             ++trackIndex;

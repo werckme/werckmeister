@@ -20,6 +20,7 @@ namespace compiler
 		const com::String *instrumentSectionName;
 		com::Expression expression;
 		com::Ticks barPositionQuarters = -1;
+		documentModel::PitchDef pitchDef;
 	};
 	class EventInformationDb
 	{
@@ -95,6 +96,10 @@ namespace compiler
 		ei.instrumentSectionName = *additonalEventInfos.instrumentSectionName;
 		ei.expression = additonalEventInfos.expression;
 		ei.barPositionQuarters = additonalEventInfos.barPositionQuarters;
+		ei.sourcePositionBegin = documentEvent.sourcePositionBegin;
+		ei.sourcePositionEnd = documentEvent.sourcePositionEnd;
+		ei.sourceId = documentEvent.sourceId;
+		ei.pitchAlias = additonalEventInfos.pitchDef.alias;
 		events.insert(ei);
 	}
 	void EventInformationDb::update(const EventInformation& evinf, const documentModel::Event& documentEvent, const com::midi::Event& midiEvent, const AdditionalEventInfos& additonalEventInfos)
@@ -184,6 +189,11 @@ namespace compiler
 		lastDocumentEvent = &ev;
 	}
 
+	void EventInformationServer::visit(const documentModel::PitchDef &pitch)
+	{
+		lastPitch = pitch;
+	}
+
 	void EventInformationServer::visit(IContext* context, const com::midi::Event& ev, IContext::TrackId trackId)
 	{
 		bool canProcess = !!lastDocumentEvent
@@ -200,6 +210,7 @@ namespace compiler
 		additionalEventInfos.instrumentName = &lastInstrument;
 		additionalEventInfos.instrumentSectionName = &lastInstrumentSectionName;
 		additionalEventInfos.barPositionQuarters = contextMeta ? contextMeta->barPosition / com::PPQ : -1;
+		additionalEventInfos.pitchDef = lastPitch;
 		eventDb->upsert(*lastDocumentEvent, ev, additionalEventInfos);
 	}
 

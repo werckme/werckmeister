@@ -19,8 +19,8 @@ namespace compiler
 	const double AContext::PitchbendMiddle = 0.5;
 	const Ticks AContext::TickTolerance = 0.5;
 
-	AContext::AContext(compiler::IDefinitionsServerPtr definitionsServer)
-		: definitionsServer_(definitionsServer)
+	AContext::AContext(compiler::IDefinitionsServerPtr definitionsServer, ICompilerVisitorPtr compilerVisitor)
+		: definitionsServer_(definitionsServer), _compilerVisitor(compilerVisitor)
 	{
 	}
 
@@ -160,6 +160,7 @@ namespace compiler
 	{
 		using namespace com;
 		documentModel::PitchDef pitch = definitionsServer_->resolvePitch(rawPitch);
+		_compilerVisitor->visit(pitch);
 		auto meta = voiceMetaData();
 		if (tying)
 		{
