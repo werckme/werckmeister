@@ -12,7 +12,7 @@ tempo: 300;
 instrument: piano;
 {
     /signature: 5 4/
-    "sn"4 d e f g   :|
+    c4 d e f g   :|
     a b c' d' e' :|
 }
 ]
