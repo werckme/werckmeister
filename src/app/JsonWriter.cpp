@@ -198,8 +198,10 @@ namespace app
                     rapidjson::Value sourcePositionBegin(info->sourcePositionBegin);
                     rapidjson::Value sourcePositionEnd(info->sourcePositionEnd);
                     rapidjson::Value pitchAlias(info->pitchAlias.c_str(), doc.GetAllocator());
+                    rapidjson::Value midiEventType(midiEvent.eventType());
                     eventObject.AddMember("trackId", trackId, doc.GetAllocator());
                     eventObject.AddMember("eventId", eventId, doc.GetAllocator());
+                    eventObject.AddMember("midiType", midiEventType, doc.GetAllocator());
                     eventObject.AddMember("documentSourceId", documentSourceId, doc.GetAllocator());
                     eventObject.AddMember("sourcePositionBegin", sourcePositionBegin, doc.GetAllocator());
                     eventObject.AddMember("sourcePositionEnd", sourcePositionEnd, doc.GetAllocator());
