@@ -9,6 +9,11 @@
 #include <compiler/metaCommands.h>
 #include <unordered_map>
 
+namespace 
+{
+	const documentModel::PitchDef NoPitchDef;
+}
+
 namespace compiler
 {
 	using namespace boost;
@@ -99,7 +104,7 @@ namespace compiler
 		ei.sourcePositionBegin = documentEvent.sourcePositionBegin;
 		ei.sourcePositionEnd = documentEvent.sourcePositionEnd;
 		ei.sourceId = documentEvent.sourceId;
-		ei.pitchAlias = additonalEventInfos.pitchDef.alias;
+		ei.pitchAlias = additonalEventInfos.pitchDef != NoPitchDef ? additonalEventInfos.pitchDef.alias : "";
 		events.insert(ei);
 	}
 	void EventInformationDb::update(const EventInformation& evinf, const documentModel::Event& documentEvent, const com::midi::Event& midiEvent, const AdditionalEventInfos& additonalEventInfos)
@@ -189,9 +194,14 @@ namespace compiler
 		lastDocumentEvent = &ev;
 	}
 
-	void EventInformationServer::visit(const documentModel::PitchDef &pitch)
+	void EventInformationServer::beginRenderPitch(const documentModel::PitchDef &pitch)
 	{
 		lastPitch = pitch;
+	}
+
+	void EventInformationServer::endRenderPitch() 
+	{
+		lastPitch = NoPitchDef;
 	}
 
 	void EventInformationServer::visit(IContext* context, const com::midi::Event& ev, IContext::TrackId trackId)

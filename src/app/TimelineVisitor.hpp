@@ -35,10 +35,8 @@ namespace app
         TIntervalContainer &intervalContainer() { return intervalContainer_; }
         const TIntervalContainer &intervalContainer() const { return intervalContainer_; }
         virtual void beginCompile() override { intervalContainer_.clear(); }
-        virtual void endCompile() override {}
         virtual void visit(compiler::IContext *context, const documentModel::Event &ev) override;
         virtual void visit(compiler::IContext *context, const com::midi::Event &ev, TrackId trackId) override;
-        virtual void visit(const documentModel::PitchDef &pitch) override {}
 
     private:
         TIntervalContainer intervalContainer_;

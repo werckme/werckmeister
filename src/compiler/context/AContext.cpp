@@ -12,6 +12,7 @@
 #include <com/tools.h>
 #include <sstream>
 #include <com/config/configServer.h>
+#include <com/OnLeavingScope.hpp>
 
 namespace compiler
 {
@@ -160,7 +161,8 @@ namespace compiler
 	{
 		using namespace com;
 		documentModel::PitchDef pitch = definitionsServer_->resolvePitch(rawPitch);
-		_compilerVisitor->visit(pitch);
+		_compilerVisitor->beginRenderPitch(pitch);
+		com::OnLeavingScope onLeavingScope([this]{ _compilerVisitor->endRenderPitch(); });
 		auto meta = voiceMetaData();
 		if (tying)
 		{
