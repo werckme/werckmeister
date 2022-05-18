@@ -180,12 +180,11 @@ int startPlayer(std::shared_ptr<PlayerProgramOptions> programOptionsPtr)
 		}
 		FactoryConfig factory(injector);
 		factory.init();
-		auto program = injector.create<SheetPlayerProgram *>();
-		sheetWatcherHandlers->container.push_back(program);
+		auto program = std::unique_ptr<SheetPlayerProgram>(injector.create<SheetPlayerProgram *>());
+		sheetWatcherHandlers->container.push_back(program.get());
 		program->prepareEnvironment();
 		auto result = program->execute();
 		sheetWatcherHandlers->container.clear();
-		delete program;
 		return result;
 	}
 	catch (const com::Exception &ex)
