@@ -48,8 +48,18 @@ namespace
 	enum ConductionSelectorFields
 	{
 		CoSourcePosBegin,
+		CoSourceId,
 		CoType,
 		CoArguments
+	};
+
+	enum DeclarationFields
+	{
+		DcSourcePosBegin,
+		DcSourceId,
+		DcOperationType,
+		DcValue,
+		DcUnit
 	};
 }
 
@@ -164,7 +174,13 @@ namespace parser
 					(attr(ConductionRule::Declaration::UnitAbsolute));
 
 				declaration_ %=
-					(current_pos_.current_pos >> attr(sourceId_) >> +char_("a-zA-Z") >> operationType_ >> double_ >> valueUnit_ >> ";");
+					(current_pos_.current_pos 
+					>> attr(sourceId_) 
+					>> +char_("a-zA-Z") 
+					>> operationType_ 
+					>> (fraction_ | double_) 
+					>> valueUnit_ 
+					>> ";");
 
 				rules_ %=
 					current_pos_.current_pos >> attr(sourceId_) >> selectorsSet_ >> "{" >> *declaration_ > "}";
