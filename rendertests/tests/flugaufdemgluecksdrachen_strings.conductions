@@ -6,12 +6,12 @@ instrument(Vl2 pno) fromPosition(172) {
   duration = 30%;
 }
 
+-- this section implements the following articulation pattern
+--  >           >            >             >            >           > 
+-- 8th 8th 8th 8th  8th 8th 8th 8th | 8th 8th 8th 8th  8th 8th 8th 8th
 instrument(Vcl Vla) fromPosition(@partA) toPosition(@partB) onBeat(1.5 3 4.5),
-instrument(Vcl Vla) fromPosition(@partA2) toPosition(@fine) onBeat(1.5 3 4.5) {
-  velocity = 80;
-}
-
 instrument(Vcl Vla) fromPosition(@partA) toPosition(@partB) nthBar(2) onBeat(1 2.5 4),
+instrument(Vcl Vla) fromPosition(@partA2) toPosition(@fine) onBeat(1.5 3 4.5),
 instrument(Vcl Vla) fromPosition(@partA2) toPosition(@fine) nthBar(2) onBeat(1 2.5 4) {
     velocity = 80;
 }
