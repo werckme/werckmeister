@@ -14,7 +14,7 @@ using "./teaser_guitar.template";
 using "./teaser_piano.template";
 
 tempo: 100;
-device: MyDevice  midi _usePort=18;
+device: MyDevice  midi _usePort=17;
 instrumentDef: bass _onDevice=MyDevice _ch=0 _pc=35;
 instrumentConf: bass volume 100;
 

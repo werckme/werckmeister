@@ -173,11 +173,9 @@ namespace conductor
 				EventsAndDeclarations newValue;
 				result.emplace_back(newValue);
 				auto eventsAndDeclarations = &result.back();
-				int numberOfSelectors = 0;
 				Events matchedMidiEvents;
 				for (auto const &selectors : rule.selectorsSet)
 				{
-					numberOfSelectors += selectors.size();
 					Events matchedSubset;
 					for(auto const &selector : selectors)
 					{
@@ -215,8 +213,7 @@ namespace conductor
 						{
 							FM_THROW(compiler::Exception, "declaration not found: " + declaration.property);
 						}
-						double orderScore = nthRule / double((totalRules + 1)); // shold not be >= 1
-						double specificity = double(numberOfSelectors) + orderScore;
+						double specificity = nthRule; 
 						declarationImpl->setDeclarationData(declaration);
 						declarationImpl->specificity(specificity);
 						eventsAndDeclarations->declarations.push_back(declarationImpl);

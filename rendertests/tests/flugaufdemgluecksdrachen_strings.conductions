@@ -1,6 +1,5 @@
 instrument(Vl1 Vla Vcl) {
     duration = 30%;
-    velocity = 1;
 }
 
 instrument(Vl2 pno) fromPosition(172) {
@@ -20,7 +19,7 @@ instrument(Vcl Vla) fromPosition(@partA2) toPosition(@fine) nthBar(2) onBeat(1 2
 instrument(Vcl Vla) fromPosition(@partA) toPosition(@partB) nthBar(2) onBeat(1.5 3 4.5),
 instrument(Vcl Vla) fromPosition(@partA2) toPosition(@fine) nthBar(2) onBeat(1.5 3 4.5) 
 {
-  velocity = 1;
+  velocity = 64;
 }
 
 instrument(Vla) {
