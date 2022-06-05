@@ -29,4 +29,4 @@ https://www.youtube.com/watch?v=gvntLSXK_Wc&list=WL&index=5&t=0s
 # music theory
 https://en.wikipedia.org/wiki/Turnaround_(music)
 
-https://pianowithwillie.com/what-are-chord-shells/
+https://myjazzedge.com/what-are-chord-shells/
