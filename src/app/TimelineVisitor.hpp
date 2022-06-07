@@ -53,6 +53,8 @@ namespace app
         std::vector<int> pitches;
         int channel = -1;
         int instrumentId = -1;
+        com::Ticks beginTime = -1;
+        com::Ticks endTime = -1;
         bool operator<(const EventInfo &b) const { return this->beginPosition < b.beginPosition; }
         bool operator==(const EventInfo &b) const { return this->beginPosition == b.beginPosition; }
     };
@@ -85,6 +87,8 @@ namespace app
         {
             currentEventInfo_->endPosition = ev.sourcePositionEnd;
         }
+        currentEventInfo_->beginTime = evStartPos / com::PPQ;
+        currentEventInfo_->endTime = evEndPos / com::PPQ;
         currentEventInfo_->sourceId = ev.sourceId;
         currentEventInfo_->eventNr = (int)intervalContainer_.size();
         TSet value = {*currentEventInfo_};
