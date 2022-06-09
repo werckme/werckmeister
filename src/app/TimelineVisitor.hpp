@@ -7,6 +7,7 @@
 #include <memory>
 #include <boost/icl/interval_map.hpp>
 #include <documentModel/objects/ASheetObject.h>
+#include <documentModel/objects/ASheetObjectWithSourceInfo.h>
 #include <compiler/DefaultCompilerVisitor.h>
 #include <compiler/context/MidiContext.h>
 #include <com/ILogger.h>
@@ -43,7 +44,7 @@ namespace app
         std::shared_ptr<EventInfo> currentEventInfo_;
     };
 
-    typedef int SourceId;
+    typedef documentModel::ASheetObjectWithSourceInfo::SourceId SourceId;
     struct EventInfo
     {
         int beginPosition = -1;
