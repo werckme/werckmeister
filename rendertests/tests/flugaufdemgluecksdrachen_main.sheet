@@ -1,0 +1,192 @@
+-- TITLE: Flug auf dem Gluecksdrachen (Never Ending Story)
+-- BY: Klaus Doldinger
+-- CREATORID: johannes.unger@vstforx.de
+-- #not-listed #time-signature-change #conductions-nthbar-selector
+using "./flugaufdemgluecksdrachen_piano.template";
+using "./flugaufdemgluecksdrachen_drums.template";
+using "./flugaufdemgluecksdrachen_myPitchmap.pitchmap";
+using "./flugaufdemgluecksdrachentrills.lua";
+using "./flugaufdemgluecksdrachen_default.chords";
+using "./flugaufdemgluecksdrachen_myConductions.conductions";
+using "./flugaufdemgluecksdrachen_strings.conductions";
+using "./flugaufdemgluecksdrachen_instrument.config";
+
+
+tempo: 146;
+device: MyDevice  midi _usePort=18;
+
+-- lead voice = Vl2 + piano 
+[
+instrument: lead;
+{
+	\f
+    -- p. 18
+	r1 | r1 | r1 | r1 | 
+    e4 e'4.  d'4. | b4 c' a' g' | f#'4.  g'4.  d'4~ | &2~   &8 e'4. |
+    e'4.  f'  c'4~  | &8 f'4.  d''4  c'' | d''1~ | &2 r | f#4 f#'4. e'8~&4 | c#'4 d' b' a' | g#'4. a'8~&4 e'~ |
+    &2~   &8 f#'8~&4 | f#'4. g'8~&4  d'~ | &8  g'8~ &4  e'' d'' |  e''1~  |  &2  f#'4  g'  |  a'2  g'2  |
+    f#'8 e' d' c'  c'2  |  bb2   c'4 d' |  g'2  f'2  |  e'8  d' c' bb   bb2  |  ab2  bb4 c'  |  bb  ab  g  ab  |
+    c' f'  eb'  d' | c#'  d'  f#' d''  |  c''2.  b'4  |  a'8  g' a' b' c''2~  | &4  b'  a'8 g' a' b' | c''2   b' | 
+    /signature: 2 4/  
+    a'4  g' |
+    /signature: 4 4/
+    e4  e'4.  d'4.  |  b4  c'  a'  g' | f#'4.   g'4.  d'4~  | &8  b'4.  d''4  c''  |  a'4.  bb'4. f'4~ | &8  d''4.  g''4  f'' | d'' eb''  bb' eb'' |   
+    /signature: 2 4/  
+    c'''  bb''  |
+    /signature: 4 4/
+    c'''1~ |  &1  |  r8 g'8  & &  & &  &16 & & & | &4 &2. | 
+}
+]
+------------------------------------------------------------------
+-- violin 1
+[
+instrument: Vl1;
+{
+    \pp
+    g8&&&&&&& | &&&&&&&& | &&&&&&&& | &&&&&&&&
+}
+]
+
+-- violin 2 
+[
+instrument: Vl2;
+{
+	\pp
+    -- p. 18
+	r1 | r1 | r2  r4 \p (gabc'd'e'f')4 | "tr"@g'1 | 
+}
+]
+
+-- viola
+[
+instrument: Vla;
+{
+	\pp
+	e'8&&&&&&& | &&&&&&&& | &&&&&&&& | &&&&&&&& |
+    \p
+    <e' g'>8 & & <d' g'> <e' g'> & <d' g'>  <e' g'> | & <d' g'> <e' g'> &    <d' g'> <e' g'> & <d' g'> |
+    <d' g'> & & & & & & & |  & & & & & & & &  |
+    <f' a'> & & <e' a'>   <f' a'> & <e' a'>  <f' a'> | & <e' a'> <f' a'> &   <e' a'> <f' a'> & <e' a'> |
+    <d' f'> & & <c' f'>   <d' f'> & <c' f'>  <d' f'> | & <c' f'> <d' f'> &   <c#' e'> & <bb e'> <c#' e'> |
+    <f#' a'> & & <e' a'>   <f#' a'> & <e' a'>  <f#' a'> | & <e' a'> <f#' a'>   & <e' a'> <f#' a'> & <e' a'> |
+    <e' a'> & & <e' a'>   <e' a'> & <e' a'>  <e' a'> | & <e' a'> <e' a'>   & <e' a'> <e' a'> & <e' a'> |
+    <g' b'> & & <f#' b'>   <g' b'> & <f#' b'>  <g' b'> | & <f#' b'> <g' b'>  &   <f#' b'> <g' b'> & <f#' b'> |
+    <e' g'> & & <d' g'>   <e' g'> & <d' g'>  <e' g'> | & <d' g'> <e' g'> <d' g'>   <d#' f#'> <d#' f#'> <c#' f#'> <d#' f#'> |
+    <e' a'> & & &  <e' g'> & & & | <e' f#'> & & &  <bb c'> & & & | <bb d'> & & &  <bb c'> & <bb d'> & | <d' g'> & & &  <d' f'> & & &  |
+    <d' e'> & <d' f'> &  <c' eb'> & & & | <c' eb'> & & &   & & & & | <c' f'> & & &   & & & &   |
+    & & & &    <c' eb'> & <c' d'> &  | <c#' f#'> & & &   <d' f#> & <d' a'> & | <g' c''> & & &  & &  <g' b'> & | & & & &  <g' c''> & & & |
+    & & <g' b'> &  & & & & | <g' c''> & & &   <g' b'> & & &  |
+    /signature: 2 4/
+    <f' a'> &  <d' g'>& |
+    /signature: 4 4/
+    <e' g'> & & <d' g'> <e' g'> & <d' g'> <e' g'> | & <d' g'> <e' g'> &  <d' g'> <e' g'> & <d' g'> | & & & &  & & & &  | & & & &   & & &  <g' b'> |
+    <bb' d''> & & <bb' c''>  <bb' d''> &  <bb' c''> <bb' d''>  | &  <bb' c''> <bb' d''> &  <bb' c''> <bb' d''> &  <bb' c''> | <g' bb'> & &  <f' bb'>    <g' bb'> & <f' bb'> <g' bb'>  | 
+    /signature: 2 4/
+    <g' c''> <f' c''> <g' bb'>  &  |
+    /signature: 4 4/
+    <ab' c''> & & &  & & & & |  <a' c''> & & &   & & & & |
+    r8 <c'' e''>8  & &  & &  &16 & & & | &4 &2. | 
+}
+]
+
+-- cello
+[
+instrument: Vcl;
+{
+	\pp
+	d8&&&&&&& | c&&& b,& c& | d&&&&&&& | c&&& b,& c& |
+    \p
+    <e, c>8 & & <d, c> <e, c> & <d, c>  <e, c> | & <d, c> <e, c>   & <d, c> <e, c> & <d, c> |
+    <d, c> & & & & & & & |  & & & & & & & &  |
+    <f, d> & & <e, d>   <f, d> & <e, d>  <f, d> | & <e, d> <f, d>   & <e, d> <f, d> & <e, d> |
+    <d, bb,> & & <c, bb,>   <d, bb,> & <c, bb,>  <d, bb,> | & <c, bb,> <d, bb,>   & <c#, a,> & & & |
+    <f#, d> & & <e, d>   <f#, d> & <e, d>  <f#, d> | & <e, d> <f#, d>   & <e, d> <f#, d> & <e, d> |
+    <e, c#> & & <e, b,>   <e, c#> & <e, b,>  <e, c#> | & <e, b,> <e, c#>   & <e, b,> <e, c#> & <e, b,> |
+    <g, e> & & <f#, e>   <g, e> & <f#, e>  <g, e> | & <f#, e> <g, e>   & <f#, e> <g, e> & <f#, e> |
+    <e, c> & & <d, c>   <e, c> & <d, c>  <e, c> | & <d, c> <e, c> <d, c>   <d#, b,> <d#, b,> <c# g,> <d#, b,> |
+    <g, b,> & & &  & & & & | & & & &  <d, f,> & & & | & & & &   & & & &  | <f, a,> & & &  & & & &  |
+    & & & &  <eb, bb,> & & & | <eb, ab,> & & &   <eb, bb,> & <eb, ab,> & | <f, bb,>& <f, ab,>&   <f, g,>& <f, ab,>&  |
+    <f, ab,> & & &  <f#, a,> & & &  | & & & &  & & & & | <g, eb> & & &  & &  <g, d> & | & & & &  <g, eb> & & & |
+    & & <g, d> &  & & & & | <g, eb> & & &   <g, b,> & & &  |
+    /signature: 2 4/
+    <f, c> &  <d, b,>& |
+    /signature: 4 4/
+    <e, c> & & &   & & & & | & & & &  & & & & | <d, b,> & &   <d, a,>   <d, b,> &  <d, a,> <d, b,>  | & <d, a,> <d, b,> &    <d, a,> <d, b,> & <g, d> |
+    <bb, f> & & &  & & & & | & & & &  & & & & | <g, eb> & & &  & & & & | 
+    /signature: 2 4/
+    <g, eb> &   &  &  |
+    /signature: 4 4/
+    <c eb> & & &  & & & & |  <a, f> & & &   & & & & |
+    r8 <g, e>8  & &  & &  &16 & & & | &4 &2. | 
+}
+]
+
+
+-- piano
+[
+instrument: pno;
+{
+
+	\pp
+    <d e g>8 &&&&&&& | <c e g> &&&&&&& | <d e g>8 &&&&&&& | <c e g>&&& <b, e g>& <c e g>& | 
+}
+]
+
+-- synth
+[
+instrument: syn;
+{
+
+	\pp
+    d8 e g d e g d e | d8 e g d e g d e | d8 e g d e g d e | d8 e g d e g d e
+}
+]
+
+
+
+-- e-bass
+[
+instrument: ebass;
+{
+ 	r1 | r1 | r1 | c,8&&&&&&& | c,8&&&&&&& | c,8&&&&&&& | g,,&&&&&&& | g,,&&&&&&& |
+    d,8&&&&&&& | &&&&&&&& | bb,,&&&&&&& | &&&&  a,,&  a,& | d,&&&&&&& | &&&&&&&& | a,,&&&&&&& | &&&&&&&& | e,,&&&&&&& | e,&&&&&&& |
+    c,&&&&&&& | c,&&& b,,&&& | e,,&&& &&&& | e,&&&  bb,,&&& | &&&& &&&& | d,&&& &&&& | &&&& ab,,&&& | &&&& &&&& | f,,&&& &&&& |
+    f,&&& d,&&& |  &&&& &&&& |  g,,&&& &&&& | &&&& &&&& | &&&& &&&& | &&&& &&&& |
+    /signature: 2 4/  
+    g,,8 &   g, & |
+    /signature: 4 4/
+    c,8 &&& &&&& | &&&& &&&& | g,,&&& &&&& | &&&& &&&& | bb,,&&& &&&& | &&&& &&&& | eb,&&& &&&& |
+    /signature: 2 4/  
+    eb,8 &&& |
+    /signature: 4 4/
+    ab,,8 &&& &&&& | f,,&&& &&&& | r8 c,,8  & &  & &  &16 & & & | &4 &2. | 
+}
+]
+
+
+-- accomp
+[
+type: accomp;
+{
+    /template: piano drums/
+    r | r | r | r | 
+    /cue: partA/ 
+    C9 | C9 | G9 | G9 | D-9 | D-9 | Bb9 | Bb9 A9 | D | D | A | 
+    A9 | E-9 | E-9 | C9 | C9 B9 |
+    /cue: partB/ 
+    /template: piano drums2/
+    E-9 | E-9 Bb9 | Bb9 | D-9 | D-9 Ab9 | Ab9 | F- |
+    F-9 D7b9 | D7 | C-/5  G | G  C-/5 | C-/5  G | G  C-/5 |
+    /template: piano drums3/
+    /signature: 2 4/  
+    F/2 G | 
+    /signature: 4 4/
+    /cue: partA2/ 
+    C9 | C9 | G9 | G9 | Bb9 | Bb9 | Eb9 |
+    /signature: 2 4/
+    Eb9 |
+    /signature: 4 4/
+    /cue: fine/ 
+    Ab9 |  F9 | C |
+}
+]

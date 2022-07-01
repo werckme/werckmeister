@@ -4,7 +4,7 @@ using "lua/voicings/guitar.lua";
 using "./42_conduction_sheet_priority.conductions";
 
 tempo: 120;
-device: MyDevice  midi _usePort=3;
+device: MyDevice  midi _usePort=18;
 instrumentDef:rhythm _onDevice=MyDevice  _ch=1 _pc=28;
 instrumentDef:rhythm2 _onDevice=MyDevice  _ch=3 _pc=50;
 instrumentDef:bass    _onDevice=MyDevice  _ch=2 _pc=38;

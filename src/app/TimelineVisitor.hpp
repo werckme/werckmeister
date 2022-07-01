@@ -7,6 +7,7 @@
 #include <memory>
 #include <boost/icl/interval_map.hpp>
 #include <documentModel/objects/ASheetObject.h>
+#include <documentModel/objects/ASheetObjectWithSourceInfo.h>
 #include <compiler/DefaultCompilerVisitor.h>
 #include <compiler/context/MidiContext.h>
 #include <com/ILogger.h>
@@ -35,7 +36,6 @@ namespace app
         TIntervalContainer &intervalContainer() { return intervalContainer_; }
         const TIntervalContainer &intervalContainer() const { return intervalContainer_; }
         virtual void beginCompile() override { intervalContainer_.clear(); }
-        virtual void endCompile() override {}
         virtual void visit(compiler::IContext *context, const documentModel::Event &ev) override;
         virtual void visit(compiler::IContext *context, const com::midi::Event &ev, TrackId trackId) override;
 
@@ -44,7 +44,7 @@ namespace app
         std::shared_ptr<EventInfo> currentEventInfo_;
     };
 
-    typedef int SourceId;
+    typedef documentModel::ASheetObjectWithSourceInfo::SourceId SourceId;
     struct EventInfo
     {
         int beginPosition = -1;
@@ -54,6 +54,8 @@ namespace app
         std::vector<int> pitches;
         int channel = -1;
         int instrumentId = -1;
+        com::Ticks beginTime = -1;
+        com::Ticks endTime = -1;
         bool operator<(const EventInfo &b) const { return this->beginPosition < b.beginPosition; }
         bool operator==(const EventInfo &b) const { return this->beginPosition == b.beginPosition; }
     };
@@ -86,6 +88,8 @@ namespace app
         {
             currentEventInfo_->endPosition = ev.sourcePositionEnd;
         }
+        currentEventInfo_->beginTime = evStartPos / com::PPQ;
+        currentEventInfo_->endTime = evEndPos / com::PPQ;
         currentEventInfo_->sourceId = ev.sourceId;
         currentEventInfo_->eventNr = (int)intervalContainer_.size();
         TSet value = {*currentEventInfo_};

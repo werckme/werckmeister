@@ -7,13 +7,13 @@ namespace conductor
     bool WithTag::isMatch(const documentModel::ConductionSelector::Arguments &arguments, const EventWithMetaInfo &evm) const
     {
         const auto &ev = *evm.noteOn;
+        auto tags = _eventInformationServer->getTags(ev);
+        if (tags.empty())
+        {
+            return false;
+        }        
 		for (const auto &argument : arguments)
 		{
-			auto tags = _eventInformationServer->getTags(ev);
-            if (tags.empty())
-            {
-                continue;
-            }
             if (std::find(tags.begin(), tags.end(), argument.name) != tags.end()) 
             {
                 return true;

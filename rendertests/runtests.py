@@ -62,7 +62,9 @@ if __name__ == '__main__':
         try:
             print(f"testing '{testfile}' ...", end=' ')
             #print (f"{compiler} {' '.join(compiler_args)}")
-            os.system(f"{compiler} {' '.join(compiler_args)}")
+            ret = os.system(f"{compiler} {' '.join(compiler_args)}")
+            if ret != 0:
+                raise Exception(f"compiler execution failed: {ret}")
             compare(reffile, midifile, test_tags)
             print(term.green + "OK" + term.normal)
         except Exception as ex:

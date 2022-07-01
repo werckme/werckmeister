@@ -3,7 +3,7 @@
 namespace conductor
 {
     bool OnBar::isMatch(const documentModel::ConductionSelector::Arguments &arguments, const EventWithMetaInfo &evm) const
-    {
+    {	
         for (const auto &argument : arguments)
         {
             int valueToMatch = int(argument.numberValue - 1);

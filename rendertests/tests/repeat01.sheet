@@ -1,4 +1,3 @@
-
 -- setup your midi device:
 -- to get a list of your available MIDI devices 
 -- and their port numbers, execute "sheetp --list"

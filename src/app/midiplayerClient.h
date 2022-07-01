@@ -73,7 +73,7 @@ namespace app
 		typedef std::unordered_map<TrackId, OutputInfo> TrackOutputMap;
 		typedef std::unordered_map<TrackId, int> TrackOffsets;
 		Lock lock;
-		std::unique_ptr<TTimer> playerTimer_;
+		typename Timer::Ptr playerTimer_;
 		State state_ = Stopped;
 		void onProcess();
 		void updateElapsedTime();
@@ -250,7 +250,7 @@ namespace app
 		elapsed_time_ = Clock::now();
 		if (!playerTimer_)
 		{
-			playerTimer_ = std::make_unique<TTimer>([this]()
+			playerTimer_ = Timer::Create([this]()
 			{
 				updateElapsedTime();
 				try

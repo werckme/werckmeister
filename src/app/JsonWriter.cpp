@@ -1,7 +1,8 @@
 #include "JsonWriter.h"
 #include <iostream>
 #include <documentModel/Document.h>
-
+#include <com/config/configServer.h>
+#include <com/config.hpp>
 namespace
 {
     rapidjson::Document documentInfosToJSONDoc(documentModel::DocumentPtr sheetDoc, com::Ticks duration, const compiler::Warnings &warnings)
@@ -39,6 +40,24 @@ namespace
         doc.AddMember("sources", array, doc.GetAllocator());
         doc.AddMember("duration", durationValue, doc.GetAllocator());
         doc.AddMember("warnings", warningsArray, doc.GetAllocator());
+#if IS_EMSCRIPTEN_BUILD == 1
+        rapidjson::Value devicedArray(rapidjson::kArrayType);
+        for(const auto& device : com::getConfigServer().getDevices())
+        {
+            if (device.second.type != com::DeviceConfig::WebPlayer) {
+                continue;
+            }
+            rapidjson::Value object(rapidjson::kObjectType);
+            rapidjson::Value name;
+            rapidjson::Value fontName;
+            name.SetString(device.second.name.c_str(), doc.GetAllocator());
+            fontName.SetString(device.second.deviceId.c_str(), doc.GetAllocator());
+            object.AddMember("name", name, doc.GetAllocator());
+            object.AddMember("fontName", fontName, doc.GetAllocator());
+            devicedArray.PushBack(object, doc.GetAllocator());
+        }
+        doc.AddMember("devices", devicedArray, doc.GetAllocator());
+#endif
         return doc;
     }
 }
@@ -65,6 +84,10 @@ namespace app
         if (_programOptions->isJsonDocInfoMode())
         {
             writeValidationJson(document);
+        }
+        if (_programOptions->isJsonDebugInfoMode())
+        {
+            writeDebugInfos();
         }
     }
 
@@ -110,8 +133,7 @@ namespace app
         docToJson(ostream(), document);
         ostream() << ", \"eventInfos\": ";
         eventInfosToJson(ostream(), document);
-        ostream() << "}"
-                  << std::endl;
+        ostream() << "}" <<std::endl;
     }
     void JsonWriter::docToJson(std::ostream &os, documentModel::DocumentPtr document)
     {
@@ -153,5 +175,43 @@ namespace app
             first = false;
         }
         os << "]";
+    }
+
+    void JsonWriter::writeDebugInfos()
+    {
+        rapidjson::Document doc;
+        doc.SetArray();
+        int trackIndex = 0;
+        for (const auto track : _midifile->ctracks()) 
+        {
+            int eventIndex = 0;
+            for (const auto midiEvent : track->events()) 
+            {
+                const auto info = _eventInformationServer->find(midiEvent);
+                if (info != nullptr)
+                {
+                    rapidjson::Value eventObject;
+                    eventObject.SetObject();
+                    rapidjson::Value trackId(trackIndex);
+                    rapidjson::Value eventId(eventIndex);
+                    rapidjson::Value documentSourceId(info->sourceId);
+                    rapidjson::Value sourcePositionBegin(info->sourcePositionBegin);
+                    rapidjson::Value sourcePositionEnd(info->sourcePositionEnd);
+                    rapidjson::Value pitchAlias(info->pitchAlias.c_str(), doc.GetAllocator());
+                    rapidjson::Value midiEventType(midiEvent.eventType());
+                    eventObject.AddMember("trackId", trackId, doc.GetAllocator());
+                    eventObject.AddMember("eventId", eventId, doc.GetAllocator());
+                    eventObject.AddMember("midiType", midiEventType, doc.GetAllocator());
+                    eventObject.AddMember("documentSourceId", documentSourceId, doc.GetAllocator());
+                    eventObject.AddMember("sourcePositionBegin", sourcePositionBegin, doc.GetAllocator());
+                    eventObject.AddMember("sourcePositionEnd", sourcePositionEnd, doc.GetAllocator());
+                    eventObject.AddMember("pitchAlias", pitchAlias, doc.GetAllocator());
+                    doc.PushBack(eventObject, doc.GetAllocator());
+                }
+                ++eventIndex;
+            }
+            ++trackIndex;
+        }
+        toStream(ostream(), doc);
     }
 }

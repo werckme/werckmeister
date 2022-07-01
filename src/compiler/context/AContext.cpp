@@ -12,6 +12,7 @@
 #include <com/tools.h>
 #include <sstream>
 #include <com/config/configServer.h>
+#include <com/OnLeavingScope.hpp>
 
 namespace compiler
 {
@@ -19,8 +20,8 @@ namespace compiler
 	const double AContext::PitchbendMiddle = 0.5;
 	const Ticks AContext::TickTolerance = 0.5;
 
-	AContext::AContext(compiler::IDefinitionsServerPtr definitionsServer)
-		: definitionsServer_(definitionsServer)
+	AContext::AContext(compiler::IDefinitionsServerPtr definitionsServer, ICompilerVisitorPtr compilerVisitor)
+		: definitionsServer_(definitionsServer), _compilerVisitor(compilerVisitor)
 	{
 	}
 
@@ -160,6 +161,8 @@ namespace compiler
 	{
 		using namespace com;
 		documentModel::PitchDef pitch = definitionsServer_->resolvePitch(rawPitch);
+		_compilerVisitor->beginRenderPitch(pitch);
+		com::OnLeavingScope onLeavingScope([this]{ _compilerVisitor->endRenderPitch(); });
 		auto meta = voiceMetaData();
 		if (tying)
 		{
@@ -281,12 +284,16 @@ namespace compiler
 
 	void AContext::setChordTrackTarget()
 	{
-		if (chordTrack_ == INVALID_TRACK_ID)
+		if (chordTrack_ != INVALID_TRACK_ID)
 		{
-			chordTrack_ = createTrack();
-			chordVoice_ = createVoice();
+			setTarget(chordTrack_, chordVoice_);
+			return;
 		}
+		chordTrack_ = createTrack();
+		chordVoice_ = createVoice();
 		setTarget(chordTrack_, chordVoice_);
+		auto trackMeta = trackMetaData();
+		trackMeta->uname = "Accomp";
 	}
 
 	TimeInfo AContext::getTimeInfo() const

@@ -1,0 +1,81 @@
+-- #skip-event-plausibility-test
+
+using "/lua/mods/swing.lua";
+using "/lua/mods/drumRudiments.lua";
+using "/chords/default.chords";
+using "./teaser_myPitchmap.pitchmap";
+using "./teaser_drums.conductions";
+using "./teaser_bass.conductions";
+using "./teaser_guitar.conductions";
+using "./teaser_piano.conductions";
+using "./teaser_bass.template";
+using "./teaser_drums.template";
+using "./teaser_guitar.template";
+using "./teaser_piano.template";
+
+tempo: 100;
+device: MyDevice  midi _usePort=17;
+instrumentDef: bass _onDevice=MyDevice _ch=0 _pc=35;
+instrumentConf: bass volume 100;
+
+instrumentDef: mutedGuitar _onDevice=MyDevice _ch=1 _pc=28;
+instrumentConf: mutedGuitar pan 90;
+
+instrumentDef: piano _onDevice=MyDevice _ch=2 _pc=4;
+instrumentConf: piano volume 100 pan 10;
+
+instrumentDef: guide _onDevice=MyDevice _ch=3 _pc=12;
+instrumentConf: guide volume 0;
+
+instrumentDef: lead _onDevice=MyDevice _ch=4 _pc=25;
+instrumentConf: lead  volume 55;
+
+instrumentDef:drums  _onDevice=MyDevice  _ch=9 _pc=50;
+instrumentConf:drums  mod drumRudiments volume 100;
+
+
+[
+instrument: lead;
+{
+    r1 | r1 | r1 | r1 
+    |: g16. g# a8 a# c'8 r8  a#16 a g a a |^1 c8. c  r2 r8   :|
+    |^2 <a# e' g'>8. &16  r2. |
+}
+]
+
+[
+type: accomp;
+{
+    /template: bass guitar drums/ -- Part A1
+    C | F |
+    C | F |
+    C7 | Fmaj7 |
+    C7 | F |
+
+    /template: bass2 drums2/ -- Part B1
+    /cue: beginB/ 
+    
+    G7 | F7 | 
+    G7 | F7 | 
+    
+    /template: bass2a drums2a/ -- Part B2
+    
+    G7 | F7 | 
+    G7 | F7 |
+    
+    /cue: endB/ 
+    /template: bass guitar drums1a piano/ -- Part A2
+    
+    C | F |
+    C | F |
+    C7 | Fmaj7 |
+    C7 | F7 |
+    
+    /template: bass3 drums guitar2/ -- Part C
+    
+    C | C |
+    C | C |
+    C | C |
+    C | C |
+}
+]

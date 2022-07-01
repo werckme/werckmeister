@@ -1,0 +1,7 @@
+instrument(piano2) {
+	pitch += 4;
+}
+
+instrument(piano2) pitch(d e a b) { -- keep tonality
+	pitch += 3;
+}

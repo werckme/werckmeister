@@ -16,7 +16,7 @@ namespace conductor
         com::midi::Event unmodifiedOriginalNoteOn;
         com::midi::Event unmodifiedOriginalNoteOff;
         TimeSignature timeSignature = {4, 4};
-        com::Ticks barNumber = 0;
+        com::Ticks barNumber = 0;        
     };
     class ISelector : public com::IRegisterable
     {

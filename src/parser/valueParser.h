@@ -1,6 +1,7 @@
 #include <boost/spirit/include/qi.hpp>
 #include <documentModel/PitchDef.h>
 #include <documentModel/AliasPitchDef.h>
+#include <documentModel/objects/FractionValue.hpp>
 #include <com/common.hpp>
 #include <boost/spirit/include/phoenix_operator.hpp>
 #include <boost/spirit/include/phoenix_object.hpp>
@@ -19,15 +20,21 @@ BOOST_FUSION_ADAPT_STRUCT(
     documentModel::AliasPitchDef,
     (com::String, alias))
 
+BOOST_FUSION_ADAPT_STRUCT(
+    documentModel::FractionValue,
+    (int, nominator)
+    (int, denominator))
+
 namespace parser
 {
-    struct PitchParser
+    struct ValueParser
     {
         typedef com::String::const_iterator Iterator;
-        PitchParser();
+        ValueParser();
         boost::spirit::qi::rule<Iterator, documentModel::PitchDef(), boost::spirit::ascii::space_type> pitchOrAlias_;
         boost::spirit::qi::rule<Iterator, documentModel::AliasPitchDef(), boost::spirit::ascii::space_type> extendedPitch_;
         boost::spirit::qi::rule<Iterator, documentModel::AliasPitchDef(), boost::spirit::ascii::space_type> alias_;
         boost::spirit::qi::rule<Iterator, documentModel::PitchDef(), boost::spirit::ascii::space_type> pitch_;
+        boost::spirit::qi::rule<Iterator, documentModel::FractionValue(), boost::spirit::ascii::space_type> fraction_;
     };
 }

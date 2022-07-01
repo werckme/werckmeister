@@ -22,6 +22,7 @@ struct ICompilerProgramOptions
 	virtual double getBegin() const = 0;
 	virtual bool isEndSet() const = 0;
 	virtual double getEnd() const = 0;
+	virtual bool isJsonDebugInfoMode() const = 0;
 	virtual ~ICompilerProgramOptions() = default;
 };
 

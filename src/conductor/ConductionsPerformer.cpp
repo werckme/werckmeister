@@ -17,7 +17,6 @@ namespace conductor
 		com::String declNamespace_ = "conductor.decl.";
 		com::midi::Event *findCorrespondingNoteOffEvent(com::midi::EventContainer::Iterator noteOn, com::midi::EventContainer::Iterator end)
 		{
-			auto it = noteOn;
 			for (auto it = noteOn; it != end; ++it)
 			{
 				if (it->eventType() != com::midi::NoteOff)
@@ -87,7 +86,7 @@ namespace conductor
 			auto begin = track->events().container().begin();
 			TimeSignature timeSignature = {4, 4};
 			com::Ticks signatureChangeBarOffset = 0;
-			com::String instrumentName;
+			com::String instrumentName;			
 			for (; it != end; ++it)
 			{
 				if (it->eventType() == com::midi::MetaEvent && it->metaEventType() == com::midi::TimeSignature)
@@ -97,7 +96,7 @@ namespace conductor
 					timeSignature = com::midi::Event::MetaGetSignatureValue(it->metaData(), it->metaDataSize());
 					com::Ticks newBarNumber = calculateBarNumber(quarters, timeSignature);
 					signatureChangeBarOffset += oldBarNumber - newBarNumber;
-				}
+				}				
 				com::midi::Event &event = *it;
 				if (!isEventOfInterest(event))
 				{
@@ -174,31 +173,36 @@ namespace conductor
 				EventsAndDeclarations newValue;
 				result.emplace_back(newValue);
 				auto eventsAndDeclarations = &result.back();
-				for (auto const &selector : rule.selectors)
+				Events matchedMidiEvents;
+				for (auto const &selectors : rule.selectorsSet)
 				{
-					try
+					Events matchedSubset;
+					for(auto const &selector : selectors)
 					{
-						Events matchedMidiEvents;
-						if (eventsAndDeclarations->events.empty())
+						try
 						{
-							matchedMidiEvents = findMatches(selector);
+							if (matchedSubset.empty())
+							{
+								matchedSubset = findMatches(selector);
+							}
+							else
+							{
+								matchedSubset = findMatches(selector, matchedSubset);
+							}
+							bool selectorDoesentMatch = matchedSubset.empty();
+							if (selectorDoesentMatch)
+							{
+								matchedSubset.clear();
+								break;
+							}
 						}
-						else
+						catch (com::Exception &ex)
 						{
-							matchedMidiEvents = findMatches(selector, eventsAndDeclarations->events);
+							ex << compiler::ex_sheet_source_info(selector);
+							throw;
 						}
-						if (matchedMidiEvents.empty())
-						{
-							eventsAndDeclarations->events.clear();
-							break;
-						}
-						eventsAndDeclarations->events.swap(matchedMidiEvents);
 					}
-					catch (com::Exception &ex)
-					{
-						ex << compiler::ex_sheet_source_info(selector);
-						throw;
-					}
+					std::copy(matchedSubset.begin(), matchedSubset.end(), std::back_inserter(eventsAndDeclarations->events));
 				}
 				for (const auto &declaration : rule.declarations)
 				{
@@ -209,8 +213,7 @@ namespace conductor
 						{
 							FM_THROW(compiler::Exception, "declaration not found: " + declaration.property);
 						}
-						double orderScore = nthRule / double((totalRules + 1)); // shold not be >= 1
-						double specificity = double(rule.selectors.size()) + orderScore;
+						double specificity = nthRule; 
 						declarationImpl->setDeclarationData(declaration);
 						declarationImpl->specificity(specificity);
 						eventsAndDeclarations->declarations.push_back(declarationImpl);

@@ -48,6 +48,14 @@ namespace compiler
         {
             visitor1->visitInstrument(uname, instrumentSectionName);
         }
+        virtual void beginRenderPitch(const documentModel::PitchDef &pitch) override 
+        {
+            visitor1->beginRenderPitch(pitch);
+        }
+        virtual void endRenderPitch() override 
+        {
+            visitor1->endRenderPitch();
+        }
         TVisitor1Ptr visitor1 = nullptr;
     };
 
@@ -105,7 +113,17 @@ namespace compiler
         {
             visitor1->visitInstrument(uname, instrumentSectionName);
             TBase::visitInstrument(uname, instrumentSectionName);
-        }        
+        }
+        virtual void beginRenderPitch(const documentModel::PitchDef &pitch) override 
+        {
+            visitor1->beginRenderPitch(pitch);
+            TBase::beginRenderPitch(pitch);
+        }
+        virtual void endRenderPitch() override 
+        {
+            visitor1->endRenderPitch();
+            TBase::endRenderPitch();
+        }             
         TVisitor1Ptr visitor1 = nullptr;
     };
     

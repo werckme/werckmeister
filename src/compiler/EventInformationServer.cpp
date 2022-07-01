@@ -9,6 +9,11 @@
 #include <compiler/metaCommands.h>
 #include <unordered_map>
 
+namespace 
+{
+	const documentModel::PitchDef NoPitchDef;
+}
+
 namespace compiler
 {
 	using namespace boost;
@@ -19,6 +24,8 @@ namespace compiler
 		const com::String *instrumentName; 
 		const com::String *instrumentSectionName;
 		com::Expression expression;
+		com::Ticks barPositionQuarters = -1;
+		documentModel::PitchDef pitchDef;
 	};
 	class EventInformationDb
 	{
@@ -56,6 +63,9 @@ namespace compiler
 	const EventInformation* EventInformationDb::find(const com::midi::Event& event)
 	{
 		auto inf = events.find(event.id);
+		if (inf == events.end()) {
+			return nullptr;
+		}		
 		return &(*inf);
 	}	
 	const EventInformation* EventInformationDb::find(const documentModel::Event& event)
@@ -90,6 +100,11 @@ namespace compiler
 		ei.instrumentName = *additonalEventInfos.instrumentName;
 		ei.instrumentSectionName = *additonalEventInfos.instrumentSectionName;
 		ei.expression = additonalEventInfos.expression;
+		ei.barPositionQuarters = additonalEventInfos.barPositionQuarters;
+		ei.sourcePositionBegin = documentEvent.sourcePositionBegin;
+		ei.sourcePositionEnd = documentEvent.sourcePositionEnd;
+		ei.sourceId = documentEvent.sourceId;
+		ei.pitchAlias = additonalEventInfos.pitchDef != NoPitchDef ? additonalEventInfos.pitchDef.alias : "";
 		events.insert(ei);
 	}
 	void EventInformationDb::update(const EventInformation& evinf, const documentModel::Event& documentEvent, const com::midi::Event& midiEvent, const AdditionalEventInfos& additonalEventInfos)
@@ -179,6 +194,16 @@ namespace compiler
 		lastDocumentEvent = &ev;
 	}
 
+	void EventInformationServer::beginRenderPitch(const documentModel::PitchDef &pitch)
+	{
+		lastPitch = pitch;
+	}
+
+	void EventInformationServer::endRenderPitch() 
+	{
+		lastPitch = NoPitchDef;
+	}
+
 	void EventInformationServer::visit(IContext* context, const com::midi::Event& ev, IContext::TrackId trackId)
 	{
 		bool canProcess = !!lastDocumentEvent
@@ -194,6 +219,8 @@ namespace compiler
 		additionalEventInfos.chordRenderInfo = lastChordRenderInfo;
 		additionalEventInfos.instrumentName = &lastInstrument;
 		additionalEventInfos.instrumentSectionName = &lastInstrumentSectionName;
+		additionalEventInfos.barPositionQuarters = contextMeta ? contextMeta->barPosition / com::PPQ : -1;
+		additionalEventInfos.pitchDef = lastPitch;
 		eventDb->upsert(*lastDocumentEvent, ev, additionalEventInfos);
 	}
 

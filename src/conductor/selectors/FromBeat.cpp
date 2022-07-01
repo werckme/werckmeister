@@ -6,12 +6,10 @@ namespace conductor
     bool FromBeat::isMatch(const documentModel::ConductionSelector::Arguments &arguments, const EventWithMetaInfo &evm) const
     {
         const auto &ev = *evm.noteOn;
+        auto eventInformation = _eventInformationServer->find(ev);
+        auto beat = eventInformation->barPositionQuarters;		
         for (const auto &argument : arguments)
         {
-            auto quarters = ev.absPosition() / com::PPQ;
-            double nominator = double(evm.timeSignature.first);
-            double denominator = double(evm.timeSignature.second);
-            auto beat = ::fmod(quarters, nominator / denominator * 4);
             auto valueToMatch = argument.numberValue - 1;
             if (beat >= valueToMatch)
             {

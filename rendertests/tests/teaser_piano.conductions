@@ -1,0 +1,13 @@
+instrument(piano) onBeat(4.5) {
+    velocity = 120%;
+    duration = 20%;
+}
+
+instrument(lead) {
+    duration = 30%;
+}
+
+instrument(lead) onBeat(1) {
+    duration = 80%;
+    velocity += 20;
+}

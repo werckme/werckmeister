@@ -1,0 +1,14 @@
+instrument(mutedGuitar) {
+    duration = 40%;
+    velocity = 70%;
+}
+
+instrument(mutedGuitar) onBeat(1) {
+    duration = 100%;
+    velocity = 100%;
+}
+
+instrument(mutedGuitar) onBeat(3.75 4.25) {
+    velocity = 50%;
+}
+

@@ -15,7 +15,7 @@
 #include "parserSymbols.h"
 #include <com/tools.h>
 #include "parserPositionIt.h"
-#include "pitchParser.h"
+#include "valueParser.h"
 #include <conductor/conductorNames.h>
 
 BOOST_FUSION_ADAPT_STRUCT(
@@ -48,8 +48,18 @@ namespace
 	enum ConductionSelectorFields
 	{
 		CoSourcePosBegin,
+		CoSourceId,
 		CoType,
 		CoArguments
+	};
+
+	enum DeclarationFields
+	{
+		DcSourcePosBegin,
+		DcSourceId,
+		DcOperationType,
+		DcValue,
+		DcUnit
 	};
 }
 
@@ -65,7 +75,7 @@ BOOST_FUSION_ADAPT_STRUCT(
 	documentModel::ConductionRule,
 	(unsigned int, sourcePositionBegin)
 	(documentModel::ASheetObjectWithSourceInfo::SourceId, sourceId)
-	(documentModel::ConductionRule::Selectors, selectors)
+	(documentModel::ConductionRule::SelectorsSet, selectorsSet)
 	(documentModel::ConductionRule::Declarations, declarations))
 
 BOOST_FUSION_ADAPT_STRUCT(
@@ -83,9 +93,9 @@ namespace parser
 		ExpressionSymbols expressionSymbols_;
 		DegreeSymbols degreeSymbols_;
 		template <typename Iterator>
-		struct _ConductionParser : PitchParser, qi::grammar<Iterator, documentModel::ConductionSheetDef(), ascii::space_type>
+		struct _ConductionParser : ValueParser, qi::grammar<Iterator, documentModel::ConductionSheetDef(), ascii::space_type>
 		{
-			_ConductionParser(Iterator begin, documentModel::ConductionSheetDef::SourceId sourceId = documentModel::ConductionSheetDef::UndefinedSource) : PitchParser(),
+			_ConductionParser(Iterator begin, documentModel::ConductionSheetDef::SourceId sourceId = documentModel::ConductionSheetDef::UndefinedSource) : ValueParser(),
 				_ConductionParser::base_type(start, "conduction"),
 				sourceId_(sourceId)
 			{
@@ -108,7 +118,7 @@ namespace parser
 				selector_.name("selector");
 				declaration_.name("declaration");
 				numberArgument_ %=
-					double_[at_c<ArNumberValue>(_val) = qi::_1] >> attr(documentModel::PitchDef()) >> attr(com::String()) >> attr(ArgumentValue::ValueContext(ArgumentValue::Unspecified));
+					(fraction_[at_c<ArNumberValue>(_val) = qi::_1] | double_[at_c<ArNumberValue>(_val) = qi::_1]) >> attr(documentModel::PitchDef()) >> attr(com::String()) >> attr(ArgumentValue::ValueContext(ArgumentValue::Unspecified));
 
 				pitchArgument_ %=
 					attr(0) >> pitchOrAlias_[at_c<ArPitch>(_val) = qi::_1] >> attr(com::String()) >> attr(ArgumentValue::ValueContext(ArgumentValue::Unspecified));
@@ -148,6 +158,10 @@ namespace parser
 					(current_pos_.current_pos >> attr(sourceId_) >> SHEET_CONDUCTOR_SEL__DEGREE >> attr(SHEET_CONDUCTOR_SEL__DEGREE) >> "(" >> +degreeArgument_ >> ")") |
 					(current_pos_.current_pos >> attr(sourceId_) >> SHEET_CONDUCTOR_SEL__OCTAVE >> attr(SHEET_CONDUCTOR_SEL__OCTAVE) >> "(" >> +numberArgument_ >> ")") |
 					(current_pos_.current_pos >> attr(sourceId_) >> SHEET_CONDUCTOR_SEL__CHORD >> attr(SHEET_CONDUCTOR_SEL__CHORD) >> "(" >> +chordNameArgument_ >> ")");
+				
+				selectors_ = +selector_;
+				selectorsSet_ = selectors_ >> *("," >> selectors_);
+				
 				operationType_ %=
 					("+=" >> attr(ConductionRule::Declaration::OperationAdd)) |
 					("-=" >> attr(ConductionRule::Declaration::OperationSubstract)) |
@@ -160,10 +174,16 @@ namespace parser
 					(attr(ConductionRule::Declaration::UnitAbsolute));
 
 				declaration_ %=
-					(current_pos_.current_pos >> attr(sourceId_) >> +char_("a-zA-Z") >> operationType_ >> double_ >> valueUnit_ >> ";");
+					(current_pos_.current_pos 
+					>> attr(sourceId_) 
+					>> +char_("a-zA-Z") 
+					>> operationType_ 
+					>> (fraction_ | double_) 
+					>> valueUnit_ 
+					>> ";");
 
 				rules_ %=
-					current_pos_.current_pos >> attr(sourceId_) >> +selector_ >> "{" >> *declaration_ > "}";
+					current_pos_.current_pos >> attr(sourceId_) >> selectorsSet_ >> "{" >> *declaration_ > "}";
 
 				start %=
 					current_pos_.current_pos > *rules_ > boost::spirit::eoi;
@@ -174,6 +194,8 @@ namespace parser
 			documentModel::ConductionSheetDef::SourceId sourceId_ = documentModel::ConductionSheetDef::UndefinedSource;
 			qi::rule<Iterator, documentModel::ConductionSheetDef(), ascii::space_type> start;
 			qi::rule<Iterator, documentModel::ConductionSelector(), ascii::space_type> selector_;
+			qi::rule<Iterator, documentModel::ConductionRule::Selectors, ascii::space_type> selectors_;
+			qi::rule<Iterator, documentModel::ConductionRule::SelectorsSet, ascii::space_type> selectorsSet_;
 			qi::rule<Iterator, documentModel::ConductionRule(), ascii::space_type> rules_;
 			qi::rule<Iterator, documentModel::ConductionSelector::ArgumentValue(), ascii::space_type> numberArgument_;
 			qi::rule<Iterator, documentModel::ConductionSelector::ArgumentValue(), ascii::space_type> pitchArgument_;

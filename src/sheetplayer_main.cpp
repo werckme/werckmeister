@@ -91,6 +91,7 @@ int main(int argc, const char **argv)
 #ifdef SHEET_USE_BOOST_TIMER
 	app::BoostTimer::io_stop();
 	boost_asio_.join();
+	app::BoostTimer::cleanup();
 #endif
 	if (_udpSender)
 	{
@@ -179,12 +180,11 @@ int startPlayer(std::shared_ptr<PlayerProgramOptions> programOptionsPtr)
 		}
 		FactoryConfig factory(injector);
 		factory.init();
-		auto program = injector.create<SheetPlayerProgram *>();
-		sheetWatcherHandlers->container.push_back(program);
+		auto program = std::unique_ptr<SheetPlayerProgram>(injector.create<SheetPlayerProgram *>());
+		sheetWatcherHandlers->container.push_back(program.get());
 		program->prepareEnvironment();
 		auto result = program->execute();
 		sheetWatcherHandlers->container.clear();
-		delete program;
 		return result;
 	}
 	catch (const com::Exception &ex)

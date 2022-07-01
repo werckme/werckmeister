@@ -20,6 +20,8 @@ namespace compiler
 
 	namespace
 	{
+		const int WHILE_LOOP_GUARD_N_CYCLES = 5000;
+		const char * WHILE_LOOP_GUARD_ERROR_MSG = "Unexpected Template Renderer Exception: Renderer got stuck";
 		const std::array<const char*, 3> IGNORED_CHORD_META_EVENTS = {
 			SHEET_META__ADD_CUE,
 			SHEET_META__JUMP,
@@ -315,7 +317,7 @@ namespace compiler
 				}
 				else
 				{
-					FM_THROW(Exception, com::String("invalid arg for: ") + SHEET_META__SHEET_TEMPLATE_POSITION + ": " + arg.value);
+					FM_THROW(Exception, com::String("invalid arg for: ") + SHEET_META__SHEET_TEMPLATE_POSITION + ". Valid argument = 'reset'");
 				}
 			}
 			catch (com::Exception &ex)
@@ -338,6 +340,11 @@ namespace compiler
 			bool isIgnoreEvent = std::find(IGNORED_CHORD_META_EVENTS.begin(), IGNORED_CHORD_META_EVENTS.end(), metaEvent.stringValue) != IGNORED_CHORD_META_EVENTS.end();
 			if (isIgnoreEvent) {
 				return;
+			}
+			bool eventNeedsAlsoBeAddedToCurrentVoice = metaEvent.stringValue == SHEET_META__SET_SIGNATURE;
+			if (eventNeedsAlsoBeAddedToCurrentVoice)
+			{
+				sheetEventRenderer->addEvent(metaEvent);
 			}
 			auto voiceId = ctx->voice();
 			auto trackId = ctx->track();
@@ -372,11 +379,6 @@ namespace compiler
 					__handleChordMeta(ctx, *chord, sheetEventRenderer, eventServer);
 					continue;
 				}
-				if (chord->type == Event::Meta)
-				{
-					__handleChordMeta(ctx, *chord, sheetEventRenderer, eventServer);
-					continue;
-				}
 				if (chord->type == Event::Chord && chord->stringValue != out_lastChord)
 				{
 					// chord changed, we can't be sure that all of our tied notes will be stopped
@@ -385,8 +387,13 @@ namespace compiler
 					ctx->stopAllPendingTies();
 				}
 				com::Ticks ticksToWrite = chord->duration;
+				int forceBreakAfterNCycles = WHILE_LOOP_GUARD_N_CYCLES;
 				while (ticksToWrite > 1.0_N128)
 				{
+					if (forceBreakAfterNCycles-- < 0) 
+					{
+						FM_THROW(Exception, WHILE_LOOP_GUARD_ERROR_MSG);
+					}
 					const Event *degree = nullptr;
 					com::Ticks degreeDuration;
 					std::tie(degree, degreeDuration) = eventServer.nextEvent(ctx);
@@ -607,16 +614,27 @@ namespace compiler
 
 						for (const auto &chord : templateAndChords.chords)
 						{
+							bool isSignatureChange = chord->type == Event::Meta && chord->stringValue == SHEET_META__SET_SIGNATURE;
+							if (isSignatureChange && !eventServer.templateIsFill)
+							{
+								eventServer.seek(0);
+							}
 							bool continue_ = renderBarOrCollectEvent(chord);
 							if (!continue_)
 							{
 								break;
 							}
 						}
-						if (eventServer.templateIsFill && eventServer.hasFurtherEvents())
+						bool renderRemainingsOfTemplate = eventServer.templateIsFill && eventServer.hasFurtherEvents();
+						if (renderRemainingsOfTemplate)
 						{
+							int forceBreakAfterNCycles = WHILE_LOOP_GUARD_N_CYCLES;
 							while (eventServer.hasFurtherEvents())
 							{
+								if (forceBreakAfterNCycles-- < 0) 
+								{
+									FM_THROW(Exception, WHILE_LOOP_GUARD_ERROR_MSG);
+								}
 								for (const auto &chord : templateAndChords.chords)
 								{
 									bool continue_ = renderBarOrCollectEvent(chord);

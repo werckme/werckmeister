@@ -74,7 +74,7 @@ int main(int argc, const char **argv)
 		di::bind<com::midi::Midi>().to(midiFile), 
 		di::bind<app::IDocumentWriter>().to([&](const auto &injector) -> app::IDocumentWriterPtr
 		{
-			if (programOptionsPtr->isJsonModeSet() || programOptionsPtr->isJsonDocInfoMode())
+			if (programOptionsPtr->isJsonModeSet() || programOptionsPtr->isJsonDocInfoMode() || programOptionsPtr->isJsonDebugInfoMode())
 			{
 				return injector.template create<std::shared_ptr<app::JsonWriter>>();
 			}

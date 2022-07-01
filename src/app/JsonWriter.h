@@ -6,6 +6,7 @@
 #include <app/TimelineVisitor.hpp>
 #include "JsonIOBase.h"
 #include <compiler/IWarningsCollection.h>
+#include <compiler/IEventInformationServer.h>
 #include "ADocumentWriter.h"
 #include <ostream>
 
@@ -18,6 +19,7 @@ namespace app
         com::midi::MidiPtr _midifile;
         app::DefaultTimelinePtr _timeline;
         com::ILoggerPtr _logger;
+        compiler::IEventInformationServerPtr _eventInformationServer;
 
     public:
         typedef JsonIOBase Base;
@@ -25,17 +27,20 @@ namespace app
             ICompilerProgramOptionsPtr programOptions,
             com::midi::MidiPtr midiFile,
             app::DefaultTimelinePtr timeline,
-            com::ILoggerPtr logger)
+            com::ILoggerPtr logger,
+            compiler::IEventInformationServerPtr eventInformationServer)
             : ADocumentWriter(logger),
               _programOptions(programOptions),
               _midifile(midiFile),
               _timeline(timeline),
-              _logger(logger)
+              _logger(logger),
+              _eventInformationServer(eventInformationServer)
         {
             initOutputStream();
         }
         void docToJson(std::ostream &, documentModel::DocumentPtr document);
         void eventInfosToJson(std::ostream &os, documentModel::DocumentPtr document);
+        void writeDebugInfos();
         virtual void write(documentModel::DocumentPtr document) override;
         void writeDocumentToJson(documentModel::DocumentPtr document);
         void writeValidationJson(documentModel::DocumentPtr document);

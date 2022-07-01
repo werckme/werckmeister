@@ -96,7 +96,9 @@ namespace compiler
 		{
 			FM_THROW(compiler::Exception, "could not resolve alias: " + pitch.alias);
 		}
-		return *result;
+		documentModel::PitchDef resultCopy = *result;
+		resultCopy.alias = pitch.alias;
+		return resultCopy;
 	}
 
 	void DefinitionsServer::prepareTemplateDefinitions()

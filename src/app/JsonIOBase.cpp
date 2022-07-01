@@ -89,6 +89,10 @@ namespace app
         {
             rapidjson::Value object(rapidjson::kObjectType);
             rapidjson::Value beginPosition(eventInfo.beginPosition);
+            rapidjson::Value beginTime((double)eventInfo.beginTime);
+            rapidjson::Value endTime((double)eventInfo.endTime);
+            object.AddMember("beginTime", beginTime, doc.GetAllocator());
+            object.AddMember("endTime", endTime, doc.GetAllocator());
             object.AddMember("beginPosition", beginPosition, doc.GetAllocator());
             if (eventInfo.endPosition > 0)
             {
