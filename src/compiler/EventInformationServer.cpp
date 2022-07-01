@@ -191,7 +191,7 @@ namespace compiler
 
 	void EventInformationServer::visit(IContext* context, const documentModel::Event& ev)
 	{
-		lastDocumentEvent = &ev;
+		lastDocumentEvent = std::make_unique<documentModel::Event>(ev);
 	}
 
 	void EventInformationServer::beginRenderPitch(const documentModel::PitchDef &pitch)
