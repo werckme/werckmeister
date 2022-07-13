@@ -8,7 +8,6 @@ using "./templates/ennio.template";
 --             name    device    ch  cc  pc 
 instrumentDef: _setName=piano   _onDevice=MyDevice   _ch=1   _pc=3 _cc=0;
 
-tempo: 130;
 
 [
 instrument: piano;

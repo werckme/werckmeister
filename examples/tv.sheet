@@ -71,7 +71,7 @@ instrument: lead;
     /mod: staccato _amount=90/
     /do: swing _grid=8 _offset =15/
     \fff  
-    r2 | r2 | r2 | r2  | d'8. &16 &32 & &8 r16 | c'16 f d b,   g c' &32 & b e | c8. f'32 c' e'16 e &32 b, g, a, |
+    r2 | r2 | r2 | r2  |  d'8. &16 &32 & &8 r16 | c'16 f d b,   g c' &32 & b e | c8. f'32 c' e'16 e &32 b, g, a, |
     c'8 &16 &32 &  e' g g, e b c' r16 | b8. (d' g' b)8  g16 e g | g'8 &&& | 
     -- repeat
             d'8. &16 &32 & &8 r16 | c'16 f d b,   g c' &32 & b e | c8. f'32 c' e'16 e &32 b, g, a, |

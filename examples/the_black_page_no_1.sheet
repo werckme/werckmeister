@@ -39,7 +39,7 @@ instrument: lead;
     (g#' f#' c#' e' f#)4 (g#' f#' c#' e' f#~)4 f#2~ | &2   g#'32 a' g#'16  &32 a' g#'16   & b32 a' f#' c#' b' f#' | 
     g#'32 e'& c#'   f#' g#'& b'   a' g#'& b'   f#' f#& b   c a b e' g#'   f# b c' d' a' f#' e' f#' g#' e' b |
     r8 f#'32 g#' e' b  r4  f#'32 g#' e' b  r4  f#'32 g#' e' b | ( a'4   a'-> g#'8 f#'  (e''4 f#' &8 b' g#')4  c#'16 b'& a'  (g#' a' f#' e'&)4  )1 |
-    f#'4    f#32 b& a b8~  &16 c#->b  f#8~  &16  g#8  b,16 | (c32 bb f)8  eb'8  (db'16 r bb)8  c'8~ (c'8  eb'->ab db' gb' bb)2 | 
+    f#'4    f#32 b& a b8~  &16 c#->b  f#8~  &16  g#8  b,16 | (c32  bb f)8  eb'8  (db'16 r bb)8  c'8~ (c'8  eb'->ab db' gb' bb)2 | 
     eb'8.    db'32 f' c'2. | c'32 e' d' f'  e' g' f' d'   (a' c'' e')8 (e' f' e' d' a)8  (bb c'& d' & e' f')4 (a' g& d' f& e)4 |
     b2 ((b c#'& b d')  (f' a& bb c')  (e' a' bb' f' c' g))2 |  a4~ &16 a'8.~ &8 &~ &8. a16~ | &4 b'~ &16 c#'8.~ &8 e'~ |
     &8. c#'16~ &4 ((b c'& a d') (eb' g& a f) (e g& f& bb))2 |  b1~ | &4  a8~ &32 g f# c'  (d a g)8 (b g& a f#)8 (r b e a f#)4 |

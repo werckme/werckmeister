@@ -8,6 +8,10 @@ execute_process(COMMAND git branch --show-current OUTPUT_VARIABLE GIT_BRANCH_NAM
 # Project name.
 project(werckmeister)
 
+# Version Format needs to be
+# D.D.DD[D]
+# There are two version parser which are depending on that:
+# VSCode Extension, VST Plugin
 SET(WERCKMEISTER_VERSION_MAJOR 1)
 SET(WERCKMEISTER_VERSION_MINOR 0)
 SET(WERCKMEISTER_VERSION_PATCH 42)
