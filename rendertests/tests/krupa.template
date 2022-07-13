@@ -1,0 +1,32 @@
+[
+type: template;
+instrument: drumsSwung;
+name: krupa.base;
+{
+    "bd"4 &4  &8. &8  &8 &16   |
+}
+{
+  !ff"sn"8 "sn"16 !p&16    !ppppp"sn"8 &16 !p&16          !ppppp"sn"8 &16 !p&16         !ppppp"sn"8 &16 !p&16    |
+  !f"sn"8 "sn"16 !p&16    !ppppp"sn"8 &16 !p&16          !ppppp"sn"8 &16 !p&16         !ppppp"sn"8 &16 !p&16    |
+}
+{
+    !fff"hf"4 "hf"4&&    |
+}
+{
+    "cr"1 |
+    r1  |
+    r1 :|
+    r1  |
+}
+]
+
+[
+type: template;
+instrument: drumsSwung;
+name: krupa.toms;
+{
+    \fffff
+    "t1"4 "t2"4 "t3"4 "t4"8. "t1"16~  |
+    "t1"16 "t1"8 "t1"16 "t2"8  "t2"8 "t3"8 "t3"8 "t4"4 |
+}
+]

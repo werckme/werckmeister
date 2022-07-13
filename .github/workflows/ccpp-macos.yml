@@ -49,5 +49,5 @@ jobs:
       with:
         name: werckmeister-mac-${{ github.sha }}
         path: |
-          build/werckmeister-*-Darwin.sh
+          build/werckmeister-*-Darwin.pkg
           rendertests/*.mid

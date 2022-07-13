@@ -1,0 +1,59 @@
+[
+type: template;
+name: drums.soca.normal;
+instrument: drums;
+{
+    "ago1"16 &  "ago2" &   "ago1" &  "ago2" &    "ago1"16 &  "ago2" &   "ago1" &  "ago2" &  |
+}
+{
+    "cwb"8 & &16 & r "cwb"   r16 "cwb" r "cwb"  "cwb" r  &  r | 
+}
+{
+    \p
+    "ht"16 & "ho"8 "ht"16 & "ho"8    "ht"16 & "ho"8 "ht"16 & "ho"8    |
+}
+{
+    \ffff
+    r8. "sn"16 r8 "sn"    r8. "sn"16 r8 "sn"    |
+}
+{
+    "bd"4 "bd"   "bd" "bd" |
+}
+]
+
+[
+type: template;
+name: drums.soca.bridge;
+instrument: drums;
+{
+    "ago1"16 &  "ago2" &   "ago1" &  "ago2" &    "ago1"16 &  "ago2" &   "ago1" &  "ago2" &  |
+}
+{
+    "cwb"8 & &16 & r "cwb"   r16 "cwb" r "cwb"  "cwb" r  &  r | 
+}
+{
+    \fff
+    "mtr"16 & "otr"8 "mtr"16 & "otr"8 "mtr"16 & "otr"8 "mtr"16 & "otr"8 |
+}
+{
+    \p
+    !ff"spl"16 "ht" "ho"8 "ht"16 & "ho"8    "ht"16 & "ho"8 "ht"16 & "ho"8    |
+    "ht"16 & "ho"8 "ht"16 & "ho"8    "ht"16 & "ho"8 "ht"16 & "ho"8    |
+}
+{
+    \f
+    r4 r16 "bo1" "bo2" &    r4 r16 "bo1" "bo2" &  |
+}
+{
+    \pp
+    r4 r16 "cla" r8  "cla" r16 "cla"16 r4  |
+}
+{
+    \fffff
+    r8. "sn"16 r8 "sn"    r8. "sn"16 r8 "sn"    |
+    r8. "sn"16 r8 "sn"    r4 r16 !fff"sn" !ffff& !fffff&   |
+}
+{
+    "bd"4 "bd"   "bd" "bd" |
+}
+]

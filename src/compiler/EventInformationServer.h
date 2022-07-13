@@ -31,7 +31,7 @@ namespace compiler
         virtual Tags getTags(const com::midi::Event &ev) const override;          
     private:
         std::unique_ptr<EventInformationDb> eventDb;
-        const documentModel::Event *lastDocumentEvent = nullptr;
+        std::unique_ptr <documentModel::Event> lastDocumentEvent = nullptr;
         ChordRenderInfoPtr lastChordRenderInfo;
         com::String lastInstrument;
         com::String lastInstrumentSectionName;

@@ -1,0 +1,160 @@
+
+-- #skip-event-plausibility-test
+using "/chords/default.chords";
+using "/lua/mods/guitarStroke.lua";
+using "/lua/mods/swing.lua";
+using "./krupa.drums.pitchmap";
+using "./krupa.template";
+using "./krupa.drums.soca.template";
+using "./krupa.rhythm.soca.template";
+using "./krupa.conductions";
+
+tempo: 120;
+
+device: MyDevice _isType="midi" _usePort=18;
+
+instrumentDef: piano   MyDevice  0 0 0;
+instrumentDef: vib     MyDevice  1 1 11;
+instrumentDef: bass1   MyDevice  2 8 27;
+instrumentDef: bass2   MyDevice  3 35 38;
+instrumentDef: rhythm2 MyDevice  4 10 80;
+instrumentDef: bell    MyDevice  5  8 14;
+instrumentDef: sitar   MyDevice  6  0 104;
+instrumentDef: rhythm  MyDevice  7  0 26;
+instrumentDef: drumsSwung   MyDevice 9 0 27;
+instrumentConf: drumsSwung mod swing _grid=16 _offset=80;
+
+
+instrumentConf:  bass1
+    volume 90
+;
+
+instrumentConf:  rhythm2
+    pan 35
+    volume 50
+    mod guitarStroke _value=32
+;
+
+instrumentConf:  piano
+    mod guitarStroke
+    volume 100
+;
+
+instrumentConf:  vib
+    volume 85
+    mod guitarStroke _value=16
+;
+
+instrumentConf:  bell
+    pan 35
+;
+
+instrumentConf:  sitar
+    pan 75
+    volume 50
+;
+
+
+[
+type: template;
+name: piano;
+instrument: piano;
+{
+    <I,,, I,, VII, III, II,>1~ |
+    &~ |
+    & |
+}
+]
+
+[
+type: template;
+name: vib;
+instrument: vib;
+{
+    <I,, VII, III II>1~ |
+    &~ |
+    & |
+}
+]
+
+[
+type: template;
+name: fx;
+instrument: bell;
+{
+    r1 | r1 | r1 | r1 | I
+}
+]
+
+[
+type: template;
+name: fx;
+instrument: sitar;
+{
+    r1 | r1 | r1 | r2. r8 I,,~ | &
+}
+]
+
+[
+type: template;
+name: bass1;
+instrument: bass1;
+{
+    I,,,4 r2 r8 r16 !f<I#,, I,,>16 |
+    I,,,4 r2 r8 I,,16 I,, |
+    I,,,4 r2 r8 !f <I,,, I#,,>8 |
+}
+]
+
+[
+type: template;
+name: bass2;
+instrument: bass2;
+{
+    I, III,, V,, Vb,, |
+}
+]
+
+
+
+[
+type: accomp;
+{
+    /template: 
+    piano 
+    krupa.base
+    vib 
+    fx
+    bass1
+    /
+    
+    C7 | C7 | C7 | Fmaj7 | Fmaj7 | Fmaj7 | B- | C#7#5 | Amaj7 | D7 Gmaj7 |
+    /template: 
+    piano 
+    krupa.base 
+    krupa.toms
+    bass1
+    bass2
+    vib
+    fx
+    /
+    C9 | C | C | Fmaj7 | E7 | Amaj7 | D7 | Abmaj7 | D | Gb | Cb-7 | F7#5 G7#5 |   
+
+    /template: 
+    piano 
+    krupa.base 
+    krupa.toms
+    bass1
+    bass2
+    vib
+    fx
+    rhythm2.soca.bridge
+    /
+
+    Amaj7  |Cb7 |Cb7 |Cb7 |Cb7 |
+
+     E-7 | E-7 | E-7 | C-7 | C-7 | C-7 | E-7 C-7 | E-7 | E-7 | Gmaj7 Bmaj7 | 
+
+
+}
+]

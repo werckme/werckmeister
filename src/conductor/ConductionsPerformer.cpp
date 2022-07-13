@@ -120,7 +120,9 @@ namespace conductor
 					{
 						auto predecessor = findPredecessorOfSamePitch(it - 1, begin);
 						eventWithMetaInfo.noteOff = noteOff;
-						eventWithMetaInfo.unmodifiedOriginalNoteOff = *noteOff;
+						if (noteOff != nullptr) {
+							eventWithMetaInfo.unmodifiedOriginalNoteOff = *noteOff;
+						}
 						eventWithMetaInfo.predecessorNoteOn = predecessor.first;
 						eventWithMetaInfo.predecessorNoteOff = predecessor.second;
 					}

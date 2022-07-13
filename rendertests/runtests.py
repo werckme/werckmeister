@@ -13,7 +13,7 @@ if os.name == 'nt':
     else:
         compiler_path = '../build/Release/sheetc.exe'
 
-
+print(f"using {compiler_path}")
 def get_test_tags(sheetfile) -> list:
     lines = []
     tags = []
