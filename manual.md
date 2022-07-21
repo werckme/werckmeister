@@ -2563,11 +2563,11 @@ Werckmeister VST
 ======
 The VST Plugin allows you to use Werckmeister within your favourite DAW. Just load a `*.sheet` file, the Plugin compiles it and sends its MIDI data into your DAW track. For live editing you can connect VSCode with your plugin instances.
 
+[Download Here](https://werckme.github.io/vst#download)
+
 ### Load a sheet file
 <img src="https://raw.githubusercontent.com/werckme/werckmeister/manual-update/assets/vst-loading-sheet.gif">
 
 
 ### Connect VSCode with the plugin
 <img src="https://raw.githubusercontent.com/werckme/werckmeister/manual-update/assets/vst2vscode.gif">
-
-[Download Werckmeister VST](https://werckme.github.io/vst)
