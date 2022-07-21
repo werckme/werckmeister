@@ -2561,10 +2561,12 @@ If Visual Studio Code is not able to execute the Werckmeister compiler you can s
 
 Werckmeister VST
 ======
-The VST Plugin allows you to use Werckmeister within your favourite DAW. Just load a `*.sheet` file, the Plugin compiles it and sends its MIDI data into you DAW track. For live editing you can connect VSCode with your plugin instances.
+The VST Plugin allows you to use Werckmeister within your favourite DAW. Just load a `*.sheet` file, the Plugin compiles it and sends its MIDI data into your DAW track. For live editing you can connect VSCode with your plugin instances.
 
 ### Load a sheet file
 TODO: Gif animation
 
 ### Connect VSCode with the plugin
 TODO: Gif animation
+
+[Download Werckmeister VST](https://werckme.github.io/vst)
