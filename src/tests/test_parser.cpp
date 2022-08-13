@@ -1692,5 +1692,47 @@ BOOST_AUTO_TEST_CASE(test_extended_note_events_octaves)
 	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, com::String("z'"));
 }
 
+BOOST_AUTO_TEST_CASE(test_chordDefAdjunctDegrees)
+{
+	com::String str(FM_STRING("\
+Xmaj: I=1 (II=3) III=4 (IV = 5) V=7 (VI=9) (VII=11)\n\
+"));
 
+	ChordDefParser defParser;
+	using namespace com::degrees;
+
+	auto chordDefs = defParser.parse(str);
+	BOOST_CHECK(chordDefs.size() == 1);
+	auto& def = chordDefs[0];
+	BOOST_CHECK((chordDefs[0].name == FM_STRING("Xmaj")));
+	BOOST_CHECK_EQUAL(def.degreeDefs.size(), size_t(7));
+	auto degreeDef = def.degreeDefs.begin();
+	BOOST_CHECK_EQUAL((degreeDef)->degree, I);
+	BOOST_CHECK_EQUAL((degreeDef)->value, 1);
+	BOOST_CHECK_EQUAL((degreeDef)->isAdjunct, false);
+	++degreeDef;
+	BOOST_CHECK_EQUAL((degreeDef)->degree, II);
+	BOOST_CHECK_EQUAL((degreeDef)->value, 3);
+	BOOST_CHECK_EQUAL((degreeDef)->isAdjunct, true);
+	++degreeDef;
+	BOOST_CHECK_EQUAL((degreeDef)->degree, III);
+	BOOST_CHECK_EQUAL((degreeDef)->value, 4);
+	BOOST_CHECK_EQUAL((degreeDef)->isAdjunct, false);
+	++degreeDef;
+	BOOST_CHECK_EQUAL((degreeDef)->degree, IV);
+	BOOST_CHECK_EQUAL((degreeDef)->value, 5);
+	BOOST_CHECK_EQUAL((degreeDef)->isAdjunct, true);
+	++degreeDef;
+	BOOST_CHECK_EQUAL((degreeDef)->degree, V);
+	BOOST_CHECK_EQUAL((degreeDef)->value, 7);
+	BOOST_CHECK_EQUAL((degreeDef)->isAdjunct, false);
+	++degreeDef;
+	BOOST_CHECK_EQUAL((degreeDef)->degree, VI);
+	BOOST_CHECK_EQUAL((degreeDef)->value, 9);
+	BOOST_CHECK_EQUAL((degreeDef)->isAdjunct, true);
+	++degreeDef;
+	BOOST_CHECK_EQUAL((degreeDef)->degree, VII);
+	BOOST_CHECK_EQUAL((degreeDef)->value, 11);
+	BOOST_CHECK_EQUAL((degreeDef)->isAdjunct, true);
+}
 

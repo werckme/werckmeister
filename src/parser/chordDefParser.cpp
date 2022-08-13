@@ -12,11 +12,16 @@
 
 BOOST_FUSION_ADAPT_STRUCT(
 	documentModel::DegreeDef,
-	(com::Pitch, degree)(int, value))
+	(com::Pitch, degree)
+	(int, value)
+	(bool, isAdjunct)
+)
 
 BOOST_FUSION_ADAPT_STRUCT(
 	documentModel::ChordDef,
-	(com::String, name)(documentModel::ChordDef::DegreeDefs, degreeDefs))
+	(com::String, name)
+	(documentModel::ChordDef::DegreeDefs, degreeDefs)
+)
 
 namespace parser
 {
@@ -46,12 +51,13 @@ namespace parser
 				using qi::lexeme;
 				using qi::lit;
 				using qi::on_error;
+				using qi::attr;
 
 				chordName.name("chord name");
 				intervals.name("intervals");
 
 				chordName %= char_("X") > *char_(ChordDefParser::ALLOWED_CHORD_SYMBOLS_REGEX);
-				interval %= degreeSymbols_ > '=' > int_;
+				interval %= '(' > degreeSymbols_ > '=' > int_ > attr(true) >')' | degreeSymbols_ > '=' > int_ > attr(false);
 				intervals %= +(interval);
 				start %= chordName > ':' > intervals;
 
