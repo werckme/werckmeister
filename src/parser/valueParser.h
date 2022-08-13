@@ -14,7 +14,10 @@
 
 BOOST_FUSION_ADAPT_STRUCT(
     documentModel::PitchDef,
-    (documentModel::PitchDef::Pitch, pitch)(documentModel::PitchDef::Octave, octave))
+    (documentModel::PitchDef::Pitch, pitch)
+    (documentModel::PitchDef::Octave, octave)
+    (bool, forceDegree)
+)
 
 BOOST_FUSION_ADAPT_STRUCT(
     documentModel::AliasPitchDef,
@@ -27,6 +30,13 @@ BOOST_FUSION_ADAPT_STRUCT(
 
 namespace parser
 {
+    enum PitchDefFields
+    {
+        PitchDefFieldPitch,
+        PitchDefFieldOctace,
+        PitchDefFieldForceDegree,
+    };
+
     struct ValueParser
     {
         typedef com::String::const_iterator Iterator;

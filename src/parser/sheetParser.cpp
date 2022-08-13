@@ -187,6 +187,7 @@ namespace parser
 				using qi::on_error;
 				using qi::space;
 				using qi::string;
+				using boost::spirit::eps;
 
 				start.name("documentModel");
 				bar_volta_.name("bar jump mark");
@@ -198,34 +199,136 @@ namespace parser
 				pitch_.name("pitch");
 				degree_.name("pitch");
 				bar_volta_ %= lexeme['^' >> +char_("0-9")];
-				degree_ %= (degreeSymbols_ >> (octaveSymbols_ | attr(PitchDef::DefaultOctave)) >> attr(false));
+				degree_ %= (degreeSymbols_ >> (octaveSymbols_ | attr(PitchDef::DefaultOctave))>> -lit("!")[at_c<PitchDefFieldForceDegree>(_val) = true] );
 				pitch_ %= pitchSymbols_ >> (octaveSymbols_ | attr(PitchDef::DefaultOctave));
 				alias_ %= lexeme['"' >> +(char_ - '"') >> '"'];
 				pitchOrAlias_ %= pitch_ | alias_ | extendedPitch_;
 				event_ %=
 					( // NOTE
-						current_pos_.current_pos >> attr(sourceId_) >> attr(Event::Note) >> (("\"" >> +(lexeme[+char_(ALLOWED_EVENT_TAG_ARGUMENT)]) >> "\"" >> "@") | attr(Event::Tags())) >> (pitchOrAlias_ | ("<" >> +pitchOrAlias_ >> ">")) >> (durationSymbols_ | attr(Event::NoDuration)) >> attr("") >> attr(Event::Args()) >> current_pos_.current_pos >> -(
-																																																																																									 lit("~")[at_c<EvType>(_val) = Event::TiedNote] | (lit("->")[at_c<EvType>(_val) = Event::Meta][at_c<EvStringValue>(_val) = FM_STRING("addVorschlag")]))) |
+						current_pos_.current_pos 
+						>> attr(sourceId_) 
+						>> attr(Event::Note) 
+						>> (("\"" >> +(lexeme[+char_(ALLOWED_EVENT_TAG_ARGUMENT)]) >> "\"" >> "@") | attr(Event::Tags())) 
+						>> (pitchOrAlias_ | ("<" >> +pitchOrAlias_ >> ">")) >> (durationSymbols_ | attr(Event::NoDuration)) 
+						>> attr("") 
+						>> attr(Event::Args()) >> current_pos_.current_pos 
+						>> -(
+							lit("~")[at_c<EvType>(_val) = Event::TiedNote] | (lit("->")[at_c<EvType>(_val) = Event::Meta][at_c<EvStringValue>(_val) = FM_STRING("addVorschlag")])
+						)
+					) 
+					|
 					( // DEGREE
-						current_pos_.current_pos >> attr(sourceId_) >> attr(Event::Degree) >> (("\"" >> +(lexeme[+char_(ALLOWED_EVENT_TAG_ARGUMENT)]) >> "\"" >> "@") | attr(Event::Tags())) >> (degree_ | ("<" >> +degree_ >> ">")) >> (durationSymbols_ | attr(Event::NoDuration)) >> attr("") >> attr(Event::Args()) >> current_pos_.current_pos >> -(
-																																																																																						   lit("~")[at_c<EvType>(_val) = Event::TiedDegree] | (lit("->")[at_c<EvType>(_val) = Event::Meta][at_c<EvStringValue>(_val) = FM_STRING("addVorschlag")]))) |
+						current_pos_.current_pos 
+						>> attr(sourceId_) 
+						>> attr(Event::Degree) 
+						>> (("\"" >> +(lexeme[+char_(ALLOWED_EVENT_TAG_ARGUMENT)]) >> "\"" >> "@") | attr(Event::Tags())) 
+						>> (degree_ | ("<" >> +degree_ >> ">")) 
+						>> (durationSymbols_ | attr(Event::NoDuration)) 
+						>> attr("") 
+						>> attr(Event::Args()) 
+						>> current_pos_.current_pos >> -(
+							lit("~")[at_c<EvType>(_val) = Event::TiedDegree] | (lit("->")[at_c<EvType>(_val) = Event::Meta][at_c<EvStringValue>(_val) = FM_STRING("addVorschlag")])
+						)
+					) 
+					|
 					( // REPEAT SHORTCUT (x)
-						current_pos_.current_pos >> attr(sourceId_) >> attr(Event::Repeat) >> "&" >> attr(Event::Tags()) >> attr(PitchDef()) >> (durationSymbols_ | attr(Event::NoDuration)) >> attr("") >> attr(Event::Args()) >> current_pos_.current_pos >> -(
-																																																																   lit("~")[at_c<EvType>(_val) = Event::TiedRepeat] | (lit("->")[at_c<EvType>(_val) = Event::Meta][at_c<EvStringValue>(_val) = FM_STRING("addVorschlag")]))) |
+						current_pos_.current_pos 
+						>> attr(sourceId_) 
+						>> attr(Event::Repeat) 
+						>> "&" 
+						>> attr(Event::Tags()) >> attr(PitchDef()) >> (durationSymbols_ | attr(Event::NoDuration)) 
+						>> attr("") >> attr(Event::Args()) >> current_pos_.current_pos 
+						>> -(
+							lit("~")[at_c<EvType>(_val) = Event::TiedRepeat] | (lit("->")[at_c<EvType>(_val) = Event::Meta][at_c<EvStringValue>(_val) = FM_STRING("addVorschlag")])
+						)
+					) 
+					|
 					( // CHORD
-						current_pos_.current_pos >> attr(sourceId_) >> attr(Event::Chord) >> attr(Event::Tags()) >> attr(PitchDef()) >> attr(Event::NoDuration) >> lexeme[char_("a-gA-G") > *char_(ChordDefParser::ALLOWED_CHORD_SYMBOLS_REGEX)] >> attr(Event::Args()) >> current_pos_.current_pos) |
+						current_pos_.current_pos 
+						>> attr(sourceId_) 
+						>> attr(Event::Chord) 
+						>> attr(Event::Tags()) 
+						>> attr(PitchDef()) 
+						>> attr(Event::NoDuration) 
+						>> lexeme[char_("a-gA-G") > *char_(ChordDefParser::ALLOWED_CHORD_SYMBOLS_REGEX)] 
+						>> attr(Event::Args()) >> current_pos_.current_pos
+					) 
+					|
 					( // EXPRESSIONS
-						current_pos_.current_pos >> attr(sourceId_) >> "\\" >> attr(Event::Meta) >> attr(Event::Tags()) >> attr(PitchDef()) >> attr(Event::NoDuration) >> attr("expression") >> expression_argument_) |
+						current_pos_.current_pos 
+						>> attr(sourceId_) 
+						>> "\\" 
+						>> attr(Event::Meta) 
+						>> attr(Event::Tags()) 
+						>> attr(PitchDef()) 
+						>> attr(Event::NoDuration) 
+						>> attr("expression") 
+						>> expression_argument_
+					) 
+					|
 					( // EXPRESSION PERFORMED ONCE
-						current_pos_.current_pos >> attr(sourceId_) >> "!" >> attr(Event::Meta) >> attr(Event::Tags()) >> attr(PitchDef()) >> attr(Event::NoDuration) >> attr("expressionPlayedOnce") >> expression_argument_) |
+						current_pos_.current_pos 
+						>> attr(sourceId_) 
+						>> "!" 
+						>> attr(Event::Meta) 
+						>> attr(Event::Tags()) 
+						>> attr(PitchDef()) 
+						>> attr(Event::NoDuration) 
+						>> attr("expressionPlayedOnce") 
+						>> expression_argument_
+					) 
+					|
 					( // REST
-						current_pos_.current_pos >> attr(sourceId_) >> "r" >> attr(Event::Rest) >> attr(Event::Tags()) >> attr(PitchDef()) >> (durationSymbols_ | attr(Event::NoDuration)) >> attr("") >> attr(Event::Args()) >> current_pos_.current_pos) |
+						current_pos_.current_pos 
+						>> attr(sourceId_)
+						>> "r" 
+						>> attr(Event::Rest) 
+						>> attr(Event::Tags()) 
+						>> attr(PitchDef()) 
+						>> (durationSymbols_ | attr(Event::NoDuration)) 
+						>> attr("") 
+						>> attr(Event::Args()) 
+						>> current_pos_.current_pos
+					) 
+					|
 					( // END OF BAR
-						current_pos_.current_pos >> attr(sourceId_) >> "|" >> attr(Event::EOB) >> attr(Event::Tags()) >> attr(PitchDef()) >> attr(Event::NoDuration) >> attr("") >> attr(Event::Args()) >> current_pos_.current_pos >> -bar_volta_[(insert(at_c<EvTags>(_val), qi::_1))] >> -(lit(":"))[at_c<EvStringValue>(_val) = FM_STRING("__repeat_begin_")]) |
+						current_pos_.current_pos 
+						>> attr(sourceId_) 
+						>> "|" 
+						>> attr(Event::EOB) 
+						>> attr(Event::Tags()) 
+						>> attr(PitchDef()) >> attr(Event::NoDuration) 
+						>> attr("") 
+						>> attr(Event::Args()) >> current_pos_.current_pos >> -bar_volta_[(insert(at_c<EvTags>(_val), qi::_1))] 
+						>> -(lit(":"))[at_c<EvStringValue>(_val) = FM_STRING("__repeat_begin_")]
+					) 
+					|
 					( // END OF BAR WITH REPEAT
-						current_pos_.current_pos >> attr(sourceId_) >> ":" >> attr(Event::EOB) >> attr(Event::Tags()) >> attr(PitchDef()) >> attr(Event::NoDuration) >> attr("__repeat_end_") >> attr(Event::Args()) >> current_pos_.current_pos >> "|" >> -bar_volta_[insert(at_c<EvTags>(_val), qi::_1)] >> -(lit(":"))[at_c<EvStringValue>(_val) = FM_STRING("__repeat_begin_and_end_")]) |
+						current_pos_.current_pos 
+						>> attr(sourceId_) 
+						>> ":" 
+						>> attr(Event::EOB) 
+						>> attr(Event::Tags()) 
+						>> attr(PitchDef()) 
+						>> attr(Event::NoDuration) 
+						>> attr("__repeat_end_") 
+						>> attr(Event::Args()) >> current_pos_.current_pos >> "|" >> -bar_volta_[insert(at_c<EvTags>(_val), qi::_1)] 
+						>> -(lit(":"))[at_c<EvStringValue>(_val) = FM_STRING("__repeat_begin_and_end_")]
+					) 
+					|
 					( // META COMMANDS
-						current_pos_.current_pos >> attr(sourceId_) >> "/" >> attr(Event::Meta) >> attr(Event::Tags()) >> attr(PitchDef()) >> attr(Event::NoDuration) >> +char_("a-zA-Z") >> ":" >> +(argument_) >> "/");
+						current_pos_.current_pos 
+						>> attr(sourceId_) 
+						>> "/" 
+						>> attr(Event::Meta) 
+						>> attr(Event::Tags()) 
+						>> attr(PitchDef()) 
+						>> attr(Event::NoDuration) 
+						>> +char_("a-zA-Z") 
+						>> ":"
+						>> +(argument_) 
+						>> "/"
+					);
 
 				groupedEvent_ %=
 					attr(sourceId_) >> "(" > *(event_ | groupedEvent_) > ")" >> (durationSymbols_ | attr(Event::NoDuration));

@@ -1736,3 +1736,24 @@ Xmaj: I=1 (II=3) III=4 (IV = 5) V=7 (VI=9) (VII=11)\n\
 	BOOST_CHECK_EQUAL((degreeDef)->isAdjunct, true);
 }
 
+BOOST_AUTO_TEST_CASE(test_ForceAdjunctDegree)
+{
+	using namespace com;
+	using documentModel::PitchDef;
+	com::String text = FM_STRING("\
+[\n\
+	{\n\
+		I4 VI!4 VI,! VI#! VI#,! <I VI!>4 \n\
+	}\n\
+] \n\
+");
+	SheetDefParser parser;
+	auto defs = parser.parse(text);
+	BOOST_CHECK_EQUAL(defs.tracks.size(), size_t(1));
+	BOOST_CHECK_EQUAL(defs.tracks[0].voices.size(), size_t(1));
+	BOOST_CHECK_EQUAL(defs.tracks[0].voices[0].events.size(), size_t(6));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[0], documentModel::Event::Degree, 1, 0, 1.0_N4));
+	BOOST_CHECK_EQUAL(defs.tracks[0].voices[0].events[0].pitches[0].forceDegree, false);
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[1], documentModel::Event::Degree, 6, 0, 1.0_N4));
+	BOOST_CHECK_EQUAL(defs.tracks[0].voices[0].events[1].pitches[0].forceDegree, true);
+}
