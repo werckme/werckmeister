@@ -11,7 +11,7 @@ namespace compiler
 		PitchDef x;
 		for (const auto &degree : degreeIntervals)
 		{
-			auto interval = def.findDegreeDef(degree.pitch);
+			auto interval = def.findDegreeDef(degree);
 			if (!interval.valid())
 			{
 				continue;

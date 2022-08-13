@@ -1,0 +1,25 @@
+using "./chords/default.chords";
+
+tempo: 80;
+device: MyDevice  midi _usePort=0;
+instrumentDef:lead    _onDevice=MyDevice  _ch=0 _pc=0;
+
+[
+type: template;
+name: adjunct;
+instrument: lead;
+{
+    VI4 VI! <I,  VI>  <I,  VI!>  |
+}
+{
+    \pp
+    I,,4 I,, I,, I,,
+}
+]
+
+[
+type: accomp;
+{
+    C7 | C7
+}
+]

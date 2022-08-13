@@ -27,6 +27,9 @@ namespace documentModel
 			return DegreeDef::invalid();
 		}
 		resultDegree = *it;
+		if (resultDegree.isAdjunct && eventPitch.forceDegree == false) {
+			return DegreeDef::invalid();
+		}
 		if (getFlag(degreeValue) == com::degrees::Sharp)
 		{
 			resultDegree.value += 1;
