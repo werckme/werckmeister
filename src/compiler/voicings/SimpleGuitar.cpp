@@ -77,7 +77,7 @@ namespace compiler
 		}
 		for (const auto &degree : degreeIntervals)
 		{
-			auto interval = def.getDegreeDef(degree);
+			auto interval = def.findDegreeDef(degree);
 			if (!interval.valid())
 			{
 				continue;

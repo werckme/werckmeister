@@ -15,14 +15,14 @@ namespace documentModel
 		return static_cast<com::degrees::Flag>((degree) >> 8);
 	}
 
-	DegreeDef ChordDef::getDegreeDef(const PitchDef &eventPitch) const
+	DegreeDef ChordDef::findDegreeDef(const PitchDef &eventPitch) const
 	{
 		DegreeDef resultDegree;
 		auto degreeValue = eventPitch.pitch;
-		Intervals::const_iterator it =
-			std::find_if(intervals.begin(), intervals.end(), [degreeValue](const auto &x)
+		DegreeDefs::const_iterator it =
+			std::find_if(degreeDefs.begin(), degreeDefs.end(), [degreeValue](const auto &x)
 						 { return getDegreeValue(x.degree) == getDegreeValue(degreeValue); });
-		if (it == intervals.end())
+		if (it == degreeDefs.end())
 		{
 			return DegreeDef::invalid();
 		}
@@ -56,22 +56,22 @@ namespace documentModel
 
 	bool has7(const ChordDef &def)
 	{
-		return std::any_of(def.intervals.begin(), def.intervals.end(), [](const auto &DegreeDef)
+		return std::any_of(def.degreeDefs.begin(), def.degreeDefs.end(), [](const auto &DegreeDef)
 						   { return DegreeDef.degree == com::degrees::VII; });
 	}
 	bool has9(const ChordDef &def)
 	{
-		return std::any_of(def.intervals.begin(), def.intervals.end(), [](const auto &DegreeDef)
+		return std::any_of(def.degreeDefs.begin(), def.degreeDefs.end(), [](const auto &DegreeDef)
 						   { return DegreeDef.degree == com::degrees::II; });
 	}
 	bool has11(const ChordDef &def)
 	{
-		return std::any_of(def.intervals.begin(), def.intervals.end(), [](const auto &DegreeDef)
+		return std::any_of(def.degreeDefs.begin(), def.degreeDefs.end(), [](const auto &DegreeDef)
 						   { return DegreeDef.degree == com::degrees::IV; });
 	}
 	bool has13(const ChordDef &def)
 	{
-		return std::any_of(def.intervals.begin(), def.intervals.end(), [](const auto &DegreeDef)
+		return std::any_of(def.degreeDefs.begin(), def.degreeDefs.end(), [](const auto &DegreeDef)
 						   { return DegreeDef.degree == com::degrees::VI; });
 	}
 

@@ -12,10 +12,10 @@ namespace documentModel
     struct PitchDef;
     struct ChordDef : public ASheetObject
     {
-        typedef std::set<DegreeDef> Intervals;
+        typedef std::set<DegreeDef> DegreeDefs;
         com::String name;
-        Intervals intervals;
-        DegreeDef getDegreeDef(const PitchDef &eventPitch) const;
+        DegreeDefs degreeDefs;
+        DegreeDef findDegreeDef(const PitchDef &eventPitch) const;
     };
 
     bool has7(const ChordDef &def);

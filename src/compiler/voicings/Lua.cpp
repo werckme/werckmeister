@@ -54,8 +54,8 @@ namespace compiler
         {
             auto top = lua_gettop(L);
             lua_pushstring(L, "degrees");
-            lua_createtable(L, chordDef->intervals.size(), 0);
-            for (const auto &DegreeDef : chordDef->intervals)
+            lua_createtable(L, chordDef->degreeDefs.size(), 0);
+            for (const auto &DegreeDef : chordDef->degreeDefs)
             {
                 pushChordDegree(L, DegreeDef);
             }
@@ -188,7 +188,7 @@ namespace compiler
             int degreeIndex = 1;
             for (const auto &degree : degrees_)
             {
-                auto degreeDef = chordDef->getDegreeDef(degree);
+                auto degreeDef = chordDef->findDegreeDef(degree);
                 if (!degreeDef.valid())
                 {
                     degreeDef.value = NoDegreeValue;

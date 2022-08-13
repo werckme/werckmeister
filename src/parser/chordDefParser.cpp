@@ -16,7 +16,7 @@ BOOST_FUSION_ADAPT_STRUCT(
 
 BOOST_FUSION_ADAPT_STRUCT(
 	documentModel::ChordDef,
-	(com::String, name)(documentModel::ChordDef::Intervals, intervals))
+	(com::String, name)(documentModel::ChordDef::DegreeDefs, degreeDefs))
 
 namespace parser
 {
@@ -36,7 +36,7 @@ namespace parser
 		template <typename Iterator>
 		struct _SectionParser : qi::grammar<Iterator, documentModel::ChordDef(), ascii::space_type>
 		{
-			typedef documentModel::ChordDef::Intervals Intervals;
+			typedef documentModel::ChordDef::DegreeDefs DegreeDefs;
 			_SectionParser() : _SectionParser::base_type(start, "chord def")
 			{
 				using ascii::char_;
@@ -59,7 +59,7 @@ namespace parser
 				on_error<fail>(start, onError);
 			}
 			qi::rule<Iterator, documentModel::DegreeDef(), ascii::space_type> interval;
-			qi::rule<Iterator, Intervals(), ascii::space_type> intervals;
+			qi::rule<Iterator, DegreeDefs(), ascii::space_type> intervals;
 			qi::rule<Iterator, com::String(), ascii::space_type> chordName;
 			qi::rule<Iterator, documentModel::ChordDef(), ascii::space_type> start;
 		};
