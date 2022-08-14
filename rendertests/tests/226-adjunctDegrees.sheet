@@ -1,25 +1,35 @@
 using "./chords/default.chords";
+using "lua/voicings/simple.lua";
 
 tempo: 80;
 device: MyDevice  midi _usePort=0;
-instrumentDef:lead    _onDevice=MyDevice  _ch=0 _pc=0;
+instrumentDef:withoutVoicing    _onDevice=MyDevice  _ch=0 _pc=0;
+instrumentDef:withVoicing       _onDevice=MyDevice  _ch=1 _pc=0;
+instrumentConf: withVoicing voicingStrategy simple _range=alto;
 
 [
 type: template;
 name: adjunct;
-instrument: lead;
+instrument: withoutVoicing;
 {
-    VI4 VI! <I,  VI>  <I,  VI!>  |
+    VI4 VI !p<I, V VI>  <I, V VI!>  |
 }
+]
+
+[
+type: template;
+name: adjunctWithVoicing;
+instrument: withVoicing;
 {
-    \pp
-    I,,4 I,, I,, I,,
+    VI4 VI8 VI! <I, V VI>4  <I, V VI!>  |
 }
 ]
 
 [
 type: accomp;
 {
-    C7 | C7
+    C7 |
+    /template: adjunctWithVoicing/
+    C7 | 
 }
 ]

@@ -36,9 +36,9 @@ VoicingMatrix = {
 function chordToHashString(chord)
     bits = {}
     slashAppendings = {}
-    local degree = chord.degrees
+    local degrees = chord.degrees
     for i=1, 7 do
-        if degree[i] == nil then
+        if degrees[i] == nil or chord:isDegreeAdjunct(i) then
             bits[i] = 0
         else
             bits[i] = 1

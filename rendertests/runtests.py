@@ -79,6 +79,6 @@ if __name__ == '__main__':
             pass #os.remove(midifile)
     print("-----------------------------------")
     print(f"Tested Executable: {compiler}" )
-    print(f"Tests={ranAndFailed[0]}\tFailed={ranAndFailed[1]}")
+    print(f"Total={ranAndFailed[0]}\tFailed={ranAndFailed[1]}")
     exit(returnCode)
 
