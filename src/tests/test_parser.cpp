@@ -191,83 +191,83 @@ X/V: I=1 III=5 V=-6  --quinte im bass\
 	BOOST_CHECK(chordDefs.size() == 5);
 	auto &def = chordDefs[0];
 	BOOST_CHECK((chordDefs[0].name == FM_STRING("Xmaj")));
-	auto interval = def.intervals.begin();
-	BOOST_CHECK((interval)->degree == I);
-	BOOST_CHECK((interval++)->value == 1);
+	auto degreeDef = def.degreeDefs.begin();
+	BOOST_CHECK((degreeDef)->degree == I);
+	BOOST_CHECK((degreeDef++)->value == 1);
 
-	BOOST_CHECK((interval)->degree == III);
-	BOOST_CHECK((interval++)->value == 5);
+	BOOST_CHECK((degreeDef)->degree == III);
+	BOOST_CHECK((degreeDef++)->value == 5);
 
-	BOOST_CHECK((interval)->degree == V);
-	BOOST_CHECK((interval++)->value == 8);
-	BOOST_CHECK((interval == chordDefs[0].intervals.end()));
+	BOOST_CHECK((degreeDef)->degree == V);
+	BOOST_CHECK((degreeDef++)->value == 8);
+	BOOST_CHECK((degreeDef == chordDefs[0].degreeDefs.end()));
 
 
 	BOOST_CHECK((chordDefs[1].name == FM_STRING("X7")));
-	interval = chordDefs[1].intervals.begin();
+	degreeDef = chordDefs[1].degreeDefs.begin();
 
-	BOOST_CHECK((interval)->degree == I);
-	BOOST_CHECK((interval++)->value == 1);
+	BOOST_CHECK((degreeDef)->degree == I);
+	BOOST_CHECK((degreeDef++)->value == 1);
 
-	BOOST_CHECK((interval)->degree == III);
-	BOOST_CHECK((interval++)->value == 5);
+	BOOST_CHECK((degreeDef)->degree == III);
+	BOOST_CHECK((degreeDef++)->value == 5);
 
-	BOOST_CHECK((interval)->degree == V);
-	BOOST_CHECK((interval++)->value == 8);
+	BOOST_CHECK((degreeDef)->degree == V);
+	BOOST_CHECK((degreeDef++)->value == 8);
 
-	BOOST_CHECK((interval)->degree == VII);
-	BOOST_CHECK((interval++)->value == 10);
-	BOOST_CHECK((interval == chordDefs[1].intervals.end()));
+	BOOST_CHECK((degreeDef)->degree == VII);
+	BOOST_CHECK((degreeDef++)->value == 10);
+	BOOST_CHECK((degreeDef == chordDefs[1].degreeDefs.end()));
 
 
 	BOOST_CHECK((chordDefs[2].name == FM_STRING("Xmaj7")));
-	interval = chordDefs[2].intervals.begin();
+	degreeDef = chordDefs[2].degreeDefs.begin();
 
-	BOOST_CHECK((interval)->degree == I);
-	BOOST_CHECK((interval++)->value == 1);
+	BOOST_CHECK((degreeDef)->degree == I);
+	BOOST_CHECK((degreeDef++)->value == 1);
 
-	BOOST_CHECK((interval)->degree == III);
-	BOOST_CHECK((interval++)->value == 5);
+	BOOST_CHECK((degreeDef)->degree == III);
+	BOOST_CHECK((degreeDef++)->value == 5);
 
-	BOOST_CHECK((interval)->degree == V);
-	BOOST_CHECK((interval++)->value == 8);
+	BOOST_CHECK((degreeDef)->degree == V);
+	BOOST_CHECK((degreeDef++)->value == 8);
 
-	BOOST_CHECK((interval)->degree == VII);
-	BOOST_CHECK((interval++)->value == 11);
-	BOOST_CHECK((interval == chordDefs[2].intervals.end()));
+	BOOST_CHECK((degreeDef)->degree == VII);
+	BOOST_CHECK((degreeDef++)->value == 11);
+	BOOST_CHECK((degreeDef == chordDefs[2].degreeDefs.end()));
 
 	BOOST_CHECK((chordDefs[3].name == FM_STRING("X7+")));
-	interval = chordDefs[3].intervals.begin();
+	degreeDef = chordDefs[3].degreeDefs.begin();
 
-	BOOST_CHECK((interval)->degree == I);
-	BOOST_CHECK((interval++)->value == 1);
+	BOOST_CHECK((degreeDef)->degree == I);
+	BOOST_CHECK((degreeDef++)->value == 1);
 
-	BOOST_CHECK((interval)->degree == III);
-	BOOST_CHECK((interval++)->value == 5);
+	BOOST_CHECK((degreeDef)->degree == III);
+	BOOST_CHECK((degreeDef++)->value == 5);
 
-	BOOST_CHECK((interval)->degree == V);
-	BOOST_CHECK((interval++)->value == 8);
+	BOOST_CHECK((degreeDef)->degree == V);
+	BOOST_CHECK((degreeDef++)->value == 8);
 
-	BOOST_CHECK((interval)->degree == VII);
-	BOOST_CHECK((interval++)->value == 11);
+	BOOST_CHECK((degreeDef)->degree == VII);
+	BOOST_CHECK((degreeDef++)->value == 11);
 
 
-	BOOST_CHECK((interval == chordDefs[3].intervals.end()));
+	BOOST_CHECK((degreeDef == chordDefs[3].degreeDefs.end()));
 
 	BOOST_CHECK((chordDefs[4].name == FM_STRING("X/V")));
-	interval = chordDefs[4].intervals.begin();
+	degreeDef = chordDefs[4].degreeDefs.begin();
 
-	BOOST_CHECK((interval)->degree == I);
-	BOOST_CHECK((interval++)->value == 1);
+	BOOST_CHECK((degreeDef)->degree == I);
+	BOOST_CHECK((degreeDef++)->value == 1);
 
-	BOOST_CHECK((interval)->degree == III);
-	BOOST_CHECK((interval++)->value == 5);
+	BOOST_CHECK((degreeDef)->degree == III);
+	BOOST_CHECK((degreeDef++)->value == 5);
 
-	BOOST_CHECK((interval)->degree == V);
-	BOOST_CHECK((interval++)->value == -6);
+	BOOST_CHECK((degreeDef)->degree == V);
+	BOOST_CHECK((degreeDef++)->value == -6);
 
 
-	BOOST_CHECK((interval == chordDefs[4].intervals.end()));
+	BOOST_CHECK((degreeDef == chordDefs[4].degreeDefs.end()));
 }
 
 BOOST_AUTO_TEST_CASE(test_SheetDefParser)
@@ -1692,3 +1692,101 @@ BOOST_AUTO_TEST_CASE(test_extended_note_events_octaves)
 	BOOST_CHECK_EQUAL(events[c++].pitches[0].alias, com::String("z'"));
 }
 
+BOOST_AUTO_TEST_CASE(test_chordDefAdjunctDegrees)
+{
+	com::String str(FM_STRING("\
+Xmaj: I=1 (II=3) III=4 (IV = 5) V=7 (VI=9) (VII=11)\n\
+"));
+
+	ChordDefParser defParser;
+	using namespace com::degrees;
+
+	auto chordDefs = defParser.parse(str);
+	BOOST_CHECK(chordDefs.size() == 1);
+	auto& def = chordDefs[0];
+	BOOST_CHECK((chordDefs[0].name == FM_STRING("Xmaj")));
+	BOOST_CHECK_EQUAL(def.degreeDefs.size(), size_t(7));
+	auto degreeDef = def.degreeDefs.begin();
+	BOOST_CHECK_EQUAL((degreeDef)->degree, I);
+	BOOST_CHECK_EQUAL((degreeDef)->value, 1);
+	BOOST_CHECK_EQUAL((degreeDef)->isAdjunct, false);
+	++degreeDef;
+	BOOST_CHECK_EQUAL((degreeDef)->degree, II);
+	BOOST_CHECK_EQUAL((degreeDef)->value, 3);
+	BOOST_CHECK_EQUAL((degreeDef)->isAdjunct, true);
+	++degreeDef;
+	BOOST_CHECK_EQUAL((degreeDef)->degree, III);
+	BOOST_CHECK_EQUAL((degreeDef)->value, 4);
+	BOOST_CHECK_EQUAL((degreeDef)->isAdjunct, false);
+	++degreeDef;
+	BOOST_CHECK_EQUAL((degreeDef)->degree, IV);
+	BOOST_CHECK_EQUAL((degreeDef)->value, 5);
+	BOOST_CHECK_EQUAL((degreeDef)->isAdjunct, true);
+	++degreeDef;
+	BOOST_CHECK_EQUAL((degreeDef)->degree, V);
+	BOOST_CHECK_EQUAL((degreeDef)->value, 7);
+	BOOST_CHECK_EQUAL((degreeDef)->isAdjunct, false);
+	++degreeDef;
+	BOOST_CHECK_EQUAL((degreeDef)->degree, VI);
+	BOOST_CHECK_EQUAL((degreeDef)->value, 9);
+	BOOST_CHECK_EQUAL((degreeDef)->isAdjunct, true);
+	++degreeDef;
+	BOOST_CHECK_EQUAL((degreeDef)->degree, VII);
+	BOOST_CHECK_EQUAL((degreeDef)->value, 11);
+	BOOST_CHECK_EQUAL((degreeDef)->isAdjunct, true);
+}
+
+BOOST_AUTO_TEST_CASE(test_ForceAdjunctDegree)
+{
+	using namespace com;
+	using documentModel::PitchDef;
+	com::String text = FM_STRING("\
+[\n\
+	{\n\
+		I4 VI!4 VI!, VI#! VI#!, <I VI!>4 \n\
+	}\n\
+] \n\
+");
+	SheetDefParser parser;
+	auto defs = parser.parse(text);
+	BOOST_CHECK_EQUAL(defs.tracks.size(), size_t(1));
+	BOOST_CHECK_EQUAL(defs.tracks[0].voices.size(), size_t(1));
+	BOOST_CHECK_EQUAL(defs.tracks[0].voices[0].events.size(), size_t(6));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[0], documentModel::Event::Degree, com::degrees::I, 0, 1.0_N4));
+	BOOST_CHECK_EQUAL(defs.tracks[0].voices[0].events[0].pitches[0].forceDegree, false);
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[1], documentModel::Event::Degree, com::degrees::VI, 0, 1.0_N4));
+	BOOST_CHECK_EQUAL(defs.tracks[0].voices[0].events[1].pitches[0].forceDegree, true);
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[2], documentModel::Event::Degree, com::degrees::VI, -1, 0.0));
+	BOOST_CHECK_EQUAL(defs.tracks[0].voices[0].events[2].pitches[0].forceDegree, true);
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[3], documentModel::Event::Degree, com::degrees::VIis, 0, 0.0));
+	BOOST_CHECK_EQUAL(defs.tracks[0].voices[0].events[3].pitches[0].forceDegree, true);
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[4], documentModel::Event::Degree, com::degrees::VIis, -1, 0.0));
+	BOOST_CHECK_EQUAL(defs.tracks[0].voices[0].events[4].pitches[0].forceDegree, true);
+	BOOST_CHECK_EQUAL(defs.tracks[0].voices[0].events[5].type, documentModel::Event::Degree);
+	BOOST_CHECK_EQUAL(defs.tracks[0].voices[0].events[5].pitches[0].pitch, com::degrees::I);
+	BOOST_CHECK_EQUAL(defs.tracks[0].voices[0].events[5].pitches[0].forceDegree, false);
+	BOOST_CHECK_EQUAL(defs.tracks[0].voices[0].events[5].pitches[1].pitch, com::degrees::VI);
+	BOOST_CHECK_EQUAL(defs.tracks[0].voices[0].events[5].pitches[1].forceDegree, true);
+}
+
+BOOST_AUTO_TEST_CASE(test_ForceAdjunctDegree_ExclamationMarkWhitespaceIssue)
+{
+	using namespace com;
+	using documentModel::PitchDef;
+	com::String text = FM_STRING("\
+[\n\
+	{\n\
+		VI !p\n\
+	}\n\
+] \n\
+");
+	SheetDefParser parser;
+	auto defs = parser.parse(text);
+	BOOST_CHECK_EQUAL(defs.tracks.size(), size_t(1));
+	BOOST_CHECK_EQUAL(defs.tracks[0].voices.size(), size_t(1));
+	BOOST_CHECK_EQUAL(defs.tracks[0].voices[0].events.size(), size_t(2));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[0], documentModel::Event::Degree, com::degrees::VI, 0, 0));
+	BOOST_CHECK_EQUAL(defs.tracks[0].voices[0].events[0].pitches[0].forceDegree, false);
+	BOOST_CHECK_EQUAL(defs.tracks[0].voices[0].events[1].type, documentModel::Event::Meta);
+	BOOST_CHECK_EQUAL(defs.tracks[0].voices[0].events[1].stringValue, com::String("expressionPlayedOnce"));
+}

@@ -815,7 +815,8 @@ type: accomp;
 ```
 > the `template` command should always appear at the begining of a bar, not at the end.
 
-
+### Adjunct Chord Tones
+tbd.
 
 ## Advanced techniques
 

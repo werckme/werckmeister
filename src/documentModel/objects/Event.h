@@ -76,7 +76,15 @@ namespace documentModel
 		double pitchBendValue = 0;
 		bool isTimeConsuming() const
 		{
-			return type == Rest || type == Note || type == Degree || type == TiedNote || type == Chord || type == TiedDegree || type == Repeat || type == TiedRepeat || type == Group;
+			return type == Rest 
+				|| type == Note 
+				|| type == Degree 
+				|| type == TiedNote 
+				|| type == Chord 
+				|| type == TiedDegree 
+				|| type == Repeat 
+				|| type == TiedRepeat 
+				|| type == Group;
 		}
 
 		bool isRepeat() const

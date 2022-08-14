@@ -48,6 +48,7 @@ if __name__ == '__main__':
     issheet = lambda x: isfile(x) and os.path.splitext(x)[1] == '.sheet'
     compiler = os.path.abspath(os.path.join(cwd, compiler_path))
     returnCode = 0
+    ranAndFailed = [0, 0]
     if (os.path.exists(compiler) == False):
         print(f"compiler not found: {compiler}")
         exit(1)
@@ -60,6 +61,7 @@ if __name__ == '__main__':
         test_args = get_args_from_tags(test_tags)
         compiler_args.extend(test_args)
         try:
+            ranAndFailed[0] += 1
             print(f"testing '{testfile}' ...", end=' ')
             #print (f"{compiler} {' '.join(compiler_args)}")
             ret = os.system(f"{compiler} {' '.join(compiler_args)}")
@@ -68,11 +70,15 @@ if __name__ == '__main__':
             compare(reffile, midifile, test_tags)
             print(term.green + "OK" + term.normal)
         except Exception as ex:
+            ranAndFailed[1] += 1
             returnCode = 1
             print(term.red + "FAILED")
             print(term.orange + "  " + str(ex))
             print(term.normal)
         finally:
             pass #os.remove(midifile)
+    print("-----------------------------------")
+    print(f"Tested Executable: {compiler}" )
+    print(f"Total={ranAndFailed[0]}\tFailed={ranAndFailed[1]}")
     exit(returnCode)
 

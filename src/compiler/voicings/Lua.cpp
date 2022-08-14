@@ -54,10 +54,10 @@ namespace compiler
         {
             auto top = lua_gettop(L);
             lua_pushstring(L, "degrees");
-            lua_createtable(L, chordDef->intervals.size(), 0);
-            for (const auto &DegreeDef : chordDef->intervals)
+            lua_createtable(L, chordDef->degreeDefs.size(), 0);
+            for (const auto &degreeDef : chordDef->degreeDefs)
             {
-                pushChordDegree(L, DegreeDef);
+                pushChordDegree(L, degreeDef);
             }
             lua_settable(L, top);
         }
@@ -96,11 +96,26 @@ namespace compiler
             return 1;
         }
 
+        static int luaIsDegreeAdjunct(lua_State* L)
+        {
+            using namespace lua;
+            int degree = lua_tointeger(L, -1);
+            auto luaChord = ALuaObject::getObject<LuaChord>(L, -2);
+            const auto *degreeDef = luaChord->chordDef->findDegreeDef(degree);
+            if (degreeDef == nullptr) 
+            {
+                return false;
+            }
+            lua_pushboolean(L, degreeDef->isAdjunct);
+            return 1;
+        }
+
         static const luaL_Reg libfs[] = {
             {"has7", luaHas7<7>},
             {"has9", luaHas7<9>},
             {"has11", luaHas7<11>},
             {"has13", luaHas7<13>},
+            {"isDegreeAdjunct", luaIsDegreeAdjunct},
             {NULL, NULL}};
 
         void LuaChord::push(lua_State *L)
@@ -116,6 +131,7 @@ namespace compiler
         const char *LuaPitchKeyOctave = "octave";
         const char *LuaPitchKeyRoot = "root";
         const char *LuaPitchKeyDegreeValue = "degreeValue";
+        const char* LuaPitchKeyIsForced = "isForced";
         enum
         {
             NoDegreeValue = INT_MAX
@@ -133,10 +149,10 @@ namespace compiler
             void push(lua_State *L);
             void pushDegrees(lua_State *L);
             void pushDegrees(lua_State *L, documentModel::PitchDef::Pitch root, int degreeValue, const std::vector<documentModel::PitchDef> &degrees);
-            void pushDegree(lua_State *L, documentModel::PitchDef::Pitch root, int degreeValue, documentModel::PitchDef::Octave octave);
+            void pushDegree(lua_State *L, documentModel::PitchDef::Pitch root, int degreeValue, documentModel::PitchDef::Octave octave, bool isForced);
         };
 
-        void LuaPitches::pushDegree(lua_State *L, documentModel::PitchDef::Pitch root, int degreeValue, documentModel::PitchDef::Octave octave)
+        void LuaPitches::pushDegree(lua_State *L, documentModel::PitchDef::Pitch root, int degreeValue, documentModel::PitchDef::Octave octave, bool isForced)
         {
             lua_createtable(L, 2, 0);
             auto top = lua_gettop(L);
@@ -150,6 +166,10 @@ namespace compiler
             top = lua_gettop(L);
             lua_pushstring(L, LuaPitchKeyDegreeValue);
             lua_pushinteger(L, degreeValue);
+            lua_settable(L, top);
+            top = lua_gettop(L);
+            lua_pushstring(L, LuaPitchKeyIsForced);
+            lua_pushboolean(L, isForced);
             lua_settable(L, top);
         }
 
@@ -188,13 +208,13 @@ namespace compiler
             int degreeIndex = 1;
             for (const auto &degree : degrees_)
             {
-                auto degreeDef = chordDef->getDegreeDef(degree);
+                auto degreeDef = chordDef->resolveDegreeDef(degree);
                 if (!degreeDef.valid())
                 {
                     degreeDef.value = NoDegreeValue;
                 }
                 lua_pushinteger(L, degreeIndex++);
-                pushDegree(L, root, degreeDef.value, degree.octave);
+                pushDegree(L, root, degreeDef.value, degree.octave, degree.forceDegree);
                 lua_settable(L, luaStackDegrees);
             }
             lua_settable(L, luaStackMainTable);

@@ -6,6 +6,8 @@ namespace documentModel
 {
 	struct DegreeDef : public Interval
 	{
+		// Akkordfremd
+		bool isAdjunct = false;
 		com::Pitch degree;
 		bool operator<(const DegreeDef &b) const { return degree < b.degree; }
 		static DegreeDef invalid()

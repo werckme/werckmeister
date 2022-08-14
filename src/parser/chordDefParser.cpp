@@ -12,11 +12,16 @@
 
 BOOST_FUSION_ADAPT_STRUCT(
 	documentModel::DegreeDef,
-	(com::Pitch, degree)(int, value))
+	(com::Pitch, degree)
+	(int, value)
+	(bool, isAdjunct)
+)
 
 BOOST_FUSION_ADAPT_STRUCT(
 	documentModel::ChordDef,
-	(com::String, name)(documentModel::ChordDef::Intervals, intervals))
+	(com::String, name)
+	(documentModel::ChordDef::DegreeDefs, degreeDefs)
+)
 
 namespace parser
 {
@@ -36,7 +41,7 @@ namespace parser
 		template <typename Iterator>
 		struct _SectionParser : qi::grammar<Iterator, documentModel::ChordDef(), ascii::space_type>
 		{
-			typedef documentModel::ChordDef::Intervals Intervals;
+			typedef documentModel::ChordDef::DegreeDefs DegreeDefs;
 			_SectionParser() : _SectionParser::base_type(start, "chord def")
 			{
 				using ascii::char_;
@@ -46,12 +51,13 @@ namespace parser
 				using qi::lexeme;
 				using qi::lit;
 				using qi::on_error;
+				using qi::attr;
 
 				chordName.name("chord name");
 				intervals.name("intervals");
 
 				chordName %= char_("X") > *char_(ChordDefParser::ALLOWED_CHORD_SYMBOLS_REGEX);
-				interval %= degreeSymbols_ > '=' > int_;
+				interval %= '(' > degreeSymbols_ > '=' > int_ > attr(true) >')' | degreeSymbols_ > '=' > int_ > attr(false);
 				intervals %= +(interval);
 				start %= chordName > ':' > intervals;
 
@@ -59,7 +65,7 @@ namespace parser
 				on_error<fail>(start, onError);
 			}
 			qi::rule<Iterator, documentModel::DegreeDef(), ascii::space_type> interval;
-			qi::rule<Iterator, Intervals(), ascii::space_type> intervals;
+			qi::rule<Iterator, DegreeDefs(), ascii::space_type> intervals;
 			qi::rule<Iterator, com::String(), ascii::space_type> chordName;
 			qi::rule<Iterator, documentModel::ChordDef(), ascii::space_type> start;
 		};

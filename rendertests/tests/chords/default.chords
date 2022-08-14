@@ -1,35 +1,35 @@
 ------------------------------------------------------------------
-X: 			I=0	    		III=4 			V=7
-Xug:       	I=0	    		III=4 			V=7
-Xmin: 		I=0     		III=3 			V=7
-X-: 		I=0     		III=3 			V=7
-XO: 		I=0     		III=3 			V=6
+X: 			I=0	    		III=4 			V=7    (VI=9)
+Xug:       	I=0	    		III=4 			V=7    (VI=9)
+Xmin: 		I=0     		III=3 			V=7    (VI=9)
+X-: 		I=0     		III=3 			V=7    (VI=9)
+XO: 		I=0     		III=3 			V=6    (VI=9)
 ------------------------------------------------------------------
 X6:         I=0     		III=4 			V=7     VI=9
 X-6:        I=0     		III=3 			V=7     VI=9
 X-6/9:      I=0     II=2	III=3 			V=7     VI=9
 ------------------------------------------------------------------
-X7: 		I=0     		III=4 			V=7 			VII=10
-Xmin7: 		I=0     		III=3 			V=7 			VII=10
-X-7: 		I=0     		III=3 			V=7 			VII=10
-Xmaj7: 		I=0     		III=4 			V=7 			VII=11
-X07: 		I=0     		III=3 			V=6             VII=10
-XO7: 		I=0     		III=3 			V=6             VII=9
-Xmaj7#11: 	I=0     		III=4 	IV=18	V=7 			VII=11
-X7#5: 		I=0     		III=4 			V=8 			VII=10
-X7#5#9:		I=0     II=15	III=4 			V=8 			VII=10
+X7: 		I=0     		III=4 			V=7     VII=10  (VI=9)
+Xmin7: 		I=0     		III=3 			V=7 	VII=10  (VI=9)
+X-7: 		I=0     		III=3 			V=7 	VII=10  (VI=9)
+Xmaj7: 		I=0     		III=4 			V=7 	VII=11  (VI=9)
+X07: 		I=0     		III=3 			V=6     VII=10  (VI=9)
+XO7: 		I=0     		III=3 			V=6     VII=9   (VI=9)
+Xmaj7#11: 	I=0     		III=4 	IV=18	V=7 	VII=11  (VI=9)
+X7#5: 		I=0     		III=4 			V=8 	VII=10  (VI=9)
+X7#5#9:		I=0     II=15	III=4 			V=8 	VII=10  (VI=9)
 ------------------------------------------------------------------
-X9: 		I=0     II=14   III=4 			V=7 			VII=10
-Xmin9: 		I=0     II=14	III=3 			V=7 			VII=10
-X-9: 		I=0     II=14	III=3 			V=7 			VII=10
-Xmaj9: 		I=0     II=14	III=4 			V=7 			VII=11
-X7#9: 		I=0     II=15	III=4 			V=7 			VII=10
-X7b9:       I=0     II=13   III=4 			V=7 			VII=10
+X9: 		I=0     II=14   III=4 			V=7 	VII=10  (VI=9)
+Xmin9: 		I=0     II=14	III=3 			V=7 	VII=10  (VI=9)
+X-9: 		I=0     II=14	III=3 			V=7 	VII=10  (VI=9)
+Xmaj9: 		I=0     II=14	III=4 			V=7 	VII=11  (VI=9)
+X7#9: 		I=0     II=15	III=4 			V=7 	VII=10  (VI=9)
+X7b9:       I=0     II=13   III=4 			V=7 	VII=10  (VI=9)
 ------------------------------------------------------------------
-X11: 		I=0     II=14	III=4 	IV=17	V=7 			VII=10
-Xmin11:		I=0     II=14	III=3 	IV=17	V=7 			VII=10
-X-11:		I=0     II=14	III=3 	IV=17	V=7 			VII=10
-Xmaj11:		I=0     II=14	III=4 	IV=17	V=7 			VII=11
+X11: 		I=0     II=14	III=4 	IV=17	V=7 	VII=10  (VI=9)
+Xmin11:		I=0     II=14	III=3 	IV=17	V=7 	VII=10  (VI=9)
+X-11:		I=0     II=14	III=3 	IV=17	V=7 	VII=10  (VI=9)
+Xmaj11:		I=0     II=14	III=4 	IV=17	V=7 	VII=11  (VI=9)
 ------------------------------------------------------------------
 X13: 		I=0     II=14	III=4 	IV=17	V=7 	VI=21	VII=10
 Xmin13:		I=0     II=14	III=3 	IV=17	V=7 	VI=21	VII=10

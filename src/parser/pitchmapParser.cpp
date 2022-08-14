@@ -35,7 +35,7 @@ namespace parser
 		template <typename Iterator>
 		struct _PitchmapParser : qi::grammar<Iterator, Pitchmap(), ascii::space_type>
 		{
-			typedef ChordDef::Intervals Intervals;
+			typedef ChordDef::DegreeDefs DegreeDefs;
 			_PitchmapParser() : _PitchmapParser::base_type(start, "chord def")
 			{
 				using ascii::char_;
