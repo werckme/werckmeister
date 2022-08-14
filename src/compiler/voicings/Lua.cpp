@@ -131,6 +131,7 @@ namespace compiler
         const char *LuaPitchKeyOctave = "octave";
         const char *LuaPitchKeyRoot = "root";
         const char *LuaPitchKeyDegreeValue = "degreeValue";
+        const char* LuaPitchKeyIsForced = "isForced";
         enum
         {
             NoDegreeValue = INT_MAX
@@ -148,10 +149,10 @@ namespace compiler
             void push(lua_State *L);
             void pushDegrees(lua_State *L);
             void pushDegrees(lua_State *L, documentModel::PitchDef::Pitch root, int degreeValue, const std::vector<documentModel::PitchDef> &degrees);
-            void pushDegree(lua_State *L, documentModel::PitchDef::Pitch root, int degreeValue, documentModel::PitchDef::Octave octave);
+            void pushDegree(lua_State *L, documentModel::PitchDef::Pitch root, int degreeValue, documentModel::PitchDef::Octave octave, bool isForced);
         };
 
-        void LuaPitches::pushDegree(lua_State *L, documentModel::PitchDef::Pitch root, int degreeValue, documentModel::PitchDef::Octave octave)
+        void LuaPitches::pushDegree(lua_State *L, documentModel::PitchDef::Pitch root, int degreeValue, documentModel::PitchDef::Octave octave, bool isForced)
         {
             lua_createtable(L, 2, 0);
             auto top = lua_gettop(L);
@@ -165,6 +166,10 @@ namespace compiler
             top = lua_gettop(L);
             lua_pushstring(L, LuaPitchKeyDegreeValue);
             lua_pushinteger(L, degreeValue);
+            lua_settable(L, top);
+            top = lua_gettop(L);
+            lua_pushstring(L, LuaPitchKeyIsForced);
+            lua_pushboolean(L, isForced);
             lua_settable(L, top);
         }
 
@@ -209,7 +214,7 @@ namespace compiler
                     degreeDef.value = NoDegreeValue;
                 }
                 lua_pushinteger(L, degreeIndex++);
-                pushDegree(L, root, degreeDef.value, degree.octave);
+                pushDegree(L, root, degreeDef.value, degree.octave, degree.forceDegree);
                 lua_settable(L, luaStackDegrees);
             }
             lua_settable(L, luaStackMainTable);

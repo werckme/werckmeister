@@ -34,8 +34,8 @@ VoicingMatrix = {
 -- if chord is a slash chord, the degree value will be appended as number.
 -- e.g.: X/V = 1010100/5
 function chordToHashString(chord)
-    bits = {}
-    slashAppendings = {}
+    local bits = {}
+    local slashAppendings = {}
     local degrees = chord.degrees
     for i=1, 7 do
         if degrees[i] == nil or chord:isDegreeAdjunct(i) then

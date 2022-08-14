@@ -9,5 +9,6 @@ parameters = {
 local solver = Simple:new()
 
 function solve(chord, degrees, parameters)
+    dump(degrees)
     return solver:solve(chord, degrees, parameters)
 end
