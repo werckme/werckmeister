@@ -199,7 +199,7 @@ namespace parser
 				pitch_.name("pitch");
 				degree_.name("pitch");
 				bar_volta_ %= lexeme['^' >> +char_("0-9")];
-				degree_ %= (lexeme[degreeSymbols_ >> -lit("!")[at_c<PitchDefFieldForceDegree>(_val) = true]] >> (octaveSymbols_ | attr(PitchDef::DefaultOctave))  );
+				degree_ %= -lit("!")[at_c<PitchDefFieldForceDegree>(_val) = true] >> (degreeSymbols_ >>  (octaveSymbols_ | attr(PitchDef::DefaultOctave))  );
 				pitch_ %= pitchSymbols_ >> (octaveSymbols_ | attr(PitchDef::DefaultOctave));
 				alias_ %= lexeme['"' >> +(char_ - '"') >> '"'];
 				pitchOrAlias_ %= pitch_ | alias_ | extendedPitch_;
