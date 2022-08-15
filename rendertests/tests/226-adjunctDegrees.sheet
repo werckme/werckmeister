@@ -12,7 +12,7 @@ type: template;
 name: adjunct;
 instrument: withoutVoicing;
 {
-    VI4 VI !p<I, V VI>  <I, V VI!>  |
+    VI4 VI !p<I, V VI>  <I, V !VI>  |
 }
 ]
 
@@ -21,7 +21,7 @@ type: template;
 name: adjunctWithVoicing;
 instrument: withVoicing;
 {
-    VI4 VI8 VI! <I, V VI>4  <I, V VI!>  |
+    VI4 VI8 !VI <I, V VI>4  <I, V !VI>  |
 }
 ]
 

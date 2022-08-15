@@ -1743,7 +1743,7 @@ BOOST_AUTO_TEST_CASE(test_ForceAdjunctDegree)
 	com::String text = FM_STRING("\
 [\n\
 	{\n\
-		I4 VI!4 VI!, VI#! VI#!, <I VI!>4 \n\
+		I4 !VI4 ! VI, !VI# !VI#, <I !VI>4 \n\
 	}\n\
 ] \n\
 ");
@@ -1769,7 +1769,7 @@ BOOST_AUTO_TEST_CASE(test_ForceAdjunctDegree)
 	BOOST_CHECK_EQUAL(defs.tracks[0].voices[0].events[5].pitches[1].forceDegree, true);
 }
 
-BOOST_AUTO_TEST_CASE(test_ForceAdjunctDegree_ExclamationMarkWhitespaceIssue)
+BOOST_AUTO_TEST_CASE(test_ForceAdjunctDegree_ExpressionExclamationMarkIssue)
 {
 	using namespace com;
 	using documentModel::PitchDef;
@@ -1777,6 +1777,28 @@ BOOST_AUTO_TEST_CASE(test_ForceAdjunctDegree_ExclamationMarkWhitespaceIssue)
 [\n\
 	{\n\
 		VI !p\n\
+	}\n\
+] \n\
+");
+	SheetDefParser parser;
+	auto defs = parser.parse(text);
+	BOOST_CHECK_EQUAL(defs.tracks.size(), size_t(1));
+	BOOST_CHECK_EQUAL(defs.tracks[0].voices.size(), size_t(1));
+	BOOST_CHECK_EQUAL(defs.tracks[0].voices[0].events.size(), size_t(2));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[0], documentModel::Event::Degree, com::degrees::VI, 0, 0));
+	BOOST_CHECK_EQUAL(defs.tracks[0].voices[0].events[0].pitches[0].forceDegree, false);
+	BOOST_CHECK_EQUAL(defs.tracks[0].voices[0].events[1].type, documentModel::Event::Meta);
+	BOOST_CHECK_EQUAL(defs.tracks[0].voices[0].events[1].stringValue, com::String("expressionPlayedOnce"));
+}
+
+BOOST_AUTO_TEST_CASE(test_ForceAdjunctDegree_ExclamationMarkWhitespaceIssue)
+{
+	using namespace com;
+	using documentModel::PitchDef;
+	com::String text = FM_STRING("\
+[\n\
+	{\n\
+		VI!p\n\
 	}\n\
 ] \n\
 ");
