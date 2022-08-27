@@ -1,0 +1,78 @@
+using "../../examples/chords/default.chords";
+device: _usePort=17 _setName=MyDevice  _isType=midi;
+instrumentDef: _setName=pianoR _onDevice=MyDevice _ch=0 _pc=0;
+instrumentDef: _setName=pianoL _onDevice=MyDevice _ch=1 _pc=0;
+
+tempo: 120;
+
+[
+type: template;
+name: chord;
+{
+    /instrument: pianoL/
+    \ff
+    r4                       ((!I' !II' !III' !IV' !V' !VI') (!VII' !VI' !V' !IV' !III' !II'))2. |
+}
+{
+    \ff
+    /instrument: pianoR/
+    <I II III IV V VI VII>1                                                                  |
+}
+]
+
+[
+type: accomp;
+{
+    /template: chord/
+    C           |
+    C-          |
+    C/7         |
+    C-/7        |
+    C/maj7      |
+    C/5         |
+    C-/5        |
+    C/4         |
+    C-/4        |
+    C-/3        |
+    C/3         |
+    C/2         |
+    C-7b5/b5    |
+    Csus4       |
+    C7sus4      |
+    C9sus4      |
+    Csus2       |
+    C6          |
+    C-6         |
+    C-6/9       |
+    C7          |
+    C-7         |
+    Cmaj7       |
+    Cmaj7b5     |
+    C-7b5       |
+    Cmaj7#11    |
+    C7b5        |
+    C07         |
+    C7#5        |
+    C7#5#9      |
+    C2          |
+    C9          |
+    Cflat9      |
+    Csharp9     |
+    C-9         |
+    C-add9      |
+    Cmaj9       |
+    C7#9        |
+    C7b9        |
+    Cmaj7b9     |
+    C11         |
+    Cflat11     |
+    Csharp11    |
+    C-11        |
+    Cmaj11      |
+    C13         |
+    Cflat13     |
+    Csharp13    |
+    C-13        |
+    Cmaj13      |
+}
+]
