@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------
--- Here you can define your chord symbols: containing degrees and its semitones.
+-- Here you can define your chord symbols, containing its degrees and its semitones.
 -- A degree in parantheses specifies chord adjunct degrees. 
 -- Those degrees will not be rendered unless they have a leading "!".
 -- E.g.: <I III !IV>

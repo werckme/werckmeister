@@ -747,7 +747,7 @@ And this is what you doing when writing style templates.
 
 ```language=Werckmeister,type=full
 -- make sure that you have a chord definition loaded
-using "chords/default.chords";
+using "/chords/default.chords";
 
 device: MyDevice  midi 0;
 --            name  device       
@@ -790,7 +790,7 @@ such as:
 
 ```language=Werckmeister,type=full
 -- make sure that you have a chord definition loaded
-using "chords/default.chords";
+using "/chords/default.chords";
 
 device: MyDevice  midi 0;
 --             name  device       ch pc cc
@@ -815,8 +815,61 @@ type: accomp;
 ```
 > the `template` command should always appear at the begining of a bar, not at the end.
 
+## Chords
+Since there are no standardized chord symbol rules you need to define your own chord symbols and their meanings.
+You do that by writing a `.chords` file. 
+Here you can define your chord symbols, containing its degrees and its semitones.
+
+For example a major chord could be written as:
+
+```Xmaj: I=0  III=4  V=7```
+
+The `X` is the placeholder for the chord base name. So `Xmaj` stands for `Cmaj`, `Dmaj`, `Emaj` and so on.
+Here is an example for some chord definitions:
+
+```
+X7:         I=0    (II=2)   III=4     (IV=5)    V=7    (VI=9)     VII=10
+X-7:        I=0    (II=2)   III=3     (IV=5)    V=7    (VI=9)     VII=10
+X11:        I=0    (II=2)   III=4      IV=5     V=7    (VI=9)     VII=10
+-- to distinguish between Xb11 (Xflat and 11) and Xb11 (X and flat 11)
+-- we write Xflat9 for the latter.
+Xflat11:    I=0    (II=2)   III=3      IV=4     V=7    (VI=9)    (VII=11)
+Xsharp11:   I=0    (II=2)   III=4      IV=6    (V=7)   (VI=9)     VII=10
+```
 ### Adjunct Chord Tones
-tbd.
+You maybe noticed in the example above, that some degrees are written in parantheses and some not.
+A degree in parantheses specifies chord adjunct degrees. 
+Those degrees will not be rendered unless they have a leading "!".
+
+Here in this example we force the 6th of a chord to appear, even if the used chords usually have no 6th.
+ 
+```language=Werckmeister,type=full
+using "chords/default.chords";
+
+device: MyDevice  midi 0;
+instrumentDef:blues  MyDevice _ch=0  _pc=0;
+
+[
+type: template;
+name: myBluesTemplate;
+instrument: blues;
+{
+    -- force the VI to appear by prepending a "!" to the degree.
+    V,8 &   !VI, &   V, &  !VI, &   |
+}
+{
+	I,8 &    I, &    I,8 &  I,  &   |
+}
+]
+
+[
+type: accomp;
+{
+    /template: myBluesTemplate/
+    C | F | G | C |
+}
+]
+```
 
 ## Advanced techniques
 
@@ -991,8 +1044,8 @@ withTag(myTag) {
 }
 ```
 
+
 #### TBD
-##### Chords
 ##### Voicing strategies
 
 
