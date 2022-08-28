@@ -1,8 +1,8 @@
 -------------------------------------------------------------------------
 -- Here you can define your chord symbols, containing its degrees and its semitones.
 -- A degree in parantheses specifies chord adjunct degrees. 
--- Those degrees will not be rendered unless they have a leading "!".
--- E.g.: <I III !IV>
+-- Those degrees are not being rendered, unless your force them to appear using a leading !.
+-- see https://werckme.github.io/manual#adjunct-chord-tones
 -------------------------------------------------------------------------
 X:          I=0    (II=2)    III=4    (IV=5)    V=7    (VI=9)    (VII=11)
 Xmin:       I=0    (II=2)    III=3    (IV=5)    V=7    (VI=9)    (VII=10)

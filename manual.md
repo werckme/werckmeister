@@ -818,13 +818,14 @@ type: accomp;
 ## Chords
 Since there are no standardized chord symbol rules you need to define your own chord symbols and their meanings.
 You do that by writing a `.chords` file. 
-Here you can define your chord symbols, containing its degrees and its semitones.
+Here you can define your chord symbols, with its degrees and its semitones.
 
 For example a major chord could be written as:
 
 ```Xmaj: I=0  III=4  V=7```
 
-The `X` is the placeholder for the chords base name. So `Xmaj` stands for `Cmaj`, `Dmaj`, `Emaj` and so on.
+> The `X` is the placeholder for the chord base name. So `Xmaj` stands for `Cmaj`, `Dmaj`, `Emaj` and so on.
+
 Here is an example for some chord definitions:
 
 ```
@@ -839,9 +840,9 @@ Xsharp11:   I=0    (II=2)   III=4      IV=6    (V=7)   (VI=9)     VII=10
 ### Adjunct Chord Tones
 You maybe noticed in the example above, that some degrees are written in parantheses and some not.
 A degree in parantheses specifies chord adjunct degrees. 
-Those degrees will not be rendered unless they have a leading "!".
+Those degrees are not being rendered, unless your force them to appear using a leading `!`.
 
-Here in this example we force the 6th of an chord to appear, although the used chords normally have no 6th.
+Here in this example we force the 6th degree to appear, even if the current chord has no 6th.
  
 ```language=Werckmeister,type=full
 using "chords/default.chords";
