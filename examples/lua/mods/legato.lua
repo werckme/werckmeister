@@ -30,7 +30,7 @@ parameters = {
     { name="amount",           default="50" }
 }
 
-function perform(events, params, timeinfo) 
+function perform(events, params, timeinfo)
     checkLegacyNamedParams(params, "forTag", "amount")
     local tag = params.forTag
     if tag == ParameterValueNoTag then
