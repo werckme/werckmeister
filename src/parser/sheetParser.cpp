@@ -199,6 +199,7 @@ namespace parser
 				pitch_.name("pitch");
 				degree_.name("pitch");
 				bar_volta_ %= lexeme['^' >> +char_("0-9")];
+				bar_repeat_number_ %= lit("(") >> "x" >> int_ >> ")";
 				degree_ %= -lit("!")[at_c<PitchDefFieldForceDegree>(_val) = true] >> (degreeSymbols_ >>  (octaveSymbols_ | attr(PitchDef::DefaultOctave))  );
 				pitch_ %= pitchSymbols_ >> (octaveSymbols_ | attr(PitchDef::DefaultOctave));
 				alias_ %= lexeme['"' >> +(char_ - '"') >> '"'];
@@ -384,6 +385,7 @@ namespace parser
 			qi::rule<Iterator, com::String(), ascii::space_type> using_;
 			qi::rule<Iterator, DocumentUsing::Usings, ascii::space_type> usings_;
 			qi::rule<Iterator, com::String(), ascii::space_type> bar_volta_;
+			qi::rule<Iterator, int, ascii::space_type> bar_repeat_number_;
 			CurrentPos<Iterator> current_pos_;
 		};
 
