@@ -327,7 +327,8 @@ namespace compiler
             }
             if (event.stringValue == RepeatEnd)
             {
-                dst.emplace_back(createJumpEvent(createInternalMarkerName(markCounter - 1)));
+                int numberOfRepeats = event.numberOfRepeats > 0 ? (event.numberOfRepeats - 1) : 0;
+                dst.emplace_back(createJumpEvent(createInternalMarkerName(markCounter - 1), numberOfRepeats));
             }
             if (event.stringValue == RepeatBeginAndEnd)
             {
