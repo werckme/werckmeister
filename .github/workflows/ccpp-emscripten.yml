@@ -19,7 +19,7 @@ jobs:
     - name: update submodules
       run: git submodule update --init --recursive --remote    
     - name: install emscripten
-      run: git clone https://github.com/emscripten-core/emsdk.git && cd emsdk && ./emsdk install latest && ./emsdk activate latest
+      run: git clone https://github.com/emscripten-core/emsdk.git && cd emsdk && ./emsdk install 3.1.28 && ./emsdk activate 3.1.28
       working-directory: third_party
     - name: configure
       run: source ../third_party/emsdk/emsdk_env.sh && emcmake cmake -DCMAKE_BUILD_TYPE=Release ..
