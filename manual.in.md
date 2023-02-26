@@ -602,6 +602,10 @@ c4 d e f :| g a b c' |
 c4 d e f |: g a b ab :| c'1
 ```
 
+```language=Werckmeister,type=single,tempo=200
+c4 d e f :(x3)|: g a b ab :(x4)| c'1
+```
+
 ##### Volta
 ```language=Werckmeister,type=single,tempo=200
 c4 d e f |^1 g a b ab :|^2 c'1
