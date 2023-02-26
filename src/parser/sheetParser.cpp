@@ -43,9 +43,11 @@ BOOST_FUSION_ADAPT_STRUCT(
 	(documentModel::Event::Tags, tags)
 	(documentModel::Event::Pitches, pitches)
 	(documentModel::Event::Duration, duration)
+	(int, numberOfRepeats)
 	(com::String, stringValue)
 	(documentModel::Event::Args, metaArgs)
 	(unsigned int, sourcePositionEnd))
+	
 
 BOOST_FUSION_ADAPT_STRUCT(
 	documentModel::Grouped,
@@ -63,10 +65,12 @@ namespace
 		EvTags,
 		EvPitches,
 		EvDuration,
+		EvNumberOfEvents,
 		EvStringValue,
 		EvMetaArgs,
-		EvSourcePosEnd
+		EvSourcePosEnd,
 	};
+	const int DefaultNumberOfBarRepeats = 0;
 }
 
 BOOST_FUSION_ADAPT_STRUCT(
@@ -188,7 +192,7 @@ namespace parser
 				using qi::space;
 				using qi::string;
 				using boost::spirit::eps;
-
+			
 				start.name("documentModel");
 				bar_volta_.name("bar jump mark");
 				event_.name("event");
@@ -199,6 +203,7 @@ namespace parser
 				pitch_.name("pitch");
 				degree_.name("pitch");
 				bar_volta_ %= lexeme['^' >> +char_("0-9")];
+				bar_repeat_number_ %= lit("(") >> "x" >> int_ >> ")";
 				degree_ %= -lit("!")[at_c<PitchDefFieldForceDegree>(_val) = true] >> (degreeSymbols_ >>  (octaveSymbols_ | attr(PitchDef::DefaultOctave))  );
 				pitch_ %= pitchSymbols_ >> (octaveSymbols_ | attr(PitchDef::DefaultOctave));
 				alias_ %= lexeme['"' >> +(char_ - '"') >> '"'];
@@ -209,7 +214,8 @@ namespace parser
 						>> attr(sourceId_) 
 						>> attr(Event::Note) 
 						>> (("\"" >> +(lexeme[+char_(ALLOWED_EVENT_TAG_ARGUMENT)]) >> "\"" >> "@") | attr(Event::Tags())) 
-						>> (pitchOrAlias_ | ("<" >> +pitchOrAlias_ >> ">")) >> (durationSymbols_ | attr(Event::NoDuration)) 
+						>> (pitchOrAlias_ | ("<" >> +pitchOrAlias_ >> ">")) >> (durationSymbols_ | attr(Event::NoDuration))
+						>> attr(DefaultNumberOfBarRepeats)
 						>> attr("") 
 						>> attr(Event::Args()) >> current_pos_.current_pos 
 						>> -(
@@ -223,7 +229,8 @@ namespace parser
 						>> attr(Event::Degree) 
 						>> (("\"" >> +(lexeme[+char_(ALLOWED_EVENT_TAG_ARGUMENT)]) >> "\"" >> "@") | attr(Event::Tags())) 
 						>> (degree_ | ("<" >> +degree_ >> ">")) 
-						>> (durationSymbols_ | attr(Event::NoDuration)) 
+						>> (durationSymbols_ | attr(Event::NoDuration))
+						>> attr(DefaultNumberOfBarRepeats)
 						>> attr("") 
 						>> attr(Event::Args()) 
 						>> current_pos_.current_pos >> -(
@@ -231,12 +238,13 @@ namespace parser
 						)
 					) 
 					|
-					( // REPEAT SHORTCUT (x)
+					( // REPEAT SHORTCUT (&)
 						current_pos_.current_pos 
 						>> attr(sourceId_) 
 						>> attr(Event::Repeat) 
 						>> "&" 
 						>> attr(Event::Tags()) >> attr(PitchDef()) >> (durationSymbols_ | attr(Event::NoDuration)) 
+						>> attr(DefaultNumberOfBarRepeats)
 						>> attr("") >> attr(Event::Args()) >> current_pos_.current_pos 
 						>> -(
 							lit("~")[at_c<EvType>(_val) = Event::TiedRepeat] | (lit("->")[at_c<EvType>(_val) = Event::Meta][at_c<EvStringValue>(_val) = FM_STRING("addVorschlag")])
@@ -250,6 +258,7 @@ namespace parser
 						>> attr(Event::Tags()) 
 						>> attr(PitchDef()) 
 						>> attr(Event::NoDuration) 
+						>> attr(DefaultNumberOfBarRepeats)
 						>> lexeme[char_("a-gA-G") > *char_(ChordDefParser::ALLOWED_CHORD_SYMBOLS_REGEX)] 
 						>> attr(Event::Args()) >> current_pos_.current_pos
 					) 
@@ -262,6 +271,7 @@ namespace parser
 						>> attr(Event::Tags()) 
 						>> attr(PitchDef()) 
 						>> attr(Event::NoDuration) 
+						>> attr(DefaultNumberOfBarRepeats)
 						>> attr("expression") 
 						>> expression_argument_
 					) 
@@ -274,6 +284,7 @@ namespace parser
 						>> attr(Event::Tags()) 
 						>> attr(PitchDef()) 
 						>> attr(Event::NoDuration) 
+						>> attr(DefaultNumberOfBarRepeats)
 						>> attr("expressionPlayedOnce") 
 						>> expression_argument_
 					) 
@@ -286,6 +297,7 @@ namespace parser
 						>> attr(Event::Tags()) 
 						>> attr(PitchDef()) 
 						>> (durationSymbols_ | attr(Event::NoDuration)) 
+						>> attr(DefaultNumberOfBarRepeats)
 						>> attr("") 
 						>> attr(Event::Args()) 
 						>> current_pos_.current_pos
@@ -298,6 +310,7 @@ namespace parser
 						>> attr(Event::EOB) 
 						>> attr(Event::Tags()) 
 						>> attr(PitchDef()) >> attr(Event::NoDuration) 
+						>> attr(DefaultNumberOfBarRepeats)
 						>> attr("") 
 						>> attr(Event::Args()) >> current_pos_.current_pos >> -bar_volta_[(insert(at_c<EvTags>(_val), qi::_1))] 
 						>> -(lit(":"))[at_c<EvStringValue>(_val) = FM_STRING("__repeat_begin_")]
@@ -310,11 +323,12 @@ namespace parser
 						>> attr(Event::EOB) 
 						>> attr(Event::Tags()) 
 						>> attr(PitchDef()) 
-						>> attr(Event::NoDuration) 
+						>> attr(Event::NoDuration)
+						>> -bar_repeat_number_
 						>> attr("__repeat_end_") 
 						>> attr(Event::Args()) >> current_pos_.current_pos >> "|" >> -bar_volta_[insert(at_c<EvTags>(_val), qi::_1)] 
 						>> -(lit(":"))[at_c<EvStringValue>(_val) = FM_STRING("__repeat_begin_and_end_")]
-					) 
+					)
 					|
 					( // META COMMANDS
 						current_pos_.current_pos 
@@ -324,6 +338,7 @@ namespace parser
 						>> attr(Event::Tags()) 
 						>> attr(PitchDef()) 
 						>> attr(Event::NoDuration) 
+						>> attr(DefaultNumberOfBarRepeats)
 						>> +char_("a-zA-Z") 
 						>> ":"
 						>> +(argument_) 
@@ -384,6 +399,7 @@ namespace parser
 			qi::rule<Iterator, com::String(), ascii::space_type> using_;
 			qi::rule<Iterator, DocumentUsing::Usings, ascii::space_type> usings_;
 			qi::rule<Iterator, com::String(), ascii::space_type> bar_volta_;
+			qi::rule<Iterator, int, ascii::space_type> bar_repeat_number_;
 			CurrentPos<Iterator> current_pos_;
 		};
 
