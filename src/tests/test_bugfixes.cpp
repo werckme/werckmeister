@@ -140,3 +140,35 @@ BOOST_AUTO_TEST_CASE(issue_100_mod_gt_1_in_instrument_config_fails)
 	it = argsIt->second.begin();
 	BOOST_CHECK((*it++).value == "63");
 }
+
+BOOST_AUTO_TEST_CASE(issue_333_special_char_event)
+{
+	using namespace com;
+	using documentModel::PitchDef;
+	com::String text = FM_STRING("\
+device: SC1 midi 5;\n\
+tempo: 130;\n\
+instrumentDef: piano   SC1 2 0 3;\n\
+[\n\
+instrument: piano;\n\
+{\n\
+    ÖÄÜöäüß\n\
+}\n\
+]\
+");
+	SheetDefParser parser;
+	try 
+	{
+		parser.parse(text);
+
+	}
+	catch(const std::exception &ex) 
+	{
+		auto exText = std::string(ex.what());
+		auto found = exText.find("syntax error");
+		if (found == std::string::npos) 
+		{
+			throw;
+		}
+	}
+}

@@ -1812,3 +1812,117 @@ BOOST_AUTO_TEST_CASE(test_ForceAdjunctDegree_ExclamationMarkWhitespaceIssue)
 	BOOST_CHECK_EQUAL(defs.tracks[0].voices[0].events[1].type, documentModel::Event::Meta);
 	BOOST_CHECK_EQUAL(defs.tracks[0].voices[0].events[1].stringValue, com::String("expressionPlayedOnce"));
 }
+
+BOOST_AUTO_TEST_CASE(test_347_repeat_more_than_once)
+{
+	using namespace com;
+	using documentModel::PitchDef;
+	com::String text = FM_STRING("\n\
+[\n\
+{\n\
+ c d e f :(x2)|\n\
+}\n\
+]\n\
+");
+	SheetDefParser parser;
+	auto defs = parser.parse(text);
+	BOOST_CHECK(defs.tracks.size() == 1);
+	BOOST_CHECK(defs.tracks[0].voices.size() == 1);
+	BOOST_CHECK_EQUAL(defs.tracks[0].voices[0].events.size(), 5);
+	const auto& events = defs.tracks[0].voices[0].events;
+	BOOST_CHECK_EQUAL(events[4].type, documentModel::Event::EOB);
+	BOOST_CHECK_EQUAL(events[4].numberOfRepeats, int(2));
+	BOOST_CHECK_EQUAL(events[4].stringValue, FM_STRING("__repeat_end_"));
+}
+
+BOOST_AUTO_TEST_CASE(test_347_repeat_more_than_once_2)
+{
+	using namespace com;
+	using documentModel::PitchDef;
+	com::String text = FM_STRING("\n\
+[\n\
+{\n\
+ c d e f :(x2)|: c d e f :|\n\
+}\n\
+]\n\
+");
+	SheetDefParser parser;
+	auto defs = parser.parse(text);
+	BOOST_CHECK(defs.tracks.size() == 1);
+	BOOST_CHECK(defs.tracks[0].voices.size() == 1);
+	BOOST_CHECK_EQUAL(defs.tracks[0].voices[0].events.size(), 10);
+	const auto& events = defs.tracks[0].voices[0].events;
+	BOOST_CHECK_EQUAL(events[4].type, documentModel::Event::EOB);
+	BOOST_CHECK_EQUAL(events[4].numberOfRepeats, int(2));
+	BOOST_CHECK_EQUAL(events[4].stringValue, FM_STRING("__repeat_begin_and_end_"));
+}
+
+BOOST_AUTO_TEST_CASE(test_347_repeat_more_than_once_default_value)
+{
+	using namespace com;
+	using documentModel::PitchDef;
+	com::String text = FM_STRING("\n\
+[\n\
+{\n\
+ c d e f :|\n\
+}\n\
+]\n\
+");
+	SheetDefParser parser;
+	auto defs = parser.parse(text);
+	BOOST_CHECK(defs.tracks.size() == 1);
+	BOOST_CHECK(defs.tracks[0].voices.size() == 1);
+	BOOST_CHECK_EQUAL(defs.tracks[0].voices[0].events.size(), 5);
+	const auto& events = defs.tracks[0].voices[0].events;
+	BOOST_CHECK_EQUAL(events[4].type, documentModel::Event::EOB);
+	BOOST_CHECK_EQUAL(events[4].numberOfRepeats, int(0));
+	BOOST_CHECK_EQUAL(events[4].stringValue, FM_STRING("__repeat_end_"));
+}
+
+BOOST_AUTO_TEST_CASE(test_347_fail_duplicated_multiplier_colon)
+{
+	using namespace com;
+	using documentModel::PitchDef;
+	com::String text = FM_STRING("\n\
+[\n\
+{\n\
+|: c d e f :(x2):| r1 \n\
+}\n\
+]\n\
+");
+	SheetDefParser parser;
+	BOOST_CHECK_THROW(parser.parse(text), Exception);
+
+}
+
+BOOST_AUTO_TEST_CASE(test_347_fail_duplicated_multiplier_colon_2)
+{
+	using namespace com;
+	using documentModel::PitchDef;
+	com::String text = FM_STRING("\n\
+[\n\
+{\n\
+|: c d e f ::(x2)| r1 \n\
+}\n\
+]\n\
+");
+	SheetDefParser parser;
+	BOOST_CHECK_THROW(parser.parse(text), Exception);
+
+}
+
+BOOST_AUTO_TEST_CASE(test_347_fail_wrong_position)
+{
+	using namespace com;
+	using documentModel::PitchDef;
+	com::String text = FM_STRING("\n\
+[\n\
+{\n\
+|(x2): c d e f :| r1 \n\
+}\n\
+]\n\
+");
+	SheetDefParser parser;
+	BOOST_CHECK_THROW(parser.parse(text), Exception);
+
+}

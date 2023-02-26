@@ -68,6 +68,7 @@ namespace documentModel
 		Args metaArgs;
 		Tags tags;
 		EventGroup eventGroup;
+		int numberOfRepeats = 0;
 		/**
 		 * the event velocity value in a range 0..1, will be set during rendering
 		 */

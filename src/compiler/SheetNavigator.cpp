@@ -321,17 +321,18 @@ namespace compiler
                 lastVoltaNr = voltaNr;
             }
             // handle the repeats
+            int numberOfRepeats = std::max(0, event.numberOfRepeats - 2);
             if (event.stringValue == RepeatBegin)
             {
                 dst.emplace_back(createMarkerEvent(createInternalMarkerName(markCounter++)));
             }
             if (event.stringValue == RepeatEnd)
             {
-                dst.emplace_back(createJumpEvent(createInternalMarkerName(markCounter - 1)));
+                dst.emplace_back(createJumpEvent(createInternalMarkerName(markCounter - 1), numberOfRepeats));
             }
             if (event.stringValue == RepeatBeginAndEnd)
             {
-                dst.emplace_back(createJumpEvent(createInternalMarkerName(markCounter - 1)));
+                dst.emplace_back(createJumpEvent(createInternalMarkerName(markCounter - 1), numberOfRepeats));
                 dst.emplace_back(createMarkerEvent(createInternalMarkerName(markCounter++)));
             }
         }
