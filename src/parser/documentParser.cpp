@@ -107,7 +107,7 @@ namespace parser
 				SheetDefParser sheetDefParser;
 				auto sheetDef = sheetDefParser.parse(documentText, sourceId);
 				append(doc, sheetDef);
-				processUsings(doc, sheetDef.documentUsing, {LUA_DEF_EXTENSION, PITCHMAP_DEF_EXTENSION}, path);
+				processUsings(doc, sheetDef.documentUsing, {LUA_DEF_EXTENSION, PITCHMAP_DEF_EXTENSION, CONDUCTIONS_SHEET}, path);
 			}
 			catch (compiler::Exception &ex)
 			{

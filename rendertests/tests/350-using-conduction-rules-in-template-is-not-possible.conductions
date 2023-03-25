@@ -1,0 +1,7 @@
+all() {
+    velocity = 60;
+}
+
+onBeat(1) {
+    velocity = 127;
+}
