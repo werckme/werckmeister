@@ -1,0 +1,10 @@
+using "./350-using-conduction-rules-in-template-is-not-possible.conductions";
+
+[
+type: template;
+name: drums;
+instrument: lead; 
+{
+    I2. III8 V |
+}   
+]

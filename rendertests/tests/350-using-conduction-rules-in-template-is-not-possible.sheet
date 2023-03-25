@@ -1,0 +1,13 @@
+using "./350-using-conduction-rules-in-template-is-not-possible.template";
+using "/chords/default.chords";
+
+tempo: 140;
+device: MyDevice  midi _usePort=17;
+instrumentDef:lead _onDevice=MyDevice  _ch=0 _pc=0;
+
+[
+type: accomp;
+{
+    C | F | G |
+}
+]
