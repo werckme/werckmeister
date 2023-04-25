@@ -1926,3 +1926,46 @@ BOOST_AUTO_TEST_CASE(test_347_fail_wrong_position)
 	BOOST_CHECK_THROW(parser.parse(text), Exception);
 
 }
+
+BOOST_AUTO_TEST_CASE(test_annotations_for_tuplets_1)
+{
+	using namespace com;
+	using documentModel::PitchDef;
+	com::String text = FM_STRING("\
+[\n\
+	{\n\
+		\"myTag\"@(c d e f g)1 |\n\
+	}\n\
+]\n\
+");
+	SheetDefParser parser;
+	auto defs = parser.parse(text);
+	BOOST_CHECK(defs.tracks.size() == 1);
+	BOOST_CHECK(defs.tracks[0].voices.size() == 1);
+	BOOST_CHECK(defs.tracks[0].voices[0].events.size() == 2);
+	const auto &ev = defs.tracks[0].voices[0].events[0];
+	BOOST_CHECK_EQUAL(ev.tags.size(), size_t(1));
+	BOOST_CHECK( ev.tags.find(com::String("myTag")) != ev.tags.end() );
+}
+
+BOOST_AUTO_TEST_CASE(test_annotations_for_tuplets_2)
+{
+	using namespace com;
+	using documentModel::PitchDef;
+	com::String text = FM_STRING("\
+[\n\
+	{\n\
+		(c \"myTag\"@d e f g)1 |\n\
+	}\n\
+]\n\
+");
+	SheetDefParser parser;
+	auto defs = parser.parse(text);
+	BOOST_CHECK(defs.tracks.size() == 1);
+	BOOST_CHECK(defs.tracks[0].voices.size() == 1);
+	BOOST_CHECK(defs.tracks[0].voices[0].events.size() == 2);
+	BOOST_CHECK_EQUAL(defs.tracks[0].voices[0].events[0].eventGroup.size(), size_t(5));
+	const auto &ev = defs.tracks[0].voices[0].events[0].eventGroup[1];
+	BOOST_CHECK_EQUAL(ev.tags.size(), size_t(1));
+	BOOST_CHECK( ev.tags.find(com::String("myTag")) != ev.tags.end() );
+}
