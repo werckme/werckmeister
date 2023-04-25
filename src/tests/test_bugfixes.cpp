@@ -172,3 +172,23 @@ instrument: piano;\n\
 		}
 	}
 }
+
+BOOST_AUTO_TEST_CASE(issue_111_tagging_does_not_work_for_repetition)
+{
+	using namespace com;
+	com::String text = FM_STRING("\
+[\n\
+{\n\
+	f4 \"myTag\"@& |\n\
+}\n\
+] \n\
+");
+	SheetDefParser parser;
+	auto defs = parser.parse(text);
+	BOOST_CHECK(defs.tracks.size() == 1);
+	BOOST_CHECK(defs.tracks[0].voices.size() == 1);
+	BOOST_CHECK(defs.tracks[0].voices[0].events.size() == 3);
+	const auto &ev = defs.tracks[0].voices[0].events[1];
+	BOOST_CHECK(ev.tags.size() == 1);
+	BOOST_CHECK( ev.tags.find(com::String("myTag")) != ev.tags.end() );
+}

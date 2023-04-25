@@ -242,8 +242,9 @@ namespace parser
 						current_pos_.current_pos 
 						>> attr(sourceId_) 
 						>> attr(Event::Repeat) 
+						>> (("\"" >> +(lexeme[+char_(ALLOWED_EVENT_TAG_ARGUMENT)]) >> "\"" >> "@") | attr(Event::Tags())) 
 						>> "&" 
-						>> attr(Event::Tags()) >> attr(PitchDef()) >> (durationSymbols_ | attr(Event::NoDuration)) 
+						>> attr(PitchDef()) >> (durationSymbols_ | attr(Event::NoDuration)) 
 						>> attr(DefaultNumberOfBarRepeats)
 						>> attr("") >> attr(Event::Args()) >> current_pos_.current_pos 
 						>> -(
