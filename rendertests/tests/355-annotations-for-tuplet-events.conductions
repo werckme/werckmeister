@@ -1,0 +1,15 @@
+withTag(tuplet1) {
+    velocity = 127;
+}
+
+withTag(tuplet2) {
+    duration = 1/8;
+}
+
+withTag(tuplet3) {
+    pitch = 100;
+}
+
+withTag(inner) {
+    pitch -= 12;
+}

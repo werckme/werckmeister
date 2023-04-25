@@ -1,0 +1,20 @@
+
+using "./355-annotations-for-tuplet-events.conductions";
+
+device: _usePort=5 _setName=MyDevice  _isType=midi;
+instrumentDef: _setName=piano _onDevice=MyDevice _ch=0 _pc=1 _cc=8;
+
+tempo: 120;
+
+[
+instrument: piano;
+{
+    \ppppp
+    "tuplet1"@(c d e f g)1 |
+    (c d e f g)1 |
+    "tuplet1"@(c "inner"@d e f g)1 |
+    (c d e f g)1 |
+    "tuplet1"@("tuplet2"@("inner"@c f g) (c "inner"@f g) "tuplet3"@(c f "inner"@g))1 |
+    (c d e f g)1 |
+}
+]

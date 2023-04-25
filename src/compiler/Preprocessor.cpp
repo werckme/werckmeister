@@ -7,6 +7,7 @@
 #include "metaCommands.h"
 #include <com/tools.h>
 #include <algorithm>
+#include <list>
 
 namespace compiler
 {
@@ -17,6 +18,7 @@ namespace compiler
 		struct ProcessData
 		{
 			documentModel::Event lastNoRepeat;
+			std::list<com::String> tags;
 			bool hasTimeConsumingEvents;
 			com::Ticks lastDuration;
 		};
@@ -41,10 +43,14 @@ namespace compiler
 			processData.hasTimeConsumingEvents = true;
 			if (ev.type == Event::Group)
 			{
+				std::list<com::String> tagsCopy(processData.tags.begin(), processData.tags.end());
+				processData.tags.insert(processData.tags.begin(), ev.tags.begin(), ev.tags.end());
 				for (auto &groupedEvent : ev.eventGroup)
 				{
+					groupedEvent.tags.insert(processData.tags.begin(), processData.tags.end());
 					processEvent(groupedEvent, processData);
 				}
+				processData.tags.swap(tagsCopy);
 			}
 			if (!ev.isRepeat() && ev.type != Event::Rest)
 			{
