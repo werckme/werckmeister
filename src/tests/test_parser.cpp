@@ -1969,3 +1969,14 @@ BOOST_AUTO_TEST_CASE(test_annotations_for_tuplets_2)
 	BOOST_CHECK_EQUAL(ev.tags.size(), size_t(1));
 	BOOST_CHECK( ev.tags.find(com::String("myTag")) != ev.tags.end() );
 }
+
+BOOST_AUTO_TEST_CASE(test_phrase_def_1)
+{
+	using namespace com;
+	using documentModel::PitchDef;
+	com::String text = FM_STRING("\
+myPhrase = c d e f\n\
+");
+	SheetDefParser parser;
+	auto defs = parser.parse(text);
+}

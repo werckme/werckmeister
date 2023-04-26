@@ -20,6 +20,7 @@
 #include <documentModel/DocumentUsing.h>
 #include <documentModel/AliasPitchDef.h>
 #include <documentModel/objects/Grouped.h>
+#include <documentModel/objects/PhraseDef.h>
 #include <com/tools.h>
 #include "valueParser.h"
 
@@ -29,7 +30,8 @@ BOOST_FUSION_ADAPT_STRUCT(
 
 BOOST_FUSION_ADAPT_STRUCT(
 	documentModel::Argument,
-	(com::String, name)(com::String, value))
+	(com::String, name)
+	(com::String, value))
 
 BOOST_FUSION_ADAPT_STRUCT(
 	documentModel::Voice,
@@ -56,6 +58,41 @@ BOOST_FUSION_ADAPT_STRUCT(
 	(documentModel::Event::EventGroup, eventGroup)
 	(documentModel::Event::Duration, duration))
 
+BOOST_FUSION_ADAPT_STRUCT(
+	documentModel::PhraseDef,
+	(unsigned int, sourcePositionBegin)
+	(documentModel::ASheetObjectWithSourceInfo::SourceId, sourceId)
+	(com::String, name)
+	(documentModel::PhraseDef::Events, events))
+
+BOOST_FUSION_ADAPT_STRUCT(
+	documentModel::TrackConfig,
+	(unsigned int, sourcePositionBegin)
+	(documentModel::ASheetObjectWithSourceInfo::SourceId, sourceId)
+	(com::String, name)
+	(documentModel::Event::Args, args))
+
+BOOST_FUSION_ADAPT_STRUCT(
+	documentModel::Track,
+	(unsigned int, sourcePositionBegin)
+	(documentModel::ASheetObjectWithSourceInfo::SourceId, sourceId)
+	(documentModel::Track::TrackConfigs, trackConfigs)
+	(documentModel::Track::Voices, voices))
+
+BOOST_FUSION_ADAPT_STRUCT(
+	documentModel::DocumentConfig,
+	(unsigned int, sourcePositionBegin)
+	(documentModel::ASheetObjectWithSourceInfo::SourceId, sourceId)
+	(com::String, name)
+	(documentModel::Event::Args, args))
+
+BOOST_FUSION_ADAPT_STRUCT(
+	documentModel::SheetDef,
+	(documentModel::DocumentUsing, documentUsing)
+	(documentModel::SheetDef::DocumentConfigs, documentConfigs)
+	(documentModel::SheetDef::PhraseDefs, phraseDefs)
+	(documentModel::SheetDef::Tracks, tracks))
+
 namespace
 {
 	enum EventFields
@@ -71,24 +108,15 @@ namespace
 		EvMetaArgs,
 		EvSourcePosEnd,
 	};
+	enum SheetDefFields
+	{
+		SdDocumentUsings,
+		SdDocumentConfigs,
+		SdPhraseDefs,
+		SdTracks
+	};
 	const int DefaultNumberOfBarRepeats = 0;
 }
-
-BOOST_FUSION_ADAPT_STRUCT(
-	documentModel::TrackConfig,
-	(unsigned int, sourcePositionBegin)(documentModel::ASheetObjectWithSourceInfo::SourceId, sourceId)(com::String, name)(documentModel::Event::Args, args))
-
-BOOST_FUSION_ADAPT_STRUCT(
-	documentModel::Track,
-	(unsigned int, sourcePositionBegin)(documentModel::ASheetObjectWithSourceInfo::SourceId, sourceId)(documentModel::Track::TrackConfigs, trackConfigs)(documentModel::Track::Voices, voices))
-
-BOOST_FUSION_ADAPT_STRUCT(
-	documentModel::DocumentConfig,
-	(unsigned int, sourcePositionBegin)(documentModel::ASheetObjectWithSourceInfo::SourceId, sourceId)(com::String, name)(documentModel::Event::Args, args))
-
-BOOST_FUSION_ADAPT_STRUCT(
-	documentModel::SheetDef,
-	(documentModel::DocumentUsing, documentUsing)(documentModel::SheetDef::DocumentConfigs, documentConfigs)(documentModel::SheetDef::Tracks, tracks))
 
 namespace parser
 {
@@ -134,6 +162,18 @@ namespace parser
 				using qi::lexeme;
 				documentConfig %=
 					current_pos_.current_pos >> attr(sourceId_) >> +char_("a-zA-Z") >> ":" >> +argument_ > ";";
+			}
+
+			template <class PhraseDefRules, class EventsRules>
+			void createPhraseDefRules(PhraseDefRules &phraseDef, EventsRules &events) const
+			{
+				using ascii::char_;
+				using qi::attr;
+				using qi::eol;
+				using qi::lexeme;
+				phraseDef %=
+					current_pos_.current_pos 
+					>> attr(sourceId_) >> +char_("a-zA-Z") >> "=" >> events > ";";
 			}
 
 			template <class TrackConfigRules>
@@ -359,6 +399,7 @@ namespace parser
 
 				createTrackRules(track, voice, trackConfig_);
 				createDocumentConfigRules(documentConfig_);
+				createPhraseDefRules(phraseDef_, events);
 			}
 
 			_SheetParser(Iterator begin, Event::SourceId sourceId = Event::UndefinedSource) : ValueParser(),
@@ -368,6 +409,9 @@ namespace parser
 				using qi::attr;
 				using qi::fail;
 				using qi::on_error;
+				using boost::phoenix::at_c;
+				using boost::phoenix::push_back;
+				using qi::_val;
 				initDocumentUsingParser();
 				initArgumentParser();
 				initSheetParser();
@@ -378,8 +422,19 @@ namespace parser
 				documentUsing_.name("document config");
 				track.name("track");
 
-				start %= (documentUsing_ | attr(DocumentUsing())) > *documentConfig_ > *track > boost::spirit::eoi;
+				// [(insert(at_c<EvTags>(_val), qi::_1))] 
+				start %= (documentUsing_ | attr(DocumentUsing())) 
+					// > *(
+					// 		documentConfig_[push_back(at_c<SdDocumentConfigs>(_val), qi::_1)] 
+					// 	| 	phraseDef_[push_back(at_c<SdPhraseDefs>(_val), qi::_1)] 
+					// )
+					> (*documentConfig_ | attr(DocumentUsing()))
+					> (*phraseDef_|attr(PhraseDef()))
+					> *track
+					> boost::spirit::eoi;
 
+				// start %= (documentUsing_ | attr(DocumentUsing())) > *documentConfig_ > *track > boost::spirit::eoi;
+				
 				auto onError = boost::bind(&compiler::handler::errorHandler<Iterator>, _1, sourceId_);
 				on_error<fail>(start, onError);
 			}
@@ -405,6 +460,7 @@ namespace parser
 			qi::rule<Iterator, DocumentUsing::Usings, ascii::space_type> usings_;
 			qi::rule<Iterator, com::String(), ascii::space_type> bar_volta_;
 			qi::rule<Iterator, int, ascii::space_type> bar_repeat_number_;
+			qi::rule<Iterator, PhraseDef(), ascii::space_type> phraseDef_;
 			CurrentPos<Iterator> current_pos_;
 		};
 
