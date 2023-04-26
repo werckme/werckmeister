@@ -7,7 +7,6 @@
 #include "DocumentUsing.h"
 #include "objects/ASheetObject.h"
 #include "objects/DocumentConfig.h"
-#include "objects/PhraseDef.h"
 
 namespace documentModel
 {
@@ -16,10 +15,8 @@ namespace documentModel
 	{
 		typedef std::vector<Track> Tracks;
 		typedef std::vector<DocumentConfig> DocumentConfigs;
-		typedef std::vector<PhraseDef> PhraseDefs;
 		DocumentUsing documentUsing;
 		DocumentConfigs documentConfigs;
-		PhraseDefs phraseDefs;
 		Tracks tracks;
 	};
 

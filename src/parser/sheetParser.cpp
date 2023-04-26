@@ -20,7 +20,6 @@
 #include <documentModel/DocumentUsing.h>
 #include <documentModel/AliasPitchDef.h>
 #include <documentModel/objects/Grouped.h>
-#include <documentModel/objects/PhraseDef.h>
 #include <com/tools.h>
 #include "valueParser.h"
 
@@ -59,13 +58,6 @@ BOOST_FUSION_ADAPT_STRUCT(
 	(documentModel::Event::Duration, duration))
 
 BOOST_FUSION_ADAPT_STRUCT(
-	documentModel::PhraseDef,
-	(unsigned int, sourcePositionBegin)
-	(documentModel::ASheetObjectWithSourceInfo::SourceId, sourceId)
-	(com::String, name)
-	(documentModel::PhraseDef::Events, events))
-
-BOOST_FUSION_ADAPT_STRUCT(
 	documentModel::TrackConfig,
 	(unsigned int, sourcePositionBegin)
 	(documentModel::ASheetObjectWithSourceInfo::SourceId, sourceId)
@@ -83,14 +75,16 @@ BOOST_FUSION_ADAPT_STRUCT(
 	documentModel::DocumentConfig,
 	(unsigned int, sourcePositionBegin)
 	(documentModel::ASheetObjectWithSourceInfo::SourceId, sourceId)
+	(documentModel::DocumentConfig::Type, type)
 	(com::String, name)
-	(documentModel::Event::Args, args))
+	(documentModel::Event::Args, args)
+	(documentModel::DocumentConfig::Events, events)
+)
 
 BOOST_FUSION_ADAPT_STRUCT(
 	documentModel::SheetDef,
 	(documentModel::DocumentUsing, documentUsing)
 	(documentModel::SheetDef::DocumentConfigs, documentConfigs)
-	(documentModel::SheetDef::PhraseDefs, phraseDefs)
 	(documentModel::SheetDef::Tracks, tracks)
 )
 
@@ -113,8 +107,16 @@ namespace
 	{
 		SdDocumentUsings,
 		SdDocumentConfigs,
-		SdPhraseDefs,
 		SdTracks
+	};
+	enum DocumentConfigFields
+	{
+		DcsourcePositionBegin,
+		DcSourceId,
+		DcType,
+		DcName,
+		DcArgs,
+		DcEvents
 	};
 	const int DefaultNumberOfBarRepeats = 0;
 }
@@ -154,27 +156,36 @@ namespace parser
 				expression_argument_ = attr("") >> expressionSymbols_;
 			}
 
-			template <class DocumentConfigRules>
-			void createDocumentConfigRules(DocumentConfigRules &documentConfig) const
+			template <class DocumentConfigRules, class EventsRule>
+			void createDocumentConfigRules(DocumentConfigRules &documentConfig, EventsRule &events) const
 			{
 				using ascii::char_;
 				using qi::attr;
 				using qi::eol;
 				using qi::lexeme;
-				documentConfig %=
-					current_pos_.current_pos >> attr(sourceId_) >> +char_("a-zA-Z") >> ":" >> +argument_ > ";";
-			}
-
-			template <class PhraseDefRules, class EventsRules>
-			void createPhraseDefRules(PhraseDefRules &phraseDef, EventsRules &events) const
-			{
-				using ascii::char_;
-				using qi::attr;
-				using qi::eol;
-				using qi::lexeme;
-				phraseDef %=
+				using boost::spirit::eps;
+				using boost::phoenix::at_c;
+				using qi::_val;
+				documentConfig %= 
+				(
 					current_pos_.current_pos 
-					>> attr(sourceId_) >> +char_("a-zA-Z") >> "=" >> events > ";";
+					>> attr(sourceId_) 
+					>> attr(DocumentConfig::TypeConfigDef)
+					>> +char_("a-zA-Z")
+					>> ":" >> +argument_ >> attr(Event())
+					>> ";"
+				)
+				|
+				(
+					current_pos_.current_pos 
+					>> attr(sourceId_) 
+					>> attr(DocumentConfig::TypePhraseDef)
+					>> eps[at_c<DcName>(_val) = FM_STRING("")] // reset name, will be appended from name above instead
+					>> +char_("a-zA-Z0-9_")
+					>> "=" >> attr(Argument()) >> events
+					>> ";"
+				)
+				;
 			}
 
 			template <class TrackConfigRules>
@@ -399,8 +410,7 @@ namespace parser
 				voice %= "{" > events > "}";
 
 				createTrackRules(track, voice, trackConfig_);
-				createDocumentConfigRules(documentConfig_);
-				createPhraseDefRules(phraseDef_, events);
+				createDocumentConfigRules(documentConfig_, events);
 			}
 
 			_SheetParser(Iterator begin, Event::SourceId sourceId = Event::UndefinedSource) : ValueParser(),
@@ -413,6 +423,7 @@ namespace parser
 				using boost::phoenix::at_c;
 				using boost::phoenix::push_back;
 				using qi::_val;
+				using boost::spirit::qi::omit;
 				initDocumentUsingParser();
 				initArgumentParser();
 				initSheetParser();
@@ -423,19 +434,11 @@ namespace parser
 				documentUsing_.name("document config");
 				track.name("track");
 
-				// [(insert(at_c<EvTags>(_val), qi::_1))] 
 				start %= (documentUsing_ | attr(DocumentUsing())) 
-					// > *(
-					// 		documentConfig_[push_back(at_c<SdDocumentConfigs>(_val), qi::_1)] 
-					// 	| 	phraseDef_[push_back(at_c<SdPhraseDefs>(_val), qi::_1)] 
-					// )
 					> *documentConfig_
-					> *phraseDef_
 					> *track
 					> boost::spirit::eoi;
 
-				// start %= (documentUsing_ | attr(DocumentUsing())) > *documentConfig_ > *track > boost::spirit::eoi;
-				
 				auto onError = boost::bind(&compiler::handler::errorHandler<Iterator>, _1, sourceId_);
 				on_error<fail>(start, onError);
 			}
@@ -461,7 +464,6 @@ namespace parser
 			qi::rule<Iterator, DocumentUsing::Usings, ascii::space_type> usings_;
 			qi::rule<Iterator, com::String(), ascii::space_type> bar_volta_;
 			qi::rule<Iterator, int, ascii::space_type> bar_repeat_number_;
-			qi::rule<Iterator, PhraseDef(), ascii::space_type> phraseDef_;
 			CurrentPos<Iterator> current_pos_;
 		};
 
@@ -475,7 +477,7 @@ namespace parser
 				using qi::fail;
 				using qi::on_error;
 				Base::initArgumentParser();
-				Base::createDocumentConfigRules(Base::documentConfig_);
+				Base::createDocumentConfigRules(Base::documentConfig_, Base::events);
 				Base::initDocumentUsingParser();
 				Base::current_pos_.setStartPos(begin);
 
@@ -484,7 +486,6 @@ namespace parser
 
 				Base::start %= (Base::documentUsing_ | attr(DocumentUsing())) 
 				> *Base::documentConfig_ 
-				> attr(PhraseDef()) 
 				> attr(Track()) 
 				> boost::spirit::eoi;
 
