@@ -52,6 +52,7 @@ BOOST_FUSION_ADAPT_STRUCT(
 BOOST_FUSION_ADAPT_STRUCT(
 	documentModel::Grouped,
 	(documentModel::ASheetObjectWithSourceInfo::SourceId, sourceId)
+	(documentModel::Event::Tags, tags)
 	(documentModel::Event::EventGroup, eventGroup)
 	(documentModel::Event::Duration, duration))
 
@@ -347,7 +348,10 @@ namespace parser
 					);
 
 				groupedEvent_ %=
-					attr(sourceId_) >> "(" > *(event_ | groupedEvent_) > ")" >> (durationSymbols_ | attr(Event::NoDuration));
+					attr(sourceId_)
+					>> (("\"" >> +(lexeme[+char_(ALLOWED_EVENT_TAG_ARGUMENT)]) >> "\"" >> "@") | attr(Event::Tags()))
+					>> ("(" > *(event_ | groupedEvent_) > ")")
+					>> (durationSymbols_ | attr(Event::NoDuration));
 
 				events %= *(event_ | groupedEvent_);
 
