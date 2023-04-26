@@ -91,7 +91,8 @@ BOOST_FUSION_ADAPT_STRUCT(
 	(documentModel::DocumentUsing, documentUsing)
 	(documentModel::SheetDef::DocumentConfigs, documentConfigs)
 	(documentModel::SheetDef::PhraseDefs, phraseDefs)
-	(documentModel::SheetDef::Tracks, tracks))
+	(documentModel::SheetDef::Tracks, tracks)
+)
 
 namespace
 {
@@ -428,8 +429,8 @@ namespace parser
 					// 		documentConfig_[push_back(at_c<SdDocumentConfigs>(_val), qi::_1)] 
 					// 	| 	phraseDef_[push_back(at_c<SdPhraseDefs>(_val), qi::_1)] 
 					// )
-					> (*documentConfig_ | attr(DocumentUsing()))
-					> (*phraseDef_|attr(PhraseDef()))
+					> *documentConfig_
+					> *phraseDef_
 					> *track
 					> boost::spirit::eoi;
 
@@ -481,7 +482,11 @@ namespace parser
 				Base::documentConfig_.name("document config");
 				Base::documentUsing_.name("document config");
 
-				Base::start %= (Base::documentUsing_ | attr(DocumentUsing())) > *Base::documentConfig_ > attr(Track()) > boost::spirit::eoi;
+				Base::start %= (Base::documentUsing_ | attr(DocumentUsing())) 
+				> *Base::documentConfig_ 
+				> attr(PhraseDef()) 
+				> attr(Track()) 
+				> boost::spirit::eoi;
 
 				auto onError = boost::bind(&compiler::handler::errorHandler<Iterator>, _1, Base::sourceId_);
 				on_error<fail>(Base::start, onError);

@@ -1975,7 +1975,7 @@ BOOST_AUTO_TEST_CASE(test_phrase_def_1)
 	using namespace com;
 	using documentModel::PitchDef;
 	com::String text = FM_STRING("\
-myPhrase = c d e f\n\
+myPhrase = c d e f;\n\
 ");
 	SheetDefParser parser;
 	auto defs = parser.parse(text);
