@@ -217,6 +217,31 @@ namespace compiler
 		voice->events.push_back(eob); // then modify source container
 	}
 
+	void Preprocessor::preprocessPhraseDefs(documentModel::DocumentConfig::Events &events)
+	{
+		documentModel::Track track;
+		documentModel::Voice voice;
+		voice.events.swap(events);
+		track.voices.push_back(voice);
+		process(track);
+		events.swap(voice.events);
+		for(const auto &event : events)
+		{
+			try 
+			{
+				if (event.type == documentModel::Event::EOB)
+				{
+					FM_THROW(Exception, "bars are not allowed in a phrase");
+				}
+			}
+			catch (const com::Exception &ex)
+			{
+				ex << compiler::ex_sheet_source_info(event);
+				throw;
+			}
+		}
+	}
+
 	void Preprocessor::preprocess(documentModel::DocumentPtr document)
 	{
 
@@ -238,6 +263,15 @@ namespace compiler
 				preprocessChordTrack(track);
 			}
 		}
+		for (auto &documentConfig : document->sheetDef.documentConfigs)
+		{
+			if (documentConfig.type != documentModel::DocumentConfig::TypePhraseDef) 
+			{
+				continue;
+			}
+			preprocessPhraseDefs(documentConfig.events);
+		}
 	}
+
 
 }

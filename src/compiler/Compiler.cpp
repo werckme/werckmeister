@@ -21,6 +21,10 @@ namespace compiler
 			std::list<documentModel::DocumentConfig> priorisedDocumentConfigs;
 			for (auto &conf : document->sheetDef.documentConfigs)
 			{
+				if (conf.type != documentModel::DocumentConfig::TypeConfigDef) 
+				{
+					continue;
+				}
 				if (conf.name == SHEET_META__SET_DEVICE)
 				{ // device commands first
 					priorisedDocumentConfigs.push_front(conf);

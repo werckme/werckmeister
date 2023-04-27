@@ -20,23 +20,30 @@ namespace compiler
 		{
 		}
 		typedef com::String SheetTemplateName;
+		typedef com::String PhraseDefName;
 		typedef com::String PartName;
 		typedef documentModel::SheetTemplate SheetTemplate;
+		typedef documentModel::DocumentConfig PhraseDef;
 		typedef std::unordered_map<SheetTemplateName, SheetTemplate> SheetTemplates;
+		typedef std::unordered_map<PhraseDefName, const Phrase*> PhraseDefs;
 		virtual ~DefinitionsServer() = default;
 		virtual documentModel::SheetTemplate getSheetTemplate(const com::String &name);
 		virtual ConstChordValueType getChord(const com::String &name);
-		virtual ConstPitchDefValueType getAlias(com::String alias);
+		virtual ConstPitchDefValueType getAlias(const com::String &alias);
+		virtual const Phrase* getPhrase(const com::String &name);
 		virtual documentModel::PitchDef resolvePitch(const documentModel::PitchDef &pitch);
 		virtual com::String defaultSheetTemplateName() const { return "?"; }
 
 	protected:
 		SheetTemplates &sheetTemplates();
+		PhraseDefs &phraseDefs();
 
 	private:
 		void prepareTemplateDefinitions();
+		void preparePhraseDefinitions();
 		SheetTemplate *findSheetTemplate(const com::String &sheetTemplateName);
 		std::unique_ptr<SheetTemplates> sheetTemplates_;
+		std::unique_ptr<PhraseDefs> phraseDefs_;
 		documentModel::DocumentPtr document_;
 	};
 

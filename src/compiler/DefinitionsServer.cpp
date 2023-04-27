@@ -43,6 +43,15 @@ namespace compiler
 		return *sheetTemplates_;
 	}
 
+	DefinitionsServer::PhraseDefs &DefinitionsServer::phraseDefs()
+	{
+		if (!phraseDefs_)
+		{
+			preparePhraseDefinitions();
+		}
+		return *phraseDefs_;
+	}
+
 	documentModel::SheetTemplate DefinitionsServer::getSheetTemplate(const com::String &name)
 	{
 		const SheetTemplates &sheetTemplates = this->sheetTemplates();
@@ -73,7 +82,7 @@ namespace compiler
 		return &(it->second);
 	}
 
-	IDefinitionsServer::ConstPitchDefValueType DefinitionsServer::getAlias(com::String alias)
+	IDefinitionsServer::ConstPitchDefValueType DefinitionsServer::getAlias(const com::String &alias)
 	{
 		documentModel::Document::PitchmapDefs::const_iterator it;
 		it = document_->pitchmapDefs.find(alias);
@@ -83,6 +92,18 @@ namespace compiler
 			return nullptr;
 		}
 		return &(it->second);
+	}
+
+	const IDefinitionsServer::Phrase* DefinitionsServer::getPhrase(const com::String &name)
+	{
+		const PhraseDefs &phraseDef = this->phraseDefs();
+		// find phrase by name
+		PhraseDefs::const_iterator it = _findByName(name, phraseDef);
+		if (it == phraseDef.end())
+		{
+			return nullptr;
+		}
+		return it->second;
 	}
 
 	documentModel::PitchDef DefinitionsServer::resolvePitch(const documentModel::PitchDef &pitch)
@@ -130,6 +151,27 @@ namespace compiler
 			catch (const com::Exception &ex)
 			{
 				ex << compiler::ex_sheet_source_info(track);
+				throw;
+			}
+		}
+	}
+
+	void DefinitionsServer::preparePhraseDefinitions()
+	{
+		phraseDefs_ = std::make_unique<PhraseDefs>();
+		for (auto &documentConfig : this->document_->sheetDef.documentConfigs)
+		{
+			if (documentConfig.type != documentModel::DocumentConfig::TypePhraseDef) 
+			{
+				continue;
+			}
+			try
+			{
+				(*phraseDefs_)[documentConfig.name] = &documentConfig.events;
+			}
+			catch (const com::Exception &ex)
+			{
+				ex << compiler::ex_sheet_source_info(documentConfig);
 				throw;
 			}
 		}

@@ -1,0 +1,16 @@
+
+using "/chords/default.chords";
+
+device: _usePort=0 _setName=MyDevice  _isType=midi;
+instrumentDef: _setName=piano _onDevice=MyDevice _ch=0 _pc=1 _cc=8;
+
+tempo: 120;
+
+phrase1 = c d e f;
+
+[
+instrument: piano;
+{
+    c d e f |
+}
+]
