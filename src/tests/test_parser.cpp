@@ -2065,3 +2065,32 @@ myDocDef: arg1 arg2;\n\
 	BOOST_CHECK_EQUAL(defs.documentConfigs.at(2).type, documentModel::DocumentConfig::TypeConfigDef);
 	BOOST_CHECK_EQUAL(defs.documentConfigs.at(2).args.size(), size_t(2));
 }
+
+BOOST_AUTO_TEST_CASE(test_phrase_def_between_docdefs_degrees)
+{
+	using namespace com;
+	using documentModel::PitchDef;
+	com::String text = FM_STRING("\
+myDocDef: arg1 arg2;\n\
+myPhrase_2 = I II III IV;\n\
+myDocDef: arg1 arg2;\n\
+");
+	SheetDefParser parser;
+	auto defs = parser.parse(text);
+	BOOST_CHECK_EQUAL(defs.documentConfigs.size(), size_t(3));
+	BOOST_CHECK_EQUAL(defs.documentConfigs.at(0).name, com::String("myDocDef"));
+	BOOST_CHECK_EQUAL(defs.documentConfigs.at(0).type, documentModel::DocumentConfig::TypeConfigDef);
+	BOOST_CHECK_EQUAL(defs.documentConfigs.at(0).args.size(), size_t(2));
+	//
+	BOOST_CHECK_EQUAL(defs.documentConfigs.at(1).name, com::String("myPhrase_2"));
+	BOOST_CHECK_EQUAL(defs.documentConfigs.at(1).type, documentModel::DocumentConfig::TypePhraseDef);
+	BOOST_CHECK_EQUAL(defs.documentConfigs.at(1).events.size(), size_t(4));
+	BOOST_CHECK_EQUAL(defs.documentConfigs.at(1).events.at(0).pitches.front().pitch, com::degrees::I);
+	BOOST_CHECK_EQUAL(defs.documentConfigs.at(1).events.at(1).pitches.front().pitch, com::degrees::II);
+	BOOST_CHECK_EQUAL(defs.documentConfigs.at(1).events.at(2).pitches.front().pitch, com::degrees::III);
+	BOOST_CHECK_EQUAL(defs.documentConfigs.at(1).events.at(3).pitches.front().pitch, com::degrees::IV);
+	//
+	BOOST_CHECK_EQUAL(defs.documentConfigs.at(2).name, com::String("myDocDef"));
+	BOOST_CHECK_EQUAL(defs.documentConfigs.at(2).type, documentModel::DocumentConfig::TypeConfigDef);
+	BOOST_CHECK_EQUAL(defs.documentConfigs.at(2).args.size(), size_t(2));
+}
