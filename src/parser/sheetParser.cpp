@@ -181,7 +181,7 @@ namespace parser
 					>> attr(sourceId_) 
 					>> attr(DocumentConfig::TypePhraseDef)
 					>> eps[at_c<DcName>(_val) = FM_STRING("")] // reset name, will be appended from name above instead
-					>> +char_("a-zA-Z0-9_")
+					>> +char_("a-zA-Z")
 					>> "=" >> attr(Argument()) >> events
 					>> ";"
 				)
@@ -288,6 +288,21 @@ namespace parser
 						>> attr(Event::Args()) 
 						>> current_pos_.current_pos >> -(
 							lit("~")[at_c<EvType>(_val) = Event::TiedDegree] | (lit("->")[at_c<EvType>(_val) = Event::Meta][at_c<EvStringValue>(_val) = FM_STRING("addVorschlag")])
+						)
+					) 
+					|
+					( // USE PHRASE
+						current_pos_.current_pos 
+						>> attr(sourceId_) 
+						>> attr(Event::Phrase) 
+						>> lexeme[">" >> +char_("a-zA-Z")]
+						>> attr(PitchDef()) 
+						>> (durationSymbols_ | attr(Event::NoDuration))
+						>> attr(DefaultNumberOfBarRepeats)
+						>> attr("") 
+						>> attr(Event::Args()) >> current_pos_.current_pos 
+						>> -(
+							lit("~")[at_c<EvType>(_val) = Event::TiedNote]
 						)
 					) 
 					|

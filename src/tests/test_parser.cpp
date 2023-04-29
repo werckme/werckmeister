@@ -2043,7 +2043,7 @@ BOOST_AUTO_TEST_CASE(test_phrase_def_between_docdefs)
 	using documentModel::PitchDef;
 	com::String text = FM_STRING("\
 myDocDef: arg1 arg2;\n\
-myPhrase_2 = c d e f;\n\
+myPhrase = c d e f;\n\
 myDocDef: arg1 arg2;\n\
 ");
 	SheetDefParser parser;
@@ -2053,7 +2053,7 @@ myDocDef: arg1 arg2;\n\
 	BOOST_CHECK_EQUAL(defs.documentConfigs.at(0).type, documentModel::DocumentConfig::TypeConfigDef);
 	BOOST_CHECK_EQUAL(defs.documentConfigs.at(0).args.size(), size_t(2));
 	//
-	BOOST_CHECK_EQUAL(defs.documentConfigs.at(1).name, com::String("myPhrase_2"));
+	BOOST_CHECK_EQUAL(defs.documentConfigs.at(1).name, com::String("myPhrase"));
 	BOOST_CHECK_EQUAL(defs.documentConfigs.at(1).type, documentModel::DocumentConfig::TypePhraseDef);
 	BOOST_CHECK_EQUAL(defs.documentConfigs.at(1).events.size(), size_t(4));
 	BOOST_CHECK_EQUAL(defs.documentConfigs.at(1).events.at(0).pitches.front().pitch, com::notes::C);
@@ -2072,7 +2072,7 @@ BOOST_AUTO_TEST_CASE(test_phrase_def_between_docdefs_degrees)
 	using documentModel::PitchDef;
 	com::String text = FM_STRING("\
 myDocDef: arg1 arg2;\n\
-myPhrase_2 = I II III IV;\n\
+myPhrase = I II III IV;\n\
 myDocDef: arg1 arg2;\n\
 ");
 	SheetDefParser parser;
@@ -2082,7 +2082,7 @@ myDocDef: arg1 arg2;\n\
 	BOOST_CHECK_EQUAL(defs.documentConfigs.at(0).type, documentModel::DocumentConfig::TypeConfigDef);
 	BOOST_CHECK_EQUAL(defs.documentConfigs.at(0).args.size(), size_t(2));
 	//
-	BOOST_CHECK_EQUAL(defs.documentConfigs.at(1).name, com::String("myPhrase_2"));
+	BOOST_CHECK_EQUAL(defs.documentConfigs.at(1).name, com::String("myPhrase"));
 	BOOST_CHECK_EQUAL(defs.documentConfigs.at(1).type, documentModel::DocumentConfig::TypePhraseDef);
 	BOOST_CHECK_EQUAL(defs.documentConfigs.at(1).events.size(), size_t(4));
 	BOOST_CHECK_EQUAL(defs.documentConfigs.at(1).events.at(0).pitches.front().pitch, com::degrees::I);
@@ -2093,4 +2093,56 @@ myDocDef: arg1 arg2;\n\
 	BOOST_CHECK_EQUAL(defs.documentConfigs.at(2).name, com::String("myDocDef"));
 	BOOST_CHECK_EQUAL(defs.documentConfigs.at(2).type, documentModel::DocumentConfig::TypeConfigDef);
 	BOOST_CHECK_EQUAL(defs.documentConfigs.at(2).args.size(), size_t(2));
+}
+
+BOOST_AUTO_TEST_CASE(test_phrase_compile_fails_with_number)
+{
+	using namespace com;
+	using documentModel::PitchDef;
+	com::String text = FM_STRING("\
+myDocDef: arg1 arg2;\n\
+myPhrase4 = I II III IV;\n\
+myDocDef: arg1 arg2;\n\
+");
+	SheetDefParser parser;
+	BOOST_CHECK_THROW(parser.parse(text), Exception);
+
+}
+
+BOOST_AUTO_TEST_CASE(test_use_phrase)
+{
+	using namespace com;
+	using namespace documentModel;
+	using documentModel::PitchDef;
+	com::String text = FM_STRING("\
+[\n\
+	{\n\
+		>myPhrase8 |\n\
+	}\n\
+]\n\
+");
+	SheetDefParser parser;
+	auto defs = parser.parse(text);
+	BOOST_CHECK(defs.tracks.size() == 1);
+	BOOST_CHECK(defs.tracks[0].voices.size() == 1);
+	BOOST_CHECK_EQUAL(defs.tracks[0].voices[0].events.size(), size_t(2));
+	BOOST_CHECK_EQUAL(defs.tracks[0].voices[0].events[0].type, Event::Phrase);
+	BOOST_CHECK_EQUAL(defs.tracks[0].voices[0].events[0].phraseName(), com::String("myPhrase"));
+	BOOST_CHECK_EQUAL(defs.tracks[0].voices[0].events[0].duration, 1.0_N8);
+}
+
+BOOST_AUTO_TEST_CASE(test_use_phrase_fail_because_of_white_spaces)
+{
+	using namespace com;
+	using namespace documentModel;
+	using documentModel::PitchDef;
+	com::String text = FM_STRING("\
+[\n\
+	{\n\
+		> myPhrase8 |\n\
+	}\n\
+]\n\
+");
+	SheetDefParser parser;
+	BOOST_CHECK_THROW(parser.parse(text), Exception);
 }

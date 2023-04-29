@@ -57,6 +57,19 @@ namespace documentModel
 		return std::make_tuple(pitch, Options(stringValue.begin() + idxOptionsStart, stringValue.end()));
 	}
 
+	com::String Event::phraseName() const 
+	{
+		if (type != Phrase) 
+		{
+			FM_THROW(com::Exception, "expecting phrase type");
+		}
+		if (tags.size() < 1) 
+		{
+			FM_THROW(com::Exception, "expecting phrase name");
+		}
+		return *tags.begin();
+	}
+
 	com::String Event::chordDefName() const
 	{
 		std::locale loc;

@@ -38,6 +38,7 @@ namespace documentModel
 			Expression,
 			PitchBend,
 			Group,
+			Phrase,
 			NumEvents
 		};
 		typedef com::Ticks Duration;
@@ -85,7 +86,8 @@ namespace documentModel
 				|| type == TiedDegree 
 				|| type == Repeat 
 				|| type == TiedRepeat 
-				|| type == Group;
+				|| type == Group
+				|| type == Phrase;
 		}
 
 		bool isRepeat() const
@@ -116,5 +118,7 @@ namespace documentModel
 		}
 
 		com::String toString() const;
+
+		com::String phraseName() const;
 	};
 }
