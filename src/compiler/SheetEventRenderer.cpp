@@ -83,6 +83,12 @@ namespace compiler
 			renderer->handleMetaEvent(*ev);
 			return true;
 		}
+		template <>
+		bool renderEvent<Event::Phrase>(SheetEventRenderer *renderer, const Event *ev)
+		{
+			renderer->renderPhrase(*ev);
+			return true;
+		}
 		//////////////////////////////////////////////////
 		template <int EventId>
 		bool renderEventUnrolled(SheetEventRenderer *renderer, const Event *ev)
@@ -134,7 +140,7 @@ namespace compiler
 
 	std::shared_ptr<ASheetEventRenderer> SheetEventRenderer::createNewSheetEventRenderer(IContextPtr ctx)
 	{
-		return std::make_shared<SheetEventRenderer>(ctx, compilerVisitor_, logger_);
+		return std::make_shared<SheetEventRenderer>(ctx, compilerVisitor_, logger_, definitionServer_);
 	}
 
 	void SheetEventRenderer::addEvent(const Event &ev)
@@ -268,4 +274,22 @@ namespace compiler
 			FM_THROW(Exception, "failed to process \"" + commandName + "\"");
 		}
 	}
+	void SheetEventRenderer::renderPhrase(const documentModel::Event &phraseEvent)
+    {
+        auto phraseName = phraseEvent.phraseName();
+        logger_->babble(WMLogLambda(log << "render phrase '" << phraseName << "'"));
+        auto phraseInfo = definitionServer_->getPhrase(phraseName);
+        if(phraseInfo.events == nullptr)
+        {
+            FM_THROW(Exception, "phrase not found: " + phraseName);
+        }
+        const auto &phraseEvents = *phraseInfo.events;
+        logger_->babble(WMLogLambda(log << "phrase found: " << phraseEvents.size() << " events"));
+        for(const auto &event : phraseEvents)
+        {
+            auto copy = event;
+            copy.duration = event.duration * (phraseEvent.duration / phraseInfo.duration);
+            addEvent(copy);
+        }
+    }
 }

@@ -25,7 +25,6 @@
 #include "FactoryConfig.h"
 #include <compiler/CompoundVisitor.hpp>
 #include <compiler/EventInformationServer.h>
-#include <compiler/PhraseRenderer.h>
 #ifdef _MSC_VER
 #define _CRTDBG_MAP_ALLOC
 #include <stdlib.h>
@@ -64,7 +63,6 @@ int main(int argc, const char **argv)
 		di::bind<cp::ICompiler>().to<cp::Compiler>().in(di::singleton), 
 		di::bind<cp::ISheetTemplateRenderer>().to<cp::SheetTemplateRenderer>().in(di::singleton), 
 		di::bind<cp::ASheetEventRenderer>().to<cp::SheetEventRenderer>().in(di::singleton), 
-		di::bind<cp::IPhraseRenderer>().to<cp::PhraseRenderer>().in(di::singleton), 
 		di::bind<cp::IContext>().to<cp::MidiContext>().in(di::singleton),
 		di::bind<cp::IPreprocessor>().to<cp::Preprocessor>().in(di::singleton), 
 		di::bind<cp::ISheetNavigator>().to<cp::SheetNavigator>().in(di::singleton), 

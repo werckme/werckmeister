@@ -33,7 +33,6 @@ SET (SRC_FETZER_LIB
     compiler/context/AContext.cpp
     compiler/Preprocessor.cpp
     compiler/SheetEventRenderer.cpp
-    compiler/PhraseRenderer.cpp
     compiler/spielanweisung/ASpielanweisung.cpp
     compiler/spielanweisung/Arpeggio.cpp
     compiler/spielanweisung/Vorschlag.cpp

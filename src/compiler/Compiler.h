@@ -7,7 +7,6 @@
 #include "ICompilerVisitor.h"
 #include "IPreprocessor.h"
 #include <com/ILogger.h>
-#include "IPhraseRenderer.h"
 
 namespace documentModel
 {
@@ -25,7 +24,6 @@ namespace compiler
 		ICompilerVisitorPtr compilerVisitorPtr_;
 		com::ILoggerPtr logger_;
 		IPreprocessorPtr preprocessor_;
-		IPhraseRendererPtr phraseRenderer_;
 
 	public:
 		Compiler(
@@ -34,15 +32,13 @@ namespace compiler
 			ISheetTemplateRendererPtr sheetTemplateRenderer,
 			ICompilerVisitorPtr compilerVisitorPtr,
 			com::ILoggerPtr logger,
-			IPreprocessorPtr preprocessor,
-			IPhraseRendererPtr phraseRenderer) : 
+			IPreprocessorPtr preprocessor) : 
 				context_(context), 
 				sheetEventRenderer_(sheetEventRenderer), 
 				sheetTemplateRenderer_(sheetTemplateRenderer), 
 				compilerVisitorPtr_(compilerVisitorPtr), 
 				logger_(logger), 
-				preprocessor_(preprocessor),
-				phraseRenderer_(phraseRenderer)
+				preprocessor_(preprocessor)
 		{
 		}
 		Compiler(const Compiler &) = delete;
