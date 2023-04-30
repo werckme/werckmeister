@@ -4,6 +4,7 @@
 #include <compiler/metaCommands.h>
 #include <compiler/error.hpp>
 #include <numeric>
+#include <compiler/context/IContext.h>
 
 namespace compiler
 {
@@ -182,5 +183,35 @@ namespace compiler
 				throw;
 			}
 		}
+	}
+
+	void DefinitionsServer::degreeToAbsoluteNote(IContextPtr ctx, const Event &chordEvent, const Event &degreeEvent, Event &outTarget)
+	{
+		outTarget = degreeEvent;
+		if (degreeEvent.type == Event::Group)
+		{
+			outTarget.type = Event::Group;
+			size_t index = 0;
+			for (const auto &groupedDegreeEvent : degreeEvent.eventGroup)
+			{
+				degreeToAbsoluteNote(ctx, chordEvent, groupedDegreeEvent, outTarget.eventGroup[index++]);
+			}
+			return;
+		}
+		if (!degreeEvent.isRelativeDegree())
+		{
+			return;
+		}
+		auto chordDef = getChord(chordEvent.chordDefName());
+		if (chordDef == nullptr)
+		{
+			FM_THROW(Exception, "chord not found: " + chordEvent.stringValue);
+		}
+		auto voicingStratgy = ctx->currentVoicingStrategy();
+		auto pitches = voicingStratgy->get(chordEvent, *chordDef, degreeEvent.pitches, ctx->getTimeInfo());
+		compilerVisitor_->visitDegree(chordEvent, *chordDef, degreeEvent);
+		outTarget.type = Event::Note;
+		outTarget.isTied(degreeEvent.isTied());
+		outTarget.pitches.swap(pitches);
 	}
 }

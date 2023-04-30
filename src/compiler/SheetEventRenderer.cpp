@@ -31,6 +31,7 @@ namespace compiler
 		template <>
 		bool renderEvent<Event::Degree>(SheetEventRenderer *renderer, const Event *ev)
 		{
+			renderer->renderDegree(*ev);
 			return true;
 		}
 
@@ -292,4 +293,8 @@ namespace compiler
             addEvent(copy);
         }
     }
+	void SheetEventRenderer::renderDegree(const documentModel::Event &degreeEvent)
+	{
+		
+	}
 }

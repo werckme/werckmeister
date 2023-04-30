@@ -262,45 +262,6 @@ namespace compiler
 			return templatesAndItsChords;
 		}
 
-		Event &__degreeToAbsoluteNote(IContextPtr ctx, ICompilerVisitorPtr visitor, const Event &chordEvent, const Event &degreeEvent, Event &target)
-		{
-			try
-			{
-				target = degreeEvent;
-				if (degreeEvent.type == Event::Group)
-				{
-					target.type = Event::Group;
-					size_t index = 0;
-					for (const auto &groupedDegreeEvent : degreeEvent.eventGroup)
-					{
-						__degreeToAbsoluteNote(ctx, visitor, chordEvent, groupedDegreeEvent, target.eventGroup[index++]);
-					}
-					return target;
-				}
-				if (!degreeEvent.isRelativeDegree())
-				{
-					return target;
-				}
-				auto chordDef = ctx->definitionsServer()->getChord(chordEvent.chordDefName());
-				if (chordDef == nullptr)
-				{
-					FM_THROW(Exception, "chord not found: " + chordEvent.stringValue);
-				}
-				auto voicingStratgy = ctx->currentVoicingStrategy();
-				auto pitches = voicingStratgy->get(chordEvent, *chordDef, degreeEvent.pitches, ctx->getTimeInfo());
-				visitor->visitDegree(chordEvent, *chordDef, degreeEvent);
-				target.type = Event::Note;
-				target.isTied(degreeEvent.isTied());
-				target.pitches.swap(pitches);
-				return target;
-			}
-			catch (const Exception &ex)
-			{
-				ex << ex_sheet_source_info(chordEvent);
-				throw;
-			}
-		}
-
 		void __handleTemplatePositionCmd(const Event &metaEvent, DegreeEventServer &eventServer)
 		{
 			try
@@ -356,6 +317,7 @@ namespace compiler
 		typedef std::list<const Event *> Chords;
 		com::Ticks __renderOneBar(IContextPtr ctx,
 								  ICompilerVisitorPtr visitor,
+								  IDefinitionsServerPtr definitionsServer,
 								  ASheetEventRenderer *sheetEventRenderer,
 								  DegreeEventServer &eventServer,
 								  const Chords &chords,
@@ -419,7 +381,15 @@ namespace compiler
 						}
 						else
 						{
-							copy = __degreeToAbsoluteNote(ctx, visitor, *chord, *degree, copy);
+							try
+							{
+								definitionsServer->degreeToAbsoluteNote(ctx, *chord, *degree, copy);
+							}
+							catch (const Exception &ex)
+							{
+								ex << ex_sheet_source_info(*chord);
+								throw;
+							}
 						}
 					}
 					bool isTimeConsuming = copy.isTimeConsuming();
@@ -451,10 +421,11 @@ namespace compiler
 		}
 	}
 
-	SheetTemplateRenderer::SheetTemplateRenderer(IContextPtr ctx, ASheetEventRendererPtr renderer, ICompilerVisitorPtr compilerVisitor) : 
+	SheetTemplateRenderer::SheetTemplateRenderer(IContextPtr ctx, ASheetEventRendererPtr renderer, ICompilerVisitorPtr compilerVisitor, IDefinitionsServerPtr definitionsServer) : 
 		sheetEventRenderer(renderer), 
 		_ctx(ctx),
-		_compilerVisitor(compilerVisitor)
+		_compilerVisitor(compilerVisitor),
+		definitionsServer_(definitionsServer)
 	{
 	}
 
@@ -595,7 +566,7 @@ namespace compiler
 							if (chord->type == Event::EOB)
 							{
 								const auto *eobEvent = chord;
-								__renderOneBar(_ctx, _compilerVisitor, sheetEventRenderer.get(), eventServer, chordsPerBar, lastChord);
+								__renderOneBar(_ctx, _compilerVisitor, definitionsServer_, sheetEventRenderer.get(), eventServer, chordsPerBar, lastChord);
 								sheetEventRenderer->addEvent(*eobEvent);
 								chordsPerBar.clear();
 								if (eventServer.templateIsFill && !eventServer.hasFurtherEvents())
@@ -646,7 +617,7 @@ namespace compiler
 								// make sure we render all remainings (#237)
 								if (!chordsPerBar.empty())
 								{
-									__renderOneBar(_ctx, _compilerVisitor, sheetEventRenderer.get(), eventServer, chordsPerBar, lastChord);
+									__renderOneBar(_ctx, _compilerVisitor, definitionsServer_, sheetEventRenderer.get(), eventServer, chordsPerBar, lastChord);
 								}
 							}
 						}

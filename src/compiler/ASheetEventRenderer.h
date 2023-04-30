@@ -18,6 +18,7 @@ namespace compiler
         virtual void handleMetaEvent(const documentModel::Event &_ev) = 0;
         virtual std::shared_ptr<ASheetEventRenderer> createNewSheetEventRenderer(IContextPtr ctx) = 0;
         virtual void renderPhrase(const documentModel::Event &phraseEvent) = 0;
+        virtual void renderDegree(const documentModel::Event &degreeEvent) = 0;
         template <class TContainer>
         void handleMetaEvents(const TContainer &container,
                               std::function<documentModel::Event(const typename TContainer::value_type &)> fGetMetaEvent);
