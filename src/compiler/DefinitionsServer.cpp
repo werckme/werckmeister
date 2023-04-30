@@ -3,6 +3,7 @@
 #include <com/tools.h>
 #include <compiler/metaCommands.h>
 #include <compiler/error.hpp>
+#include <numeric>
 
 namespace compiler
 {
@@ -94,14 +95,14 @@ namespace compiler
 		return &(it->second);
 	}
 
-	const IDefinitionsServer::Phrase* DefinitionsServer::getPhrase(const com::String &name)
+	IDefinitionsServer::ConstPhraseDefValueType DefinitionsServer::getPhrase(const com::String &name)
 	{
 		const PhraseDefs &phraseDef = this->phraseDefs();
 		// find phrase by name
 		PhraseDefs::const_iterator it = _findByName(name, phraseDef);
 		if (it == phraseDef.end())
 		{
-			return nullptr;
+			return ConstPhraseDefValueType();
 		}
 		return it->second;
 	}
@@ -167,7 +168,13 @@ namespace compiler
 			}
 			try
 			{
-				(*phraseDefs_)[documentConfig.name] = &documentConfig.events;
+				PhraseInfo info;
+				info.events = &documentConfig.events;
+				for(const auto &event : *info.events) 
+				{
+					info.duration += event.duration;
+				}
+				phraseDefs_->emplace(std::make_pair(documentConfig.name, info));	
 			}
 			catch (const com::Exception &ex)
 			{

@@ -14,8 +14,8 @@ namespace compiler
     class SheetEventRenderer : public ASheetEventRenderer
     {
     public:
-        SheetEventRenderer(IContextPtr ctx, ICompilerVisitorPtr compilerVisitor, com::ILoggerPtr logger, IPhraseRendererPtr phraseRenderer)
-            : ctx_(ctx), compilerVisitor_(compilerVisitor), logger_(logger), phraseRenderer_(phraseRenderer)
+        SheetEventRenderer(IContextPtr ctx, ICompilerVisitorPtr compilerVisitor, com::ILoggerPtr logger)
+            : ctx_(ctx), compilerVisitor_(compilerVisitor), logger_(logger)
         {
         }
         virtual ~SheetEventRenderer() = default;
@@ -25,9 +25,7 @@ namespace compiler
         virtual void renderEvent(const documentModel::Event &_ev);
         virtual void renderEventPitches(const documentModel::Event &noteEvent);
         virtual void renderPitchBendEvent(const documentModel::Event &pitchBendEvent);
-        virtual void renderPhrase(const documentModel::Event &phraseEvent) override;
         virtual std::shared_ptr<ASheetEventRenderer> createNewSheetEventRenderer(IContextPtr ctx);
-
     protected:
         void onWarning(const com::String &message, const documentModel::Event &event);
 

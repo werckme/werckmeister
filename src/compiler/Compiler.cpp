@@ -97,6 +97,11 @@ namespace compiler
 				ctx->setTarget(trackId, voiceId);
 				for (const auto &ev : voice.events)
 				{
+					if (ev.type == documentModel::Event::Phrase) 
+					{
+						phraseRenderer_->renderPhrase(ev);
+						continue;
+					}
 					renderer->addEvent(ev);
 				}
 			}

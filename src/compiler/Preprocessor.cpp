@@ -221,10 +221,10 @@ namespace compiler
 	{
 		documentModel::Track track;
 		documentModel::Voice voice;
-		voice.events.swap(events);
-		track.voices.push_back(voice);
-		process(track);
-		events.swap(voice.events);
+		if (events.empty()) 
+		{
+			return;
+		}
 		for(const auto &event : events)
 		{
 			try 
@@ -240,6 +240,11 @@ namespace compiler
 				throw;
 			}
 		}
+		voice.events.swap(events);
+		track.voices.emplace_back(voice);
+		process(track);
+		events.swap(track.voices[0].events);
+		events.erase(events.end() - 1); // remove last eob
 	}
 
 	void Preprocessor::preprocess(documentModel::DocumentPtr document)

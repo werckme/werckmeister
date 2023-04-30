@@ -8,6 +8,12 @@
 
 namespace compiler
 {
+	struct PhraseInfo 
+	{
+		typedef documentModel::DocumentConfig::Events PhraseEvents;
+		const PhraseEvents *events = nullptr;
+		com::Ticks duration = 0;
+	};
 	class IDefinitionsServer
 	{
 	public:
@@ -16,8 +22,7 @@ namespace compiler
 		typedef std::vector<const documentModel::Track *> Tracks;
 		typedef const documentModel::ChordDef* ConstChordValueType;
 		typedef const documentModel::PitchDef* ConstPitchDefValueType;
-		typedef documentModel::DocumentConfig::Events Phrase;
-		typedef const Phrase* ConstPhraseDefValueType;
+		typedef PhraseInfo ConstPhraseDefValueType;
 		virtual documentModel::SheetTemplate getSheetTemplate(const com::String &name) = 0;
 		virtual ConstChordValueType getChord(const com::String &name) = 0;
 		virtual ConstPitchDefValueType getAlias(const com::String &alias) = 0;
