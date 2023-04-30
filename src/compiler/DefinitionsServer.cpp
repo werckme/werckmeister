@@ -24,6 +24,20 @@ namespace compiler
 			}
 			return it;
 		}
+		documentModel::ChordDef fallbackChordDef = []()
+		{
+			using namespace documentModel;
+			using namespace com::degrees;
+			ChordDef def;
+			def.degreeDefs.insert(DegreeDef(I  , 0, false));
+			def.degreeDefs.insert(DegreeDef(II , 2, true));
+			def.degreeDefs.insert(DegreeDef(III, 4, false));
+			def.degreeDefs.insert(DegreeDef(IV , 5, true));
+			def.degreeDefs.insert(DegreeDef(V  , 7, false));
+			def.degreeDefs.insert(DegreeDef(VI , 9, true));
+			def.degreeDefs.insert(DegreeDef(VII, 11, true));
+			return def;
+		}();
 	}
 	documentModel::SheetTemplate *DefinitionsServer::findSheetTemplate(const com::String &sheetTemplateName)
 	{
@@ -185,7 +199,7 @@ namespace compiler
 		}
 	}
 
-	void DefinitionsServer::degreeToAbsoluteNote(IContextPtr ctx, const Event &chordEvent, const Event &degreeEvent, Event &outTarget)
+	void DefinitionsServer::degreeToAbsoluteNote(IContextPtr ctx, const Event &chordEvent, const Event &degreeEvent, Event &outTarget, bool throwIfChordNotFound)
 	{
 		outTarget = degreeEvent;
 		if (degreeEvent.type == Event::Group)
@@ -205,7 +219,14 @@ namespace compiler
 		auto chordDef = getChord(chordEvent.chordDefName());
 		if (chordDef == nullptr)
 		{
-			FM_THROW(Exception, "chord not found: " + chordEvent.stringValue);
+			if (throwIfChordNotFound)
+			{
+				FM_THROW(Exception, "chord not found: " + chordEvent.stringValue);
+			}
+			else
+			{
+				chordDef = &fallbackChordDef;
+			}
 		}
 		auto voicingStratgy = ctx->currentVoicingStrategy();
 		auto pitches = voicingStratgy->get(chordEvent, *chordDef, degreeEvent.pitches, ctx->getTimeInfo());

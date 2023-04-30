@@ -40,7 +40,7 @@ namespace compiler
 		 */
 		virtual documentModel::PitchDef resolvePitch(const documentModel::PitchDef &pitch) = 0;
 		virtual com::String defaultSheetTemplateName() const = 0;
-		virtual void degreeToAbsoluteNote(IContextPtr context, const Event &chordEvent, const Event &degreeEvent, Event &outTarget) = 0;
+		virtual void degreeToAbsoluteNote(IContextPtr context, const Event &chordEvent, const Event &degreeEvent, Event &outTarget, bool throwIfChordNotFound = true) = 0;
 	};
 	typedef std::shared_ptr<IDefinitionsServer> IDefinitionsServerPtr;
 }

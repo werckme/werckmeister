@@ -19,6 +19,12 @@ namespace compiler
 	using namespace com;
 	const double AContext::PitchbendMiddle = 0.5;
 	const Ticks AContext::TickTolerance = 0.5;
+	const documentModel::Event fallbackChordEvent = [](){
+		documentModel::Event ev;
+		ev.type = documentModel::Event::Chord;
+		ev.stringValue = "C";
+		return ev;
+	}();
 
 	AContext::AContext(compiler::IDefinitionsServerPtr definitionsServer, ICompilerVisitorPtr compilerVisitor)
 		: definitionsServer_(definitionsServer), _compilerVisitor(compilerVisitor)
@@ -336,6 +342,11 @@ namespace compiler
 			return currentInstrument->voicingStrategy;
 		}
 		return defaultVoiceStrategy_;
+	}
+
+	documentModel::Event AContext::currentChordEvent() 
+	{
+		return fallbackChordEvent;
 	}
 
 	void AContext::clear()

@@ -6,6 +6,13 @@ namespace documentModel
 {
 	struct DegreeDef : public Interval
 	{
+		DegreeDef() {}
+		DegreeDef(com::Pitch degree, int semitones, bool isAdjunct) 
+		{
+			this->degree = degree;
+			Interval::value = semitones;
+			this->isAdjunct = isAdjunct;
+		}
 		// Akkordfremd
 		bool isAdjunct = false;
 		com::Pitch degree;

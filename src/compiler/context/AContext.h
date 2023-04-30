@@ -96,6 +96,7 @@ namespace compiler
 		virtual const SheetTemplates &currentSheetTemplates();
 		virtual void currentSheetTemplate(const SheetTemplates &sheetTemplate);
 		virtual VoicingStrategyPtr currentVoicingStrategy();
+		virtual documentModel::Event currentChordEvent() override;
 		virtual AModificationPtr spielanweisung();
 		virtual AInstrumentDefPtr getInstrumentDef(const com::String &uname) = 0;
 		virtual AInstrumentDefPtr currentInstrumentDef() = 0;

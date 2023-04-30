@@ -76,6 +76,7 @@ namespace compiler
 		virtual AModificationPtr spielanweisung() = 0;
 		virtual AInstrumentDefPtr getInstrumentDef(const com::String &uname) = 0;
 		virtual AInstrumentDefPtr currentInstrumentDef() = 0;
+		virtual documentModel::Event currentChordEvent() = 0;
 		virtual com::Ticks currentPosition() const = 0;
 		virtual com::Ticks maxPosition() const = 0;
 		virtual TimeInfo getTimeInfo() const = 0;
