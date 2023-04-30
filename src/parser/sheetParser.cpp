@@ -132,6 +132,7 @@ namespace parser
 		DurationSymbols durationSymbols_;
 		ExpressionSymbols expressionSymbols_;
 		const std::string ALLOWED_META_ARGUMENT = "a-zA-Z0-9.";
+		const std::string ALLOWED_PHRASE_NAME = "a-zA-Z0-9_";
 		const std::string ALLOWED_ARGUMENT_NAME_SYMBOLS = "a-zA-Z0-9";
 		const std::string ALLOWED_EVENT_TAG_ARGUMENT = "a-zA-Z0-9,`':;?.!()[]<>+*/=$%&@\\^_|~-";
 	}
@@ -181,7 +182,7 @@ namespace parser
 					>> attr(sourceId_) 
 					>> attr(DocumentConfig::TypePhraseDef)
 					>> eps[at_c<DcName>(_val) = FM_STRING("")] // reset name, will be appended from name above instead
-					>> +char_("a-zA-Z")
+					>> +char_(ALLOWED_PHRASE_NAME)
 					>> "=" >> attr(Argument()) >> events
 					>> ";"
 				)
@@ -295,7 +296,7 @@ namespace parser
 						current_pos_.current_pos 
 						>> attr(sourceId_) 
 						>> attr(Event::Phrase) 
-						>> lexeme[">" >> +char_("a-zA-Z")]
+						>> ">" >> lexeme["\"" >> +char_(ALLOWED_PHRASE_NAME) >> "\""]
 						>> attr(PitchDef()) 
 						>> (durationSymbols_ | attr(Event::NoDuration))
 						>> attr(DefaultNumberOfBarRepeats)
