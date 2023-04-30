@@ -26,7 +26,7 @@
 #include "FactoryConfig.h"
 #include <compiler/CompoundVisitor.hpp>
 #include <compiler/EventInformationServer.h>
-
+#include <compiler/PhraseRenderer.h>
 
 #ifdef _MSC_VER
 #define _CRTDBG_MAP_ALLOC
@@ -95,7 +95,8 @@ extern "C" const char *create_compile_result(const char *file, double beginQuart
 		di::bind<pr::IDocumentParser>().to<pr::DocumentParser>().in(di::extension::scoped), 
 		di::bind<cp::ICompiler>().to<cp::Compiler>().in(di::extension::scoped), 
 		di::bind<cp::ISheetTemplateRenderer>().to<cp::SheetTemplateRenderer>().in(di::extension::scoped), 
-		di::bind<cp::ASheetEventRenderer>().to<cp::SheetEventRenderer>().in(di::extension::scoped), 
+		di::bind<cp::ASheetEventRenderer>().to<cp::SheetEventRenderer>().in(di::extension::scoped),
+		di::bind<cp::IPhraseRenderer>().to<cp::PhraseRenderer>().in(di::extension::scoped), 
 		di::bind<cp::IContext>().to<cp::MidiContext>().in(di::extension::scoped), 
 		di::bind<cp::IPreprocessor>().to<cp::Preprocessor>().in(di::extension::scoped), 
 		di::bind<cp::ISheetNavigator>().to<cp::SheetNavigator>().in(di::extension::scoped), 

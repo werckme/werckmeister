@@ -83,6 +83,12 @@ namespace compiler
 			renderer->handleMetaEvent(*ev);
 			return true;
 		}
+		template <>
+		bool renderEvent<Event::Phrase>(SheetEventRenderer *renderer, const Event *ev)
+		{
+			renderer->renderPhrase(*ev);
+			return true;
+		}
 		//////////////////////////////////////////////////
 		template <int EventId>
 		bool renderEventUnrolled(SheetEventRenderer *renderer, const Event *ev)
@@ -134,7 +140,7 @@ namespace compiler
 
 	std::shared_ptr<ASheetEventRenderer> SheetEventRenderer::createNewSheetEventRenderer(IContextPtr ctx)
 	{
-		return std::make_shared<SheetEventRenderer>(ctx, compilerVisitor_, logger_);
+		return std::make_shared<SheetEventRenderer>(ctx, compilerVisitor_, logger_, phraseRenderer_);
 	}
 
 	void SheetEventRenderer::addEvent(const Event &ev)
@@ -267,5 +273,10 @@ namespace compiler
 		{
 			FM_THROW(Exception, "failed to process \"" + commandName + "\"");
 		}
+	}
+	
+	void SheetEventRenderer::renderPhrase(const documentModel::Event &phraseEvent)
+	{
+		phraseRenderer_->renderPhrase(phraseEvent);
 	}
 }

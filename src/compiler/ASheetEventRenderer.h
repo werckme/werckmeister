@@ -16,6 +16,7 @@ namespace compiler
     public:
         virtual void addEvent(const documentModel::Event &event) = 0;
         virtual void handleMetaEvent(const documentModel::Event &_ev) = 0;
+        virtual void renderPhrase(const documentModel::Event &phrase) = 0;
         virtual std::shared_ptr<ASheetEventRenderer> createNewSheetEventRenderer(IContextPtr ctx) = 0;
         template <class TContainer>
         void handleMetaEvents(const TContainer &container,

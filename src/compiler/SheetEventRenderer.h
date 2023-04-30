@@ -6,6 +6,7 @@
 #include "ASheetEventRenderer.h"
 #include <com/ILogger.h>
 #include "ICompilerVisitor.h"
+#include "IPhraseRenderer.h"
 #include <list>
 
 namespace compiler
@@ -13,17 +14,18 @@ namespace compiler
     class SheetEventRenderer : public ASheetEventRenderer
     {
     public:
-        SheetEventRenderer(IContextPtr ctx, ICompilerVisitorPtr compilerVisitor, com::ILoggerPtr logger)
-            : ctx_(ctx), compilerVisitor_(compilerVisitor), logger_(logger)
+        SheetEventRenderer(IContextPtr ctx, ICompilerVisitorPtr compilerVisitor, com::ILoggerPtr logger, IPhraseRendererPtr phraseRenderer)
+            : ctx_(ctx), compilerVisitor_(compilerVisitor), logger_(logger), phraseRenderer_(phraseRenderer)
         {
         }
         virtual ~SheetEventRenderer() = default;
         IContextPtr context() const { return this->ctx_; }
-        virtual void addEvent(const documentModel::Event &event);
-        virtual void handleMetaEvent(const documentModel::Event &_ev);
+        virtual void addEvent(const documentModel::Event &event) override;
+        virtual void handleMetaEvent(const documentModel::Event &_ev) override;
         virtual void renderEvent(const documentModel::Event &_ev);
         virtual void renderEventPitches(const documentModel::Event &noteEvent);
         virtual void renderPitchBendEvent(const documentModel::Event &pitchBendEvent);
+        virtual void renderPhrase(const documentModel::Event &phraseEvent) override;
         virtual std::shared_ptr<ASheetEventRenderer> createNewSheetEventRenderer(IContextPtr ctx);
 
     protected:
@@ -33,5 +35,6 @@ namespace compiler
         IContextPtr ctx_;
         com::ILoggerPtr logger_;
         ICompilerVisitorPtr compilerVisitor_;
+        IPhraseRendererPtr phraseRenderer_;
     };
 }

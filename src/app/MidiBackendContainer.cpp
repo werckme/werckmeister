@@ -15,7 +15,7 @@ namespace app
     AMidiBackend::Outputs MidiBackendContainer::getOutputs() const
     {
         AMidiBackend::Outputs result;
-        for (const auto backend : this->_midiBackends)
+        for (const auto &backend : this->_midiBackends)
         {
             auto outputs = backend->getOutputs();
             result.insert(result.end(), outputs.begin(), outputs.end());
@@ -40,21 +40,21 @@ namespace app
     }
     void MidiBackendContainer::seek(long double millis)
     {
-        for (const auto backend : this->_midiBackends)
+        for (const auto &backend : this->_midiBackends)
         {
             backend->seek(millis);
         }
     }    
     void MidiBackendContainer::tearDown()
     {
-        for (const auto backend : this->_midiBackends)
+        for (const auto &backend : this->_midiBackends)
         {
             backend->tearDown();
         }
     }
     void MidiBackendContainer::panic()
     {
-        for (const auto backend : this->_midiBackends)
+        for (const auto &backend : this->_midiBackends)
         {
             backend->panic();
         }
@@ -71,7 +71,7 @@ namespace app
 
     void MidiBackendContainer::_initOutputIdToBackendMap()
     {
-        for (const auto backend : this->_midiBackends)
+        for (const auto &backend : this->_midiBackends)
         {
             auto outputs = backend->getOutputs();
             for (const auto &output : outputs)

@@ -182,10 +182,10 @@ namespace app
         rapidjson::Document doc;
         doc.SetArray();
         int trackIndex = 0;
-        for (const auto track : _midifile->ctracks()) 
+        for (const auto &track : _midifile->ctracks()) 
         {
             int eventIndex = 0;
-            for (const auto midiEvent : track->events()) 
+            for (const auto &midiEvent : track->events()) 
             {
                 const auto info = _eventInformationServer->find(midiEvent);
                 if (info != nullptr)
