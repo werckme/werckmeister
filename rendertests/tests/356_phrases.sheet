@@ -8,6 +8,7 @@ tempo: 80;
 
 myPhrase = c d e f;
 myPhraseII = (c d e) c d e;
+myPhraseRel = I II III IV;
 
 [
 instrument: piano;
