@@ -102,6 +102,7 @@ void FactoryConfig<TInjector>::initModifications()
 #include <compiler/commands/Cue.h>
 #include <compiler/commands/Fill.h>
 #include <compiler/commands/DefineInstrumentSection.h>
+#include <compiler/commands/SetChord.h>
 
 template <class TInjector>
 void FactoryConfig<TInjector>::initCommands()
@@ -140,6 +141,7 @@ void FactoryConfig<TInjector>::initCommands()
     register_<Fill>(SHEET_META__SET_FILL_TEMPLATE);
     register_<Cue>(SHEET_META__ADD_CUE);
     register_<DefineInstrumentSection>(SHEET_META__DEFINE_INSTRUMENT_SECTION);
+    register_<SetChord>(SHEET_META__SET_CHORD);
 }
 
 // Conductor

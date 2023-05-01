@@ -23,6 +23,7 @@ namespace compiler
 		documentModel::Event ev;
 		ev.type = documentModel::Event::Chord;
 		ev.stringValue = "C";
+		ev.tags.insert("fallback");
 		return ev;
 	}();
 
@@ -344,9 +345,32 @@ namespace compiler
 		return defaultVoiceStrategy_;
 	}
 
-	documentModel::Event AContext::currentChordEvent() 
+	const documentModel::Event& AContext::currentChordEvent() const
 	{
-		return fallbackChordEvent;
+		auto meta = voiceMetaData();
+		if (!meta)
+		{
+			FM_THROW(Exception, "meta data = null");
+		}
+		if (meta->chordEvent.type != documentModel::Event::Chord)
+		{
+			return fallbackChordEvent;
+		}
+		return meta->chordEvent;
+	}
+
+	void AContext::currentChordEvent(const documentModel::Event& chordEvent)
+	{
+		if (chordEvent.type != documentModel::Event::Chord)
+		{
+			FM_THROW(Exception, "expecting a chord event but got: " + chordEvent.toString());
+		}
+		auto meta = voiceMetaData();
+		if (!meta)
+		{
+			FM_THROW(Exception, "meta data = null");
+		}
+		meta->chordEvent = chordEvent;
 	}
 
 	void AContext::clear()

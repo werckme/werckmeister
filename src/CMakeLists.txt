@@ -62,6 +62,7 @@ SET (SRC_FETZER_LIB
     compiler/commands/DefineMidiInstrument.cpp
     compiler/commands/SetVolume.cpp
     compiler/commands/SetPan.cpp
+    compiler/commands/SetChord.cpp
     compiler/commands/AddVorschlag.cpp
     compiler/commands/SetExpression.cpp
     compiler/commands/SetExpressionPlayedOnce.cpp

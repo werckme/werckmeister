@@ -296,8 +296,9 @@ namespace compiler
 	void SheetEventRenderer::renderDegree(const documentModel::Event &degreeEvent)
 	{
 		auto chordEvent = ctx_->currentChordEvent();
+		bool isFallbackChord = !chordEvent.tags.empty() && (*chordEvent.tags.begin() == "fallback"); 
 		documentModel::Event absolutePitch;
-		definitionServer_->degreeToAbsoluteNote(ctx_, chordEvent, degreeEvent, absolutePitch, false);
+		definitionServer_->degreeToAbsoluteNote(ctx_, chordEvent, degreeEvent, absolutePitch, !isFallbackChord);
 		addEvent(absolutePitch);
 	}
 }

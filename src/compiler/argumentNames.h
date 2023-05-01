@@ -143,6 +143,10 @@ struct ArgumentNames
         std::string Template = "template";
         std::string Replace = "replace";
     } Fill;
+    struct
+    {
+        std::string Name = "name";
+    } SetChord;
 };
 
 extern ArgumentNames argumentNames;
