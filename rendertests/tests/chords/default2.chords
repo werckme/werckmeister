@@ -4,6 +4,7 @@
 -- Those degrees are not being rendered, unless your force them to appear using a leading !.
 -- see https://werckme.github.io/manual#adjunct-chord-tones
 -------------------------------------------------------------------------
+XminScale:  I=0     II=2     III=3     IV=5     V=7     VI=9      VII=10
 X:          I=0    (II=2)    III=4    (IV=5)    V=7    (VI=9)    (VII=11)
 Xmin:       I=0    (II=2)    III=3    (IV=5)    V=7    (VI=9)    (VII=10)
 X-:         I=0    (II=2)    III=3    (IV=5)    V=7    (VI=9)    (VII=10)

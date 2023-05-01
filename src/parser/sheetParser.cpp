@@ -20,6 +20,7 @@
 #include <documentModel/DocumentUsing.h>
 #include <documentModel/AliasPitchDef.h>
 #include <documentModel/objects/Grouped.h>
+#include <documentModel/objects/Phrase.h>
 #include <com/tools.h>
 #include "valueParser.h"
 
@@ -56,6 +57,16 @@ BOOST_FUSION_ADAPT_STRUCT(
 	(documentModel::Event::Tags, tags)
 	(documentModel::Event::EventGroup, eventGroup)
 	(documentModel::Event::Duration, duration))
+
+BOOST_FUSION_ADAPT_STRUCT(
+	documentModel::Phrase,
+	(unsigned int, sourcePositionBegin)
+	(documentModel::ASheetObjectWithSourceInfo::SourceId, sourceId)
+	(documentModel::Event::Type, type)
+	(documentModel::Event::Tags, tags)
+	(com::String, stringValue)
+	(documentModel::Event::Duration, duration)
+	(unsigned int, sourcePositionEnd))
 
 BOOST_FUSION_ADAPT_STRUCT(
 	documentModel::TrackConfig,
@@ -292,21 +303,6 @@ namespace parser
 						)
 					) 
 					|
-					( // USE PHRASE
-						current_pos_.current_pos 
-						>> attr(sourceId_) 
-						>> attr(Event::Phrase) 
-						>> ">" >> lexeme["\"" >> +char_(ALLOWED_PHRASE_NAME) >> "\""]
-						>> attr(PitchDef()) 
-						>> (durationSymbols_ | attr(Event::NoDuration))
-						>> attr(DefaultNumberOfBarRepeats)
-						>> attr("") 
-						>> attr(Event::Args()) >> current_pos_.current_pos 
-						>> -(
-							lit("~")[at_c<EvType>(_val) = Event::TiedPhrase]
-						)
-					) 
-					|
 					( // REPEAT SHORTCUT (&)
 						current_pos_.current_pos 
 						>> attr(sourceId_) 
@@ -419,9 +415,22 @@ namespace parser
 					attr(sourceId_)
 					>> (("\"" >> +(lexeme[+char_(ALLOWED_EVENT_TAG_ARGUMENT)]) >> "\"" >> "@") | attr(Event::Tags()))
 					>> ("(" > *(event_ | groupedEvent_) > ")")
-					>> (durationSymbols_ | attr(Event::NoDuration));
+					>> (durationSymbols_ | attr(Event::NoDuration))
+				;
 
-				events %= *(event_ | groupedEvent_);
+				phrase_ %= 
+						current_pos_.current_pos 
+						>> attr(sourceId_) 
+						>> attr(Event::Phrase) 
+						>> (("\"" >> +(lexeme[+char_(ALLOWED_EVENT_TAG_ARGUMENT)]) >> "\"" >> "@") | attr(Event::Tags()))
+						>> ">" >> lexeme["\"" >> +char_(ALLOWED_PHRASE_NAME) >> "\""]
+						>> (durationSymbols_ | attr(Event::NoDuration))
+						>> -(
+							lit("~")[at_c<EvType>(_val) = Event::TiedPhrase]
+						)
+				;
+
+				events %= *(event_ | groupedEvent_ | phrase_);
 
 				voice %= "{" > events > "}";
 
@@ -471,6 +480,7 @@ namespace parser
 			qi::rule<Iterator, Voice::Events(), ascii::space_type> events;
 			qi::rule<Iterator, Event(), ascii::space_type> event_;
 			qi::rule<Iterator, Grouped(), ascii::space_type> groupedEvent_;
+			qi::rule<Iterator, Phrase(), ascii::space_type> phrase_;
 			qi::rule<Iterator, DocumentConfig(), ascii::space_type> documentConfig_;
 			qi::rule<Iterator, TrackConfig(), ascii::space_type> trackConfig_;
 			qi::rule<Iterator, DocumentUsing(), ascii::space_type> documentUsing_;

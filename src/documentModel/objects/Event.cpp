@@ -63,11 +63,7 @@ namespace documentModel
 		{
 			FM_THROW(com::Exception, "expecting phrase type");
 		}
-		if (tags.size() < 1) 
-		{
-			FM_THROW(com::Exception, "expecting phrase name");
-		}
-		return *tags.begin();
+		return stringValue;
 	}
 
 	com::String Event::chordDefName() const

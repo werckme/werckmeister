@@ -1,0 +1,16 @@
+-- https://youtu.be/FRirqB369sM
+using "./chords/default.chords";
+device: _usePort=17 _setName=MyDevice  _isType=midi;
+instrumentDef: _setName=piano _onDevice=MyDevice _ch=0 _pc=1 _cc=8;
+
+tempo: 60;
+
+S = I II III IV V VI VII;
+
+[
+instrument: piano;
+{
+    /chord: "C#minScale"/
+    >"S"1 |
+}
+]
