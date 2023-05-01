@@ -9,11 +9,24 @@
 #include <compiler/Warning.hpp>
 #include "IEventLogger.h"
 #include <compiler/Instrument.h>
+#include <list>
 
 namespace compiler
 {
 	namespace
 	{
+		void addTagsRecursive(documentModel::Event &event, std::list<com::String>& tags)
+		{
+			event.tags.insert(tags.begin(), tags.end());
+			std::list<com::String> tagsCopy = tags;
+			tags.insert(tags.begin(), event.tags.begin(), event.tags.end());
+			for (auto &groupedEvent : event.eventGroup)
+			{
+				addTagsRecursive(groupedEvent, tags);
+			}
+			tags.swap(tagsCopy);
+		}
+
 		using namespace documentModel;
 		template <int EventType>
 		bool renderEvent(SheetEventRenderer *renderer, const Event *ev)
@@ -300,10 +313,12 @@ namespace compiler
         const auto &phraseEvents = *phraseInfo.events;
         logger_->babble(WMLogLambda(log << "phrase found: " << phraseEvents.size() << " events"));
 		com::Ticks phraseEventLength = isTiedEvent ? phraseEvent.tiedDurationTotal : phraseEvent.duration;
-        for(const auto &event : phraseEvents)
+        std::list<com::String> phraseTags(phraseEvent.tags.begin(), phraseEvent.tags.end());
+		for(const auto &event : phraseEvents)
         {
             auto copy = event;
             copy.duration = event.duration * (phraseEventLength / phraseInfo.duration);
+			addTagsRecursive(copy, phraseTags);
             addEvent(copy);
         }
 		if (isTiedEvent)

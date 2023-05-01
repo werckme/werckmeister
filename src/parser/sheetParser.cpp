@@ -418,6 +418,7 @@ namespace parser
 						>> (("\"" >> +(lexeme[+char_(ALLOWED_EVENT_TAG_ARGUMENT)]) >> "\"" >> "@") | attr(Event::Tags()))
 						>> ">" >> lexeme["\"" >> +char_(ALLOWED_PHRASE_NAME) >> "\""]
 						>> (durationSymbols_ | attr(Event::NoDuration))
+						>> current_pos_.current_pos
 						>> -(
 							lit("~")[at_c<EvType>(_val) = Event::TiedPhrase]
 						)

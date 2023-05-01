@@ -1,0 +1,14 @@
+withTag(high)
+{
+    velocity = 127;
+}
+
+withTag(up)
+{
+    pitch += 12;
+}
+
+withTag(x)
+{
+    pitch = 50;
+}

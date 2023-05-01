@@ -1,0 +1,18 @@
+
+using "./356_tagged_phrase.conductions";
+
+device: _usePort=17 _setName=MyDevice  _isType=midi;
+instrumentDef: _setName=piano _onDevice=MyDevice _ch=0 _pc=1 _cc=8;
+
+tempo: 40;
+
+myPhrase = c d e f "up"@("x"@(g a c) b c');
+
+[
+instrument: piano;
+{
+    \ppp
+    >"myPhrase"1 |
+    "high"@>"myPhrase"1 |
+}
+]
