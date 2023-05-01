@@ -59,7 +59,7 @@ namespace documentModel
 
 	com::String Event::phraseName() const 
 	{
-		if (type != Phrase) 
+		if (!isPhrase()) 
 		{
 			FM_THROW(com::Exception, "expecting phrase type");
 		}

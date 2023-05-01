@@ -303,7 +303,7 @@ namespace parser
 						>> attr("") 
 						>> attr(Event::Args()) >> current_pos_.current_pos 
 						>> -(
-							lit("~")[at_c<EvType>(_val) = Event::TiedNote]
+							lit("~")[at_c<EvType>(_val) = Event::TiedPhrase]
 						)
 					) 
 					|

@@ -90,6 +90,12 @@ namespace compiler
 			renderer->renderPhrase(*ev);
 			return true;
 		}
+		template <>
+		bool renderEvent<Event::TiedPhrase>(SheetEventRenderer *renderer, const Event *ev)
+		{
+			renderer->renderPhrase(*ev);
+			return true;
+		}
 		//////////////////////////////////////////////////
 		template <int EventId>
 		bool renderEventUnrolled(SheetEventRenderer *renderer, const Event *ev)
@@ -277,6 +283,13 @@ namespace compiler
 	}
 	void SheetEventRenderer::renderPhrase(const documentModel::Event &phraseEvent)
     {
+		bool isTiedEvent = phraseEvent.tiedDurationTotal > 0;
+		bool isInBetweenTiedEvents = isTiedEvent && phraseEvent.tiedDuration != phraseEvent.tiedDurationTotal;
+		if (isInBetweenTiedEvents)
+		{
+			ctx_->seek(phraseEvent.duration);
+			return;
+		}
         auto phraseName = phraseEvent.phraseName();
         logger_->babble(WMLogLambda(log << "render phrase '" << phraseName << "'"));
         auto phraseInfo = definitionServer_->getPhrase(phraseName);
@@ -286,12 +299,17 @@ namespace compiler
         }
         const auto &phraseEvents = *phraseInfo.events;
         logger_->babble(WMLogLambda(log << "phrase found: " << phraseEvents.size() << " events"));
+		com::Ticks phraseEventLength = isTiedEvent ? phraseEvent.tiedDurationTotal : phraseEvent.duration;
         for(const auto &event : phraseEvents)
         {
             auto copy = event;
-            copy.duration = event.duration * (phraseEvent.duration / phraseInfo.duration);
+            copy.duration = event.duration * (phraseEventLength / phraseInfo.duration);
             addEvent(copy);
         }
+		if (isTiedEvent)
+		{
+			ctx_->seek(-(phraseEventLength - phraseEvent.duration));
+		}
     }
 	void SheetEventRenderer::renderDegree(const documentModel::Event &degreeEvent)
 	{

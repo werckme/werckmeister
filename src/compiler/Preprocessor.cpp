@@ -30,6 +30,14 @@ namespace compiler
 			{
 				return repeat.type == Event::Repeat ? Event::Degree : Event::TiedDegree;
 			}
+			if(lastNoRepeat.isPhrase()) 
+			{
+				return repeat.type == Event::Repeat ? Event::Phrase : Event::TiedPhrase;
+			}
+			if(lastNoRepeat.isGroup()) 
+			{
+				return Event::Group;
+			}
 			return repeat.type == Event::Repeat ? Event::Note : Event::TiedNote;
 		}
 
@@ -62,7 +70,18 @@ namespace compiler
 				{
 					FM_THROW(Exception, "no prevoius event for repeat symbol: '&'");
 				}
-				ev.pitches = processData.lastNoRepeat.pitches;
+				if (processData.lastNoRepeat.isGroup())
+				{
+					ev.eventGroup = processData.lastNoRepeat.eventGroup;
+				}
+				else if (processData.lastNoRepeat.isPhrase())
+				{
+					ev.tags = processData.lastNoRepeat.tags;
+				}
+				else 
+				{
+					ev.pitches = processData.lastNoRepeat.pitches;
+				}
 				ev.type = resolveRepeatType(processData.lastNoRepeat, ev);
 			}
 			if (ev.duration == 0)
@@ -100,7 +119,7 @@ namespace compiler
 				}
 				totalDurations.push_back(&event);
 				event.tiedDuration = startEvent.tiedDurationTotal;
-				if (!event.isTied())
+				if (!event.isTied() && event.type != Event::EOB)
 				{
 					break;
 				}

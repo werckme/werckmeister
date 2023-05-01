@@ -39,6 +39,7 @@ namespace documentModel
 			PitchBend,
 			Group,
 			Phrase,
+			TiedPhrase,
 			NumEvents
 		};
 		typedef com::Ticks Duration;
@@ -87,7 +88,8 @@ namespace documentModel
 				|| type == Repeat 
 				|| type == TiedRepeat 
 				|| type == Group
-				|| type == Phrase;
+				|| type == Phrase
+				|| type == TiedPhrase;
 		}
 
 		bool isRepeat() const
@@ -107,7 +109,10 @@ namespace documentModel
 
 		bool isTied() const
 		{
-			return type == TiedNote || type == TiedDegree;
+			return type == TiedNote 
+			|| type == TiedDegree 
+			|| type == TiedRepeat
+			|| type == TiedPhrase;
 		}
 
 		void isTied(bool val);
@@ -115,6 +120,16 @@ namespace documentModel
 		bool isPitchBend() const
 		{
 			return type == PitchBend;
+		}
+
+		bool isPhrase() const
+		{
+			return type == Phrase || type == TiedPhrase;
+		}
+
+		bool isGroup() const
+		{
+			return type == Group;
 		}
 
 		com::String toString() const;
