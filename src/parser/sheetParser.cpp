@@ -411,13 +411,6 @@ namespace parser
 						>> "/"
 					);
 
-				groupedEvent_ %=
-					attr(sourceId_)
-					>> (("\"" >> +(lexeme[+char_(ALLOWED_EVENT_TAG_ARGUMENT)]) >> "\"" >> "@") | attr(Event::Tags()))
-					>> ("(" > *(event_ | groupedEvent_) > ")")
-					>> (durationSymbols_ | attr(Event::NoDuration))
-				;
-
 				phrase_ %= 
 						current_pos_.current_pos 
 						>> attr(sourceId_) 
@@ -428,6 +421,13 @@ namespace parser
 						>> -(
 							lit("~")[at_c<EvType>(_val) = Event::TiedPhrase]
 						)
+				;
+
+				groupedEvent_ %=
+					attr(sourceId_)
+					>> (("\"" >> +(lexeme[+char_(ALLOWED_EVENT_TAG_ARGUMENT)]) >> "\"" >> "@") | attr(Event::Tags()))
+					>> ("(" > *(event_ | phrase_ | groupedEvent_) > ")")
+					>> (durationSymbols_ | attr(Event::NoDuration))
 				;
 
 				events %= *(event_ | groupedEvent_ | phrase_);

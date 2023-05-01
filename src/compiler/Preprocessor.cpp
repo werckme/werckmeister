@@ -76,7 +76,7 @@ namespace compiler
 				}
 				else if (processData.lastNoRepeat.isPhrase())
 				{
-					ev.tags = processData.lastNoRepeat.tags;
+					ev.stringValue = processData.lastNoRepeat.stringValue;
 				}
 				else 
 				{
