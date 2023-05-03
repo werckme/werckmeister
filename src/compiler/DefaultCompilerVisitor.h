@@ -17,6 +17,8 @@ namespace compiler
         virtual void beginDegreeRendering() override {}
         virtual void visitDegree(const documentModel::Event& chord, const documentModel::ChordDef& def, const documentModel::Event& degreeEvent) override  {}
         virtual void endDegreeRendering() override {}
+        virtual void beginRenderPhrase(const com::String& phraseName) override {}
+        virtual void endRenderPhrase(const com::String& phraseName) override {}
         virtual ~DefaultCompilerVisitor() = default;
     };
 }

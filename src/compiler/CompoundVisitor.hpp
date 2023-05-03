@@ -56,6 +56,14 @@ namespace compiler
         {
             visitor1->endRenderPitch();
         }
+        virtual void beginRenderPhrase(const com::String& phraseName) override 
+        {
+            visitor1->beginRenderPhrase(phraseName);
+        }
+        virtual void endRenderPhrase(const com::String& phraseName) override 
+        {
+            visitor1->endRenderPhrase(phraseName);
+        }
         TVisitor1Ptr visitor1 = nullptr;
     };
 
@@ -123,7 +131,17 @@ namespace compiler
         {
             visitor1->endRenderPitch();
             TBase::endRenderPitch();
-        }             
+        }
+        virtual void beginRenderPhrase(const com::String& phraseName) override 
+        {
+            visitor1->beginRenderPhrase(phraseName);
+            TBase::beginRenderPhrase(phraseName);
+        }
+        virtual void endRenderPhrase(const com::String& phraseName) override 
+        {
+            visitor1->endRenderPhrase(phraseName);
+            TBase::endRenderPhrase(phraseName);
+        }
         TVisitor1Ptr visitor1 = nullptr;
     };
     

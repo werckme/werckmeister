@@ -304,6 +304,7 @@ namespace compiler
 			return;
 		}
         auto phraseName = phraseEvent.phraseName();
+		compilerVisitor_->beginRenderPhrase(phraseName);
         logger_->babble(WMLogLambda(log << "render phrase '" << phraseName << "'"));
         auto phraseInfo = definitionServer_->getPhrase(phraseName);
         if(phraseInfo.events == nullptr)
@@ -325,6 +326,7 @@ namespace compiler
 		{
 			ctx_->seek(-(phraseEventLength - phraseEvent.duration));
 		}
+		compilerVisitor_->endRenderPhrase(phraseName);
     }
 	void SheetEventRenderer::renderDegree(const documentModel::Event &degreeEvent)
 	{

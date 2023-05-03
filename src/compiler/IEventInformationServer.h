@@ -36,6 +36,7 @@ namespace compiler
         com::String stringValue;
         com::String instrumentName;
         com::String instrumentSectionName;
+        com::String phraseName;
         com::Expression expression;
         com::Ticks barPositionQuarters = -1;
         int barNumber = -1;

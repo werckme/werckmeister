@@ -31,6 +31,8 @@ namespace compiler
         virtual void beginDegreeRendering() = 0;
         virtual void visitDegree(const documentModel::Event& chord, const documentModel::ChordDef& def, const documentModel::Event& degreeEvent) = 0;
         virtual void endDegreeRendering() = 0;
+        virtual void beginRenderPhrase(const com::String& phraseName) = 0;
+        virtual void endRenderPhrase(const com::String& phraseName) = 0;
     };
     typedef std::shared_ptr<ICompilerVisitor> ICompilerVisitorPtr;
 }

@@ -28,13 +28,16 @@ namespace compiler
         virtual com::Ticks findCueEventPosition(const com::String& cueName) override;
         virtual const EventInformation* find(const documentModel::Event &ev) const override;
         virtual const EventInformation* find(const com::midi::Event &ev) const override;
-        virtual Tags getTags(const com::midi::Event &ev) const override;          
+        virtual Tags getTags(const com::midi::Event &ev) const override;
+        virtual void beginRenderPhrase(const com::String& phraseName) override;
+        virtual void endRenderPhrase(const com::String& phraseName) override;
     private:
         std::unique_ptr<EventInformationDb> eventDb;
         std::unique_ptr <documentModel::Event> lastDocumentEvent = nullptr;
         ChordRenderInfoPtr lastChordRenderInfo;
         com::String lastInstrument;
         com::String lastInstrumentSectionName;
+        com::String lastPhraseName;
         documentModel::PitchDef lastPitch;
     };
 }

@@ -1,0 +1,4 @@
+phrase(myPhraseII)
+{
+    pitch -= 12;
+}
