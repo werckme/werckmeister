@@ -1,0 +1,22 @@
+
+using "/chords/default.chords";
+using "./356_phrases_recursion.conductions";
+
+device: _usePort=17 _setName=MyDevice  _isType=midi;
+instrumentDef: _setName=piano _onDevice=MyDevice _ch=0 _pc=1 _cc=8;
+
+tempo: 80;
+
+myPhrase = c d e f;
+myPhrase1 = >"myPhrase"4 (a b c)4;
+myPhrase2 = >"myPhrase1"4 (d e f)4;
+myPhrase3 = >"myPhrase2"4 (f a c)4;
+myPhrase4 = >"myPhrase3"4 (c e g)4;
+
+
+[
+instrument: piano;
+{
+    >"myPhrase4"1~ | &~ | &
+}
+]

@@ -37,7 +37,7 @@ namespace compiler
         ChordRenderInfoPtr lastChordRenderInfo;
         com::String lastInstrument;
         com::String lastInstrumentSectionName;
-        com::String lastPhraseName;
+        EventInformation::Phrases phrases;
         documentModel::PitchDef lastPitch;
     };
 }

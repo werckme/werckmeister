@@ -295,6 +295,12 @@ namespace compiler
 		}
 	}
 	void SheetEventRenderer::renderPhrase(const documentModel::Event &phraseEvent)
+	{
+		PhraseNames callStack;
+		renderPhraseImpl(phraseEvent, callStack);
+	}
+
+	void SheetEventRenderer::renderPhraseImpl(const documentModel::Event &phraseEvent, PhraseNames &phraseNamesCallStack)
     {
 		bool isTiedEvent = phraseEvent.tiedDurationTotal > 0;
 		bool isInBetweenTiedEvents = isTiedEvent && phraseEvent.tiedDuration != phraseEvent.tiedDurationTotal;
@@ -320,7 +326,19 @@ namespace compiler
             auto copy = event;
             copy.duration = event.duration * (phraseEventLength / phraseInfo.duration);
 			addTagsRecursive(copy, phraseTags);
-            addEvent(copy);
+			if (event.isPhrase())
+			{
+				bool isCyclicRecursion = phraseNamesCallStack.find(event.phraseName()) != phraseNamesCallStack.end();
+				if (isCyclicRecursion)
+				{
+					FM_THROW(Exception, "recursion detected in phrase: " + phraseName);
+				}
+				phraseNamesCallStack.insert(copy.phraseName());
+				renderPhraseImpl(copy, phraseNamesCallStack);
+				phraseNamesCallStack.erase(copy.phraseName());
+			} else {
+            	addEvent(copy);
+			}
         }
 		if (isTiedEvent)
 		{

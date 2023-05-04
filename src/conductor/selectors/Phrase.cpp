@@ -1,5 +1,6 @@
 #include "Phrase.h"
 #include <compiler/context/MidiContext.h>
+#include <algorithm>
 
 namespace conductor
 {
@@ -9,11 +10,9 @@ namespace conductor
 		for (const auto &arg : arguments)
 		{
 			auto eventInformation = _eventInformationServer->find(midiEvent);
-			const auto &phraseName = eventInformation->phraseName;
-			if (phraseName.empty()) {
-				continue;
-			}
-			if (arg.name == phraseName)
+			const auto &phrases = eventInformation->phrases;
+			bool containsPhrase = std::find(phrases.begin(), phrases.end(), arg.name) != phrases.end();
+			if (containsPhrase)
 			{
 				return true;
 			}

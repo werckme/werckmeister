@@ -8,6 +8,7 @@
 #include "ICompilerVisitor.h"
 #include <list>
 #include "IDefinitionsServer.h"
+#include <set>
 
 namespace compiler
 {
@@ -32,9 +33,11 @@ namespace compiler
         void onWarning(const com::String &message, const documentModel::Event &event);
 
     private:
+        typedef std::set<com::String> PhraseNames;
         IContextPtr ctx_;
         com::ILoggerPtr logger_;
         ICompilerVisitorPtr compilerVisitor_;
         IDefinitionsServerPtr definitionServer_;
+        void renderPhraseImpl(const documentModel::Event &phraseEvent, PhraseNames &phraseNamesCallStack);
     };
 }
