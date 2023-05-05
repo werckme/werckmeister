@@ -2,7 +2,7 @@
 
 #include <com/common.hpp>
 #include <vector>
-#include "ASheetObject.hpp"
+#include <documentModel/objects/ASheetObjectWithSourceInfo.h>
 
 namespace documentModel
 {

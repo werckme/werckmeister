@@ -32,7 +32,13 @@ namespace compiler
 			ISheetTemplateRendererPtr sheetTemplateRenderer,
 			ICompilerVisitorPtr compilerVisitorPtr,
 			com::ILoggerPtr logger,
-			IPreprocessorPtr preprocessor) : context_(context), sheetEventRenderer_(sheetEventRenderer), sheetTemplateRenderer_(sheetTemplateRenderer), compilerVisitorPtr_(compilerVisitorPtr), logger_(logger), preprocessor_(preprocessor)
+			IPreprocessorPtr preprocessor) : 
+				context_(context), 
+				sheetEventRenderer_(sheetEventRenderer), 
+				sheetTemplateRenderer_(sheetTemplateRenderer), 
+				compilerVisitorPtr_(compilerVisitorPtr), 
+				logger_(logger), 
+				preprocessor_(preprocessor)
 		{
 		}
 		Compiler(const Compiler &) = delete;

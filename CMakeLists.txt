@@ -13,8 +13,8 @@ project(werckmeister)
 # There are two version parser which are depending on that:
 # VSCode Extension, VST Plugin
 SET(WERCKMEISTER_VERSION_MAJOR 1)
-SET(WERCKMEISTER_VERSION_MINOR 2)
-SET(WERCKMEISTER_VERSION_PATCH 1)
+SET(WERCKMEISTER_VERSION_MINOR 3)
+SET(WERCKMEISTER_VERSION_PATCH 0)
 
 # Add this project's cmake/ directory to the module path.
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake")

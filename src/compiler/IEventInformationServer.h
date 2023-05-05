@@ -3,6 +3,7 @@
 #include <memory>
 #include <set>
 #include <vector>
+#include <list>
 #include <documentModel/objects/Event.h>
 #include <documentModel/objects/ChordDef.h>
 
@@ -27,9 +28,11 @@ namespace compiler
     {
         typedef unsigned int Id;
         typedef com::String DocumentId;
+        typedef std::list<com::String> Phrases;
         documentModel::Event::Type eventType = documentModel::Event::Unknown;
         documentModel::Event::Args metaArgs;
         documentModel::Event::Tags tags;
+        Phrases phrases;
         ChordRenderInfoPtr chordRenderInfo;
         Id id = -1;
         DocumentId documentId;

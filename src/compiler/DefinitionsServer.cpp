@@ -3,6 +3,8 @@
 #include <com/tools.h>
 #include <compiler/metaCommands.h>
 #include <compiler/error.hpp>
+#include <numeric>
+#include <compiler/context/IContext.h>
 
 namespace compiler
 {
@@ -22,6 +24,20 @@ namespace compiler
 			}
 			return it;
 		}
+		documentModel::ChordDef fallbackChordDef = []()
+		{
+			using namespace documentModel;
+			using namespace com::degrees;
+			ChordDef def;
+			def.degreeDefs.insert(DegreeDef(I  , 0, false));
+			def.degreeDefs.insert(DegreeDef(II , 2, true));
+			def.degreeDefs.insert(DegreeDef(III, 4, false));
+			def.degreeDefs.insert(DegreeDef(IV , 5, true));
+			def.degreeDefs.insert(DegreeDef(V  , 7, false));
+			def.degreeDefs.insert(DegreeDef(VI , 9, true));
+			def.degreeDefs.insert(DegreeDef(VII, 11, true));
+			return def;
+		}();
 	}
 	documentModel::SheetTemplate *DefinitionsServer::findSheetTemplate(const com::String &sheetTemplateName)
 	{
@@ -41,6 +57,15 @@ namespace compiler
 			prepareTemplateDefinitions();
 		}
 		return *sheetTemplates_;
+	}
+
+	DefinitionsServer::PhraseDefs &DefinitionsServer::phraseDefs()
+	{
+		if (!phraseDefs_)
+		{
+			preparePhraseDefinitions();
+		}
+		return *phraseDefs_;
 	}
 
 	documentModel::SheetTemplate DefinitionsServer::getSheetTemplate(const com::String &name)
@@ -73,7 +98,7 @@ namespace compiler
 		return &(it->second);
 	}
 
-	IDefinitionsServer::ConstPitchDefValueType DefinitionsServer::getAlias(com::String alias)
+	IDefinitionsServer::ConstPitchDefValueType DefinitionsServer::getAlias(const com::String &alias)
 	{
 		documentModel::Document::PitchmapDefs::const_iterator it;
 		it = document_->pitchmapDefs.find(alias);
@@ -83,6 +108,18 @@ namespace compiler
 			return nullptr;
 		}
 		return &(it->second);
+	}
+
+	IDefinitionsServer::ConstPhraseDefValueType DefinitionsServer::getPhrase(const com::String &name)
+	{
+		const PhraseDefs &phraseDef = this->phraseDefs();
+		// find phrase by name
+		PhraseDefs::const_iterator it = _findByName(name, phraseDef);
+		if (it == phraseDef.end())
+		{
+			return ConstPhraseDefValueType();
+		}
+		return it->second;
 	}
 
 	documentModel::PitchDef DefinitionsServer::resolvePitch(const documentModel::PitchDef &pitch)
@@ -133,5 +170,69 @@ namespace compiler
 				throw;
 			}
 		}
+	}
+
+	void DefinitionsServer::preparePhraseDefinitions()
+	{
+		phraseDefs_ = std::make_unique<PhraseDefs>();
+		for (auto &documentConfig : this->document_->sheetDef.documentConfigs)
+		{
+			if (documentConfig.type != documentModel::DocumentConfig::TypePhraseDef) 
+			{
+				continue;
+			}
+			try
+			{
+				PhraseInfo info;
+				info.events = &documentConfig.events;
+				for(const auto &event : *info.events) 
+				{
+					info.duration += event.duration;
+				}
+				phraseDefs_->emplace(std::make_pair(documentConfig.name, info));	
+			}
+			catch (const com::Exception &ex)
+			{
+				ex << compiler::ex_sheet_source_info(documentConfig);
+				throw;
+			}
+		}
+	}
+
+	void DefinitionsServer::degreeToAbsoluteNote(IContextPtr ctx, const Event &chordEvent, const Event &degreeEvent, Event &outTarget, bool throwIfChordNotFound)
+	{
+		outTarget = degreeEvent;
+		if (degreeEvent.type == Event::Group)
+		{
+			outTarget.type = Event::Group;
+			size_t index = 0;
+			for (const auto &groupedDegreeEvent : degreeEvent.eventGroup)
+			{
+				degreeToAbsoluteNote(ctx, chordEvent, groupedDegreeEvent, outTarget.eventGroup[index++]);
+			}
+			return;
+		}
+		if (!degreeEvent.isRelativeDegree())
+		{
+			return;
+		}
+		auto chordDef = getChord(chordEvent.chordDefName());
+		if (chordDef == nullptr)
+		{
+			if (throwIfChordNotFound)
+			{
+				FM_THROW(Exception, "chord not found: " + chordEvent.stringValue);
+			}
+			else
+			{
+				chordDef = &fallbackChordDef;
+			}
+		}
+		auto voicingStratgy = ctx->currentVoicingStrategy();
+		auto pitches = voicingStratgy->get(chordEvent, *chordDef, degreeEvent.pitches, ctx->getTimeInfo());
+		compilerVisitor_->visitDegree(chordEvent, *chordDef, degreeEvent);
+		outTarget.type = Event::Note;
+		outTarget.isTied(degreeEvent.isTied());
+		outTarget.pitches.swap(pitches);
 	}
 }

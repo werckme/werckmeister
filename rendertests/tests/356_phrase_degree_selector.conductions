@@ -1,0 +1,4 @@
+chord(A-) {
+    pitch -= 24;
+    velocity = 127;
+}

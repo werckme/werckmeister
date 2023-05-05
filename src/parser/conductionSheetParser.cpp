@@ -157,7 +157,8 @@ namespace parser
 					(current_pos_.current_pos >> attr(sourceId_) >> SHEET_CONDUCTOR_SEL__WITHTAG >> attr(SHEET_CONDUCTOR_SEL__WITHTAG) >> "(" >> +stringArgument_ >> ")") |
 					(current_pos_.current_pos >> attr(sourceId_) >> SHEET_CONDUCTOR_SEL__DEGREE >> attr(SHEET_CONDUCTOR_SEL__DEGREE) >> "(" >> +degreeArgument_ >> ")") |
 					(current_pos_.current_pos >> attr(sourceId_) >> SHEET_CONDUCTOR_SEL__OCTAVE >> attr(SHEET_CONDUCTOR_SEL__OCTAVE) >> "(" >> +numberArgument_ >> ")") |
-					(current_pos_.current_pos >> attr(sourceId_) >> SHEET_CONDUCTOR_SEL__CHORD >> attr(SHEET_CONDUCTOR_SEL__CHORD) >> "(" >> +chordNameArgument_ >> ")");
+					(current_pos_.current_pos >> attr(sourceId_) >> SHEET_CONDUCTOR_SEL__CHORD >> attr(SHEET_CONDUCTOR_SEL__CHORD) >> "(" >> +chordNameArgument_ >> ")") |
+					(current_pos_.current_pos >> attr(sourceId_) >> SHEET_CONDUCTOR_SEL__PHRASE >> attr(SHEET_CONDUCTOR_SEL__PHRASE) >> "(" >> +stringArgument_ >> ")");
 				
 				selectors_ = +selector_;
 				selectorsSet_ = selectors_ >> *("," >> selectors_);

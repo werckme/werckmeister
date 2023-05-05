@@ -18,6 +18,7 @@
 #include "ISheetTemplateRenderer.h"
 #include "ASheetEventRenderer.h"
 #include "ICompilerVisitor.h"
+#include "IDefinitionsServer.h"
 
 namespace compiler
 {
@@ -25,7 +26,7 @@ namespace compiler
     class SheetTemplateRenderer : public ISheetTemplateRenderer
     {
     public:
-        SheetTemplateRenderer(IContextPtr ctx, ASheetEventRendererPtr renderer, ICompilerVisitorPtr compilerVisitor);
+        SheetTemplateRenderer(IContextPtr ctx, ASheetEventRendererPtr renderer, ICompilerVisitorPtr compilerVisitor, IDefinitionsServerPtr definitionsServer);
         virtual ~SheetTemplateRenderer();
         void render(documentModel::Track *sheetTrack);
         IContextPtr context() const { return this->_ctx; }
@@ -39,5 +40,6 @@ namespace compiler
         IContextPtr _ctx;
         Container2ContextElementId _contextElementIdMap;
         ICompilerVisitorPtr _compilerVisitor;
+        IDefinitionsServerPtr definitionsServer_;
     };
 }

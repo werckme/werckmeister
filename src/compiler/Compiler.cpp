@@ -21,6 +21,10 @@ namespace compiler
 			std::list<documentModel::DocumentConfig> priorisedDocumentConfigs;
 			for (auto &conf : document->sheetDef.documentConfigs)
 			{
+				if (conf.type != documentModel::DocumentConfig::TypeConfigDef) 
+				{
+					continue;
+				}
 				if (conf.name == SHEET_META__SET_DEVICE)
 				{ // device commands first
 					priorisedDocumentConfigs.push_front(conf);
@@ -30,14 +34,14 @@ namespace compiler
 			}
 			std::vector<documentModel::DocumentConfig> configs(priorisedDocumentConfigs.begin(), priorisedDocumentConfigs.end());
 			sheetEventRenderer()->handleMetaEvents(configs,
-												   [](const auto &x)
-												   {
-													   documentModel::Event metaEvent;
-													   metaEvent.type = documentModel::Event::Meta;
-													   metaEvent.stringValue = x.name;
-													   metaEvent.metaArgs = x.args;
-													   return metaEvent;
-												   });
+			[](const auto &x)
+			{
+				documentModel::Event metaEvent;
+				metaEvent.type = documentModel::Event::Meta;
+				metaEvent.stringValue = x.name;
+				metaEvent.metaArgs = x.args;
+				return metaEvent;
+			});
 		}
 		catch (com::Exception &ex)
 		{

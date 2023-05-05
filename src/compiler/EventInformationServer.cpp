@@ -23,6 +23,7 @@ namespace compiler
 		ChordRenderInfoPtr chordRenderInfo; 
 		const com::String *instrumentName; 
 		const com::String *instrumentSectionName;
+		const EventInformation::Phrases *phrases;
 		com::Expression expression;
 		com::Ticks barPositionQuarters = -1;
 		documentModel::PitchDef pitchDef;
@@ -105,6 +106,7 @@ namespace compiler
 		ei.sourcePositionEnd = documentEvent.sourcePositionEnd;
 		ei.sourceId = documentEvent.sourceId;
 		ei.pitchAlias = additonalEventInfos.pitchDef != NoPitchDef ? additonalEventInfos.pitchDef.alias : "";
+		ei.phrases = *additonalEventInfos.phrases;
 		events.insert(ei);
 	}
 	void EventInformationDb::update(const EventInformation& evinf, const documentModel::Event& documentEvent, const com::midi::Event& midiEvent, const AdditionalEventInfos& additonalEventInfos)
@@ -118,6 +120,7 @@ namespace compiler
 		copy.instrumentName = *additonalEventInfos.instrumentName;
 		copy.instrumentSectionName = *additonalEventInfos.instrumentSectionName;
 		copy.expression = additonalEventInfos.expression;
+		copy.phrases = *additonalEventInfos.phrases;
 		auto it = events.find(copy.id);
 		events.replace(it, copy);
 	}
@@ -221,6 +224,7 @@ namespace compiler
 		additionalEventInfos.instrumentSectionName = &lastInstrumentSectionName;
 		additionalEventInfos.barPositionQuarters = contextMeta ? contextMeta->barPosition / com::PPQ : -1;
 		additionalEventInfos.pitchDef = lastPitch;
+		additionalEventInfos.phrases = &phrases;
 		eventDb->upsert(*lastDocumentEvent, ev, additionalEventInfos);
 	}
 
@@ -266,5 +270,15 @@ namespace compiler
 	void EventInformationServer::endDegreeRendering()
 	{
 		this->lastChordRenderInfo.reset();
+	}
+
+	void EventInformationServer::beginRenderPhrase(const com::String& phraseName)
+	{
+		phrases.push_front(phraseName);
+	}
+
+    void EventInformationServer::endRenderPhrase(const com::String& phraseName)
+	{
+		phrases.pop_front();
 	}
 }

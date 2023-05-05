@@ -1,0 +1,9 @@
+phrase(myPhrase)
+{
+    pitch -= 12;
+}
+
+phrase(myPhrase3)
+{
+    velocity = 30%;
+}

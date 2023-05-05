@@ -30,6 +30,14 @@ namespace compiler
 			{
 				return repeat.type == Event::Repeat ? Event::Degree : Event::TiedDegree;
 			}
+			if(lastNoRepeat.isPhrase()) 
+			{
+				return repeat.type == Event::Repeat ? Event::Phrase : Event::TiedPhrase;
+			}
+			if(lastNoRepeat.isGroup()) 
+			{
+				return Event::Group;
+			}
 			return repeat.type == Event::Repeat ? Event::Note : Event::TiedNote;
 		}
 
@@ -62,7 +70,18 @@ namespace compiler
 				{
 					FM_THROW(Exception, "no prevoius event for repeat symbol: '&'");
 				}
-				ev.pitches = processData.lastNoRepeat.pitches;
+				if (processData.lastNoRepeat.isGroup())
+				{
+					ev.eventGroup = processData.lastNoRepeat.eventGroup;
+				}
+				else if (processData.lastNoRepeat.isPhrase())
+				{
+					ev.stringValue = processData.lastNoRepeat.stringValue;
+				}
+				else 
+				{
+					ev.pitches = processData.lastNoRepeat.pitches;
+				}
 				ev.type = resolveRepeatType(processData.lastNoRepeat, ev);
 			}
 			if (ev.duration == 0)
@@ -100,7 +119,7 @@ namespace compiler
 				}
 				totalDurations.push_back(&event);
 				event.tiedDuration = startEvent.tiedDurationTotal;
-				if (!event.isTied())
+				if (!event.isTied() && event.type != Event::EOB)
 				{
 					break;
 				}
@@ -217,6 +236,36 @@ namespace compiler
 		voice->events.push_back(eob); // then modify source container
 	}
 
+	void Preprocessor::preprocessPhraseDefs(documentModel::DocumentConfig::Events &events)
+	{
+		documentModel::Track track;
+		documentModel::Voice voice;
+		if (events.empty()) 
+		{
+			return;
+		}
+		for(const auto &event : events)
+		{
+			try 
+			{
+				if (event.type == documentModel::Event::EOB)
+				{
+					FM_THROW(Exception, "bars are not allowed in a phrase");
+				}
+			}
+			catch (const com::Exception &ex)
+			{
+				ex << compiler::ex_sheet_source_info(event);
+				throw;
+			}
+		}
+		voice.events.swap(events);
+		track.voices.emplace_back(voice);
+		process(track);
+		events.swap(track.voices[0].events);
+		events.erase(events.end() - 1); // remove last eob
+	}
+
 	void Preprocessor::preprocess(documentModel::DocumentPtr document)
 	{
 
@@ -238,6 +287,15 @@ namespace compiler
 				preprocessChordTrack(track);
 			}
 		}
+		for (auto &documentConfig : document->sheetDef.documentConfigs)
+		{
+			if (documentConfig.type != documentModel::DocumentConfig::TypePhraseDef) 
+			{
+				continue;
+			}
+			preprocessPhraseDefs(documentConfig.events);
+		}
 	}
+
 
 }

@@ -54,5 +54,6 @@ namespace compiler
         PitchDefSet startedEvents;
         double volume = 100;
         double pan = 50;
+        documentModel::Event chordEvent;
     };
 }

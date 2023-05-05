@@ -34,6 +34,7 @@ namespace compiler
 		Preprocessor &operator=(const Preprocessor &) = delete;
 		virtual void process(documentModel::Track &track);
 		virtual void preprocessChordTrack(documentModel::Track &sheetTrack);
+		virtual void preprocessPhraseDefs(documentModel::DocumentConfig::Events &events);
 		virtual void preprocess(documentModel::DocumentPtr document);
 		virtual ~Preprocessor() = default;
 	};

@@ -9,11 +9,24 @@
 #include <compiler/Warning.hpp>
 #include "IEventLogger.h"
 #include <compiler/Instrument.h>
+#include <list>
 
 namespace compiler
 {
 	namespace
 	{
+		void addTagsRecursive(documentModel::Event &event, std::list<com::String>& tags)
+		{
+			event.tags.insert(tags.begin(), tags.end());
+			std::list<com::String> tagsCopy = tags;
+			tags.insert(tags.begin(), event.tags.begin(), event.tags.end());
+			for (auto &groupedEvent : event.eventGroup)
+			{
+				addTagsRecursive(groupedEvent, tags);
+			}
+			tags.swap(tagsCopy);
+		}
+
 		using namespace documentModel;
 		template <int EventType>
 		bool renderEvent(SheetEventRenderer *renderer, const Event *ev)
@@ -31,6 +44,7 @@ namespace compiler
 		template <>
 		bool renderEvent<Event::Degree>(SheetEventRenderer *renderer, const Event *ev)
 		{
+			renderer->renderDegree(*ev);
 			return true;
 		}
 
@@ -81,6 +95,18 @@ namespace compiler
 		bool renderEvent<Event::Meta>(SheetEventRenderer *renderer, const Event *ev)
 		{
 			renderer->handleMetaEvent(*ev);
+			return true;
+		}
+		template <>
+		bool renderEvent<Event::Phrase>(SheetEventRenderer *renderer, const Event *ev)
+		{
+			renderer->renderPhrase(*ev);
+			return true;
+		}
+		template <>
+		bool renderEvent<Event::TiedPhrase>(SheetEventRenderer *renderer, const Event *ev)
+		{
+			renderer->renderPhrase(*ev);
 			return true;
 		}
 		//////////////////////////////////////////////////
@@ -134,7 +160,7 @@ namespace compiler
 
 	std::shared_ptr<ASheetEventRenderer> SheetEventRenderer::createNewSheetEventRenderer(IContextPtr ctx)
 	{
-		return std::make_shared<SheetEventRenderer>(ctx, compilerVisitor_, logger_);
+		return std::make_shared<SheetEventRenderer>(ctx, compilerVisitor_, logger_, definitionServer_);
 	}
 
 	void SheetEventRenderer::addEvent(const Event &ev)
@@ -267,5 +293,65 @@ namespace compiler
 		{
 			FM_THROW(Exception, "failed to process \"" + commandName + "\"");
 		}
+	}
+	void SheetEventRenderer::renderPhrase(const documentModel::Event &phraseEvent)
+	{
+		PhraseNames callStack;
+		renderPhraseImpl(phraseEvent, callStack);
+	}
+
+	void SheetEventRenderer::renderPhraseImpl(const documentModel::Event &phraseEvent, PhraseNames &phraseNamesCallStack)
+    {
+		bool isTiedEvent = phraseEvent.tiedDurationTotal > 0;
+		bool isInBetweenTiedEvents = isTiedEvent && phraseEvent.tiedDuration != phraseEvent.tiedDurationTotal;
+		if (isInBetweenTiedEvents)
+		{
+			ctx_->seek(phraseEvent.duration);
+			return;
+		}
+        auto phraseName = phraseEvent.phraseName();
+		compilerVisitor_->beginRenderPhrase(phraseName);
+        logger_->babble(WMLogLambda(log << "render phrase '" << phraseName << "'"));
+        auto phraseInfo = definitionServer_->getPhrase(phraseName);
+        if(phraseInfo.events == nullptr)
+        {
+            FM_THROW(Exception, "phrase not found: " + phraseName);
+        }
+        const auto &phraseEvents = *phraseInfo.events;
+        logger_->babble(WMLogLambda(log << "phrase found: " << phraseEvents.size() << " events"));
+		com::Ticks phraseEventLength = isTiedEvent ? phraseEvent.tiedDurationTotal : phraseEvent.duration;
+        std::list<com::String> phraseTags(phraseEvent.tags.begin(), phraseEvent.tags.end());
+		for(const auto &event : phraseEvents)
+        {
+            auto copy = event;
+            copy.duration = event.duration * (phraseEventLength / phraseInfo.duration);
+			addTagsRecursive(copy, phraseTags);
+			if (event.isPhrase())
+			{
+				bool isCyclicRecursion = phraseNamesCallStack.find(event.phraseName()) != phraseNamesCallStack.end();
+				if (isCyclicRecursion)
+				{
+					FM_THROW(Exception, "recursion detected in phrase: " + phraseName);
+				}
+				phraseNamesCallStack.insert(copy.phraseName());
+				renderPhraseImpl(copy, phraseNamesCallStack);
+				phraseNamesCallStack.erase(copy.phraseName());
+			} else {
+            	addEvent(copy);
+			}
+        }
+		if (isTiedEvent)
+		{
+			ctx_->seek(-(phraseEventLength - phraseEvent.duration));
+		}
+		compilerVisitor_->endRenderPhrase(phraseName);
+    }
+	void SheetEventRenderer::renderDegree(const documentModel::Event &degreeEvent)
+	{
+		auto chordEvent = ctx_->currentChordEvent();
+		bool isFallbackChord = !chordEvent.tags.empty() && (*chordEvent.tags.begin() == "fallback"); 
+		documentModel::Event absolutePitch;
+		definitionServer_->degreeToAbsoluteNote(ctx_, chordEvent, degreeEvent, absolutePitch, !isFallbackChord);
+		addEvent(absolutePitch);
 	}
 }

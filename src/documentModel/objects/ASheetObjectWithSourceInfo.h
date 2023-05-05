@@ -21,5 +21,11 @@ namespace documentModel
 		 */
 		unsigned int sourcePositionBegin = UndefinedPosition;
 		unsigned int sourcePositionEnd = UndefinedPosition;
+		void copySourceInfo(ASheetObjectWithSourceInfo &dst) const
+		{
+			dst.sourcePositionBegin = sourcePositionBegin;
+			dst.sourcePositionEnd = sourcePositionEnd;
+			dst.sourceId = sourceId;
+		}
 	};
 }

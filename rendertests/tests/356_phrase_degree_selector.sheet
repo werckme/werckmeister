@@ -1,0 +1,21 @@
+
+using "./chords/default.chords";
+using "./356_phrase_degree_selector.conductions";
+
+device: _usePort=17 _setName=MyDevice  _isType=midi;
+instrumentDef: _setName=piano _onDevice=MyDevice _ch=0 _pc=1 _cc=8;
+
+tempo: 150;
+
+myPhrase = I III V;
+
+[
+instrument: piano;
+{
+    /chord: "A-"/
+    >"myPhrase"1 |
+    /chord: "C"/
+    >"myPhrase"1 |
+    (I III V)2 & |
+}
+]

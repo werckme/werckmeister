@@ -4,9 +4,12 @@
 #include "ASheetEventRenderer.h"
 #include <compiler/context/IContext.h>
 #include <memory>
+#include <vector>
+
 namespace documentModel
 {
 	struct Track;
+	struct Event;
 }
 namespace compiler
 {
