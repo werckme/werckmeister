@@ -329,6 +329,10 @@ namespace compiler
 											   { return ev->type == Event::Chord; });
 			for (const Event *chord : chords)
 			{
+				if (chord->type == Event::Chord) 
+				{
+					ctx->currentChordEvent(*chord);
+				}
 				using namespace com;
 				if (chord->type == Event::Rest && numberOfChords == 0)
 				{

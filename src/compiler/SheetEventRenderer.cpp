@@ -88,6 +88,7 @@ namespace compiler
 		bool renderEvent<Event::Chord>(SheetEventRenderer *renderer, const Event *chordEv)
 		{
 			auto ctx = renderer->context();
+			ctx->currentChordEvent(*chordEv);
 			ctx->seek(chordEv->duration);
 			return true;
 		}
