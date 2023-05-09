@@ -296,6 +296,8 @@ have a relative pitch degree and a duration. In combination with a chord, degree
 I II III IV V VI VII
 ```
 
+> If you want to use degree events, you can do that either by using [accompaniment tracks](#accomp-my-melodies) or [setting a chord context](#setchord) to the current voice.
+
 ### Chord Events
 Events which are related to a name. They also store the information which interval is used for a degree. These informations are stored in a [chord definition file](#chords).
 ```language=Werckmeister,type=mute
@@ -879,6 +881,61 @@ type: accomp;
 ```
 
 ## Advanced techniques
+
+## Phrases
+A phrase is a sequence of events, you can use arbitary in your piece. 
+
+**Define a phrase**
+```
+PHRASE_NAME = PHRASE_EVENTS;
+```
+
+**Use a phrase**
+```
+>"PHRASE_NAME"DURATION_VALUE
+```
+
+```language=Werckmeister,type=full
+device: MyDevice _isType=webPlayer _useFont="FluidR3-GM"; 
+instrumentDef: piano _onDevice=MyDevice _ch=0 _pc=1 _cc=8;
+
+tempo: 80;
+
+myPhrase = c d e f; -- define a phrase
+
+[
+instrument: piano;
+{
+    >"myPhrase"1 | -- use the phrase
+    >"myPhrase"2. >"myPhrase"4 | -- with different durations
+    >"myPhrase"1~ | >"myPhrase"1 -- use ties to perform a phrase over several bars
+}
+]
+```
+
+**Using phrases with degree events**
+
+```language=Werckmeister,type=full
+using "/chords/default.chords";
+device: MyDevice _isType=webPlayer _useFont="FluidR3-GM"; 
+instrumentDef: piano _onDevice=MyDevice _ch=0 _pc=1 _cc=8;
+
+tempo: 80;
+
+myPhrase = I III V I';
+
+[
+instrument: piano;
+{
+    /chord: "C"/
+    >"myPhrase"1 |
+    /chord: "D-"/
+    >"myPhrase"2. >"myPhrase"4 |
+    /chord: "E-"/
+    >"myPhrase"1~ | >"myPhrase"1 
+}
+]
+```
 
 ## Mods
 If you want do write your own modification you need to:
@@ -1526,6 +1583,35 @@ set the pan of the current track
  `/pan: 50/`
 <br><br><br>
 
+### `setChord`
+
+#### parameters
+| name | position | description | type |
+|:--- |:--- |:--- |:--- |
+| name | - | the chord name | text |
+
+Sets a chord context to the current voice to be able to use relative [degrees](#degree-events) instead of absolute notes.
+
+    The given chord name must be defined in a *.chords file.
+
+ #### example
+
+ ```language=Werckmeister,type=full
+
+ using "/chords/default.chords";
+ device: myDevice midi _usePort=0;
+ instrumentDef: piano  myDevice _ch=0 _pc=0;
+ tempo: 120;
+ [
+ instrument: piano;
+ {
+     /chord: "C-9"/
+     I III V VII | II'1 
+ }
+ ]
+ ```
+<br><br><br>
+
 ### `signature`
 
 #### parameters
@@ -2114,6 +2200,22 @@ Selects a MIDI event which was created during rendering a specific chord.
 
  ```
  chord(X7) {...}
+ ```
+<br><br><br>
+
+### `degree`
+
+#### parameters
+| name | position | description | type |
+|:--- |:--- |:--- |:--- |
+| name | - | name(s) of a phrase | text+ |
+
+Selects a MIDI event which was created during rendering a phrase.
+
+ ```
+
+ phrase(myPhrase1 myPhrase2) {...}
+
  ```
 <br><br><br>
 
