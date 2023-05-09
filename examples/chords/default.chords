@@ -70,8 +70,3 @@ Xsharp13:   I=0    (II=2)   III=4     (IV=5)   (V=7)    VI=10    (VII=11)
 Xmin13:     I=0    (II=2)   III=3     (IV=5)    V=7     VI=9      VII=10
 X-13:       I=0    (II=2)   III=3     (IV=5)    V=7     VI=9      VII=10
 Xmaj13:     I=0    (II=2)   III=4     (IV=5)    V=7     VI=9      VII=11
-------------------------------------------------------------------
-XminScale:     I=0     II=2     III=3     IV=5     V=7     VI=8      VII=10
-XmajScale:     I=0     II=2     III=4     IV=5     V=7     VI=9      VII=11
-XPhrygianScale:  I=0     II=2     III=4     IV=5     V=7     VI=9      VII=10
-XYScale:  I=0     II=2     III=4     IV=5     V=7     VI=8      VII=10
