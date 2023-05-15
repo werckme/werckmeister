@@ -21,7 +21,7 @@ namespace compiler
         virtual ~LuaVoicingStrategy() = default;
         virtual bool canExecute() const override;
         virtual void assertCanExecute() const override;
-        virtual Pitches get(const documentModel::Event &chord, const documentModel::ChordDef &def, const Degrees &degreeIntervals, const TimeInfo &) override;
+        virtual Pitches solve(const documentModel::Event &chord, const documentModel::ChordDef &def, const Pitches &degreePitches, const TimeInfo &) override;
         virtual ParametersByNames &getParameters() override;
 
     protected:

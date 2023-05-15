@@ -57,12 +57,12 @@ namespace compiler
 		});
 	}
 
-	SimpleGuitar::Pitches SimpleGuitar::get(const documentModel::Event &chord, const documentModel::ChordDef &def, const Degrees &degreeIntervals, const TimeInfo &timeInfo)
+	SimpleGuitar::Pitches SimpleGuitar::solve(const documentModel::Event &chord, const documentModel::ChordDef &def, const Pitches &degreePitches, const TimeInfo &timeInfo)
 	{
 
-		if (degreeIntervals.size() < 3)
+		if (degreePitches.size() < 3)
 		{
-			return Base::get(chord, def, degreeIntervals, timeInfo);
+			return Base::solve(chord, def, degreePitches, timeInfo);
 		}
 		bool lowerRange = parameters[argumentNames.SimpleGuitarVoicingStrategy.Range].value<com::String>() == "lowerRange";
 		Pitches result;
@@ -75,7 +75,7 @@ namespace compiler
 		{
 			transpose = -1;
 		}
-		for (const auto &degree : degreeIntervals)
+		for (const auto &degree : degreePitches)
 		{
 			auto interval = def.resolveDegreeDef(degree);
 			if (!interval.valid())

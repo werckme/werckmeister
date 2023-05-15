@@ -199,16 +199,21 @@ namespace compiler
 		}
 	}
 
-	void DefinitionsServer::degreeToAbsoluteNote(IContextPtr ctx, const Event &chordEvent, const Event &degreeEvent, Event &outTarget, bool throwIfChordNotFound)
+	void DefinitionsServer::degreeToAbsoluteNote(IContextPtr ctx, const Event &chordEvent, const Event &degreeEvent, Event &outEvent, bool throwIfChordNotFound)
 	{
-		outTarget = degreeEvent;
+		VoicingStrategies strategies({ ctx->currentVoicingStrategy() });
+		degreeToAbsoluteNote(strategies, ctx->getTimeInfo(), chordEvent, degreeEvent, outEvent, throwIfChordNotFound, true);
+	}
+	void DefinitionsServer::degreeToAbsoluteNote(const VoicingStrategies &voicingStrategies, const TimeInfo &timeInfo, const Event &chordEvent, const Event &degreeEvent, Event &outEvent, bool throwIfChordNotFound, bool visit)
+	{
+		outEvent = degreeEvent;
 		if (degreeEvent.type == Event::Group)
 		{
-			outTarget.type = Event::Group;
+			outEvent.type = Event::Group;
 			size_t index = 0;
 			for (const auto &groupedDegreeEvent : degreeEvent.eventGroup)
 			{
-				degreeToAbsoluteNote(ctx, chordEvent, groupedDegreeEvent, outTarget.eventGroup[index++]);
+				degreeToAbsoluteNote(voicingStrategies, timeInfo, chordEvent, groupedDegreeEvent, outEvent.eventGroup[index++]);
 			}
 			return;
 		}
@@ -228,11 +233,15 @@ namespace compiler
 				chordDef = &fallbackChordDef;
 			}
 		}
-		auto voicingStratgy = ctx->currentVoicingStrategy();
-		auto pitches = voicingStratgy->get(chordEvent, *chordDef, degreeEvent.pitches, ctx->getTimeInfo());
-		compilerVisitor_->visitDegree(chordEvent, *chordDef, degreeEvent);
-		outTarget.type = Event::Note;
-		outTarget.isTied(degreeEvent.isTied());
-		outTarget.pitches.swap(pitches);
+		auto voicingStratgy = *(voicingStrategies.begin()); // TODO: iterate all
+		auto pitches = voicingStratgy->solve(chordEvent, *chordDef, degreeEvent.pitches, timeInfo);
+		if (visit) 
+		{
+			compilerVisitor_->visitDegree(chordEvent, *chordDef, degreeEvent);
+		}
+		outEvent.type = Event::Note;
+		outEvent.isTied(degreeEvent.isTied());
+		outEvent.pitches.swap(pitches);
 	}
+	
 }

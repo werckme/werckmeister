@@ -141,8 +141,8 @@ namespace compiler
             typedef lua::ALuaObject Base;
             const documentModel::ChordDef *chordDef;
             const documentModel::Event *chordEvent;
-            const LuaVoicingStrategy::Degrees *degrees;
-            LuaPitches(const documentModel::ChordDef *chordDef, const documentModel::Event *chordEvent, const VoicingStrategy::Degrees *degrees)
+            const LuaVoicingStrategy::Pitches *degrees;
+            LuaPitches(const documentModel::ChordDef *chordDef, const documentModel::Event *chordEvent, const VoicingStrategy::Pitches *degrees)
                 : chordDef(chordDef), chordEvent(chordEvent), degrees(degrees)
             {
             }
@@ -282,9 +282,9 @@ namespace compiler
         return result;
     }
 
-    LuaVoicingStrategy::Pitches LuaVoicingStrategy::get(const documentModel::Event &chord,
+    LuaVoicingStrategy::Pitches LuaVoicingStrategy::solve(const documentModel::Event &chord,
                                                         const documentModel::ChordDef &def,
-                                                        const Degrees &degreeIntervals,
+                                                        const Pitches &degreePitches,
                                                         const TimeInfo &t)
     {
         try
@@ -292,7 +292,7 @@ namespace compiler
             lua_getglobal(L, LUA_VOICING_STRATEGY_FENTRY);
             luaChord::LuaChord luaChord(&def, &chord);
             luaChord.push(L);
-            luaPitches::LuaPitches luaPitches(&def, &chord, &degreeIntervals);
+            luaPitches::LuaPitches luaPitches(&def, &chord, &degreePitches);
             luaPitches.push(L);
             pushParameters(L, ALuaWithParameter::parameters);
             lua::LuaTimeInfo(t).push(L);

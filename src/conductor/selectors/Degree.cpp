@@ -4,7 +4,9 @@
 
 namespace 
 {
-	compiler::DirectVoicingStrategy voicingStrategy;
+	compiler::IDefinitionsServer::VoicingStrategies voicingStrategies(
+		{ std::make_shared<compiler::DirectVoicingStrategy>() }
+	);
 }
 
 namespace conductor
@@ -19,7 +21,13 @@ namespace conductor
 				continue;
 			}
 			auto chordInfos = eventInformation->chordRenderInfo;
-			auto absolutePitches = voicingStrategy.get(chordInfos->chordEvent, chordInfos->chordDef, { arg.pitch }, compiler::TimeInfo());
+			documentModel::Event absolutePitch;
+			documentModel::Event degreeEvent;
+			degreeEvent.type = documentModel::Event::Degree;
+			degreeEvent.pitches = { arg.pitch };
+			_definitionsServer->degreeToAbsoluteNote(voicingStrategies, compiler::TimeInfo(), chordInfos->chordEvent, degreeEvent, absolutePitch, true, false);
+
+			auto &absolutePitches = absolutePitch.pitches;
 			if (absolutePitches.empty()) 
 			{
 				continue;
