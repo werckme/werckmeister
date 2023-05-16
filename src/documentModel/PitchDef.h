@@ -26,6 +26,7 @@ namespace documentModel
 			DefaultOctave = 0,
 		};
 		Pitch pitch = NoPitch;
+		Pitch originalDegree = NoPitch;
 		Octave octave = DefaultOctave;
 		com::String alias;
 		bool forceDegree = false;

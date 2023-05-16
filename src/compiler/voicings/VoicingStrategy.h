@@ -16,7 +16,7 @@ namespace compiler
     {
     public:
         typedef documentModel::Event::Pitches Pitches;
-        virtual Pitches solve(const documentModel::Event &chord, const documentModel::ChordDef &def, const Pitches &degreePitches, const TimeInfo &) = 0;
+        virtual Pitches solve(const documentModel::Event &chord, const documentModel::ChordDef &def, const Pitches &absolutePitches, const TimeInfo &) = 0;
         virtual ~VoicingStrategy() = default;
         com::String name() const { return name_; }
         void name(const com::String &name) { name_ = name; }

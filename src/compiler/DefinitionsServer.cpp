@@ -204,6 +204,7 @@ namespace compiler
 		VoicingStrategies strategies({ ctx->currentVoicingStrategy() });
 		degreeToAbsoluteNote(strategies, ctx->getTimeInfo(), chordEvent, degreeEvent, outEvent, throwIfChordNotFound, true);
 	}
+
 	void DefinitionsServer::degreeToAbsoluteNote(const VoicingStrategies &voicingStrategies, const TimeInfo &timeInfo, const Event &chordEvent, const Event &degreeEvent, Event &outEvent, bool throwIfChordNotFound, bool visit)
 	{
 		outEvent = degreeEvent;
@@ -233,15 +234,46 @@ namespace compiler
 				chordDef = &fallbackChordDef;
 			}
 		}
-		auto voicingStratgy = *(voicingStrategies.begin()); // TODO: iterate all
-		auto pitches = voicingStratgy->solve(chordEvent, *chordDef, degreeEvent.pitches, timeInfo);
+		auto absolutePitches = degreeToAbsoluteNoteImpl(chordEvent, *chordDef, degreeEvent.pitches);
+		for(auto voicingStratgy : voicingStrategies)
+		{
+			absolutePitches = voicingStratgy->solve(chordEvent, *chordDef, absolutePitches, timeInfo);
+			for(const auto &pitch : absolutePitches)
+			{
+				if (pitch.originalDegree == documentModel::PitchDef::NoPitch)
+				{
+					FM_THROW(Exception, "voicing strategy: '" + voicingStratgy->name() + "' returns pitch without degree information");
+				}
+			}
+		}
 		if (visit) 
 		{
 			compilerVisitor_->visitDegree(chordEvent, *chordDef, degreeEvent);
 		}
 		outEvent.type = Event::Note;
 		outEvent.isTied(degreeEvent.isTied());
-		outEvent.pitches.swap(pitches);
+		outEvent.pitches.swap(absolutePitches);
 	}
 	
+	VoicingStrategy::Pitches DefinitionsServer::degreeToAbsoluteNoteImpl(const documentModel::Event &chord, const documentModel::ChordDef &def, const VoicingStrategy::Pitches &relativeDegrees)
+	{
+		using namespace documentModel;
+		VoicingStrategy::Pitches result;
+		auto chordElements = chord.chordElements();
+		auto root = std::get<0>(chordElements);
+		PitchDef x;
+		for (const auto &degree : relativeDegrees)
+		{
+			auto interval = def.resolveDegreeDef(degree);
+			if (!interval.valid())
+			{
+				continue;
+			}
+			x.pitch = root + interval.value;
+			x.octave = degree.octave;
+			x.originalDegree = degree.pitch;
+			result.push_back(x);
+		}
+		return result;
+	}
 }

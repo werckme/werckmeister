@@ -1,21 +1,28 @@
 using "./myConfig.config";
 using "./chords/default.chords";
-using "./templates/ennio.template";
-using "./lua/voicings/simple.lua";
-using "./lua/voicings/guitar.lua";
-using "./lua/voicings/voicelead.lua";
-using "./lua/mods/guitarStroke.lua";
-using "./lua/mods/myArpeggio.lua";
-using "./lua/mods/swing.lua";
-using "./lua/mods/staccato.lua";
+using "./luavoicing.lua";
 
+device: MyDevice _isType="midi" _usePort=17;
 instrumentDef: _setName=piano _onDevice=MyDevice _ch=0 _pc=0 _bankMsb=81 _bankLsb=1;
+instrumentConf: piano voicingStrategy luavoicing _range=fuck;
 
 
 tempo: 130;
+ 
 [
+type: template;
+name: X;
 instrument: piano;
 {
-    c d e f | g a b c'
+    I4 III V VII1 | 
+    <I III V VII>1
+}
+]
+
+
+[
+type: accomp;
+{
+    C | C7
 }
 ]
