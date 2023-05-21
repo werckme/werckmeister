@@ -87,24 +87,39 @@ function ChordToHashString(chord)
     return table.concat(bits) .. "/" .. table.concat(slashAppendings)
 end
 
+function ToDegreeToPitchMap(pitches)
+    local deg2pitch = {}
+    for _, pitchDef in ipairs(pitches) do
+        deg2pitch[pitchDef.degree] = pitchDef.pitch
+    end
+    return deg2pitch
+end
 
 function solve(chord, pitches, params, timeinfo)
-    dump(pitches)
+    if #pitches < 3 then
+        return pitches
+    end
     local strDegrees = ChordToHashString(chord)
     local voicing = VoicingMatrix[strDegrees]
+    local deg2pitch = ToDegreeToPitchMap(pitches)
     local result = {}
     local octave = -1
     local lastDegree = -1
-    for idx, degree in pairs(voicing) do
+    for _, degree in ipairs(voicing) do
         if degree <= lastDegree then 
             octave = octave + 1
         end
+        local pitch = deg2pitch[degree]
+        if pitch == nil then
+            goto continue
+        end
         lastDegree = degree
-        table.insert(table, {
+        table.insert(result, {
             degree = degree,
             octave = octave,
-            pitch = 1
+            pitch = pitch
         });
+        ::continue::
     end
     return result
 end
