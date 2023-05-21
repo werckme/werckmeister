@@ -28,15 +28,14 @@
 -- <param name="range" optional="1" type="[contrabass,bass,baritone,tenor,alto,mezzosoprano,soprano]">If given the strategy tries to keeps the range by shifting the octave of the chord.</param>
 
 require "lua/com/com"
-require "solvers/simple"
-require "solvers/asolver"
+require "com"
 
 parameters = {
-    table.unpack(ASolverDefaultParameter)
+    table.unpack(SolverDefaultParameter)
 }
 
-local solver = Simple:new()
-
-function solve(chord, degrees, parameters)
-    return solver:solve(chord, degrees, parameters)
+function solve(chord, pitches, parameters)
+    CheckForLegacyParameters(parameters)
+    KeepRange(pitches, parameters.range)
+    return pitches
 end

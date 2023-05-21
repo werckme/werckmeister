@@ -1,10 +1,10 @@
 using "./myConfig.config";
 using "./chords/default.chords";
-using "./luavoicing.lua";
+using "./lua/voicings/guitar.lua";
 
-device: MyDevice _isType="midi" _usePort=17;
+device: MyDevice _isType="midi" _usePort=1;
 instrumentDef: _setName=piano _onDevice=MyDevice _ch=0 _pc=0 _bankMsb=81 _bankLsb=1;
-instrumentConf: piano voicingStrategy luavoicing _range=fuck;
+instrumentConf: piano voicingStrategy guitar;
 
 
 tempo: 130;
