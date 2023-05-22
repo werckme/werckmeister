@@ -1,5 +1,5 @@
 
-using "./voicings/292voicingstrategy.lua";
+using "./lua/voicings/292voicingstrategy.lua";
 using "./chords/default.chords";
 
 device: MyDevice  midi _usePort=0;

@@ -1,5 +1,5 @@
 using "./chords/default.chords";
-using "./voicings/simple.lua";
+using "./lua/voicings/simple.lua";
 
 device: SC1 midi 5;
 

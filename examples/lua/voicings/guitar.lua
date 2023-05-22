@@ -41,7 +41,7 @@ parameters = {
 VoicingMatrix = {
   --  ["1234567/bass"] = {degrees},
     ["1010100"] = {I, V, I, III, I},            -- base
-    ["1100100"] = {I, V, I, II },               -- sus2
+    ["1100100"] = {I, V, I, II},               -- sus2
     ["1001100"] = {I, V, I, IV, V },            -- sus4
     ["1001101"] = {I, V, VII, IV, V},           -- 7sus4
     ["1101101"] = {I, IV, VII, II, V},          -- 9sus4
@@ -95,7 +95,8 @@ function ToDegreeToPitchMap(pitches)
     return deg2pitch
 end
 
-function solve(chord, pitches, params, timeinfo)
+function solve(chord, pitches, parameters, timeinfo)
+    CheckForLegacyParameters(parameters)
     if #pitches < 3 then
         return pitches
     end
@@ -121,5 +122,6 @@ function solve(chord, pitches, params, timeinfo)
         });
         ::continue::
     end
+    KeepRange(result, parameters.range)
     return result
 end

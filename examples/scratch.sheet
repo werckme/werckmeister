@@ -14,7 +14,6 @@ type: template;
 name: X;
 instrument: piano;
 {
-    I4 III V VII1 | 
     <I III V VII>1
 }
 ]
@@ -23,6 +22,6 @@ instrument: piano;
 [
 type: accomp;
 {
-    C | C7
+    C E7 | F A7 | D7 G7 | C
 }
 ]
