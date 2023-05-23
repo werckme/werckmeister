@@ -7,7 +7,6 @@ device: MyDevice _isType="midi" _usePort=1;
 instrumentDef: _setName=piano _onDevice=MyDevice _ch=0 _pc=0 _bankMsb=81 _bankLsb=1;
 instrumentConf: piano volume 100
     voicingStrategy guitar 
-    voicingStrategy voicelead 
     voicingStrategy simple _range="alto"
 ;
 
