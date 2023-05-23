@@ -43,7 +43,7 @@ namespace compiler
         com::Expression expression = com::expression::FF;
         com::Expression expressionPlayedOnce = com::expression::Default;
         WaitForTieBuffer waitForTieBuffer;
-        VoicingStrategyPtr voicingStrategy = nullptr;
+        VoicingStrategies voicingStrategies;
         virtual ~VoiceMetaData() = default;
         bool pendingTie() const { return !waitForTieBuffer.empty(); }
         AModificationPtr spielanweisung;

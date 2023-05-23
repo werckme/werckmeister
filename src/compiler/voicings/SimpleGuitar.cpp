@@ -57,41 +57,34 @@ namespace compiler
 		});
 	}
 
-	SimpleGuitar::Pitches SimpleGuitar::get(const documentModel::Event &chord, const documentModel::ChordDef &def, const Degrees &degreeIntervals, const TimeInfo &timeInfo)
+	SimpleGuitar::Pitches SimpleGuitar::solve(const documentModel::Event &chord, const documentModel::ChordDef &def, const Pitches &absolutePitches, const TimeInfo &timeInfo)
 	{
 
-		if (degreeIntervals.size() < 3)
+		if (absolutePitches.size() < 3)
 		{
-			return Base::get(chord, def, degreeIntervals, timeInfo);
+			return Base::solve(chord, def, absolutePitches, timeInfo);
 		}
 		bool lowerRange = parameters[argumentNames.SimpleGuitarVoicingStrategy.Range].value<com::String>() == "lowerRange";
 		Pitches result;
 		auto chordElements = chord.chordElements();
 		auto root = std::get<0>(chordElements);
-		documentModel::PitchDef x;
 		auto octaves = createOctaveMap(def);
 		int transpose = 0;
 		if (root > com::notes::D && lowerRange)
 		{
 			transpose = -1;
 		}
-		for (const auto &degree : degreeIntervals)
+		for (const auto &pitchDef : absolutePitches)
 		{
-			auto interval = def.resolveDegreeDef(degree);
-			if (!interval.valid())
-			{
-				continue;
-			}
-			x.pitch = root + (interval.value % 12);
-			auto octaveRange = octaves.equal_range(degree.pitch);
+			auto octaveRange = octaves.equal_range(pitchDef.originalDegree);
 			auto octave = octaveRange.first;
 			for (; octave != octaveRange.second; ++octave)
 			{ // some degrees may be twice (lower I & upper I)
-				x.octave = octave->second + transpose;
-				result.push_back(x);
+				auto copy = pitchDef;
+				copy.octave = octave->second + transpose;
+				result.push_back(copy);
 			}
 		}
-
 		return result;
 	}
 }

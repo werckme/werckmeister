@@ -1,6 +1,6 @@
 
 using "./chords/default.chords";
-using "./voicings/guitar.lua";
+using "./lua/voicings/guitar.lua";
 using "./276_degree_selector_accidentials.conductions";
 
 device: MyDevice  midi _usePort=0;

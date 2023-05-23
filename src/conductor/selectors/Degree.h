@@ -3,6 +3,7 @@
 #include "ISelector.h"
 #include <compiler/IDefinitionsServer.h>
 #include <compiler/IEventInformationServer.h>
+#include <compiler/IDefinitionsServer.h>
 
 namespace conductor
 {
@@ -17,11 +18,15 @@ namespace conductor
     class Degree : public ISelector
     {
     public:
-        Degree(compiler::IEventInformationServerPtr eventInformationServer) : _eventInformationServer(eventInformationServer) {}
+        Degree(compiler::IEventInformationServerPtr eventInformationServer, compiler::IDefinitionsServerPtr definitionsServer) : 
+                _eventInformationServer(eventInformationServer) 
+            ,   _definitionsServer(definitionsServer)
+            {}
         virtual bool isMatch(const documentModel::ConductionSelector::Arguments &, const EventWithMetaInfo &) const override;
         virtual ~Degree() = default;
 
     private:
         compiler::IEventInformationServerPtr _eventInformationServer;
+        compiler::IDefinitionsServerPtr _definitionsServer;
     };
 }

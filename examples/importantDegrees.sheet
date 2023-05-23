@@ -4,20 +4,17 @@ using "./lua/voicings/simple.lua";
 
 instrumentDef: piano   MyDevice 2 0 0;
 
-instrumentConf: piano 
-    voicingStrategy simple _importantDegrees="IV VI";
-
 [
 type: template;
 name: x;
 instrument: piano; 
 {   
     \ff
-    IV2 VI |
+    IV2 !VI |
 }
 {   
     \ff
-    I2 IV,, |
+    I2 !IV,, |
 }
 ]
 

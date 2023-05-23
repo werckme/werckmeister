@@ -1,5 +1,5 @@
 using "./chords/default.chords";
-using "./voicings/voicelead.lua";
+using "./lua/voicings/voicelead.lua";
 using "./templates/piano.bossanova.template";
 using "./templates/piano.disco.template";
 using "./templates/piano.jazz.template";

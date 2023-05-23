@@ -1,18 +1,19 @@
 #include "SetVoicingStrategy.h"
 #include <compiler/context/IContext.h>
 #include <com/werckmeister.hpp>
+#include <algorithm>
 
 namespace compiler
 {
     void SetVoicingStrategy::execute(IContextPtr context)
     {
         auto meta = context->voiceMetaData();
-        bool isAlreadySet = meta->voicingStrategy && meta->voicingStrategy->name() == voicingStrategy->name();
+        bool isAlreadySet = containsVoicingStrategy(meta->voicingStrategies, voicingStrategy->name());
         if (isAlreadySet)
         {
             return;
         }
-        meta->voicingStrategy = this->voicingStrategy;
+        meta->voicingStrategies.push_back(this->voicingStrategy);
     }
 
     void SetVoicingStrategy::setArguments(const Arguments &args)

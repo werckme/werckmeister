@@ -17,7 +17,7 @@ namespace compiler
 		com::String uname;
 		double volume = 100.0;
 		double pan = 50.0;
-		VoicingStrategyPtr voicingStrategy;
+		VoicingStrategies voicingStrategies;
 		typedef std::list<AModificationPtr> Modifications;
 		Modifications modifications;
 		typedef std::unordered_map<com::Expression, double> VelocityOverride;

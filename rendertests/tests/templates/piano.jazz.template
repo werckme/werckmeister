@@ -1,4 +1,4 @@
-using "./voicings/simple.lua";
+using "./lua/voicings/simple.lua";
 
 [
 type: template;

@@ -34,8 +34,8 @@ namespace compiler
 		virtual ConstPhraseDefValueType getPhrase(const com::String &name) override;
 		virtual documentModel::PitchDef resolvePitch(const documentModel::PitchDef &pitch);
 		virtual com::String defaultSheetTemplateName() const { return "?"; }
-		virtual void degreeToAbsoluteNote(IContextPtr context, const Event &chordEvent, const Event &degreeEvent, Event &outTarget, bool throwIfChordNotFound = true) override;
-
+		virtual void degreeToAbsoluteNote(IContextPtr context, const Event &chordEvent, const Event &degreeEvent, Event &outEvent, bool throwIfChordNotFound = true) override;
+		virtual void degreeToAbsoluteNote(const VoicingStrategies &voicingStrategies, const TimeInfo &timeInfo, const Event &chordEvent, const Event &degreeEvent, Event &outEvent, bool throwIfChordNotFound = true, bool visitVisitors = true) override;
 	protected:
 		SheetTemplates &sheetTemplates();
 		PhraseDefs &phraseDefs();
@@ -43,6 +43,7 @@ namespace compiler
 	private:
 		void prepareTemplateDefinitions();
 		void preparePhraseDefinitions();
+		VoicingStrategy::Pitches degreeToAbsoluteNoteImpl(const documentModel::Event &chord, const documentModel::ChordDef &def, const VoicingStrategy::Pitches &absolutePitches);
 		SheetTemplate *findSheetTemplate(const com::String &sheetTemplateName);
 		std::unique_ptr<SheetTemplates> sheetTemplates_;
 		std::unique_ptr<PhraseDefs> phraseDefs_;

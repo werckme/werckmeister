@@ -130,100 +130,67 @@ namespace compiler
         const char *LuaPitchKeyPitch = "pitch";
         const char *LuaPitchKeyOctave = "octave";
         const char *LuaPitchKeyRoot = "root";
-        const char *LuaPitchKeyDegreeValue = "degreeValue";
+        const char *LuaPitchKeyDegreeValue = "degree";
         const char* LuaPitchKeyIsForced = "isForced";
         enum
         {
             NoDegreeValue = INT_MAX
         };
-        struct LuaPitches : lua::ALuaObject
+        struct LuaPitches
         {
             typedef lua::ALuaObject Base;
             const documentModel::ChordDef *chordDef;
             const documentModel::Event *chordEvent;
-            const LuaVoicingStrategy::Degrees *degrees;
-            LuaPitches(const documentModel::ChordDef *chordDef, const documentModel::Event *chordEvent, const VoicingStrategy::Degrees *degrees)
-                : chordDef(chordDef), chordEvent(chordEvent), degrees(degrees)
+            const LuaVoicingStrategy::Pitches *absolutePitches;
+            LuaPitches(const documentModel::ChordDef *chordDef, const documentModel::Event *chordEvent, const VoicingStrategy::Pitches *absolutePitches)
+                : chordDef(chordDef), chordEvent(chordEvent), absolutePitches(absolutePitches)
             {
             }
             void push(lua_State *L);
-            void pushDegrees(lua_State *L);
-            void pushDegrees(lua_State *L, documentModel::PitchDef::Pitch root, int degreeValue, const std::vector<documentModel::PitchDef> &degrees);
-            void pushDegree(lua_State *L, documentModel::PitchDef::Pitch root, int degreeValue, documentModel::PitchDef::Octave octave, bool isForced);
+            void pushPitches(lua_State *L);
+            void pushPitch(lua_State *L, const documentModel::PitchDef &pitchDef);
         };
 
-        void LuaPitches::pushDegree(lua_State *L, documentModel::PitchDef::Pitch root, int degreeValue, documentModel::PitchDef::Octave octave, bool isForced)
+        void LuaPitches::pushPitch(lua_State *L, const documentModel::PitchDef &pitchDef)
         {
-            lua_createtable(L, 2, 0);
+            lua_createtable(L, 3, 0);
             auto top = lua_gettop(L);
             lua_pushstring(L, LuaPitchKeyOctave);
-            lua_pushinteger(L, octave);
+            lua_pushinteger(L, pitchDef.octave);
             lua_settable(L, top);
-            if (degreeValue == NoDegreeValue)
-            {
-                return;
-            }
+
             top = lua_gettop(L);
             lua_pushstring(L, LuaPitchKeyDegreeValue);
-            lua_pushinteger(L, degreeValue);
+            lua_pushinteger(L, pitchDef.originalDegree);
             lua_settable(L, top);
+
             top = lua_gettop(L);
-            lua_pushstring(L, LuaPitchKeyIsForced);
-            lua_pushboolean(L, isForced);
+            lua_pushstring(L, LuaPitchKeyPitch);
+            lua_pushinteger(L, pitchDef.pitch);
             lua_settable(L, top);
         }
 
-        void LuaPitches::pushDegrees(lua_State *L)
+        void LuaPitches::pushPitches(lua_State *L)
         {
             using namespace documentModel;
-            if (degrees->empty())
+            lua_createtable(L, absolutePitches->size(), 0);
+            if (absolutePitches->empty())
             {
                 return;
             }
-            auto chordElements = chordEvent->chordElements();
-            auto root = std::get<0>(chordElements);
-            std::vector<PitchDef> orderedByPitch(degrees->begin(), degrees->end());
-            auto degreeComp = [](const PitchDef &a, const PitchDef &b)
-            { return getDegreeValue(a.pitch) < getDegreeValue(b.pitch); };
-            std::sort(orderedByPitch.begin(), orderedByPitch.end(), degreeComp);
-            auto it = orderedByPitch.begin();
-            while (it < orderedByPitch.end())
+            int index = 0;
+            for(const auto &pitchDef : *absolutePitches)
             {
-                // <I I'> => I=[{I}, {I'}]
-                // II => II=[{II}]
-                auto degreeValue = getDegreeValue(it->pitch);
-                auto grouped = std::equal_range(orderedByPitch.begin(), orderedByPitch.end(), *it, degreeComp);
-                std::vector<PitchDef> degreesRanged(grouped.first, grouped.second);
-                pushDegrees(L, root, degreeValue, degreesRanged);
-                it = grouped.second; // it++
+                auto top = lua_gettop(L);
+                lua_pushinteger(L, ++index);
+                pushPitch(L, pitchDef);
+                lua_settable(L, top);
             }
-        }
-
-        void LuaPitches::pushDegrees(lua_State *L, documentModel::PitchDef::Pitch root, int degreeValue, const std::vector<documentModel::PitchDef> &degrees_)
-        {
-            auto luaStackMainTable = lua_gettop(L);
-            lua_pushinteger(L, degreeValue);
-            lua_createtable(L, degrees_.size(), 0);
-            auto luaStackDegrees = lua_gettop(L);
-            int degreeIndex = 1;
-            for (const auto &degree : degrees_)
-            {
-                auto degreeDef = chordDef->resolveDegreeDef(degree);
-                if (!degreeDef.valid())
-                {
-                    degreeDef.value = NoDegreeValue;
-                }
-                lua_pushinteger(L, degreeIndex++);
-                pushDegree(L, root, degreeDef.value, degree.octave, degree.forceDegree);
-                lua_settable(L, luaStackDegrees);
-            }
-            lua_settable(L, luaStackMainTable);
         }
 
         void LuaPitches::push(lua_State *L)
         {
-            Base::push(L, NULL, 0);
-            pushDegrees(L);
+            pushPitches(L);
         }
     }
 }
@@ -254,9 +221,17 @@ namespace compiler
         lua_gettable(L, -2);
         result.octave = lua_tointeger(L, -1);
         lua_pop(L, 1);
+
         lua_pushstring(L, luaPitches::LuaPitchKeyPitch);
         lua_gettable(L, -2);
         result.pitch = lua_tointeger(L, -1);
+        lua_pop(L, 1);
+        
+        lua_pushstring(L, luaPitches::LuaPitchKeyDegreeValue);
+        lua_gettable(L, -2);
+        if (!lua_isnil(L, -1)) {
+            result.originalDegree = lua_tointeger(L, -1);
+        }
         lua_pop(L, 1);
         return result;
     }
@@ -282,9 +257,9 @@ namespace compiler
         return result;
     }
 
-    LuaVoicingStrategy::Pitches LuaVoicingStrategy::get(const documentModel::Event &chord,
+    LuaVoicingStrategy::Pitches LuaVoicingStrategy::solve(const documentModel::Event &chord,
                                                         const documentModel::ChordDef &def,
-                                                        const Degrees &degreeIntervals,
+                                                        const Pitches &absolutePitches,
                                                         const TimeInfo &t)
     {
         try
@@ -292,7 +267,7 @@ namespace compiler
             lua_getglobal(L, LUA_VOICING_STRATEGY_FENTRY);
             luaChord::LuaChord luaChord(&def, &chord);
             luaChord.push(L);
-            luaPitches::LuaPitches luaPitches(&def, &chord, &degreeIntervals);
+            luaPitches::LuaPitches luaPitches(&def, &chord, &absolutePitches);
             luaPitches.push(L);
             pushParameters(L, ALuaWithParameter::parameters);
             lua::LuaTimeInfo(t).push(L);

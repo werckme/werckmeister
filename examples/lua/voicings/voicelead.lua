@@ -30,14 +30,72 @@
 
 require "lua/com/com"
 require "lua/com/globals"
-require "solvers/voicelead"
+require "com"
 
 parameters = {
-    table.unpack(ASolverDefaultParameter)
+    table.unpack(SolverDefaultParameter)
 }
 
-local solver = VoiceLeadSolver:new()
+local previousResult = nil
 
-function solve(chord, degrees, params)
-    return solver:solve(chord, degrees, params)
+local function GetPitchWithMinDistance(pitch, pitches)
+    local min = math.maxinteger
+    local minPitch = nil
+    local relPitch = pitch.pitch % 12
+    for i, refpitch in pairs(pitches) do
+        local diff = relpitchdiff(refpitch.pitch, relPitch)
+        diff = math.abs(diff)
+        if (diff < min) then
+            minPitch = refpitch
+            min = diff
+        end
+    end
+    return minPitch
+end
+
+-- changes the octave of pitch, so that the interval
+-- between pitch and targetPitch is minimal
+local function ChangeOctaveToPitchNextTo(pitch, targetPitch)
+    if targetPitch == nil then
+        return pitch
+    end
+    local diff = pitch.pitch - targetPitch.pitch
+    pitch.octave = targetPitch.octave
+    if (diff > 6) then
+        pitch.octave = pitch.octave - 1
+    end
+    if (diff < -6) then
+        pitch.octave = pitch.octave + 1
+    end
+    return pitch
+end
+
+
+-- compare pitches with a reference and adjust octaves
+local function AdjustOctaves(pitches, reference)
+    for _, pitch in pairs(pitches) do
+        local min = GetPitchWithMinDistance(pitch, reference)
+        ChangeOctaveToPitchNextTo(pitch, min)
+    end
+    return pitches
+end
+
+local function SolveImpl(pitches)
+    if #pitches < 2
+    then
+        return pitches
+    end
+    if previousResult ~= nil
+    then
+        pitches = AdjustOctaves(pitches, previousResult)
+    end
+    return pitches
+end
+
+function solve(chord, pitches, parameters)
+    CheckForLegacyParameters(parameters)
+    SolveImpl(pitches)
+    KeepRange(pitches, parameters.range)
+    previousResult = pitches
+    return pitches
 end

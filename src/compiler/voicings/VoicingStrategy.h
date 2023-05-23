@@ -8,6 +8,7 @@
 #include <compiler/timeInfo.h>
 #include <com/IRegisterable.h>
 #include <com/AConvertsArgumentsToParameter.h>
+#include <list>
 
 namespace compiler
 {
@@ -15,9 +16,8 @@ namespace compiler
     class VoicingStrategy : public com::IRegisterable, public com::AConvertsArgumentsToParameter
     {
     public:
-        typedef documentModel::Event::Pitches Degrees;
-        typedef Degrees Pitches;
-        virtual Pitches get(const documentModel::Event &chord, const documentModel::ChordDef &def, const Degrees &degreeIntervals, const TimeInfo &) = 0;
+        typedef documentModel::Event::Pitches Pitches;
+        virtual Pitches solve(const documentModel::Event &chord, const documentModel::ChordDef &def, const Pitches &absolutePitches, const TimeInfo &) = 0;
         virtual ~VoicingStrategy() = default;
         com::String name() const { return name_; }
         void name(const com::String &name) { name_ = name; }
@@ -26,4 +26,6 @@ namespace compiler
         com::String name_;
     };
     typedef std::shared_ptr<VoicingStrategy> VoicingStrategyPtr;
+    typedef std::list<VoicingStrategyPtr> VoicingStrategies;
+    bool containsVoicingStrategy(const VoicingStrategies& strategies, com::String strategyName);
 }

@@ -9,11 +9,11 @@ namespace compiler
         {
             return;
         }
-        bool isAlreadySet = getInstrument()->voicingStrategy && getInstrument()->voicingStrategy->name() == voicingStrategy->name();
+        bool isAlreadySet = containsVoicingStrategy(getInstrument()->voicingStrategies, voicingStrategy->name());
         if (isAlreadySet)
         {
             return;
         }
-        getInstrument()->voicingStrategy = this->voicingStrategy;
+        getInstrument()->voicingStrategies.push_back(this->voicingStrategy);
     }
 }
