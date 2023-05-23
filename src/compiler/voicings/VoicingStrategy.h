@@ -8,6 +8,7 @@
 #include <compiler/timeInfo.h>
 #include <com/IRegisterable.h>
 #include <com/AConvertsArgumentsToParameter.h>
+#include <list>
 
 namespace compiler
 {
@@ -25,4 +26,6 @@ namespace compiler
         com::String name_;
     };
     typedef std::shared_ptr<VoicingStrategy> VoicingStrategyPtr;
+    typedef std::list<VoicingStrategyPtr> VoicingStrategies;
+    bool containsVoicingStrategy(const VoicingStrategies& strategies, com::String strategyName);
 }

@@ -34,7 +34,6 @@ namespace compiler
 		typedef const documentModel::ChordDef* ConstChordValueType;
 		typedef const documentModel::PitchDef* ConstPitchDefValueType;
 		typedef PhraseInfo ConstPhraseDefValueType;
-		typedef std::vector<VoicingStrategyPtr> VoicingStrategies;
 		virtual documentModel::SheetTemplate getSheetTemplate(const com::String &name) = 0;
 		virtual ConstChordValueType getChord(const com::String &name) = 0;
 		virtual ConstPitchDefValueType getAlias(const com::String &alias) = 0;

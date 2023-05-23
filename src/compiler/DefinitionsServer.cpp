@@ -201,8 +201,7 @@ namespace compiler
 
 	void DefinitionsServer::degreeToAbsoluteNote(IContextPtr ctx, const Event &chordEvent, const Event &degreeEvent, Event &outEvent, bool throwIfChordNotFound)
 	{
-		VoicingStrategies strategies({ ctx->currentVoicingStrategy() });
-		degreeToAbsoluteNote(strategies, ctx->getTimeInfo(), chordEvent, degreeEvent, outEvent, throwIfChordNotFound, true);
+		degreeToAbsoluteNote(ctx->voicingStrategies(), ctx->getTimeInfo(), chordEvent, degreeEvent, outEvent, throwIfChordNotFound, true);
 	}
 
 	void DefinitionsServer::degreeToAbsoluteNote(const VoicingStrategies &voicingStrategies, const TimeInfo &timeInfo, const Event &chordEvent, const Event &degreeEvent, Event &outEvent, bool throwIfChordNotFound, bool visit)

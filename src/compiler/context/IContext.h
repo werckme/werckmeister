@@ -72,7 +72,7 @@ namespace compiler
 		virtual TrackMetaDataPtr trackMetaData() const = 0;
 		virtual TrackMetaDataPtr trackMetaData(TrackId trackid) const = 0;
 		virtual const SheetTemplates &currentSheetTemplates() = 0;
-		virtual VoicingStrategyPtr currentVoicingStrategy() = 0;
+		virtual const VoicingStrategies& voicingStrategies() = 0;
 		virtual AModificationPtr spielanweisung() = 0;
 		virtual AInstrumentDefPtr getInstrumentDef(const com::String &uname) = 0;
 		virtual AInstrumentDefPtr currentInstrumentDef() = 0;

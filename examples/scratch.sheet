@@ -1,10 +1,16 @@
 using "./myConfig.config";
 using "./chords/default.chords";
 using "./lua/voicings/guitar.lua";
+using "./lua/voicings/voicelead.lua";
+using "./lua/voicings/simple.lua";
 
 device: MyDevice _isType="midi" _usePort=1;
 instrumentDef: _setName=piano _onDevice=MyDevice _ch=0 _pc=0 _bankMsb=81 _bankLsb=1;
-instrumentConf: piano voicingStrategy guitar;
+instrumentConf: piano volume 100
+    voicingStrategy guitar 
+    voicingStrategy voicelead 
+    voicingStrategy simple _range="alto"
+;
 
 
 tempo: 130;
@@ -22,6 +28,6 @@ instrument: piano;
 [
 type: accomp;
 {
-    C E7 | F A7 | D7 G7 | C
+    C E7 | F A7 | D7 G7 | C | E-7 | A- | B F-6 | G |
 }
 ]

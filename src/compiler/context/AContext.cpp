@@ -326,23 +326,24 @@ namespace compiler
 	{
 		currentSheetTemplates_ = sheetTemplate;
 	}
-	VoicingStrategyPtr AContext::currentVoicingStrategy()
+	const VoicingStrategies& AContext::voicingStrategies()
 	{
 		auto meta = voiceMetaData();
 		if (!defaultVoiceStrategy_)
 		{
 			defaultVoiceStrategy_ = com::getWerckmeister().getDefaultVoicingStrategy();
 		}
-		if (meta->voicingStrategy)
+		if (!meta->voicingStrategies.empty())
 		{ // first voice setup
-			return meta->voicingStrategy;
+			return meta->voicingStrategies;
 		}
 		auto currentInstrument = currentInstrumentDef();
-		if (currentInstrument && currentInstrument->voicingStrategy)
+		if (currentInstrument && !currentInstrument->voicingStrategies.empty())
 		{ // then instrument config
-			return currentInstrument->voicingStrategy;
+			return currentInstrument->voicingStrategies;
 		}
-		return defaultVoiceStrategy_;
+		static VoicingStrategies defaultVoiceStrategies({defaultVoiceStrategy_});
+		return defaultVoiceStrategies;
 	}
 
 	const documentModel::Event& AContext::currentChordEvent() const

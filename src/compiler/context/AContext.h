@@ -95,7 +95,7 @@ namespace compiler
 		virtual void warn(const std::string &msg);
 		virtual const SheetTemplates &currentSheetTemplates();
 		virtual void currentSheetTemplate(const SheetTemplates &sheetTemplate);
-		virtual VoicingStrategyPtr currentVoicingStrategy();
+		virtual const VoicingStrategies& voicingStrategies() override;
 		virtual const documentModel::Event& currentChordEvent() const override;
 		virtual void currentChordEvent(const documentModel::Event&);
 		virtual AModificationPtr spielanweisung();

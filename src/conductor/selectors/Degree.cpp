@@ -4,7 +4,7 @@
 
 namespace 
 {
-	compiler::IDefinitionsServer::VoicingStrategies voicingStrategies(
+	compiler::VoicingStrategies voicingStrategies(
 		{ std::make_shared<compiler::DirectVoicingStrategy>() }
 	);
 }

@@ -61,7 +61,6 @@ local function ChangeOctaveToPitchNextTo(pitch, targetPitch)
     end
     local diff = pitch.pitch - targetPitch.pitch
     pitch.octave = targetPitch.octave
-    --print(pitch.pitch, targetPitch.pitch, diff)
     if (diff > 6) then
         pitch.octave = pitch.octave - 1
     end
