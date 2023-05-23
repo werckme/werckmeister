@@ -7,6 +7,7 @@ device: MyDevice _isType="midi" _usePort=1;
 instrumentDef: _setName=piano _onDevice=MyDevice _ch=0 _pc=0 _bankMsb=81 _bankLsb=1;
 instrumentConf: piano volume 100
     voicingStrategy guitar 
+    voicingStrategy voicelead
     voicingStrategy simple _range="alto"
 ;
 
@@ -26,6 +27,6 @@ instrument: piano;
 [
 type: accomp;
 {
-    C E7 | F A7 | D7 G7 | C6 | E-7 | A- | B07 F-6 :(x3)| G7 
+    C E7 | F A7 | D7 G7 | C6 | E-7 | A- | B07 F-6 :(x3)| G7
 }
 ]
