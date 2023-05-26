@@ -9,6 +9,7 @@
 #include <lua/luaHelper.h>
 
 static const char *LUA_EVENT_TYPE_NOTE = "note";
+static const char *LUA_EVENT_TYPE_REST = "rest";
 static const char *LUA_EVENT_TYPE_DEGREE = "degree";
 static const char *LUA_EVENT_TYPE_PITCHBEND = "pitchBend";
 static const char *LUA_EVENT_TYPE_UNKNOWN = "unknown";
@@ -144,6 +145,8 @@ namespace compiler
             return LUA_EVENT_TYPE_DEGREE;
         case Event::PitchBend:
             return LUA_EVENT_TYPE_PITCHBEND;
+        case Event::Rest:
+            return LUA_EVENT_TYPE_REST;
         default:
             return LUA_EVENT_TYPE_UNKNOWN;
         }
@@ -172,18 +175,22 @@ namespace compiler
 
     void LuaModification::popNoteEvent(documentModel::Event &event)
     {
-        lua::getTableValue(L, LUA_EVENT_PROPETRY_VELOCITY, event.velocity);
+        lua::getTableValue(L, LUA_EVENT_PROPETRY_DURATION, event.duration);
         lua::getTableValue(L, LUA_EVENT_PROPETRY_OFFSET, event.offset);
+        event.duration *= com::PPQ;
+        event.offset *= com::PPQ;
+        if (event.type == documentModel::Event::Rest) 
+        {
+            return;
+        }
+        lua::getTableValue(L, LUA_EVENT_PROPETRY_VELOCITY, event.velocity);
         lua::getTableValue(L, LUA_EVENT_PROPETRY_TOAL_TIED_DURATION, event.tiedDurationTotal);
         lua::getTableValue(L, LUA_EVENT_PROPERTY_TIED_DURATION, event.tiedDuration);
-        event.offset *= com::PPQ;
         event.tiedDuration *= com::PPQ;
         event.tiedDurationTotal *= com::PPQ;
-        lua::getTableValue(L, LUA_EVENT_PROPETRY_DURATION, event.duration);
         bool isTied = false;
         lua::getTableValue(L, LUA_EVENT_PROPETRY_TYING, isTied);
         event.isTied(isTied);
-        event.duration *= com::PPQ;
         lua_pushstring(L, LUA_EVENT_PROPETRY_PITCHES);
         lua_gettable(L, -2);
         if (!lua_istable(L, -1))
@@ -260,6 +267,13 @@ namespace compiler
                 Event event;
                 event.type = Event::PitchBend;
                 popPitchBendEvent(event);
+                result.push_back(event);
+            }
+            if (type == LUA_EVENT_TYPE_REST)
+            {
+                Event event;
+                event.type = Event::Rest;
+                popNoteEvent(event);
                 result.push_back(event);
             }
             lua_pop(L, 1);

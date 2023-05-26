@@ -29,7 +29,7 @@ namespace compiler
         com::IHasParameter::ParametersByNames parameters = {
             FM_PARAMETER_DEF(argumentNames.AddMod.Use, 0)};
         virtual ParametersByNames &getParameters() { return this->parameters; }
-        virtual void execute(IContextPtr);
+        virtual void execute(IContextPtr) override;
         virtual void setArguments(const Arguments &args) override;
     protected:
         Arguments modArgs;

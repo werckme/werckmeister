@@ -21,7 +21,7 @@ namespace compiler
         virtual ~LuaModification() = default;
         virtual bool canExecute() const override;
         virtual void assertCanExecute() const override;
-        virtual void perform(IContextPtr ctx, Events &events) override;
+        virtual void perform(IContextPtr ctx, Events &inOutEvents) override;
         virtual ParametersByNames &getParameters() override;
 
     protected:

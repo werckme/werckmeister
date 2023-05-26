@@ -16,6 +16,8 @@ namespace compiler
 	typedef std::shared_ptr<AModification> AModificationPtr;
 	class VoicingStrategy;
 	typedef std::shared_ptr<VoicingStrategy> VoicingStrategyPtr;
+	class LuaEventFunction;
+	typedef std::shared_ptr<LuaEventFunction> LuaEventFunctionPtr;
 }
 namespace lua
 {

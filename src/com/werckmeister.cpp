@@ -16,6 +16,7 @@
 #include "compiler/spielanweisung/Vorschlag.h"
 #include "compiler/spielanweisung/spielanweisungen.h"
 #include "compiler/modification/LuaMod.h"
+#include "compiler/modification/EventFunction.h"
 #include <documentModel/Document.h>
 #include <locale>
 
@@ -24,9 +25,11 @@ namespace com
 	namespace 
 	{
 		typedef std::unordered_map<com::String, compiler::AModificationPtr> ModCache;
+		typedef std::unordered_map<com::String, compiler::LuaEventFunctionPtr> EventFunctionCache;
 		typedef std::unordered_map<com::String, compiler::VoicingStrategyPtr> VoicingStrategyCache;
 		ModCache _modCache;
 		VoicingStrategyCache _voicingStrategyCache;
+		EventFunctionCache _eventFunctionCache;
 
 		template<class TMap>
 		typename TMap::mapped_type _find(TMap &map, const com::String& key)
@@ -50,9 +53,19 @@ namespace com
 			return _find(_modCache, key);
 		}
 
+		compiler::LuaEventFunctionPtr _findEventFunction(const com::String& key)
+		{
+			return _find(_eventFunctionCache, key);
+		}
+
 		void _registerMod(const com::String& key, compiler::AModificationPtr mod)
 		{
 			return _register(_modCache, key, mod);
+		}
+
+		void _registerEventFunction(const com::String& key, compiler::LuaEventFunctionPtr eventFunction)
+		{
+			return _register(_eventFunctionCache, key, eventFunction);
 		}
 
 		compiler::VoicingStrategyPtr _findStrategy(const com::String& key)
@@ -219,10 +232,53 @@ namespace com
 		return result;
 	}
 
+	compiler::LuaEventFunctionPtr Werckmeister::getEventFunction(const com::String& name, const String& uniqueCallerId)
+	{
+		if (uniqueCallerId.empty())
+		{
+			return getEventFunction(name);
+		}
+		auto cacheKey = name + uniqueCallerId;
+		auto eventFunction = _findEventFunction(cacheKey);
+		if (eventFunction != nullptr)
+		{
+			return eventFunction;
+		}
+		eventFunction = getEventFunction(name);
+		_registerEventFunction(cacheKey, eventFunction);
+		return eventFunction;
+	}
+
+	compiler::LuaEventFunctionPtr Werckmeister::getEventFunction(const com::String &name)
+	{
+		const Path *scriptPath = findScriptPathByName(name);
+		if (scriptPath != nullptr)
+		{
+			auto anw = std::make_shared<compiler::LuaEventFunction>(*scriptPath);
+			try
+			{
+				anw->assertCanExecute();
+			}
+			catch (const Exception &ex)
+			{
+				com::StringStream ss;
+				ss << "'" << *scriptPath << "'"
+				   << ": failed to execute script:" << std::endl;
+				ss << "  " << ex.what();
+				FM_THROW(Exception, ss.str());
+			}
+			return anw;
+		}
+
+		auto result = solve<compiler::LuaEventFunction>(name);
+		return result;
+	}
+
 	void Werckmeister::clearCache()
 	{
 		_modCache.clear();
 		_voicingStrategyCache.clear();
+		_eventFunctionCache.clear();
 	}
 
 	void Werckmeister::registerLuaScript(const Path &path)

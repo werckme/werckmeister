@@ -45,6 +45,11 @@ namespace com
 		compiler::AModificationPtr getModification(const String& name);
 		compiler::VoicingStrategyPtr getDefaultVoicingStrategy();
 		/**
+		* @param uniqueCallerId, when called with the same id it returns the same event function
+		*/
+		compiler::LuaEventFunctionPtr getEventFunction(const String &name, const String& uniqueCallerId);
+		compiler::LuaEventFunctionPtr getEventFunction(const String& name);
+		/**
 		* @param uniqueCallerId, when called with the same id it returns the same vocing strategy
 		*/
 		compiler::VoicingStrategyPtr getVoicingStrategy(const String &name, const String& uniqueCallerId);

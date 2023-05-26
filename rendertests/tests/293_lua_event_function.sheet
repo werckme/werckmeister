@@ -1,0 +1,16 @@
+
+using "./293luaEventFunction.lua";
+using "./293_lua_event_function.conductions";
+
+device: MyDevice  midi _usePort=0;
+instrumentDef: piano _ch=0 _onDevice=MyDevice _pc=0;
+instrumentDef: piano2 _ch=1 _onDevice=MyDevice _pc=0;
+instrumentDef: piano3 _ch=2 _onDevice=MyDevice _pc=0;
+
+[
+instrument: piano;
+{
+    /call: 293luaEventFunction/ | g a b c' |
+    /call: 293luaEventFunction _octave=1/ | g' a' b' c'' |
+}
+]
