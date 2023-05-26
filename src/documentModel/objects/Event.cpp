@@ -5,6 +5,7 @@
 #include <unordered_map>
 #include <locale>
 #include <com/exception.hpp>
+#include <compiler/metaCommands.h>
 
 namespace documentModel
 {
@@ -136,5 +137,24 @@ namespace documentModel
 		{
 			type = isAbsoluteNote() ? Note : Degree;
 		}
+	}
+
+	bool Event::isTimeConsuming() const
+	{
+		if (type == Meta && stringValue == SHEET_META__CALL_EVENTFUNCTION)
+		{
+			return true;
+		}
+		return type == Rest 
+			|| type == Note 
+			|| type == Degree 
+			|| type == TiedNote 
+			|| type == Chord 
+			|| type == TiedDegree 
+			|| type == Repeat 
+			|| type == TiedRepeat 
+			|| type == Group
+			|| type == Phrase
+			|| type == TiedPhrase;
 	}
 }

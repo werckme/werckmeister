@@ -39,6 +39,7 @@ SET (SRC_FETZER_LIB
     compiler/modification/AModification.cpp
     compiler/modification/Bend.cpp
     compiler/modification/LuaMod.cpp
+    compiler/modification/EventFunction.cpp
     compiler/voicings/DirectVoicingStrategy.cpp
     compiler/voicings/VoicingStrategy.cpp
     compiler/voicings/SimpleGuitar.cpp
@@ -74,6 +75,7 @@ SET (SRC_FETZER_LIB
     compiler/commands/SetSpielanweisungPlayedOnce.cpp
     compiler/commands/AddMod.cpp
     compiler/commands/AddModPlayedOnce.cpp
+    compiler/commands/ExecuteEventFunction.cpp
     compiler/commands/SetInstrument.cpp
     compiler/commands/SelectMidiSound.cpp
     compiler/commands/AddInstrumentConfig.cpp

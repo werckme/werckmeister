@@ -407,7 +407,8 @@ namespace parser
 						>> attr(DefaultNumberOfBarRepeats)
 						>> +char_("a-zA-Z") 
 						>> ":"
-						>> +(argument_) 
+						>> +(argument_)
+						>> current_pos_.current_pos
 						>> "/"
 					);
 

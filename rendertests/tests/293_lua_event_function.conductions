@@ -1,0 +1,9 @@
+withTag(leise)
+{
+    velocity = 30;
+}
+
+withTag(legato)
+{
+    duration += 50%;
+}

@@ -77,20 +77,7 @@ namespace documentModel
 		double velocity = 0;
 		com::Ticks offset = 0;
 		double pitchBendValue = 0;
-		bool isTimeConsuming() const
-		{
-			return type == Rest 
-				|| type == Note 
-				|| type == Degree 
-				|| type == TiedNote 
-				|| type == Chord 
-				|| type == TiedDegree 
-				|| type == Repeat 
-				|| type == TiedRepeat 
-				|| type == Group
-				|| type == Phrase
-				|| type == TiedPhrase;
-		}
+		bool isTimeConsuming() const;
 
 		bool isRepeat() const
 		{
