@@ -5,6 +5,7 @@
 #include <compiler/error.hpp>
 #include <numeric>
 #include <compiler/context/IContext.h>
+#include <algorithm>
 
 namespace compiler
 {
@@ -236,6 +237,12 @@ namespace compiler
 		auto absolutePitches = degreeToAbsoluteNoteImpl(chordEvent, *chordDef, degreeEvent.pitches);
 		for(auto voicingStratgy : voicingStrategies)
 		{
+			std::sort(absolutePitches.begin(), absolutePitches.end(), [](const auto& a, const auto& b) 
+			{
+				auto absPitchA = a.pitch + (a.octave * com::NotesPerOctave);
+				auto absPitchB = b.pitch + (b.octave * com::NotesPerOctave);
+				return absPitchA < absPitchB;
+			});
 			absolutePitches = voicingStratgy->solve(chordEvent, *chordDef, absolutePitches, timeInfo);
 			for(const auto &pitch : absolutePitches)
 			{

@@ -9,7 +9,7 @@ namespace compiler
         {
             return;
         }
-        bool isAlreadySet = containsVoicingStrategy(getInstrument()->voicingStrategies, voicingStrategy->name());
+        bool isAlreadySet = containsVoicingStrategy(getInstrument()->voicingStrategies, voicingStrategy);
         if (isAlreadySet)
         {
             return;

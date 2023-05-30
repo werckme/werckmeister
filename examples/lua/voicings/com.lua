@@ -12,6 +12,7 @@ PitchRanges = {
 
 NoRangeSet = "__noRangeSet"
 NoImportantDegreesSet = "_noImportantDegreesSet"
+NoNumberSet = "__noNumberSet"
 
 SolverDefaultParameter = {
     -- can be contrabass, bass, baritone, tenor, alto, mezzosoprano, soprano

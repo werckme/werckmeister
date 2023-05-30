@@ -1,0 +1,36 @@
+using "/chords/default.chords";
+using "../../examples/lua/voicings/inversion.lua";
+using "../../examples/lua/mods/myArpeggio.lua";
+
+tempo: 150;
+device: MyDevice  midi _usePort=3;
+instrumentDef:piano1thInversion   _onDevice=MyDevice  _ch=0 _pc=0;
+instrumentConf: piano1thInversion 
+    mod myArpeggio
+    voicingStrategy inversion _level="1"
+;
+
+instrumentDef:piano2thInversion   _onDevice=MyDevice  _ch=0 _pc=0;
+instrumentConf: piano2thInversion 
+    mod myArpeggio
+    voicingStrategy inversion _level="2"
+;
+
+[
+type: template;
+name: chords;
+instrument: piano1thInversion;
+{
+    <II III V VII I>1 :(x3)
+    |:
+    /instrument: piano2thInversion/
+     <I II III V VII>1 :(x3)|
+}
+]
+
+[
+type: accomp;
+{
+    C | F | G7 :|
+}
+]

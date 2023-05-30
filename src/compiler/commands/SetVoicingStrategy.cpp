@@ -8,7 +8,7 @@ namespace compiler
     void SetVoicingStrategy::execute(IContextPtr context)
     {
         auto meta = context->voiceMetaData();
-        bool isAlreadySet = containsVoicingStrategy(meta->voicingStrategies, voicingStrategy->name());
+        bool isAlreadySet = containsVoicingStrategy(meta->voicingStrategies, voicingStrategy);
         if (isAlreadySet)
         {
             return;

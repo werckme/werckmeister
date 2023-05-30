@@ -27,5 +27,5 @@ namespace compiler
     };
     typedef std::shared_ptr<VoicingStrategy> VoicingStrategyPtr;
     typedef std::list<VoicingStrategyPtr> VoicingStrategies;
-    bool containsVoicingStrategy(const VoicingStrategies& strategies, com::String strategyName);
+    bool containsVoicingStrategy(const VoicingStrategies& strategies, VoicingStrategyPtr strategy);
 }
