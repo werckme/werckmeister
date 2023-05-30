@@ -1212,6 +1212,20 @@ Like [do](#do). But with the difference, that the loaded mod will be only execut
  `/doOnce: arpeggio/`
 <br><br><br>
 
+### `execute`
+
+#### parameters
+| name | position | description | type |
+|:--- |:--- |:--- |:--- |
+| name | 1 | The name of the lua event function. This is the only "unique" parameter for this command. All further parameters are specific to its related modification. | text |
+
+Executes a lua event function.
+
+ #### examples
+
+ tbd.
+<br><br><br>
+
 ### `fade`
 
 #### parameters
@@ -2208,22 +2222,6 @@ Selects a MIDI event which was created during rendering a specific chord.
 #### parameters
 | name | position | description | type |
 |:--- |:--- |:--- |:--- |
-| name | - | name(s) of a phrase | text+ |
-
-Selects a MIDI event which was created during rendering a phrase.
-
- ```
-
- phrase(myPhrase1 myPhrase2) {...}
-
- ```
-<br><br><br>
-
-### `degree`
-
-#### parameters
-| name | position | description | type |
-|:--- |:--- |:--- |:--- |
 | degree | - |  | degree+ |
 
 Selects a MIDI event which was created during rendering a template and its degrees.
@@ -2439,6 +2437,22 @@ Selects an event which appears on a given beat or a list of beats
  ```
 
  onBeat(1 3) {...}
+
+ ```
+<br><br><br>
+
+### `phrase`
+
+#### parameters
+| name | position | description | type |
+|:--- |:--- |:--- |:--- |
+| name | - | name(s) of a phrase | text+ |
+
+Selects a MIDI event which was created during rendering a phrase.
+
+ ```
+
+ phrase(myPhrase1 myPhrase2) {...}
 
  ```
 <br><br><br>

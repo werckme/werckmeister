@@ -7,10 +7,11 @@
 namespace compiler
 {
     /// <command name="execute" where="voice">
-    /// Adds executes a lua event function.
+    /// Executes a lua function.
     /// #### examples
     /// tbd.
-    /// <param name="name" position="0" type="text">The name of the lua event function. This is the only "unique" parameter for this command. All further parameters are specific to its related modification.</param>
+    /// </command>
+    /// <param name="name" position="0" type="text">The name of the lua function. This is the only "unique" parameter for this command. All further parameters are specific to its related modification.</param>
     class ExecuteEventFunction : public AddMod, public AUsingAnEvent
     {
     public:

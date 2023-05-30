@@ -6,7 +6,7 @@
 
 namespace conductor
 {
-    /// <selector name="degree">
+    /// <selector name="phrase">
     ///     Selects a MIDI event which was created during rendering a phrase.
     /// ```
     /// phrase(myPhrase1 myPhrase2) {...}
