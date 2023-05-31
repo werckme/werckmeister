@@ -147,6 +147,21 @@ struct ArgumentNames
     {
         std::string Name = "name";
     } SetChord;
+    struct
+    {
+        std::string Nr = "nr";
+        std::string Name = "name";
+        std::string Value = "value";
+    } SetCC;
+    struct
+    {
+        std::string Nr = "nr";
+        std::string Name = "name";
+        std::string From = "from";
+        std::string To = "to";
+        std::string Duration = "duration";
+        std::string Curve = "curve";
+    } FadeCC;
 };
 
 extern ArgumentNames argumentNames;

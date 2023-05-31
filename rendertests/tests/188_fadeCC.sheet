@@ -1,0 +1,17 @@
+device: MyDevice midi 4;
+
+instrumentDef: piano  MyDevice _ch=0 _cc=0 _pc=0;
+
+tempo: 50;
+
+[
+instrument: piano;
+{
+    /signature: 3 8/
+    /fadeCC: _nr=1  _from=0 _to=127 _duration=4 _curve="exp"/ -- TODO: cc events will not be recognized by compare_midi.py
+    d16  e  f  g  a  bb | c#  bb  a  g  f e |  f8    a     d'     |  g     c#'   e' |
+    /fadeCC: _name="Modulation"  _from=127 _to=0 _duration=4 _curve="lin"/
+    d'16 e' f' g' a' bb' |
+    c#' bb' a' g' f' e' | f' d' e' f' g' a' | bb a' g' f' e' d'   | e' c' d' e' f' g' |  a  g'  f'  e'  d' c' |
+}
+]

@@ -1120,6 +1120,89 @@ withTag(myTag) {
 
 
 ## Commands
+### `cc`
+
+#### parameters
+| name | position | description | type |
+|:--- |:--- |:--- |:--- |
+| nr | 1 | The number of the controller | 0..N |
+| name | 2 | a controller name, supported names see list above | text |
+
+Adds a CC message.
+
+ #### examples
+
+ `/cc: _name="modulation" _value=10/ -- sets modulation value by controller name`
+
+ `/cc: _nr=1 _value=10/ -- sets modulation value by controller number`
+
+ #### supported CC names * (if using name paramenter instead of cc number) *
+
+ * BankSelectMSB
+
+ * Modulation
+
+ * BreathController
+
+ * FootController
+
+ * PortamentoTime
+
+ * MainVolume 
+
+ * Balance
+
+ * Panorama
+
+ * Expression
+
+ * EffectControl1 
+
+ * EffectControl2 
+
+ * BankSelectLSB 
+
+ * Hold1
+
+ * Portamento
+
+ * Sostenuto
+
+ * SoftPedal
+
+ * Legato
+
+ * Hold2
+
+ * PortamentoControl
+
+ * Effects1Depth
+
+ * Effects2Depth
+
+ * Effects3Depth
+
+ * Effects4Depth
+
+ * Effects5Depth
+
+ * AllSoundsOff
+
+ * ControllerReset
+
+ * LocalControl
+
+ * AllNotesOff
+
+ * OmniOff
+
+ * OmniOn
+
+ * MonoOn
+
+ * MonoOff
+<br><br><br>
+
 ### `cue`
 
 #### parameters
@@ -1217,9 +1300,9 @@ Like [do](#do). But with the difference, that the loaded mod will be only execut
 #### parameters
 | name | position | description | type |
 |:--- |:--- |:--- |:--- |
-| name | 1 | The name of the lua event function. This is the only "unique" parameter for this command. All further parameters are specific to its related modification. | text |
+| name | 1 | The name of the lua function. This is the only "unique" parameter for this command. All further parameters are specific to its related modification. | text |
 
-Executes a lua event function.
+Executes a lua function.
 
  #### examples
 
@@ -2077,6 +2160,45 @@ name: myTemplate;
 instrument: piano;
 {
    /voicingStrategy: guitar/
+   <I II III IV V VI VII>1
+}
+]
+[
+type: accomp;
+
+{
+  C | F | G | C |
+}
+]
+ ```
+<br><br><br>
+
+### `inversion`
+
+#### parameters
+| name | position | description | type |
+|:--- |:--- |:--- |:--- |
+| level | - | level of inversion | number |
+| range | - | If given the strategy tries to keeps the range by shifting the octave of the chord. | [contrabass,bass,baritone,tenor,alto,mezzosoprano,soprano] |
+
+#### include extension
+`using "lua/voicings/inversion.lua";`
+
+creates an inversion by moving the lowest note an octave hihgher.
+
+ ```language=Werckmeister
+using "lua/voicings/inversion.lua";
+using "chords/default.chords";
+
+tempo: 120;
+device: MyDevice  midi 0;
+instrumentDef:piano  MyDevice  _ch=0 _pc=0;
+[
+type: template;
+name: myTemplate;
+instrument: piano;
+{
+   /voicingStrategy: inversion/
    <I II III IV V VI VII>1
 }
 ]

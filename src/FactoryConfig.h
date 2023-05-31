@@ -104,6 +104,8 @@ void FactoryConfig<TInjector>::initModifications()
 #include <compiler/commands/DefineInstrumentSection.h>
 #include <compiler/commands/SetChord.h>
 #include <compiler/commands/ExecuteEventFunction.h>
+#include <compiler/commands/SetCC.h>
+#include <compiler/commands/FadeCC.h>
 
 template <class TInjector>
 void FactoryConfig<TInjector>::initCommands()
@@ -144,6 +146,8 @@ void FactoryConfig<TInjector>::initCommands()
     register_<DefineInstrumentSection>(SHEET_META__DEFINE_INSTRUMENT_SECTION);
     register_<SetChord>(SHEET_META__SET_CHORD);
     register_<ExecuteEventFunction>(SHEET_META__CALL_EVENTFUNCTION);
+    register_<SetCC>(SHEET_META__SET_CC);
+    register_<FadeCC>(SHEET_META__FADE_CC);
 }
 
 

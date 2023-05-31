@@ -91,6 +91,8 @@ SET (SRC_FETZER_LIB
     compiler/commands/Cue.cpp
     compiler/commands/Fill.cpp
     compiler/commands/DefineInstrumentSection.cpp
+    compiler/commands/SetCC.cpp
+    compiler/commands/FadeCC.cpp
     conductor/ConductionsPerformer.cpp
     conductor/selectors/ASelectorBase.cpp
     conductor/selectors/OnBeat.cpp
