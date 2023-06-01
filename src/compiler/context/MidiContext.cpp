@@ -392,6 +392,13 @@ namespace compiler
 		addEvent(__createVolumeEvent(*instrumentDef, currentPosition()));
 		// pan
 		addEvent(__createPanEvent(*instrumentDef, currentPosition()));
+		// cc
+		for (const auto &ccValue : instrumentDef->ccValues)
+		{
+			
+			auto ev = com::midi::Event::CCValue(instrumentDef->channel, ccValue.nr, ccValue.value);
+			addEvent(ev);
+		}
 	}
 
 	void MidiContext::setInstrument(std::shared_ptr<InstrumentSectionDef> instrumentDef)

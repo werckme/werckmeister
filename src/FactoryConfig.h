@@ -94,6 +94,7 @@ void FactoryConfig<TInjector>::initModifications()
 #include <compiler/commands/AddDevice.h>
 #include <compiler/commands/SetInstrument.h>
 #include <compiler/commands/InstrumentConfigAddMod.h>
+#include <compiler/commands/InstrumentConfigSetCC.h>
 #include <compiler/commands/InstrumentConfigVelocityRemap.h>
 #include <compiler/commands/Mark.h>
 #include <compiler/commands/Jump.h>
@@ -132,6 +133,7 @@ void FactoryConfig<TInjector>::initCommands()
     register_<AddDevice>(SHEET_META__SET_DEVICE);
     register_<SetInstrument>(SHEET_META__INSTRUMENT);
     register_<InstrumentConfigAddMod>(InstrumentConfigCommandName(SHEET_META__SET_MOD));
+    register_<InstrumentConfigSetCC>(InstrumentConfigCommandName(SHEET_META__INSTRUMENT_CONFIG_SET_CC));
     register_<InstrumentConfigVelocityRemap>(InstrumentConfigCommandName(SHEET_META__VELOCITY_REMAP));
     register_<Mark>(SHEET_META__MARK);
     register_<Jump>(SHEET_META__JUMP);

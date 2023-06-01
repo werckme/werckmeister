@@ -1,7 +1,6 @@
 device: MyDevice midi 4;
 
 instrumentDef: piano  MyDevice _ch=0 _cc=0 _pc=0;
-
 tempo: 50;
 
 [

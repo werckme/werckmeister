@@ -80,6 +80,7 @@ SET (SRC_FETZER_LIB
     compiler/commands/SelectMidiSound.cpp
     compiler/commands/AddInstrumentConfig.cpp
     compiler/commands/InstrumentConfigSetPan.cpp
+    compiler/commands/InstrumentConfigSetCC.cpp
     compiler/commands/InstrumentConfigAddMod.cpp
     compiler/commands/InstrumentConfigSetVoicingStrategy.cpp
     compiler/commands/InstrumentConfigSetVolume.cpp    
