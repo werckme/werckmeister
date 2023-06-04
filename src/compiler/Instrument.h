@@ -26,6 +26,12 @@ namespace compiler
 		virtual void setToContext(IContext *context) = 0;
 		virtual void renderEvents(SheetEventRenderer *renderer, std::list<documentModel::Event> &events, const com::String &parentInsrtumentSectionName = com::String()) = 0;
 		virtual std::shared_ptr<AInstrumentDef> activeInstrument() = 0;
+		struct CcValue {
+			int nr;
+			int value;
+		};
+		typedef std::list<CcValue> CcValues;
+		CcValues ccValues;
 
 	protected:
 		template <class TImpl>

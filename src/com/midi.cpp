@@ -265,6 +265,15 @@ namespace com
 			ev.parameter2(std::max(std::min(volume, (Byte)MaxMidiValue), (Byte)0));
 			return ev;
 		}
+		Event Event::CCValue(Channel channel, Byte ccNr, Byte value)
+		{
+			auto ev = com::midi::Event();
+			ev.eventType(com::midi::Controller);
+			ev.channel(channel);
+			ev.parameter1(ccNr);
+			ev.parameter2(std::max(std::min(value, (Byte)MaxMidiValue), (Byte)0));
+			return ev;
+		}
 		Event Event::NoteOn(Channel channel, Ticks absPos, Pitch pitch, Velocity velocity)
 		{
 			Event ev;

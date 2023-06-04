@@ -12,6 +12,7 @@ namespace compiler
     /// Following settings can be applied:
     ///  * volume
     ///  * pan
+    ///  * cc
     ///  * voicing strategy
     ///  * mod
     ///  * velocity remap
