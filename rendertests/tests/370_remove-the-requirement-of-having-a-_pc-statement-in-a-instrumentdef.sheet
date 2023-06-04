@@ -1,0 +1,13 @@
+using "./lua/voicings/voicelead.lua";
+using "./chords/default.chords";
+
+tempo: 120;
+device: SC1 midi 3;
+instrumentDef: piano SC1 _ch=0;
+
+[
+instrument: piano;
+{
+    c & & & 
+}
+]

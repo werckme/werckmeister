@@ -36,7 +36,7 @@ namespace compiler
             FM_PARAMETER_DEF(argumentNames.InstrumentDef.OnDevice, 1),
             FM_PARAMETER_DEF(argumentNames.InstrumentDef.Ch, 2),
             FM_PARAMETER_DEFAULT_DEF(argumentNames.InstrumentDef.BankMsb, 3, -1),
-            FM_PARAMETER_DEF(argumentNames.InstrumentDef.Pc, 4),
+            FM_PARAMETER_DEFAULT_DEF(argumentNames.InstrumentDef.Pc, 4, -1),
             FM_PARAMETER_DEFAULT_DEF(argumentNames.InstrumentDef.Cc, 5, -1),
             FM_PARAMETER_DEFAULT_DEF(argumentNames.InstrumentDef.BankLsb, 6, -1),
         };
