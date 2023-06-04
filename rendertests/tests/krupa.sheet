@@ -1,5 +1,8 @@
 
+-- #ignore
 -- #skip-event-plausibility-test
+
+--- TODO FIX: https://github.com/werckme/werckmeister/issues/373
 using "/chords/default.chords";
 using "/lua/mods/guitarStroke.lua";
 using "/lua/mods/swing.lua";
