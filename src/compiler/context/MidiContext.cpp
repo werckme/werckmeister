@@ -262,13 +262,16 @@ namespace compiler
 			addEvent(ev);
 		}
 		// pc
-		auto ev = com::midi::Event();
-		ev.absPosition(position);
-		ev.channel(channel);
-		ev.eventType(com::midi::ProgramChange);
-		ev.parameter1(pc);
-		ev.parameter2(0);
-		addEvent(ev);
+		if (bankLsb >= 0)
+		{
+			auto ev = com::midi::Event();
+			ev.absPosition(position);
+			ev.channel(channel);
+			ev.eventType(com::midi::ProgramChange);
+			ev.parameter1(pc);
+			ev.parameter2(0);
+			addEvent(ev);
+		}
 	}
 
 	AInstrumentDefPtr MidiContext::getInstrumentDef(const com::String &uname)
