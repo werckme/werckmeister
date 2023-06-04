@@ -1,0 +1,19 @@
+device: MyDevice midi 4;
+
+instrumentDef: pianoMod  MyDevice _ch=0 _cc=0 _pc=0;
+instrumentConf: pianoMod
+    cc _name="Modulation" _value=127
+    cc 7 50
+;
+
+tempo: 50;
+
+[
+instrument: pianoMod;
+{
+    /signature: 3 8/
+    d16  e  f  g  a  bb | c#  bb  a  g  f e |  f8    a     d'     |  g     c#'   e' |
+    d'16 e' f' g' a' bb' |
+    c#' bb' a' g' f' e' | f' d' e' f' g' a' | bb a' g' f' e' d'   | e' c' d' e' f' g' |  a  g'  f'  e'  d' c' |
+}
+]

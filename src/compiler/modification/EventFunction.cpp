@@ -33,7 +33,7 @@ namespace compiler
         pushParameters(L, ALuaWithParameter::parameters);
         lua::LuaTimeInfo(ctx->getTimeInfo()).push(L);
         call(2, 1);
-        auto events = popEvents();
+        auto events = popEvents(ctx);
         outEvents.swap(events);
     }
 }
