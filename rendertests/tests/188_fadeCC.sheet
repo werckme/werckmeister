@@ -8,7 +8,7 @@ tempo: 50;
 instrument: piano;
 {
     /signature: 3 8/
-    /fadeCC: _nr=1  _from=0 _to=127 _duration=4 _curve="exp"/ -- TODO: cc events will not be recognized by compare_midi.py
+    /fadeCC: _nr=1  _from=0 _to=127 _duration=4 _curve="exp"/
     d16  e  f  g  a  bb | c#  bb  a  g  f e |  f8    a     d'     |  g     c#'   e' |
     /fadeCC: _name="Modulation"  _from=127 _to=0 _duration=4 _curve="lin"/
     d'16 e' f' g' a' bb' |

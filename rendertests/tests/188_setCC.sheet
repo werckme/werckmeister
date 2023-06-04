@@ -7,7 +7,7 @@ tempo: 50;
 instrument: piano;
 {
     /signature: 3 8/
-    /cc: _nr=1  _value=127/ -- TODO: cc events will not be recognized by compare_midi.py
+    /cc: _nr=1  _value=127/
     d16  e  f  g  a  bb | c#  bb  a  g  f e |  f8    a     d'     |  g     c#'   e' |
     /cc: _name="Modulation"  _value=0/
     d'16 e' f' g' a' bb' |
