@@ -18,6 +18,7 @@ instrument: organ;
 [
 type: accomp;
 {
+    /template: X/
     C | C | D | E | F | G | A | B 
 }
 ]

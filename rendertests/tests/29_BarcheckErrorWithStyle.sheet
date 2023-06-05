@@ -17,6 +17,7 @@ instrument: piano;
 type: accomp;
 instrument: piano; 
 {
+    /template: i29.normal/
     A-7 | D-7 | G7 | Cmaj7 C7 |
     Fmaj7 | B07 | E7b9 |
 }

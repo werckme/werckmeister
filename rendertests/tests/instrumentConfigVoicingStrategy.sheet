@@ -60,6 +60,7 @@ instrument: guitar;
 [
 type: accomp;
 {
+    /template: myTrack/
     C | F | G7 | C |
 }
 ]

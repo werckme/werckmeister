@@ -19,7 +19,7 @@ instrument: piano;
 [
 type: accomp;
 {
-
+    /template: myTemplate/
     A | 
 }
 ]

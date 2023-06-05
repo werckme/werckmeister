@@ -18,7 +18,7 @@ instrument: piano;
 [
 type: accomp;
 {
-
+    /template: myTemplate/
     C | C | F | A- | 
     /cue: fromHere/ 
     G | E- | D- | G | C 
