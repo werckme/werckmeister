@@ -23,6 +23,7 @@ instrument: piano;
 type: accomp;
 instrument: piano; 
 {
+    /template: x/
     A-7 | D-7 | G7 | Cmaj7 C7 |
     Fmaj7 | B07 | E7b9 | 
 }

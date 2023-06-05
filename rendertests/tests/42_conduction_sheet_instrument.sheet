@@ -18,6 +18,7 @@ instrument: rhythm;
 [
 type: accomp;
 {
+    /template: myAccomp/
     A-7 | D-7 |
 }
 ]

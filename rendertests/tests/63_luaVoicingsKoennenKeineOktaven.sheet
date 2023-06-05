@@ -20,6 +20,7 @@ instrument: piano;
 [
 type: accomp;
 {
+    /template: x/
     C |
 }
 ]

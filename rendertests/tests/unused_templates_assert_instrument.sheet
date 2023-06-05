@@ -1,0 +1,40 @@
+
+-- #skip-event-plausibility-test
+using "/chords/default.chords";
+
+tempo: 120;
+
+device: MyDevice _isType="midi" _usePort=0;
+
+instrumentDef: piano   MyDevice  0 0 0;
+
+[
+type: template;
+name: piano;
+instrument: piano;
+{
+    <I,,, I,, VII, III, II,>1 |
+}
+]
+
+[
+type: template;
+name: rhythm2;
+instrument: rhythm2;
+{
+    <I,,, I,, VII, III, II,>1~ |
+    &~ |
+    & |
+}
+]
+
+
+[
+type: accomp;
+{
+    /template: 
+    piano 
+    /
+    C
+}
+]

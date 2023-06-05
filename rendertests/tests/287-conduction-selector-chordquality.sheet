@@ -18,7 +18,7 @@ instrument: piano;
 [
 type: accomp;
 {
-
+    /template: myTemplate/
     C | C7 | D-7 | F-7 | G7 | C-
 }
 ]

@@ -29,9 +29,8 @@ instrument: lead;
 
 [
 type: accomp;
-name: x;
-instrument: lead;
 {
+    /template: x/
     C | C 
 }
 ]

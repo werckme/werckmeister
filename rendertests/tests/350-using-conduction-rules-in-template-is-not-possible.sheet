@@ -8,6 +8,7 @@ instrumentDef:lead _onDevice=MyDevice  _ch=0 _pc=0;
 [
 type: accomp;
 {
+    /template: drums/
     C | F | G |
 }
 ]

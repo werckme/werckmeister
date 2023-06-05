@@ -148,20 +148,19 @@ namespace compiler
 			return fillCommand;
 		}
 
-		std::list<TemplatesAndItsChords> __collectChordsPerTemplate(SheetTemplateRenderer &sheetTemplateRenderer, Track *sheetTrack)
+		std::list<TemplatesAndItsChords> __collectChordsPerTemplate(SheetTemplateRenderer &sheetTemplateRenderer, Track *chordTrack)
 		{
 			auto ctx = sheetTemplateRenderer.context();
 			std::list<TemplatesAndItsChords> templatesAndItsChords;
 			templatesAndItsChords.emplace_back(TemplatesAndItsChords());
-			templatesAndItsChords.back().templates = ctx->currentSheetTemplates();
 			auto &wm = com::getWerckmeister();
 			auto tmpContext = ctx->createNewContext();
 			tmpContext->masterTempo(ctx->masterTempo());
 			tmpContext->setChordTrackTarget();
 			auto tmpEventRenderer = sheetTemplateRenderer.sheetEventRenderer->createNewSheetEventRenderer(tmpContext);
 
-			auto &sheetEvents = sheetTrack->voices.begin()->events;
-			for (auto &ev : sheetEvents)
+			auto &chordTrackEvents = chordTrack->voices.begin()->events;
+			for (auto &ev : chordTrackEvents)
 			{
 				try
 				{
@@ -514,11 +513,11 @@ namespace compiler
 		return *(newServer.get());
 	}
 
-	void SheetTemplateRenderer::render(Track *sheetTrack)
+	void SheetTemplateRenderer::render(Track *chordTrack)
 	{
 		DegreeEventServers degreeEventServers;
 		auto sheetMeta = _ctx->voiceMetaData(_ctx->chordVoiceId());
-		auto templatesAndItsChords = __collectChordsPerTemplate(*this, sheetTrack);
+		auto templatesAndItsChords = __collectChordsPerTemplate(*this, chordTrack);
 		const TemplatesAndItsChords *previousTemplateAndChords = nullptr;
 		for (auto const &templateAndChords : templatesAndItsChords)
 		{
