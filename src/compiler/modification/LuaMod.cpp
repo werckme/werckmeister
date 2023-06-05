@@ -12,11 +12,14 @@ static const char *LUA_EVENT_TYPE_NOTE = "note";
 static const char *LUA_EVENT_TYPE_REST = "rest";
 static const char *LUA_EVENT_TYPE_DEGREE = "degree";
 static const char *LUA_EVENT_TYPE_PITCHBEND = "pitchBend";
+static const char *LUA_EVENT_TYPE_CC = "cc";
 static const char *LUA_EVENT_TYPE_UNKNOWN = "unknown";
 static const char *LUA_EVENT_PROPETRY_VELOCITY = "velocity";
 static const char *LUA_EVENT_PROPETRY_DURATION = "duration";
 static const char *LUA_EVENT_PROPETRY_TYING = "isTied";
 static const char *LUA_EVENT_PROPETRY_OFFSET = "offset";
+static const char *LUA_EVENT_PROPETRY_CC_NR = "ccNr";
+static const char *LUA_EVENT_PROPETRY_CC_VALUE = "ccValue";
 static const char *LUA_EVENT_PROPETRY_PITCHES = "pitches";
 static const char *LUA_EVENT_PROPETRY_TYPE = "type";
 static const char *LUA_EVENT_PROPETRY_PITCHBENDVALUE = "pitchBendValue";
@@ -237,7 +240,7 @@ namespace compiler
         lua::getTableValue(L, LUA_EVENT_PROPETRY_DURATION, event.duration);
     }
 
-    AModification::Events LuaModification::popEvents()
+    AModification::Events LuaModification::popEvents(IContextPtr ctx)
     {
         using namespace documentModel;
         Events result;
@@ -276,9 +279,26 @@ namespace compiler
                 popNoteEvent(event);
                 result.push_back(event);
             }
+            if(type == LUA_EVENT_TYPE_CC)
+            {
+                popAndExecuteCc(ctx);
+            }
             lua_pop(L, 1);
         }
         return result;
+    }
+
+    void LuaModification::popAndExecuteCc(IContextPtr ctx)
+    {
+        com::Ticks timeOffset = 0;
+        int ccNr = -1;
+        int ccValue = -1;
+        lua::getTableValue(L, LUA_EVENT_PROPETRY_OFFSET, timeOffset);
+        lua::getTableValue(L, LUA_EVENT_PROPETRY_CC_NR, ccNr);
+        lua::getTableValue(L, LUA_EVENT_PROPETRY_CC_VALUE, ccValue);
+        timeOffset *= com::PPQ;
+        ctx->setContinuousController(ccNr, ccValue, timeOffset);
+
     }
 
     void LuaModification::perform(IContextPtr ctx, Events &events)
@@ -288,7 +308,7 @@ namespace compiler
         pushParameters(L, ALuaWithParameter::parameters);
         lua::LuaTimeInfo(ctx->getTimeInfo()).push(L);
         call(3, 1);
-        auto processedEvents = popEvents();
+        auto processedEvents = popEvents(ctx);
         events.swap(processedEvents);
     }
 

@@ -26,10 +26,10 @@ namespace compiler
 
     protected:
         void pushEvents(IContextPtr ctx, const Events &events);
-        Events popEvents();
+        Events popEvents(IContextPtr ctx);
         void popNoteEvent(documentModel::Event &event);
         void popPitchBendEvent(documentModel::Event &event);
-
+        void popAndExecuteCc(IContextPtr ctx);
     private:
         documentModel::Event::Args args_;
     };

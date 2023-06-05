@@ -1,6 +1,7 @@
 -- #compiler-args(--begin=4)
 -- (because we skip note off here):
 -- #skip-event-plausibility-test
+-- !! REFERENCE MUST BE COMPILE WITH: --begin=4
 tempo: 140;
 device: MyDevice  midi _usePort=3;
 instrumentDef:lead    _onDevice=MyDevice  _ch=0 _pc=16;

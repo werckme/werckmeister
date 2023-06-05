@@ -80,6 +80,7 @@ SET (SRC_FETZER_LIB
     compiler/commands/SelectMidiSound.cpp
     compiler/commands/AddInstrumentConfig.cpp
     compiler/commands/InstrumentConfigSetPan.cpp
+    compiler/commands/InstrumentConfigSetCC.cpp
     compiler/commands/InstrumentConfigAddMod.cpp
     compiler/commands/InstrumentConfigSetVoicingStrategy.cpp
     compiler/commands/InstrumentConfigSetVolume.cpp    
@@ -91,6 +92,8 @@ SET (SRC_FETZER_LIB
     compiler/commands/Cue.cpp
     compiler/commands/Fill.cpp
     compiler/commands/DefineInstrumentSection.cpp
+    compiler/commands/SetCC.cpp
+    compiler/commands/FadeCC.cpp
     conductor/ConductionsPerformer.cpp
     conductor/selectors/ASelectorBase.cpp
     conductor/selectors/OnBeat.cpp

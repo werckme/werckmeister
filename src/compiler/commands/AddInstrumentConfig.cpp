@@ -15,7 +15,9 @@ namespace compiler
         SHEET_META__SET_INSTRUMENT_CONFIG_PAN,
         SHEET_META__SET_VOICING_STRATEGY,
         SHEET_META__SET_MOD,
-        SHEET_META__VELOCITY_REMAP};
+        SHEET_META__VELOCITY_REMAP,
+        SHEET_META__INSTRUMENT_CONFIG_SET_CC
+    };
 
     void AddInstrumentConfig::execute(IContextPtr context)
     {

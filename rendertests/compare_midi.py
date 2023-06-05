@@ -14,15 +14,22 @@ from os import name as OSNAME
 MAX_TIME_DIFF = 0.019 if OSNAME == 'nt' else 0
 
 _tempo = 120
-_acceptedEventTypes = ['note_on', 'note_off']
+_acceptedEventTypes = ['note_on', 'note_off', 'control_change']
 
 fticks_2_seconds = None
 
-def createKey(trackIdx, event, absTicks):
+def createKey(trackIdx, event, absTicks, cc_counter: map):
+    if event.type == 'control_change':
+        key = (event.type, event.channel, event.control, event.value, fticks_2_seconds(absTicks))
+        if key in cc_counter:
+            cc_counter[key] = cc_counter[key] + 1
+        else:
+            cc_counter[key] = 0
+        return key + (cc_counter[key],)
     return (event.type, event.channel, event.note, event.velocity, fticks_2_seconds(absTicks))
 
-def addEvent(trackIdx, container, event, absTicks):
-    key = createKey(trackIdx, event, absTicks)
+def addEvent(trackIdx, container, event, absTicks, cc_counter: map):
+    key = createKey(trackIdx, event, absTicks, cc_counter)
     if key in container:
         raise RuntimeError("event(%s, time=%f) duplicate" % (str(event), fticks_2_seconds(absTicks)))
     container.add(key)
@@ -91,18 +98,19 @@ def compare(file1, file2, test_tags):
         raise RuntimeError("ticks per beat dosen't match")
     fticks_2_seconds = lambda ticks:  60.0 * ticks / (_tempo * midi_a.ticks_per_beat)
 
+    cc_counter_file_a = {}
     for trackIdx, event, absTicks in get_events(midi_a):
-        addEvent(trackIdx, events_a, event, absTicks)
-    
+        addEvent(trackIdx, events_a, event, absTicks, cc_counter_file_a)
+    cc_counter_file_b = {}
     eventindex = 0
     for trackIdx, event, absTicks in get_events(midi_b):
-        key = createKey(trackIdx, event, absTicks)
+        key = createKey(trackIdx, event, absTicks, cc_counter_file_b)
         if key in events_a:
             events_a.remove(key)
         else:
             try:
                 neighborTrackIdx, neighbourEvent, neighbourAbsTicks = list(get_events(midi_a))[eventindex]
-                neighbourKey=createKey(neighborTrackIdx, neighbourEvent, neighbourAbsTicks)
+                neighbourKey=createKey(neighborTrackIdx, neighbourEvent, neighbourAbsTicks, cc_counter_file_b)
                 if  is_same_event_except_for_time(event, neighbourEvent):
                     timediff = abs(fticks_2_seconds(neighbourAbsTicks) - fticks_2_seconds(absTicks))
                     if (timediff > MAX_TIME_DIFF):
@@ -111,6 +119,7 @@ def compare(file1, file2, test_tags):
                 else:
                     raise Exception("fallback compare failed")
             except Exception as ex:
+                print(str(ex))
                 raise RuntimeError("%s's event(%s, time=%f) not found in %s -> %s" % (file2, str(event), fticks_2_seconds(absTicks), file1, str(ex)))
         eventindex += 1
 
@@ -137,7 +146,7 @@ if __name__ == '__main__':
     file1 = sys.argv[1]
     file2 = sys.argv[2]
     try:
-        compare(file1, file2)
+        compare(file1, file2, [])
     except RuntimeError as ex:
         print(str(ex))
         exit(1)

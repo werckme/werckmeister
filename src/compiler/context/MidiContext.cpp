@@ -306,6 +306,28 @@ namespace compiler
 		addEvent(ev);
 	}
 
+	void MidiContext::setContinuousController(int controllerNumber, int value, com::Ticks relativePosition)
+	{
+		if (value < 0 || value > com::midi::MaxMidiValue) 
+		{
+			FM_THROW(Exception, "invalid midi value: " + std::to_string(value));
+		}
+		if (controllerNumber < 0 || controllerNumber > com::midi::MaxMidiValue) 
+		{
+			FM_THROW(Exception, "invalid midi value: " + std::to_string(value));
+		}
+		auto meta = voiceMetaData<MidiContext::VoiceMetaData>();
+		auto trackMeta = trackMetaData<MidiContext::TrackMetaData>();
+		if (!meta || !trackMeta)
+		{
+			FM_THROW(Exception, "meta data = null");
+		}
+		auto channel = getChannel(*trackMeta);
+		auto ev = com::midi::Event::CCValue(channel, controllerNumber, value);
+		ev.absPosition(currentPosition() + relativePosition);
+		addEvent(ev);
+	}
+
 	void MidiContext::setPan(double val)
 	{
 		Base::setPan(val);
@@ -373,6 +395,13 @@ namespace compiler
 		addEvent(__createVolumeEvent(*instrumentDef, currentPosition()));
 		// pan
 		addEvent(__createPanEvent(*instrumentDef, currentPosition()));
+		// cc
+		for (const auto &ccValue : instrumentDef->ccValues)
+		{
+			
+			auto ev = com::midi::Event::CCValue(instrumentDef->channel, ccValue.nr, ccValue.value);
+			addEvent(ev);
+		}
 	}
 
 	void MidiContext::setInstrument(std::shared_ptr<InstrumentSectionDef> instrumentDef)
