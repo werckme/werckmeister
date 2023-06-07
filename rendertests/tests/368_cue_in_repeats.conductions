@@ -1,0 +1,9 @@
+all() fromPosition(@A)
+{
+  timeOffset = 2;
+}
+
+all() fromPosition(@A2)
+{
+  timeOffset = 2;
+}
