@@ -262,7 +262,7 @@ namespace compiler
 			addEvent(ev);
 		}
 		// pc
-		if (bankLsb >= 0)
+		if (pc >= 0)
 		{
 			auto ev = com::midi::Event();
 			ev.absPosition(position);
