@@ -16,6 +16,7 @@ SET (SRC_FETZER_LIB
     com/exception.cpp
     com/AConvertsArgumentsToParameter.cpp
     com/config/configServer.cpp
+    com/GmInstrumentNames.cpp
     lua/ALuaObject.cpp
     lua/ALuaScript.cpp
     lua/ALuaWithParameter.cpp

@@ -26,6 +26,7 @@ struct ArgumentNames
         std::string BankLsb = "bankLsb";
         std::string Pc = "pc";
         std::string Cc = "cc";
+        std::string GmInstrument = "gmInstrument";
     } InstrumentDef;
 
     struct
