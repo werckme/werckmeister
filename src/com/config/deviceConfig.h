@@ -18,5 +18,6 @@ namespace com
         Type type = Undefinded;
         typedef std::string DeviceId;
         DeviceId deviceId;
+        std::string deviceName;
     };
 }

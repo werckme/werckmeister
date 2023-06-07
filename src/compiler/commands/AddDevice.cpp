@@ -7,6 +7,7 @@
 
 namespace compiler
 {
+    com::String AddDevice::NoDeviceName = "NO_DEVICE_NAME";
     void AddDevice::execute(IContextPtr context)
     {
         auto name = parameters[argumentNames.Device.WithName].value<com::String>();
@@ -22,8 +23,20 @@ namespace compiler
         }
         if (type == "midi")
         {
-            auto deviceId = parameters[argumentNames.Device.UsePort].value<com::String>();
-            addMidiDevice(name, deviceId, offsetMillis);
+            auto deviceId = parameters[argumentNames.Device.UsePort].value<int>();
+            auto deviceName = parameters[argumentNames.Device.UseDevice].value<com::String>();
+            if (deviceId == NO_DEVICE_ID && deviceName == NoDeviceName)
+            {
+                FM_THROW(Exception, "neither a port nor a device name was given");
+            }
+            if (deviceId != NO_DEVICE_ID)
+            {
+                addMidiDeviceById(name, deviceId, offsetMillis);
+            }
+            else 
+            {
+                addMidiDeviceByName(name, deviceName, offsetMillis);
+            }
             return;
         }
         if (type == "fluidSynth")
@@ -45,10 +58,17 @@ namespace compiler
         FM_THROW(Exception, ss.str());
     }
 
-    void AddDevice::addMidiDevice(const com::String &uname, const com::String &deviceId, int offsetMillis)
+    void AddDevice::addMidiDeviceById(const com::String &uname, int deviceId, int offsetMillis)
     {
         auto &cs = com::getConfigServer();
-        auto device = cs.createMidiDeviceConfig(uname, deviceId, offsetMillis);
+        auto device = cs.createMidiDeviceConfigByDeviceId(uname, std::to_string(deviceId), offsetMillis);
+        cs.addDevice(device);
+    }
+
+    void AddDevice::addMidiDeviceByName(const com::String &uname, const com::String &deviceName, int offsetMillis)
+    {
+        auto &cs = com::getConfigServer();
+        auto device = cs.createMidiDeviceConfigByDeviceName(uname, deviceName, offsetMillis);
         cs.addDevice(device);
     }
 

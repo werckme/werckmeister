@@ -100,6 +100,30 @@ namespace app
 		elapsedMillis_ = MidiProvider::ticksToMillis(elapsedTicks);
 	}
 
+	namespace 
+	{
+		template<class OutputContainer>
+		auto _findOutputById(const OutputContainer& outputs, const com::DeviceConfig::DeviceId &id)
+		{
+			auto it = std::find_if(outputs.begin(), outputs.end(), [id](const auto &ouput)
+				{ 
+					return ouput.id == id; 
+				}
+			);
+			return it;
+		}
+		template<class OutputContainer>
+		auto _findOutputByName(const OutputContainer& outputs, const com::String&name)
+		{
+			auto it = std::find_if(outputs.begin(), outputs.end(), [name](const auto &ouput)
+				{ 
+					return ouput.name.find(name) != std::string::npos; 
+				}
+			);
+			return it;
+		}
+	}
+
 	template <class TBackend, class TMidiProvider, class TTimer>
 	void MidiplayerClient<TBackend, TMidiProvider, TTimer>::updateOutputMapping(const com::ConfigServer::Devices &devices)
 	{
@@ -107,18 +131,34 @@ namespace app
 		auto outputs = getOutputs();
 		for (const auto &device : devices)
 		{
-			auto name = device.first;
-			auto id = device.second.deviceId;
-			auto it = std::find_if(outputs.begin(), outputs.end(), [id](const auto &ouput)
-								   { return ouput.id == id; });
+			const auto &deviceDefName = device.first;
+			const auto &portId = device.second.deviceId;
+			const auto &deviceName = device.second.deviceName;
+			typename Outputs::const_iterator it;
+			if (!portId.empty())
+			{
+				it = _findOutputById(outputs, portId);
+				if (it == outputs.end())
+				{
+					throw std::runtime_error("output with port id = " + portId + " not found");
+				}
+			}
+			if (!deviceName.empty())
+			{
+				it = _findOutputByName(outputs, deviceName);
+				if (it == outputs.end())
+				{
+					throw std::runtime_error("output with device name = " + deviceName + " not found");
+				}
+			}
 			if (it == outputs.end())
 			{
-				throw std::runtime_error("output with id = " + id + " not found");
+				throw std::runtime_error("not able to assign an output of device definiton: " + deviceDefName);
 			}
 			OutputInfo inf;
 			inf.output = *it;
 			inf.offset = device.second.offsetMillis;
-			outputMap_[name] = inf;
+			outputMap_[deviceDefName] = inf;
 		}
 	}
 
@@ -160,13 +200,13 @@ namespace app
 	}
 
 	template <class TBackend, class TMidiProvider, class TTimer>
-	void MidiplayerClient<TBackend, TMidiProvider, TTimer>::changeDevice(const std::string &deviceId)
+	void MidiplayerClient<TBackend, TMidiProvider, TTimer>::changeDevice(const std::string &deviceUname)
 	{
 		if (currentTrack_ == MidiProvider::INVALID_TRACKID)
 		{
 			return;
 		}
-		auto outputIt = outputMap_.find(deviceId);
+		auto outputIt = outputMap_.find(deviceUname);
 		if (outputIt == outputMap_.end())
 		{
 			return;

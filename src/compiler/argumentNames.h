@@ -10,6 +10,7 @@ struct ArgumentNames
         std::string WithName = "setName";
         std::string IsType = "isType";
         std::string UsePort = "usePort";
+        std::string UseDevice = "useDevice";
         std::string OffsetIndicator = "use";
         std::string OffsetValue = "value";
         std::string WithOffset = "withOffset";
