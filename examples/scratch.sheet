@@ -3,8 +3,8 @@ using "./lua/voicings/guitar.lua";
 using "./lua/voicings/voicelead.lua";
 using "./lua/voicings/simple.lua";
 
-device: MyDevice midi _useDevice="Qsynth2";
-instrumentDef: _setName=piano _onDevice=MyDevice _ch=0 _pc=0 _bankMsb=81 _bankLsb=1;
+device: MyDevice midi _useDevice="FLUID";
+instrumentDef: _setName=piano _onDevice=MyDevice _ch=0 _pc=11;
 instrumentConf: piano volume 100
     voicingStrategy guitar 
     voicingStrategy voicelead 
@@ -28,6 +28,6 @@ instrument: piano;
 type: accomp;
 {
     /template: X/
-    C E7 | F A7 | D7 G7 | C6 | E-7 | A- | B07 F-6 :(x3)| G7 
+    C E7 | F A7 | D7 G7 | C6 | E-7 | A- | B07 F-6 :(x3)| G7  |
 }
 ]
