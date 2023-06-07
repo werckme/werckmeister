@@ -1,0 +1,22 @@
+-- TITLE: Cue issue
+-- DESCRIPTION: either that cue behaviour: https://werckme.github.io/manual#cue dosen't work anymore or the cue selector does'nt work
+-- CREATORID: johannes.unger@vstforx.de
+
+using "./368_cue_in_repeats.conductions";
+
+device: MyDevice _isType=midi _usePort=0;
+
+-- instrument definitions
+instrumentDef: vibra         MyDevice _ch=4  _pc=11;
+
+tempo: 155;
+ 
+[
+instrument: vibra;
+{
+    --/do: swing/
+    \f
+    bb'8 d' c' bb   eb' c#' d' f' | /cue: A/ r4 r8 eb' r f' eb'4  :|
+
+}
+]
