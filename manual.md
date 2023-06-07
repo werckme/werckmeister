@@ -1114,6 +1114,7 @@ withTag(myTag) {
 
 
 ## References
+[1133] WARN-enum: nameless enum ['enum', '{', 'NO_DEVICE_ID', '=', '-', '1', '}']
 
 
 
@@ -1126,9 +1127,10 @@ withTag(myTag) {
 | name | position | description | type |
 |:--- |:--- |:--- |:--- |
 | nr | 1 | The number of the controller | 0..N |
-| name | 2 | a controller name, supported names see list above | text |
+| value | 2 | the controller values | 0..127 |
+| name | 3 | a controller name, can be used instead of a number. (supported names, see list above) | text |
 
-Adds a CC message.
+Adds a midi CC message.
 
  #### examples
 
@@ -1136,7 +1138,7 @@ Adds a CC message.
 
  `/cc: _nr=1 _value=10/ -- sets modulation value by controller number`
 
- #### supported CC names * (if using name paramenter instead of cc number) *
+ #### supported CC names *(if using name paramenter instead of cc number)*
 
  * BankSelectMSB
 
@@ -1230,7 +1232,8 @@ adds a cue MIDI meta message to the corresponding midi track
 |:--- |:--- |:--- |:--- |
 | setName | 1 | An arbitary name. | text |
 | isType | 2 | The type of the device. | [midi,fluidSynth] |
-| usePort | 3 | The midi port id of your device. You can get a list of your connected devices, by executing `sheetp --list` | 0..N |
+| usePort | 3 | The midi port id of your device. You can get a list of your connected devices, by executing `sheetp --list`. Alternatively you can use `useDevice` instead. | 0..N |
+| useDevice |  | The name of the midi port of your device. You can get a list of your connected devices, by executing `sheetp --list`. It is not necessary to give the full name, a subset will match. | text |
 | withOffset |  | Defines an offset in milliseconds. Can be used to keep different devices in sync. | 0..N |
 | useFont |  | Only valid if isType=`fluidsynth`. Sets the location of the soundfont file, which will be used by FluidSynth | a file path |
 
@@ -1351,6 +1354,94 @@ Fades the volume over a given duration in quarters.
  ![supported curve types](https://raw.githubusercontent.com/werckme/werckmeister/main/assets/curve-types.png)
 <br><br><br>
 
+### `fadeCC`
+
+#### parameters
+| name | position | description | type |
+|:--- |:--- |:--- |:--- |
+| nr | 1 | The number of the controller | 0..N |
+| from | 2 | the start value | 0..127 |
+| to | 3 | the end value | 0..127 |
+| name | 4 | a controller name, can be used instead of a number. (supported names, see list above) | text |
+| curve | 5 | The fade curve type. | lin,quad,cub,quart,quint,exp |
+
+Fades a CC value from a start to an end value.
+
+ #### examples
+
+ `/fadeCC: _name="modulation" _from=10 _to=100 _curve="lin"/ -- fades a modulation value by controller name`
+
+ `/fadeCC: _nr=1 _value=10 _from=10 _to=100 _curve="lin"/ -- fades a modulation value by controller number`
+
+ #### supported CC names *(if using name paramenter instead of cc number)*
+
+ * BankSelectMSB
+
+ * Modulation
+
+ * BreathController
+
+ * FootController
+
+ * PortamentoTime
+
+ * MainVolume 
+
+ * Balance
+
+ * Panorama
+
+ * Expression
+
+ * EffectControl1 
+
+ * EffectControl2 
+
+ * BankSelectLSB 
+
+ * Hold1
+
+ * Portamento
+
+ * Sostenuto
+
+ * SoftPedal
+
+ * Legato
+
+ * Hold2
+
+ * PortamentoControl
+
+ * Effects1Depth
+
+ * Effects2Depth
+
+ * Effects3Depth
+
+ * Effects4Depth
+
+ * Effects5Depth
+
+ * AllSoundsOff
+
+ * ControllerReset
+
+ * LocalControl
+
+ * AllNotesOff
+
+ * OmniOff
+
+ * OmniOn
+
+ * MonoOn
+
+ * MonoOff
+
+ ![supported curve types](https://raw.githubusercontent.com/werckme/werckmeister/main/assets/curve-types.png)
+<br><br><br>
+
 ### `fill`
 
 #### parameters
@@ -1461,6 +1552,8 @@ With `instrumentConf` you are able to setup a specific instrument.
   * volume
 
   * pan
+
+  * cc
 
   * voicing strategy
 

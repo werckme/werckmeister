@@ -24,12 +24,21 @@ namespace com
         }
         return &(it->second);
     }
-    DeviceConfig ConfigServer::createMidiDeviceConfig(const com::String &uname, const DeviceConfig::DeviceId &deviceId, int offsetMillis)
+    DeviceConfig ConfigServer::createMidiDeviceConfigByDeviceId(const com::String &uname, const DeviceConfig::DeviceId &deviceId, int offsetMillis)
     {
         DeviceConfig cf;
         cf.name = uname;
         cf.type = DeviceConfig::Midi;
         cf.deviceId = deviceId;
+        cf.offsetMillis = offsetMillis;
+        return cf;
+    }
+    DeviceConfig ConfigServer::createMidiDeviceConfigByDeviceName(const com::String &uname, const com::String &deviceName, int offsetMillis)
+    {
+        DeviceConfig cf;
+        cf.name = uname;
+        cf.type = DeviceConfig::Midi;
+        cf.deviceName = deviceName;
         cf.offsetMillis = offsetMillis;
         return cf;
     }
