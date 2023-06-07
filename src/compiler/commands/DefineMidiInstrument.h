@@ -28,9 +28,11 @@ namespace compiler
     /// <param name="pc"       position="4" type="0..127">A MIDI `program change` value.</param>
     /// <param name="bankLsb"  type="0..127">A MIDI `bank select LSB` value.</param>
     /// <param name="cc"       type="0..127" deprecated="use bankMsb instead">A MIDI `bank select MSB. Deprecated use bankMsb instead` value.</param>
+    /// <param name="gmName"   type="text">A GM name. You can use a GM instrument name instead of a pc number. It is not necessary to give the full name, a subset will match. You can find a complete list of instrument names here: [www.pgmusic.com/tutorial_gm.html](https://www.pgmusic.com/tutorial_gm.html).</param>
     class DefineMidiInstrument : public AMidiContextCommand
     {
     public:
+        static com::String NoGmName;
         com::IHasParameter::ParametersByNames parameters = {
             FM_PARAMETER_DEF(argumentNames.InstrumentDef.WithName, 0),
             FM_PARAMETER_DEF(argumentNames.InstrumentDef.OnDevice, 1),
@@ -39,6 +41,7 @@ namespace compiler
             FM_PARAMETER_DEFAULT_DEF(argumentNames.InstrumentDef.Pc, 4, -1),
             FM_PARAMETER_DEFAULT_DEF(argumentNames.InstrumentDef.Cc, 5, -1),
             FM_PARAMETER_DEFAULT_DEF(argumentNames.InstrumentDef.BankLsb, 6, -1),
+            FM_PARAMETER_DEFAULT_DEF(argumentNames.InstrumentDef.GmInstrument, 7, NoGmName),
         };
         virtual ParametersByNames &getParameters() { return this->parameters; }
         virtual void execute(IContextPtr);

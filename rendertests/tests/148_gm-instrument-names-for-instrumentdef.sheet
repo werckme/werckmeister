@@ -1,0 +1,33 @@
+using "./chords/default.chords";
+using "./lua/voicings/guitar.lua";
+using "./lua/voicings/voicelead.lua";
+using "./lua/voicings/simple.lua";
+
+device: MyDevice midi _useDevice="FLUID";
+instrumentDef: _setName=piano _onDevice=MyDevice _ch=0 _pc=0 ;
+instrumentConf: piano volume 100
+    voicingStrategy guitar 
+    voicingStrategy voicelead 
+    voicingStrategy simple _range="alto"
+;
+
+
+tempo: 180;
+ 
+[
+type: template;
+name: X;
+instrument: piano;
+{
+    <I III V VII VI>1
+}
+]
+
+
+[
+type: accomp;
+{
+    /template: X/
+    C E7 | F A7 | D7 G7 | C6 | E-7 | A- | B07 F-6 :(x3)| G7  |
+}
+]
