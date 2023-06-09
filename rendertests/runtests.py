@@ -41,19 +41,20 @@ def get_args_from_tags(test_tags: list) -> None:
     args = [arg.strip() for arg in args]
     return args
 
-def execute_postprocess_script(name, sheetfile):
+def execute_postprocess_script(name, testdata: dict):
     from importlib.machinery import SourceFileLoader
     lib = SourceFileLoader(name, f"./postprocess_scripts/{name}.py").load_module()
-    lib.execute(sheetfile)
+    lib.execute(testdata)
 
-def postprocess(sheetfile: str, test_tags: list[str]) -> None:
+def postprocess(testdata: dict, test_tags: list[str]) -> None:
     extract_file = re.compile("post-test\((.+?)\)")
     try:
         post_scripts = [extract_file.match(x)[1] for x in test_tags if x.strip().startswith(TAG_POST_TEST)]
     except:
         raise RuntimeError("failed to extract script file for postprocess")
     for post_script in post_scripts:
-        execute_postprocess_script(post_script, sheetfile)
+        print(f"\n\t post process: {post_script} ", end= '')
+        execute_postprocess_script(post_script, testdata)
 
 if __name__ == '__main__':
     term = Terminal()
@@ -87,7 +88,7 @@ if __name__ == '__main__':
             if ret != 0:
                 raise Exception(f"compiler execution failed: {ret}")
             compare(reffile, midifile, test_tags)
-            postprocess(infile, test_tags)
+            postprocess({"referenceMidiFile": reffile, "midiFile": midifile, "sheetFile": infile}, test_tags)
             print(term.green + "OK" + term.normal)
         except Exception as ex:
             ranAndFailedAndIgnored[1] += 1
