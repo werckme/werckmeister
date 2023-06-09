@@ -1,3 +1,4 @@
+-- post-test: check_instrument_init_sequence.py
 device: MyDevice midi 4;
 
 instrumentDef: pianoMod  MyDevice _ch=0 _cc=0 _bankLsb=1 _bankMsb=2 _pc=0;
