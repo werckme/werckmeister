@@ -463,8 +463,12 @@ namespace com
 
 		///////////////////////////////////////////////////////////////////////////
 		// EventCompare
-		// events should be ordered by following order:
-		// (1)control changes, (2)program change then note-on / note-off
+		// events on the same position should be ordered as follows:
+		// 1: cc _bankMsb(0)  
+		// 2: cc _bankLsb(32) 
+		// 3: program change 
+		// 4: other cc
+		// 5: then note-on / note-off
 
 		bool EventCompare::operator()(const Event &a, const Event &b) const
 		{
@@ -483,6 +487,42 @@ namespace com
 			if (t2 == MetaEvent && t1 != MetaEvent)
 			{ // could be custom meta: change device
 				return false;
+			}
+			if (t1 == Controller && t2 == Controller)
+			{
+				if (a.parameter1() == 0) 
+				{
+					return true;
+				}
+				if (b.parameter1() == 0) 
+				{
+					return false;
+				}
+				if (a.parameter1() == 32) 
+				{
+					return true;
+				}
+				if (b.parameter1() == 32) 
+				{
+					return false;
+				}
+				return a.parameter1() < b.parameter1();
+			}
+			if (t1 == Controller && t2 == ProgramChange)
+			{
+				if (a.parameter1() == 0 || a.parameter1() == 32) 
+				{
+					return true;
+				}
+				return false;
+			}
+			if (t1 == ProgramChange && t2 == Controller)
+			{
+				if (b.parameter1() == 0 || b.parameter1() == 32) 
+				{
+					return false;
+				}
+				return true;
 			}
 			bool isNoteEvent1 = t1 == NoteOn || t1 == NoteOff;
 			bool isNoteEvent2 = t2 == NoteOn || t2 == NoteOff;
