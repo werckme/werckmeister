@@ -314,7 +314,7 @@ namespace compiler
 		}
 		if (controllerNumber < 0 || controllerNumber > com::midi::MaxMidiValue) 
 		{
-			FM_THROW(Exception, "invalid midi value: " + std::to_string(value));
+			FM_THROW(Exception, "invalid controller number: " + std::to_string(controllerNumber));
 		}
 		auto meta = voiceMetaData<MidiContext::VoiceMetaData>();
 		auto trackMeta = trackMetaData<MidiContext::TrackMetaData>();
