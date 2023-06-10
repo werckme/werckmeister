@@ -10,6 +10,10 @@ namespace conductor
 		for (const auto &arg : arguments)
 		{
 			auto eventInformation = _eventInformationServer->find(midiEvent);
+			if (!eventInformation)
+			{
+				continue;
+			}
 			const auto &phrases = eventInformation->phrases;
 			bool containsPhrase = std::find(phrases.begin(), phrases.end(), arg.name) != phrases.end();
 			if (containsPhrase)

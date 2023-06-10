@@ -17,7 +17,7 @@ namespace conductor
 		for (const auto &arg : arguments)
 		{
 			auto eventInformation = _eventInformationServer->find(midiEvent);
-			if (eventInformation->chordRenderInfo.get() == nullptr) {
+			if (!eventInformation || eventInformation->chordRenderInfo.get() == nullptr) {
 				continue;
 			}
 			auto chordInfos = eventInformation->chordRenderInfo;
