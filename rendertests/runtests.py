@@ -69,7 +69,7 @@ if __name__ == '__main__':
     if (os.path.exists(compiler) == False):
         print(f"compiler not found: {compiler}")
         exit(1)
-    for testfile in [x for x in os.listdir(indir) if issheet(x) and x == '188_setCCInstrumentConfig.sheet']:
+    for testfile in [x for x in os.listdir(indir) if issheet(x)]:
         infile = os.path.abspath(os.path.join(indir,testfile))
         test_tags = get_test_tags(infile)
         midifile = f"{testfile}.mid"
