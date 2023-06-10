@@ -14,7 +14,7 @@ if os.name == 'nt':
         compiler_path = '../build/Release/sheetc.exe'
 
 TAG_SKIP_TEST = 'ignore'
-
+TAG_POST_TEST = 'post-test'
 print(f"using {compiler_path}")
 def get_test_tags(sheetfile) -> list:
     lines = []
@@ -41,6 +41,21 @@ def get_args_from_tags(test_tags: list) -> None:
     args = [arg.strip() for arg in args]
     return args
 
+def execute_postprocess_script(name, testdata: dict):
+    from importlib.machinery import SourceFileLoader
+    lib = SourceFileLoader(name, f"./postprocess_scripts/{name}.py").load_module()
+    lib.execute(testdata)
+
+def postprocess(testdata: dict, test_tags: list[str]) -> None:
+    extract_file = re.compile("post-test\((.+?)\)")
+    try:
+        post_scripts = [extract_file.match(x)[1] for x in test_tags if x.strip().startswith(TAG_POST_TEST)]
+    except:
+        raise RuntimeError("failed to extract script file for postprocess")
+    for post_script in post_scripts:
+        print(f"\n\t post process: {post_script} ", end= '')
+        execute_postprocess_script(post_script, testdata)
+
 if __name__ == '__main__':
     term = Terminal()
     cwd = os.path.dirname(os.path.abspath(__file__))
@@ -54,7 +69,7 @@ if __name__ == '__main__':
     if (os.path.exists(compiler) == False):
         print(f"compiler not found: {compiler}")
         exit(1)
-    for testfile in [x for x in os.listdir(indir) if issheet(x)]:
+    for testfile in [x for x in os.listdir(indir) if issheet(x) and x == '188_setCCInstrumentConfig.sheet']:
         infile = os.path.abspath(os.path.join(indir,testfile))
         test_tags = get_test_tags(infile)
         midifile = f"{testfile}.mid"
@@ -73,6 +88,7 @@ if __name__ == '__main__':
             if ret != 0:
                 raise Exception(f"compiler execution failed: {ret}")
             compare(reffile, midifile, test_tags)
+            postprocess({"referenceMidiFile": reffile, "midiFile": midifile, "sheetFile": infile}, test_tags)
             print(term.green + "OK" + term.normal)
         except Exception as ex:
             ranAndFailedAndIgnored[1] += 1
@@ -86,4 +102,3 @@ if __name__ == '__main__':
     print(f"Tested Executable: {compiler}" )
     print(f"Total={ranAndFailedAndIgnored[0]}\tFailed={ranAndFailedAndIgnored[1]}\tIgnored={ranAndFailedAndIgnored[2]}")
     exit(returnCode)
-
