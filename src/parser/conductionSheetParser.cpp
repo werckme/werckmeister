@@ -136,29 +136,32 @@ namespace parser
 					attr(0) >> attr(documentModel::PitchDef()) >> "@" >> +char_("a-zA-Z0-9") >> attr(ArgumentValue::ValueContext(ArgumentValue::CueReference));
 
 				selector_ %=
-					(current_pos_.current_pos >> attr(sourceId_) >> SHEET_CONDUCTOR_SEL__FROM_POSITION >> attr(SHEET_CONDUCTOR_SEL__FROM_POSITION) >> "(" >> (numberArgument_ | cueArgument_) >> ")") |
-					(current_pos_.current_pos >> attr(sourceId_) >> SHEET_CONDUCTOR_SEL__TO_POSITION >> attr(SHEET_CONDUCTOR_SEL__TO_POSITION) >> "(" >> (numberArgument_ | cueArgument_) >> ")") |
-					(current_pos_.current_pos >> attr(sourceId_) >> SHEET_CONDUCTOR_SEL__PITCH >> attr(SHEET_CONDUCTOR_SEL__PITCH) >> "(" >> +pitchArgument_ >> ")") |
-					(current_pos_.current_pos >> attr(sourceId_) >> SHEET_CONDUCTOR_SEL__ON_BEAT >> attr(SHEET_CONDUCTOR_SEL__ON_BEAT) >> "(" >> +numberArgument_ >> ")") |
-					(current_pos_.current_pos >> attr(sourceId_) >> SHEET_CONDUCTOR_SEL__NOT_ON_BEAT >> attr(SHEET_CONDUCTOR_SEL__NOT_ON_BEAT) >> "(" >> +numberArgument_ >> ")") |
-					(current_pos_.current_pos >> attr(sourceId_) >> SHEET_CONDUCTOR_SEL__FROM_PITCH >> attr(SHEET_CONDUCTOR_SEL__FROM_PITCH) >> "(" >> pitchArgument_ >> ")") |
-					(current_pos_.current_pos >> attr(sourceId_) >> SHEET_CONDUCTOR_SEL__TO_PITCH >> attr(SHEET_CONDUCTOR_SEL__TO_PITCH) >> "(" >> pitchArgument_ >> ")") |
-					(current_pos_.current_pos >> attr(sourceId_) >> SHEET_CONDUCTOR_SEL__INSTRUMENT >> attr(SHEET_CONDUCTOR_SEL__INSTRUMENT) >> "(" >> +stringArgument_ >> ")") |
-					(current_pos_.current_pos >> attr(sourceId_) >> SHEET_CONDUCTOR_SEL__PITCH >> attr(SHEET_CONDUCTOR_SEL__PITCH) >> "(" >> +pitchArgument_ >> ")") |
-					(current_pos_.current_pos >> attr(sourceId_) >> SHEET_CONDUCTOR_SEL__FROM_BEAT >> attr(SHEET_CONDUCTOR_SEL__FROM_BEAT) >> "(" >> numberArgument_ >> ")") |
-					(current_pos_.current_pos >> attr(sourceId_) >> SHEET_CONDUCTOR_SEL__TO_BEAT >> attr(SHEET_CONDUCTOR_SEL__TO_BEAT) >> "(" >> numberArgument_ >> ")") |
-					(current_pos_.current_pos >> attr(sourceId_) >> SHEET_CONDUCTOR_SEL__FROM_BAR >> attr(SHEET_CONDUCTOR_SEL__FROM_BAR) >> "(" >> numberArgument_ >> ")") |
-					(current_pos_.current_pos >> attr(sourceId_) >> SHEET_CONDUCTOR_SEL__TO_BAR >> attr(SHEET_CONDUCTOR_SEL__TO_BAR) >> "(" >> numberArgument_ >> ")") |
-					(current_pos_.current_pos >> attr(sourceId_) >> SHEET_CONDUCTOR_SEL__ON_BAR >> attr(SHEET_CONDUCTOR_SEL__ON_BAR) >> "(" >> +numberArgument_ >> ")") |
-					(current_pos_.current_pos >> attr(sourceId_) >> SHEET_CONDUCTOR_SEL__NTH_BAR >> attr(SHEET_CONDUCTOR_SEL__NTH_BAR) >> "(" >> +numberArgument_ >> ")") |
-					(current_pos_.current_pos >> attr(sourceId_) >> SHEET_CONDUCTOR_SEL__CHANNEL >> attr(SHEET_CONDUCTOR_SEL__CHANNEL) >> "(" >> +numberArgument_ >> ")") |
-					(current_pos_.current_pos >> attr(sourceId_) >> SHEET_CONDUCTOR_SEL__EXPRESSION >> attr(SHEET_CONDUCTOR_SEL__EXPRESSION) >> "(" >> +stringArgument_ >> ")") |
-					(current_pos_.current_pos >> attr(sourceId_) >> SHEET_CONDUCTOR_SEL__ALL >> attr(SHEET_CONDUCTOR_SEL__ALL) >> "(" >> ")") |
-					(current_pos_.current_pos >> attr(sourceId_) >> SHEET_CONDUCTOR_SEL__WITHTAG >> attr(SHEET_CONDUCTOR_SEL__WITHTAG) >> "(" >> +stringArgument_ >> ")") |
-					(current_pos_.current_pos >> attr(sourceId_) >> SHEET_CONDUCTOR_SEL__DEGREE >> attr(SHEET_CONDUCTOR_SEL__DEGREE) >> "(" >> +degreeArgument_ >> ")") |
-					(current_pos_.current_pos >> attr(sourceId_) >> SHEET_CONDUCTOR_SEL__OCTAVE >> attr(SHEET_CONDUCTOR_SEL__OCTAVE) >> "(" >> +numberArgument_ >> ")") |
-					(current_pos_.current_pos >> attr(sourceId_) >> SHEET_CONDUCTOR_SEL__CHORD >> attr(SHEET_CONDUCTOR_SEL__CHORD) >> "(" >> +chordNameArgument_ >> ")") |
-					(current_pos_.current_pos >> attr(sourceId_) >> SHEET_CONDUCTOR_SEL__PHRASE >> attr(SHEET_CONDUCTOR_SEL__PHRASE) >> "(" >> +stringArgument_ >> ")");
+					(current_pos_.current_pos >> attr(sourceId_) >> SHEET_CONDUCTOR_SEL__FROM_POSITION >> attr(SHEET_CONDUCTOR_SEL__FROM_POSITION) >> "(" >> (numberArgument_ | cueArgument_) >> ")")
+				  | (current_pos_.current_pos >> attr(sourceId_) >> SHEET_CONDUCTOR_SEL__TO_POSITION >> attr(SHEET_CONDUCTOR_SEL__TO_POSITION) >> "(" >> (numberArgument_ | cueArgument_) >> ")")
+				  | (current_pos_.current_pos >> attr(sourceId_) >> SHEET_CONDUCTOR_SEL__AT_POSITION >> attr(SHEET_CONDUCTOR_SEL__AT_POSITION) >> "(" >> (numberArgument_ | cueArgument_) >> ")")
+				  | (current_pos_.current_pos >> attr(sourceId_) >> SHEET_CONDUCTOR_SEL__PITCH >> attr(SHEET_CONDUCTOR_SEL__PITCH) >> "(" >> +pitchArgument_ >> ")")
+				  | (current_pos_.current_pos >> attr(sourceId_) >> SHEET_CONDUCTOR_SEL__ON_BEAT >> attr(SHEET_CONDUCTOR_SEL__ON_BEAT) >> "(" >> +numberArgument_ >> ")")
+				  | (current_pos_.current_pos >> attr(sourceId_) >> SHEET_CONDUCTOR_SEL__NOT_ON_BEAT >> attr(SHEET_CONDUCTOR_SEL__NOT_ON_BEAT) >> "(" >> +numberArgument_ >> ")")
+				  | (current_pos_.current_pos >> attr(sourceId_) >> SHEET_CONDUCTOR_SEL__FROM_PITCH >> attr(SHEET_CONDUCTOR_SEL__FROM_PITCH) >> "(" >> pitchArgument_ >> ")")
+				  | (current_pos_.current_pos >> attr(sourceId_) >> SHEET_CONDUCTOR_SEL__TO_PITCH >> attr(SHEET_CONDUCTOR_SEL__TO_PITCH) >> "(" >> pitchArgument_ >> ")")
+				  | (current_pos_.current_pos >> attr(sourceId_) >> SHEET_CONDUCTOR_SEL__INSTRUMENT >> attr(SHEET_CONDUCTOR_SEL__INSTRUMENT) >> "(" >> +stringArgument_ >> ")")
+				  | (current_pos_.current_pos >> attr(sourceId_) >> SHEET_CONDUCTOR_SEL__PITCH >> attr(SHEET_CONDUCTOR_SEL__PITCH) >> "(" >> +pitchArgument_ >> ")")
+				  | (current_pos_.current_pos >> attr(sourceId_) >> SHEET_CONDUCTOR_SEL__FROM_BEAT >> attr(SHEET_CONDUCTOR_SEL__FROM_BEAT) >> "(" >> numberArgument_ >> ")")
+				  | (current_pos_.current_pos >> attr(sourceId_) >> SHEET_CONDUCTOR_SEL__TO_BEAT >> attr(SHEET_CONDUCTOR_SEL__TO_BEAT) >> "(" >> numberArgument_ >> ")")
+				  | (current_pos_.current_pos >> attr(sourceId_) >> SHEET_CONDUCTOR_SEL__FROM_BAR >> attr(SHEET_CONDUCTOR_SEL__FROM_BAR) >> "(" >> numberArgument_ >> ")")
+				  | (current_pos_.current_pos >> attr(sourceId_) >> SHEET_CONDUCTOR_SEL__TO_BAR >> attr(SHEET_CONDUCTOR_SEL__TO_BAR) >> "(" >> numberArgument_ >> ")")
+				  | (current_pos_.current_pos >> attr(sourceId_) >> SHEET_CONDUCTOR_SEL__ON_BAR >> attr(SHEET_CONDUCTOR_SEL__ON_BAR) >> "(" >> +numberArgument_ >> ")")
+				  | (current_pos_.current_pos >> attr(sourceId_) >> SHEET_CONDUCTOR_SEL__NTH_BAR >> attr(SHEET_CONDUCTOR_SEL__NTH_BAR) >> "(" >> +numberArgument_ >> ")")
+				  | (current_pos_.current_pos >> attr(sourceId_) >> SHEET_CONDUCTOR_SEL__CHANNEL >> attr(SHEET_CONDUCTOR_SEL__CHANNEL) >> "(" >> +numberArgument_ >> ")")
+				  | (current_pos_.current_pos >> attr(sourceId_) >> SHEET_CONDUCTOR_SEL__EXPRESSION >> attr(SHEET_CONDUCTOR_SEL__EXPRESSION) >> "(" >> +stringArgument_ >> ")")
+				  | (current_pos_.current_pos >> attr(sourceId_) >> SHEET_CONDUCTOR_SEL__ALL >> attr(SHEET_CONDUCTOR_SEL__ALL) >> "(" >> ")")
+				  | (current_pos_.current_pos >> attr(sourceId_) >> SHEET_CONDUCTOR_SEL__WITHTAG >> attr(SHEET_CONDUCTOR_SEL__WITHTAG) >> "(" >> +stringArgument_ >> ")")
+				  | (current_pos_.current_pos >> attr(sourceId_) >> SHEET_CONDUCTOR_SEL__DEGREE >> attr(SHEET_CONDUCTOR_SEL__DEGREE) >> "(" >> +degreeArgument_ >> ")")
+				  | (current_pos_.current_pos >> attr(sourceId_) >> SHEET_CONDUCTOR_SEL__OCTAVE >> attr(SHEET_CONDUCTOR_SEL__OCTAVE) >> "(" >> +numberArgument_ >> ")")
+				  | (current_pos_.current_pos >> attr(sourceId_) >> SHEET_CONDUCTOR_SEL__CHORD >> attr(SHEET_CONDUCTOR_SEL__CHORD) >> "(" >> +chordNameArgument_ >> ")")
+				  | (current_pos_.current_pos >> attr(sourceId_) >> SHEET_CONDUCTOR_SEL__PHRASE >> attr(SHEET_CONDUCTOR_SEL__PHRASE) >> "(" >> +stringArgument_ >> ")")
+				  | (current_pos_.current_pos >> attr(sourceId_) >> SHEET_CONDUCTOR_SEL__CC >> attr(SHEET_CONDUCTOR_SEL__CC) >> "(" >> +numberArgument_ >> ")")
+				;
 				
 				selectors_ = +selector_;
 				selectorsSet_ = selectors_ >> *("," >> selectors_);

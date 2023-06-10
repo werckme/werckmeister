@@ -6,9 +6,14 @@ namespace conductor
 {
     void TimeOffset::perform(const Events &events) const
     {
-        com::midi::Event *noteOn = events.noteOn;
+        com::midi::Event *midiEvent = events.midiEvent;
+        if (midiEvent->eventType() == com::midi::Controller)
+        {
+            midiEvent->absPosition(std::max(com::Ticks(0), (midiEvent->absPosition() + declaration.value * com::PPQ))); 
+            return;
+        }
         com::midi::Event *noteOff = events.noteOff;
-        const com::midi::Event &originalNoteOn = events.unmodifiedOriginalNoteOn;
+        const com::midi::Event &originalNoteOn = events.unmodifiedOriginalMidiEvent;
         const com::midi::Event &originalNoteOff = events.unmodifiedOriginalNoteOff;
         if (!noteOff)
         {
@@ -17,9 +22,9 @@ namespace conductor
         FGetValue getOriginalValue = []() { return 0; };
         FGetValue getPercentBase = [originalNoteOn, originalNoteOff]()
         { return (originalNoteOff.absPosition() - originalNoteOn.absPosition()) / com::PPQ; };
-        FSetValue setNoteOn = [](com::midi::Event *noteOn, double val)
-        { noteOn->absPosition(std::max(com::Ticks(0), (noteOn->absPosition() + val * com::PPQ))); };
-        FSetValue setNoteOff = [noteOn](com::midi::Event *noteOff, double val)
+        FSetValue setNoteOn = [](com::midi::Event *midiEvent, double val)
+        { midiEvent->absPosition(std::max(com::Ticks(0), (midiEvent->absPosition() + val * com::PPQ))); };
+        FSetValue setNoteOff = [midiEvent](com::midi::Event *noteOff, double val)
         { noteOff->absPosition(std::max(com::Ticks(0), (noteOff->absPosition() + val * com::PPQ))); };
         FGetOptionalValue getPredecessorValue = []() -> std::optional<double> {
             FM_THROW(compiler::Exception, "the follow up operator isn't supported by timeOffset");
@@ -27,6 +32,6 @@ namespace conductor
         double inputValue = declaration.value;
         constexpr double min = -std::numeric_limits<double>::max();
         constexpr double max = std::numeric_limits<double>::max();
-        performImpl(noteOn, noteOff, inputValue, min, max, getOriginalValue, getPercentBase, getPredecessorValue, setNoteOn, setNoteOff);
+        performImpl(midiEvent, noteOff, inputValue, min, max, getOriginalValue, getPercentBase, getPredecessorValue, setNoteOn, setNoteOff);
     }
 }

@@ -159,6 +159,7 @@ void FactoryConfig<TInjector>::initCommands()
 #include <conductor/selectors/NotOnBeat.h>
 #include <conductor/selectors/FromPosition.h>
 #include <conductor/selectors/ToPosition.h>
+#include <conductor/selectors/AtPosition.h>
 #include <conductor/selectors/Pitch.h>
 #include <conductor/selectors/FromPitch.h>
 #include <conductor/selectors/ToPitch.h>
@@ -177,6 +178,7 @@ void FactoryConfig<TInjector>::initCommands()
 #include <conductor/selectors/Chord.h>
 #include <conductor/selectors/Octave.h>
 #include <conductor/selectors/Phrase.h>
+#include <conductor/selectors/CC.h>
 #include <conductor/declarations/Velocity.h>
 #include <conductor/declarations/TimeOffset.h>
 #include <conductor/declarations/Duration.h>
@@ -192,6 +194,7 @@ void FactoryConfig<TInjector>::initConductor()
     register_<NotOnBeat>(selNamespace_ + SHEET_CONDUCTOR_SEL__NOT_ON_BEAT);
     register_<FromPosition>(selNamespace_ + SHEET_CONDUCTOR_SEL__FROM_POSITION);
     register_<ToPosition>(selNamespace_ + SHEET_CONDUCTOR_SEL__TO_POSITION);
+    register_<AtPosition>(selNamespace_ + SHEET_CONDUCTOR_SEL__AT_POSITION);
     register_<Pitch>(selNamespace_ + SHEET_CONDUCTOR_SEL__PITCH);
     register_<FromPitch>(selNamespace_ + SHEET_CONDUCTOR_SEL__FROM_PITCH);
     register_<ToPitch>(selNamespace_ + SHEET_CONDUCTOR_SEL__TO_PITCH);
@@ -210,6 +213,9 @@ void FactoryConfig<TInjector>::initConductor()
     register_<Octave>(selNamespace_ + SHEET_CONDUCTOR_SEL__OCTAVE);
     register_<Expression>(selNamespace_ + SHEET_CONDUCTOR_SEL__EXPRESSION);
     register_<Phrase>(selNamespace_ + SHEET_CONDUCTOR_SEL__PHRASE);
+    register_<Cc>(selNamespace_ + SHEET_CONDUCTOR_SEL__CC);
+
+
     register_<Velocity>(declNamespace_ + SHEET_CONDUCTOR_DEC__VELOCITY);
     register_<TimeOffset>(declNamespace_ + SHEET_CONDUCTOR_DEC__TIME_OFFSET);
     register_<Duration>(declNamespace_ + SHEET_CONDUCTOR_DEC__LENGTH);

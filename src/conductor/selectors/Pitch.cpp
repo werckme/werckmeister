@@ -5,7 +5,7 @@ namespace conductor
 {
     bool Pitch::isMatch(const documentModel::ConductionSelector::Arguments &arguments, const EventWithMetaInfo &evm) const
     {
-        const auto &ev = *evm.noteOn;
+        const auto &ev = *evm.midiEvent;
         for (const auto &argument : arguments)
         {
             auto pitchdef = _definitionServer->resolvePitch(argument.pitch);

@@ -102,6 +102,7 @@ SET (SRC_FETZER_LIB
     conductor/selectors/FromPosition.cpp
     conductor/selectors/FromPosition.cpp
     conductor/selectors/ToPosition.cpp
+    conductor/selectors/AtPosition.cpp
     conductor/selectors/Instrument.cpp
     conductor/selectors/FromPitch.cpp
     conductor/selectors/ToPitch.cpp
@@ -119,6 +120,7 @@ SET (SRC_FETZER_LIB
     conductor/selectors/Phrase.cpp
     conductor/selectors/Chord.cpp
     conductor/selectors/Octave.cpp
+    conductor/selectors/CC.cpp
     conductor/declarations/ADeclaration.cpp
     conductor/declarations/Velocity.cpp
     conductor/declarations/Pitch.cpp

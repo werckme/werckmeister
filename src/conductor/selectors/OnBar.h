@@ -6,7 +6,8 @@
 namespace conductor
 {
     /// <selector name="onBar">
-    ///     Selects an event on a given bar number or a list of bar numbers
+    ///     Selects an event in a given bar number or a list of bar numbers.
+    ///     TODO: should be renamed into inBar.
     /// ```
     /// onBar(1 3) {...}
     /// ```

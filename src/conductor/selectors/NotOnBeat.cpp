@@ -10,7 +10,7 @@ namespace conductor
 {
     bool NotOnBeat::isMatch(const documentModel::ConductionSelector::Arguments &arguments, const EventWithMetaInfo &evm) const
     {
-        const auto &ev = *evm.noteOn;
+        const auto &ev = *evm.midiEvent;
         auto eventInformation = _eventInformationServer->find(ev);
         if (!eventInformation)
         {

@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <unordered_map>
 #include <compiler/error.hpp>
+#include <compiler/ICompilerVisitor.h>
 
 namespace compiler
 {

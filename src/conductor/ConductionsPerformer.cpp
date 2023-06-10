@@ -110,8 +110,8 @@ namespace conductor
 				}
 				EventWithMetaInfo eventWithMetaInfo;
 				eventWithMetaInfo.timeSignature = timeSignature;
-				eventWithMetaInfo.noteOn = &event;
-				eventWithMetaInfo.unmodifiedOriginalNoteOn = event;
+				eventWithMetaInfo.midiEvent = &event;
+				eventWithMetaInfo.unmodifiedOriginalMidiEvent = event;
 				eventWithMetaInfo.barNumber = calculateBarNumber(quarters, timeSignature) + signatureChangeBarOffset;
 				if (selectorImpl->isMatch(selector.arguments, eventWithMetaInfo))
 				{
@@ -139,7 +139,7 @@ namespace conductor
 		auto &wm = com::getWerckmeister();
 		for (auto eventAndMetaInfo : events)
 		{
-			if (!isEventOfInterest(*eventAndMetaInfo.noteOn))
+			if (!isEventOfInterest(*eventAndMetaInfo.midiEvent))
 			{
 				continue;
 			}
@@ -245,7 +245,7 @@ namespace conductor
 			{
 				for (auto declaration : eventsAndDeclarations.declarations)
 				{
-					eventsWithDeclarations.insert({eventAndMetaInfo.noteOn, {&eventAndMetaInfo, declaration}});
+					eventsWithDeclarations.insert({eventAndMetaInfo.midiEvent, {&eventAndMetaInfo, declaration}});
 				}
 			}
 		}
@@ -277,11 +277,11 @@ namespace conductor
 				try
 				{
 					declaration->perform({
-						eventAndMetaInfo.noteOn,
+						eventAndMetaInfo.midiEvent,
 						eventAndMetaInfo.noteOff,
 						eventAndMetaInfo.predecessorNoteOn,
 						eventAndMetaInfo.predecessorNoteOff,
-						eventAndMetaInfo.unmodifiedOriginalNoteOn,
+						eventAndMetaInfo.unmodifiedOriginalMidiEvent,
 						eventAndMetaInfo.unmodifiedOriginalNoteOff
 					});
 				}

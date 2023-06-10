@@ -9,7 +9,7 @@ namespace conductor
 		{
 			auto pitchdef = _definitionServer->resolvePitch(arg.pitch);
 			com::Byte midiPitch = com::Byte(compiler::MidiContext::toMidiPitch(pitchdef));
-			if (evm.noteOn->parameter1() <= midiPitch)
+			if (evm.midiEvent->parameter1() <= midiPitch)
 			{
 				return true;
 			}
