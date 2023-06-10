@@ -297,6 +297,7 @@ namespace conductor
 
 	bool ConductionsPerformer::isEventOfInterest(const com::midi::Event &event) const
 	{
-		return event.eventType() == com::midi::NoteOn;
+		return event.eventType() == com::midi::NoteOn  
+		|| event.eventType() == com::midi::Controller;
 	}
 }
