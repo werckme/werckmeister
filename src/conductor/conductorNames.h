@@ -26,7 +26,6 @@
 #define SHEET_CONDUCTOR_SEL__CHORD FM_STRING("chord")
 #define SHEET_CONDUCTOR_SEL__OCTAVE FM_STRING("octave")
 #define SHEET_CONDUCTOR_SEL__PHRASE FM_STRING("phrase")
-#define SHEET_CONDUCTOR_SEL__CC FM_STRING("cc")
 
 // declarartions
 #define SHEET_CONDUCTOR_DEC__VELOCITY FM_STRING("velocity")

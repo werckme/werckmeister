@@ -3,6 +3,8 @@
 #include "ACommand.h"
 #include <compiler/argumentNames.h>
 #include <forward.hpp>
+#include "AUsingAnEvent.h"
+#include <compiler/ASheetEventRenderer.h>
 
 namespace compiler
 {
@@ -48,9 +50,10 @@ namespace compiler
     /// <param name="nr" type="0..N" position="0" optional="1" >The number of the controller</param>
     /// <param name="value" type="0..127" position="1" optional="0" >the controller values</param>
     /// <param name="name"  type="text" position="2" optional="1" >a controller name, can be used instead of a number. (supported names, see list above)</param>
-    class SetCC : public ACommand
+    class SetCC : public ACommand, public AUsingAnEvent
     {
     public:
+        SetCC(ASheetEventRendererPtr eventRenderer) : eventRenderer(eventRenderer) {}
         typedef ACommand Base;
         static com::String NoNameValue; 
         static int NoCCNumberValue; 
@@ -63,5 +66,8 @@ namespace compiler
         virtual void execute(IContextPtr) override;
         int findControllerNr(const com::String &name) const;
         int getControllerNr();
+        void renderController(IContextPtr context, int controllerNumber, int controllerValue, com::Ticks timeOffset = 0);
+    private:
+        ASheetEventRendererPtr eventRenderer;
     };
 }

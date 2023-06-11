@@ -3,7 +3,6 @@
 #include "SetCC.h"
 #include <compiler/argumentNames.h>
 #include <forward.hpp>
-#include "SetFade.h"
 
 namespace compiler
 {
@@ -55,17 +54,26 @@ namespace compiler
     class FadeCC : public SetCC
     {
     public:
+        static const com::String CurveTypeLin;
+        static const com::String CurveTypeQuad;
+        static const com::String CurveTypeCub;
+        static const com::String CurveTypeQuart;
+        static const com::String CurveTypeQuint;
+        static const com::String CurveTypeExp;
         typedef SetCC Base;
+        FadeCC(ASheetEventRendererPtr renderer) : Base(renderer) {}
         com::IHasParameter::ParametersByNames parameters = {
 
             FM_PARAMETER_DEFAULT_DEF(argumentNames.FadeCC.Nr, 0, NoCCNumberValue),
             FM_PARAMETER_DEF(argumentNames.FadeCC.From, 1),
             FM_PARAMETER_DEF(argumentNames.FadeCC.To, 2),
             FM_PARAMETER_DEFAULT_DEF(argumentNames.FadeCC.Duration, 3, NoNameValue),
-            FM_PARAMETER_DEFAULT_DEF(argumentNames.FadeCC.Curve, 4, SetFade::CurveTypeLin),
+            FM_PARAMETER_DEFAULT_DEF(argumentNames.FadeCC.Curve, 4, CurveTypeLin),
             FM_PARAMETER_DEFAULT_DEF(argumentNames.FadeCC.Name, 5, NoNameValue),
         };
         virtual ParametersByNames &getParameters() { return this->parameters; }
         virtual void execute(IContextPtr) override;
+    protected:
+        void fade(IContextPtr, int ccNr, double from, double to, double duration, const com::String& curveType);
     };
 }

@@ -7,7 +7,7 @@ namespace conductor
     void TimeOffset::perform(const Events &events) const
     {
         com::midi::Event *midiEvent = events.midiEvent;
-        if (midiEvent->eventType() == com::midi::Controller)
+        if (midiEvent->eventType() != com::midi::NoteOn)
         {
             if (com::midi::isDeviceConfigEvent(*midiEvent))
             {

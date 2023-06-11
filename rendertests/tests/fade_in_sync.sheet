@@ -1,0 +1,15 @@
+using "./fade_in_sync.conductions";
+
+tempo: 120;
+device: myDevice _isType="midi" _useDevice="FLUID";
+
+instrumentDef: organ  _onDevice="myDevice" _ch=0 _gmInstrument="Organ";
+
+
+[
+instrument: organ;
+{
+    /fade: _from=0 _to=127 _curve="lin" _duration=4/
+    c1~ | &
+}
+]

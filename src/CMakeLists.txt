@@ -120,7 +120,6 @@ SET (SRC_FETZER_LIB
     conductor/selectors/Phrase.cpp
     conductor/selectors/Chord.cpp
     conductor/selectors/Octave.cpp
-    conductor/selectors/CC.cpp
     conductor/declarations/ADeclaration.cpp
     conductor/declarations/Velocity.cpp
     conductor/declarations/Pitch.cpp

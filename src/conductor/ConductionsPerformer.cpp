@@ -273,7 +273,6 @@ namespace conductor
 			{
 				IDeclarationPtr declaration = declarationData.second;
 				const EventWithMetaInfo &eventAndMetaInfo = *declarationData.first;
-				// _logger->error(WMLogLambda(log << eventAndMetaInfo.noteOn->absPosition() << " : " << declaration->priority()));
 				try
 				{
 					declaration->perform({
@@ -298,6 +297,9 @@ namespace conductor
 	bool ConductionsPerformer::isEventOfInterest(const com::midi::Event &event) const
 	{
 		return event.eventType() == com::midi::NoteOn  
-		|| event.eventType() == com::midi::Controller;
+		|| event.eventType() == com::midi::Controller
+		|| event.eventType() == com::midi::PitchBend
+		|| event.eventType() == com::midi::CuePoint
+		|| event.eventType() == com::midi::ChannelAftertouch;
 	}
 }

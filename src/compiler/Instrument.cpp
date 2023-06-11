@@ -32,6 +32,10 @@ namespace compiler
 			{
 				renderer->renderPitchBendEvent(event);
 			}
+			else if(event.isController())
+			{
+				renderer->renderControllerEvent(event);
+			}
 			else
 			{
 				renderer->renderEventPitches(event);
