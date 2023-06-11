@@ -9,6 +9,10 @@ namespace conductor
         com::midi::Event *midiEvent = events.midiEvent;
         if (midiEvent->eventType() == com::midi::Controller)
         {
+            if (com::midi::isDeviceConfigEvent(*midiEvent))
+            {
+                return;
+            }
             midiEvent->absPosition(std::max(com::Ticks(0), (midiEvent->absPosition() + declaration.value * com::PPQ))); 
             return;
         }

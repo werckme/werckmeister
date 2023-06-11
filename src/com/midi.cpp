@@ -20,6 +20,20 @@ namespace com
 
 		const MetaValue NoMetaValue = "not_a_meta_value";
 
+		// pc
+		// cc _bankMsb(0)  
+		// cc _bankLsb(32) 
+		bool isDeviceConfigEvent(const Event& ev)
+		{
+			return ev.eventType() == ProgramChange
+				|| 
+				(
+					ev.eventType() == Controller
+					&& (ev.parameter1() == 0 || ev.parameter1() == 32)
+				)
+			;
+		}
+
 		size_t variableLengthRequiredSize(MidiLong value)
 		{
 			if (value <= 0x7F)
