@@ -11,7 +11,7 @@ namespace compiler
     /// Fades a CC value from a start to an end value.
     /// #### examples
     /// `/fadeCC: _name="modulation" _from=10 _to=100 _curve="lin"/ -- fades a modulation value by controller name`
-    /// `/fadeCC: _nr=1 _value=10 _from=10 _to=100 _curve="lin"/ -- fades a modulation value by controller number`
+    /// `/fadeCC: _nr=1 _from=10 _to=100 _curve="lin"/ -- fades a modulation value by controller number`
     /// #### supported CC names *(if using name paramenter instead of cc number)*
     /// * BankSelectMSB
     /// * Modulation
