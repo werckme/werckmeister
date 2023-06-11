@@ -28,6 +28,7 @@ namespace compiler
         virtual void renderEvent(const documentModel::Event &_ev);
         virtual void renderEventPitches(const documentModel::Event &noteEvent);
         virtual void renderPitchBendEvent(const documentModel::Event &pitchBendEvent);
+        virtual void renderControllerEvent(const documentModel::Event &controllerEvent);
         virtual std::shared_ptr<ASheetEventRenderer> createNewSheetEventRenderer(IContextPtr ctx);
     protected:
         void onWarning(const com::String &message, const documentModel::Event &event);

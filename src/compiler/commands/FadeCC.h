@@ -3,7 +3,6 @@
 #include "SetCC.h"
 #include <compiler/argumentNames.h>
 #include <forward.hpp>
-#include "SetFade.h"
 
 namespace compiler
 {
@@ -11,7 +10,7 @@ namespace compiler
     /// Fades a CC value from a start to an end value.
     /// #### examples
     /// `/fadeCC: _name="modulation" _from=10 _to=100 _curve="lin"/ -- fades a modulation value by controller name`
-    /// `/fadeCC: _nr=1 _value=10 _from=10 _to=100 _curve="lin"/ -- fades a modulation value by controller number`
+    /// `/fadeCC: _nr=1 _from=10 _to=100 _curve="lin"/ -- fades a modulation value by controller number`
     /// #### supported CC names *(if using name paramenter instead of cc number)*
     /// * BankSelectMSB
     /// * Modulation
@@ -55,17 +54,26 @@ namespace compiler
     class FadeCC : public SetCC
     {
     public:
+        static const com::String CurveTypeLin;
+        static const com::String CurveTypeQuad;
+        static const com::String CurveTypeCub;
+        static const com::String CurveTypeQuart;
+        static const com::String CurveTypeQuint;
+        static const com::String CurveTypeExp;
         typedef SetCC Base;
+        FadeCC(ASheetEventRendererPtr renderer) : Base(renderer) {}
         com::IHasParameter::ParametersByNames parameters = {
 
             FM_PARAMETER_DEFAULT_DEF(argumentNames.FadeCC.Nr, 0, NoCCNumberValue),
             FM_PARAMETER_DEF(argumentNames.FadeCC.From, 1),
             FM_PARAMETER_DEF(argumentNames.FadeCC.To, 2),
             FM_PARAMETER_DEFAULT_DEF(argumentNames.FadeCC.Duration, 3, NoNameValue),
-            FM_PARAMETER_DEFAULT_DEF(argumentNames.FadeCC.Curve, 4, SetFade::CurveTypeLin),
+            FM_PARAMETER_DEFAULT_DEF(argumentNames.FadeCC.Curve, 4, CurveTypeLin),
             FM_PARAMETER_DEFAULT_DEF(argumentNames.FadeCC.Name, 5, NoNameValue),
         };
         virtual ParametersByNames &getParameters() { return this->parameters; }
         virtual void execute(IContextPtr) override;
+    protected:
+        void fade(IContextPtr, int ccNr, double from, double to, double duration, const com::String& curveType);
     };
 }

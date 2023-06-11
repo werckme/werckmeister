@@ -6,7 +6,7 @@ namespace conductor
 {
     bool WithTag::isMatch(const documentModel::ConductionSelector::Arguments &arguments, const EventWithMetaInfo &evm) const
     {
-        const auto &ev = *evm.noteOn;
+        const auto &ev = *evm.midiEvent;
         auto tags = _eventInformationServer->getTags(ev);
         if (tags.empty())
         {

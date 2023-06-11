@@ -110,6 +110,12 @@ namespace compiler
 			renderer->renderPhrase(*ev);
 			return true;
 		}
+		template <>
+		bool renderEvent<Event::Controller>(SheetEventRenderer *renderer, const Event *ev)
+		{
+			renderer->renderControllerEvent(*ev);
+			return true;
+		}		
 		//////////////////////////////////////////////////
 		template <int EventId>
 		bool renderEventUnrolled(SheetEventRenderer *renderer, const Event *ev)
@@ -232,6 +238,10 @@ namespace compiler
 				{
 					renderPitchBendEvent(event);
 				}
+				else if(event.isController())
+				{
+					renderControllerEvent(event);
+				}
 				else
 				{
 					renderEventPitches(event);
@@ -262,8 +272,16 @@ namespace compiler
 	{
 		auto ctx = context();
 		auto meta = ctx->voiceMetaData();
-		auto position = meta->position + static_cast<com::Ticks>(pitchBendEvent.offset);
-		ctx->renderPitchbend(pitchBendEvent.pitchBendValue, position);
+		auto absolutePosition = meta->position + static_cast<com::Ticks>(pitchBendEvent.offset);
+		ctx->renderPitchbend(pitchBendEvent.pitchBendValue, absolutePosition);
+	}
+
+	void SheetEventRenderer::renderControllerEvent(const Event &controllerEvent)
+	{
+		auto ctx = context();
+		auto meta = ctx->voiceMetaData();
+		auto relativePosition = static_cast<com::Ticks>(controllerEvent.offset);
+		ctx->setContinuousController(controllerEvent.controllerNumber, controllerEvent.controllerValue, relativePosition);
 	}
 
 	void SheetEventRenderer::handleMetaEvent(const Event &metaEvent)

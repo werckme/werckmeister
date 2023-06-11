@@ -2,6 +2,7 @@
 
 #include "ACommand.h"
 #include <compiler/argumentNames.h>
+#include "FadeCC.h"
 
 namespace compiler
 {
@@ -37,15 +38,11 @@ namespace compiler
     /// <param name="from"     position="1" default="0" type="0..100">The source volume value.</param>
     /// <param name="to"       position="2" default="100" type="0..100">The target volume value.</param>
     /// <param name="curve"    position="3" default="lin" type="lin,quad,cub,quart,quint,exp">The fade curve type.</param>
-    class SetFade : public ACommand
+    class SetFade : public FadeCC
     {
     public:
-        static const com::String CurveTypeLin;
-        static const com::String CurveTypeQuad;
-        static const com::String CurveTypeCub;
-        static const com::String CurveTypeQuart;
-        static const com::String CurveTypeQuint;
-        static const com::String CurveTypeExp;
+        typedef FadeCC Base;
+        SetFade(ASheetEventRendererPtr renderer) : Base(renderer) {}
         com::IHasParameter::ParametersByNames parameters = {
             FM_PARAMETER_DEF(argumentNames.SetFade.FadeDuration, 0),
             FM_PARAMETER_DEFAULT_DEF(argumentNames.SetFade.FadeFrom, 1, "0"),

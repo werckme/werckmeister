@@ -7,7 +7,7 @@ namespace conductor
 	{
 		for (const auto &arg : arguments)
 		{
-			int midiEventOctave = (int)evm.noteOn->parameter1() / 12;
+			int midiEventOctave = (int)evm.midiEvent->parameter1() / 12;
 			if (midiEventOctave == arg.numberValue)
 			{
 				return true;

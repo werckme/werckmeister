@@ -1,27 +1,26 @@
-#include "ToPosition.h"
-#include <cmath>
+#include "AtPosition.h"
 #include <compiler/error.hpp>
 
 namespace conductor
 {
-    bool ToPosition::isMatch(const documentModel::ConductionSelector::Arguments &arguments, const EventWithMetaInfo &evm) const
+    bool AtPosition::isMatch(const documentModel::ConductionSelector::Arguments &arguments, const EventWithMetaInfo &evm) const
     {
         const auto &ev = *evm.midiEvent;
         auto eventPosition = ev.absPosition() / com::PPQ;
         if (arguments.empty())
         {
-            FM_THROW(compiler::Exception, "missing argument for selector ToPosition");
+            FM_THROW(compiler::Exception, "missing argument for selector AtPosition");
         }
         auto argument = arguments[0];
         if (argument.valueContext != documentModel::ConductionSelector::ArgumentValue::CueReference)
         {
-            return eventPosition < argument.numberValue;
+            return eventPosition == argument.numberValue;
         }
         auto cuePosition = _eventInformationServer->findCueEventPosition(argument.name);
         if (cuePosition == UndefinedTicks)
         {
             return false;
         }
-        return eventPosition < cuePosition/com::PPQ;
+        return eventPosition == cuePosition/com::PPQ;
     }
 }

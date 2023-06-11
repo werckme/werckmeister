@@ -5,11 +5,11 @@ namespace conductor
 {
     void Duration::perform(const Events &events) const
     {
-        com::midi::Event *noteOn = events.noteOn;
+        com::midi::Event *noteOn = events.midiEvent;
         com::midi::Event *noteOff = events.noteOff;
         com::midi::Event *predecessorNoteOn = events.predecessorNoteOn;
         com::midi::Event *predecessorNoteOff = events.predecessorNoteOff;
-        const com::midi::Event &originalNoteOn = events.unmodifiedOriginalNoteOn;
+        const com::midi::Event &originalNoteOn = events.unmodifiedOriginalMidiEvent;
         const com::midi::Event &originalNoteOff = events.unmodifiedOriginalNoteOff;
         if (!noteOff)
         {

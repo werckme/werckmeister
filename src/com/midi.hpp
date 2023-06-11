@@ -294,5 +294,7 @@ namespace com
 			TrackContainer _container;
 			bool _sealed = false;
 		};
+		
+		bool isDeviceConfigEvent(const Event&);
 	}
 }

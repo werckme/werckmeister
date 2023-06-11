@@ -56,8 +56,9 @@ namespace app
         int instrumentId = -1;
         com::Ticks beginTime = -1;
         com::Ticks endTime = -1;
-        bool operator<(const EventInfo &b) const { return this->beginPosition < b.beginPosition; }
-        bool operator==(const EventInfo &b) const { return this->beginPosition == b.beginPosition; }
+        bool operator<(const EventInfo &b) const { return this->sourceId == b.sourceId ? (this->beginPosition < b.beginPosition) : (this->sourceId < b.sourceId); }
+        bool operator==(const EventInfo &b) const { return this->sourceId == b.sourceId && this->beginPosition == b.beginPosition; }
+
     };
 
     typedef std::vector<EventInfo> EventInfos;

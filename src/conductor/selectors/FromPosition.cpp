@@ -5,7 +5,7 @@ namespace conductor
 {
     bool FromPosition::isMatch(const documentModel::ConductionSelector::Arguments &arguments, const EventWithMetaInfo &evm) const
     {
-        const auto &ev = *evm.noteOn;
+        const auto &ev = *evm.midiEvent;
         auto eventPosition = ev.absPosition() / com::PPQ;
         if (arguments.empty())
         {

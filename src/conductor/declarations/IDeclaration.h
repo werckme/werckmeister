@@ -14,11 +14,11 @@ namespace conductor
     public:
         struct Events
         {
-            com::midi::Event *noteOn = nullptr;
+            com::midi::Event *midiEvent = nullptr;
             com::midi::Event *noteOff = nullptr;
             com::midi::Event *predecessorNoteOn = nullptr;
             com::midi::Event *predecessorNoteOff = nullptr;
-            com::midi::Event unmodifiedOriginalNoteOn;
+            com::midi::Event unmodifiedOriginalMidiEvent;
             com::midi::Event unmodifiedOriginalNoteOff;
         };
         virtual void setDeclarationData(const documentModel::ConductionRule::Declaration &) = 0;

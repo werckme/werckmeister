@@ -40,6 +40,7 @@ namespace documentModel
 			Group,
 			Phrase,
 			TiedPhrase,
+			Controller,
 			NumEvents
 		};
 		typedef com::Ticks Duration;
@@ -77,6 +78,9 @@ namespace documentModel
 		double velocity = 0;
 		com::Ticks offset = 0;
 		double pitchBendValue = 0;
+		int controllerNumber = 0;
+		int controllerValue = 0;
+
 		bool isTimeConsuming() const;
 
 		bool isRepeat() const
@@ -117,6 +121,11 @@ namespace documentModel
 		bool isGroup() const
 		{
 			return type == Group;
+		}
+
+		bool isController() const
+		{
+			return type == Controller;
 		}
 
 		com::String toString() const;

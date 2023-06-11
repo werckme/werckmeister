@@ -4,6 +4,8 @@
 #include <algorithm>
 #include <unordered_map>
 #include <compiler/error.hpp>
+#include <compiler/ICompilerVisitor.h>
+#include <compiler/SheetEventRenderer.h>
 
 namespace compiler
 {
@@ -62,11 +64,32 @@ namespace compiler
         }
         return nr;
     }
+    void SetCC::renderController(IContextPtr context, int controllerNumber, int controllerValue, com::Ticks timeOffset)
+    {
+        auto controllerEvent = event(); // use the origin as base
+        controllerEvent.type = documentModel::Event::Controller;
+        controllerEvent.controllerNumber = controllerNumber;
+        controllerEvent.controllerValue = controllerValue;
+        controllerEvent.offset = timeOffset;
+        auto instrument = context->currentInstrumentDef();
+        if (instrument)
+        {
+            auto sheetEventRenderer = dynamic_cast<SheetEventRenderer*>(eventRenderer.get());
+            if (sheetEventRenderer == nullptr)
+            {
+                FM_THROW(Exception, "expecting SheetEventRenderer");
+            }
+            std::list<documentModel::Event> events({controllerEvent});
+            instrument->renderEvents(sheetEventRenderer, events);
+            return;
+        }
+        eventRenderer->addEvent(controllerEvent);
+    }
     void SetCC::execute(IContextPtr context)
     {
         int nr = getControllerNr();
         auto value = parameters[argumentNames.SetCC.Value].value<int>();
-        context->setContinuousController(nr, value);
+        renderController(context, nr, value);
     }
     int SetCC::findControllerNr(const com::String &name) const
     {

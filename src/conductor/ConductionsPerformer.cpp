@@ -110,8 +110,8 @@ namespace conductor
 				}
 				EventWithMetaInfo eventWithMetaInfo;
 				eventWithMetaInfo.timeSignature = timeSignature;
-				eventWithMetaInfo.noteOn = &event;
-				eventWithMetaInfo.unmodifiedOriginalNoteOn = event;
+				eventWithMetaInfo.midiEvent = &event;
+				eventWithMetaInfo.unmodifiedOriginalMidiEvent = event;
 				eventWithMetaInfo.barNumber = calculateBarNumber(quarters, timeSignature) + signatureChangeBarOffset;
 				if (selectorImpl->isMatch(selector.arguments, eventWithMetaInfo))
 				{
@@ -139,7 +139,7 @@ namespace conductor
 		auto &wm = com::getWerckmeister();
 		for (auto eventAndMetaInfo : events)
 		{
-			if (!isEventOfInterest(*eventAndMetaInfo.noteOn))
+			if (!isEventOfInterest(*eventAndMetaInfo.midiEvent))
 			{
 				continue;
 			}
@@ -245,7 +245,7 @@ namespace conductor
 			{
 				for (auto declaration : eventsAndDeclarations.declarations)
 				{
-					eventsWithDeclarations.insert({eventAndMetaInfo.noteOn, {&eventAndMetaInfo, declaration}});
+					eventsWithDeclarations.insert({eventAndMetaInfo.midiEvent, {&eventAndMetaInfo, declaration}});
 				}
 			}
 		}
@@ -273,15 +273,14 @@ namespace conductor
 			{
 				IDeclarationPtr declaration = declarationData.second;
 				const EventWithMetaInfo &eventAndMetaInfo = *declarationData.first;
-				// _logger->error(WMLogLambda(log << eventAndMetaInfo.noteOn->absPosition() << " : " << declaration->priority()));
 				try
 				{
 					declaration->perform({
-						eventAndMetaInfo.noteOn,
+						eventAndMetaInfo.midiEvent,
 						eventAndMetaInfo.noteOff,
 						eventAndMetaInfo.predecessorNoteOn,
 						eventAndMetaInfo.predecessorNoteOff,
-						eventAndMetaInfo.unmodifiedOriginalNoteOn,
+						eventAndMetaInfo.unmodifiedOriginalMidiEvent,
 						eventAndMetaInfo.unmodifiedOriginalNoteOff
 					});
 				}
@@ -297,6 +296,10 @@ namespace conductor
 
 	bool ConductionsPerformer::isEventOfInterest(const com::midi::Event &event) const
 	{
-		return event.eventType() == com::midi::NoteOn;
+		return event.eventType() == com::midi::NoteOn  
+		|| event.eventType() == com::midi::Controller
+		|| event.eventType() == com::midi::PitchBend
+		|| event.eventType() == com::midi::CuePoint
+		|| event.eventType() == com::midi::ChannelAftertouch;
 	}
 }

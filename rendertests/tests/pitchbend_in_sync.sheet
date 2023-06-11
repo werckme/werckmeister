@@ -1,0 +1,15 @@
+using "./pitchbend_in_sync.conductions";
+
+tempo: 120;
+device: myDevice _isType="midi" _useDevice="FLUID";
+
+instrumentDef: organ  _onDevice="myDevice" _ch=0 _gmInstrument="Organ";
+
+
+[
+instrument: organ;
+{
+    /doOnce: bend _from=0/
+    c1~ | &
+}
+]

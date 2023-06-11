@@ -6,7 +6,7 @@ namespace conductor
     {
         for (const auto &argument : arguments)
         {
-            const auto *eventInfo = _eventInformationServer->find(*evm.noteOn);
+            const auto *eventInfo = _eventInformationServer->find(*evm.midiEvent);
             if (!eventInfo) 
             {
                 continue;

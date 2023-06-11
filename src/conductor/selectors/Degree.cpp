@@ -13,11 +13,11 @@ namespace conductor
 {
 	bool Degree::isMatch(const documentModel::ConductionSelector::Arguments &arguments, const EventWithMetaInfo &evm) const
 	{
-		const auto &midiEvent = *evm.noteOn;
+		const auto &midiEvent = *evm.midiEvent;
 		for (const auto &arg : arguments)
 		{
 			auto eventInformation = _eventInformationServer->find(midiEvent);
-			if (eventInformation->chordRenderInfo.get() == nullptr) {
+			if (!eventInformation || eventInformation->chordRenderInfo.get() == nullptr) {
 				continue;
 			}
 			auto chordInfos = eventInformation->chordRenderInfo;
