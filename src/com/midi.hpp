@@ -78,6 +78,7 @@ namespace com
 			ProgramChange = 0xC,
 			ChannelAftertouch = 0xD,
 			PitchBend = 0xE,
+			Sysex = 0xF0,
 			MetaEvent = 0xFF
 		};
 		enum MetaEventType
@@ -130,6 +131,7 @@ namespace com
 			size_t metaDataSize() const { return _metaDataSize; }
 			MetaEventType metaEventType() const { return _metaEventType; }
 			const Byte *metaData() const { return _metaData.get(); }
+			const Byte *sysexData() const { return _metaData.get(); }
 			static Event NoteOn(Channel, Ticks, Pitch, Velocity);
 			static Event NoteOff(Channel, Ticks, Pitch);
 			static Event MetaTempo(double bpm);
@@ -142,6 +144,10 @@ namespace com
 			static Event MetaTrack(const std::string &name);
 			static Event MetaCue(const std::string &name);
 			static Event MetaCustom(const CustomMetaData &custom);
+			/**
+			* @param sysexData: the sysex data excluding the delimiters F0 F7
+			*/
+			static Event Sysex(const Byte* sysexData, size_t length);
 			static std::vector<Byte> MetaCreateStringData(const std::string &string);
 			static std::string MetaGetStringValue(const Byte *data, size_t length);
 			static int MetaGetIntValue(const Byte *data, size_t length);
@@ -165,10 +171,12 @@ namespace com
 			size_t readPayload(const Byte *, size_t maxByteSize);
 			size_t readPayloadDefault(const Byte *, size_t maxByteSize);
 			size_t readPayloadMeta(const Byte *, size_t maxByteSize);
+			size_t readPayloadSysex(const Byte*, size_t maxByteSize);
 
 		private:
 			size_t writePayloadDefault(Byte *, size_t maxByteSize) const;
 			size_t writePayloadMeta(Byte *, size_t maxByteSize) const;
+			size_t writePayloadSysex(Byte*, size_t maxByteSize) const;
 
 		private:
 			Ticks _deltaTime = 0;

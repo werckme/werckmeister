@@ -148,7 +148,10 @@ namespace com
 		}
 		size_t Event::readPayload(const Byte *bytes, size_t maxByteSize)
 		{
-
+			if (*bytes == midi::Sysex)
+			{
+				return readPayloadSysex(bytes + 1, maxByteSize - 1) + 2;
+			}
 			if (*bytes != MetaEvent)
 			{
 				return readPayloadDefault(bytes, maxByteSize);
@@ -189,6 +192,20 @@ namespace com
 			::memcpy(_metaData.get(), bytes, _metaDataSize);
 			return metaTypeByteSize + vlengthBytes + _metaDataSize;
 		}
+		size_t Event::readPayloadSysex(const Byte* bytes, size_t maxByteSize)
+		{
+			eventType(midi::Sysex);
+			const Byte* end = bytes + maxByteSize;
+			const Byte* delimit = std::find(bytes, end, (Byte)0xF7);
+			if (delimit == end)
+			{
+				FM_THROW(com::Exception, "sysex delimiter 0xF7 not found");
+			}
+			_metaDataSize = delimit - bytes;
+			_metaData = Bytes(new Byte[_metaDataSize]);
+			::memcpy(_metaData.get(), bytes, _metaDataSize);
+			return _metaDataSize;
+		}
 		size_t Event::write(Ticks deltaOffset, Byte *bytes, size_t maxByteSize) const
 		{
 			size_t length = byteSize(deltaOffset);
@@ -206,6 +223,10 @@ namespace com
 			if (eventType() == MetaEvent)
 			{
 				return writePayloadMeta(bytes, maxByteSize);
+			}
+			if (eventType() == midi::Sysex)
+			{
+				return writePayloadSysex(bytes, maxByteSize);
 			}
 			return writePayloadDefault(bytes, maxByteSize);
 		}
@@ -242,6 +263,18 @@ namespace com
 			::memcpy(bytes, _metaData.get(), metaDataSize());
 			return 3 + metaDataSize();
 		}
+		size_t Event::writePayloadSysex(Byte* bytes, size_t maxByteSize) const
+		{
+			if (maxByteSize < payloadSize())
+			{
+				FM_THROW(com::Exception, "buffer to small");
+			}
+			(*bytes++) = 0xF0;
+			::memcpy(bytes, _metaData.get(), metaDataSize());
+			bytes += metaDataSize();
+			(*bytes) = 0xF7;
+			return 2 + metaDataSize();
+		}
 		size_t Event::payloadSize() const
 		{
 			switch (eventType())
@@ -252,6 +285,8 @@ namespace com
 				return 2;
 			case MetaEvent:
 				return 2 + variableLengthRequiredSize(_metaDataSize) + _metaDataSize;
+			case midi::Sysex:
+				return 2 + _metaDataSize;
 			default:
 				break;
 			}
@@ -450,6 +485,15 @@ namespace com
 			}
 			result.data = CustomMetaData::Data(&data[1], &data[length]);
 			return result;
+		}
+		Event Event::Sysex(const Byte* sysexData, size_t numBytes)
+		{
+			Event event;
+			event.eventType(midi::Sysex);
+			event._metaDataSize = numBytes;
+			event._metaData = Bytes(new Byte[numBytes]);
+			::memcpy(event._metaData.get(), sysexData, numBytes);
+			return event;
 		}
 		bool Event::equals(const Event &b) const
 		{
