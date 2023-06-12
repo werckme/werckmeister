@@ -1,4 +1,5 @@
 using "./mod_in_sync.conductions";
+using "./modinsync.lua";
 
 tempo: 120;
 device: myDevice _isType="midi" _useDevice="FLUID";
@@ -11,6 +12,8 @@ instrumentConf: organ cc _nr=2 _value=2;
 instrument: organ;
 {
     /fadeCC: _nr=1 _from=0 _to=127 _curve="lin" _duration=4/
-    c1~ | &
+    c1~ | & |
+    /doOnce: modinsync/
+    d1  |
 }
 ]
