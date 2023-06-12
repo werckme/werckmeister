@@ -1,0 +1,16 @@
+using "./chords/default.chords";
+using "./215luaExtensionSysexSupport.lua";
+
+tempo: 190;
+device: SC1 midi 0;
+--           instrument   dv ch cc pc
+instrumentDef: piano      SC1 0 0 0;
+
+[
+instrument: piano;
+{
+    c d e f | 
+    /call: 215luaExtensionSysexSupport/
+    g1 
+}
+]

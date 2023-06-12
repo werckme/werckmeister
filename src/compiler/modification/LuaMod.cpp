@@ -13,6 +13,8 @@ static const char *LUA_EVENT_TYPE_REST = "rest";
 static const char *LUA_EVENT_TYPE_DEGREE = "degree";
 static const char *LUA_EVENT_TYPE_PITCHBEND = "pitchBend";
 static const char *LUA_EVENT_TYPE_CC = "cc";
+static const char *LUA_EVENT_TYPE_SYSEX = "sysex";
+static const char *LUA_EVENT_PROPETRY_SYSEX_DATA = "sysexData";
 static const char *LUA_EVENT_TYPE_UNKNOWN = "unknown";
 static const char *LUA_EVENT_PROPETRY_VELOCITY = "velocity";
 static const char *LUA_EVENT_PROPETRY_DURATION = "duration";
@@ -283,6 +285,10 @@ namespace compiler
             {
                 popAndExecuteCc(ctx);
             }
+            if (type == LUA_EVENT_TYPE_SYSEX)
+            {
+                popAndExecuteSysex(ctx);
+            }
             lua_pop(L, 1);
         }
         return result;
@@ -298,7 +304,46 @@ namespace compiler
         lua::getTableValue(L, LUA_EVENT_PROPETRY_CC_VALUE, ccValue);
         timeOffset *= com::PPQ;
         ctx->setContinuousController(ccNr, ccValue, timeOffset);
+    }
 
+    void LuaModification::popAndExecuteSysex(IContextPtr ctx)
+    {
+        com::Ticks timeOffset = 0;
+        int ccNr = -1;
+        int ccValue = -1;
+        lua::getTableValue(L, LUA_EVENT_PROPETRY_OFFSET, timeOffset);
+        timeOffset *= com::PPQ;
+        lua_pushstring(L, LUA_EVENT_PROPETRY_SYSEX_DATA);
+        lua_gettable(L, -2);
+        if (!lua_istable(L, -1))
+        {
+            FM_THROW(Exception, "sysex data is not a table");
+        }
+        size_t size = lua_rawlen(L, -1);
+        std::vector<com::Byte> bff;
+        bff.reserve(size);
+        for (int index = 0; index < size; index++) 
+        {
+            lua_pushinteger(L, index + 1);
+            lua_gettable(L, -2);
+            if (!lua_isinteger(L, -1))
+            {
+                FM_THROW(Exception, "sysex data expecting number value");
+            }
+            int value = lua_tointeger(L, -1);
+            if (value < 0 || value > 255)
+            {
+                FM_THROW(Exception, "sysex value out of bounds: " + std::to_string(value));
+            }
+            bff.push_back((com::Byte)value);
+            lua_pop(L, 1);
+        }
+        lua_pop(L, 1);
+        if (bff.empty())
+        {
+            return;
+        }
+        ctx->setSysex(bff.data(), bff.size(), timeOffset);
     }
 
     void LuaModification::perform(IContextPtr ctx, Events &events)
