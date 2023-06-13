@@ -100,6 +100,12 @@ namespace com
 			KeySignature = 0x59,
 			CustomMetaEvent = 0x7F
 		};
+		enum MidiEventTarget
+		{
+			MidiEventTargetUnknown,
+			MidiEventTargetFile,
+			MidiEventTargetDevice
+		};
 		struct Event
 		{
 			Event();
@@ -122,7 +128,7 @@ namespace com
 			/**
 				@return the event size excluding offset
 			*/
-			size_t payloadSize() const;
+			size_t payloadSize(MidiEventTarget target = MidiEventTargetFile) const;
 			/**
 			 * set the type to MetaData and sets the meta data.
 			 * @see metaDataSize() and metaData
@@ -164,7 +170,7 @@ namespace com
 			/**
 				writes the event excluding offset
 			*/
-			size_t writePayload(Byte *, size_t maxByteSize) const;
+			size_t writePayload(Byte *, size_t maxByteSize, MidiEventTarget target = MidiEventTargetFile) const;
 			com::String toString() const;
 
 		protected:
@@ -176,7 +182,7 @@ namespace com
 		private:
 			size_t writePayloadDefault(Byte *, size_t maxByteSize) const;
 			size_t writePayloadMeta(Byte *, size_t maxByteSize) const;
-			size_t writePayloadSysex(Byte*, size_t maxByteSize) const;
+			size_t writePayloadSysex(Byte*, size_t maxByteSize, MidiEventTarget target = MidiEventTargetFile) const;
 
 		private:
 			Ticks _deltaTime = 0;

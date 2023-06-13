@@ -811,40 +811,78 @@ BOOST_AUTO_TEST_CASE(meta_event_read_write_custom_meta_0)
 BOOST_AUTO_TEST_CASE(event_read_write_sysex)
 {
 	using namespace com;
-	const char* sysexData = "this is sysex data"; // avoid F7 => ÷
-	constexpr size_t dataSize = 19;
-	constexpr size_t eventSize = 2 + dataSize + 1;
+	const char* sysexData = "1234567890"; // avoid F7 => ÷
+	constexpr size_t dataSize = 10 + 1; // numchar + \0
+	constexpr size_t sysexEventSize = 1 + 1 + dataSize + 1; // f0 + message size + data + f7
+	constexpr size_t eventSizeTotal = sysexEventSize + 1;
 	auto org = midi::Event::Sysex((Byte*)sysexData, dataSize);
 
 	BOOST_CHECK_EQUAL(org.eventType(), midi::Sysex);
-	BOOST_CHECK_EQUAL(org.byteSize(0), eventSize);
+	BOOST_CHECK_EQUAL(org.byteSize(0), eventSizeTotal);
 
-	Byte bff[eventSize];
-	org.write(0, bff, eventSize);
+	Byte bff[eventSizeTotal];
+	org.write(0, bff, eventSizeTotal);
 
 	midi::Event copy;
-	size_t bytesRead = copy.read(0, &bff[0], eventSize);
-	BOOST_CHECK_EQUAL(bytesRead, eventSize);
+	size_t bytesRead = copy.read(0, &bff[0], eventSizeTotal);
+	BOOST_CHECK_EQUAL(bytesRead, eventSizeTotal);
 	BOOST_CHECK_EQUAL(copy.eventType(), midi::Sysex);
-	BOOST_CHECK_EQUAL(copy.byteSize(0), eventSize);
+	BOOST_CHECK_EQUAL(copy.byteSize(0), eventSizeTotal);
 	BOOST_CHECK_EQUAL((const char*)copy.sysexData(), sysexData);
 }
 
-BOOST_AUTO_TEST_CASE(event_read_write_sysex_fail)
+BOOST_AUTO_TEST_CASE(event_read_write_sysex_to_device)
 {
 	using namespace com;
-	const char* sysexData = "this is sysex data"; // avoid F7 => ÷
-	constexpr size_t dataSize = 19;
-	constexpr size_t eventSize = 2 + dataSize + 1;
+	const char* sysexData = "1234567890"; // avoid F7 => ÷
+	constexpr size_t dataSize = 10 + 1; // numchar + \0
+	constexpr size_t sysexEventSize = 1 + dataSize + 1; // f0 + data + f7
+	
+	auto org = midi::Event::Sysex((Byte*)sysexData, dataSize);
+
+	Byte bff[sysexEventSize];
+
+	org.writePayload(bff, sysexEventSize, midi::MidiEventTargetDevice);
+
+	BOOST_CHECK_EQUAL(bff[0], 0xF0);
+	BOOST_CHECK_EQUAL(bff[1], '1');
+	BOOST_CHECK_EQUAL(bff[2], '2');
+	BOOST_CHECK_EQUAL(bff[3], '3');
+	BOOST_CHECK_EQUAL(bff[4], '4');
+	BOOST_CHECK_EQUAL(bff[5], '5');
+	BOOST_CHECK_EQUAL(bff[6], '6');
+	BOOST_CHECK_EQUAL(bff[7], '7');
+	BOOST_CHECK_EQUAL(bff[8], '8');
+	BOOST_CHECK_EQUAL(bff[9], '9');
+	BOOST_CHECK_EQUAL(bff[10], '0');
+	BOOST_CHECK_EQUAL(bff[11], '\0');
+	BOOST_CHECK_EQUAL(bff[12], 0xF7);
+
+}
+
+BOOST_AUTO_TEST_CASE(event_read_write_sysex_large)
+{
+	using namespace com;
+	constexpr size_t dataSize = 1024 * 1024 * 1;
+	char* sysexData = new char[dataSize];
+	::memset(sysexData, 'A', dataSize);
+
+	constexpr size_t sysexEventSize = 1 + 3 + dataSize + 1; // f0 + message size + data + f7
+	constexpr size_t eventSizeTotal = sysexEventSize + 1;
 	auto org = midi::Event::Sysex((Byte*)sysexData, dataSize);
 
 	BOOST_CHECK_EQUAL(org.eventType(), midi::Sysex);
-	BOOST_CHECK_EQUAL(org.byteSize(0), eventSize);
+	BOOST_CHECK_EQUAL(org.byteSize(0), eventSizeTotal);
 
-	Byte bff[eventSize];
-	org.write(0, bff, eventSize);
-	bff[21] = 'X'; // overwrite delimiter F7
+	Byte* bff = new Byte[eventSizeTotal];
+	org.write(0, bff, eventSizeTotal);
+
 	midi::Event copy;
-	BOOST_CHECK_THROW(copy.read(0, &bff[0], eventSize), com::Exception);
-
+	size_t bytesRead = copy.read(0, bff, eventSizeTotal);
+	BOOST_CHECK_EQUAL(bytesRead, eventSizeTotal);
+	BOOST_CHECK_EQUAL(copy.eventType(), midi::Sysex);
+	BOOST_CHECK_EQUAL(copy.byteSize(0), eventSizeTotal);
+	BOOST_CHECK_EQUAL((const char*)copy.sysexData(), sysexData);
+	delete[] sysexData;
+	delete[] bff;
 }

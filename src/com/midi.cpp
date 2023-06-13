@@ -150,7 +150,7 @@ namespace com
 		{
 			if (*bytes == midi::Sysex)
 			{
-				return readPayloadSysex(bytes + 1, maxByteSize - 1) + 2;
+				return readPayloadSysex(bytes + 1, maxByteSize - 1);
 			}
 			if (*bytes != MetaEvent)
 			{
@@ -197,7 +197,8 @@ namespace com
 			eventType(midi::Sysex);
 			const Byte* end = bytes + maxByteSize;
 			size_t vlengthBytes = 0;
-			_metaDataSize = variableLengthRead(bytes, maxByteSize, &vlengthBytes);
+			//																	  - F7
+			_metaDataSize = variableLengthRead(bytes, maxByteSize, &vlengthBytes) - 1;
 			bytes += vlengthBytes;
 
 			if ((maxByteSize - vlengthBytes) < _metaDataSize)
@@ -208,16 +209,10 @@ namespace com
 			{
 				FM_THROW(com::Exception, "meta data bytes overflow");
 			}
-			//                                       - F7
-			_metaData = Bytes(new Byte[_metaDataSize - 1]);
-			::memcpy(_metaData.get(), bytes, _metaDataSize - 1);
-
-
-
-
-
-
-			return _metaDataSize;
+			_metaData = Bytes(new Byte[_metaDataSize]);
+			::memcpy(_metaData.get(), bytes, _metaDataSize);
+			//		F0 + varLength + dataBytes + F7
+			return  1  + vlengthBytes + _metaDataSize + 1;
 		}
 		size_t Event::write(Ticks deltaOffset, Byte *bytes, size_t maxByteSize) const
 		{
@@ -231,7 +226,7 @@ namespace com
 			writePayload(&bytes[c], maxByteSize - c);
 			return length;
 		}
-		size_t Event::writePayload(Byte *bytes, size_t maxByteSize) const
+		size_t Event::writePayload(Byte *bytes, size_t maxByteSize, MidiEventTarget target) const
 		{
 			if (eventType() == MetaEvent)
 			{
@@ -239,7 +234,7 @@ namespace com
 			}
 			if (eventType() == midi::Sysex)
 			{
-				return writePayloadSysex(bytes, maxByteSize);
+				return writePayloadSysex(bytes, maxByteSize, target);
 			}
 			return writePayloadDefault(bytes, maxByteSize);
 		}
@@ -283,22 +278,26 @@ namespace com
 		* F0 <length> <bytes to be transmitted after F0. The length is stored as a variable-length quantity. 
 		* It specifies the number of bytes which follow it, not including the F0 or the length itself.
 		*/
-		size_t Event::writePayloadSysex(Byte* bytes, size_t maxByteSize) const
+		size_t Event::writePayloadSysex(Byte* bytes, size_t maxByteSize, MidiEventTarget target) const
 		{
-			if (maxByteSize < payloadSize())
+			if (maxByteSize < payloadSize(target))
 			{
 				FM_THROW(com::Exception, "buffer to small");
 			}
 			(*bytes++) = 0xF0;
-			size_t vlengthBytes = variableLengthWrite(metaDataSize(), bytes, metaDataSize() + 1); // including F7
-			bytes += vlengthBytes;
+			size_t vlengthBytes = 0;
+			if (target == MidiEventTargetFile)
+			{
+				vlengthBytes = variableLengthWrite(metaDataSize() + 1, bytes, maxByteSize - 1); // including F7
+				bytes += vlengthBytes;
+			}
 			::memcpy(bytes, _metaData.get(), metaDataSize());
 			bytes += metaDataSize();
 			(*bytes) = 0xF7;
 			//     f0  vlength       data
 			return 1 + vlengthBytes + metaDataSize();
 		}
-		size_t Event::payloadSize() const
+		size_t Event::payloadSize(MidiEventTarget target) const
 		{
 			switch (eventType())
 			{
@@ -308,9 +307,15 @@ namespace com
 				return 2;
 			case MetaEvent:
 				return 2 + variableLengthRequiredSize(_metaDataSize) + _metaDataSize;
-			case midi::Sysex:
-				//     f0  vlength                                     data
-				return 1 + variableLengthRequiredSize(_metaDataSize) + _metaDataSize;
+			case midi::Sysex: 
+			{
+				if (target == MidiEventTargetDevice)
+				{
+					return 1 + _metaDataSize + 1;
+				}
+				//     F0  vlength                                     data		   	  F7
+				return 1 + variableLengthRequiredSize(_metaDataSize) + _metaDataSize + 1;
+			}
 			default:
 				break;
 			}

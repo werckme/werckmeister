@@ -11,6 +11,6 @@ instrument: guitar;
 {
     c d e f | 
     /call: 215luaExtensionSysexSupport/
-    c d e f | g1
+    c4 d e f | g1
 }
 ]
