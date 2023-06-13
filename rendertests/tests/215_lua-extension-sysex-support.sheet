@@ -2,15 +2,15 @@ using "./chords/default.chords";
 using "./215luaExtensionSysexSupport.lua";
 
 tempo: 190;
-device: SC1 midi 0;
+device: SC1 midi _useDevice="DIN 3";
 --           instrument   dv ch cc pc
-instrumentDef: piano      SC1 0 0 0;
+instrumentDef: guitar      SC1 0 _bankMsb=89 _bankLsb=64 _pc=93; -- integra 7
 
 [
-instrument: piano;
+instrument: guitar;
 {
     c d e f | 
     /call: 215luaExtensionSysexSupport/
-    g1 
+    c d e f | g1
 }
 ]
