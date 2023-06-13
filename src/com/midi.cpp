@@ -196,14 +196,27 @@ namespace com
 		{
 			eventType(midi::Sysex);
 			const Byte* end = bytes + maxByteSize;
-			const Byte* delimit = std::find(bytes, end, (Byte)0xF7);
-			if (delimit == end)
+			size_t vlengthBytes = 0;
+			_metaDataSize = variableLengthRead(bytes, maxByteSize, &vlengthBytes);
+			bytes += vlengthBytes;
+
+			if ((maxByteSize - vlengthBytes) < _metaDataSize)
 			{
-				FM_THROW(com::Exception, "sysex delimiter 0xF7 not found");
+				FM_THROW(com::Exception, "buffer to small");
 			}
-			_metaDataSize = delimit - bytes;
-			_metaData = Bytes(new Byte[_metaDataSize]);
-			::memcpy(_metaData.get(), bytes, _metaDataSize);
+			if (_metaDataSize >= MaxVarLength)
+			{
+				FM_THROW(com::Exception, "meta data bytes overflow");
+			}
+			//                                       - F7
+			_metaData = Bytes(new Byte[_metaDataSize - 1]);
+			::memcpy(_metaData.get(), bytes, _metaDataSize - 1);
+
+
+
+
+
+
 			return _metaDataSize;
 		}
 		size_t Event::write(Ticks deltaOffset, Byte *bytes, size_t maxByteSize) const
@@ -263,6 +276,13 @@ namespace com
 			::memcpy(bytes, _metaData.get(), metaDataSize());
 			return 3 + metaDataSize();
 		}
+
+		/*
+		* https://www.cs.cmu.edu/~music/cmsip/readings/Standard-MIDI-file-format-updated.pdf
+		* A normal complete system exclusive message is stored in a MIDI File in this way:
+		* F0 <length> <bytes to be transmitted after F0. The length is stored as a variable-length quantity. 
+		* It specifies the number of bytes which follow it, not including the F0 or the length itself.
+		*/
 		size_t Event::writePayloadSysex(Byte* bytes, size_t maxByteSize) const
 		{
 			if (maxByteSize < payloadSize())
@@ -270,10 +290,13 @@ namespace com
 				FM_THROW(com::Exception, "buffer to small");
 			}
 			(*bytes++) = 0xF0;
+			size_t vlengthBytes = variableLengthWrite(metaDataSize(), bytes, metaDataSize() + 1); // including F7
+			bytes += vlengthBytes;
 			::memcpy(bytes, _metaData.get(), metaDataSize());
 			bytes += metaDataSize();
 			(*bytes) = 0xF7;
-			return 2 + metaDataSize();
+			//     f0  vlength       data
+			return 1 + vlengthBytes + metaDataSize();
 		}
 		size_t Event::payloadSize() const
 		{
@@ -286,7 +309,8 @@ namespace com
 			case MetaEvent:
 				return 2 + variableLengthRequiredSize(_metaDataSize) + _metaDataSize;
 			case midi::Sysex:
-				return 2 + _metaDataSize;
+				//     f0  vlength                                     data
+				return 1 + variableLengthRequiredSize(_metaDataSize) + _metaDataSize;
 			default:
 				break;
 			}
