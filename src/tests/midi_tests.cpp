@@ -811,7 +811,7 @@ BOOST_AUTO_TEST_CASE(meta_event_read_write_custom_meta_0)
 BOOST_AUTO_TEST_CASE(event_read_write_sysex)
 {
 	using namespace com;
-	const char* sysexData = "1234567890"; // avoid F7 => ÷
+	const char* sysexData = "1234567890"; // avoid F7 => ï¿½
 	constexpr size_t dataSize = 10 + 1; // numchar + \0
 	constexpr size_t sysexEventSize = 1 + 1 + dataSize + 1; // f0 + message size + data + f7
 	constexpr size_t eventSizeTotal = sysexEventSize + 1;
@@ -834,7 +834,7 @@ BOOST_AUTO_TEST_CASE(event_read_write_sysex)
 BOOST_AUTO_TEST_CASE(event_read_write_sysex_to_device)
 {
 	using namespace com;
-	const char* sysexData = "1234567890"; // avoid F7 => ÷
+	const char* sysexData = "1234567890"; // avoid F7 => ï¿½
 	constexpr size_t dataSize = 10 + 1; // numchar + \0
 	constexpr size_t sysexEventSize = 1 + dataSize + 1; // f0 + data + f7
 	
@@ -866,6 +866,7 @@ BOOST_AUTO_TEST_CASE(event_read_write_sysex_large)
 	constexpr size_t dataSize = 1024 * 1024 * 1;
 	char* sysexData = new char[dataSize];
 	::memset(sysexData, 'A', dataSize);
+	sysexData[dataSize - 1] = '\0';
 
 	constexpr size_t sysexEventSize = 1 + 3 + dataSize + 1; // f0 + message size + data + f7
 	constexpr size_t eventSizeTotal = sysexEventSize + 1;
