@@ -148,7 +148,10 @@ namespace com
 		}
 		size_t Event::readPayload(const Byte *bytes, size_t maxByteSize)
 		{
-
+			if (*bytes == midi::Sysex)
+			{
+				return readPayloadSysex(bytes + 1, maxByteSize - 1);
+			}
 			if (*bytes != MetaEvent)
 			{
 				return readPayloadDefault(bytes, maxByteSize);
@@ -189,6 +192,28 @@ namespace com
 			::memcpy(_metaData.get(), bytes, _metaDataSize);
 			return metaTypeByteSize + vlengthBytes + _metaDataSize;
 		}
+		size_t Event::readPayloadSysex(const Byte* bytes, size_t maxByteSize)
+		{
+			eventType(midi::Sysex);
+			const Byte* end = bytes + maxByteSize;
+			size_t vlengthBytes = 0;
+			//																	  - F7
+			_metaDataSize = variableLengthRead(bytes, maxByteSize, &vlengthBytes) - 1;
+			bytes += vlengthBytes;
+
+			if ((maxByteSize - vlengthBytes) < _metaDataSize)
+			{
+				FM_THROW(com::Exception, "buffer to small");
+			}
+			if (_metaDataSize >= MaxVarLength)
+			{
+				FM_THROW(com::Exception, "meta data bytes overflow");
+			}
+			_metaData = Bytes(new Byte[_metaDataSize]);
+			::memcpy(_metaData.get(), bytes, _metaDataSize);
+			//		F0 + varLength + dataBytes + F7
+			return  1  + vlengthBytes + _metaDataSize + 1;
+		}
 		size_t Event::write(Ticks deltaOffset, Byte *bytes, size_t maxByteSize) const
 		{
 			size_t length = byteSize(deltaOffset);
@@ -201,11 +226,15 @@ namespace com
 			writePayload(&bytes[c], maxByteSize - c);
 			return length;
 		}
-		size_t Event::writePayload(Byte *bytes, size_t maxByteSize) const
+		size_t Event::writePayload(Byte *bytes, size_t maxByteSize, MidiEventTarget target) const
 		{
 			if (eventType() == MetaEvent)
 			{
 				return writePayloadMeta(bytes, maxByteSize);
+			}
+			if (eventType() == midi::Sysex)
+			{
+				return writePayloadSysex(bytes, maxByteSize, target);
 			}
 			return writePayloadDefault(bytes, maxByteSize);
 		}
@@ -242,7 +271,33 @@ namespace com
 			::memcpy(bytes, _metaData.get(), metaDataSize());
 			return 3 + metaDataSize();
 		}
-		size_t Event::payloadSize() const
+
+		/*
+		* https://www.cs.cmu.edu/~music/cmsip/readings/Standard-MIDI-file-format-updated.pdf
+		* A normal complete system exclusive message is stored in a MIDI File in this way:
+		* F0 <length> <bytes to be transmitted after F0. The length is stored as a variable-length quantity. 
+		* It specifies the number of bytes which follow it, not including the F0 or the length itself.
+		*/
+		size_t Event::writePayloadSysex(Byte* bytes, size_t maxByteSize, MidiEventTarget target) const
+		{
+			if (maxByteSize < payloadSize(target))
+			{
+				FM_THROW(com::Exception, "buffer to small");
+			}
+			(*bytes++) = 0xF0;
+			size_t vlengthBytes = 0;
+			if (target == MidiEventTargetFile)
+			{
+				vlengthBytes = variableLengthWrite(metaDataSize() + 1, bytes, maxByteSize - 1); // including F7
+				bytes += vlengthBytes;
+			}
+			::memcpy(bytes, _metaData.get(), metaDataSize());
+			bytes += metaDataSize();
+			(*bytes) = 0xF7;
+			//     f0  vlength       data
+			return 1 + vlengthBytes + metaDataSize();
+		}
+		size_t Event::payloadSize(MidiEventTarget target) const
 		{
 			switch (eventType())
 			{
@@ -252,6 +307,15 @@ namespace com
 				return 2;
 			case MetaEvent:
 				return 2 + variableLengthRequiredSize(_metaDataSize) + _metaDataSize;
+			case midi::Sysex: 
+			{
+				if (target == MidiEventTargetDevice)
+				{
+					return 1 + _metaDataSize + 1;
+				}
+				//     F0  vlength                                     data		   	  F7
+				return 1 + variableLengthRequiredSize(_metaDataSize) + _metaDataSize + 1;
+			}
 			default:
 				break;
 			}
@@ -450,6 +514,15 @@ namespace com
 			}
 			result.data = CustomMetaData::Data(&data[1], &data[length]);
 			return result;
+		}
+		Event Event::Sysex(const Byte* sysexData, size_t numBytes)
+		{
+			Event event;
+			event.eventType(midi::Sysex);
+			event._metaDataSize = numBytes;
+			event._metaData = Bytes(new Byte[numBytes]);
+			::memcpy(event._metaData.get(), sysexData, numBytes);
+			return event;
 		}
 		bool Event::equals(const Event &b) const
 		{

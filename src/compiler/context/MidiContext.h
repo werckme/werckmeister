@@ -61,6 +61,7 @@ namespace compiler
 		virtual void addCue(const com::String &text, com::Ticks absolutePosition);
 		virtual void setSignature(int upper, int lower) override;
 		virtual void setContinuousController(int controllerNumber, int value, com::Ticks relativePosition = 0) override;
+		virtual void setSysex(const com::Byte* data, size_t length, com::Ticks relativePosition = 0) override;
 		/**
 		 * sends a custom meta event containing a device name
 		 */

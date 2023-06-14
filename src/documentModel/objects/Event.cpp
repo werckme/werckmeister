@@ -141,10 +141,10 @@ namespace documentModel
 
 	bool Event::isTimeConsuming() const
 	{
-		if (type == Meta && stringValue == SHEET_META__CALL_EVENTFUNCTION)
-		{
-			return true;
-		}
+		//if (type == Meta && stringValue == SHEET_META__CALL_EVENTFUNCTION)
+		//{
+		//	return true;
+		//}
 		return type == Rest 
 			|| type == Note 
 			|| type == Degree 

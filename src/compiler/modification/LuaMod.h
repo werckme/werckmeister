@@ -30,6 +30,7 @@ namespace compiler
         void popNoteEvent(documentModel::Event &event);
         void popPitchBendEvent(documentModel::Event &event);
         void popAndExecuteCc(IContextPtr ctx);
+        void popAndExecuteSysex(IContextPtr ctx);
     private:
         documentModel::Event::Args args_;
     };

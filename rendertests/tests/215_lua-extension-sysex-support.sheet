@@ -1,0 +1,16 @@
+using "./chords/default.chords";
+using "./215luaExtensionSysexSupport.lua";
+
+tempo: 190;
+device: SC1 midi _useDevice="DIN 3";
+--           instrument   dv ch cc pc
+instrumentDef: guitar      SC1 0 _bankMsb=89 _bankLsb=64 _pc=93; -- integra 7
+
+[
+instrument: guitar;
+{
+    c d e f | 
+    /call: 215luaExtensionSysexSupport/
+    c4 d e f | g1
+}
+]

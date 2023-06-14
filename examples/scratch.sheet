@@ -15,19 +15,12 @@ instrumentConf: piano volume 100
 tempo: 180;
  
 [
-type: template;
-name: X;
-instrument: piano;
 {
-    <I III V VII VI>1
+    /instrument: piano/
+    c d e f |
+    c d e f |
+    c d e f |
+    c d e f |
 }
 ]
 
-
-[
-type: accomp;
-{
-    /template: X/
-    C E7 | F A7 | D7 G7 | C6 | E-7 | A- | B07 F-6 :(x3)| G7  |
-}
-]

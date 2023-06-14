@@ -78,6 +78,7 @@ namespace com
 			ProgramChange = 0xC,
 			ChannelAftertouch = 0xD,
 			PitchBend = 0xE,
+			Sysex = 0xF0,
 			MetaEvent = 0xFF
 		};
 		enum MetaEventType
@@ -98,6 +99,12 @@ namespace com
 			TimeSignature = 0x58,
 			KeySignature = 0x59,
 			CustomMetaEvent = 0x7F
+		};
+		enum MidiEventTarget
+		{
+			MidiEventTargetUnknown,
+			MidiEventTargetFile,
+			MidiEventTargetDevice
 		};
 		struct Event
 		{
@@ -121,7 +128,7 @@ namespace com
 			/**
 				@return the event size excluding offset
 			*/
-			size_t payloadSize() const;
+			size_t payloadSize(MidiEventTarget target = MidiEventTargetFile) const;
 			/**
 			 * set the type to MetaData and sets the meta data.
 			 * @see metaDataSize() and metaData
@@ -130,6 +137,7 @@ namespace com
 			size_t metaDataSize() const { return _metaDataSize; }
 			MetaEventType metaEventType() const { return _metaEventType; }
 			const Byte *metaData() const { return _metaData.get(); }
+			const Byte *sysexData() const { return _metaData.get(); }
 			static Event NoteOn(Channel, Ticks, Pitch, Velocity);
 			static Event NoteOff(Channel, Ticks, Pitch);
 			static Event MetaTempo(double bpm);
@@ -142,6 +150,10 @@ namespace com
 			static Event MetaTrack(const std::string &name);
 			static Event MetaCue(const std::string &name);
 			static Event MetaCustom(const CustomMetaData &custom);
+			/**
+			* @param sysexData: the sysex data excluding the delimiters F0 F7
+			*/
+			static Event Sysex(const Byte* sysexData, size_t length);
 			static std::vector<Byte> MetaCreateStringData(const std::string &string);
 			static std::string MetaGetStringValue(const Byte *data, size_t length);
 			static int MetaGetIntValue(const Byte *data, size_t length);
@@ -158,17 +170,19 @@ namespace com
 			/**
 				writes the event excluding offset
 			*/
-			size_t writePayload(Byte *, size_t maxByteSize) const;
+			size_t writePayload(Byte *, size_t maxByteSize, MidiEventTarget target = MidiEventTargetFile) const;
 			com::String toString() const;
 
 		protected:
 			size_t readPayload(const Byte *, size_t maxByteSize);
 			size_t readPayloadDefault(const Byte *, size_t maxByteSize);
 			size_t readPayloadMeta(const Byte *, size_t maxByteSize);
+			size_t readPayloadSysex(const Byte*, size_t maxByteSize);
 
 		private:
 			size_t writePayloadDefault(Byte *, size_t maxByteSize) const;
 			size_t writePayloadMeta(Byte *, size_t maxByteSize) const;
+			size_t writePayloadSysex(Byte*, size_t maxByteSize, MidiEventTarget target = MidiEventTargetFile) const;
 
 		private:
 			Ticks _deltaTime = 0;

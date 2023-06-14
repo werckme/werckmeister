@@ -96,7 +96,7 @@ namespace app
 		const unsigned int StaticBufferSize = 255;
 		com::Byte buffer[StaticBufferSize];
 		std::vector<com::Byte> fallback;
-		auto eventSize = ev.payloadSize();
+		auto eventSize = ev.payloadSize(com::midi::MidiEventTargetDevice);
 		com::Byte *bff = &buffer[0];
 		if (eventSize > StaticBufferSize)
 		{
@@ -104,7 +104,7 @@ namespace app
 			bff = fallback.data();
 		}
 
-		ev.writePayload(bff, eventSize);
+		ev.writePayload(bff, eventSize, com::midi::MidiEventTargetDevice);
 		port->sendMessage(bff, eventSize);
 	}
 }

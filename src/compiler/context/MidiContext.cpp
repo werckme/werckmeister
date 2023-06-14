@@ -328,6 +328,13 @@ namespace compiler
 		addEvent(ev);
 	}
 
+	void MidiContext::setSysex(const com::Byte* data, size_t length, com::Ticks relativePosition)
+	{
+		auto ev = com::midi::Event::Sysex(data, length);
+		ev.absPosition(currentPosition() + relativePosition);
+		addEvent(ev);
+	}
+
 	void MidiContext::setPan(double val)
 	{
 		Base::setPan(val);
