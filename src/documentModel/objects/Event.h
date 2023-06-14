@@ -133,8 +133,6 @@ namespace documentModel
 			return type == Meta;
 		}
 
-		bool hasDynamicDuration() const;
-
 		com::String toString() const;
 
 		com::String phraseName() const;
