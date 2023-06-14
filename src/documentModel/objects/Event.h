@@ -128,6 +128,13 @@ namespace documentModel
 			return type == Controller;
 		}
 
+		bool isMeta() const
+		{
+			return type == Meta;
+		}
+
+		bool hasDynamicDuration() const;
+
 		com::String toString() const;
 
 		com::String phraseName() const;

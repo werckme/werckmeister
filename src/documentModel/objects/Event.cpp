@@ -157,4 +157,9 @@ namespace documentModel
 			|| type == Phrase
 			|| type == TiedPhrase;
 	}
+
+	bool Event::hasDynamicDuration() const
+	{
+		return type == Meta && stringValue == SHEET_META__CALL_EVENTFUNCTION;
+	}
 }

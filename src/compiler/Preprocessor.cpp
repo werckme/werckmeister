@@ -84,7 +84,7 @@ namespace compiler
 				}
 				ev.type = resolveRepeatType(processData.lastNoRepeat, ev);
 			}
-			if (ev.duration == 0)
+			if (ev.duration == 0 && !ev.hasDynamicDuration())
 			{
 				ev.duration = processData.lastDuration;
 			}
