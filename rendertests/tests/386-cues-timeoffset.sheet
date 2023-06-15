@@ -1,0 +1,17 @@
+using "./386-cues-timeoffset.conductions";
+
+device: MyDevice _isType=midi _usePort=0;
+
+-- instrument definitions
+instrumentDef: vibra         MyDevice _ch=4 _pc=11;
+
+tempo: 155;
+ 
+[
+instrument: vibra;
+{
+    c d e f | g a b c' |
+    /cue: X/
+    c d e f | g a b c' 
+}
+]

@@ -13,7 +13,7 @@ using "./flugaufdemgluecksdrachen_instrument.config";
 
 
 tempo: 146;
-device: MyDevice  midi _usePort=18;
+device: MyDevice  midi _usePort=0;
 
 -- lead voice = Vl2 + piano 
 [
