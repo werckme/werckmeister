@@ -1,0 +1,9 @@
+all()
+{
+    timeOffset = 2;
+}
+
+fromPosition(@X)
+{
+    timeOffset = 2;
+}

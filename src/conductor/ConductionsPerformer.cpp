@@ -300,6 +300,9 @@ namespace conductor
 		|| event.eventType() == com::midi::Controller
 		|| event.eventType() == com::midi::PitchBend
 		|| event.eventType() == com::midi::CuePoint
-		|| event.eventType() == com::midi::ChannelAftertouch;
+		|| event.eventType() == com::midi::ChannelAftertouch
+		|| event.eventType() == com::midi::CuePoint
+		|| event.eventType() == com::midi::MetaEvent
+		|| event.eventType() == com::midi::Sysex;
 	}
 }
