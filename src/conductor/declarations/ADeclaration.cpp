@@ -55,4 +55,9 @@ namespace conductor
             setNoteOffValue(noteOff, inputValue);
         }
     }
+    
+    bool ADeclaration::canApply(const com::midi::Event& event)
+    {
+        return event.eventType() == com::midi::NoteOn;
+    }
 }

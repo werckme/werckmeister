@@ -275,6 +275,10 @@ namespace conductor
 				const EventWithMetaInfo &eventAndMetaInfo = *declarationData.first;
 				try
 				{
+					if (!declaration->canApply(*eventAndMetaInfo.midiEvent))
+					{
+						continue;
+					}
 					declaration->perform({
 						eventAndMetaInfo.midiEvent,
 						eventAndMetaInfo.noteOff,

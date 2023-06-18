@@ -9,10 +9,6 @@ namespace conductor
         com::midi::Event *midiEvent = events.midiEvent;
         if (midiEvent->eventType() != com::midi::NoteOn)
         {
-            if (com::midi::isDeviceConfigEvent(*midiEvent))
-            {
-                return;
-            }
             midiEvent->absPosition(std::max(com::Ticks(0), (midiEvent->absPosition() + declaration.value * com::PPQ))); 
             return;
         }
@@ -37,5 +33,10 @@ namespace conductor
         constexpr double min = -std::numeric_limits<double>::max();
         constexpr double max = std::numeric_limits<double>::max();
         performImpl(midiEvent, noteOff, inputValue, min, max, getOriginalValue, getPercentBase, getPredecessorValue, setNoteOn, setNoteOff);
+    }
+
+    bool TimeOffset::canApply(const com::midi::Event& event)
+    {
+        return !com::midi::isDeviceConfigEvent(event);
     }
 }

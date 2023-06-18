@@ -27,6 +27,7 @@ namespace conductor
         // priority of a declaration higher values means higher priority
         virtual double specificity() const = 0;
         virtual void specificity(double val) = 0;
+        virtual bool canApply(const com::midi::Event& event) = 0;
         virtual ~IDeclaration() = default;
     };
     typedef std::shared_ptr<IDeclaration> IDeclarationPtr;

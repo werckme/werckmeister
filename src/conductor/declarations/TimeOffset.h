@@ -24,5 +24,6 @@ namespace conductor
     public:
         virtual void perform(const Events &events) const override;
         virtual ~TimeOffset() = default;
+        virtual bool canApply(const com::midi::Event& event) override;
     };
 }

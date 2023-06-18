@@ -15,6 +15,7 @@ namespace conductor
         // priority of a declaration higher values means higher priority
         virtual double specificity() const override;
         virtual void specificity(double val) override { _specificity = val; }
+        virtual bool canApply(const com::midi::Event& event) override;
 
     protected:
         documentModel::ConductionRule::Declaration declaration;
