@@ -303,11 +303,10 @@ namespace conductor
 		return event.eventType() == com::midi::NoteOn  
 		|| event.eventType() == com::midi::Controller
 		|| event.eventType() == com::midi::PitchBend
-		|| event.eventType() == com::midi::CuePoint
 		|| event.eventType() == com::midi::ChannelAftertouch
-		|| event.eventType() == com::midi::CuePoint
 		|| event.eventType() == com::midi::Sysex
 		|| event.eventType() == com::midi::ProgramChange
+		|| (event.eventType() == com::midi::MetaEvent && event.metaEventType() == com::midi::CuePoint)
 		;
 	}
 }
