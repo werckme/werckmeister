@@ -28,7 +28,7 @@ namespace compiler
     /// <param name="pc"       position="4" type="0..127">A MIDI `program change` value.</param>
     /// <param name="bankLsb"  type="0..127">A MIDI `bank select LSB` value.</param>
     /// <param name="cc"       type="0..127" deprecated="use bankMsb instead">A MIDI `bank select MSB. Deprecated use bankMsb instead` value.</param>
-    /// <param name="gmName"   type="text">A GM name. You can use a GM instrument name instead of a pc number. It is not necessary to give the full name, a subset will match. You can find a complete list of instrument names here: [GM Instruments](https://raw.githubusercontent.com/werckme/werckmeister/main/assets/gm_instrument_names.md).</param>
+    /// <param name="gmInstrument"   type="text">You can use a GM instrument name instead of a pc number. It is not necessary to give the full name, a subset will match. You can find a complete list of instrument names here: [GM Instruments](https://raw.githubusercontent.com/werckme/werckmeister/main/assets/gm_instrument_names.md).</param>
     class DefineMidiInstrument : public AMidiContextCommand
     {
     public:
