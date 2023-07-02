@@ -1114,7 +1114,6 @@ withTag(myTag) {
 
 
 ## References
-[1133] WARN-enum: nameless enum ['enum', '{', 'NO_DEVICE_ID', '=', '-', '1', '}']
 
 
 
@@ -1371,7 +1370,7 @@ Fades a CC value from a start to an end value.
 
  `/fadeCC: _name="modulation" _from=10 _to=100 _curve="lin"/ -- fades a modulation value by controller name`
 
- `/fadeCC: _nr=1 _value=10 _from=10 _to=100 _curve="lin"/ -- fades a modulation value by controller number`
+ `/fadeCC: _nr=1 _from=10 _to=100 _curve="lin"/ -- fades a modulation value by controller number`
 
  #### supported CC names *(if using name paramenter instead of cc number)*
 
@@ -1577,6 +1576,8 @@ With `instrumentConf` you are able to setup a specific instrument.
 
  In the example below the velocity for `p` will be set to 100 and the value for `f` will be set to 10.
 
+ > this approach is deprecated, use [conduction rules](#conduction-rules) instead
+
  The value range is 0..100. (100=127 Midi velocity)
 
  `instrumentConf: _set=remapVelocity _p=100 _f=10;`
@@ -1594,6 +1595,7 @@ With `instrumentConf` you are able to setup a specific instrument.
 | pc | 5 | A MIDI `program change` value. | 0..127 |
 | bankLsb | - | A MIDI `bank select LSB` value. | 0..127 |
 | cc | - | A MIDI `bank select MSB. Deprecated use bankMsb instead` value. | 0..127 |
+| gmInstrument | - | You can use a GM instrument name instead of a pc number. It is not necessary to give the full name, a subset will match. You can find a complete list of instrument names here: [GM Instruments](https://raw.githubusercontent.com/werckme/werckmeister/main/assets/gm_instrument_names.md). | text |
 
 Adds a new MIDI instrument.
 
@@ -2394,6 +2396,18 @@ Selects all events.
  ```
 <br><br><br>
 
+### `atPosition`
+
+#### parameters
+| name | position | description | type |
+|:--- |:--- |:--- |:--- |
+| position | - |  | quarters|cuename |
+
+Selects any event where its position is equal to a given value.
+
+ > Please mind the [cue](#cue) behaviour in combination with repeat and jumps.
+<br><br><br>
+
 ### `channel`
 
 #### parameters
@@ -2625,7 +2639,9 @@ Selects any event where its pitch is in the range of a given octave. The middle 
 |:--- |:--- |:--- |:--- |
 | beat | - |  | bar number+ |
 
-Selects an event on a given bar number or a list of bar numbers
+Selects an event in a given bar number or a list of bar numbers.
+
+     TODO: should be renamed into inBar.
 
  ```
 

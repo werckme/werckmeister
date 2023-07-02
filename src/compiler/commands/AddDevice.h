@@ -34,7 +34,7 @@ namespace compiler
     class AddDevice : public ACommand
     {
     public:
-        enum 
+        enum DeviceIdConstants
         {
             NO_DEVICE_ID = -1
         };
