@@ -125,4 +125,4 @@ Bird Tweet
 Telephone Ring
 Helicopter
 Applause
-Gunshot, 127
+Gunshot
