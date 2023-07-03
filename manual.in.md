@@ -941,7 +941,7 @@ instrument: piano;
 If you want do write your own modification you need to:
 * create a lua file
 * define parameters
-* implement a `perform` function
+* implement a `perform` or a `execute` function
 * include mod file
 * apply mod
 
@@ -982,13 +982,17 @@ This table contains all input events.
 {
     {
         -- a track id
+        -- [Read Only]
         trackId = number,
         -- a voice id
+        -- [Read Only]
         voiceId = number,
         -- the duration of the event
+        -- only relevant if type is "note" or "degree" or "rest"
         duration = number,
 
         -- whether event is tied or not
+        -- only relevant if type is "note" or "degree"
         isTied = boolean,
 
          -- offset in quarters, affecting the position, 
@@ -996,10 +1000,12 @@ This table contains all input events.
         offset = number, 
 
         -- a table containing event tags (see Event Tags)
+        -- only relevant if type is "note" or "degree"
         tags = { tag1, ..., tagN },
 
         -- a table containing the events pitches, 
         -- contains several if event is a chord
+        -- only relevant if type is "note" or "degree"
         pitches = {
             {
                 -- pitch alias if any. (see Pitchmaps)
@@ -1017,19 +1023,35 @@ This table contains all input events.
         -- for example: "c4~c" 
         -- the tiedDuration here would be 2 for the first event 
         -- and 1 for the second
+        -- [Read Only]
         tiedDuration = number, 
 
         -- the total duration of a "tie chain"
+        -- [Read Only]
         totalTiedDuration = number,
 
         -- the event type
-        type = string,
+        type = "note" | "rest" | "degree" | "pitchBend" | "cc" | "sysex",
 
         -- the events velocity value in a range from 0 to 1
-        velocity = number   
+        -- only relevant if type is "note" or "degree"
+        velocity = number,
+
+        -- a cc number
+        -- only relevant if type is "cc"
+        ccNr = 0..127,
+
+        -- a cc value
+        -- only relevant if type is "cc"
+        ccValue = 0..127,
+        
+        -- a table of byte values (excluding F0 and F7)
+        -- only relevant if type is "sysex"
+        sysexData  = { byte values }
     }
     ...
 }
+
 ```
 ### `params` argument
 Contains the params if any. See [Define Mod Parameters](#define-mod-parameters)
@@ -1070,6 +1092,7 @@ Use the mod command with the mod name. The mod name is also the [file](#create-a
 [
 {
     /mod: <<modName>> [mod arguments]/
+    c d e f | -- these notes will be modified
 }
 ]
 ```
@@ -1086,6 +1109,28 @@ instrumentConf: myInstrument
     mod myModX _modXParameter=1 
     mod myModY _modYParameter=2;
 ```
+
+
+### The Excute Function
+The `execute` function works the same way as the `perform` function does. Except the `peform` function modifies existing events, the `execute` function can be used to create new events. Therefore the function signature is slightly different:
+
+```lua
+function execute(params, timeinfo)
+    return {
+        -- some events
+    }
+end
+```
+
+```
+[
+{
+    /call: <<modName>> [mod arguments]/ -- creates some events
+    c d e f | -- will not be affected by the (execute) mod
+}
+]
+```
+
 
 ## Event Tags
 You can add additional annotations to an event in werckmeister. These informations can be used in [conduction rules](#conduction-rules) or [modifications](#mods).

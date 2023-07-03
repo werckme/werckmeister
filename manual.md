@@ -941,7 +941,7 @@ instrument: piano;
 If you want do write your own modification you need to:
 * create a lua file
 * define parameters
-* implement a `perform` function
+* implement a `perform` or a `execute` function
 * include mod file
 * apply mod
 
@@ -982,13 +982,17 @@ This table contains all input events.
 {
     {
         -- a track id
+        -- [Read Only]
         trackId = number,
         -- a voice id
+        -- [Read Only]
         voiceId = number,
         -- the duration of the event
+        -- only relevant if type is "note" or "degree" or "rest"
         duration = number,
 
         -- whether event is tied or not
+        -- only relevant if type is "note" or "degree"
         isTied = boolean,
 
          -- offset in quarters, affecting the position, 
@@ -996,10 +1000,12 @@ This table contains all input events.
         offset = number, 
 
         -- a table containing event tags (see Event Tags)
+        -- only relevant if type is "note" or "degree"
         tags = { tag1, ..., tagN },
 
         -- a table containing the events pitches, 
         -- contains several if event is a chord
+        -- only relevant if type is "note" or "degree"
         pitches = {
             {
                 -- pitch alias if any. (see Pitchmaps)
@@ -1017,19 +1023,35 @@ This table contains all input events.
         -- for example: "c4~c" 
         -- the tiedDuration here would be 2 for the first event 
         -- and 1 for the second
+        -- [Read Only]
         tiedDuration = number, 
 
         -- the total duration of a "tie chain"
+        -- [Read Only]
         totalTiedDuration = number,
 
         -- the event type
-        type = string,
+        type = "note" | "rest" | "degree" | "pitchBend" | "cc" | "sysex",
 
         -- the events velocity value in a range from 0 to 1
-        velocity = number   
+        -- only relevant if type is "note" or "degree"
+        velocity = number,
+
+        -- a cc number
+        -- only relevant if type is "cc"
+        ccNr = 0..127,
+
+        -- a cc value
+        -- only relevant if type is "cc"
+        ccValue = 0..127,
+        
+        -- a table of byte values (excluding F0 and F7)
+        -- only relevant if type is "sysex"
+        sysexData  = { byte values }
     }
     ...
 }
+
 ```
 ### `params` argument
 Contains the params if any. See [Define Mod Parameters](#define-mod-parameters)
@@ -1070,6 +1092,7 @@ Use the mod command with the mod name. The mod name is also the [file](#create-a
 [
 {
     /mod: <<modName>> [mod arguments]/
+    c d e f | -- these notes will be modified
 }
 ]
 ```
@@ -1086,6 +1109,28 @@ instrumentConf: myInstrument
     mod myModX _modXParameter=1 
     mod myModY _modYParameter=2;
 ```
+
+
+### The Excute Function
+The `execute` function works the same way as the `perform` function does. Except the `peform` function modifies existing events, the `execute` function can be used to create new events. Therefore the function signature is slightly different:
+
+```lua
+function execute(params, timeinfo)
+    return {
+        -- some events
+    }
+end
+```
+
+```
+[
+{
+    /call: <<modName>> [mod arguments]/ -- creates some events
+    c d e f | -- will not be affected by the (execute) mod
+}
+]
+```
+
 
 ## Event Tags
 You can add additional annotations to an event in werckmeister. These informations can be used in [conduction rules](#conduction-rules) or [modifications](#mods).
@@ -1127,17 +1172,17 @@ withTag(myTag) {
 |:--- |:--- |:--- |:--- |
 | nr | 1 | The number of the controller | 0..N |
 | value | 2 | the controller values | 0..127 |
-| name | 3 | a controller name, can be used instead of a number. (supported names, see list above) | text |
+| name | 3 | a controller name, can be used instead of a number. (supported names, see list below) | text |
 
 Adds a midi CC message.
 
  #### examples
 
- `/cc: _name="modulation" _value=10/ -- sets modulation value by controller name`
+ `/cc: _nr=1 _value=10/ --modulation by controller number`
 
- `/cc: _nr=1 _value=10/ -- sets modulation value by controller number`
+ `/cc: _name="modulation" _value=10/ --modulation value by controller name`
 
- #### supported CC names *(if using name paramenter instead of cc number)*
+ #### supported CC names
 
  * BankSelectMSB
 
@@ -1361,18 +1406,18 @@ Fades the volume over a given duration in quarters.
 | nr | 1 | The number of the controller | 0..N |
 | from | 2 | the start value | 0..127 |
 | to | 3 | the end value | 0..127 |
-| name | 4 | a controller name, can be used instead of a number. (supported names, see list above) | text |
+| name | 4 | a controller name, can be used instead of a number. (supported names, see list below) | text |
 | curve | 5 | The fade curve type. | lin,quad,cub,quart,quint,exp |
 
 Fades a CC value from a start to an end value.
 
  #### examples
 
- `/fadeCC: _name="modulation" _from=10 _to=100 _curve="lin"/ -- fades a modulation value by controller name`
+ `/cc: _nr=1 _value=10/ --modulation by controller number`
 
- `/fadeCC: _nr=1 _from=10 _to=100 _curve="lin"/ -- fades a modulation value by controller number`
+ `/cc: _name="modulation" _value=10/ --modulation value by controller name`
 
- #### supported CC names *(if using name paramenter instead of cc number)*
+ #### supported CC names
 
  * BankSelectMSB
 
@@ -2243,8 +2288,8 @@ instrument: piano;
 Tries to simulate the chord voicing of an guitar.
 
  ```language=Werckmeister
-using "lua/voicings/guitar.lua";
-using "chords/default.chords";
+using "/lua/voicings/guitar.lua";
+using "/chords/default.chords";
 
 tempo: 120;
 device: MyDevice  midi 0;
@@ -2262,6 +2307,8 @@ instrument: piano;
 type: accomp;
 
 {
+  /template: myTemplate/
+
   C | F | G | C |
 }
 ]
@@ -2282,8 +2329,8 @@ type: accomp;
 creates an inversion by moving the lowest note an octave hihgher.
 
  ```language=Werckmeister
-using "lua/voicings/inversion.lua";
-using "chords/default.chords";
+using "/lua/voicings/inversion.lua";
+using "/chords/default.chords";
 
 tempo: 120;
 device: MyDevice  midi 0;
@@ -2301,6 +2348,8 @@ instrument: piano;
 type: accomp;
 
 {
+  /template: myTemplate/
+
   C | F | G | C |
 }
 ]
@@ -2320,8 +2369,8 @@ type: accomp;
 The simple approach with no strategy.
 
  ```language=Werckmeister
-using "lua/voicings/simple.lua";
-using "chords/default.chords";
+using "/lua/voicings/simple.lua";
+using "/chords/default.chords";
 
 tempo: 120;
 device: MyDevice  midi 0;
@@ -2339,6 +2388,8 @@ instrument: piano;
 type: accomp;
 
 {
+  /template: myTemplate/
+
   C | F | G | C |
 }
 ]
@@ -2360,8 +2411,8 @@ Tries to simulates a voice leading approach:
  the octaves of a chord are rearranged, so that the actual pitch distance between the previous chord is kept minimal.
 
  ```language=Werckmeister
-using "lua/voicings/voicelead.lua";
-using "chords/default.chords";
+using "/lua/voicings/voicelead.lua";
+using "/chords/default.chords";
 
 tempo: 120;
 device: MyDevice  midi 0;
@@ -2379,6 +2430,8 @@ instrument: piano;
 type: accomp;
 
 {
+  /template: myTemplate/
+
   C | F | G | C |
 }
 ]

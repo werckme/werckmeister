@@ -2,8 +2,8 @@
 -- <![CDATA[
 -- creates an inversion by moving the lowest note an octave hihgher.
 -- ```language=Werckmeister\n
---using "lua/voicings/inversion.lua";\n
---using "chords/default.chords";
+--using "/lua/voicings/inversion.lua";\n
+--using "/chords/default.chords";
 --tempo: 120;\n
 --device: MyDevice  midi 0;\n
 --instrumentDef:piano  MyDevice  _ch=0 _pc=0;\n
@@ -19,6 +19,7 @@
 --[\n
 --type: accomp;
 --{\n
+--  /template: myTemplate/
 --  C | F | G | C |\n
 --}\n
 --]\n

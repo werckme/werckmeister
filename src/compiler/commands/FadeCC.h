@@ -9,9 +9,9 @@ namespace compiler
     /// <command name="fadeCC" where="voice">
     /// Fades a CC value from a start to an end value.
     /// #### examples
-    /// `/fadeCC: _name="modulation" _from=10 _to=100 _curve="lin"/ -- fades a modulation value by controller name`
-    /// `/fadeCC: _nr=1 _from=10 _to=100 _curve="lin"/ -- fades a modulation value by controller number`
-    /// #### supported CC names *(if using name paramenter instead of cc number)*
+    /// `/cc: _nr=1 _value=10/ --modulation by controller number`
+    /// `/cc: _name="modulation" _value=10/ --modulation value by controller name`
+    /// #### supported CC names
     /// * BankSelectMSB
     /// * Modulation
     /// * BreathController
@@ -49,7 +49,7 @@ namespace compiler
     /// <param name="nr" type="0..N" position="0" optional="0" >The number of the controller</param>
     /// <param name="from" type="0..127" position="1" optional="0" >the start value</param>
     /// <param name="to" type="0..127" position="2" optional="0" >the end value</param>
-    /// <param name="name"  type="text" position="3" optional="1" >a controller name, can be used instead of a number. (supported names, see list above)</param>
+    /// <param name="name"  type="text" position="3" optional="1" >a controller name, can be used instead of a number. (supported names, see list below)</param>
     /// <param name="curve" position="4" default="lin" optional="1" type="lin,quad,cub,quart,quint,exp">The fade curve type.</param>
     class FadeCC : public SetCC
     {

@@ -11,9 +11,9 @@ namespace compiler
     /// <command name="cc" where="voice">
     /// Adds a midi CC message.
     /// #### examples
-    /// `/cc: _name="modulation" _value=10/ -- sets modulation value by controller name`
-    /// `/cc: _nr=1 _value=10/ -- sets modulation value by controller number`
-    /// #### supported CC names *(if using name paramenter instead of cc number)*
+    /// `/cc: _nr=1 _value=10/ --modulation by controller number`
+    /// `/cc: _name="modulation" _value=10/ --modulation value by controller name`
+    /// #### supported CC names
     /// * BankSelectMSB
     /// * Modulation
     /// * BreathController
@@ -49,7 +49,7 @@ namespace compiler
     /// </command>
     /// <param name="nr" type="0..N" position="0" optional="1" >The number of the controller</param>
     /// <param name="value" type="0..127" position="1" optional="0" >the controller values</param>
-    /// <param name="name"  type="text" position="2" optional="1" >a controller name, can be used instead of a number. (supported names, see list above)</param>
+    /// <param name="name"  type="text" position="2" optional="1" >a controller name, can be used instead of a number. (supported names, see list below)</param>
     class SetCC : public ACommand, public AUsingAnEvent
     {
     public:
