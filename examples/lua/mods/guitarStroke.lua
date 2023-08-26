@@ -30,9 +30,9 @@
 -- ```
 -- ]]>
 -- </command>
--- <param name="direction" optional="1" type="[up,down]">Specifies the start direction of the stroke</param>
+-- <param name="direction" optional="1" type="[up,down,alternate]">Specifies the start direction of the stroke</param>
 -- <param name="value" optional="1" type="[1,2,4,8,...]">the duration of one arpeggio event. (Default=64)</param>
--- <param name="mode" optional="1" type="[normal,alternate]">Perform only one stroke direction (normal) or alternates between up and down. (Default=normal)</param>
+-- <param name="mode" optional="1" type="[normal,alternate]">Deprecated: Use _direction=alternate instead. Perform only one stroke direction (normal) or alternates between up and down. (Default=normal)</param>
 
 require "lua/com/com"
 require "_events"
@@ -64,8 +64,8 @@ function perform(eventsOrigin, params, timeinfo)
     local events = { }
     local comparer = pitchCompare
     
-    if mode == nil then
-        mode = modeParam
+    if modeParam == "alternate" then
+        directionParam = "alternate"
     end
 
     if direction ==nil then
@@ -74,12 +74,12 @@ function perform(eventsOrigin, params, timeinfo)
 
     if direction == "down" then
         comparer = pitchCompareReversed
-        if mode == "alternate" then
+        if directionParam == "alternate" then
             direction = "up"
         end
     else
         comparer = pitchCompare
-        if mode == "alternate" then
+        if directionParam == "alternate" then
             direction = "down"
         end
     end

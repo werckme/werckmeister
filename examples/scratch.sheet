@@ -1,26 +1,21 @@
 using "./chords/default.chords";
 using "./lua/voicings/guitar.lua";
-using "./lua/voicings/voicelead.lua";
-using "./lua/voicings/simple.lua";
+using "./lua/mods/guitarStroke.lua";
 
 device: MyDevice midi _useDevice="FLUID";
 instrumentDef: _setName=piano _onDevice=MyDevice _ch=0 _pc=11;
 instrumentConf: piano volume 100
-    voicingStrategy guitar 
-    voicingStrategy voicelead 
-    voicingStrategy simple _range="alto"
+    voicingStrategy guitar _range="alto"
+    mod guitarStroke _value=4 _direction="alternate"
 ;
 
 
 tempo: 180;
- 
+
 [
+instrument: piano;
 {
-    /instrument: piano/
-    c d e f |
-    c d e f |
-    c d e f |
-    c d e f |
+    <c e g c'>2 & :|
 }
 ]
 
