@@ -310,24 +310,10 @@ namespace app
 	void MidiplayerClient<TBackend, TMidiProvider, TTimer>::play(com::Ticks ticks)
 	{
 		std::lock_guard<Lock> lockGuard(lock);
-		MidiProvider::iterate([this, ticks](com::Ticks pos, const typename MidiProvider::Event &ev) { // consume all events except NoteOn and NoteOff
-			if (pos >= ticks)
-			{
-				currentTrack_ = MidiProvider::INVALID_TRACKID;
-				return false; // aka break
-			}
-			if (ev.event.eventType() == com::midi::NoteOn || ev.event.eventType() == com::midi::NoteOff)
-			{
-				return true; // aka continue
-			}
-			currentTrack_ = ev.trackId;
-			send(ev.event);
-			return true;
-		});
-		play();
 		elapsedMillis_ = MidiProvider::ticksToMillis(ticks);
 		Backend::seek(elapsedMillis_);
 		MidiProvider::seek(elapsedMillis_, trackOffsets_);
+		play();
 	}
 
 	template <class TBackend, class TMidiProvider, class TTimer>

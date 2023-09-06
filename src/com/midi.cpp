@@ -926,28 +926,45 @@ namespace com
 				auto &originalContainer = track->events().container();
 				com::midi::EventContainer::TContainer copy;
 				copy.reserve(originalContainer.size());
-				for (auto &midiEvent : originalContainer)
+				auto it = originalContainer.begin();
+				auto itEnd = originalContainer.end();
+				for (; it != itEnd; ++it)
 				{
+					auto midiEvent = *it;
 					com::Ticks midiEventPosition = midiEvent.absPosition();
-					bool canBeSkipped = midiEvent.eventType() == com::midi::NoteOn || midiEvent.eventType() == com::midi::NoteOff;
+					auto eventType = midiEvent.eventType();
+					bool isConfigEvent = midiEventPosition == 0 && (eventType == com::midi::ProgramChange 
+						|| eventType == com::midi::MetaEvent
+						|| eventType == com::midi::Sysex);
 					bool isInRange = midiEventPosition >= begin && midiEventPosition < end;
-					if(midiEventPosition >= end) 
+					if(!isInRange && !isConfigEvent) 
 					{
 						continue;
 					}
-					if (canBeSkipped && !isInRange)
-					{
-						continue;
-					}
-					if (!canBeSkipped && (midiEventPosition < begin))
-					{
-						midiEvent.absPosition(0);
-					}
-					else
-					{
-						midiEvent.absPosition(midiEvent.absPosition() - begin);
-					}
+					midiEvent.absPosition(midiEvent.absPosition() - begin);
 					copy.push_back(midiEvent);
+					if (eventType == com::midi::NoteOn) 
+					{
+						auto correspondingNoteOff = 
+							std::find_if(it, itEnd, [midiEvent](auto &ev) 
+							{ 
+								if (ev.eventType() != com::midi::NoteOff) 
+								{
+									return false;
+								}
+								if (ev.parameter1() != midiEvent.parameter1()) 
+								{
+									return false;
+								}
+								return true;
+							 });
+						if (correspondingNoteOff != itEnd) 
+						{
+							auto noteOffCopy = *correspondingNoteOff;
+							noteOffCopy.absPosition(noteOffCopy.absPosition() - begin);
+							copy.push_back(noteOffCopy);
+						}
+					}
 				}
 				originalContainer.swap(copy);
 			}
