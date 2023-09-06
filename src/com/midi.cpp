@@ -894,7 +894,7 @@ namespace com
 			for (auto track : tracks())
 			{
 				auto &events = track->events();
-				if (events.container().size() == 0)
+				if (events.container().empty())
 				{
 					continue;
 				}
@@ -931,6 +931,10 @@ namespace com
 					com::Ticks midiEventPosition = midiEvent.absPosition();
 					bool canBeSkipped = midiEvent.eventType() == com::midi::NoteOn || midiEvent.eventType() == com::midi::NoteOff;
 					bool isInRange = midiEventPosition >= begin && midiEventPosition < end;
+					if(midiEventPosition >= end) 
+					{
+						continue;
+					}
 					if (canBeSkipped && !isInRange)
 					{
 						continue;

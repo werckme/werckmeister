@@ -56,7 +56,6 @@ namespace app
             resume = _programOptions->getResumeAtPosition() * com::PPQ;
             _programOptions->setResumeAtPosition(0);
         }
-        _logger->babble(WMLogLambda(log << "begin at tick: " << begin));
         initFluidSynthInstances();
         _midiPlayerImpl.updateOutputMapping(com::getConfigServer().getDevices());
         _midiPlayerImpl.midi(_midifile);

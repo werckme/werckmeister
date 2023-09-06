@@ -364,6 +364,10 @@ namespace com
 
 	void Werckmeister::addSearchPath(const Path &searchPath)
 	{
+		if (searchPath.empty()) 
+		{
+			return;
+		}
 		auto path = boost::filesystem::path(searchPath);
 		if (!boost::filesystem::is_directory(path))
 		{
