@@ -14,6 +14,7 @@
 #include <com/config/configServer.h>
 #include <algorithm>
 #include <iostream>
+#include <functional>
 
 namespace app
 {
@@ -40,6 +41,8 @@ namespace app
 		typedef TMidiProvider MidiProvider;
 		typedef typename MidiProvider::TrackId TrackId;
 		typedef std::chrono::high_resolution_clock Clock;
+		typedef std::function<void()> OnEnd;
+		OnEnd onEnd = OnEnd();
 		MidiplayerClient();
 		MidiplayerClient(const MidiplayerClient &&) = delete;
 		MidiplayerClient &operator=(MidiplayerClient &&) = delete;
@@ -57,7 +60,7 @@ namespace app
 		void bpm(com::BPM bpm);
 		void updateOutputMapping(const com::ConfigServer::Devices &devices);
 		OutputInfo getOutputInfo(const std::string &deviceName) const;
-
+		com::Ticks end = com::Ticks(-1);
 	private:
 		const OutputInfo *getOutputInfo() const;
 		void handleMetaEvent(const com::midi::Event &ev);
@@ -266,6 +269,11 @@ namespace app
 	template <class TBackend, class TMidiProvider, class TTimer>
 	void MidiplayerClient<TBackend, TMidiProvider, TTimer>::onProcess()
 	{
+		if (this->end >= 0 && this->elapsed() >= this->end)
+		{
+			onEnd();
+			return;
+		}
 		std::lock_guard<Lock> lockGuard(lock);
 		typename MidiProvider::Events events;
 		MidiProvider::getEvents(this->elapsedMillis_, events, trackOffsets_);
@@ -310,24 +318,10 @@ namespace app
 	void MidiplayerClient<TBackend, TMidiProvider, TTimer>::play(com::Ticks ticks)
 	{
 		std::lock_guard<Lock> lockGuard(lock);
-		MidiProvider::iterate([this, ticks](com::Ticks pos, const typename MidiProvider::Event &ev) { // consume all events except NoteOn and NoteOff
-			if (pos >= ticks)
-			{
-				currentTrack_ = MidiProvider::INVALID_TRACKID;
-				return false; // aka break
-			}
-			if (ev.event.eventType() == com::midi::NoteOn || ev.event.eventType() == com::midi::NoteOff)
-			{
-				return true; // aka continue
-			}
-			currentTrack_ = ev.trackId;
-			send(ev.event);
-			return true;
-		});
-		play();
 		elapsedMillis_ = MidiProvider::ticksToMillis(ticks);
 		Backend::seek(elapsedMillis_);
 		MidiProvider::seek(elapsedMillis_, trackOffsets_);
+		play();
 	}
 
 	template <class TBackend, class TMidiProvider, class TTimer>

@@ -69,6 +69,7 @@ void SheetCompilerProgram::compile()
         {
             auto beginTicks = _programOptions->isBeginSet() ? _programOptions->getBegin() * com::PPQ : 0;
             auto endTicks = _programOptions->isEndSet() ? _programOptions->getEnd() * com::PPQ : com::Ticks(INT_MAX);
+            _logger->babble(WMLogLambda(log << "crop midi " << beginTicks/com::PPQ << ":" << endTicks/com::PPQ ));
             _midiFile->crop(beginTicks, endTicks);
         }
         _midiFile->seal();

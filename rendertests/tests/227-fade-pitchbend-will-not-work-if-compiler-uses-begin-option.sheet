@@ -3,7 +3,7 @@
 -- #skip-event-plausibility-test
 -- !! REFERENCE MUST BE COMPILE WITH: --begin=4
 tempo: 140;
-device: MyDevice  midi _usePort=3;
+device: MyDevice  midi _useDevice="FLUID";
 instrumentDef:lead    _onDevice=MyDevice  _ch=0 _pc=16;
 instrumentDef:rhythm _onDevice=MyDevice  _ch=1 _pc=0;
 instrumentDef:bass    _onDevice=MyDevice  _ch=2 _pc=32;

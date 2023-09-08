@@ -894,7 +894,7 @@ namespace com
 			for (auto track : tracks())
 			{
 				auto &events = track->events();
-				if (events.container().size() == 0)
+				if (events.container().empty())
 				{
 					continue;
 				}
@@ -926,23 +926,22 @@ namespace com
 				auto &originalContainer = track->events().container();
 				com::midi::EventContainer::TContainer copy;
 				copy.reserve(originalContainer.size());
-				for (auto &midiEvent : originalContainer)
+				auto it = originalContainer.begin();
+				auto itEnd = originalContainer.end();
+				for (; it != itEnd; ++it)
 				{
+					auto midiEvent = *it;
 					com::Ticks midiEventPosition = midiEvent.absPosition();
-					bool canBeSkipped = midiEvent.eventType() == com::midi::NoteOn || midiEvent.eventType() == com::midi::NoteOff;
+					auto eventType = midiEvent.eventType();
+					bool isConfigEvent = midiEventPosition == 0 && (eventType == com::midi::ProgramChange 
+						|| eventType == com::midi::MetaEvent
+						|| eventType == com::midi::Sysex);
 					bool isInRange = midiEventPosition >= begin && midiEventPosition < end;
-					if (canBeSkipped && !isInRange)
+					if(!isInRange && !isConfigEvent) 
 					{
 						continue;
 					}
-					if (!canBeSkipped && (midiEventPosition < begin))
-					{
-						midiEvent.absPosition(0);
-					}
-					else
-					{
-						midiEvent.absPosition(midiEvent.absPosition() - begin);
-					}
+					midiEvent.absPosition(std::max(midiEvent.absPosition() - begin, com::Ticks(0)));
 					copy.push_back(midiEvent);
 				}
 				originalContainer.swap(copy);

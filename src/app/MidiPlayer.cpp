@@ -56,20 +56,32 @@ namespace app
             resume = _programOptions->getResumeAtPosition() * com::PPQ;
             _programOptions->setResumeAtPosition(0);
         }
-        _logger->babble(WMLogLambda(log << "begin at tick: " << begin));
         initFluidSynthInstances();
         _midiPlayerImpl.updateOutputMapping(com::getConfigServer().getDevices());
         _midiPlayerImpl.midi(_midifile);
+        _midiPlayerImpl.end = end;
         _midiPlayerImpl.play(resume > 0 ? resume : begin);
+        bool isEnd = false;
+        bool loop = _programOptions->isLoopSet();
+        _midiPlayerImpl.onEnd = [&isEnd, &begin, &loop, this]()
+        {
+            if (!loop) 
+            {
+                isEnd = true;
+                return;
+            }
+            _midiPlayerImpl.play(begin);
+        };
+
 
         state = Playing;
-        bool loop = _programOptions->isLoopSet();
+
         app::os::setSigtermHandler([&]
-                                   {
-                                       state = Stopped;
-                                       _midiPlayerImpl.panic();
-                                       _logger->debug(WMLogLambda(log << "stopped via SIGTERM"));
-                                   });
+        {
+            state = Stopped;
+            _midiPlayerImpl.panic();
+            _logger->debug(WMLogLambda(log << "stopped via SIGTERM"));
+        });
 
 #ifdef SIGINT_WORKAROUND
         std::unique_ptr<app::os::InterProcessMessageQueue> ipcMessageQueue = nullptr;
@@ -93,13 +105,9 @@ namespace app
                 _logger->debug(WMLogLambda(log << "stopped via win32 sigterm ipc workaround"));
             }
 #endif
-            if (elapsed >= end)
+            if (isEnd)
             {
-                if (!loop)
-                {
-                    break;
-                }
-                _midiPlayerImpl.play(begin);
+                break;
             }
             visitVisitors(Loop, elapsed);
         }
