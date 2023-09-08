@@ -95,7 +95,7 @@ namespace app
 		Events events;
 		if (millis > 0)
 		{
-			millis = std::max(millis - ticksToMillis(1), Millis(0.0));
+			millis = std::max(millis, Millis(0.0));
 			getEvents(millis, events, offsets);
 		}
 	}

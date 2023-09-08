@@ -941,30 +941,8 @@ namespace com
 					{
 						continue;
 					}
-					midiEvent.absPosition(midiEvent.absPosition() - begin);
+					midiEvent.absPosition(std::max(midiEvent.absPosition() - begin, com::Ticks(0)));
 					copy.push_back(midiEvent);
-					if (eventType == com::midi::NoteOn) 
-					{
-						auto correspondingNoteOff = 
-							std::find_if(it, itEnd, [midiEvent](auto &ev) 
-							{ 
-								if (ev.eventType() != com::midi::NoteOff) 
-								{
-									return false;
-								}
-								if (ev.parameter1() != midiEvent.parameter1()) 
-								{
-									return false;
-								}
-								return true;
-							 });
-						if (correspondingNoteOff != itEnd) 
-						{
-							auto noteOffCopy = *correspondingNoteOff;
-							noteOffCopy.absPosition(noteOffCopy.absPosition() - begin);
-							copy.push_back(noteOffCopy);
-						}
-					}
 				}
 				originalContainer.swap(copy);
 			}
