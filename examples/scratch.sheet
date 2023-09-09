@@ -12,7 +12,7 @@ instrument: piano;
     !fffffc,,,8 d,,, e,,, f,,, g,,, a,,, b,,, c,, | 
     !fffffd,, e,, f,, g,, a,, b,, c, d, | 
     !fffffe, f, g, a, b, c d e |
-    !fffff f g a b c'4. r8 |
+    !fffff f g a b c'4. r8 :(x10)|
 }
 ]
 
