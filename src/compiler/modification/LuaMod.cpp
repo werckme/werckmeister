@@ -53,38 +53,48 @@ namespace compiler
     };
     void LuaEvent::push(lua_State *L)
     {
+        using namespace documentModel;
         lua_createtable(L, 2, 0);
         auto top = lua_gettop(L);
         // type
         lua::setTableValue(L, LUA_EVENT_PROPETRY_TYPE, top, getTypename());
-        // pitches
-        lua_pushstring(L, LUA_EVENT_PROPETRY_PITCHES);
-        pushPitches(L);
-        lua_settable(L, top);
-        // tags
-        lua_pushstring(L, LUA_EVENT_PITCH_PROPETRY_TAGS);
-        pushTags(L);
-        lua_settable(L, top);
-        // offset
-        lua::setTableValue(L, LUA_EVENT_PROPETRY_OFFSET, top, event->offset / com::PPQ);
-        // velocity
-        lua::setTableValue(L, LUA_EVENT_PROPETRY_VELOCITY, top, event->velocity);
-        // duration
-        lua::setTableValue(L, LUA_EVENT_PROPETRY_DURATION, top, event->duration / com::PPQ);
-        // is tied
-        lua::setTableValue(L, LUA_EVENT_PROPETRY_TYING, top, event->isTied());
-        // pitchbend value
-        pushPitchBendValue(L, top, *event);
-        // totalTiedDuration
-        lua::setTableValue(L, LUA_EVENT_PROPETRY_TOAL_TIED_DURATION, top, event->tiedDurationTotal / com::PPQ);
-        // tiedDuration
-        lua::setTableValue(L, LUA_EVENT_PROPERTY_TIED_DURATION, top, event->tiedDuration / com::PPQ);
         IContext::TrackId trackId = ctx->track();
         // track id
         lua::setTableValue(L, LUA_EVENT_PROPERTY_TRACK_ID, top, trackId);
         IContext::TrackId voiceId = ctx->voice();
         // voice id
         lua::setTableValue(L, LUA_EVENT_PROPERTY_VOICE_ID, top, voiceId);
+        // tags
+        lua_pushstring(L, LUA_EVENT_PITCH_PROPETRY_TAGS);
+        pushTags(L);
+        lua_settable(L, top);
+        // offset
+        lua::setTableValue(L, LUA_EVENT_PROPETRY_OFFSET, top, event->offset / com::PPQ);
+
+        switch (event->type)
+        {
+            case Event::Controller:
+                lua::setTableValue(L, LUA_EVENT_PROPETRY_CC_NR, top, event->controllerNumber);
+                lua::setTableValue(L, LUA_EVENT_PROPETRY_CC_VALUE, top, event->controllerValue);
+                break;
+            default:
+                // pitches
+                lua_pushstring(L, LUA_EVENT_PROPETRY_PITCHES);
+                pushPitches(L);
+                lua_settable(L, top);
+                // velocity
+                lua::setTableValue(L, LUA_EVENT_PROPETRY_VELOCITY, top, event->velocity);
+                // duration
+                lua::setTableValue(L, LUA_EVENT_PROPETRY_DURATION, top, event->duration / com::PPQ);
+                // is tied
+                lua::setTableValue(L, LUA_EVENT_PROPETRY_TYING, top, event->isTied());
+                // pitchbend value
+                pushPitchBendValue(L, top, *event);
+                // totalTiedDuration
+                lua::setTableValue(L, LUA_EVENT_PROPETRY_TOAL_TIED_DURATION, top, event->tiedDurationTotal / com::PPQ);
+                // tiedDuration
+                lua::setTableValue(L, LUA_EVENT_PROPERTY_TIED_DURATION, top, event->tiedDuration / com::PPQ);
+        }
     }
 
     void LuaEvent::pushPitchBendValue(lua_State *L, int top, const documentModel::Event &event)
@@ -152,6 +162,8 @@ namespace compiler
             return LUA_EVENT_TYPE_PITCHBEND;
         case Event::Rest:
             return LUA_EVENT_TYPE_REST;
+        case Event::Controller:
+            return LUA_EVENT_TYPE_CC;
         default:
             return LUA_EVENT_TYPE_UNKNOWN;
         }
@@ -309,8 +321,6 @@ namespace compiler
     void LuaModification::popAndExecuteSysex(IContextPtr ctx)
     {
         com::Ticks timeOffset = 0;
-        int ccNr = -1;
-        int ccValue = -1;
         lua::getTableValue(L, LUA_EVENT_PROPETRY_OFFSET, timeOffset);
         timeOffset *= com::PPQ;
         lua_pushstring(L, LUA_EVENT_PROPETRY_SYSEX_DATA);
@@ -322,7 +332,7 @@ namespace compiler
         size_t size = lua_rawlen(L, -1);
         std::vector<com::Byte> bff;
         bff.reserve(size);
-        for (int index = 0; index < size; index++) 
+        for (size_t index = 0; index < size; index++) 
         {
             lua_pushinteger(L, index + 1);
             lua_gettable(L, -2);
