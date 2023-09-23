@@ -1,0 +1,22 @@
+using "/chords/default.chords";
+tempo: 140;
+
+device: MyDevice _isType=midi _useDevice="FLUID";
+instrumentDef:lead    _onDevice=MyDevice  _ch=0 _gmInstrument="Organ";
+
+
+myPhrase = I,2~  &2;
+
+
+-- melody track
+[
+instrument: lead;
+{
+	/chord: C/
+    I,1~ | &1 |
+    >"myPhrase"1 |
+}
+{
+	c''4 & & & :| 
+}
+]

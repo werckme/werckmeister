@@ -51,6 +51,7 @@ namespace compiler
 		template <>
 		bool renderEvent<Event::TiedDegree>(SheetEventRenderer *renderer, const Event *ev)
 		{
+			renderer->renderDegree(*ev);
 			return true;
 		}
 
