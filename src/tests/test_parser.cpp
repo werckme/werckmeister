@@ -2163,3 +2163,22 @@ BOOST_AUTO_TEST_CASE(test_phrase_with_annotations)
 	BOOST_CHECK( ev.tags.find(com::String("myTag1")) != ev.tags.end() );
 	BOOST_CHECK( ev.tags.find(com::String("myTag2")) != ev.tags.end() );
 }
+
+BOOST_AUTO_TEST_CASE(order_of_sheet_components_phrase_after_track)
+{
+	using namespace com;
+	using namespace documentModel;
+	using documentModel::PitchDef;
+	com::String text = FM_STRING("\
+[  \
+{	\
+	c d e f	\
+}	\
+]	\
+myPhrase = c d e f;	\
+");
+	SheetDefParser parser;
+	auto defs = parser.parse(text);
+	BOOST_CHECK_EQUAL(defs.documentConfigs.size(), size_t(1));
+	BOOST_CHECK_EQUAL(defs.tracks.size(), size_t(1));
+}
