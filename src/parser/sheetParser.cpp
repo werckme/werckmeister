@@ -462,8 +462,12 @@ namespace parser
 				track.name("track");
 
 				start %= (documentUsing_ | attr(DocumentUsing())) 
-					> *documentConfig_
-					> *track
+					> attr(SheetDef::DocumentConfigs())
+					> attr(SheetDef::Tracks())
+					> -(*(
+							  documentConfig_[(push_back(at_c<SdDocumentConfigs>(_val), qi::_1))] 
+							| track[(push_back(at_c<SdTracks>(_val), qi::_1))]
+						))
 					> boost::spirit::eoi;
 
 				auto onError = boost::bind(&compiler::handler::errorHandler<Iterator>, _1, sourceId_);
