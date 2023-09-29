@@ -6,7 +6,6 @@
 #include <documentModel/objects/ConductionSheetDef.h>
 #include "documentModel/SheetDef.h"
 #include "documentModel/Pitchmap.h"
-#include "documentModel/DocumentUsing.h"
 #include "forward.hpp"
 #include <tuple>
 
