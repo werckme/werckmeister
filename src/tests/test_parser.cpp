@@ -757,9 +757,9 @@ using \"C:\\drivers\\Intel Rapid Storage Technology Driver\"; \n\
 ");
 	SheetDefParser parser;
 	auto doc = parser.parse(text);
-	const auto &defs = doc.documentUsing;
-	BOOST_CHECK(defs.usings.size() == 7);
-	auto it = defs.usings.begin();
+	const auto &defs = doc.documentUsings;
+	BOOST_CHECK(defs.size() == 7);
+	auto it = defs.begin();
 	BOOST_CHECK(*(it++) == FM_STRING("Chords1.chords"));
 	BOOST_CHECK(*(it++) == FM_STRING("Chords.chords"));
 	BOOST_CHECK(*(it++) == FM_STRING("simplePianoSheetTemplate.sheetTemplate"));
@@ -796,7 +796,7 @@ BOOST_AUTO_TEST_CASE(test_documentUsingParser_empty)
 ");
 	SheetDefParser parser;
 	auto doc = parser.parse(text);
-	BOOST_CHECK(doc.documentUsing.usings.size() == 0);
+	BOOST_CHECK(doc.documentUsings.size() == 0);
 
 }
 
@@ -2164,21 +2164,62 @@ BOOST_AUTO_TEST_CASE(test_phrase_with_annotations)
 	BOOST_CHECK( ev.tags.find(com::String("myTag2")) != ev.tags.end() );
 }
 
-BOOST_AUTO_TEST_CASE(order_of_sheet_components_phrase_after_track)
+BOOST_AUTO_TEST_CASE(order_of_sheet_components)
 {
 	using namespace com;
 	using namespace documentModel;
 	using documentModel::PitchDef;
-	com::String text = FM_STRING("\
+	com::String usings = FM_STRING("\
+using \"myFile.template\";\
+");
+	com::String phrase = FM_STRING("\
+myPhrase = c d e f;	\
+");
+	com::String track = FM_STRING("\
 [  \
 {	\
 	c d e f	\
 }	\
 ]	\
-myPhrase = c d e f;	\
 ");
-	SheetDefParser parser;
-	auto defs = parser.parse(text);
-	BOOST_CHECK_EQUAL(defs.documentConfigs.size(), size_t(1));
-	BOOST_CHECK_EQUAL(defs.tracks.size(), size_t(1));
+	{
+		SheetDefParser parser;
+		auto text = usings + phrase + track;
+		auto defs = parser.parse(text);
+		BOOST_CHECK_EQUAL(defs.documentUsings.size(), size_t(1));
+		BOOST_CHECK_EQUAL(defs.documentConfigs.size(), size_t(1));
+		BOOST_CHECK_EQUAL(defs.tracks.size(), size_t(1));
+	}
+	{
+		SheetDefParser parser;
+		auto text = usings + track + phrase;
+		auto defs = parser.parse(text);
+		BOOST_CHECK_EQUAL(defs.documentUsings.size(), size_t(1));
+		BOOST_CHECK_EQUAL(defs.documentConfigs.size(), size_t(1));
+		BOOST_CHECK_EQUAL(defs.tracks.size(), size_t(1));
+	}
+	{
+		SheetDefParser parser;
+		auto text = track + usings + phrase;
+		auto defs = parser.parse(text);
+		BOOST_CHECK_EQUAL(defs.documentUsings.size(), size_t(1));
+		BOOST_CHECK_EQUAL(defs.documentConfigs.size(), size_t(1));
+		BOOST_CHECK_EQUAL(defs.tracks.size(), size_t(1));
+	}
+	{
+		SheetDefParser parser;
+		auto text = track + phrase + usings;
+		auto defs = parser.parse(text);
+		BOOST_CHECK_EQUAL(defs.documentUsings.size(), size_t(1));
+		BOOST_CHECK_EQUAL(defs.documentConfigs.size(), size_t(1));
+		BOOST_CHECK_EQUAL(defs.tracks.size(), size_t(1));
+	}
+	{
+		SheetDefParser parser;
+		auto text = track + usings + phrase + usings + track + phrase;
+		auto defs = parser.parse(text);
+		BOOST_CHECK_EQUAL(defs.documentUsings.size(), size_t(2));
+		BOOST_CHECK_EQUAL(defs.documentConfigs.size(), size_t(2));
+		BOOST_CHECK_EQUAL(defs.tracks.size(), size_t(2));
+	}
 }

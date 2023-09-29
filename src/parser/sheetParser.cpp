@@ -17,16 +17,12 @@
 #include <sstream>
 #include "parserSymbols.h"
 #include "parserPositionIt.h"
-#include <documentModel/DocumentUsing.h>
 #include <documentModel/AliasPitchDef.h>
 #include <documentModel/objects/Grouped.h>
 #include <documentModel/objects/Phrase.h>
 #include <com/tools.h>
 #include "valueParser.h"
 
-BOOST_FUSION_ADAPT_STRUCT(
-	documentModel::DocumentUsing,
-	(documentModel::DocumentUsing::Usings, usings))
 
 BOOST_FUSION_ADAPT_STRUCT(
 	documentModel::Argument,
@@ -94,7 +90,7 @@ BOOST_FUSION_ADAPT_STRUCT(
 
 BOOST_FUSION_ADAPT_STRUCT(
 	documentModel::SheetDef,
-	(documentModel::DocumentUsing, documentUsing)
+	(documentModel::SheetDef::Usings, documentUsings)
 	(documentModel::SheetDef::DocumentConfigs, documentConfigs)
 	(documentModel::SheetDef::Tracks, tracks)
 )
@@ -234,8 +230,6 @@ namespace parser
 				meta_arg_value_ = quoted_string | lexeme[+char_(ALLOWED_META_ARGUMENT)];
 
 				using_ %= "using" > quoted_string > ";";
-				usings_ %= *using_;
-				documentUsing_ %= usings_;
 			}
 
 			void initSheetParser()
@@ -461,11 +455,12 @@ namespace parser
 				documentUsing_.name("document config");
 				track.name("track");
 
-				start %= (documentUsing_ | attr(DocumentUsing())) 
+				start %= attr(SheetDef::Usings())
 					> attr(SheetDef::DocumentConfigs())
 					> attr(SheetDef::Tracks())
 					> -(*(
-							  documentConfig_[(push_back(at_c<SdDocumentConfigs>(_val), qi::_1))] 
+							  using_[(push_back(at_c<SdDocumentUsings>(_val), qi::_1))]
+							| documentConfig_[(push_back(at_c<SdDocumentConfigs>(_val), qi::_1))]
 							| track[(push_back(at_c<SdTracks>(_val), qi::_1))]
 						))
 					> boost::spirit::eoi;
@@ -489,11 +484,10 @@ namespace parser
 			qi::rule<Iterator, Phrase(), ascii::space_type> phrase_;
 			qi::rule<Iterator, DocumentConfig(), ascii::space_type> documentConfig_;
 			qi::rule<Iterator, TrackConfig(), ascii::space_type> trackConfig_;
-			qi::rule<Iterator, DocumentUsing(), ascii::space_type> documentUsing_;
+			qi::rule<Iterator, SheetDef::Using(), ascii::space_type> documentUsing_;
 			qi::rule<Iterator, com::String(), ascii::space_type> quoted_string;
 			qi::rule<Iterator, com::String(), ascii::space_type> meta_arg_value_;
 			qi::rule<Iterator, com::String(), ascii::space_type> using_;
-			qi::rule<Iterator, DocumentUsing::Usings, ascii::space_type> usings_;
 			qi::rule<Iterator, com::String(), ascii::space_type> bar_volta_;
 			qi::rule<Iterator, int, ascii::space_type> bar_repeat_number_;
 			CurrentPos<Iterator> current_pos_;
@@ -508,18 +502,24 @@ namespace parser
 				using qi::attr;
 				using qi::fail;
 				using qi::on_error;
+				using boost::phoenix::at_c;
+				using boost::phoenix::push_back;
+				using qi::_val;
 				Base::initArgumentParser();
 				Base::createDocumentConfigRules(Base::documentConfig_, Base::events);
 				Base::initDocumentUsingParser();
 				Base::current_pos_.setStartPos(begin);
-
 				Base::documentConfig_.name("document config");
-				Base::documentUsing_.name("document config");
+				Base::documentUsing_.name("document usings");
 
-				Base::start %= (Base::documentUsing_ | attr(DocumentUsing())) 
-				> *Base::documentConfig_ 
-				> attr(Track()) 
-				> boost::spirit::eoi;
+				Base::start %= attr(SheetDef::Usings())
+					> attr(SheetDef::DocumentConfigs())
+					> attr(SheetDef::Tracks())
+					> -(*(
+							  Base::using_[(push_back(at_c<SdDocumentUsings>(_val), qi::_1))]
+							| Base::documentConfig_[(push_back(at_c<SdDocumentConfigs>(_val), qi::_1))]
+						))
+					> boost::spirit::eoi;
 
 				auto onError = boost::bind(&compiler::handler::errorHandler<Iterator>, _1, Base::sourceId_);
 				on_error<fail>(Base::start, onError);
