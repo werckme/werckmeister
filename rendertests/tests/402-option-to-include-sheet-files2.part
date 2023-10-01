@@ -1,0 +1,14 @@
+using "./402-option-to-include-sheet-files2.part";
+
+myPhrase2 = I' III' V' VII';
+
+[
+instrument: piano2;
+{
+    r1 |
+    /chord: "C#7"/
+    >"myPhrase2"1 |
+    /chord: "C7"/
+    >"myPhrase2"1 |
+}
+]

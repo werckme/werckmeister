@@ -1,0 +1,21 @@
+
+using "/chords/default.chords";
+using "./402-option-to-include-sheet-files2.part";
+
+device: _useDevice="FLUID" _setName=MyDevice  _isType=midi;
+instrumentDef: _setName=piano _onDevice=MyDevice _ch=0 _pc=1;
+instrumentDef: _setName=piano2 _onDevice=MyDevice _ch=1 _pc=8;
+
+tempo: 80;
+
+myPhrase = I III V VII;
+
+[
+instrument: piano;
+{
+    /chord: "C#7"/
+    >"myPhrase"1 |
+    /chord: "C7"/
+    >"myPhrase"1 |
+}
+]

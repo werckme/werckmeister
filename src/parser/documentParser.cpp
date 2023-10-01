@@ -25,6 +25,7 @@ namespace parser
 		void useLuaScript(DocumentPtr doc, const com::String &path, Event::SourceId);
 		void useSheetTemplateDef(DocumentPtr doc, const com::String &path, Event::SourceId);
 		void useConfig(DocumentPtr doc, const com::String &path, Event::SourceId sourceId);
+		void useSheetPart(DocumentPtr doc, const com::String &path, Event::SourceId sourceId);
 		void processUsings(DocumentPtr doc,
 						   const documentModel::DocumentUsing &documentUsing,
 						   const Extensions &allowedExtendions,
@@ -35,9 +36,19 @@ namespace parser
 																 {PITCHMAP_DEF_EXTENSION, &usePitchmapDef},
 																 {LUA_DEF_EXTENSION, &useLuaScript},
 																 {SHEET_CONFIG, &useConfig},
+																 {SHEET_PART, &useSheetPart},
 																 {CONDUCTIONS_SHEET, &useConductionSheet}});
 
 		const Extensions AllSupportedExtensions = {
+			CHORD_DEF_EXTENSION,
+			SHEET_TEMPLATE_DEF_EXTENSION,
+			PITCHMAP_DEF_EXTENSION,
+			LUA_DEF_EXTENSION,
+			SHEET_CONFIG,
+			CONDUCTIONS_SHEET,
+			SHEET_PART};
+
+		const Extensions AllSupportedPartExtensions = {
 			CHORD_DEF_EXTENSION,
 			SHEET_TEMPLATE_DEF_EXTENSION,
 			PITCHMAP_DEF_EXTENSION,
@@ -49,6 +60,15 @@ namespace parser
 		{
 			com::append(doc->sheetDef.documentConfigs, sheetDef.documentConfigs);
 			com::append(doc->sheetDef.tracks, sheetDef.tracks);
+		}
+
+		void merge(DocumentPtr target, DocumentPtr src)
+		{
+			append(target, src->sheetDef);
+			com::append(src->conductionSheets, target->conductionSheets);
+			com::insertRange(src->chordDefs, target->chordDefs);
+			com::insertRange(src->pitchmapDefs, target->pitchmapDefs);
+			com::insertRange(src->sources, target->sources);
 		}
 
 		void useChordDef(DocumentPtr doc, const com::String &path, Event::SourceId sourceId)
@@ -115,7 +135,6 @@ namespace parser
 				throw;
 			}
 		}
-
 		void useConfig(DocumentPtr doc, const com::String &path, Event::SourceId sourceId)
 		{
 			try
@@ -144,30 +163,52 @@ namespace parser
 			}
 		}
 
+		void useSheetPart(DocumentPtr mainDocument, const com::String &path, Event::SourceId sourceId)
+		{
+			auto documentPtr = std::make_shared<documentModel::Document>();
+			documentPtr->path = path;
+			DocumentParser parser(documentPtr);
+			parser.isPart = true;
+			parser.parse(path);
+			merge(mainDocument, documentPtr);
+		}
+
 		void processUsings(DocumentPtr doc,
 						   const documentModel::DocumentUsing &documentUsing,
 						   const Extensions &allowedExtendions,
 						   const com::String &sourcePath)
 		{
-			auto &wm = com::getWerckmeister();
-			for (const auto &x : documentUsing.usings)
+			try 
 			{
-				auto path = boost::filesystem::path(x);
-				auto ext = path.extension().string();
-				auto it = exthandlers.find(ext);
-				if (it == exthandlers.end())
+				auto &wm = com::getWerckmeister();
+				for (const auto &x : documentUsing.usings)
 				{
-					FM_THROW(compiler::Exception, "unsupported file type: " + x);
+					auto path = boost::filesystem::path(x);
+					auto ext = path.extension().string();
+					auto it = exthandlers.find(ext);
+					if (it == exthandlers.end())
+					{
+						FM_THROW(compiler::Exception, "unsupported file type: " + x);
+					}
+					if (allowedExtendions.find(ext) == allowedExtendions.end())
+					{
+						FM_THROW(compiler::Exception, "document type not allowed: " + x);
+					}
+					com::String absolutePath;
+					wm.addSearchPath(sourcePath);
+					absolutePath = wm.resolvePath(x);
+					auto sourceId = doc->addSource(absolutePath);
+					it->second(doc, absolutePath, sourceId);
 				}
-				if (allowedExtendions.find(ext) == allowedExtendions.end())
-				{
-					FM_THROW(compiler::Exception, "document type not allowed: " + x);
-				}
-				com::String absolutePath;
-				wm.addSearchPath(sourcePath);
-				absolutePath = wm.resolvePath(x);
-				auto sourceId = doc->addSource(absolutePath);
-				it->second(doc, absolutePath, sourceId);
+			} 
+			catch(compiler::Exception &ex)
+			{
+				ASheetObjectWithSourceInfo posInfo;
+				posInfo.sourceId = doc->sourceId;
+				posInfo.sourcePositionBegin = 0;
+				posInfo.sourcePositionEnd = 0;
+				ex << compiler::ex_sheet_source_info(posInfo);
+				throw;
 			}
 		}
 	}
@@ -191,7 +232,9 @@ namespace parser
 		try
 		{
 			_document->sheetDef = sheetParser.parse(first, last, sourceId);
-			processUsings(_document, _document->sheetDef.documentUsing, AllSupportedExtensions);
+			processUsings(_document, 
+				_document->sheetDef.documentUsing, 
+				this->isPart ? AllSupportedPartExtensions : AllSupportedExtensions);
 		}
 		catch (com::Exception &ex)
 		{
