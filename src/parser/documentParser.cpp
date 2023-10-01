@@ -27,7 +27,7 @@ namespace parser
 		void useConfig(DocumentPtr doc, const com::String &path, Event::SourceId sourceId);
 		void useSheetPart(DocumentPtr doc, const com::String &path, Event::SourceId sourceId);
 		void processUsings(DocumentPtr doc,
-						   const documentModel::DocumentUsing &documentUsing,
+						   const documentModel::SheetDef::Usings &documentUsings,
 						   const Extensions &allowedExtendions,
 						   const com::String &sourcePath = com::String());
 
@@ -127,7 +127,7 @@ namespace parser
 				SheetDefParser sheetDefParser;
 				auto sheetDef = sheetDefParser.parse(documentText, sourceId);
 				append(doc, sheetDef);
-				processUsings(doc, sheetDef.documentUsing, {LUA_DEF_EXTENSION, PITCHMAP_DEF_EXTENSION, CONDUCTIONS_SHEET}, path);
+				processUsings(doc, sheetDef.documentUsings, {LUA_DEF_EXTENSION, PITCHMAP_DEF_EXTENSION, CONDUCTIONS_SHEET}, path);
 			}
 			catch (compiler::Exception &ex)
 			{
@@ -146,7 +146,7 @@ namespace parser
 				ConfigParser configParser;
 				auto configDef = configParser.parse(documentText, sourceId);
 				com::append(doc->sheetDef.documentConfigs, configDef.documentConfigs);
-				processUsings(doc, configDef.documentUsing, 
+				processUsings(doc, configDef.documentUsings, 
 				{
 					LUA_DEF_EXTENSION, 
 					PITCHMAP_DEF_EXTENSION, 
@@ -174,7 +174,7 @@ namespace parser
 		}
 
 		void processUsings(DocumentPtr doc,
-						   const documentModel::DocumentUsing &documentUsing,
+						   const documentModel::SheetDef::Usings &documentUsings,
 						   const Extensions &allowedExtendions,
 						   const com::String &sourcePath)
 		{

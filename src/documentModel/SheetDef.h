@@ -4,7 +4,6 @@
 #include "objects/Track.h"
 #include "objects/Event.h"
 #include <vector>
-#include "DocumentUsing.h"
 #include "objects/ASheetObject.h"
 #include "objects/DocumentConfig.h"
 
@@ -13,9 +12,11 @@ namespace documentModel
 
 	struct SheetDef
 	{
+		typedef com::String Using;
+		typedef std::vector<Using> Usings;
 		typedef std::vector<Track> Tracks;
 		typedef std::vector<DocumentConfig> DocumentConfigs;
-		DocumentUsing documentUsing;
+		Usings documentUsings;
 		DocumentConfigs documentConfigs;
 		Tracks tracks;
 	};

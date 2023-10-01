@@ -38,7 +38,7 @@ namespace app
         };
         bool result = changed(_document->path);
         // check all files, to update their timestamps
-        for (const auto &p : _document->sheetDef.documentUsing.usings)
+        for (const auto &p : _document->sheetDef.documentUsings)
         {
             auto fullPath = com::getWerckmeister().resolvePath(p);
             result |= changed(fullPath);
