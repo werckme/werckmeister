@@ -169,6 +169,16 @@ namespace com
         dst.insert(dst.end(), toAppend.begin(), toAppend.end());
     }
 
+    template <class TContainer>
+    void insertRange(TContainer &dst, const TContainer &toAppend)
+    {
+        if (toAppend.empty())
+        {
+            return;
+        }
+        dst.insert(toAppend.begin(), toAppend.end());
+    }
+
     /**
      * returns a value from an argument list such as:
      * key1 value1 key2 value2 ...

@@ -77,7 +77,7 @@ namespace parser
 		virtual documentModel::DocumentPtr parse(const com::String &path);
 		virtual documentModel::DocumentPtr parseString(const com::String &text);
 		virtual ~DocumentParser() = default;
-
+		bool isPart = false;
 	private:
 		documentModel::DocumentPtr _document;
 	};
