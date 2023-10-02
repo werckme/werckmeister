@@ -181,7 +181,7 @@ namespace parser
 			try 
 			{
 				auto &wm = com::getWerckmeister();
-				for (const auto &x : documentUsing.usings)
+				for (const auto &x : documentUsings)
 				{
 					auto path = boost::filesystem::path(x);
 					auto ext = path.extension().string();
@@ -233,7 +233,7 @@ namespace parser
 		{
 			_document->sheetDef = sheetParser.parse(first, last, sourceId);
 			processUsings(_document, 
-				_document->sheetDef.documentUsing, 
+				_document->sheetDef.documentUsings, 
 				this->isPart ? AllSupportedPartExtensions : AllSupportedExtensions);
 		}
 		catch (com::Exception &ex)
