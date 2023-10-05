@@ -178,37 +178,25 @@ namespace parser
 						   const Extensions &allowedExtendions,
 						   const com::String &sourcePath)
 		{
-			try 
+			auto &wm = com::getWerckmeister();
+			for (const auto &x : documentUsings)
 			{
-				auto &wm = com::getWerckmeister();
-				for (const auto &x : documentUsings)
+				auto path = boost::filesystem::path(x);
+				auto ext = path.extension().string();
+				auto it = exthandlers.find(ext);
+				if (it == exthandlers.end())
 				{
-					auto path = boost::filesystem::path(x);
-					auto ext = path.extension().string();
-					auto it = exthandlers.find(ext);
-					if (it == exthandlers.end())
-					{
-						FM_THROW(compiler::Exception, "unsupported file type: " + x);
-					}
-					if (allowedExtendions.find(ext) == allowedExtendions.end())
-					{
-						FM_THROW(compiler::Exception, "document type not allowed: " + x);
-					}
-					com::String absolutePath;
-					wm.addSearchPath(sourcePath);
-					absolutePath = wm.resolvePath(x);
-					auto sourceId = doc->addSource(absolutePath);
-					it->second(doc, absolutePath, sourceId);
+					FM_THROW(compiler::Exception, "unsupported file type: " + x);
 				}
-			} 
-			catch(compiler::Exception &ex)
-			{
-				ASheetObjectWithSourceInfo posInfo;
-				posInfo.sourceId = doc->sourceId;
-				posInfo.sourcePositionBegin = 0;
-				posInfo.sourcePositionEnd = 0;
-				ex << compiler::ex_sheet_source_info(posInfo);
-				throw;
+				if (allowedExtendions.find(ext) == allowedExtendions.end())
+				{
+					FM_THROW(compiler::Exception, "document type not allowed: " + x);
+				}
+				com::String absolutePath;
+				wm.addSearchPath(sourcePath);
+				absolutePath = wm.resolvePath(x);
+				auto sourceId = doc->addSource(absolutePath);
+				it->second(doc, absolutePath, sourceId);
 			}
 		}
 	}
