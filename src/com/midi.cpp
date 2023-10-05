@@ -933,9 +933,10 @@ namespace com
 					auto midiEvent = *it;
 					com::Ticks midiEventPosition = midiEvent.absPosition();
 					auto eventType = midiEvent.eventType();
-					bool isConfigEvent = midiEventPosition == 0 && (eventType == com::midi::ProgramChange 
+					bool isConfigEvent =  (eventType == com::midi::ProgramChange
 						|| eventType == com::midi::MetaEvent
-						|| eventType == com::midi::Sysex);
+						|| eventType == com::midi::Sysex
+						|| eventType == com::midi::Controller);
 					bool isInRange = midiEventPosition >= begin && midiEventPosition < end;
 					if(!isInRange && !isConfigEvent) 
 					{
