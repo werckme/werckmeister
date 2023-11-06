@@ -182,7 +182,8 @@ The recommended way to edit Werckmeister sheet files, is using Visual Studio Cod
 Have a look [here](/code-extension).
 
 ## Using Werckmeister along with a DAW
-All you need is to connect the `sheetp` player with the MIDI inputs of your DAW.
+Use the [VST Plugin](https://www.werckme.org/vst) for that matter.<br>
+As an alternative, somehow you need to connect the `sheetp` player with the MIDI inputs of your DAW.
 
 On Windows there is some third party software for that purpose. In my opinion [loopMIDI](https://www.tobias-erichsen.de/software/loopmidi.html) does a pretty good job.
 
@@ -2106,9 +2107,9 @@ instrument: piano;
 #### parameters
 | name | position | description | type |
 |:--- |:--- |:--- |:--- |
-| direction | - | Specifies the start direction of the stroke | [up,down] |
+| direction | - | Specifies the start direction of the stroke | [up,down,alternate] |
 | value | - | the duration of one arpeggio event. (Default=64) | [1,2,4,8,...] |
-| mode | - | Perform only one stroke direction (normal) or alternates between up and down. (Default=normal) | [normal,alternate] |
+| mode | - | Deprecated: Use _direction=alternate instead. Perform only one stroke direction (normal) or alternates between up and down. (Default=normal) | [normal,alternate] |
 
 #### include extension
 `using "lua/mod/guitarStroke.lua";`
