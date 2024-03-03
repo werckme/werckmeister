@@ -18,6 +18,8 @@ namespace parser
         DurationSymbols durationSymbols_;
     }
 
+    const std::string ValueParser::ALLOWED_META_ARGUMENT = "a-zA-Z0-9.";
+
     ValueParser::ValueParser()
     {
         using namespace boost::phoenix;
@@ -41,5 +43,7 @@ namespace parser
         alias_ %= lexeme['"' >> +(char_ - '"') >> '"'];
         pitchOrAlias_ %= pitch_ | alias_ | extendedPitch_;
         fraction_ %= int_ >> "/" >> int_;
+        quoted_string.name("quoted string");
+        quoted_string %= lexeme['"' > +(char_ - '"') > '"'];
     }
 }

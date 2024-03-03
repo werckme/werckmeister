@@ -30,6 +30,7 @@ BOOST_FUSION_ADAPT_STRUCT(
 
 namespace parser
 {
+    namespace ascii = boost::spirit::ascii;
     enum PitchDefFields
     {
         PitchDefFieldPitch,
@@ -46,5 +47,7 @@ namespace parser
         boost::spirit::qi::rule<Iterator, documentModel::AliasPitchDef(), boost::spirit::ascii::space_type> alias_;
         boost::spirit::qi::rule<Iterator, documentModel::PitchDef(), boost::spirit::ascii::space_type> pitch_;
         boost::spirit::qi::rule<Iterator, documentModel::FractionValue(), boost::spirit::ascii::space_type> fraction_;
+        boost::spirit::qi::rule<Iterator, com::String(), ascii::space_type> quoted_string;
+        static const std::string ALLOWED_META_ARGUMENT;
     };
 }
