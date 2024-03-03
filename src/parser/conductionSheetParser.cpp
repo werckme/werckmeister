@@ -127,13 +127,13 @@ namespace parser
 					attr(0) >> degreeSymbols_[at_c<ArPitch>(_val) = qi::_1] >> attr(com::String()) >> attr(ArgumentValue::ValueContext(ArgumentValue::Unspecified));
 
 				stringArgument_ %=
-					attr(0) >> attr(documentModel::PitchDef()) >> lexeme[+char_("a-zA-Z0-9")] >> attr(ArgumentValue::ValueContext(ArgumentValue::Unspecified));
+					attr(0) >> attr(documentModel::PitchDef()) >> (quoted_string | lexeme[+char_(ALLOWED_META_ARGUMENT)]) >> attr(ArgumentValue::ValueContext(ArgumentValue::Unspecified));
 
 				chordNameArgument_ %=
 					attr(0) >> attr(documentModel::PitchDef()) >> lexeme[+char_(ChordDefParser::ALLOWED_CHORD_SYMBOLS_REGEX)] >> attr(ArgumentValue::ValueContext(ArgumentValue::Unspecified));
 
 				cueArgument_ %=
-					attr(0) >> attr(documentModel::PitchDef()) >> "@" >> +char_("a-zA-Z0-9") >> attr(ArgumentValue::ValueContext(ArgumentValue::CueReference));
+					attr(0) >> attr(documentModel::PitchDef()) >> "@" >> (quoted_string | lexeme[+char_(ALLOWED_META_ARGUMENT)]) >> attr(ArgumentValue::ValueContext(ArgumentValue::CueReference));
 
 				selector_ %=
 					(current_pos_.current_pos >> attr(sourceId_) >> SHEET_CONDUCTOR_SEL__FROM_POSITION >> attr(SHEET_CONDUCTOR_SEL__FROM_POSITION) >> "(" >> (numberArgument_ | cueArgument_) >> ")")

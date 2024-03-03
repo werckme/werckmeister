@@ -1,0 +1,21 @@
+using "./411-instrument-selector-with-spec-char.conductions";
+
+
+device: _usePort=17 _setName=MyDevice  _isType=midi;
+instrumentDef: _setName=piano.part.I _onDevice=MyDevice _ch=0 _pc=1 _cc=8;
+instrumentDef: _setName="piano-part-II" _onDevice=MyDevice _ch=1 _pc=16 _cc=8;
+tempo: 150;
+
+[
+instrument: piano.part.I;
+{
+   c d e f | g a b c'
+}
+]
+
+[
+instrument: "piano-part-II";
+{
+   c d e f | g a b c'
+}
+]

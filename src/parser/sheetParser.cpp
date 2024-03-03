@@ -138,7 +138,6 @@ namespace parser
 		OctaveSymbols octaveSymbols_;
 		DurationSymbols durationSymbols_;
 		ExpressionSymbols expressionSymbols_;
-		const std::string ALLOWED_META_ARGUMENT = "a-zA-Z0-9.";
 		const std::string ALLOWED_PHRASE_NAME = "a-zA-Z0-9_";
 		const std::string ALLOWED_ARGUMENT_NAME_SYMBOLS = "a-zA-Z0-9";
 		const std::string ALLOWED_EVENT_TAG_ARGUMENT = "a-zA-Z0-9,`':;?.!()[]<>+*/=$%&@\\^_|~-";
@@ -223,12 +222,9 @@ namespace parser
 				using qi::lexeme;
 				using qi::lit;
 				using qi::on_error;
-				quoted_string.name("quoted string");
+				
 				meta_arg_value_.name("argument value");
-
-				quoted_string %= lexeme['"' > +(char_ - '"') > '"'];
 				meta_arg_value_ = quoted_string | lexeme[+char_(ALLOWED_META_ARGUMENT)];
-
 				using_ %= "using" > quoted_string > ";";
 			}
 
@@ -485,7 +481,6 @@ namespace parser
 			qi::rule<Iterator, DocumentConfig(), ascii::space_type> documentConfig_;
 			qi::rule<Iterator, TrackConfig(), ascii::space_type> trackConfig_;
 			qi::rule<Iterator, SheetDef::Using(), ascii::space_type> documentUsing_;
-			qi::rule<Iterator, com::String(), ascii::space_type> quoted_string;
 			qi::rule<Iterator, com::String(), ascii::space_type> meta_arg_value_;
 			qi::rule<Iterator, com::String(), ascii::space_type> using_;
 			qi::rule<Iterator, com::String(), ascii::space_type> bar_volta_;

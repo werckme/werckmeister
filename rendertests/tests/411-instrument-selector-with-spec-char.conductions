@@ -1,0 +1,11 @@
+instrument(piano.part.I) 
+{
+    duration = 15%;
+    pitch += 12;
+}
+
+instrument("piano-part-II") 
+{
+    duration = 250%;
+    pitch -= 12;
+}
