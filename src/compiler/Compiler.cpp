@@ -74,8 +74,7 @@ namespace compiler
 		auto document = document_.lock();
 		for (auto &track : document->sheetDef.tracks)
 		{
-			com::String type = com::getFirstMetaArgumentForKey(SHEET_META__TRACK_META_KEY_TYPE, track.trackConfigs).value;
-			bool isNoteEventTrack = type.empty();
+			bool isNoteEventTrack = com::isNoteEventTrack(track);
 			if (!isNoteEventTrack)
 			{
 				continue;
@@ -126,8 +125,7 @@ namespace compiler
 
 		bool isAccompTrack(const documentModel::Track &track)
 		{
-			return com::getFirstMetaArgumentForKey(SHEET_META__TRACK_META_KEY_TYPE, track.trackConfigs)
-					   .value == SHEET_META__TRACK_META_VALUE_TYPE_ACCOMP;
+			return com::isAccompEventTrack(track);
 		}
 	}
 

@@ -14,6 +14,7 @@
 namespace documentModel
 {
     struct Event;
+    struct Track;
     class Document;
 }
 
@@ -454,5 +455,9 @@ namespace com
                                   documentModel::ASheetObjectWithSourceInfo::SourceId,
                                   unsigned int sourcePosition,
                                   const std::string &message);
+    
+    bool isNoteEventTrack(const documentModel::Track&);
+    bool isAccompEventTrack(const documentModel::Track&);
+    bool isTemplateTrack(const documentModel::Track&);
 
 }

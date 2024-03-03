@@ -275,14 +275,13 @@ namespace compiler
 			{
 				_sheetNavigator->processNavigation(voice);
 			}
-			com::String type = com::getFirstMetaArgumentForKey(SHEET_META__TRACK_META_KEY_TYPE, track.trackConfigs).value;
-			bool isNoteEventTrack = type.empty();
-			bool isTemplateTrack = type == SHEET_META__SET_SHEET_TEMPLATE;
+			bool isNoteEventTrack = com::isNoteEventTrack(track);
+			bool isTemplateTrack = com::isTemplateTrack(track);
 			if (isNoteEventTrack || isTemplateTrack)
 			{
 				process(track);
 			}
-			if (type == SHEET_META__TRACK_META_VALUE_TYPE_ACCOMP)
+			if (com::isAccompEventTrack(track))
 			{
 				preprocessChordTrack(track);
 			}

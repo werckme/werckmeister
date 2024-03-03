@@ -147,12 +147,15 @@ namespace compiler
 		{
 			try
 			{
-				com::String type = com::getFirstMetaArgumentForKey(SHEET_META__TRACK_META_KEY_TYPE, track.trackConfigs).value;
-				if (type != SHEET_META__TRACK_META_VALUE_TYPE_SHEET_TEMPLATE)
-				{
-					continue;
+				com::String sheetTemplateName = com::getFirstMetaArgumentForKey(SHEET_META__TRACK_META_KEY_TEMPLATE_TYPE, track.trackConfigs).value;
+				if (sheetTemplateName.empty()) {
+					com::String type = com::getFirstMetaArgumentForKey(SHEET_META__TRACK_META_KEY_TYPE, track.trackConfigs).value;
+					if (type != SHEET_META__TRACK_META_VALUE_TYPE_SHEET_TEMPLATE)
+					{
+						continue;
+					}
+					sheetTemplateName = com::getFirstMetaArgumentForKey(SHEET_META__TRACK_META_KEY_NAME, track.trackConfigs).value;
 				}
-				com::String sheetTemplateName = com::getFirstMetaArgumentForKey(SHEET_META__TRACK_META_KEY_NAME, track.trackConfigs).value;
 				if (sheetTemplateName.empty())
 				{
 					FM_THROW(compiler::Exception, "missing 'name' for sheetTemplate track");

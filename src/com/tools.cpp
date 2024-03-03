@@ -1,7 +1,9 @@
 #include "tools.h"
 #include <documentModel/objects/Event.h>
 #include <documentModel/Document.h>
+#include <documentModel/objects/Track.h>
 #include <com/werckmeister.hpp>
+#include <compiler/metaCommands.h>
 
 namespace com
 {
@@ -144,4 +146,24 @@ namespace com
                                          << arrowLine;
         return ss;
     }
+
+    bool isNoteEventTrack(const documentModel::Track &track)
+    {
+        return !isAccompEventTrack(track) && !isTemplateTrack(track);
+    }
+    bool isAccompEventTrack(const documentModel::Track &track)
+    {
+        com::String str = com::getFirstMetaArgumentForKey(SHEET_META__TRACK_META_KEY_TYPE, track.trackConfigs).value;
+        return str == SHEET_META__TRACK_META_VALUE_TYPE_ACCOMP;
+    }
+    bool isTemplateTrack(const documentModel::Track &track)
+    {
+        com::String str = com::getFirstMetaArgumentForKey(SHEET_META__TRACK_META_KEY_TEMPLATE_TYPE, track.trackConfigs).value;
+        if (!str.empty()) {
+            return true;
+        }
+        str = getFirstMetaArgumentForKey(SHEET_META__TRACK_META_KEY_TYPE, track.trackConfigs).value;
+        return str == SHEET_META__TRACK_META_VALUE_TYPE_SHEET_TEMPLATE;
+    }
+
 }

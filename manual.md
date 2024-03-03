@@ -764,8 +764,7 @@ instrumentDef:bass  MyDevice _ch=0  _pc=0;
 
 -- here is the template:
 [
-type: template;
-name: simpleBass;
+template: simpleBass;
 instrument: bass;
 {
     I,,2. V,,4 |
@@ -806,8 +805,7 @@ device: MyDevice  midi 0;
 instrumentDef:bass  MyDevice _ch=0  _pc=0;
 
 [
-type: template;
-name: simpleBass;
+template: simpleBass;
 instrument: bass;
 {
     I,,2. V,,4 | <I,, III, V,>1
@@ -860,8 +858,7 @@ device: MyDevice  midi 0;
 instrumentDef:blues  MyDevice _ch=0  _pc=0;
 
 [
-type: template;
-name: myBluesTemplate;
+template: myBluesTemplate;
 instrument: blues;
 {
     -- force the VI to appear by prepending a "!" to the degree.
