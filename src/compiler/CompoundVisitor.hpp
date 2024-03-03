@@ -64,6 +64,22 @@ namespace compiler
         {
             visitor1->endRenderPhrase(phraseName);
         }
+        virtual void beginRenderTemplate(const com::String& templateName) override 
+        {
+            visitor1->beginRenderTemplate(templateName);
+        }
+        virtual void endRenderTemplate() override 
+        {
+            visitor1->endRenderTemplate();
+        }
+        virtual void beginRenderVoice(int voiceNumber) override 
+        {
+            visitor1->beginRenderVoice(voiceNumber);
+        }
+        virtual void endRenderVoice() override 
+        {
+            visitor1->endRenderVoice();
+        }
         TVisitor1Ptr visitor1 = nullptr;
     };
 
@@ -141,6 +157,26 @@ namespace compiler
         {
             visitor1->endRenderPhrase(phraseName);
             TBase::endRenderPhrase(phraseName);
+        }
+        virtual void beginRenderTemplate(const com::String& templateName) override 
+        {
+            visitor1->beginRenderTemplate(templateName);
+            TBase::beginRenderTemplate(templateName);
+        }
+        virtual void endRenderTemplate() override 
+        {
+            visitor1->endRenderTemplate();
+            TBase::endRenderTemplate();
+        }
+        virtual void beginRenderVoice(int voiceNumber) override 
+        {
+            visitor1->beginRenderVoice(voiceNumber);
+            TBase::beginRenderVoice(voiceNumber);
+        }
+        virtual void endRenderVoice() override 
+        {
+            visitor1->endRenderVoice();
+            TBase::endRenderVoice();
         }
         TVisitor1Ptr visitor1 = nullptr;
     };

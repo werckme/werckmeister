@@ -532,10 +532,15 @@ namespace compiler
 				const auto &sheetTemplateTracks = tmpl.tracks;
 				for (const auto &track : sheetTemplateTracks)
 				{
+					auto trackname = com::getTrackName(*track);
+					_compilerVisitor->beginRenderTemplate(trackname);
+					int voiceNumber = 1;
 					for (const auto &voice : track->voices)
 					{
+						_compilerVisitor->beginRenderVoice(voiceNumber++);
 						if (voice.events.empty())
 						{
+							_compilerVisitor->endRenderVoice();
 							continue;
 						}
 						DegreeEventServer &eventServer = findDegreeEventServer(degreeEventServers, &(voice.events));
@@ -556,7 +561,7 @@ namespace compiler
 
 						DEBUGX(
 							{
-								auto trackname = getMetaArgumentsForKey("name", track->trackConfigs).front();
+								auto trackname = com::getMetaArgumentsForKey(SHEET_META__TRACK_META_KEY_NAME, track->trackConfigs).front();
 								auto position = _ctx->voiceMetaData()->position;
 								auto tempofac = _ctx->voiceMetaData()->tempoFactor;
 								std::cout << trackname << " ; " << position << " ; " << tempofac << std::endl;
@@ -624,7 +629,9 @@ namespace compiler
 								}
 							}
 						}
+						_compilerVisitor->endRenderVoice();
 					}
+					_compilerVisitor->endRenderTemplate();
 				}
 			}
 			previousTemplateAndChords = &templateAndChords;

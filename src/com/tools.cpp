@@ -165,5 +165,13 @@ namespace com
         str = getFirstMetaArgumentForKey(SHEET_META__TRACK_META_KEY_TYPE, track.trackConfigs).value;
         return str == SHEET_META__TRACK_META_VALUE_TYPE_SHEET_TEMPLATE;
     }
+    String getTrackName(const documentModel::Track& track)
+    {
+        auto trackname = com::getFirstMetaArgumentForKey(SHEET_META__TRACK_META_KEY_TEMPLATE_TYPE, track.trackConfigs).value;
+        if (!trackname.empty()) {
+            return trackname;
+        }
+        return com::getFirstMetaArgumentForKey(SHEET_META__TRACK_META_KEY_NAME, track.trackConfigs).value;
+    }
 
 }

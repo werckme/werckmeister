@@ -90,14 +90,17 @@ namespace compiler
 										   metaEvent.metaArgs = x.args;
 										   return metaEvent;
 									   });
+			int voiceNumber = 1;
 			for (const auto &voice : track.voices)
 			{
+				compilerVisitorPtr_->beginRenderVoice(voiceNumber++);
 				auto voiceId = ctx->createVoice();
 				ctx->setTarget(trackId, voiceId);
 				for (const auto &ev : voice.events)
 				{
 					renderer->addEvent(ev);
 				}
+				compilerVisitorPtr_->endRenderVoice();
 			}
 		}
 	}
