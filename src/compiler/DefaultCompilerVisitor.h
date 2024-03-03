@@ -19,6 +19,10 @@ namespace compiler
         virtual void endDegreeRendering() override {}
         virtual void beginRenderPhrase(const com::String& phraseName) override {}
         virtual void endRenderPhrase(const com::String& phraseName) override {}
+        virtual void beginRenderTemplate(const com::String& templateName) override {}
+        virtual void endRenderTemplate() override {}
+        virtual void beginRenderVoice(int voiceNumber) override {}
+        virtual void endRenderVoice() override {}
         virtual ~DefaultCompilerVisitor() = default;
     };
 }

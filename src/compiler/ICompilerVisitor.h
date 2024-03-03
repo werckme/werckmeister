@@ -33,6 +33,10 @@ namespace compiler
         virtual void endDegreeRendering() = 0;
         virtual void beginRenderPhrase(const com::String& phraseName) = 0;
         virtual void endRenderPhrase(const com::String& phraseName) = 0;
+        virtual void beginRenderTemplate(const com::String& templateName) = 0;
+        virtual void endRenderTemplate() = 0;
+        virtual void beginRenderVoice(int voiceNumber) = 0;
+        virtual void endRenderVoice() = 0;
     };
     typedef std::shared_ptr<ICompilerVisitor> ICompilerVisitorPtr;
 }

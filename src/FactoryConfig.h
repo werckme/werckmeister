@@ -178,6 +178,8 @@ void FactoryConfig<TInjector>::initCommands()
 #include <conductor/selectors/Chord.h>
 #include <conductor/selectors/Octave.h>
 #include <conductor/selectors/Phrase.h>
+#include <conductor/selectors/Template.h>
+#include <conductor/selectors/Voice.h>
 #include <conductor/declarations/Velocity.h>
 #include <conductor/declarations/TimeOffset.h>
 #include <conductor/declarations/Duration.h>
@@ -212,6 +214,8 @@ void FactoryConfig<TInjector>::initConductor()
     register_<Octave>(selNamespace_ + SHEET_CONDUCTOR_SEL__OCTAVE);
     register_<Expression>(selNamespace_ + SHEET_CONDUCTOR_SEL__EXPRESSION);
     register_<Phrase>(selNamespace_ + SHEET_CONDUCTOR_SEL__PHRASE);
+    register_<Template>(selNamespace_ + SHEET_CONDUCTOR_SEL__TEMPLATE);
+    register_<Voice>(selNamespace_ + SHEET_CONDUCTOR_SEL__VOICE);
 
 
     register_<Velocity>(declNamespace_ + SHEET_CONDUCTOR_DEC__VELOCITY);

@@ -1,0 +1,15 @@
+using "./361-voice-selector.conductions";
+
+device: _usePort=17 _setName=MyDevice  _isType=midi;
+tempo: 150;
+instrumentDef: _setName=piano _onDevice=MyDevice _ch=0 _pc=1 _cc=8;
+
+[
+instrument: piano;
+{
+   c d e f | g1
+}
+{
+   g f e d | c1
+}
+]

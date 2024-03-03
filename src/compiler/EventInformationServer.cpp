@@ -18,7 +18,7 @@ namespace compiler
 {
 	using namespace boost;
 	using namespace boost::multi_index;
-	struct AdditionalEventInfos 
+	struct AdditionalEventInfosArg 
 	{
 		ChordRenderInfoPtr chordRenderInfo; 
 		const com::String *instrumentName; 
@@ -27,6 +27,8 @@ namespace compiler
 		com::Expression expression;
 		com::Ticks barPositionQuarters = -1;
 		documentModel::PitchDef pitchDef;
+		com::String *templateName;
+		int voiceNumber = -1;
 	};
 	class EventInformationDb
 	{
@@ -45,15 +47,15 @@ namespace compiler
 		EventSet events;
 		CuePositionMap cuePositionMap;
 	private:
-		void insert(const documentModel::Event&, const com::midi::Event&, const AdditionalEventInfos& additonalEventInfos);
-		void update(const EventInformation&, const documentModel::Event&, const com::midi::Event& midiEvent, const AdditionalEventInfos& additonalEventInfos);
+		void insert(const documentModel::Event&, const com::midi::Event&, const AdditionalEventInfosArg& additonalEventInfos);
+		void update(const EventInformation&, const documentModel::Event&, const com::midi::Event& midiEvent, const AdditionalEventInfosArg& additonalEventInfos);
 		void updateCueEventMap(const com::midi::Event&);
 	public:
 		inline EventInformation::DocumentId createDocumentId(const documentModel::Event& ev) const
 		{
 			return std::to_string(ev.sourceId) + "-" + std::to_string(ev.sourcePositionBegin);
 		}
-		void upsert(const documentModel::Event&, const com::midi::Event&, const AdditionalEventInfos& additonalEventInfos);
+		void upsert(const documentModel::Event&, const com::midi::Event&, const AdditionalEventInfosArg& additonalEventInfos);
 		const EventInformation* find(const documentModel::Event&);
 		const EventInformation* find(const com::midi::Event&);
 		const EventInformation* find(const EventInformation::Id &id);
@@ -88,7 +90,7 @@ namespace compiler
 		}
 		return &(*infoIt);
 	}		
-	void EventInformationDb::insert(const documentModel::Event& documentEvent, const com::midi::Event& midiEvent, const AdditionalEventInfos& additonalEventInfos)
+	void EventInformationDb::insert(const documentModel::Event& documentEvent, const com::midi::Event& midiEvent, const AdditionalEventInfosArg& additonalEventInfos)
 	{
 		EventInformation ei;
 		ei.id = midiEvent.id;
@@ -107,9 +109,11 @@ namespace compiler
 		ei.sourceId = documentEvent.sourceId;
 		ei.pitchAlias = additonalEventInfos.pitchDef != NoPitchDef ? additonalEventInfos.pitchDef.alias : "";
 		ei.phrases = *additonalEventInfos.phrases;
+		ei.templateName = *additonalEventInfos.templateName;
+		ei.voiceNumber = additonalEventInfos.voiceNumber;
 		events.insert(ei);
 	}
-	void EventInformationDb::update(const EventInformation& evinf, const documentModel::Event& documentEvent, const com::midi::Event& midiEvent, const AdditionalEventInfos& additonalEventInfos)
+	void EventInformationDb::update(const EventInformation& evinf, const documentModel::Event& documentEvent, const com::midi::Event& midiEvent, const AdditionalEventInfosArg& additonalEventInfos)
 	{
 		auto copy = evinf;
 		copy.eventType = documentEvent.type;
@@ -121,6 +125,8 @@ namespace compiler
 		copy.instrumentSectionName = *additonalEventInfos.instrumentSectionName;
 		copy.expression = additonalEventInfos.expression;
 		copy.phrases = *additonalEventInfos.phrases;
+		copy.templateName = *additonalEventInfos.templateName;
+		copy.voiceNumber = additonalEventInfos.voiceNumber;
 		auto it = events.find(copy.id);
 		events.replace(it, copy);
 	}
@@ -134,7 +140,7 @@ namespace compiler
 		auto name = com::midi::Event::MetaGetStringValue(midiEvent.metaData(), midiEvent.metaDataSize());
 		cuePositionMap[name] = midiEvent.absPosition();
 	}
-	void EventInformationDb::upsert(const documentModel::Event& documentEvent, const com::midi::Event& midiEvent, const AdditionalEventInfos& additonalEventInfos)
+	void EventInformationDb::upsert(const documentModel::Event& documentEvent, const com::midi::Event& midiEvent, const AdditionalEventInfosArg& additonalEventInfos)
 	{
 		updateCueEventMap(midiEvent);
 		auto infoIt = events.find(midiEvent.id);
@@ -217,7 +223,7 @@ namespace compiler
 			return;
 		}
 		const auto contextMeta = context->voiceMetaData();
-		AdditionalEventInfos additionalEventInfos;
+		AdditionalEventInfosArg additionalEventInfos;
 		additionalEventInfos.expression = contextMeta ? contextMeta->expression : com::expression::Undefined;
 		additionalEventInfos.chordRenderInfo = lastChordRenderInfo;
 		additionalEventInfos.instrumentName = &lastInstrument;
@@ -225,6 +231,8 @@ namespace compiler
 		additionalEventInfos.barPositionQuarters = contextMeta ? contextMeta->barPosition / com::PPQ : -1;
 		additionalEventInfos.pitchDef = lastPitch;
 		additionalEventInfos.phrases = &phrases;
+		additionalEventInfos.templateName = &lastTemplateName;
+		additionalEventInfos.voiceNumber = lastVoiceNumber;
 		eventDb->upsert(*lastDocumentEvent, ev, additionalEventInfos);
 	}
 
@@ -280,5 +288,23 @@ namespace compiler
     void EventInformationServer::endRenderPhrase(const com::String& phraseName)
 	{
 		phrases.pop_front();
+	}
+
+	void EventInformationServer::beginRenderTemplate(const com::String& templateName)
+	{
+		lastTemplateName = templateName;
+	}
+
+	void EventInformationServer::endRenderTemplate()
+	{
+		lastTemplateName.clear();
+	}
+	void EventInformationServer::beginRenderVoice(int voiceNumber)
+	{
+		lastVoiceNumber = voiceNumber;
+	}
+	void EventInformationServer::endRenderVoice()
+	{
+		lastVoiceNumber = -1;
 	}
 }

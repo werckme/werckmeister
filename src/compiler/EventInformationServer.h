@@ -31,6 +31,10 @@ namespace compiler
         virtual Tags getTags(const com::midi::Event &ev) const override;
         virtual void beginRenderPhrase(const com::String& phraseName) override;
         virtual void endRenderPhrase(const com::String& phraseName) override;
+        virtual void beginRenderTemplate(const com::String& templateName) override;
+        virtual void endRenderTemplate() override;
+        virtual void beginRenderVoice(int voiceNumber) override;
+        virtual void endRenderVoice() override;
     private:
         std::unique_ptr<EventInformationDb> eventDb;
         std::unique_ptr <documentModel::Event> lastDocumentEvent = nullptr;
@@ -39,5 +43,7 @@ namespace compiler
         com::String lastInstrumentSectionName;
         EventInformation::Phrases phrases;
         documentModel::PitchDef lastPitch;
+        com::String lastTemplateName;
+        int lastVoiceNumber = -1;
     };
 }

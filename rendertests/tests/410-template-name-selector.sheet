@@ -1,0 +1,32 @@
+using "/chords/default.chords";
+using "./410-template-name-selector.conductions";
+
+device: _usePort=17 _setName=MyDevice  _isType=midi;
+tempo: 150;
+instrumentDef: _setName=piano _onDevice=MyDevice _ch=0 _pc=1 _cc=8;
+
+
+[
+template: rightHand;
+instrument: piano;
+{
+    <I III V>1
+}
+]
+
+
+[
+template: leftHand;
+instrument: piano;
+{
+   I4 &&& |
+}
+]
+
+[
+type: accomp;
+{
+    /template: leftHand rightHand/
+    C | G | C | C | F | E- | D- |
+}
+]

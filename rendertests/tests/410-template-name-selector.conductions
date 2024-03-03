@@ -1,0 +1,3 @@
+template(leftHand) {
+    pitch -= 24;
+}
