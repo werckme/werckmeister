@@ -1,0 +1,35 @@
+
+using "/chords/default.chords";
+device: MyDevice _isType=midi _usePort=17;
+
+-- instrument definitions
+instrumentDef: vibra         MyDevice _ch=4 _pc=11;
+instrumentDef: bass         MyDevice _ch=1 _pc=42;
+
+tempo: 155;
+ 
+[
+type: template;
+name: myTemplate;
+instrument: vibra;
+{
+    I III V I'
+}
+]
+
+[
+template: myBassTemplate;
+instrument: bass;
+{
+    I,,2. V,4 
+}
+]
+
+
+[
+type: accomp;
+{
+    /template: myTemplate myBassTemplate/
+    C |
+}
+]
