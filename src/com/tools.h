@@ -365,20 +365,37 @@ namespace com
     }
 
     /**
-     *  replaces a comment sequence with an spaces.
+     *  replaces a comment sequence with spaces.
      */
     template <typename TIterator>
     void removeComments(TIterator begin, TIterator end)
     {
         auto it = begin;
         bool clearing = false;
+        bool isMultiline = false;
         while (it != end)
         {
-            if (*it == NewLine<TIterator>::value())
+            if (!isMultiline && *it == NewLine<TIterator>::value())
             {
                 clearing = false;
             }
-            if (*it == '-')
+            if (!clearing && *it == '/') {
+                if ((it + 1) != end && *(it + 1) == '*')
+                {
+                    clearing = true;
+                    isMultiline = true;
+                }
+            }
+            if (isMultiline && *it == '*') {
+                if ((it + 1) != end && *(it + 1) == '/')
+                {
+                    clearing = false;
+                    isMultiline = false;
+                    *it = ' ';
+                    *(it + 1) = ' ';
+                }
+            }
+            if (!isMultiline && *it == '-')
             {
                 if ((it + 1) != end && *(it + 1) == '-')
                 {
