@@ -1,0 +1,14 @@
+/*
+  Line 1
+  Line 2
+*/
+
+[
+type: template;
+name: myTemplate;
+instrument: piano;
+{
+    \fffff
+    I,,,2 V,,,4  I,, |
+}
+]

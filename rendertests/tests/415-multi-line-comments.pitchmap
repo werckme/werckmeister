@@ -1,0 +1,13 @@
+/*
+  my pitchmap line 1
+  line 2
+*/
+"o": c,            -- bass drum
+"x": d,,            -- snare
+"x'": c#,,          -- sidestick
+"h'": bb,,          -- hihat open
+"h": f#,,           -- hihat closed
+"h,": g#,,          -- hihat foot
+"m'": c,            -- high tom 
+"m": b,,            -- middle tom
+"m,": g,,           -- low tom

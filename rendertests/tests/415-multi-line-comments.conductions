@@ -1,0 +1,14 @@
+/*
+  line 1
+  line 2
+*/
+
+instrument(piano) onBeat(1) {
+  velocity = 50;
+}
+
+/*
+all() {
+  velocity = 0;
+}
+*/
