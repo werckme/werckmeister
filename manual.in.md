@@ -243,6 +243,20 @@ instrument: piano;
 }
 ]
 ```
+
+### Comments
+Werckmeister knows two types of comments:
+```
+-- a single line comment
+```
+
+```
+/*
+  multi line comments
+  ...
+*/
+```
+
 ## Tracks and Voices
 
 A track in Werckmeister has exactly the same meaning as it has in a MIDI file.

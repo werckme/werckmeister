@@ -1,0 +1,18 @@
+
+/*
+ line 1
+ line 2
+*/
+
+[
+instrument: drums;
+{
+  \fffff
+  /*
+    line 3
+    line 4
+    -- xxx
+  */
+   o4 & & & | & & & &
+}
+]

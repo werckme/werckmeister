@@ -1,0 +1,6 @@
+/*
+ Here you can define your chord symbols, containing its degrees and its semitones.
+ A degree in parantheses specifies chord adjunct degrees. 
+ Those degrees are not being rendered, unless your force them to appear using a leading !.
+*/
+X:          I=0    (II=2)    III=4    (IV=5)    V=7    (VI=9)    (VII=11)

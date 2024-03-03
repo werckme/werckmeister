@@ -1,0 +1,57 @@
+-- /*
+using "./415-multi-line-comments.chords";
+using "./415-multi-line-comments.template";
+using "./415-multi-line-comments.pitchmap";
+using "./415-multi-line-comments.part";
+using "./415-multi-line-comments.conductions";
+
+/*
+device: MyDevice  midi _usePort=0;
+instrumentDef: piano _ch=0 _onDevice=MyDevice _pc=0;
+*/
+
+using "./415-multi-line-comments.config";
+
+/*
+  comment 1
+  comment 2
+*/
+
+
+
+[
+instrument: piano;
+{
+    \fffff
+    c8& d& e& f& | g& a& b& c& 
+}
+]
+
+
+-- one liner
+
+[
+instrument: piano;
+{
+    \fffff
+    c,4 d, e, f, | g, a, b, c, 
+}
+]
+
+
+/*
+[
+instrument: piano;
+{
+    \fffff
+    c,,,1
+}
+]*/
+
+[
+type: accomp;
+{
+    /template: myTemplate/
+    C | C
+}
+]
