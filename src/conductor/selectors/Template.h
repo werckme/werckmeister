@@ -9,6 +9,14 @@ namespace conductor
     /// Selects any event which belongs to one of the given template names.
     /// #### example:
     /// ```
+    /// ------------ sheet file\n
+    /// [\n
+    ///   template: myTemplate;\n
+    /// {\n
+    ///   ...\n
+    /// }\n
+    /// ]\n
+     /// ------------ conductions file\n
     /// template(myTemplate) {...}\n
     /// template(partI partII) {...}\n
     /// ```

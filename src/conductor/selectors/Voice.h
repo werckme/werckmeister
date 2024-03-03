@@ -18,7 +18,7 @@ namespace conductor
     ///  -- voice 1\n
     /// }\n
     /// ]\n
-    /// ------------ conduction file:\n
+    /// ------------ conductions file:\n
     /// voice(1) {...}\n
     /// voice(1 2) {...}\n
     /// ```

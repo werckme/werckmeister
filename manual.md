@@ -2759,6 +2759,32 @@ Selects any event where its pitch is equal to one of the given pitches.
  ```
 <br><br><br>
 
+### `templateSelector`
+
+#### parameters
+| name | position | description | type |
+|:--- |:--- |:--- |:--- |
+| template name | - |  | templateName+ |
+
+Selects any event which belongs to one of the given template names.
+
+ #### example:
+
+ ```
+
+ ------------ sheet file
+ [
+   template: myTemplate;
+ {
+   ...
+ }
+ ]
+ ------------ conductions file
+ template(myTemplate) {...}
+ template(partI partII) {...}
+ ```
+<br><br><br>
+
 ### `toBar`
 
 #### parameters
@@ -2840,6 +2866,34 @@ Selects any event where its position is before a given position.
  > In order to work properly, a cue name must occur only once in a document.
 
  > Please mind the [cue](#cue) behaviour in combination with repeat and jumps.
+<br><br><br>
+
+### `voiceSelector`
+
+#### parameters
+| name | position | description | type |
+|:--- |:--- |:--- |:--- |
+| voice number | - |  | number+ |
+
+Selects any event which is located in one of the given voice numbers.
+
+ #### example:
+
+ ```
+
+ ------------ sheet file
+ [
+ {
+   -- voice 1
+ }
+ {
+  -- voice 1
+ }
+ ]
+ ------------ conductions file:
+ voice(1) {...}
+ voice(1 2) {...}
+ ```
 <br><br><br>
 
 ### `withTag`
