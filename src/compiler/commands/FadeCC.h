@@ -9,8 +9,8 @@ namespace compiler
     /// <command name="fadeCC" where="voice">
     /// Fades a CC value from a start to an end value.
     /// #### examples
-    /// `/cc: _nr=1 _value=10/ --modulation by controller number`
-    /// `/cc: _name="modulation" _value=10/ --modulation value by controller name`
+    /// `/fadeCC: _nr=1 _from=0 _to=100 _duration=2/ --modulation by controller number`
+    /// `/fadeCC: _name="Modulation" _from=0 _to=100 _duration=2/ --modulation value by controller name`
     /// #### supported CC names
     /// * BankSelectMSB
     /// * Modulation
