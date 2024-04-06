@@ -1,0 +1,12 @@
+all() {
+    velocity = 80;
+}
+
+withTag("MyHeroPart") {
+    velocity = 127;
+    duration = 15%;
+}
+
+withTag("octadown") {
+    pitch -= 24;
+}

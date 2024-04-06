@@ -1,0 +1,48 @@
+
+using "/chords/default.chords";
+using "./418-tag-region.conductions";
+
+device: _useDevice="FLUID" _setName=MyDevice  _isType=midi;
+instrumentDef: _setName=piano _onDevice=MyDevice _ch=0 _pc=1;
+
+phrase = g a b c';
+
+[
+instrument: piano;
+{
+    c d e f |
+    /beginTag: "MyHeroPart"/
+    c d e f |
+    /endTag: "MyHeroPart"/
+    c d e f :|
+
+    >"phrase"2 
+    /beginTag: "MyHeroPart"/
+    >"phrase"2 |
+    >"phrase"2 
+    /endTag: "MyHeroPart"/
+    >"phrase"2 
+}
+]
+
+[
+template: lh;
+instrument: piano;
+{
+    /beginTag: "MyHeroPart octadown"/
+    <I V III'>1 |
+    /endTag: "MyHeroPart"/
+    <I V III'>1 |
+    <I V III'>1 |
+    /endTag: "octadown"/
+    <I V III'>1 |
+}
+]
+
+[
+type: accomp;
+{
+    /template: lh/
+    C | F | D | E- :|
+}
+]

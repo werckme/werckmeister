@@ -171,20 +171,22 @@ namespace compiler
 		return std::make_shared<SheetEventRenderer>(ctx, compilerVisitor_, logger_, definitionServer_);
 	}
 
-	void SheetEventRenderer::addEvent(const Event &ev)
+	void SheetEventRenderer::addEvent(const Event &_ev)
 	{
-		compilerVisitor_->visit(ctx_.get(), ev);
 		auto meta = ctx_->voiceMetaData();
+		auto evCopy = _ev;
+		evCopy.tags.insert(meta->tags.begin(), meta->tags.end());
+		compilerVisitor_->visit(ctx_.get(), evCopy);
 		++(meta->eventCount);
 		try
 		{
-			ctx_->warningHandler(std::bind(&SheetEventRenderer::onWarning, this, std::placeholders::_1, ev));
-			_addEvent(this, &ev);
+			ctx_->warningHandler(std::bind(&SheetEventRenderer::onWarning, this, std::placeholders::_1, evCopy));
+			_addEvent(this, &evCopy);
 			ctx_->warningHandler(nullptr);
 		}
 		catch (com::Exception &ex)
 		{
-			ex << ex_sheet_source_info(ev);
+			ex << ex_sheet_source_info(evCopy);
 			throw;
 		}
 	}

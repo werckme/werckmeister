@@ -15,6 +15,7 @@
 #include <compiler/metaData.h>
 #include <compiler/Instrument.h>
 #include <memory>
+#include <set>
 
 namespace compiler
 {
@@ -129,6 +130,9 @@ namespace compiler
 		 * retunrs the current compiler visitor
 		 */
 		virtual std::shared_ptr<ICompilerVisitor> compilerVisitor() const = 0;
+		virtual void addTag(const com::String &tag) = 0;
+		virtual void removeTag(const com::String &tag) = 0;
+		virtual const VoiceMetaData::Tags & getTags() const = 0;
 	};
 	typedef std::shared_ptr<IContext> IContextPtr;
 

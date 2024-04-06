@@ -391,4 +391,20 @@ namespace compiler
 	void AContext::setInstrument(const com::String &uname)
 	{
 	}
+
+	void AContext::addTag(const com::String &tag)
+	{
+		auto metaData = voiceMetaData();
+		metaData->tags.insert(tag);
+	}
+	void AContext::removeTag(const com::String &tag)
+	{
+		auto metaData = voiceMetaData();
+		metaData->tags.erase(tag);
+	}
+	const VoiceMetaData::Tags & AContext::getTags() const
+	{
+		auto metaData = voiceMetaData();
+		return metaData->tags;
+	}
 }

@@ -164,6 +164,16 @@ struct ArgumentNames
         std::string Duration = "duration";
         std::string Curve = "curve";
     } FadeCC;
+
+    struct
+    {
+        std::string Tags = "tags";
+    } BeginTag;
+
+    struct
+    {
+        std::string Tags = "tags";
+    } EndTag;
 };
 
 extern ArgumentNames argumentNames;

@@ -107,6 +107,8 @@ void FactoryConfig<TInjector>::initModifications()
 #include <compiler/commands/ExecuteEventFunction.h>
 #include <compiler/commands/SetCC.h>
 #include <compiler/commands/FadeCC.h>
+#include <compiler/commands/BeginTag.h>
+#include <compiler/commands/EndTag.h>
 
 template <class TInjector>
 void FactoryConfig<TInjector>::initCommands()
@@ -150,6 +152,8 @@ void FactoryConfig<TInjector>::initCommands()
     register_<ExecuteEventFunction>(SHEET_META__CALL_EVENTFUNCTION);
     register_<SetCC>(SHEET_META__SET_CC);
     register_<FadeCC>(SHEET_META__FADE_CC);
+    register_<BeginTag>(SHEET_META__BEGIN_TAG);
+    register_<EndTag>(SHEET_META__END_TAG);
 }
 
 
