@@ -29,7 +29,7 @@ instrument: piano;
 template: lh;
 instrument: piano;
 {
-    /beginTag: "MyHeroPart octadown"/
+    /beginTag: _tags="MyHeroPart octadown"/
     <I V III'>1 |
     /endTag: "MyHeroPart"/
     <I V III'>1 |

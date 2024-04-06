@@ -7,6 +7,8 @@
 namespace compiler
 {
     /// <command name="beginTag" where="voice">
+    ///     Begins a tag region where its including events will receive the given tags. See [endTag](manual/#endTag).
+    ///     Example: TBD
     /// </command>
     /// <param name="tags" position="0" type="text">a space separated list of tag names</param>
     class BeginTag : public ACommand
