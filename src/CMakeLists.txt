@@ -95,6 +95,8 @@ SET (SRC_FETZER_LIB
     compiler/commands/DefineInstrumentSection.cpp
     compiler/commands/SetCC.cpp
     compiler/commands/FadeCC.cpp
+    compiler/commands/BeginTag.cpp
+    compiler/commands/EndTag.cpp
     conductor/ConductionsPerformer.cpp
     conductor/selectors/ASelectorBase.cpp
     conductor/selectors/OnBeat.cpp

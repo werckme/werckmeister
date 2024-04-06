@@ -144,7 +144,9 @@ namespace compiler
 		virtual void warningHandler(const WarningHandler &handler) { _warningHandler = handler; }
 		virtual WarningHandler &warningHandler() { return _warningHandler; }
 		virtual void clear() override;
-
+		virtual void addTag(const com::String &tag) override;
+		virtual void removeTag(const com::String &tag) override;
+		virtual const VoiceMetaData::Tags & getTags() const override;
 	protected:
 		virtual TrackId createTrackImpl() = 0;
 		virtual VoiceId createVoiceImpl() = 0;

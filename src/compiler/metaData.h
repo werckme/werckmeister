@@ -2,16 +2,16 @@
 
 #include <documentModel/objects/Event.h>
 #include <memory>
+#include <map>
+#include <list>
 #include <unordered_map>
+#include <unordered_set>
 #include <com/units.hpp>
 #include <com/literals.hpp>
-#include <map>
-#include <unordered_map>
 #include <documentModel/objects/ChordDef.h>
 #include <compiler/IDefinitionsServer.h>
 #include "compiler/voicings/VoicingStrategy.h"
 #include <com/common.hpp>
-#include <list>
 #include "forward.hpp"
 
 namespace compiler
@@ -25,6 +25,7 @@ namespace compiler
     struct VoiceMetaData
     {
         typedef std::set<documentModel::PitchDef> PitchDefSet;
+        typedef std::unordered_set<com::String> Tags;
         static const com::Ticks DefaultDuration;
         static const com::Ticks DefaultBarLength;
         typedef std::map<documentModel::PitchDef, com::Ticks> WaitForTieBuffer;
@@ -55,5 +56,6 @@ namespace compiler
         double volume = 100;
         double pan = 50;
         documentModel::Event chordEvent;
+        Tags tags;
     };
 }
