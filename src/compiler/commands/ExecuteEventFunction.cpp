@@ -16,13 +16,16 @@ namespace compiler
         AModification::Events events;
         theEventFunction->execute(context, events);
         const auto &originEvent = event();
+        com::Ticks passedTicks = 0;
         for(auto &event : events)
         {
             event.sourceId =  originEvent.sourceId;
             event.sourcePositionBegin = originEvent.sourcePositionBegin;
             event.sourcePositionEnd = originEvent.sourcePositionEnd;
             sheetEventRenderer_->addEvent(event);
+            passedTicks += event.duration;
         }
+        context->seek(-passedTicks);
     }
 
     LuaEventFunctionPtr ExecuteEventFunction::loadEventFunction(IContextPtr ctx, const com::String& modName)
