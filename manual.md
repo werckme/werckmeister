@@ -118,7 +118,7 @@ Getting Started
 ============
 
 ## Download & Installation
-Have a look [here](https://werckme.github.io/getwerckmeister).
+Have a look [here](https://www.werckme.org/getwerckmeister).
 
 Find the download and follow the installation instructions for your operation system.
 
@@ -712,7 +712,7 @@ instrument(drums) pitch(h) onBeat(1.5 2.5 3.5 4.5) {
     velocity = 89;
 }
 ```
-Find the full example [here](https://werckme.github.io/editor?wid=conductor16thHighHat).
+Find the full example [here](https://www.werckme.org/editor?wid=conductor16thHighHat).
 
 A conduction rule starts with a list of selectors, followed by a set of declarations.
 
@@ -757,7 +757,7 @@ Means: the new velocity value is 10 units less than the velocity of its predeces
 This usefull if you want to achieve something like this:
 ![linear decreasing velocity values](https://raw.githubusercontent.com/werckme/werckmeister/main/assets/follow-up-velocity.png)
 
-Find the full example [here](https://werckme.github.io/editor?wid=conductor16thHighHatFollowUp).
+Find the full example [here](https://www.werckme.org/editor?wid=conductor16thHighHatFollowUp).
 
 
 ## Accomp My Melodies
@@ -957,9 +957,9 @@ If you want do write your own modification you need to:
 * include mod file
 * apply mod
 
-[find some example implementations](https://werckme.github.io/examples?tag=custom-lua-mod)
+[find some example implementations](https://www.werckme.org/examples?tag=custom-lua-mod)
 
-### create a lua file
+### Create A Lua File
 Since the name of the lua file is also the name of the modification in werckmeister you can not use any name you want for that file.
 * don't use special characters
 * avoid naming conflicts
@@ -1123,7 +1123,7 @@ instrumentConf: myInstrument
 ```
 
 
-### The Excute Function
+### The Execute Function
 The `execute` function works the same way as the `perform` function does. Except the `peform` function modifies existing events, the `execute` function can be used to create new events. Therefore the function signature is slightly different:
 
 ```lua
@@ -1142,7 +1142,7 @@ end
 }
 ]
 ```
-
+See [Example](https://www.werckme.org/editor?wid=lua-event-functions-example).
 
 ## Event Tags
 You can add additional annotations to an event in werckmeister. These informations can be used in [conduction rules](#conduction-rules) or [modifications](#mods).
@@ -1177,6 +1177,30 @@ withTag(myTag) {
 
 
 ## Commands
+### `beginTag`
+
+#### parameters
+| name | position | description | type |
+|:--- |:--- |:--- |:--- |
+| tags | 1 | a space separated list of tag names | text |
+
+Begins a tag region where its including events will receive the given tags. See [endTag](/manual#endtag).
+
+ [Example](https://www.werckme.org/editor?wid=mariounderworld)
+<br><br><br>
+
+### `call`
+
+#### parameters
+| name | position | description | type |
+|:--- |:--- |:--- |:--- |
+| name | 1 | The name of the lua function. This is the only "unique" parameter for this command. All further parameters are specific to its related implementation (see [The Execute Function](/manual#the-execute-function)). | text |
+
+Executes a lua function.
+
+ See [Example](https://www.werckme.org/editor?wid=lua-event-functions-example)
+<br><br><br>
+
 ### `cc`
 
 #### parameters
@@ -1354,18 +1378,16 @@ Like [do](#do). But with the difference, that the loaded mod will be only execut
  `/doOnce: arpeggio/`
 <br><br><br>
 
-### `execute`
+### `endTag`
 
 #### parameters
 | name | position | description | type |
 |:--- |:--- |:--- |:--- |
-| name | 1 | The name of the lua function. This is the only "unique" parameter for this command. All further parameters are specific to its related modification. | text |
+| tags | 1 | a space separated list of tag names | text |
 
-Executes a lua function.
+Ends a tag region where its including events will receive the given tags. See [beginTag](manual/#begintag).
 
- #### examples
-
- tbd.
+ [Example](https://www.werckme.org/editor?wid=mariounderworld)
 <br><br><br>
 
 ### `fade`
@@ -1425,9 +1447,9 @@ Fades a CC value from a start to an end value.
 
  #### examples
 
- `/cc: _nr=1 _value=10/ --modulation by controller number`
+ `/fadeCC: _nr=1 _from=0 _to=100 _duration=2/ --modulation by controller number`
 
- `/cc: _name="modulation" _value=10/ --modulation value by controller name`
+ `/fadeCC: _name="Modulation" _from=0 _to=100 _duration=2/ --modulation value by controller name`
 
  #### supported CC names
 
@@ -1748,7 +1770,7 @@ Jumps to a previous defined mark See [mark](manual/#mark).
 |:--- |:--- |:--- |:--- |
 | name | 1 | the name of the mark | word |
 
-adds a mark to the voice. Us it in combination with [jump](manual/#jump).
+adds a mark to the voice. Use it in combination with [jump](manual/#jump).
 
  #### examples
 
