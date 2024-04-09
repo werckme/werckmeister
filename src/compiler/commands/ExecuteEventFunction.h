@@ -6,12 +6,11 @@
 
 namespace compiler
 {
-    /// <command name="execute" where="voice">
+    /// <command name="call" where="voice">
     /// Executes a lua function.
-    /// #### examples
-    /// tbd.
+    /// See [Example](https://www.werckme.org/editor?wid=lua-event-functions-example)
     /// </command>
-    /// <param name="name" position="0" type="text">The name of the lua function. This is the only "unique" parameter for this command. All further parameters are specific to its related modification.</param>
+    /// <param name="name" position="0" type="text">The name of the lua function. This is the only "unique" parameter for this command. All further parameters are specific to its related implementation (see [The Execute Function](/manual#the-execute-function)).</param>
     class ExecuteEventFunction : public AddMod, public AUsingAnEvent
     {
     public:
