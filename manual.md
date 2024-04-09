@@ -1177,6 +1177,18 @@ withTag(myTag) {
 
 
 ## Commands
+### `beginTag`
+
+#### parameters
+| name | position | description | type |
+|:--- |:--- |:--- |:--- |
+| tags | 1 | a space separated list of tag names | text |
+
+Begins a tag region where its including events will receive the given tags. See [endTag](manual/#endTag).
+
+     Example: TBD
+<br><br><br>
+
 ### `cc`
 
 #### parameters
@@ -1184,7 +1196,7 @@ withTag(myTag) {
 |:--- |:--- |:--- |:--- |
 | nr | 1 | The number of the controller | 0..N |
 | value | 2 | the controller values | 0..127 |
-| name | 3 | a controller name, can be used instead of a number. (supported names, see list below) | text |
+| name | 3 | a controller name, can be used instead of a number. (supported names, see list below) | [BankSelectMSB,Modulation,BreathController,FootController,PortamentoTime,MainVolume,Balance,Panorama,Expression,EffectControl1,EffectControl2,BankSelectLSB,Hold1,Portamento,Sostenuto,SoftPedal,Legato,Hold2,PortamentoControl,Effects1Depth,Effects2Depth,Effects3Depth,Effects4Depth,Effects5Depth,AllSoundsOff,ControllerReset,LocalControl,AllNotesOff,OmniOff,OmniOn,MonoOn,MonoOff] |
 
 Adds a midi CC message.
 
@@ -1354,6 +1366,18 @@ Like [do](#do). But with the difference, that the loaded mod will be only execut
  `/doOnce: arpeggio/`
 <br><br><br>
 
+### `endTag`
+
+#### parameters
+| name | position | description | type |
+|:--- |:--- |:--- |:--- |
+| tags | 1 | a space separated list of tag names | text |
+
+Ends a tag region where its including events will receive the given tags. See [beginTag](manual/#beginTag).
+
+     Example: TBD
+<br><br><br>
+
 ### `execute`
 
 #### parameters
@@ -1418,16 +1442,16 @@ Fades the volume over a given duration in quarters.
 | nr | 1 | The number of the controller | 0..N |
 | from | 2 | the start value | 0..127 |
 | to | 3 | the end value | 0..127 |
-| name | 4 | a controller name, can be used instead of a number. (supported names, see list below) | text |
+| name | 4 | a controller name, can be used instead of a number. (supported names, see list below) | [BankSelectMSB,Modulation,BreathController,FootController,PortamentoTime,MainVolume,Balance,Panorama,Expression,EffectControl1,EffectControl2,BankSelectLSB,Hold1,Portamento,Sostenuto,SoftPedal,Legato,Hold2,PortamentoControl,Effects1Depth,Effects2Depth,Effects3Depth,Effects4Depth,Effects5Depth,AllSoundsOff,ControllerReset,LocalControl,AllNotesOff,OmniOff,OmniOn,MonoOn,MonoOff] |
 | curve | 5 | The fade curve type. | lin,quad,cub,quart,quint,exp |
 
 Fades a CC value from a start to an end value.
 
  #### examples
 
- `/cc: _nr=1 _value=10/ --modulation by controller number`
+ `/fadeCC: _nr=1 _from=0 _to=100 _duration=2/ --modulation by controller number`
 
- `/cc: _name="modulation" _value=10/ --modulation value by controller name`
+ `/fadeCC: _name="Modulation" _from=0 _to=100 _duration=2/ --modulation value by controller name`
 
  #### supported CC names
 
@@ -1748,7 +1772,7 @@ Jumps to a previous defined mark See [mark](manual/#mark).
 |:--- |:--- |:--- |:--- |
 | name | 1 | the name of the mark | word |
 
-adds a mark to the voice. Us it in combination with [jump](manual/#jump).
+adds a mark to the voice. Use it in combination with [jump](manual/#jump).
 
  #### examples
 

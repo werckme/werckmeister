@@ -49,7 +49,7 @@ namespace compiler
     /// <param name="nr" type="0..N" position="0" optional="0" >The number of the controller</param>
     /// <param name="from" type="0..127" position="1" optional="0" >the start value</param>
     /// <param name="to" type="0..127" position="2" optional="0" >the end value</param>
-    /// <param name="name"  type="text" position="3" optional="1" >a controller name, can be used instead of a number. (supported names, see list below)</param>
+    /// <param name="name"  type="[BankSelectMSB,Modulation,BreathController,FootController,PortamentoTime,MainVolume,Balance,Panorama,Expression,EffectControl1,EffectControl2,BankSelectLSB,Hold1,Portamento,Sostenuto,SoftPedal,Legato,Hold2,PortamentoControl,Effects1Depth,Effects2Depth,Effects3Depth,Effects4Depth,Effects5Depth,AllSoundsOff,ControllerReset,LocalControl,AllNotesOff,OmniOff,OmniOn,MonoOn,MonoOff]" position="3" optional="1" >a controller name, can be used instead of a number. (supported names, see list below)</param>
     /// <param name="curve" position="4" default="lin" optional="1" type="lin,quad,cub,quart,quint,exp">The fade curve type.</param>
     class FadeCC : public SetCC
     {
