@@ -9,4 +9,10 @@ local function iterate_node(node)
     end
 end
 
-iterate_node(I7ROOT_NODE)
+--iterate_node(I7ROOT_NODE)
+local noderesult = Get_Node("PRM-_FPART1")
+assert(noderesult ~= nil)
+print(noderesult.node.addr)
+print(Nibble(0x19000000))
+assert(noderesult.node.addr == Nibble(0x19000000));
+assert(noderesult.node.desc == "Temporary Tone (Studio Mode Part 1)");
