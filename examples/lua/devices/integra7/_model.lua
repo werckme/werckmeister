@@ -43,7 +43,7 @@ function Node:tostring()
     return string.format("0x%02X ", self.addr) .. self.desc
 end
 
-STP =
+local STP =
 {
     Node:new(0x0000, "Side 1 Sound Mode", "NESTP_SND_MODE_SD1", 1, 1, 4, INTEGER1x3),
     Node:new(0x0001, "Side 1 Live Set BS MSB (CC# 0)", "NESTP_LIV_BS_MSB_SD1", 84, 0, 127, INTEGER1x7),
@@ -103,7 +103,7 @@ STP =
     Node:new(0x0037, "GM Map", "NESTP_GM_MAP", 0, 0, 1, INTEGER1x4),
 }
 
-STP = -- Setup
+local STP = -- Setup
 {
     Node:new(0x0000, "Side 1 Sound Mode", "NESTP_SND_MODE_SD1", 1, 1, 4, INTEGER1x3),
     Node:new(0x0001, "Side 1 Live Set BS MSB (CC# 0)", "NESTP_LIV_BS_MSB_SD1", 84, 0, 127, INTEGER1x7),
@@ -163,7 +163,7 @@ STP = -- Setup
     Node:new(0x0037, "GM Map", "NESTP_GM_MAP", 0, 0, 1, INTEGER1x4),
 }
 
-SC = --  System Common
+local SC = --  System Common
 {
     Node:new(0x0000, "Master Tune", "NESC_TUNE", 1024, 24, 2024, INTEGER4x4),
     Node:new(0x0004, "Master Key Shift", "NESC_KEY_SHIFT", 64, 40, 88, INTEGER1x6),
@@ -208,7 +208,7 @@ SC = --  System Common
     Node:new(0x002E, "USB Audio Sampling Rate", "NESC_USB_SAMP_RATE", 0, 0, 2, INTEGER1x2),
 }
 
-VF = --  Virtual MFX
+local VF = --  Virtual MFX
 {
     Node:new(0x0000, "MFX Type", "NEVF_MFX_TYPE", 0, 0, 67, INTEGER1x7, "mfx"),
     Node:new(0x0001, "MFX Dry Send Level", "NEVF_MFX_DRY_SEND", 127, 0, 127, INTEGER1x7),
@@ -260,14 +260,14 @@ VF = --  Virtual MFX
     Node:new(0x010D, "MFX Parameter 32", "NEVF_MFX_PRM32", 32768, 12768, 52768, INTEGER4x4, "mfx", 35),
 }
 
-VP = --  Virtual Part
+local VP = --  Virtual Part
 {
     Node:new(0x0000, "Tone Level", "NEVP_LEVEL", 127, 0, 127, INTEGER1x7),
     Node:new(0x0001, "Tone Pan", "NEVP_PAN", 64, 0, 127, INTEGER1x7),
     Node:new(0x0002, "TFX Switch", "NEVP_TFX_SW", 0, 0, 1, INTEGER1x1),
 }
 
-FC = --  Studio Set Common
+local FC = --  Studio Set Common
 {
     Node:new(0x0000, "Studio Set Name", "NEFC_NAME", 0, 32, 127, ByteSize16),
     Node:new(0x0011, "MFX1 Control Channel", "NEFC_MFX1_CTRL_CH", 16, 0, 16, INTEGER1x6),
@@ -322,7 +322,7 @@ FC = --  Studio Set Common
     Node:new(0x0053, "Expansion Slot 4 RomID", "NEFC_EXP_SLOT4_ROMID", 0, 0, 127, INTEGER1x7),
 }
 
-FH = --  Studio Set Common Chorus
+local FH = --  Studio Set Common Chorus
 {
     Node:new(0x0000, "Chorus Type", "NEFH_CHO_TYPE", 1, 0, 3, INTEGER1x4, "chorus"),
     Node:new(0x0001, "Chorus Level", "NEFH_CHO_LEVEL", 127, 0, 127, INTEGER1x7),
@@ -350,7 +350,7 @@ FH = --  Studio Set Common Chorus
     Node:new(0x0050, "Chorus Parameter 20", "NEFH_CHO_PRM20", 32768, 12768, 52768, INTEGER4x4, "chorus", 19),
 }
 
-FV = --  Studio Set Common Reverb
+local FV = --  Studio Set Common Reverb
 {
     Node:new(0x0000, "Reverb Type", "NEFV_REV_TYPE", 1, 0, 6, INTEGER1x4, "reverb"),
     Node:new(0x0001, "Reverb Level", "NEFV_REV_LEVEL", 127, 0, 127, INTEGER1x7),
@@ -381,7 +381,7 @@ FV = --  Studio Set Common Reverb
     Node:new(0x005F, "Reverb Parameter 24", "NEFV_REV_PRM24", 32768, 12768, 52768, INTEGER4x4, "reverb", 23),
 }
 
-FRSS = --  Studio Set Common RSS
+local FRSS = --  Studio Set Common RSS
 {
     Node:new(0x0000, "Motional Surround Switch", "NEFRSS_RSS_SW", 0, 0, 1, INTEGER1x1),
     Node:new(0x0001, "Room Type", "NEFRSS_RSS_ROOM_TYPE", 2, 0, 3, INTEGER1x2),
@@ -398,7 +398,7 @@ FRSS = --  Studio Set Common RSS
     Node:new(0x000C, "Cross Talk Cancel", "NEFRSS_SP4XTALKC", 50, 0, 100, INTEGER1x7),
 }
 
-FMEQ = --  Studio Set Mastering EQ
+local FMEQ = --  Studio Set Mastering EQ
 {
     Node:new(0x0000, "EQ Low Freq", "NEFMEQ_EQ_LOWFREQ", 1, 0, 1, INTEGER1x1),
     Node:new(0x0001, "EQ Low Gain", "NEFMEQ_EQ_LOWGAIN", 15, 0, 30, INTEGER1x5),
@@ -409,12 +409,12 @@ FMEQ = --  Studio Set Mastering EQ
     Node:new(0x0006, "EQ High Gain", "NEFMEQ_EQ_HIGHGAIN", 15, 0, 30, INTEGER1x5),
 }
 
-FM = --  Studio Set MIDI
+local FM = --  Studio Set MIDI
 {
     Node:new(0x0000, "Phase Lock", "NEFM_PHASE_LOCK", 0, 0, 1, INTEGER1x1),
 }
 
-FP = --  Studio Set Part
+local FP = --  Studio Set Part
 {
     Node:new(0x0000, "Receive Channel", "NEFP_RX_CH", 0, 0, 15, INTEGER1x4),
     Node:new(0x0001, "Part Switch", "NEFP_RX_SW", 1, 0, 1, INTEGER1x1),
@@ -488,7 +488,7 @@ FP = --  Studio Set Part
     Node:new(0x0049, "Motional Surround RevSend Level", "NEFP_RSS_RVSEND", 40, 0, 127, INTEGER1x7),
 }
 
-FPEQ = --  Studio Set Part EQ
+local FPEQ = --  Studio Set Part EQ
 {
     Node:new(0x0000, "EQ Switch", "NEFPEQ_EQ_SW", 0, 0, 1, INTEGER1x1),
     Node:new(0x0001, "EQ Low Freq", "NEFPEQ_EQ_LOWFREQ", 1, 0, 1, INTEGER1x1),
@@ -500,7 +500,7 @@ FPEQ = --  Studio Set Part EQ
     Node:new(0x0007, "EQ High Gain", "NEFPEQ_EQ_HIGHGAIN", 15, 0, 30, INTEGER1x5),
 }
 
-PC = --  PCM Tone Common
+local PC = --  PCM Tone Common
 {
     Node:new(0x0000, "PCM Tone Name", "RFPC_NAME", 0, 32, 127, ByteSize12),
     Node:new(0x000E, "PCM Tone Level", "RFPC_LEVEL", 127, 0, 127, INTEGER1x7),
@@ -566,7 +566,7 @@ PC = --  PCM Tone Common
     Node:new(0x004F, "Part Modulation Switch", "RFPC_PART_MOD_SW", 0, 0, 1, INTEGER1x1),
 }
 
-PF = --  PCM Tone Common MFX
+local PF = --  PCM Tone Common MFX
 {
     Node:new(0x0000, "MFX Type", "RFPF_MFX_TYPE", 0, 0, 67, INTEGER1x7, "mfx"),
     Node:new(0x0001, "MFX Dry Send Level", "RFPF_MFX_DRY_SEND", 127, 0, 127, INTEGER1x7),
@@ -618,7 +618,7 @@ PF = --  PCM Tone Common MFX
     Node:new(0x010D, "MFX Parameter 32", "RFPF_MFX_PRM32", 32768, 12768, 52768, INTEGER4x4, "mfx", 35),
 }
 
-PX = --  PCM Tone PMT (Partial Mix Table)
+local PX = --  PCM Tone PMT (Partial Mix Table)
 {
     Node:new(0x0000, "Structure Type 1 & 2", "RFPX_STRUCT1", 0, 0, 9, INTEGER1x4),
     Node:new(0x0001, "Booster 1 & 2", "RFPX_BOOST1", 0, 0, 3, INTEGER1x2),
@@ -663,7 +663,7 @@ PX = --  PCM Tone PMT (Partial Mix Table)
     Node:new(0x0028, "PMT4 Velocity Fade Width Upper", "RFPX_TMT4_VFADE_UP", 0, 0, 127, INTEGER1x7),
 }
 
-PT = --  PCM Tone Partial
+local PT = --  PCM Tone Partial
 {
     Node:new(0x0000, "Partial Level", "RFPT_LEVEL", 127, 0, 127, INTEGER1x7),
     Node:new(0x0001, "Partial Coarse Tune", "RFPT_PIT_CRS", 64, 16, 112, INTEGER1x7),
@@ -805,7 +805,7 @@ PT = --  PCM Tone Partial
     Node:new(0x0119, "LFO Step16", "RFPT_LFO_STEP16", 64, 28, 100, INTEGER1x7),
 }
 
-PLGT4 = --  PCM Tone Controller
+local PLGT4 = --  PCM Tone Controller
 {
     Node:new(0x0000, "Beam Switch", "RFPLGT4_BEAM_SW", 0, 0, 1, INTEGER1x1),
     Node:new(0x0001, "Beam Assign", "RFPLGT4_BEAM_ASGN", 2, 0, 109, INTEGER1x7),
@@ -837,7 +837,7 @@ PLGT4 = --  PCM Tone Controller
     Node:new(0x001B, "Arpeggio Key Trigger", "RFPLGT4_ARP_KEY_TRIG", 0, 0, 1, INTEGER1x1),
 }
 
-PC2 = --  PCM Tone Common 2
+local PC2 = --  PCM Tone Common 2
 {
     Node:new(0x0000, "(reserve)", "RESERVE_DUMMY", 0, 0, 127, INTEGER1x7),
     Node:new(0x0010, "Tone Category", "RFPC2_CATE", 0, 0, 127, INTEGER1x7),
@@ -881,7 +881,7 @@ PC2 = --  PCM Tone Common 2
     Node:new(0x0038, "Phrase Number", "RFPC2_PHRASE", 0, 0, 65535, INTEGER4x4),
 }
 
-PTM = --  PCM Tone Modify
+local PTM = --  PCM Tone Modify
 {
     Node:new(0x0001, "Modify Parameter 1 ", "RFPTM_MOD_PRM1", 0, 0, 127, INTEGER1x7),
     Node:new(0x0002, "Modify Parameter 2 ", "RFPTM_MOD_PRM2", 0, 0, 127, INTEGER1x7),
@@ -917,13 +917,13 @@ PTM = --  PCM Tone Modify
     Node:new(0x0020, "Modify Parameter 32", "RFPTM_MOD_PRM32", 0, 0, 127, INTEGER1x7),
 }
 
-RC = --  Rhythm Set Common
+local RC = --  Rhythm Set Common
 {
     Node:new(0x0000, "Rhythm Name", "RFRC_NAME", 0, 32, 127, ByteSize12),
     Node:new(0x000C, "Rhythm Level", "RFRC_LEVEL", 127, 0, 127, INTEGER1x7),
 }
 
-RF = --  Rhythm Set Common MFX
+local RF = --  Rhythm Set Common MFX
 {
     Node:new(0x0000, "MFX Type", "RFRF_MFX_TYPE", 0, 0, 67, INTEGER1x7, "mfx"),
     Node:new(0x0001, "MFX Dry Send Level", "RFRF_MFX_DRY_SEND", 127, 0, 127, INTEGER1x7),
@@ -975,7 +975,7 @@ RF = --  Rhythm Set Common MFX
     Node:new(0x010D, "MFX Parameter 32", "RFRF_MFX_PRM32", 32768, 12768, 52768, INTEGER4x4, "mfx", 35),
 }
 
-RCQ = --  Rhythm Set Common Comp/EQ
+local RCQ = --  Rhythm Set Common Comp/EQ
 {
     Node:new(0x0000, "Comp1 Switch", "RFRCQ_COMP1_SW", 0, 0, 1, INTEGER1x1),
     Node:new(0x0001, "Comp1 Attack Time", "RFRCQ_COMP1_ATTACK", 9, 0, 31, INTEGER1x5),
@@ -1063,7 +1063,7 @@ RCQ = --  Rhythm Set Common Comp/EQ
     Node:new(0x0053, "EQ6 High Gain", "RFRCQ_EQ6_HIGHGAIN", 15, 0, 30, INTEGER1x5),
 }
 
-RT = --  Rhythm Set Partial
+local RT = --  Rhythm Set Partial
 {
     Node:new(0x0000, "Partial Name", "RFRT_NAME", 0, 32, 127, ByteSize12),
     Node:new(0x000C, "Assign Type", "RFRT_ASGN_TYPE", 0, 0, 1, INTEGER1x1),
@@ -1212,7 +1212,7 @@ RT = --  Rhythm Set Partial
     Node:new(0x0142, "Relative Level", "RFRT_LEVEL_MOD", 64, 0, 127, INTEGER1x7),
 }
 
-RLGT4 = --  Rhythm Set Controller
+local RLGT4 = --  Rhythm Set Controller
 {
     Node:new(0x0000, "Beam Switch", "RFRLGT4_BEAM_SW", 0, 0, 1, INTEGER1x1),
     Node:new(0x0001, "Beam Assign", "RFRLGT4_BEAM_ASGN", 2, 0, 106, INTEGER1x7),
@@ -1242,7 +1242,7 @@ RLGT4 = --  Rhythm Set Controller
     Node:new(0x0019, "Pattern Key Trigger", "RFRLGT4_PTN_KEY_TRIG", 0, 0, 1, INTEGER1x1),
 }
 
-RC2 = --  Rhythm Set Common 2
+local RC2 = --  Rhythm Set Common 2
 {
     Node:new(0x0000, "(reserve)", "RESERVE_DUMMY", 0, 0, 127, INTEGER1x7),
     Node:new(0x0010, "Phrase Number", "RFRC2_PHRASE", 0, 0, 255, INTEGER2x4),
@@ -1280,7 +1280,7 @@ RC2 = --  Rhythm Set Common 2
     Node:new(0x0031, "TFX Switch", "RFRC2_TFX_SW", 1, 0, 1, INTEGER1x1),
 }
 
-RTM = --  Rhythm Set Tone Modify
+local RTM = --  Rhythm Set Tone Modify
 {
     Node:new(0x0001, "Modify Parameter 1 ", "RFRTM_MOD_PRM1", 0, 0, 127, INTEGER1x7),
     Node:new(0x0002, "Modify Parameter 2 ", "RFRTM_MOD_PRM2", 0, 0, 127, INTEGER1x7),
@@ -1316,7 +1316,7 @@ RTM = --  Rhythm Set Tone Modify
     Node:new(0x0020, "Modify Parameter 32", "RFRTM_MOD_PRM32", 0, 0, 127, INTEGER1x7),
 }
 
-SHPC = --  SN Synth Tone Common
+local SHPC = --  SN Synth Tone Common
 {
     Node:new(0x0000, "Tone Name", "SHPC_NAME", 0, 32, 127, ByteSize12),
     Node:new(0x000C, "Tone Level", "SHPC_LEVEL", 100, 0, 127, INTEGER1x7),
@@ -1345,7 +1345,7 @@ SHPC = --  SN Synth Tone Common
     Node:new(0x003C, "Unison Size", "SHPC_UNISON_SIZE", 3, 0, 3, INTEGER1x2),
 }
 
-SHPF = --  SN Synth Tone Common MFX
+local SHPF = --  SN Synth Tone Common MFX
 {
     Node:new(0x0000, "MFX Type", "SHPF_MFX_TYPE", 0, 0, 67, INTEGER1x7, "mfx"),
     Node:new(0x0001, "MFX Dry Send Level", "SHPF_MFX_DRY_SEND", 127, 0, 127, INTEGER1x7),
@@ -1397,7 +1397,7 @@ SHPF = --  SN Synth Tone Common MFX
     Node:new(0x010D, "MFX Parameter 32", "SHPF_MFX_PRM32", 32768, 12768, 52768, INTEGER4x4, "mfx", 35),
 }
 
-SHPTM = --  SN Synth Tone Modify
+local SHPTM = --  SN Synth Tone Modify
 {
     Node:new(0x0000, "(reserve)", "RESERVE_DUMMY", 0, 0, 127, INTEGER1x7),
     Node:new(0x0001, "Attack Time Interval Sens ", "SHPTM_MOD_PRM1", 0, 0, 127, INTEGER1x7),
@@ -1434,7 +1434,7 @@ SHPTM = --  SN Synth Tone Modify
     Node:new(0x0020, "Modify Parameter 32", "SHPTM_MOD_PRM32", 0, 0, 127, INTEGER1x7),
 }
 
-SHPT = --  SN Synth Tone Partial
+local SHPT = --  SN Synth Tone Partial
 {
     Node:new(0x0000, "OSC Wave", "SHPT_OSC_WAVE", 0, 0, 7, INTEGER1x3),
     Node:new(0x0001, "OSC Wave Variation", "SHPT_OSC_WAVE_VAR", 0, 0, 2, INTEGER1x6),
@@ -1492,7 +1492,7 @@ SHPT = --  SN Synth Tone Partial
     Node:new(0x003C, "AMP Level Keyfollow", "SHPT_BIAS_LEVEL", 64, 54, 74, INTEGER1x5),
 }
 
-SNTC = --  SN Tone Common
+local SNTC = --  SN Tone Common
 {
     Node:new(0x0000, "Tone Name", "SNTC_NAME", 0, 32, 127, ByteSize16),
     Node:new(0x0010, "Tone Level", "SNTC_TONE_LEVEL", 127, 0, 127, INTEGER1x7),
@@ -1546,7 +1546,7 @@ SNTC = --  SN Tone Common
     Node:new(0x0041, "Modify Parameter 32", "SNTC_MOD_PRM32", 0, 0, 127, INTEGER1x7, "mod", 31),
 }
 
-SNTF = --  SN Tone MFX
+local SNTF = --  SN Tone MFX
 {
     Node:new(0x0000, "MFX Type", "SNTF_MFX_TYPE", 0, 0, 67, INTEGER1x7, "mfx"),
     Node:new(0x0001, "MFX Dry Send Level", "SNTF_MFX_DRY_SEND", 127, 0, 127, INTEGER1x7),
@@ -1598,7 +1598,7 @@ SNTF = --  SN Tone MFX
     Node:new(0x010D, "MFX Parameter 32", "SNTF_MFX_PRM32", 32768, 12768, 52768, INTEGER4x4, "mfx", 35),
 }
 
-KC = --  Kit Common
+local KC = --  Kit Common
 {
     Node:new(0x0000, "Kit Name", "SDKC_NAME", 0, 32, 127, ByteSize16),
     Node:new(0x0010, "Kit Level", "SDKC_LEVEL", 100, 0, 127, INTEGER1x7),
@@ -1607,7 +1607,7 @@ KC = --  Kit Common
     Node:new(0x0013, "TFX Switch", "SDKC_TFX_SW", 1, 0, 1, INTEGER1x1),
 }
 
-KF = --  Kit MFX
+local KF = --  Kit MFX
 {
     Node:new(0x0000, "MFX Type", "SDKF_MFX_TYPE", 0, 0, 67, INTEGER1x7, "mfx"),
     Node:new(0x0001, "MFX Dry Send Level", "SDKF_MFX_DRY_SEND", 127, 0, 127, INTEGER1x7),
@@ -1659,7 +1659,7 @@ KF = --  Kit MFX
     Node:new(0x010D, "MFX Parameter 32", "SDKF_MFX_PRM32", 32768, 12768, 52768, INTEGER4x4, "mfx", 35),
 }
 
-KCQ = --  Kit Common Comp/EQ
+local KCQ = --  Kit Common Comp/EQ
 {
     Node:new(0x0000, "Comp1 Switch", "SDKCQ_COMP1_SW", 0, 0, 1, INTEGER1x1),
     Node:new(0x0001, "Comp1 Attack Time", "SDKCQ_COMP1_ATTACK", 0, 0, 31, INTEGER1x5),
@@ -1747,7 +1747,7 @@ KCQ = --  Kit Common Comp/EQ
     Node:new(0x0053, "EQ6 High Gain", "SDKCQ_EQ6_HIGHGAIN", 15, 0, 30, INTEGER1x5),
 }
 
-KN = --  Kit Note
+local KN = --  Kit Note
 {
     Node:new(0x0000, "Inst Number", "SDKN_INST_NUM", 1, 0, 512, INTEGER4x4),
     Node:new(0x0004, "Level", "SDKN_INST_LEVEL", 100, 0, 127, INTEGER1x7),
@@ -1764,7 +1764,7 @@ KN = --  Kit Note
     Node:new(0x0012, "Output Assign", "SDKN_OUTPUT_ASSIGN", 0, 0, 6, INTEGER1x3),
 }
 
-PAT = --  PCM Tone
+local PAT = --  PCM Tone
 {
     Node:new_parent(0x0, 0, "PCM Tone Common", "_PC", PC),
     Node:new_parent(0x200, 0, "PCM Tone Common MFX", "_PF", PF),
@@ -1776,7 +1776,7 @@ PAT = --  PCM Tone
     Node:new_parent(0x3000, 703, "PCM Tone Common 2", "_PC2", PC2)
 }
 
-RHY = --  Rhythm Set
+local RHY = --  Rhythm Set
 {
     Node:new_parent(0x0, 0, "Rhythm Set Common", "_RC", RC),
     Node:new_parent(0x200, 2, "Rhythm Set Common MFX", "_RF", RF),
@@ -1872,7 +1872,7 @@ RHY = --  Rhythm Set
     Node:new_parent(0x20000, 12894, "Rhythm Set Common 2", "_RC2", RC2),
 }
 
-SHPAT = --  Synth Tone
+local SHPAT = --  Synth Tone
 {
     Node:new_parent(0x0, 0, "Synth Tone Common", "_SHPC", SHPC),
     Node:new_parent(0x200, 25, "Synth Tone MFX", "_SHPF", SHPF),
@@ -1882,13 +1882,13 @@ SHPAT = --  Synth Tone
     Node:new_parent(0x5000, 235, "Synth Tone Modify", "_SHPTM", SHPTM)
 }
 
-SNTONE = --  SuperNATURAL Tone
+local SNTONE = --  SuperNATURAL Tone
 {
     Node:new_parent(0x0, 0, "SN Tone Common", "_SNTC", SNTC),
     Node:new_parent(0x200, 0, "SN Tone MFX", "_SNTF", SNTF)
 }
 
-KIT = --  Drum Kit
+local KIT = --  Drum Kit
 {
     Node:new_parent(0x0, 0, "Drum Kit Common", "_KC", KC),
     Node:new_parent(0x200, 5, "Drum Kit MFX", "_KF", KF),
@@ -1957,17 +1957,17 @@ KIT = --  Drum Kit
     Node:new_parent(0x4D00, 930, "Drum Kit Note (Key # 88)", "_KN88", KN),
 }
 
-SETUP =
+local SETUP =
 {
     Node:new_parent(0x0, 0, "Setup", "_STP", STP),
 }
 
-SYS =
+local SYS =
 {
     Node:new_parent(0x0, 0, "System Common", "_SC", SC),
 }
 
-PRF = --  Studio Set
+local PRF = -- Studio Set
 {
     Node:new_parent(0x0, 0, "Studio Set Common", "_FC", FC),
     Node:new_parent(0x400, 51, "Studio Set Common Chorus", "_FH", FH),
@@ -2024,7 +2024,7 @@ PRF = --  Studio Set
     Node:new_parent(0x5F00, 1378, "Studio Set Part EQ (Part 16)", "_FPEQ16", FPEQ),
 }
 
-FPART = --  Temporary Tone
+local FPART = --  Temporary Tone
 {
     Node:new_parent(0x0, 0, "Temporary PCM Tone", "_PAT", PAT),
     Node:new_parent(0x10000, 743, "Temporary Synth Tone", "_SHPAT", SHPAT),
@@ -2033,9 +2033,9 @@ FPART = --  Temporary Tone
     Node:new_parent(0x100000, 2052, "Temporary Rhythm Set", "_RHY", RHY),
 }
 
-EDITOR_NOP = {}
+local EDITOR_NOP = {}
 
-Root =
+I7ROOT_NODE =
 {
     Node:new_parent(0x1000000, 0, "Setup", "_SETUP", SETUP),
     Node:new_parent(0x2000000, 56, "System", "_SYS", SYS),
@@ -2059,15 +2059,49 @@ Root =
     Node:new_parent(0x1C600000, 226183, "Temporary Tone (Studio Mode Part 16)", "_FPART16", FPART),
 }
 
-
-function Iterate_Node(node)
-    for _, value in pairs(node) do
-        print(value:tostring())
-        if value.children ~= nil then
-            Iterate_Node(value.children)
-        end
-    end
+function Get_Node(id)
+-- {
+--     NodeInfo result;
+--     const Node* nodes = &root[0];
+--     const Node* node = nullptr;
+--     UInt numNodes = NumRootNodes;
+--     std::string partId;
+--     std::stringstream ss(id); 
+--     while (std::getline(ss, partId, '-'))
+--     {
+--         if (partId == "PRM") 
+--         {
+--             // prm has no data representation
+--             continue;
+--         }
+--         UInt localOffset = 0;
+--         for (UInt i = 0; i < numNodes; ++i)
+--         {
+--             const Node* n = &nodes[i];
+--             if (partId == std::string(n->id))
+--             {
+--                 result.addr += getModelIdAddress(partId);
+--                 result.offset += n->offset;
+--                 node = n;
+--                 if (ss.eof()) 
+--                 {
+--                     result.offset += localOffset;
+--                     result.node = node;
+--                     return result;
+--                 }
+--                 nodes = &node->node[0];
+--                 numNodes = node->numChildren;
+--                 break;
+--             }
+--             localOffset += getByteSize(n->valueByteSizeType);
+--         }
+--         if (nodes == &root[0]) 
+--         {
+--             // found nothing
+--             return result;
+--         }
+--     }
+--     return result;
+-- }
 end
-
-Iterate_Node(Root)
 
