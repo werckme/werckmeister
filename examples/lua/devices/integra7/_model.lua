@@ -17,12 +17,20 @@ ByteSize16 = 16
 
 Node = {}
 
+function Nibble(x)
+    return bit32.bor(
+        bit32.rshift(bit32.band(x, 0x7f000000), 3),
+        bit32.rshift(bit32.band(x, 0x007f0000), 2),
+        bit32.rshift(bit32.band(x, 0x00007f00), 1),
+        bit32.band(x, 0x0000007f)
+    )
+end
 
 function Node:new(addr, desc, id, init, min, max, valueByteSizeType, opt, pos)
     local o = {}
     setmetatable(o, self)
     self.__index = self
-    o.addr = addr
+    o.addr = Nibble(addr)
     o.desc = desc
     o.opt = opt
     o.pos = pos
@@ -33,7 +41,7 @@ function Node:new_parent(addr, offset, desc, id, children)
     local o = {}
     setmetatable(o, self)
     self.__index = self
-    o.addr = addr
+    o.addr = Nibble(addr)
     o.offset = offset
     o.desc = desc
     o.id = id
@@ -3879,21 +3887,6 @@ local MODEL_ID_MAP =
     ["RESERVE_DUMMY"] = 0x0000
 }
 
-function Nibble(x)
-    return bit32.bor(
-        bit32.rshift(bit32.band(x, 0x7f000000), 3),
-        bit32.rshift(bit32.band(x, 0x007f0000), 2),
-        bit32.rshift(bit32.band(x, 0x00007f00), 1),
-        bit32.band(x, 0x0000007f)
-    )
-    -- return (
-    --     ((x & 0x7f000000) >> 3) |
-    --     ((x & 0x007f0000) >> 2) |
-    --     ((x & 0x00007f00) >> 1) |
-    --     ((x & 0x0000007f))
-    -- );
-end
-
 function Get_Node(id)
     local result = {
         addr = 0,
@@ -3911,8 +3904,8 @@ function Get_Node(id)
             if part_id == n.id then
                 result.addr = result.addr + MODEL_ID_MAP[part_id];
                 node = n
-             nodes = node.children;
-             break
+                nodes = node.children;
+                break
             end
         end
         ::continue::
@@ -3932,7 +3925,7 @@ function Get_Node(id)
     -- {
     --     if (partId == "PRM") 
     --     {
-    --         // prm has no data representation
+    --         // prm has no data representationcode
     --         continue;
     --     }
     --     for (UInt i = 0; i < numNodes; ++i)
