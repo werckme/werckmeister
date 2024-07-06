@@ -32,6 +32,11 @@ function Node:new(addr, desc, id, init, min, max, valueByteSizeType, opt, pos)
     self.__index = self
     o.addr = Nibble(addr)
     o.desc = desc
+    o.id = id
+    o.init = init
+    o.min = min
+    o.max = max
+    o.valueByteSizeType = valueByteSizeType
     o.opt = opt
     o.pos = pos
     return o
@@ -3915,41 +3920,4 @@ function Get_Node(id)
     end
     result.node = node
     return result
-    -- NodeInfo result;
-    -- const Node* nodes = &root[0];
-    -- const Node* node = nullptr;
-    -- UInt numNodes = NumRootNodes;
-    -- std::string partId;
-    -- std::stringstream ss(id);
-    -- while (std::getline(ss, partId, '-'))
-    -- {
-    --     if (partId == "PRM") 
-    --     {
-    --         // prm has no data representationcode
-    --         continue;
-    --     }
-    --     for (UInt i = 0; i < numNodes; ++i)
-    --     {
-    --         const Node* n = &nodes[i];
-    --         if (partId == std::string(n->id))
-    --         {
-    --             result.addr += getModelIdAddress(partId);
-    --             node = n;
-    --             if (ss.eof()) 
-    --             {
-    --                 result.node = node;
-    --                 return result;
-    --             }
-    --             nodes = &node->node[0];
-    --             numNodes = node->numChildren;
-    --             break;
-    --         }
-    --     }
-    --     if (nodes == &root[0]) 
-    --     {
-    --         // found nothing
-    --         return result;
-    --     }
-    -- }
-    -- return result;
 end

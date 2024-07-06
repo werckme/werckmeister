@@ -16,7 +16,11 @@ assert(Nibble(0x19000000) == 52428800)
 assert(noderesult.node.desc == "Temporary Tone (Studio Mode Part 1)");
 assert(noderesult.node.addr == Nibble(0x19000000));
 
-local noderesult = Get_Node("PRM-_FPART1-_SNTONE-_SNTC-SNTC_MOD_PRM14");
+noderesult = Get_Node("PRM-_FPART1-_SNTONE-_SNTC-SNTC_MOD_PRM14");
 assert(noderesult ~= nil)
 assert(noderesult.node.addr == Nibble(0x002F));
 assert(noderesult.node.desc == "Modify Parameter 14");
+
+noderesult = Get_Node("PRM-_SETUP-_STP-_RC2-NESTP_SND_MODE_SD1");
+assert(noderesult ~= nil)
+assert(noderesult.node.desc == "Side 1 Sound Mode");
