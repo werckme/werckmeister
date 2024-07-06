@@ -39,6 +39,7 @@ function Node:new(addr, desc, id, init, min, max, valueByteSizeType, opt, pos)
     o.valueByteSizeType = valueByteSizeType
     o.opt = opt
     o.pos = pos
+    o.value = nil
     return o
 end
 
@@ -56,6 +57,13 @@ end
 
 function Node:tostring()
     return string.format("0x%02X ", self.addr) .. self.desc
+end
+
+function Node:setvalue(v)
+    if self.children ~= nil then
+        error("try to set a value to a branch node: \"" .. self.desc .. "\"")
+    end
+    self.value = v
 end
 
 local STP =
@@ -3920,4 +3928,29 @@ function Get_Node(id)
     end
     result.node = node
     return result
+end
+
+function Get_Byte_Size(valueByteSizeType)
+    if valueByteSizeType == ZeroByteSize then return 0 end
+    if valueByteSizeType == INTEGER1x1
+    or valueByteSizeType == INTEGER1x2
+    or valueByteSizeType == INTEGER1x3
+    or valueByteSizeType == INTEGER1x4
+    or valueByteSizeType == INTEGER1x5
+    or valueByteSizeType == INTEGER1x6
+    or valueByteSizeType == INTEGER1x7 then return 1 end
+    if valueByteSizeType == INTEGER2x4 then return 2 end
+    if valueByteSizeType == INTEGER4x4 then return 4 end
+    if valueByteSizeType == ByteSize12 then return 12 end
+    if valueByteSizeType == ByteSize16 then return 16 end
+    return 0
+
+end
+
+
+function Create_SysexMessage(nodeinfo)
+    local addr = nodeinfo
+    local bytesize = Get_Byte_Size(nodeinfo.node.valueByteSizeType)
+    local result = {}
+    
 end
