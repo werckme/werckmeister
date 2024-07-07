@@ -1,4 +1,4 @@
-require "bit32"
+local bit32 = require "bit32"
 
 UndefinedByteType = -1
 ZeroByteSize = -2
@@ -14,6 +14,19 @@ INTEGER2x4 = 0x2000f --00001111
 INTEGER4x4 = 0x4000f --00001111
 ByteSize12 = 12
 ByteSize16 = 16
+
+local ADDR_SIZE = 4
+local DATA_SIZE = 4
+local SIZE_F7 = 1
+local SIZE_CHKSM = 1
+local ROLAND = 0x41
+local DEV_ID = 0x10
+local DEVICE_ID_INDEX = 3
+local MODEL_ID = { 0, 0, 0x64 }
+local RQ1 = 0x11
+local DT1 = 0x12
+local ROLAND_SYSEX = { 0xF0,  0x41, DEV_ID, MODEL_ID[1], MODEL_ID[2] , MODEL_ID[3] }
+local ROLAND_DT1 = { ROLAND_SYSEX[1], ROLAND_SYSEX[2], ROLAND_SYSEX[3], ROLAND_SYSEX[4], ROLAND_SYSEX[5], ROLAND_SYSEX[6], DT1 }
 
 Node = {}
 
@@ -62,6 +75,13 @@ end
 function Node:setvalue(v)
     if self.children ~= nil then
         error("try to set a value to a branch node: \"" .. self.desc .. "\"")
+    end
+    if type(v) == "string" then
+        self.value = v
+        return
+    end
+    if v < self.min or v > self.max then
+        error("value out of bounds for: \"" .. self.desc .. "\" = " .. tostring(v) .. " (" .. tostring(self.min) .. ", " .. tostring(self.max) .. ")")
     end
     self.value = v
 end
@@ -3947,10 +3967,68 @@ function Get_Byte_Size(valueByteSizeType)
 
 end
 
-
-function Create_SysexMessage(nodeinfo)
-    local addr = nodeinfo
-    local bytesize = Get_Byte_Size(nodeinfo.node.valueByteSizeType)
+function Value_To_Bytes(v, bytesize)
     local result = {}
-    
+    local is_string = type(v) == "string"
+    if not is_string and bytesize == 1 then
+        return {bit32.band(v, 0x7f)}
+    end
+    for i = 1, bytesize, 1 do
+        if is_string then
+            if i <= #v then
+                result[i] = string.byte(v, i)
+            else
+                result[i] = string.byte(" ")
+            end
+            goto continue
+        end
+        local shift = 4*(bytesize - i)
+        result[i] = bit32.band(bit32.rshift(v, shift), 0xf)
+        ::continue::
+    end
+    return result
+end
+
+function ConcatTable(a, b)
+    local res = {table.unpack(a)}
+    for _, val in pairs(b) do
+        table.insert(res, val)
+    end
+    return res
+end
+
+local function Checksum(values, begin_index, end_index)
+    local result = 0
+    for i = begin_index, end_index, 1 do
+        local value = values[i]
+        result = result + value
+    end
+    return bit32.band(-result, 0x7F)
+end
+
+function Create_SysexMessage(nodeinfo, device_id)
+    local result = {table.unpack(ROLAND_DT1)}
+    local addr = nodeinfo.addr
+    table.insert(result, bit32.band(bit32.rshift(addr, 24), 0xff))
+    table.insert(result, bit32.band(bit32.rshift(addr, 16), 0xff))
+    table.insert(result, bit32.band(bit32.rshift(addr,  8), 0xff))
+    table.insert(result, bit32.band(addr, 0xff))
+    local bytesize = Get_Byte_Size(nodeinfo.node.valueByteSizeType)
+    local value_bytes = Value_To_Bytes(nodeinfo.node.value, bytesize)
+    result = ConcatTable(result, value_bytes)
+    local checksum = Checksum(result, #ROLAND_DT1+1, #result)
+    table.insert(result, checksum)
+    table.insert(result, 0xf7)
+    if device_id ~= nil then
+        result[DEVICE_ID_INDEX] = device_id;
+    end
+    return result
+end
+
+function Bytes_To_String(bytes)
+    local chars = {}
+    for _, value in pairs(bytes) do
+        table.insert(chars, string.format("%02x", value))
+    end
+    return table.concat(chars, " ")
 end
