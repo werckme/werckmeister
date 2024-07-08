@@ -21,7 +21,7 @@ jobs:
     - name: install icu4c
       run: brew install icu4c
     - name: install render test requirements
-      run: brew install pipx && pipx install -r requirements.txt
+      run: python3 -m venv .venv && source .venv/bin/activate && python3 -m pip install -r requirements.txt
       working-directory: rendertests
     - name: install boost
       run: sh ./mac_build_boost_fallback.sh
