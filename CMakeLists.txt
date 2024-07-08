@@ -108,7 +108,6 @@ else()
 endif()
 
 IF(APPLE)
-  add_definitions(-D_LIBCPP_ENABLE_CXX17_REMOVED_UNARY_BINARY_FUNCTION)
   SET(Boost_LIBRARIES ${Boost_LIBRARIES}
       /usr/local/opt/icu4c/lib/libicudata.a 
       /usr/local/opt/icu4c/lib/libicui18n.a 
