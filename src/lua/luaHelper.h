@@ -6,6 +6,11 @@
 namespace lua
 {
 
+    inline const char * getVersion() 
+    {
+        static char * versionStr = LUA_VERSION;
+        return versionStr;
+    }
     inline void getTableValue(lua_State *L, const char *key, int &out)
     {
         lua_pushstring(L, key);
