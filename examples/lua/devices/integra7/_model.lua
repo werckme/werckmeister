@@ -1,5 +1,3 @@
-local bit32 = require "bit32"
-
 UndefinedByteType = -1
 ZeroByteSize = -2
 INTEGER_MASK = 0x10000
@@ -21,22 +19,21 @@ local SIZE_F7 = 1
 local SIZE_CHKSM = 1
 local ROLAND = 0x41
 local DEV_ID = 0x10
-local DEVICE_ID_INDEX = 3
+local DEVICE_ID_INDEX = 2
 local MODEL_ID = { 0, 0, 0x64 }
 local RQ1 = 0x11
 local DT1 = 0x12
-local ROLAND_SYSEX = { 0xF0,  0x41, DEV_ID, MODEL_ID[1], MODEL_ID[2] , MODEL_ID[3] }
-local ROLAND_DT1 = { ROLAND_SYSEX[1], ROLAND_SYSEX[2], ROLAND_SYSEX[3], ROLAND_SYSEX[4], ROLAND_SYSEX[5], ROLAND_SYSEX[6], DT1 }
+local ROLAND_SYSEX = { 0x41, DEV_ID, MODEL_ID[1], MODEL_ID[2] , MODEL_ID[3] }
+local ROLAND_DT1 = { ROLAND_SYSEX[1], ROLAND_SYSEX[2], ROLAND_SYSEX[3], ROLAND_SYSEX[4], ROLAND_SYSEX[5], DT1 }
 
 Node = {}
 
 function Nibble(x)
-    return bit32.bor(
-        bit32.rshift(bit32.band(x, 0x7f000000), 3),
-        bit32.rshift(bit32.band(x, 0x007f0000), 2),
-        bit32.rshift(bit32.band(x, 0x00007f00), 1),
-        bit32.band(x, 0x0000007f)
-    )
+    return (x & 0x7f000000) >> 3 |
+        (x & 0x007f0000) >> 2 |
+        (x & 0x00007f00) >> 1 |
+         x & 0x0000007f
+
 end
 
 function Node:new(addr, desc, id, init, min, max, valueByteSizeType, opt, pos)
@@ -3971,7 +3968,7 @@ function Value_To_Bytes(v, bytesize)
     local result = {}
     local is_string = type(v) == "string"
     if not is_string and bytesize == 1 then
-        return {bit32.band(v, 0x7f)}
+        return {v & 0x7f}
     end
     for i = 1, bytesize, 1 do
         if is_string then
@@ -3983,7 +3980,7 @@ function Value_To_Bytes(v, bytesize)
             goto continue
         end
         local shift = 4*(bytesize - i)
-        result[i] = bit32.band(bit32.rshift(v, shift), 0xf)
+        result[i] = v >> shift & 0xf
         ::continue::
     end
     return result
@@ -4003,22 +4000,21 @@ local function Checksum(values, begin_index, end_index)
         local value = values[i]
         result = result + value
     end
-    return bit32.band(-result, 0x7F)
+    return -result & 0x7F
 end
 
 function Create_SysexMessage(nodeinfo, device_id)
     local result = {table.unpack(ROLAND_DT1)}
     local addr = nodeinfo.addr
-    table.insert(result, bit32.band(bit32.rshift(addr, 24), 0xff))
-    table.insert(result, bit32.band(bit32.rshift(addr, 16), 0xff))
-    table.insert(result, bit32.band(bit32.rshift(addr,  8), 0xff))
-    table.insert(result, bit32.band(addr, 0xff))
+    table.insert(result, (addr >> 24) & 0xff)
+    table.insert(result, (addr >> 16) & 0xff)
+    table.insert(result, (addr >>  8) & 0xff)
+    table.insert(result, (addr & 0xff))
     local bytesize = Get_Byte_Size(nodeinfo.node.valueByteSizeType)
     local value_bytes = Value_To_Bytes(nodeinfo.node.value, bytesize)
     result = ConcatTable(result, value_bytes)
     local checksum = Checksum(result, #ROLAND_DT1+1, #result)
     table.insert(result, checksum)
-    table.insert(result, 0xf7)
     if device_id ~= nil then
         result[DEVICE_ID_INDEX] = device_id;
     end
