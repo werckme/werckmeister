@@ -1059,7 +1059,20 @@ This table contains all input events.
         
         -- a table of byte values (excluding F0 and F7)
         -- only relevant if type is "sysex"
-        sysexData  = { byte values }
+        sysexData  = { byte values },
+
+        -- some information about the related instrument
+        instrument = {
+          name = string, 
+          pan = 0..100,
+          volume = 0..100,
+          midiChannel = 0..15, -- optional
+          midiLsb = 0..127, -- optional
+          midiMsb = 0..127, -- optional
+          midiPc = 0..127, -- optional
+          children: {} -- further instrument children see instrumentSection (https://www.werckme.org/manual#instrumentsection)
+        }
+
     }
     ...
 }
