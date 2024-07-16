@@ -7,6 +7,9 @@ local function checkinstrument (instrument)
     if instrument.name == nil then
         return false
     end
+    if #instrument.name == 0 then
+        return false
+    end
     if instrument.children ~= nil then
         for _, child in pairs(instrument.children) do
             return checkinstrument(child)
@@ -18,9 +21,19 @@ local function checkinstrument (instrument)
     return true
 end
 
-function perform(events, params, timeinfo)
-    if checkinstrument(events[1].instrument) == false then
-        return {}
+function perform(events, params, timeinfo, context)
+    local instrument = context:getCurrentInstrument()
+    if checkinstrument(instrument) == false then
+        error("instrument check failed")
     end
     return events
+end
+
+function execute(params, timeinfo, context)
+    local instrument = context:getCurrentInstrument()
+    dump(instrument)
+    if checkinstrument(instrument) == false then
+        error("instrument check failed")
+    end
+    return {}
 end

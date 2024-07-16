@@ -5,6 +5,7 @@
 #include <compiler/error.hpp>
 #include <algorithm>
 #include <compiler/lua/luaTimeInfo.h>
+#include <compiler/lua/luaContext.h>
 #include <compiler/context/IContext.h>
 #include <lua/luaHelper.h>
 
@@ -19,7 +20,6 @@ static const char *LUA_EVENT_TYPE_UNKNOWN = "unknown";
 static const char *LUA_EVENT_PROPETRY_VELOCITY = "velocity";
 static const char *LUA_EVENT_PROPETRY_DURATION = "duration";
 static const char *LUA_EVENT_PROPETRY_TYING = "isTied";
-static const char *LUA_EVENT_PROPETRY_INSTRUMENT = "instrument";
 static const char *LUA_EVENT_PROPETRY_OFFSET = "offset";
 static const char *LUA_EVENT_PROPETRY_CC_NR = "ccNr";
 static const char *LUA_EVENT_PROPETRY_CC_VALUE = "ccValue";
@@ -34,14 +34,6 @@ static const char *LUA_EVENT_PROPETRY_TOAL_TIED_DURATION = "totalTiedDuration";
 static const char *LUA_EVENT_PROPERTY_TIED_DURATION = "tiedDuration";
 static const char* LUA_EVENT_PROPERTY_TRACK_ID = "trackId";
 static const char* LUA_EVENT_PROPERTY_VOICE_ID = "voiceId";
-static const char* LUA_INSTRUMENT_PROPERTY_NAME = "name";
-static const char* LUA_INSTRUMENT_PROPERTY_VOLUME = "volume";
-static const char* LUA_INSTRUMENT_PROPERTY_PAN = "pan";
-static const char* LUA_INSTRUMENT_PROPERTY_MIDI_CHANNEL = "midiChannel";
-static const char* LUA_INSTRUMENT_PROPERTY_MIDI_MSB = "midiMsb";
-static const char* LUA_INSTRUMENT_PROPERTY_MIDI_LSB = "midiLsb";
-static const char* LUA_INSTRUMENT_PROPERTY_MIDI_PC = "midiPc";
-static const char* LUA_INSTRUMENT_PROPERTY_CHILDREN = "children";
 
 namespace compiler
 {
@@ -57,7 +49,6 @@ namespace compiler
         void push(lua_State *L);
         void pushPitches(lua_State *L);
         void pushTags(lua_State *L);
-        void pushInstrument(lua_State *L, AInstrumentDefPtr instrument);
         void pushPitchBendValue(lua_State *L, int top, const documentModel::Event &event);
         const char *getTypename() const;
     };
@@ -77,10 +68,6 @@ namespace compiler
         // tags
         lua_pushstring(L, LUA_EVENT_PITCH_PROPETRY_TAGS);
         pushTags(L);
-        lua_settable(L, top);
-        // instrument
-        lua_pushstring(L, LUA_EVENT_PROPETRY_INSTRUMENT);
-        pushInstrument(L, ctx->currentInstrumentDef());
         lua_settable(L, top);
         // offset
         lua::setTableValue(L, LUA_EVENT_PROPETRY_OFFSET, top, event->offset / com::PPQ);
@@ -158,66 +145,6 @@ namespace compiler
             lua_pushstring(L, tag.c_str());
             lua_settable(L, top);
         }
-    }
-    void LuaEvent::pushInstrument(lua_State *L, AInstrumentDefPtr instrument)
-    {
-        lua_createtable(L, event->tags.size(), 0);
-        if (!instrument) 
-        {
-            return;
-        }
-        auto top = lua_gettop(L);
-        //
-        lua_pushstring(L, LUA_INSTRUMENT_PROPERTY_NAME);
-        lua_pushstring(L, instrument->uname.c_str());
-        lua_settable(L, top);
-        //
-        lua_pushstring(L, LUA_INSTRUMENT_PROPERTY_VOLUME);
-        lua_pushnumber(L, instrument->volume);
-        lua_settable(L, top);
-        //
-        lua_pushstring(L, LUA_INSTRUMENT_PROPERTY_PAN);
-        lua_pushnumber(L, instrument->pan);
-        lua_settable(L, top);
-        //
-        auto instrumentSection = std::dynamic_pointer_cast<InstrumentSectionDef>(instrument);
-        if (instrumentSection)
-        {
-            lua_pushstring(L, LUA_INSTRUMENT_PROPERTY_CHILDREN);
-            lua_createtable(L, instrumentSection->instrumentNames.size(), 0);
-            auto childrenTop = lua_gettop(L);
-            int index = 1;
-            for(const auto& uname : instrumentSection->instrumentNames)
-            {
-                auto instrumentDef = ctx->getInstrumentDef(uname);
-                lua_pushinteger(L, index++);
-                pushInstrument(L, instrumentDef);
-                lua_settable(L, childrenTop);
-            }
-            lua_settable(L, top);
-            return;
-        }
-        //
-        auto midiInstrument = std::dynamic_pointer_cast<MidiInstrumentDef>(instrument);
-        if (!midiInstrument)
-        {
-            return;
-        }
-        lua_pushstring(L, LUA_INSTRUMENT_PROPERTY_MIDI_CHANNEL);
-        lua_pushinteger(L, midiInstrument->channel);
-        lua_settable(L, top);
-        //
-        lua_pushstring(L, LUA_INSTRUMENT_PROPERTY_MIDI_MSB);
-        lua_pushinteger(L, midiInstrument->bankMsb);
-        lua_settable(L, top);
-        //
-        lua_pushstring(L, LUA_INSTRUMENT_PROPERTY_MIDI_LSB);
-        lua_pushinteger(L, midiInstrument->bankLsb);
-        lua_settable(L, top);
-        //
-        lua_pushstring(L, LUA_INSTRUMENT_PROPERTY_MIDI_PC);
-        lua_pushinteger(L, midiInstrument->pc);
-        lua_settable(L, top);
     }
     const char *LuaEvent::getTypename() const
     {
@@ -435,8 +362,11 @@ namespace compiler
         lua_getglobal(L, LUA_MODIFICATION_FENTRY);
         pushEvents(ctx, events);
         pushParameters(L, ALuaWithParameter::parameters);
-        lua::LuaTimeInfo(ctx->getTimeInfo()).push(L);
-        call(3, 1);
+        lua::LuaTimeInfo ltimeInfo(ctx->getTimeInfo());
+        ltimeInfo.push(L);
+        lua::LuaContext luaCtx(*ctx.get());
+        luaCtx.push(L);
+        call(4, 1);
         auto processedEvents = popEvents(ctx);
         events.swap(processedEvents);
     }

@@ -3,16 +3,15 @@ using "./modinstrumentinfo.lua";
 
 device: _setName=MyDevice  _isType=midi _useDevice="FLUID Synth";
 instrumentDef: _setName=piano _onDevice=MyDevice _ch=0 _pc=1 _cc=8;
-instrumentConf: piano mod modinstrumentinfo;
 
 instrumentDef: _setName=p1 _onDevice=MyDevice _ch=1 _pc=100;
 instrumentDef: _setName=p2 _onDevice=MyDevice _ch=2 _pc=12;
 instrumentSection: mySection p1 p2;
--- instrumentConf: mySection mod modinstrumentinfo; -- https://github.com/werckme/werckmeister/issues/424
 
 [
 instrument: piano;
 {
+    /call: modinstrumentinfo/
     c d e f | g a b c' 
 }
 ]
@@ -20,7 +19,7 @@ instrument: piano;
 [
 instrument: mySection;
 {
-    /mod: modinstrumentinfo/
+    /call: modinstrumentinfo/
     c, d, e, f, | g, a, b, c 
 }
 ]
