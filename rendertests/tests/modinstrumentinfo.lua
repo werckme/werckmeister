@@ -31,7 +31,6 @@ end
 
 function execute(params, timeinfo, context)
     local instrument = context:getCurrentInstrument()
-    dump(instrument)
     if checkinstrument(instrument) == false then
         error("instrument check failed")
     end
