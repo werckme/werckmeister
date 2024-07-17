@@ -1,0 +1,31 @@
+using "/chords/default.chords";
+using "../../examples/lua/devices/integra7/integra7.lua";
+using "../../examples/lua/mods/myArpeggio.lua";
+using "./integra7-instrumentSection.conductions";
+
+tempo: 150;
+device: MyDevice  midi _useDevice="DIN 3";
+instrumentDef:guitar1   _onDevice=MyDevice  _pc=0 _ch=0 _bankMsb=89 _bankLsb=64  _pc=97;
+instrumentDef:guitar2   _onDevice=MyDevice  _pc=0 _ch=1 _bankMsb=89 _bankLsb=64  _pc=94;
+instrumentSection: guitar guitar1 guitar2;
+
+[
+type: template;
+name: chords;
+instrument: guitar;
+{
+    /mod: myArpeggio/
+    /modOnce: integra7 _parameterId="PRM-_FPARTxxx-_SNTONE-_SNTC-SNTC_MOD_PRM10" _value=2/
+    <II III V VII I>1 :(x3)
+    |:
+     <I II III V VII>1 :(x3)|
+}
+]
+
+[
+type: accomp;
+{
+    /template: chords/
+    C | F | G7 :|
+}
+]

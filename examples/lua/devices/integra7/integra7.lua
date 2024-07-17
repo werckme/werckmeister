@@ -10,49 +10,58 @@ require "/lua/devices/integra7/_model"
 require "lua/com/com"
 
 parameters = {
-    -- { name="parameterId"},
-    -- { name="value"},
-    -- { name="partId", default=-1 },
+    { name="parameterId"},
+    { name="value"},
+    { name="partId", default=-1 },
 }
 
-local function get_partids(params)
-    if params.partIdsFromInstrument ~= nil then
-        return params.partIdsFromInstrument
-    end
+Parameter_PartId_Placeholder = "xxx"
+
+local function get_partids(params, context)
     if isnumber(params.partId) then
         return { tonumber(params.partId) }
     end
-    local function get_id_from_instrument()
-        
+    local part_ids = {}
+    local function get_id_from_instrument(instrument)
+        if instrument.children ~= nil then
+            for _, child in pairs(instrument.children) do
+                get_id_from_instrument(child)
+            end
+            return
+        end
+        table.insert(part_ids, instrument.midiChannel + 1)
     end
+    local instrument = context:getCurrentInstrument()
+    get_id_from_instrument(instrument)
+    return part_ids
 end
 
-function execute(params, timeinfo)
-    local part_ids = get_partids(params);
+function execute(params, timeinfo, context)
+    local part_ids = get_partids(params, context)
+    local messages = {}
     local value = tonumber(params.value)
-    local node_id = string.format(NODE_ID_TEMPLATE, part_nr)
-
-    local nodeinfo = Get_Node(node_id)
-    if nodeinfo == nil then
-        error("no node found for id:" .. node_id)
-    end
-    nodeinfo.node:setvalue(value)
-    local sysex = Create_SysexMessage(nodeinfo)
-    return {
-        {
+    local node_id_template = params.parameterId
+    for _, part_id in pairs(part_ids) do
+        local node_id = string.gsub(node_id_template, Parameter_PartId_Placeholder, part_id)
+        local nodeinfo = Get_Node(node_id)
+        if nodeinfo == nil then
+            error("no node found for id:" .. node_id)
+        end
+        nodeinfo.node:setvalue(value)
+        local sysex = Create_SysexMessage(nodeinfo)
+        table.insert(messages, {
             ["type"] = "sysex",
             ["sysexData"] = sysex,
-        }
-    }
+        })
+    end
+    return messages
 end
 
-local function get_partids_from_instrument(events)
-    
-end
 
-function perform(events, params, timeinfo)
-    params.partIdsFromInstrument = get_partids_from_instrument(events)
-    local midiMessage = execute(params, timeinfo)
-    table.insert(events, midiMessage[1])
+function perform(events, params, timeinfo, context)
+    local messages = execute(params, timeinfo, context)
+    for _, message in pairs(messages) do
+        table.insert(events, message)
+    end
     return events
 end

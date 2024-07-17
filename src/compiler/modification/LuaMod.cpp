@@ -346,7 +346,13 @@ namespace compiler
             {
                 FM_THROW(Exception, "sysex value out of bounds: " + std::to_string(value));
             }
-            bff.push_back((com::Byte)value);
+            com::Byte byteValue = (com::Byte)value;
+            bool isSyexEscapeByte = index == 0 && byteValue == 0xF0;
+            isSyexEscapeByte |= index == size -1 && byteValue == 0xF7;
+            if (!isSyexEscapeByte) // will be added later
+            {
+                bff.push_back(byteValue);
+            }
             lua_pop(L, 1);
         }
         lua_pop(L, 1);

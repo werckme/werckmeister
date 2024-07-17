@@ -19,12 +19,12 @@ local SIZE_F7 = 1
 local SIZE_CHKSM = 1
 local ROLAND = 0x41
 local DEV_ID = 0x10
-local DEVICE_ID_INDEX = 2
+local DEVICE_ID_INDEX = 3
 local MODEL_ID = { 0, 0, 0x64 }
 local RQ1 = 0x11
 local DT1 = 0x12
-local ROLAND_SYSEX = { 0x41, DEV_ID, MODEL_ID[1], MODEL_ID[2] , MODEL_ID[3] }
-local ROLAND_DT1 = { ROLAND_SYSEX[1], ROLAND_SYSEX[2], ROLAND_SYSEX[3], ROLAND_SYSEX[4], ROLAND_SYSEX[5], DT1 }
+local ROLAND_SYSEX = { 0xF0, 0x41, DEV_ID, MODEL_ID[1], MODEL_ID[2] , MODEL_ID[3] }
+local ROLAND_DT1 = { ROLAND_SYSEX[1], ROLAND_SYSEX[2], ROLAND_SYSEX[3], ROLAND_SYSEX[4], ROLAND_SYSEX[5], ROLAND_SYSEX[6], DT1 }
 
 Node = {}
 
@@ -4015,6 +4015,7 @@ function Create_SysexMessage(nodeinfo, device_id)
     result = ConcatTable(result, value_bytes)
     local checksum = Checksum(result, #ROLAND_DT1+1, #result)
     table.insert(result, checksum)
+    table.insert(result, 0xF7)
     if device_id ~= nil then
         result[DEVICE_ID_INDEX] = device_id;
     end
