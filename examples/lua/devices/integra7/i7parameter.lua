@@ -4,7 +4,7 @@
 -- <param name="parameterId" optional="0" type="string">the parameter (node) id. As placeholder for the partId can `xxx` be used. For exampe `PRM-_PRF-_FPxxx-NEFP_OUT_ASGN`</param>
 -- <param name="value" optional="0" type="number|string">the value</param>
 -- <param name="partId" optional="1" type="0..15">specifies the part id. If not set, will be determined using its related instrument channel(s), assuming that the channel never changes.</param>
-
+-- <param name="deviceId" optional="1" type="number">an alternative device id</param>
 
 require "lua/com/com"
 require "_integra7"
@@ -13,6 +13,7 @@ parameters = {
     { name="parameterId"},
     { name="value"},
     { name="partId", default=-1 },
+    { name="deviceId", default=17 },
 }
 
 local function get_partids(params, context)
@@ -40,6 +41,10 @@ function execute(params, timeinfo, context)
     local messages = {}
     local value = tonumber(params.value)
     local node_id_template = params.parameterId
+    local device_id = tonumber(params.deviceId)
+    if device_id == nil or device_id < 17 or device_id > 32 then
+        error("invalid device id: " .. device_id)
+    end
     for _, part_id in pairs(part_ids) do
         local sysex = Create_Sysex_Message_For_Node(part_id, node_id_template, value)
         table.insert(messages, {
@@ -57,3 +62,5 @@ function perform(events, params, timeinfo, context)
     end
     return events
 end
+
+return {execute = execute, get_partids = get_partids}

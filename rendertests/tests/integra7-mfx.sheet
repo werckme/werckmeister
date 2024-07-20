@@ -1,0 +1,44 @@
+-- #skip-event-plausibility-test
+using "/chords/default.chords";
+using "../../examples/lua/devices/integra7/i7mfxtype.lua";
+using "../../examples/lua/mods/myArpeggio.lua";
+
+tempo: 150;
+device: MyDevice  midi _useDevice="DIN 3";
+instrumentDef:guitar   _onDevice=MyDevice _ch=0; -- _pc=0 _bankMsb=89 _bankLsb=64 _pc=5;
+instrumentConf: guitar
+    mod myArpeggio
+    --mod i7mfxtype _toneType="sna" _typeNr=51
+;
+
+
+[
+instrument: guitar;
+{
+    r1 |
+    /call: i7mfxtype _toneType="sna" _typeNr=51/
+    r1
+}
+]
+
+[
+type: template;
+name: chords;
+instrument: guitar;
+{
+    <II III V VII I>1 :(x3) |
+    |:
+     <I II III V VII>1 :(x3)|
+}
+]
+
+
+
+[
+type: accomp;
+{
+    /template: chords/
+    r1 | r1 |
+    C | F | G7 :(x10)|
+}
+]
