@@ -3917,6 +3917,52 @@ local MODEL_ID_MAP =
     ["RESERVE_DUMMY"] = 0x0000
 }
 
+
+Mfx_Types = {
+    SNA = "SNA",
+    SNS = "SNS",
+    SND = "SND",
+    PCMS = "PCMS",
+    PCMD = "PCMD"
+}
+
+Mfx_Ids = {
+    SNA = "PRM-_FPARTxxx-_SNTONE-_SNTF",
+    SNS = "PRM-_FPARTxxx-_SHPAT-_SHPF",
+    SND = "PRM-_FPARTxxx-_KIT-_KF",
+    PCMS = "PRM-_FPARTxxx-_PAT-_PF",
+    PCMD = "PRM-_FPARTxxx-_RHY-_RF"
+}
+
+Mfx_Type_Ids = {
+    SNA = Mfx_Ids[Mfx_Types.SNA] .. "-_SNTF-SNTF_MFX_TYPE",
+    SNS = Mfx_Ids[Mfx_Types.SNS] .. "-_SHPF-SHPF_MFX_TYPE",
+    SND = Mfx_Ids[Mfx_Types.SND] .. "-_KF-SDKF_MFX_TYPE",
+    PCMS = Mfx_Ids[Mfx_Types.PCMS] .. "-RFPF_MFX_TYPE",
+    PCMD = Mfx_Ids[Mfx_Types.PCMD] .. "-RFRF_MFX_TYPE"
+}
+
+Mfx_Nodes = {
+    SNA = SNTF,
+    SNS = SHPF,
+    SND = KF,
+    PCMS = PF,
+    PCMD = RF
+}
+
+function Get_Adress(id)
+    local addr = 0
+    for splitted_id_part in string.gmatch(id, "([^-]+)") do
+        if splitted_id_part == "PRM" then
+            -- prm has no data representation
+            goto continue
+        end
+        addr = addr + MODEL_ID_MAP[splitted_id_part];
+        ::continue::
+    end
+    return addr
+end
+
 function Get_Node(id)
     local result = {
         addr = 0,
@@ -3924,15 +3970,15 @@ function Get_Node(id)
     }
     local nodes = I7ROOT_NODE
     local node = nil
-    for part_id in string.gmatch(id, "([^-]+)") do
+    for splitted_id_part in string.gmatch(id, "([^-]+)") do
         node = nil
-        if part_id == "PRM" then
+        if splitted_id_part == "PRM" then
             -- prm has no data representation
             goto continue
         end
         for _, n in pairs(nodes) do
-            if part_id == n.id then
-                result.addr = result.addr + MODEL_ID_MAP[part_id];
+            if splitted_id_part == n.id then
+                result.addr = result.addr + MODEL_ID_MAP[splitted_id_part];
                 node = n
                 nodes = node.children;
                 break
@@ -4003,16 +4049,13 @@ local function Checksum(values, begin_index, end_index)
     return -result & 0x7F
 end
 
-function Create_SysexMessage(nodeinfo, device_id)
+function Create_Sysex_Message_For_Payload(addr, payload, device_id)
     local result = {table.unpack(ROLAND_DT1)}
-    local addr = nodeinfo.addr
     table.insert(result, (addr >> 24) & 0xff)
     table.insert(result, (addr >> 16) & 0xff)
     table.insert(result, (addr >>  8) & 0xff)
     table.insert(result, (addr & 0xff))
-    local bytesize = Get_Byte_Size(nodeinfo.node.valueByteSizeType)
-    local value_bytes = Value_To_Bytes(nodeinfo.node.value, bytesize)
-    result = ConcatTable(result, value_bytes)
+    result = ConcatTable(result, payload)
     local checksum = Checksum(result, #ROLAND_DT1+1, #result)
     table.insert(result, checksum)
     table.insert(result, 0xF7)
@@ -4020,6 +4063,13 @@ function Create_SysexMessage(nodeinfo, device_id)
         result[DEVICE_ID_INDEX] = device_id;
     end
     return result
+end
+
+function Create_SysexMessage(nodeinfo, device_id)
+    local addr = nodeinfo.addr
+    local bytesize = Get_Byte_Size(nodeinfo.node.valueByteSizeType)
+    local value_bytes = Value_To_Bytes(nodeinfo.node.value, bytesize)
+    return Create_Sysex_Message_For_Payload(addr, value_bytes, device_id)
 end
 
 function Bytes_To_String(bytes)

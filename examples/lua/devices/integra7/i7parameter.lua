@@ -41,7 +41,7 @@ function execute(params, timeinfo, context)
     local value = tonumber(params.value)
     local node_id_template = params.parameterId
     for _, part_id in pairs(part_ids) do
-        local sysex = Create_Sysex_Message_For(part_id, node_id_template, value)
+        local sysex = Create_Sysex_Message_For_Node(part_id, node_id_template, value)
         table.insert(messages, {
             ["type"] = "sysex",
             ["sysexData"] = sysex,
