@@ -1,6 +1,6 @@
 -- #skip-event-plausibility-test
 using "/chords/default.chords";
-using "../../examples/lua/devices/integra7/integra7.lua";
+using "../../examples/lua/devices/integra7/i7parameter.lua";
 using "../../examples/lua/mods/myArpeggio.lua";
 
 tempo: 150;
@@ -12,7 +12,7 @@ instrumentConf: guitar
 
 instrumentDef:guitar2   _onDevice=MyDevice  _pc=0 _ch=0 _bankMsb=89 _bankLsb=64  _pc=97;
 instrumentConf: guitar2
-    mod integra7 _parameterId="PRM-_FPARTxxx-_SNTONE-_SNTC-SNTC_MOD_PRM10" _value=1
+    mod i7parameter _parameterId="PRM-_FPARTxxx-_SNTONE-_SNTC-SNTC_MOD_PRM10" _value=1
 ;
 
 
@@ -21,10 +21,10 @@ type: template;
 name: chords;
 instrument: guitar;
 {
-     /modOnce: integra7 _parameterId="PRM-_FPARTxxx-_SNTONE-_SNTC-SNTC_MOD_PRM10" _value=2/
+     /modOnce: i7parameter _parameterId="PRM-_FPARTxxx-_SNTONE-_SNTC-SNTC_MOD_PRM10" _value=2/
     <II III V VII I>1 :(x3)
     |:
-    /modOnce: integra7 _parameterId="PRM-_FPARTxxx-_SNTONE-_SNTC-SNTC_MOD_PRM10" _value=1/
+    /modOnce: i7parameter _parameterId="PRM-_FPARTxxx-_SNTONE-_SNTC-SNTC_MOD_PRM10" _value=1/
      <I II III V VII>1 :(x3)|
 }
 ]

@@ -1,5 +1,5 @@
 using "/chords/default.chords";
-using "../../examples/lua/devices/integra7/integra7.lua";
+using "../../examples/lua/devices/integra7/i7parameter.lua";
 using "../../examples/lua/mods/myArpeggio.lua";
 using "./integra7-instrumentSection.conductions";
 
@@ -15,7 +15,7 @@ name: chords;
 instrument: guitar;
 {
     /mod: myArpeggio/
-    /modOnce: integra7 _parameterId="PRM-_FPARTxxx-_SNTONE-_SNTC-SNTC_MOD_PRM10" _value=2/
+    /modOnce: i7parameter _parameterId="PRM-_FPARTxxx-_SNTONE-_SNTC-SNTC_MOD_PRM10" _value=2/
     <II III V VII I>1 :(x3)
     |:
      <I II III V VII>1 :(x3)|
