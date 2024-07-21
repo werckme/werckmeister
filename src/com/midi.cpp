@@ -6,7 +6,7 @@
 #include <com/exception.hpp>
 #include <math.h>
 #include <sstream>
-#include <boost/functional/hash.hpp>
+//#include <boost/functional/hash.hpp>
 
 namespace 
 {
@@ -631,15 +631,15 @@ namespace com
 
 		size_t EventHasher::operator()(const Event &ev) const
 		{
-			using boost::hash_value;
-			using boost::hash_combine;
+			// using boost::hash_value;
+			// using boost::hash_combine;
 			size_t seed = 0;
-			hash_combine(seed, hash_value(ev.absPosition()));
-			hash_combine(seed, hash_value(ev.channel()));
-			hash_combine(seed, hash_value(ev.eventType()));
-			hash_combine(seed, hash_value(ev.parameter1()));
-			hash_combine(seed, hash_value(ev.parameter2()));
-			hash_combine(seed, hash_value(ev.payloadSize()));
+			// hash_combine(seed, hash_value(ev.absPosition()));
+			// hash_combine(seed, hash_value(ev.channel()));
+			// hash_combine(seed, hash_value(ev.eventType()));
+			// hash_combine(seed, hash_value(ev.parameter1()));
+			// hash_combine(seed, hash_value(ev.parameter2()));
+			// hash_combine(seed, hash_value(ev.payloadSize()));
 			return seed;
 		}
 
