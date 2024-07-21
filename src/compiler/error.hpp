@@ -3,7 +3,7 @@
 #include <exception>
 #include <boost/fusion/include/vector.hpp>
 #include <boost/fusion/include/at_c.hpp>
-#include <boost/spirit/home/support/info.hpp>
+//#include <boost/spirit/home/support/info.hpp>
 #include <com/exception.hpp>
 #include <string>
 #include <list>
