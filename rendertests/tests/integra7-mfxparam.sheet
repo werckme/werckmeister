@@ -15,7 +15,7 @@ instrumentConf: guitar
 instrument: guitar; -- init track
 {
     /call: i7mfxtype  _partId=1 _toneType="sna" _typeNr=45/
-    r1
+    --r1
 }
 ]
 
@@ -29,12 +29,12 @@ instrument: guitar;
     <II III V VII I>1 :(x3) |
     |:
     /call: i7mfxparam _toneType="sna" _paramNr=5 _value=12768/
-     <I II III V VII>1 :(x3)|
-     /call: i7mfxparam _toneType="sna" _paramNr=5 _value=32968/
-     <I II III V VII>1 |
-     <I II III V VII>1 |
-     /call: i7mfxparam _toneType="sna" _paramNr=5 _value=12768/
-     I,
+    <I II III V VII>1 :(x3)|
+    /call: i7mfxparam _toneType="sna" _paramNr=5 _value=32968/
+    <I II III V VII>1 |
+    <I II III V VII>1 |
+    /call: i7mfxparam _toneType="sna" _paramNr=5 _value=12768/
+    I,
 }
 ]
 
