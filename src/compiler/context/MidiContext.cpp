@@ -306,7 +306,7 @@ namespace compiler
 		addEvent(ev);
 	}
 
-	void MidiContext::setContinuousController(int controllerNumber, int value, com::Ticks relativePosition)
+	void MidiContext::setContinuousController(int controllerNumber, int value, com::Ticks relativePosition, int prio)
 	{
 		if (value < 0 || value > com::midi::MaxMidiValue) 
 		{
@@ -325,13 +325,15 @@ namespace compiler
 		auto channel = getChannel(*trackMeta);
 		auto ev = com::midi::Event::CCValue(channel, controllerNumber, value);
 		ev.absPosition(currentPosition() + relativePosition);
+		ev.prio(prio);
 		addEvent(ev);
 	}
 
-	void MidiContext::setSysex(const com::Byte* data, size_t length, com::Ticks relativePosition)
+	void MidiContext::setSysex(const com::Byte* data, size_t length, com::Ticks relativePosition, int prio)
 	{
 		auto ev = com::midi::Event::Sysex(data, length);
 		ev.absPosition(currentPosition() + relativePosition);
+		ev.prio(prio);
 		addEvent(ev);
 	}
 

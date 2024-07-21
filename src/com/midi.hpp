@@ -122,6 +122,8 @@ namespace com
 			void parameter2(Byte val) { _p2 = val; }
 			Byte parameter2() const { return _p2; }
 			double pitchBend() const;
+			inline int prio() const { return _prio; }
+			void prio(int v) { _prio = v; }
 			size_t read(Ticks deltaOffset, const Byte *, size_t maxByteSize);
 			size_t write(Ticks deltaOffset, Byte *, size_t maxByteSize) const;
 			size_t byteSize(Ticks deltaOffset) const;
@@ -194,6 +196,7 @@ namespace com
 			Bytes _metaData;
 			size_t _metaDataSize = 0;
 			MetaEventType _metaEventType = Undefined;
+			int _prio = -1;
 		};
 		struct EventCompare
 		{

@@ -50,6 +50,7 @@ function execute(params, timeinfo, context)
         table.insert(messages, {
             ["type"] = "sysex",
             ["sysexData"] = sysex,
+            ["prio"] = SYSEX_PRIO_MOD
         })
     end
     return messages

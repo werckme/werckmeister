@@ -1060,6 +1060,11 @@ This table contains all input events.
         -- a table of byte values (excluding F0 and F7)
         -- only relevant if type is "sysex"
         sysexData  = { byte values }
+
+        -- when working with control messages or sysex messages, sometime the order
+        -- of its execution is vital. For this purpose you can give a message a priorisation value.
+        -- 0 is the highest prio.
+        prio = 0 .. MAX_INT
     }
     ...
 }

@@ -176,11 +176,6 @@ namespace compiler
 					determineTiedDuration(it, end);
 				}
 			}
-			if (!processData.hasTimeConsumingEvents)
-			{
-				// no need to do anything
-				voice.events.clear();
-			}
 		}
 	}
 

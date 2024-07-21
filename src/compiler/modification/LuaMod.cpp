@@ -15,25 +15,26 @@ static const char *LUA_EVENT_TYPE_DEGREE = "degree";
 static const char *LUA_EVENT_TYPE_PITCHBEND = "pitchBend";
 static const char *LUA_EVENT_TYPE_CC = "cc";
 static const char *LUA_EVENT_TYPE_SYSEX = "sysex";
-static const char *LUA_EVENT_PROPETRY_SYSEX_DATA = "sysexData";
+static const char *LUA_EVENT_PROPERTY_SYSEX_DATA = "sysexData";
 static const char *LUA_EVENT_TYPE_UNKNOWN = "unknown";
-static const char *LUA_EVENT_PROPETRY_VELOCITY = "velocity";
-static const char *LUA_EVENT_PROPETRY_DURATION = "duration";
-static const char *LUA_EVENT_PROPETRY_TYING = "isTied";
-static const char *LUA_EVENT_PROPETRY_OFFSET = "offset";
-static const char *LUA_EVENT_PROPETRY_CC_NR = "ccNr";
-static const char *LUA_EVENT_PROPETRY_CC_VALUE = "ccValue";
-static const char *LUA_EVENT_PROPETRY_PITCHES = "pitches";
-static const char *LUA_EVENT_PROPETRY_TYPE = "type";
-static const char *LUA_EVENT_PROPETRY_PITCHBENDVALUE = "pitchBendValue";
-static const char *LUA_EVENT_PITCH_PROPETRY_PITCH = "pitch";
-static const char *LUA_EVENT_PITCH_PROPETRY_TAGS = "tags";
-static const char *LUA_EVENT_PITCH_PROPETRY_OCTAVE = "octave";
-static const char *LUA_EVENT_PITCH_PROPETRY_ALIAS = "alias";
-static const char *LUA_EVENT_PROPETRY_TOAL_TIED_DURATION = "totalTiedDuration";
+static const char *LUA_EVENT_PROPERTY_VELOCITY = "velocity";
+static const char *LUA_EVENT_PROPERTY_DURATION = "duration";
+static const char *LUA_EVENT_PROPERTY_TYING = "isTied";
+static const char *LUA_EVENT_PROPERTY_OFFSET = "offset";
+static const char *LUA_EVENT_PROPERTY_CC_NR = "ccNr";
+static const char *LUA_EVENT_PROPERTY_CC_VALUE = "ccValue";
+static const char *LUA_EVENT_PROPERTY_PITCHES = "pitches";
+static const char *LUA_EVENT_PROPERTY_TYPE = "type";
+static const char *LUA_EVENT_PROPERTY_PITCHBENDVALUE = "pitchBendValue";
+static const char *LUA_EVENT_PITCH_PROPERTY_PITCH = "pitch";
+static const char *LUA_EVENT_PITCH_PROPERTY_TAGS = "tags";
+static const char *LUA_EVENT_PITCH_PROPERTY_OCTAVE = "octave";
+static const char *LUA_EVENT_PITCH_PROPERTY_ALIAS = "alias";
+static const char *LUA_EVENT_PROPERTY_TOAL_TIED_DURATION = "totalTiedDuration";
 static const char *LUA_EVENT_PROPERTY_TIED_DURATION = "tiedDuration";
 static const char* LUA_EVENT_PROPERTY_TRACK_ID = "trackId";
 static const char* LUA_EVENT_PROPERTY_VOICE_ID = "voiceId";
+static const char* LUA_EVENT_PROPERTY_PRIO = "prio";
 
 namespace compiler
 {
@@ -58,7 +59,7 @@ namespace compiler
         lua_createtable(L, 2, 0);
         auto top = lua_gettop(L);
         // type
-        lua::setTableValue(L, LUA_EVENT_PROPETRY_TYPE, top, getTypename());
+        lua::setTableValue(L, LUA_EVENT_PROPERTY_TYPE, top, getTypename());
         IContext::TrackId trackId = ctx->track();
         // track id
         lua::setTableValue(L, LUA_EVENT_PROPERTY_TRACK_ID, top, trackId);
@@ -66,33 +67,32 @@ namespace compiler
         // voice id
         lua::setTableValue(L, LUA_EVENT_PROPERTY_VOICE_ID, top, voiceId);
         // tags
-        lua_pushstring(L, LUA_EVENT_PITCH_PROPETRY_TAGS);
+        lua_pushstring(L, LUA_EVENT_PITCH_PROPERTY_TAGS);
         pushTags(L);
         lua_settable(L, top);
         // offset
-        lua::setTableValue(L, LUA_EVENT_PROPETRY_OFFSET, top, event->offset / com::PPQ);
-
+        lua::setTableValue(L, LUA_EVENT_PROPERTY_OFFSET, top, event->offset / com::PPQ);
         switch (event->type)
         {
             case Event::Controller:
-                lua::setTableValue(L, LUA_EVENT_PROPETRY_CC_NR, top, event->controllerNumber);
-                lua::setTableValue(L, LUA_EVENT_PROPETRY_CC_VALUE, top, event->controllerValue);
+                lua::setTableValue(L, LUA_EVENT_PROPERTY_CC_NR, top, event->controllerNumber);
+                lua::setTableValue(L, LUA_EVENT_PROPERTY_CC_VALUE, top, event->controllerValue);
                 break;
             default:
                 // pitches
-                lua_pushstring(L, LUA_EVENT_PROPETRY_PITCHES);
+                lua_pushstring(L, LUA_EVENT_PROPERTY_PITCHES);
                 pushPitches(L);
                 lua_settable(L, top);
                 // velocity
-                lua::setTableValue(L, LUA_EVENT_PROPETRY_VELOCITY, top, event->velocity);
+                lua::setTableValue(L, LUA_EVENT_PROPERTY_VELOCITY, top, event->velocity);
                 // duration
-                lua::setTableValue(L, LUA_EVENT_PROPETRY_DURATION, top, event->duration / com::PPQ);
+                lua::setTableValue(L, LUA_EVENT_PROPERTY_DURATION, top, event->duration / com::PPQ);
                 // is tied
-                lua::setTableValue(L, LUA_EVENT_PROPETRY_TYING, top, event->isTied());
+                lua::setTableValue(L, LUA_EVENT_PROPERTY_TYING, top, event->isTied());
                 // pitchbend value
                 pushPitchBendValue(L, top, *event);
                 // totalTiedDuration
-                lua::setTableValue(L, LUA_EVENT_PROPETRY_TOAL_TIED_DURATION, top, event->tiedDurationTotal / com::PPQ);
+                lua::setTableValue(L, LUA_EVENT_PROPERTY_TOAL_TIED_DURATION, top, event->tiedDurationTotal / com::PPQ);
                 // tiedDuration
                 lua::setTableValue(L, LUA_EVENT_PROPERTY_TIED_DURATION, top, event->tiedDuration / com::PPQ);
         }
@@ -104,7 +104,7 @@ namespace compiler
         {
             return;
         }
-        lua::setTableValue(L, LUA_EVENT_PROPETRY_PITCHBENDVALUE, top, event.pitchBendValue);
+        lua::setTableValue(L, LUA_EVENT_PROPERTY_PITCHBENDVALUE, top, event.pitchBendValue);
     }
 
     void LuaEvent::pushPitches(lua_State *L)
@@ -119,15 +119,15 @@ namespace compiler
             auto objecttop = lua_gettop(L);
             auto resolved = ctx->definitionsServer()->resolvePitch(pitch);
             // pitch
-            lua_pushstring(L, LUA_EVENT_PITCH_PROPETRY_PITCH);
+            lua_pushstring(L, LUA_EVENT_PITCH_PROPERTY_PITCH);
             lua_pushnumber(L, resolved.pitch);
             lua_settable(L, objecttop);
             // octave
-            lua_pushstring(L, LUA_EVENT_PITCH_PROPETRY_OCTAVE);
+            lua_pushstring(L, LUA_EVENT_PITCH_PROPERTY_OCTAVE);
             lua_pushnumber(L, resolved.octave);
             lua_settable(L, objecttop);
             // alias
-            lua_pushstring(L, LUA_EVENT_PITCH_PROPETRY_ALIAS);
+            lua_pushstring(L, LUA_EVENT_PITCH_PROPERTY_ALIAS);
             lua_pushstring(L, pitch.alias.c_str());
             lua_settable(L, objecttop);
             // iterate
@@ -193,23 +193,23 @@ namespace compiler
 
     void LuaModification::popNoteEvent(documentModel::Event &event)
     {
-        lua::getTableValue(L, LUA_EVENT_PROPETRY_DURATION, event.duration);
-        lua::getTableValue(L, LUA_EVENT_PROPETRY_OFFSET, event.offset);
+        lua::getTableValue(L, LUA_EVENT_PROPERTY_DURATION, event.duration);
+        lua::getTableValue(L, LUA_EVENT_PROPERTY_OFFSET, event.offset);
         event.duration *= com::PPQ;
         event.offset *= com::PPQ;
         if (event.type == documentModel::Event::Rest) 
         {
             return;
         }
-        lua::getTableValue(L, LUA_EVENT_PROPETRY_VELOCITY, event.velocity);
-        lua::getTableValue(L, LUA_EVENT_PROPETRY_TOAL_TIED_DURATION, event.tiedDurationTotal);
+        lua::getTableValue(L, LUA_EVENT_PROPERTY_VELOCITY, event.velocity);
+        lua::getTableValue(L, LUA_EVENT_PROPERTY_TOAL_TIED_DURATION, event.tiedDurationTotal);
         lua::getTableValue(L, LUA_EVENT_PROPERTY_TIED_DURATION, event.tiedDuration);
         event.tiedDuration *= com::PPQ;
         event.tiedDurationTotal *= com::PPQ;
         bool isTied = false;
-        lua::getTableValue(L, LUA_EVENT_PROPETRY_TYING, isTied);
+        lua::getTableValue(L, LUA_EVENT_PROPERTY_TYING, isTied);
         event.isTied(isTied);
-        lua_pushstring(L, LUA_EVENT_PROPETRY_PITCHES);
+        lua_pushstring(L, LUA_EVENT_PROPERTY_PITCHES);
         lua_gettable(L, -2);
         if (!lua_istable(L, -1))
         {
@@ -219,9 +219,9 @@ namespace compiler
         while (lua_next(L, -2) != 0)
         {
             int pitch = 0;
-            lua::getTableValue(L, LUA_EVENT_PITCH_PROPETRY_PITCH, pitch);
+            lua::getTableValue(L, LUA_EVENT_PITCH_PROPERTY_PITCH, pitch);
             int octave = 0;
-            lua::getTableValue(L, LUA_EVENT_PITCH_PROPETRY_OCTAVE, octave);
+            lua::getTableValue(L, LUA_EVENT_PITCH_PROPERTY_OCTAVE, octave);
             lua_pop(L, 1);
             documentModel::PitchDef pitchDef;
             pitchDef.pitch = pitch;
@@ -230,7 +230,7 @@ namespace compiler
         }
         lua_pop(L, 1);
         // get tags
-        lua_pushstring(L, LUA_EVENT_PITCH_PROPETRY_TAGS);
+        lua_pushstring(L, LUA_EVENT_PITCH_PROPERTY_TAGS);
         lua_gettable(L, -2);
         if (!lua_istable(L, -1))
         {
@@ -249,10 +249,10 @@ namespace compiler
 
     void LuaModification::popPitchBendEvent(documentModel::Event &event)
     {
-        lua::getTableValue(L, LUA_EVENT_PROPETRY_PITCHBENDVALUE, event.pitchBendValue);
-        lua::getTableValue(L, LUA_EVENT_PROPETRY_OFFSET, event.offset);
+        lua::getTableValue(L, LUA_EVENT_PROPERTY_PITCHBENDVALUE, event.pitchBendValue);
+        lua::getTableValue(L, LUA_EVENT_PROPERTY_OFFSET, event.offset);
         event.offset *= com::PPQ;
-        lua::getTableValue(L, LUA_EVENT_PROPETRY_DURATION, event.duration);
+        lua::getTableValue(L, LUA_EVENT_PROPERTY_DURATION, event.duration);
     }
 
     AModification::Events LuaModification::popEvents(IContextPtr ctx)
@@ -272,7 +272,7 @@ namespace compiler
                 continue;
             }
             com::String type;
-            lua::getTableValue(L, LUA_EVENT_PROPETRY_TYPE, type);
+            lua::getTableValue(L, LUA_EVENT_PROPERTY_TYPE, type);
             if (type == LUA_EVENT_TYPE_NOTE || type == LUA_EVENT_TYPE_DEGREE)
             {
                 Event event;
@@ -312,19 +312,23 @@ namespace compiler
         com::Ticks timeOffset = 0;
         int ccNr = -1;
         int ccValue = -1;
-        lua::getTableValue(L, LUA_EVENT_PROPETRY_OFFSET, timeOffset);
-        lua::getTableValue(L, LUA_EVENT_PROPETRY_CC_NR, ccNr);
-        lua::getTableValue(L, LUA_EVENT_PROPETRY_CC_VALUE, ccValue);
+        int prio = -1;
+        lua::getTableValue(L, LUA_EVENT_PROPERTY_OFFSET, timeOffset);
+        lua::getTableValue(L, LUA_EVENT_PROPERTY_CC_NR, ccNr);
+        lua::getTableValue(L, LUA_EVENT_PROPERTY_CC_VALUE, ccValue);
+        lua::getTableValue(L, LUA_EVENT_PROPERTY_PRIO, prio, false);
         timeOffset *= com::PPQ;
-        ctx->setContinuousController(ccNr, ccValue, timeOffset);
+        ctx->setContinuousController(ccNr, ccValue, timeOffset, prio);
     }
 
     void LuaModification::popAndExecuteSysex(IContextPtr ctx)
     {
         com::Ticks timeOffset = 0;
-        lua::getTableValue(L, LUA_EVENT_PROPETRY_OFFSET, timeOffset);
+        int prio = -1;
+        lua::getTableValue(L, LUA_EVENT_PROPERTY_OFFSET, timeOffset);
+        lua::getTableValue(L, LUA_EVENT_PROPERTY_PRIO, prio, false);
         timeOffset *= com::PPQ;
-        lua_pushstring(L, LUA_EVENT_PROPETRY_SYSEX_DATA);
+        lua_pushstring(L, LUA_EVENT_PROPERTY_SYSEX_DATA);
         lua_gettable(L, -2);
         if (!lua_istable(L, -1))
         {
@@ -360,7 +364,7 @@ namespace compiler
         {
             return;
         }
-        ctx->setSysex(bff.data(), bff.size(), timeOffset);
+        ctx->setSysex(bff.data(), bff.size(), timeOffset, prio);
     }
 
     void LuaModification::perform(IContextPtr ctx, Events &events)

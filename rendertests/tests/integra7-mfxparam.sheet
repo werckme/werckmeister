@@ -1,0 +1,52 @@
+-- #skip-event-plausibility-test
+using "/chords/default.chords";
+using "../../examples/lua/devices/integra7/i7mfxtype.lua";
+using "../../examples/lua/devices/integra7/i7mfxparam.lua";
+using "../../examples/lua/mods/myArpeggio.lua";
+
+tempo: 150;
+device: MyDevice  midi _useDevice="DIN 3";
+instrumentDef:guitar   _onDevice=MyDevice _ch=0 _pc=0 _bankMsb=89 _bankLsb=64 _pc=5;
+instrumentConf: guitar
+    mod myArpeggio
+;
+
+[
+instrument: guitar; -- init track
+{
+    /call: i7mfxtype  _partId=1 _toneType="sna" _typeNr=45/
+    r1
+}
+]
+
+
+[
+type: template;
+name: chords;
+instrument: guitar;
+{
+    /call: i7mfxparam _toneType="sna" _paramNr=5 _value=32968/
+    <II III V VII I>1 :(x3) |
+    |:
+    /call: i7mfxparam _toneType="sna" _paramNr=5 _value=12768/
+     <I II III V VII>1 :(x3)|
+     /call: i7mfxparam _toneType="sna" _paramNr=5 _value=32968/
+     <I II III V VII>1 |
+     <I II III V VII>1 |
+     /call: i7mfxparam _toneType="sna" _paramNr=5 _value=12768/
+     I,
+}
+]
+
+
+
+[
+type: accomp;
+{
+    r1 |
+    /template: chords/
+    C | F | G7 |
+    C | F | G7 |
+    D- G7 | C 
+}
+]

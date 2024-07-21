@@ -555,7 +555,8 @@ namespace com
 		// 2: cc _bankLsb(32) 
 		// 3: program change 
 		// 4: other cc
-		// 5: then note-on / note-off
+		// 5: prio
+		// 6: then note-on / note-off
 
 		bool EventCompare::operator()(const Event &a, const Event &b) const
 		{
@@ -610,6 +611,10 @@ namespace com
 					return false;
 				}
 				return true;
+			}
+			if (a.prio() >= 0 && b.prio() >= 0) 
+			{
+				return a.prio() < b.prio();
 			}
 			bool isNoteEvent1 = t1 == NoteOn || t1 == NoteOff;
 			bool isNoteEvent2 = t2 == NoteOn || t2 == NoteOff;
