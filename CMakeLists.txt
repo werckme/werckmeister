@@ -34,7 +34,7 @@ if (EMSCRIPTEN)
     MESSAGE("using emscripten")
     SET(USE_EMSCRIPTEN 1)
     SET (INSTALL_AUX 0)
-    set(BOOST_VERSION "1.72.0") # fails with other versions than 1.72.0, since emscripten uses its own CMake script with fixed cpp references. So we need to consider new versions in this script.
+    set(BOOST_VERSION "1.85.0") # fails with other versions than 1.72.0, since emscripten uses its own CMake script with fixed cpp references. So we need to consider new versions in this script.
     SET(CMAKE_INSTALL_PREFIX ${CMAKE_SOURCE_DIR}/werckmeisterjs)
 endif()
 
