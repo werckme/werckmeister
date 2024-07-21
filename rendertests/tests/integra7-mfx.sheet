@@ -5,29 +5,20 @@ using "../../examples/lua/mods/myArpeggio.lua";
 
 tempo: 150;
 device: MyDevice  midi _useDevice="DIN 3";
-instrumentDef:guitar   _onDevice=MyDevice _ch=0; -- _pc=0 _bankMsb=89 _bankLsb=64 _pc=5;
+instrumentDef:guitar   _onDevice=MyDevice _ch=0 _pc=0 _bankMsb=89 _bankLsb=64 _pc=5;
 instrumentConf: guitar
     mod myArpeggio
-    --mod i7mfxtype _toneType="sna" _typeNr=51
 ;
-
-
-[
-instrument: guitar;
-{
-    r1 |
-    /call: i7mfxtype _toneType="sna" _typeNr=51/
-    r1
-}
-]
 
 [
 type: template;
 name: chords;
 instrument: guitar;
 {
+    /modOnce: i7mfxtype _toneType="sna" _typeNr=51/
     <II III V VII I>1 :(x3) |
     |:
+    /modOnce: i7mfxtype _toneType="sna" _typeNr=12/
      <I II III V VII>1 :(x3)|
 }
 ]
@@ -38,7 +29,6 @@ instrument: guitar;
 type: accomp;
 {
     /template: chords/
-    r1 | r1 |
-    C | F | G7 :(x10)|
+    C | F | G7 :(x2)|
 }
 ]

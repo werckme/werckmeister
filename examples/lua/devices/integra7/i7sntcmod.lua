@@ -4,7 +4,7 @@
 -- <param name="partId" optional="-1" type="1..16" type="number">the part number, will be detected via instrument channel if not set.</param>
 -- <param name="modNr" type="1..32" type="number">the mod number.</param>
 -- <param name="value" type="number">the value</param>
--- <param name="deviceId" optional="1" type="number">an alternative device id</param>
+-- <param name="deviceId" optional="1" type="16..31">an alternative device id</param>
 
 require "lua/com/com"
 local i7p = require "i7parameter"
@@ -13,7 +13,7 @@ parameters = {
     { name="partId", default=-1 },
     { name="modNr"},
     { name="value"},
-    { name="deviceId", default=17 },
+    { name="deviceId", default=16 },
 }
 
 local node_id_template = "PRM-_FPARTxxx-_SNTONE-_SNTC-SNTC_MOD_PRM%i"

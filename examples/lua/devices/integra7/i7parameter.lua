@@ -4,7 +4,7 @@
 -- <param name="parameterId" optional="0" type="string">the parameter (node) id. As placeholder for the partId can `xxx` be used. For exampe `PRM-_PRF-_FPxxx-NEFP_OUT_ASGN`</param>
 -- <param name="value" optional="0" type="number|string">the value</param>
 -- <param name="partId" optional="1" type="0..15">specifies the part id. If not set, will be determined using its related instrument channel(s), assuming that the channel never changes.</param>
--- <param name="deviceId" optional="1" type="number">an alternative device id</param>
+-- <param name="deviceId" optional="1" type="16..31">an alternative device id</param>
 
 require "lua/com/com"
 require "_integra7"
@@ -13,7 +13,7 @@ parameters = {
     { name="parameterId"},
     { name="value"},
     { name="partId", default=-1 },
-    { name="deviceId", default=17 },
+    { name="deviceId", default=16 },
 }
 
 local function get_partids(params, context)

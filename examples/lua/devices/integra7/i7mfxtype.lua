@@ -4,7 +4,7 @@
 -- <param name="partId" optional="-1" type="1..16" type="number">the part number, will be detected via instrument channel if not set.</param>
 -- <param name="typeNr" type="0..67" type="number">the mfx type</param>
 -- <param name="toneType" type="[sna, sns, snd, pcms, pcmd]">the type of the tone on the target part</param>
--- <param name="deviceId" optional="1" type="number">an alternative device id</param>
+-- <param name="deviceId" optional="1" type="16..31">an alternative device id</param>
 
 require "lua/com/com"
 require "_model"
@@ -15,7 +15,7 @@ parameters = {
     { name="partId", default=-1 },
     { name="typeNr" },
     { name="toneType" },
-    { name="deviceId", default=17 },
+    { name="deviceId", default=16 },
 }
 
 local toneTypeMap = {
@@ -38,7 +38,7 @@ function execute(params, timeinfo, context)
         error("typeNr out of bounds " .. typeNr)
     end
     local device_id = tonumber(params.deviceId)
-    if device_id == nil or device_id < 17 or device_id > 32 then
+    if device_id == nil or device_id < 16 or device_id > 31 then
         error("invalid device id: " .. device_id)
     end
     local messages = {}
@@ -46,13 +46,12 @@ function execute(params, timeinfo, context)
         local sysex = Get_Set_Mfx_Type_Messages(mfxType, part_id, typeNr, device_id)
         table.insert(messages, { -- set type
         ["type"] = "sysex",
+        ["sysexData"] = sysex[1],
+    })
+    table.insert(messages, { -- set default values
+        ["type"] = "sysex",
         ["sysexData"] = sysex[2],
     })
-    -- table.insert(messages, { -- set default values
-    --     ["type"] = "sysex",
-    --     ["offset"] = -2,
-    --     ["sysexData"] = sysex[2],
-    -- })
     end
     return messages
 end
