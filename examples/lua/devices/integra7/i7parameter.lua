@@ -42,11 +42,11 @@ function execute(params, timeinfo, context)
     local value = tonumber(params.value)
     local node_id_template = params.parameterId
     local device_id = tonumber(params.deviceId)
-    if device_id == nil or device_id < 17 or device_id > 32 then
+    if device_id == nil or device_id < 16 or device_id > 32 then
         error("invalid device id: " .. device_id)
     end
     for _, part_id in pairs(part_ids) do
-        local sysex = Create_Sysex_Message_For_Node(part_id, node_id_template, value)
+        local sysex = Create_Sysex_Message_For_Node(part_id, node_id_template, value, device_id)
         table.insert(messages, {
             ["type"] = "sysex",
             ["sysexData"] = sysex,
