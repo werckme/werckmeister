@@ -4,6 +4,9 @@ require "_integra7"
 local nodeinfo = Get_Node("xxx")
 assert(nodeinfo == nil)
 
+assert(Denormalize100(50, 210, 0) == 50)
+assert(Denormalize100(50, 210, 100) == 210)
+
 local nodeinfo = Get_Node("PRM-_FPART1")
 assert(nodeinfo ~= nil)
 assert(Nibble(0x19000000) == 52428800)
@@ -23,6 +26,14 @@ nodeinfo = Get_Node("PRM-_FPART1-_SNTONE-_SNTC-SNTC_TONE_LEVEL");
 assert(nodeinfo ~= nil)
 assert(nodeinfo.node.desc == "Tone Level");
 nodeinfo.node:setvalue(127)
+local sysex = Create_SysexMessage(nodeinfo)
+local sysexStr = Bytes_To_String(sysex)
+assert(sysexStr == "f0 41 10 00 00 64 12 19 02 00 10 7f 56 f7")
+
+nodeinfo = Get_Node("PRM-_FPART1-_SNTONE-_SNTC-SNTC_TONE_LEVEL");
+assert(nodeinfo ~= nil)
+assert(nodeinfo.node.desc == "Tone Level");
+nodeinfo.node:setvalue100(100)
 local sysex = Create_SysexMessage(nodeinfo)
 local sysexStr = Bytes_To_String(sysex)
 assert(sysexStr == "f0 41 10 00 00 64 12 19 02 00 10 7f 56 f7")

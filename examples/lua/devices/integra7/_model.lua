@@ -73,6 +73,11 @@ function Node:tostring()
     return string.format("0x%02X ", self.addr) .. self.desc
 end
 
+function Denormalize100(min, max, v)
+    return math.ceil(v * (max-min) / 100 + min)
+end
+
+
 function Node:setvalue(v)
     if self.children ~= nil then
         error("try to set a value to a branch node: \"" .. self.desc .. "\"")
@@ -85,6 +90,10 @@ function Node:setvalue(v)
         error("value out of bounds for: \"" .. self.desc .. "\" = " .. tostring(v) .. " (" .. tostring(self.min) .. ", " .. tostring(self.max) .. ")")
     end
     self.value = v
+end
+
+function Node:setvalue100(v)
+   self:setvalue(Denormalize100(self.min, self.max, v))
 end
 
 local STP =
