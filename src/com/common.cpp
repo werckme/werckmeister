@@ -47,6 +47,6 @@ namespace com
 	std::wstring to_wstring(const std::string &str)
 	{
 		//return boost::locale::conv::to_utf<wchar_t>(str, FM_CHARSET);
-		return std::string();
+		return std::wstring();
 	}
 }
