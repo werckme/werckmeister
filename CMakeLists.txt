@@ -84,7 +84,7 @@ IF(APPLE)
   SET(Boost_USE_STATIC_LIBS ON)
 ENDIF(APPLE)
 
-SET(BOOST_PACKAGES unit_test_framework filesystem program_options locale system)
+SET(BOOST_PACKAGES unit_test_framework filesystem program_options  system)
 
 if ("$ENV{WM_DOWNLOAD_EXTERNALS}")
   #Download Boost
@@ -108,13 +108,13 @@ else()
 endif()
 
 IF(APPLE)
-  SET(Boost_LIBRARIES ${Boost_LIBRARIES}
-      /usr/local/Cellar/icu4c/74.2/lib/libicudata.a 
-      /usr/local/Cellar/icu4c/74.2/lib/libicui18n.a 
-      /usr/local/Cellar/icu4c/74.2/lib/libicutu.a 
-      /usr/local/Cellar/icu4c/74.2/lib/libicuuc.a 
-      /usr/local/Cellar/icu4c/74.2/lib/libicuio.a 
-      iconv)
+  # SET(Boost_LIBRARIES ${Boost_LIBRARIES}
+  #     /usr/local/Cellar/icu4c/74.2/lib/libicudata.a 
+  #     /usr/local/Cellar/icu4c/74.2/lib/libicui18n.a 
+  #     /usr/local/Cellar/icu4c/74.2/lib/libicutu.a 
+  #     /usr/local/Cellar/icu4c/74.2/lib/libicuuc.a 
+  #     /usr/local/Cellar/icu4c/74.2/lib/libicuio.a 
+  #     iconv)
 ELSEIF(UNIX)
   if ($ENV{WM_LINUX_LINK_STATIC})
     SET(

@@ -40,11 +40,13 @@ namespace com
 
 	std::string to_string(const std::wstring &str)
 	{
-		return boost::locale::conv::from_utf(str, FM_CHARSET);
+		//return boost::locale::conv::from_utf(str, FM_CHARSET);
+		return std::string();
 	}
 
 	std::wstring to_wstring(const std::string &str)
 	{
-		return boost::locale::conv::to_utf<wchar_t>(str, FM_CHARSET);
+		//return boost::locale::conv::to_utf<wchar_t>(str, FM_CHARSET);
+		return std::string();
 	}
 }
