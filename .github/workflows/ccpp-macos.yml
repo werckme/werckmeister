@@ -24,7 +24,7 @@ jobs:
       run: pip3 install -r requirements.txt
       working-directory: rendertests
     - name: install boost
-      run: brew install boost@1.74
+      run: brew install boost@1.76
     #   run: sh ./mac_build_boost_fallback.sh
     #  working-directory: third_party
     - name: configure
