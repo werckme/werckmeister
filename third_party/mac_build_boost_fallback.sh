@@ -3,8 +3,8 @@
 # during building the bootstrap binary.
 # Strangely enough it succeeds after a second try.
 # Some how it has trouble to find the right toolset.
-VERSION=1.72.0
-FILE=boost_1_72_0
+VERSION=1.85.0
+FILE=boost_1_85_0
 FILENAME=$FILE.tar.gz
 url=https://boostorg.jfrog.io/artifactory/main/release/$VERSION/source/$FILENAME
 echo Downloading $url

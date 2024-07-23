@@ -24,14 +24,13 @@ jobs:
       run: pip3 install -r requirements.txt
       working-directory: rendertests
     - name: install boost
-      run: brew install boost@1.85
-    #   run: sh ./mac_build_boost_fallback.sh
-    #  working-directory: third_party
+      run: sh ./mac_build_boost_fallback.sh
+      working-directory: third_party
     - name: configure
       run: cmake -DCMAKE_BUILD_TYPE=Release ..
       env:
         WM_DOWNLOAD_EXTERNALS: 0 # for some reason the boost build fails here: seems not to find the right toolset (for the first run, the second try succeeds)
-        #BOOST_ROOT: ${{ github.workspace }}/third_party/boost
+        BOOST_ROOT: ${{ github.workspace }}/third_party/boost
       working-directory: build
     - name: build
       run: cmake --build .
