@@ -109,11 +109,11 @@ endif()
 
 IF(APPLE)
   SET(Boost_LIBRARIES ${Boost_LIBRARIES}
-      /usr/local/opt/icu4c/lib/libicudata.a 
-      /usr/local/opt/icu4c/lib/libicui18n.a 
-      /usr/local/opt/icu4c/lib/libicutu.a 
-      /usr/local/opt/icu4c/lib/libicuuc.a 
-      /usr/local/opt/icu4c/lib/libicuio.a 
+      /usr/local/Cellar/icu4c/74.2/lib/libicudata.a 
+      /usr/local/Cellar/icu4c/74.2/lib/libicui18n.a 
+      /usr/local/Cellar/icu4c/74.2/lib/libicutu.a 
+      /usr/local/Cellar/icu4c/74.2/lib/libicuuc.a 
+      /usr/local/Cellar/icu4c/74.2/lib/libicuio.a 
       iconv)
 ELSEIF(UNIX)
   if ($ENV{WM_LINUX_LINK_STATIC})
