@@ -25,7 +25,7 @@ jobs:
       working-directory: rendertests
     # - name: install boost
     #   run: sh ./mac_build_boost_fallback.sh
-      working-directory: third_party
+    #  working-directory: third_party
     - name: configure
       run: cmake -DCMAKE_BUILD_TYPE=Release ..
       env:
