@@ -384,7 +384,7 @@ namespace com
 
 	bool Werckmeister::fileIsSheet(const Path &path) const
 	{
-		return boost::filesystem::extension(path) == ".documentModel";
+		return throw std::runtime_error("TODO");//boost::filesystem::extension(path) == ".documentModel";
 	}
 
 	Werckmeister::~Werckmeister() = default;
