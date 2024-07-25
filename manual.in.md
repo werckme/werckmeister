@@ -986,7 +986,7 @@ function perform(events, params, timeinfo)
 end
 ```
 
-The perform function has 3 arguments:
+The perform function has 4 arguments:
 
 ### `events` argument
 This table contains all input events.
@@ -1060,6 +1060,11 @@ This table contains all input events.
         -- a table of byte values (excluding F0 and F7)
         -- only relevant if type is "sysex"
         sysexData  = { byte values }
+
+        -- when working with control messages or sysex messages, sometime the order
+        -- of its execution is vital. For this purpose you can give a message a priorisation value.
+        -- 0 is the highest prio.
+        prio = 0 .. MAX_INT
     }
     ...
 }
@@ -1080,6 +1085,24 @@ Contains a table with informations about the current musical time.
 
     -- the denominator of the current time signature
     sinatureDenominator = number
+}
+```
+
+### `context` argument
+Contains an interface with some context related functions.
+
+#### getCurrentInstrument
+returns information about the current instrument
+```lua
+{
+    name = string, 
+    pan = 0..100,
+    volume = 0..100,
+    midiChannel = 0..15, -- optional
+    midiLsb = 0..127, -- optional
+    midiMsb = 0..127, -- optional
+    midiPc = 0..127, -- optional
+    children: {} -- further instrument children see instrumentSection (https://www.werckme.org/manual#instrumentsection)
 }
 ```
 

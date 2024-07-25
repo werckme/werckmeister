@@ -14,6 +14,7 @@
 #include <app/JsonStringInputReader.hpp>
 #include <boost/algorithm/string/join.hpp>
 #include <compiler/error.hpp>
+#include <lua/luaHelper.h>
 
 void SheetCompilerProgram::prepareEnvironment()
 {
@@ -42,6 +43,7 @@ void SheetCompilerProgram::printIntro(std::ostream &os)
        << "\t(c) Samba Godschynski " << std::endl
        << "\thttps://werckme.github.io" << std::endl
        << "\tversion: " << SHEET_VERSION << std::endl
+       << "\tlua version: " << lua::getVersion() << std::endl
        << "\tMIDI ppq value: " << com::PPQ << std::endl;
 }
 

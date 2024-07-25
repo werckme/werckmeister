@@ -208,6 +208,9 @@ file(GLOB WM_LUA_COM
 file(GLOB WM_LUA_MODS
     "${EXAMPLES_FOLDER}/lua/mods/*.lua"
 )
+file(GLOB WM_LUA_DEVICES_INTEGRA7
+    "${EXAMPLES_FOLDER}/lua/devices/integra7/*.lua"
+)
 file(GLOB WM_LUA_VOICINGS
     "${EXAMPLES_FOLDER}/lua/voicings/*.lua"
 )
@@ -233,6 +236,7 @@ if(${INSTALL_AUX})
   install(FILES ${WM_LUA}                    DESTINATION share/werckmeister/lua COMPONENT wmapp)
   install(FILES ${WM_LUA_COM}                DESTINATION share/werckmeister/lua/com COMPONENT wmapp)
   install(FILES ${WM_LUA_MODS}               DESTINATION share/werckmeister/lua/mods COMPONENT wmapp)
+  install(FILES ${WM_LUA_DEVICES_INTEGRA7}   DESTINATION share/werckmeister/lua/devices/integra7 COMPONENT wmapp)
   install(FILES ${WM_LUA_VOICINGS}           DESTINATION share/werckmeister/lua/voicings COMPONENT wmapp)
   install(FILES ${WM_LUA_VOICINGS_SOVLERS}   DESTINATION share/werckmeister/lua/voicings/solvers COMPONENT wmapp)
   install(FILES ${WM_PITCHMAPS}              DESTINATION share/werckmeister/pitchmaps COMPONENT wmapp)
@@ -246,6 +250,7 @@ if (${USE_EMSCRIPTEN})
     ${WM_LUA} 
     ${WM_LUA_COM}
     ${WM_LUA_MODS}
+    ${WM_LUA_DEVICES_INTEGRA7}
     ${WM_LUA_VOICINGS}
     ${WM_LUA_VOICINGS_SOVLERS}
     ${WM_PITCHMAPS}

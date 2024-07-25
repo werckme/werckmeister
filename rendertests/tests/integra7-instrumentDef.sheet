@@ -1,0 +1,48 @@
+-- #skip-event-plausibility-test
+using "/chords/default.chords";
+using "../../examples/lua/devices/integra7/i7parameter.lua";
+using "../../examples/lua/mods/myArpeggio.lua";
+
+tempo: 150;
+device: MyDevice  midi _useDevice="DIN 3";
+instrumentDef:guitar   _onDevice=MyDevice  _pc=0 _ch=6 _bankMsb=89 _bankLsb=64  _pc=97;
+instrumentConf: guitar
+    mod myArpeggio
+;
+
+instrumentDef:guitar2   _onDevice=MyDevice  _pc=0 _ch=0 _bankMsb=89 _bankLsb=64  _pc=97;
+instrumentConf: guitar2
+    mod i7parameter _parameterId="PRM-_FPARTxxx-_SNTONE-_SNTC-SNTC_MOD_PRM10" _value=1
+;
+
+
+[
+type: template;
+name: chords;
+instrument: guitar;
+{
+     /modOnce: i7parameter _parameterId="PRM-_FPARTxxx-_SNTONE-_SNTC-SNTC_MOD_PRM10" _value=2/
+    <II III V VII I>1 :(x3)
+    |:
+    /modOnce: i7parameter _parameterId="PRM-_FPARTxxx-_SNTONE-_SNTC-SNTC_MOD_PRM10" _value=1/
+     <I II III V VII>1 :(x3)|
+}
+]
+
+
+[
+type: template;
+name: gg;
+instrument: guitar2;
+{
+    (I8 r &)4 r   (I8 r &)4 r
+}
+]
+
+[
+type: accomp;
+{
+    /template: chords gg/
+    C | F | G7 :|
+}
+]

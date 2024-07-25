@@ -88,8 +88,8 @@ namespace compiler
 		virtual void setTempo(double bpm) = 0;
 		virtual void setSignature(int upper, int lower) = 0;
 		virtual void setVolume(double volume, com::Ticks relativePosition = 0) = 0;
-		virtual void setContinuousController(int controllerNumber, int value, com::Ticks relativePosition = 0) = 0;
-		virtual void setSysex(const com::Byte* data, size_t length, com::Ticks relativePosition = 0) = 0;
+		virtual void setContinuousController(int controllerNumber, int value, com::Ticks relativePosition = 0, int prio = -1) = 0;
+		virtual void setSysex(const com::Byte* data, size_t length, com::Ticks relativePosition = 0, int prio = -1) = 0;
 		virtual void setPan(double val) = 0;
 		virtual void addCue(const com::String &text, com::Ticks absolutePosition) = 0;
 		/////// actual context stuff

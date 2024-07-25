@@ -5,6 +5,7 @@
 #include <compiler/error.hpp>
 #include <algorithm>
 #include <compiler/lua/luaTimeInfo.h>
+#include <compiler/lua/luaContext.h>
 #include <compiler/context/IContext.h>
 #include <lua/luaHelper.h>
 
@@ -31,8 +32,13 @@ namespace compiler
     {
         lua_getglobal(L, LUA_EVENTFUNCTION_FENTRY);
         pushParameters(L, ALuaWithParameter::parameters);
-        lua::LuaTimeInfo(ctx->getTimeInfo()).push(L);
-        call(2, 1);
+        
+        lua::LuaTimeInfo ltimeInfo(ctx->getTimeInfo());
+        ltimeInfo.push(L);
+        lua::LuaContext luaCtx(*ctx.get());
+        luaCtx.push(L);
+
+        call(3, 1);
         auto events = popEvents(ctx);
         outEvents.swap(events);
     }

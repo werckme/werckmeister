@@ -1,0 +1,34 @@
+-- #skip-event-plausibility-test
+using "/chords/default.chords";
+using "../../examples/lua/devices/integra7/i7sntcmod.lua";
+using "../../examples/lua/mods/myArpeggio.lua";
+
+tempo: 150;
+device: MyDevice  midi _useDevice="DIN 3";
+instrumentDef:guitar   _onDevice=MyDevice  _pc=0 _ch=6 _bankMsb=89 _bankLsb=64  _pc=97;
+instrumentConf: guitar
+    mod myArpeggio
+;
+
+[
+type: template;
+name: chords;
+instrument: guitar;
+{
+     /modOnce: i7sntcmod _modNr=10 _value=2/
+    <II III V VII I>1 :(x3)
+    |:
+    /modOnce: i7sntcmod _modNr=10 _value=1/
+     <I II III V VII>1 :(x3)|
+}
+]
+
+
+
+[
+type: accomp;
+{
+    /template: chords/
+    C | F | G7 :|
+}
+]

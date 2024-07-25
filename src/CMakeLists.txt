@@ -54,6 +54,7 @@ SET (SRC_FETZER_LIB
     compiler/SheetNavigator.cpp
     compiler/EventInformationServer.cpp
     compiler/lua/luaTimeInfo.cpp
+    compiler/lua/luaContext.cpp
     documentModel/objects/Event.cpp
     documentModel/objects/ChordDef.cpp
     documentModel/objects/Track.cpp

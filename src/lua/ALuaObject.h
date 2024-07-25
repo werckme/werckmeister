@@ -42,7 +42,12 @@ namespace lua
         {
             throw std::runtime_error("invalid cast for ALuaObject");
         }
-        return dynamic_cast<TObject *>(obj);
+        TObject *target = dynamic_cast<TObject *>(obj);
+        if (target == nullptr) 
+        {
+            throw std::runtime_error("unexpected lua reference error");
+        }
+        return target;
     }
 
     template <class TObject>

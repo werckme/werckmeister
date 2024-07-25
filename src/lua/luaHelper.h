@@ -6,45 +6,80 @@
 namespace lua
 {
 
-    inline void getTableValue(lua_State *L, const char *key, int &out)
+    inline const char * getVersion() 
+    {
+        static const char * versionStr = LUA_VERSION;
+        return versionStr;
+    }
+    inline void getTableValue(lua_State *L, const char *key, int &out, bool required = true)
     {
         lua_pushstring(L, key);
         lua_gettable(L, -2);
+        if (!required && lua_isnil(L, -1))
+        {
+            lua_pop(L, 1);
+            return;
+        }
         out = lua_tointeger(L, -1);
         lua_pop(L, 1);
     }
-    inline void getTableValue(lua_State *L, const char *key, bool &out)
+    inline void getTableValue(lua_State *L, const char *key, bool &out, bool required = true)
     {
         lua_pushstring(L, key);
         lua_gettable(L, -2);
+        if (!required && lua_isnil(L, -1))
+        {
+            lua_pop(L, 1);
+            return;
+        }
         out = lua_toboolean(L, -1);
         lua_pop(L, 1);
     }
-    inline void getTableValue(lua_State *L, const char *key, double &out)
+    inline void getTableValue(lua_State *L, const char *key, double &out, bool required = true)
     {
         lua_pushstring(L, key);
         lua_gettable(L, -2);
+        if (!required && lua_isnil(L, -1))
+        {
+            lua_pop(L, 1);
+            return;
+        }
         out = lua_tonumber(L, -1);
         lua_pop(L, 1);
     }
-    inline void getTableValue(lua_State *L, const char *key, long double &out)
+    inline void getTableValue(lua_State *L, const char *key, long double &out, bool required = true)
     {
         lua_pushstring(L, key);
         lua_gettable(L, -2);
+        if (!required && lua_isnil(L, -1))
+        {
+            lua_pop(L, 1);
+            return;
+        }
         out = lua_tonumber(L, -1);
         lua_pop(L, 1);
     }
-    inline void getTableValue(lua_State *L, const char *key, float &out)
+    inline void getTableValue(lua_State *L, const char *key, float &out, bool required = true)
     {
         lua_pushstring(L, key);
         lua_gettable(L, -2);
+        if (!required && lua_isnil(L, -1))
+        {
+            lua_pop(L, 1);
+            return;
+        }
         out = lua_tonumber(L, -1);
         lua_pop(L, 1);
     }
-    inline void getTableValue(lua_State *L, const char *key, com::String &out)
+    inline void getTableValue(lua_State *L, const char *key, com::String &out, bool required = true)
     {
         lua_pushstring(L, key);
         lua_gettable(L, -2);
+        if (!required && lua_isnil(L, -1))
+        {
+            lua_pop(L, 1);
+            return;
+        }
         out = lua_tostring(L, -1);
         lua_pop(L, 1);
     }
