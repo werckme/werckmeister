@@ -311,7 +311,7 @@ namespace parser
 						current_pos_.current_pos 
 						>> attr(sourceId_) 
 						>> attr(Event::Chord) 
-						>> attr(Event::Tags()) 
+						>> (("\"" >> +(lexeme[+char_(ALLOWED_EVENT_TAG_ARGUMENT)]) >> "\"" >> "@") | attr(Event::Tags())) 
 						>> attr(PitchDef()) 
 						>> attr(Event::NoDuration) 
 						>> attr(DefaultNumberOfBarRepeats)

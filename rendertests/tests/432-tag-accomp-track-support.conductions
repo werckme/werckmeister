@@ -1,0 +1,3 @@
+instrument(piano) chord(Cmaj7) degree(VII) withTag(drop7) {
+    pitch -= 12;
+}
