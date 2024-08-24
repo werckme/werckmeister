@@ -1,0 +1,26 @@
+using "/chords/default.chords";
+using "./432-tag-accomp-track-support.conductions";
+
+device: MyDevice  midi _usePort=17;
+instrumentDef: piano _onDevice=MyDevice _ch=2 _pc=4;
+instrumentConf: piano volume 100;
+
+[
+template: myTemplate;
+instrument: piano;
+{
+    <I III V VII>1
+}
+]
+
+[
+type: accomp;
+{
+    /template: myTemplate/
+    Cmaj7 | F | G7 | Cmaj7 |
+    /beginTag: drop7/
+    Cmaj7 | F | G7 | Cmaj7 |
+    /endTag: drop7/
+    Cmaj7 | F | G7 | Cmaj7 |
+}
+]

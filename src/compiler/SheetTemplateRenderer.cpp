@@ -313,6 +313,18 @@ namespace compiler
 			ctx->setTarget(trackId, voiceId);
 		}
 
+		void __getChordTrackTags(IContextPtr ctx, VoiceMetaData::Tags &outTags)
+		{
+			auto voiceId = ctx->voice();
+			auto trackId = ctx->track();
+			ctx->setChordTrackTarget();
+			outTags.insert(
+				ctx->voiceMetaData()->tags.begin(),
+				ctx->voiceMetaData()->tags.end()
+			);
+			ctx->setTarget(trackId, voiceId);
+		}
+
 		typedef std::list<const Event *> Chords;
 		com::Ticks __renderOneBar(IContextPtr ctx,
 								  ICompilerVisitorPtr visitor,
@@ -411,6 +423,10 @@ namespace compiler
 						// eob will be handled elsewhere
 						continue;
 					}
+					copy.tags.insert(chord->tags.begin(), chord->tags.end());
+					VoiceMetaData::Tags trackTags;
+					__getChordTrackTags(ctx, trackTags);
+					copy.tags.insert(trackTags.begin(), trackTags.end());
 					sheetEventRenderer->addEvent(copy);
 					visitor->endDegreeRendering();
 					if (isTimeConsuming)
