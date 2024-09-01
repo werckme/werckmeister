@@ -25,3 +25,8 @@ instrument(guitar1.B) {
 -- using "./disable A.conductions";
 using "./disable B.conductions";
 ```
+
+## Grace Note alternative (more options)
+```
+(cb16 c2)4
+```
