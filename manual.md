@@ -1043,7 +1043,7 @@ This table contains all input events.
         totalTiedDuration = number,
 
         -- the event type
-        type = "note" | "rest" | "degree" | "pitchBend" | "cc" | "sysex",
+        type = "note" | "rest" | "degree" | "pitchBend" | "cc" | "sysex" | "meta",
 
         -- the events velocity value in a range from 0 to 1
         -- only relevant if type is "note" or "degree"
@@ -1065,6 +1065,14 @@ This table contains all input events.
         -- of its execution is vital. For this purpose you can give a message a priorisation value.
         -- 0 is the highest prio.
         prio = 0 .. MAX_INT
+
+        -- the midi meta event type
+        -- only relevant if type is "meta"
+        metaType  = "textEvent" | "copyright" | "sequenceOrTrackName" | "instrumentName" | "lyricText" | "markerText" | "cuePoint"
+
+        -- the midi meta value
+        -- only relevant if type is "meta"
+        metaValue  = string
     }
     ...
 }
