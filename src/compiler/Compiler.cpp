@@ -9,7 +9,7 @@
 #include <boost/exception/get_error_info.hpp>
 #include <com/tools.h>
 #include <functional>
-
+#include <compiler/context/CompilerStateGuard.hpp>
 namespace compiler
 {
 	void Compiler::compile(documentModel::DocumentPtr document)
@@ -70,6 +70,7 @@ namespace compiler
 	void Compiler::renderTracks()
 	{
 		auto ctx = context();
+		auto guard = CompilerStateGuard(ctx, IContext::CompilerState::RenderTrack);
 		auto renderer = sheetEventRenderer();
 		auto document = document_.lock();
 		for (auto &track : document->sheetDef.tracks)
