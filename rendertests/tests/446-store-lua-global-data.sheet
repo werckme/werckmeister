@@ -1,0 +1,21 @@
+using "./446-store-lua-global-data.lua";
+
+device: MyDevice  midi _usePort=0;
+instrumentDef: piano _onDevice=MyDevice _ch=2 _pc=4;
+instrumentConf: piano volume 100;
+
+
+[
+instrument: piano;
+{
+    /modOnce: "446-store-lua-global-data" _value="101"/
+    c d e f | g a b c'
+}
+]
+
+[
+instrument: piano;
+{
+    r1 | r1 | /call: "446-store-lua-global-data"/ r1
+}
+]
