@@ -7,7 +7,10 @@
 #include <compiler/lua/luaTimeInfo.h>
 #include <compiler/lua/luaContext.h>
 #include <compiler/context/IContext.h>
+#include <compiler/context/MidiContext.h>
 #include <lua/luaHelper.h>
+#include <com/midi.hpp>
+#include <com/common.hpp>
 
 static const char *LUA_EVENT_TYPE_NOTE = "note";
 static const char *LUA_EVENT_TYPE_REST = "rest";
@@ -15,12 +18,15 @@ static const char *LUA_EVENT_TYPE_DEGREE = "degree";
 static const char *LUA_EVENT_TYPE_PITCHBEND = "pitchBend";
 static const char *LUA_EVENT_TYPE_CC = "cc";
 static const char *LUA_EVENT_TYPE_SYSEX = "sysex";
+static const char *LUA_EVENT_TYPE_META = "meta";
 static const char *LUA_EVENT_PROPERTY_SYSEX_DATA = "sysexData";
 static const char *LUA_EVENT_TYPE_UNKNOWN = "unknown";
 static const char *LUA_EVENT_PROPERTY_VELOCITY = "velocity";
 static const char *LUA_EVENT_PROPERTY_DURATION = "duration";
 static const char *LUA_EVENT_PROPERTY_TYING = "isTied";
 static const char *LUA_EVENT_PROPERTY_OFFSET = "offset";
+static const char *LUA_EVENT_PROPERTY_META_TYPE = "metaType";
+static const char *LUA_EVENT_PROPERTY_META_STR_VALUE = "metaValue";
 static const char *LUA_EVENT_PROPERTY_CC_NR = "ccNr";
 static const char *LUA_EVENT_PROPERTY_CC_VALUE = "ccValue";
 static const char *LUA_EVENT_PROPERTY_PITCHES = "pitches";
@@ -302,6 +308,10 @@ namespace compiler
             {
                 popAndExecuteSysex(ctx);
             }
+            if (type == LUA_EVENT_TYPE_META)
+            {
+                popAndExecuteMeta(ctx);
+            }
             lua_pop(L, 1);
         }
         return result;
@@ -319,6 +329,49 @@ namespace compiler
         lua::getTableValue(L, LUA_EVENT_PROPERTY_PRIO, prio, false);
         timeOffset *= com::PPQ;
         ctx->setContinuousController(ccNr, ccValue, timeOffset, prio);
+    }
+
+    namespace 
+    {
+        const std::map<com::String, com::midi::MetaEventType> _metaTypes({
+            {"textEvent", com::midi::TextEvent},
+            {"copyright", com::midi::Copyright},
+            {"sequenceOrTrackName", com::midi::SequenceOrTrackName},
+            {"instrumentName", com::midi::InstrumentName},
+            {"lyricText", com::midi::LyricText},
+            {"markerText", com::midi::MarkerText},
+            {"cuePoint", com::midi::CuePoint},
+        });
+    }
+
+    void LuaModification::popAndExecuteMeta(IContextPtr ctx)
+    {
+        auto midiContext = std::dynamic_pointer_cast<MidiContext>(ctx);
+        if (!midiContext)
+        {
+            FM_THROW(Exception, "meta event not supported in non midi environment");
+        }
+        com::String type;
+        com::String value;
+        lua::getTableValue(L, LUA_EVENT_PROPERTY_META_TYPE, type);
+        auto itMetaType = _metaTypes.find(type);
+        if (itMetaType == _metaTypes.end())
+        {
+            com::StringStream ss;
+            ss << "unsupported midi type: " << type << std::endl;
+            ss << "supported types are: ";
+            for(const auto& supportedType : _metaTypes)
+            {
+                ss << supportedType.first << " ";
+            }
+            FM_THROW(Exception, ss.str());
+        }
+        lua::getTableValue(L, LUA_EVENT_PROPERTY_META_STR_VALUE, value);
+        auto ev = com::midi::Event();
+        auto bytes = com::midi::Event::MetaCreateStringData(value);
+        ev.metaData(itMetaType->second, bytes.data(), bytes.size());
+        ev.absPosition(ctx->currentPosition());
+        midiContext->addEvent(ev);
     }
 
     void LuaModification::popAndExecuteSysex(IContextPtr ctx)
