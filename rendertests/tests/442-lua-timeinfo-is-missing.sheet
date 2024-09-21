@@ -1,0 +1,23 @@
+using "./442-lua-timeinfo-is-missing.lua";
+
+device: MyDevice  midi _usePort=0;
+instrumentDef: piano _onDevice=MyDevice _ch=2 _pc=4;
+instrumentConf: piano volume 100;
+
+tempo: 180.5;
+
+[
+instrument: piano;
+{
+    r1 |
+    /call: "442-lua-timeinfo-is-missing"/ -- 4 * 60/180.5
+    c4 d e f | g a b c' |
+    /tempo: 118/
+    /call: "442-lua-timeinfo-is-missing"/ -- 12 * 60/180.5
+    c d e f | g a b c' |
+    /tempo: 30/
+    c4
+    /call: "442-lua-timeinfo-is-missing"/ -- (12 * 60/180.5) + (8 * 60/118) + (1 * 60/30)
+    r2.
+}
+]

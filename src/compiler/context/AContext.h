@@ -112,6 +112,7 @@ namespace compiler
 		virtual void setVolume(double volume, com::Ticks relativePosition = 0);
 		virtual void setPan(double val);
 		/////// actual context stuff
+		virtual double getCurrentBpm() const override;
 		virtual void renderPitch(const documentModel::PitchDef &pitch, com::Ticks duration, double velocity, bool tying);
 		virtual void renderPitch(const documentModel::PitchDef &pitch, com::Ticks absolutePosition, double velocity, com::Ticks duration) = 0;
 		/*

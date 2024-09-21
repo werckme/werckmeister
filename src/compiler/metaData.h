@@ -34,6 +34,7 @@ namespace compiler
         typedef std::unordered_map<com::String, AModificationPtr> ModificationCache;
         com::Ticks position = 0;
         com::Ticks barLength = DefaultBarLength;
+        double seconds = 0;
         int signatureNumerator = 4;
         int signatureDenominator = 4;
         com::Ticks barPosition = 0;
