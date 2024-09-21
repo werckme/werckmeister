@@ -2,6 +2,7 @@
 #include <lua.hpp>
 #include <compiler/context/IContext.h>
 #include <compiler/Instrument.h>
+#include <map>
 
 static const char *LUA_CONTEXT_PROPETRY_CURRENT_INSTRUMENT = "getCurrentInstrument";
 static const char *LUA_EVENT_PROPETRY_INSTRUMENT = "instrument";
@@ -90,8 +91,40 @@ namespace lua
         return 1;
     }
 
+    namespace 
+    {
+        typedef std::map<com::String, com::String> LuaDataMap;
+        LuaDataMap _luaDataMap;
+    }
+
+    static int setDate(lua_State *L)
+    {
+        using namespace lua;
+        const char *value = lua_tostring(L, -1);
+        const char *key = lua_tostring(L, -2);
+        lua_pop(L, 2);
+        _luaDataMap[key] = value;
+        return 0;
+    }
+
+    static int getDate(lua_State *L)
+    {
+        const char *key = lua_tostring(L, -1);
+        lua_pop(L, 1);
+        auto it = _luaDataMap.find(key);
+        if (it == _luaDataMap.end()) 
+        {
+            lua_pushnil(L);
+            return 1;
+        }
+        lua_pushstring(L, it->second.c_str());
+        return 1;
+    }
+
     static const luaL_Reg libfs[] = {
         {"getCurrentInstrument", getCurrentInstrument},
+        {"setDate", setDate},
+        {"getDate", getDate},
         {NULL, NULL}};
 
     void LuaContext::push(lua_State *L)
