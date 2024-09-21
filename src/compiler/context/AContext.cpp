@@ -217,6 +217,7 @@ namespace compiler
 		auto meta = voiceMetaData();
 		meta->position += duration;
 		meta->barPosition += duration;
+		meta->seconds += 60.0 / getCurrentBpm() * (duration / com::PPQ);
 	}
 
 	void AContext::warn(const std::string &msg)
@@ -303,6 +304,12 @@ namespace compiler
 		trackMeta->uname = "Accomp";
 	}
 
+	double AContext::getCurrentBpm() const 
+	{
+		auto meta = voiceMetaData();
+		return masterTempo() / (meta->tempoFactor == 0 ? 1 : meta->tempoFactor);
+	}
+
 	TimeInfo AContext::getTimeInfo() const
 	{
 		TimeInfo result;
@@ -310,6 +317,8 @@ namespace compiler
 		result.quarterPosition = meta->position / (double)com::PPQ;
 		result.signatureNumerator = meta->signatureNumerator;
 		result.sinatureDenominator = meta->signatureDenominator;
+		result.bpm = getCurrentBpm();
+		result.seconds = meta->seconds;
 		return result;
 	}
 

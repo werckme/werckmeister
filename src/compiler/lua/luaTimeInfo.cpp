@@ -16,5 +16,11 @@ namespace lua
         lua_pushstring(L, "sinatureDenominator");
         lua_pushnumber(L, timeInfo_.sinatureDenominator);
         lua_settable(L, top);
+        lua_pushstring(L, "bpm");
+        lua_pushnumber(L, timeInfo_.bpm);
+        lua_settable(L, top);
+        lua_pushstring(L, "seconds");
+        lua_pushnumber(L, timeInfo_.seconds);
+        lua_settable(L, top);
     }
 }

@@ -93,6 +93,7 @@ namespace compiler
 		virtual void setPan(double val) = 0;
 		virtual void addCue(const com::String &text, com::Ticks absolutePosition) = 0;
 		/////// actual context stuff
+		virtual double getCurrentBpm() const = 0;
 		virtual void renderPitch(const documentModel::PitchDef &pitch, com::Ticks duration, double velocity, bool tying) = 0;
 		virtual void renderPitch(const documentModel::PitchDef &pitch, com::Ticks absolutePosition, double velocity, com::Ticks duration) = 0;
 		/*
