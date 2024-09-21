@@ -111,10 +111,6 @@ namespace compiler
 		virtual void setSignature(int upper, int lower);
 		virtual void setVolume(double volume, com::Ticks relativePosition = 0);
 		virtual void setPan(double val);
-		CompilerState compilerState = CompilerState::Undefined;
-		virtual void beginState(CompilerState state) override { compilerState = state; }
-		virtual void endState() override { compilerState = CompilerState::Undefined; }
-		virtual CompilerState getCompilerState() const override { return compilerState; }
 		/////// actual context stuff
 		virtual double getCurrentBpm() const override;
 		virtual void renderPitch(const documentModel::PitchDef &pitch, com::Ticks duration, double velocity, bool tying);

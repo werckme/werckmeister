@@ -10,11 +10,6 @@ namespace compiler
 {
     void ExecuteEventFunction::execute(IContextPtr context)
     {
-        if (context->getCompilerState() != IContext::CompilerState::RenderTrack 
-            && context->getCompilerState() != IContext::CompilerState::RenderAccompTrackChords) 
-        {
-            return;
-        }
         com::String modName = parameters[argumentNames.AddMod.Use].value<com::String>();
         auto meta = context->voiceMetaData();
         auto theEventFunction = loadEventFunction(context, modName);

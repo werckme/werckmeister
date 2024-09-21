@@ -30,12 +30,6 @@ namespace compiler
 			MAX_VOLUME = 100,
 			MAX_PAN = 100
 		};
-		enum class CompilerState
-		{
-			Undefined,
-			RenderTrack,
-			RenderAccompTrackChords
-		};
 		typedef int Id;
 		typedef Id TrackId;
 		typedef Id VoiceId;
@@ -98,9 +92,6 @@ namespace compiler
 		virtual void setSysex(const com::Byte* data, size_t length, com::Ticks relativePosition = 0, int prio = -1) = 0;
 		virtual void setPan(double val) = 0;
 		virtual void addCue(const com::String &text, com::Ticks absolutePosition) = 0;
-		virtual void beginState(CompilerState state) = 0;
-		virtual void endState() = 0;
-		virtual CompilerState getCompilerState() const = 0;
 		/////// actual context stuff
 		virtual double getCurrentBpm() const = 0;
 		virtual void renderPitch(const documentModel::PitchDef &pitch, com::Ticks duration, double velocity, bool tying) = 0;

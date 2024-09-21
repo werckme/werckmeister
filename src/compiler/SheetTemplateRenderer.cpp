@@ -12,7 +12,6 @@
 #include <unordered_map>
 #include <memory>
 #include <array>
-#include <compiler/context/CompilerStateGuard.hpp>
 
 #define DEBUGX(x)
 
@@ -339,10 +338,8 @@ namespace compiler
 			com::Ticks written = 0;
 			int numberOfChords = std::count_if(chords.begin(), chords.end(), [](auto &ev)
 											   { return ev->type == Event::Chord; });
-			auto guard = CompilerStateGuard(ctx, IContext::CompilerState::RenderAccompTrackChords);
 			for (const Event *chord : chords)
 			{
-
 				if (chord->type == Event::Chord) 
 				{
 					ctx->currentChordEvent(*chord);
