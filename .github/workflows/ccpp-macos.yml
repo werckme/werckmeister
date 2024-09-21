@@ -40,7 +40,7 @@ jobs:
       working-directory: build
     - name: run rendertests
       run: python3 runtests.py
-      continue-on-error: true # rendertests fail on mac (since XCode15?)
+      continue-on-error: false # rendertests fail on mac (since XCode15?)
       working-directory: rendertests
     - name: pack
       run: cmake --build . --config Release --target package
