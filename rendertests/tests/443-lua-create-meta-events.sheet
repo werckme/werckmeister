@@ -1,0 +1,16 @@
+using "./443-lua-create-meta-events.lua";
+
+device: MyDevice  midi _usePort=0;
+instrumentDef: piano _onDevice=MyDevice _ch=2 _pc=4;
+instrumentConf: piano volume 100;
+
+
+[
+instrument: piano;
+{
+    /call: "443-lua-create-meta-events" _text="hello"/
+    c1 |
+    /call: "443-lua-create-meta-events" _text="world"/
+    r1 |
+}
+]
