@@ -1,8 +1,22 @@
 
-local count = 0
+local date_key = "count"
 
-function execute(params, timeinfo)
+parameters = {
+    {name="when", default="somewhen"}
+}
+
+function execute(params, timeinfo, context)
+    local count = context:getDate(date_key)
+    if count == nil then
+        count = 0
+    else
+        count = tonumber(count)
+    end
+    if params.when == "finito" then
+        assert(count == 1)
+        return {}
+    end
     count = count + 1
-    print(count)
+    context:setDate(date_key, count)
     return {}
 end

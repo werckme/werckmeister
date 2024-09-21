@@ -21,5 +21,7 @@ type: accomp;
     Cmaj7 | F | G7 | Cmaj7 |
     Cmaj7 | F | G7 | Cmaj7 |
     Cmaj7 | F | G7 | Cmaj7 |
+    /call: "441-meta-events-executed-several-times" _when="finito"/
+    r1
 }
 ]
