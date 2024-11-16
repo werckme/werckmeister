@@ -21,6 +21,8 @@ instrument: piano;
     /signature: 3 4/
     c4 g g |
     >>"myPhraseIV"2.~ | &4  >>"myPhraseIV"2 |
+    /signature: 4 4/
+    >>"myPhraseIV"2 &2 | >"myPhraseIV"2 &2
 
 }
 ]

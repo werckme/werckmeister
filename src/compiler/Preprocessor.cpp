@@ -77,6 +77,7 @@ namespace compiler
 				else if (processData.lastNoRepeat.isPhrase())
 				{
 					ev.stringValue = processData.lastNoRepeat.stringValue;
+					ev.isPhraseStrechedPlayback = processData.lastNoRepeat.isPhraseStrechedPlayback;
 				}
 				else 
 				{
