@@ -2114,7 +2114,7 @@ BOOST_AUTO_TEST_CASE(test_use_phrase)
 	BOOST_CHECK_EQUAL(defs.tracks[0].voices[0].events.size(), size_t(2));
 	BOOST_CHECK_EQUAL(defs.tracks[0].voices[0].events[0].type, Event::Phrase);
 	BOOST_CHECK_EQUAL(defs.tracks[0].voices[0].events[0].phraseName(), com::String("myPhrase"));
-	BOOST_CHECK_EQUAL(defs.tracks[0].voices[0].events[0].isPhraseStrechedPlayback, false);
+	BOOST_CHECK_EQUAL(defs.tracks[0].voices[0].events[0].isPhraseStrechedPlayback, true);
 	BOOST_CHECK_EQUAL(defs.tracks[0].voices[0].events[0].duration, 1.0_N8);
 }
 BOOST_AUTO_TEST_CASE(test_use_tied_phrase)
@@ -2245,6 +2245,6 @@ BOOST_AUTO_TEST_CASE(test_use_phrase_normal_mode)
 	BOOST_CHECK_EQUAL(defs.tracks[0].voices[0].events.size(), size_t(2));
 	BOOST_CHECK_EQUAL(defs.tracks[0].voices[0].events[0].type, Event::Phrase);
 	BOOST_CHECK_EQUAL(defs.tracks[0].voices[0].events[0].phraseName(), com::String("myPhrase"));
-	BOOST_CHECK_EQUAL(defs.tracks[0].voices[0].events[0].isPhraseStrechedPlayback, true);
+	BOOST_CHECK_EQUAL(defs.tracks[0].voices[0].events[0].isPhraseStrechedPlayback, false);
 	BOOST_CHECK_EQUAL(defs.tracks[0].voices[0].events[0].duration, 1.0_N8);
 }

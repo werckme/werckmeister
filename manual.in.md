@@ -903,9 +903,23 @@ PHRASE_NAME = PHRASE_EVENTS;
 ```
 
 **Use a phrase**
+
+There are two ways to playback an phrase:
+
+**playback streched**
+
+If the phrase duration is unequal to the target duration, the phrase will be rendered streched to fit into the target.
 ```
 >"PHRASE_NAME"DURATION_VALUE
 ```
+
+**playback cut off**
+If If the phrase duration is unequal to the target duration, the phrase will be rendered cut off or filled with rests to fit into the target.
+```
+>>"PHRASE_NAME"DURATION_VALUE
+```
+
+
 
 ```language=Werckmeister,type=full
 device: MyDevice _isType=webPlayer _useFont="FluidR3-GM"; 

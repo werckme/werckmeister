@@ -80,7 +80,7 @@ namespace documentModel
 		double pitchBendValue = 0;
 		int controllerNumber = 0;
 		int controllerValue = 0;
-		bool isPhraseStrechedPlayback = false;
+		bool isPhraseStrechedPlayback = true;
 
 		bool isTimeConsuming() const;
 

@@ -419,7 +419,7 @@ namespace parser
 						>> attr(sourceId_) 
 						>> attr(Event::Phrase) 
 						>> (("\"" >> +(lexeme[+char_(ALLOWED_EVENT_TAG_ARGUMENT)]) >> "\"" >> "@") | attr(Event::Tags()))
-						>> (lit(">>") >> attr(true) | lit(">") >> attr(false))
+						>> (lit(">>") >> attr(false) | lit(">") >> attr(true))
 						>> lexeme["\"" >> +char_(ALLOWED_PHRASE_NAME) >> "\""]
 						>> (durationSymbols_ | attr(Event::NoDuration))
 						>> current_pos_.current_pos
