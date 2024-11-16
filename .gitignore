@@ -6,9 +6,10 @@ fe/package-lock.jso
 .vscode
 package.json
 
-rendertests/lib/
-rendertests/lib64
-rendertests/pyvenv.cfg
+lib/
+lib64
+pyvenv.cfg
+
 
 # Created by 
 https://www.gitignore.io/api/c,c++,grunt,cmake,emacs,angular,visualstudio
