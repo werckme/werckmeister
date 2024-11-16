@@ -60,6 +60,7 @@ BOOST_FUSION_ADAPT_STRUCT(
 	(documentModel::ASheetObjectWithSourceInfo::SourceId, sourceId)
 	(documentModel::Event::Type, type)
 	(documentModel::Event::Tags, tags)
+	(bool, isPhraseStrechedPlayback)
 	(com::String, stringValue)
 	(documentModel::Event::Duration, duration)
 	(unsigned int, sourcePositionEnd))
@@ -124,6 +125,17 @@ namespace
 		DcName,
 		DcArgs,
 		DcEvents
+	};
+	enum PhraseConfigFields
+	{
+		PhSourceBegin,
+		PhSourceId,
+		PhEvType,
+		PhEvTag,
+		PhIsStrechedPlayback,
+		PhStringValue,
+		PhDuration,
+		PhSourceEnd
 	};
 	const int DefaultNumberOfBarRepeats = 0;
 }
@@ -407,7 +419,8 @@ namespace parser
 						>> attr(sourceId_) 
 						>> attr(Event::Phrase) 
 						>> (("\"" >> +(lexeme[+char_(ALLOWED_EVENT_TAG_ARGUMENT)]) >> "\"" >> "@") | attr(Event::Tags()))
-						>> ">" >> lexeme["\"" >> +char_(ALLOWED_PHRASE_NAME) >> "\""]
+						>> (lit(">>") >> attr(true) | lit(">") >> attr(false))
+						>> lexeme["\"" >> +char_(ALLOWED_PHRASE_NAME) >> "\""]
 						>> (durationSymbols_ | attr(Event::NoDuration))
 						>> current_pos_.current_pos
 						>> -(
