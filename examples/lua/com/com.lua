@@ -103,3 +103,13 @@ function split(pString, pPattern)
     end
     return Table
  end
+
+function FilterEventsByTagName(events, tagName)
+    local result = {}
+    for _, event in pairs(events) do
+        if contains(event.tags, tagName) then
+            table.insert(result, event)
+        end
+    end
+    return result
+ end

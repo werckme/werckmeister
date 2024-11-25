@@ -33,10 +33,12 @@
 -- <param name="direction" optional="1" type="[up,down,alternate]">Specifies the start direction of the stroke</param>
 -- <param name="value" optional="1" type="[1,2,4,8,...]">the duration of one arpeggio event. (Default=64)</param>
 -- <param name="mode" optional="1" type="[normal,alternate]">Deprecated: Use _direction=alternate instead. Perform only one stroke direction (normal) or alternates between up and down. (Default=normal)</param>
+-- <param name="withTag" optional="1" type="tagName">if set, only events including this tag will be processed.</param>
 
 require "lua/com/com"
 require "_events"
 
+local NO_TAG = "WM_NO_TAG"
 
 parameters = {
     -- can be up, down
@@ -44,7 +46,8 @@ parameters = {
     -- can be 1, 2, 4, 8, 16, 32, 64, ...
     { name="value",           default="64" },
     -- can be normal, alternate
-    { name="mode",            default="normal" }
+    { name="mode",            default="normal" },
+    { name="withTag",            default="WM_NO_TAG" }
 
 }
 
@@ -52,7 +55,14 @@ local direction = nil
 local mode = nil
 
 function perform(eventsOrigin, params, timeinfo)
-    if #eventsOrigin > 2 then
+    local withTag = params.withTag
+    local filtered_events
+    if withTag ~= NO_TAG then
+        filtered_events = FilterEventsByTagName(eventsOrigin, withTag)
+    else
+        filtered_events = eventsOrigin
+    end
+    if #eventsOrigin > 2 or #filtered_events == 0 then
         return eventsOrigin
     end
     checkLegacyNamedParams(params, "direction", "mode", "value")
