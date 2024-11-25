@@ -1,0 +1,28 @@
+
+using "/chords/default.chords";
+
+device: _usePort=17 _setName=MyDevice  _isType=midi;
+instrumentDef: _setName=piano _onDevice=MyDevice _ch=0 _pc=1 _cc=8;
+
+tempo: 80;
+
+myPhrase = c2 d4 e;
+myPhraseII = >"myPhrase"2 f4 g;
+myPhraseIII = c2;
+myPhraseIV = c4 c, c c';
+
+[
+instrument: piano;
+{
+    >"myPhrase"2 >"myPhrase"2 | >>"myPhrase"1 |
+    >>"myPhrase"2  >>"myPhrase"2 | >>"myPhrase"2.  >>"myPhrase"4 |
+    >>"myPhraseII"1 | >>"myPhraseII"2. >>"myPhraseII"4 |
+    >>"myPhraseII"1 | 
+    /signature: 3 4/
+    c4 g g |
+    >>"myPhraseIV"2.~ | &4  >>"myPhraseIV"2 |
+    /signature: 4 4/
+    >>"myPhraseIV"2 &2 | >"myPhraseIV"2 &2
+
+}
+]

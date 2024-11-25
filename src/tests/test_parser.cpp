@@ -2114,6 +2114,7 @@ BOOST_AUTO_TEST_CASE(test_use_phrase)
 	BOOST_CHECK_EQUAL(defs.tracks[0].voices[0].events.size(), size_t(2));
 	BOOST_CHECK_EQUAL(defs.tracks[0].voices[0].events[0].type, Event::Phrase);
 	BOOST_CHECK_EQUAL(defs.tracks[0].voices[0].events[0].phraseName(), com::String("myPhrase"));
+	BOOST_CHECK_EQUAL(defs.tracks[0].voices[0].events[0].isPhraseStrechedPlayback, true);
 	BOOST_CHECK_EQUAL(defs.tracks[0].voices[0].events[0].duration, 1.0_N8);
 }
 BOOST_AUTO_TEST_CASE(test_use_tied_phrase)
@@ -2222,4 +2223,28 @@ myPhrase = c d e f;	\
 		BOOST_CHECK_EQUAL(defs.documentConfigs.size(), size_t(2));
 		BOOST_CHECK_EQUAL(defs.tracks.size(), size_t(2));
 	}
+}
+
+
+BOOST_AUTO_TEST_CASE(test_use_phrase_normal_mode)
+{
+	using namespace com;
+	using namespace documentModel;
+	using documentModel::PitchDef;
+	com::String text = FM_STRING("\
+[\n\
+	{\n\
+		>> \"myPhrase\"8 |\n\
+	}\n\
+]\n\
+");
+	SheetDefParser parser;
+	auto defs = parser.parse(text);
+	BOOST_CHECK(defs.tracks.size() == 1);
+	BOOST_CHECK(defs.tracks[0].voices.size() == 1);
+	BOOST_CHECK_EQUAL(defs.tracks[0].voices[0].events.size(), size_t(2));
+	BOOST_CHECK_EQUAL(defs.tracks[0].voices[0].events[0].type, Event::Phrase);
+	BOOST_CHECK_EQUAL(defs.tracks[0].voices[0].events[0].phraseName(), com::String("myPhrase"));
+	BOOST_CHECK_EQUAL(defs.tracks[0].voices[0].events[0].isPhraseStrechedPlayback, false);
+	BOOST_CHECK_EQUAL(defs.tracks[0].voices[0].events[0].duration, 1.0_N8);
 }

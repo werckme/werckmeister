@@ -342,11 +342,21 @@ namespace compiler
         const auto &phraseEvents = *phraseInfo.events;
         logger_->babble(WMLogLambda(log << "phrase found: " << phraseEvents.size() << " events"));
 		com::Ticks phraseEventLength = isTiedEvent ? phraseEvent.tiedDurationTotal : phraseEvent.duration;
+		com::Ticks totalRenderLength =  phraseEventLength;
         std::list<com::String> phraseTags(phraseEvent.tags.begin(), phraseEvent.tags.end());
 		for(const auto &event : phraseEvents)
         {
             auto copy = event;
-            copy.duration = event.duration * (phraseEventLength / phraseInfo.duration);
+			if (phraseEvent.isPhraseStrechedPlayback)
+			{
+            	copy.duration = event.duration * (phraseEventLength / phraseInfo.duration);
+			} else 
+			{
+				if (totalRenderLength < event.duration) {
+					copy.duration = totalRenderLength;
+				}
+				totalRenderLength -= event.duration;
+			}
 			addTagsRecursive(copy, phraseTags);
 			if (event.isPhrase())
 			{
@@ -361,7 +371,14 @@ namespace compiler
 			} else {
             	addEvent(copy);
 			}
+			if (totalRenderLength <= 0) {
+				break;
+			}
         }
+		if (phraseEvent.isPhraseStrechedPlayback == false && totalRenderLength > 0) 
+		{
+			ctx_->seek(totalRenderLength);
+		}
 		if (isTiedEvent)
 		{
 			ctx_->seek(-(phraseEventLength - phraseEvent.duration));

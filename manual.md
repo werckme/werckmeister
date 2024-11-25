@@ -903,9 +903,23 @@ PHRASE_NAME = PHRASE_EVENTS;
 ```
 
 **Use a phrase**
+
+There are two ways to playback an phrase:
+
+**playback streched**
+
+If the phrase duration is unequal to the target duration, the phrase will be rendered streched to fit into the target.
 ```
 >"PHRASE_NAME"DURATION_VALUE
 ```
+
+**playback cut off**
+If If the phrase duration is unequal to the target duration, the phrase will be rendered cut off or filled with rests to fit into the target.
+```
+>>"PHRASE_NAME"DURATION_VALUE
+```
+
+
 
 ```language=Werckmeister,type=full
 device: MyDevice _isType=webPlayer _useFont="FluidR3-GM"; 
@@ -981,7 +995,7 @@ parameters = {
 In the `perform` function you can implement your modification. Werckmeister expects a table with event informations to be returned from that function. This is the most minimalistic implementation you could write:
 
 ```lua
-function perform(events, params, timeinfo)
+function perform(events, params, timeinfo, context)
     return events
 end
 ```
@@ -1099,6 +1113,13 @@ Contains a table with informations about the current musical time.
 ### `context` argument
 Contains an interface with some context related functions.
 
+#### setDate
+`setDate(key, stringValue)`
+sets a global date to exchange data between mods and "perform functions".
+
+#### getDate
+`getDate(key)` returns the value for a key (see [setDate](#setdate))
+
 #### getCurrentInstrument
 returns information about the current instrument
 ```lua
@@ -1158,7 +1179,7 @@ instrumentConf: myInstrument
 The `execute` function works the same way as the `perform` function does. Except the `peform` function modifies existing events, the `execute` function can be used to create new events. Therefore the function signature is slightly different:
 
 ```lua
-function execute(params, timeinfo)
+function execute(params, timeinfo, context)
     return {
         -- some events
     }
