@@ -344,9 +344,11 @@ namespace compiler
 		com::Ticks phraseEventLength = isTiedEvent ? phraseEvent.tiedDurationTotal : phraseEvent.duration;
 		com::Ticks totalRenderLength =  phraseEventLength;
         std::list<com::String> phraseTags(phraseEvent.tags.begin(), phraseEvent.tags.end());
+		bool noTimeConsumingEventsRendered = true;
 		for(const auto &event : phraseEvents)
         {
             auto copy = event;
+			noTimeConsumingEventsRendered &= !event.isTimeConsuming();
 			if (phraseEvent.isPhraseStrechedPlayback)
 			{
             	copy.duration = event.duration * (phraseEventLength / phraseInfo.duration);
@@ -375,7 +377,7 @@ namespace compiler
 				break;
 			}
         }
-		if (phraseEvent.isPhraseStrechedPlayback == false && totalRenderLength > 0) 
+		if (noTimeConsumingEventsRendered == false && phraseEvent.isPhraseStrechedPlayback == false && totalRenderLength > 0) 
 		{
 			ctx_->seek(totalRenderLength);
 		}
