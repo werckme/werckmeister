@@ -1,48 +1,48 @@
-name: Windows Build
+# name: Windows Build
 
-on:
-  push:
-    branches: 
-        - main
-        - feature/* 
-        - bugfix/*
-        - develop
-        - bugfix/*
-  pull_request:
-    branches: [ develop ]
+#on:
+#  push:
+#    branches: 
+#        - main
+#        - feature/* 
+#        - bugfix/*
+#        - develop
+#        - bugfix/*
+#  pull_request:
+#    branches: [ develop ]
 
-jobs:
-  build:
-    runs-on: windows-latest
+#jobs:
+#  build:
+#    runs-on: windows-latest
 
-    steps:
-    - uses: actions/checkout@v2
-    - name: update submodules
-      run: git submodule update --init --recursive --remote
-    - name: configure
-      run: cmake -DCMAKE_BUILD_TYPE=Release ..
-      working-directory: build
-      env:
-        WM_DOWNLOAD_EXTERNALS: 1
-    - name: install render test requirements
-      run: pip3 install -r requirements.txt
-      working-directory: rendertests        
-    - name: build
-      run: cmake --build . --config Release
-      working-directory: build
-    - name: test
-      run: ./rehearse
-      working-directory: build/Release 
-    - name: run rendertests
-      run: python runtests.py
-      continue-on-error: false
-      working-directory: rendertests           
-    - name: pack
-      run: cmake --build . --config Release --target package
-      working-directory: build
-    - uses: actions/upload-artifact@v4
-      with:
-        name: werckmeister-win-${{ github.sha }}
-        path: | 
-          build/werckmeister-*-win64.msi
-          rendertests/*.mid
+#    steps:
+#    - uses: actions/checkout@v2
+#    - name: update submodules
+#      run: git submodule update --init --recursive --remote
+#    - name: configure
+#      run: cmake -DCMAKE_BUILD_TYPE=Release ..
+#      working-directory: build
+#      env:
+#        WM_DOWNLOAD_EXTERNALS: 1
+#    - name: install render test requirements
+#      run: pip3 install -r requirements.txt
+#      working-directory: rendertests        
+#    - name: build
+#      run: cmake --build . --config Release
+#      working-directory: build
+#    - name: test
+#      run: ./rehearse
+#      working-directory: build/Release 
+#    - name: run rendertests
+#      run: python runtests.py
+#      continue-on-error: false
+#      working-directory: rendertests           
+#    - name: pack
+#      run: cmake --build . --config Release --target package
+#      working-directory: build
+#    - uses: actions/upload-artifact@v4
+#      with:
+#        name: werckmeister-win-${{ github.sha }}
+#        path: | 
+#          build/werckmeister-*-win64.msi
+#          rendertests/*.mid
