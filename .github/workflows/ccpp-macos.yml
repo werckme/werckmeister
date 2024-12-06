@@ -22,6 +22,7 @@ jobs:
     #  run: brew install icu4c
     - name: configure python venv
       run: python -m venv myEnv && source myEnv/bin/activate
+      working-directory: rendertests
     - name: install render test requirements
       run: pip3 install -r requirements.txt
       working-directory: rendertests
