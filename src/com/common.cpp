@@ -2,7 +2,7 @@
 #include <boost/uuid/uuid.hpp>
 #include <boost/uuid/uuid_generators.hpp>
 #include <boost/uuid/uuid_io.hpp>
-#include <boost/locale.hpp>
+// TODO: #include <boost/locale.hpp>
 #include "config.hpp"
 
 namespace
@@ -40,11 +40,13 @@ namespace com
 
 	std::string to_string(const std::wstring &str)
 	{
-		return boost::locale::conv::from_utf(str, FM_CHARSET);
+	  throw std::runtime_error("todo: convert wstr to str");
+	  //return boost::locale::conv::from_utf(str, FM_CHARSET);
 	}
 
 	std::wstring to_wstring(const std::string &str)
 	{
-		return boost::locale::conv::to_utf<wchar_t>(str, FM_CHARSET);
+	  throw	std::runtime_error("todo: convert str to wstr");
+	  //return boost::locale::conv::to_utf<wchar_t>(str, FM_CHARSET);
 	}
 }
