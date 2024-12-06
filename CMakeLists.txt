@@ -84,7 +84,7 @@ IF(APPLE)
   SET(Boost_USE_STATIC_LIBS ON)
 ENDIF(APPLE)
 
-SET(BOOST_PACKAGES unit_test_framework filesystem program_options locale system)
+SET(BOOST_PACKAGES unit_test_framework filesystem program_options system)
 
 if ("$ENV{WM_DOWNLOAD_EXTERNALS}")
   #Download Boost
