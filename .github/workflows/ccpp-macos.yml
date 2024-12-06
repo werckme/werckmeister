@@ -13,23 +13,23 @@ on:
 
 jobs:
   build:
-    runs-on: macos-12
+    runs-on: macos-latest
     steps:
     - uses: actions/checkout@v2
     - name: update submodules
       run: git submodule update --init --recursive --remote
-    - name: install icu4c
-      run: brew install icu4c
-    - name: install render test requirements
-      run: pip3 install -r requirements.txt
-      working-directory: rendertests
+    #- name: install icu4c
+    #  run: brew install icu4c
+    #- name: install render test requirements
+    #  run: pip3 install -r requirements.txt
+    #  working-directory: rendertests
     - name: install boost
-      run: sh ./mac_build_boost_fallback.sh
-      working-directory: third_party
+      run: brew install boost #sh ./mac_build_boost_fallback.sh
+    #  working-directory: third_party
     - name: configure
       run: cmake -DCMAKE_BUILD_TYPE=Release ..
       env:
-        WM_DOWNLOAD_EXTERNALS: 1 # for some reason the boost build fails here: seems not to find the right toolset (for the first run, the second try succeeds)
+        WM_DOWNLOAD_EXTERNALS: 0 # for some reason the boost build fails here: seems not to find the right toolset (for the first run, the second try succeeds)
         #BOOST_ROOT: ${{ github.workspace }}/third_party/boost
       working-directory: build
     - name: build
