@@ -29,8 +29,8 @@ jobs:
     - name: configure
       run: cmake -DCMAKE_BUILD_TYPE=Release ..
       env:
-        WM_DOWNLOAD_EXTERNALS: 0 # for some reason the boost build fails here: seems not to find the right toolset (for the first run, the second try succeeds)
-        BOOST_ROOT: ${{ github.workspace }}/third_party/boost
+        WM_DOWNLOAD_EXTERNALS: 1 # for some reason the boost build fails here: seems not to find the right toolset (for the first run, the second try succeeds)
+        #BOOST_ROOT: ${{ github.workspace }}/third_party/boost
       working-directory: build
     - name: build
       run: cmake --build .
