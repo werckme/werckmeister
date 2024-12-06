@@ -18,8 +18,8 @@ jobs:
     - uses: actions/checkout@v2
     - name: update submodules
       run: git submodule update --init --recursive --remote
-    #- name: install icu4c
-    #  run: brew install icu4c
+    - name: install icu4c
+      run: brew install icu4c
     #- name: install render test requirements
     #  run: pip3 install -r requirements.txt
     #  working-directory: rendertests
