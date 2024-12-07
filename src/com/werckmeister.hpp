@@ -82,7 +82,6 @@ namespace com
 		Path resolvePath(const Path &relPath) const;
 		Path absolutePath(const Path &relPath) const;
 		bool fileExists(const Path &path) const;
-		bool fileIsSheet(const Path &path) const;
 		const Path *findScriptPathByName(const com::String &name) const;
 		ResourceStream openResource(const std::string &path)
 		{
