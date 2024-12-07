@@ -12,7 +12,7 @@ on:
 
 jobs:
   build:
-    if: false
+    if: true
     runs-on: ubuntu-latest
 
     steps:
