@@ -27,7 +27,7 @@ jobs:
     - name: install boost
       run: brew install boost
     - name: configure
-      run: cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_OSX_ARCHITECTURES=arm64;x86_64 ..
+      run: cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64" ..
       env:
         WM_DOWNLOAD_EXTERNALS: 0 # for some reason the boost build fails here: seems not to find the right toolset (for the first run, the second try succeeds)
       working-directory: build
