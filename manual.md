@@ -2195,6 +2195,7 @@ instrument: piano;
 | direction | - | Specifies the start direction of the stroke | [up,down,alternate] |
 | value | - | the duration of one arpeggio event. (Default=64) | [1,2,4,8,...] |
 | mode | - | Deprecated: Use _direction=alternate instead. Perform only one stroke direction (normal) or alternates between up and down. (Default=normal) | [normal,alternate] |
+| withTag | - | if set, only events including this tag will be processed. | tagName |
 
 #### include extension
 `using "lua/mod/guitarStroke.lua";`
