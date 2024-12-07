@@ -24,12 +24,10 @@ jobs:
     - name: install render test requirements
       run: source myEnv/bin/activate && pip3 install -r requirements.txt
       working-directory: rendertests
-    - name: install boost arm
-      run: arch -arm64 brew install boost
     - name: install boost x86
       run: arch -x86_64 brew install boost
     - name: configure
-      run: cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64" ..
+      run: cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_OSX_ARCHITECTURES="x86_64" ..
       env:
         WM_DOWNLOAD_EXTERNALS: 0 # for some reason the boost build fails here: seems not to find the right toolset (for the first run, the second try succeeds)
       working-directory: build
