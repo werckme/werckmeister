@@ -25,7 +25,7 @@ jobs:
       run: source myEnv/bin/activate && pip3 install -r requirements.txt
       working-directory: rendertests
     - name: install boost x86
-      run: arch -x86_64 brew install boost
+      run: arch -x86_64 /usr/local/bin/brew install boost
     - name: configure
       run: cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_OSX_ARCHITECTURES="x86_64" ..
       env:
