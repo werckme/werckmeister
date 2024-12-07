@@ -24,6 +24,8 @@ jobs:
     - name: install render test requirements
       run: source myEnv/bin/activate && pip3 install -r requirements.txt
       working-directory: rendertests
+    - name: install brew x86
+      run: arch -x86_64 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
     - name: install boost x86
       run: arch -x86_64 /usr/local/bin/brew install boost
     - name: configure
