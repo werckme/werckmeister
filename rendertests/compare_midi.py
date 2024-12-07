@@ -11,7 +11,7 @@ import sys
 from mido import MidiFile  # tick2second seems not to work properly
 from os import name as OSNAME
 
-MAX_TIME_DIFF = 0.019 if OSNAME == 'nt' else 0
+MAX_TIME_DIFF = 0.019 
 
 _tempo = 120
 _acceptedEventTypes = ['note_on', 'note_off', 'control_change', 'sysex']

@@ -22,8 +22,11 @@ jobs:
       run: git submodule update --init --recursive --remote    
     - name: install alsa
       run: sudo apt-get update && sudo apt-get install -y libasound2 libasound2-dev
+    - name: configure python venv
+      run: python -m venv myEnv
+      working-directory: rendertests
     - name: install render test requirements
-      run: pip3 install -r requirements.txt
+      run: source myEnv/bin/activate && pip3 install -r requirements.txt
       working-directory: rendertests
     - name: configure
       run: cmake -DCMAKE_BUILD_TYPE=Release ..
@@ -38,7 +41,7 @@ jobs:
       run: ./rehearse
       working-directory: build
     - name: run rendertests
-      run: python3 runtests.py
+      run: source myEnv/bin/activate && python3 runtests.py
       continue-on-error: false
       working-directory: rendertests   
     - name: pack

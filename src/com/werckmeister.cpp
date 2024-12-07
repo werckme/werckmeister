@@ -382,10 +382,5 @@ namespace com
 		this->_createContextHandler = createContextHandler;
 	}
 
-	bool Werckmeister::fileIsSheet(const Path &path) const
-	{
-		return boost::filesystem::extension(path) == ".documentModel";
-	}
-
 	Werckmeister::~Werckmeister() = default;
 }

@@ -24,7 +24,7 @@ def get_test_tags(sheetfile) -> list:
             line = file.readline()
             if not line:
                 break
-            is_comment_line_or_empty = re.match('\s*--.*$', line) or len(line.strip()) == 0
+            is_comment_line_or_empty = re.match(r'\s*--.*$', line) or len(line.strip()) == 0
             if not is_comment_line_or_empty:
                 break
             tags_matched = re.findall('#([a-zA-Z0-9_()=, -]+)*', line, re.DOTALL)
@@ -35,7 +35,7 @@ def get_test_tags(sheetfile) -> list:
             
 def get_args_from_tags(test_tags: list) -> None:
     args_tags = [tag for tag in test_tags if tag.startswith('compiler-args')]
-    args = [re.findall('compiler-args\((.*)\)', arg_tag, re.DOTALL) for arg_tag in args_tags]
+    args = [re.findall(r'compiler-args\((.*)\)', arg_tag, re.DOTALL) for arg_tag in args_tags]
     args = [arg[0].split(',') for arg in args if arg]
     args = list(itertools.chain(*args))
     args = [arg.strip() for arg in args]
@@ -47,7 +47,7 @@ def execute_postprocess_script(name, testdata: dict):
     lib.execute(testdata)
 
 def postprocess(testdata: dict, test_tags: list[str]) -> None:
-    extract_file = re.compile("post-test\((.+?)\)")
+    extract_file = re.compile(r"post-test\((.+?)\)")
     try:
         post_scripts = [extract_file.match(x)[1] for x in test_tags if x.strip().startswith(TAG_POST_TEST)]
     except:
