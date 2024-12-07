@@ -28,7 +28,7 @@ jobs:
     #  run: sh ./mac_build_boost_fallback.sh
     #  working-directory: third_party
     - name: configure
-      run: cmake -DCMAKE_BUILD_TYPE=Release ..
+      run: cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_OSX_ARCHITECTURES=arm64;x86_64 ..
       #env:
        # WM_DOWNLOAD_EXTERNALS: 1 # for some reason the boost build fails here: seems not to find the right toolset (for the first run, the second try succeeds)
         #BOOST_ROOT: ${{ github.workspace }}/third_party/boost
