@@ -107,27 +107,6 @@ else()
   find_package(Boost 1.66.0 COMPONENTS ${BOOST_PACKAGES} REQUIRED)
 endif()
 
-IF(APPLE)
-#  SET(Boost_LIBRARIES ${Boost_LIBRARIES}
-#      /usr/local/opt/icu4c/lib/libicudata.a 
-#      /usr/local/opt/icu4c/lib/libicui18n.a 
-#      /usr/local/opt/icu4c/lib/libicutu.a 
-#      /usr/local/opt/icu4c/lib/libicuuc.a 
-#      /usr/local/opt/icu4c/lib/libicuio.a 
-#      iconv)
-ELSEIF(UNIX)
-  if ($ENV{WM_LINUX_LINK_STATIC})
-    SET(
-      Boost_LIBRARIES ${Boost_LIBRARIES}
-      /usr/lib/x86_64-linux-gnu/libicui18n.a 
-      /usr/lib/x86_64-linux-gnu/libicutu.a 
-      /usr/lib/x86_64-linux-gnu/libicuuc.a 
-      /usr/lib/x86_64-linux-gnu/libicuio.a
-      /usr/lib/x86_64-linux-gnu/libicudata.a  
-      dl)
-  endif ($ENV{WM_LINUX_LINK_STATIC})
-ENDIF(APPLE)
-
 
 INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(src/)
