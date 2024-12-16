@@ -10,6 +10,8 @@ on:
         - bugfix/*
   pull_request:
     branches: [ develop ]
+  schedule:
+    - cron: '0 0 17 * *'
 
 jobs:
   build:
