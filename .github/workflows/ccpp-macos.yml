@@ -29,7 +29,7 @@ jobs:
     - name: install brew x86
       run: arch -x86_64 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
     - name: install boost x86
-      run: arch -x86_64 /usr/local/bin/brew install boost
+      run: arch -x86_64 /usr/local/bin/brew install boost@1.86
     - name: configure
       run: cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_OSX_ARCHITECTURES="x86_64" ..
       env:
