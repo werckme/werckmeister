@@ -6,7 +6,8 @@
 #include <boost/spirit/include/phoenix_statement.hpp>
 #include <boost/spirit/include/phoenix_algorithm.hpp>
 #include <boost/spirit/include/phoenix_core.hpp>
-#include <boost/bind.hpp>
+#include <boost/bind/bind.hpp>
+
 #include <boost/algorithm/string.hpp>
 #include <vector>
 #include <com/common.hpp>
@@ -61,6 +62,7 @@ namespace parser
 	template <typename Lexer>
 	ChordDefTokenizer<Lexer>::ChordDefTokenizer()
 	{
+		using namespace boost::placeholders;
 		auto addConfigs = boost::bind(&Base::add, this, _1, _2, boost::ref(documentUsings));
 		auto addDef = boost::bind(&Base::add, this, _1, _2, boost::ref(chordDefs));
 		this->self = (Base::documentUsing[addConfigs] | Base::comment | Base::chordDef[addDef]) | Base::eol | Base::any;
@@ -78,6 +80,7 @@ namespace parser
 	template <typename Lexer>
 	PitchmapTokenizer<Lexer>::PitchmapTokenizer()
 	{
+		using namespace boost::placeholders;
 		auto addConfigs = boost::bind(&Base::add, this, _1, _2, boost::ref(documentUsings));
 		auto addDef = boost::bind(&Base::add, this, _1, _2, boost::ref(pitchdefs));
 		this->self = (Base::documentUsing[addConfigs] | Base::comment | Base::pitchDef[addDef]) | Base::eol | Base::any;
@@ -98,6 +101,7 @@ namespace parser
 	template <typename Lexer>
 	DocumentUsingTokenizer<Lexer>::DocumentUsingTokenizer()
 	{
+		using namespace boost::placeholders;
 		auto addConfigs = boost::bind(&DocumentUsingTokenizer::onDocDef, this, _1, _2);
 		this->self = (Base::documentUsing[addConfigs] | Base::comment) | Base::eol | Base::any;
 	}

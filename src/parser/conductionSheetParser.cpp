@@ -10,7 +10,7 @@
 #include <boost/spirit/include/phoenix_core.hpp>
 #include <boost/spirit/include/phoenix_fusion.hpp>
 #include <boost/spirit/include/phoenix_stl.hpp>
-#include <boost/bind.hpp>
+#include <boost/bind/bind.hpp>
 #include "error.hpp"
 #include "parserSymbols.h"
 #include <com/tools.h>
@@ -112,6 +112,7 @@ namespace parser
 				using qi::lit;
 				using qi::on_error;
 				using namespace documentModel;
+				using namespace boost::placeholders;
 				typedef ConductionSelector::ArgumentValue ArgumentValue;
 				current_pos_.setStartPos(begin);
 				start.name("conduction documentModel");

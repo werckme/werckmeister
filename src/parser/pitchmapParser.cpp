@@ -46,7 +46,7 @@ namespace parser
 				using qi::lexeme;
 				using qi::lit;
 				using qi::on_error;
-
+				using namespace boost::placeholders;
 				alias_ %= lexeme['"' >> +(char_ - '"') >> '"'];
 
 				pitch_.name("pitch");

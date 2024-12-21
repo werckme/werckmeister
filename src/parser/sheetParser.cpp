@@ -454,6 +454,7 @@ namespace parser
 				using boost::phoenix::push_back;
 				using qi::_val;
 				using boost::spirit::qi::omit;
+				using namespace boost::placeholders;
 				initDocumentUsingParser();
 				initArgumentParser();
 				initSheetParser();
@@ -513,6 +514,7 @@ namespace parser
 				using boost::phoenix::at_c;
 				using boost::phoenix::push_back;
 				using qi::_val;
+				using namespace boost::placeholders;
 				Base::initArgumentParser();
 				Base::createDocumentConfigRules(Base::documentConfig_, Base::events);
 				Base::initDocumentUsingParser();
