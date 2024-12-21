@@ -24,7 +24,7 @@ set (CMAKE_CXX_STANDARD 17)
 # PROJECT CONFIG
 set(FM_CHARSET "ISO-8859-1")
 set(FM_PPQ 5000)
-set(BOOST_VERSION "1.78.0")
+set(BOOST_VERSION "1.87.0")
 set(FLUIDSYNTH_VERSION "2.1.0")
 #END PROJECT CONFIG
 
@@ -104,7 +104,7 @@ if(${USE_EMSCRIPTEN})
   # (I was not able to get linking against the boost library to work properly, even with --toolset=emscripten)
   add_subdirectory(third_party/emscripten_boost)
 else()
-  find_package(Boost 1.66.0 COMPONENTS ${BOOST_PACKAGES} REQUIRED)
+  find_package(Boost 1.87.0 COMPONENTS ${BOOST_PACKAGES} REQUIRED)
 endif()
 
 

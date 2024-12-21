@@ -1,6 +1,5 @@
 #include "UdpSender.hpp"
 #include <vector>
-#include <boost/bind.hpp>
 #include <boost/algorithm/string.hpp>
 
 namespace ip = boost::asio::ip;
@@ -11,12 +10,12 @@ namespace funk
 	{
 		ip::udp::resolver resolver(_service);
 		auto hostInfo = getHostInfo(hostStr);
-		ip::udp::resolver::query query(ip::udp::v4(), std::get<0>(hostInfo), std::get<1>(hostInfo));
-		_endpoint = *resolver.resolve(query);
+		auto results = resolver.resolve(boost::asio::ip::udp::v4(), std::get<0>(hostInfo), std::get<1>(hostInfo));
+		_endpoint = *results.begin();
 	}
 	void UdpSender::start()
 	{
-		_socket = std::move(SocketPtr(new Socket(_service)));
+		_socket = SocketPtr(new Socket(_service));
 		_socket->open(ip::udp::v4());
 	}
 	void UdpSender::stop()
