@@ -52,7 +52,7 @@ namespace parser
 				using qi::lit;
 				using qi::on_error;
 				using qi::attr;
-
+				using namespace boost::placeholders;
 				chordName.name("chord name");
 				intervals.name("intervals");
 

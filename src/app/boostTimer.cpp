@@ -1,8 +1,10 @@
 #include "boostTimer.h"
-#include <boost/bind.hpp>
+#include <boost/bind/bind.hpp>
+
 #include <mutex>
 #include <memory>
 #include <list>
+#include <boost/asio/executor_work_guard.hpp>
 
 namespace app
 {
@@ -10,11 +12,9 @@ namespace app
 	namespace
 	{
 		typedef std::lock_guard<BoostTimer::Lock> LockGuard;
-		typedef boost::asio::io_service::work Work;
-		typedef std::shared_ptr<Work> WorkPtr;
 		std::list<BoostTimer::Ptr> _gc;
 		boost::asio::io_context io;
-		WorkPtr work_ = WorkPtr(new Work(io));
+		auto work_ = boost::asio::make_work_guard(io);
 	}
 
 	BoostTimer::BoostTimer(const Callback &callback) : callback_(callback)
