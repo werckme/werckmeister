@@ -18,6 +18,7 @@ namespace compiler
 	public:
 		/**
 		 * for note event tracks:
+		 *   applies events of the master track
 		 *   resolves implicite duration to every event time consuming with duration = 0.
 		 *   resolves x shortcut e.g.: c1 x x x -> c1 c1 c1 c1
 		 *   determines total duration of tied events

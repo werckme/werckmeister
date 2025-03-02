@@ -125,11 +125,6 @@ namespace compiler
 				sheetEventRenderer->addEvent(ev);
 			}
 		}
-
-		bool isAccompTrack(const documentModel::Track &track)
-		{
-			return com::isAccompEventTrack(track);
-		}
 	}
 
 	void Compiler::renderAccompTrack()
@@ -138,7 +133,7 @@ namespace compiler
 		auto document = document_.lock();
 		for (documentModel::Track &track : document->sheetDef.tracks)
 		{
-			if (!isAccompTrack(track))
+			if (!com::isAccompEventTrack(track))
 			{
 				continue;
 			}

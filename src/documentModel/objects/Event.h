@@ -134,6 +134,16 @@ namespace documentModel
 			return type == Meta;
 		}
 
+		bool isBar() const
+		{
+			return type == EOB;
+		}
+		
+		bool isRest() const
+		{
+			return type == Rest;
+		}
+
 		com::String toString() const;
 
 		com::String phraseName() const;

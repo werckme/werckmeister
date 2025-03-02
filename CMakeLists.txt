@@ -1,4 +1,4 @@
-# WM_DOWNLOAD_EXTERNALS=1 WM_LINUX_LINK_STATIC=1 cmake .. -DCMAKE_BUILD_TYPE=Debug
+# CXX=clang++ CC=clang WM_DOWNLOAD_EXTERNALS=1 WM_LINUX_LINK_STATIC=1 cmake .. -DCMAKE_BUILD_TYPE=Debug
 cmake_minimum_required(VERSION 3.11)
 
 execute_process(COMMAND git --work-tree=. log --pretty=format:%h -n 1
@@ -14,7 +14,7 @@ project(werckmeister)
 # VSCode Extension, VST Plugin
 SET(WERCKMEISTER_VERSION_MAJOR 1)
 SET(WERCKMEISTER_VERSION_MINOR 4)
-SET(WERCKMEISTER_VERSION_PATCH 4)
+SET(WERCKMEISTER_VERSION_PATCH 5)
 
 # Add this project's cmake/ directory to the module path.
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake")

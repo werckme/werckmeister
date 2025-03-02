@@ -476,6 +476,7 @@ namespace com
     bool isNoteEventTrack(const documentModel::Track&);
     bool isAccompEventTrack(const documentModel::Track&);
     bool isTemplateTrack(const documentModel::Track&);
+    bool isMasterTrack(const documentModel::Track &track);
     String getTrackName(const documentModel::Track&);
 
 }

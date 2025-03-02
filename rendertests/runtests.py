@@ -15,6 +15,7 @@ if os.name == 'nt':
 
 TAG_SKIP_TEST = 'ignore'
 TAG_POST_TEST = 'post-test'
+TAG_POST_SHOULD_FAIL = 'should-fail'
 print(f"using {compiler_path}")
 def get_test_tags(sheetfile) -> list:
     lines = []
@@ -91,6 +92,9 @@ if __name__ == '__main__':
             postprocess({"referenceMidiFile": reffile, "midiFile": midifile, "sheetFile": infile}, test_tags)
             print(term.green + "OK" + term.normal)
         except Exception as ex:
+            if TAG_POST_SHOULD_FAIL in test_tags:
+                print(term.green + "OK" + term.normal)
+                continue
             ranAndFailedAndIgnored[1] += 1
             returnCode = 1
             print(term.red + "FAILED")

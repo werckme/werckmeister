@@ -5,6 +5,7 @@
 #include "ASheetEventRenderer.h"
 #include <compiler/context/IContext.h>
 #include <compiler/IDefinitionsServer.h>
+#include <documentModel/objects/Track.h>
 #include <forward.hpp>
 #include "ISheetNavigator.h"
 
@@ -22,20 +23,18 @@ namespace compiler
 		compiler::IDefinitionsServerPtr _definitionServer;
 		ISheetNavigatorPtr _sheetNavigator;
 
+		virtual void preprocessChordTrack(documentModel::Track &sheetTrack);
+		virtual void preprocessPhraseDefs(documentModel::DocumentConfig::Events &events);
+		virtual void preprocess(documentModel::DocumentPtr document);
+
 	public:
 		Preprocessor(IContextPtr context,
 					 ASheetEventRendererPtr renderer,
 					 compiler::IDefinitionsServerPtr definitionServer,
-					 ISheetNavigatorPtr sheetNavigator)
-			: _context(context), _renderer(renderer), _definitionServer(definitionServer), _sheetNavigator(sheetNavigator)
-		{
-		}
+					 ISheetNavigatorPtr sheetNavigator);
 		Preprocessor(const Preprocessor &) = delete;
 		Preprocessor &operator=(const Preprocessor &) = delete;
 		virtual void process(documentModel::Track &track);
-		virtual void preprocessChordTrack(documentModel::Track &sheetTrack);
-		virtual void preprocessPhraseDefs(documentModel::DocumentConfig::Events &events);
-		virtual void preprocess(documentModel::DocumentPtr document);
 		virtual ~Preprocessor() = default;
 	};
 }

@@ -1,5 +1,4 @@
 #include "Preprocessor.h"
-#include <documentModel/objects/Track.h>
 #include <compiler/metaData.h>
 #include "error.hpp"
 #include <functional>
@@ -14,7 +13,6 @@ namespace compiler
 
 	namespace
 	{
-
 		struct ProcessData
 		{
 			documentModel::Event lastNoRepeat;
@@ -120,7 +118,7 @@ namespace compiler
 				}
 				totalDurations.push_back(&event);
 				event.tiedDuration = startEvent.tiedDurationTotal;
-				if (!event.isTied() && event.type != Event::EOB)
+				if (!event.isTied() && event.isBar() == false)
 				{
 					break;
 				}
@@ -132,6 +130,15 @@ namespace compiler
 			}
 			startEvent.tiedDuration = startEvent.tiedDurationTotal;
 		}
+	} // namespace
+
+	Preprocessor::Preprocessor(IContextPtr context,
+		ASheetEventRendererPtr renderer,
+		compiler::IDefinitionsServerPtr definitionServer,
+		ISheetNavigatorPtr sheetNavigator)
+		: _context(context), _renderer(renderer), _definitionServer(definitionServer), _sheetNavigator(sheetNavigator)
+	{
+		using namespace documentModel;
 	}
 
 	void Preprocessor::process(documentModel::Track &track)
@@ -149,7 +156,7 @@ namespace compiler
 			auto end = voice.events.end();
 			auto lastEvent = end - 1;
 			processData.hasTimeConsumingEvents = false;
-			if (lastEvent->type != Event::EOB)
+			if (lastEvent->isBar() == false)
 			{
 				Event eob = *lastEvent;
 				eob.duration = 0;
@@ -168,6 +175,7 @@ namespace compiler
 				processEvent(ev, processData);
 			}
 			it = voice.events.begin();
+			
 			// second pass (repeat symbols are resolved now)
 			for (; it != end; ++it)
 			{
@@ -211,7 +219,7 @@ namespace compiler
 					_renderer->handleMetaEvent(*it);
 				}
 			}
-			if (it->type == Event::EOB)
+			if (it->isBar() == true)
 			{
 				processEob();
 			}
@@ -244,7 +252,7 @@ namespace compiler
 		{
 			try 
 			{
-				if (event.type == documentModel::Event::EOB)
+				if (event.isBar())
 				{
 					FM_THROW(Exception, "bars are not allowed in a phrase");
 				}
