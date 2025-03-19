@@ -182,8 +182,9 @@ The recommended way to edit Werckmeister sheet files, is using Visual Studio Cod
 Have a look [here](/code-extension).
 
 ## Using Werckmeister along with a DAW
-Use the [VST Plugin](https://www.werckme.org/vst) for that matter.<br>
-As an alternative, somehow you need to connect the `sheetp` player with the MIDI inputs of your DAW.
+The best way to use Werckmeister along with your DAW is [Werckmeister VST](#werckmeister-vst).
+
+As an alternative, all you need is to connect the `sheetp` player with the MIDI inputs of your DAW.
 
 On Windows there is some third party software for that purpose. In my opinion [loopMIDI](https://www.tobias-erichsen.de/software/loopmidi.html) does a pretty good job.
 
@@ -1256,3 +1257,17 @@ If Visual Studio Code is not able to execute the Werckmeister compiler you can s
 *Preferences -> Settings -> Extensions -> Werckmeister Binary Directory*
 
 <img src="https://raw.githubusercontent.com/werckme/werckmeister-codext/master/assets/pathsetup.png">
+
+
+Werckmeister VST
+======
+The VST Plugin allows you to use Werckmeister within your favourite DAW. Just load a `*.sheet` file, the Plugin compiles it and sends its MIDI data into your DAW track. For live editing you can connect VSCode with your plugin instances.
+
+[Download Here](https://werckme.github.io/vst#download)
+
+### Load a sheet file
+<img src="https://raw.githubusercontent.com/werckme/werckmeister/manual-update/assets/vst-loading-sheet.gif">
+
+
+### Connect VSCode with the plugin
+<img src="https://raw.githubusercontent.com/werckme/werckmeister/manual-update/assets/vst2vscode.gif">
