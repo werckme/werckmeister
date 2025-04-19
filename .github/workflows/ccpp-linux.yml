@@ -35,6 +35,8 @@ jobs:
       env:
         WM_DOWNLOAD_EXTERNALS: 1
         WM_LINUX_LINK_STATIC: 1
+        CC: clang
+        CXX: clang++
       working-directory: build
     - name: build
       run: cmake --build .
