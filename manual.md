@@ -1916,7 +1916,11 @@ set the pan of the current track
 
 Sets a chord context to the current voice to be able to use relative [degrees](#degree-events) instead of absolute notes.
 
-    The given chord name must be defined in a *.chords file.
+  The given chord name must be defined in a `*.chords` file.
+
+  A special chord name is "null", this unsets the current chord, wich is usefull when used within a template, to switch bewteen `accomp` track chord and a given chord:
+
+  [https://www.werckme.org/editor?wid=release-1-4-5-chordname](https://www.werckme.org/editor?wid=release-1-4-5-chordname)
 
  #### example
 

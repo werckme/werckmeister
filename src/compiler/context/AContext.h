@@ -98,6 +98,7 @@ namespace compiler
 		virtual const VoicingStrategies& voicingStrategies() override;
 		virtual const documentModel::Event& currentChordEvent() const override;
 		virtual void currentChordEvent(const documentModel::Event&);
+		virtual bool hasCurrentChordEvent() const override;
 		virtual AModificationPtr spielanweisung();
 		virtual AInstrumentDefPtr getInstrumentDef(const com::String &uname) = 0;
 		virtual AInstrumentDefPtr currentInstrumentDef() = 0;

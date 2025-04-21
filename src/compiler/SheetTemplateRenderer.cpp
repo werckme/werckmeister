@@ -398,7 +398,14 @@ namespace compiler
 						{
 							try
 							{
-								definitionsServer->degreeToAbsoluteNote(ctx, *chord, *degree, copy);
+								if (ctx->hasCurrentChordEvent()) 
+								{
+									const auto& contexChord = ctx->currentChordEvent();
+									definitionsServer->degreeToAbsoluteNote(ctx, contexChord, *degree, copy);
+								} else 
+								{
+									definitionsServer->degreeToAbsoluteNote(ctx, *chord, *degree, copy);
+								}
 							}
 							catch (const Exception &ex)
 							{

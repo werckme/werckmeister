@@ -79,6 +79,7 @@ namespace compiler
 		virtual AInstrumentDefPtr currentInstrumentDef() = 0;
 		virtual const documentModel::Event& currentChordEvent() const = 0;
 		virtual void currentChordEvent(const documentModel::Event&) = 0;
+		virtual bool hasCurrentChordEvent() const = 0;
 		virtual com::Ticks currentPosition() const = 0;
 		virtual com::Ticks maxPosition() const = 0;
 		virtual TimeInfo getTimeInfo() const = 0;
