@@ -380,7 +380,26 @@ namespace compiler
 		{
 			FM_THROW(Exception, "meta data = null");
 		}
+		if (chordEvent.stringValue == SHEET_META__SET_CHORD_VALUE_NULL)
+        {
+			meta->chordEvent = documentModel::Event();
+			return;
+        }
 		meta->chordEvent = chordEvent;
+	}
+
+	bool AContext::hasCurrentChordEvent() const
+	{
+		auto meta = voiceMetaData();
+		if (!meta)
+		{
+			FM_THROW(Exception, "meta data = null");
+		}
+		if (meta->chordEvent.type != documentModel::Event::Chord)
+		{
+			return false;
+		}
+		return true;
 	}
 
 	void AContext::clear()

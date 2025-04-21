@@ -1,0 +1,29 @@
+using "./chords/default.chords";
+
+
+device: _useDevice="FLUID" _setName=MyDevice  _isType=midi;
+instrumentDef: _setName=piano _onDevice=MyDevice _ch=0 _pc=1;
+
+
+[
+template: myTemplate;
+instrument: piano;
+{
+    /chord: "B"/
+    r8 <I III V>
+    /chord: "A"/
+    r8 <I III V>
+    /chord: "G#"/
+    r8 <I III V>
+    /chord: null/
+    r16 <I III V>8. | -- here goes the chord given by the accomp track
+}
+]
+
+[
+type: accomp;
+{
+    /template: myTemplate/
+    F | A | C# |
+}
+]

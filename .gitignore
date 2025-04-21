@@ -6,6 +6,7 @@ fe/package-lock.jso
 .vscode
 package.json
 
+tmp
 lib/
 lib64
 pyvenv.cfg
