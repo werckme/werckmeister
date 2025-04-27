@@ -294,19 +294,22 @@ BOOST_AUTO_TEST_CASE(test_SheetDefParser)
 	BOOST_CHECK(defs.tracks[0].voices.size() == 2);
 	BOOST_CHECK(defs.tracks[0].voices[0].events.size() == 16);
 	BOOST_CHECK(defs.tracks[0].voices[1].events.size() == 11);
-	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[0], documentModel::Event::Degree, 1, -1, 1.0_N4));
-	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[1], documentModel::Event::Degree, 2, -2, 1.0_N8));
-	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[2], documentModel::Event::Degree, 3, -3, 1.0_N16));
-	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[3], documentModel::Event::Degree, 4, 0, 1.0_N32));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[0], documentModel::Event::Degree, com::degrees::I, -1, 1.0_N4));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[1], documentModel::Event::Degree, com::degrees::II, -2, 1.0_N8));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[2], documentModel::Event::Degree, com::degrees::III, -3, 1.0_N16));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[3], documentModel::Event::Degree, com::degrees::IV, 0, 1.0_N32));
 	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[4], documentModel::Event::EOB));
-	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[5], documentModel::Event::Degree, 1, -1, 1.0_N4));
-	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[6], documentModel::Event::Degree, 1, -2, documentModel::Event::NoDuration));
-	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[7], documentModel::Event::Degree, 1, -3, documentModel::Event::NoDuration));
-	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[8], documentModel::Event::Degree, 1, 0, documentModel::Event::NoDuration));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[5], documentModel::Event::Degree, com::degrees::I, -1, 1.0_N4));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[6], documentModel::Event::Degree, com::degrees::I, -2, documentModel::Event::NoDuration));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[7], documentModel::Event::Degree, com::degrees::I, -3, documentModel::Event::NoDuration));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[8], documentModel::Event::Degree, com::degrees::I, 0, documentModel::Event::NoDuration));
 	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[9], documentModel::Event::EOB));
 	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[10], documentModel::Event::Rest, documentModel::PitchDef::NoPitch, 0, 1.0_N1));
 	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[11], documentModel::Event::EOB));
-	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[12], documentModel::Event::Degree, documentModel::Event::Pitches({ PitchDef(1, 1), PitchDef(3, 1), PitchDef(5, 1) }), 1.0_N4));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[12], documentModel::Event::Degree, documentModel::Event::Pitches({ PitchDef(com::degrees::I, 1), 
+		PitchDef(com::degrees::III, 1), 
+		PitchDef(com::degrees::V, 1) }), 1.0_N4)
+	);
 
 	BOOST_CHECK_EQUAL(defs.tracks[0].voices[0].events[13].metaArgs.size(), (size_t)1);
 	BOOST_CHECK(checkMetaEvent(defs.tracks[0].voices[0].events[13], FM_STRING("name"), documentModel::Event::Args({ makeArg("bass") })));
@@ -316,15 +319,15 @@ BOOST_AUTO_TEST_CASE(test_SheetDefParser)
 	BOOST_CHECK_EQUAL(defs.tracks[0].voices[0].events[15].metaArgs.size(), (size_t)2);
 	BOOST_CHECK(checkMetaEvent(defs.tracks[0].voices[0].events[15], FM_STRING("acommand"), documentModel::Event::Args({ makeArg("first", "arg1"), makeArg("second", "arg2") })));
 
-	BOOST_CHECK(checkNote(defs.tracks[0].voices[1].events[0], documentModel::Event::Degree, 4, 1, 1.0_N4p));
-	BOOST_CHECK(checkNote(defs.tracks[0].voices[1].events[1], documentModel::Event::Degree, 7, 2, 1.0_N8p));
-	BOOST_CHECK(checkNote(defs.tracks[0].voices[1].events[2], documentModel::Event::Degree, 1, 3, 1.0_N16p));
-	BOOST_CHECK(checkNote(defs.tracks[0].voices[1].events[3], documentModel::Event::Degree, 2, 0, 1.0_N32p));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[1].events[0], documentModel::Event::Degree, com::degrees::IV, 1, 1.0_N4p));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[1].events[1], documentModel::Event::Degree, com::degrees::VII, 2, 1.0_N8p));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[1].events[2], documentModel::Event::Degree, com::degrees::I, 3, 1.0_N16p));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[1].events[3], documentModel::Event::Degree, com::degrees::II, 0, 1.0_N32p));
 	BOOST_CHECK(checkNote(defs.tracks[0].voices[1].events[4], documentModel::Event::EOB));
-	BOOST_CHECK(checkNote(defs.tracks[0].voices[1].events[5], documentModel::Event::Degree, 2, 1, 1.0_N4));
-	BOOST_CHECK(checkNote(defs.tracks[0].voices[1].events[6], documentModel::Event::Degree, 2, 2, documentModel::Event::NoDuration));
-	BOOST_CHECK(checkNote(defs.tracks[0].voices[1].events[7], documentModel::Event::Degree, 2, 3, documentModel::Event::NoDuration));
-	BOOST_CHECK(checkNote(defs.tracks[0].voices[1].events[8], documentModel::Event::Degree, 2, 0, documentModel::Event::NoDuration));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[1].events[5], documentModel::Event::Degree, com::degrees::II, 1, 1.0_N4));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[1].events[6], documentModel::Event::Degree, com::degrees::II, 2, documentModel::Event::NoDuration));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[1].events[7], documentModel::Event::Degree, com::degrees::II, 3, documentModel::Event::NoDuration));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[1].events[8], documentModel::Event::Degree, com::degrees::II, 0, documentModel::Event::NoDuration));
 	BOOST_CHECK(checkNote(defs.tracks[0].voices[1].events[9], documentModel::Event::EOB));
 	BOOST_CHECK(checkNote(defs.tracks[0].voices[1].events[10], documentModel::Event::Rest, documentModel::PitchDef::NoPitch, 0, 1.0_N1));
 }
@@ -350,10 +353,10 @@ BOOST_AUTO_TEST_CASE(test_SheetDefParser_mixed_with_absolute_notes)
 	BOOST_CHECK(defs.tracks.size() == 1);
 	BOOST_CHECK(defs.tracks[0].voices.size() == 2);
 	BOOST_CHECK(defs.tracks[0].voices[0].events.size() == 4);
-	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[0], documentModel::Event::Degree, 1, -1, 1.0_N4));
-	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[1], documentModel::Event::Degree, 2, -2, 1.0_N8));
-	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[2], documentModel::Event::Degree, 3, -3, 1.0_N16));
-	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[3], documentModel::Event::Degree, 4, 0, 1.0_N32));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[0], documentModel::Event::Degree, com::degrees::I, -1, 1.0_N4));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[1], documentModel::Event::Degree, com::degrees::II, -2, 1.0_N8));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[2], documentModel::Event::Degree, com::degrees::III, -3, 1.0_N16));
+	BOOST_CHECK(checkNote(defs.tracks[0].voices[0].events[3], documentModel::Event::Degree, com::degrees::IV, 0, 1.0_N32));
 
 	BOOST_CHECK(defs.tracks[0].voices[1].events.size() == 4);
 	BOOST_CHECK(checkNote(defs.tracks[0].voices[1].events[0], documentModel::Event::Note, com::notes::C, 0, 1.0_N4));

@@ -18,6 +18,8 @@ namespace compiler
 	typedef std::shared_ptr<VoicingStrategy> VoicingStrategyPtr;
 	class LuaEventFunction;
 	typedef std::shared_ptr<LuaEventFunction> LuaEventFunctionPtr;
+	class IDefinitionsServer;
+	typedef std::shared_ptr<IDefinitionsServer> IDefinitionsServerPtr;
 }
 namespace lua
 {
