@@ -1,0 +1,30 @@
+using "/chords/default.chords";
+
+device: MyDevice  midi _usePort=17;
+instrumentDef: piano _onDevice=MyDevice _ch=2 _pc=1;
+instrumentConf: piano volume 100;
+
+[
+instrument: piano;
+{
+    /chord: "D7"/ 
+    Ib'->I'1 |
+}
+]
+
+[
+instrument: piano;
+template: myTemplate;
+{
+    r1 |
+    VII->I'1 |
+}
+]
+
+[
+type: accomp;
+{
+    /template: myTemplate/
+    Emaj7 | Emaj7 |
+}
+]
