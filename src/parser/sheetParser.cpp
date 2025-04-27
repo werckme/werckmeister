@@ -38,6 +38,7 @@ BOOST_FUSION_ADAPT_STRUCT(
 	(unsigned int, sourcePositionBegin)
 	(documentModel::ASheetObjectWithSourceInfo::SourceId, sourceId)
 	(documentModel::Event::Type, type)
+	(documentModel::Event::Type, subType)
 	(documentModel::Event::Tags, tags)
 	(documentModel::Event::Pitches, pitches)
 	(documentModel::Event::Duration, duration)
@@ -103,13 +104,14 @@ namespace
 		EvSourcePosBegin,
 		EvSourceId,
 		EvType,
+		EvSubType,
 		EvTags,
 		EvPitches,
 		EvDuration,
 		EvNumberOfEvents,
 		EvStringValue,
 		EvMetaArgs,
-		EvSourcePosEnd,
+		EvSourcePosEnd
 	};
 	enum SheetDefFields
 	{
@@ -278,22 +280,27 @@ namespace parser
 				event_ %=
 					( // NOTE
 						current_pos_.current_pos 
-						>> attr(sourceId_) 
-						>> attr(Event::Note) 
+						>> attr(sourceId_)
+						>> attr(Event::Note)
+						>> attr(Event::Unknown)
 						>> (("\"" >> +(lexeme[+char_(ALLOWED_EVENT_TAG_ARGUMENT)]) >> "\"" >> "@") | attr(Event::Tags())) 
 						>> (pitchOrAlias_ | ("<" >> +pitchOrAlias_ >> ">")) >> (durationSymbols_ | attr(Event::NoDuration))
 						>> attr(DefaultNumberOfBarRepeats)
 						>> attr("") 
 						>> attr(Event::Args()) >> current_pos_.current_pos 
 						>> -(
-							lit("~")[at_c<EvType>(_val) = Event::TiedNote] | (lit("->")[at_c<EvType>(_val) = Event::Meta][at_c<EvStringValue>(_val) = FM_STRING("addVorschlag")])
+							   lit("~")[at_c<EvType>(_val) = Event::TiedNote] 
+							| (lit("->")[at_c<EvType>(_val) = Event::Meta]
+										[at_c<EvSubType>(_val) = Event::Note]
+										[at_c<EvStringValue>(_val) = FM_STRING("addVorschlag")])
 						)
 					) 
 					|
 					( // DEGREE
 						current_pos_.current_pos 
-						>> attr(sourceId_) 
-						>> attr(Event::Degree) 
+						>> attr(sourceId_)
+						>> attr(Event::Degree)
+						>> attr(Event::Unknown)
 						>> (("\"" >> +(lexeme[+char_(ALLOWED_EVENT_TAG_ARGUMENT)]) >> "\"" >> "@") | attr(Event::Tags())) 
 						>> (degree_ | ("<" >> +degree_ >> ">")) 
 						>> (durationSymbols_ | attr(Event::NoDuration))
@@ -301,14 +308,18 @@ namespace parser
 						>> attr("") 
 						>> attr(Event::Args()) 
 						>> current_pos_.current_pos >> -(
-							lit("~")[at_c<EvType>(_val) = Event::TiedDegree] | (lit("->")[at_c<EvType>(_val) = Event::Meta][at_c<EvStringValue>(_val) = FM_STRING("addVorschlag")])
+							lit("~")[at_c<EvType>(_val) = Event::TiedDegree] 
+							| (lit("->")[at_c<EvType>(_val) = Event::Meta]
+										[at_c<EvSubType>(_val) = Event::Degree]
+							            [at_c<EvStringValue>(_val) = FM_STRING("addVorschlag")])
 						)
 					) 
 					|
 					( // REPEAT SHORTCUT (&)
-						current_pos_.current_pos 
-						>> attr(sourceId_) 
-						>> attr(Event::Repeat) 
+						current_pos_.current_pos
+						>> attr(sourceId_)
+						>> attr(Event::Repeat)
+						>> attr(Event::Unknown)
 						>> (("\"" >> +(lexeme[+char_(ALLOWED_EVENT_TAG_ARGUMENT)]) >> "\"" >> "@") | attr(Event::Tags())) 
 						>> "&" 
 						>> attr(PitchDef()) >> (durationSymbols_ | attr(Event::NoDuration)) 
@@ -323,6 +334,7 @@ namespace parser
 						current_pos_.current_pos 
 						>> attr(sourceId_) 
 						>> attr(Event::Chord) 
+						>> attr(Event::Unknown)
 						>> (("\"" >> +(lexeme[+char_(ALLOWED_EVENT_TAG_ARGUMENT)]) >> "\"" >> "@") | attr(Event::Tags())) 
 						>> attr(PitchDef()) 
 						>> attr(Event::NoDuration) 
@@ -336,6 +348,7 @@ namespace parser
 						>> attr(sourceId_) 
 						>> "\\" 
 						>> attr(Event::Meta) 
+						>> attr(Event::Unknown)
 						>> attr(Event::Tags()) 
 						>> attr(PitchDef()) 
 						>> attr(Event::NoDuration) 
@@ -349,6 +362,7 @@ namespace parser
 						>> attr(sourceId_) 
 						>> "!" 
 						>> attr(Event::Meta) 
+						>> attr(Event::Unknown)
 						>> attr(Event::Tags()) 
 						>> attr(PitchDef()) 
 						>> attr(Event::NoDuration) 
@@ -362,6 +376,7 @@ namespace parser
 						>> attr(sourceId_)
 						>> "r" 
 						>> attr(Event::Rest) 
+						>> attr(Event::Unknown)
 						>> attr(Event::Tags()) 
 						>> attr(PitchDef()) 
 						>> (durationSymbols_ | attr(Event::NoDuration)) 
@@ -376,6 +391,7 @@ namespace parser
 						>> attr(sourceId_) 
 						>> "|" 
 						>> attr(Event::EOB) 
+						>> attr(Event::Unknown)
 						>> attr(Event::Tags()) 
 						>> attr(PitchDef()) >> attr(Event::NoDuration) 
 						>> attr(DefaultNumberOfBarRepeats)
@@ -389,6 +405,7 @@ namespace parser
 						>> attr(sourceId_) 
 						>> ":" 
 						>> attr(Event::EOB) 
+						>> attr(Event::Unknown)
 						>> attr(Event::Tags()) 
 						>> attr(PitchDef()) 
 						>> attr(Event::NoDuration)
@@ -403,6 +420,7 @@ namespace parser
 						>> attr(sourceId_) 
 						>> "/" 
 						>> attr(Event::Meta) 
+						>> attr(Event::Unknown)
 						>> attr(Event::Tags()) 
 						>> attr(PitchDef()) 
 						>> attr(Event::NoDuration) 

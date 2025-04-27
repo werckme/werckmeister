@@ -1,6 +1,6 @@
 using "chords/default.chords";
 
-device: SC1 midi 5;
+device: SC1  midi _usePort=17;
 
 tempo: 130;
 instrumentDef: lead    SC1 3 0 0;
@@ -21,7 +21,7 @@ name: x;
 instrument: lead;
 {
     \ffff
-    I,4 I, I,  I,->I, | I, I, I,  I,8->I,
+    I,4 I, I,  I#,->I, | I, I, I,  I#,8->I,
 }
 ]
 

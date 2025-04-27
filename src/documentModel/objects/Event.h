@@ -55,6 +55,7 @@ namespace documentModel
 		com::String chordDefName() const;
 		Pitches pitches;
 		Type type = Unknown;
+		Type subType = Unknown;
 		Duration duration = NoDuration;
 		/**
 		 * duration of this event and all following tied events
