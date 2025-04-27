@@ -65,10 +65,10 @@ namespace parser
 		void merge(DocumentPtr target, DocumentPtr src)
 		{
 			append(target, src->sheetDef);
-			com::append(src->conductionSheets, target->conductionSheets);
-			com::insertRange(src->chordDefs, target->chordDefs);
-			com::insertRange(src->pitchmapDefs, target->pitchmapDefs);
-			com::insertRange(src->sources, target->sources);
+			com::append(target->conductionSheets, src->conductionSheets);
+			com::insertRange(target->chordDefs, src->chordDefs);
+			com::insertRange(target->pitchmapDefs, src->pitchmapDefs);
+			com::insertRange(target->sources, src->sources);
 		}
 
 		void useChordDef(DocumentPtr doc, const com::String &path, Event::SourceId sourceId)
@@ -165,12 +165,12 @@ namespace parser
 
 		void useSheetPart(DocumentPtr mainDocument, const com::String &path, Event::SourceId sourceId)
 		{
-			auto documentPtr = std::make_shared<documentModel::Document>();
-			documentPtr->path = path;
-			DocumentParser parser(documentPtr);
+			auto partDocumentPtr = std::make_shared<documentModel::Document>();
+			partDocumentPtr->path = path;
+			DocumentParser parser(partDocumentPtr);
 			parser.isPart = true;
 			parser.parse(path);
-			merge(mainDocument, documentPtr);
+			merge(mainDocument, partDocumentPtr);
 		}
 
 		void processUsings(DocumentPtr doc,
