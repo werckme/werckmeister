@@ -1,0 +1,8 @@
+using "./425-conduction-files-in-parts.conductions";
+
+[
+instrument: piano;
+{
+   c d e f |
+}
+]

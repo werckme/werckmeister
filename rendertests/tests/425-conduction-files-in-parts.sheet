@@ -1,0 +1,7 @@
+using "/chords/default.chords";
+using "./425-conduction-files-in-parts.part";
+
+device: MyDevice  midi _usePort=17;
+instrumentDef: piano _onDevice=MyDevice _ch=2 _pc=4;
+instrumentConf: piano volume 100;
+
