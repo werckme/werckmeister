@@ -14,11 +14,13 @@ from os import name as OSNAME
 MAX_TIME_DIFF = 0.019 
 
 _tempo = 120
-_acceptedEventTypes = ['note_on', 'note_off', 'control_change', 'sysex']
+_acceptedEventTypes = ['note_on', 'note_off', 'control_change', 'sysex', 'cue_marker']
 
 fticks_2_seconds = None
 
 def createKey(trackIdx, event, absTicks, cc_counter: map):
+    if event.type == 'cue_marker':
+        return (event.type, fticks_2_seconds(absTicks), event.text)
     if event.type == 'sysex':
         return (event.type, tuple(event.data), fticks_2_seconds(absTicks))
     if event.type == 'control_change':
@@ -41,7 +43,7 @@ def get_events(midifile):
         absTicks = 0
         for event in track:
             if hasattr(event, 'time'):
-                absTicks += event.time            
+                absTicks += event.time
             if event.type in _acceptedEventTypes:
                 yield trackIdx, event, absTicks
 

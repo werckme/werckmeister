@@ -370,7 +370,10 @@ namespace compiler
         auto ev = com::midi::Event();
         auto bytes = com::midi::Event::MetaCreateStringData(value);
         ev.metaData(itMetaType->second, bytes.data(), bytes.size());
-        ev.absPosition(ctx->currentPosition());
+        auto pos = ctx->currentPosition();
+        com::Ticks offset = 0;
+        lua::getTableValue(L, LUA_EVENT_PROPERTY_OFFSET, offset, false);
+        ev.absPosition(pos + offset * com::PPQ);
         midiContext->addEvent(ev);
     }
 
