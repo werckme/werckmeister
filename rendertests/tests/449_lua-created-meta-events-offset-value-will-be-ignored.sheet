@@ -1,0 +1,15 @@
+using "./449.lua";
+
+
+device: MyDevice  midi _usePort=0;
+instrumentDef: piano _onDevice=MyDevice _ch=2 _pc=4;
+instrumentConf: piano volume 100;
+
+
+[
+instrument: piano;
+{
+    /call: 449 _instrument=bass/
+    r1
+}
+]
