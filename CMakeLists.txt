@@ -1,5 +1,5 @@
 # CXX=clang++ CC=clang WM_DOWNLOAD_EXTERNALS=1 WM_LINUX_LINK_STATIC=1 cmake .. -DCMAKE_BUILD_TYPE=Debug
-cmake_minimum_required(VERSION 4.0)
+cmake_minimum_required(VERSION 3.31.6)
 
 execute_process(COMMAND git --work-tree=. log --pretty=format:%h -n 1
               OUTPUT_VARIABLE GIT_VERSION)
