@@ -1,0 +1,48 @@
+using "/chords/default.chords";
+using "./lua/highlight.lua";
+using "./lua/mods/myArpeggio.lua";
+
+using "./450-call-script-event-is-missing.conductions";
+
+
+device: SC1 midi 4;
+
+instrumentDef: guitar2       midi _onDevice="SC1" _ch=1;
+instrumentSection: guitar2.pose guitar2;
+instrumentSection: guitar2.nopose guitar2;
+
+instrumentDef: bass  midi _onDevice="SC1" _ch=2;
+instrumentSection: bass.pose bass;
+instrumentSection: bass.nopose bass;
+
+
+tempo: 140;
+[
+type: template;
+name: guitar.50sRock.normal;
+instrument: guitar2.nopose;
+{
+   II,,4 & & & |
+}
+]
+
+
+[
+type: template;
+name: guitar.50sRock.normal;
+instrument: guitar2.pose;
+{
+   /call: highlight _instrument="Gt" _value="low"/
+   r8. "ghost emph"@<V, I III V I'>16. r16. 
+
+}
+]
+
+[
+type: accomp;
+{
+    r1 |
+    /template: guitar.50sRock.normal /
+      Dmaj7 | 
+}
+]

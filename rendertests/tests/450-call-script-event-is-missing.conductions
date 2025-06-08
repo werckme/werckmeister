@@ -1,0 +1,6 @@
+instrument(guitar2.nopose bass.nopose) {
+      -- https://github.com/werckme/werckmeister/issues/436
+   velocity = 0;
+   duration = 0;
+   timeOffset -= 900;
+}

@@ -374,6 +374,18 @@ namespace compiler
         com::Ticks offset = 0;
         lua::getTableValue(L, LUA_EVENT_PROPERTY_OFFSET, offset, false);
         ev.absPosition(pos + offset * com::PPQ);
+
+
+		auto visitor = ctx->compilerVisitor();
+		auto trackMeta = ctx->trackMetaData();
+        if (trackMeta)
+        {
+            // #450: cue event had no insrument informations, because it was 
+            // the first event in a voice.
+            // A better fix may be, handle midi events as regular events and not here instantly, 
+            // so that the event process chain will be walked through properly
+            visitor->visitInstrument(trackMeta->uname, trackMeta->uname);
+        }
         midiContext->addEvent(ev);
     }
 
