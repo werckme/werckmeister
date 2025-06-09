@@ -1,6 +1,8 @@
-![Linux Build](https://github.com/werckme/werckmeister/workflows/Linux%20Build/badge.svg)
-![Windows Build](https://github.com/werckme/werckmeister/workflows/Windows%20Build/badge.svg)
-![Mac Build](https://github.com/werckme/werckmeister/workflows/Mac%20Build/badge.svg)
+[![Linux Build](https://github.com/werckme/werckmeister/actions/workflows/ccpp-linux.yml/badge.svg?branch=main)](https://github.com/werckme/werckmeister/actions/workflows/ccpp-linux.yml)
+[![Windows Build](https://github.com/werckme/werckmeister/actions/workflows/ccpp-win.yml/badge.svg?branch=main)](https://github.com/werckme/werckmeister/actions/workflows/ccpp-win.yml)
+[![Mac Build](https://github.com/werckme/werckmeister/actions/workflows/ccpp-macos.yml/badge.svg?branch=main)](https://github.com/werckme/werckmeister/actions/workflows/ccpp-macos.yml)
+[![Mac-arm Build](https://github.com/werckme/werckmeister/actions/workflows/ccpp-macos-arm.yml/badge.svg?branch=main)](https://github.com/werckme/werckmeister/actions/workflows/ccpp-macos-arm.yml)
+
 
 <img src="https://raw.githubusercontent.com/SambaGodschynski/werckmeister/main/assets/Logo2.png" style="margin: -90px auto; height: 500px">
 
