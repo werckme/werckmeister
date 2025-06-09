@@ -1,5 +1,4 @@
-# CXX=clang++ CC=clang WM_DOWNLOAD_EXTERNALS=1 WM_LINUX_LINK_STATIC=1 cmake .. -DCMAKE_BUILD_TYPE=Debug
-cmake_minimum_required(VERSION 3.11)
+cmake_minimum_required(VERSION 3.80)
 
 execute_process(COMMAND git --work-tree=. log --pretty=format:%h -n 1
               OUTPUT_VARIABLE GIT_VERSION)
@@ -24,7 +23,7 @@ set (CMAKE_CXX_STANDARD 17)
 # PROJECT CONFIG
 set(FM_CHARSET "ISO-8859-1")
 set(FM_PPQ 5000)
-set(BOOST_VERSION "1.87.0")
+set(BOOST_VERSION "1.88.0")
 set(FLUIDSYNTH_VERSION "2.1.0")
 #END PROJECT CONFIG
 
