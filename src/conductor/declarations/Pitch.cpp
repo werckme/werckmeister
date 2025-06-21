@@ -31,7 +31,7 @@ namespace conductor
             }
             return predecessorNoteOn->parameter1();
         };
-        double inputValue = declaration.value;
+        double inputValue = declaration.numberValue();
         constexpr double min = 0.0;
         constexpr double max = double(com::midi::MaxMidiValue);
         performImpl(noteOn, noteOff, inputValue, min, max, getOriginalValue, getPercentBase, getPredecessorValue, setNoteOn, setNoteOff);

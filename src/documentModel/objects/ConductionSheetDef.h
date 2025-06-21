@@ -4,6 +4,7 @@
 #include <com/common.hpp>
 #include <vector>
 #include <documentModel/PitchDef.h>
+#include <boost/variant2.hpp>
 
 namespace documentModel
 {
@@ -28,6 +29,7 @@ namespace documentModel
 		typedef std::vector<Selectors> SelectorsSet;
 		struct Declaration : public ASheetObjectWithSourceInfo
 		{
+			typedef boost::variant2::variant<double, com::String> ValueType;
 			enum OperationType
 			{
 				OperationUnknown,
@@ -45,7 +47,9 @@ namespace documentModel
 			com::String property = "";
 			OperationType operation = OperationUnknown;
 			ValueUnit unit = UnitAbsolute;
-			double value = 0;
+			ValueType value = 0.0;
+			double numberValue() const { return boost::variant2::get<double>(value); }
+			com::String strValue() const { return boost::variant2::get<com::String>(value); }
 		};
 		typedef std::vector<Declaration> Declarations;
 		SelectorsSet selectorsSet;
