@@ -1,0 +1,5 @@
+instrument(piano) {
+    volume = 0;
+    bend = 0;
+    cc = "Modulation(0)";
+}
