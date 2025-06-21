@@ -1,0 +1,42 @@
+
+using "/chords/default.chords";
+using "./426-last-meta-event-will-be-ignored-in-a-template.conductions";
+
+device: MyDevice  midi _usePort=17;
+instrumentDef: guitar1 _onDevice=MyDevice _ch=2 _pc=4;
+instrumentConf: guitar1 volume 100;
+
+instrumentDef: bass _onDevice=MyDevice _ch=3 _pc=33;
+instrumentConf: bass volume 100;
+
+
+[
+instrument: bass;
+template: bass;
+{
+    I, &&& |
+}
+]
+
+[
+instrument: guitar1;
+template: guitar1.riff;
+{
+    V8 !VI VII8. V8. !VI8 VII r |
+    <!VI III'>8 <VII !IV'>8    <I' V'>8. <!VI III'>8
+    <VII !IV'>8 
+    /beginTag: legato/
+    <!VI III'>16  <VII !IV'>16 <I V>8.
+    /endTag: legato/
+}
+]
+
+[
+type: accomp;
+{
+    /template: guitar1.riff bass/
+    C7  |  C7  |  D7  |  D7  |  C7 
+}
+]
+
+
