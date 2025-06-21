@@ -1,0 +1,16 @@
+using "../../examples/lua/mods/guitarStroke.lua";
+
+tempo: 140;
+device: SC1 _isType="midi" _useDevice="FLUID Synth";
+instrumentDef:lead    _onDevice=SC1  _ch=0 _pc=0;
+instrumentConf: lead mod guitarStroke _value=8;
+
+-- melody track
+[
+instrument: lead;
+{
+    \fff
+    /cc: _name="Modulation" _value=120/
+	<c e g b>1 |
+}
+]
