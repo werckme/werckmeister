@@ -14,11 +14,13 @@ from os import name as OSNAME
 MAX_TIME_DIFF = 0.019 
 
 _tempo = 120
-_acceptedEventTypes = ['note_on', 'note_off', 'control_change', 'sysex', 'cue_marker']
+_acceptedEventTypes = ['note_on', 'note_off', 'control_change', 'sysex', 'cue_marker', 'pitchwheel']
 
 fticks_2_seconds = None
 
 def createKey(trackIdx, event, absTicks, cc_counter: map):
+    if event.type == 'pitchwheel':
+        return (event.type, fticks_2_seconds(absTicks), event.pitch)
     if event.type == 'cue_marker':
         return (event.type, fticks_2_seconds(absTicks), event.text)
     if event.type == 'sysex':

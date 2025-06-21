@@ -3011,6 +3011,26 @@ Selects any event which has a tag assigned matching to the given tag.
 
 
 ## Conductor Declarations
+### `bend`
+
+#### Value Types
+| name | description | type |
+|:--- |:--- |:--- |
+| absolute | 50 is the neutral position of the bend | 0..100 |
+
+adds a pitch bend event at the same position as the selected event.
+
+  > the `%` unit and the `+=`, `-=`, `=& +` operations are not supported.
+
+ #### example:
+
+ ```
+ onBeat(1) { 
+   bend = 60; 
+ } 
+ ```
+<br><br><br>
+
 ### `duration`
 
 #### Value Types

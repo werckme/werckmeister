@@ -190,7 +190,6 @@ void FactoryConfig<TInjector>::initCommands()
 #include <conductor/declarations/Pitch.h>
 #include <conductor/declarations/Bend.h>
 #include <conductor/declarations/Cc.h>
-#include <conductor/declarations/Volume.h>
 
 template <class TInjector>
 void FactoryConfig<TInjector>::initConductor()
@@ -228,7 +227,6 @@ void FactoryConfig<TInjector>::initConductor()
     register_<TimeOffset>(declNamespace_ + SHEET_CONDUCTOR_DEC__TIME_OFFSET);
     register_<Duration>(declNamespace_ + SHEET_CONDUCTOR_DEC__LENGTH);
     register_<PitchDecl>(declNamespace_ + SHEET_CONDUCTOR_DEC__PITCH);
-    register_<Volume>(declNamespace_ + SHEET_CONDUCTOR_DEC__VOLUME);
     register_<Cc>(declNamespace_ + SHEET_CONDUCTOR_DEC__CC);
     register_<Bend>(declNamespace_ + SHEET_CONDUCTOR_DEC__BEND);
 }

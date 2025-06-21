@@ -110,6 +110,7 @@ namespace com
 		{
 			Event();
 			unsigned int id;
+			mutable Track* parentTrack = nullptr;
 			Ticks relDelta(Ticks deltaOffset) const;
 			void absPosition(Ticks ticks) { _deltaTime = ticks; }
 			Ticks absPosition() const { return _deltaTime; }
@@ -227,6 +228,7 @@ namespace com
 			const MidiConfig *midiConfig() const;
 			void midiConfig(const MidiConfig *midiConfig) { this->_midiConfig = midiConfig; }
 			void sort();
+			Track* parentTrack = nullptr;
 
 		private:
 			const MidiConfig *_midiConfig = nullptr;
@@ -259,6 +261,10 @@ namespace com
 			*/
 			void setMetaData(const MetaKey &key, const MetaValue &val);
 			MetaValue getMetaData(const MetaKey &key) const;
+			Track()
+			{
+				_container.parentTrack = this;
+			}
 
 		private:
 			MetaDataContainer _metaDataContainer;
