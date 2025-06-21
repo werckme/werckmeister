@@ -71,6 +71,9 @@ function perform(eventsOrigin, params, timeinfo)
     local value          = params.value
     value = tonumber(value)
     local event = eventsOrigin[1]
+    if event.pitches == nil then
+        return  eventsOrigin
+    end
     local events = { }
     local comparer = pitchCompare
     
