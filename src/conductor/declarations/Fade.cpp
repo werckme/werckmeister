@@ -74,12 +74,12 @@ namespace conductor
             if (strOption == "offset")
             { 
             
-                options.offset = parseNumnber<com::Ticks>(strValue, "offset");
+                options.offset = parseNumnber<double>(strValue, "offset");
                 return;
             }
             if (strOption == "duration")
             { 
-                options.duration = parseNumnber<com::Ticks>(strValue, "duration");
+                options.duration = parseNumnber<double>(strValue, "duration");
                 if (options.duration <= 0)
                 {
                     FM_THROW(compiler::Exception, "invalid duration value: " + strOption);
