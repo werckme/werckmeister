@@ -5,6 +5,7 @@
 #include <vector>
 #include <documentModel/PitchDef.h>
 #include <variant>
+#include <compiler/error.hpp>
 
 namespace documentModel
 {
@@ -48,8 +49,22 @@ namespace documentModel
 			OperationType operation = OperationUnknown;
 			ValueUnit unit = UnitAbsolute;
 			ValueType value = 0.0;
-			double numberValue() const { return std::get<double>(value); }
-			com::String strValue() const { return std::get<com::String>(value); }
+			double numberValue() const 
+			{
+				if (value.index() != 0) 
+				{
+					FM_THROW(compiler::Exception, "invalid value type: number expected");
+				}
+				return std::get<double>(value); 
+			}
+			com::String strValue() const
+			{ 
+				if (value.index() != 1) 
+				{
+					FM_THROW(compiler::Exception, "invalid value type: quoted string expected");
+				}
+				return std::get<com::String>(value); 
+			}
 		};
 		typedef std::vector<Declaration> Declarations;
 		SelectorsSet selectorsSet;

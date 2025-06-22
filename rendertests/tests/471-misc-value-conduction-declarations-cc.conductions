@@ -1,0 +1,18 @@
+instrument(piano) onBar(1) {
+    cc = "Modulation(100)";
+    cc = "MainVolume(127)";
+}
+
+instrument(piano) onBar(2) {
+    cc = "cc1(0)";
+}
+
+instrument(piano) onBar(3) {
+    cc = "MainVolume(90)";
+    cc = "Modulation(100)";
+}
+
+instrument(piano) onBar(4) {
+    cc = "MainVolume(127)";
+    cc = "Modulation(0)";
+}

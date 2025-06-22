@@ -15,7 +15,7 @@ namespace conductor
     /// } \n
     /// ```
     /// </declaration>
-    /// <value name="absolute" type="0..100">50 is the neutral position of the bend</value>
+    /// <value name="bend value" type="0..100">50 is the neutral position of the bend</value>
     class Bend : public ADeclaration
     {
     public:
