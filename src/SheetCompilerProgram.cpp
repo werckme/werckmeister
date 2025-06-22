@@ -66,6 +66,7 @@ void SheetCompilerProgram::compile()
     try
     {
         _logger->babble(WMLogLambda(log << "aplying conduction rules"));
+        _midiFile->transactionMode(true);
         _conductionsPerformer->applyConductions();
         if (_programOptions->isBeginSet() || _programOptions->isEndSet())
         {
@@ -74,6 +75,7 @@ void SheetCompilerProgram::compile()
             _logger->babble(WMLogLambda(log << "crop midi " << beginTicks/com::PPQ << ":" << endTicks/com::PPQ ));
             _midiFile->crop(beginTicks, endTicks);
         }
+        _midiFile->transactionMode(false);
         _midiFile->seal();
         com::getWerckmeister().clearCache();
     }

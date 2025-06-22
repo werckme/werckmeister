@@ -664,20 +664,35 @@ namespace com
 				return;
 			}
 			event.parentTrack = this->parentTrack;
+			if (_transactionMode)
+			{
+				_transaction.push_back(event);
+				return;
+			}
 			_container.push_back(event);
 		}
 		void EventContainer::remove(const Event &event)
 		{
-			ConstIterator it = _container.begin();
-			ConstIterator end = _container.end();
+			auto& ctn = _transactionMode ? _transaction : _container;
+			ConstIterator it = ctn.begin();
+			ConstIterator end = ctn.end();
 			for (; it != end; ++it)
 			{
 				if (*it == event)
 				{
 					event.parentTrack = nullptr;
-					_container.erase(it);
+					ctn.erase(it);
 					break;
 				}
+			}
+		}
+		void EventContainer::transactionMode(bool val)
+		{
+			_transactionMode = val;
+			if (!val)
+			{
+				_container.insert(_container.end(), _transaction.begin(), _transaction.end());
+				_transaction.clear();
 			}
 		}
 		EventContainer::ConstIterator EventContainer::begin() const
@@ -953,6 +968,15 @@ namespace com
 					copy.push_back(midiEvent);
 				}
 				originalContainer.swap(copy);
+			}
+		}
+	
+		void Midi::transactionMode(bool val)
+		{
+			_transactionMode = val;
+			for(auto& track : tracks())
+			{
+				track->events().transactionMode(val);
 			}
 		}
 	}

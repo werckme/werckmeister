@@ -229,10 +229,14 @@ namespace com
 			void midiConfig(const MidiConfig *midiConfig) { this->_midiConfig = midiConfig; }
 			void sort();
 			Track* parentTrack = nullptr;
+			void transactionMode(bool val);
+			bool transactionMode() const { return _transactionMode; }
 
 		private:
 			const MidiConfig *_midiConfig = nullptr;
 			TContainer _container;
+			TContainer _transaction;
+			bool _transactionMode = false;
 		};
 
 		class Track
@@ -310,12 +314,15 @@ namespace com
 			 */
 			void seal();
 			void crop(com::Ticks begin, com::Ticks end);
+			void transactionMode(bool val);
+			bool transactionMode() const { return _transactionMode; }
 
 		private:
 			BPM bpm_ = com::DefaultTempo;
 			Ticks _ppq = 0;
 			TrackContainer _container;
 			bool _sealed = false;
+			bool _transactionMode = false;
 		};
 		
 		bool isDeviceConfigEvent(const Event&);

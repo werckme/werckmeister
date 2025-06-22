@@ -97,13 +97,13 @@ namespace conductor
             {
                 if (valueType == Fade::FadeOptions::TypeBend)
                 {
-                    return com::midi::Event::PitchBend(channel, pos, val);
+                    return com::midi::Event::PitchBend(channel, pos, val/100.0);
                 }
                 auto ev = com::midi::Event::CCValue(channel, valueType, val);
                 ev.absPosition(pos);
                 return ev;
             };
-            for (double t = 0; t <= duration; t += double(1.0_N16))
+            for (double t = 0; t <= duration; t += double(1.0_N128))
             {
                 auto doubleValue = tween.calc(t);
                 int value = std::max(0, std::min(127, int(doubleValue)));
@@ -169,11 +169,11 @@ namespace conductor
         }
         if (options.from < 0 || options.from > maxValue)
         {
-            FM_THROW(compiler::Exception, "fade value out of range: " + std::to_string(options.from));
+            FM_THROW(compiler::Exception, "fade value out of range max(" + std::to_string(maxValue)  +  "): " + std::to_string(options.from));
         }
         if (options.to < 0 || options.to > maxValue)
         {
-            FM_THROW(compiler::Exception, "fade value out of range: " + std::to_string(options.to));
+            FM_THROW(compiler::Exception, "fade value out of range max(" + std::to_string(maxValue)  +  "): " + std::to_string(options.to));
         }
         if (options.curve == compiler::FadeCC::CurveTypeLin)
         {

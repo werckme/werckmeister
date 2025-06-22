@@ -1,12 +1,14 @@
 
 using "./470-misc-fade-values.conductions";
 
-device: _setName=MyDevice  _isType=midi _useDevice="FLUID Synth";
+device: _setName=MyDevice  _isType=midi _useDevice="FLUID";
 instrumentDef: _setName=piano _onDevice=MyDevice _ch=0 _pc=1 _cc=8;
 
 [
 instrument: piano;
 {
-    c &&& :(x4)|
+    "mod"@c &&& :(x2)
+    | "reset"@c &&& 
+    |: "bend"@c &&& :(x2)|
 }
 ]
