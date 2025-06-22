@@ -17,16 +17,13 @@ namespace conductor
 
     namespace
     {
-        template<typename T>
-        T parseNumnber(const com::String& str, const com::String context)
+        double parseNumber(const com::String& str, const com::String& context)
         {
-            T value = 0;
-            auto [ptr, ec] = std::from_chars(str.data(), str.data() + str.size(), value);
-            if (ec != std::errc()) 
-            {
-                FM_THROW(compiler::Exception, "invalid number value '" + str + "' for " + context);
+            try {
+                return std::stod(str);
+            } catch (...) {
+                FM_THROW(compiler::Exception, "invalid double value '" + str + "' for " + context);
             }
-            return value;
         }
 
         void parseOption(Fade::FadeOptions& options, const com::String& strOptionExpr)
@@ -58,12 +55,12 @@ namespace conductor
             }
             if (strOption == "from")
             {
-                options.from = parseNumnber<int>(strValue, "from");
+                options.from = (int)parseNumber(strValue, "from");
                 return;
             }
             if (strOption == "to")
             {
-                options.to = parseNumnber<int>(strValue, "to");
+                options.to = (int)parseNumber(strValue, "to");
                 return;
             }
             if (strOption == "curve")
@@ -74,12 +71,12 @@ namespace conductor
             if (strOption == "offset")
             { 
             
-                options.offset = parseNumnber<double>(strValue, "offset");
+                options.offset = (com::Ticks)parseNumber(strValue, "offset");
                 return;
             }
             if (strOption == "duration")
             { 
-                options.duration = parseNumnber<double>(strValue, "duration");
+                options.duration = (com::Ticks)parseNumber(strValue, "duration");
                 if (options.duration <= 0)
                 {
                     FM_THROW(compiler::Exception, "invalid duration value: " + strOption);
