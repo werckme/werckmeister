@@ -1,0 +1,5 @@
+
+instrument(piano)
+{
+    fade = "type(cc1),from(0),to(100),duration(4)";
+}

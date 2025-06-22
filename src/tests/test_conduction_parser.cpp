@@ -553,3 +553,173 @@ BOOST_AUTO_TEST_CASE(parse_declaration_fraction_value)
 	BOOST_CHECK_EQUAL(defs.rules[0].declarations.size(), size_t(1));
 	BOOST_CHECK_EQUAL(defs.rules[0].declarations[0].numberValue(), 1.0/4.0);
 }
+
+#include <conductor/declarations/Fade.h>
+
+BOOST_AUTO_TEST_CASE(parse_fade_options_empty)
+{
+	using namespace conductor;
+
+	Fade::FadeOptions options;
+	Fade::parseFadeOptions(options, "");
+	BOOST_CHECK_EQUAL(options.type, 0);
+	BOOST_CHECK_EQUAL(options.from, 0);
+	BOOST_CHECK_EQUAL(options.to, 0);
+	BOOST_CHECK_EQUAL(options.offset, 0);
+	BOOST_CHECK_EQUAL(options.curve, com::String("lin"));
+}
+
+BOOST_AUTO_TEST_CASE(parse_fade_options_type)
+{
+	using namespace conductor;
+
+	{
+		Fade::FadeOptions options;
+		Fade::parseFadeOptions(options, "type(cc69)");
+		BOOST_CHECK_EQUAL(options.type, 69);
+		BOOST_CHECK_EQUAL(options.from, 0);
+		BOOST_CHECK_EQUAL(options.to, 0);
+		BOOST_CHECK_EQUAL(options.offset, 0);
+		BOOST_CHECK_EQUAL(options.curve, com::String("lin"));
+	}
+	{
+		Fade::FadeOptions options;
+		Fade::parseFadeOptions(options, "type(Hold2)");
+		BOOST_CHECK_EQUAL(options.type, 69);
+		BOOST_CHECK_EQUAL(options.from, 0);
+		BOOST_CHECK_EQUAL(options.to, 0);
+		BOOST_CHECK_EQUAL(options.offset, 0);
+		BOOST_CHECK_EQUAL(options.curve, com::String("lin"));
+	}
+	{
+		Fade::FadeOptions options;
+		Fade::parseFadeOptions(options, "type(bend)");
+		BOOST_CHECK_EQUAL(options.type, Fade::FadeOptions::TypeBend);
+		BOOST_CHECK_EQUAL(options.from, 0);
+		BOOST_CHECK_EQUAL(options.to, 0);
+		BOOST_CHECK_EQUAL(options.offset, 0);
+		BOOST_CHECK_EQUAL(options.curve, com::String("lin"));
+	}
+}
+
+BOOST_AUTO_TEST_CASE(parse_fade_options_from_and_to)
+{
+	using namespace conductor;
+
+	{
+		Fade::FadeOptions options;
+		Fade::parseFadeOptions(options, "from(10)");
+		BOOST_CHECK_EQUAL(options.type, 0);
+		BOOST_CHECK_EQUAL(options.from, 10);
+		BOOST_CHECK_EQUAL(options.to, 0);
+		BOOST_CHECK_EQUAL(options.offset, 0);
+		BOOST_CHECK_EQUAL(options.curve, com::String("lin"));
+	}
+	{
+		Fade::FadeOptions options;
+		Fade::parseFadeOptions(options, "to(20)");
+		BOOST_CHECK_EQUAL(options.type, 0);
+		BOOST_CHECK_EQUAL(options.from, 0);
+		BOOST_CHECK_EQUAL(options.to, 20);
+		BOOST_CHECK_EQUAL(options.offset, 0);
+		BOOST_CHECK_EQUAL(options.curve, com::String("lin"));
+	}
+}
+
+BOOST_AUTO_TEST_CASE(parse_fade_options_offset)
+{
+	using namespace conductor;
+
+	{
+		Fade::FadeOptions options;
+		Fade::parseFadeOptions(options, "offset(1.5)");
+		BOOST_CHECK_EQUAL(options.type, 0);
+		BOOST_CHECK_EQUAL(options.from, 0);
+		BOOST_CHECK_EQUAL(options.to, 0);
+		BOOST_CHECK_EQUAL(options.offset, 1.5);
+		BOOST_CHECK_EQUAL(options.curve, com::String("lin"));
+	}
+	{
+		Fade::FadeOptions options;
+		Fade::parseFadeOptions(options, "offset(2)");
+		BOOST_CHECK_EQUAL(options.type, 0);
+		BOOST_CHECK_EQUAL(options.from, 0);
+		BOOST_CHECK_EQUAL(options.to, 0);
+		BOOST_CHECK_EQUAL(options.offset, 2);
+		BOOST_CHECK_EQUAL(options.curve, com::String("lin"));
+	}
+}
+
+BOOST_AUTO_TEST_CASE(parse_fade_options_duration)
+{
+	using namespace conductor;
+
+	{
+		Fade::FadeOptions options;
+		Fade::parseFadeOptions(options, "duration(1.5)");
+		BOOST_CHECK_EQUAL(options.type, 0);
+		BOOST_CHECK_EQUAL(options.from, 0);
+		BOOST_CHECK_EQUAL(options.to, 0);
+		BOOST_CHECK_EQUAL(options.offset, 0);
+		BOOST_CHECK_EQUAL(options.duration, 1.5);
+		BOOST_CHECK_EQUAL(options.curve, com::String("lin"));
+	}
+	{
+		Fade::FadeOptions options;
+		Fade::parseFadeOptions(options, "duration(2)");
+		BOOST_CHECK_EQUAL(options.type, 0);
+		BOOST_CHECK_EQUAL(options.from, 0);
+		BOOST_CHECK_EQUAL(options.to, 0);
+		BOOST_CHECK_EQUAL(options.offset, 0);
+		BOOST_CHECK_EQUAL(options.duration, 2);
+		BOOST_CHECK_EQUAL(options.curve, com::String("lin"));
+	}
+}
+
+BOOST_AUTO_TEST_CASE(parse_fade_options_curve)
+{
+	using namespace conductor;
+	Fade::FadeOptions options;
+	Fade::parseFadeOptions(options, "curve(exp)");
+	BOOST_CHECK_EQUAL(options.type, 0);
+	BOOST_CHECK_EQUAL(options.from, 0);
+	BOOST_CHECK_EQUAL(options.to, 0);
+	BOOST_CHECK_EQUAL(options.offset, 0);
+	BOOST_CHECK_EQUAL(options.curve, com::String("exp"));
+}
+
+BOOST_AUTO_TEST_CASE(parse_fade_options_multiple_options)
+{
+	using namespace conductor;
+	Fade::FadeOptions options;
+	Fade::parseFadeOptions(options, "type(cc10), from(10), to(100), offset(-1.5), curve(exp)");
+	BOOST_CHECK_EQUAL(options.type, 10);
+	BOOST_CHECK_EQUAL(options.from, 10);
+	BOOST_CHECK_EQUAL(options.to, 100);
+	BOOST_CHECK_EQUAL(options.offset, -1.5);
+	BOOST_CHECK_EQUAL(options.curve, com::String("exp"));
+}
+
+BOOST_AUTO_TEST_CASE(parse_fade_options_multiple_options_spaces)
+{
+	using namespace conductor;
+	Fade::FadeOptions options;
+	Fade::parseFadeOptions(options, "  type(cc10) , from(10)    , to(100),offset(1.5),    curve(exp)  ");
+	BOOST_CHECK_EQUAL(options.type, 10);
+	BOOST_CHECK_EQUAL(options.from, 10);
+	BOOST_CHECK_EQUAL(options.to, 100);
+	BOOST_CHECK_EQUAL(options.offset, 1.5);
+	BOOST_CHECK_EQUAL(options.curve, com::String("exp"));
+}
+
+BOOST_AUTO_TEST_CASE(parse_fade_options_multiple_options_spaces2)
+{
+	using namespace conductor;
+	Fade::FadeOptions options;
+	Fade::parseFadeOptions(options, "  type (cc10),from( 10),to(100 ),offset(  1.5  ),curve( exp )");
+	BOOST_CHECK_EQUAL(options.type, 10);
+	BOOST_CHECK_EQUAL(options.from, 10);
+	BOOST_CHECK_EQUAL(options.to, 100);
+	BOOST_CHECK_EQUAL(options.offset, 1.5);
+	BOOST_CHECK_EQUAL(options.curve, com::String("exp"));
+}

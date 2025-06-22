@@ -132,6 +132,7 @@ SET (SRC_FETZER_LIB
     conductor/declarations/Duration.cpp
     conductor/declarations/Bend.cpp
     conductor/declarations/Cc.cpp
+    conductor/declarations/Fade.cpp
 )
 
 add_definitions( -DGIT_VERSION="${GIT_VERSION}" )
