@@ -190,6 +190,7 @@ void FactoryConfig<TInjector>::initCommands()
 #include <conductor/declarations/Pitch.h>
 #include <conductor/declarations/Bend.h>
 #include <conductor/declarations/Cc.h>
+#include <conductor/declarations/Fade.h>
 
 template <class TInjector>
 void FactoryConfig<TInjector>::initConductor()
@@ -229,4 +230,5 @@ void FactoryConfig<TInjector>::initConductor()
     register_<PitchDecl>(declNamespace_ + SHEET_CONDUCTOR_DEC__PITCH);
     register_<Cc>(declNamespace_ + SHEET_CONDUCTOR_DEC__CC);
     register_<Bend>(declNamespace_ + SHEET_CONDUCTOR_DEC__BEND);
+    register_<Fade>(declNamespace_ + SHEET_CONDUCTOR_DEC__FADE);
 }

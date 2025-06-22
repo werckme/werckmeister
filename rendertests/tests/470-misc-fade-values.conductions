@@ -1,0 +1,24 @@
+
+instrument(piano) withTag(mod)
+{
+    duration = 70%;
+}
+
+instrument(piano) withTag(mod)
+{
+    bend = 50;
+    fade = "type(cc1),from(0),to(127),duration(3.9),curve(lin)";
+    cc = "MainVolume(100)";
+}
+
+instrument(piano) withTag(reset)
+{
+    cc = "cc1(0)";
+    bend = 50;
+}
+
+instrument(piano) withTag(bend)
+{
+    fade = "type(bend),from(50),to(100),duration(4),curve(exp), offset(-0.05)";
+    fade = "type(MainVolume),from(100),to(60),duration(4),curve(lin)";
+}

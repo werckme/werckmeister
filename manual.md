@@ -3031,12 +3031,12 @@ adds a pitch bend event at the same position as the selected event.
  ```
 <br><br><br>
 
-### `cc`
+### `cc-decl`
 
 #### Value Types
 | name | description | type |
 |:--- |:--- |:--- |
-| cc type and value | a contoller name followed by the target number enlcosed by parenthese. See https://werckme.github.io/manual#cc | string |
+| cc type and value | a contoller name followed by the target number enlcosed by parentheses. See https://werckme.github.io/manual#cc. Alternatively you can write cc0..127. | string |
 
 adds a cc event at the same position as the selected event.
 
@@ -3083,6 +3083,37 @@ Changes the duration of an event.
 
  }
 
+ ```
+<br><br><br>
+
+### `fade-decl`
+
+#### Value Types
+| name | description | type |
+|:--- |:--- |:--- |
+| fade options | a comma separated list of fade options. E.g. \"type(Modulation)\, from(0) ...", | string |
+| type | could be either a controller (See https://werckme.github.io/manual#cc-declr) or type(bend) | string |
+| from | the fade start value, in case of a bend the range is 0..100 where 50 is the neutral position. Otherwise it is 0..127 | 0..N |
+| to | Optional. the fade end value, in case of a bend the range is 0..100 where 50 is the neutral position. Otherwise it is 0..127 | 0..N |
+| curve | Optional. the curve type see https://www.werckme.org/manual#fade | 0..N |
+| offset | an optional position offset in quarters | -N..N |
+
+adding a fade of an cc, or pitchbend value at the position of the selected event.
+
+  > the `%` unit and the `+=`, `-=`, `=& +` operations are not supported.
+
+ #### example:
+
+ ```
+ onBeat(1) { 
+   fade = "from(0), to(100), type(cc2), curve(exp), offset(-1)"; 
+ } 
+ ```
+
+ ```
+ onBeat(1) { 
+   bend = "cc1(100)"; 
+ } 
  ```
 <br><br><br>
 

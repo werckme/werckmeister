@@ -10,7 +10,7 @@ namespace conductor
 
     namespace 
     {
-        typedef compiler::SetCC::ControllerNumberMap ControllerNumberMap;
+        typedef Cc::ControllerNumberMap ControllerNumberMap;
 
         ControllerNumberMap _createControllerMap()
         {
@@ -21,7 +21,12 @@ namespace conductor
             }
             return map; 
         }
-        ControllerNumberMap _controllerNames = _createControllerMap();
+        
+        const ControllerNumberMap& _controllerNames()
+        {
+            static ControllerNumberMap map = _createControllerMap();
+            return map;
+        }
     }
 
     Cc::Cc(com::midi::MidiPtr midi) : midi(midi) 
@@ -51,7 +56,7 @@ namespace conductor
             FM_THROW(compiler::Exception, "the follow up substract operator isn't supported by cc");
         }
         std::string input = declaration.strValue();
-        std::regex pattern("(\\w+\\d*)\\((\\d+)\\)");
+        std::regex pattern("(\\w+\\d*)\\s*\\(\\s*(\\d+)\\s*\\)");
         std::smatch match;
         if (!std::regex_search(input, match, pattern))
         {
@@ -59,8 +64,8 @@ namespace conductor
         }
         auto controllerStr = match[1].str();
         auto strValue = match[2].str();
-        auto ccIt = _controllerNames.find(controllerStr);
-        if (ccIt == _controllerNames.end())
+        auto ccIt = _controllerNames().find(controllerStr);
+        if (ccIt == _controllerNames().end())
         {
              FM_THROW(compiler::Exception, "invalid cc name: '" + controllerStr + "'. Please find here a complete list of supported cc names https://werckme.github.io/manual#cc");
 
@@ -82,5 +87,10 @@ namespace conductor
         auto ccEvent = com::midi::Event::CCValue(noteOn->channel(), (com::Byte)ccNr, (com::Byte)ccValue);
         ccEvent.absPosition(eventPosition);
         track->events().add(ccEvent);
+    }
+
+    const Cc::ControllerNumberMap& Cc::getControllerNumberMap()
+    {
+        return _controllerNames();
     }
 }
