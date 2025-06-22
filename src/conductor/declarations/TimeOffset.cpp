@@ -9,7 +9,7 @@ namespace conductor
         com::midi::Event *midiEvent = events.midiEvent;
         if (midiEvent->eventType() != com::midi::NoteOn)
         {
-            midiEvent->absPosition(std::max(com::Ticks(0), (midiEvent->absPosition() + declaration.value * com::PPQ))); 
+            midiEvent->absPosition(std::max(com::Ticks(0), (midiEvent->absPosition() + declaration.numberValue() * com::PPQ))); 
             return;
         }
         com::midi::Event *noteOff = events.noteOff;
@@ -29,7 +29,7 @@ namespace conductor
         FGetOptionalValue getPredecessorValue = []() -> std::optional<double> {
             FM_THROW(compiler::Exception, "the follow up operator isn't supported by timeOffset");
         };
-        double inputValue = declaration.value;
+        double inputValue = declaration.numberValue();
         constexpr double min = -std::numeric_limits<double>::max();
         constexpr double max = std::numeric_limits<double>::max();
         performImpl(midiEvent, noteOff, inputValue, min, max, getOriginalValue, getPercentBase, getPredecessorValue, setNoteOn, setNoteOff);

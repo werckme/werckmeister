@@ -3011,6 +3011,52 @@ Selects any event which has a tag assigned matching to the given tag.
 
 
 ## Conductor Declarations
+### `bend`
+
+#### Value Types
+| name | description | type |
+|:--- |:--- |:--- |
+| bend value | 50 is the neutral position of the bend | 0..100 |
+
+adds a pitch bend event at the same position as the selected event.
+
+  > the `%` unit and the `+=`, `-=`, `=& +` operations are not supported.
+
+ #### example:
+
+ ```
+ onBeat(1) { 
+   bend = 60; 
+ } 
+ ```
+<br><br><br>
+
+### `cc`
+
+#### Value Types
+| name | description | type |
+|:--- |:--- |:--- |
+| cc type and value | a contoller name followed by the target number enlcosed by parenthese. See https://werckme.github.io/manual#cc | string |
+
+adds a cc event at the same position as the selected event.
+
+  > the `%` unit and the `+=`, `-=`, `=& +` operations are not supported.
+
+ #### example:
+
+ ```
+ onBeat(1) { 
+   bend = "Modulation(100)"; 
+ } 
+ ```
+
+ ```
+ onBeat(1) { 
+   bend = "cc1(100)"; 
+ } 
+ ```
+<br><br><br>
+
 ### `duration`
 
 #### Value Types

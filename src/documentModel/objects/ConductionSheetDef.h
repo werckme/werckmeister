@@ -4,6 +4,8 @@
 #include <com/common.hpp>
 #include <vector>
 #include <documentModel/PitchDef.h>
+#include <variant>
+#include <compiler/error.hpp>
 
 namespace documentModel
 {
@@ -28,6 +30,7 @@ namespace documentModel
 		typedef std::vector<Selectors> SelectorsSet;
 		struct Declaration : public ASheetObjectWithSourceInfo
 		{
+			typedef std::variant<double, com::String> ValueType;
 			enum OperationType
 			{
 				OperationUnknown,
@@ -45,7 +48,23 @@ namespace documentModel
 			com::String property = "";
 			OperationType operation = OperationUnknown;
 			ValueUnit unit = UnitAbsolute;
-			double value = 0;
+			ValueType value = 0.0;
+			double numberValue() const 
+			{
+				if (value.index() != 0) 
+				{
+					FM_THROW(compiler::Exception, "invalid value type: number expected");
+				}
+				return std::get<double>(value); 
+			}
+			com::String strValue() const
+			{ 
+				if (value.index() != 1) 
+				{
+					FM_THROW(compiler::Exception, "invalid value type: quoted string expected");
+				}
+				return std::get<com::String>(value); 
+			}
 		};
 		typedef std::vector<Declaration> Declarations;
 		SelectorsSet selectorsSet;

@@ -130,6 +130,8 @@ SET (SRC_FETZER_LIB
     conductor/declarations/Pitch.cpp
     conductor/declarations/TimeOffset.cpp
     conductor/declarations/Duration.cpp
+    conductor/declarations/Bend.cpp
+    conductor/declarations/Cc.cpp
 )
 
 add_definitions( -DGIT_VERSION="${GIT_VERSION}" )

@@ -30,7 +30,7 @@ namespace conductor
             }
             return (predecessorNoteOff->absPosition() - predecessorNoteOn->absPosition()) / com::PPQ;
         };
-        double inputValue = declaration.value;
+        double inputValue = declaration.numberValue();
         constexpr double min = 0.000000001;
         constexpr double max = std::numeric_limits<double>::max();
         performImpl(noteOn, noteOff, inputValue, min, max, getOriginalValue, getPercentBase, getPredecessorValue, setNoteOn, setNoteOff);

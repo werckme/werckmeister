@@ -11,7 +11,7 @@ namespace compiler
 {
     namespace 
     {
-        std::unordered_map<com::String, int> _controllerNames(
+        SetCC::ControllerNumberMap _controllerNames(
         {
             { "BankSelectMSB", 0x0 },
             { "Modulation", 0x1 },
@@ -99,5 +99,9 @@ namespace compiler
             FM_THROW(Exception, "invalid cc name: '" + name + "'. Please find here a complete list of supported cc names https://werckme.github.io/manual#cc");
         }
         return it->second;
+    }
+    const SetCC::ControllerNumberMap& SetCC::getControllerNumberMap()
+    {
+        return _controllerNames;
     }
 }

@@ -68,7 +68,7 @@ BOOST_FUSION_ADAPT_STRUCT(
 	(unsigned int, sourcePositionBegin)
 	(documentModel::ASheetObjectWithSourceInfo::SourceId, sourceId)
 	(com::String, property)(documentModel::ConductionRule::Declaration::OperationType, operation)
-	(double, value)
+	(documentModel::ConductionRule::Declaration::ValueType, value)
 	(documentModel::ConductionRule::Declaration::ValueUnit, unit))
 
 BOOST_FUSION_ADAPT_STRUCT(
@@ -184,8 +184,8 @@ namespace parser
 					>> attr(sourceId_) 
 					>> +char_("a-zA-Z") 
 					>> operationType_ 
-					>> (fraction_ | double_) 
-					>> valueUnit_ 
+					>> (fraction_ | double_ | quoted_string)
+					>> valueUnit_
 					>> ";");
 
 				rules_ %=

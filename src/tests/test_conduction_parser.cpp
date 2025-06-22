@@ -85,7 +85,7 @@ BOOST_AUTO_TEST_CASE(parse_oneSelector_oneDeclaration)
 	BOOST_CHECK_EQUAL(defs.rules[0].declarations.size(), size_t(1));
 	BOOST_CHECK_EQUAL(defs.rules[0].declarations[0].property, "velocity");
 	BOOST_CHECK_EQUAL(defs.rules[0].declarations[0].operation, documentModel::ConductionRule::Declaration::OperationAdd);
-	BOOST_CHECK_EQUAL(defs.rules[0].declarations[0].value, double(10));
+	BOOST_CHECK_EQUAL(defs.rules[0].declarations[0].numberValue(), double(10));
 	BOOST_CHECK_EQUAL(defs.rules[0].declarations[0].unit, documentModel::ConductionRule::Declaration::UnitAbsolute);
 }
 
@@ -109,12 +109,12 @@ BOOST_AUTO_TEST_CASE(parse_oneSelector_twoDeclarations)
 	BOOST_CHECK_EQUAL(defs.rules[0].declarations.size(), size_t(2));
 	BOOST_CHECK_EQUAL(defs.rules[0].declarations[0].property, "velocity");
 	BOOST_CHECK_EQUAL(defs.rules[0].declarations[0].operation, documentModel::ConductionRule::Declaration::OperationAdd);
-	BOOST_CHECK_EQUAL(defs.rules[0].declarations[0].value, double(10));
+	BOOST_CHECK_EQUAL(defs.rules[0].declarations[0].numberValue(), double(10));
 	BOOST_CHECK_EQUAL(defs.rules[0].declarations[0].unit, documentModel::ConductionRule::Declaration::UnitAbsolute);
 
 	BOOST_CHECK_EQUAL(defs.rules[0].declarations[1].property, "time");
 	BOOST_CHECK_EQUAL(defs.rules[0].declarations[1].operation, documentModel::ConductionRule::Declaration::OperationSet);
-	BOOST_CHECK_EQUAL(defs.rules[0].declarations[1].value, double(2));
+	BOOST_CHECK_EQUAL(defs.rules[0].declarations[1].numberValue(), double(2));
 	BOOST_CHECK_EQUAL(defs.rules[0].declarations[1].unit, documentModel::ConductionRule::Declaration::UnitPercent);
 }
 
@@ -179,7 +179,7 @@ BOOST_AUTO_TEST_CASE(parse_oneSelector_followUpOperator_1)
 	BOOST_CHECK_EQUAL(defs.rules[0].declarations.size(), size_t(1));
 	BOOST_CHECK_EQUAL(defs.rules[0].declarations[0].property, "velocity");
 	BOOST_CHECK_EQUAL(defs.rules[0].declarations[0].operation, documentModel::ConductionRule::Declaration::OperationFollowUpAdd);
-	BOOST_CHECK_EQUAL(defs.rules[0].declarations[0].value, double(10));
+	BOOST_CHECK_EQUAL(defs.rules[0].declarations[0].numberValue(), double(10));
 	BOOST_CHECK_EQUAL(defs.rules[0].declarations[0].unit, documentModel::ConductionRule::Declaration::UnitAbsolute);
 }
 
@@ -202,7 +202,7 @@ BOOST_AUTO_TEST_CASE(parse_oneSelector_followUpOperator_2)
 	BOOST_CHECK_EQUAL(defs.rules[0].declarations.size(), size_t(1));
 	BOOST_CHECK_EQUAL(defs.rules[0].declarations[0].property, "velocity");
 	BOOST_CHECK_EQUAL(defs.rules[0].declarations[0].operation, documentModel::ConductionRule::Declaration::OperationFollowUpAdd);
-	BOOST_CHECK_EQUAL(defs.rules[0].declarations[0].value, double(10));
+	BOOST_CHECK_EQUAL(defs.rules[0].declarations[0].numberValue(), double(10));
 	BOOST_CHECK_EQUAL(defs.rules[0].declarations[0].unit, documentModel::ConductionRule::Declaration::UnitAbsolute);
 }
 
@@ -225,7 +225,7 @@ BOOST_AUTO_TEST_CASE(parse_oneSelector_followUpOperator_3)
 	BOOST_CHECK_EQUAL(defs.rules[0].declarations.size(), size_t(1));
 	BOOST_CHECK_EQUAL(defs.rules[0].declarations[0].property, "velocity");
 	BOOST_CHECK_EQUAL(defs.rules[0].declarations[0].operation, documentModel::ConductionRule::Declaration::OperationFollowUpAdd);
-	BOOST_CHECK_EQUAL(defs.rules[0].declarations[0].value, double(10));
+	BOOST_CHECK_EQUAL(defs.rules[0].declarations[0].numberValue(), double(10));
 	BOOST_CHECK_EQUAL(defs.rules[0].declarations[0].unit, documentModel::ConductionRule::Declaration::UnitAbsolute);
 }
 
@@ -248,7 +248,7 @@ BOOST_AUTO_TEST_CASE(parse_oneSelector_followUpOperator_4)
 	BOOST_CHECK_EQUAL(defs.rules[0].declarations.size(), size_t(1));
 	BOOST_CHECK_EQUAL(defs.rules[0].declarations[0].property, "velocity");
 	BOOST_CHECK_EQUAL(defs.rules[0].declarations[0].operation, documentModel::ConductionRule::Declaration::OperationFollowUpSubstract);
-	BOOST_CHECK_EQUAL(defs.rules[0].declarations[0].value, double(10));
+	BOOST_CHECK_EQUAL(defs.rules[0].declarations[0].numberValue(), double(10));
 	BOOST_CHECK_EQUAL(defs.rules[0].declarations[0].unit, documentModel::ConductionRule::Declaration::UnitAbsolute);
 }
 
@@ -271,7 +271,7 @@ BOOST_AUTO_TEST_CASE(parse_oneSelector_followUpOperator_5)
 	BOOST_CHECK_EQUAL(defs.rules[0].declarations.size(), size_t(1));
 	BOOST_CHECK_EQUAL(defs.rules[0].declarations[0].property, "velocity");
 	BOOST_CHECK_EQUAL(defs.rules[0].declarations[0].operation, documentModel::ConductionRule::Declaration::OperationFollowUpSubstract);
-	BOOST_CHECK_EQUAL(defs.rules[0].declarations[0].value, double(10));
+	BOOST_CHECK_EQUAL(defs.rules[0].declarations[0].numberValue(), double(10));
 	BOOST_CHECK_EQUAL(defs.rules[0].declarations[0].unit, documentModel::ConductionRule::Declaration::UnitAbsolute);
 }
 
@@ -551,5 +551,5 @@ BOOST_AUTO_TEST_CASE(parse_declaration_fraction_value)
 	BOOST_CHECK_EQUAL(defs.rules[0].selectorsSet[0].size(), size_t(1));
 	BOOST_CHECK_EQUAL(defs.rules[0].selectorsSet[0][0].type, "onBeat");
 	BOOST_CHECK_EQUAL(defs.rules[0].declarations.size(), size_t(1));
-	BOOST_CHECK_EQUAL(defs.rules[0].declarations[0].value, 1.0/4.0);
+	BOOST_CHECK_EQUAL(defs.rules[0].declarations[0].numberValue(), 1.0/4.0);
 }

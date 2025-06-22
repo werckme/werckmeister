@@ -36,7 +36,8 @@ namespace conductor
             auto originalValue = getOriginalValue();
             inputValue = originalValue - inputValue;
         }
-        if (declaration.operation == documentModel::ConductionRule::Declaration::OperationFollowUpAdd || declaration.operation == documentModel::ConductionRule::Declaration::OperationFollowUpSubstract)
+        if (declaration.operation == documentModel::ConductionRule::Declaration::OperationFollowUpAdd 
+            || declaration.operation == documentModel::ConductionRule::Declaration::OperationFollowUpSubstract)
         {
             auto predecessorValue = getPredecessorValue();
             if (!predecessorValue.has_value())

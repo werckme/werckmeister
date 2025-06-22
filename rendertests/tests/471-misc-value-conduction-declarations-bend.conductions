@@ -1,0 +1,12 @@
+instrument(piano) onBeat(1) {
+    bend = 100;
+}
+instrument(piano) onBeat(2) {
+    bend = 60;
+}
+instrument(piano) onBeat(3) {
+    bend = 70;
+}
+instrument(piano) onBeat(4) {
+    bend = 0;
+}

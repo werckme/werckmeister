@@ -1,0 +1,11 @@
+using "./471-misc-value-conduction-declarations-bend.conductions";
+
+device: _usePort=17 _setName=MyDevice  _isType=midi;
+instrumentDef: _setName=piano _onDevice=MyDevice _ch=0 _pc=1 _cc=8;
+
+[
+instrument: piano;
+{
+    c &&& 
+}
+]

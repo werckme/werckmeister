@@ -53,6 +53,7 @@ namespace compiler
     class SetCC : public ACommand, public AUsingAnEvent
     {
     public:
+        typedef std::unordered_map<com::String, int>  ControllerNumberMap;
         SetCC(ASheetEventRendererPtr eventRenderer) : eventRenderer(eventRenderer) {}
         typedef ACommand Base;
         static com::String NoNameValue; 
@@ -67,6 +68,7 @@ namespace compiler
         int findControllerNr(const com::String &name) const;
         int getControllerNr();
         void renderController(IContextPtr context, int controllerNumber, int controllerValue, com::Ticks timeOffset = 0);
+        static const ControllerNumberMap& getControllerNumberMap();
     private:
         ASheetEventRendererPtr eventRenderer;
     };

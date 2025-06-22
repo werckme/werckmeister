@@ -663,6 +663,7 @@ namespace com
 			{
 				return;
 			}
+			event.parentTrack = this->parentTrack;
 			_container.push_back(event);
 		}
 		void EventContainer::remove(const Event &event)
@@ -673,6 +674,7 @@ namespace com
 			{
 				if (*it == event)
 				{
+					event.parentTrack = nullptr;
 					_container.erase(it);
 					break;
 				}
