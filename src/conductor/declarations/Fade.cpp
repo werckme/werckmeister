@@ -159,7 +159,7 @@ namespace conductor
         int maxValue = options.type == FadeOptions::TypeBend ? 100: 127;
         int channel = events.midiEvent->channel();
         com::Ticks startPos = events.midiEvent->absPosition();
-        startPos += options.offset;
+        startPos += options.offset * com::PPQ;
         if (startPos < 0)
         {
             startPos = 0;
