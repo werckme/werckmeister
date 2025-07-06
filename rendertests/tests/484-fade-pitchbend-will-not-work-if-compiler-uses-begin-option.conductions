@@ -1,0 +1,4 @@
+withTag(bend)
+{
+  fade = "type(bend),from(0),to(50)";
+}
