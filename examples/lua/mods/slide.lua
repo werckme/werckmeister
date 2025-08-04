@@ -1,14 +1,15 @@
--- <command name="slide" where="mod" using="lua/mod/chromaticSlide.lua">
--- Performs a chromatic slide to the target note
+-- <command name="slide" where="mod" using="lua/mod/slide.lua">
+-- Performs a chromatic slide to the target note.
+-- > Works only with absolute notes, not with degree notes !
 -- ```language=Werckmeister\n
---using "lua/mods/chromaticSlide.lua";\n
+--using "lua/mods/slide.lua";\n
 --tempo: 140;\n
 --device: MyDevice  midi 0;\n
 --instrumentDef:piano  MyDevice  _ch=0 _pc=0;\n
 --[\n
 --instrument: piano;\n
 --{\n
---   /modOn: chromaticSlide _forTag=slide _numNotes=-4 _duration=0.25/\n
+--   /modOn: slide _forTag=slide _numNotes=-4 _duration=0.25/\n
 --   -- only the `d` will be performed slide. \n
 --   c "slide"@d e f\n
 --}\n

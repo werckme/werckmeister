@@ -2318,19 +2318,21 @@ instrument: piano;
 | velocityInc | - | a velocity incremental value | 0..1 |
 
 #### include extension
-`using "lua/mod/chromaticSlide.lua";`
+`using "lua/mod/slide.lua";`
 
-Performs a chromatic slide to the target note
+Performs a chromatic slide to the target note.
+
+ > Works only with absolute notes, not with degree notes !
 
  ```language=Werckmeister
-using "lua/mods/chromaticSlide.lua";
+using "lua/mods/slide.lua";
 tempo: 140;
 device: MyDevice  midi 0;
 instrumentDef:piano  MyDevice  _ch=0 _pc=0;
 [
 instrument: piano;
 {
-   /modOn: chromaticSlide _forTag=slide _numNotes=-4 _duration=0.25/
+   /modOn: slide _forTag=slide _numNotes=-4 _duration=0.25/
    -- only the `d` will be performed slide. 
    c "slide"@d e f
 }
