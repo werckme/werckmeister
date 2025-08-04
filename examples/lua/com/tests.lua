@@ -1,5 +1,5 @@
-require "com/com"
-require "com/globals"
+require "lua/com/com"
+require "lua/com/globals"
 
 function testpitchdiff(a, b, expected)
     local diff = relpitchdiff(a, b)
@@ -42,3 +42,15 @@ assert( toMidiPitch({pitch=C,   octave=0}) == 60)
 assert( toMidiPitch({pitch=C,   octave=1}) == 72)
 assert( toMidiPitch({pitch=CIS, octave=1}) == 73)
 assert( toMidiPitch({pitch=C,   octave=-1}) == 48)
+
+assert( fromMidiPitch(60).pitch == C )
+assert( fromMidiPitch(60).pitch == 0 )
+
+assert( fromMidiPitch(72).pitch == C )
+assert( fromMidiPitch(72).octave == 1 )
+
+assert( fromMidiPitch(73).pitch == CIS )
+assert( fromMidiPitch(73).octave == 1 )
+
+assert( fromMidiPitch(48).pitch == C )
+assert( fromMidiPitch(48).octave == -1 )

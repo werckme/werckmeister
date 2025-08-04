@@ -1,0 +1,40 @@
+
+using "../../examples/lua/mods/slide.lua";
+using "./slideMod.conductions";
+
+device: _setName=MyDevice  _isType=midi _useDevice="FLUID";
+instrumentDef: _setName=piano _onDevice=MyDevice _ch=0;
+tempo: 120;
+
+[
+instrument: piano;
+{
+    /mod: slide _forTag="slide" _numNotes="-8" _duration=0.5/
+    c4 r "slide"@e2 |
+    g4 r "slide"@c'2 |
+}
+{
+    r1 :|
+    /mod: slide _forTag="slide" _numNotes="8" _duration=0.5/
+    g4 r "slide"@c'2 |
+    c4 r "slide"@e2 |
+}
+{
+    r1 :(x4)|
+    /mod: slide _forTag="slide" _numNotes="-8" _duration=0.5 _velocity=0.25/
+    c4 r "slide"@e2 | 
+    g4 r "slide"@c'2 |
+}
+{
+    r1 :(x6)|
+    /mod: slide _forTag="slide" _numNotes="8" _duration=0.5 _velocity=0.25 _velocityInc=0.1/
+     g4 r "slide"@c'2 |
+     c4 r "slide"@e2 |
+}
+{
+    r1 :(x8)|
+    /mod: slide _forTag="slide" _numNotes="8" _duration=0.5 _velocity=0.7 _velocityInc="-0.05"/
+     g4 r "slide"@c'2 |
+     c4 r "slide"@e2 |
+}
+]

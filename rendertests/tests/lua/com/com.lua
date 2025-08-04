@@ -52,6 +52,13 @@ function toMidiPitch(pitch)
     return MidiSchluesselCOffset + pitch.pitch + (pitch.octave * 12)
 end
 
+function fromMidiPitch(midiValue)
+    local relative = midiValue - MidiSchluesselCOffset
+    local octave = math.floor(relative / 12)
+    local pitch = relative % 12
+    return { pitch = pitch, octave = octave }
+end
+
 function deepcopy(o, seen)
     seen = seen or {}
     if o == nil then return nil end
@@ -102,4 +109,14 @@ function split(pString, pPattern)
        table.insert(Table, cap)
     end
     return Table
+ end
+
+function FilterEventsByTagName(events, tagName)
+    local result = {}
+    for _, event in pairs(events) do
+        if contains(event.tags, tagName) then
+            table.insert(result, event)
+        end
+    end
+    return result
  end
