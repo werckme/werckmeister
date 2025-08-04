@@ -1224,6 +1224,7 @@ withTag(myTag) {
 
 
 ## References
+[1133] WARN-enum: nameless enum ['enum', '{', 'TypeBend', '=', '0xFF', '}']
 
 
 
@@ -2305,6 +2306,38 @@ instrument: piano;
  ```
 <br><br><br>
 
+### `slide`
+
+#### parameters
+| name | position | description | type |
+|:--- |:--- |:--- |:--- |
+| forTag | - | Specifies a tag name. If set only events with this tag name will be affected by the slide mod. | text |
+| numNotes | - | number of slide nodes. Can be positive or negative | 0..N |
+| duration | - | the duration of the slide in quarters | 0..N |
+| velocity | - | the slide velocity | 0..1 |
+| velocityInc | - | a velocity incremental value | 0..1 |
+
+#### include extension
+`using "lua/mod/chromaticSlide.lua";`
+
+Performs a chromatic slide to the target note
+
+ ```language=Werckmeister
+using "lua/mods/chromaticSlide.lua";
+tempo: 140;
+device: MyDevice  midi 0;
+instrumentDef:piano  MyDevice  _ch=0 _pc=0;
+[
+instrument: piano;
+{
+   /modOn: chromaticSlide _forTag=slide _numNotes=-4 _duration=0.25/
+   -- only the `d` will be performed slide. 
+   c "slide"@d e f
+}
+]
+ ```
+<br><br><br>
+
 ### `staccato`
 
 #### parameters
@@ -3095,6 +3128,7 @@ Changes the duration of an event.
 | type | could be either a controller (See https://werckme.github.io/manual#cc-declr) or type(bend) | string |
 | from | the fade start value, in case of a bend the range is 0..100 where 50 is the neutral position. Otherwise it is 0..127 | 0..N |
 | to | Optional. the fade end value, in case of a bend the range is 0..100 where 50 is the neutral position. Otherwise it is 0..127 | 0..N |
+| duration | the fade duration in quarters | 0..N |
 | curve | Optional. the curve type see https://www.werckme.org/manual#fade | 0..N |
 | offset | an optional position offset in quarters | -N..N |
 
