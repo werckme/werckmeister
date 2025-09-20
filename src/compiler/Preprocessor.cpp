@@ -77,7 +77,7 @@ namespace compiler
 					ev.stringValue = processData.lastNoRepeat.stringValue;
 					ev.isPhraseStrechedPlayback = processData.lastNoRepeat.isPhraseStrechedPlayback;
 				}
-				else 
+				else
 				{
 					ev.pitches = processData.lastNoRepeat.pitches;
 				}
@@ -130,6 +130,51 @@ namespace compiler
 			}
 			startEvent.tiedDuration = startEvent.tiedDurationTotal;
 		}
+	
+		void processBarRepeats(documentModel::Voice::Events &events)
+		{
+			documentModel::Voice::Events copy;
+			std::list<const documentModel::Voice::Events::value_type*> lastBarEvents;
+			int eventInBar = 0;
+			for(const auto& ev : events)
+			{
+				if (ev.isBar())
+				{
+					eventInBar = 0;
+				}
+				else 
+				{
+					++eventInBar;
+				}
+				if (ev.type == documentModel::Event::RepeatBar)
+				{
+					if (lastBarEvents.empty())
+					{
+						FM_THROW(Exception, "repeat bar '%' is missing a previous bar");
+					}
+					for(auto lastBarEvent : lastBarEvents)
+					{
+						if (lastBarEvent->isBar())
+						{
+							continue;
+						}
+						copy.push_back(*lastBarEvent);
+					}
+					continue;
+				} 
+				else
+				{
+					if (eventInBar == 1) 
+					{
+						lastBarEvents.clear();
+					}
+				}
+				lastBarEvents.push_back(&ev);
+				copy.push_back(ev);
+			}
+			events.swap(copy);
+		}
+	
 	} // namespace
 
 	Preprocessor::Preprocessor(IContextPtr context,
@@ -277,6 +322,7 @@ namespace compiler
 		{
 			for (auto &voice : track.voices)
 			{
+				processBarRepeats(voice.events);
 				_sheetNavigator->processNavigation(voice);
 			}
 			bool isNoteEventTrack = com::isNoteEventTrack(track);
