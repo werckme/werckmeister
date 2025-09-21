@@ -1,12 +1,30 @@
-using "./258-all-selector.conductions";
+using "chords/default.chords";
 
 device: MyDevice  midi _useDevice="FLUID";
 instrumentDef: piano _ch=0 _onDevice=MyDevice _pc=0;
 
--- melody track
 [
 instrument: piano;
 {
-	c d e f | % | f g f g |  % | c1
+	c d e f :| % |: f g f g :| % | g1
+}
+]
+
+
+[
+instrument: piano;
+template: chords;
+{
+	\p
+	<I, III, V,>2. & | %
+}
+]
+
+
+[
+type: accomp;
+{
+	/template: chords/
+	C | % | G | F D- | % | % | C
 }
 ]
