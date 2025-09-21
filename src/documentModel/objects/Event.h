@@ -41,6 +41,7 @@ namespace documentModel
 			Phrase,
 			TiedPhrase,
 			Controller,
+			RepeatBar,
 			NumEvents
 		};
 		typedef com::Ticks Duration;

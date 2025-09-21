@@ -1,0 +1,30 @@
+using "chords/default.chords";
+
+device: MyDevice  midi _useDevice="FLUID";
+instrumentDef: piano _ch=0 _onDevice=MyDevice _pc=0;
+
+[
+instrument: piano;
+{
+	c d e f :| % |: f g f g :| % | g1
+}
+]
+
+
+[
+instrument: piano;
+template: chords;
+{
+	\p
+	<I, III, V,>2. & | %
+}
+]
+
+
+[
+type: accomp;
+{
+	/template: chords/
+	C | % | G | F D- | % | % | C
+}
+]

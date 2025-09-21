@@ -328,6 +328,18 @@ namespace parser
 						>> -(
 							lit("~")[at_c<EvType>(_val) = Event::TiedRepeat] | (lit("->")[at_c<EvType>(_val) = Event::Meta][at_c<EvStringValue>(_val) = FM_STRING("addVorschlag")])
 						)
+					)
+					|
+					( // REPEAT BAR (%)
+						current_pos_.current_pos
+						>> attr(sourceId_)
+						>> attr(Event::RepeatBar)
+						>> attr(Event::Unknown)
+						>> (("\"" >> +(lexeme[+char_(ALLOWED_EVENT_TAG_ARGUMENT)]) >> "\"" >> "@") | attr(Event::Tags())) 
+						>> "%" 
+						>> attr(PitchDef()) >> (durationSymbols_ | attr(Event::NoDuration)) 
+						>> attr(DefaultNumberOfBarRepeats)
+						>> attr("") >> attr(Event::Args()) >> current_pos_.current_pos 
 					) 
 					|
 					( // CHORD
