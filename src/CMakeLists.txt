@@ -249,9 +249,16 @@ if(${BUILD_SHEETP})
 endif()
 
 if(${BUILD_LIBWM})
-    add_library(werckmeister SHARED sheetcompiler_main.cpp SheetCompilerProgram.cpp CompilerProgramOptions.cpp)
+    add_library(werckmeister SHARED libwerckmeister.cpp SheetCompilerProgram.cpp CompilerProgramOptions.cpp)
     target_link_libraries (werckmeister ${SHEET_LIBS})
-    SET (WM_TARGETS ${WM_TARGETS} werckmeister)
+    
+    install(TARGETS werckmeister
+        RUNTIME DESTINATION "bin"       # DLL
+        LIBRARY DESTINATION "lib"       # Linux/Unix .so oder .dylib
+        ARCHIVE DESTINATION "lib"       # Import-Library (.lib) unter Windows
+        COMPONENT wmapp
+    )
+
 endif()
 
 # Win32 Kill Process Workaround
