@@ -6,4 +6,4 @@
   #define WM_EXPORT
 #endif
 
-extern "C" WM_EXPORT void hello();
+extern "C" WM_EXPORT void wm_hello();

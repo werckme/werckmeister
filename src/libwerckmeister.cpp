@@ -33,7 +33,7 @@
 #endif
 
 
-extern "C" WM_EXPORT void hello()
+extern "C" WM_EXPORT void wm_hello()
 {
 	std::cout << "HELLO FROM WERCKMEISTER" << std::endl;
 }
