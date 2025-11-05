@@ -1,12 +1,13 @@
 #include "libwerckmeister.h"
 #include <boost/di.hpp>
+#include <boost/di/extension/scopes/scoped.hpp>
 #include <iostream>
 #include <memory>
 #include "SheetLibProgram.h"
 #include <parser/parser.h>
 #include <com/werckmeister.hpp>
 #include <CompilerProgramOptions.h>
-#include <com/FileLogger.h>
+#include <com/ConsoleLogger.h>
 #include <compiler/LoggerAndWarningsCollector.h>
 #include <compiler/SheetEventRenderer.h>
 #include <compiler/SheetTemplateRenderer.h>
@@ -25,52 +26,38 @@
 #include "FactoryConfig.h"
 #include <compiler/CompoundVisitor.hpp>
 #include <compiler/EventInformationServer.h>
+#include <app/MidiFileWriter.h>
 #include <com/config.hpp>
 
 #define LOG(x) std::cout << "[WM_LOG] " << x << std::endl;
 #define assert(exp, msg) if(!(exp)) LOG(msg)
 
+#define STRVERSION SHEET_VERSION " lib 0.13"
+
 namespace
 {
-	typedef std::shared_ptr<SheetLibProgram> CompilerProgramPtr;
+	typedef SheetLibProgram CompilerProgram;
 	struct Session 
 	{
-		CompilerProgramPtr compilerProgramPtr;
-		com::midi::MidiPtr midi() const { return compilerProgramPtr->getMidiFile(); }
+		com::midi::MidiPtr midiFile;
 	};
 }
 
 
 extern "C"  
 {
-	static CompilerProgramPtr createCompilerProgram(int argc, const char **argv);
+	static com::midi::MidiPtr createMidiFile(int argc, const char **argv);
 
 	WM_EXPORT const char * wm_getStrVersion()
 	{
-		static std::string version = std::string(SHEET_VERSION) + " lib 0.11";
-		return version.c_str();
+		return STRVERSION;
 	}
 
-	WM_EXPORT WmSession wm_createSession(const char * sourcePath)
+	WM_EXPORT WmSession wm_createSession()
 	{
-		LOG("wm_createSession" << ": " << sourcePath)
-		const char * args[] = {sourcePath, "--verbose"};
-		const int numArgs = sizeof(args)/sizeof(args[0]);
+		LOG("wm_createSession")
 		auto session = new Session();
-		try 
-		{
-			session->compilerProgramPtr = createCompilerProgram(numArgs, &args[0]);
-			assert(session->compilerProgramPtr, "expected compilerProgramPtr");
-			//assert(session->midi(), "expected session->midi");
-			//LOG("session created " << session->midi()->tracks().size())
-			//LOG("session created " << session->midi()->byteSize() << " bytes")
-			return session;
-		}
-		catch (...) 
-		{
-			std::cout << "failed to create compiler program" << std::endl;
-			return nullptr;
-		}
+		return session;
 	}
 
   	WM_EXPORT int wm_releaseSession(WmSession sessionPtr)
@@ -84,8 +71,46 @@ extern "C"
 		return 0;
 	}
 
+	WM_EXPORT int wm_compile(WmSession sessionPtr, const char * sourcePath)
+	{
+		if (sessionPtr == nullptr)
+		{
+			return -1;
+		}
+		Session* session = reinterpret_cast<Session*>(sessionPtr);
+		LOG("wm_compile" << ": " << sourcePath)
+		const char * args[] = {"noProgramName", sourcePath, "--verbose"};
+		const int numArgs = sizeof(args)/sizeof(args[0]);
+		try 
+		{
+			session->midiFile = createMidiFile(numArgs, &args[0]);
+			assert(session->midiFile, "expected session->midi");
+			LOG("session created " << session->midiFile->byteSize() << " bytes")
+			return 0;
+		}
+		catch (const std::exception &ex) 
+		{
+			std::cout << "failed to create compiler program: " << ex.what() << std::endl;
+			return -1;
+		}
+		catch (...) 
+		{
+			std::cout << "failed to create compiler program: unknown reason" << std::endl;
+			return -1;
+		}
+	}
 
-	static CompilerProgramPtr createCompilerProgram(int argc, const char **argv)
+	WM_EXPORT bool wm_iscompiled(WmSession sessionPtr)
+	{
+		if (sessionPtr == nullptr)
+		{
+			return false;
+		}
+		Session* session = reinterpret_cast<Session*>(sessionPtr);
+		return session->midiFile.get() != nullptr;
+	}
+
+	static com::midi::MidiPtr createMidiFile(int argc, const char **argv)
 	{
 		namespace di = boost::di;
 		namespace cp = compiler;
@@ -98,23 +123,23 @@ extern "C"
 		auto documentPtr = std::make_shared<documentModel::Document>();
 		auto midiFile = com::getWerckmeister().createMidi();
 		bool needTimeline = programOptionsPtr->isJsonModeSet();
-		bool writeWarningsToConsole = !(programOptionsPtr->isJsonModeSet() || programOptionsPtr->isJsonDocInfoMode());
 		auto injector = di::make_injector(
-			di::bind<pr::IDocumentParser>().to<pr::DocumentParser>().in(di::singleton), 
-			di::bind<cp::ICompiler>().to<cp::Compiler>().in(di::singleton), 
-			di::bind<cp::ISheetTemplateRenderer>().to<cp::SheetTemplateRenderer>().in(di::singleton), 
-			di::bind<cp::ASheetEventRenderer>().to<cp::SheetEventRenderer>().in(di::singleton), 
-			di::bind<cp::IContext>().to<cp::MidiContext>().in(di::singleton),
-			di::bind<cp::IPreprocessor>().to<cp::Preprocessor>().in(di::singleton), 
-			di::bind<cp::ISheetNavigator>().to<cp::SheetNavigator>().in(di::singleton), 
-			di::bind<co::IConductionsPerformer>().to<co::ConductionsPerformer>().in(di::singleton), 
-			di::bind<cp::IEventInformationServer>().to<cp::EventInformationServer>().in(di::singleton),
+			di::bind<pr::IDocumentParser>().to<pr::DocumentParser>().in(di::extension::scoped), 
+			di::bind<cp::ICompiler>().to<cp::Compiler>().in(di::extension::scoped), 
+			di::bind<cp::ISheetTemplateRenderer>().to<cp::SheetTemplateRenderer>().in(di::extension::scoped), 
+			di::bind<cp::ASheetEventRenderer>().to<cp::SheetEventRenderer>().in(di::extension::scoped), 
+			di::bind<cp::IContext>().to<cp::MidiContext>().in(di::extension::scoped),
+			di::bind<cp::IPreprocessor>().to<cp::Preprocessor>().in(di::extension::scoped), 
+			di::bind<cp::ISheetNavigator>().to<cp::SheetNavigator>().in(di::extension::scoped), 
+			di::bind<co::IConductionsPerformer>().to<co::ConductionsPerformer>().in(di::extension::scoped), 
+			di::bind<cp::IEventInformationServer>().to<cp::EventInformationServer>().in(di::extension::scoped),
 			di::bind<ICompilerProgramOptions>().to(programOptionsPtr), 
 			di::bind<documentModel::Document>().to(documentPtr), 
-			di::bind<compiler::IDefinitionsServer>().to<compiler::DefinitionsServer>().in(di::singleton), 
+			di::bind<compiler::IDefinitionsServer>().to<compiler::DefinitionsServer>().in(di::extension::scoped), 
 			di::bind<com::midi::Midi>().to(midiFile), 
 			di::bind<app::IDocumentWriter>().to([&](const auto &injector) -> app::IDocumentWriterPtr
 			{
+				//return injector.template create<std::shared_ptr<app::DummyFileWriter>>();
 				return injector.template create<std::shared_ptr<app::DummyFileWriter>>();
 			}),
 			di::bind<cp::ICompilerVisitor>().to([&](const auto &injector) -> cp::ICompilerVisitorPtr
@@ -127,13 +152,14 @@ extern "C"
 			}),
 			di::bind<com::ILogger>().to([&](const auto &injector) -> com::ILoggerPtr
 			{
-				return injector.template create<std::shared_ptr<com::FileLogger>>();
+				return injector.template create<std::shared_ptr<com::ConsoleLogger>>();
 			}));
+
 		FactoryConfig factory(injector);
 		factory.init();
-		auto program = injector.create<CompilerProgramPtr>();
-		program->prepareEnvironment();
-		program->execute();
-		return program;
+		auto program = injector.create<CompilerProgram>();
+		program.prepareEnvironment();
+		program.execute();
+		return midiFile;
 	}
 }

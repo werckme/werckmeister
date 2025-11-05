@@ -12,7 +12,7 @@ namespace com
         }
         std::fstream flog(_programOptions->logFile(), std::ios::app);
         flog << "[debug] ";
-        writeMessage(f, std::clog);
+        writeMessage(f, flog);
     }
     void FileLogger::babble(const WriteToStreamF &f)
     {
@@ -22,7 +22,7 @@ namespace com
         }
         std::fstream flog(_programOptions->logFile(), std::ios::app);
         flog << "[info] ";
-        writeMessage(f, std::clog);
+        writeMessage(f, flog);
     }
     void FileLogger::warn(const WriteToStreamF &f)
     {
@@ -32,7 +32,7 @@ namespace com
         }
         std::fstream flog(_programOptions->logFile(), std::ios::app);
         flog << "[warning] ";
-        writeMessage(f, std::clog);
+        writeMessage(f, flog);
     }
     void FileLogger::error(const WriteToStreamF &f)
     {
@@ -42,7 +42,7 @@ namespace com
         }
         std::fstream flog(_programOptions->logFile(), std::ios::app);
         flog << "[error] ";
-        writeMessage(f, std::cerr);
+        writeMessage(f, flog);
     }
     void FileLogger::writeMessage(const WriteToStreamF &f, std::ostream &os)
     {
