@@ -6,4 +6,11 @@
   #define WM_EXPORT __attribute__((visibility("default")))
 #endif
 
-extern "C" WM_EXPORT void wm_hello();
+#define WmSession void*
+
+extern "C"  
+{
+  WM_EXPORT const char * wm_getStrVersion();
+  WM_EXPORT WmSession wm_createSession(const char * sourcePath);
+  WM_EXPORT int wm_releaseSession(WmSession);
+}

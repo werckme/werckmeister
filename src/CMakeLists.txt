@@ -24,6 +24,7 @@ SET (SRC_FETZER_LIB
     compiler/DefinitionsServer.cpp
     com/tools.cpp
     com/ConsoleLogger.cpp
+    com/FileLogger.cpp
     compiler/Compiler.cpp
     parser/chordDefParser.cpp
     parser/sheetParser.cpp
@@ -249,7 +250,7 @@ if(${BUILD_SHEETP})
 endif()
 
 if(${BUILD_LIBWM})
-    add_library(werckmeister SHARED libwerckmeister.cpp SheetCompilerProgram.cpp CompilerProgramOptions.cpp)
+    add_library(werckmeister SHARED libwerckmeister.cpp SheetLibProgram.cpp SheetCompilerProgram.cpp CompilerProgramOptions.cpp)
     target_link_libraries (werckmeister ${SHEET_LIBS})
     
     install(TARGETS werckmeister
