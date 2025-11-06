@@ -27,12 +27,15 @@
 #include <compiler/CompoundVisitor.hpp>
 #include <compiler/EventInformationServer.h>
 #include <app/MidiFileWriter.h>
+#include <app/FluidSynthWriter.h>
 #include <com/config.hpp>
 
 #define LOG(x) std::cout << "[WM_LOG] " << x << std::endl;
+#define ERR(x) std::cerr << "[WM_ERROR] " << x << std::endl;
 #define assert(exp, msg) if(!(exp)) LOG(msg)
 
 #define STRVERSION SHEET_VERSION " lib 0.13"
+#define TEST_SOUNDFONT "/home/samba/Soundfonds/FluidR3_GM_EX.sf2"
 
 namespace
 {
@@ -40,6 +43,8 @@ namespace
 	struct Session 
 	{
 		com::midi::MidiPtr midiFile;
+		app::FluidSynthWriterPtr fluidSynth;
+
 	};
 }
 
@@ -48,34 +53,34 @@ extern "C"
 {
 	static com::midi::MidiPtr createMidiFile(int argc, const char **argv);
 
-	WM_EXPORT const char * wm_getStrVersion()
+	WERCKM_EXPORT const char * wm_getStrVersion()
 	{
 		return STRVERSION;
 	}
 
-	WM_EXPORT WmSession wm_createSession()
+	WERCKM_EXPORT WmSession wm_createSession()
 	{
 		LOG("wm_createSession")
 		auto session = new Session();
 		return session;
 	}
 
-  	WM_EXPORT int wm_releaseSession(WmSession sessionPtr)
+  	WERCKM_EXPORT int wm_releaseSession(WmSession sessionPtr)
 	{
 		if (sessionPtr == nullptr)
 		{
-			return -1;
+			return WERCKM_ERR;
 		}
 		Session* session = reinterpret_cast<Session*>(sessionPtr);
 		delete session;
-		return 0;
+		return WERCKM_OK;
 	}
 
-	WM_EXPORT int wm_compile(WmSession sessionPtr, const char * sourcePath)
+	WERCKM_EXPORT int wm_compile(WmSession sessionPtr, const char * sourcePath)
 	{
 		if (sessionPtr == nullptr)
 		{
-			return -1;
+			return WERCKM_ERR;
 		}
 		Session* session = reinterpret_cast<Session*>(sessionPtr);
 		LOG("wm_compile" << ": " << sourcePath)
@@ -86,21 +91,21 @@ extern "C"
 			session->midiFile = createMidiFile(numArgs, &args[0]);
 			assert(session->midiFile, "expected session->midi");
 			LOG("session created " << session->midiFile->byteSize() << " bytes")
-			return 0;
+			return WERCKM_OK;
 		}
 		catch (const std::exception &ex) 
 		{
-			std::cout << "failed to create compiler program: " << ex.what() << std::endl;
-			return -1;
+			ERR("failed to create compiler program: " << ex.what())
+			return WERCKM_ERR;
 		}
 		catch (...) 
 		{
-			std::cout << "failed to create compiler program: unknown reason" << std::endl;
-			return -1;
+			ERR("failed to create compiler program")
+			return WERCKM_ERR;
 		}
 	}
 
-	WM_EXPORT bool wm_iscompiled(WmSession sessionPtr)
+	WERCKM_EXPORT bool wm_iscompiled(WmSession sessionPtr)
 	{
 		if (sessionPtr == nullptr)
 		{
@@ -110,6 +115,60 @@ extern "C"
 		return session->midiFile.get() != nullptr;
 	}
 
+	WERCKM_EXPORT int wm_initSynth(WmSession sessionPtr)
+	{
+		LOG("wm_initSynth")
+		if (sessionPtr == nullptr)
+		{
+			return WERCKM_ERR;
+		}
+		try
+		{
+			Session* session = reinterpret_cast<Session*>(sessionPtr);
+			session->fluidSynth = std::make_shared<app::FluidSynthWriter>();
+			session->fluidSynth->initSynth(TEST_SOUNDFONT);
+		}
+		catch (const std::exception &ex) 
+		{
+			ERR("failed to init synth: " << ex.what())
+			return WERCKM_ERR;
+		}
+		catch (...) 
+		{
+			ERR("failed to init synth")
+			return WERCKM_ERR;
+		}
+		return WERCKM_OK;
+	}
+
+	WERCKM_EXPORT int wm_copyMidiDataToSynth(WmSession sessionPtr)
+	{
+		LOG("wm_copyMidiDataToSynth")
+		if (sessionPtr == nullptr)
+		{
+			return WERCKM_ERR;
+		}
+		Session* session = reinterpret_cast<Session*>(sessionPtr);
+		if (session->midiFile.get() == nullptr)
+		{
+			ERR("no midi file")
+			return WERCKM_ERR;
+		}
+		LOG("copy " << session->midiFile->ctracks().size() <<  " tracks")
+		for(const auto& track : session->midiFile->ctracks())
+		{
+			LOG("copy " << track->events().numEvents() <<  " events")
+			for(const auto& event : track->events())
+			{
+				if (!session->fluidSynth->addEvent(event))
+				{
+					LOG("copy event " << event.toString() <<  " failed")
+					continue;
+				}
+			}
+		}
+		return WERCKM_OK;
+	}
 	static com::midi::MidiPtr createMidiFile(int argc, const char **argv)
 	{
 		namespace di = boost::di;

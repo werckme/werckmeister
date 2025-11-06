@@ -1,18 +1,23 @@
 #pragma once
 
 #if _WIN32
-  #define WM_EXPORT __declspec(dllexport)
+  #define WERCKM_EXPORT __declspec(dllexport)
 #else
-  #define WM_EXPORT __attribute__((visibility("default")))
+  #define WERCKM_EXPORT __attribute__((visibility("default")))
 #endif
 
 #define WmSession void*
 
+#define WERCKM_OK 0
+#define WERCKM_ERR -1
+
 extern "C"  
 {
-  WM_EXPORT const char * wm_getStrVersion();
-  WM_EXPORT WmSession wm_createSession();
-  WM_EXPORT int wm_compile(WmSession, const char * sourcePath);
-  WM_EXPORT bool wm_iscompiled(WmSession);
-  WM_EXPORT int wm_releaseSession(WmSession);
+  WERCKM_EXPORT const char * wm_getStrVersion();
+  WERCKM_EXPORT WmSession wm_createSession();
+  WERCKM_EXPORT int wm_compile(WmSession, const char * sourcePath);
+  WERCKM_EXPORT bool wm_iscompiled(WmSession);
+  WERCKM_EXPORT int wm_releaseSession(WmSession);
+  WERCKM_EXPORT int wm_initSynth(WmSession);
+  WERCKM_EXPORT int wm_copyMidiDataToSynth(WmSession);
 }

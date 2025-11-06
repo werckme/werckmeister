@@ -544,7 +544,12 @@ namespace com
 		com::String Event::toString() const
 		{
 			std::stringstream ss;
-			ss << "pos(" << (int)absPosition() << ") " << "ch(" << (int)channel() << ") p1(" << (int)parameter1() << ") p2(" << (int)parameter2() << ")"; 
+			ss << "pos(" 
+				<< (int)absPosition() << ") " 
+				<< "ty(" << (int)eventType() << ")"
+				<< "ch(" << (int)channel() << ")"
+				<<" p1(" << (int)parameter1() << ")"
+				<<" p2(" << (int)parameter2() << ")"; 
 			return ss.str();
 		}
 

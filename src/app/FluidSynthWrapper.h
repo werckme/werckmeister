@@ -6,6 +6,9 @@
 #include <boost/dll.hpp>
 #include <com/midi.hpp>
 
+
+// https://www.fluidsynth.org/api-1.x/synth_8h.html
+
 #if FLUIDSYNTH_VERSION_MAJOR < 2
 #error "Fluidsynth version >2 required"
 #endif
@@ -45,24 +48,25 @@
 #define fluid_event_channel_pressure_ftype void(fluid_event_t*, int, int)
 #define fluid_event_key_pressure_ftype void(fluid_event_t*, int, short, int)
 #define fluid_sequencer_set_time_scale_ftype void(fluid_sequencer_t*, double)
-
+#define fluid_synth_write_float_ftype int(fluid_synth_t *, int, void*, int, int, void*, int, int)
 
 namespace app
 {
 	class FluidSynth
 	{
 	public:
+		FluidSynth();
 		FluidSynth(const std::string &soundfontPath);
 		FluidSynth(const FluidSynth &&) = delete;
 		FluidSynth &operator=(const FluidSynth &&) = delete;
 		virtual ~FluidSynth();
 		void send(const com::midi::Event &event, long double elapsedMillis);
 		void seek(long double millis);
-	private:
-		void initSynth(const std::string soundFondPath);
-		void tearDownSynth();
+	protected:
+		virtual void initSynth(const std::string soundFondPath);
+		virtual void tearDownSynth();
 		void initLibraryFunctions();
-		std::string findFluidSynthLibraryPath() const;
+		virtual std::string findFluidSynthLibraryPath() const;
 		std::function<new_fluid_settings_ftype> _new_fluid_settings;
 		std::function<new_fluid_synth_ftype> _new_fluid_synth;
 		std::function<new_fluid_audio_driver_ftype> _new_fluid_audio_driver;
@@ -98,6 +102,10 @@ namespace app
 		std::function<fluid_event_key_pressure_ftype> _fluid_event_key_pressure;
 		std::function<fluid_sequencer_unregister_client_ftype> _fluid_sequencer_unregister_client;
 		std::function<fluid_sequencer_set_time_scale_ftype> _fluid_sequencer_set_time_scale;
+		/*
+			Useful for storing interleaved stereo (lout = rout, loff = 0, roff = 1, lincr = 2, rincr = 2).
+		*/
+		std::function<fluid_synth_write_float_ftype> _fluid_synth_write_float;
 
 		boost::dll::shared_library *_library = nullptr;
 		fluid_settings_t *settings = nullptr;
@@ -105,7 +113,7 @@ namespace app
 		fluid_audio_driver_t *adriver = nullptr;
 		fluid_sequencer_t* seq = nullptr;
 		fluid_seq_id_t synthSeqID = 0;
-		void midiEventToFluidEvent(const com::midi::Event& src, fluid_event_t& evt);
+		bool midiEventToFluidEvent(const com::midi::Event& src, fluid_event_t& evt, bool doThrow = true);
 		long double _playerOffsetMillis = 0;
 	};
 	typedef std::shared_ptr<FluidSynth> FluidSynthPtr;

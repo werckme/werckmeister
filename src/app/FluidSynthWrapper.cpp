@@ -13,11 +13,17 @@ namespace
 
 namespace app
 {
-    FluidSynth::FluidSynth(const std::string &soundfontPath)
+
+    FluidSynth::FluidSynth()
+    {
+    }
+
+    FluidSynth::FluidSynth(const std::string &soundfontPath) : FluidSynth()
     {
         initLibraryFunctions();
         initSynth(soundfontPath);
     }
+
     FluidSynth::~FluidSynth()
     {
         if (_library)
@@ -28,7 +34,7 @@ namespace app
         }
     }
 
-    void FluidSynth::midiEventToFluidEvent(const com::midi::Event& src, fluid_event_t& evt)
+    bool FluidSynth::midiEventToFluidEvent(const com::midi::Event& src, fluid_event_t& evt, bool doThrow)
     {
         int chan = (int)src.channel();
 
@@ -63,8 +69,13 @@ namespace app
             break;
 
         default:
+            if (!doThrow)
+            {
+                return false;
+            }
             throw com::Exception("fluidsynth: midi event type not implemented");
         }
+        return true;
     }
 
     void FluidSynth::initLibraryFunctions()
@@ -109,6 +120,7 @@ namespace app
             _fluid_event_channel_pressure = _library->get<fluid_event_channel_pressure_ftype>("fluid_event_channel_pressure");
             _fluid_event_key_pressure = _library->get<fluid_event_key_pressure_ftype>("fluid_event_key_pressure");
             _fluid_sequencer_set_time_scale = _library->get<fluid_sequencer_set_time_scale_ftype>("fluid_sequencer_set_time_scale");
+            _fluid_synth_write_float = _library->get<fluid_synth_write_float_ftype>("fluid_synth_write_float");
         }
         catch (const std::exception &ex)
         {

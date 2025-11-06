@@ -250,7 +250,13 @@ if(${BUILD_SHEETP})
 endif()
 
 if(${BUILD_LIBWM})
-    add_library(werckmeister SHARED libwerckmeister.cpp SheetLibProgram.cpp SheetCompilerProgram.cpp CompilerProgramOptions.cpp)
+    add_library(werckmeister SHARED 
+        libwerckmeister.cpp 
+        SheetLibProgram.cpp 
+        SheetCompilerProgram.cpp
+        app/FluidSynthWriter.cpp
+        app/FluidSynthWrapper.cpp
+        CompilerProgramOptions.cpp)
     target_link_libraries (werckmeister ${SHEET_LIBS})
     
     install(TARGETS werckmeister
