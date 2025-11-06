@@ -57,4 +57,12 @@ namespace app
         return true;
     }
 
+    void FluidSynthWriter::render(int len, float* lout, int loff, int lincr, float* rout, int roff, int rincr)
+    {
+        auto result = _fluid_synth_write_float(synth, len, lout, loff, lincr, rout, roff, rincr);
+        if (result != FLUID_OK)
+        {
+            throw std::runtime_error("fluid_synth_nwrite_float failed.");
+        }
+    }
 }

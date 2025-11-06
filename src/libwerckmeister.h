@@ -20,4 +20,5 @@ extern "C"
   WERCKM_EXPORT int wm_releaseSession(WmSession);
   WERCKM_EXPORT int wm_initSynth(WmSession);
   WERCKM_EXPORT int wm_copyMidiDataToSynth(WmSession);
+  WERCKM_EXPORT int wm_synthRender(WmSession, int len, float* lout, int loff, int lincr, float* rout, int roff, int rincr);
 }

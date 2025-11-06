@@ -169,6 +169,31 @@ extern "C"
 		}
 		return WERCKM_OK;
 	}
+
+	int wm_synthRender(WmSession sessionPtr, int len, float* lout, int loff, int lincr, float* rout, int roff, int rincr)
+	{
+		//LOG("wm_synthRender " << len << ", " << loff << ", " << lincr << ", " <<  roff << ", " << rincr)
+		if (sessionPtr == nullptr)
+		{
+			return WERCKM_ERR;
+		}
+		try
+		{
+			Session* session = reinterpret_cast<Session*>(sessionPtr);
+			session->fluidSynth->render(len, lout, loff, lincr, rout, roff, rincr);
+			return WERCKM_OK;
+		}
+		catch (const std::exception &ex) 
+		{
+			ERR("failed to render: " << ex.what())
+			return WERCKM_ERR;
+		}
+		catch (...) 
+		{
+			ERR("failed to render")
+			return WERCKM_ERR;
+		}
+	}
 	static com::midi::MidiPtr createMidiFile(int argc, const char **argv)
 	{
 		namespace di = boost::di;
