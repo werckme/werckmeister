@@ -44,7 +44,6 @@ namespace
 	{
 		com::midi::MidiPtr midiFile;
 		app::FluidSynthWriterPtr fluidSynth;
-
 	};
 }
 
