@@ -3,7 +3,6 @@
 #include <memory>
 #include <vector>
 #include <fluidsynth.h>
-#include <boost/dll.hpp>
 #include <com/midi.hpp>
 
 
@@ -67,6 +66,7 @@ namespace app
 		virtual void tearDownSynth();
 		void initLibraryFunctions();
 		virtual std::string findFluidSynthLibraryPath() const;
+		void resetLibraryFunctions();
 		std::function<new_fluid_settings_ftype> _new_fluid_settings;
 		std::function<new_fluid_synth_ftype> _new_fluid_synth;
 		std::function<new_fluid_audio_driver_ftype> _new_fluid_audio_driver;
@@ -107,7 +107,6 @@ namespace app
 		*/
 		std::function<fluid_synth_write_float_ftype> _fluid_synth_write_float;
 
-		boost::dll::shared_library *_library = nullptr;
 		fluid_settings_t *settings = nullptr;
 		fluid_synth_t *synth = nullptr;
 		fluid_audio_driver_t *adriver = nullptr;

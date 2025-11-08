@@ -29,6 +29,8 @@
 #include <app/MidiFileWriter.h>
 #include <app/FluidSynthWriter.h>
 #include <com/config.hpp>
+#include <thread>
+#include <mutex>
 
 #define LOG(x) std::cout << "[WM_LOG] " << x << std::endl;
 #define ERR(x) std::cerr << "[WM_ERROR] " << x << std::endl;
@@ -39,6 +41,8 @@
 
 namespace
 {
+	typedef std::mutex Mutex;
+	Mutex mutex;
 	typedef SheetLibProgram CompilerProgram;
 	struct Session 
 	{
@@ -71,7 +75,9 @@ extern "C"
 			return WERCKM_ERR;
 		}
 		Session* session = reinterpret_cast<Session*>(sessionPtr);
-		delete session;
+		session->fluidSynth.reset();
+		session->midiFile.reset();
+		// delete session;
 		return WERCKM_OK;
 	}
 

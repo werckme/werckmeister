@@ -9,6 +9,7 @@ namespace
     const double FLUID_SYNTH_SEQUENCER_TIMESCALE = 1000;
     const double FLUID_SYNTH_DEFAULT_GAIN = 1.0;
     const long double FLUID_SYNTH_HEADROOM_MILLIS = 500;
+    std::unique_ptr<boost::dll::shared_library> _library;
 }
 
 namespace app
@@ -26,12 +27,7 @@ namespace app
 
     FluidSynth::~FluidSynth()
     {
-        if (_library)
-        {
-            tearDownSynth();
-            delete _library;
-            _library = nullptr;
-        }
+        tearDownSynth();
     }
 
     bool FluidSynth::midiEventToFluidEvent(const com::midi::Event& src, fluid_event_t& evt, bool doThrow)
@@ -83,7 +79,10 @@ namespace app
         auto libPath = findFluidSynthLibraryPath();
         try
         {
-            _library = new boost::dll::shared_library(libPath);
+            if (!_library)
+            {
+                _library = std::make_unique<boost::dll::shared_library>(libPath);
+            }
             _new_fluid_settings = _library->get<new_fluid_settings_ftype>("new_fluid_settings");
             _new_fluid_synth = _library->get<new_fluid_synth_ftype>("new_fluid_synth");
             _new_fluid_audio_driver = _library->get<new_fluid_audio_driver_ftype>("new_fluid_audio_driver");
