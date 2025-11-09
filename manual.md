@@ -1397,7 +1397,9 @@ Defines a device which can be used when adding instruments (see [instrumentDef](
 
  `device: MyDevice fluidSynth _useFont="PATH OF A SOUNDFONT FILE";`
 
- On mac, make sure that you have fluidsynth installed.
+ On mac and linux, make sure that you have fluidsynth installed.
+
+ You can set an environment variable `WM_SOUNDFONT_PATH` to add a search path for soundfont files. *(only one path supported)*
 <br><br><br>
 
 ### `do`

@@ -369,6 +369,10 @@ namespace com
 		{
 			path = path.parent_path();
 		}
+		if (path.empty()) 
+		{
+			return;
+		}
 		_searchPaths.push_front(path.string());
 	}
 

@@ -105,6 +105,11 @@ void SheetCompilerProgram::prepareSearchPaths()
 #ifndef WIN32
     addSearchPath((path("/usr/local/share/werckmeister").string()));
 #endif
+    const char* path = std::getenv("WM_SOUNDFONT_PATH");
+    if (path)
+    {
+        addSearchPath(path);
+    }
 }
 
 void SheetCompilerProgram::printSearchPaths() const

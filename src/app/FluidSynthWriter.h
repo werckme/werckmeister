@@ -21,6 +21,7 @@ namespace app
 		com::String _libPath;
 		double _sampleRate = 44100.0f;
         virtual std::string findFluidSynthLibraryPath() const override;
+		double _tempo = 120.0;
 	};
 	typedef std::shared_ptr<FluidSynthWriter> FluidSynthWriterPtr;
 }
