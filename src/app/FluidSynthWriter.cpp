@@ -18,6 +18,7 @@ namespace app
         settings = _new_fluid_settings();
         _fluid_settings_setstr(settings, "audio.driver", "file");
         _fluid_settings_setnum(settings, "synth.gain", FLUID_SYNTH_DEFAULT_GAIN);
+        _fluid_settings_setnum(settings, "synth.sample-rate", sampleRate());
         synth = _new_fluid_synth(settings);
         seq = _new_fluid_sequencer2(0);
         _fluid_sequencer_set_time_scale(seq, FLUID_SYNTH_SEQUENCER_TIMESCALE);
@@ -35,7 +36,11 @@ namespace app
 
     std::string FluidSynthWriter::findFluidSynthLibraryPath() const
     {
-        return "/lib/x86_64-linux-gnu/libfluidsynth.so.3"; // TODO
+        if (_libPath.empty())
+        {
+            return Base::findFluidSynthLibraryPath();
+        }
+        return _libPath;
     }
 
     bool FluidSynthWriter::addEvent(const com::midi::Event& event)

@@ -120,9 +120,9 @@ extern "C"
 		return session->midiFile.get() != nullptr;
 	}
 
-	WERCKM_EXPORT int wm_initSynth(WmSession sessionPtr)
+	WERCKM_EXPORT int wm_initSynth(WmSession sessionPtr, const char *libPath, int sampleRate)
 	{
-		LOG("wm_initSynth")
+		LOG("wm_initSynth: " << libPath << ", sample rate:" << sampleRate)
 		if (sessionPtr == nullptr)
 		{
 			return WERCKM_ERR;
@@ -131,6 +131,8 @@ extern "C"
 		{
 			Session* session = reinterpret_cast<Session*>(sessionPtr);
 			session->fluidSynth = std::make_shared<app::FluidSynthWriter>();
+			session->fluidSynth->libPath(libPath);
+			session->fluidSynth->sampleRate((double)sampleRate);
 			session->fluidSynth->initSynth(TEST_SOUNDFONT);
 		}
 		catch (const std::exception &ex) 
@@ -154,6 +156,10 @@ extern "C"
 			return WERCKM_ERR;
 		}
 		Session* session = reinterpret_cast<Session*>(sessionPtr);
+		if (session->fluidSynth.get() == nullptr)
+		{
+			return WERCKM_OK;
+		}
 		if (session->midiFile.get() == nullptr)
 		{
 			ERR("no midi file")
@@ -185,6 +191,10 @@ extern "C"
 		try
 		{
 			Session* session = reinterpret_cast<Session*>(sessionPtr);
+			if (session->fluidSynth.get() == nullptr)
+			{
+				return WERCKM_OK;
+			}
 			session->fluidSynth->render(len, lout, loff, lincr, rout, roff, rincr);
 			return WERCKM_OK;
 		}
