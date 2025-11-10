@@ -127,11 +127,11 @@ namespace app
 
     void FluidSynthWriter::render(int len, float* lout, int loff, int lincr, float* rout, int roff, int rincr)
     {
-        std::lock_guard<Mutex> lock(_renderMutex);
         if (synth == nullptr)
         {
             return;
         }
+        std::lock_guard<Mutex> lock(_renderMutex);
         auto result = _fluid_synth_write_float(synth, len, lout, loff, lincr, rout, roff, rincr);
         if (result != FLUID_OK)
         {

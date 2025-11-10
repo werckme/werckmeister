@@ -39,7 +39,7 @@ void SheetCompilerProgram::printIntro(std::ostream &os)
         return;
     }
     shown = true;
-    os << "\tWERCKMEISTER X" << std::endl
+    os << "\tWERCKMEISTER" << std::endl
        << "\t(c) Samba Godschynski " << std::endl
        << "\thttps://werckme.github.io" << std::endl
        << "\tversion: " << SHEET_VERSION << std::endl
