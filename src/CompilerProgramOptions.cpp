@@ -128,8 +128,3 @@ double CompilerProgramOptions::getEnd() const
 {
     return variables[ARG_END].as<double>();
 }
-
-com::String CompilerProgramOptions::logFile() const
-{
-    return logFilePath;
-}

@@ -58,7 +58,6 @@ public:
 	virtual double getBegin() const override  { return begin; }
 	virtual bool isEndSet() const override  { return false; }
 	virtual double getEnd() const override  { return 0; }
-	virtual com::String logFile() const override { return ""; }
 	std::string input;
 	double begin = -1;
 };

@@ -3,6 +3,7 @@
 
 #include "FluidSynthWrapper.h"
 #include <unordered_map>
+#include <com/ILogger.h>
 
 namespace app
 {
@@ -11,6 +12,7 @@ namespace app
     public:
         typedef int SoundFontId;
         typedef FluidSynth Base;
+        FluidSynthWriter(com::ILoggerPtr logger) : _logger(logger) {}
         virtual ~FluidSynthWriter() = default;
         virtual void initSynth(const std::string &soundFondPath) override;
         SoundFontId addSoundFont(const std::string &soundFondPath);
@@ -21,6 +23,7 @@ namespace app
         void sampleRate(const double &sampleRate) { _sampleRate = sampleRate; }
         double sampleRate() const { return _sampleRate; }
     protected:
+        com::ILoggerPtr _logger;
         com::String _libPath;
         double _sampleRate = 44100.0f;
         virtual std::string findFluidSynthLibraryPath() const override;

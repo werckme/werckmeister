@@ -10,7 +10,7 @@ namespace com
     class FileLogger : public virtual ILogger
     {
     public:
-        FileLogger(ICompilerProgramOptionsPtr programOptions) : _programOptions(programOptions) {}
+        FileLogger(std::string logFilePath) : _logFilePath(logFilePath) {}
         typedef std::function<void(std::ostream &)> WriteToStreamF;
         virtual void debug(const WriteToStreamF &) override;
         virtual void babble(const WriteToStreamF &) override;
@@ -20,9 +20,9 @@ namespace com
         virtual ~FileLogger() = default;
         virtual void logLevel(LogLevel lvl) override { _logLevel = lvl; }
         virtual LogLevel logLevel() const override { return _logLevel; }
-
+        
     private:
         LogLevel _logLevel = LevelWarn;
-        ICompilerProgramOptionsPtr _programOptions;
+        std::string _logFilePath;
     };
 }

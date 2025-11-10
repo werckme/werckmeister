@@ -47,6 +47,7 @@ namespace app
 
     std::string FluidSynthWriter::findFluidSynthLibraryPath() const
     {
+        _logger->babble(WMLogLambda(log << "findFluidSynthLibraryPath: '" << _libPath << "'"));
         if (_libPath.empty())
         {
             return Base::findFluidSynthLibraryPath();

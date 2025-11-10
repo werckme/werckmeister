@@ -10,7 +10,7 @@ namespace com
         {
             return;
         }
-        std::fstream flog(_programOptions->logFile(), std::ios::app);
+        std::fstream flog(_logFilePath, std::ios::app | std::ios::out);
         flog << "[debug] ";
         writeMessage(f, flog);
     }
@@ -20,7 +20,7 @@ namespace com
         {
             return;
         }
-        std::fstream flog(_programOptions->logFile(), std::ios::app);
+        std::fstream flog(_logFilePath, std::ios::app | std::ios::out);
         flog << "[info] ";
         writeMessage(f, flog);
     }
@@ -30,7 +30,7 @@ namespace com
         {
             return;
         }
-        std::fstream flog(_programOptions->logFile(), std::ios::app);
+        std::fstream flog(_logFilePath, std::ios::app | std::ios::out);
         flog << "[warning] ";
         writeMessage(f, flog);
     }
@@ -40,7 +40,7 @@ namespace com
         {
             return;
         }
-        std::fstream flog(_programOptions->logFile(), std::ios::app);
+        std::fstream flog(_logFilePath, std::ios::app | std::ios::out);
         flog << "[error] ";
         writeMessage(f, flog);
     }

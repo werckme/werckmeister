@@ -8,6 +8,7 @@
 #include <com/werckmeister.hpp>
 #include <CompilerProgramOptions.h>
 #include <com/ConsoleLogger.h>
+#include <com/FileLogger.h>
 #include <compiler/LoggerAndWarningsCollector.h>
 #include <compiler/SheetEventRenderer.h>
 #include <compiler/SheetTemplateRenderer.h>
@@ -32,18 +33,29 @@
 #include <thread>
 #include <mutex>
 
-#define LOG(x) std::cout << "[WM_LOG] " << x << std::endl;
-#define ERR(x) std::cerr << "[WM_ERROR] " << x << std::endl;
 #define assert(exp, msg) if(!(exp)) LOG(msg)
-
 #define STRVERSION SHEET_VERSION " lib 0.13"
-#define TEST_SOUNDFONT "/home/samba/Soundfonds/FluidR3_GM_EX.sf2"
 
 namespace
 {
+	com::ILoggerPtr createLogger()
+	{
+		const char* logPath = std::getenv("WMLIB_LOGFILE_PATH");
+		com::ILoggerPtr logger;
+		if (logPath)
+		{
+			logger = std::make_shared<com::FileLogger>("/home/samba/werckmeister.log");
+		} else 
+		{
+			logger = std::make_shared<com::ConsoleLogger>();
+		}
+		logger->logLevel(com::FileLogger::LevelDebug);
+		return logger;
+	}
 	typedef std::mutex Mutex;
 	Mutex mutex;
 	typedef SheetLibProgram CompilerProgram;
+	com::ILoggerPtr _logger = createLogger();
 	struct Session 
 	{
 		com::midi::MidiPtr midiFile;
@@ -51,6 +63,8 @@ namespace
 	};
 }
 
+#define LOG(x) _logger->babble(WMLogLambda(log << x));
+#define ERR(x) _logger->error(WMLogLambda(log << x));
 
 extern "C"  
 {
@@ -63,13 +77,14 @@ extern "C"
 
 	WERCKM_EXPORT WmSession wm_createSession()
 	{
-		LOG("wm_createSession")
+		LOG("wm_createSession");
 		auto session = new Session();
 		return session;
 	}
 
   	WERCKM_EXPORT int wm_releaseSession(WmSession sessionPtr)
 	{
+		LOG("wm_releaseSession")
 		if (sessionPtr == nullptr)
 		{
 			return WERCKM_ERR;
@@ -130,10 +145,10 @@ extern "C"
 		try
 		{
 			Session* session = reinterpret_cast<Session*>(sessionPtr);
-			session->fluidSynth = std::make_shared<app::FluidSynthWriter>();
+			session->fluidSynth = std::make_shared<app::FluidSynthWriter>(_logger);
 			session->fluidSynth->libPath(libPath);
 			session->fluidSynth->sampleRate((double)sampleRate);
-			session->fluidSynth->initSynth(TEST_SOUNDFONT);
+			session->fluidSynth->initSynth("");
 		}
 		catch (const std::exception &ex) 
 		{
@@ -223,7 +238,6 @@ extern "C"
 		namespace pr = parser;
 		auto programOptionsPtr = std::make_shared<CompilerProgramOptions>();
 		programOptionsPtr->parseProgrammArgs(argc, argv);
-		programOptionsPtr->logFilePath = "/home/samba/wm-log.txt"; // TODO: JUST FOR DEBUG, REMOVE
 
 		auto documentPtr = std::make_shared<documentModel::Document>();
 		auto midiFile = com::getWerckmeister().createMidi();
@@ -244,7 +258,6 @@ extern "C"
 			di::bind<com::midi::Midi>().to(midiFile), 
 			di::bind<app::IDocumentWriter>().to([&](const auto &injector) -> app::IDocumentWriterPtr
 			{
-				//return injector.template create<std::shared_ptr<app::DummyFileWriter>>();
 				return injector.template create<std::shared_ptr<app::DummyFileWriter>>();
 			}),
 			di::bind<cp::ICompilerVisitor>().to([&](const auto &injector) -> cp::ICompilerVisitorPtr
@@ -257,7 +270,7 @@ extern "C"
 			}),
 			di::bind<com::ILogger>().to([&](const auto &injector) -> com::ILoggerPtr
 			{
-				return injector.template create<std::shared_ptr<com::ConsoleLogger>>();
+				return _logger;
 			}));
 
 		FactoryConfig factory(injector);
