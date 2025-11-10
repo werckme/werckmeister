@@ -44,7 +44,7 @@ namespace
 		com::ILoggerPtr logger;
 		if (logPath)
 		{
-			logger = std::make_shared<com::FileLogger>("/home/samba/werckmeister.log");
+			logger = std::make_shared<com::FileLogger>(logPath);
 		} else 
 		{
 			logger = std::make_shared<com::ConsoleLogger>();
