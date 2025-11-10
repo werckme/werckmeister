@@ -52,12 +52,10 @@ namespace
 		logger->logLevel(com::FileLogger::LevelDebug);
 		return logger;
 	}
-	typedef std::mutex Mutex;
-	Mutex mutex;
 	typedef SheetLibProgram CompilerProgram;
-	com::ILoggerPtr _logger = createLogger();
 	struct Session 
 	{
+		com::ILoggerPtr logger = createLogger();
 		com::midi::MidiPtr midiFile;
 		app::FluidSynthWriterPtr fluidSynth;
 	};
@@ -68,7 +66,7 @@ namespace
 
 extern "C"  
 {
-	static com::midi::MidiPtr createMidiFile(int argc, const char **argv);
+	static com::midi::MidiPtr createMidiFile(Session* session, int argc, const char **argv);
 
 	WERCKM_EXPORT const char * wm_getStrVersion()
 	{
@@ -77,21 +75,20 @@ extern "C"
 
 	WERCKM_EXPORT WmSession wm_createSession()
 	{
-		LOG("wm_createSession");
 		auto session = new Session();
 		return session;
 	}
 
   	WERCKM_EXPORT int wm_releaseSession(WmSession sessionPtr)
 	{
-		LOG("wm_releaseSession")
 		if (sessionPtr == nullptr)
 		{
 			return WERCKM_ERR;
 		}
 		Session* session = reinterpret_cast<Session*>(sessionPtr);
-		session->fluidSynth.reset();
-		session->midiFile.reset();
+		// session->fluidSynth.reset();
+		// session->midiFile.reset();
+		// session->logger.reset();
 		//delete session;
 		return WERCKM_OK;
 	}
@@ -103,12 +100,13 @@ extern "C"
 			return WERCKM_ERR;
 		}
 		Session* session = reinterpret_cast<Session*>(sessionPtr);
+		auto _logger = session->logger;
 		LOG("wm_compile" << ": " << sourcePath)
 		const char * args[] = {"noProgramName", sourcePath, "--verbose"};
 		const int numArgs = sizeof(args)/sizeof(args[0]);
 		try 
 		{
-			session->midiFile = createMidiFile(numArgs, &args[0]);
+			session->midiFile = createMidiFile(session, numArgs, &args[0]);
 			assert(session->midiFile, "expected session->midi");
 			LOG("session created " << session->midiFile->byteSize() << " bytes")
 			return WERCKM_OK;
@@ -137,14 +135,15 @@ extern "C"
 
 	WERCKM_EXPORT int wm_initSynth(WmSession sessionPtr, const char *libPath, int sampleRate)
 	{
-		LOG("wm_initSynth: " << libPath << ", sample rate:" << sampleRate)
 		if (sessionPtr == nullptr)
 		{
 			return WERCKM_ERR;
 		}
+		Session* session = reinterpret_cast<Session*>(sessionPtr);
+		auto _logger = session->logger;
 		try
 		{
-			Session* session = reinterpret_cast<Session*>(sessionPtr);
+			LOG("wm_initSynth: " << libPath << ", sample rate:" << sampleRate)
 			session->fluidSynth = std::make_shared<app::FluidSynthWriter>(_logger);
 			session->fluidSynth->libPath(libPath);
 			session->fluidSynth->sampleRate((double)sampleRate);
@@ -165,12 +164,13 @@ extern "C"
 
 	WERCKM_EXPORT int wm_copyMidiDataToSynth(WmSession sessionPtr)
 	{
-		LOG("wm_copyMidiDataToSynth")
 		if (sessionPtr == nullptr)
 		{
 			return WERCKM_ERR;
 		}
 		Session* session = reinterpret_cast<Session*>(sessionPtr);
+		auto _logger = session->logger;
+		LOG("wm_copyMidiDataToSynth")
 		if (session->fluidSynth.get() == nullptr)
 		{
 			return WERCKM_OK;
@@ -204,14 +204,14 @@ extern "C"
 
 	int wm_synthRender(WmSession sessionPtr, int len, float* lout, int loff, int lincr, float* rout, int roff, int rincr)
 	{
-		//LOG("wm_synthRender " << len << ", " << loff << ", " << lincr << ", " <<  roff << ", " << rincr)
 		if (sessionPtr == nullptr)
 		{
 			return WERCKM_ERR;
 		}
+		Session* session = reinterpret_cast<Session*>(sessionPtr);
+		auto _logger = session->logger;
 		try
 		{
-			Session* session = reinterpret_cast<Session*>(sessionPtr);
 			if (session->fluidSynth.get() == nullptr)
 			{
 				return WERCKM_OK;
@@ -230,7 +230,7 @@ extern "C"
 			return WERCKM_ERR;
 		}
 	}
-	static com::midi::MidiPtr createMidiFile(int argc, const char **argv)
+	static com::midi::MidiPtr createMidiFile(Session* session, int argc, const char **argv)
 	{
 		namespace di = boost::di;
 		namespace cp = compiler;
@@ -242,6 +242,7 @@ extern "C"
 		auto documentPtr = std::make_shared<documentModel::Document>();
 		auto midiFile = com::getWerckmeister().createMidi();
 		bool needTimeline = programOptionsPtr->isJsonModeSet();
+		auto _logger = session->logger;
 		auto injector = di::make_injector(
 			di::bind<pr::IDocumentParser>().to<pr::DocumentParser>().in(di::extension::scoped), 
 			di::bind<cp::ICompiler>().to<cp::Compiler>().in(di::extension::scoped), 
