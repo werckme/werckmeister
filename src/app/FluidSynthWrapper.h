@@ -4,7 +4,7 @@
 #include <vector>
 #include <fluidsynth.h>
 #include <com/midi.hpp>
-#include <boost/dll.hpp>
+
 
 // https://www.fluidsynth.org/api-1.x/synth_8h.html
 
@@ -115,7 +115,6 @@ namespace app
 		fluid_audio_driver_t *adriver = nullptr;
 		fluid_sequencer_t* seq = nullptr;
 		fluid_seq_id_t synthSeqID = 0;
-		boost::dll::shared_library* _library = nullptr;
 		bool midiEventToFluidEvent(const com::midi::Event& src, fluid_event_t& evt, bool doThrow = true);
 		long double _playerOffsetMillis = 0;
 	};
