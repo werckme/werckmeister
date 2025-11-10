@@ -32,4 +32,5 @@ public:
     }
     virtual ~SheetLibProgram() = default;
     com::midi::MidiPtr getMidiFile() const { return _midiFile; }
+    virtual int execute() override;
 };
