@@ -92,7 +92,7 @@ extern "C"
 		Session* session = reinterpret_cast<Session*>(sessionPtr);
 		session->fluidSynth.reset();
 		session->midiFile.reset();
-		// delete session;
+		delete session;
 		return WERCKM_OK;
 	}
 
