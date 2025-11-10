@@ -48,6 +48,7 @@
 #define fluid_event_key_pressure_ftype void(fluid_event_t*, int, short, int)
 #define fluid_sequencer_set_time_scale_ftype void(fluid_sequencer_t*, double)
 #define fluid_synth_write_float_ftype int(fluid_synth_t *, int, void*, int, int, void*, int, int)
+#define fluid_synth_program_select_ftype int(fluid_synth_t *, int, int, int, int)
 
 namespace app
 {
@@ -62,7 +63,7 @@ namespace app
 		void send(const com::midi::Event &event, long double elapsedMillis);
 		void seek(long double millis);
 	protected:
-		virtual void initSynth(const std::string soundFondPath);
+		virtual void initSynth(const std::string &soundFondPath);
 		virtual void tearDownSynth();
 		void initLibraryFunctions();
 		virtual std::string findFluidSynthLibraryPath() const;
@@ -106,6 +107,8 @@ namespace app
 			Useful for storing interleaved stereo (lout = rout, loff = 0, roff = 1, lincr = 2, rincr = 2).
 		*/
 		std::function<fluid_synth_write_float_ftype> _fluid_synth_write_float;
+		std::function<fluid_synth_program_select_ftype> _fluid_synth_program_select;
+
 
 		fluid_settings_t *settings = nullptr;
 		fluid_synth_t *synth = nullptr;

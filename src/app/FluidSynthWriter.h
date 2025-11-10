@@ -2,26 +2,32 @@
 #pragma once
 
 #include "FluidSynthWrapper.h"
+#include <unordered_map>
 
 namespace app
 {
-	class FluidSynthWriter : public FluidSynth
-	{
-	public:
-		typedef FluidSynth Base;
-		virtual ~FluidSynthWriter() = default;
-		virtual void initSynth(const std::string soundFondPath) override;
-		bool addEvent(const com::midi::Event& event);
-		void render(int len, float* lout, int loff, int lincr, float* rout, int roff, int rincr);
-		void libPath(const com::String &path) { _libPath = path; }
-		com::String libPath() const { return _libPath; }
-		void sampleRate(const double &sampleRate) { _sampleRate = sampleRate; }
-		double sampleRate() const { return _sampleRate; }
-	protected:
-		com::String _libPath;
-		double _sampleRate = 44100.0f;
+    class FluidSynthWriter : public FluidSynth
+    {
+    public:
+        typedef int SoundFontId;
+        typedef FluidSynth Base;
+        virtual ~FluidSynthWriter() = default;
+        virtual void initSynth(const std::string &soundFondPath) override;
+        SoundFontId addSoundFont(const std::string &soundFondPath);
+        bool addEvent(const com::midi::Event& event);
+        void render(int len, float* lout, int loff, int lincr, float* rout, int roff, int rincr);
+        void libPath(const com::String &path) { _libPath = path; }
+        com::String libPath() const { return _libPath; }
+        void sampleRate(const double &sampleRate) { _sampleRate = sampleRate; }
+        double sampleRate() const { return _sampleRate; }
+    protected:
+        com::String _libPath;
+        double _sampleRate = 44100.0f;
         virtual std::string findFluidSynthLibraryPath() const override;
-		double _tempo = 120.0;
-	};
-	typedef std::shared_ptr<FluidSynthWriter> FluidSynthWriterPtr;
+        void handleMetaEvent(const com::midi::Event& event);
+        double _tempo = 120.0;
+        typedef std::unordered_map<com::String, SoundFontId> SoundFontIdMap;
+        SoundFontIdMap soundFontIds;
+    };
+    typedef std::shared_ptr<FluidSynthWriter> FluidSynthWriterPtr;
 }

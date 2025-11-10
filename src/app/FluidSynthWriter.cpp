@@ -1,7 +1,8 @@
 
 
 #include "FluidSynthWriter.h"
-
+#include <fstream>
+#include <com/config/configServer.h>
 
 namespace 
 {
@@ -12,7 +13,7 @@ namespace
 
 namespace app
 {
-    void FluidSynthWriter::initSynth(const std::string soundFondPath)
+    void FluidSynthWriter::initSynth(const std::string &soundFondPath)
     {
         initLibraryFunctions();
         settings = _new_fluid_settings();
@@ -27,11 +28,21 @@ namespace app
         {
             throw std::runtime_error("error initializing fluidsynth sequencer");
         }
+
+    }
+
+    FluidSynthWriter::SoundFontId FluidSynthWriter::addSoundFont(const std::string &soundFondPath)
+    {
+        if (soundFondPath.empty())
+        {
+            return FLUID_FAILED;
+        }
         auto sfont_id = _fluid_synth_sfload(synth, soundFondPath.c_str(), 1);
         if (sfont_id == FLUID_FAILED)
         {
             throw std::runtime_error("Loading the SoundFont " + soundFondPath + " failed!");
         }
+        return sfont_id;
     }
 
     std::string FluidSynthWriter::findFluidSynthLibraryPath() const
@@ -43,13 +54,51 @@ namespace app
         return _libPath;
     }
 
+    void FluidSynthWriter::handleMetaEvent(const com::midi::Event& event)
+    {
+        if (event.eventType() == com::midi::MetaEvent && event.metaEventType() == com::midi::Tempo)
+        {
+            auto metaIntValue = com::midi::Event::MetaGetIntValue(event.metaData(), event.metaDataSize());
+            _tempo = com::midi::MicrosecondsPerMinute / (double)metaIntValue;
+        }
+        if (event.metaEventType() == com::midi::CustomMetaEvent)
+        {
+            auto customEvent = com::midi::Event::MetaGetCustomData(event.metaData(), event.metaDataSize());
+            if (customEvent.type == com::midi::CustomMetaData::SetDevice)
+            {
+                std::string deviceId(customEvent.data.begin(), customEvent.data.end());
+                auto soundFontIdsIt = soundFontIds.find(deviceId);
+                SoundFontId sfId = FLUID_FAILED;
+                if (soundFontIdsIt != soundFontIds.end())
+                {
+                    sfId = soundFontIdsIt->second;
+                } 
+                else 
+                {
+                    const auto &devices = com::getConfigServer().getDevices();
+                    auto deviceIt = devices.find(deviceId);
+                    if (deviceIt == devices.end())
+                    {
+                        return;
+                    }
+                    sfId = addSoundFont(deviceIt->second.deviceId);
+                    soundFontIds.insert(std::make_pair(deviceId, sfId));
+                }
+                if (sfId == FLUID_FAILED)
+                {
+                    return;
+                }
+                if (_fluid_synth_program_select(synth, event.channel(), sfId, 0, 0) != FLUID_OK)
+                {
+                    throw std::runtime_error("fluid_synth_program_select failed");
+                }
+            }
+        }
+    }
+
     bool FluidSynthWriter::addEvent(const com::midi::Event& event)
     {
-		if (event.eventType() == com::midi::MetaEvent && event.metaEventType() == com::midi::Tempo)
-		{
-			auto metaIntValue = com::midi::Event::MetaGetIntValue(event.metaData(), event.metaDataSize());
-			_tempo = com::midi::MicrosecondsPerMinute / (double)metaIntValue;
-		}
+        handleMetaEvent(event);
         fluid_event_t* fluid_event = _new_fluid_event();
         const bool doThrow = false;
         if (!midiEventToFluidEvent(event, *fluid_event, doThrow))

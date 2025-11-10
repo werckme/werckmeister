@@ -181,6 +181,12 @@ extern "C"
 		return WERCKM_OK;
 	}
 
+	WERCKM_EXPORT int wm_setSoundFontHome(WmSession, const char *sfHomePath)
+	{
+		com::getWerckmeister().addSearchPath(sfHomePath);
+		return WERCKM_OK;
+	}
+
 	int wm_synthRender(WmSession sessionPtr, int len, float* lout, int loff, int lincr, float* rout, int roff, int rincr)
 	{
 		//LOG("wm_synthRender " << len << ", " << loff << ", " << lincr << ", " <<  roff << ", " << rincr)

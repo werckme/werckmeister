@@ -120,6 +120,7 @@ namespace app
             _fluid_event_key_pressure = _library->get<fluid_event_key_pressure_ftype>("fluid_event_key_pressure");
             _fluid_sequencer_set_time_scale = _library->get<fluid_sequencer_set_time_scale_ftype>("fluid_sequencer_set_time_scale");
             _fluid_synth_write_float = _library->get<fluid_synth_write_float_ftype>("fluid_synth_write_float");
+            _fluid_synth_program_select = _library->get<fluid_synth_program_select_ftype>("fluid_synth_program_select");
         }
         catch (const std::exception &ex)
         {
@@ -173,7 +174,7 @@ namespace app
         return wm.resolvePath(libraryPath);
     }
 
-    void FluidSynth::initSynth(const std::string soundFondPath)
+    void FluidSynth::initSynth(const std::string &soundFondPath)
     {
         settings = _new_fluid_settings();
 
