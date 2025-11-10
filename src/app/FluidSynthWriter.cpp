@@ -15,6 +15,7 @@ namespace app
 {
     void FluidSynthWriter::initSynth(const std::string &soundFondPath)
     {
+        std::lock_guard<Mutex> lock(_renderMutex);
         initLibraryFunctions();
         settings = _new_fluid_settings();
         _fluid_settings_setstr(settings, "audio.driver", "file");
@@ -28,11 +29,17 @@ namespace app
         {
             throw std::runtime_error("error initializing fluidsynth sequencer");
         }
+    }
 
+    void FluidSynthWriter::tearDownSynth()
+    {
+        std::lock_guard<Mutex> lock(_renderMutex);
+        Base::tearDownSynth();
     }
 
     FluidSynthWriter::SoundFontId FluidSynthWriter::addSoundFont(const std::string &soundFondPath)
     {
+        std::lock_guard<Mutex> lock(_renderMutex);
         if (soundFondPath.empty())
         {
             return FLUID_FAILED;
@@ -99,6 +106,7 @@ namespace app
 
     bool FluidSynthWriter::addEvent(const com::midi::Event& event)
     {
+        std::lock_guard<Mutex> lock(_renderMutex);
         handleMetaEvent(event);
         fluid_event_t* fluid_event = _new_fluid_event();
         const bool doThrow = false;
@@ -119,6 +127,11 @@ namespace app
 
     void FluidSynthWriter::render(int len, float* lout, int loff, int lincr, float* rout, int roff, int rincr)
     {
+        std::lock_guard<Mutex> lock(_renderMutex);
+        if (synth == nullptr)
+        {
+            return;
+        }
         auto result = _fluid_synth_write_float(synth, len, lout, loff, lincr, rout, roff, rincr);
         if (result != FLUID_OK)
         {

@@ -4,6 +4,7 @@
 #include "FluidSynthWrapper.h"
 #include <unordered_map>
 #include <com/ILogger.h>
+#include <mutex>
 
 namespace app
 {
@@ -22,7 +23,10 @@ namespace app
         com::String libPath() const { return _libPath; }
         void sampleRate(const double &sampleRate) { _sampleRate = sampleRate; }
         double sampleRate() const { return _sampleRate; }
+        virtual void tearDownSynth() override;
     protected:
+        typedef std::recursive_mutex Mutex;
+        Mutex _renderMutex;
         com::ILoggerPtr _logger;
         com::String _libPath;
         double _sampleRate = 44100.0f;
@@ -31,6 +35,7 @@ namespace app
         double _tempo = 120.0;
         typedef std::unordered_map<com::String, SoundFontId> SoundFontIdMap;
         SoundFontIdMap soundFontIds;
+        
     };
     typedef std::shared_ptr<FluidSynthWriter> FluidSynthWriterPtr;
 }
