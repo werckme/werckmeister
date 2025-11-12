@@ -64,10 +64,11 @@ namespace
 #define LOG(x) _logger->babble(WMLogLambda(log << x));
 #define ERR(x) _logger->error(WMLogLambda(log << x));
 
+
+static com::midi::MidiPtr createMidiFile(Session* session, int argc, const char** argv);
+
 extern "C"  
 {
-	static com::midi::MidiPtr createMidiFile(Session* session, int argc, const char **argv);
-
 	WERCKM_EXPORT const char * wm_getStrVersion()
 	{
 		return STRVERSION;
@@ -86,10 +87,10 @@ extern "C"
 			return WERCKM_ERR;
 		}
 		Session* session = reinterpret_cast<Session*>(sessionPtr);
-		// session->fluidSynth.reset();
-		// session->midiFile.reset();
-		// session->logger.reset();
-		//delete session;
+		session->fluidSynth.reset();
+		session->midiFile.reset();
+		session->logger.reset();
+		delete session;
 		return WERCKM_OK;
 	}
 
@@ -181,18 +182,32 @@ extern "C"
 			return WERCKM_ERR;
 		}
 		LOG("copy " << session->midiFile->ctracks().size() <<  " tracks")
-		for(const auto& track : session->midiFile->ctracks())
+		try 
 		{
-			LOG("copy " << track->events().numEvents() <<  " events")
-			for(const auto& event : track->events())
+			for (const auto& track : session->midiFile->ctracks())
 			{
-				if (!session->fluidSynth->addEvent(event))
-				{
-					LOG("copy event " << event.toString() <<  " failed")
-					continue;
-				}
+				LOG("copy " << track->events().numEvents() << " events")
+					for (const auto& event : track->events())
+					{
+						if (!session->fluidSynth->addEvent(event))
+						{
+							LOG("copy event " << event.toString() << " failed")
+								continue;
+						}
+					}
 			}
 		}
+		catch (const std::exception& ex)
+		{
+			ERR("failed copy midi data: " << ex.what())
+				return WERCKM_ERR;
+		}
+		catch (...)
+		{
+			ERR("failed to copy midi data")
+				return WERCKM_ERR;
+		}
+
 		return WERCKM_OK;
 	}
 
@@ -230,38 +245,40 @@ extern "C"
 			return WERCKM_ERR;
 		}
 	}
-	static com::midi::MidiPtr createMidiFile(Session* session, int argc, const char **argv)
-	{
-		namespace di = boost::di;
-		namespace cp = compiler;
-		namespace co = conductor;
-		namespace pr = parser;
-		auto programOptionsPtr = std::make_shared<CompilerProgramOptions>();
-		programOptionsPtr->parseProgrammArgs(argc, argv);
+}
 
-		auto documentPtr = std::make_shared<documentModel::Document>();
-		auto midiFile = com::getWerckmeister().createMidi();
-		bool needTimeline = programOptionsPtr->isJsonModeSet();
-		auto _logger = session->logger;
-		auto injector = di::make_injector(
-			di::bind<pr::IDocumentParser>().to<pr::DocumentParser>().in(di::extension::scoped), 
-			di::bind<cp::ICompiler>().to<cp::Compiler>().in(di::extension::scoped), 
-			di::bind<cp::ISheetTemplateRenderer>().to<cp::SheetTemplateRenderer>().in(di::extension::scoped), 
-			di::bind<cp::ASheetEventRenderer>().to<cp::SheetEventRenderer>().in(di::extension::scoped), 
-			di::bind<cp::IContext>().to<cp::MidiContext>().in(di::extension::scoped),
-			di::bind<cp::IPreprocessor>().to<cp::Preprocessor>().in(di::extension::scoped), 
-			di::bind<cp::ISheetNavigator>().to<cp::SheetNavigator>().in(di::extension::scoped), 
-			di::bind<co::IConductionsPerformer>().to<co::ConductionsPerformer>().in(di::extension::scoped), 
-			di::bind<cp::IEventInformationServer>().to<cp::EventInformationServer>().in(di::extension::scoped),
-			di::bind<ICompilerProgramOptions>().to(programOptionsPtr), 
-			di::bind<documentModel::Document>().to(documentPtr), 
-			di::bind<compiler::IDefinitionsServer>().to<compiler::DefinitionsServer>().in(di::extension::scoped), 
-			di::bind<com::midi::Midi>().to(midiFile), 
-			di::bind<app::IDocumentWriter>().to([&](const auto &injector) -> app::IDocumentWriterPtr
+static com::midi::MidiPtr createMidiFile(Session* session, int argc, const char** argv)
+{
+	namespace di = boost::di;
+	namespace cp = compiler;
+	namespace co = conductor;
+	namespace pr = parser;
+	auto programOptionsPtr = std::make_shared<CompilerProgramOptions>();
+	programOptionsPtr->parseProgrammArgs(argc, argv);
+
+	auto documentPtr = std::make_shared<documentModel::Document>();
+	auto midiFile = com::getWerckmeister().createMidi();
+	bool needTimeline = programOptionsPtr->isJsonModeSet();
+	auto _logger = session->logger;
+	auto injector = di::make_injector(
+		di::bind<pr::IDocumentParser>().to<pr::DocumentParser>().in(di::extension::scoped),
+		di::bind<cp::ICompiler>().to<cp::Compiler>().in(di::extension::scoped),
+		di::bind<cp::ISheetTemplateRenderer>().to<cp::SheetTemplateRenderer>().in(di::extension::scoped),
+		di::bind<cp::ASheetEventRenderer>().to<cp::SheetEventRenderer>().in(di::extension::scoped),
+		di::bind<cp::IContext>().to<cp::MidiContext>().in(di::extension::scoped),
+		di::bind<cp::IPreprocessor>().to<cp::Preprocessor>().in(di::extension::scoped),
+		di::bind<cp::ISheetNavigator>().to<cp::SheetNavigator>().in(di::extension::scoped),
+		di::bind<co::IConductionsPerformer>().to<co::ConductionsPerformer>().in(di::extension::scoped),
+		di::bind<cp::IEventInformationServer>().to<cp::EventInformationServer>().in(di::extension::scoped),
+		di::bind<ICompilerProgramOptions>().to(programOptionsPtr),
+		di::bind<documentModel::Document>().to(documentPtr),
+		di::bind<compiler::IDefinitionsServer>().to<compiler::DefinitionsServer>().in(di::extension::scoped),
+		di::bind<com::midi::Midi>().to(midiFile),
+		di::bind<app::IDocumentWriter>().to([&](const auto& injector) -> app::IDocumentWriterPtr
 			{
 				return injector.template create<std::shared_ptr<app::DummyFileWriter>>();
 			}),
-			di::bind<cp::ICompilerVisitor>().to([&](const auto &injector) -> cp::ICompilerVisitorPtr
+		di::bind<cp::ICompilerVisitor>().to([&](const auto& injector) -> cp::ICompilerVisitorPtr
 			{
 				if (needTimeline)
 				{
@@ -269,16 +286,16 @@ extern "C"
 				}
 				return injector.template create<std::shared_ptr<cp::EventInformationServer>>();
 			}),
-			di::bind<com::ILogger>().to([&](const auto &injector) -> com::ILoggerPtr
+		di::bind<com::ILogger>().to([&](const auto& injector) -> com::ILoggerPtr
 			{
+				//return injector.template create<std::shared_ptr<com::ConsoleLogger>>();
 				return _logger;
 			}));
 
-		FactoryConfig factory(injector);
-		factory.init();
-		auto program = injector.create<CompilerProgram>();
-		program.prepareEnvironment();
-		program.execute();
-		return midiFile;
-	}
+	FactoryConfig factory(injector);
+	factory.init();
+	auto program = injector.create<CompilerProgram>();
+	program.prepareEnvironment();
+	program.execute();
+	return midiFile;
 }
