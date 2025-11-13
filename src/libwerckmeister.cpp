@@ -87,6 +87,12 @@ extern "C"
 			return WERCKM_ERR;
 		}
 		Session* session = reinterpret_cast<Session*>(sessionPtr);
+		auto _logger = session->logger;
+		LOG("wm_releaseSession")
+		if (session->fluidSynth)
+		{
+			session->fluidSynth->tearDownSynth();
+		}
 		session->fluidSynth.reset();
 		session->midiFile.reset();
 		session->logger.reset();
@@ -231,6 +237,10 @@ extern "C"
 			{
 				return WERCKM_OK;
 			}
+			if(!wm_iscompiled(sessionPtr))
+			{
+				return WERCKM_OK;
+			}
 			session->fluidSynth->render(len, lout, loff, lincr, rout, roff, rincr);
 			return WERCKM_OK;
 		}
@@ -288,7 +298,7 @@ static com::midi::MidiPtr createMidiFile(Session* session, int argc, const char*
 			}),
 		di::bind<com::ILogger>().to([&](const auto& injector) -> com::ILoggerPtr
 			{
-				//return injector.template create<std::shared_ptr<com::ConsoleLogger>>();
+				// return injector.template create<std::shared_ptr<com::ConsoleLogger>>();
 				return _logger;
 			}));
 

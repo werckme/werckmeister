@@ -16,6 +16,7 @@ namespace app
     void FluidSynthWriter::initSynth(const std::string &soundFondPath)
     {
         std::lock_guard<Mutex> lock(_renderMutex);
+        _logger->babble(WMLogLambda(log << "FluidSynthWriter:: init fluidsynth: " << soundFondPath));
         initLibraryFunctions();
         settings = _new_fluid_settings();
         _fluid_settings_setstr(settings, "audio.driver", "file");
@@ -34,12 +35,14 @@ namespace app
     void FluidSynthWriter::tearDownSynth()
     {
         std::lock_guard<Mutex> lock(_renderMutex);
+        _logger->babble(WMLogLambda(log << "FluidSynthWriter:: tear down fluidsynth"));
         Base::tearDownSynth();
     }
 
     FluidSynthWriter::SoundFontId FluidSynthWriter::addSoundFont(const std::string &soundFondPath)
     {
         std::lock_guard<Mutex> lock(_renderMutex);
+        _logger->babble(WMLogLambda(log << "FluidSynthWriter:: addSoundFont: " << soundFondPath));
         if (soundFondPath.empty())
         {
             return FLUID_FAILED;
@@ -54,7 +57,7 @@ namespace app
 
     std::string FluidSynthWriter::findFluidSynthLibraryPath() const
     {
-        _logger->babble(WMLogLambda(log << "findFluidSynthLibraryPath: '" << _libPath << "'"));
+        _logger->babble(WMLogLambda(log << "FluidSynthWriter:: findFluidSynthLibraryPath: '" << _libPath << "'"));
         if (_libPath.empty())
         {
             return Base::findFluidSynthLibraryPath();
@@ -107,6 +110,10 @@ namespace app
     bool FluidSynthWriter::addEvent(const com::midi::Event& event)
     {
         std::lock_guard<Mutex> lock(_renderMutex);
+        if (!seq)
+        {
+            return true;
+        }
         handleMetaEvent(event);
         fluid_event_t* fluid_event = _new_fluid_event();
         const bool doThrow = false;

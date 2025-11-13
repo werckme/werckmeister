@@ -139,17 +139,18 @@ namespace app
 
     void FluidSynth::tearDownSynth()
     {
-        if (adriver)
-        {
-            _delete_fluid_audio_driver(adriver);
-            adriver = nullptr;
-        }
         if (seq) 
         {
             _fluid_sequencer_unregister_client(seq, synthSeqID);
             _delete_fluid_sequencer(seq);
             seq = nullptr;
         }
+        if (adriver)
+        {
+            _delete_fluid_audio_driver(adriver);
+            adriver = nullptr;
+        }
+
         if (synth)
         {
             _delete_fluid_synth(synth);
