@@ -32,8 +32,9 @@
 #include <com/config.hpp>
 #include <thread>
 #include <mutex>
+#include <vector>
 
-#define assert(exp, msg) if(!(exp)) LOG(msg)
+#define wmassert(exp, msg) if(!(exp)) LOG(msg)
 #define STRVERSION SHEET_VERSION " lib 0.13"
 
 namespace
@@ -53,19 +54,27 @@ namespace
 		return logger;
 	}
 	typedef SheetLibProgram CompilerProgram;
+	struct CueDate
+	{
+		com::String cueText;
+		unsigned int timePointMillis = 0;
+	};
+	typedef std::vector<CueDate> CueDates;
 	struct Session 
 	{
 		com::ILoggerPtr logger = createLogger();
 		com::midi::MidiPtr midiFile;
 		app::FluidSynthWriterPtr fluidSynth;
+		CueDates cueDates;
 	};
 }
 
-#define LOG(x) _logger->babble(WMLogLambda(log << x));
-#define ERR(x) _logger->error(WMLogLambda(log << x));
+#define LOG(x) _logger->babble(WMLogLambda(log << x))
+#define ERR(x) _logger->error(WMLogLambda(log << x))
 
 
 static com::midi::MidiPtr createMidiFile(Session* session, int argc, const char** argv);
+static void handleIfMetaEvent(Session*, const com::midi::Event&);
 
 extern "C"  
 {
@@ -88,7 +97,7 @@ extern "C"
 		}
 		Session* session = reinterpret_cast<Session*>(sessionPtr);
 		auto _logger = session->logger;
-		LOG("wm_releaseSession")
+		LOG("wm_releaseSession");
 		if (session->fluidSynth)
 		{
 			session->fluidSynth->tearDownSynth();
@@ -108,24 +117,24 @@ extern "C"
 		}
 		Session* session = reinterpret_cast<Session*>(sessionPtr);
 		auto _logger = session->logger;
-		LOG("wm_compile" << ": " << sourcePath)
+		LOG("wm_compile" << ": " << sourcePath);
 		const char * args[] = {"noProgramName", sourcePath, "--verbose"};
 		const int numArgs = sizeof(args)/sizeof(args[0]);
 		try 
 		{
 			session->midiFile = createMidiFile(session, numArgs, &args[0]);
-			assert(session->midiFile, "expected session->midi");
-			LOG("session created " << session->midiFile->byteSize() << " bytes")
+			wmassert(session->midiFile, "expected session->midi");
+			LOG("session created " << session->midiFile->byteSize() << " bytes");
 			return WERCKM_OK;
 		}
 		catch (const std::exception &ex) 
 		{
-			ERR("failed to create compiler program: " << ex.what())
+			ERR("failed to create compiler program: " << ex.what());
 			return WERCKM_ERR;
 		}
 		catch (...) 
 		{
-			ERR("failed to create compiler program")
+			ERR("failed to create compiler program");
 			return WERCKM_ERR;
 		}
 	}
@@ -150,7 +159,7 @@ extern "C"
 		auto _logger = session->logger;
 		try
 		{
-			LOG("wm_initSynth: " << libPath << ", sample rate:" << sampleRate)
+			LOG("wm_initSynth: " << libPath << ", sample rate:" << sampleRate);
 			session->fluidSynth = std::make_shared<app::FluidSynthWriter>(_logger);
 			session->fluidSynth->libPath(libPath);
 			session->fluidSynth->sampleRate((double)sampleRate);
@@ -158,12 +167,12 @@ extern "C"
 		}
 		catch (const std::exception &ex) 
 		{
-			ERR("failed to init synth: " << ex.what())
+			ERR("failed to init synth: " << ex.what());
 			return WERCKM_ERR;
 		}
 		catch (...) 
 		{
-			ERR("failed to init synth")
+			ERR("failed to init synth");
 			return WERCKM_ERR;
 		}
 		return WERCKM_OK;
@@ -177,40 +186,37 @@ extern "C"
 		}
 		Session* session = reinterpret_cast<Session*>(sessionPtr);
 		auto _logger = session->logger;
-		LOG("wm_copyMidiDataToSynth")
+		LOG("wm_copyMidiDataToSynth");
 		if (session->fluidSynth.get() == nullptr)
 		{
 			return WERCKM_OK;
 		}
 		if (session->midiFile.get() == nullptr)
 		{
-			ERR("no midi file")
+			ERR("no midi file");
 			return WERCKM_ERR;
 		}
-		LOG("copy " << session->midiFile->ctracks().size() <<  " tracks")
+		LOG("copy " << session->midiFile->ctracks().size() <<  " tracks");
 		try 
 		{
 			for (const auto& track : session->midiFile->ctracks())
 			{
-				LOG("copy " << track->events().numEvents() << " events")
-					for (const auto& event : track->events())
-					{
-						if (!session->fluidSynth->addEvent(event))
-						{
-							LOG("copy event " << event.toString() << " failed")
-								continue;
-						}
-					}
+				LOG("copy " << track->events().numEvents() << " events");
+				for (const auto& event : track->events())
+				{
+					session->fluidSynth->addEvent(event);
+					handleIfMetaEvent(session, event);
+				}
 			}
 		}
 		catch (const std::exception& ex)
 		{
-			ERR("failed copy midi data: " << ex.what())
+			ERR("failed copy midi data: " << ex.what());
 				return WERCKM_ERR;
 		}
 		catch (...)
 		{
-			ERR("failed to copy midi data")
+			ERR("failed to copy midi data");
 				return WERCKM_ERR;
 		}
 
@@ -223,7 +229,7 @@ extern "C"
 		return WERCKM_OK;
 	}
 
-	int wm_synthRender(WmSession sessionPtr, int len, float* lout, int loff, int lincr, float* rout, int roff, int rincr)
+	WERCKM_EXPORT int wm_synthRender(WmSession sessionPtr, int len, float* lout, int loff, int lincr, float* rout, int roff, int rincr)
 	{
 		if (sessionPtr == nullptr)
 		{
@@ -246,13 +252,89 @@ extern "C"
 		}
 		catch (const std::exception &ex) 
 		{
-			ERR("failed to render: " << ex.what())
+			ERR("failed to render: " << ex.what());
 			return WERCKM_ERR;
 		}
 		catch (...) 
 		{
-			ERR("failed to render")
+			ERR("failed to render");
 			return WERCKM_ERR;
+		}
+	}
+	
+	WERCKM_EXPORT double wm_getSongPositionSeconds(WmSession sessionPtr)
+	{
+		if (sessionPtr == nullptr)
+		{
+			return 0;
+		}
+		Session* session = reinterpret_cast<Session*>(sessionPtr);
+		if (!session->fluidSynth)
+		{
+			return 0;
+		}
+		return session->fluidSynth->getSongPositionSeconds();
+	}
+
+	WERCKM_EXPORT int wm_getNumMidiCuePoints(WmSession sessionPtr)
+	{
+		if (sessionPtr == nullptr)
+		{
+			return 0;
+		}
+		Session* session = reinterpret_cast<Session*>(sessionPtr);
+		auto _logger = session->logger;
+		try 
+		{
+			
+			return (int)session->cueDates.size();
+		} 
+		catch(...)
+		{
+			ERR("failed to get cue dates size");
+			return WERCKM_ERR;
+		}
+	}
+
+	WERCKM_EXPORT const char * wm_getMidiCuePointText(WmSession sessionPtr, int index)
+	{
+		if (sessionPtr == nullptr)
+		{
+			return 0;
+		}
+		Session* session = reinterpret_cast<Session*>(sessionPtr);
+		auto _logger = session->logger;
+		try 
+		{
+			Session* session = reinterpret_cast<Session*>(sessionPtr);
+			const auto& cueDate = session->cueDates.at(index);
+			return cueDate.cueText.c_str();
+		}
+		catch(...)
+		{
+			ERR("failed to get cue text");
+			return 0;
+		}
+	}
+
+	WERCKM_EXPORT unsigned int wm_getMidiCuePositionMillis(WmSession sessionPtr, int index)
+	{
+		if (sessionPtr == nullptr)
+		{
+			return 0;
+		}
+		Session* session = reinterpret_cast<Session*>(sessionPtr);
+		auto _logger = session->logger;
+		try 
+		{
+			Session* session = reinterpret_cast<Session*>(sessionPtr);
+			const auto& cueDate = session->cueDates.at(index);
+			return cueDate.timePointMillis;
+		}
+		catch(...)
+		{
+			ERR("failed to get cue position");
+			return 0;
 		}
 	}
 }
@@ -308,4 +390,23 @@ static com::midi::MidiPtr createMidiFile(Session* session, int argc, const char*
 	program.prepareEnvironment();
 	program.execute();
 	return midiFile;
+}
+
+static void handleIfMetaEvent(Session* session, const com::midi::Event& event)
+{
+	auto _logger = session->logger;
+	if (event.eventType() != com::midi::MetaEvent)
+	{
+		return;
+	}
+	if (event.metaEventType() == com::midi::CuePoint)
+	{
+		auto& cueDates = session->cueDates;
+		auto bpm = session->fluidSynth->tempo();
+		CueDate cue;
+		cue.cueText = com::midi::Event::MetaGetStringValue(event.metaData(), event.metaDataSize());
+		cue.timePointMillis = 60.0 * 1000.0 * event.absPosition() / (bpm * com::PPQ);
+		cueDates.push_back(cue);
+		LOG("added cue " << cue.cueText);
+	}
 }

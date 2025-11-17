@@ -15,7 +15,6 @@ namespace app
 {
     void FluidSynthWriter::initSynth(const std::string &soundFondPath)
     {
-        std::lock_guard<Mutex> lock(_renderMutex);
         _logger->babble(WMLogLambda(log << "FluidSynthWriter:: init fluidsynth: " << soundFondPath));
         initLibraryFunctions();
         settings = _new_fluid_settings();
@@ -34,14 +33,12 @@ namespace app
 
     void FluidSynthWriter::tearDownSynth()
     {
-        std::lock_guard<Mutex> lock(_renderMutex);
         _logger->babble(WMLogLambda(log << "FluidSynthWriter:: tear down fluidsynth"));
         Base::tearDownSynth();
     }
 
     FluidSynthWriter::SoundFontId FluidSynthWriter::addSoundFont(const std::string &soundFondPath)
     {
-        std::lock_guard<Mutex> lock(_renderMutex);
         _logger->babble(WMLogLambda(log << "FluidSynthWriter:: addSoundFont: " << soundFondPath));
         if (soundFondPath.empty())
         {
@@ -109,7 +106,6 @@ namespace app
 
     bool FluidSynthWriter::addEvent(const com::midi::Event& event)
     {
-        std::lock_guard<Mutex> lock(_renderMutex);
         if (!seq)
         {
             return true;
@@ -138,11 +134,20 @@ namespace app
         {
             return;
         }
-        std::lock_guard<Mutex> lock(_renderMutex);
         auto result = _fluid_synth_write_float(synth, len, lout, loff, lincr, rout, roff, rincr);
         if (result != FLUID_OK)
         {
             throw std::runtime_error("fluid_synth_nwrite_float failed.");
         }
+    }
+
+    double FluidSynthWriter::getSongPositionSeconds() const
+    {
+        if (synth == nullptr || seq == nullptr)
+        {
+            return 0;
+        }
+        double ticks = _fluid_sequencer_get_tick(seq);
+        return ticks / FLUID_SYNTH_SEQUENCER_TIMESCALE;
     }
 }

@@ -22,4 +22,8 @@ extern "C"
   WERCKM_EXPORT int wm_copyMidiDataToSynth(WmSession);
   WERCKM_EXPORT int wm_synthRender(WmSession, int len, float* lout, int loff, int lincr, float* rout, int roff, int rincr);
   WERCKM_EXPORT int wm_setSoundFontHome(WmSession, const char *sfHomePath);
+  WERCKM_EXPORT double wm_getSongPositionSeconds(WmSession);
+  WERCKM_EXPORT int wm_getNumMidiCuePoints(WmSession);
+  WERCKM_EXPORT const char * wm_getMidiCuePointText(WmSession, int index);
+  WERCKM_EXPORT unsigned int wm_getMidiCuePositionMillis(WmSession, int index);
 }
