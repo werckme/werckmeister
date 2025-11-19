@@ -121,6 +121,9 @@ namespace app
             _fluid_sequencer_set_time_scale = _library->get<fluid_sequencer_set_time_scale_ftype>("fluid_sequencer_set_time_scale");
             _fluid_synth_write_float = _library->get<fluid_synth_write_float_ftype>("fluid_synth_write_float");
             _fluid_synth_program_select = _library->get<fluid_synth_program_select_ftype>("fluid_synth_program_select");
+            _new_fluid_file_renderer = _library->get<new_fluid_file_renderer_ftype>("fluid_synth_program_select");
+            _fluid_file_renderer_process_block = _library->get<fluid_file_renderer_process_block_ftype>("fluid_synth_program_select");
+            _delete_fluid_file_renderer = _library->get<delete_fluid_file_renderer_ftype>("fluid_synth_program_select");
         }
         catch (const std::exception &ex)
         {

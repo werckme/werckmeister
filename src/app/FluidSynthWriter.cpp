@@ -8,7 +8,7 @@ namespace
 {
     const double FLUID_SYNTH_SEQUENCER_TIMESCALE = 1000;
     const double FLUID_SYNTH_DEFAULT_GAIN = 1.0;
-    const long double FLUID_SYNTH_HEADROOM_MILLIS = 500;
+    const long double FLUID_SYNTH_HEADROOM_MILLIS = 0;
 }
 
 namespace app
@@ -139,6 +139,22 @@ namespace app
         {
             throw std::runtime_error("fluid_synth_nwrite_float failed.");
         }
+    }
+
+    void FluidSynthWriter::renderToFile(const std::string &outputPath, double seconds)
+    {
+        const int blockSize = 1024;
+        _fluid_settings_setint(settings, "audio.period-size", blockSize);
+        _fluid_settings_setstr(settings, "audio.file.name", outputPath.c_str());
+        _fluid_settings_setstr(settings, "audio.file.format", "wav");
+        int totalSamples = blockSize * 100; //sampleRate() * seconds;
+        auto renderer = _new_fluid_file_renderer(synth);
+        while (totalSamples > 0) 
+        {
+            _fluid_file_renderer_process_block(renderer);
+            totalSamples -= blockSize;
+        }
+        _delete_fluid_file_renderer(renderer);
     }
 
     double FluidSynthWriter::getSongPositionSeconds() const

@@ -306,7 +306,6 @@ extern "C"
 		auto _logger = session->logger;
 		try 
 		{
-			Session* session = reinterpret_cast<Session*>(sessionPtr);
 			const auto& cueDate = session->cueDates.at(index);
 			return cueDate.cueText.c_str();
 		}
@@ -327,9 +326,34 @@ extern "C"
 		auto _logger = session->logger;
 		try 
 		{
-			Session* session = reinterpret_cast<Session*>(sessionPtr);
 			const auto& cueDate = session->cueDates.at(index);
 			return cueDate.timePointMillis;
+		}
+		catch(...)
+		{
+			ERR("failed to get cue position");
+			return 0;
+		}
+	}
+
+	WERCKM_EXPORT int wm_writeToFile(WmSession sessionPtr, const char* outputPath)
+	{
+		if (sessionPtr == nullptr)
+		{
+			return 0;
+		}
+		Session* session = reinterpret_cast<Session*>(sessionPtr);
+		if (!session->fluidSynth)
+		{
+			return 0;
+		}
+		auto _logger = session->logger;
+		try 
+		{
+			auto bpm = session->fluidSynth->tempo();
+			auto totalLength = session->midiFile->duration() * 60.0 / (bpm * com::PPQ);
+			session->fluidSynth->renderToFile(outputPath, totalLength);
+			return 0;
 		}
 		catch(...)
 		{

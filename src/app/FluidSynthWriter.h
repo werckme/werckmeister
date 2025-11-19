@@ -25,6 +25,7 @@ namespace app
         virtual void tearDownSynth() override;
         double tempo() const { return _tempo; }
         double getSongPositionSeconds() const;
+        void renderToFile(const std::string &outputPath, double seconds);
     protected:
         com::ILoggerPtr _logger;
         com::String _libPath;

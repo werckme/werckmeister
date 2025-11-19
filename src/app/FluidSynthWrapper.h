@@ -49,6 +49,9 @@
 #define fluid_sequencer_set_time_scale_ftype void(fluid_sequencer_t*, double)
 #define fluid_synth_write_float_ftype int(fluid_synth_t *, int, void*, int, int, void*, int, int)
 #define fluid_synth_program_select_ftype int(fluid_synth_t *, int, int, int, int)
+#define new_fluid_file_renderer_ftype fluid_file_renderer_t*(fluid_synth_t*)
+#define fluid_file_renderer_process_block_ftype int(fluid_file_renderer_t *)
+#define delete_fluid_file_renderer_ftype void(fluid_file_renderer_t *)
 
 namespace app
 {
@@ -108,6 +111,9 @@ namespace app
 		*/
 		std::function<fluid_synth_write_float_ftype> _fluid_synth_write_float;
 		std::function<fluid_synth_program_select_ftype> _fluid_synth_program_select;
+		std::function<new_fluid_file_renderer_ftype> _new_fluid_file_renderer;
+		std::function<fluid_file_renderer_process_block_ftype> _fluid_file_renderer_process_block;
+		std::function<delete_fluid_file_renderer_ftype> _delete_fluid_file_renderer;
 
 
 		fluid_settings_t *settings = nullptr;

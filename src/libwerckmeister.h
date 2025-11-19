@@ -18,9 +18,10 @@ extern "C"
   WERCKM_EXPORT int wm_compile(WmSession, const char * sourcePath);
   WERCKM_EXPORT bool wm_iscompiled(WmSession);
   WERCKM_EXPORT int wm_releaseSession(WmSession);
-  WERCKM_EXPORT int wm_initSynth(WmSession, const char *libPath, int sampleRate);
+  WERCKM_EXPORT int wm_initSynth(WmSession, const char *libFluidPath, int sampleRate);
   WERCKM_EXPORT int wm_copyMidiDataToSynth(WmSession);
   WERCKM_EXPORT int wm_synthRender(WmSession, int len, float* lout, int loff, int lincr, float* rout, int roff, int rincr);
+  WERCKM_EXPORT int wm_writeToFile(WmSession, const char* outputPath);
   WERCKM_EXPORT int wm_setSoundFontHome(WmSession, const char *sfHomePath);
   WERCKM_EXPORT double wm_getSongPositionSeconds(WmSession);
   WERCKM_EXPORT int wm_getNumMidiCuePoints(WmSession);
