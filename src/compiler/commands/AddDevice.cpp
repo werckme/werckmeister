@@ -4,6 +4,7 @@
 #include <com/config/configServer.h>
 #include <com/werckmeister.hpp>
 #include <com/config.hpp>
+#include <compiler/context/MidiContext.h>
 
 namespace compiler
 {
@@ -43,6 +44,20 @@ namespace compiler
         {
             auto font = parameters[argumentNames.Device.UseFont].value<com::String>();
             addFluidSynthDevice(name, font, offsetMillis);
+            auto midiContext = dynamic_cast<MidiContext*>(context.get());
+            if (midiContext != nullptr)
+            {
+                auto deviceName = parameters[argumentNames.Device.WithName].value<com::String>();
+                auto masterTrackId = context->masterTrackId();
+                auto deviceNameAndFont = deviceName + "://" + font;  
+                com::midi::CustomMetaData cdata;
+                cdata.type = com::midi::CustomMetaData::SoundFont;
+                cdata.data = com::midi::CustomMetaData::Data(deviceNameAndFont.begin(), deviceNameAndFont.end());
+                auto ev = com::midi::Event::MetaCustom(cdata);
+                auto pos = context->currentPosition();
+                ev.absPosition(pos);
+                midiContext->addEvent(ev, masterTrackId);
+            }
             return;
         }
 #if IS_EMSCRIPTEN_BUILD == 1

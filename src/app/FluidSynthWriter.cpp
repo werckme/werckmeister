@@ -25,6 +25,7 @@ namespace app
         seq = _new_fluid_sequencer2(0);
         _fluid_sequencer_set_time_scale(seq, FLUID_SYNTH_SEQUENCER_TIMESCALE);
         synthSeqID = _fluid_sequencer_register_fluidsynth(seq, synth);
+        addSoundFont("/home/samba/Soundfonds/Live HQ Natural SoundFont GM.sf2");
         if (synthSeqID == FLUID_FAILED)
         {
             throw std::runtime_error("error initializing fluidsynth sequencer");
@@ -89,7 +90,9 @@ namespace app
                     {
                         return;
                     }
-                    sfId = addSoundFont(deviceIt->second.deviceId);
+                    auto soundFontFileName = deviceIt->second.deviceId;
+                    soundFontFileName = "Live HQ Natural SoundFont GM.sf2";
+                    sfId = addSoundFont(soundFontFileName);
                     soundFontIds.insert(std::make_pair(deviceId, sfId));
                 }
                 if (sfId == FLUID_FAILED)

@@ -33,6 +33,7 @@
 #include <thread>
 #include <mutex>
 #include <vector>
+#include <list>
 
 #define wmassert(exp, msg) if(!(exp)) LOG(msg)
 #define STRVERSION SHEET_VERSION " lib 0.13"
@@ -62,6 +63,8 @@ namespace
 	typedef std::vector<CueDate> CueDates;
 	struct Session 
 	{
+		std::mutex processMidiMutex;
+		std::list<com::midi::Event> tmpMidiEvents;
 		com::ILoggerPtr logger = createLogger();
 		com::midi::MidiPtr midiFile;
 		app::FluidSynthWriterPtr fluidSynth;
@@ -159,6 +162,7 @@ extern "C"
 		auto _logger = session->logger;
 		try
 		{
+			std::lock_guard<std::mutex> guard(session->processMidiMutex);
 			LOG("wm_initSynth: " << libPath << ", sample rate:" << sampleRate);
 			session->fluidSynth = std::make_shared<app::FluidSynthWriter>(_logger);
 			session->fluidSynth->libPath(libPath);
@@ -243,9 +247,16 @@ extern "C"
 			{
 				return WERCKM_OK;
 			}
-			if(!wm_iscompiled(sessionPtr))
+			if (session->tmpMidiEvents.empty() == false)
 			{
-				return WERCKM_OK;
+				std::lock_guard<std::mutex> guard(session->processMidiMutex);
+				LOG("process " << session->tmpMidiEvents.size() << " events");
+				for(const auto& event : session->tmpMidiEvents)
+				{
+					session->fluidSynth->addEvent(event);
+					handleIfMetaEvent(session, event);
+				}
+				session->tmpMidiEvents.clear();
 			}
 			session->fluidSynth->render(len, lout, loff, lincr, rout, roff, rincr);
 			return WERCKM_OK;
@@ -358,6 +369,54 @@ extern "C"
 		catch(...)
 		{
 			ERR("failed to get cue position");
+			return 0;
+		}
+	}
+
+	WERCKM_EXPORT int wm_addMidiEvent(WmSession sessionPtr, long double tickPos, const unsigned char* data, unsigned int length)
+	{
+		if (sessionPtr == nullptr)
+		{
+			return WERCKM_ERR;
+		}
+		Session* session = reinterpret_cast<Session*>(sessionPtr);
+		auto _logger = session->logger;
+		try 
+		{
+			std::lock_guard<std::mutex> guard(session->processMidiMutex);
+			bool synthIsReady = session->fluidSynth.get() != nullptr;
+			com::midi::Event event;
+
+			std::vector<unsigned char> bytes;
+			bytes.reserve(length + 1);
+			bytes.push_back(0);
+			for(int i = 0; i<length; ++i)
+			{
+				bytes.push_back(data[i]);
+			}
+
+			event.read(0, bytes.data(), length + 1);
+			event.absPosition(tickPos);
+
+			if (synthIsReady)
+			{
+				session->fluidSynth->addEvent(event);
+				handleIfMetaEvent(session, event);
+			} else
+			{
+				session->tmpMidiEvents.push_back(event);
+			}
+
+			return WERCKM_OK;
+		}
+		catch (const std::exception &ex) 
+		{
+			ERR("failed to addMidiEvent: " << length << " " << ex.what());
+			return WERCKM_ERR;
+		}
+		catch(...)
+		{
+			ERR("failed to addMidiEvent");
 			return 0;
 		}
 	}
