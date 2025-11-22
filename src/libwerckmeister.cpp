@@ -65,6 +65,7 @@ namespace
 	{
 		std::mutex processMidiMutex;
 		std::list<com::midi::Event> tmpMidiEvents;
+		std::vector<unsigned char> tmpMidiEventBff;
 		com::ILoggerPtr logger = createLogger();
 		com::midi::MidiPtr midiFile;
 		app::FluidSynthWriterPtr fluidSynth;
@@ -78,6 +79,7 @@ namespace
 
 static com::midi::MidiPtr createMidiFile(Session* session, int argc, const char** argv);
 static void handleIfMetaEvent(Session*, const com::midi::Event&);
+static void eatTmpEvents(Session* session);
 
 extern "C"  
 {
@@ -89,6 +91,7 @@ extern "C"
 	WERCKM_EXPORT WmSession wm_createSession()
 	{
 		auto session = new Session();
+		session->tmpMidiEventBff.reserve(255);
 		return session;
 	}
 
@@ -168,6 +171,12 @@ extern "C"
 			session->fluidSynth->libPath(libPath);
 			session->fluidSynth->sampleRate((double)sampleRate);
 			session->fluidSynth->initSynth("");
+
+			if (session->tmpMidiEvents.empty() == false)
+			{
+				eatTmpEvents(session);
+			}
+
 		}
 		catch (const std::exception &ex) 
 		{
@@ -247,17 +256,6 @@ extern "C"
 			{
 				return WERCKM_OK;
 			}
-			if (session->tmpMidiEvents.empty() == false)
-			{
-				std::lock_guard<std::mutex> guard(session->processMidiMutex);
-				LOG("process " << session->tmpMidiEvents.size() << " events");
-				for(const auto& event : session->tmpMidiEvents)
-				{
-					session->fluidSynth->addEvent(event);
-					handleIfMetaEvent(session, event);
-				}
-				session->tmpMidiEvents.clear();
-			}
 			session->fluidSynth->render(len, lout, loff, lincr, rout, roff, rincr);
 			return WERCKM_OK;
 		}
@@ -272,7 +270,7 @@ extern "C"
 			return WERCKM_ERR;
 		}
 	}
-	
+
 	WERCKM_EXPORT double wm_getSongPositionSeconds(WmSession sessionPtr)
 	{
 		if (sessionPtr == nullptr)
@@ -387,15 +385,15 @@ extern "C"
 			bool synthIsReady = session->fluidSynth.get() != nullptr;
 			com::midi::Event event;
 
-			std::vector<unsigned char> bytes;
-			bytes.reserve(length + 1);
-			bytes.push_back(0);
+			session->tmpMidiEventBff.clear();
+			session->tmpMidiEventBff.push_back(0);
+
 			for(int i = 0; i<length; ++i)
 			{
-				bytes.push_back(data[i]);
+				session->tmpMidiEventBff.push_back(data[i]);
 			}
 
-			event.read(0, bytes.data(), length + 1);
+			event.read(0, session->tmpMidiEventBff.data(), length + 1);
 			event.absPosition(tickPos);
 
 			if (synthIsReady)
@@ -420,6 +418,29 @@ extern "C"
 			return 0;
 		}
 	}
+}
+
+static void eatTmpEvents(Session* session)
+{
+	auto _logger = session->logger;
+	LOG("process " << session->tmpMidiEvents.size() << " events");
+	for(const auto& event : session->tmpMidiEvents)
+	{
+		try 
+		{
+			session->fluidSynth->addEvent(event);
+			handleIfMetaEvent(session, event);
+		}
+		catch (const std::exception &ex) 
+		{
+			ERR("failed to addMidiEvent:" << ex.what());
+		}
+		catch(...)
+		{
+			ERR("failed to addMidiEvent");
+		}
+	}
+	session->tmpMidiEvents.clear();
 }
 
 static com::midi::MidiPtr createMidiFile(Session* session, int argc, const char** argv)
@@ -490,6 +511,5 @@ static void handleIfMetaEvent(Session* session, const com::midi::Event& event)
 		cue.cueText = com::midi::Event::MetaGetStringValue(event.metaData(), event.metaDataSize());
 		cue.timePointMillis = 60.0 * 1000.0 * event.absPosition() / (bpm * com::PPQ);
 		cueDates.push_back(cue);
-		LOG("added cue " << cue.cueText);
 	}
 }

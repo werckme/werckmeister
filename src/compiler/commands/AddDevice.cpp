@@ -51,7 +51,7 @@ namespace compiler
                 auto masterTrackId = context->masterTrackId();
                 auto deviceNameAndFont = deviceName + "://" + font;  
                 com::midi::CustomMetaData cdata;
-                cdata.type = com::midi::CustomMetaData::SoundFont;
+                cdata.type = com::midi::CustomMetaData::DefineDevice;
                 cdata.data = com::midi::CustomMetaData::Data(deviceNameAndFont.begin(), deviceNameAndFont.end());
                 auto ev = com::midi::Event::MetaCustom(cdata);
                 auto pos = context->currentPosition();

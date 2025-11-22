@@ -3,6 +3,11 @@
 #include "FluidSynthWriter.h"
 #include <fstream>
 #include <com/config/configServer.h>
+#include <vector>
+#include <string>
+#include <boost/algorithm/string/regex.hpp>
+#include <boost/regex.hpp>
+#include <com/werckmeister.hpp>
 
 namespace 
 {
@@ -25,7 +30,6 @@ namespace app
         seq = _new_fluid_sequencer2(0);
         _fluid_sequencer_set_time_scale(seq, FLUID_SYNTH_SEQUENCER_TIMESCALE);
         synthSeqID = _fluid_sequencer_register_fluidsynth(seq, synth);
-        addSoundFont("/home/samba/Soundfonds/Live HQ Natural SoundFont GM.sf2");
         if (synthSeqID == FLUID_FAILED)
         {
             throw std::runtime_error("error initializing fluidsynth sequencer");
@@ -40,15 +44,16 @@ namespace app
 
     FluidSynthWriter::SoundFontId FluidSynthWriter::addSoundFont(const std::string &soundFondPath)
     {
-        _logger->babble(WMLogLambda(log << "FluidSynthWriter:: addSoundFont: " << soundFondPath));
         if (soundFondPath.empty())
         {
             return FLUID_FAILED;
         }
-        auto sfont_id = _fluid_synth_sfload(synth, soundFondPath.c_str(), 1);
+        auto absPath = com::getWerckmeister().resolvePath(soundFondPath);
+        _logger->babble(WMLogLambda(log << "FluidSynthWriter:: addSoundFont: " << absPath));
+        auto sfont_id = _fluid_synth_sfload(synth, absPath.c_str(), 1);
         if (sfont_id == FLUID_FAILED)
         {
-            throw std::runtime_error("Loading the SoundFont " + soundFondPath + " failed!");
+            throw std::runtime_error("Loading the SoundFont " + absPath + " failed!");
         }
         return sfont_id;
     }
@@ -82,16 +87,16 @@ namespace app
                 {
                     sfId = soundFontIdsIt->second;
                 } 
-                else 
+                else
                 {
                     const auto &devices = com::getConfigServer().getDevices();
                     auto deviceIt = devices.find(deviceId);
                     if (deviceIt == devices.end())
                     {
+                         _logger->error(WMLogLambda(log << "device not found: " << deviceId));
                         return;
                     }
                     auto soundFontFileName = deviceIt->second.deviceId;
-                    soundFontFileName = "Live HQ Natural SoundFont GM.sf2";
                     sfId = addSoundFont(soundFontFileName);
                     soundFontIds.insert(std::make_pair(deviceId, sfId));
                 }
@@ -103,6 +108,23 @@ namespace app
                 {
                     throw std::runtime_error("fluid_synth_program_select failed");
                 }
+            }
+            if(customEvent.type == com::midi::CustomMetaData::DefineDevice)
+            {
+                std::string deviceIdWithSoundFont(customEvent.data.begin(), customEvent.data.end());
+                std::vector<std::string> defParts;
+                defParts.reserve(2);
+                boost::split_regex(defParts, deviceIdWithSoundFont, boost::regex("://"));
+                if (defParts.size() != 2)
+                {
+                    return;
+                }
+                com::DeviceConfig deviceConfig;
+                deviceConfig.name = defParts[0];
+                deviceConfig.deviceId = defParts[1];
+                deviceConfig.type = com::DeviceConfig::FluidSynth;
+                _logger->babble(WMLogLambda(log << "adding device: " << deviceConfig.deviceName << ", " << deviceConfig.deviceId));
+                com::getConfigServer().addDevice(deviceConfig);
             }
         }
     }

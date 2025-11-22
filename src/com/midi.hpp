@@ -25,7 +25,7 @@ namespace com
 				Undefined,
 				SetDevice,
 				SetInstrument,
-				SoundFont,
+				DefineDevice,
 				MaxTypeId = 0xFF
 			};
 			typedef std::vector<Byte> Data;
