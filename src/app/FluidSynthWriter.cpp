@@ -110,7 +110,7 @@ namespace app
                 deviceConfig.name = defParts[0];
                 deviceConfig.deviceId = defParts[1];
                 deviceConfig.type = com::DeviceConfig::FluidSynth;
-                _logger->babble(WMLogLambda(log << "adding device: " << deviceConfig.deviceName << ", " << deviceConfig.deviceId));
+                _logger->babble(WMLogLambda(log << "adding device: " << deviceConfig.name << ", " << deviceConfig.deviceId));
                 com::getConfigServer().addDevice(deviceConfig);
 
                 auto sfId = addSoundFont(deviceConfig.deviceId);
