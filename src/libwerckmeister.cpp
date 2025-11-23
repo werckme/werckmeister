@@ -171,6 +171,15 @@ extern "C"
 			session->fluidSynth->libPath(libPath);
 			session->fluidSynth->sampleRate((double)sampleRate);
 			session->fluidSynth->initSynth("");
+
+			if (session->tmpMidiEvents.empty() == false)
+			{
+				eatTmpEvents(session);
+			} else 
+			{
+				LOG("no init events to process");
+			}
+
 		}
 		catch (const std::exception &ex) 
 		{
@@ -249,10 +258,6 @@ extern "C"
 			if (session->fluidSynth.get() == nullptr)
 			{
 				return WERCKM_OK;
-			}
-			if (session->tmpMidiEvents.empty() == false)
-			{
-				eatTmpEvents(session);
 			}
 			session->fluidSynth->render(len, lout, loff, lincr, rout, roff, rincr);
 			return WERCKM_OK;
