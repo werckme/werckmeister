@@ -87,19 +87,6 @@ namespace app
                 {
                     sfId = soundFontIdsIt->second;
                 } 
-                else
-                {
-                    const auto &devices = com::getConfigServer().getDevices();
-                    auto deviceIt = devices.find(deviceId);
-                    if (deviceIt == devices.end())
-                    {
-                         _logger->error(WMLogLambda(log << "device not found: " << deviceId));
-                        return;
-                    }
-                    auto soundFontFileName = deviceIt->second.deviceId;
-                    sfId = addSoundFont(soundFontFileName);
-                    soundFontIds.insert(std::make_pair(deviceId, sfId));
-                }
                 if (sfId == FLUID_FAILED)
                 {
                     return;
@@ -125,8 +112,14 @@ namespace app
                 deviceConfig.type = com::DeviceConfig::FluidSynth;
                 _logger->babble(WMLogLambda(log << "adding device: " << deviceConfig.deviceName << ", " << deviceConfig.deviceId));
                 com::getConfigServer().addDevice(deviceConfig);
+
+                auto sfId = addSoundFont(deviceConfig.deviceId);
+                soundFontIds.insert(std::make_pair(deviceConfig.name, sfId));
+
             }
         }
+        bool eventIsMsb = event.eventType() == com::midi::Controller && event.parameter1() == 0;
+        bool eventIsProgramChange = event.eventType() == com::midi::ProgramChange || eventIsMsb;
     }
 
     bool FluidSynthWriter::addEvent(const com::midi::Event& event)

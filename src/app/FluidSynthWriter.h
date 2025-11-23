@@ -35,7 +35,6 @@ namespace app
         double _tempo = 120.0;
         typedef std::unordered_map<com::String, SoundFontId> SoundFontIdMap;
         SoundFontIdMap soundFontIds;
-        
     };
     typedef std::shared_ptr<FluidSynthWriter> FluidSynthWriterPtr;
 }
