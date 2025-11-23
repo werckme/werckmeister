@@ -110,12 +110,15 @@ namespace app
                 deviceConfig.name = defParts[0];
                 deviceConfig.deviceId = defParts[1];
                 deviceConfig.type = com::DeviceConfig::FluidSynth;
+                if (soundFontIds.find(deviceConfig.name) != soundFontIds.end())
+                {
+                    _logger->babble(WMLogLambda(log << "device: " << deviceConfig.name << "already added"));
+                    return;
+                }
                 _logger->babble(WMLogLambda(log << "adding device: " << deviceConfig.name << ", " << deviceConfig.deviceId));
                 com::getConfigServer().addDevice(deviceConfig);
-
                 auto sfId = addSoundFont(deviceConfig.deviceId);
                 soundFontIds.insert(std::make_pair(deviceConfig.name, sfId));
-
             }
         }
         bool eventIsMsb = event.eventType() == com::midi::Controller && event.parameter1() == 0;
