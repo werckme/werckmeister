@@ -139,7 +139,7 @@ namespace app
             return false;
         }
         _fluid_event_set_dest(fluid_event, synthSeqID);
-        long double pos =  60.0 * 1000.0 * event.absPosition() / (_tempo * com::PPQ) + FLUID_SYNTH_HEADROOM_MILLIS;
+        long double pos =  60.0 * 1000.0 * event.absPosition() / (120 * com::PPQ) + FLUID_SYNTH_HEADROOM_MILLIS;
         auto sendResult = _fluid_sequencer_send_at(seq, fluid_event, (int)(pos), 1);
         if (sendResult == FLUID_FAILED)
         {
