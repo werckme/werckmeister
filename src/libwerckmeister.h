@@ -27,5 +27,5 @@ extern "C"
   WERCKM_EXPORT int wm_getNumMidiCuePoints(WmSession);
   WERCKM_EXPORT const char * wm_getMidiCuePointText(WmSession, int index);
   WERCKM_EXPORT unsigned int wm_getMidiCuePositionMillis(WmSession, int index);
-  WERCKM_EXPORT int wm_addMidiEvent(WmSession, long double tickPos, const unsigned char* data, unsigned int length);
+  WERCKM_EXPORT int wm_addMidiEvent(WmSession, double tickPos, const unsigned char* data, unsigned int length);
 }

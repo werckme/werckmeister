@@ -374,7 +374,7 @@ extern "C"
 		}
 	}
 
-	WERCKM_EXPORT int wm_addMidiEvent(WmSession sessionPtr, long double tickPos, const unsigned char* data, unsigned int length)
+	WERCKM_EXPORT int wm_addMidiEvent(WmSession sessionPtr, double tickPos, const unsigned char* data, unsigned int length)
 	{
 		if (sessionPtr == nullptr)
 		{
