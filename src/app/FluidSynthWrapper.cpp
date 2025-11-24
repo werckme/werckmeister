@@ -217,4 +217,9 @@ namespace app
     {
         _playerOffsetMillis = -millis;
     }
+
+    void FluidSynth::setCC(int ch, int cc, int value)
+    {
+        _fluid_synth_cc(synth, ch, cc, value);
+    }
 }

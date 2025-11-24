@@ -65,6 +65,7 @@ namespace app
 		virtual ~FluidSynth();
 		void send(const com::midi::Event &event, long double elapsedMillis);
 		void seek(long double millis);
+		void setCC(int ch, int cc, int value);
 	protected:
 		virtual void initSynth(const std::string &soundFondPath);
 		virtual void tearDownSynth();

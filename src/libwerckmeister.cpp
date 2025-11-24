@@ -421,6 +421,30 @@ extern "C"
 			return 0;
 		}
 	}
+
+	WERCKM_EXPORT int wm_setCC(WmSession sessionPtr, int ch, int cc, int value)
+	{
+		if (sessionPtr == nullptr)
+		{
+			return 0;
+		}
+		Session* session = reinterpret_cast<Session*>(sessionPtr);
+		if (!session->fluidSynth)
+		{
+			return 0;
+		}
+		auto _logger = session->logger;
+		try 
+		{
+			session->fluidSynth->setCC(ch, cc, value);
+			return 0;
+		}
+		catch(...)
+		{
+			ERR("failed to set cc");
+			return 0;
+		}
+	}
 }
 
 static void eatTmpEvents(Session* session)
