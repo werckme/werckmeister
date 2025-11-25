@@ -124,6 +124,17 @@ namespace app
             _new_fluid_file_renderer = _library->get<new_fluid_file_renderer_ftype>("fluid_synth_program_select");
             _fluid_file_renderer_process_block = _library->get<fluid_file_renderer_process_block_ftype>("fluid_synth_program_select");
             _delete_fluid_file_renderer = _library->get<delete_fluid_file_renderer_ftype>("fluid_synth_program_select");
+            _new_fluid_player = _library->get<new_fluid_player_ftype>("new_fluid_player");
+            _fluid_player_stop = _library->get<fluid_player_stop_ftype>("fluid_player_stop");
+            _fluid_player_set_playback_callback = _library->get<fluid_player_set_playback_callback_ftype>("fluid_player_set_playback_callback");
+            _fluid_player_seek = _library->get<fluid_player_seek_ftype>("fluid_player_seek");
+            _fluid_player_play = _library->get<fluid_player_play_ftype>("fluid_player_play");
+            _fluid_player_join = _library->get<fluid_player_join_ftype>("fluid_player_join");
+            _fluid_player_get_current_tick = _library->get<fluid_player_get_current_tick_ftype>("fluid_player_get_current_tick");
+            _fluid_player_add_mem = _library->get<fluid_player_add_mem_ftype>("fluid_player_add_mem");
+            _delete_fluid_player = _library->get<delete_fluid_player_ftype>("delete_fluid_player");
+            _fluid_player_get_midi_tempo = _library->get<fluid_player_get_midi_tempo_ftype>("fluid_player_get_midi_tempo");
+            _fluid_player_get_division = _library->get<fluid_player_get_division_ftype>("fluid_player_get_division");
         }
         catch (const std::exception &ex)
         {

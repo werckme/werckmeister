@@ -52,6 +52,17 @@
 #define new_fluid_file_renderer_ftype fluid_file_renderer_t*(fluid_synth_t*)
 #define fluid_file_renderer_process_block_ftype int(fluid_file_renderer_t *)
 #define delete_fluid_file_renderer_ftype void(fluid_file_renderer_t *)
+#define new_fluid_player_ftype fluid_player_t*(fluid_synth_t * synth)
+#define fluid_player_stop_ftype int(fluid_player_t * player)
+#define fluid_player_set_playback_callback_ftype int(fluid_player_t * player, handle_midi_event_func_t handler, void * handler_data)
+#define fluid_player_seek_ftype int(fluid_player_t * player, int ticks)
+#define fluid_player_play_ftype int(fluid_player_t * player)
+#define fluid_player_join_ftype int(fluid_player_t * player)
+#define fluid_player_get_current_tick_ftype int(fluid_player_t * player)
+#define fluid_player_add_mem_ftype int(fluid_player_t * player, const void * buffer, size_t len)
+#define delete_fluid_player_ftype void(fluid_player_t * player)
+#define fluid_player_get_midi_tempo_ftype int(fluid_player_t * player)
+#define fluid_player_get_division_ftype int(fluid_player_t * player)
 
 namespace app
 {
@@ -115,6 +126,18 @@ namespace app
 		std::function<new_fluid_file_renderer_ftype> _new_fluid_file_renderer;
 		std::function<fluid_file_renderer_process_block_ftype> _fluid_file_renderer_process_block;
 		std::function<delete_fluid_file_renderer_ftype> _delete_fluid_file_renderer;
+		std::function<new_fluid_player_ftype> _new_fluid_player;
+		std::function<fluid_player_stop_ftype> _fluid_player_stop;
+		std::function<fluid_player_set_playback_callback_ftype> _fluid_player_set_playback_callback;
+		std::function<fluid_player_seek_ftype> _fluid_player_seek;
+		std::function<fluid_player_play_ftype> _fluid_player_play;
+		std::function<fluid_player_join_ftype> _fluid_player_join;
+		std::function<fluid_player_get_current_tick_ftype> _fluid_player_get_current_tick;
+		std::function<fluid_player_add_mem_ftype> _fluid_player_add_mem;
+		std::function<delete_fluid_player_ftype> _delete_fluid_player;
+		std::function<fluid_player_get_midi_tempo_ftype> _fluid_player_get_midi_tempo; 
+		std::function<fluid_player_get_division_ftype> _fluid_player_get_division; 
+
 
 
 		fluid_settings_t *settings = nullptr;

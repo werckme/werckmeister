@@ -39,6 +39,13 @@ namespace app
     void FluidSynthWriter::tearDownSynth()
     {
         _logger->babble(WMLogLambda(log << "FluidSynthWriter:: tear down fluidsynth"));
+        if (player)
+        {
+             _fluid_player_stop(player);
+             _fluid_player_join(player);
+             _delete_fluid_player(player);
+             player = nullptr;
+        }
         Base::tearDownSynth();
     }
 
@@ -149,6 +156,13 @@ namespace app
         return true;
     }
 
+    void FluidSynthWriter::setMidiFileData(const unsigned char* data, size_t length)
+    {
+        player = _new_fluid_player(synth);
+        _fluid_player_add_mem(player, data, length);
+        _fluid_player_play(player);
+    }
+
     void FluidSynthWriter::render(int len, float* lout, int loff, int lincr, float* rout, int roff, int rincr)
     {
         if (synth == nullptr)
@@ -180,11 +194,23 @@ namespace app
 
     double FluidSynthWriter::getSongPositionSeconds() const
     {
-        if (synth == nullptr || seq == nullptr)
+        if (synth == nullptr)
         {
             return 0;
         }
-        double ticks = _fluid_sequencer_get_tick(seq);
-        return ticks / FLUID_SYNTH_SEQUENCER_TIMESCALE;
+        if (player != nullptr)
+        {
+            int ticks = fluid_player_get_current_tick(player);
+            int division = _fluid_player_get_division(player);
+            int tempo_us = _fluid_player_get_midi_tempo(player);
+            double seconds = ticks * (tempo_us / 1e6) / division;
+            return seconds;
+        }
+        if (seq != nullptr)
+        {
+            double ticks = _fluid_sequencer_get_tick(seq);
+            return ticks / FLUID_SYNTH_SEQUENCER_TIMESCALE;
+        }
+        return 0;
     }
 }

@@ -26,7 +26,7 @@ namespace app
         double tempo() const { return _tempo; }
         double getSongPositionSeconds() const;
         void renderToFile(const std::string &outputPath, double seconds);
-        
+        void setMidiFileData(const unsigned char* data, size_t length);
     protected:
         com::ILoggerPtr _logger;
         com::String _libPath;
@@ -36,6 +36,7 @@ namespace app
         double _tempo = 120.0;
         typedef std::unordered_map<com::String, SoundFontId> SoundFontIdMap;
         SoundFontIdMap soundFontIds;
+        fluid_player_t*  player = nullptr;
     };
     typedef std::shared_ptr<FluidSynthWriter> FluidSynthWriterPtr;
 }
