@@ -2,7 +2,7 @@ function(DownloadLibFluidSynthWin version download_dir)
   # Specify the binary distribution type and download directory.
   set(FLUIDSYNTH_DOWNLOAD_DIR "${download_dir}")
 
-  set(FLUIDSYNTH_ROOT "${FLUIDSYNTH_DOWNLOAD_DIR}/fluidsynth-win10-x64" CACHE INTERNAL "FLUIDSYNTH_ROOT")
+  set(FLUIDSYNTH_ROOT "${FLUIDSYNTH_DOWNLOAD_DIR}" CACHE INTERNAL "FLUIDSYNTH_ROOT")
  
   # Download and/or extract the binary distribution if necessary.
   if(NOT IS_DIRECTORY "${FLUIDSYNTH_DOWNLOAD_DIR}")
