@@ -241,7 +241,7 @@ namespace app
         }
         if (player != nullptr)
         {
-            int ticks = fluid_player_get_current_tick(player);
+            int ticks = _fluid_player_get_current_tick(player);
             int division = _fluid_player_get_division(player);
             int tempo_us = _fluid_player_get_midi_tempo(player);
             double seconds = ticks * (tempo_us / 1e6) / division;
