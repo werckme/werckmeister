@@ -13,6 +13,12 @@
 
 extern "C"  
 {
+  struct WmJumpPoint
+  {
+    double fromPositionSeconds = 0;
+    double toPositionSeconds = 0;
+  };
+
   WERCKM_EXPORT const char * wm_getStrVersion();
   WERCKM_EXPORT WmSession wm_createSession();
   WERCKM_EXPORT int wm_compile(WmSession, const char * sourcePath);
@@ -30,4 +36,6 @@ extern "C"
   WERCKM_EXPORT int wm_addMidiEvent(WmSession, double tickPos, const unsigned char* data, unsigned int length);
   WERCKM_EXPORT int wm_addMidiFileData(WmSession, const unsigned char* data, unsigned int length);
   WERCKM_EXPORT int wm_setCC(WmSession, int ch, int cc, int value);
+  WERCKM_EXPORT int wm_setJumpPoints(WmSession, WmJumpPoint* jumpPoints, int length);
+  WERCKM_EXPORT int wm_setActiveJumpPoint(WmSession, int jumpPointIndex);
 }

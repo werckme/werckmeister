@@ -24,28 +24,30 @@
 #include <stdio.h>
 
 #ifdef __cplusplus
-extern "C"
-{
+extern "C" {
 #endif
 
 #define BUILD_SHARED_LIBS 1
 
 #if (BUILD_SHARED_LIBS == 0)
-#define FLUIDSYNTH_API // building static lib? no visibility control then
+    #define FLUIDSYNTH_API // building static lib? no visibility control then
 #elif defined(WIN32)
-#if defined(FLUIDSYNTH_NOT_A_DLL)
-#define FLUIDSYNTH_API
-#elif defined(FLUIDSYNTH_DLL_EXPORTS)
-#define FLUIDSYNTH_API __declspec(dllexport)
-#else
-#define FLUIDSYNTH_API __declspec(dllimport)
-#endif
+    #if defined(FLUIDSYNTH_NOT_A_DLL)
+        #define FLUIDSYNTH_API
+    #elif defined(FLUIDSYNTH_DLL_EXPORTS)
+        #define FLUIDSYNTH_API __declspec(dllexport)
+    #else
+        #define FLUIDSYNTH_API __declspec(dllimport)
+    #endif
 
 #elif defined(MACOS9)
 #define FLUIDSYNTH_API __declspec(export)
 
+#elif defined(__OS2__)
+#define FLUIDSYNTH_API __declspec(dllexport)
+
 #elif defined(__GNUC__)
-#define FLUIDSYNTH_API __attribute__((visibility("default")))
+#define FLUIDSYNTH_API __attribute__ ((visibility ("default")))
 
 #else
 #define FLUIDSYNTH_API
@@ -53,14 +55,15 @@ extern "C"
 #endif
 
 #if defined(__GNUC__) || defined(__clang__)
-#define FLUID_DEPRECATED __attribute__((deprecated))
+#    define FLUID_DEPRECATED __attribute__((deprecated))
 #elif defined(_MSC_VER) && _MSC_VER > 1200
-#define FLUID_DEPRECATED __declspec(deprecated)
+#    define FLUID_DEPRECATED __declspec(deprecated)
 #else
-#define FLUID_DEPRECATED
+#    define FLUID_DEPRECATED
 #endif
 
-    /**
+
+/**
  * @file fluidsynth.h
  * @brief FluidSynth is a real-time synthesizer designed for SoundFont(R) files.
  *
@@ -109,6 +112,7 @@ extern "C"
 #include "fluidsynth/voice.h"
 #include "fluidsynth/version.h"
 #include "fluidsynth/ladspa.h"
+
 
 #ifdef __cplusplus
 }

@@ -8,12 +8,18 @@
 #include <boost/algorithm/string/regex.hpp>
 #include <boost/regex.hpp>
 #include <com/werckmeister.hpp>
+#include <com/config.hpp>
 
 namespace 
 {
     const double FLUID_SYNTH_SEQUENCER_TIMESCALE = 1000;
     const double FLUID_SYNTH_DEFAULT_GAIN = 1.0;
     const long double FLUID_SYNTH_HEADROOM_MILLIS = 0;
+    int OnTickEventHandler(void *data, int tick)
+    {
+        reinterpret_cast<app::FluidSynthWriter*>(data)->onTickEventCallback(tick);
+        return FLUID_OK;
+    }
 }
 
 namespace app
@@ -132,6 +138,40 @@ namespace app
         bool eventIsProgramChange = event.eventType() == com::midi::ProgramChange || eventIsMsb;
     }
 
+    void FluidSynthWriter::onTickEventCallback(int tick)
+    {
+        if (_activeJumpPoint <= UndefindedJumpPointIndex)
+        {
+            return;
+        }
+        const auto &jumpPoint = _jumpPoints[_activeJumpPoint];
+        if (tick >= jumpPoint.toPositionTicks) 
+        {
+            _fluid_player_seek(player, jumpPoint.fromPositionTicks);
+        }
+    }
+
+    void FluidSynthWriter::setJumpPoints(const JumpPoints& jumpPoints)
+    {
+        _jumpPoints = jumpPoints;
+        _activeJumpPoint = UndefindedJumpPointIndex;
+    }
+
+    void FluidSynthWriter::setJumpPoints(JumpPoints&& jumpPoints)
+    {
+        _jumpPoints = std::move(jumpPoints);
+        _activeJumpPoint = UndefindedJumpPointIndex;
+    }
+
+    void FluidSynthWriter::setActiveJumpPoint(int jumpPointIndex)
+    {
+        if (jumpPointIndex < UndefindedJumpPointIndex || jumpPointIndex >= _jumpPoints.size())
+        {
+            throw std::invalid_argument("invalid jump point: " + std::to_string(jumpPointIndex));
+        }
+        _activeJumpPoint = jumpPointIndex;
+    }
+
     bool FluidSynthWriter::addEvent(const com::midi::Event& event)
     {
         if (!seq)
@@ -160,6 +200,7 @@ namespace app
     {
         player = _new_fluid_player(synth);
         _fluid_player_add_mem(player, data, length);
+        _fluid_player_set_tick_callback(player, OnTickEventHandler, this);
         _fluid_player_play(player);
     }
 

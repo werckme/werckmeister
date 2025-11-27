@@ -479,6 +479,63 @@ extern "C"
 			return 0;
 		}
 	}
+
+	WERCKM_EXPORT int wm_setJumpPoints(WmSession sessionPtr, WmJumpPoint* jumpPoints, int length)
+	{
+		if (sessionPtr == nullptr)
+		{
+			return WERCKM_ERR;
+		}
+		Session* session = reinterpret_cast<Session*>(sessionPtr);
+		auto _logger = session->logger;
+		try 
+		{
+			app::FluidSynthWriter::JumpPoints jmps;
+			for(int i=0; i<length; ++i)
+			{
+				app::FluidSynthWriter::JumpPoint jmp;
+				jmp.fromPositionTicks = jumpPoints[i].fromPositionSeconds * com::PPQ;
+				jmp.toPositionTicks = jumpPoints[i].toPositionSeconds * com::PPQ;
+			}
+			session->fluidSynth->setJumpPoints(std::move(jmps));
+			return WERCKM_ERR;
+		}
+		catch (const std::exception &ex) 
+		{
+			ERR("failed to set jump points: " << ex.what());
+			return WERCKM_ERR;
+		}
+		catch(...)
+		{
+			ERR("failed to set jump points");
+			return 0;
+		}
+	}
+
+	WERCKM_EXPORT int wm_setActiveJumpPoint(WmSession sessionPtr, int jumpPointIndex)
+	{
+		if (sessionPtr == nullptr)
+		{
+			return WERCKM_ERR;
+		}
+		Session* session = reinterpret_cast<Session*>(sessionPtr);
+		auto _logger = session->logger;
+		try 
+		{
+			session->fluidSynth->setActiveJumpPoint(jumpPointIndex);
+			return WERCKM_ERR;
+		}
+		catch (const std::exception &ex) 
+		{
+			ERR("failed to setActiveJumpPoint: " << jumpPointIndex << " " << ex.what());
+			return WERCKM_ERR;
+		}
+		catch(...)
+		{
+			ERR("failed to setActiveJumpPoint");
+			return 0;
+		}
+	}
 }
 
 static void eatTmpEvents(Session* session)

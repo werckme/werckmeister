@@ -63,6 +63,7 @@
 #define delete_fluid_player_ftype void(fluid_player_t * player)
 #define fluid_player_get_midi_tempo_ftype int(fluid_player_t * player)
 #define fluid_player_get_division_ftype int(fluid_player_t * player)
+#define fluid_player_set_tick_callback_ftype int(fluid_player_t * player, handle_midi_tick_func_t handler, void * handler_data)
 
 namespace app
 {
@@ -135,10 +136,9 @@ namespace app
 		std::function<fluid_player_get_current_tick_ftype> _fluid_player_get_current_tick;
 		std::function<fluid_player_add_mem_ftype> _fluid_player_add_mem;
 		std::function<delete_fluid_player_ftype> _delete_fluid_player;
-		std::function<fluid_player_get_midi_tempo_ftype> _fluid_player_get_midi_tempo; 
-		std::function<fluid_player_get_division_ftype> _fluid_player_get_division; 
-
-
+		std::function<fluid_player_get_midi_tempo_ftype> _fluid_player_get_midi_tempo;
+		std::function<fluid_player_get_division_ftype> _fluid_player_get_division;
+		std::function<fluid_player_set_tick_callback_ftype> _fluid_player_set_tick_callback;
 
 		fluid_settings_t *settings = nullptr;
 		fluid_synth_t *synth = nullptr;

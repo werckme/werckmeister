@@ -135,6 +135,7 @@ namespace app
             _delete_fluid_player = _library->get<delete_fluid_player_ftype>("delete_fluid_player");
             _fluid_player_get_midi_tempo = _library->get<fluid_player_get_midi_tempo_ftype>("fluid_player_get_midi_tempo");
             _fluid_player_get_division = _library->get<fluid_player_get_division_ftype>("fluid_player_get_division");
+            _fluid_player_set_tick_callback = _library->get<fluid_player_set_tick_callback_ftype>("fluid_player_set_tick_callback");
         }
         catch (const std::exception &ex)
         {
