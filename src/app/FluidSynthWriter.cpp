@@ -167,7 +167,11 @@ namespace app
     {
         if (jumpPointIndex < UndefindedJumpPointIndex || jumpPointIndex >= _jumpPoints.size())
         {
-            throw std::invalid_argument("invalid jump point: " + std::to_string(jumpPointIndex));
+            throw std::invalid_argument("invalid jump point: " 
+                + std::to_string(jumpPointIndex)
+                + " with a size of "
+                + std::to_string(_jumpPoints.size())
+            );
         }
         _activeJumpPoint = jumpPointIndex;
     }

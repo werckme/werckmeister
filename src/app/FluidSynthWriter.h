@@ -50,7 +50,7 @@ namespace app
         SoundFontIdMap soundFontIds;
         fluid_player_t*  player = nullptr;
         JumpPoints _jumpPoints;
-        size_t _activeJumpPoint = UndefindedJumpPointIndex;
+        int _activeJumpPoint = UndefindedJumpPointIndex;
     };
     typedef std::shared_ptr<FluidSynthWriter> FluidSynthWriterPtr;
 }
