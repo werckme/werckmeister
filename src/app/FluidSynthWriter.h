@@ -19,7 +19,7 @@ namespace app
         typedef int SoundFontId;
         typedef FluidSynth Base;
         typedef std::vector<JumpPoint> JumpPoints;
-        enum { UndefindedJumpPointIndex = -1 };
+        enum { UndefinedJumpPointIndex = -1 };
         FluidSynthWriter(com::ILoggerPtr logger) : _logger(logger) {}
         virtual ~FluidSynthWriter() = default;
         virtual void initSynth(const std::string &soundFondPath) override;
@@ -50,7 +50,7 @@ namespace app
         SoundFontIdMap soundFontIds;
         fluid_player_t*  player = nullptr;
         JumpPoints _jumpPoints;
-        int _activeJumpPoint = UndefindedJumpPointIndex;
+        int _activeJumpPoint = UndefinedJumpPointIndex;
     };
     typedef std::shared_ptr<FluidSynthWriter> FluidSynthWriterPtr;
 }

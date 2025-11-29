@@ -140,7 +140,7 @@ namespace app
 
     void FluidSynthWriter::onTickEventCallback(int tick)
     {
-        if (_activeJumpPoint <= UndefindedJumpPointIndex)
+        if (_activeJumpPoint <= UndefinedJumpPointIndex)
         {
             return;
         }
@@ -154,18 +154,18 @@ namespace app
     void FluidSynthWriter::setJumpPoints(const JumpPoints& jumpPoints)
     {
         _jumpPoints = jumpPoints;
-        _activeJumpPoint = UndefindedJumpPointIndex;
+        _activeJumpPoint = UndefinedJumpPointIndex;
     }
 
     void FluidSynthWriter::setJumpPoints(JumpPoints&& jumpPoints)
     {
         _jumpPoints = std::move(jumpPoints);
-        _activeJumpPoint = UndefindedJumpPointIndex;
+        _activeJumpPoint = UndefinedJumpPointIndex;
     }
 
     void FluidSynthWriter::setActiveJumpPoint(int jumpPointIndex)
     {
-        if (jumpPointIndex < UndefindedJumpPointIndex || jumpPointIndex >= _jumpPoints.size())
+        if (jumpPointIndex < UndefinedJumpPointIndex || jumpPointIndex >= _jumpPoints.size())
         {
             throw std::invalid_argument("invalid jump point: " 
                 + std::to_string(jumpPointIndex)
