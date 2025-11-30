@@ -165,7 +165,8 @@ namespace app
 
     void FluidSynthWriter::setActiveJumpPoint(int jumpPointIndex)
     {
-        if (jumpPointIndex < UndefinedJumpPointIndex || jumpPointIndex >= _jumpPoints.size())
+        _logger->babble(WMLogLambda(log << "setActiveJumpPoint: " << "jumpPointIndex"));
+        if (jumpPointIndex < (int)UndefinedJumpPointIndex || jumpPointIndex >= (int)_jumpPoints.size())
         {
             throw std::invalid_argument("invalid jump point: " 
                 + std::to_string(jumpPointIndex)
