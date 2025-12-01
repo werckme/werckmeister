@@ -122,6 +122,7 @@ INCLUDE_DIRECTORIES(submodules/di/extension/include)
 
 if(WIN32)
   INCLUDE_DIRECTORIES(submodules)
+  set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
   set(BUILD_SHARED_LIBS OFF CACHE BOOL "Build static rtmidi" FORCE)
   set(RTMIDI_BUILD_STATIC_LIBS ON CACHE BOOL "Build RTMIDI static library" FORCE)
   add_subdirectory(submodules/rtmidi)
