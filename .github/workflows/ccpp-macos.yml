@@ -44,16 +44,10 @@ jobs:
       run: |
         cd boost-src
         ./bootstrap.sh --prefix=$HOME/local
-        ./b2 install
-
-    - name: Show installed files
-      run: |
-        echo "Boost installed in: $HOME/local"
-        ls -R $HOME/local
-
+        ./b2 link=static runtime-link=static --with-filesystem --with-program_options --with-locale --with-system --with-test --with-date_time install
 
     - name: configure
-      run: cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_OSX_ARCHITECTURES="x86_64" -DCMAKE_PREFIX_PATH=/usr/local ..
+      run: cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_OSX_ARCHITECTURES="x86_64" -DCMAKE_PREFIX_PATH=$HOME/local ..
       env:
         WM_DOWNLOAD_EXTERNALS: 1
       working-directory: build
