@@ -16,6 +16,7 @@ SET(WERCKMEISTER_VERSION_MAJOR 1)
 SET(WERCKMEISTER_VERSION_MINOR 4)
 SET(WERCKMEISTER_VERSION_PATCH 6)
 
+
 # Add this project's cmake/ directory to the module path.
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
@@ -119,14 +120,21 @@ INCLUDE_DIRECTORIES(submodules/di/extension/include)
 
 if(WIN32)
   INCLUDE_DIRECTORIES(submodules)
-  add_subdirectory(submodules/rtmidi) #rtmidi needs /MT or /MTd for windows
+  set(BUILD_SHARED_LIBS OFF CACHE BOOL "Build static rtmidi" FORCE)
+  set(RTMIDI_BUILD_STATIC_LIBS ON CACHE BOOL "Build RTMIDI static library" FORCE)
+  add_subdirectory(submodules/rtmidi)
 endif(WIN32)
 
 if(APPLE)
   INCLUDE_DIRECTORIES(submodules)
-  add_subdirectory(submodules/rtmidi) #rtmidi needs /MT or /MTd for windows
+  set(BUILD_SHARED_LIBS OFF CACHE BOOL "Build static rtmidi" FORCE)
+  set(RTMIDI_BUILD_STATIC_LIBS ON CACHE BOOL "Build RTMIDI static library" FORCE)
+  add_subdirectory(submodules/rtmidi)
 elseif(UNIX)
   if($ENV{WM_LINUX_LINK_STATIC})
+    MESSAGE("build rtmidi static")
+    set(BUILD_SHARED_LIBS OFF CACHE BOOL "Build static rtmidi" FORCE)
+    set(RTMIDI_BUILD_STATIC_LIBS ON CACHE BOOL "Build RTMIDI static library" FORCE)
     INCLUDE_DIRECTORIES(submodules)
     add_subdirectory(submodules/rtmidi)
   endif($ENV{WM_LINUX_LINK_STATIC})
