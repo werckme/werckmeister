@@ -46,6 +46,7 @@ jobs:
           --with-system --with-test --with-date_time install
 
     - name: configure
+      shell: pwsh
       run: >
           cmake
             -DCMAKE_BUILD_TYPE=Release
