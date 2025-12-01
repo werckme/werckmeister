@@ -27,11 +27,6 @@ jobs:
     - name: install render test requirements
       run: source myEnv/bin/activate && pip3 install -r requirements.txt
       working-directory: rendertests
-    # - name: install brew x86
-    #   run: arch -x86_64 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-    # - name: install boost x86
-    #   run: arch -x86_64 /usr/local/bin/brew install boost
-
     - name: Download Boost
       run: |
         BOOST_VERSION=1.84.0
@@ -48,8 +43,6 @@ jobs:
 
     - name: configure
       run: cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_OSX_ARCHITECTURES="x86_64" -DCMAKE_PREFIX_PATH=$HOME/local ..
-      env:
-        WM_DOWNLOAD_EXTERNALS: 1
       working-directory: build
     - name: build
       run: cmake --build .
