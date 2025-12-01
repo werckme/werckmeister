@@ -68,6 +68,7 @@ function(DownloadBOOST version download_dir skip_build)
     execute_process(
       COMMAND ${BOOST_B2}
       ${TOOLSET}
+      "--prefix=$HOME/lib/boost"
       "link=static" 
       "runtime-link=static" 
       "--with-filesystem" 
@@ -76,6 +77,7 @@ function(DownloadBOOST version download_dir skip_build)
       "--with-system"
       "--with-test"
       "--with-date_time"
+      "install"
       WORKING_DIRECTORY ${BOOST_ROOT}
     )
   
