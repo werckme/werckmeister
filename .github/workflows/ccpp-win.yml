@@ -41,7 +41,7 @@ jobs:
         # Bootstrap für Windows
         .\bootstrap.bat --prefix="$Env:USERPROFILE\local"
         # Build + Install
-        .\b2.exe link=static runtime-link=static `
+        .\b2.exe --prefix="$Env:USERPROFILE\local" link=static runtime-link=static `
           --with-filesystem --with-program_options --with-locale `
           --with-system --with-test --with-date_time install
 
