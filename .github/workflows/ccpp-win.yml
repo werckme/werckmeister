@@ -46,7 +46,7 @@ jobs:
           --with-system --with-test --with-date_time install
 
     - name: configure
-      run: cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH="$Env:USERPROFILE\local" ..
+      run: cmake -DCMAKE_BUILD_TYPE=Release -DBOOST_ROOT="$Env:USERPROFILE\local" -DBoost_INCLUDE_DIR="$Env:USERPROFILE\local\include" -DBoost_LIBRARY_DIR="$Env:USERPROFILE\local\lib" -DBoost_NO_BOOST_CMAKE=ON ..
       working-directory: build
     - name: install render test requirements
       run: pip3 install -r requirements.txt
