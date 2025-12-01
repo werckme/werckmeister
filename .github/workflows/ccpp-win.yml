@@ -47,14 +47,13 @@ jobs:
 
     - name: configure
       shell: pwsh
-      run: >
-          cmake
-            -DCMAKE_BUILD_TYPE=Release
-            -DBoost_NO_BOOST_CMAKE=ON
-            -DBoost_USE_STATIC_LIBS=ON
-            -DBOOST_ROOT="$Env:USERPROFILE\local"
-            -DBoost_INCLUDE_DIR="$Env:USERPROFILE\local\include"
-            -DBoost_LIBRARY_DIR="$Env:USERPROFILE\local\lib"
+      run:  cmake `
+            -DCMAKE_BUILD_TYPE=Release `
+            -DBoost_NO_BOOST_CMAKE=ON `
+            -DBoost_USE_STATIC_LIBS=ON `
+            -DBOOST_ROOT="$Env:USERPROFILE\local" `
+            -DBoost_INCLUDE_DIR="$Env:USERPROFILE\local\include" `
+            -DBoost_LIBRARY_DIR="$Env:USERPROFILE\local\lib" `
             ..
       working-directory: build
     - name: install render test requirements
