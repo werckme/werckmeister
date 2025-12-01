@@ -46,7 +46,7 @@ jobs:
           --with-system --with-test --with-date_time install
 
     - name: configure
-      run: cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=$Env:USERPROFILE\local ..
+      run: cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH="$Env:USERPROFILE\local" ..
       working-directory: build
     - name: install render test requirements
       run: pip3 install -r requirements.txt
