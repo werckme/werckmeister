@@ -32,7 +32,7 @@ jobs:
     # - name: install boost x86
     #   run: arch -x86_64 /usr/local/bin/brew install boost
     - name: configure
-      run: cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_OSX_ARCHITECTURES="x86_64" ..
+      run: cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_OSX_ARCHITECTURES="x86_64" -DCMAKE_PREFIX_PATH=/usr/local ..
       env:
         WM_DOWNLOAD_EXTERNALS: 1
       working-directory: build
