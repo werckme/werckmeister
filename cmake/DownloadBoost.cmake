@@ -76,6 +76,7 @@ function(DownloadBOOST version download_dir skip_build)
       "--with-system"
       "--with-test"
       "--with-date_time"
+      "install"
       WORKING_DIRECTORY ${BOOST_ROOT}
     )
   
