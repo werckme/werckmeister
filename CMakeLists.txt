@@ -80,11 +80,12 @@ ENDIF(WIN32)
 
 
 IF(APPLE)
+  SET(CMAKE_OSX_DEPLOYMENT_TARGET "13.0" CACHE STRING "Minimum macOS version")
   SET (LIB_FLUIDSYNTH_FILENAME "libfluidsynth.dylib")
   SET (LIB_FLUIDSYNTH_SEARCH_PATHS "{\"/usr/lib\", \"/usr/local/lib\"}")
   SET(Boost_USE_STATIC_LIBS ON)
-  set(Boost_USE_MULTITHREADED ON)
-  set(Boost_USE_STATIC_RUNTIME ON)
+  SET(Boost_USE_MULTITHREADED ON)
+  SET(Boost_USE_STATIC_RUNTIME ON)
 ENDIF(APPLE)
 
 SET(BOOST_PACKAGES unit_test_framework filesystem program_options system)
