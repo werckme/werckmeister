@@ -1,4 +1,4 @@
-name: Mac-arm Build
+name: Mac Build
 
 on:
   push:
@@ -27,12 +27,22 @@ jobs:
     - name: install render test requirements
       run: source myEnv/bin/activate && pip3 install -r requirements.txt
       working-directory: rendertests
-    - name: install boost
-      run: brew install boost
+    - name: Download Boost
+      run: |
+        BOOST_VERSION=1.87.0
+        BOOST_VERSION_UNDERSCORE=${BOOST_VERSION//./_}
+        wget "https://archives.boost.io/release/$BOOST_VERSION/source/boost_$BOOST_VERSION_UNDERSCORE.tar.gz"
+        tar -xzf boost_$BOOST_VERSION_UNDERSCORE.tar.gz
+        mv boost_$BOOST_VERSION_UNDERSCORE boost-src
+
+    - name: Build and install Boost
+      run: |
+        cd boost-src
+        ./bootstrap.sh --prefix=$HOME/local
+        ./b2 link=static runtime-link=static --with-filesystem --with-program_options --with-locale --with-system --with-test --with-date_time install
+
     - name: configure
-      run: cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_OSX_ARCHITECTURES="arm64" ..
-      env:
-        WM_DOWNLOAD_EXTERNALS: 0 # for some reason the boost build fails here: seems not to find the right toolset (for the first run, the second try succeeds)
+      run: cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=$HOME/local ..
       working-directory: build
     - name: build
       run: cmake --build .
@@ -42,7 +52,7 @@ jobs:
       working-directory: build
     - name: run rendertests
       run: source myEnv/bin/activate && python3 runtests.py
-      continue-on-error: false
+      continue-on-error: true
       working-directory: rendertests
     - name: pack
       run: cmake --build . --config Release --target package

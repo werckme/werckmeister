@@ -1,5 +1,5 @@
-# CXX=clang++ CC=clang WM_DOWNLOAD_EXTERNALS=1 WM_LINUX_LINK_STATIC=1 cmake .. -DCMAKE_BUILD_TYPE=Debug
-cmake_minimum_required(VERSION 3.11)
+# CXX=clang++ CC=clang WM_LINUX_LINK_STATIC=1 cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_PREFIX_PATH=/home/samba/local/boost-1.87 ..
+cmake_minimum_required(VERSION 3.30)
 
 execute_process(COMMAND git --work-tree=. log --pretty=format:%h -n 1
               OUTPUT_VARIABLE GIT_VERSION)
@@ -16,6 +16,7 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 SET(WERCKMEISTER_VERSION_MAJOR 1)
 SET(WERCKMEISTER_VERSION_MINOR 4)
 SET(WERCKMEISTER_VERSION_PATCH 6)
+
 
 # Add this project's cmake/ directory to the module path.
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
@@ -54,9 +55,9 @@ IF(UNIX)
   if ($ENV{WM_LINUX_LINK_STATIC})
     message(STATUS "USE BOOST STATIC LIBS")
     SET(Boost_USE_STATIC_LIBS ON)
+    SET(Boost_USE_MULTITHREADED ON)
+    SET(Boost_USE_STATIC_RUNTIME ON)
   endif($ENV{WM_LINUX_LINK_STATIC})
-#  set(Boost_USE_MULTITHREADED ON)
-#  set(Boost_USE_STATIC_RUNTIME ON)
 ENDIF(UNIX)
 
 IF(WIN32)
@@ -80,9 +81,12 @@ ENDIF(WIN32)
 
 
 IF(APPLE)
+  SET(CMAKE_OSX_DEPLOYMENT_TARGET "13.0" CACHE STRING "Minimum macOS version")
   SET (LIB_FLUIDSYNTH_FILENAME "libfluidsynth.dylib")
   SET (LIB_FLUIDSYNTH_SEARCH_PATHS "{\"/usr/lib\", \"/usr/local/lib\"}")
   SET(Boost_USE_STATIC_LIBS ON)
+  SET(Boost_USE_MULTITHREADED ON)
+  SET(Boost_USE_STATIC_RUNTIME ON)
 ENDIF(APPLE)
 
 SET(BOOST_PACKAGES unit_test_framework filesystem program_options system)
@@ -120,17 +124,29 @@ INCLUDE_DIRECTORIES(submodules/di/extension/include)
 
 if(WIN32)
   INCLUDE_DIRECTORIES(submodules)
-  add_subdirectory(submodules/rtmidi) #rtmidi needs /MT or /MTd for windows
+  set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+  set(BUILD_SHARED_LIBS OFF CACHE BOOL "Build static rtmidi" FORCE)
+  set(RTMIDI_BUILD_STATIC_LIBS ON CACHE BOOL "Build RTMIDI static library" FORCE)
+  INCLUDE_DIRECTORIES(third_party)
+  add_subdirectory(third_party/myrtmidi)
 endif(WIN32)
 
 if(APPLE)
   INCLUDE_DIRECTORIES(submodules)
-  add_subdirectory(submodules/rtmidi) #rtmidi needs /MT or /MTd for windows
+  set(BUILD_SHARED_LIBS OFF CACHE BOOL "Build static rtmidi" FORCE)
+  set(RTMIDI_BUILD_STATIC_LIBS ON CACHE BOOL "Build RTMIDI static library" FORCE)
+  INCLUDE_DIRECTORIES(third_party)
+  add_subdirectory(third_party/myrtmidi)
 elseif(UNIX)
+
   if($ENV{WM_LINUX_LINK_STATIC})
-    INCLUDE_DIRECTORIES(submodules)
-    add_subdirectory(submodules/rtmidi)
+    MESSAGE("build rtmidi static")
+    set(BUILD_SHARED_LIBS OFF CACHE BOOL "Build static rtmidi" FORCE)
+    set(BUILD_STATIC_LIBS ON CACHE BOOL "Build RTMIDI static library" FORCE)
+    INCLUDE_DIRECTORIES(third_party)
+    add_subdirectory(third_party/myrtmidi)
   endif($ENV{WM_LINUX_LINK_STATIC})
+  
 endif(APPLE)
 
 

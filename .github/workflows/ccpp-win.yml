@@ -22,11 +22,40 @@ jobs:
     - uses: actions/checkout@v2
     - name: update submodules
       run: git submodule update --init --recursive --remote
+    - name: Download Boost
+      shell: pwsh
+      run: |
+        $BOOST_VERSION = "1.87.0"
+        $BOOST_VERSION_UNDERSCORE = $BOOST_VERSION -replace "\.", "_"
+
+        $url = "https://archives.boost.io/release/$BOOST_VERSION/source/boost_$BOOST_VERSION_UNDERSCORE.zip"
+        Invoke-WebRequest -Uri $url -OutFile "boost.zip"
+
+        Expand-Archive -Path "boost.zip" -DestinationPath "."
+        Rename-Item -Path "boost_$BOOST_VERSION_UNDERSCORE" -NewName "boost-src"
+
+    - name: Build and install Boost
+      shell: pwsh
+      run: |
+        cd boost-src
+        # Bootstrap für Windows
+        .\bootstrap.bat --prefix="$Env:USERPROFILE\local"
+        # Build + Install
+        .\b2.exe --prefix="$Env:USERPROFILE\local" link=static runtime-link=static `
+          --with-filesystem --with-program_options --with-locale `
+          --with-system --with-test --with-date_time install
+
     - name: configure
-      run: cmake -DCMAKE_BUILD_TYPE=Release ..
+      shell: pwsh
+      run:  cmake `
+            -DCMAKE_BUILD_TYPE=Release `
+            -DBoost_NO_BOOST_CMAKE=ON `
+            -DBoost_USE_STATIC_LIBS=ON `
+            -DBOOST_ROOT="$Env:USERPROFILE\local" `
+            -DBoost_INCLUDE_DIR="$Env:USERPROFILE\local\include" `
+            -DBoost_LIBRARY_DIR="$Env:USERPROFILE\local\lib" `
+            ..
       working-directory: build
-      env:
-        WM_DOWNLOAD_EXTERNALS: 1
     - name: install render test requirements
       run: pip3 install -r requirements.txt
       working-directory: rendertests        

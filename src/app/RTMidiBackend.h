@@ -3,7 +3,7 @@
 #include <memory>
 #include <vector>
 #include <com/midi.hpp>
-#include <rtmidi/RtMidi.h>
+#include <myrtmidi/RtMidi.h>
 #include "AMidiBackend.h"
 
 namespace app

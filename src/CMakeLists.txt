@@ -239,7 +239,7 @@ elseif(UNIX)
     if ($ENV{WM_LINUX_LINK_STATIC})
         SET(LIBS_PLAYER ${LIBS_PLAYER} rtmidi_static ${CMAKE_DL_LIBS})
     else($ENV{WM_LINUX_LINK_STATIC})
-        SET(LIBS_PLAYER ${LIBS_PLAYER} rtmidi pthread ${CMAKE_DL_LIBS})
+        SET(LIBS_PLAYER ${LIBS_PLAYER} rtmidi_static pthread ${CMAKE_DL_LIBS})
     endif($ENV{WM_LINUX_LINK_STATIC})
 endif(APPLE)
 
