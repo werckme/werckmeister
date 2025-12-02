@@ -125,14 +125,16 @@ if(WIN32)
   set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
   set(BUILD_SHARED_LIBS OFF CACHE BOOL "Build static rtmidi" FORCE)
   set(RTMIDI_BUILD_STATIC_LIBS ON CACHE BOOL "Build RTMIDI static library" FORCE)
-  add_subdirectory(submodules/rtmidi)
+  INCLUDE_DIRECTORIES(third_party)
+  add_subdirectory(third_party/myrtmidi)
 endif(WIN32)
 
 if(APPLE)
   INCLUDE_DIRECTORIES(submodules)
   set(BUILD_SHARED_LIBS OFF CACHE BOOL "Build static rtmidi" FORCE)
   set(RTMIDI_BUILD_STATIC_LIBS ON CACHE BOOL "Build RTMIDI static library" FORCE)
-  add_subdirectory(submodules/rtmidi)
+  INCLUDE_DIRECTORIES(third_party)
+  add_subdirectory(third_party/myrtmidi)
 elseif(UNIX)
 
   if($ENV{WM_LINUX_LINK_STATIC})
@@ -142,17 +144,7 @@ elseif(UNIX)
     INCLUDE_DIRECTORIES(third_party)
     add_subdirectory(third_party/myrtmidi)
   endif($ENV{WM_LINUX_LINK_STATIC})
-
-  # if($ENV{WM_LINUX_LINK_STATIC})
-  #   MESSAGE("build rtmidi static")
-  #   set(BUILD_SHARED_LIBS OFF CACHE BOOL "Build static rtmidi" FORCE)
-  #   set(RTMIDI_BUILD_STATIC_LIBS ON CACHE BOOL "Build RTMIDI static library" FORCE)
-  #   set(RTMIDI_BUILD_ALSA ON)
-  #   set(RTMIDI_BUILD_JACK ON)
-  #   INCLUDE_DIRECTORIES(submodules)
-  #   add_subdirectory(submodules/myrtmidi)
-  # endif($ENV{WM_LINUX_LINK_STATIC})
-
+  
 endif(APPLE)
 
 
