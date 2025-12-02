@@ -5,6 +5,3 @@
 	path = submodules/di
 	url = https://github.com/boost-experimental/di
 	branch = cpp14
-[submodule "submodules/rtmidi"]
-	path = submodules/rtmidi
-	url = https://github.com/thestk/rtmidi.git
