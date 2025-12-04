@@ -222,6 +222,32 @@ namespace app
         }
     }
 
+    void FluidSynthWriter::stop()
+    {
+        if (synth == nullptr)
+        {
+            return;
+        }
+        if (player == nullptr)
+        {
+            return;
+        }
+        _fluid_player_stop(player);
+    }
+
+    void FluidSynthWriter::play()
+    {
+        if (synth == nullptr)
+        {
+            return;
+        }
+        if (player == nullptr)
+        {
+            return;
+        }
+        _fluid_player_play(player);
+    }
+
     void FluidSynthWriter::renderToFile(const std::string &outputPath, double seconds)
     {
         const int blockSize = 1024;

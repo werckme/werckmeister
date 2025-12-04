@@ -39,6 +39,8 @@ namespace app
         void setJumpPoints(const JumpPoints& jumpPoints);
         void setJumpPoints(JumpPoints&& jumpPoints);
         void setActiveJumpPoint(int jumpPointIndex);
+        void stop();
+        void play();
     protected:
         com::ILoggerPtr _logger;
         com::String _libPath;

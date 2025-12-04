@@ -546,6 +546,38 @@ extern "C"
 			return WERCKM_ERR;
 		}
 	}
+
+	WERCKM_EXPORT int wm_play(WmSession sessionPtr)
+	{
+		if (sessionPtr == nullptr)
+		{
+			return WERCKM_ERR;
+		}
+		Session* session = reinterpret_cast<Session*>(sessionPtr);
+		if (session->fluidSynth.get() == nullptr)
+		{
+			return WERCKM_OK;
+		}
+		auto _logger = session->logger;
+		session->fluidSynth->play();
+		return WERCKM_ERR;
+	}
+
+	WERCKM_EXPORT int wm_stop(WmSession sessionPtr)
+	{
+		if (sessionPtr == nullptr)
+		{
+			return WERCKM_ERR;
+		}
+		Session* session = reinterpret_cast<Session*>(sessionPtr);
+		if (session->fluidSynth.get() == nullptr)
+		{
+			return WERCKM_OK;
+		}
+		auto _logger = session->logger;
+		session->fluidSynth->stop();
+		return WERCKM_ERR;
+	}
 }
 
 static void eatTmpEvents(Session* session)
