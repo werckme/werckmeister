@@ -39,7 +39,7 @@ void SheetCompilerProgram::printIntro(std::ostream &os)
         return;
     }
     shown = true;
-    os << "\tWERCKMEISTER " << std::endl
+    os << "\tWERCKMEISTER" << std::endl
        << "\t(c) Samba Godschynski " << std::endl
        << "\thttps://werckme.github.io" << std::endl
        << "\tversion: " << SHEET_VERSION << std::endl
@@ -105,6 +105,11 @@ void SheetCompilerProgram::prepareSearchPaths()
 #ifndef WIN32
     addSearchPath((path("/usr/local/share/werckmeister").string()));
 #endif
+    const char* sfPath = std::getenv("WM_SOUNDFONT_PATH");
+    if (sfPath)
+    {
+        addSearchPath(sfPath);
+    }
 }
 
 void SheetCompilerProgram::printSearchPaths() const

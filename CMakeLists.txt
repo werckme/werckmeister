@@ -7,6 +7,7 @@ execute_process(COMMAND git branch --show-current OUTPUT_VARIABLE GIT_BRANCH_NAM
 
 # Project name.
 project(werckmeister)
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 # Version Format needs to be
 # D.D.DD[D]
@@ -26,7 +27,7 @@ set (CMAKE_CXX_STANDARD 17)
 set(FM_CHARSET "ISO-8859-1")
 set(FM_PPQ 5000)
 set(BOOST_VERSION "1.87.0")
-set(FLUIDSYNTH_VERSION "2.1.0")
+set(FLUIDSYNTH_VERSION "2.3.4")
 #END PROJECT CONFIG
 
 set (INSTALL_AUX 1)
@@ -227,6 +228,7 @@ if(WIN32)
 endif()
 
 if(${INSTALL_AUX})
+  install(FILES src/libwerckmeister.h        DESTINATION include/werckmeister COMPONENT wmapp)
   install(FILES ${WM_CHORDS}                 DESTINATION share/werckmeister/chords COMPONENT wmapp)
   install(FILES ${WM_LUA}                    DESTINATION share/werckmeister/lua COMPONENT wmapp)
   install(FILES ${WM_LUA_COM}                DESTINATION share/werckmeister/lua/com COMPONENT wmapp)

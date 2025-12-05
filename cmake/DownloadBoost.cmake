@@ -17,6 +17,7 @@ function(DownloadBOOST version download_dir skip_build)
 
   set(BOOST_PREFIX "${BOOST_ROOT}")
   set(TOOLSET "")
+  set(BOOST_B2_FLAGS "")
   if(${USE_EMSCRIPTEN})
     message(STATUS "Using Toolset Emscripten")
     SET(TOOLSET "--toolset=emscripten")
@@ -33,6 +34,7 @@ function(DownloadBOOST version download_dir skip_build)
     SET(FILE_EXT ".tar.gz")
     SET(BOOST_BOOTSTRAP "./bootstrap.sh")
     SET(BOOST_B2 "./b2")
+    SET(BOOST_B2_FLAGS "cxxflags=-fPIC")
   endif(WIN32)
 
   # Download and/or extract the binary distribution if necessary.
@@ -67,6 +69,7 @@ function(DownloadBOOST version download_dir skip_build)
     message(STATUS "building boost...")
     execute_process(
       COMMAND ${BOOST_B2}
+      ${BOOST_B2_FLAGS}
       ${TOOLSET}
       "link=static" 
       "runtime-link=static" 

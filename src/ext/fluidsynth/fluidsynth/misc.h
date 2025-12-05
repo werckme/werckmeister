@@ -21,19 +21,22 @@
 #ifndef _FLUIDSYNTH_MISC_H
 #define _FLUIDSYNTH_MISC_H
 
+
 #ifdef __cplusplus
-extern "C"
-{
+extern "C" {
 #endif
 
+
 /**
- * @file misc.h
- * @brief Miscellaneous utility functions and defines
+ * @defgroup misc Miscellaneous
+ *
+ * Miscellaneous utility functions and defines
+ *
+ * @{
  */
 
 /**
  * Value that indicates success, used by most libfluidsynth functions.
- * @since 1.1.0
  *
  * @note This was not publicly defined prior to libfluidsynth 1.1.0.  When
  * writing code which should also be compatible with older versions, something
@@ -47,20 +50,25 @@ extern "C"
  *   #define FLUID_FAILED  (-1)
  *   #endif
  * @endcode
+ *
+ * @since 1.1.0
  */
-#define FLUID_OK (0)
+#define FLUID_OK        (0)
 
 /**
  * Value that indicates failure, used by most libfluidsynth functions.
- * @since 1.1.0
  *
  * @note See #FLUID_OK for more details.
+ *
+ * @since 1.1.0
  */
-#define FLUID_FAILED (-1)
+#define FLUID_FAILED    (-1)
 
-    FLUIDSYNTH_API int fluid_is_soundfont(const char *filename);
-    FLUIDSYNTH_API int fluid_is_midifile(const char *filename);
-    FLUIDSYNTH_API void fluid_free(void *ptr);
+
+FLUIDSYNTH_API int fluid_is_soundfont(const char *filename);
+FLUIDSYNTH_API int fluid_is_midifile(const char *filename);
+FLUIDSYNTH_API void fluid_free(void* ptr);
+/** @} */
 
 #ifdef __cplusplus
 }

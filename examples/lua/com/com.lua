@@ -92,7 +92,7 @@ function contains(table, value)
 end
 
 -- https://stackoverflow.com/questions/1426954/split-string-in-lua#1426970
-function split(pString, pPattern)
+function (pString, pPattern)
     local Table = {}  -- NOTE: use {n = 0} in Lua-5.0
     local fpat = "(.-)" .. pPattern
     local last_end = 1

@@ -9,26 +9,28 @@ namespace
     const double FLUID_SYNTH_SEQUENCER_TIMESCALE = 1000;
     const double FLUID_SYNTH_DEFAULT_GAIN = 1.0;
     const long double FLUID_SYNTH_HEADROOM_MILLIS = 500;
+    std::unique_ptr<boost::dll::shared_library> _library;
 }
 
 namespace app
 {
-    FluidSynth::FluidSynth(const std::string &soundfontPath)
+
+    FluidSynth::FluidSynth()
+    {
+    }
+
+    FluidSynth::FluidSynth(const std::string &soundfontPath) : FluidSynth()
     {
         initLibraryFunctions();
         initSynth(soundfontPath);
     }
+
     FluidSynth::~FluidSynth()
     {
-        if (_library)
-        {
-            tearDownSynth();
-            delete _library;
-            _library = nullptr;
-        }
+        tearDownSynth();
     }
 
-    void FluidSynth::midiEventToFluidEvent(const com::midi::Event& src, fluid_event_t& evt)
+    bool FluidSynth::midiEventToFluidEvent(const com::midi::Event& src, fluid_event_t& evt, bool doThrow)
     {
         int chan = (int)src.channel();
 
@@ -63,8 +65,13 @@ namespace app
             break;
 
         default:
+            if (!doThrow)
+            {
+                return false;
+            }
             throw com::Exception("fluidsynth: midi event type not implemented");
         }
+        return true;
     }
 
     void FluidSynth::initLibraryFunctions()
@@ -72,7 +79,10 @@ namespace app
         auto libPath = findFluidSynthLibraryPath();
         try
         {
-            _library = new boost::dll::shared_library(libPath);
+            if (!_library)
+            {
+                _library = std::make_unique<boost::dll::shared_library>(libPath);
+            }
             _new_fluid_settings = _library->get<new_fluid_settings_ftype>("new_fluid_settings");
             _new_fluid_synth = _library->get<new_fluid_synth_ftype>("new_fluid_synth");
             _new_fluid_audio_driver = _library->get<new_fluid_audio_driver_ftype>("new_fluid_audio_driver");
@@ -109,6 +119,23 @@ namespace app
             _fluid_event_channel_pressure = _library->get<fluid_event_channel_pressure_ftype>("fluid_event_channel_pressure");
             _fluid_event_key_pressure = _library->get<fluid_event_key_pressure_ftype>("fluid_event_key_pressure");
             _fluid_sequencer_set_time_scale = _library->get<fluid_sequencer_set_time_scale_ftype>("fluid_sequencer_set_time_scale");
+            _fluid_synth_write_float = _library->get<fluid_synth_write_float_ftype>("fluid_synth_write_float");
+            _fluid_synth_program_select = _library->get<fluid_synth_program_select_ftype>("fluid_synth_program_select");
+            _new_fluid_file_renderer = _library->get<new_fluid_file_renderer_ftype>("fluid_synth_program_select");
+            _fluid_file_renderer_process_block = _library->get<fluid_file_renderer_process_block_ftype>("fluid_synth_program_select");
+            _delete_fluid_file_renderer = _library->get<delete_fluid_file_renderer_ftype>("fluid_synth_program_select");
+            _new_fluid_player = _library->get<new_fluid_player_ftype>("new_fluid_player");
+            _fluid_player_stop = _library->get<fluid_player_stop_ftype>("fluid_player_stop");
+            _fluid_player_set_playback_callback = _library->get<fluid_player_set_playback_callback_ftype>("fluid_player_set_playback_callback");
+            _fluid_player_seek = _library->get<fluid_player_seek_ftype>("fluid_player_seek");
+            _fluid_player_play = _library->get<fluid_player_play_ftype>("fluid_player_play");
+            _fluid_player_join = _library->get<fluid_player_join_ftype>("fluid_player_join");
+            _fluid_player_get_current_tick = _library->get<fluid_player_get_current_tick_ftype>("fluid_player_get_current_tick");
+            _fluid_player_add_mem = _library->get<fluid_player_add_mem_ftype>("fluid_player_add_mem");
+            _delete_fluid_player = _library->get<delete_fluid_player_ftype>("delete_fluid_player");
+            _fluid_player_get_midi_tempo = _library->get<fluid_player_get_midi_tempo_ftype>("fluid_player_get_midi_tempo");
+            _fluid_player_get_division = _library->get<fluid_player_get_division_ftype>("fluid_player_get_division");
+            _fluid_player_set_tick_callback = _library->get<fluid_player_set_tick_callback_ftype>("fluid_player_set_tick_callback");
         }
         catch (const std::exception &ex)
         {
@@ -138,15 +165,16 @@ namespace app
             _delete_fluid_audio_driver(adriver);
             adriver = nullptr;
         }
-        if (settings)
-        {
-            _delete_fluid_settings(settings);
-            settings = nullptr;
-        }
+
         if (synth)
         {
             _delete_fluid_synth(synth);
             synth = nullptr;
+        }
+        if (settings)
+        {
+            _delete_fluid_settings(settings);
+            settings = nullptr;
         }
     }
 
@@ -162,7 +190,7 @@ namespace app
         return wm.resolvePath(libraryPath);
     }
 
-    void FluidSynth::initSynth(const std::string soundFondPath)
+    void FluidSynth::initSynth(const std::string &soundFondPath)
     {
         settings = _new_fluid_settings();
 
@@ -200,5 +228,10 @@ namespace app
     void FluidSynth::seek(long double millis)
     {
         _playerOffsetMillis = -millis;
+    }
+
+    void FluidSynth::setCC(int ch, int cc, int value)
+    {
+        _fluid_synth_cc(synth, ch, cc, value);
     }
 }

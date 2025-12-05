@@ -5,6 +5,7 @@ else()
     SET(BUILD_SHEETJSD 1)
     SET(BUILD_SHEETP   1)
     SET(BUILD_REHEARSE 1)
+    SET(BUILD_LIBWM    1)
 endif()
 
 ## lib
@@ -23,6 +24,7 @@ SET (SRC_FETZER_LIB
     compiler/DefinitionsServer.cpp
     com/tools.cpp
     com/ConsoleLogger.cpp
+    com/FileLogger.cpp
     compiler/Compiler.cpp
     parser/chordDefParser.cpp
     parser/sheetParser.cpp
@@ -247,7 +249,24 @@ if(${BUILD_SHEETP})
     SET (WM_TARGETS ${WM_TARGETS} sheetp)
 endif()
 
+if(${BUILD_LIBWM})
+    add_library(werckmeister SHARED 
+        libwerckmeister.cpp 
+        SheetLibProgram.cpp 
+        SheetCompilerProgram.cpp
+        app/FluidSynthWriter.cpp
+        app/FluidSynthWrapper.cpp
+        CompilerProgramOptions.cpp)
+    target_link_libraries (werckmeister ${SHEET_LIBS})
+    
+    install(TARGETS werckmeister
+        RUNTIME DESTINATION "bin"       # DLL
+        LIBRARY DESTINATION "lib"       # Linux/Unix .so oder .dylib
+        ARCHIVE DESTINATION "lib"       # Import-Library (.lib) unter Windows
+        COMPONENT wmapp
+    )
 
+endif()
 
 # Win32 Kill Process Workaround
 if (WIN32) 

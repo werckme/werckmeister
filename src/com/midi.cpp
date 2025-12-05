@@ -140,7 +140,7 @@ namespace com
 		{
 			if (maxByteSize < MinEventSize)
 			{
-				FM_THROW(com::Exception, "buffer to small");
+				FM_THROW(com::Exception, "read: buffer to small");
 			}
 			size_t c = 0;
 			absPosition(variableLengthRead(bytes, maxByteSize, &c) + deltaOffset);
@@ -182,7 +182,7 @@ namespace com
 
 			if ((maxByteSize - vlengthBytes - metaTypeByteSize) < _metaDataSize)
 			{
-				FM_THROW(com::Exception, "buffer to small");
+				FM_THROW(com::Exception, "readPayloadMeta: buffer to small");
 			}
 			if (_metaDataSize >= MaxVarLength)
 			{
@@ -203,7 +203,7 @@ namespace com
 
 			if ((maxByteSize - vlengthBytes) < _metaDataSize)
 			{
-				FM_THROW(com::Exception, "buffer to small");
+				FM_THROW(com::Exception, "readPayloadSysex: buffer to small");
 			}
 			if (_metaDataSize >= MaxVarLength)
 			{
@@ -219,7 +219,7 @@ namespace com
 			size_t length = byteSize(deltaOffset);
 			if (length > maxByteSize)
 			{
-				FM_THROW(com::Exception, "buffer to small");
+				FM_THROW(com::Exception, "write: buffer to small");
 			}
 			MidiLong relOff = (MidiLong)::nearbyint(relDelta(deltaOffset));
 			size_t c = variableLengthWrite(relOff, bytes, maxByteSize);
@@ -242,7 +242,7 @@ namespace com
 		{
 			if (maxByteSize < 2)
 			{
-				FM_THROW(com::Exception, "buffer to small");
+				FM_THROW(com::Exception, "writePayloadDefault: buffer to small");
 			}
 			(*bytes++) = (eventType() << 4) | channel();
 			(*bytes++) = parameter1();
@@ -250,7 +250,7 @@ namespace com
 			{
 				if (maxByteSize < 3)
 				{
-					FM_THROW(com::Exception, "buffer to small");
+					FM_THROW(com::Exception, "writePayloadDefault: buffer to small");
 				}
 				(*bytes++) = parameter2();
 				return 3;
@@ -262,7 +262,7 @@ namespace com
 		{
 			if (maxByteSize < payloadSize())
 			{
-				FM_THROW(com::Exception, "buffer to small");
+				FM_THROW(com::Exception, "writePayloadMeta: buffer to small");
 			}
 			(*bytes++) = eventType();
 			(*bytes++) = metaEventType();
@@ -282,7 +282,7 @@ namespace com
 		{
 			if (maxByteSize < payloadSize(target))
 			{
-				FM_THROW(com::Exception, "buffer to small");
+				FM_THROW(com::Exception, "writePayloadSysex: buffer to small");
 			}
 			(*bytes++) = 0xF0;
 			size_t vlengthBytes = 0;
@@ -544,7 +544,12 @@ namespace com
 		com::String Event::toString() const
 		{
 			std::stringstream ss;
-			ss << "pos(" << (int)absPosition() << ") " << "ch(" << (int)channel() << ") p1(" << (int)parameter1() << ") p2(" << (int)parameter2() << ")"; 
+			ss << "pos(" 
+				<< (int)absPosition() << ") " 
+				<< "ty(" << (int)eventType() << ")"
+				<< "ch(" << (int)channel() << ")"
+				<<" p1(" << (int)parameter1() << ")"
+				<<" p2(" << (int)parameter2() << ")"; 
 			return ss.str();
 		}
 
@@ -726,7 +731,7 @@ namespace com
 		{
 			if (maxByteSize < byteSize())
 			{
-				FM_THROW(com::Exception, "buffer to small");
+				FM_THROW(com::Exception, "write: buffer to small");
 			}
 			size_t written = 0;
 			Ticks offset = 0;
@@ -775,7 +780,7 @@ namespace com
 			size_t wrote = 0;
 			if (maxByteSize < byteSize())
 			{
-				FM_THROW(com::Exception, "buffer to small");
+				FM_THROW(com::Exception, "write: buffer to small");
 			}
 			Header header;
 			header.chunkSize = static_cast<DWord>(events().byteSize() + EoTSize);

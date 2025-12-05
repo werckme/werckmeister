@@ -21,23 +21,24 @@
 #ifndef _FLUIDSYNTH_VERSION_H
 #define _FLUIDSYNTH_VERSION_H
 
+
 #ifdef __cplusplus
-extern "C"
-{
+extern "C" {
 #endif
 
-    /**
- * @file version.h
- * @brief Library version functions and defines
+/**
+ * @addtogroup misc
+ *
+ * @{
  */
+#define FLUIDSYNTH_VERSION       "2.3.4"           /**< String constant of libfluidsynth version. */
+#define FLUIDSYNTH_VERSION_MAJOR 2     /**< libfluidsynth major version integer constant. */
+#define FLUIDSYNTH_VERSION_MINOR 3     /**< libfluidsynth minor version integer constant. */
+#define FLUIDSYNTH_VERSION_MICRO 4     /**< libfluidsynth micro version integer constant. */
 
-#define FLUIDSYNTH_VERSION "2.1.0" /**< String constant of libfluidsynth version. */
-#define FLUIDSYNTH_VERSION_MAJOR 2 /**< libfluidsynth major version integer constant. */
-#define FLUIDSYNTH_VERSION_MINOR 1 /**< libfluidsynth minor version integer constant. */
-#define FLUIDSYNTH_VERSION_MICRO 0 /**< libfluidsynth micro version integer constant. */
-
-    FLUIDSYNTH_API void fluid_version(int *major, int *minor, int *micro);
-    FLUIDSYNTH_API char *fluid_version_str(void);
+FLUIDSYNTH_API void fluid_version(int *major, int *minor, int *micro);
+FLUIDSYNTH_API char* fluid_version_str(void);
+/** @} */
 
 #ifdef __cplusplus
 }
