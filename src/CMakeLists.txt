@@ -127,6 +127,10 @@ SET (SRC_FETZER_LIB
     conductor/selectors/Octave.cpp
     conductor/selectors/Template.cpp
     conductor/selectors/Voice.cpp
+    conductor/selectors/DurationSelector.cpp
+    conductor/selectors/LongerThan.cpp
+    conductor/selectors/ShorterThan.cpp
+
     conductor/declarations/ADeclaration.cpp
     conductor/declarations/Velocity.cpp
     conductor/declarations/Pitch.cpp

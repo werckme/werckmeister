@@ -113,19 +113,21 @@ namespace conductor
 				eventWithMetaInfo.midiEvent = &event;
 				eventWithMetaInfo.unmodifiedOriginalMidiEvent = event;
 				eventWithMetaInfo.barNumber = calculateBarNumber(quarters, timeSignature) + signatureChangeBarOffset;
+
+				auto noteOff = findCorrespondingNoteOffEvent(it, end);
+				if (it != begin)
+				{
+					auto predecessor = findPredecessorOfSamePitch(it - 1, begin);
+					eventWithMetaInfo.noteOff = noteOff;
+					if (noteOff != nullptr) {
+						eventWithMetaInfo.unmodifiedOriginalNoteOff = *noteOff;
+					}
+					eventWithMetaInfo.predecessorNoteOn = predecessor.first;
+					eventWithMetaInfo.predecessorNoteOff = predecessor.second;
+				}
+
 				if (selectorImpl->isMatch(selector.arguments, eventWithMetaInfo))
 				{
-					auto noteOff = findCorrespondingNoteOffEvent(it, end);
-					if (it != begin)
-					{
-						auto predecessor = findPredecessorOfSamePitch(it - 1, begin);
-						eventWithMetaInfo.noteOff = noteOff;
-						if (noteOff != nullptr) {
-							eventWithMetaInfo.unmodifiedOriginalNoteOff = *noteOff;
-						}
-						eventWithMetaInfo.predecessorNoteOn = predecessor.first;
-						eventWithMetaInfo.predecessorNoteOff = predecessor.second;
-					}
 					result.emplace_back(eventWithMetaInfo);
 				}
 			}
