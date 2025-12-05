@@ -1,0 +1,9 @@
+duration(0.5)
+{
+   pitch -= 12;
+}
+
+longerThan(1) shorterThan(2)
+{
+    pitch += 12;
+}
