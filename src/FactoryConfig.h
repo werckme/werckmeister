@@ -184,6 +184,10 @@ void FactoryConfig<TInjector>::initCommands()
 #include <conductor/selectors/Phrase.h>
 #include <conductor/selectors/Template.h>
 #include <conductor/selectors/Voice.h>
+#include <conductor/selectors/DurationSelector.h>
+#include <conductor/selectors/LongerThan.h>
+#include <conductor/selectors/ShorterThan.h>
+
 #include <conductor/declarations/Velocity.h>
 #include <conductor/declarations/TimeOffset.h>
 #include <conductor/declarations/Duration.h>
@@ -223,6 +227,9 @@ void FactoryConfig<TInjector>::initConductor()
     register_<Phrase>(selNamespace_ + SHEET_CONDUCTOR_SEL__PHRASE);
     register_<Template>(selNamespace_ + SHEET_CONDUCTOR_SEL__TEMPLATE);
     register_<Voice>(selNamespace_ + SHEET_CONDUCTOR_SEL__VOICE);
+    register_<DurationSelector>(selNamespace_ + SHEET_CONDUCTOR_SEL__DURATION);
+    register_<ShorterThan>(selNamespace_ + SHEET_CONDUCTOR_SEL__SHORTERTHAN);
+    register_<LongerThan>(selNamespace_ + SHEET_CONDUCTOR_SEL__LONGERTHAN);
 
     register_<Velocity>(declNamespace_ + SHEET_CONDUCTOR_DEC__VELOCITY);
     register_<TimeOffset>(declNamespace_ + SHEET_CONDUCTOR_DEC__TIME_OFFSET);

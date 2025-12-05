@@ -163,6 +163,9 @@ namespace parser
 				  | (current_pos_.current_pos >> attr(sourceId_) >> SHEET_CONDUCTOR_SEL__PHRASE >> attr(SHEET_CONDUCTOR_SEL__PHRASE) >> "(" >> +stringArgument_ >> ")")
 				  | (current_pos_.current_pos >> attr(sourceId_) >> SHEET_CONDUCTOR_SEL__TEMPLATE >> attr(SHEET_CONDUCTOR_SEL__TEMPLATE) >> "(" >> +stringArgument_ >> ")")
 				  | (current_pos_.current_pos >> attr(sourceId_) >> SHEET_CONDUCTOR_SEL__VOICE >> attr(SHEET_CONDUCTOR_SEL__VOICE) >> "(" >> +numberArgument_ >> ")")
+				  | (current_pos_.current_pos >> attr(sourceId_) >> SHEET_CONDUCTOR_SEL__DURATION >> attr(SHEET_CONDUCTOR_SEL__DURATION) >> "(" >> +numberArgument_ >> ")")
+				  | (current_pos_.current_pos >> attr(sourceId_) >> SHEET_CONDUCTOR_SEL__SHORTERTHAN >> attr(SHEET_CONDUCTOR_SEL__SHORTERTHAN) >> "(" >> +numberArgument_ >> ")")
+				  | (current_pos_.current_pos >> attr(sourceId_) >> SHEET_CONDUCTOR_SEL__LONGERTHAN >> attr(SHEET_CONDUCTOR_SEL__LONGERTHAN) >> "(" >> +numberArgument_ >> ")")
 				;
 				
 				selectors_ = +selector_;
