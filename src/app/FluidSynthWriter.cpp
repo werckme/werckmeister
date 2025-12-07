@@ -32,6 +32,7 @@ namespace app
         _fluid_settings_setstr(settings, "audio.driver", "file");
         _fluid_settings_setnum(settings, "synth.gain", FLUID_SYNTH_DEFAULT_GAIN);
         _fluid_settings_setnum(settings, "synth.sample-rate", sampleRate());
+        _fluid_settings_setstr(settings, "synth.midi-bank-select", "mma");
         synth = _new_fluid_synth(settings);
         seq = _new_fluid_sequencer2(0);
         _fluid_sequencer_set_time_scale(seq, FLUID_SYNTH_SEQUENCER_TIMESCALE);

@@ -23,7 +23,7 @@ namespace conductor
 		for (const auto &argument : arguments)
         {
             auto valueToMatch = argument.numberValue;
-			auto diff = abs(valueToMatch - duration);
+			auto diff = std::abs(valueToMatch - duration);
 			if (diff <= eps)
 			{
 				return true;

@@ -194,7 +194,15 @@ namespace app
     {
         settings = _new_fluid_settings();
 
-        _fluid_settings_setnum(settings, "synth.gain", FLUID_SYNTH_DEFAULT_GAIN);
+        auto ok =_fluid_settings_setnum(settings, "synth.gain", FLUID_SYNTH_DEFAULT_GAIN);
+        if (ok != FLUID_OK) {
+            throw std::runtime_error("Setting synth.gain failed");
+        }
+        ok = _fluid_settings_setstr(settings, "synth.midi-bank-select", "mma");
+        if (ok != FLUID_OK) {
+            throw std::runtime_error("Setting synth.midi-bank-select failed");
+        }
+
         synth = _new_fluid_synth(settings);
         adriver = _new_fluid_audio_driver(settings, synth);
         seq = _new_fluid_sequencer2(0);

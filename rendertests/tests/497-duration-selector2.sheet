@@ -1,0 +1,14 @@
+using "./chords/default.chords";
+using "./497-duration-selector2.conductions";
+
+--device: SC1 _isType="fluidSynth" _useFont="Live HQ Natural SoundFont GM.sf2";
+device: SC1 _isType="midi" _useDevice="FLUID";
+instrumentDef: piano      SC1 2 _pc=0;
+
+
+[
+instrument: piano;
+{
+   c8 &  & &  c4  & |
+}
+]

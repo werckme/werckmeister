@@ -1,0 +1,11 @@
+instrument(piano) duration(0.5)
+{
+   pitch+=12;
+}
+
+
+instrument(piano) duration(1)
+{
+    velocity = 40;
+}
+
