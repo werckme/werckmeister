@@ -7,7 +7,7 @@
 
 namespace com
 {
-    class FileLogger : public virtual ILogger
+    class FileLogger : public ILogger
     {
     public:
         FileLogger(std::string logFilePath) : _logFilePath(logFilePath) {}

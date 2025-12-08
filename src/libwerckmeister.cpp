@@ -57,6 +57,7 @@ namespace
 	typedef SheetLibProgram CompilerProgram;
 	struct CueDate
 	{
+		int channel = -1;
 		com::String cueText;
 		unsigned int timePointMillis = 0;
 	};
@@ -349,6 +350,26 @@ extern "C"
 		}
 	}
 
+	WERCKM_EXPORT unsigned int wm_getMidiCueChannel(WmSession sessionPtr, int index)
+	{
+		if (sessionPtr == nullptr)
+		{
+			return 0;
+		}
+		Session* session = reinterpret_cast<Session*>(sessionPtr);
+		auto _logger = session->logger;
+		try 
+		{
+			const auto& cueDate = session->cueDates.at(index);
+			return cueDate.channel;
+		}
+		catch(...)
+		{
+			ERR("failed to get cue position");
+			return 0;
+		}
+	}
+
 	WERCKM_EXPORT int wm_writeToFile(WmSession sessionPtr, const char* outputPath)
 	{
 		if (sessionPtr == nullptr)
@@ -361,6 +382,9 @@ extern "C"
 			return 0;
 		}
 		auto _logger = session->logger;
+		ERR("not implemented");
+		return 0;
+		#if 0
 		try 
 		{
 			auto bpm = session->fluidSynth->tempo();
@@ -373,6 +397,7 @@ extern "C"
 			ERR("failed to get cue position");
 			return 0;
 		}
+		#endif
 	}
 
 	WERCKM_EXPORT int wm_addMidiEvent(WmSession sessionPtr, double tickPos, const unsigned char* data, unsigned int length)
@@ -392,7 +417,7 @@ extern "C"
 			session->tmpMidiEventBff.clear();
 			session->tmpMidiEventBff.push_back(0);
 
-			for(int i = 0; i<length; ++i)
+			for(unsigned int i = 0; i<length; ++i)
 			{
 				session->tmpMidiEventBff.push_back(data[i]);
 			}
@@ -689,6 +714,7 @@ static void handleIfMetaEvent(Session* session, const com::midi::Event& event)
 		CueDate cue;
 		cue.cueText = com::midi::Event::MetaGetStringValue(event.metaData(), event.metaDataSize());
 		cue.timePointMillis = 60.0 * 1000.0 * event.absPosition() / (bpm * com::PPQ);
+		cue.channel = event.channel();
 		cueDates.push_back(cue);
 	}
 }
