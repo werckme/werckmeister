@@ -141,11 +141,11 @@ namespace app
 
     void FluidSynthWriter::onTickEventCallback(int tick)
     {
-        if (_activeJumpPoint <= UndefinedJumpPointIndex)
+        if (_activeJumpPoint == nullptr)
         {
             return;
         }
-        const auto &jumpPoint = _jumpPoints[_activeJumpPoint];
+        const auto &jumpPoint = *_activeJumpPoint;
         if (tick >= jumpPoint.toPositionTicks) 
         {
             _fluid_player_seek(player, jumpPoint.fromPositionTicks);
@@ -155,19 +155,40 @@ namespace app
     void FluidSynthWriter::setJumpPoints(const JumpPoints& jumpPoints)
     {
         _jumpPoints = jumpPoints;
-        _activeJumpPoint = UndefinedJumpPointIndex;
+        _activeJumpPoint = nullptr;
+        updateJumpPointIndex();
     }
 
     void FluidSynthWriter::setJumpPoints(JumpPoints&& jumpPoints)
     {
         _jumpPoints = std::move(jumpPoints);
-        _activeJumpPoint = UndefinedJumpPointIndex;
+        _activeJumpPoint = nullptr;
+        updateJumpPointIndex();
+    }
+
+    void FluidSynthWriter::updateJumpPointIndex()
+    {
+        _jumpPointsIndex = JumpPointsIndex(_jumpPoints.size(), nullptr);
+        for(const auto& cit : _jumpPoints)
+        {
+            auto index = cit.second.index;
+            if (index < 0)
+            {
+                throw std::runtime_error("invalid jumpPointIndex: " + std::to_string(index));
+            }
+            _jumpPointsIndex[index] = &cit.second;
+        }
     }
 
     void FluidSynthWriter::setActiveJumpPoint(int jumpPointIndex)
     {
         _logger->babble(WMLogLambda(log << "setActiveJumpPoint: " << "jumpPointIndex"));
-        if (jumpPointIndex < (int)UndefinedJumpPointIndex || jumpPointIndex >= (int)_jumpPoints.size())
+        if (jumpPointIndex == UndefinedJumpPointIndex)
+        {
+            _activeJumpPoint = nullptr;
+            return;
+        }
+        if (jumpPointIndex < 0 || jumpPointIndex >= (int)_jumpPoints.size())
         {
             throw std::invalid_argument("invalid jump point: " 
                 + std::to_string(jumpPointIndex)
@@ -175,7 +196,7 @@ namespace app
                 + std::to_string(_jumpPoints.size())
             );
         }
-        _activeJumpPoint = jumpPointIndex;
+        _activeJumpPoint = this->_jumpPointsIndex[jumpPointIndex];
     }
 
     bool FluidSynthWriter::addEvent(const com::midi::Event& event)

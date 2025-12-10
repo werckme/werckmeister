@@ -392,7 +392,7 @@ extern "C"
 			session->tmpMidiEventBff.clear();
 			session->tmpMidiEventBff.push_back(0);
 
-			for(int i = 0; i<length; ++i)
+			for(unsigned int i = 0; i<length; ++i)
 			{
 				session->tmpMidiEventBff.push_back(data[i]);
 			}
@@ -499,9 +499,10 @@ extern "C"
 			for(int i=0; i<length; ++i)
 			{
 				app::FluidSynthWriter::JumpPoint jmp;
+				jmp.index = i;
 				jmp.fromPositionTicks = jumpPoints[i].fromPositionSeconds * session->fluidSynth->tempo() / 60.0 * com::PPQ;
 				jmp.toPositionTicks = jumpPoints[i].toPositionSeconds * session->fluidSynth->tempo() / 60.0 * com::PPQ;
-				jmps.push_back(jmp);
+				jmps.insert({jmp.fromPositionTicks, jmp});
 			}
 			session->fluidSynth->setJumpPoints(jmps);
 			return WERCKM_ERR;

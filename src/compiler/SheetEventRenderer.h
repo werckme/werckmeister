@@ -36,8 +36,8 @@ namespace compiler
     private:
         typedef std::set<com::String> PhraseNames;
         IContextPtr ctx_;
-        com::ILoggerPtr logger_;
         ICompilerVisitorPtr compilerVisitor_;
+        com::ILoggerPtr logger_;
         IDefinitionsServerPtr definitionServer_;
         void renderPhraseImpl(const documentModel::Event &phraseEvent, PhraseNames &phraseNamesCallStack);
     };

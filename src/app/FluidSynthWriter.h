@@ -4,7 +4,9 @@
 #include "FluidSynthWrapper.h"
 #include <unordered_map>
 #include <com/ILogger.h>
+#include <map>
 #include <vector>
+
 
 namespace app
 {
@@ -13,12 +15,15 @@ namespace app
     public:
         struct JumpPoint
         {
+            int index = -1;
             int fromPositionTicks = 0;
             int toPositionTicks = 0;
         };
         typedef int SoundFontId;
         typedef FluidSynth Base;
-        typedef std::vector<JumpPoint> JumpPoints;
+        typedef int TickPosition;
+        typedef std::map<TickPosition, JumpPoint> JumpPoints;
+        typedef std::vector<const JumpPoint*> JumpPointsIndex;
         enum { UndefinedJumpPointIndex = -1 };
         FluidSynthWriter(com::ILoggerPtr logger) : _logger(logger) {}
         virtual ~FluidSynthWriter() = default;
@@ -42,6 +47,7 @@ namespace app
         void stop();
         void play();
     protected:
+        void updateJumpPointIndex();
         com::ILoggerPtr _logger;
         com::String _libPath;
         double _sampleRate = 44100.0f;
@@ -49,10 +55,11 @@ namespace app
         void handleMetaEvent(const com::midi::Event& event);
         double _tempo = 120.0;
         typedef std::unordered_map<com::String, SoundFontId> SoundFontIdMap;
+        const JumpPoint* _activeJumpPoint = nullptr;
         SoundFontIdMap soundFontIds;
         fluid_player_t*  player = nullptr;
         JumpPoints _jumpPoints;
-        int _activeJumpPoint = UndefinedJumpPointIndex;
+        JumpPointsIndex _jumpPointsIndex;
     };
     typedef std::shared_ptr<FluidSynthWriter> FluidSynthWriterPtr;
 }
