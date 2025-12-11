@@ -38,6 +38,7 @@ namespace compiler
         int signatureNumerator = 4;
         int signatureDenominator = 4;
         com::Ticks barPosition = 0;
+        com::Ticks absoluteBarPosition = 0;
         double tempoFactor = 1;
         int barCount = 0;
         long long eventCount = 0;
