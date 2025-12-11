@@ -239,7 +239,9 @@ namespace compiler
 			std::string toLong = errorInQuaters > 0 ? "too long" : "too short";
 			ss << "bar is " << std::abs(errorInQuaters) << " quarter(s) " << toLong;
 			warn(ss.str());
+		
 		}
+		meta->absoluteBarPosition += meta->barPosition;
 		meta->barPosition = 0;
 		++(meta->barCount);
 	}
@@ -319,6 +321,7 @@ namespace compiler
 		result.sinatureDenominator = meta->signatureDenominator;
 		result.bpm = getCurrentBpm();
 		result.seconds = meta->seconds;
+		result.barPosition = meta->absoluteBarPosition / (double)com::PPQ;
 		return result;
 	}
 
