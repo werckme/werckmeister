@@ -1100,6 +1100,10 @@ Contains the params if any. See [Define Mod Parameters](#define-mod-parameters)
 Contains a table with informations about the current musical time.
 ```lua
 {
+
+    -- the absolute position of the current bar in quarters
+    barPosition = number
+
     -- the position of the current event in quarters
     quarterPostion = number,
 
