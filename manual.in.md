@@ -1107,7 +1107,10 @@ Contains a table with informations about the current musical time.
     signatureNumerator = number,
 
     -- the denominator of the current time signature
-    sinatureDenominator = number
+    sinatureDenominator = number,
+
+    -- the current tempo
+    tempo = number
 }
 ```
 
