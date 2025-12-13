@@ -22,5 +22,8 @@ namespace lua
         lua_pushstring(L, "seconds");
         lua_pushnumber(L, timeInfo_.seconds);
         lua_settable(L, top);
+        lua_pushstring(L, "barPosition");
+        lua_pushnumber(L, timeInfo_.barPosition);
+        lua_settable(L, top);
     }
 }

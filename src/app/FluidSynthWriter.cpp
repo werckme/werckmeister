@@ -135,8 +135,6 @@ namespace app
                 soundFontIds.insert(std::make_pair(deviceConfig.name, sfId));
             }
         }
-        bool eventIsMsb = event.eventType() == com::midi::Controller && event.parameter1() == 0;
-        bool eventIsProgramChange = event.eventType() == com::midi::ProgramChange || eventIsMsb;
     }
 
     void FluidSynthWriter::onTickEventCallback(int tick)
@@ -150,6 +148,16 @@ namespace app
         {
             _fluid_player_seek(player, jumpPoint.fromPositionTicks);
         }
+        if (_activeJumpPoint == &_tmpJumpoint)
+        {
+            _activeJumpPoint = nullptr;
+        }
+    }
+
+    void FluidSynthWriter::jump(const JumpPoint &jumpPoint)
+    {
+        _tmpJumpoint = jumpPoint;
+        _activeJumpPoint = &_tmpJumpoint;
     }
 
     void FluidSynthWriter::setJumpPoints(const JumpPoints& jumpPoints)

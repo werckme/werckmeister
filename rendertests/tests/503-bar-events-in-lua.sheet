@@ -1,0 +1,24 @@
+using "./chords/default.chords";
+using "./503bareventsinlua.lua";
+
+--device: SC1 _isType="fluidSynth" _useFont="Live HQ Natural SoundFont GM.sf2";
+device: SC1 _isType="midi" _useDevice="FLUID";
+instrumentDef: piano      SC1 2 _pc=0;
+instrumentDef: piano2      SC1 2 _pc=0;
+instrumentConf: piano mod 503bareventsinlua;
+
+
+[
+instrument: piano;
+{
+    c8 d  e f  g a b4 | c'2 d' | e'1
+}
+]
+
+
+[
+instrument: piano2;
+{
+    /call: 503bareventsinlua/ r2 /call: 503bareventsinlua/ r2 :(x3)|
+}
+]
