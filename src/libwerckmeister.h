@@ -38,6 +38,7 @@ extern "C"
   WERCKM_EXPORT int wm_setCC(WmSession, int ch, int cc, int value);
   WERCKM_EXPORT int wm_setJumpPoints(WmSession, WmJumpPoint* jumpPoints, int length);
   WERCKM_EXPORT int wm_setActiveJumpPoint(WmSession, int jumpPointIndex);
+  WERCKM_EXPORT int wm_jump(WmSession, const WmJumpPoint* jumpPoint);
   WERCKM_EXPORT int wm_play(WmSession);
   WERCKM_EXPORT int wm_stop(WmSession);
 }

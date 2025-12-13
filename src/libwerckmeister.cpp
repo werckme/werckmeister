@@ -548,6 +548,42 @@ extern "C"
 		}
 	}
 
+	WERCKM_EXPORT int wm_jump(WmSession sessionPtr, const WmJumpPoint* jumpPoint)
+	{
+		if (sessionPtr == nullptr || jumpPoint == nullptr)
+		{
+			return WERCKM_ERR;
+		}
+		Session* session = reinterpret_cast<Session*>(sessionPtr);
+		if (session->fluidSynth.get() == nullptr)
+		{
+			return WERCKM_OK;
+		}
+		auto _logger = session->logger;
+		try 
+		{
+			app::FluidSynthWriter::JumpPoint jmp;
+			jmp.index = app::FluidSynthWriter::UndefinedJumpPointIndex;
+			jmp.fromPositionTicks = jumpPoint->fromPositionSeconds * session->fluidSynth->tempo() / 60.0 * com::PPQ;
+			jmp.toPositionTicks = jumpPoint->toPositionSeconds * session->fluidSynth->tempo() / 60.0 * com::PPQ;
+			session->fluidSynth->jump(jmp);
+			return WERCKM_ERR;
+		}
+		catch (const std::exception &ex) 
+		{
+			ERR("failed to jump: " << jumpPoint->fromPositionSeconds 
+				<< ", " 
+				<< jumpPoint->toPositionSeconds 
+				<< ex.what());
+			return WERCKM_ERR;
+		}
+		catch(...)
+		{
+			ERR("failed to setActiveJumpPoint");
+			return WERCKM_ERR;
+		}
+	}
+
 	WERCKM_EXPORT int wm_play(WmSession sessionPtr)
 	{
 		if (sessionPtr == nullptr)
