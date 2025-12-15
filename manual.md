@@ -3347,8 +3347,8 @@ The VST Plugin allows you to use Werckmeister within your favourite DAW. Just lo
 [Download Here](https://werckme.github.io/vst#download)
 
 ### Load a sheet file
-<img src="https://raw.githubusercontent.com/werckme/werckmeister/manual-update/assets/vst-loading-sheet.gif">
+<img src="https://raw.githubusercontent.com/werckme/werckmeister/master/assets/vst-loading-sheet.gif">
 
 
 ### Connect VSCode with the plugin
-<img src="https://raw.githubusercontent.com/werckme/werckmeister/manual-update/assets/vst2vscode.gif">
+<img src="https://raw.githubusercontent.com/werckme/werckmeister/master/assets/vst2vscode.gif">
