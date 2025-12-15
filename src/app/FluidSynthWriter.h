@@ -44,6 +44,7 @@ namespace app
         void setJumpPoints(const JumpPoints& jumpPoints);
         void setJumpPoints(JumpPoints&& jumpPoints);
         void setActiveJumpPoint(int jumpPointIndex);
+        void jump(const JumpPoint &jumpPoint);
         void stop();
         void play();
     protected:
@@ -56,6 +57,7 @@ namespace app
         double _tempo = 120.0;
         typedef std::unordered_map<com::String, SoundFontId> SoundFontIdMap;
         const JumpPoint* _activeJumpPoint = nullptr;
+        JumpPoint _tmpJumpoint;
         SoundFontIdMap soundFontIds;
         fluid_player_t*  player = nullptr;
         JumpPoints _jumpPoints;

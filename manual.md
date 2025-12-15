@@ -1100,6 +1100,10 @@ Contains the params if any. See [Define Mod Parameters](#define-mod-parameters)
 Contains a table with informations about the current musical time.
 ```lua
 {
+
+    -- the absolute position of the current bar in quarters
+    barPosition = number
+
     -- the position of the current event in quarters
     quarterPostion = number,
 
@@ -1107,7 +1111,10 @@ Contains a table with informations about the current musical time.
     signatureNumerator = number,
 
     -- the denominator of the current time signature
-    sinatureDenominator = number
+    sinatureDenominator = number,
+
+    -- the current tempo
+    tempo = number
 }
 ```
 
@@ -2646,6 +2653,24 @@ Selects a MIDI event which was created during rendering a template and its degre
  ```
 <br><br><br>
 
+### `durationSelector`
+
+#### parameters
+| name | position | description | type |
+|:--- |:--- |:--- |:--- |
+| duration | - |  | quarters |
+
+Selects any event whitch duration matches to the given duration
+
+ see also: [longerThan](#longerThan), [shorterThan](#shorterThan).
+
+ ```
+
+ duration(1) {...}
+
+ ```
+<br><br><br>
+
 ### `expression`
 
 #### parameters
@@ -2762,6 +2787,24 @@ Selects any event which belongs to one of the given instruments.
 
  instrument(bass) {...}
  instrument(bass drums) {...}
+ ```
+<br><br><br>
+
+### `longerThan`
+
+#### parameters
+| name | position | description | type |
+|:--- |:--- |:--- |:--- |
+| duration | - |  | quarters |
+
+Selects any event whitch duration is longer or equal than the given duration
+
+ see also: [duration](#durationSelector), [shorterThan](#shorterThan).
+
+ ```
+
+ longerThan(1) {...}
+
  ```
 <br><br><br>
 
@@ -2886,6 +2929,24 @@ Selects any event where its pitch is equal to one of the given pitches.
  pitch(c) {...}
 
  pitch(c, c c') {...}
+
+ ```
+<br><br><br>
+
+### `shorterThan`
+
+#### parameters
+| name | position | description | type |
+|:--- |:--- |:--- |:--- |
+| duration | - |  | quarters |
+
+Selects any event whitch duration is shorter or equal than the given duration
+
+ see also: [duration](#durationSelector), [longerThan](#longerThan).
+
+ ```
+
+ shorterThan(1) {...}
 
  ```
 <br><br><br>
