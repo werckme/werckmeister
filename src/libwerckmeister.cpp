@@ -279,14 +279,29 @@ extern "C"
 	{
 		if (sessionPtr == nullptr)
 		{
-			return 0;
+			return WERCKM_OK;
 		}
 		Session* session = reinterpret_cast<Session*>(sessionPtr);
 		if (!session->fluidSynth)
 		{
-			return 0;
+			return WERCKM_OK;
 		}
 		return session->fluidSynth->getSongPositionSeconds();
+	}
+
+	WERCKM_EXPORT double wm_setSongPositionSeconds(WmSession sessionPtr, double songPosSeconds)
+	{
+		if (sessionPtr == nullptr)
+		{
+			return WERCKM_OK;
+		}
+		Session* session = reinterpret_cast<Session*>(sessionPtr);
+		if (!session->fluidSynth)
+		{
+			return WERCKM_OK;
+		}
+		session->fluidSynth->setSongPositionSeconds(songPosSeconds);
+		return WERCKM_OK;
 	}
 
 	WERCKM_EXPORT int wm_getNumMidiCuePoints(WmSession sessionPtr)

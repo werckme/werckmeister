@@ -30,6 +30,7 @@ extern "C"
   WERCKM_EXPORT int wm_writeToFile(WmSession, const char* outputPath);
   WERCKM_EXPORT int wm_setSoundFontHome(WmSession, const char *sfHomePath);
   WERCKM_EXPORT double wm_getSongPositionSeconds(WmSession);
+  WERCKM_EXPORT double wm_setSongPositionSeconds(WmSession, double songPosSeconds);
   WERCKM_EXPORT int wm_getNumMidiCuePoints(WmSession);
   WERCKM_EXPORT const char * wm_getMidiCuePointText(WmSession, int index);
   WERCKM_EXPORT unsigned int wm_getMidiCuePositionMillis(WmSession, int index);

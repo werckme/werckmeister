@@ -301,6 +301,19 @@ namespace app
         _delete_fluid_file_renderer(renderer);
     }
 
+    void FluidSynthWriter::setSongPositionSeconds(double songPosSeconds)
+    {
+        if (player == nullptr)
+        {
+            _logger->error(WMLogLambda(log << "seek is not supported when fluid synth midi player is not in use"));
+            return;
+        }
+        int division = _fluid_player_get_division(player);
+        int tempo_us = _fluid_player_get_midi_tempo(player);
+        int ticks = (int)(songPosSeconds * division * 1e6 / tempo_us);
+        _fluid_player_seek(player, ticks);
+    }
+
     double FluidSynthWriter::getSongPositionSeconds() const
     {
         if (synth == nullptr)

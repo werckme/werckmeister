@@ -38,6 +38,7 @@ namespace app
         virtual void tearDownSynth() override;
         double tempo() const { return _tempo; }
         double getSongPositionSeconds() const;
+        void setSongPositionSeconds(double songPosSeconds);
         void renderToFile(const std::string &outputPath, double seconds);
         void setMidiFileData(const unsigned char* data, size_t length);
         void onTickEventCallback(int tick);
