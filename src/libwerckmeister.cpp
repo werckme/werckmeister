@@ -579,7 +579,7 @@ extern "C"
 		}
 		catch(...)
 		{
-			ERR("failed to setActiveJumpPoint");
+			ERR("failed to jump");
 			return WERCKM_ERR;
 		}
 	}

@@ -144,13 +144,13 @@ namespace app
             return;
         }
         const auto &jumpPoint = *_activeJumpPoint;
-        if (tick >= jumpPoint.toPositionTicks) 
+        if (tick >= jumpPoint.fromPositionTicks) 
         {
-            _fluid_player_seek(player, jumpPoint.fromPositionTicks);
-        }
-        if (_activeJumpPoint == &_tmpJumpoint)
-        {
-            _activeJumpPoint = nullptr;
+            _fluid_player_seek(player, jumpPoint.toPositionTicks);
+            if (_activeJumpPoint == &_tmpJumpoint)
+            {
+                _activeJumpPoint = nullptr;
+            }
         }
     }
 
@@ -158,10 +158,12 @@ namespace app
     {
         _tmpJumpoint = jumpPoint;
         _activeJumpPoint = &_tmpJumpoint;
+        _logger->babble(WMLogLambda(log << "jump: " << "f: " << _activeJumpPoint->fromPositionTicks << " t:" << _activeJumpPoint->toPositionTicks));
     }
 
     void FluidSynthWriter::setJumpPoints(const JumpPoints& jumpPoints)
     {
+         _logger->babble(WMLogLambda(log << "setJumpPoints: " << jumpPoints.size()));
         _jumpPoints = jumpPoints;
         _activeJumpPoint = nullptr;
         updateJumpPointIndex();
@@ -169,6 +171,7 @@ namespace app
 
     void FluidSynthWriter::setJumpPoints(JumpPoints&& jumpPoints)
     {
+        _logger->babble(WMLogLambda(log << "setJumpPoints: " << jumpPoints.size()));
         _jumpPoints = std::move(jumpPoints);
         _activeJumpPoint = nullptr;
         updateJumpPointIndex();
@@ -190,7 +193,7 @@ namespace app
 
     void FluidSynthWriter::setActiveJumpPoint(int jumpPointIndex)
     {
-        _logger->babble(WMLogLambda(log << "setActiveJumpPoint: " << "jumpPointIndex"));
+        _logger->babble(WMLogLambda(log << "setActiveJumpPoint: " << jumpPointIndex));
         if (jumpPointIndex == UndefinedJumpPointIndex)
         {
             _activeJumpPoint = nullptr;
@@ -205,6 +208,10 @@ namespace app
             );
         }
         _activeJumpPoint = this->_jumpPointsIndex[jumpPointIndex];
+         _logger->babble(WMLogLambda(log << "setActiveJumpPoint: " 
+            << "f: " << _activeJumpPoint->fromPositionTicks
+            << " t:" << _activeJumpPoint->toPositionTicks
+            << " i:" << _activeJumpPoint->index));
     }
 
     bool FluidSynthWriter::addEvent(const com::midi::Event& event)
