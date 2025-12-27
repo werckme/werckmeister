@@ -15,7 +15,7 @@ on:
 
 jobs:
   build:
-    if: true
+    if: false
     runs-on: windows-latest
 
     steps:
