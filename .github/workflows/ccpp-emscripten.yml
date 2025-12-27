@@ -19,7 +19,6 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
-    environment: npm-publish  # Trusted Publisher Environment
 
     steps:
       # 1️⃣ Checkout Repository
