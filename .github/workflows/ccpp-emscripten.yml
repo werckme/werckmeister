@@ -61,6 +61,11 @@ jobs:
           node-version: 18
           registry-url: https://registry.npmjs.org/
 
+      - name: Force OIDC (remove all npm auth)
+        run: |
+          rm -f ~/.npmrc
+          rm -f .npmrc
+
       - name: Publish
         run: |
           unzip werckmeister-*-Emscripten.zip
