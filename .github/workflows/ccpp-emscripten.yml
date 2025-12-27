@@ -3,76 +3,51 @@ name: Emscripten Build
 on:
   push:
     branches: 
-      - main
-      - feature/*
-      - bugfix/*
-      - develop
+        - main
+        - feature/*
+        - bugfix/* 
+        - develop
   pull_request:
     branches: [ develop ]
   schedule:
     - cron: '0 0 17 * *'
 
-permissions:
-  id-token: write       # wichtig für OIDC
-  contents: read
-
 jobs:
   build:
+    if: true
     runs-on: ubuntu-latest
 
     steps:
-      # 1️⃣ Checkout Repository
-      - uses: actions/checkout@v3
-
-      # 2️⃣ Update Submodules
-      - name: Update Submodules
-        run: git submodule update --init --recursive --remote    
-
-      # 3️⃣ Install Emscripten
-      - name: Install Emscripten
-        run: |
-          git clone https://github.com/emscripten-core/emsdk.git
-          cd emsdk
-          ./emsdk install 3.1.23
-          ./emsdk activate 3.1.23
-        working-directory: third_party
-
-      # 4️⃣ Configure Build
-      - name: Configure
-        run: |
-          source ../third_party/emsdk/emsdk_env.sh
-          emcmake cmake -DCMAKE_BUILD_TYPE=Release ..
-        working-directory: build
-        env: 
-          BUILD_NR: ${{ github.run_number }}
-
-      # 5️⃣ Build
-      - name: Build
-        run: cmake --build .
-        working-directory: build  
-
-      # 6️⃣ Pack
-      - name: Pack
-        run: cpack -G ZIP
-        working-directory: build
-
-      # 7️⃣ Upload Artifact
-      - uses: actions/upload-artifact@v4
-        with:
-          name: werckmeister-linux-${{ github.sha }}
-          path: build/werckmeister-*-Emscripten.zip
-
-      # 8️⃣ Setup Node.js for npm publish
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 18
-          registry-url: https://registry.npmjs.org/
-          scope: '@werckmeister'   # wichtig für dein Scoped Package
-
-      # 9️⃣ Publish to npm via Trusted Publisher
-      - name: Publish
-        run: |
+    - uses: actions/checkout@v2
+    - name: update submodules
+      run: git submodule update --init --recursive --remote    
+    - name: install emscripten
+      run: git clone https://github.com/emscripten-core/emsdk.git && cd emsdk && ./emsdk install 3.1.23 && ./emsdk activate 3.1.23
+      working-directory: third_party
+    - name: configure
+      run: source ../third_party/emsdk/emsdk_env.sh && emcmake cmake -DCMAKE_BUILD_TYPE=Release ..
+      working-directory: build
+      env: 
+        BUILD_NR: ${{ github.run_number }}
+    - name: build
+      run: cmake --build .
+      working-directory: build  
+    - name: pack
+      run: cpack -G ZIP
+      working-directory: build
+    - uses: actions/upload-artifact@v4
+      with:
+        name: werckmeister-linux-${{ github.sha }}
+        path: build/werckmeister-*-Emscripten.zip
+    - uses: actions/setup-node@v1
+      with:
+        node-version: 14
+    - name: Publish
+      run: |
           unzip werckmeister-*-Emscripten.zip
           cd werckmeister-*-Emscripten
-          npm publish --access public
-        working-directory: build
+          npm config set //registry.npmjs.org/:_authToken ${NPM_TOKEN}
+          npm publish --ignore-scripts --access=public
+      working-directory: build
+      env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
