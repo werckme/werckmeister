@@ -61,12 +61,16 @@ jobs:
           node-version: 18
           registry-url: https://registry.npmjs.org/
 
-      - name: Force OIDC (remove all npm auth)
+      - name: Force pure OIDC (no npm config at all)
         run: |
           rm -f ~/.npmrc
           rm -f .npmrc
+          export NPM_CONFIG_USERCONFIG=/dev/null
+          npm config list
 
       - name: Publish
+        env:
+          NPM_CONFIG_USERCONFIG: /dev/null
         run: |
           unzip werckmeister-*-Emscripten.zip
           cd werckmeister-*-Emscripten
