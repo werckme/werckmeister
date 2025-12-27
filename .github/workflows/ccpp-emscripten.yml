@@ -13,20 +13,24 @@ on:
     - cron: '0 0 17 * *'
 
 permissions:
-  id-token: write
+  id-token: write       # wichtig für OIDC
   contents: read
+
 jobs:
   build:
     runs-on: ubuntu-latest
-    environment: npm-publish
+    environment: npm-publish  # Trusted Publisher Environment
 
     steps:
+      # 1️⃣ Checkout Repository
       - uses: actions/checkout@v3
 
-      - name: update submodules
+      # 2️⃣ Update Submodules
+      - name: Update Submodules
         run: git submodule update --init --recursive --remote    
 
-      - name: install emscripten
+      # 3️⃣ Install Emscripten
+      - name: Install Emscripten
         run: |
           git clone https://github.com/emscripten-core/emsdk.git
           cd emsdk
@@ -34,7 +38,8 @@ jobs:
           ./emsdk activate 3.1.23
         working-directory: third_party
 
-      - name: configure
+      # 4️⃣ Configure Build
+      - name: Configure
         run: |
           source ../third_party/emsdk/emsdk_env.sh
           emcmake cmake -DCMAKE_BUILD_TYPE=Release ..
@@ -42,36 +47,33 @@ jobs:
         env: 
           BUILD_NR: ${{ github.run_number }}
 
-      - name: build
+      # 5️⃣ Build
+      - name: Build
         run: cmake --build .
         working-directory: build  
 
-      - name: pack
+      # 6️⃣ Pack
+      - name: Pack
         run: cpack -G ZIP
         working-directory: build
 
+      # 7️⃣ Upload Artifact
       - uses: actions/upload-artifact@v4
         with:
           name: werckmeister-linux-${{ github.sha }}
           path: build/werckmeister-*-Emscripten.zip
 
+      # 8️⃣ Setup Node.js for npm publish
       - uses: actions/setup-node@v4
         with:
           node-version: 18
           registry-url: https://registry.npmjs.org/
+          scope: '@werckmeister'   # wichtig für dein Scoped Package
 
-      - name: Force pure OIDC (no npm config at all)
-        run: |
-          rm -f ~/.npmrc
-          rm -f .npmrc
-          export NPM_CONFIG_USERCONFIG=/dev/null
-          npm config list
-
+      # 9️⃣ Publish to npm via Trusted Publisher
       - name: Publish
-        env:
-          NPM_CONFIG_USERCONFIG: /dev/null
         run: |
           unzip werckmeister-*-Emscripten.zip
           cd werckmeister-*-Emscripten
-          npm publish --ignore-scripts --access=public
+          npm publish --access public
         working-directory: build
