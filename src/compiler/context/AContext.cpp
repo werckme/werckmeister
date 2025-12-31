@@ -251,6 +251,28 @@ namespace compiler
 		auto meta = voiceMetaData();
 		seek(duration);
 	}
+
+	void AContext::multiMeasureRest(int numberOfMeasures)
+	{
+		if (numberOfMeasures <= 0)
+		{
+			FM_THROW(Exception, "invalid number for a multi measure rest:  " + std::to_string(numberOfMeasures));
+		}
+		auto meta = voiceMetaData();
+		if (!meta)
+		{
+			FM_THROW(Exception, "meta data = null");
+		}
+		com::Ticks num = meta->signatureNumerator;
+		com::Ticks den = meta->signatureDenominator;
+		com::Ticks quartersPerBar = num * (4.0 / den) * com::PPQ;
+		while(--numberOfMeasures >= 1)
+		{
+			seek(quartersPerBar);
+			newBar();
+		}
+		seek(quartersPerBar); // a bar will be followed
+	}
 	void AContext::setVolume(double volume, com::Ticks relativePosition)
 	{
 		auto meta = voiceMetaData();

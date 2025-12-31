@@ -132,6 +132,7 @@ namespace compiler
 		virtual void seek(com::Ticks duration);
 		virtual void newBar();
 		virtual void rest(com::Ticks duration);
+		virtual void multiMeasureRest(int numberOfMeasures) override;
 		virtual com::Ticks barPos() const;
 		/**
 		 * the documents master tempo

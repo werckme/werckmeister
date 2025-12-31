@@ -90,6 +90,9 @@ namespace documentModel
 		case Rest:
 			ss << "Rest";
 			break;
+		case MultimeasureRest:
+			ss << "MultimeasureRest";
+			break;			
 		case Degree:
 			ss << "Degree";
 			break;
@@ -141,7 +144,8 @@ namespace documentModel
 
 	bool Event::isTimeConsuming() const
 	{
-		return type == Rest 
+		return type == Rest
+			|| type == MultimeasureRest 
 			|| type == Note 
 			|| type == Degree 
 			|| type == TiedNote 

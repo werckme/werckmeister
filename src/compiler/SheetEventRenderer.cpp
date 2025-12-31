@@ -37,7 +37,7 @@ namespace compiler
 		template <>
 		bool renderEvent<Event::Note>(SheetEventRenderer *renderer, const Event *ev)
 		{
-			renderer->renderEvent(*ev);
+			renderer->_renderEvent(*ev);
 			return true;
 		}
 
@@ -58,14 +58,14 @@ namespace compiler
 		template <>
 		bool renderEvent<Event::TiedNote>(SheetEventRenderer *renderer, const Event *ev)
 		{
-			renderer->renderEvent(*ev);
+			renderer->_renderEvent(*ev);
 			return true;
 		}
 
 		template <>
 		bool renderEvent<Event::PitchBend>(SheetEventRenderer *renderer, const Event *ev)
 		{
-			renderer->renderPitchBendEvent(*ev);
+			renderer->_renderPitchBendEvent(*ev);
 			return true;
 		}
 
@@ -82,6 +82,14 @@ namespace compiler
 		{
 			auto ctx = renderer->context();
 			ctx->rest(ev->duration);
+			return true;
+		}
+
+		template <>
+		bool renderEvent<Event::MultimeasureRest>(SheetEventRenderer *renderer, const Event *ev)
+		{
+			auto ctx = renderer->context();
+			ctx->multiMeasureRest(ev->numberOfRepeats);
 			return true;
 		}
 
@@ -114,7 +122,7 @@ namespace compiler
 		template <>
 		bool renderEvent<Event::Controller>(SheetEventRenderer *renderer, const Event *ev)
 		{
-			renderer->renderControllerEvent(*ev);
+			renderer->_renderControllerEvent(*ev);
 			return true;
 		}		
 		//////////////////////////////////////////////////
@@ -202,7 +210,7 @@ namespace compiler
 		eventLogger->warn(WMLogLambda(log << message), event);
 	}
 
-	void SheetEventRenderer::renderEvent(const Event &_ev)
+	void SheetEventRenderer::_renderEvent(const Event &_ev)
 	{
 		Event ev = _ev;
 		auto meta = ctx_->voiceMetaData();
@@ -239,15 +247,15 @@ namespace compiler
 			{
 				if (event.isPitchBend())
 				{
-					renderPitchBendEvent(event);
+					_renderPitchBendEvent(event);
 				}
 				else if(event.isController())
 				{
-					renderControllerEvent(event);
+					_renderControllerEvent(event);
 				}
 				else
 				{
-					renderEventPitches(event);
+					_renderEventPitches(event);
 				}
 			}
 		}
@@ -256,7 +264,7 @@ namespace compiler
 		ctx_->seek(ev.duration);
 	}
 
-	void SheetEventRenderer::renderEventPitches(const Event &ev)
+	void SheetEventRenderer::_renderEventPitches(const Event &ev)
 	{
 		auto ctx = context();
 		ctx->seek(ev.offset);
@@ -271,7 +279,7 @@ namespace compiler
 		ctx->seek(-ev.offset);
 	}
 
-	void SheetEventRenderer::renderPitchBendEvent(const Event &pitchBendEvent)
+	void SheetEventRenderer::_renderPitchBendEvent(const Event &pitchBendEvent)
 	{
 		auto ctx = context();
 		auto meta = ctx->voiceMetaData();
@@ -279,7 +287,7 @@ namespace compiler
 		ctx->renderPitchbend(pitchBendEvent.pitchBendValue, absolutePosition);
 	}
 
-	void SheetEventRenderer::renderControllerEvent(const Event &controllerEvent)
+	void SheetEventRenderer::_renderControllerEvent(const Event &controllerEvent)
 	{
 		auto ctx = context();
 		auto meta = ctx->voiceMetaData();

@@ -30,15 +30,15 @@ namespace compiler
 		{
 			if (event.isPitchBend())
 			{
-				renderer->renderPitchBendEvent(event);
+				renderer->_renderPitchBendEvent(event);
 			}
 			else if(event.isController())
 			{
-				renderer->renderControllerEvent(event);
+				renderer->_renderControllerEvent(event);
 			}
 			else
 			{
-				renderer->renderEventPitches(event);
+				renderer->_renderEventPitches(event);
 			}
 		}
 	}
