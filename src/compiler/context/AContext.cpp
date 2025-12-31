@@ -256,7 +256,7 @@ namespace compiler
 	{
 		if (numberOfMeasures <= 0)
 		{
-			FM_THROW(Exception, "invalid number for a multi mesure rest:  " + std::to_string(numberOfMeasures));
+			FM_THROW(Exception, "invalid number for a multi measure rest:  " + std::to_string(numberOfMeasures));
 		}
 		auto meta = voiceMetaData();
 		if (!meta)
