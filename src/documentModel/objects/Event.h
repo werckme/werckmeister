@@ -26,6 +26,7 @@ namespace documentModel
 		{
 			Unknown,
 			Rest,
+			MultimeasureRest,
 			Degree,
 			TiedDegree,
 			Note,
@@ -143,7 +144,7 @@ namespace documentModel
 		
 		bool isRest() const
 		{
-			return type == Rest;
+			return type == Rest || type == MultimeasureRest;
 		}
 
 		com::String toString() const;

@@ -25,11 +25,13 @@ namespace compiler
         virtual void handleMetaEvent(const documentModel::Event &_ev) override;
         virtual void renderPhrase(const documentModel::Event &phraseEvent) override;
         virtual void renderDegree(const documentModel::Event &degreeEvent) override;
-        virtual void renderEvent(const documentModel::Event &_ev);
-        virtual void renderEventPitches(const documentModel::Event &noteEvent);
-        virtual void renderPitchBendEvent(const documentModel::Event &pitchBendEvent);
-        virtual void renderControllerEvent(const documentModel::Event &controllerEvent);
         virtual std::shared_ptr<ASheetEventRenderer> createNewSheetEventRenderer(IContextPtr ctx);
+    /* proteced: */
+        virtual void _renderEvent(const documentModel::Event &_ev);
+        virtual void _renderEventPitches(const documentModel::Event &noteEvent);
+        virtual void _renderPitchBendEvent(const documentModel::Event &pitchBendEvent);
+        virtual void _renderControllerEvent(const documentModel::Event &controllerEvent);
+
     protected:
         void onWarning(const com::String &message, const documentModel::Event &event);
 

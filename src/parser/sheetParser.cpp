@@ -396,7 +396,21 @@ namespace parser
 						>> attr("") 
 						>> attr(Event::Args()) 
 						>> current_pos_.current_pos
-					) 
+					)
+					|
+					( // MULTIPLE MEASURE REST
+						current_pos_.current_pos 
+						>> attr(sourceId_)
+						>> attr(Event::MultimeasureRest) 
+						>> attr(Event::Unknown)
+						>> attr(Event::Tags()) 
+						>> attr(PitchDef()) 
+						>> attr(Event::NoDuration)
+						>> "=" >>  int_  >> "="
+						>> attr("") 
+						>> attr(Event::Args()) 
+						>> current_pos_.current_pos
+					) 						
 					|
 					( // END OF BAR
 						current_pos_.current_pos 

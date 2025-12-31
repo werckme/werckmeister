@@ -2251,3 +2251,47 @@ BOOST_AUTO_TEST_CASE(test_use_phrase_normal_mode)
 	BOOST_CHECK_EQUAL(defs.tracks[0].voices[0].events[0].isPhraseStrechedPlayback, false);
 	BOOST_CHECK_EQUAL(defs.tracks[0].voices[0].events[0].duration, 1.0_N8);
 }
+
+BOOST_AUTO_TEST_CASE(test_multimeasure_rest)
+{
+	using namespace com;
+	using documentModel::PitchDef;
+	com::String text = FM_STRING("\
+[\n\
+	{\n\
+	 =4= |\n\
+	}\n\
+]\n\
+");
+	SheetDefParser parser;
+	auto defs = parser.parse(text);
+	BOOST_CHECK(defs.tracks.size() == 1);
+	BOOST_CHECK(defs.tracks[0].voices.size() == 1);
+	BOOST_CHECK(defs.tracks[0].voices[0].events.size() == 2);
+
+	BOOST_CHECK_EQUAL(defs.tracks[0].voices[0].events[0].type, documentModel::Event::MultimeasureRest);
+	BOOST_CHECK_EQUAL(defs.tracks[0].voices[0].events[0].numberOfRepeats, 4);
+	BOOST_CHECK_EQUAL(defs.tracks[0].voices[0].events[0].duration, com::Ticks(0));
+}
+
+BOOST_AUTO_TEST_CASE(test_multimeasure_rest_2)
+{
+	using namespace com;
+	using documentModel::PitchDef;
+	com::String text = FM_STRING("\
+[\n\
+	{\n\
+	 = 3  = |\n\
+	}\n\
+]\n\
+");
+	SheetDefParser parser;
+	auto defs = parser.parse(text);
+	BOOST_CHECK(defs.tracks.size() == 1);
+	BOOST_CHECK(defs.tracks[0].voices.size() == 1);
+	BOOST_CHECK(defs.tracks[0].voices[0].events.size() == 2);
+
+	BOOST_CHECK_EQUAL(defs.tracks[0].voices[0].events[0].type, documentModel::Event::MultimeasureRest);
+	BOOST_CHECK_EQUAL(defs.tracks[0].voices[0].events[0].numberOfRepeats, 3);
+	BOOST_CHECK_EQUAL(defs.tracks[0].voices[0].events[0].duration, com::Ticks(0));
+}

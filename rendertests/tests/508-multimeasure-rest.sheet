@@ -1,0 +1,27 @@
+using "./chords/default.chords";
+
+--device: SC1 _isType="fluidSynth" _useFont="Live HQ Natural SoundFont GM.sf2";
+device: SC1 _isType="midi" _useDevice="FLUID";
+instrumentDef: piano      SC1 2 _pc=0;
+instrumentDef: piano2      SC1 2 _pc=0;
+
+
+[
+instrument: piano;
+{
+   =2=  | c8 d  e f  g a b4 |
+}
+{
+    c8 d  e f  g a b4 | c'2 d' | \p c,,4&&&
+}
+{
+    =3= |
+    /signature: 3 4/
+    c d e | c d e
+}
+{
+    =3= |
+    /signature: 3 4/
+    =2= | g a b | g a b
+}
+]
