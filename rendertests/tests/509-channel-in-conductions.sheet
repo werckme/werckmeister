@@ -1,0 +1,28 @@
+using "./chords/default.chords";
+using "./509-channel-in-conductions.conductions";
+
+device: SC1 _isType="midi" _useDevice="FLUID";
+instrumentDef: piano      SC1 _ch=0 _pc=0;
+instrumentDef: guitar      SC1  _ch=1 _gmInstrument="Acoustic Guitar Nylon";
+instrumentDef: vibraphone      SC1  _ch=2 _gmInstrument="Vibraphone";
+instrumentDef: epiano      SC1  _ch=3 _gmInstrument="Electric Piano 1";
+
+
+[
+{
+    -- make sure that, all instruments sends pc
+    /instrument: piano/
+    /instrument: guitar/
+    /instrument: vibraphone/
+    /instrument: epiano/
+    r1
+}
+]
+
+[
+instrument: piano;
+{
+
+    c8 d  e f  g a b4 | c'2 d' | c,,4&&&
+}
+]
