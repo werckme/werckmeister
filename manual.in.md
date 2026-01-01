@@ -538,6 +538,19 @@ the end of a bar is marked by a pipe: `|`
 c d e f | g a b c'
 ```
 
+### Rests
+
+Just like with notes, you use a `r` to write a rest.
+
+```language=Werckmeister
+ r2 r4 r8 r16 r32 r64 r128
+```
+
+You can also write multimeasure rests.
+
+```language=Werckmeister,type=single
+ c d e f | =2= | g a b 'c
+```
 
 ### Octaves
 
@@ -563,6 +576,7 @@ A numeric value after a note marks its duration.
 ```language=Werckmeister,type=single
 c2 c4 c8 c16 c32 c64 c128 r
 ```
+
 
 ### Intervals and Chords
 
