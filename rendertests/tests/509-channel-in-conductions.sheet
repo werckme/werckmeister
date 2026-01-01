@@ -7,10 +7,11 @@ instrumentDef: guitar      SC1  _ch=1 _gmInstrument="Acoustic Guitar Nylon";
 instrumentDef: vibraphone      SC1  _ch=2 _gmInstrument="Vibraphone";
 instrumentDef: epiano      SC1  _ch=3 _gmInstrument="Electric Piano 1";
 
+tempo: 150;
 
 [
 {
-    -- make sure that, all instruments sends pc
+    -- make sure that, all instruments sends its pc
     /instrument: piano/
     /instrument: guitar/
     /instrument: vibraphone/
@@ -23,6 +24,6 @@ instrumentDef: epiano      SC1  _ch=3 _gmInstrument="Electric Piano 1";
 instrument: piano;
 {
 
-    c8 d  e f  g a b4 | c'2 d' | c,,4&&&
+   c, d, e, f, | a, b, c d :(x3)| "chord"@<c e g>1
 }
 ]
