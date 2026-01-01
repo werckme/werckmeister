@@ -3216,6 +3216,24 @@ adding a fade of an cc, or pitchbend value at the position of the selected event
  ```
 <br><br><br>
 
+### `midiChannel`
+
+#### Value Types
+| name | description | type |
+|:--- |:--- |:--- |
+| midiChannel |  | 0..15 |
+
+changes the channel of the selected event.
+
+ #### example:
+
+ ```
+ onBeat(1) { 
+   midiChannel = 1; 
+ } 
+ ```
+<br><br><br>
+
 ### `pitch`
 
 #### Value Types
