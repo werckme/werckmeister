@@ -1,0 +1,27 @@
+instrument(piano) onBeat(1) {
+    midiChannel = 0;
+}
+
+instrument(piano) onBeat(2) {
+    midiChannel = 1;
+}
+
+instrument(piano) onBeat(3) {
+    midiChannel = 2;
+}
+
+instrument(piano) onBeat(4) {
+    midiChannel = 3;
+}
+
+instrument(piano) withTag(chord) pitch(c) {
+    midiChannel = 0;
+}
+
+instrument(piano) withTag(chord) pitch(e) {
+    midiChannel = 1;
+}
+
+instrument(piano) withTag(chord) pitch(g) {
+    midiChannel = 1;
+}
