@@ -1,7 +1,7 @@
 using "./chords/default.chords";
 using "/pitchmaps/defaultMIDI.pitchmap";
 
-device: Canvas _isType="fluidSynth" _useFont="FluidR3_GM_EX.sf2";
+device: Canvas _isType="fluidSynth" _useFont="FluidR3_GM.sf2";
 -- https://musical-artifacts.com/artifacts/817
 device: Orchestral _isType="fluidSynth" _useFont="HQ Orchestral Soundfont Collection v2.1.2.sf2";
 -- https://musical-artifacts.com/artifacts/1176
