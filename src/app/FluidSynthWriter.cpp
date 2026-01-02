@@ -24,9 +24,8 @@ namespace
 
 namespace app
 {
-    void FluidSynthWriter::initSynth(const std::string &soundFondPath)
+    void FluidSynthWriter::initSynth()
     {
-        _logger->babble(WMLogLambda(log << "FluidSynthWriter:: init fluidsynth: " << soundFondPath));
         initLibraryFunctions();
         settings = _new_fluid_settings();
         _fluid_settings_setstr(settings, "audio.driver", "file");
@@ -56,20 +55,14 @@ namespace app
         Base::tearDownSynth();
     }
 
-    FluidSynthWriter::SoundFontId FluidSynthWriter::addSoundFont(const std::string &soundFondPath)
+    FluidSynthWriter::SoundFontId FluidSynthWriter::addSoundFont(const DeviceId& deviceId, const std::string &soundFondPath)
     {
         if (soundFondPath.empty())
         {
             return FLUID_FAILED;
         }
-        auto absPath = com::getWerckmeister().resolvePath(soundFondPath);
-        _logger->babble(WMLogLambda(log << "FluidSynthWriter:: addSoundFont: " << absPath));
-        auto sfont_id = _fluid_synth_sfload(synth, absPath.c_str(), 1);
-        if (sfont_id == FLUID_FAILED)
-        {
-            throw std::runtime_error("Loading the SoundFont " + absPath + " failed!");
-        }
-        return sfont_id;
+        _logger->babble(WMLogLambda(log << "FluidSynthWriter:: addSoundFont: " << soundFondPath));
+        return Base::addSoundFont(deviceId, soundFondPath);
     }
 
     std::string FluidSynthWriter::findFluidSynthLibraryPath() const
@@ -84,6 +77,7 @@ namespace app
 
     void FluidSynthWriter::handleMetaEvent(const com::midi::Event& event)
     {
+        Base::handleMetaEvent(event);
         if (event.eventType() == com::midi::MetaEvent && event.metaEventType() == com::midi::Tempo)
         {
             auto metaIntValue = com::midi::Event::MetaGetIntValue(event.metaData(), event.metaDataSize());
@@ -92,24 +86,6 @@ namespace app
         if (event.metaEventType() == com::midi::CustomMetaEvent)
         {
             auto customEvent = com::midi::Event::MetaGetCustomData(event.metaData(), event.metaDataSize());
-            if (customEvent.type == com::midi::CustomMetaData::SetDevice)
-            {
-                std::string deviceId(customEvent.data.begin(), customEvent.data.end());
-                auto soundFontIdsIt = soundFontIds.find(deviceId);
-                SoundFontId sfId = FLUID_FAILED;
-                if (soundFontIdsIt != soundFontIds.end())
-                {
-                    sfId = soundFontIdsIt->second;
-                } 
-                if (sfId == FLUID_FAILED)
-                {
-                    return;
-                }
-                if (_fluid_synth_program_select(synth, event.channel(), sfId, 0, 0) != FLUID_OK)
-                {
-                    throw std::runtime_error("fluid_synth_program_select failed");
-                }
-            }
             if(customEvent.type == com::midi::CustomMetaData::DefineDevice)
             {
                 std::string deviceIdWithSoundFont(customEvent.data.begin(), customEvent.data.end());
@@ -124,15 +100,9 @@ namespace app
                 deviceConfig.name = defParts[0];
                 deviceConfig.deviceId = defParts[1];
                 deviceConfig.type = com::DeviceConfig::FluidSynth;
-                if (soundFontIds.find(deviceConfig.name) != soundFontIds.end())
-                {
-                    _logger->babble(WMLogLambda(log << "device: " << deviceConfig.name << "already added"));
-                    return;
-                }
                 _logger->babble(WMLogLambda(log << "adding device: " << deviceConfig.name << ", " << deviceConfig.deviceId));
                 com::getConfigServer().addDevice(deviceConfig);
-                auto sfId = addSoundFont(deviceConfig.deviceId);
-                soundFontIds.insert(std::make_pair(deviceConfig.name, sfId));
+                addSoundFont(deviceConfig.name, deviceConfig.deviceId);
             }
         }
     }

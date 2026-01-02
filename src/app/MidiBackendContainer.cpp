@@ -44,7 +44,14 @@ namespace app
         {
             backend->seek(millis);
         }
-    }    
+    }
+    void MidiBackendContainer::init()
+    {
+        for (const auto &backend : this->_midiBackends)
+        {
+            backend->init();
+        }
+    }
     void MidiBackendContainer::tearDown()
     {
         for (const auto &backend : this->_midiBackends)

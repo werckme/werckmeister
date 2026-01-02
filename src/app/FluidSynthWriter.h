@@ -19,7 +19,6 @@ namespace app
             int fromPositionTicks = 0;
             int toPositionTicks = 0;
         };
-        typedef int SoundFontId;
         typedef FluidSynth Base;
         typedef int TickPosition;
         typedef std::map<TickPosition, JumpPoint> JumpPoints;
@@ -27,8 +26,8 @@ namespace app
         enum { UndefinedJumpPointIndex = -1 };
         FluidSynthWriter(com::ILoggerPtr logger) : _logger(logger) {}
         virtual ~FluidSynthWriter() = default;
-        virtual void initSynth(const std::string &soundFondPath) override;
-        SoundFontId addSoundFont(const std::string &soundFondPath);
+        virtual void initSynth() override;
+        virtual SoundFontId addSoundFont(const DeviceId& deviceId, const std::string &soundFondPath) override;
         bool addEvent(const com::midi::Event& event);
         void render(int len, float* lout, int loff, int lincr, float* rout, int roff, int rincr);
         void libPath(const com::String &path) { _libPath = path; }
@@ -54,12 +53,10 @@ namespace app
         com::String _libPath;
         double _sampleRate = 44100.0f;
         virtual std::string findFluidSynthLibraryPath() const override;
-        void handleMetaEvent(const com::midi::Event& event);
+        virtual void handleMetaEvent(const com::midi::Event& event) override;
         double _tempo = 120.0;
-        typedef std::unordered_map<com::String, SoundFontId> SoundFontIdMap;
         const JumpPoint* _activeJumpPoint = nullptr;
         JumpPoint _tmpJumpoint;
-        SoundFontIdMap soundFontIds;
         fluid_player_t*  player = nullptr;
         JumpPoints _jumpPoints;
         JumpPointsIndex _jumpPointsIndex;

@@ -172,7 +172,7 @@ extern "C"
 			session->fluidSynth = std::make_shared<app::FluidSynthWriter>(_logger);
 			session->fluidSynth->libPath(libPath);
 			session->fluidSynth->sampleRate((double)sampleRate);
-			session->fluidSynth->initSynth("");
+			session->fluidSynth->initSynth();
 			if (session->tmpMidiEvents.empty() == false)
 			{
 				eatTmpEvents(session);

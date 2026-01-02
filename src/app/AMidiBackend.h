@@ -27,6 +27,7 @@ namespace app
 		virtual Outputs getOutputs() const = 0;
 		virtual void send(const com::midi::Event &event, const Output *output, long double elapsedMillis) = 0;
 		virtual void seek(long double millis) {}
+		virtual void init() = 0;
 		virtual void tearDown() = 0;
 		virtual void panic() = 0;
 	};

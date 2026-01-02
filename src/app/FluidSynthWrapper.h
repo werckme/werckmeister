@@ -70,16 +70,21 @@ namespace app
 	class FluidSynth
 	{
 	public:
+		typedef int SoundFontId;
+		typedef com::String DeviceId;
+        typedef std::unordered_map<DeviceId, SoundFontId> SoundFontIdMap;
 		FluidSynth();
-		FluidSynth(const std::string &soundfontPath);
 		FluidSynth(const FluidSynth &&) = delete;
 		FluidSynth &operator=(const FluidSynth &&) = delete;
 		virtual ~FluidSynth();
 		void send(const com::midi::Event &event, long double elapsedMillis);
 		void seek(long double millis);
 		void setCC(int ch, int cc, int value);
+		virtual SoundFontId addSoundFont(const DeviceId& deviceId, const std::string &soundfontPath);
+		const SoundFontIdMap& soundFontIds() const { return soundFontIdMap; }
 	protected:
-		virtual void initSynth(const std::string &soundFondPath);
+		SoundFontIdMap soundFontIdMap;
+		virtual void initSynth();
 		virtual void tearDownSynth();
 		void initLibraryFunctions();
 		virtual std::string findFluidSynthLibraryPath() const;
@@ -146,6 +151,7 @@ namespace app
 		fluid_sequencer_t* seq = nullptr;
 		fluid_seq_id_t synthSeqID = 0;
 		bool midiEventToFluidEvent(const com::midi::Event& src, fluid_event_t& evt, bool doThrow = true);
+		virtual void handleMetaEvent(const com::midi::Event& event);
 		long double _playerOffsetMillis = 0;
 	};
 	typedef std::shared_ptr<FluidSynth> FluidSynthPtr;

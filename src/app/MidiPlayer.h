@@ -71,7 +71,7 @@ namespace app
             EndLoop
         };
         void initMidiBackends();
-        void initFluidSynthInstances();
+        void initFluidSynthInstancesIfNecessary();
         void execLoop(documentModel::DocumentPtr document);
         void visitVisitors(VisitorMessage, com::Ticks elapsed);
         State state = Stopped;
