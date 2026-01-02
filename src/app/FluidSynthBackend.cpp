@@ -16,7 +16,7 @@ namespace app
 		{
 			throw std::runtime_error("fluid synth not ready");
 		}
-		auto sfId = _fluidSynth->addSoundFont(deviceId, soundfontPath);
+		_fluidSynth->addSoundFont(deviceId, soundfontPath);
 	}
 
 	FluidSynthBackend::Outputs FluidSynthBackend::getOutputs() const
@@ -24,13 +24,12 @@ namespace app
 		FluidSynthBackend::Outputs result;
 		const auto& soundfonts = _fluidSynth->soundFontIds();
 		result.reserve(soundfonts.size());
-		int i = 0;
 		for (const auto &idSynthPair : soundfonts)
 		{
 			Output output;
 			output.id = idSynthPair.first;
 			output.name = output.id;
-			output.portid = ++i;
+			output.portid = idSynthPair.second;
 			result.emplace_back(output);
 		}
 		return result;
@@ -40,6 +39,21 @@ namespace app
 	}
 	void FluidSynthBackend::send(const com::midi::Event &event, const Output *output, long double elapsedMillis)
 	{
+		if (event.eventType() == com::midi::Controller && event.parameter1() == 0) // msb
+		{
+			_fluidSynth->setMsb(event.channel(), event.parameter2());
+			return;
+		}
+		if (event.eventType() == com::midi::Controller && event.parameter1() == 32) // lsb
+		{
+			_fluidSynth->setLsb(event.channel(), event.parameter2());
+			return;
+		}
+		if (event.eventType() == com::midi::ProgramChange)
+		{
+			_fluidSynth->setPreset(output->portid, event.channel(), event.parameter1());
+			return;
+		}
 		_fluidSynth->send(event, elapsedMillis);
 	}
 	void FluidSynthBackend::init()

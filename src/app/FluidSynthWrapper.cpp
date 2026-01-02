@@ -226,9 +226,35 @@ namespace app
         return sfont_id;
     }
 
+    void FluidSynth::setPreset(SoundFontId sfId, int channel, int presetNr)
+    {
+        auto bank = msbPerChannel[channel] * 128 + lsbPerChannel[channel];
+        if (_fluid_synth_program_select(synth, channel, sfId, bank, presetNr) != FLUID_OK)
+        {
+            throw std::runtime_error("fluid_synth_program_select failed");
+        }
+    }
+
+    void FluidSynth::setMsb(int channel, int msb)
+    {
+        if (channel < 0 || channel > 15)
+        {
+            throw std::runtime_error("invalid channel " + std::to_string(channel));
+        }
+        msbPerChannel[channel] = msb;
+    }
+
+    void FluidSynth::setLsb(int channel, int lsb)
+    {
+        if (channel < 0 || channel > 15)
+        {
+            throw std::runtime_error("invalid channel " + std::to_string(channel));
+        }
+        lsbPerChannel[channel] = lsb;
+    }
+
     void FluidSynth::send(const com::midi::Event &event, long double elapsedMillis)
     {
-        handleMetaEvent(event);
         fluid_event_t* fluid_event = _new_fluid_event();
         midiEventToFluidEvent(event, *fluid_event);
         _fluid_event_set_dest(fluid_event, synthSeqID);

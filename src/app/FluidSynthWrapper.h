@@ -82,7 +82,12 @@ namespace app
 		void setCC(int ch, int cc, int value);
 		virtual SoundFontId addSoundFont(const DeviceId& deviceId, const std::string &soundfontPath);
 		const SoundFontIdMap& soundFontIds() const { return soundFontIdMap; }
+		void setPreset(SoundFontId sfId, int channel, int presetNr);
+		void setMsb(int channel, int msb);
+		void setLsb(int channel, int lsb);
 	protected:
+		int lsbPerChannel[16] = {0};
+		int msbPerChannel[16] = {0};
 		SoundFontIdMap soundFontIdMap;
 		virtual void initSynth();
 		virtual void tearDownSynth();

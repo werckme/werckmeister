@@ -1,11 +1,14 @@
 using "./chords/default.chords";
+using "/pitchmaps/defaultMIDI.pitchmap";
 
+device: Canvas _isType="fluidSynth" _useFont="FluidR3_GM_EX.sf2";
 -- https://musical-artifacts.com/artifacts/817
 device: Orchestral _isType="fluidSynth" _useFont="HQ Orchestral Soundfont Collection v2.1.2.sf2";
 -- https://musical-artifacts.com/artifacts/1176
 device: Natural _isType="fluidSynth" _useFont="Live HQ Natural SoundFont GM.sf2";
 instrumentDef: _setName=brass1 _onDevice=Natural _ch=0 _pc=57;
 instrumentDef: _setName=brass2 _onDevice=Orchestral _ch=1 _pc=57;
+instrumentDef: _setName=drums _onDevice=Canvas _ch=9;
 
 
 tempo: 180;
@@ -24,5 +27,13 @@ instrument: brass2;
 {
     \ffff
     =2= | c,, d,, e,, f,,~ | &1
+}
+]
+
+[
+instrument: drums;
+{
+    \fff
+    x4 &&& :(x4)|
 }
 ]
