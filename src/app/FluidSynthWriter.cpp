@@ -20,6 +20,11 @@ namespace
         reinterpret_cast<app::FluidSynthWriter*>(data)->onTickEventCallback(tick);
         return FLUID_OK;
     }
+    int OnMidiEventHandler(void *data, fluid_midi_event_t *event)
+    {
+        auto res = reinterpret_cast<app::FluidSynthWriter*>(data)->onPlaybackCallback(event);
+        return FLUID_OK;
+    }
 }
 
 namespace app
@@ -77,7 +82,6 @@ namespace app
 
     void FluidSynthWriter::handleMetaEvent(const com::midi::Event& event)
     {
-        Base::handleMetaEvent(event);
         if (event.eventType() == com::midi::MetaEvent && event.metaEventType() == com::midi::Tempo)
         {
             auto metaIntValue = com::midi::Event::MetaGetIntValue(event.metaData(), event.metaDataSize());
@@ -104,6 +108,25 @@ namespace app
                 com::getConfigServer().addDevice(deviceConfig);
                 addSoundFont(deviceConfig.name, deviceConfig.deviceId);
             }
+            if (event.metaEventType() == com::midi::CustomMetaEvent)
+            {
+                auto customEvent = com::midi::Event::MetaGetCustomData(event.metaData(), event.metaDataSize());
+                if (customEvent.type == com::midi::CustomMetaData::SetDevice)
+                {
+                    std::string deviceId(customEvent.data.begin(), customEvent.data.end());
+                    auto soundFontIdsIt = soundFontIdMap.find(deviceId);
+                    SoundFontId sfId = FLUID_FAILED;
+                    if (soundFontIdsIt != soundFontIdMap.end())
+                    {
+                        sfId = soundFontIdsIt->second;
+                    }
+                    if (sfId == FLUID_FAILED)
+                    {
+                        return;
+                    }
+                    lastSoundFontId = sfId;
+                }
+            }
         }
     }
 
@@ -122,6 +145,21 @@ namespace app
                 _activeJumpPoint = nullptr;
             }
         }
+    }
+
+    bool FluidSynthWriter::onPlaybackCallback(fluid_midi_event_t *event)
+    {
+        auto eventType = _fluid_midi_event_get_type(event);
+         _logger->babble(WMLogLambda(log << "on ev: " << std::hex << eventType));
+        if (eventType == 0xff)
+        {
+            char *data;
+            int dataSize;
+            fluid_midi_event_get_text(event, (void**)&data, &dataSize);
+            _logger->babble(WMLogLambda(log << "meta ev: " << data));
+        }
+        _fluid_synth_handle_midi_event(synth, event);
+        return true;
     }
 
     void FluidSynthWriter::jump(const JumpPoint &jumpPoint)
@@ -184,6 +222,45 @@ namespace app
             << " i:" << _activeJumpPoint->index));
     }
 
+    int FluidSynthWriter::getSfId(int channel)
+    {
+        int sfId = _sfIdPerChannel[channel];
+        if (sfId != 0)
+        {
+            return sfId;
+        }
+        if (lastSoundFontId < 0)
+        {
+            throw std::runtime_error("no valid sound font id, did you use setDevice properly");
+        }
+        _sfIdPerChannel[channel] = lastSoundFontId;
+        return lastSoundFontId;
+    }
+
+    bool FluidSynthWriter::handlePresetEvent(const com::midi::Event& event)
+    {
+        if (event.eventType() == com::midi::Controller && event.parameter1() == 0) // msb
+		{
+			setMsb(event.channel(), event.parameter2());
+			return true;
+		}
+		if (event.eventType() == com::midi::Controller && event.parameter1() == 32) // lsb
+		{
+			setLsb(event.channel(), event.parameter2());
+			return true;
+		}
+		if (event.eventType() == com::midi::ProgramChange)
+		{
+            auto sfId = getSfId(event.channel());
+            _logger->babble(WMLogLambda(log << "setPreset: " 
+                << sfId << " ," 
+                << (int)event.channel() << " ," << event.parameter1())); 
+			setPreset(sfId, event.channel(), event.parameter1());
+			return true;
+		}
+        return false;
+    }
+
     bool FluidSynthWriter::addEvent(const com::midi::Event& event)
     {
         if (!seq)
@@ -191,6 +268,10 @@ namespace app
             return true;
         }
         handleMetaEvent(event);
+        if (handlePresetEvent(event))
+        {
+            return true;
+        }
         fluid_event_t* fluid_event = _new_fluid_event();
         const bool doThrow = false;
         if (!midiEventToFluidEvent(event, *fluid_event, doThrow))
@@ -213,6 +294,7 @@ namespace app
         player = _new_fluid_player(synth);
         _fluid_player_add_mem(player, data, length);
         _fluid_player_set_tick_callback(player, OnTickEventHandler, this);
+        _fluid_player_set_playback_callback(player, OnMidiEventHandler, this);
         _fluid_player_play(player);
     }
 

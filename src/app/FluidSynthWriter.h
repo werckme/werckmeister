@@ -41,6 +41,7 @@ namespace app
         void renderToFile(const std::string &outputPath, double seconds);
         void setMidiFileData(const unsigned char* data, size_t length);
         void onTickEventCallback(int tick);
+        bool onPlaybackCallback(fluid_midi_event_t *event);
         void setJumpPoints(const JumpPoints& jumpPoints);
         void setJumpPoints(JumpPoints&& jumpPoints);
         void setActiveJumpPoint(int jumpPointIndex);
@@ -48,18 +49,22 @@ namespace app
         void stop();
         void play();
     protected:
+        bool handlePresetEvent(const com::midi::Event& event);
         void updateJumpPointIndex();
         com::ILoggerPtr _logger;
         com::String _libPath;
         double _sampleRate = 44100.0f;
         virtual std::string findFluidSynthLibraryPath() const override;
-        virtual void handleMetaEvent(const com::midi::Event& event) override;
+        virtual void handleMetaEvent(const com::midi::Event& event);
+        SoundFontId lastSoundFontId = -1;
         double _tempo = 120.0;
         const JumpPoint* _activeJumpPoint = nullptr;
         JumpPoint _tmpJumpoint;
         fluid_player_t*  player = nullptr;
         JumpPoints _jumpPoints;
         JumpPointsIndex _jumpPointsIndex;
+        int _sfIdPerChannel[16] = {0};
+        int getSfId(int channel);
     };
     typedef std::shared_ptr<FluidSynthWriter> FluidSynthWriterPtr;
 }
