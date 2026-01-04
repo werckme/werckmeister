@@ -22,7 +22,7 @@ namespace
     }
     int OnMidiEventHandler(void *data, fluid_midi_event_t *event)
     {
-        auto res = reinterpret_cast<app::FluidSynthWriter*>(data)->onPlaybackCallback(event);
+        reinterpret_cast<app::FluidSynthWriter*>(data)->onPlaybackCallback(event);
         return FLUID_OK;
     }
 }
@@ -147,19 +147,31 @@ namespace app
         }
     }
 
-    bool FluidSynthWriter::onPlaybackCallback(fluid_midi_event_t *event)
+    void FluidSynthWriter::onPlaybackCallback(fluid_midi_event_t *event)
     {
         auto eventType = _fluid_midi_event_get_type(event);
-         _logger->babble(WMLogLambda(log << "on ev: " << std::hex << eventType));
-        if (eventType == 0xff)
+        //_logger->babble(WMLogLambda(log << "onPlaybackCallback: " <<  std::hex << eventType));
+        if (eventType == 0xB0) // CC
         {
-            char *data;
-            int dataSize;
-            fluid_midi_event_get_text(event, (void**)&data, &dataSize);
-            _logger->babble(WMLogLambda(log << "meta ev: " << data));
+            int cn = _fluid_midi_event_get_control(event);
+            int ch = _fluid_midi_event_get_channel(event);
+            int value = _fluid_midi_event_get_value(event);
+            if (value == 0x0 || value == 0x20) // msb or lsb
+            {
+                auto midiEv = com::midi::Event::CCValue(ch, cn, value);
+                handlePresetEvent(midiEv);
+                return;
+            }
+        }
+        if (eventType == 0xC0)
+        {
+            int pr = _fluid_midi_event_get_program(event);
+            int ch = _fluid_midi_event_get_channel(event);
+            auto midiEv = com::midi::Event::ProgramChange_(ch, pr);
+            handlePresetEvent(midiEv);
+            return;
         }
         _fluid_synth_handle_midi_event(synth, event);
-        return true;
     }
 
     void FluidSynthWriter::jump(const JumpPoint &jumpPoint)
@@ -237,7 +249,7 @@ namespace app
         return lastSoundFontId;
     }
 
-    bool FluidSynthWriter::handlePresetEvent(const com::midi::Event& event)
+    bool FluidSynthWriter::handlePresetEvent(const com::midi::Event& event, bool sendToFluidSynth)
     {
         if (event.eventType() == com::midi::Controller && event.parameter1() == 0) // msb
 		{
@@ -251,10 +263,14 @@ namespace app
 		}
 		if (event.eventType() == com::midi::ProgramChange)
 		{
-            auto sfId = getSfId(event.channel());
+            auto sfId = getSfId(event.channel()); // init soundfont id if necessary
+            if (!sendToFluidSynth)
+            {
+                return true;
+            }
             _logger->babble(WMLogLambda(log << "setPreset: " 
                 << sfId << " ," 
-                << (int)event.channel() << " ," << event.parameter1())); 
+                << (int)event.channel() << " ," << (int)event.parameter1())); 
 			setPreset(sfId, event.channel(), event.parameter1());
 			return true;
 		}
@@ -289,9 +305,28 @@ namespace app
         return true;
     }
 
-    void FluidSynthWriter::setMidiFileData(const unsigned char* data, size_t length)
+     void FluidSynthWriter::handleMidiMetaEvents(const unsigned char* data, size_t length, VisitEventFunction visitEventFunction)
+     {
+        com::midi::Midi midiFile;
+        midiFile.read(data, length);
+        for(const auto& track : midiFile.tracks())
+        {
+            for(const auto& event : track->events())
+            {
+                if (visitEventFunction)
+                {
+                    visitEventFunction(&event);
+                }
+                handleMetaEvent(event);
+                handlePresetEvent(event, false);
+            }
+        } 
+     }
+
+    void FluidSynthWriter::setMidiFileData(const unsigned char* data, size_t length, VisitEventFunction visitEventFunction)
     {
         player = _new_fluid_player(synth);
+        handleMidiMetaEvents(data, length, visitEventFunction);
         _fluid_player_add_mem(player, data, length);
         _fluid_player_set_tick_callback(player, OnTickEventHandler, this);
         _fluid_player_set_playback_callback(player, OnMidiEventHandler, this);

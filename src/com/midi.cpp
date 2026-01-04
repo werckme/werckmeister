@@ -372,6 +372,14 @@ namespace com
 			ev.eventType(midi::NoteOff);
 			return ev;
 		}
+		Event Event::ProgramChange_(Channel channel, Byte program)
+		{
+			Event ev;
+			ev.channel(channel);
+			ev.parameter1(program);
+			ev.eventType(midi::ProgramChange);
+			return ev;
+		}
 		Event Event::PitchBend(Channel channel, Ticks absPos, double value)
 		{
 			int ivalue = static_cast<int>((value * (double)MaxPitchbend));

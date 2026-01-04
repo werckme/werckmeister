@@ -36,7 +36,7 @@
 #include <list>
 
 #define wmassert(exp, msg) if(!(exp)) LOG(msg)
-#define STRVERSION SHEET_VERSION " lib 0.13"
+#define STRVERSION SHEET_VERSION " lib 0.2"
 
 namespace
 {
@@ -51,7 +51,7 @@ namespace
 		{
 			logger = std::make_shared<com::ConsoleLogger>();
 		}
-		logger->logLevel(com::FileLogger::LevelDebug);
+		logger->logLevel(com::FileLogger::LevelError);
 		return logger;
 	}
 	typedef SheetLibProgram CompilerProgram;
@@ -452,7 +452,11 @@ extern "C"
 
 			if (synthIsReady)
 			{
-				session->fluidSynth->setMidiFileData(data, length);
+				session->fluidSynth->setMidiFileData(data, length, [session](const auto* event)
+				{
+					handleIfMetaEvent(session, *event);
+				}
+			);
 			} else
 			{
 				session->tmpMidiDataBff = std::vector<unsigned char>(data, data + length);

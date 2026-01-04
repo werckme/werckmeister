@@ -6,7 +6,7 @@
 #include <com/ILogger.h>
 #include <map>
 #include <vector>
-
+#include <functional>
 
 namespace app
 {
@@ -23,6 +23,7 @@ namespace app
         typedef int TickPosition;
         typedef std::map<TickPosition, JumpPoint> JumpPoints;
         typedef std::vector<const JumpPoint*> JumpPointsIndex;
+        typedef std::function<void(const com::midi::Event*)> VisitEventFunction;
         enum { UndefinedJumpPointIndex = -1 };
         FluidSynthWriter(com::ILoggerPtr logger) : _logger(logger) {}
         virtual ~FluidSynthWriter() = default;
@@ -39,9 +40,9 @@ namespace app
         double getSongPositionSeconds() const;
         void setSongPositionSeconds(double songPosSeconds);
         void renderToFile(const std::string &outputPath, double seconds);
-        void setMidiFileData(const unsigned char* data, size_t length);
+        void setMidiFileData(const unsigned char* data, size_t length, VisitEventFunction visitEventFunction = nullptr);
         void onTickEventCallback(int tick);
-        bool onPlaybackCallback(fluid_midi_event_t *event);
+        void onPlaybackCallback(fluid_midi_event_t *event);
         void setJumpPoints(const JumpPoints& jumpPoints);
         void setJumpPoints(JumpPoints&& jumpPoints);
         void setActiveJumpPoint(int jumpPointIndex);
@@ -49,8 +50,9 @@ namespace app
         void stop();
         void play();
     protected:
-        bool handlePresetEvent(const com::midi::Event& event);
+        bool handlePresetEvent(const com::midi::Event& event, bool sendToFluidSynth = true);
         void updateJumpPointIndex();
+        void handleMidiMetaEvents(const unsigned char* data, size_t length, VisitEventFunction visitEventFunction);
         com::ILoggerPtr _logger;
         com::String _libPath;
         double _sampleRate = 44100.0f;
