@@ -41,9 +41,9 @@ namespace app
     void MidiPlayer::initMidiBackends()
     {
         _logger->babble(WMLogLambda(log << "init rtmidi backend"));
-        _midiPlayerImpl.addBackend(std::make_shared<RtMidiBackend>());
-        _logger->babble(WMLogLambda(log << "init fluidsynth backend"));
-        _midiPlayerImpl.addBackend(std::make_shared<FluidSynthBackend>());
+        auto backend = std::make_shared<RtMidiBackend>();
+        backend->init();
+        _midiPlayerImpl.addBackend(backend);
     }
 
     void MidiPlayer::execLoop(documentModel::DocumentPtr)
@@ -56,7 +56,7 @@ namespace app
             resume = _programOptions->getResumeAtPosition() * com::PPQ;
             _programOptions->setResumeAtPosition(0);
         }
-        initFluidSynthInstances();
+        initFluidSynthInstancesIfNecessary();
         _midiPlayerImpl.updateOutputMapping(com::getConfigServer().getDevices());
         _midiPlayerImpl.midi(_midifile);
         _midiPlayerImpl.end = end;
@@ -148,9 +148,10 @@ namespace app
         return position;
     }
 
-    void MidiPlayer::initFluidSynthInstances()
+    void MidiPlayer::initFluidSynthInstancesIfNecessary()
     {
         const auto &deviceConfigs = com::getConfigServer().getDevices();
+        std::shared_ptr<FluidSynthBackend> backend;
         for (const auto &idConfPair : deviceConfigs)
         {
             const auto &conf = idConfPair.second;
@@ -158,8 +159,15 @@ namespace app
             {
                 continue;
             }
+            if (!backend)
+            {
+                _logger->babble(WMLogLambda(log << "init fluidsynth backend"));
+                backend = std::make_shared<FluidSynthBackend>();
+                backend->init();
+                _midiPlayerImpl.addBackend(backend);
+            }
             const auto &soundFontFile = conf.deviceId;
-            FluidSynthBackend::createInstance(conf.deviceId, soundFontFile);
+            backend->addSoundFont(conf.deviceId, soundFontFile);
         }
     }
 }

@@ -1420,6 +1420,10 @@ Defines a device which can be used when adding instruments (see [instrumentDef](
 
  On mac and linux, make sure that you have fluidsynth installed.
 
+ If you are using multiple sound fonts with multiple devices, make sure to use the program change argument “_pc” in the instrument definition, otherwise no
+
+ soundfont change will be triggered internally. 
+
  You can set an environment variable `WM_SOUNDFONT_PATH` to add a search path for soundfont files. *(only one path supported)*
 <br><br><br>
 

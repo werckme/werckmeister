@@ -17,12 +17,8 @@ namespace app
 
     FluidSynth::FluidSynth()
     {
-    }
-
-    FluidSynth::FluidSynth(const std::string &soundfontPath) : FluidSynth()
-    {
         initLibraryFunctions();
-        initSynth(soundfontPath);
+        initSynth();
     }
 
     FluidSynth::~FluidSynth()
@@ -136,6 +132,29 @@ namespace app
             _fluid_player_get_midi_tempo = _library->get<fluid_player_get_midi_tempo_ftype>("fluid_player_get_midi_tempo");
             _fluid_player_get_division = _library->get<fluid_player_get_division_ftype>("fluid_player_get_division");
             _fluid_player_set_tick_callback = _library->get<fluid_player_set_tick_callback_ftype>("fluid_player_set_tick_callback");
+            _fluid_synth_handle_midi_event = _library->get<fluid_synth_handle_midi_event_ftype>("fluid_synth_handle_midi_event");
+            _fluid_midi_event_get_channel = _library->get<fluid_midi_event_get_channel_ftype>("fluid_midi_event_get_channel");
+            _fluid_midi_event_get_control = _library->get<fluid_midi_event_get_control_ftype>("fluid_midi_event_get_control");
+            _fluid_midi_event_get_key = _library->get<fluid_midi_event_get_key_ftype>("fluid_midi_event_get_key");
+            _fluid_midi_event_get_lyrics = _library->get<fluid_midi_event_get_lyrics_ftype>("fluid_midi_event_get_lyrics");
+            _fluid_midi_event_get_pitch = _library->get<fluid_midi_event_get_pitch_ftype>("fluid_midi_event_get_pitch");
+            _fluid_midi_event_get_program = _library->get<fluid_midi_event_get_program_ftype>("fluid_midi_event_get_program");
+            _fluid_midi_event_get_text = _library->get<fluid_midi_event_get_text_ftype>("fluid_midi_event_get_text");
+            _fluid_midi_event_get_type = _library->get<fluid_midi_event_get_type_ftype>("fluid_midi_event_get_type");
+            _fluid_midi_event_get_value = _library->get<fluid_midi_event_get_value_ftype>("fluid_midi_event_get_value");
+            _fluid_midi_event_get_velocity = _library->get<fluid_midi_event_get_velocity_ftype>("fluid_midi_event_get_velocity");
+            _fluid_midi_event_set_channel = _library->get<fluid_midi_event_set_channel_ftype>("fluid_midi_event_set_channel");
+            _fluid_midi_event_set_control = _library->get<fluid_midi_event_set_control_ftype>("fluid_midi_event_set_control");
+            _fluid_midi_event_set_key = _library->get<fluid_midi_event_set_key_ftype>("fluid_midi_event_set_key");
+            _fluid_midi_event_set_lyrics = _library->get<fluid_midi_event_set_lyrics_ftype>("fluid_midi_event_set_lyrics");
+            _fluid_midi_event_set_pitch = _library->get<fluid_midi_event_set_pitch_ftype>("fluid_midi_event_set_pitch");
+            _fluid_midi_event_set_program = _library->get<fluid_midi_event_set_program_ftype>("fluid_midi_event_set_program");
+            _fluid_midi_event_set_sysex = _library->get<fluid_midi_event_set_sysex_ftype>("fluid_midi_event_set_sysex");
+            _fluid_midi_event_set_text = _library->get<fluid_midi_event_set_text_ftype>("fluid_midi_event_set_text");
+            _fluid_midi_event_set_type = _library->get<fluid_midi_event_set_type_ftype>("fluid_midi_event_set_type");
+            _fluid_midi_event_set_value = _library->get<fluid_midi_event_set_value_ftype>("fluid_midi_event_set_value");
+            _fluid_midi_event_set_velocity = _library->get<fluid_midi_event_set_velocity_ftype>("fluid_midi_event_set_velocity");
+
         }
         catch (const std::exception &ex)
         {
@@ -190,7 +209,7 @@ namespace app
         return wm.resolvePath(libraryPath);
     }
 
-    void FluidSynth::initSynth(const std::string &soundFondPath)
+    void FluidSynth::initSynth()
     {
         settings = _new_fluid_settings();
 
@@ -212,11 +231,49 @@ namespace app
         {
             throw std::runtime_error("error initializing fluidsynth sequencer");
         }
-        auto sfont_id = _fluid_synth_sfload(synth, soundFondPath.c_str(), 1);
+    }
+
+    FluidSynth::SoundFontId FluidSynth::addSoundFont(const DeviceId& deviceId, const std::string &soundFontPath)
+    {
+        if (soundFontIdMap.find(deviceId) != soundFontIdMap.end())
+		{
+			throw std::runtime_error("device '" + deviceId + "' already added");
+		}
+        auto absPath = com::getWerckmeister().resolvePath(soundFontPath);
+        auto sfont_id = _fluid_synth_sfload(synth, absPath.c_str(), 1);
         if (sfont_id == FLUID_FAILED)
         {
-            throw std::runtime_error("Loading the SoundFont " + soundFondPath + "  failed!");
+            throw std::runtime_error("Loading the SoundFont " + absPath + " failed!");
         }
+        soundFontIdMap.insert({deviceId, sfont_id});
+        return sfont_id;
+    }
+
+    void FluidSynth::setPreset(SoundFontId sfId, int channel, int presetNr)
+    {
+        auto bank = msbPerChannel[channel] * 128 + lsbPerChannel[channel];
+        if (_fluid_synth_program_select(synth, channel, sfId, bank, presetNr) != FLUID_OK)
+        {
+            // ignore
+        }
+    }
+
+    void FluidSynth::setMsb(int channel, int msb)
+    {
+        if (channel < 0 || channel > 15)
+        {
+            throw std::runtime_error("invalid channel " + std::to_string(channel));
+        }
+        msbPerChannel[channel] = msb;
+    }
+
+    void FluidSynth::setLsb(int channel, int lsb)
+    {
+        if (channel < 0 || channel > 15)
+        {
+            throw std::runtime_error("invalid channel " + std::to_string(channel));
+        }
+        lsbPerChannel[channel] = lsb;
     }
 
     void FluidSynth::send(const com::midi::Event &event, long double elapsedMillis)

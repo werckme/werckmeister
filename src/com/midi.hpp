@@ -154,6 +154,7 @@ namespace com
 			static Event MetaTrack(const std::string &name);
 			static Event MetaCue(const std::string &name);
 			static Event MetaCustom(const CustomMetaData &custom);
+			static Event ProgramChange_(Channel channel, Byte program);
 			/**
 			* @param sysexData: the sysex data excluding the delimiters F0 F7
 			*/

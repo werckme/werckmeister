@@ -2,7 +2,6 @@
 
 #include <memory>
 #include <functional>
-#include <unordered_map>
 #include <com/midi.hpp>
 #include "FluidSynthWrapper.h"
 #include "AMidiBackend.h"
@@ -19,11 +18,11 @@ namespace app
 		virtual ~FluidSynthBackend();
 		virtual void send(const com::midi::Event &event, const Output *output, long double elapsedMillis) override;
 		virtual void seek(long double millis) override;
+		virtual void init() override;
 		virtual void tearDown() override;
 		virtual void panic() override;
-		static void createInstance(const std::string &deviceId, const std::string &soundfontPath);
-
+		void addSoundFont(const std::string &deviceId, const std::string &soundfontPath);
 	private:
-		static std::unordered_map<std::string, FluidSynthPtr> _synths;
+		std::unique_ptr<app::FluidSynth> _fluidSynth;
 	};
 }

@@ -64,22 +64,54 @@
 #define fluid_player_get_midi_tempo_ftype int(fluid_player_t * player)
 #define fluid_player_get_division_ftype int(fluid_player_t * player)
 #define fluid_player_set_tick_callback_ftype int(fluid_player_t * player, handle_midi_tick_func_t handler, void * handler_data)
+#define fluid_synth_handle_midi_event_ftype int(void* synth, fluid_midi_event_t* event)
+#define fluid_midi_event_get_channel_ftype int(const fluid_midi_event_t *evt)
+#define fluid_midi_event_get_control_ftype int(const fluid_midi_event_t *evt)
+#define fluid_midi_event_get_key_ftype int(const fluid_midi_event_t *evt)
+#define fluid_midi_event_get_lyrics_ftype int(fluid_midi_event_t *evt, void **data, int *size)
+#define fluid_midi_event_get_pitch_ftype int(const fluid_midi_event_t *evt)
+#define fluid_midi_event_get_program_ftype int(const fluid_midi_event_t *evt)
+#define fluid_midi_event_get_text_ftype int(fluid_midi_event_t *evt, void **data, int *size)
+#define fluid_midi_event_get_type_ftype int(const fluid_midi_event_t *evt)
+#define fluid_midi_event_get_value_ftype int(const fluid_midi_event_t *evt)
+#define fluid_midi_event_get_velocity_ftype int(const fluid_midi_event_t *evt)
+#define fluid_midi_event_set_channel_ftype int(fluid_midi_event_t *evt, int chan)
+#define fluid_midi_event_set_control_ftype int(fluid_midi_event_t *evt, int ctrl)
+#define fluid_midi_event_set_key_ftype int(fluid_midi_event_t *evt, int key)
+#define fluid_midi_event_set_lyrics_ftype int(fluid_midi_event_t *evt, void *data, int size, int dynamic)
+#define fluid_midi_event_set_pitch_ftype int(fluid_midi_event_t *evt, int val)
+#define fluid_midi_event_set_program_ftype int(fluid_midi_event_t *evt, int val)
+#define fluid_midi_event_set_sysex_ftype int(fluid_midi_event_t *evt, void *data, int size, int dynamic)
+#define fluid_midi_event_set_text_ftype int(fluid_midi_event_t *evt, void *data, int size, int dynamic)
+#define fluid_midi_event_set_type_ftype int(fluid_midi_event_t *evt, int type)
+#define fluid_midi_event_set_value_ftype int(fluid_midi_event_t *evt, int val)
+#define fluid_midi_event_set_velocity_ftype int(fluid_midi_event_t *evt, int vel)
 
 namespace app
 {
 	class FluidSynth
 	{
 	public:
+		typedef int SoundFontId;
+		typedef com::String DeviceId;
+        typedef std::unordered_map<DeviceId, SoundFontId> SoundFontIdMap;
 		FluidSynth();
-		FluidSynth(const std::string &soundfontPath);
 		FluidSynth(const FluidSynth &&) = delete;
 		FluidSynth &operator=(const FluidSynth &&) = delete;
 		virtual ~FluidSynth();
 		void send(const com::midi::Event &event, long double elapsedMillis);
 		void seek(long double millis);
 		void setCC(int ch, int cc, int value);
+		virtual SoundFontId addSoundFont(const DeviceId& deviceId, const std::string &soundfontPath);
+		const SoundFontIdMap& soundFontIds() const { return soundFontIdMap; }
+		void setPreset(SoundFontId sfId, int channel, int presetNr);
+		void setMsb(int channel, int msb);
+		void setLsb(int channel, int lsb);
 	protected:
-		virtual void initSynth(const std::string &soundFondPath);
+		int lsbPerChannel[16] = {0};
+		int msbPerChannel[16] = {0};
+		SoundFontIdMap soundFontIdMap;
+		virtual void initSynth();
 		virtual void tearDownSynth();
 		void initLibraryFunctions();
 		virtual std::string findFluidSynthLibraryPath() const;
@@ -139,6 +171,29 @@ namespace app
 		std::function<fluid_player_get_midi_tempo_ftype> _fluid_player_get_midi_tempo;
 		std::function<fluid_player_get_division_ftype> _fluid_player_get_division;
 		std::function<fluid_player_set_tick_callback_ftype> _fluid_player_set_tick_callback;
+		std::function<fluid_synth_handle_midi_event_ftype> _fluid_synth_handle_midi_event;
+		std::function<fluid_midi_event_get_channel_ftype> _fluid_midi_event_get_channel;
+		std::function<fluid_midi_event_get_control_ftype> _fluid_midi_event_get_control;
+		std::function<fluid_midi_event_get_key_ftype> _fluid_midi_event_get_key;
+		std::function<fluid_midi_event_get_lyrics_ftype> _fluid_midi_event_get_lyrics;
+		std::function<fluid_midi_event_get_pitch_ftype> _fluid_midi_event_get_pitch;
+		std::function<fluid_midi_event_get_program_ftype> _fluid_midi_event_get_program;
+		std::function<fluid_midi_event_get_text_ftype> _fluid_midi_event_get_text;
+		std::function<fluid_midi_event_get_type_ftype> _fluid_midi_event_get_type;
+		std::function<fluid_midi_event_get_value_ftype> _fluid_midi_event_get_value;
+		std::function<fluid_midi_event_get_velocity_ftype> _fluid_midi_event_get_velocity;
+		std::function<fluid_midi_event_set_channel_ftype> _fluid_midi_event_set_channel;
+		std::function<fluid_midi_event_set_control_ftype> _fluid_midi_event_set_control;
+		std::function<fluid_midi_event_set_key_ftype> _fluid_midi_event_set_key;
+		std::function<fluid_midi_event_set_lyrics_ftype> _fluid_midi_event_set_lyrics;
+		std::function<fluid_midi_event_set_pitch_ftype> _fluid_midi_event_set_pitch;
+		std::function<fluid_midi_event_set_program_ftype> _fluid_midi_event_set_program;
+		std::function<fluid_midi_event_set_sysex_ftype> _fluid_midi_event_set_sysex;
+		std::function<fluid_midi_event_set_text_ftype> _fluid_midi_event_set_text;
+		std::function<fluid_midi_event_set_type_ftype> _fluid_midi_event_set_type;
+		std::function<fluid_midi_event_set_value_ftype> _fluid_midi_event_set_value;
+		std::function<fluid_midi_event_set_velocity_ftype> _fluid_midi_event_set_velocity;
+
 
 		fluid_settings_t *settings = nullptr;
 		fluid_synth_t *synth = nullptr;
