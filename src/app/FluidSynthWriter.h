@@ -28,7 +28,7 @@ namespace app
         FluidSynthWriter(com::ILoggerPtr logger) : _logger(logger) {}
         virtual ~FluidSynthWriter() = default;
         virtual void initSynth() override;
-        virtual SoundFontId addSoundFont(const DeviceId& deviceId, const std::string &soundFondPath) override;
+        virtual SoundFontId addSoundFont(const DeviceId& deviceId, const std::string &soundFontPath) override;
         bool addEvent(const com::midi::Event& event);
         void render(int len, float* lout, int loff, int lincr, float* rout, int roff, int rincr);
         void libPath(const com::String &path) { _libPath = path; }

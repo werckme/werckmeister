@@ -234,8 +234,16 @@ namespace app
             << " i:" << _activeJumpPoint->index));
     }
 
+    /*
+        gets the soundfont id of the current channel, if not esists the last used sfId will be set and returned
+        the idea is this: 
+        set device (with sf path)
+        ...
+        pc  // this will initial call getSfId and assign the last used (via set device) sfId.
+    */
     int FluidSynthWriter::getSfId(int channel)
     {
+
         int sfId = _sfIdPerChannel[channel];
         if (sfId != 0)
         {
