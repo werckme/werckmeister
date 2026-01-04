@@ -825,10 +825,85 @@ namespace com
 		{
 			_ppq = ppq;
 		}
-		size_t Midi::read(const Byte *, size_t length)
+		size_t Midi::read(const Byte *bytes, size_t length)
 		{
-			FM_THROW(com::Exception, "not yet implemented");
+			if (bytes == nullptr)
+			{
+				FM_THROW(com::Exception, "buffer == null");
+			}
+			if (length < HeaderSize)
+			{
+				FM_THROW(com::Exception, "buffer too small for MIDI header");
+			}
+			Header header;
+			::memcpy(&header, bytes, HeaderSize);
+			if (isLittleEndian())
+			{
+				endswap(&header.chunkSize);
+				endswap(&header.formatType);
+				endswap(&header.numberOfTracks);
+				endswap(&header.timeDivision);
+			}
+			if (::memcmp(header.chunkID, "MThd", 4) != 0)
+			{
+				FM_THROW(com::Exception, "invalid MIDI file: missing MThd header");
+			}
+			if (header.chunkSize != 6)
+			{
+				FM_THROW(com::Exception, "invalid MIDI header chunk size");
+			}
+			_ppq = header.timeDivision & 0x7FFF;
+			if (header.timeDivision & 0x8000)
+			{
+				FM_THROW(com::Exception, "SMPTE time division format not supported");
+			}
+			if (header.formatType != 1 && header.formatType != 0)
+			{
+				FM_THROW(com::Exception, "only MIDI format 0 and 1 are supported");
+			}
+			size_t bytesRead = HeaderSize;
+			const Byte *trackData = bytes + HeaderSize;
+			size_t remainingBytes = length - HeaderSize;
+			for (Word trackIdx = 0; trackIdx < header.numberOfTracks; ++trackIdx)
+			{
+				if (remainingBytes < Track::HeaderSize)
+				{
+					FM_THROW(com::Exception, "buffer too small for track header");
+				}
+				Track::Header trackHeader;
+				::memcpy(&trackHeader, trackData, Track::HeaderSize);
+
+				if (isLittleEndian())
+				{
+					endswap(&trackHeader.chunkSize);
+				}
+				if (::memcmp(trackHeader.chunkID, "MTrk", 4) != 0)
+				{
+					FM_THROW(com::Exception, "invalid track header: missing MTrk");
+				}
+				trackData += Track::HeaderSize;
+				remainingBytes -= Track::HeaderSize;
+				bytesRead += Track::HeaderSize;
+
+				if (remainingBytes < trackHeader.chunkSize)
+				{
+					FM_THROW(com::Exception, "buffer too small for track data");
+				}
+				TrackPtr track = createTrack();
+				track->events().midiConfig(&this->midiConfig);
+				size_t trackBytesRead = track->events().read(trackData, trackHeader.chunkSize);
+				if (trackBytesRead != trackHeader.chunkSize)
+				{
+					FM_THROW(com::Exception, "track size mismatch");
+				}
+				_container.push_back(track);
+				trackData += trackHeader.chunkSize;
+				remainingBytes -= trackHeader.chunkSize;
+				bytesRead += trackHeader.chunkSize;
+			}
+			return bytesRead;
 		}
+
 		size_t Midi::write(Byte *bff, size_t maxByteSize) const
 		{
 			if (!_sealed)
