@@ -60,14 +60,14 @@ namespace app
         Base::tearDownSynth();
     }
 
-    FluidSynthWriter::SoundFontId FluidSynthWriter::addSoundFont(const DeviceId& deviceId, const std::string &soundFondPath)
+    FluidSynthWriter::SoundFontId FluidSynthWriter::addSoundFont(const DeviceId& deviceId, const std::string &soundFontPath)
     {
-        if (soundFondPath.empty())
+        if (soundFontPath.empty())
         {
             return FLUID_FAILED;
         }
-        _logger->babble(WMLogLambda(log << "FluidSynthWriter:: addSoundFont: " << soundFondPath));
-        return Base::addSoundFont(deviceId, soundFondPath);
+        _logger->babble(WMLogLambda(log << "FluidSynthWriter:: addSoundFont: " << soundFontPath));
+        return Base::addSoundFont(deviceId, soundFontPath);
     }
 
     std::string FluidSynthWriter::findFluidSynthLibraryPath() const
