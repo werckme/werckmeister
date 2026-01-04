@@ -887,3 +887,80 @@ BOOST_AUTO_TEST_CASE(event_read_write_sysex_large)
 	delete[] sysexData;
 	delete[] bff;
 }
+
+BOOST_AUTO_TEST_CASE(write_midi_read)
+{
+	using namespace com;
+	Byte* bytes = nullptr;
+	int byteSize = 0;
+	{
+		midi::Midi midi(PPQ);
+		{
+			midi::TrackPtr track = std::make_shared<midi::Track>();
+			auto &events = track->events();
+			midi::MidiConfig config;
+			events.midiConfig(&config);
+			events.add(midi::Event::NoteOn(0, 0, 24, 100));
+			events.add(midi::Event::NoteOn(1, 50, 25, 101));
+			events.add(midi::Event::NoteOn(2, 100, 26, 102));
+			midi.addTrack(track);
+		}
+		{
+			midi::TrackPtr track = std::make_shared<midi::Track>();
+			auto &events = track->events();
+			midi::MidiConfig config;
+			events.midiConfig(&config);
+			events.add(midi::Event::NoteOn(3, 0, 48, 103));
+			events.add(midi::Event::NoteOn(4, 50, 50, 104));
+			events.add(midi::Event::NoteOn(5, 100, 52, 105));
+			midi.addTrack(track);
+		}
+		midi.seal();
+		byteSize = midi.byteSize();
+		bytes = new Byte[byteSize];
+		BOOST_CHECK(midi.write(&bytes[0], byteSize) == byteSize);
+	}
+	{
+		midi::Midi midi(PPQ);
+		auto bytesRead = midi.read(bytes, byteSize);
+		BOOST_CHECK_EQUAL(bytesRead, byteSize);
+		BOOST_CHECK_EQUAL(midi.tracks().size(), 2);
+		auto evIt = midi.tracks().at(0)->events().begin();
+		BOOST_CHECK_EQUAL(evIt->eventType(), midi::NoteOn);
+		BOOST_CHECK_EQUAL(evIt->channel(), 0);
+		BOOST_CHECK_EQUAL(evIt->absPosition(), 0);
+		BOOST_CHECK_EQUAL(evIt->parameter1(), 24);
+		BOOST_CHECK_EQUAL(evIt->parameter2(), 100);
+		++evIt;
+		BOOST_CHECK_EQUAL(evIt->eventType(), midi::NoteOn);
+		BOOST_CHECK_EQUAL(evIt->channel(), 1);
+		BOOST_CHECK_EQUAL(evIt->absPosition(), 50);
+		BOOST_CHECK_EQUAL(evIt->parameter1(), 25);
+		BOOST_CHECK_EQUAL(evIt->parameter2(), 101);
+		++evIt;
+		BOOST_CHECK_EQUAL(evIt->eventType(), midi::NoteOn);
+		BOOST_CHECK_EQUAL(evIt->channel(), 2);
+		BOOST_CHECK_EQUAL(evIt->absPosition(), 100);
+		BOOST_CHECK_EQUAL(evIt->parameter1(), 26);
+		BOOST_CHECK_EQUAL(evIt->parameter2(), 102);
+		evIt = midi.tracks().at(1)->events().begin();
+		BOOST_CHECK_EQUAL(evIt->eventType(), midi::NoteOn);
+		BOOST_CHECK_EQUAL(evIt->channel(), 3);
+		BOOST_CHECK_EQUAL(evIt->absPosition(), 0);
+		BOOST_CHECK_EQUAL(evIt->parameter1(), 48);
+		BOOST_CHECK_EQUAL(evIt->parameter2(), 103);
+		++evIt;
+		BOOST_CHECK_EQUAL(evIt->eventType(), midi::NoteOn);
+		BOOST_CHECK_EQUAL(evIt->channel(), 4);
+		BOOST_CHECK_EQUAL(evIt->absPosition(), 50);
+		BOOST_CHECK_EQUAL(evIt->parameter1(), 50);
+		BOOST_CHECK_EQUAL(evIt->parameter2(), 104);
+		++evIt;
+		BOOST_CHECK_EQUAL(evIt->eventType(), midi::NoteOn);
+		BOOST_CHECK_EQUAL(evIt->channel(), 5);
+		BOOST_CHECK_EQUAL(evIt->absPosition(), 100);
+		BOOST_CHECK_EQUAL(evIt->parameter1(), 52);
+		BOOST_CHECK_EQUAL(evIt->parameter2(), 105);
+	}
+	delete[] bytes;
+}
