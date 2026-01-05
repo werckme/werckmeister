@@ -90,6 +90,21 @@ extern "C"
 		return STRVERSION;
 	}
 
+	WERCKM_EXPORT int wm_setLogLevel(WmSession sessionPtr, int logLevel)
+	{
+		if (sessionPtr == nullptr)
+		{
+			return WERCKM_ERR;
+		}
+		Session* session = reinterpret_cast<Session*>(sessionPtr);
+		auto _logger = session->logger;
+		if (logLevel < 0 || logLevel >= com::ILogger::NumLogLevels)
+		{
+			return WERCKM_ERR;
+		}
+		_logger->logLevel((com::ILogger::LogLevel)logLevel);
+	}
+
 	WERCKM_EXPORT WmSession wm_createSession()
 	{
 		auto session = new Session();

@@ -17,7 +17,8 @@ namespace com
             LevelBabble,
             LevelWarn,
             LevelError,
-            LevelNone
+            LevelNone,
+            NumLogLevels
         };
         typedef std::function<void(std::ostream &)> WriteToStreamF;
         virtual void babble(const WriteToStreamF &) = 0;

@@ -29,6 +29,14 @@ extern "C"
   WERCKM_EXPORT int wm_synthRender(WmSession, int len, float* lout, int loff, int lincr, float* rout, int roff, int rincr);
   WERCKM_EXPORT int wm_writeToFile(WmSession, const char* outputPath);
   WERCKM_EXPORT int wm_setSoundFontHome(WmSession, const char *sfHomePath);
+  /**
+    LevelDebug = 0,
+    LevelBabble,
+    LevelWarn,
+    LevelError,
+    LevelNone,
+  */
+  WERCKM_EXPORT int wm_setLogLevel(WmSession, int logLevel);
   WERCKM_EXPORT double wm_getSongPositionSeconds(WmSession);
   WERCKM_EXPORT double wm_setSongPositionSeconds(WmSession, double songPosSeconds);
   WERCKM_EXPORT int wm_getNumMidiCuePoints(WmSession);
