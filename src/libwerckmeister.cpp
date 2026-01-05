@@ -103,6 +103,7 @@ extern "C"
 			return WERCKM_ERR;
 		}
 		_logger->logLevel((com::ILogger::LogLevel)logLevel);
+		return WERCKM_OK;
 	}
 
 	WERCKM_EXPORT WmSession wm_createSession()
