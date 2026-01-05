@@ -51,7 +51,7 @@ namespace
 		{
 			logger = std::make_shared<com::ConsoleLogger>();
 		}
-		logger->logLevel(com::FileLogger::LevelError);
+		logger->logLevel(com::FileLogger::LevelDebug);
 		return logger;
 	}
 	typedef SheetLibProgram CompilerProgram;
