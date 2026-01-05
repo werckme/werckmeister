@@ -25,7 +25,7 @@ namespace app
         typedef std::vector<const JumpPoint*> JumpPointsIndex;
         typedef std::function<void(const com::midi::Event*)> VisitEventFunction;
         enum { UndefinedJumpPointIndex = -1 };
-        FluidSynthWriter(com::ILoggerPtr logger) : _logger(logger) {}
+        FluidSynthWriter(com::ILoggerPtr logger) : Base(false), _logger(logger) {}
         virtual ~FluidSynthWriter() = default;
         virtual void initSynth() override;
         virtual SoundFontId addSoundFont(const DeviceId& deviceId, const std::string &soundFontPath) override;

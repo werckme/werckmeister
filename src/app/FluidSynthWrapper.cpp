@@ -15,8 +15,12 @@ namespace
 namespace app
 {
 
-    FluidSynth::FluidSynth()
+    FluidSynth::FluidSynth(bool initNow)
     {
+        if (!initNow)
+        {
+            return;
+        }
         initLibraryFunctions();
         initSynth();
     }

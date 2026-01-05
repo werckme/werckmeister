@@ -95,7 +95,7 @@ namespace app
 		typedef int SoundFontId;
 		typedef com::String DeviceId;
         typedef std::unordered_map<DeviceId, SoundFontId> SoundFontIdMap;
-		FluidSynth();
+		FluidSynth(bool initNow = true);
 		FluidSynth(const FluidSynth &&) = delete;
 		FluidSynth &operator=(const FluidSynth &&) = delete;
 		virtual ~FluidSynth();
