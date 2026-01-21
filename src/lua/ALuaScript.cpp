@@ -40,7 +40,10 @@ namespace lua
 
     ALuaScript::~ALuaScript()
     {
-        lua_close(L);
+        if (L != nullptr)
+        {
+            lua_close(L);
+        }
     }
 
     bool ALuaScript::hasFunction(const std::string &name) const

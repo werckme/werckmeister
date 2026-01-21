@@ -20,6 +20,8 @@ struct PlayerProgramOptions : public CompilerProgramOptions, public IPlayerProgr
 	virtual bool isNoTimePrintSet() const override;
 	virtual bool isSigintWorkaroundSet() const override;
 	virtual bool isJsonDocInfoMode() const override;
+	virtual bool isScriptSet() const override;
+	virtual com::String script() const override;
 
 	// compileroptions we don't need
 	virtual bool isJsonModeSet() const override { return false; }

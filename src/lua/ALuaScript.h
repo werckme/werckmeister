@@ -14,6 +14,7 @@ namespace lua
     class ALuaScript
     {
     public:
+        ALuaScript() = default;
         ALuaScript(const com::String &path);
         virtual ~ALuaScript();
         virtual bool hasFunction(const std::string &name) const;
@@ -28,7 +29,7 @@ namespace lua
         lua_State *L = nullptr;
 
     private:
-        const com::String &_path;
+        com::String _path;
         void addSearchPaths();
     };
 }

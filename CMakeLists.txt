@@ -121,6 +121,7 @@ INCLUDE_DIRECTORIES(submodules/lua/src)
 INCLUDE_DIRECTORIES(submodules/rapidjson/include)
 INCLUDE_DIRECTORIES(submodules/di/include)
 INCLUDE_DIRECTORIES(submodules/di/extension/include)
+INCLUDE_DIRECTORIES(submodules/sol2/include)
 
 if(WIN32)
   INCLUDE_DIRECTORIES(submodules)
