@@ -10,15 +10,20 @@ namespace lua
 
     ALuaScript::ALuaScript(const com::String &path) : _path(path)
     {
-        L = luaL_newstate();
-        luaL_openlibs(L);
-        auto dir = boost::filesystem::path(path).parent_path().generic_string();
-        addPackagePath(dir);
-        addSearchPaths();
-        if (luaL_dofile(L, path.c_str()))
+        prepareLuaEnvironment();
+        if (luaL_dofile(L, _path.c_str()))
         {
             error(std::string(lua_tostring(L, -1)));
         }
+    }
+
+    void ALuaScript::prepareLuaEnvironment()
+    {
+        L = luaL_newstate();
+        luaL_openlibs(L);
+        auto dir = boost::filesystem::path(_path).parent_path().generic_string();
+        addPackagePath(dir);
+        addSearchPaths();
     }
 
     void ALuaScript::addSearchPaths()
@@ -38,12 +43,17 @@ namespace lua
         luaL_dostring(L, pathcommand.c_str());
     }
 
-    ALuaScript::~ALuaScript()
+    void ALuaScript::releaseLuaState()
     {
         if (L != nullptr)
         {
             lua_close(L);
         }
+    }
+
+    ALuaScript::~ALuaScript()
+    {
+        releaseLuaState();
     }
 
     bool ALuaScript::hasFunction(const std::string &name) const

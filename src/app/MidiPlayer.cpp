@@ -35,7 +35,19 @@ namespace app
         }
         _logger->babble(WMLogLambda(log << "start playback"));
         _logger->babble(WMLogLambda(log << "midi: " << _midifile->byteSize() << " bytes"));
+        if (_performerScript)
+        {
+            initPlayerScript();
+        }
         execLoop(doc);
+    }
+
+    void MidiPlayer::initPlayerScript()
+    {
+        _midiPlayerImpl.onSendMidiEvent = [this](const auto *midiEv)
+        {
+            _performerScript->onMidiEvent(midiEv);
+        };
     }
 
     void MidiPlayer::initMidiBackends()

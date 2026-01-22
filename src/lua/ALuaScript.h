@@ -25,6 +25,8 @@ namespace lua
         const com::String &path() const { return _path; }
 
     protected:
+        void prepareLuaEnvironment();
+        virtual void releaseLuaState();
         void error(const std::string &msg);
         lua_State *L = nullptr;
 
