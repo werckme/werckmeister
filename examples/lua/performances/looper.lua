@@ -1,5 +1,5 @@
 print("tach")
 
-function onMidiEvent(event)
-    print(event.position)
+function OnMidiEvent(event)
+    JumpToPosition(event.position)
 end

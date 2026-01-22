@@ -28,6 +28,7 @@ namespace lua
         virtual void assertCanExecute() const {}
         virtual void onMidiEvent(const com::midi::Event*) override;
     private:
+        void jumpToPosition(double quarters);
         void initLuaFunctions(sol::state_view&);
         void initLuaTypes(sol::state_view&);
         sol::state_view* luaPtr = nullptr;

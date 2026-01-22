@@ -311,6 +311,10 @@ namespace app
 				{
 					onProcess();
 				}
+				catch (const std::exception &ex)
+				{
+					std::cerr << ex.what() << std::endl;
+				}
 				catch (...)
 				{
 					std::cerr << __FILE__ << " unexpected exception" << std::endl;
