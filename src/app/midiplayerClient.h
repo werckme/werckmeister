@@ -53,6 +53,7 @@ namespace app
 		bool isPlaying() const { return state_ == Playing; }
 		void play();
 		void play(com::Ticks ticks);
+		void seek(com::Ticks ticks);
 		void panic();
 		void stop();
 		com::Ticks elapsed() const { return MidiProvider::millisToTicks(elapsedMillis_); }
@@ -347,6 +348,14 @@ namespace app
 		Backend::seek(elapsedMillis_);
 		MidiProvider::seek(elapsedMillis_, trackOffsets_);
 		play();
+	}
+
+	template <class TBackend, class TMidiProvider, class TTimer>
+	void MidiplayerClient<TBackend, TMidiProvider, TTimer>::seek(com::Ticks ticks)
+	{
+		elapsedMillis_ = MidiProvider::ticksToMillis(ticks);
+		Backend::seek(elapsedMillis_);
+		MidiProvider::seek(elapsedMillis_, trackOffsets_);
 	}
 
 	template <class TBackend, class TMidiProvider, class TTimer>

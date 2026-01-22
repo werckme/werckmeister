@@ -4,7 +4,7 @@
 #include <com/common.hpp>
 #include "IPerformerScript.h"
 #include "ALuaScript.h"
-#include <functional>
+
 
 namespace sol
 {
@@ -27,7 +27,9 @@ namespace lua
         virtual bool canExecute() const { return false; }
         virtual void assertCanExecute() const {}
         virtual void onMidiEvent(const com::midi::Event*) override;
+        virtual void setSeekRequestHandler(const OnSeekRequestFunction& rq) override { onSeekRequest = rq; }
     private:
+        OnSeekRequestFunction onSeekRequest = nullptr;
         void jumpToPosition(double quarters);
         void initLuaFunctions(sol::state_view&);
         void initLuaTypes(sol::state_view&);

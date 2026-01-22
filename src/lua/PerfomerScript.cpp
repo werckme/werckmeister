@@ -31,7 +31,7 @@ namespace lua
 
         lua["JumpToPosition"] = [this](double position)
         {
-            jumpToPosition(position);
+            onSeekRequest(position);
         };
     }
 
@@ -47,10 +47,6 @@ namespace lua
         LuaMidi luaMidi;
         luaMidi.position = ev->absPosition() / com::PPQ;
         luaOnMidiEvent(luaMidi);
-    }
-
-    void PerformerScript::jumpToPosition(double quarters)
-    {
     }
 
     PerformerScript::~PerformerScript()
