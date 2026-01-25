@@ -38,7 +38,7 @@ namespace lua
     void PerformerScript::initLuaTypes(sol::state_view& lua)
     {
         lua.new_usertype<LuaMidi>("LuaMidi",
-            "position", &LuaMidi::position
+            "position", sol::property(&LuaMidi::position)
         );
     }
 
