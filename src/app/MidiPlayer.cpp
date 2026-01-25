@@ -44,14 +44,18 @@ namespace app
 
     void MidiPlayer::initPlayerScript()
     {
-        _midiPlayerImpl.onSendMidiEvent = [this](const auto *midiEv)
+        _midiPlayerImpl.onSendMidiEvent = [this](const auto& output, const auto *midiEv)
         {
-            _performerScript->onMidiEvent(midiEv);
+            _performerScript->onMidiEvent(output, midiEv);
         };
         _performerScript->setSeekRequestHandler([this](auto positionQuarters)
         {
             auto ticks = positionQuarters * com::PPQ;
             _midiPlayerImpl.seek(ticks);
+        });
+        _performerScript->setSendMidiEventHandler([this](const auto* output, const auto *midiEv)
+        {
+            _midiPlayerImpl.send(*midiEv, output);
         });
         _performerScript->init();
     }

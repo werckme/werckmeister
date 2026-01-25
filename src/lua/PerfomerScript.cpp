@@ -66,6 +66,7 @@ namespace lua
         lua["JumpToPosition"] = [this](double position)
         {
             onSeekRequest(position);
+            sendNoteOffs();
         };
         lua["GetMidiEvents"] = [this]()
         {
@@ -116,10 +117,45 @@ namespace lua
         );
     }
 
-    void PerformerScript::onMidiEvent(const com::midi::Event* ev)
+    void PerformerScript::updateNoteOnCache(const Output& output, const com::midi::Event* ev)
+    {
+        bool noteOn = ev->eventType() == com::midi::NoteOn;
+        bool noteOff = ev->eventType() == com::midi::NoteOff;
+        if (!noteOn && !noteOff)
+        {
+            return;
+        }
+        NoteOnCacheValue cacheValue;
+        cacheValue.output = &output;
+        cacheValue.channel = ev->channel();
+        cacheValue.pitch = ev->parameter1();
+        if (noteOn)
+        {
+            noteOnCache.insert(cacheValue);
+            return;
+        }
+        noteOnCache.erase(cacheValue);
+    }
+
+    void PerformerScript::sendNoteOffs()
+    {
+        for(const auto noteCacheValue : noteOnCache)
+        {
+            com::midi::Event midiEv;
+            midiEv.eventType(com::midi::NoteOff);
+            midiEv.parameter1(noteCacheValue.pitch);
+            midiEv.parameter2(0);
+            midiEv.channel(noteCacheValue.channel);
+            onSendMidiEvent(noteCacheValue.output, &midiEv);
+        }
+        noteOnCache.clear();
+    }
+
+    void PerformerScript::onMidiEvent(const Output& output, const com::midi::Event* ev)
     {
         LuaMidi luaMidi = createFrom(*ev);
         luaOnMidiEvent(luaMidi);
+        updateNoteOnCache(output, ev);
     }
 
     void PerformerScript::init()

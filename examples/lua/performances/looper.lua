@@ -12,9 +12,6 @@ function OnMidiEvent(event)
     if event.type == NoteOn then
         print(event.position)
     end
-    -- if event.position >=4 then
-    --     JumpToPosition(0)
-    -- end
     if event.type == MetaEvent and event.metaType == MetaCuePoint then
         JumpToPosition(0)
     end

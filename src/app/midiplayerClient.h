@@ -42,7 +42,7 @@ namespace app
 		typedef typename MidiProvider::TrackId TrackId;
 		typedef std::chrono::high_resolution_clock Clock;
 		typedef std::function<void()> OnEnd;
-		typedef std::function<void(const com::midi::Event*)> OnSendMidiEvent;
+		typedef std::function<void(const Output&, const com::midi::Event*)> OnSendMidiEvent;
 		OnEnd onEnd = OnEnd();
 		OnSendMidiEvent onSendMidiEvent = nullptr;
 		MidiplayerClient();
@@ -282,20 +282,22 @@ namespace app
 		typename MidiProvider::Events events;
 		auto t = this->elapsedMillis_;
 		MidiProvider::getEvents(this->elapsedMillis_, events, trackOffsets_);
+		auto outputInfo = getOutputInfo();
+		auto output = &outputInfo->output;
 		for (const auto &evAndTrack : events)
 		{
 			currentTrack_ = evAndTrack.trackId;
 			const auto &ev = evAndTrack.event;
 			if (onSendMidiEvent)
 			{
-				onSendMidiEvent(&ev);
+				onSendMidiEvent(*output, &ev);
 				if (_seeked)
 				{
 					_seeked = false;
 					break;
 				}
 			}
-			send(ev);
+			send(ev, output);
 		}
 		currentTrack_ = MidiProvider::INVALID_TRACKID;
 	}
