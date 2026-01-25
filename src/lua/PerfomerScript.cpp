@@ -17,7 +17,7 @@ namespace lua
     void PerformerScript::initLuaFunctions(sol::state_view& lua)
     {
         sol::function luaF = lua["OnMidiEvent"];
-        if (luaF.is<sol::nil_t>() == false)
+        if (luaF.valid())
         {
             luaOnMidiEvent = [luaF](LuaMidi midiEv) {
                 auto result = luaF(midiEv);
