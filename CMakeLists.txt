@@ -1,4 +1,4 @@
-# CXX=clang++ CC=clang WM_LINUX_LINK_STATIC=1 cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_PREFIX_PATH=/home/samba/local/boost-1.87 ..
+# CXX=clang++ CC=clang WM_LINUX_LINK_STATIC=1 cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_PREFIX_PATH=/home/samba/local ..
 cmake_minimum_required(VERSION 3.30)
 
 execute_process(COMMAND git --work-tree=. log --pretty=format:%h -n 1

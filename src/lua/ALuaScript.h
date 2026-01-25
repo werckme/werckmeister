@@ -29,9 +29,8 @@ namespace lua
         virtual void releaseLuaState();
         void error(const std::string &msg);
         lua_State *L = nullptr;
-
-    private:
         com::String _path;
+    private:
         void addSearchPaths();
     };
 }

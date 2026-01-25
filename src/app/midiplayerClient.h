@@ -65,6 +65,7 @@ namespace app
 		OutputInfo getOutputInfo(const std::string &deviceName) const;
 		com::Ticks end = com::Ticks(-1);
 	private:
+		bool _seeked = false;
 		const OutputInfo *getOutputInfo() const;
 		void handleMetaEvent(const com::midi::Event &ev);
 		void changeDevice(const std::string &deviceId);
@@ -279,6 +280,7 @@ namespace app
 		}
 		std::lock_guard<Lock> lockGuard(lock);
 		typename MidiProvider::Events events;
+		auto t = this->elapsedMillis_;
 		MidiProvider::getEvents(this->elapsedMillis_, events, trackOffsets_);
 		for (const auto &evAndTrack : events)
 		{
@@ -287,6 +289,11 @@ namespace app
 			if (onSendMidiEvent)
 			{
 				onSendMidiEvent(&ev);
+				if (_seeked)
+				{
+					_seeked = false;
+					break;
+				}
 			}
 			send(ev);
 		}
@@ -356,6 +363,7 @@ namespace app
 		elapsedMillis_ = MidiProvider::ticksToMillis(ticks);
 		Backend::seek(elapsedMillis_);
 		MidiProvider::seek(elapsedMillis_, trackOffsets_);
+		_seeked = true;
 	}
 
 	template <class TBackend, class TMidiProvider, class TTimer>

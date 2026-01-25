@@ -1,18 +1,18 @@
 using "./chords/default.chords";
 
 device: MyDevice midi _useDevice="FLUID";
-instrumentDef: _setName=piano _onDevice=MyDevice _ch=0 _pc=0;
+instrumentDef: _setName=lead _onDevice=MyDevice _ch=0 _pc=18;
 
 
 tempo: 180;
 
 [
-instrument: piano;
+instrument: lead;
 {
     
-    !fffffc,,,8 d,,, e,,, f,,, g,,, a,,, b,,, c,, | 
-    !fffffd,, e,, f,, g,, a,, b,, c, d, | 
-    !fffffe, f, g, a, b, c d e |
-    !fffff f g a b c'4. r8 :(x10)| 
+    c d e f  /cue: X/ | g' a' b' c' 
+}
+{
+    c''2 d''~ | &4 r2.
 }
 ]
