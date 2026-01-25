@@ -21,6 +21,7 @@ namespace lua
         virtual ~IPerformerScript() = default;
         virtual void onMidiEvent(const com::midi::Event*) = 0;
         virtual void setSeekRequestHandler(const OnSeekRequestFunction&) = 0;
+        virtual void init() = 0;
     };
     typedef std::shared_ptr<IPerformerScript> IPerformerScriptPtr;
 }

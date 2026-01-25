@@ -16,11 +16,24 @@ namespace lua
 
     void PerformerScript::initLuaFunctions(sol::state_view& lua)
     {
-        sol::function luaF = lua["OnMidiEvent"];
-        if (luaF.valid())
+        // LUA
+        sol::function solOnMidiEvent = lua["OnMidiEvent"];
+        if (solOnMidiEvent.valid())
         {
-            luaOnMidiEvent = [luaF](LuaMidi midiEv) {
-                auto result = luaF(midiEv);
+            luaOnMidiEvent = [solOnMidiEvent](LuaMidi midiEv) {
+                auto result = solOnMidiEvent(midiEv);
+                if (!result.valid())
+                {
+                    sol::error err = result;
+                    throw std::runtime_error(err.what());
+                }
+            };
+        }
+        sol::function solInit = lua["Init"];
+        if (solInit.valid())
+        {
+            luaInit = [solInit]() {
+                auto result = solInit();
                 if (!result.valid())
                 {
                     sol::error err = result;
@@ -29,6 +42,7 @@ namespace lua
             };
         }
 
+        /// HOST
         lua["JumpToPosition"] = [this](double position)
         {
             onSeekRequest(position);
@@ -37,9 +51,7 @@ namespace lua
 
     void PerformerScript::initLuaTypes(sol::state_view& lua)
     {
-        lua.new_usertype<LuaMidi>("LuaMidi",
-            "position", sol::property(&LuaMidi::position)
-        );
+        lua.new_usertype<LuaMidi>("LuaMidi", "position", &LuaMidi::position);
     }
 
     void PerformerScript::onMidiEvent(const com::midi::Event* ev)
@@ -47,6 +59,14 @@ namespace lua
         LuaMidi luaMidi;
         luaMidi.position = ev->absPosition() / com::PPQ;
         luaOnMidiEvent(luaMidi);
+    }
+
+    void PerformerScript::init()
+    {
+        if (luaInit)
+        {
+            luaInit();
+        }
     }
 
     PerformerScript::~PerformerScript()

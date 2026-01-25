@@ -53,6 +53,7 @@ namespace app
             auto ticks = positionQuarters * com::PPQ;
             _midiPlayerImpl.seek(ticks);
         });
+        _performerScript->init();
     }
 
     void MidiPlayer::initMidiBackends()
