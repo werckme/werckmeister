@@ -1,7 +1,9 @@
 using "./chords/default.chords";
+using "/pitchmaps/defaultMIDI.pitchmap";
 
 device: MyDevice midi _useDevice="FLUID";
 instrumentDef: _setName=lead _onDevice=MyDevice _ch=0 _pc=18;
+instrumentDef: _setName=drums _onDevice=MyDevice _ch=9;
 
 
 tempo: 180;
@@ -10,9 +12,19 @@ tempo: 180;
 instrument: lead;
 {
     
-    c d e f  /cue: X/ | g' a' b' c' 
+    c d e f  /cue: X/ | g'4 a' b' c' 
 }
 {
     c''2 d''~ | &4 r2.
+}
+]
+
+[
+instrument: drums;
+{
+    r4. x4 x x8 | x4 r2.
+}
+{
+   o4 & & & | & & & &
 }
 ]

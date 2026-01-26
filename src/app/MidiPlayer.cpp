@@ -57,6 +57,7 @@ namespace app
         {
             _midiPlayerImpl.send(*midiEv, output);
         });
+        _performerScript->setMidiBackend(_midiPlayerImpl.getDefaultBackend().get());
         _performerScript->init();
     }
 

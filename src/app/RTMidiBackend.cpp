@@ -1,15 +1,24 @@
 #include "RTMidiBackend.h"
 #include <algorithm>
 
+namespace 
+{
+	void inputCallback(double timeStamp, std::vector<unsigned char> *message, void *userData);
+}
+
 namespace app
 {
-
 	RtMidiBackend::RtMidiBackend()
 	{
 		auto defaultOutput = std::make_unique<RtMidiOut>();
 		auto nOutputs = defaultOutput->getPortCount();
 		midiOuts.resize(std::max((int)nOutputs, (int)1));
 		midiOuts[0].swap(defaultOutput);
+
+		auto defaultInput = std::make_unique<RtMidiIn>();
+		auto nInputs = defaultInput->getPortCount();
+		midiIns.resize(std::max((int)nInputs, (int)1));
+		midiIns[0].swap(defaultInput);
 	}
 
 	RtMidiOut *RtMidiBackend::getRtOutputReadyForSend(int idx)
@@ -50,6 +59,20 @@ namespace app
 		return result;
 	}
 
+	RtMidiBackend::Inputs RtMidiBackend::getInputs() const 
+	{
+		auto nInputs = defaultRtInput()->getPortCount();
+		Inputs result(nInputs);
+		for (size_t idx = 0; idx < nInputs; ++idx)
+		{
+			auto &input = result[idx];
+			input.portid = idx;
+			input.id = std::to_string(idx);
+			input.name = defaultRtInput()->getPortName(idx);
+		}
+		return result;
+	}
+
 	void RtMidiBackend::panic()
 	{
 		com::Byte message[3] = {0};
@@ -77,8 +100,24 @@ namespace app
 			{
 				continue;
 			}
+			if (rtOut->isPortOpen())
+			{
+				continue;
+			}
 			rtOut->closePort();
 		}
+		for (auto &rtIn : midiIns)
+		{
+			if (rtIn.get() == nullptr)
+			{
+				continue;
+			}
+			if (rtIn->isPortOpen())
+			{
+				continue;
+			}
+			rtIn->closePort();
+		}		
 	}
 
 	void RtMidiBackend::send(const com::midi::Event &ev, const Output *output, long double elapsedMillis)
@@ -106,5 +145,40 @@ namespace app
 
 		ev.writePayload(bff, eventSize, com::midi::MidiEventTargetDevice);
 		port->sendMessage(bff, eventSize);
+	}
+
+	void RtMidiBackend::listenTo(const Input *input) 
+	{
+		if (input->portid < 0 || input->portid >= midiIns.size())
+		{
+			throw std::runtime_error("invalid port id: " + std::to_string(input->portid));
+		}
+		auto rtIn = midiIns.at(input->portid).get();
+		if (rtIn == nullptr)
+		{
+			auto newIn = std::make_unique<RtMidiIn>();
+			newIn->openPort(input->portid);
+			rtIn = newIn.get();
+			midiIns.at(input->portid).swap(newIn);
+		}
+		if (!rtIn->isPortOpen())
+		{
+			rtIn->openPort(input->portid);
+		}
+		rtIn->setCallback(&inputCallback, (void*)input);
+	}
+}
+
+
+namespace 
+{
+	void inputCallback(double timeStamp, std::vector<unsigned char> *message, void *userData)
+	{
+		const auto *input = reinterpret_cast<app::AMidiBackend::Input*>(userData);
+		if (!input->midiMessageCallback)
+		{
+			return;
+		}
+		input->midiMessageCallback(message);
 	}
 }

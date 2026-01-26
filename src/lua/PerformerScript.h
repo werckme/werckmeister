@@ -8,6 +8,7 @@
 #include <vector>
 #include <unordered_set>
 #include <cstdint>
+#include <sol/sol.hpp>
 
 namespace sol
 {
@@ -23,9 +24,11 @@ namespace lua
         struct LuaMidi
         {
             float position = 0;
-            int type = -1;
-            int channel = -1;
-            int metaType = -1;
+            com::Byte type = -1;
+            com::Byte channel = -1;
+            com::Byte metaType = -1;
+            com::Byte parameter1 = -1;
+            com::Byte parameter2 = -1;
             LuaMidiData data;
         };
         typedef std::vector<LuaMidi> LuaMidiEvents;
@@ -63,8 +66,14 @@ namespace lua
                 return h;
             }
         };
-        PerformerScript(com::midi::MidiPtr midiFile) : 
-            _midiFile(midiFile) 
+        struct LuaMidiInput
+        {
+            std::string name;
+            std::string id;
+        };
+        typedef std::vector<LuaMidiInput> LuaMidiInputs;
+        PerformerScript(com::midi::MidiPtr midiFile) :
+              _midiFile(midiFile) 
         {
         }
         virtual ~PerformerScript();
@@ -74,14 +83,19 @@ namespace lua
         virtual void onMidiEvent(const Output& output, const com::midi::Event*) override;
         virtual void setSeekRequestHandler(const OnSeekRequestFunction& rq) override { onSeekRequest = rq; }
         virtual void setSendMidiEventHandler(const OnSendMidiEventFunction& sm) override { onSendMidiEvent = sm; }
+        virtual void setMidiBackend(app::AMidiBackend* midiBackend) override { _midiBackend = midiBackend; }
         virtual void init() override;
     private:
+        app::AMidiBackend::Inputs _midiInputs;
         void sendNoteOffs();
         void updateNoteOnCache(const Output& output, const com::midi::Event*);
+        app::AMidiBackend* _midiBackend = nullptr;
         std::unordered_set<NoteOnCacheValue, NoteOnCacheValueHasher> noteOnCache;
         com::midi::MidiPtr _midiFile = nullptr;
         OnSeekRequestFunction onSeekRequest = nullptr;
         OnSendMidiEventFunction onSendMidiEvent = nullptr;
+        LuaMidiInputs getLuaMidiInputs();
+        void listenTo(const std::string &id, sol::protected_function callBack);
         void jumpToPosition(double quarters);
         void initLuaFunctions(sol::state_view&);
         void initLuaTypes(sol::state_view&);

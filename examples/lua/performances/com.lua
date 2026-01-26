@@ -24,3 +24,31 @@ MetaSMPTEOffset = 0x54
 MetaTimeSignature = 0x58
 MetaKeySignature = 0x59
 MetaCustomMetaEvent = 0x7F
+
+local function bytesToHex(str)
+    local hex = {}
+    for i = 1, #str do
+        table.insert(hex, string.format("0x%02x", string.byte(str, i)))
+    end
+    return table.concat(hex, " ")
+end
+
+function DumpEvent(midiEvent)
+    print("{")
+    print(string.format("\tposition: %f", midiEvent.position))
+    print(string.format("\ttype: 0x%x", midiEvent.type))
+    print(string.format("\tchannel: 0x%x", midiEvent.channel))
+    print(string.format("\tparameter1: 0x%x", midiEvent.parameter1))
+    print(string.format("\tparameter2: 0x%x", midiEvent.parameter2))
+    print(string.format("\tmetaType: 0x%x", midiEvent.metaType))
+    print(string.format("\tdata: %s", bytesToHex(midiEvent.data)))
+    print("}")
+end
+
+function FindInput(midiInputs, deviceName)
+    for _, input in ipairs(midiInputs) do
+        if input.name:lower():match(deviceName:lower()) ~= nil then
+            return input
+        end
+    end
+end

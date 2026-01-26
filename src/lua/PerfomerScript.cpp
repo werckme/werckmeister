@@ -1,7 +1,7 @@
 #include "PerformerScript.h"
-#include <sol/sol.hpp>
 #include <com/midi.hpp>
 #include <iostream>
+#include <algorithm>
 
 namespace
 {
@@ -22,6 +22,8 @@ namespace
                 (char)midiEvent.parameter1(),
                 (char)midiEvent.parameter2(),
             });
+            result.parameter1 = midiEvent.parameter1();
+            result.parameter2 = midiEvent.parameter2();
         }
         return result;
     }
@@ -72,6 +74,14 @@ namespace lua
         {
             return hostGetMidiEvents();
         };
+        lua["GetMidiInputs"] = [this]()
+        {
+            return getLuaMidiInputs();
+        };
+        lua["AddMidiInputListener"] = [this](const std::string &id, sol::function callBack)
+        {
+            return listenTo(id, callBack);
+        };
     }
 
     void PerformerScript::initLuaTypes(sol::state_view& lua)
@@ -101,6 +111,16 @@ namespace lua
                 [](const LuaMidi& m) {
                     return m.data;
                 }
+            ),
+            "parameter1", sol::property(
+                [](const LuaMidi& m) {
+                    return m.parameter1;
+                }
+            ),
+            "parameter2", sol::property(
+                [](const LuaMidi& m) {
+                    return m.parameter2;
+                }
             )
         );
         lua.new_usertype<LuaMidiTrack>("LuaMidiTrack",
@@ -115,6 +135,19 @@ namespace lua
                 }
             )
         );
+        lua.new_usertype<LuaMidiInput>("LuaMidiInput",
+            "name", sol::property(
+                [](const LuaMidiInput& m) {
+                    return m.name;
+                }
+            ),
+            "id", sol::property(
+                [](const LuaMidiInput& m) {
+                    return m.id;
+                }
+            )
+        );        
+        
     }
 
     void PerformerScript::updateNoteOnCache(const Output& output, const com::midi::Event* ev)
@@ -201,5 +234,49 @@ namespace lua
             luaTracks.emplace_back(luaTrack);
         }
         return luaTracks;
+    }
+
+    PerformerScript::LuaMidiInputs PerformerScript::getLuaMidiInputs()
+    {
+        LuaMidiInputs result;
+        if (_midiBackend == nullptr)
+        {
+            return result;
+        }
+        _midiInputs = _midiInputs.empty() ? _midiBackend->getInputs() : _midiInputs;
+        result.reserve(_midiInputs.size());
+        for(const auto& input : _midiInputs)
+        {
+            LuaMidiInput luaIn;
+            luaIn.id = input.id;
+            luaIn.name = input.name;
+            result.emplace_back(luaIn);
+        }
+        return result;
+    }
+
+    void PerformerScript::listenTo(const std::string &id, sol::protected_function callBack)
+    {
+         _midiInputs = _midiInputs.empty() ? _midiBackend->getInputs() : _midiInputs;
+        auto inputIt = std::find_if(_midiInputs.begin(), _midiInputs.end(), [id](const auto &el) { return el.id == id; });
+        if (inputIt == _midiInputs.end())
+        {
+            throw std::runtime_error("invalid midi input id: " + id);
+        }
+        app::AMidiBackend::Input* inputPtr = &(*inputIt);
+        inputPtr->midiMessageCallback = [callBack](const auto *msg)
+        {
+            std::vector<com::Byte> midiData = {0x0};
+            midiData.insert( midiData.end(), msg->begin(), msg->end() );
+            com::midi::Event midiEvent;
+            midiEvent.read(0, midiData.data(), midiData.size());
+            auto luaMidiEvent = createFrom(midiEvent);
+            auto result = callBack(const_cast<LuaMidi*>(&luaMidiEvent));
+            if (!result.valid()) {
+                sol::error err = result;
+                std::cerr << "Error: " << err.what() << std::endl;
+            }
+        };
+        _midiBackend->listenTo(inputPtr);
     }
 }

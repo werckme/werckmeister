@@ -25,6 +25,7 @@ namespace lua
         virtual void onMidiEvent(const Output& output, const com::midi::Event*) = 0;
         virtual void setSeekRequestHandler(const OnSeekRequestFunction&) = 0;
         virtual void setSendMidiEventHandler(const OnSendMidiEventFunction&) = 0;
+        virtual void setMidiBackend(app::AMidiBackend* midiBackend) = 0;
         virtual void init() = 0;
     };
     typedef std::shared_ptr<IPerformerScript> IPerformerScriptPtr;
