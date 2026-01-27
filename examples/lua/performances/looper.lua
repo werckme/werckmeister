@@ -2,20 +2,47 @@ require "lua/com/com"
 require "com"
 
 local midiInputName = "Ampero"
-local looping = true
+local loops = {}
+local loopNames = {}
+local currentLoopIdx = 1
 
 local function onMidiInput(midiEvent)
     DumpEvent(midiEvent)
-    looping = false
+    currentLoopIdx = currentLoopIdx + 1
 end
 
+local function getCueText(event)
+    if event.type ~= MetaEvent or event.metaType ~= MetaCuePoint then
+        return nil
+    end
+    local cue = event.data
+    if not BeginsWith(cue, "loop_") then
+        return nil
+    end
+    return cue
+end
+
+local function handleCue(event)
+    local cue = getCueText(event)
+    if cue == nil then
+        return
+    end
+    if loops[cue] == nil then
+        loops[cue] = { event.position }
+        table.insert(loopNames, cue)
+        return
+    end
+    table.insert(loops[cue], event.position)
+end
 
 function Init()
     local midiEvents = GetMidiEvents()
     for _, track in ipairs(midiEvents) do
-        --print(track.name, #track.events)
+        for _, event in ipairs(track.events) do
+            handleCue(event)
+        end
     end
-
+    dump(loops)
     local midiInputs = GetMidiInputs()
     local input = FindInput(midiInputs, midiInputName)
     if input == nil then
@@ -25,10 +52,15 @@ function Init()
 end
 
 function OnMidiEvent(event)
-    if event.type == NoteOn then
-        print(event.position)
+    local cue = getCueText(event)
+    local currentLoop = loopNames[currentLoopIdx]
+    if cue == nil or cue ~= currentLoop then
+        return
     end
-    if event.type == MetaEvent and event.metaType == MetaCuePoint and looping then
-        JumpToPosition(0)
+    local loop = loops[cue]
+    local loopBegin = loop[1]
+    if event.position == loopBegin then
+        return
     end
+    JumpToPosition(loopBegin)
 end

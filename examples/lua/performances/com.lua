@@ -52,3 +52,7 @@ function FindInput(midiInputs, deviceName)
         end
     end
 end
+
+function BeginsWith(str, needle)
+   return str.sub(needle,1,string.len(needle))==needle
+end

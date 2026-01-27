@@ -1,0 +1,15 @@
+instrument(bass)
+{
+    duration = 70%;
+    pitch -= 24;
+}
+
+instrument(drums)
+{
+    velocity = 50;
+}
+
+instrument(drums) onBeat(1.5 2.5 3.5 4.5) 
+{
+    velocity = 80;
+}
