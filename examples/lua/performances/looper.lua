@@ -8,6 +8,9 @@ local currentLoopIdx = 1
 
 local function onMidiInput(midiEvent)
     DumpEvent(midiEvent)
+    if currentLoopIdx >= (#loopNames + 1) then
+        JumpToPosition(0)
+    end
     currentLoopIdx = currentLoopIdx + 1
 end
 

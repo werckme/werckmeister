@@ -67,8 +67,7 @@ namespace lua
         /// HOST
         lua["JumpToPosition"] = [this](double position)
         {
-            onSeekRequest(position);
-            sendNoteOffs();
+            nextJumpToValue = position;
         };
         lua["GetMidiEvents"] = [this]()
         {
@@ -82,6 +81,12 @@ namespace lua
         {
             return listenTo(id, callBack);
         };
+    }
+
+    void PerformerScript::performJump(double position)
+    {
+        onSeekRequest(position);
+        sendNoteOffs();
     }
 
     void PerformerScript::initLuaTypes(sol::state_view& lua)
@@ -184,10 +189,19 @@ namespace lua
         noteOnCache.clear();
     }
 
+    void PerformerScript::onTick(com::Ticks ticks)
+    {
+    }
+
     void PerformerScript::onMidiEvent(const Output& output, const com::midi::Event* ev)
     {
         LuaMidi luaMidi = createFrom(*ev);
         luaOnMidiEvent(luaMidi);
+        if (nextJumpToValue >= 0)
+        {
+            performJump(nextJumpToValue);
+        }
+        nextJumpToValue = -1;
         updateNoteOnCache(output, ev);
     }
 

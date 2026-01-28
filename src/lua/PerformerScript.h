@@ -84,11 +84,14 @@ namespace lua
         virtual void setSeekRequestHandler(const OnSeekRequestFunction& rq) override { onSeekRequest = rq; }
         virtual void setSendMidiEventHandler(const OnSendMidiEventFunction& sm) override { onSendMidiEvent = sm; }
         virtual void setMidiBackend(app::AMidiBackend* midiBackend) override { _midiBackend = midiBackend; }
+        virtual void onTick(com::Ticks ticks) override;
         virtual void init() override;
     private:
         app::AMidiBackend::Inputs _midiInputs;
         void sendNoteOffs();
+        void performJump(double position);
         void updateNoteOnCache(const Output& output, const com::midi::Event*);
+        double nextJumpToValue = -1;
         app::AMidiBackend* _midiBackend = nullptr;
         std::unordered_set<NoteOnCacheValue, NoteOnCacheValueHasher> noteOnCache;
         com::midi::MidiPtr _midiFile = nullptr;

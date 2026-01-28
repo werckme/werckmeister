@@ -13,7 +13,7 @@ tempo: 220;
 instrument: bass;
 {
     \fff
-    /cue: "loop_A"/ c d c d /cue: "loop_A"/ |: /cue: "loop_B"/ e f e f /cue: "loop_B"/| g b g b
+    /cue: "loop_A"/ c d c d /cue: "loop_A"/ | /cue: "loop_B"/ e f e f /cue: "loop_B"/|: g b g b :(x10)|
 }
 ]
 

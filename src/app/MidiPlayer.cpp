@@ -48,6 +48,10 @@ namespace app
         {
             _performerScript->onMidiEvent(output, midiEv);
         };
+        _midiPlayerImpl.onTick = [this](auto ticks)
+        {
+            _performerScript->onTick(ticks);
+        };
         _performerScript->setSeekRequestHandler([this](auto positionQuarters)
         {
             auto ticks = positionQuarters * com::PPQ;
