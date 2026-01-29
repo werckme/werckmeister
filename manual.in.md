@@ -1262,7 +1262,7 @@ Registers a callback function to receive MIDI events from an external input devi
 - `inputId` (number): The ID of the MIDI input device
 - `callback` (function): Function called with `LuaMidi` event when input is received
 
-### `JumpToPosition(position)`
+### `JumpToPosition(positionQuarters)`
 Jumps playback to a specific position in the sheet.
 
 **Parameters:**
