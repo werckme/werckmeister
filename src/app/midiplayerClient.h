@@ -68,6 +68,7 @@ namespace app
 		com::Ticks end = com::Ticks(-1);
 	private:
 		bool _seeked = false;
+		const com::Ticks tailTicks = 1;
 		const OutputInfo *getOutputInfo() const;
 		void handleMetaEvent(const com::midi::Event &ev);
 		void changeDevice(const std::string &deviceId);
@@ -275,7 +276,7 @@ namespace app
 	template <class TBackend, class TMidiProvider, class TTimer>
 	void MidiplayerClient<TBackend, TMidiProvider, TTimer>::onProcess()
 	{
-		if (this->end >= 0 && this->elapsed() >= this->end)
+		if (this->end + tailTicks >= 0 && this->elapsed() >= this->end + tailTicks)
 		{
 			onEnd();
 			return;
