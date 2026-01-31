@@ -1220,8 +1220,6 @@ See [Example](https://www.werckme.org/editor?wid=lua-event-functions-example).
 
 ## Performer Script
 
-# Performer Script Feature
-
 ## Overview
 
 The Performer Script feature allows you to embed Lua scripts into the sheetp player to control playback behavior dynamically. Scripts can react to MIDI events, manipulate playback position, and interact with external MIDI inputs.
