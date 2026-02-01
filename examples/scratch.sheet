@@ -1,18 +1,32 @@
 using "./chords/default.chords";
+using "/pitchmaps/defaultMIDI.pitchmap";
+using "./scratch.conductions";
 
 device: MyDevice midi _useDevice="FLUID";
-instrumentDef: _setName=piano _onDevice=MyDevice _ch=0 _pc=0;
+instrumentDef: _setName=bass _onDevice=MyDevice _ch=0 _pc=32;
+instrumentDef: _setName=drums _onDevice=MyDevice _ch=9;
 
 
-tempo: 180;
+tempo: 220;
 
 [
-instrument: piano;
+instrument: bass;
 {
-    
-    !fffffc,,,8 d,,, e,,, f,,, g,,, a,,, b,,, c,, | 
-    !fffffd,, e,, f,, g,, a,, b,, c, d, | 
-    !fffffe, f, g, a, b, c d e |
-    !fffff f g a b c'4. r8 :(x10)| 
+    \fff
+    /cue: "loop_A"/ c d c d /cue: "loop_A"/ | /cue: "loop_B"/ e f e f /cue: "loop_B"/
+}
+]
+
+[
+instrument: drums;
+{
+    r4 x r x | r x r x | x8xrxxxrx
+}
+{
+   \fffff
+   o4 & & & | & & & &
+}
+{
+    (h8&16&)4  &  &  &  | & & & &   
 }
 ]

@@ -1,4 +1,4 @@
-# CXX=clang++ CC=clang WM_LINUX_LINK_STATIC=1 cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_PREFIX_PATH=/home/samba/local/boost-1.87 ..
+# CXX=clang++ CC=clang WM_LINUX_LINK_STATIC=1 cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_PREFIX_PATH=/home/samba/local ..
 cmake_minimum_required(VERSION 3.30)
 
 execute_process(COMMAND git --work-tree=. log --pretty=format:%h -n 1
@@ -121,6 +121,7 @@ INCLUDE_DIRECTORIES(submodules/lua/src)
 INCLUDE_DIRECTORIES(submodules/rapidjson/include)
 INCLUDE_DIRECTORIES(submodules/di/include)
 INCLUDE_DIRECTORIES(submodules/di/extension/include)
+INCLUDE_DIRECTORIES(submodules/sol2/include)
 
 if(WIN32)
   INCLUDE_DIRECTORIES(submodules)

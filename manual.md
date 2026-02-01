@@ -1218,6 +1218,82 @@ end
 ```
 See [Example](https://www.werckme.org/editor?wid=lua-event-functions-example).
 
+## Performer Script
+
+## Overview
+
+The Performer Script feature allows you to embed Lua scripts into the sheetp player to control playback behavior dynamically. Scripts can react to MIDI events, manipulate playback position, and interact with external MIDI inputs.
+
+## Usage
+
+```bash
+./sheetp ./my.sheet --script=./your-script.lua
+```
+
+## Script Lifecycle
+
+### `Init()`
+Called once when the player starts. Use this to set up your script's initial state, register MIDI input listeners, or analyze the sheet's MIDI events.
+
+### `OnMidiEvent(event)`
+Called for each MIDI event during playback. Use this to react to specific events and control playback flow.
+
+**Parameters:**
+- `event` (LuaMidi): The current MIDI event being processed
+
+## API Functions
+
+### `GetMidiEvents()`
+Returns all MIDI tracks and their events from the loaded sheet.
+
+**Returns:** Array of `LuaMidiTrack` objects
+
+### `GetMidiInputs()`
+Returns all available MIDI input devices.
+
+**Returns:** Array of `LuaMidiInput` objects
+
+### `AddMidiInputListener(inputId, callback)`
+Registers a callback function to receive MIDI events from an external input device.
+
+**Parameters:**
+- `inputId` (number): The ID of the MIDI input device
+- `callback` (function): Function called with `LuaMidi` event when input is received
+
+### `JumpToPosition(positionQuarters)`
+Jumps playback to a specific position in the sheet.
+
+**Parameters:**
+- `position` (number): Target position in ticks
+
+## Data Types
+
+### LuaMidi
+Represents a MIDI event.
+
+**Properties:**
+- `position` (number): Position in ticks
+- `type` (number): MIDI event type
+- `channel` (number): MIDI channel
+- `metaType` (number): Meta event type (for meta events)
+- `data` (string): Event data (e.g., text for cue points)
+- `parameter1` (number): First parameter (e.g., note number, controller)
+- `parameter2` (number): Second parameter (e.g., velocity, controller value)
+
+### LuaMidiTrack
+Represents a MIDI track.
+
+**Properties:**
+- `name` (string): Track name
+- `events` (array): Array of `LuaMidi` events
+
+### LuaMidiInput
+Represents a MIDI input device.
+
+**Properties:**
+- `name` (string): Device name
+- `id` (number): Device identifier
+
 ## Event Tags
 You can add additional annotations to an event in werckmeister. These informations can be used in [conduction rules](#conduction-rules) or [modifications](#mods).
 

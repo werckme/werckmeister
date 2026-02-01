@@ -13,6 +13,7 @@
 #include "MidiBackendContainer.h"
 #include <ostream>
 #include "ADocumentWriter.h"
+#include <lua/IPerformerScript.h>
 
 #ifdef SHEET_USE_BOOST_TIMER
 #include "app/boostTimer.h"
@@ -40,22 +41,26 @@ namespace app
         com::midi::MidiPtr _midifile;
         LoopVisitors _loopVisitors;
         com::ILoggerPtr _logger;
+        lua::IPerformerScriptPtr _performerScript;
 
     public:
         MidiPlayer(
             ICompilerProgramOptionsPtr programOptions,
             com::midi::MidiPtr midiFile,
             LoopVisitors loopVisitors,
-            com::ILoggerPtr logger)
+            com::ILoggerPtr logger,
+            lua::IPerformerScriptPtr performerScript)
             : ADocumentWriter(logger),
               _programOptions(std::dynamic_pointer_cast<IPlayerProgramOptions>(programOptions)),
               _midifile(midiFile),
               _loopVisitors(loopVisitors),
-              _logger(logger)
+              _logger(logger),
+              _performerScript(performerScript)
         {
             initMidiBackends();
         }
         void listDevices(std::ostream &);
+        void initPlayerScript();
         virtual void write(documentModel::DocumentPtr document);
         virtual ~MidiPlayer() = default;
         /**

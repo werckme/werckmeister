@@ -98,4 +98,15 @@ namespace app
         }
         return outputMapIt->second;
     }
+
+    AMidiBackendPtr MidiBackendContainer::getDefaultBackend()
+    {
+        const auto &outputMap = outputIdToBackend();
+        if (outputMap.empty())
+        {
+            return nullptr;
+        }
+        const auto &outputMapIt = outputMap.begin();
+        return outputMapIt->second;
+    }
 }

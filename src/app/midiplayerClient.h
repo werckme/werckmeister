@@ -42,7 +42,11 @@ namespace app
 		typedef typename MidiProvider::TrackId TrackId;
 		typedef std::chrono::high_resolution_clock Clock;
 		typedef std::function<void()> OnEnd;
+		typedef std::function<void(const Output&, const com::midi::Event*)> OnSendMidiEvent;
+		typedef std::function<void(com::Ticks)> OnTick;
 		OnEnd onEnd = OnEnd();
+		OnTick onTick = nullptr;
+		OnSendMidiEvent onSendMidiEvent = nullptr;
 		MidiplayerClient();
 		MidiplayerClient(const MidiplayerClient &&) = delete;
 		MidiplayerClient &operator=(MidiplayerClient &&) = delete;
@@ -51,6 +55,7 @@ namespace app
 		bool isPlaying() const { return state_ == Playing; }
 		void play();
 		void play(com::Ticks ticks);
+		void seek(com::Ticks ticks);
 		void panic();
 		void stop();
 		com::Ticks elapsed() const { return MidiProvider::millisToTicks(elapsedMillis_); }
@@ -62,6 +67,8 @@ namespace app
 		OutputInfo getOutputInfo(const std::string &deviceName) const;
 		com::Ticks end = com::Ticks(-1);
 	private:
+		bool _seeked = false;
+		const com::Ticks tailTicks = 1;
 		const OutputInfo *getOutputInfo() const;
 		void handleMetaEvent(const com::midi::Event &ev);
 		void changeDevice(const std::string &deviceId);
@@ -269,19 +276,35 @@ namespace app
 	template <class TBackend, class TMidiProvider, class TTimer>
 	void MidiplayerClient<TBackend, TMidiProvider, TTimer>::onProcess()
 	{
-		if (this->end >= 0 && this->elapsed() >= this->end)
+		if (this->end + tailTicks >= 0 && this->elapsed() >= this->end + tailTicks)
 		{
 			onEnd();
 			return;
 		}
 		std::lock_guard<Lock> lockGuard(lock);
 		typename MidiProvider::Events events;
+		auto t = this->elapsedMillis_;
 		MidiProvider::getEvents(this->elapsedMillis_, events, trackOffsets_);
+		auto outputInfo = getOutputInfo();
+		auto output = &outputInfo->output;
+		if (onTick)
+		{
+			onTick(MidiProvider::millisToTicks(t));
+		}
 		for (const auto &evAndTrack : events)
 		{
 			currentTrack_ = evAndTrack.trackId;
 			const auto &ev = evAndTrack.event;
-			send(ev);
+			if (onSendMidiEvent)
+			{
+				onSendMidiEvent(*output, &ev);
+				if (_seeked)
+				{
+					_seeked = false;
+					break;
+				}
+			}
+			send(ev, output);
 		}
 		currentTrack_ = MidiProvider::INVALID_TRACKID;
 	}
@@ -304,6 +327,10 @@ namespace app
 				try
 				{
 					onProcess();
+				}
+				catch (const std::exception &ex)
+				{
+					std::cerr << ex.what() << std::endl;
 				}
 				catch (...)
 				{
@@ -337,6 +364,15 @@ namespace app
 		Backend::seek(elapsedMillis_);
 		MidiProvider::seek(elapsedMillis_, trackOffsets_);
 		play();
+	}
+
+	template <class TBackend, class TMidiProvider, class TTimer>
+	void MidiplayerClient<TBackend, TMidiProvider, TTimer>::seek(com::Ticks ticks)
+	{
+		elapsedMillis_ = MidiProvider::ticksToMillis(ticks);
+		Backend::seek(elapsedMillis_);
+		MidiProvider::seek(elapsedMillis_, trackOffsets_);
+		_seeked = true;
 	}
 
 	template <class TBackend, class TMidiProvider, class TTimer>

@@ -5,3 +5,6 @@
 	path = submodules/di
 	url = https://github.com/boost-experimental/di
 	branch = cpp14
+[submodule "submodules/sol2"]
+	path = submodules/sol2
+	url = https://github.com/ThePhD/sol2.git

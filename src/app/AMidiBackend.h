@@ -3,6 +3,7 @@
 #include <memory>
 #include <vector>
 #include <com/midi.hpp>
+#include <functional>
 
 namespace app
 {
@@ -20,6 +21,17 @@ namespace app
 			IdType id;
 			std::string name = "undefined output";
 		};
+		struct Input
+		{
+			typedef std::vector<com::Byte> MessageData;
+			typedef std::function<void(const MessageData*)> MidiMessageCallback;
+			typedef std::string IdType;
+			int portid = UNKNOWN_PORT;
+			IdType id;
+			std::string name = "undefined input";
+			MidiMessageCallback midiMessageCallback;
+		};
+        typedef std::vector<Input> Inputs;
 		typedef std::vector<Output> Outputs;
 		virtual ~AMidiBackend() = default;
 		template <class TEvents>
@@ -30,6 +42,9 @@ namespace app
 		virtual void init() = 0;
 		virtual void tearDown() = 0;
 		virtual void panic() = 0;
+		//////////
+		virtual Inputs getInputs() const { return Inputs(); }
+		virtual void listenTo(const Input *input) {}
 	};
 	typedef std::shared_ptr<AMidiBackend> AMidiBackendPtr;
 	///////////////////////////////////////////////////////////////////////////////

@@ -13,6 +13,8 @@ struct IPlayerProgramOptions : public virtual ICompilerProgramOptions
 	virtual bool isSigintWorkaroundSet() const = 0;
 	virtual void setResumeAtPosition(double quarters) = 0;
 	virtual double getResumeAtPosition() = 0;
+	virtual bool isScriptSet() const = 0;
+	virtual com::String script() const = 0;
 };
 
 typedef std::shared_ptr<IPlayerProgramOptions> IPlayerProgramOptionsPtr;

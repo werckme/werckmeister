@@ -35,7 +35,34 @@ namespace app
         }
         _logger->babble(WMLogLambda(log << "start playback"));
         _logger->babble(WMLogLambda(log << "midi: " << _midifile->byteSize() << " bytes"));
+        if (_performerScript)
+        {
+            initPlayerScript();
+        }
         execLoop(doc);
+    }
+
+    void MidiPlayer::initPlayerScript()
+    {
+        _midiPlayerImpl.onSendMidiEvent = [this](const auto& output, const auto *midiEv)
+        {
+            _performerScript->onMidiEvent(output, midiEv);
+        };
+        _midiPlayerImpl.onTick = [this](auto ticks)
+        {
+            _performerScript->onTick(ticks);
+        };
+        _performerScript->setSeekRequestHandler([this](auto positionQuarters)
+        {
+            auto ticks = positionQuarters * com::PPQ;
+            _midiPlayerImpl.seek(ticks);
+        });
+        _performerScript->setSendMidiEventHandler([this](const auto* output, const auto *midiEv)
+        {
+            _midiPlayerImpl.send(*midiEv, output);
+        });
+        _performerScript->setMidiBackend(_midiPlayerImpl.getDefaultBackend().get());
+        _performerScript->init();
     }
 
     void MidiPlayer::initMidiBackends()

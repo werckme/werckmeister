@@ -35,7 +35,7 @@
 #include "FactoryConfig.h"
 #include <compiler/CompoundVisitor.hpp>
 #include <compiler/EventInformationServer.h>
-
+#include <lua/PerformerScript.h>
 
 #ifdef SHEET_USE_BOOST_TIMER
 #include "app/boostTimer.h"
@@ -152,6 +152,17 @@ int startPlayer(std::shared_ptr<PlayerProgramOptions> programOptionsPtr)
 				return injector.template create<std::shared_ptr<LoggerImpl>>();
 			}
 			return injector.template create<std::shared_ptr<WarningsCollectorWithConsoleLogger>>();
+		}),
+		di::bind<lua::IPerformerScript>().to([&](const auto &injector) -> lua::IPerformerScriptPtr
+		{
+			if (!programOptionsPtr->isScriptSet())
+			{
+				return nullptr;
+			}
+			auto script = injector.template create<std::shared_ptr<lua::PerformerScript>>();
+			auto scriptPath = programOptionsPtr->script();
+			script->scriptPath(scriptPath);
+			return script;
 		}),
 		di::bind<app::IStringSender>().to([&](const auto &injector) -> app::IStringSenderPtr
 		{
