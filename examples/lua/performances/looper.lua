@@ -49,7 +49,11 @@ function Init()
     local midiInputs = GetMidiInputs()
     local input = FindInput(midiInputs, midiInputName)
     if input == nil then
-        error("input '" .. midiInputName .. "' not found")
+        local availableInputs = ""
+        for _, inp in ipairs(midiInputs) do
+            availableInputs = availableInputs .. inp.name .. "\n" 
+        end
+        error("input '" .. midiInputName .. "' not found. Available Inputs are:\n" .. availableInputs)
     end
     AddMidiInputListener(input.id, onMidiInput)
 end
