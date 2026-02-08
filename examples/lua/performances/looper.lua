@@ -1,7 +1,31 @@
+--[[
+    # Looper Script Example Implementation
+
+    This script implements an automatic loop sequencer that cycles through 
+    predefined loop sections marked with cue points in your MIDI sheet.
+
+    ## Setup and Usage
+
+    1. Mark loop sections in your sheet using cue points e.g. `/cue:"loop_1"/`, `/cue:"loop_2"/`, 
+    etc. Each loop needs a start and end cue point with the same name.
+    
+    2. Set `midiInputName` to match your MIDI controller device.
+
+    3. During playback:
+    - start the playback: `sheetp --script=<<path_to_this_file>> <<path_to_your_sheet_file>>
+    - The script starts with the first loop
+    - Send MIDI events from your controller to advance to the next loop
+    - Playback automatically jumps back to the loop start when reaching the end
+    - After the last loop, playback returns to the beginning
+
+    This is useful for practicing sections repeatedly or creating dynamic live 
+    performances with controlled progression through your arrangement.
+--]]
+
 require "lua/com/com"
 require "com"
 
-local midiInputName = "Ampero"
+local midiInputName = "MY_MIDI_INPUT_DEVICE_NAME"
 local loops = {}
 local loopNames = {}
 local currentLoopIdx = 1
@@ -45,7 +69,6 @@ function Init()
             handleCue(event)
         end
     end
-    dump(loops)
     local midiInputs = GetMidiInputs()
     local input = FindInput(midiInputs, midiInputName)
     if input == nil then
