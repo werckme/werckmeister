@@ -1321,7 +1321,6 @@ withTag(myTag) {
 
 
 ## References
-[1133] WARN-enum: nameless enum ['enum', '{', 'TypeBend', '=', '0xFF', '}']
 
 
 

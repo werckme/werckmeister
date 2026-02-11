@@ -31,7 +31,7 @@ namespace conductor
     public:
         struct FadeOptions
         {
-            enum { TypeBend = 0xFF };
+            enum FadeType { TypeBend = 0xFF };
             int type = 0;
             int from = 0;
             int to = 0;
