@@ -369,10 +369,12 @@ namespace com
 		{
 			path = path.parent_path();
 		}
+#ifndef WEB_BUILD  // does not find any file in online editor when active
 		if (path.empty()) 
 		{
 			return;
 		}
+#endif
 		_searchPaths.push_front(path.string());
 	}
 

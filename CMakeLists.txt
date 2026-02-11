@@ -98,6 +98,7 @@ if ("$ENV{WM_DOWNLOAD_EXTERNALS}")
 endif ()
 
 if(${USE_EMSCRIPTEN})
+  add_definitions( -DWEB_BUILD )
   include(DownloadBoost)
   DownloadBoost("${BOOST_VERSION}" "${CMAKE_SOURCE_DIR}/third_party/boost" 1)
   add_compile_options(-s DISABLE_EXCEPTION_CATCHING=0 -Oz)
