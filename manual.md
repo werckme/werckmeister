@@ -549,7 +549,7 @@ Just like with notes, you use a `r` to write a rest.
 You can also write multimeasure rests.
 
 ```language=Werckmeister,type=single
- c d e f | =2= | g a b 'c
+ c d e f | =2= | g a b c'
 ```
 
 ### Octaves
@@ -626,7 +626,11 @@ b2 ((b c#' c#' b d')  (f' a a bb c')  (e' a' bb' f' c' g))2
 ```
 
 ### Repeats
-#### Simple repeats
+#### Measure repeat
+```language=Werckmeister,type=single,tempo=200
+c4 d e f | % | % |
+```
+#### Repeat barline
 ```language=Werckmeister,type=single,tempo=200
 c4 d e f :| g a b c' |
 ```
