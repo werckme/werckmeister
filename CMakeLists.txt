@@ -252,6 +252,7 @@ if (${USE_EMSCRIPTEN})
     ${WM_CHORDS} 
     ${WM_LUA} 
     ${WM_LUA_COM}
+    ${WM_LUA_MODS} 
     ${WM_LUA_PERFORMANCES}
     ${WM_LUA_DEVICES_INTEGRA7}
     ${WM_LUA_VOICINGS}
