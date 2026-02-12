@@ -369,7 +369,7 @@ namespace com
 		{
 			path = path.parent_path();
 		}
-#if 0  // does not find any file in online editor when active
+#ifndef WEB_BUILD  // does not find any file in online editor when active
 		if (path.empty()) 
 		{
 			return;
