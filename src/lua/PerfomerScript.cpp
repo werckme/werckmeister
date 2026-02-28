@@ -334,7 +334,7 @@ namespace lua
             LuaMidiInput luaIn;
             luaIn.id = input.id;
             luaIn.name = input.name;
-            result.emplace_back(luaIn);
+            result.emplace_back(std::move(luaIn));
         }
         return result;
     }
