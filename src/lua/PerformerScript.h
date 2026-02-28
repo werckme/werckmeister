@@ -9,7 +9,7 @@
 #include <unordered_set>
 #include <cstdint>
 #include <sol/sol.hpp>
-
+#include <optional>
 namespace sol
 {
     class state_view;
@@ -23,6 +23,7 @@ namespace lua
         typedef std::string LuaMidiData;
         struct LuaMidi
         {
+            bool isModified = false;
             float position = 0;
             com::Byte type = -1;
             com::Byte channel = -1;
@@ -30,6 +31,7 @@ namespace lua
             com::Byte parameter1 = -1;
             com::Byte parameter2 = -1;
             LuaMidiData data;
+            inline void modified() { isModified = true; }
         };
         typedef std::vector<LuaMidi> LuaMidiEvents;
         struct LuaMidiTrack
@@ -80,7 +82,7 @@ namespace lua
         void scriptPath(const com::String &scriptPath);
         virtual bool canExecute() const override { return false; }
         virtual void assertCanExecute() const override {}
-        virtual void onMidiEvent(const Output& output, const com::midi::Event*) override;
+        virtual void onMidiEvent(const Output& output, const com::midi::Event*, com::midi::Event **outEventPtrContainer) override;
         virtual void setSeekRequestHandler(const OnSeekRequestFunction& rq) override { onSeekRequest = rq; }
         virtual void setSendMidiEventHandler(const OnSendMidiEventFunction& sm) override { onSendMidiEvent = sm; }
         virtual void setMidiBackend(app::AMidiBackend* midiBackend) override { _midiBackend = midiBackend; }
@@ -104,7 +106,8 @@ namespace lua
         void initLuaTypes(sol::state_view&);
         sol::state_view* luaPtr = nullptr;
         /////////////////////
-        std::function<void(LuaMidi)> luaOnMidiEvent = nullptr;
+        typedef std::optional<LuaMidi> LuaMidiOptional;
+        std::function<LuaMidiOptional(LuaMidi)> luaOnMidiEvent = nullptr;
         std::function<void()> luaInit = nullptr;
         LuaMidiTracks hostGetMidiEvents() const;
     };

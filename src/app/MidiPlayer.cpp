@@ -44,9 +44,9 @@ namespace app
 
     void MidiPlayer::initPlayerScript()
     {
-        _midiPlayerImpl.onSendMidiEvent = [this](const auto& output, const auto *midiEv)
+        _midiPlayerImpl.onSendMidiEvent = [this](const auto& output, const auto *midiEv, auto **outEventPtrContainer)
         {
-            _performerScript->onMidiEvent(output, midiEv);
+            _performerScript->onMidiEvent(output, midiEv, outEventPtrContainer);
         };
         _midiPlayerImpl.onTick = [this](auto ticks)
         {

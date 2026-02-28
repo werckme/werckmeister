@@ -42,7 +42,7 @@ namespace app
 		typedef typename MidiProvider::TrackId TrackId;
 		typedef std::chrono::high_resolution_clock Clock;
 		typedef std::function<void()> OnEnd;
-		typedef std::function<void(const Output&, const com::midi::Event*)> OnSendMidiEvent;
+		typedef std::function<void(const Output&, const com::midi::Event*, com::midi::Event** out)> OnSendMidiEvent;
 		typedef std::function<void(com::Ticks)> OnTick;
 		OnEnd onEnd = OnEnd();
 		OnTick onTick = nullptr;
@@ -297,11 +297,24 @@ namespace app
 			const auto &ev = evAndTrack.event;
 			if (onSendMidiEvent)
 			{
-				onSendMidiEvent(*output, &ev);
+				com::midi::Event outEvent;
+				com::midi::Event* outEventContainer[] = { &outEvent };
+				onSendMidiEvent(*output, &ev, (com::midi::Event**)&outEventContainer);
 				if (_seeked)
 				{
 					_seeked = false;
 					break;
+				}
+				bool eventChanged = *outEventContainer == &outEvent;
+				if (eventChanged)
+				{
+					send(outEvent, output);
+					continue;
+				}
+				bool skipped = *outEventContainer == nullptr;
+				if (skipped)
+				{
+					continue;
 				}
 			}
 			send(ev, output);

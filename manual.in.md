@@ -1240,7 +1240,19 @@ The Performer Script feature allows you to embed Lua scripts into the sheetp pla
 Called once when the player starts. Use this to set up your script's initial state, register MIDI input listeners, or analyze the sheet's MIDI events.
 
 ### `OnMidiEvent(event)`
-Called for each MIDI event during playback. Use this to react to specific events and control playback flow.
+Called for each MIDI event during playback. Use this to react to events and control playback flow.
+
+- The callback return value determines the result:
+  - If the return value is `nil`: the event will be **skipped**.
+  - If an event object is returned: it will be **used (possibly modified)** for further processing.
+- The input `event` parameter may be modified before returning it.
+- Meta events (such as cue points, lyrics, or other metadata events) should **not be modified**.
+
+This allows you to:
+
+- filter events (return `nil` to skip)
+- transform events (modify and return the event)
+- or pass them through unchanged
 
 **Parameters:**
 - `event` (LuaMidi): The current MIDI event being processed

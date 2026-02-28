@@ -85,12 +85,13 @@ function OnMidiEvent(event)
     local cue = getCueText(event)
     local currentLoop = loopNames[currentLoopIdx]
     if cue == nil or cue ~= currentLoop then
-        return
+        return event
     end
     local loop = loops[cue]
     local loopBegin = loop[1]
     if event.position == loopBegin then
-        return
+        return event
     end
     JumpToPosition(loopBegin)
+    return event
 end
