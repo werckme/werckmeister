@@ -313,9 +313,9 @@ namespace lua
                     luaTrack.name = name;
                 }
                 LuaMidi luaEvent = createLuaMidiFrom(event);
-                luaTrack.events.emplace_back(luaEvent);
+                luaTrack.events.emplace_back(std::move(luaEvent));
             }
-            luaTracks.emplace_back(luaTrack);
+            luaTracks.emplace_back(std::move(luaTrack));
         }
         return luaTracks;
     }
