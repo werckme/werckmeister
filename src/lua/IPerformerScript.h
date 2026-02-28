@@ -22,7 +22,7 @@ namespace lua
         typedef std::function<void(double)> OnSeekRequestFunction;
         typedef std::function<void(const Output* output, const com::midi::Event*)> OnSendMidiEventFunction;
         virtual ~IPerformerScript() = default;
-        virtual void onMidiEvent(const Output& output, const com::midi::Event*) = 0;
+        virtual void onMidiEvent(const Output& output, const com::midi::Event*, com::midi::Event **outEventPtrContainer) = 0;
         virtual void setSeekRequestHandler(const OnSeekRequestFunction&) = 0;
         virtual void setSendMidiEventHandler(const OnSendMidiEventFunction&) = 0;
         virtual void setMidiBackend(app::AMidiBackend* midiBackend) = 0;

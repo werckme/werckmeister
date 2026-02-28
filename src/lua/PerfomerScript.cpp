@@ -5,7 +5,7 @@
 
 namespace
 {
-    lua::PerformerScript::LuaMidi createFrom(const com::midi::Event &midiEvent)
+    lua::PerformerScript::LuaMidi createLuaMidiFrom(const com::midi::Event &midiEvent)
     {
         lua::PerformerScript::LuaMidi result;
         result.position = midiEvent.absPosition() / com::PPQ;
@@ -27,6 +27,21 @@ namespace
         }
         return result;
     }
+
+    com::midi::Event createMidiFrom(const lua::PerformerScript::LuaMidi& luaMidi)
+    {
+        com::midi::Event result;
+        result.absPosition(luaMidi.position * com::PPQ);
+        result.eventType((com::midi::EventType)luaMidi.type);
+        if (result.eventType() == com::midi::MetaEvent)
+        {
+            throw std::runtime_error("copy lua midi meta events to midi events not supported");
+        }
+        result.channel(luaMidi.channel);
+        result.parameter1(luaMidi.parameter1);
+        result.parameter2(luaMidi.parameter2);
+        return result;
+    }
 }
 
 namespace lua
@@ -39,7 +54,7 @@ namespace lua
     void PerformerScript::initLuaFunctions(sol::state_view& lua)
     {
         // LUA
-        sol::function solOnMidiEvent = lua["OnMidiEvent"];
+        sol::protected_function solOnMidiEvent = lua["OnMidiEvent"];
         if (solOnMidiEvent.valid())
         {
             luaOnMidiEvent = [solOnMidiEvent](LuaMidi midiEv) {
@@ -49,9 +64,10 @@ namespace lua
                     sol::error err = result;
                     throw std::runtime_error(err.what());
                 }
+                return result.get<LuaMidiOptional>();
             };
         }
-        sol::function solInit = lua["Init"];
+        sol::protected_function solInit = lua["Init"];
         if (solInit.valid())
         {
             luaInit = [solInit]() {
@@ -93,61 +109,102 @@ namespace lua
     {
         lua.new_usertype<LuaMidi>("LuaMidi",
             "position", sol::property(
-                [](const LuaMidi& m) {
+                [](const LuaMidi& m)
+                {
                     return m.position;
+                },
+                [](LuaMidi& m, float value)
+                {
+                    m.position = value;
+                    m.modified();
                 }
             ),
             "type", sol::property(
-                [](const LuaMidi& m) {
+                [](const LuaMidi& m)
+                {
                     return m.type;
+                },
+                [](LuaMidi& m, com::Byte value)
+                {
+                    m.type = value;
+                    m.modified();
                 }
             ),
             "channel", sol::property(
-                [](const LuaMidi& m) {
+                [](const LuaMidi& m)
+                {
                     return m.channel;
+                },
+                [](LuaMidi& m, com::Byte value)
+                {
+                    m.channel = value;
+                    m.modified();
                 }
             ),
             "metaType", sol::property(
-                [](const LuaMidi& m) {
+                [](const LuaMidi& m)
+                {
                     return m.metaType;
+                },
+                [](LuaMidi& m, com::Byte value)
+                {
+                    m.metaType = value;
+                    m.modified();
                 }
             ),
             "data", sol::property(
-                [](const LuaMidi& m) {
+                [](const LuaMidi& m)
+                {
                     return m.data;
                 }
             ),
             "parameter1", sol::property(
-                [](const LuaMidi& m) {
+                [](const LuaMidi& m)
+                {
                     return m.parameter1;
+                },
+                [](LuaMidi& m, com::Byte value)
+                {
+                    m.parameter1 = value;
+                    m.modified();
                 }
             ),
             "parameter2", sol::property(
-                [](const LuaMidi& m) {
+                [](const LuaMidi& m)
+                {
                     return m.parameter2;
+                },
+                [](LuaMidi& m, com::Byte value)
+                {
+                    m.parameter2 = value;
+                    m.modified();
                 }
             )
         );
         lua.new_usertype<LuaMidiTrack>("LuaMidiTrack",
             "name", sol::property(
-                [](const LuaMidiTrack& m) {
+                [](const LuaMidiTrack& m)
+                {
                     return m.name;
                 }
             ),
             "events", sol::property(
-                [](const LuaMidiTrack& m) {
+                [](const LuaMidiTrack& m)
+                {
                     return m.events;
                 }
             )
         );
         lua.new_usertype<LuaMidiInput>("LuaMidiInput",
             "name", sol::property(
-                [](const LuaMidiInput& m) {
+                [](const LuaMidiInput& m)
+                {
                     return m.name;
                 }
             ),
             "id", sol::property(
-                [](const LuaMidiInput& m) {
+                [](const LuaMidiInput& m)
+                {
                     return m.id;
                 }
             )
@@ -193,16 +250,29 @@ namespace lua
     {
     }
 
-    void PerformerScript::onMidiEvent(const Output& output, const com::midi::Event* ev)
+    void PerformerScript::onMidiEvent(const Output& output, const com::midi::Event* ev, com::midi::Event **outEventPtrContainer)
     {
-        LuaMidi luaMidi = createFrom(*ev);
-        luaOnMidiEvent(luaMidi);
+        LuaMidiOptional luaMidi = createLuaMidiFrom(*ev);
+        luaMidi = luaOnMidiEvent(luaMidi.value());
         if (nextJumpToValue >= 0)
         {
             performJump(nextJumpToValue);
         }
         nextJumpToValue = -1;
         updateNoteOnCache(output, ev);
+        if (!luaMidi)
+        {
+            // skip event
+            *outEventPtrContainer = nullptr;
+            return; 
+        }
+        auto luaMidiValue = luaMidi.value();
+        if (!luaMidiValue.isModified)
+        {
+            *outEventPtrContainer = const_cast<com::midi::Event*>(ev);
+            return;
+        }
+        **outEventPtrContainer = createMidiFrom(luaMidiValue);
     }
 
     void PerformerScript::init()
@@ -242,7 +312,7 @@ namespace lua
                     std::string name((char*)event.metaData(), event.metaDataSize());
                     luaTrack.name = name;
                 }
-                LuaMidi luaEvent = createFrom(event);
+                LuaMidi luaEvent = createLuaMidiFrom(event);
                 luaTrack.events.emplace_back(luaEvent);
             }
             luaTracks.emplace_back(luaTrack);
@@ -284,7 +354,7 @@ namespace lua
             midiData.insert( midiData.end(), msg->begin(), msg->end() );
             com::midi::Event midiEvent;
             midiEvent.read(0, midiData.data(), midiData.size());
-            auto luaMidiEvent = createFrom(midiEvent);
+            auto luaMidiEvent = createLuaMidiFrom(midiEvent);
             auto result = callBack(const_cast<LuaMidi*>(&luaMidiEvent));
             if (!result.valid()) {
                 sol::error err = result;
