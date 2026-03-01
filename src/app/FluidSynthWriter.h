@@ -7,24 +7,17 @@
 #include <map>
 #include <vector>
 #include <functional>
+#include "midiProvider.h"
+#include "lua/FluidWriterPerformer.h"
 
 namespace app
 {
     class FluidSynthWriter : public FluidSynth
     {
     public:
-        struct JumpPoint
-        {
-            int index = -1;
-            int fromPositionTicks = 0;
-            int toPositionTicks = 0;
-        };
         typedef FluidSynth Base;
         typedef int TickPosition;
-        typedef std::map<TickPosition, JumpPoint> JumpPoints;
-        typedef std::vector<const JumpPoint*> JumpPointsIndex;
         typedef std::function<void(const com::midi::Event*)> VisitEventFunction;
-        enum { UndefinedJumpPointIndex = -1 };
         FluidSynthWriter(com::ILoggerPtr logger) : Base(false), _logger(logger) {}
         virtual ~FluidSynthWriter() = default;
         virtual void initSynth() override;
@@ -43,28 +36,25 @@ namespace app
         void setMidiFileData(const unsigned char* data, size_t length, VisitEventFunction visitEventFunction = nullptr);
         void onTickEventCallback(int tick);
         void onPlaybackCallback(fluid_midi_event_t *event);
-        void setJumpPoints(const JumpPoints& jumpPoints);
-        void setJumpPoints(JumpPoints&& jumpPoints);
-        void setActiveJumpPoint(int jumpPointIndex);
-        void jump(const JumpPoint &jumpPoint);
+        void setPerformerScriptPath(const com::String &path);
         void stop();
         void play();
     protected:
+        void sendNow(const com::midi::Event &ev, fluid_event_t* target = nullptr);
+        void initScriptIfReady();
+        lua::FluidWriterPerformerPtr performerScript;
+        MidiProvider midiProvider;
         bool handlePresetEvent(const com::midi::Event& event, bool sendToFluidSynth = true);
-        void updateJumpPointIndex();
-        void handleMidiMetaEvents(const unsigned char* data, size_t length, VisitEventFunction visitEventFunction);
+        void parseMidiData(const unsigned char* data, size_t length, VisitEventFunction visitEventFunction);
         com::ILoggerPtr _logger;
         com::String _libPath;
+        com::String _scriptPath;
         double _sampleRate = 44100.0f;
         virtual std::string findFluidSynthLibraryPath() const override;
         virtual void handleMetaEvent(const com::midi::Event& event);
         SoundFontId lastSoundFontId = -1;
         double _tempo = 120.0;
-        const JumpPoint* _activeJumpPoint = nullptr;
-        JumpPoint _tmpJumpoint;
         fluid_player_t*  player = nullptr;
-        JumpPoints _jumpPoints;
-        JumpPointsIndex _jumpPointsIndex;
         int _sfIdPerChannel[16] = {0};
         int getSfId(int channel);
     };

@@ -37,6 +37,7 @@
 #define fluid_event_set_source_ftype void(fluid_event_t*, fluid_seq_id_t)
 #define fluid_event_set_dest_ftype void(fluid_event_t*, fluid_seq_id_t)
 #define fluid_sequencer_send_at_ftype int(fluid_sequencer_t*, fluid_event_t*, unsigned int, int)
+#define fluid_sequencer_send_now_ftype int(fluid_sequencer_t*, fluid_event_t*)
 #define delete_fluid_event_ftype void(fluid_event_t*)
 #define fluid_sequencer_get_tick_ftype unsigned int(fluid_sequencer_t*)
 #define fluid_event_noteon_ftype void(fluid_event_t*, int, short, short)
@@ -140,6 +141,7 @@ namespace app
 		std::function<fluid_event_set_source_ftype> _fluid_event_set_source;
 		std::function<fluid_event_set_dest_ftype> _fluid_event_set_dest;
 		std::function<fluid_sequencer_send_at_ftype> _fluid_sequencer_send_at;
+		std::function<fluid_sequencer_send_now_ftype> _fluid_sequencer_send_now;
 		std::function<delete_fluid_event_ftype> _delete_fluid_event;
 		std::function<fluid_event_noteon_ftype> _fluid_event_noteon;
 		std::function<fluid_event_noteoff_ftype> _fluid_event_noteoff;

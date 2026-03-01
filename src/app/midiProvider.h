@@ -34,6 +34,7 @@ namespace app
 		typedef std::list<Event> Events;
 		typedef std::function<bool(com::Ticks, const Event &)> IterateFunction;
 		void getEvents(Millis at, Events &out, const TrackOffsets &offsets);
+		void getEventsAtTick(com::Ticks at, Events &out);
 		void iterate(const IterateFunction &f);
 		virtual ~MidiProvider() = default;
 		void midi(com::midi::MidiPtr midi);
@@ -47,11 +48,12 @@ namespace app
 		{
 			return MINUTE * ONE_SECOND_MILLIS * ticks / (bpm() * com::PPQ);
 		}
+		void seek(Millis millis, const TrackOffsets &offsets);
+		void seekToTicks(com::Ticks ticks);
 
 	protected:
 		inline com::BPM bpm() const { return std::max(bpm_, 1.0); }
 		void bpm(com::BPM bpm) { bpm_ = bpm; }
-		void seek(Millis millis, const TrackOffsets &offsets);
 
 	private:
 		com::midi::MidiPtr midi_ = nullptr;

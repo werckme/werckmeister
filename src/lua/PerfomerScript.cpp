@@ -293,11 +293,23 @@ namespace lua
         **outEventPtrContainer = createMidiFrom(luaMidiValue);
     }
 
+    void PerformerScript::script(const com::String &scriptText)
+    {
+        _script = scriptText;
+    }
+
     void PerformerScript::init()
     {
         prepareLuaEnvironment();
         luaPtr = new sol::state_view(L);
-        luaPtr->script_file(_path);
+        if (!_path.empty())
+        {
+            luaPtr->script_file(_path);
+        }
+        else if (!_script.empty())
+        {
+            luaPtr->script(_script);
+        }
         initLuaTypes(*luaPtr);
         initLuaFunctions(*luaPtr);
         if (luaInit)

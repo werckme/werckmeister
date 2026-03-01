@@ -82,6 +82,7 @@ namespace lua
         }
         virtual ~PerformerScript();
         void scriptPath(const com::String &scriptPath);
+        void script(const com::String &scriptText);
         virtual bool canExecute() const override { return false; }
         virtual void assertCanExecute() const override {}
         virtual void onMidiEvent(const Output& output, const com::midi::Event*, com::midi::Event **outEventPtrContainer) override;
@@ -90,11 +91,12 @@ namespace lua
         virtual void setMidiBackend(app::AMidiBackend* midiBackend) override { _midiBackend = midiBackend; }
         virtual void onTick(com::Ticks ticks) override;
         virtual void init() override;
-    private:
+    protected:
+        com::String _script;
         app::AMidiBackend::Inputs _midiInputs;
         void sendNoteOffs();
-        void performJump(double position);
-        void updateNoteOnCache(const Output& output, const com::midi::Event*);
+        virtual void performJump(double position);
+        virtual void updateNoteOnCache(const Output& output, const com::midi::Event*);
         double nextJumpToValue = -1;
         app::AMidiBackend* _midiBackend = nullptr;
         std::unordered_set<NoteOnCacheValue, NoteOnCacheValueHasher> noteOnCache;

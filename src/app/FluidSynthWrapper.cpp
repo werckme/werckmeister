@@ -108,6 +108,7 @@ namespace app
             _fluid_event_set_source = _library->get<fluid_event_set_source_ftype>("fluid_event_set_source");
             _fluid_event_set_dest = _library->get<fluid_event_set_dest_ftype>("fluid_event_set_dest");
             _fluid_sequencer_send_at = _library->get<fluid_sequencer_send_at_ftype>("fluid_sequencer_send_at");
+            _fluid_sequencer_send_now = _library->get<fluid_sequencer_send_now_ftype>("fluid_sequencer_send_now");
             _delete_fluid_event = _library->get<delete_fluid_event_ftype>("delete_fluid_event");
             _fluid_event_noteon = _library->get<fluid_event_noteon_ftype>("fluid_event_noteon");
             _fluid_event_noteoff = _library->get<fluid_event_noteoff_ftype>("fluid_event_noteoff");
