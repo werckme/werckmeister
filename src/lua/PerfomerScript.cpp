@@ -10,12 +10,13 @@ namespace
         lua::PerformerScript::LuaMidi result;
         result.position = midiEvent.absPosition() / com::PPQ;
         result.type = midiEvent.eventType();
+        result.id = midiEvent.id;
         if (midiEvent.eventType() == com::midi::MetaEvent)
         {
             result.metaType = midiEvent.metaEventType();
             result.data = lua::PerformerScript::LuaMidiData(midiEvent.metaData(), midiEvent.metaData() + midiEvent.metaDataSize());
         } 
-        else 
+        else
         {
             result.channel = midiEvent.channel();
             result.data = lua::PerformerScript::LuaMidiData({
@@ -178,6 +179,23 @@ namespace lua
                 {
                     m.parameter2 = value;
                     m.modified();
+                }
+            )
+            ,
+            "tag", sol::property(
+                [this](const LuaMidi& m)
+                {
+                    auto it = tagMap.find(m.id);
+                    if (it == tagMap.end())
+                    {
+                        return 0;
+                    }
+                    return it->second;
+                },
+                [this](LuaMidi& m, int value)
+                {
+
+                    tagMap.insert({m.id, value});
                 }
             )
         );

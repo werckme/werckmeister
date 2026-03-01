@@ -7,6 +7,7 @@
 #include <forward.hpp>
 #include <vector>
 #include <unordered_set>
+#include <unordered_map>
 #include <cstdint>
 #include <sol/sol.hpp>
 #include <optional>
@@ -30,6 +31,7 @@ namespace lua
             com::Byte metaType = -1;
             com::Byte parameter1 = -1;
             com::Byte parameter2 = -1;
+            int id = 0;
             LuaMidiData data;
             inline void modified() { isModified = true; }
         };
@@ -110,6 +112,8 @@ namespace lua
         std::function<LuaMidiOptional(LuaMidi)> luaOnMidiEvent = nullptr;
         std::function<void()> luaInit = nullptr;
         LuaMidiTracks hostGetMidiEvents() const;
+        typedef std::unordered_map<int, int> TagMap;
+        TagMap tagMap;
     };
     typedef std::shared_ptr<PerformerScript> PerformerScriptPtr;
 }

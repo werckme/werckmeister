@@ -25,7 +25,7 @@
 require "lua/com/com"
 require "com"
 
-local midiInputName = "MY_MIDI_INPUT_DEVICE_NAME"
+local midiInputName = "mio4"
 local loops = {}
 local loopNames = {}
 local currentLoopIdx = 1

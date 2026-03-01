@@ -1295,6 +1295,7 @@ Represents a MIDI event.
 - `data` (string): Event data (e.g., text for cue points)
 - `parameter1` (number): First parameter (e.g., note number, controller)
 - `parameter2` (number): Second parameter (e.g., velocity, controller value)
+- `tag` an arbitrary int value, can be used to mark events
 
 ### LuaMidiTrack
 Represents a MIDI track.
