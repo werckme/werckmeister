@@ -9,6 +9,8 @@
 #include <functional>
 #include "midiProvider.h"
 #include "lua/FluidWriterPerformer.h"
+#include <mutex>
+#include <queue>
 
 namespace app
 {
@@ -37,11 +39,17 @@ namespace app
         void onTickEventCallback(int tick);
         void onPlaybackCallback(fluid_midi_event_t *event);
         void setPerformerScriptPath(const com::String &path);
+        void sendCustomController(int controller, int value);
         void stop();
         void play();
     protected:
+        typedef std::queue<com::midi::Event> EventQueue;
+        EventQueue _eventQueue;
+        typedef std::mutex QueueLock;
+        QueueLock _queueLock;
         void sendNow(const com::midi::Event &ev, fluid_event_t* target = nullptr);
         void initScriptIfReady();
+        void processEventQueue();
         lua::FluidWriterPerformerPtr performerScript;
         MidiProvider midiProvider;
         bool handlePresetEvent(const com::midi::Event& event, bool sendToFluidSynth = true);

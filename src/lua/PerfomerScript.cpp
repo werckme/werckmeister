@@ -2,10 +2,9 @@
 #include <com/midi.hpp>
 #include <iostream>
 #include <algorithm>
-
-namespace
+namespace lua
 {
-    lua::PerformerScript::LuaMidi createLuaMidiFrom(const com::midi::Event &midiEvent)
+    lua::PerformerScript::LuaMidi PerformerScript::createLuaMidiFrom(const com::midi::Event &midiEvent) const
     {
         lua::PerformerScript::LuaMidi result;
         result.position = midiEvent.absPosition() / com::PPQ;
@@ -29,7 +28,7 @@ namespace
         return result;
     }
 
-    com::midi::Event createMidiFrom(const lua::PerformerScript::LuaMidi& luaMidi)
+    com::midi::Event PerformerScript::createMidiFrom(const lua::PerformerScript::LuaMidi& luaMidi) const
     {
         com::midi::Event result;
         result.absPosition(luaMidi.position * com::PPQ);
@@ -43,10 +42,7 @@ namespace
         result.parameter2(luaMidi.parameter2);
         return result;
     }
-}
 
-namespace lua
-{
     void PerformerScript::scriptPath(const com::String &scriptPath)
     {
         _path = scriptPath;
@@ -378,7 +374,7 @@ namespace lua
             throw std::runtime_error("invalid midi input id: " + id);
         }
         app::AMidiBackend::Input* inputPtr = &(*inputIt);
-        inputPtr->midiMessageCallback = [callBack](const auto *msg)
+        inputPtr->midiMessageCallback = [callBack, this](const auto *msg)
         {
             std::vector<com::Byte> midiData = {0x0};
             midiData.insert( midiData.end(), msg->begin(), msg->end() );

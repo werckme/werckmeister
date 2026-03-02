@@ -134,9 +134,9 @@ namespace app
 
     void FluidSynthWriter::onTickEventCallback(int ticks)
     {
+        processEventQueue();
         MidiProvider::Events events;
         midiProvider.getEventsAtTick(ticks, events);
-
         fluid_event_t* fluid_event = _new_fluid_event();
         _fluid_event_set_dest(fluid_event, synthSeqID);
         com::midi::Event modifiedEvent;
@@ -216,6 +216,28 @@ namespace app
         {
             sendNow(*midiEvent);
         });
+    }
+
+    void FluidSynthWriter::sendCustomController(int controller, int value)
+    {
+        if (!performerScript)
+        {
+            return;
+        }
+        std::lock_guard<QueueLock> lock(_queueLock);
+        auto cc = com::midi::Event::CCValue(0, controller, value);
+        _eventQueue.emplace(std::move(cc));
+    }
+
+    void FluidSynthWriter::processEventQueue()
+    {
+        std::lock_guard<QueueLock> lock(_queueLock);
+        while(!_eventQueue.empty())
+        {
+            const auto &event = _eventQueue.front();
+            performerScript->sendInputEventToScript(&event);
+            _eventQueue.pop();
+        }
     }
 
     void FluidSynthWriter::onPlaybackCallback(fluid_midi_event_t *event)

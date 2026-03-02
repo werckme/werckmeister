@@ -103,8 +103,10 @@ namespace lua
         com::midi::MidiPtr _midiFile = nullptr;
         OnSeekRequestFunction onSeekRequest = nullptr;
         OnSendMidiEventFunction onSendMidiEvent = nullptr;
-        LuaMidiInputs getLuaMidiInputs();
-        void listenTo(const std::string &id, sol::protected_function callBack);
+        LuaMidi createLuaMidiFrom(const com::midi::Event &midiEvent) const;
+        com::midi::Event createMidiFrom(const LuaMidi& luaMidi) const;
+        virtual LuaMidiInputs getLuaMidiInputs();
+        virtual void listenTo(const std::string &id, sol::protected_function callBack);
         void jumpToPosition(double quarters);
         void initLuaFunctions(sol::state_view&);
         void initLuaTypes(sol::state_view&);

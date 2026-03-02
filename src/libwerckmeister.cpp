@@ -386,21 +386,6 @@ extern "C"
 		}
 	}
 
-	WERCKM_EXPORT int wm_setJumpPoints(WmSession sessionPtr, WmJumpPoint* jumpPoints, int length)
-	{
-		return WERCKM_OK;
-	}
-
-	WERCKM_EXPORT int wm_setActiveJumpPoint(WmSession sessionPtr, int jumpPointIndex)
-	{
-		return WERCKM_OK;
-	}
-
-	WERCKM_EXPORT int wm_jump(WmSession sessionPtr, const WmJumpPoint* jumpPoint)
-	{
-		return WERCKM_OK;
-	}
-
 	WERCKM_EXPORT int wm_play(WmSession sessionPtr)
 	{
 		if (sessionPtr == nullptr)
@@ -412,9 +397,8 @@ extern "C"
 		{
 			return WERCKM_OK;
 		}
-		auto _logger = session->logger;
 		session->fluidSynth->play();
-		return WERCKM_ERR;
+		return WERCKM_OK;
 	}
 
 	WERCKM_EXPORT int wm_stop(WmSession sessionPtr)
@@ -428,9 +412,23 @@ extern "C"
 		{
 			return WERCKM_OK;
 		}
-		auto _logger = session->logger;
 		session->fluidSynth->stop();
-		return WERCKM_ERR;
+		return WERCKM_OK;
+	}
+
+  	WERCKM_EXPORT int wm_sendCustomController(WmSession sessionPtr, int controllerNumber, int value)
+	{
+		if (sessionPtr == nullptr)
+		{
+			return WERCKM_ERR;
+		}
+		Session* session = reinterpret_cast<Session*>(sessionPtr);
+		if (session->fluidSynth.get() == nullptr)
+		{
+			return WERCKM_OK;
+		}
+		session->fluidSynth->sendCustomController(controllerNumber, value);
+		return WERCKM_OK;
 	}
 }
 
