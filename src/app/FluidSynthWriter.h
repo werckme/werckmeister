@@ -48,12 +48,14 @@ namespace app
         typedef std::mutex QueueLock;
         QueueLock _queueLock;
         void sendNow(const com::midi::Event &ev, fluid_event_t* target = nullptr);
+        void sendAt(const com::midi::Event &ev, int ticks);
         void initScriptIfReady();
         void processEventQueue();
         lua::FluidWriterPerformerPtr performerScript;
         MidiProvider midiProvider;
         bool handlePresetEvent(const com::midi::Event& event, bool sendToFluidSynth = true);
         void parseMidiData(const unsigned char* data, size_t length, VisitEventFunction visitEventFunction);
+        void logMidiEvent(fluid_event_t* ev, int at = -1);
         com::ILoggerPtr _logger;
         com::String _libPath;
         com::String _scriptPath;
@@ -65,6 +67,7 @@ namespace app
         fluid_player_t*  player = nullptr;
         int _sfIdPerChannel[16] = {0};
         int getSfId(int channel);
+        bool _seekRequested = false;
     };
     typedef std::shared_ptr<FluidSynthWriter> FluidSynthWriterPtr;
 }

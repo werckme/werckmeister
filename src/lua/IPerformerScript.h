@@ -26,6 +26,7 @@ namespace lua
         virtual void setSeekRequestHandler(const OnSeekRequestFunction&) = 0;
         virtual void setSendMidiEventHandler(const OnSendMidiEventFunction&) = 0;
         virtual void setMidiBackend(app::AMidiBackend* midiBackend) = 0;
+        virtual void enqueue(const Output* output, com::midi::Event) = 0;
         virtual void onTick(com::Ticks ticks) = 0;
         virtual void init() = 0;
     };

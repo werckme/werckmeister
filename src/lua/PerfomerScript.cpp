@@ -94,12 +94,16 @@ namespace lua
         {
             return listenTo(id, callBack);
         };
+        lua["ReleaseAllActiveNotes"] = [this](int channel)
+        {
+            sendNoteOffs(channel);
+        };
     }
 
     void PerformerScript::performJump(double position)
     {
-        onSeekRequest(position);
         sendNoteOffs();
+        onSeekRequest(position);
     }
 
     void PerformerScript::initLuaTypes(sol::state_view& lua)
@@ -260,8 +264,49 @@ namespace lua
         noteOnCache.clear();
     }
 
+    void PerformerScript::enqueue(const Output* output, com::midi::Event ev)
+    {
+        std::lock_guard<QueueLock> lock(_queueLock);
+        _eventQueue.emplace(MidiEventWithOutput {
+            .output = output,
+            .event = std::move(ev)
+        });
+    }
+
+    void PerformerScript::processEventQueue()
+    {
+        std::lock_guard<QueueLock> lock(_queueLock);
+        while(!_eventQueue.empty())
+        {
+            const auto &eventAndOutput = _eventQueue.front();
+            onSendMidiEvent(eventAndOutput.output, &eventAndOutput.event);
+            _eventQueue.pop();
+        }
+    }
+
+    void PerformerScript::sendNoteOffs(int channel)
+    {
+        
+        for(auto it = noteOnCache.begin(); it != noteOnCache.end(); )
+        {
+            if (it->channel != channel)
+            {
+                ++it;
+                continue;
+            }
+            com::midi::Event midiEv;
+            midiEv.eventType(com::midi::NoteOff);
+            midiEv.parameter1(it->pitch);
+            midiEv.parameter2(0);
+            midiEv.channel(it->channel);
+            enqueue(it->output, std::move(midiEv));
+            it = noteOnCache.erase(it);
+        }
+    }
+
     void PerformerScript::onTick(com::Ticks ticks)
     {
+        processEventQueue();
     }
 
     void PerformerScript::onMidiEvent(const Output& output, const com::midi::Event* ev, com::midi::Event **outEventPtrContainer)

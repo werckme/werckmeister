@@ -11,6 +11,10 @@
 #include <cstdint>
 #include <sol/sol.hpp>
 #include <optional>
+#include <mutex>
+#include <queue>
+
+
 namespace sol
 {
     class state_view;
@@ -43,6 +47,11 @@ namespace lua
         };
         typedef std::vector<LuaMidiTrack> LuaMidiTracks;
         typedef ALuaScript Base;
+        struct MidiEventWithOutput
+        {
+            const Output *output;
+            com::midi::Event event;
+        };
         struct NoteOnCacheValue  
         {
             const Output *output;
@@ -83,6 +92,7 @@ namespace lua
         virtual ~PerformerScript();
         void scriptPath(const com::String &scriptPath);
         void script(const com::String &scriptText);
+        virtual void enqueue(const Output* output, com::midi::Event) override;
         virtual bool canExecute() const override { return false; }
         virtual void assertCanExecute() const override {}
         virtual void onMidiEvent(const Output& output, const com::midi::Event*, com::midi::Event **outEventPtrContainer) override;
@@ -94,7 +104,13 @@ namespace lua
     protected:
         com::String _script;
         app::AMidiBackend::Inputs _midiInputs;
-        void sendNoteOffs();
+        typedef std::queue<MidiEventWithOutput> EventQueue;
+        EventQueue _eventQueue;
+        typedef std::recursive_mutex QueueLock;
+        QueueLock _queueLock;
+        void processEventQueue();
+        virtual void sendNoteOffs();
+        virtual void sendNoteOffs(int channel);
         virtual void performJump(double position);
         virtual void updateNoteOnCache(const Output& output, const com::midi::Event*);
         double nextJumpToValue = -1;

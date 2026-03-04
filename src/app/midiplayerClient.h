@@ -285,8 +285,6 @@ namespace app
 		typename MidiProvider::Events events;
 		auto t = this->elapsedMillis_;
 		MidiProvider::getEvents(this->elapsedMillis_, events, trackOffsets_);
-		auto outputInfo = getOutputInfo();
-		auto output = &outputInfo->output;
 		if (onTick)
 		{
 			onTick(MidiProvider::millisToTicks(t));
@@ -295,6 +293,8 @@ namespace app
 		{
 			currentTrack_ = evAndTrack.trackId;
 			const auto &ev = evAndTrack.event;
+			auto outputInfo = getOutputInfo();
+			auto output = &outputInfo->output;			
 			if (onSendMidiEvent)
 			{
 				com::midi::Event outEvent;

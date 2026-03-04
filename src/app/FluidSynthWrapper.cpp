@@ -159,7 +159,25 @@ namespace app
             _fluid_midi_event_set_type = _library->get<fluid_midi_event_set_type_ftype>("fluid_midi_event_set_type");
             _fluid_midi_event_set_value = _library->get<fluid_midi_event_set_value_ftype>("fluid_midi_event_set_value");
             _fluid_midi_event_set_velocity = _library->get<fluid_midi_event_set_velocity_ftype>("fluid_midi_event_set_velocity");
-
+            _fluid_event_get_bank = _library->get<fluid_event_get_bank_ftype>("fluid_event_get_bank");
+            _fluid_event_get_channel = _library->get<fluid_event_get_channel_ftype>("fluid_event_get_channel");
+            _fluid_event_get_control = _library->get<fluid_event_get_control_ftype>("fluid_event_get_control");
+            _fluid_event_get_data = _library->get<fluid_event_get_data_ftype>("fluid_event_get_data");
+            _fluid_event_get_dest = _library->get<fluid_event_get_dest_ftype>("fluid_event_get_dest");
+            _fluid_event_get_duration = _library->get<fluid_event_get_duration_ftype>("fluid_event_get_duration");
+            _fluid_event_get_key = _library->get<fluid_event_get_key_ftype>("fluid_event_get_key");
+            _fluid_event_get_pitch = _library->get<fluid_event_get_pitch_ftype>("fluid_event_get_pitch");
+            _fluid_event_get_program = _library->get<fluid_event_get_program_ftype>("fluid_event_get_program");
+            _fluid_event_get_scale = _library->get<fluid_event_get_scale_ftype>("fluid_event_get_scale");
+            _fluid_event_get_sfont_id = _library->get<fluid_event_get_sfont_id_ftype>("fluid_event_get_sfont_id");
+            _fluid_event_get_source = _library->get<fluid_event_get_source_ftype>("fluid_event_get_source");
+            _fluid_event_get_type = _library->get<fluid_event_get_type_ftype>("fluid_event_get_type");
+            _fluid_event_get_value = _library->get<fluid_event_get_value_ftype>("fluid_event_get_value");
+            _fluid_event_get_velocity = _library->get<fluid_event_get_velocity_ftype>("fluid_event_get_velocity");
+            _fluid_event_all_notes_off = _library->get<fluid_event_all_notes_off_ftype>("fluid_event_all_notes_off");
+            _fluid_event_all_sounds_off = _library->get<fluid_event_all_sounds_off_ftype>("fluid_event_all_sounds_off");
+            _fluid_synth_all_notes_off = _library->get<fluid_synth_all_notes_off_ftype>("fluid_synth_all_notes_off");
+            _fluid_synth_all_sounds_off = _library->get<fluid_synth_all_sounds_off_ftype>("fluid_synth_all_sounds_off");
         }
         catch (const std::exception &ex)
         {

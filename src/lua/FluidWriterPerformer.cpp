@@ -31,4 +31,18 @@ namespace lua
             }
         };
     }
+    void FluidWriterPerformer::sendNoteOffs() 
+    {
+        for(int i=0; i<15; ++i)
+        {
+            sendNoteOffs(i);
+        }
+    }
+    void FluidWriterPerformer::sendNoteOffs(int channel) 
+    {
+        sendAllNotesOff(channel);
+    }
+    void FluidWriterPerformer::updateNoteOnCache(const Output& output, const com::midi::Event*) 
+    {
+    }
 }

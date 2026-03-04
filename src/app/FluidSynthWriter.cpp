@@ -31,6 +31,26 @@ namespace
 
 namespace app
 {
+    void FluidSynthWriter::logMidiEvent(fluid_event_t* ev, int at)
+    {
+        int type   = _fluid_event_get_type(ev);
+        int chan   = _fluid_event_get_channel(ev);
+        int param1 = _fluid_event_get_key(ev);
+        int param2 = _fluid_event_get_velocity(ev);
+
+        std::cout << std::hex << std::uppercase
+                << "[MIDI] type=0x"   << type
+                << " chan=0x"         << chan
+                << " param1=0x"       << param1
+                << " param2=0x"       << param2
+                << std::dec;
+
+        if (at > 0)
+        {
+            std::cout << " at " << at;
+        }
+        std::cout << "\n";
+    }
     void FluidSynthWriter::initSynth()
     {
         initLibraryFunctions();
@@ -135,6 +155,10 @@ namespace app
     void FluidSynthWriter::onTickEventCallback(int ticks)
     {
         processEventQueue();
+        if (performerScript)
+        {
+            performerScript->onTick(ticks);
+        }
         MidiProvider::Events events;
         midiProvider.getEventsAtTick(ticks, events);
         fluid_event_t* fluid_event = _new_fluid_event();
@@ -157,6 +181,11 @@ namespace app
 				{
 					continue;
 				}
+                if (_seekRequested)
+                {
+                    _seekRequested = false;
+                    break;
+                }
             }
             sendNow(*midiEvent, fluid_event);
         }
@@ -167,21 +196,47 @@ namespace app
     {
         constexpr bool doThrow = false;
         bool ownEvent = fluid_event == nullptr;
+        int result = FLUID_OK;
         if (ownEvent)
         {
             fluid_event = _new_fluid_event();
         }
         if (!midiEventToFluidEvent(ev, *fluid_event, doThrow))
         {
-            goto ret;
+            goto sendNowRet;
         }
-        _fluid_sequencer_send_now(seq, fluid_event);
-    ret:
+        // logMidiEvent(fluid_event);
+        result = _fluid_sequencer_send_now(seq, fluid_event);
+        if (result != FLUID_OK)
+        {
+            // IGNORE
+        }
+    sendNowRet:
         if (ownEvent)
         {
             _delete_fluid_event(fluid_event);
         }
     }
+
+    void FluidSynthWriter::sendAt(const com::midi::Event &ev, int ticks)
+    {
+        constexpr bool doThrow = false;
+        int result = FLUID_OK;
+        auto fluid_event = _new_fluid_event();
+        int isAbsolute = 0;
+        if (!midiEventToFluidEvent(ev, *fluid_event, doThrow))
+        {
+            goto sendAtRet;
+        }
+        // logMidiEvent(fluid_event, ticks);
+        result = _fluid_sequencer_send_at(seq, fluid_event, ticks, isAbsolute);
+        if (result != FLUID_OK)
+        {
+            // IGNORE
+        }
+    sendAtRet:
+        _delete_fluid_event(fluid_event);
+    }    
 
     void FluidSynthWriter::setPerformerScriptPath(const com::String &path)
     {
@@ -208,14 +263,19 @@ namespace app
         performerScript->init();
         performerScript->setSeekRequestHandler([this](auto position)
         {
-            int ticks = (int)(position * com::PPQ);
-            _fluid_player_seek(player, ticks);
-            midiProvider.seekToTicks(ticks);
+            auto ticks = position * com::PPQ;
+            midiProvider.seekToTicks(ticks-1);
+            _fluid_player_seek(player, (int)ticks-1);
+            _seekRequested = true;
         });
         performerScript->setSendMidiEventHandler([this](const auto *output, const auto *midiEvent)
         {
             sendNow(*midiEvent);
         });
+        performerScript->sendAllNotesOff = [this](int ch)
+        {
+           _fluid_synth_all_notes_off(synth, ch);
+        };
     }
 
     void FluidSynthWriter::sendCustomController(int controller, int value)
