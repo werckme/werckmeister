@@ -10,6 +10,7 @@
 #include <com/werckmeister.hpp>
 #include <com/config.hpp>
 #include <app/AMidiBackend.h>
+#include <iostream>
 
 namespace 
 {
@@ -270,7 +271,13 @@ namespace app
         });
         performerScript->setSendMidiEventHandler([this](const auto *output, const auto *midiEvent)
         {
-            sendNow(*midiEvent);
+            auto pos = midiEvent->absPosition();
+            if (pos == 0)
+            {
+                sendNow(*midiEvent);
+                return;
+            }
+            sendAt(*midiEvent, pos);
         });
         performerScript->sendAllNotesOff = [this](int ch)
         {

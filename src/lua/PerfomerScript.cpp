@@ -299,6 +299,7 @@ namespace lua
             midiEv.parameter1(it->pitch);
             midiEv.parameter2(0);
             midiEv.channel(it->channel);
+            midiEv.absPosition(0);
             enqueue(it->output, std::move(midiEv));
             it = noteOnCache.erase(it);
         }

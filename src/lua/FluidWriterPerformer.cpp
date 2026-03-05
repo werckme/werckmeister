@@ -1,5 +1,6 @@
 #include "FluidWriterPerformer.h"
 #include <iostream>
+#include <algorithm>
 
 namespace
 {
@@ -45,5 +46,19 @@ namespace lua
     }
     void FluidWriterPerformer::updateNoteOnCache(const Output& output, const com::midi::Event*) 
     {
+    }
+
+    void FluidWriterPerformer::initLuaFunctions(sol::state_view& lua)
+    {
+        Base::initLuaFunctions(lua);
+        lua["SendMidiAtRelativePosition"] = [this](LuaMidiEvents luaMidiEvents)
+        {
+           for(const auto &luaMidi : luaMidiEvents)
+           {
+                auto midiEv = createMidiFrom(luaMidi);
+                // only works with FluidWriter
+                enqueue(nullptr, std::move(midiEv));
+           }
+        };
     }
 }

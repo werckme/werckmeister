@@ -7,6 +7,7 @@ namespace lua
     class FluidWriterPerformer : public PerformerScript
     {
     public:
+        typedef PerformerScript Base;
         FluidWriterPerformer(com::midi::MidiPtr midiFile) : PerformerScript(midiFile) 
         {
         }
@@ -17,6 +18,7 @@ namespace lua
         FAllNotesOff sendAllNotesOff = [](auto ch){};
     protected:
         virtual LuaMidiInputs getLuaMidiInputs() override;
+        virtual void initLuaFunctions(sol::state_view&) override;
         virtual void listenTo(const std::string &id, sol::protected_function callBack) override;
         virtual void sendNoteOffs() override;
         virtual void sendNoteOffs(int channel) override;

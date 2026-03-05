@@ -124,8 +124,8 @@ namespace lua
         virtual LuaMidiInputs getLuaMidiInputs();
         virtual void listenTo(const std::string &id, sol::protected_function callBack);
         void jumpToPosition(double quarters);
-        void initLuaFunctions(sol::state_view&);
-        void initLuaTypes(sol::state_view&);
+        virtual void initLuaFunctions(sol::state_view&);
+        virtual void initLuaTypes(sol::state_view&);
         sol::state_view* luaPtr = nullptr;
         /////////////////////
         typedef std::optional<LuaMidi> LuaMidiOptional;
