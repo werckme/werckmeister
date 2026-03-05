@@ -1,4 +1,5 @@
 #include "FluidWriterPerformer.h"
+#include <iostream>
 
 namespace
 {
