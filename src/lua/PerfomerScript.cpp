@@ -268,8 +268,8 @@ namespace lua
     {
         std::lock_guard<QueueLock> lock(_queueLock);
         _eventQueue.emplace(MidiEventWithOutput {
-            .output = output,
-            .event = std::move(ev)
+            output,
+            std::move(ev)
         });
     }
 
