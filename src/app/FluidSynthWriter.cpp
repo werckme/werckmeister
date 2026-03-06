@@ -12,6 +12,8 @@
 #include <app/AMidiBackend.h>
 #include <iostream>
 
+#define DEBUG_ONLY(x)
+
 namespace 
 {
     const double FLUID_SYNTH_SEQUENCER_TIMESCALE = 1000;
@@ -155,11 +157,11 @@ namespace app
 
     void FluidSynthWriter::onTickEventCallback(int ticks)
     {
-        processEventQueue();
         if (performerScript)
         {
             performerScript->onTick(ticks);
         }
+        processEventQueue();
         MidiProvider::Events events;
         midiProvider.getEventsAtTick(ticks, events);
         fluid_event_t* fluid_event = _new_fluid_event();
@@ -201,12 +203,13 @@ namespace app
         if (ownEvent)
         {
             fluid_event = _new_fluid_event();
+            _fluid_event_set_dest(fluid_event, synthSeqID);
         }
         if (!midiEventToFluidEvent(ev, *fluid_event, doThrow))
         {
             goto sendNowRet;
         }
-        // logMidiEvent(fluid_event);
+        DEBUG_ONLY(logMidiEvent(fluid_event);)
         result = _fluid_sequencer_send_now(seq, fluid_event);
         if (result != FLUID_OK)
         {
@@ -224,12 +227,13 @@ namespace app
         constexpr bool doThrow = false;
         int result = FLUID_OK;
         auto fluid_event = _new_fluid_event();
+        _fluid_event_set_dest(fluid_event, synthSeqID);
         int isAbsolute = 0;
         if (!midiEventToFluidEvent(ev, *fluid_event, doThrow))
         {
             goto sendAtRet;
         }
-        // logMidiEvent(fluid_event, ticks);
+        DEBUG_ONLY(logMidiEvent(fluid_event, ticks);)
         result = _fluid_sequencer_send_at(seq, fluid_event, ticks, isAbsolute);
         if (result != FLUID_OK)
         {

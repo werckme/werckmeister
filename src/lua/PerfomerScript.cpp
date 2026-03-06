@@ -76,6 +76,18 @@ namespace lua
                 }
             };
         }
+        sol::protected_function onTick = lua["OnTick"];
+        if (onTick.valid())
+        {
+            luaOnTick = [onTick](double position) {
+                auto result = onTick(position);
+                if (!result.valid())
+                {
+                    sol::error err = result;
+                    throw std::runtime_error(err.what());
+                }
+            };
+        }
 
         /// HOST
         lua["JumpToPosition"] = [this](double position)
@@ -109,6 +121,7 @@ namespace lua
     void PerformerScript::initLuaTypes(sol::state_view& lua)
     {
         lua.new_usertype<LuaMidi>("LuaMidi",
+            sol::constructors<LuaMidi()>(),
             "position", sol::property(
                 [](const LuaMidi& m)
                 {
@@ -308,6 +321,10 @@ namespace lua
     void PerformerScript::onTick(com::Ticks ticks)
     {
         processEventQueue();
+        if (luaOnTick)
+        {
+            luaOnTick(ticks / com::PPQ);
+        }
     }
 
     void PerformerScript::onMidiEvent(const Output& output, const com::midi::Event* ev, com::midi::Event **outEventPtrContainer)

@@ -56,7 +56,6 @@ namespace lua
            for(const auto &luaMidi : luaMidiEvents)
            {
                 auto midiEv = createMidiFrom(luaMidi);
-                // only works with FluidWriter
                 enqueue(nullptr, std::move(midiEv));
            }
         };

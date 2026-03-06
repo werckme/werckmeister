@@ -130,6 +130,7 @@ namespace lua
         /////////////////////
         typedef std::optional<LuaMidi> LuaMidiOptional;
         std::function<LuaMidiOptional(LuaMidi)> luaOnMidiEvent = nullptr;
+        std::function<void(double)> luaOnTick = nullptr;
         std::function<void()> luaInit = nullptr;
         LuaMidiTracks hostGetMidiEvents() const;
         typedef std::unordered_map<int, int> TagMap;
