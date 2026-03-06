@@ -227,14 +227,17 @@ namespace app
         constexpr bool doThrow = false;
         int result = FLUID_OK;
         auto fluid_event = _new_fluid_event();
-        _fluid_event_set_dest(fluid_event, synthSeqID);
+        int division = _fluid_player_get_division(player);
+        int tempo_us = _fluid_player_get_midi_tempo(player);
+        int millis = ticks * (tempo_us / 1e6 ) / division * 1000;
         int isAbsolute = 0;
+        _fluid_event_set_dest(fluid_event, synthSeqID);
         if (!midiEventToFluidEvent(ev, *fluid_event, doThrow))
         {
             goto sendAtRet;
         }
-        DEBUG_ONLY(logMidiEvent(fluid_event, ticks);)
-        result = _fluid_sequencer_send_at(seq, fluid_event, ticks, isAbsolute);
+        DEBUG_ONLY(logMidiEvent(fluid_event, millis);)
+        result = _fluid_sequencer_send_at(seq, fluid_event, millis, isAbsolute);
         if (result != FLUID_OK)
         {
             // IGNORE
