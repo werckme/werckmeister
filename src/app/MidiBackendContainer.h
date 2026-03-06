@@ -26,7 +26,7 @@ namespace app
 		void addBackend(AMidiBackendPtr);
 		const OutputIdToBackend &outputIdToBackend();
 		AMidiBackendPtr getBackend(const std::string &outputId);
-		AMidiBackendPtr getDefaultBackend();
+		AMidiBackendPtr getDefaultBackend() const;
 
 	private:
 		std::vector<AMidiBackendPtr> _midiBackends;
