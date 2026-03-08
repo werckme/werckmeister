@@ -440,6 +440,12 @@ namespace app
 
     void FluidSynthWriter::setMidiFileData(const unsigned char* data, size_t length, VisitEventFunction visitEventFunction)
     {
+        if (player != nullptr)
+        {
+             _fluid_player_stop(player);
+             _fluid_player_join(player);
+             _delete_fluid_player(player);
+        }
         player = _new_fluid_player(synth);
         parseMidiData(data, length, visitEventFunction);
         initScriptIfReady();

@@ -54,5 +54,8 @@ function FindInput(midiInputs, deviceName)
 end
 
 function BeginsWith(str, needle)
-   return str.sub(needle,1,string.len(needle))==needle
+    if str == nil then
+        return false
+    end
+    return str:sub(1, #needle) == needle
 end
