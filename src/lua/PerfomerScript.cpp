@@ -2,10 +2,9 @@
 #include <com/midi.hpp>
 #include <iostream>
 #include <algorithm>
-
-namespace
+namespace lua
 {
-    lua::PerformerScript::LuaMidi createLuaMidiFrom(const com::midi::Event &midiEvent)
+    lua::PerformerScript::LuaMidi PerformerScript::createLuaMidiFrom(const com::midi::Event &midiEvent) const
     {
         lua::PerformerScript::LuaMidi result;
         result.position = midiEvent.absPosition() / com::PPQ;
@@ -29,7 +28,7 @@ namespace
         return result;
     }
 
-    com::midi::Event createMidiFrom(const lua::PerformerScript::LuaMidi& luaMidi)
+    com::midi::Event PerformerScript::createMidiFrom(const lua::PerformerScript::LuaMidi& luaMidi) const
     {
         com::midi::Event result;
         result.absPosition(luaMidi.position * com::PPQ);
@@ -43,10 +42,7 @@ namespace
         result.parameter2(luaMidi.parameter2);
         return result;
     }
-}
 
-namespace lua
-{
     void PerformerScript::scriptPath(const com::String &scriptPath)
     {
         _path = scriptPath;
@@ -80,6 +76,18 @@ namespace lua
                 }
             };
         }
+        sol::protected_function onTick = lua["OnTick"];
+        if (onTick.valid())
+        {
+            luaOnTick = [onTick](double position) {
+                auto result = onTick(position);
+                if (!result.valid())
+                {
+                    sol::error err = result;
+                    throw std::runtime_error(err.what());
+                }
+            };
+        }
 
         /// HOST
         lua["JumpToPosition"] = [this](double position)
@@ -98,17 +106,22 @@ namespace lua
         {
             return listenTo(id, callBack);
         };
+        lua["ReleaseAllActiveNotes"] = [this](int channel)
+        {
+            sendNoteOffs(channel);
+        };
     }
 
     void PerformerScript::performJump(double position)
     {
-        onSeekRequest(position);
         sendNoteOffs();
+        onSeekRequest(position);
     }
 
     void PerformerScript::initLuaTypes(sol::state_view& lua)
     {
         lua.new_usertype<LuaMidi>("LuaMidi",
+            sol::constructors<LuaMidi()>(),
             "position", sol::property(
                 [](const LuaMidi& m)
                 {
@@ -264,8 +277,54 @@ namespace lua
         noteOnCache.clear();
     }
 
+    void PerformerScript::enqueue(const Output* output, com::midi::Event ev)
+    {
+        std::lock_guard<QueueLock> lock(_queueLock);
+        _eventQueue.emplace(MidiEventWithOutput {
+            output,
+            std::move(ev)
+        });
+    }
+
+    void PerformerScript::processEventQueue()
+    {
+        std::lock_guard<QueueLock> lock(_queueLock);
+        while(!_eventQueue.empty())
+        {
+            const auto &eventAndOutput = _eventQueue.front();
+            onSendMidiEvent(eventAndOutput.output, &eventAndOutput.event);
+            _eventQueue.pop();
+        }
+    }
+
+    void PerformerScript::sendNoteOffs(int channel)
+    {
+        
+        for(auto it = noteOnCache.begin(); it != noteOnCache.end(); )
+        {
+            if (it->channel != channel)
+            {
+                ++it;
+                continue;
+            }
+            com::midi::Event midiEv;
+            midiEv.eventType(com::midi::NoteOff);
+            midiEv.parameter1(it->pitch);
+            midiEv.parameter2(0);
+            midiEv.channel(it->channel);
+            midiEv.absPosition(0);
+            enqueue(it->output, std::move(midiEv));
+            it = noteOnCache.erase(it);
+        }
+    }
+
     void PerformerScript::onTick(com::Ticks ticks)
     {
+        processEventQueue();
+        if (luaOnTick)
+        {
+            luaOnTick(ticks / com::PPQ);
+        }
     }
 
     void PerformerScript::onMidiEvent(const Output& output, const com::midi::Event* ev, com::midi::Event **outEventPtrContainer)
@@ -293,11 +352,23 @@ namespace lua
         **outEventPtrContainer = createMidiFrom(luaMidiValue);
     }
 
+    void PerformerScript::script(const com::String &scriptText)
+    {
+        _script = scriptText;
+    }
+
     void PerformerScript::init()
     {
         prepareLuaEnvironment();
         luaPtr = new sol::state_view(L);
-        luaPtr->script_file(_path);
+        if (!_path.empty())
+        {
+            luaPtr->script_file(_path);
+        }
+        else if (!_script.empty())
+        {
+            luaPtr->script(_script);
+        }
         initLuaTypes(*luaPtr);
         initLuaFunctions(*luaPtr);
         if (luaInit)
@@ -366,7 +437,7 @@ namespace lua
             throw std::runtime_error("invalid midi input id: " + id);
         }
         app::AMidiBackend::Input* inputPtr = &(*inputIt);
-        inputPtr->midiMessageCallback = [callBack](const auto *msg)
+        inputPtr->midiMessageCallback = [callBack, this](const auto *msg)
         {
             std::vector<com::Byte> midiData = {0x0};
             midiData.insert( midiData.end(), msg->begin(), msg->end() );

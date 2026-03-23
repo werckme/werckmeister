@@ -1279,6 +1279,9 @@ Registers a callback function to receive MIDI events from an external input devi
 ### `JumpToPosition(positionQuarters)`
 Jumps playback to a specific position in the sheet.
 
+### `ReleaseAllActiveNotes(int channel)`
+Sends note-off events for all pending pitches on the specified channel.
+
 **Parameters:**
 - `position` (number): Target position in ticks
 

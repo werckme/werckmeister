@@ -52,6 +52,29 @@ namespace app
 		}
 	}
 
+	void MidiProvider::getEventsAtTick(com::Ticks at, Events &out)
+	{
+		for (auto track : midi_->ctracks())
+		{
+			auto trackId = reinterpret_cast<TrackId>(track.get());
+			auto end = track->events().end();
+			EventIt &it = *getEventIt(track);
+			while (it != end)
+			{
+				auto pos = it->absPosition();
+				if (pos > at)
+				{
+					break;
+				}
+				Event ev;
+				ev.event = *it;
+				ev.trackId = trackId;
+				out.push_back(ev);
+				++it;
+			}
+		}
+	}
+
 	void MidiProvider::iterate(const IterateFunction &f)
 	{
 		for (auto track : midi_->ctracks())
@@ -97,6 +120,16 @@ namespace app
 		{
 			millis = std::max(millis - ticksToMillis(1), Millis(0.0));
 			getEvents(millis, events, offsets);
+		}
+	}
+
+	void MidiProvider::seekToTicks(com::Ticks ticks)
+	{
+		trackEventIts_.clear();
+		Events events;
+		if (ticks > 0)
+		{
+			getEventsAtTick(ticks, events);
 		}
 	}
 

@@ -22,6 +22,7 @@ SET (SRC_FETZER_LIB
     lua/ALuaScript.cpp
     lua/ALuaWithParameter.cpp
     lua/PerfomerScript.cpp
+    lua/FluidWriterPerformer.cpp
     compiler/DefinitionsServer.cpp
     com/tools.cpp
     com/ConsoleLogger.cpp

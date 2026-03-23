@@ -9,6 +9,10 @@
 #include <boost/regex.hpp>
 #include <com/werckmeister.hpp>
 #include <com/config.hpp>
+#include <app/AMidiBackend.h>
+#include <iostream>
+
+#define DEBUG_ONLY(x)
 
 namespace 
 {
@@ -25,10 +29,31 @@ namespace
         reinterpret_cast<app::FluidSynthWriter*>(data)->onPlaybackCallback(event);
         return FLUID_OK;
     }
+    app::AMidiBackend::Output dummyOutput;
 }
 
 namespace app
 {
+    void FluidSynthWriter::logMidiEvent(fluid_event_t* ev, int at)
+    {
+        int type   = _fluid_event_get_type(ev);
+        int chan   = _fluid_event_get_channel(ev);
+        int param1 = _fluid_event_get_key(ev);
+        int param2 = _fluid_event_get_velocity(ev);
+
+        std::cout << std::hex << std::uppercase
+                << "[MIDI] type=0x"   << type
+                << " chan=0x"         << chan
+                << " param1=0x"       << param1
+                << " param2=0x"       << param2
+                << std::dec;
+
+        if (at > 0)
+        {
+            std::cout << " at " << at;
+        }
+        std::cout << "\n";
+    }
     void FluidSynthWriter::initSynth()
     {
         initLibraryFunctions();
@@ -130,20 +155,162 @@ namespace app
         }
     }
 
-    void FluidSynthWriter::onTickEventCallback(int tick)
+    void FluidSynthWriter::onTickEventCallback(int ticks)
     {
-        if (_activeJumpPoint == nullptr)
+        if (performerScript)
+        {
+            performerScript->onTick(ticks);
+        }
+        processEventQueue();
+        MidiProvider::Events events;
+        midiProvider.getEventsAtTick(ticks, events);
+        fluid_event_t* fluid_event = _new_fluid_event();
+        _fluid_event_set_dest(fluid_event, synthSeqID);
+        com::midi::Event modifiedEvent;
+        for(const auto &pEv : events)
+        {
+            const com::midi::Event* midiEvent = &pEv.event;
+            if (performerScript)
+            {
+				com::midi::Event* outEventContainer[] = { &modifiedEvent };
+                performerScript->onMidiEvent(dummyOutput, &pEv.event, outEventContainer);
+				bool eventChanged = *outEventContainer == &modifiedEvent;
+				if (eventChanged)
+				{
+                    midiEvent = &modifiedEvent;
+				}
+				bool skipped = *outEventContainer == nullptr;
+				if (skipped)
+				{
+					continue;
+				}
+                if (_seekRequested)
+                {
+                    _seekRequested = false;
+                    break;
+                }
+            }
+            sendNow(*midiEvent, fluid_event);
+        }
+        _delete_fluid_event(fluid_event);
+    }
+
+    void FluidSynthWriter::sendNow(const com::midi::Event &ev, fluid_event_t* fluid_event)
+    {
+        constexpr bool doThrow = false;
+        bool ownEvent = fluid_event == nullptr;
+        int result = FLUID_OK;
+        if (ownEvent)
+        {
+            fluid_event = _new_fluid_event();
+            _fluid_event_set_dest(fluid_event, synthSeqID);
+        }
+        if (!midiEventToFluidEvent(ev, *fluid_event, doThrow))
+        {
+            goto sendNowRet;
+        }
+        DEBUG_ONLY(logMidiEvent(fluid_event);)
+        result = _fluid_sequencer_send_now(seq, fluid_event);
+        if (result != FLUID_OK)
+        {
+            // IGNORE
+        }
+    sendNowRet:
+        if (ownEvent)
+        {
+            _delete_fluid_event(fluid_event);
+        }
+    }
+
+    void FluidSynthWriter::sendAt(const com::midi::Event &ev, int ticks)
+    {
+        constexpr bool doThrow = false;
+        int result = FLUID_OK;
+        auto fluid_event = _new_fluid_event();
+        int division = _fluid_player_get_division(player);
+        int tempo_us = _fluid_player_get_midi_tempo(player);
+        int millis = ticks * (tempo_us / 1e6 ) / division * 1000;
+        int isAbsolute = 0;
+        _fluid_event_set_dest(fluid_event, synthSeqID);
+        if (!midiEventToFluidEvent(ev, *fluid_event, doThrow))
+        {
+            goto sendAtRet;
+        }
+        DEBUG_ONLY(logMidiEvent(fluid_event, millis);)
+        result = _fluid_sequencer_send_at(seq, fluid_event, millis, isAbsolute);
+        if (result != FLUID_OK)
+        {
+            // IGNORE
+        }
+    sendAtRet:
+        _delete_fluid_event(fluid_event);
+    }    
+
+    void FluidSynthWriter::setPerformerScriptPath(const com::String &path)
+    {
+        _scriptPath = path;
+        initScriptIfReady();
+    }
+
+    void FluidSynthWriter::initScriptIfReady()
+    {
+        if (_scriptPath.empty())
         {
             return;
         }
-        const auto &jumpPoint = *_activeJumpPoint;
-        if (tick >= jumpPoint.fromPositionTicks) 
+        if (!midiProvider.midi())
         {
-            _fluid_player_seek(player, jumpPoint.toPositionTicks);
-            if (_activeJumpPoint == &_tmpJumpoint)
+            return;
+        }
+        if (performerScript)
+        {
+            return;
+        }
+        performerScript = std::make_shared<lua::FluidWriterPerformer>(midiProvider.midi());
+        performerScript->scriptPath(_scriptPath);
+        performerScript->init();
+        performerScript->setSeekRequestHandler([this](auto position)
+        {
+            auto ticks = position * com::PPQ;
+            midiProvider.seekToTicks(ticks-1);
+            _fluid_player_seek(player, (int)ticks-1);
+            _seekRequested = true;
+        });
+        performerScript->setSendMidiEventHandler([this](const auto *output, const auto *midiEvent)
+        {
+            auto pos = midiEvent->absPosition();
+            if (pos == 0)
             {
-                _activeJumpPoint = nullptr;
+                sendNow(*midiEvent);
+                return;
             }
+            sendAt(*midiEvent, pos);
+        });
+        performerScript->sendAllNotesOff = [this](int ch)
+        {
+           _fluid_synth_all_notes_off(synth, ch);
+        };
+    }
+
+    void FluidSynthWriter::sendCustomController(int controller, int value)
+    {
+        if (!performerScript)
+        {
+            return;
+        }
+        std::lock_guard<QueueLock> lock(_queueLock);
+        auto cc = com::midi::Event::CCValue(0, controller, value);
+        _eventQueue.emplace(std::move(cc));
+    }
+
+    void FluidSynthWriter::processEventQueue()
+    {
+        std::lock_guard<QueueLock> lock(_queueLock);
+        while(!_eventQueue.empty())
+        {
+            const auto &event = _eventQueue.front();
+            performerScript->sendInputEventToScript(&event);
+            _eventQueue.pop();
         }
     }
 
@@ -171,67 +338,6 @@ namespace app
             handlePresetEvent(midiEv);
             return;
         }
-        _fluid_synth_handle_midi_event(synth, event);
-    }
-
-    void FluidSynthWriter::jump(const JumpPoint &jumpPoint)
-    {
-        _tmpJumpoint = jumpPoint;
-        _activeJumpPoint = &_tmpJumpoint;
-        _logger->babble(WMLogLambda(log << "jump: " << "f: " << _activeJumpPoint->fromPositionTicks << " t:" << _activeJumpPoint->toPositionTicks));
-    }
-
-    void FluidSynthWriter::setJumpPoints(const JumpPoints& jumpPoints)
-    {
-         _logger->babble(WMLogLambda(log << "setJumpPoints: " << jumpPoints.size()));
-        _jumpPoints = jumpPoints;
-        _activeJumpPoint = nullptr;
-        updateJumpPointIndex();
-    }
-
-    void FluidSynthWriter::setJumpPoints(JumpPoints&& jumpPoints)
-    {
-        _logger->babble(WMLogLambda(log << "setJumpPoints: " << jumpPoints.size()));
-        _jumpPoints = std::move(jumpPoints);
-        _activeJumpPoint = nullptr;
-        updateJumpPointIndex();
-    }
-
-    void FluidSynthWriter::updateJumpPointIndex()
-    {
-        _jumpPointsIndex = JumpPointsIndex(_jumpPoints.size(), nullptr);
-        for(const auto& cit : _jumpPoints)
-        {
-            auto index = cit.second.index;
-            if (index < 0)
-            {
-                throw std::runtime_error("invalid jumpPointIndex: " + std::to_string(index));
-            }
-            _jumpPointsIndex[index] = &cit.second;
-        }
-    }
-
-    void FluidSynthWriter::setActiveJumpPoint(int jumpPointIndex)
-    {
-        _logger->babble(WMLogLambda(log << "setActiveJumpPoint: " << jumpPointIndex));
-        if (jumpPointIndex == UndefinedJumpPointIndex)
-        {
-            _activeJumpPoint = nullptr;
-            return;
-        }
-        if (jumpPointIndex < 0 || jumpPointIndex >= (int)_jumpPoints.size())
-        {
-            throw std::invalid_argument("invalid jump point: " 
-                + std::to_string(jumpPointIndex)
-                + " with a size of "
-                + std::to_string(_jumpPoints.size())
-            );
-        }
-        _activeJumpPoint = this->_jumpPointsIndex[jumpPointIndex];
-         _logger->babble(WMLogLambda(log << "setActiveJumpPoint: " 
-            << "f: " << _activeJumpPoint->fromPositionTicks
-            << " t:" << _activeJumpPoint->toPositionTicks
-            << " i:" << _activeJumpPoint->index));
     }
 
     /*
@@ -313,11 +419,11 @@ namespace app
         return true;
     }
 
-     void FluidSynthWriter::handleMidiMetaEvents(const unsigned char* data, size_t length, VisitEventFunction visitEventFunction)
+     void FluidSynthWriter::parseMidiData(const unsigned char* data, size_t length, VisitEventFunction visitEventFunction)
      {
-        com::midi::Midi midiFile;
-        midiFile.read(data, length);
-        for(const auto& track : midiFile.tracks())
+        com::midi::MidiPtr midiFile = std::make_shared<com::midi::Midi>();
+        midiFile->read(data, length);
+        for(const auto& track : midiFile->tracks())
         {
             for(const auto& event : track->events())
             {
@@ -328,13 +434,21 @@ namespace app
                 handleMetaEvent(event);
                 handlePresetEvent(event, false);
             }
-        } 
+        }
+        midiProvider.midi(midiFile);
      }
 
     void FluidSynthWriter::setMidiFileData(const unsigned char* data, size_t length, VisitEventFunction visitEventFunction)
     {
+        if (player != nullptr)
+        {
+             _fluid_player_stop(player);
+             _fluid_player_join(player);
+             _delete_fluid_player(player);
+        }
         player = _new_fluid_player(synth);
-        handleMidiMetaEvents(data, length, visitEventFunction);
+        parseMidiData(data, length, visitEventFunction);
+        initScriptIfReady();
         _fluid_player_add_mem(player, data, length);
         _fluid_player_set_tick_callback(player, OnTickEventHandler, this);
         _fluid_player_set_playback_callback(player, OnMidiEventHandler, this);

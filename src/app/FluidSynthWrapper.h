@@ -37,6 +37,7 @@
 #define fluid_event_set_source_ftype void(fluid_event_t*, fluid_seq_id_t)
 #define fluid_event_set_dest_ftype void(fluid_event_t*, fluid_seq_id_t)
 #define fluid_sequencer_send_at_ftype int(fluid_sequencer_t*, fluid_event_t*, unsigned int, int)
+#define fluid_sequencer_send_now_ftype int(fluid_sequencer_t*, fluid_event_t*)
 #define delete_fluid_event_ftype void(fluid_event_t*)
 #define fluid_sequencer_get_tick_ftype unsigned int(fluid_sequencer_t*)
 #define fluid_event_noteon_ftype void(fluid_event_t*, int, short, short)
@@ -86,6 +87,27 @@
 #define fluid_midi_event_set_type_ftype int(fluid_midi_event_t *evt, int type)
 #define fluid_midi_event_set_value_ftype int(fluid_midi_event_t *evt, int val)
 #define fluid_midi_event_set_velocity_ftype int(fluid_midi_event_t *evt, int vel)
+#define fluid_event_get_bank_ftype short(fluid_event_t *evt)
+#define fluid_event_get_channel_ftype int(fluid_event_t *evt)
+#define fluid_event_get_control_ftype short(fluid_event_t *evt)
+#define fluid_event_get_data_ftype void*(fluid_event_t *evt)
+#define fluid_event_get_dest_ftype fluid_seq_id_t(fluid_event_t *evt)
+#define fluid_event_get_duration_ftype unsigned int(fluid_event_t *evt)
+#define fluid_event_get_key_ftype short(fluid_event_t *evt)
+#define fluid_event_get_pitch_ftype int(fluid_event_t *evt)
+#define fluid_event_get_program_ftype int(fluid_event_t *evt)
+#define fluid_event_get_scale_ftype double(fluid_event_t *evt)
+#define fluid_event_get_sfont_id_ftype unsigned int(fluid_event_t *evt)
+#define fluid_event_get_source_ftype fluid_seq_id_t(fluid_event_t *evt)
+#define fluid_event_get_type_ftype int(fluid_event_t *evt)
+#define fluid_event_get_value_ftype int(fluid_event_t *evt)
+#define fluid_event_get_velocity_ftype short(fluid_event_t *evt)
+#define fluid_event_all_notes_off_ftype int(fluid_event_t *evt, int channel)
+#define fluid_event_all_sounds_off_ftype int(fluid_event_t *evt, int channel)
+#define fluid_synth_all_notes_off_ftype int(fluid_synth_t *synth, int channel)
+#define fluid_synth_all_sounds_off_ftype int(fluid_synth_t *synth, int channel)
+
+
 
 namespace app
 {
@@ -140,6 +162,7 @@ namespace app
 		std::function<fluid_event_set_source_ftype> _fluid_event_set_source;
 		std::function<fluid_event_set_dest_ftype> _fluid_event_set_dest;
 		std::function<fluid_sequencer_send_at_ftype> _fluid_sequencer_send_at;
+		std::function<fluid_sequencer_send_now_ftype> _fluid_sequencer_send_now;
 		std::function<delete_fluid_event_ftype> _delete_fluid_event;
 		std::function<fluid_event_noteon_ftype> _fluid_event_noteon;
 		std::function<fluid_event_noteoff_ftype> _fluid_event_noteoff;
@@ -193,6 +216,25 @@ namespace app
 		std::function<fluid_midi_event_set_type_ftype> _fluid_midi_event_set_type;
 		std::function<fluid_midi_event_set_value_ftype> _fluid_midi_event_set_value;
 		std::function<fluid_midi_event_set_velocity_ftype> _fluid_midi_event_set_velocity;
+		std::function<fluid_event_get_bank_ftype> _fluid_event_get_bank;
+		std::function<fluid_event_get_channel_ftype> _fluid_event_get_channel;
+		std::function<fluid_event_get_control_ftype> _fluid_event_get_control;
+		std::function<fluid_event_get_data_ftype> _fluid_event_get_data;
+		std::function<fluid_event_get_dest_ftype> _fluid_event_get_dest;
+		std::function<fluid_event_get_duration_ftype> _fluid_event_get_duration;
+		std::function<fluid_event_get_key_ftype> _fluid_event_get_key;
+		std::function<fluid_event_get_pitch_ftype> _fluid_event_get_pitch;
+		std::function<fluid_event_get_program_ftype> _fluid_event_get_program;
+		std::function<fluid_event_get_scale_ftype> _fluid_event_get_scale;
+		std::function<fluid_event_get_sfont_id_ftype> _fluid_event_get_sfont_id;
+		std::function<fluid_event_get_source_ftype> _fluid_event_get_source;
+		std::function<fluid_event_get_type_ftype> _fluid_event_get_type;
+		std::function<fluid_event_get_value_ftype> _fluid_event_get_value;
+		std::function<fluid_event_get_velocity_ftype> _fluid_event_get_velocity;
+		std::function<fluid_event_all_notes_off_ftype> _fluid_event_all_notes_off; 
+		std::function<fluid_event_all_sounds_off_ftype> _fluid_event_all_sounds_off;
+		std::function<fluid_synth_all_notes_off_ftype> _fluid_synth_all_notes_off;
+		std::function<fluid_synth_all_sounds_off_ftype> _fluid_synth_all_sounds_off;
 
 
 		fluid_settings_t *settings = nullptr;

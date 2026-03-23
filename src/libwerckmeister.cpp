@@ -133,46 +133,6 @@ extern "C"
 		return WERCKM_OK;
 	}
 
-	WERCKM_EXPORT int wm_compile(WmSession sessionPtr, const char * sourcePath)
-	{
-		if (sessionPtr == nullptr)
-		{
-			return WERCKM_ERR;
-		}
-		Session* session = reinterpret_cast<Session*>(sessionPtr);
-		auto _logger = session->logger;
-		LOG("wm_compile" << ": " << sourcePath);
-		const char * args[] = {"noProgramName", sourcePath, "--verbose"};
-		const int numArgs = sizeof(args)/sizeof(args[0]);
-		try 
-		{
-			session->midiFile = createMidiFile(session, numArgs, &args[0]);
-			wmassert(session->midiFile, "expected session->midi");
-			LOG("session created " << session->midiFile->byteSize() << " bytes");
-			return WERCKM_OK;
-		}
-		catch (const std::exception &ex) 
-		{
-			ERR("failed to create compiler program: " << ex.what());
-			return WERCKM_ERR;
-		}
-		catch (...) 
-		{
-			ERR("failed to create compiler program");
-			return WERCKM_ERR;
-		}
-	}
-
-	WERCKM_EXPORT bool wm_iscompiled(WmSession sessionPtr)
-	{
-		if (sessionPtr == nullptr)
-		{
-			return false;
-		}
-		Session* session = reinterpret_cast<Session*>(sessionPtr);
-		return session->midiFile.get() != nullptr;
-	}
-
 	WERCKM_EXPORT int wm_initSynth(WmSession sessionPtr, const char *libPath, int sampleRate)
 	{
 		if (sessionPtr == nullptr)
@@ -211,7 +171,7 @@ extern "C"
 		return WERCKM_OK;
 	}
 
-	WERCKM_EXPORT int wm_copyCompiledMidiDataToSynth(WmSession sessionPtr)
+	WERCKM_EXPORT int wm_setPerformerScriptPath(WmSession sessionPtr, const char* path, unsigned int length)
 	{
 		if (sessionPtr == nullptr)
 		{
@@ -219,41 +179,25 @@ extern "C"
 		}
 		Session* session = reinterpret_cast<Session*>(sessionPtr);
 		auto _logger = session->logger;
-		LOG("wm_copyCompiledMidiDataToSynth");
-		if (session->fluidSynth.get() == nullptr)
+		try
 		{
+			if (session->fluidSynth.get() == nullptr)
+			{
+				return WERCKM_OK;
+			}
+			session->fluidSynth->setPerformerScriptPath(com::String(path, length));
 			return WERCKM_OK;
 		}
-		if (session->midiFile.get() == nullptr)
+		catch (const std::exception &ex) 
 		{
-			ERR("no midi file");
+			ERR("failed to render: " << ex.what());
 			return WERCKM_ERR;
 		}
-		LOG("copy " << session->midiFile->ctracks().size() <<  " tracks");
-		try 
+		catch (...) 
 		{
-			for (const auto& track : session->midiFile->ctracks())
-			{
-				LOG("copy " << track->events().numEvents() << " events");
-				for (const auto& event : track->events())
-				{
-					session->fluidSynth->addEvent(event);
-					handleIfMetaEvent(session, event);
-				}
-			}
+			ERR("failed to render");
+			return WERCKM_ERR;
 		}
-		catch (const std::exception& ex)
-		{
-			ERR("failed copy midi data: " << ex.what());
-				return WERCKM_ERR;
-		}
-		catch (...)
-		{
-			ERR("failed to copy midi data");
-				return WERCKM_ERR;
-		}
-
-		return WERCKM_OK;
 	}
 
 	WERCKM_EXPORT int wm_setSoundFontHome(WmSession, const char *sfHomePath)
@@ -380,79 +324,6 @@ extern "C"
 		}
 	}
 
-	WERCKM_EXPORT int wm_writeToFile(WmSession sessionPtr, const char* outputPath)
-	{
-		if (sessionPtr == nullptr)
-		{
-			return 0;
-		}
-		Session* session = reinterpret_cast<Session*>(sessionPtr);
-		if (!session->fluidSynth)
-		{
-			return 0;
-		}
-		auto _logger = session->logger;
-		try 
-		{
-			auto bpm = session->fluidSynth->tempo();
-			auto totalLength = session->midiFile->duration() * 60.0 / (bpm * com::PPQ);
-			session->fluidSynth->renderToFile(outputPath, totalLength);
-			return 0;
-		}
-		catch(...)
-		{
-			ERR("failed to get cue position");
-			return 0;
-		}
-	}
-
-	WERCKM_EXPORT int wm_addMidiEvent(WmSession sessionPtr, double tickPos, const unsigned char* data, unsigned int length)
-	{
-		if (sessionPtr == nullptr)
-		{
-			return WERCKM_ERR;
-		}
-		Session* session = reinterpret_cast<Session*>(sessionPtr);
-		auto _logger = session->logger;
-		try 
-		{
-			std::lock_guard<std::mutex> guard(session->processMidiMutex);
-			bool synthIsReady = session->fluidSynth.get() != nullptr;
-			com::midi::Event event;
-
-			session->tmpMidiEventBff.clear();
-			session->tmpMidiEventBff.push_back(0);
-
-			for(unsigned int i = 0; i<length; ++i)
-			{
-				session->tmpMidiEventBff.push_back(data[i]);
-			}
-
-			event.read(0, session->tmpMidiEventBff.data(), length + 1);
-			event.absPosition(tickPos);
-
-			if (synthIsReady)
-			{
-				session->fluidSynth->addEvent(event);
-				handleIfMetaEvent(session, event);
-			} else
-			{
-				session->tmpMidiEvents.push_back(event);
-			}
-			return WERCKM_OK;
-		}
-		catch (const std::exception &ex) 
-		{
-			ERR("failed to addMidiEvent: " << length << " " << ex.what());
-			return WERCKM_ERR;
-		}
-		catch(...)
-		{
-			ERR("failed to addMidiEvent");
-			return 0;
-		}
-	}
-
 	WERCKM_EXPORT int wm_addMidiFileData(WmSession sessionPtr, const unsigned char* data, unsigned int length)
 	{
 		if (sessionPtr == nullptr)
@@ -515,110 +386,6 @@ extern "C"
 		}
 	}
 
-	WERCKM_EXPORT int wm_setJumpPoints(WmSession sessionPtr, WmJumpPoint* jumpPoints, int length)
-	{
-		if (sessionPtr == nullptr)
-		{
-			return WERCKM_ERR;
-		}
-		Session* session = reinterpret_cast<Session*>(sessionPtr);
-		if (session->fluidSynth.get() == nullptr)
-		{
-			return WERCKM_OK;
-		}
-		auto _logger = session->logger;
-		try 
-		{
-			app::FluidSynthWriter::JumpPoints jmps;
-			LOG("wm_setJumpPoints: " << length);
-			for(int i=0; i<length; ++i)
-			{
-				app::FluidSynthWriter::JumpPoint jmp;
-				jmp.index = i;
-				jmp.fromPositionTicks = jumpPoints[i].fromPositionSeconds * session->fluidSynth->tempo() / 60.0 * com::PPQ;
-				jmp.toPositionTicks = jumpPoints[i].toPositionSeconds * session->fluidSynth->tempo() / 60.0 * com::PPQ;
-				jmps.insert({jmp.fromPositionTicks, jmp});
-			}
-			session->fluidSynth->setJumpPoints(jmps);
-			return WERCKM_ERR;
-		}
-		catch (const std::exception &ex) 
-		{
-			ERR("failed to set jump points: " << ex.what());
-			return WERCKM_ERR;
-		}
-		catch(...)
-		{
-			ERR("failed to set jump points");
-			return 0;
-		}
-	}
-
-	WERCKM_EXPORT int wm_setActiveJumpPoint(WmSession sessionPtr, int jumpPointIndex)
-	{
-		if (sessionPtr == nullptr)
-		{
-			return WERCKM_ERR;
-		}
-		Session* session = reinterpret_cast<Session*>(sessionPtr);
-		if (session->fluidSynth.get() == nullptr)
-		{
-			return WERCKM_OK;
-		}
-		auto _logger = session->logger;
-		try 
-		{
-			session->fluidSynth->setActiveJumpPoint(jumpPointIndex);
-			return WERCKM_ERR;
-		}
-		catch (const std::exception &ex) 
-		{
-			ERR("failed to setActiveJumpPoint: " << jumpPointIndex << " " << ex.what());
-			return WERCKM_ERR;
-		}
-		catch(...)
-		{
-			ERR("failed to setActiveJumpPoint");
-			return WERCKM_ERR;
-		}
-	}
-
-	WERCKM_EXPORT int wm_jump(WmSession sessionPtr, const WmJumpPoint* jumpPoint)
-	{
-		if (sessionPtr == nullptr || jumpPoint == nullptr)
-		{
-			return WERCKM_ERR;
-		}
-		Session* session = reinterpret_cast<Session*>(sessionPtr);
-		if (session->fluidSynth.get() == nullptr)
-		{
-			return WERCKM_OK;
-		}
-		auto _logger = session->logger;
-		try 
-		{
-			app::FluidSynthWriter::JumpPoint jmp;
-			jmp.index = app::FluidSynthWriter::UndefinedJumpPointIndex;
-			jmp.fromPositionTicks = jumpPoint->fromPositionSeconds * session->fluidSynth->tempo() / 60.0 * com::PPQ;
-			jmp.toPositionTicks = jumpPoint->toPositionSeconds * session->fluidSynth->tempo() / 60.0 * com::PPQ;
-			session->fluidSynth->jump(jmp);
-			return WERCKM_ERR;
-		}
-		catch (const std::exception &ex) 
-		{
-			ERR("failed to jump: " << jumpPoint->fromPositionSeconds 
-				<< ", " 
-				<< jumpPoint->toPositionSeconds 
-				<< ex.what());
-			return WERCKM_ERR;
-		}
-		catch(...)
-		{
-			ERR("failed to jump");
-			return WERCKM_ERR;
-		}
-	}
-
 	WERCKM_EXPORT int wm_play(WmSession sessionPtr)
 	{
 		if (sessionPtr == nullptr)
@@ -630,9 +397,8 @@ extern "C"
 		{
 			return WERCKM_OK;
 		}
-		auto _logger = session->logger;
 		session->fluidSynth->play();
-		return WERCKM_ERR;
+		return WERCKM_OK;
 	}
 
 	WERCKM_EXPORT int wm_stop(WmSession sessionPtr)
@@ -646,9 +412,23 @@ extern "C"
 		{
 			return WERCKM_OK;
 		}
-		auto _logger = session->logger;
 		session->fluidSynth->stop();
-		return WERCKM_ERR;
+		return WERCKM_OK;
+	}
+
+  	WERCKM_EXPORT int wm_sendCustomController(WmSession sessionPtr, int controllerNumber, int value)
+	{
+		if (sessionPtr == nullptr)
+		{
+			return WERCKM_ERR;
+		}
+		Session* session = reinterpret_cast<Session*>(sessionPtr);
+		if (session->fluidSynth.get() == nullptr)
+		{
+			return WERCKM_OK;
+		}
+		session->fluidSynth->sendCustomController(controllerNumber, value);
+		return WERCKM_OK;
 	}
 }
 

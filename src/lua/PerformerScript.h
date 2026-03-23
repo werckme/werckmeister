@@ -11,6 +11,10 @@
 #include <cstdint>
 #include <sol/sol.hpp>
 #include <optional>
+#include <mutex>
+#include <queue>
+
+
 namespace sol
 {
     class state_view;
@@ -43,6 +47,11 @@ namespace lua
         };
         typedef std::vector<LuaMidiTrack> LuaMidiTracks;
         typedef ALuaScript Base;
+        struct MidiEventWithOutput
+        {
+            const Output *output;
+            com::midi::Event event;
+        };
         struct NoteOnCacheValue  
         {
             const Output *output;
@@ -82,6 +91,8 @@ namespace lua
         }
         virtual ~PerformerScript();
         void scriptPath(const com::String &scriptPath);
+        void script(const com::String &scriptText);
+        virtual void enqueue(const Output* output, com::midi::Event) override;
         virtual bool canExecute() const override { return false; }
         virtual void assertCanExecute() const override {}
         virtual void onMidiEvent(const Output& output, const com::midi::Event*, com::midi::Event **outEventPtrContainer) override;
@@ -90,26 +101,36 @@ namespace lua
         virtual void setMidiBackend(app::AMidiBackend* midiBackend) override { _midiBackend = midiBackend; }
         virtual void onTick(com::Ticks ticks) override;
         virtual void init() override;
-    private:
+    protected:
+        com::String _script;
         app::AMidiBackend::Inputs _midiInputs;
-        void sendNoteOffs();
-        void performJump(double position);
-        void updateNoteOnCache(const Output& output, const com::midi::Event*);
+        typedef std::queue<MidiEventWithOutput> EventQueue;
+        EventQueue _eventQueue;
+        typedef std::recursive_mutex QueueLock;
+        QueueLock _queueLock;
+        void processEventQueue();
+        virtual void sendNoteOffs();
+        virtual void sendNoteOffs(int channel);
+        virtual void performJump(double position);
+        virtual void updateNoteOnCache(const Output& output, const com::midi::Event*);
         double nextJumpToValue = -1;
         app::AMidiBackend* _midiBackend = nullptr;
         std::unordered_set<NoteOnCacheValue, NoteOnCacheValueHasher> noteOnCache;
         com::midi::MidiPtr _midiFile = nullptr;
         OnSeekRequestFunction onSeekRequest = nullptr;
         OnSendMidiEventFunction onSendMidiEvent = nullptr;
-        LuaMidiInputs getLuaMidiInputs();
-        void listenTo(const std::string &id, sol::protected_function callBack);
+        LuaMidi createLuaMidiFrom(const com::midi::Event &midiEvent) const;
+        com::midi::Event createMidiFrom(const LuaMidi& luaMidi) const;
+        virtual LuaMidiInputs getLuaMidiInputs();
+        virtual void listenTo(const std::string &id, sol::protected_function callBack);
         void jumpToPosition(double quarters);
-        void initLuaFunctions(sol::state_view&);
-        void initLuaTypes(sol::state_view&);
+        virtual void initLuaFunctions(sol::state_view&);
+        virtual void initLuaTypes(sol::state_view&);
         sol::state_view* luaPtr = nullptr;
         /////////////////////
         typedef std::optional<LuaMidi> LuaMidiOptional;
         std::function<LuaMidiOptional(LuaMidi)> luaOnMidiEvent = [](auto x){return x;};
+        std::function<void(double)> luaOnTick = nullptr;
         std::function<void()> luaInit = nullptr;
         LuaMidiTracks hostGetMidiEvents() const;
         typedef std::unordered_map<int, int> TagMap;
