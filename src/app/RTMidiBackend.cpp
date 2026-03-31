@@ -149,7 +149,7 @@ namespace app
 
 	void RtMidiBackend::listenTo(const Input *input) 
 	{
-		if (input->portid < 0 || input->portid >= midiIns.size())
+		if (input->portid < 0 || static_cast<size_t>(input->portid) >= midiIns.size())
 		{
 			throw std::runtime_error("invalid port id: " + std::to_string(input->portid));
 		}

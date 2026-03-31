@@ -115,6 +115,7 @@ endif()
 
 
 INCLUDE_DIRECTORIES(SYSTEM ${Boost_INCLUDE_DIRS})
+add_compile_definitions(BOOST_ALLOW_DEPRECATED_HEADERS)
 INCLUDE_DIRECTORIES(src/)
 INCLUDE_DIRECTORIES(src/ext)
 INCLUDE_DIRECTORIES(src/ext/fluidsynth)
@@ -151,6 +152,9 @@ elseif(UNIX)
   
 endif(APPLE)
 
+if(TARGET rtmidi_static)
+  target_compile_options(rtmidi_static PRIVATE -Wno-deprecated-declarations)
+endif()
 
 add_subdirectory(src)
 add_subdirectory(submodules/lua)

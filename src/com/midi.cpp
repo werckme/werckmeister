@@ -843,7 +843,7 @@ namespace com
 				FM_THROW(com::Exception, "buffer too small for MIDI header");
 			}
 			Header header;
-			::memcpy(&header, bytes, HeaderSize);
+			::memcpy(static_cast<void*>(&header), bytes, HeaderSize);
 			if (isLittleEndian())
 			{
 				endswap(&header.chunkSize);

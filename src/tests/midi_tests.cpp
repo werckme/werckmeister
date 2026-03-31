@@ -892,7 +892,7 @@ BOOST_AUTO_TEST_CASE(write_midi_read)
 {
 	using namespace com;
 	Byte* bytes = nullptr;
-	int byteSize = 0;
+	size_t byteSize = 0;
 	{
 		midi::Midi midi(PPQ);
 		{
