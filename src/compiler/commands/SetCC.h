@@ -63,7 +63,7 @@ namespace compiler
             FM_PARAMETER_DEF(argumentNames.SetCC.Value, 1),
             FM_PARAMETER_DEFAULT_DEF(argumentNames.SetCC.Name, 2, NoNameValue)
         };
-        virtual ParametersByNames &getParameters() { return this->parameters; }
+        virtual ParametersByNames &getParameters() override { return this->parameters; }
         virtual void execute(IContextPtr) override;
         int findControllerNr(const com::String &name) const;
         int getControllerNr();

@@ -195,7 +195,6 @@ namespace com
 		size_t Event::readPayloadSysex(const Byte* bytes, size_t maxByteSize)
 		{
 			eventType(midi::Sysex);
-			const Byte* end = bytes + maxByteSize;
 			size_t vlengthBytes = 0;
 			//																	  - F7
 			_metaDataSize = variableLengthRead(bytes, maxByteSize, &vlengthBytes) - 1;

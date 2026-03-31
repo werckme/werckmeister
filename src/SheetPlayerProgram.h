@@ -31,7 +31,7 @@ public:
     {
     }
     virtual ~SheetPlayerProgram() = default;
-    virtual void onSheetChanged();
+    virtual void onSheetChanged() override;
     virtual int execute() override;
 
 protected:

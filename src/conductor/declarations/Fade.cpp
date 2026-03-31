@@ -204,7 +204,7 @@ namespace conductor
         }
         else
         {
-            FM_THROW(compiler::Exception, "unsupported curve type: " + options.type);
+            FM_THROW(compiler::Exception, std::string("unsupported curve type: ") + std::to_string(options.type));
         }
     }
 }

@@ -60,6 +60,7 @@ namespace app
 		void stop();
 		com::Ticks elapsed() const { return MidiProvider::millisToTicks(elapsedMillis_); }
 		void reset();
+		using Backend::send;
 		void send(const com::midi::Event &ev, const Output *output = nullptr);
 		inline com::BPM bpm() const { return MidiProvider::bpm(); }
 		void bpm(com::BPM bpm);

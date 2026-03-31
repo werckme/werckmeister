@@ -192,7 +192,7 @@ namespace parser
 					>> ";");
 
 				rules_ %=
-					current_pos_.current_pos >> attr(sourceId_) >> selectorsSet_ >> "{" >> *declaration_ > "}";
+					current_pos_.current_pos >> attr(sourceId_) >> selectorsSet_ >> (("{" >> *declaration_) > "}");
 
 				start %=
 					current_pos_.current_pos > *rules_ > boost::spirit::eoi;

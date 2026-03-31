@@ -164,11 +164,6 @@ namespace conductor
 		auto result = EventsAndDeclarationsCollection();
 
 		int nthRule = 0;
-		int totalRules = 0;
-		for (const auto &cs : _document->conductionSheets)
-		{
-			totalRules += (int)cs.rules.size();
-		}
 		for (const auto &cs : _document->conductionSheets)
 		{
 			for (auto const &rule : cs.rules)
@@ -264,7 +259,7 @@ namespace conductor
 				declarationDataContainer.push_back(it->second);
 			}
 			// 2.
-			std::sort(declarationDataContainer.begin(), declarationDataContainer.end(), [this](const auto &a, const auto &b) -> bool
+			std::sort(declarationDataContainer.begin(), declarationDataContainer.end(), [](const auto &a, const auto &b) -> bool
 					  {
 						  IDeclarationPtr aDecl = a.second;
 						  IDeclarationPtr bDecl = b.second;

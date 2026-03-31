@@ -37,8 +37,8 @@ namespace compiler
         com::IHasParameter::ParametersByNames parameters = {
             FM_PARAMETER_DEF(argumentNames.InstrumentSection.WithName, 0),
         };
-        virtual ParametersByNames &getParameters() { return this->parameters; }
-        virtual void execute(IContextPtr);
+        virtual ParametersByNames &getParameters() override { return this->parameters; }
+        virtual void execute(IContextPtr) override;
         virtual void setArguments(const Arguments &args) override;
         std::list<com::String> sectionInstruments;
     };

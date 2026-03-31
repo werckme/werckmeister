@@ -32,8 +32,8 @@ namespace compiler
 		virtual ConstChordValueType getChord(const com::String &name) override;
 		virtual ConstPitchDefValueType getAlias(const com::String &alias) override;
 		virtual ConstPhraseDefValueType getPhrase(const com::String &name) override;
-		virtual documentModel::PitchDef resolvePitch(const documentModel::PitchDef &pitch);
-		virtual com::String defaultSheetTemplateName() const { return "?"; }
+		virtual documentModel::PitchDef resolvePitch(const documentModel::PitchDef &pitch) override;
+		virtual com::String defaultSheetTemplateName() const override { return "?"; }
 		virtual void degreeToAbsoluteNote(IContextPtr context, const Event &chordEvent, const Event &degreeEvent, Event &outEvent, bool throwIfChordNotFound = true) override;
 		virtual void degreeToAbsoluteNote(const VoicingStrategies &voicingStrategies, const TimeInfo &timeInfo, const Event &chordEvent, const Event &degreeEvent, Event &outEvent, bool throwIfChordNotFound = true, bool visitVisitors = true) override;
 	protected:

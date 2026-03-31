@@ -17,6 +17,6 @@ namespace compiler
         };
         Direction direction = Up;
         com::IHasParameter::ParametersByNames parameters = {};
-        virtual ParametersByNames &getParameters() { return this->parameters; }
+        virtual ParametersByNames &getParameters() override { return this->parameters; }
     };
 }

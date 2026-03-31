@@ -58,7 +58,7 @@ namespace compiler
 		virtual void setTempo(double bpm) override;
 		virtual void setVolume(double volume, com::Ticks relativePosition = 0) override;
 		virtual void setPan(double val) override;
-		virtual void addCue(const com::String &text, com::Ticks absolutePosition);
+		virtual void addCue(const com::String &text, com::Ticks absolutePosition) override;
 		virtual void setSignature(int upper, int lower) override;
 		virtual void setContinuousController(int controllerNumber, int value, com::Ticks relativePosition = 0, int prio = -1) override;
 		virtual void setSysex(const com::Byte* data, size_t length, com::Ticks relativePosition = 0, int prio = -1) override;
@@ -70,7 +70,7 @@ namespace compiler
 		virtual AInstrumentDefPtr getInstrumentDef(const com::String &uname) override;
 		virtual AInstrumentDefPtr currentInstrumentDef() override;
 		const InstrumentDefs &instrumentDefs() const { return this->instrumentDefs_; }
-		virtual IContextPtr createNewContext() const;
+		virtual IContextPtr createNewContext() const override;
 		virtual void clear() override;
 		static int toMidiPitch(const documentModel::PitchDef &pitch);
 		virtual compiler::ICompilerVisitorPtr compilerVisitor() const override { return _compilerVisitor; }

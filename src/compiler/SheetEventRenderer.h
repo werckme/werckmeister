@@ -25,7 +25,7 @@ namespace compiler
         virtual void handleMetaEvent(const documentModel::Event &_ev) override;
         virtual void renderPhrase(const documentModel::Event &phraseEvent) override;
         virtual void renderDegree(const documentModel::Event &degreeEvent) override;
-        virtual std::shared_ptr<ASheetEventRenderer> createNewSheetEventRenderer(IContextPtr ctx);
+        virtual std::shared_ptr<ASheetEventRenderer> createNewSheetEventRenderer(IContextPtr ctx) override;
     /* proteced: */
         virtual void _renderEvent(const documentModel::Event &_ev);
         virtual void _renderEventPitches(const documentModel::Event &noteEvent);

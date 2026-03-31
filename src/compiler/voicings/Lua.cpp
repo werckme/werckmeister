@@ -19,6 +19,7 @@ namespace compiler
                 : chordDef(chordDef), chordEvent(chordEvent)
             {
             }
+            using Base::push;
             void push(lua_State *L);
             void pushChordName(lua_State *L);
             void pushChordDegrees(lua_State *L);

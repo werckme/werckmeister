@@ -22,6 +22,7 @@ namespace compiler
     public:
         EventLogger(documentModel::DocumentPtr document) : _document(document) {}
         typedef TLoggerBase Base;
+        using Base::warn;
         virtual void warn(const ILogger::WriteToStreamF &, const documentModel::Event &theRelatedEvent);
     };
     ///////////////////////////////////////////////////////////////////////

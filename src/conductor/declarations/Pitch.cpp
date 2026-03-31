@@ -10,7 +10,6 @@ namespace conductor
         com::midi::Event *noteOff = events.noteOff;
         com::midi::Event *predecessorNoteOn = events.predecessorNoteOn;
         const com::midi::Event &originalNoteOn = events.unmodifiedOriginalMidiEvent;
-        const com::midi::Event &originalNoteOff = events.unmodifiedOriginalNoteOff;
         if (!noteOff)
         {
             return;

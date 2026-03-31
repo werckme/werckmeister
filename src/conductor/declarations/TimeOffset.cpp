@@ -24,7 +24,7 @@ namespace conductor
         { return (originalNoteOff.absPosition() - originalNoteOn.absPosition()) / com::PPQ; };
         FSetValue setNoteOn = [](com::midi::Event *midiEvent, double val)
         { midiEvent->absPosition(std::max(com::Ticks(0), (midiEvent->absPosition() + val * com::PPQ))); };
-        FSetValue setNoteOff = [midiEvent](com::midi::Event *noteOff, double val)
+        FSetValue setNoteOff = [](com::midi::Event *noteOff, double val)
         { noteOff->absPosition(std::max(com::Ticks(0), (noteOff->absPosition() + val * com::PPQ))); };
         FGetOptionalValue getPredecessorValue = []() -> std::optional<double> {
             FM_THROW(compiler::Exception, "the follow up operator isn't supported by timeOffset");

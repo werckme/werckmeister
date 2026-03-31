@@ -22,9 +22,9 @@ namespace compiler
         typedef ACommand Base;
         com::IHasParameter::ParametersByNames parameters = {
             FM_PARAMETER_DEF(argumentNames.SetVoicingStrategy.Use, 0)};
-        virtual ParametersByNames &getParameters() { return this->parameters; }
+        virtual ParametersByNames &getParameters() override { return this->parameters; }
         virtual void setArguments(const Arguments &args) override;
-        virtual void execute(IContextPtr);
+        virtual void execute(IContextPtr) override;
 
     protected:
         VoicingStrategyPtr voicingStrategy = nullptr;

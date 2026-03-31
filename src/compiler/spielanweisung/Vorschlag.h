@@ -16,7 +16,7 @@ namespace compiler
         virtual void perform(IContextPtr ctx, Events &events) override;
         documentModel::Event vorschlagNote;
         com::IHasParameter::ParametersByNames parameters = {};
-        virtual ParametersByNames &getParameters() { return this->parameters; }
+        virtual ParametersByNames &getParameters() override { return this->parameters; }
     private:
         IDefinitionsServerPtr definitionsServer;
     };

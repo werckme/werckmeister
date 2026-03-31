@@ -432,10 +432,10 @@ namespace compiler
 		masterTempo_ = com::DefaultTempo;
 		defaultVoiceStrategy_ = nullptr;
 		currentSheetTemplates_.clear();
-		TrackId trackId_ = INVALID_TRACK_ID;
+		trackId_ = INVALID_TRACK_ID;
 		chordTrack_ = INVALID_TRACK_ID;
 		masterTrackId_ = INVALID_TRACK_ID;
-		VoiceId voiceId_ = INVALID_VOICE_ID;
+		voiceId_ = INVALID_VOICE_ID;
 		chordVoice_ = INVALID_VOICE_ID;
 		voiceMetaDataMap_.clear();
 		trackMetaDataMap_.clear();

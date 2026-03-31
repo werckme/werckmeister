@@ -53,6 +53,7 @@ namespace compiler
             : event(event), ctx(ctx)
         {
         }
+        using Base::push;
         void push(lua_State *L);
         void pushPitches(lua_State *L);
         void pushTags(lua_State *L);

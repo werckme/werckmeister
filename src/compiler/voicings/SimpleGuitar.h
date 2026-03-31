@@ -27,6 +27,6 @@ namespace compiler
         com::IHasParameter::ParametersByNames parameters = {
             FM_PARAMETER_DEFAULT_DEF(argumentNames.SimpleGuitarVoicingStrategy.Range, 0, "higherRange"),
         };
-        virtual ParametersByNames &getParameters() { return this->parameters; }
+        virtual ParametersByNames &getParameters() override { return this->parameters; }
     };
 }

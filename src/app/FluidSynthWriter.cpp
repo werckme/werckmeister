@@ -18,7 +18,6 @@ namespace
 {
     const double FLUID_SYNTH_SEQUENCER_TIMESCALE = 1000;
     const double FLUID_SYNTH_DEFAULT_GAIN = 1.0;
-    const long double FLUID_SYNTH_HEADROOM_MILLIS = 0;
     int OnTickEventHandler(void *data, int tick)
     {
         reinterpret_cast<app::FluidSynthWriter*>(data)->onTickEventCallback(tick);

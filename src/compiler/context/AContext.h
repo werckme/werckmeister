@@ -29,15 +29,15 @@ namespace compiler
 		 * for rounding errors e.g. for triplets
 		 */
 		static const com::Ticks TickTolerance;
-		virtual void setTrack(TrackId trackId);
-		virtual void setVoice(VoiceId voice);
-		TrackId track() const;
+		virtual void setTrack(TrackId trackId) override;
+		virtual void setVoice(VoiceId voice) override;
+		virtual TrackId track() const override;
 		/**
 		 * @return the current voiceId
 		 */
-		VoiceId voice() const;
-		TrackId chordTrackId() const { return chordTrack_; }
-		TrackId masterTrackId()
+		virtual VoiceId voice() const override;
+		virtual TrackId chordTrackId() const override { return chordTrack_; }
+		virtual TrackId masterTrackId() override
 		{
 			if (masterTrackId_ == INVALID_TRACK_ID)
 			{
@@ -45,8 +45,8 @@ namespace compiler
 			}
 			return masterTrackId_;
 		}
-		VoiceId chordVoiceId() const { return chordVoice_; }
-		inline void setTarget(TrackId trackId, VoiceId voiceId)
+		virtual VoiceId chordVoiceId() const override { return chordVoice_; }
+		virtual void setTarget(TrackId trackId, VoiceId voiceId) override
 		{
 			setTrack(trackId);
 			setVoice(voiceId);
@@ -55,17 +55,17 @@ namespace compiler
 		/**
 		 * creates a track and returns an id.
 		 */
-		virtual TrackId createTrack();
+		virtual TrackId createTrack() override;
 		/**
 		 * creates a vocie and returns an id.
 		 */
-		virtual VoiceId createVoice();
-		virtual void setChordTrackTarget();
+		virtual VoiceId createVoice() override;
+		virtual void setChordTrackTarget() override;
 		/**
-		 * @return the metdata for the current voice  
+		 * @return the metdata for the current voice
 		 */
-		VoiceMetaDataPtr voiceMetaData() const;
-		VoiceMetaDataPtr voiceMetaData(VoiceId voiceid) const;
+		virtual VoiceMetaDataPtr voiceMetaData() const override;
+		virtual VoiceMetaDataPtr voiceMetaData(VoiceId voiceid) const override;
 		template <typename TVoiceMeta>
 		std::shared_ptr<TVoiceMeta> voiceMetaData(VoiceId voiceid) const
 		{
@@ -77,10 +77,10 @@ namespace compiler
 			return std::dynamic_pointer_cast<TVoiceMeta>(voiceMetaData());
 		}
 		/**
-		 * @return the metdata for the current track  
+		 * @return the metdata for the current track
 		 */
-		TrackMetaDataPtr trackMetaData() const;
-		TrackMetaDataPtr trackMetaData(TrackId trackid) const;
+		virtual TrackMetaDataPtr trackMetaData() const override;
+		virtual TrackMetaDataPtr trackMetaData(TrackId trackid) const override;
 		template <typename TTrackMeta>
 		std::shared_ptr<TTrackMeta> trackMetaData(TrackId trackid) const
 		{
@@ -93,35 +93,35 @@ namespace compiler
 		}
 		virtual void throwContextException(const std::string &msg);
 		virtual void warn(const std::string &msg);
-		virtual const SheetTemplates &currentSheetTemplates();
+		virtual const SheetTemplates &currentSheetTemplates() override;
 		virtual void currentSheetTemplate(const SheetTemplates &sheetTemplate);
 		virtual const VoicingStrategies& voicingStrategies() override;
 		virtual const documentModel::Event& currentChordEvent() const override;
-		virtual void currentChordEvent(const documentModel::Event&);
+		virtual void currentChordEvent(const documentModel::Event&) override;
 		virtual bool hasCurrentChordEvent() const override;
-		virtual AModificationPtr spielanweisung();
-		virtual AInstrumentDefPtr getInstrumentDef(const com::String &uname) = 0;
-		virtual AInstrumentDefPtr currentInstrumentDef() = 0;
-		virtual com::Ticks currentPosition() const;
-		virtual com::Ticks maxPosition() const;
-		TimeInfo getTimeInfo() const;
-		virtual void setInstrument(const com::String &uname);
-		virtual void setExpression(com::Expression value);
-		virtual void setExpressionPlayedOnce(com::Expression expr);
-		virtual void setTempo(double bpm) {}
-		virtual void setSignature(int upper, int lower);
-		virtual void setVolume(double volume, com::Ticks relativePosition = 0);
-		virtual void setPan(double val);
+		virtual AModificationPtr spielanweisung() override;
+		virtual AInstrumentDefPtr getInstrumentDef(const com::String &uname) override = 0;
+		virtual AInstrumentDefPtr currentInstrumentDef() override = 0;
+		virtual com::Ticks currentPosition() const override;
+		virtual com::Ticks maxPosition() const override;
+		virtual TimeInfo getTimeInfo() const override;
+		virtual void setInstrument(const com::String &uname) override;
+		virtual void setExpression(com::Expression value) override;
+		virtual void setExpressionPlayedOnce(com::Expression expr) override;
+		virtual void setTempo(double bpm) override {}
+		virtual void setSignature(int upper, int lower) override;
+		virtual void setVolume(double volume, com::Ticks relativePosition = 0) override;
+		virtual void setPan(double val) override;
 		/////// actual context stuff
 		virtual double getCurrentBpm() const override;
-		virtual void renderPitch(const documentModel::PitchDef &pitch, com::Ticks duration, double velocity, bool tying);
-		virtual void renderPitch(const documentModel::PitchDef &pitch, com::Ticks absolutePosition, double velocity, com::Ticks duration) = 0;
+		virtual void renderPitch(const documentModel::PitchDef &pitch, com::Ticks duration, double velocity, bool tying) override;
+		virtual void renderPitch(const documentModel::PitchDef &pitch, com::Ticks absolutePosition, double velocity, com::Ticks duration) override = 0;
 		/*
 			* value = 0..1, 0.5 is the middle position => no bending
 			*/
-		virtual void renderPitchbend(double value, com::Ticks absolutePosition) = 0;
-		virtual void startEvent(const documentModel::PitchDef &pitch, com::Ticks absolutePosition, double velocity);
-		virtual void stopEvent(const documentModel::PitchDef &pitch, com::Ticks absolutePosition);
+		virtual void renderPitchbend(double value, com::Ticks absolutePosition) override = 0;
+		virtual void startEvent(const documentModel::PitchDef &pitch, com::Ticks absolutePosition, double velocity) override;
+		virtual void stopEvent(const documentModel::PitchDef &pitch, com::Ticks absolutePosition) override;
 		/**
 		 * sends note off to all pitches where its tie process wasn't completed yet
 		 */
@@ -129,23 +129,23 @@ namespace compiler
 		/**
 		 * if duration == 0 the last event duration will be used
 		 */
-		virtual void seek(com::Ticks duration);
-		virtual void newBar();
-		virtual void rest(com::Ticks duration);
+		virtual void seek(com::Ticks duration) override;
+		virtual void newBar() override;
+		virtual void rest(com::Ticks duration) override;
 		virtual void multiMeasureRest(int numberOfMeasures) override;
-		virtual com::Ticks barPos() const;
+		virtual com::Ticks barPos() const override;
 		/**
 		 * the documents master tempo
 		 */
-		virtual double masterTempo() const { return masterTempo_; }
-		virtual void masterTempo(double val) { this->masterTempo_ = val; }
+		virtual double masterTempo() const override { return masterTempo_; }
+		virtual void masterTempo(double val) override { this->masterTempo_ = val; }
 		/**
 		 * @return the current velocity value between 0..1
 		 */
-		virtual double velocity();
-		virtual compiler::IDefinitionsServerPtr definitionsServer() { return definitionsServer_; }
-		virtual void warningHandler(const WarningHandler &handler) { _warningHandler = handler; }
-		virtual WarningHandler &warningHandler() { return _warningHandler; }
+		virtual double velocity() override;
+		virtual compiler::IDefinitionsServerPtr definitionsServer() override { return definitionsServer_; }
+		virtual void warningHandler(const WarningHandler &handler) override { _warningHandler = handler; }
+		virtual WarningHandler &warningHandler() override { return _warningHandler; }
 		virtual void clear() override;
 		virtual void addTag(const com::String &tag) override;
 		virtual void removeTag(const com::String &tag) override;

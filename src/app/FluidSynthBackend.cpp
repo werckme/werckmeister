@@ -1,5 +1,5 @@
 #ifndef FM_FLUIDSYNTH_BACKEND_HPP
-#define FM_RTMIDI_BACKEND_HPP
+#define FM_FLUIDSYNTH_BACKEND_HPP
 
 #include "FluidSynthBackend.h"
 #include <map>

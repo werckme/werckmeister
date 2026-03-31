@@ -47,12 +47,12 @@ namespace com
             IHasParameter::ParametersByNames::iterator parameterIt;
             if (byName)
             {
-                parameterIt = std::find_if(outParameters.begin(), outParameters.end(), [position, &argument](const auto &p)
+                parameterIt = std::find_if(outParameters.begin(), outParameters.end(), [&argument](const auto &p)
                                            { return argument.name == p.second.name(); });
             }
             if (byPosition)
             {
-                parameterIt = std::find_if(outParameters.begin(), outParameters.end(), [position, &argument](const auto &p)
+                parameterIt = std::find_if(outParameters.begin(), outParameters.end(), [position](const auto &p)
                                            { return p.second.position() == position; });
             }
             if (parameterIt == outParameters.end())

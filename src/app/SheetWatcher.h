@@ -25,7 +25,7 @@ namespace app
         }
         virtual void loopBegin() override {}
         virtual void loopEnd() override {}
-        virtual void visit(com::Ticks elapsed);
+        virtual void visit(com::Ticks elapsed) override;
         virtual ~SheetWatcher() = default;
 
     private:

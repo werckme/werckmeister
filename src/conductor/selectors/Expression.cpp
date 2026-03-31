@@ -6,7 +6,6 @@ namespace conductor
 {
     bool Expression::isMatch(const documentModel::ConductionSelector::Arguments &arguments, const EventWithMetaInfo &evm) const
     {
-        const auto &ev = *evm.midiEvent;
         for (const auto &argument : arguments)
         {
             auto argumentExpression = compiler::SetExpression::getExpressionForString(argument.name, com::expression::Undefined);

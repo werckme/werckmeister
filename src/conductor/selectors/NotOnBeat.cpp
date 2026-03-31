@@ -20,7 +20,7 @@ namespace conductor
         for (const auto &argument : arguments)
         {
             auto valueToMatch = argument.numberValue - 1;
-            if (::fabs(beat - valueToMatch) <= Tolerance)
+            if (::fabsl(beat - valueToMatch) <= Tolerance)
             {
                 return false;
             }

@@ -24,7 +24,7 @@ namespace app
 		static void cleanup();
 
 	private:
-		void *handle_ = nullptr;
+		[[maybe_unused]] void *handle_ = nullptr;
 		Callback callback_;
 		void onCallback();
 		std::unique_ptr<boost::asio::steady_timer> t_;

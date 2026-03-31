@@ -22,6 +22,7 @@ namespace compiler
         virtual bool canExecute() const override;
         virtual void assertCanExecute() const override;
         virtual Pitches solve(const documentModel::Event &chord, const documentModel::ChordDef &def, const Pitches &absolutePitches, const TimeInfo &) override;
+        using lua::ALuaWithParameter::getParameters;
         virtual ParametersByNames &getParameters() override;
 
     protected:

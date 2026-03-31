@@ -19,6 +19,7 @@ namespace lua
         LuaContext(compiler::IContext& context) : context(context)
         {
         }
+        using Base::push;
         void push(lua_State *L);
         compiler::IContext &context;
         virtual ~LuaContext() = default;

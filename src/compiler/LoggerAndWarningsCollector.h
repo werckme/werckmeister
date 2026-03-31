@@ -19,6 +19,7 @@ namespace compiler
 
     public:
         typedef TLoggerBase Base;
+        using Base::warn;
         virtual void warn(const ILogger::WriteToStreamF &, const documentModel::Event &theRelatedEvent) override;
         virtual const Warnings &warnings() const override { return _warnings; }
         virtual ~LoggerAndWarningsCollector() = default;

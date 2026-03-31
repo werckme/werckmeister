@@ -22,6 +22,7 @@ namespace compiler
         virtual bool canExecute() const override;
         virtual void assertCanExecute() const override;
         virtual void perform(IContextPtr ctx, Events &inOutEvents) override;
+        using lua::ALuaWithParameter::getParameters;
         virtual ParametersByNames &getParameters() override;
 
     protected:

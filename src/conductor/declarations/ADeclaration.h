@@ -8,7 +8,7 @@ namespace conductor
     class ADeclaration : public IDeclaration
     {
     public:
-        virtual void perform(const Events &events) const = 0;
+        virtual void perform(const Events &events) const override = 0;
         virtual ~ADeclaration() = default;
         virtual void setDeclarationData(const documentModel::ConductionRule::Declaration &val) override { declaration = val; }
         virtual const documentModel::ConductionRule::Declaration &getDeclarationData() const override { return declaration; }

@@ -26,7 +26,7 @@ namespace compiler
             FM_PARAMETER_DEFAULT_DEF(argumentNames.Bend.BendTo, 2, FM_BEND_ALTERNAIVE_PARAM_VALUE_NOT_SET),
             FM_PARAMETER_DEFAULT_DEF(argumentNames.Bend.BendFrom, 3, FM_BEND_ALTERNAIVE_PARAM_VALUE_NOT_SET),
         };
-        virtual ParametersByNames &getParameters() { return this->parameters; }
+        virtual ParametersByNames &getParameters() override { return this->parameters; }
 
     private:
         void prepareValues();

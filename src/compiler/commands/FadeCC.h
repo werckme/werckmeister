@@ -71,7 +71,7 @@ namespace compiler
             FM_PARAMETER_DEFAULT_DEF(argumentNames.FadeCC.Curve, 4, CurveTypeLin),
             FM_PARAMETER_DEFAULT_DEF(argumentNames.FadeCC.Name, 5, NoNameValue),
         };
-        virtual ParametersByNames &getParameters() { return this->parameters; }
+        virtual ParametersByNames &getParameters() override { return this->parameters; }
         virtual void execute(IContextPtr) override;
     protected:
         void fade(IContextPtr, int ccNr, double from, double to, double duration, const com::String& curveType);

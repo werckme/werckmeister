@@ -15,6 +15,6 @@ namespace compiler
     virtual ~DirectVoicingStrategy() = default;
     virtual Pitches solve(const documentModel::Event &chord, const documentModel::ChordDef &def, const Pitches &absolutePitches, const TimeInfo &) override;
     com::IHasParameter::ParametersByNames parameters = {};
-    virtual ParametersByNames &getParameters() { return this->parameters; }
+    virtual ParametersByNames &getParameters() override { return this->parameters; }
   };
 }

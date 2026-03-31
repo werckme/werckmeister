@@ -153,7 +153,6 @@ namespace compiler
 			auto ctx = sheetTemplateRenderer.context();
 			std::list<TemplatesAndItsChords> templatesAndItsChords;
 			templatesAndItsChords.emplace_back(TemplatesAndItsChords());
-			auto &wm = com::getWerckmeister();
 			auto tmpContext = ctx->createNewContext();
 			tmpContext->masterTempo(ctx->masterTempo());
 			tmpContext->setChordTrackTarget();

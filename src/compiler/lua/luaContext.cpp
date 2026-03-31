@@ -4,8 +4,6 @@
 #include <compiler/Instrument.h>
 #include <map>
 
-static const char *LUA_CONTEXT_PROPETRY_CURRENT_INSTRUMENT = "getCurrentInstrument";
-static const char *LUA_EVENT_PROPETRY_INSTRUMENT = "instrument";
 static const char *LUA_INSTRUMENT_PROPERTY_CHILDREN = "children";
 static const char *LUA_INSTRUMENT_PROPERTY_NAME = "name";
 static const char *LUA_INSTRUMENT_PROPERTY_VOLUME = "volume";
@@ -83,7 +81,6 @@ namespace lua
     {
         using namespace lua;
         auto luaContext = ALuaObject::getObject<LuaContext>(L, -1);
-        auto top = lua_gettop(L);
         // instrument
         auto& context = luaContext->context;
         auto instrument = context.currentInstrumentDef();
