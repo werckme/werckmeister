@@ -323,7 +323,8 @@ namespace app
             int cn = _fluid_midi_event_get_control(event);
             int ch = _fluid_midi_event_get_channel(event);
             int value = _fluid_midi_event_get_value(event);
-            if (value == 0x0 || value == 0x20) // msb or lsb
+            handleCustomCc(ch, cn, value);
+            if (cn == 0x0 || cn == 0x20) // msb or lsb
             {
                 auto midiEv = com::midi::Event::CCValue(ch, cn, value);
                 handlePresetEvent(midiEv);
@@ -391,33 +392,6 @@ namespace app
         return false;
     }
 
-    bool FluidSynthWriter::addEvent(const com::midi::Event& event)
-    {
-        if (!seq)
-        {
-            return true;
-        }
-        handleMetaEvent(event);
-        if (handlePresetEvent(event))
-        {
-            return true;
-        }
-        fluid_event_t* fluid_event = _new_fluid_event();
-        const bool doThrow = false;
-        if (!midiEventToFluidEvent(event, *fluid_event, doThrow))
-        {
-            return false;
-        }
-        _fluid_event_set_dest(fluid_event, synthSeqID);
-        long double pos =  60.0 * 1000.0 * event.absPosition() / (_tempo * com::PPQ) + FLUID_SYNTH_HEADROOM_MILLIS;
-        auto sendResult = _fluid_sequencer_send_at(seq, fluid_event, (int)(pos), 1);
-        if (sendResult == FLUID_FAILED)
-        {
-            throw std::runtime_error("sending fluid synth sequence event failed at time: " + std::to_string(pos) + "ms");
-        }
-        _delete_fluid_event(fluid_event);
-        return true;
-    }
 
      void FluidSynthWriter::parseMidiData(const unsigned char* data, size_t length, VisitEventFunction visitEventFunction)
      {

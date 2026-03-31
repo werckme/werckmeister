@@ -10,6 +10,11 @@ namespace
     const double FLUID_SYNTH_DEFAULT_GAIN = 1.0;
     const long double FLUID_SYNTH_HEADROOM_MILLIS = 500;
     std::unique_ptr<boost::dll::shared_library> _library;
+
+    constexpr int CustomCcReverbRoomsize = 25;
+    constexpr int CustomCcReverbDamping = 26;
+    constexpr int CustomCcReverbWidth = 27;
+    constexpr int CustomCcReverbLevel = 28;
 }
 
 namespace app
@@ -178,6 +183,25 @@ namespace app
             _fluid_event_all_sounds_off = _library->get<fluid_event_all_sounds_off_ftype>("fluid_event_all_sounds_off");
             _fluid_synth_all_notes_off = _library->get<fluid_synth_all_notes_off_ftype>("fluid_synth_all_notes_off");
             _fluid_synth_all_sounds_off = _library->get<fluid_synth_all_sounds_off_ftype>("fluid_synth_all_sounds_off");
+            _fluid_synth_get_reverb_damp = _library->get<fluid_synth_get_reverb_damp_ftype>("fluid_synth_get_reverb_damp");
+            _fluid_synth_get_reverb_group_damp = _library->get<fluid_synth_get_reverb_group_damp_ftype>("fluid_synth_get_reverb_group_damp");
+            _fluid_synth_get_reverb_group_level = _library->get<fluid_synth_get_reverb_group_level_ftype>("fluid_synth_get_reverb_group_level");
+            _fluid_synth_get_reverb_group_roomsize = _library->get<fluid_synth_get_reverb_group_roomsize_ftype>("fluid_synth_get_reverb_group_roomsize");
+            _fluid_synth_get_reverb_group_width = _library->get<fluid_synth_get_reverb_group_width_ftype>("fluid_synth_get_reverb_group_width");
+            _fluid_synth_get_reverb_level = _library->get<fluid_synth_get_reverb_level_ftype>("fluid_synth_get_reverb_level");
+            _fluid_synth_get_reverb_roomsize = _library->get<fluid_synth_get_reverb_roomsize_ftype>("fluid_synth_get_reverb_roomsize");
+            _fluid_synth_get_reverb_width = _library->get<fluid_synth_get_reverb_width_ftype>("fluid_synth_get_reverb_width");
+            _fluid_synth_reverb_on = _library->get<fluid_synth_reverb_on_ftype>("fluid_synth_reverb_on");
+            _fluid_synth_set_reverb = _library->get<fluid_synth_set_reverb_ftype>("fluid_synth_set_reverb");
+            _fluid_synth_set_reverb_damp = _library->get<fluid_synth_set_reverb_damp_ftype>("fluid_synth_set_reverb_damp");
+            _fluid_synth_set_reverb_group_damp = _library->get<fluid_synth_set_reverb_group_damp_ftype>("fluid_synth_set_reverb_group_damp");
+            _fluid_synth_set_reverb_group_level = _library->get<fluid_synth_set_reverb_group_level_ftype>("fluid_synth_set_reverb_group_level");
+            _fluid_synth_set_reverb_group_roomsize = _library->get<fluid_synth_set_reverb_group_roomsize_ftype>("fluid_synth_set_reverb_group_roomsize");
+            _fluid_synth_set_reverb_group_width = _library->get<fluid_synth_set_reverb_group_width_ftype>("fluid_synth_set_reverb_group_width");
+            _fluid_synth_set_reverb_level = _library->get<fluid_synth_set_reverb_level_ftype>("fluid_synth_set_reverb_level");
+            _fluid_synth_set_reverb_on = _library->get<fluid_synth_set_reverb_on_ftype>("fluid_synth_set_reverb_on");
+            _fluid_synth_set_reverb_roomsize = _library->get<fluid_synth_set_reverb_roomsize_ftype>("fluid_synth_set_reverb_roomsize");
+            _fluid_synth_set_reverb_width = _library->get<fluid_synth_set_reverb_width_ftype>("fluid_synth_set_reverb_width");
         }
         catch (const std::exception &ex)
         {
@@ -301,6 +325,10 @@ namespace app
 
     void FluidSynth::send(const com::midi::Event &event, long double elapsedMillis)
     {
+        if (event.eventType() == com::midi::Controller)
+        {
+            handleCustomCc(event.channel(), event.parameter1(), event.parameter2());
+        }
         fluid_event_t* fluid_event = _new_fluid_event();
         midiEventToFluidEvent(event, *fluid_event);
         _fluid_event_set_dest(fluid_event, synthSeqID);
@@ -321,5 +349,24 @@ namespace app
     void FluidSynth::setCC(int ch, int cc, int value)
     {
         _fluid_synth_cc(synth, ch, cc, value);
+    }
+
+    void FluidSynth::handleCustomCc(int ch, int cc, int value)
+    {
+        switch(cc)
+        {
+            case CustomCcReverbRoomsize:
+                _fluid_synth_set_reverb_roomsize(synth, value / 127.);
+                break;
+            case CustomCcReverbDamping:
+                _fluid_synth_set_reverb_damp(synth, value / 127.);
+                break;
+            case CustomCcReverbWidth:
+                _fluid_synth_set_reverb_width(synth, value / 127. * 100.);
+                break;
+            case CustomCcReverbLevel:
+                _fluid_synth_set_reverb_level(synth, value / 127.);
+                break;
+        }
     }
 }

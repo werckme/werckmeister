@@ -64,8 +64,6 @@ namespace
 	struct Session 
 	{
 		std::mutex processMidiMutex;
-		std::list<com::midi::Event> tmpMidiEvents;
-		std::vector<unsigned char> tmpMidiEventBff; // single events
 		std::vector<unsigned char> tmpMidiDataBff; // midi file
 		com::ILoggerPtr logger = createLogger();
 		com::midi::MidiPtr midiFile;
@@ -109,7 +107,6 @@ extern "C"
 	WERCKM_EXPORT WmSession wm_createSession()
 	{
 		auto session = new Session();
-		session->tmpMidiEventBff.reserve(255);
 		return session;
 	}
 
@@ -149,10 +146,6 @@ extern "C"
 			session->fluidSynth->libPath(libPath);
 			session->fluidSynth->sampleRate((double)sampleRate);
 			session->fluidSynth->initSynth();
-			if (session->tmpMidiEvents.empty() == false)
-			{
-				eatTmpEvents(session);
-			}
 			if (session->tmpMidiDataBff.empty() == false)
 			{
 				eatTmpMidiData(session);
@@ -216,6 +209,7 @@ extern "C"
 		auto _logger = session->logger;
 		try
 		{
+			std::lock_guard<std::mutex> guard(session->processMidiMutex);
 			if (session->fluidSynth.get() == nullptr)
 			{
 				return WERCKM_OK;
@@ -432,28 +426,6 @@ extern "C"
 	}
 }
 
-static void eatTmpEvents(Session* session)
-{
-	auto _logger = session->logger;
-	LOG("process " << session->tmpMidiEvents.size() << " events");
-	for(const auto& event : session->tmpMidiEvents)
-	{
-		try 
-		{
-			session->fluidSynth->addEvent(event);
-			handleIfMetaEvent(session, event);
-		}
-		catch (const std::exception &ex) 
-		{
-			ERR("failed to addMidiEvent:" << ex.what());
-		}
-		catch(...)
-		{
-			ERR("failed to addMidiEvent");
-		}
-	}
-	session->tmpMidiEvents.clear();
-}
 
 static void eatTmpMidiData(Session* session)
 {

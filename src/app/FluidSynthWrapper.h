@@ -107,6 +107,25 @@
 #define fluid_synth_all_notes_off_ftype int(fluid_synth_t *synth, int channel)
 #define fluid_synth_all_sounds_off_ftype int(fluid_synth_t *synth, int channel)
 
+#define fluid_synth_get_reverb_damp_ftype double(fluid_synth_t *synth)
+#define fluid_synth_get_reverb_group_damp_ftype int(fluid_synth_t *synth, int fx_group, double *damping)
+#define fluid_synth_get_reverb_group_level_ftype int(fluid_synth_t *synth, int fx_group, double *level)
+#define fluid_synth_get_reverb_group_roomsize_ftype int(fluid_synth_t *synth, int fx_group, double *roomsize)
+#define fluid_synth_get_reverb_group_width_ftype int(fluid_synth_t *synth, int fx_group, double *width)
+#define fluid_synth_get_reverb_level_ftype double(fluid_synth_t *synth)
+#define fluid_synth_get_reverb_roomsize_ftype double(fluid_synth_t *synth)
+#define fluid_synth_get_reverb_width_ftype double(fluid_synth_t *synth)
+#define fluid_synth_reverb_on_ftype int(fluid_synth_t *synth, int fx_group, int on)
+#define fluid_synth_set_reverb_ftype int(fluid_synth_t *synth, double roomsize, double damping, double width, double level)
+#define fluid_synth_set_reverb_damp_ftype int(fluid_synth_t *synth, double damping)
+#define fluid_synth_set_reverb_group_damp_ftype int(fluid_synth_t *synth, int fx_group, double damping)
+#define fluid_synth_set_reverb_group_level_ftype int(fluid_synth_t *synth, int fx_group, double level)
+#define fluid_synth_set_reverb_group_roomsize_ftype int(fluid_synth_t *synth, int fx_group, double roomsize)
+#define fluid_synth_set_reverb_group_width_ftype int(fluid_synth_t *synth, int fx_group, double width)
+#define fluid_synth_set_reverb_level_ftype int(fluid_synth_t *synth, double level)
+#define fluid_synth_set_reverb_on_ftype void(fluid_synth_t *synth, int on)
+#define fluid_synth_set_reverb_roomsize_ftype int(fluid_synth_t *synth, double roomsize)
+#define fluid_synth_set_reverb_width_ftype int(fluid_synth_t *synth, double width)
 
 
 namespace app
@@ -129,6 +148,7 @@ namespace app
 		void setPreset(SoundFontId sfId, int channel, int presetNr);
 		void setMsb(int channel, int msb);
 		void setLsb(int channel, int lsb);
+		void handleCustomCc(int ch, int cc, int value);
 	protected:
 		int lsbPerChannel[16] = {0};
 		int msbPerChannel[16] = {0};
@@ -235,6 +255,25 @@ namespace app
 		std::function<fluid_event_all_sounds_off_ftype> _fluid_event_all_sounds_off;
 		std::function<fluid_synth_all_notes_off_ftype> _fluid_synth_all_notes_off;
 		std::function<fluid_synth_all_sounds_off_ftype> _fluid_synth_all_sounds_off;
+		std::function<fluid_synth_get_reverb_damp_ftype> _fluid_synth_get_reverb_damp;
+		std::function<fluid_synth_get_reverb_group_damp_ftype> _fluid_synth_get_reverb_group_damp;
+		std::function<fluid_synth_get_reverb_group_level_ftype> _fluid_synth_get_reverb_group_level;
+		std::function<fluid_synth_get_reverb_group_roomsize_ftype> _fluid_synth_get_reverb_group_roomsize;
+		std::function<fluid_synth_get_reverb_group_width_ftype> _fluid_synth_get_reverb_group_width;
+		std::function<fluid_synth_get_reverb_level_ftype> _fluid_synth_get_reverb_level;
+		std::function<fluid_synth_get_reverb_roomsize_ftype> _fluid_synth_get_reverb_roomsize;
+		std::function<fluid_synth_get_reverb_width_ftype> _fluid_synth_get_reverb_width;
+		std::function<fluid_synth_reverb_on_ftype> _fluid_synth_reverb_on;
+		std::function<fluid_synth_set_reverb_ftype> _fluid_synth_set_reverb;
+		std::function<fluid_synth_set_reverb_damp_ftype> _fluid_synth_set_reverb_damp;
+		std::function<fluid_synth_set_reverb_group_damp_ftype> _fluid_synth_set_reverb_group_damp;
+		std::function<fluid_synth_set_reverb_group_level_ftype> _fluid_synth_set_reverb_group_level;
+		std::function<fluid_synth_set_reverb_group_roomsize_ftype> _fluid_synth_set_reverb_group_roomsize;
+		std::function<fluid_synth_set_reverb_group_width_ftype> _fluid_synth_set_reverb_group_width;
+		std::function<fluid_synth_set_reverb_level_ftype> _fluid_synth_set_reverb_level;
+		std::function<fluid_synth_set_reverb_on_ftype> _fluid_synth_set_reverb_on;
+		std::function<fluid_synth_set_reverb_roomsize_ftype> _fluid_synth_set_reverb_roomsize;
+		std::function<fluid_synth_set_reverb_width_ftype> _fluid_synth_set_reverb_width;
 
 
 		fluid_settings_t *settings = nullptr;
