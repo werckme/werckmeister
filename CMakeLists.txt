@@ -105,7 +105,7 @@ if(${USE_EMSCRIPTEN})
   # due a bug: https://github.com/emscripten-core/emscripten/issues/10078
   # we cant rely on find boost in combination with emscripten
   SET (Boost_INCLUDE_DIRS ${BOOST_ROOT})
-  INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIRS})
+  INCLUDE_DIRECTORIES(SYSTEM ${Boost_INCLUDE_DIRS})
   # compile the needed files manually
   # (I was not able to get linking against the boost library to work properly, even with --toolset=emscripten)
   add_subdirectory(third_party/emscripten_boost)
@@ -114,15 +114,15 @@ else()
 endif()
 
 
-INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(SYSTEM ${Boost_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(src/)
 INCLUDE_DIRECTORIES(src/ext)
 INCLUDE_DIRECTORIES(src/ext/fluidsynth)
-INCLUDE_DIRECTORIES(submodules/lua/src)
-INCLUDE_DIRECTORIES(submodules/rapidjson/include)
-INCLUDE_DIRECTORIES(submodules/di/include)
-INCLUDE_DIRECTORIES(submodules/di/extension/include)
-INCLUDE_DIRECTORIES(submodules/sol2/include)
+INCLUDE_DIRECTORIES(SYSTEM submodules/lua/src)
+INCLUDE_DIRECTORIES(SYSTEM submodules/rapidjson/include)
+INCLUDE_DIRECTORIES(SYSTEM submodules/di/include)
+INCLUDE_DIRECTORIES(SYSTEM submodules/di/extension/include)
+INCLUDE_DIRECTORIES(SYSTEM submodules/sol2/include)
 
 if(WIN32)
   INCLUDE_DIRECTORIES(submodules)
