@@ -19,7 +19,7 @@ namespace conductor
         { return (originalNoteOff.absPosition() - originalNoteOn.absPosition()) / com::PPQ; };
         FGetValue getPercentBase = [originalNoteOn, originalNoteOff]()
         { return (originalNoteOff.absPosition() - originalNoteOn.absPosition()) / com::PPQ; };
-        FSetValue setNoteOn = [](com::midi::Event *noteOn, double val) {};
+        FSetValue setNoteOn = [](com::midi::Event *, double) {};
         FSetValue setNoteOff = [noteOn](com::midi::Event *noteOff, double val)
         { noteOff->absPosition(noteOn->absPosition() + val * com::PPQ); };
         FGetOptionalValue getPredecessorValue = [predecessorNoteOn, predecessorNoteOff]() -> std::optional<double>

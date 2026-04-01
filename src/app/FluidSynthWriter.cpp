@@ -275,7 +275,7 @@ namespace app
             _fluid_player_seek(player, (int)ticks-1);
             _seekRequested = true;
         });
-        performerScript->setSendMidiEventHandler([this](const auto *output, const auto *midiEvent)
+        performerScript->setSendMidiEventHandler([this](const auto *, const auto *midiEvent)
         {
             auto pos = midiEvent->absPosition();
             if (pos == 0)
@@ -467,7 +467,7 @@ namespace app
         _fluid_player_play(player);
     }
 
-    void FluidSynthWriter::renderToFile(const std::string &outputPath, double seconds)
+    void FluidSynthWriter::renderToFile(const std::string &outputPath, double)
     {
         const int blockSize = 1024;
         _fluid_settings_setint(settings, "audio.period-size", blockSize);

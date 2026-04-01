@@ -14,8 +14,8 @@ namespace lua
         virtual ~FluidWriterPerformer() = default;
         typedef std::function<void(const com::midi::Event*)> FSendInputEventToScript;
         typedef std::function<void(int)> FAllNotesOff;
-        FSendInputEventToScript sendInputEventToScript = [](auto ev){};
-        FAllNotesOff sendAllNotesOff = [](auto ch){};
+        FSendInputEventToScript sendInputEventToScript = [](auto){};
+        FAllNotesOff sendAllNotesOff = [](auto){};
     protected:
         virtual LuaMidiInputs getLuaMidiInputs() override;
         virtual void initLuaFunctions(sol::state_view&) override;

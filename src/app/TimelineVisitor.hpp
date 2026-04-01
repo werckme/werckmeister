@@ -98,7 +98,7 @@ namespace app
     }
 
     template <class TIntervalContainer>
-    void TimelineVisitor<TIntervalContainer>::visit(compiler::IContext *ctx, const com::midi::Event &ev, TrackId trackId)
+    void TimelineVisitor<TIntervalContainer>::visit(compiler::IContext *, const com::midi::Event &, TrackId)
     {
     }
 }

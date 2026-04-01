@@ -31,19 +31,19 @@ namespace com
     template <class TString>
     struct NewLine
     {
-        static const auto value() { return com::String::value_type('\n'); }
+        static auto value() { return com::String::value_type('\n'); }
     };
 
     template <>
     struct NewLine<com::String>
     {
-        static const auto value() { return com::String::value_type('\n'); }
+        static auto value() { return com::String::value_type('\n'); }
     };
 
     template <>
     struct NewLine<com::String::const_iterator>
     {
-        static const auto value() { return com::String::value_type('\n'); }
+        static auto value() { return com::String::value_type('\n'); }
     };
 
     namespace toolsimpl

@@ -3,7 +3,7 @@
 
 namespace compiler
 {
-    void InstrumentConfigSetVoicingStrategy::execute(IContextPtr context)
+    void InstrumentConfigSetVoicingStrategy::execute(IContextPtr)
     {
         if (!this->hasInstrument())
         {

@@ -64,7 +64,7 @@ namespace compiler
         }
 
         template <int Degree>
-        bool hasDegreeImpl(const documentModel::ChordDef &def)
+        bool hasDegreeImpl(const documentModel::ChordDef &)
         {
             return false;
         }

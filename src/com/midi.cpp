@@ -160,7 +160,7 @@ namespace com
 			size_t eventTypeByteSize = 1;
 			return readPayloadMeta(bytes + eventTypeByteSize, maxByteSize - eventTypeByteSize) + eventTypeByteSize;
 		}
-		size_t Event::readPayloadDefault(const Byte *bytes, size_t maxByteSize)
+		size_t Event::readPayloadDefault(const Byte *bytes, size_t)
 		{
 			size_t c = 0;
 			eventType(static_cast<EventType>((*(bytes)&0xF0) >> 4));
@@ -778,7 +778,7 @@ namespace com
 		const MetaKey Track::MetaKeyRelatedSheetId = "related_sheetid";
 		const MetaKey Track::MetaKeyMidiChannel = "midi_channel";
 
-		size_t Track::read(const Byte *, size_t length)
+		size_t Track::read(const Byte *, size_t)
 		{
 			FM_THROW(com::Exception, "not yet implemented");
 		}

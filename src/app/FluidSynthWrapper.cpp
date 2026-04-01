@@ -351,7 +351,7 @@ namespace app
         _fluid_synth_cc(synth, ch, cc, value);
     }
 
-    void FluidSynth::handleCustomCc(int ch, int cc, int value)
+    void FluidSynth::handleCustomCc(int, int cc, int value)
     {
         switch(cc)
         {

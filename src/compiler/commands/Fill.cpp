@@ -4,7 +4,7 @@
 
 namespace compiler
 {
-    void Fill::execute(IContextPtr context)
+    void Fill::execute(IContextPtr)
     {
         // does nothing
         // will be processed via SheetTemplateRenderer

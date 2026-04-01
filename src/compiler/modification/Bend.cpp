@@ -7,7 +7,7 @@
 namespace compiler
 {
 
-    void Bend::perform(IContextPtr ctx, Events &events)
+    void Bend::perform(IContextPtr, Events &events)
     {
         using namespace com;
         prepareValues();

@@ -194,13 +194,13 @@ namespace compiler
 		renderPitch(pitch, meta->position, velocity, duration);
 	}
 
-	void AContext::startEvent(const documentModel::PitchDef &pitch, com::Ticks absolutePosition, double velocity)
+	void AContext::startEvent(const documentModel::PitchDef &pitch, com::Ticks, double)
 	{
 		auto meta = voiceMetaData();
 		meta->startedEvents.insert(pitch);
 	}
 
-	void AContext::stopEvent(const documentModel::PitchDef &pitch, com::Ticks absolutePosition)
+	void AContext::stopEvent(const documentModel::PitchDef &pitch, com::Ticks)
 	{
 		auto meta = voiceMetaData();
 		meta->startedEvents.erase(pitch);
@@ -273,7 +273,7 @@ namespace compiler
 		}
 		seek(quartersPerBar); // a bar will be followed
 	}
-	void AContext::setVolume(double volume, com::Ticks relativePosition)
+	void AContext::setVolume(double volume, com::Ticks)
 	{
 		auto meta = voiceMetaData();
 		meta->volume = std::max(std::min(volume, 100.0), 0.0);
@@ -441,7 +441,7 @@ namespace compiler
 		trackMetaDataMap_.clear();
 	}
 
-	void AContext::setInstrument(const com::String &uname)
+	void AContext::setInstrument(const com::String &)
 	{
 	}
 

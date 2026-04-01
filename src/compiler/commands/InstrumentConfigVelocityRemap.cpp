@@ -7,7 +7,7 @@ namespace compiler
 {
     const com::String InstrumentConfigVelocityRemap::VelocityNotSet = "NoRemapValueSet";
 
-    void InstrumentConfigVelocityRemap::execute(IContextPtr context)
+    void InstrumentConfigVelocityRemap::execute(IContextPtr)
     {
         if (this->hasInstrument() == false)
         {

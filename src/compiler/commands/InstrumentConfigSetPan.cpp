@@ -3,7 +3,7 @@
 
 namespace compiler
 {
-    void InstrumentConfigSetPan::execute(IContextPtr context)
+    void InstrumentConfigSetPan::execute(IContextPtr)
     {
         if (!this->hasInstrument())
         {

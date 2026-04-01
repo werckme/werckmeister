@@ -6,7 +6,7 @@
 namespace compiler
 {
 
-	void Arpeggio::perform(IContextPtr ctx, Events &events)
+	void Arpeggio::perform(IContextPtr, Events &events)
 	{
 		Events result;
 		if (events.empty())

@@ -29,7 +29,7 @@ namespace compiler
 
 		using namespace documentModel;
 		template <int EventType>
-		bool renderEvent(SheetEventRenderer *renderer, const Event *ev)
+		bool renderEvent(SheetEventRenderer *, const Event *)
 		{
 			return false;
 		}
@@ -70,7 +70,7 @@ namespace compiler
 		}
 
 		template <>
-		bool renderEvent<Event::EOB>(SheetEventRenderer *renderer, const Event *ev)
+		bool renderEvent<Event::EOB>(SheetEventRenderer *renderer, const Event *)
 		{
 			auto ctx = renderer->context();
 			ctx->newBar();
@@ -136,7 +136,7 @@ namespace compiler
 			return renderEventUnrolled<EventId + 1>(renderer, ev);
 		}
 		template <>
-		bool renderEventUnrolled<Event::NumEvents>(SheetEventRenderer *renderer, const Event *ev)
+		bool renderEventUnrolled<Event::NumEvents>(SheetEventRenderer *, const Event *)
 		{
 			return false;
 		}

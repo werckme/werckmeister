@@ -71,7 +71,7 @@ namespace parser
 			com::insertRange(target->sources, src->sources);
 		}
 
-		void useChordDef(DocumentPtr doc, const com::String &path, Event::SourceId sourceId)
+		void useChordDef(DocumentPtr doc, const com::String &path, Event::SourceId)
 		{
 			auto filestream = com::getWerckmeister().openResource(path);
 			com::StreamBuffIterator begin(*filestream);
@@ -84,7 +84,7 @@ namespace parser
 				doc->chordDefs[x.name] = x;
 			}
 		}
-		void usePitchmapDef(DocumentPtr doc, const com::String &path, Event::SourceId sourceId)
+		void usePitchmapDef(DocumentPtr doc, const com::String &path, Event::SourceId)
 		{
 
 			auto filestream = com::getWerckmeister().openResource(path);
@@ -109,7 +109,7 @@ namespace parser
 			auto conductionSheet = parser.parse(documentText, sourceId);
 			doc->conductionSheets.push_back(conductionSheet);
 		}
-		void useLuaScript(DocumentPtr doc, const com::String &path, Event::SourceId sourceId)
+		void useLuaScript(DocumentPtr, const com::String &path, Event::SourceId)
 		{
 			auto &wm = com::getWerckmeister();
 			wm.registerLuaScript(path);
@@ -163,7 +163,7 @@ namespace parser
 			}
 		}
 
-		void useSheetPart(DocumentPtr mainDocument, const com::String &path, Event::SourceId sourceId)
+		void useSheetPart(DocumentPtr mainDocument, const com::String &path, Event::SourceId)
 		{
 			auto partDocumentPtr = std::make_shared<documentModel::Document>();
 			partDocumentPtr->path = path;

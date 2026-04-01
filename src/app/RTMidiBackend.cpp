@@ -120,7 +120,7 @@ namespace app
 		}		
 	}
 
-	void RtMidiBackend::send(const com::midi::Event &ev, const Output *output, long double elapsedMillis)
+	void RtMidiBackend::send(const com::midi::Event &ev, const Output *output, long double)
 	{
 		if (output == nullptr)
 		{
@@ -170,9 +170,9 @@ namespace app
 }
 
 
-namespace 
+namespace
 {
-	void inputCallback(double timeStamp, std::vector<unsigned char> *message, void *userData)
+	void inputCallback(double, std::vector<unsigned char> *message, void *userData)
 	{
 		const auto *input = reinterpret_cast<app::AMidiBackend::Input*>(userData);
 		if (!input->midiMessageCallback)

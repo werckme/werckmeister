@@ -3,7 +3,7 @@
 
 namespace compiler
 {
-    void Jump::execute(IContextPtr context)
+    void Jump::execute(IContextPtr)
     {
         // does nothing
         // will be processed via SheetNavigator

@@ -51,7 +51,7 @@ public:
 	virtual bool isJsonDocInfoMode() const override  { return false; }
 	virtual bool isJsonDebugInfoMode() const override  { return false; }
 	virtual bool isVersionSet() const override  { return false; }
-	virtual void printHelpText(std::ostream &os) override {}
+	virtual void printHelpText(std::ostream &) override {}
 	virtual bool isVerboseSet() const override  { return false; }
 	virtual bool isDebugSet() const override  { return false; }
 	virtual bool isBeginSet() const override  { return begin > 0; }
@@ -141,7 +141,7 @@ int main(int argc, const char **argv)
 	delete result;
 }
 #else
-int main(int argc, const char **argv)
+int main(int, const char **)
 {
 	std::cout << com::getWerckmeister().version() << std::endl;
 }

@@ -153,7 +153,7 @@ namespace app
         toStream(os, doc);
     }
 
-    void JsonWriter::eventInfosToJson(std::ostream &os, documentModel::DocumentPtr document)
+    void JsonWriter::eventInfosToJson(std::ostream &os, documentModel::DocumentPtr)
     {
         os << "[" << std::endl;
 

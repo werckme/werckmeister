@@ -20,7 +20,7 @@ namespace conductor
         { return originalNoteOn.parameter2(); };
         FSetValue setNoteOn = [](com::midi::Event *noteOn, double val)
         { noteOn->parameter2(com::Byte(val)); };
-        FSetValue setNoteOff = [](com::midi::Event *noteOff, double val) {};
+        FSetValue setNoteOff = [](com::midi::Event *, double) {};
         FGetOptionalValue getPredecessorValue = [predecessorNoteOn]() -> std::optional<double>
         {
             if (!predecessorNoteOn)

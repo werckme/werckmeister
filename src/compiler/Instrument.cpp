@@ -73,7 +73,7 @@ namespace compiler
 		midiContext->setInstrument(getThis<InstrumentSectionDef>());
 	}
 
-	void InstrumentSectionDef::renderEvents(SheetEventRenderer *renderer, std::list<documentModel::Event> &events, const com::String &parentInsrtumentSectionName)
+	void InstrumentSectionDef::renderEvents(SheetEventRenderer *renderer, std::list<documentModel::Event> &events, const com::String &)
 	{
 		auto ctx_ = renderer->context();
 		auto visitor = ctx_->compilerVisitor();

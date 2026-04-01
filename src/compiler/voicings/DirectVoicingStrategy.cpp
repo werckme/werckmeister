@@ -2,7 +2,7 @@
 
 namespace compiler
 {
-	DirectVoicingStrategy::Pitches DirectVoicingStrategy::solve(const documentModel::Event &chord, const documentModel::ChordDef &def, const Pitches &absolutePitches, const TimeInfo &)
+	DirectVoicingStrategy::Pitches DirectVoicingStrategy::solve(const documentModel::Event &, const documentModel::ChordDef &, const Pitches &absolutePitches, const TimeInfo &)
 	{
 		return absolutePitches;
 	}

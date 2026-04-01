@@ -6,7 +6,7 @@
 
 namespace compiler
 {
-    void InstrumentConfigSetCC::execute(IContextPtr context)
+    void InstrumentConfigSetCC::execute(IContextPtr)
     {
         if (!this->hasInstrument())
         {

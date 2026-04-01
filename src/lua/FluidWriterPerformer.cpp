@@ -44,7 +44,7 @@ namespace lua
     {
         sendAllNotesOff(channel);
     }
-    void FluidWriterPerformer::updateNoteOnCache(const Output& output, const com::midi::Event*) 
+    void FluidWriterPerformer::updateNoteOnCache(const Output&, const com::midi::Event*)
     {
     }
 

@@ -3,7 +3,7 @@
 
 namespace compiler
 {
-    void Mark::execute(IContextPtr context)
+    void Mark::execute(IContextPtr)
     {
         // does nothing
         // will be processed via SheetNavigator

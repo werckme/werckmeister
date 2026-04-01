@@ -46,7 +46,7 @@ namespace app
         return result;
     }
 
-    void SheetWatcher::visit(com::Ticks elapsed)
+    void SheetWatcher::visit(com::Ticks)
     {
         if (!this->hasChanges())
         {

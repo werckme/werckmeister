@@ -49,7 +49,7 @@ set(LIB_FLUIDSYNTH_SEARCH_PATHS "")
 IF(UNIX)
   SET (LIB_FLUIDSYNTH_FILENAME "libfluidsynth.so")
   SET (LIB_FLUIDSYNTH_SEARCH_PATHS "{\"/usr/lib\", \"/usr/local/lib\"}")
-  SET (CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "-std=c++17 -Wall -Wno-unused-function")
+  SET (CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "-std=c++17 -Wall -Wextra -Wno-unused-function")
   add_definitions( -DSHEET_USE_BOOST_TIMER )
   add_definitions( -DSHEET_OS_UNIX )
   if ($ENV{WM_LINUX_LINK_STATIC})
@@ -158,6 +158,7 @@ endif()
 
 add_subdirectory(src)
 add_subdirectory(submodules/lua)
+target_compile_options(lua PRIVATE -Wno-string-plus-int)
 
 configure_file("${PROJECT_SOURCE_DIR}/src/com/config.hpp.in" "${PROJECT_SOURCE_DIR}/src/com/config.hpp")
 

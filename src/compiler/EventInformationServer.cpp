@@ -113,7 +113,7 @@ namespace compiler
 		ei.voiceNumber = additonalEventInfos.voiceNumber;
 		events.insert(ei);
 	}
-	void EventInformationDb::update(const EventInformation& evinf, const documentModel::Event& documentEvent, const com::midi::Event& midiEvent, const AdditionalEventInfosArg& additonalEventInfos)
+	void EventInformationDb::update(const EventInformation& evinf, const documentModel::Event& documentEvent, const com::midi::Event&, const AdditionalEventInfosArg& additonalEventInfos)
 	{
 		auto copy = evinf;
 		copy.eventType = documentEvent.type;
@@ -198,7 +198,7 @@ namespace compiler
 
 	}
 
-	void EventInformationServer::visit(IContext* context, const documentModel::Event& ev)
+	void EventInformationServer::visit(IContext*, const documentModel::Event& ev)
 	{
 		lastDocumentEvent = std::make_unique<documentModel::Event>(ev);
 	}
@@ -213,7 +213,7 @@ namespace compiler
 		lastPitch = NoPitchDef;
 	}
 
-	void EventInformationServer::visit(IContext* context, const com::midi::Event& ev, IContext::TrackId trackId)
+	void EventInformationServer::visit(IContext* context, const com::midi::Event& ev, IContext::TrackId)
 	{
 		bool canProcess = !!lastDocumentEvent
 			&& lastDocumentEvent->sourcePositionBegin != documentModel::Event::UndefinedPosition
@@ -285,7 +285,7 @@ namespace compiler
 		phrases.push_front(phraseName);
 	}
 
-    void EventInformationServer::endRenderPhrase(const com::String& phraseName)
+    void EventInformationServer::endRenderPhrase(const com::String&)
 	{
 		phrases.pop_front();
 	}

@@ -108,7 +108,7 @@ namespace compiler
 		virtual void setInstrument(const com::String &uname) override;
 		virtual void setExpression(com::Expression value) override;
 		virtual void setExpressionPlayedOnce(com::Expression expr) override;
-		virtual void setTempo(double bpm) override {}
+		virtual void setTempo(double) override {}
 		virtual void setSignature(int upper, int lower) override;
 		virtual void setVolume(double volume, com::Ticks relativePosition = 0) override;
 		virtual void setPan(double val) override;

@@ -60,7 +60,7 @@ namespace compiler
 	{
 
 		void errorHandler(const std::string &source,
-						  const std::string &what,
+						  const std::string &,
 						  int errorPos,
 						  documentModel::ASheetObjectWithSourceInfo::SourceId sourceId)
 		{

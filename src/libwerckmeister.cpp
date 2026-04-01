@@ -485,7 +485,7 @@ static com::midi::MidiPtr createMidiFile(Session* session, int argc, const char*
 				}
 				return injector.template create<std::shared_ptr<cp::EventInformationServer>>();
 			}),
-		di::bind<com::ILogger>().to([&](const auto& injector) -> com::ILoggerPtr
+		di::bind<com::ILogger>().to([&](const auto&) -> com::ILoggerPtr
 			{
 				// return injector.template create<std::shared_ptr<com::ConsoleLogger>>();
 				return _logger;

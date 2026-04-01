@@ -74,7 +74,7 @@ namespace app
 
 namespace
 {
-	void signalCallback(int signal)
+	void signalCallback(int)
 	{
 		app::os::sigtermHandler_();
 	}

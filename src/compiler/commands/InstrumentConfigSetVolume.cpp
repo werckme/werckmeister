@@ -3,7 +3,7 @@
 
 namespace compiler
 {
-    void InstrumentConfigSetVolume::execute(IContextPtr context)
+    void InstrumentConfigSetVolume::execute(IContextPtr)
     {
         auto setTo = parameters[argumentNames.SetVolume.SetTo].value<double>();
         if (!this->hasInstrument())

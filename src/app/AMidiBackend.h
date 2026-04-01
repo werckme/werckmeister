@@ -38,13 +38,13 @@ namespace app
 		void send(const TEvents &events, const Output *output);
 		virtual Outputs getOutputs() const = 0;
 		virtual void send(const com::midi::Event &event, const Output *output, long double elapsedMillis) = 0;
-		virtual void seek(long double millis) {}
+		virtual void seek(long double) {}
 		virtual void init() = 0;
 		virtual void tearDown() = 0;
 		virtual void panic() = 0;
 		//////////
 		virtual Inputs getInputs() const { return Inputs(); }
-		virtual void listenTo(const Input *input) {}
+		virtual void listenTo(const Input *) {}
 	};
 	typedef std::shared_ptr<AMidiBackend> AMidiBackendPtr;
 	///////////////////////////////////////////////////////////////////////////////
