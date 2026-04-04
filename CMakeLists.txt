@@ -158,7 +158,10 @@ endif()
 
 add_subdirectory(src)
 add_subdirectory(submodules/lua)
-target_compile_options(lua PRIVATE -Wno-string-plus-int)
+
+if(UNIX)
+    target_compile_options(lua PRIVATE -Wno-string-plus-int)
+endif(UNIX)
 
 configure_file("${PROJECT_SOURCE_DIR}/src/com/config.hpp.in" "${PROJECT_SOURCE_DIR}/src/com/config.hpp")
 
