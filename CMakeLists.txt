@@ -149,12 +149,13 @@ elseif(UNIX)
     INCLUDE_DIRECTORIES(third_party)
     add_subdirectory(third_party/myrtmidi)
   endif($ENV{WM_LINUX_LINK_STATIC})
-  
+
+  if(TARGET rtmidi_static)
+    target_compile_options(rtmidi_static PRIVATE -Wno-deprecated-declarations)
+  endif()
+
 endif(APPLE)
 
-if(TARGET rtmidi_static)
-  target_compile_options(rtmidi_static PRIVATE -Wno-deprecated-declarations)
-endif()
 
 add_subdirectory(src)
 add_subdirectory(submodules/lua)
