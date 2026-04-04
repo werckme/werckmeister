@@ -130,7 +130,7 @@ extern "C"
 		return WERCKM_OK;
 	}
 
-	WERCKM_EXPORT int wm_initSynth(WmSession sessionPtr, const char *libPath, int sampleRate)
+	WERCKM_EXPORT int wm_initSynth(WmSession sessionPtr, const char *libPath, int sampleRate, int numChannelGroups)
 	{
 		if (sessionPtr == nullptr)
 		{
@@ -145,6 +145,7 @@ extern "C"
 			session->fluidSynth = std::make_shared<app::FluidSynthWriter>(_logger);
 			session->fluidSynth->libPath(libPath);
 			session->fluidSynth->sampleRate((double)sampleRate);
+			session->fluidSynth->setNumChannelGroups(numChannelGroups);
 			session->fluidSynth->initSynth();
 			if (session->tmpMidiDataBff.empty() == false)
 			{
@@ -199,7 +200,7 @@ extern "C"
 		return WERCKM_OK;
 	}
 
-	WERCKM_EXPORT int wm_synthRender(WmSession sessionPtr, int len, float* lout, int loff, int lincr, float* rout, int roff, int rincr)
+	WERCKM_EXPORT WERCKM_EXPORT int wm_synthRender(WmSession sessionPtr, int len, int numOut, float *out[])
 	{
 		if (sessionPtr == nullptr)
 		{
@@ -214,7 +215,7 @@ extern "C"
 			{
 				return WERCKM_OK;
 			}
-			session->fluidSynth->render(len, lout, loff, lincr, rout, roff, rincr);
+			session->fluidSynth->render(len, numOut, out);
 			return WERCKM_OK;
 		}
 		catch (const std::exception &ex) 

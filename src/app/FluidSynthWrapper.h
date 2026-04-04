@@ -126,6 +126,8 @@
 #define fluid_synth_set_reverb_on_ftype void(fluid_synth_t *synth, int on)
 #define fluid_synth_set_reverb_roomsize_ftype int(fluid_synth_t *synth, double roomsize)
 #define fluid_synth_set_reverb_width_ftype int(fluid_synth_t *synth, double width)
+#define fluid_synth_process_ftype int(fluid_synth_t *, int, int, float*[], int nout, float *[])
+#define fluid_synth_count_audio_channels_ftype int(fluid_synth_t*)
 
 
 namespace app
@@ -274,7 +276,8 @@ namespace app
 		std::function<fluid_synth_set_reverb_on_ftype> _fluid_synth_set_reverb_on;
 		std::function<fluid_synth_set_reverb_roomsize_ftype> _fluid_synth_set_reverb_roomsize;
 		std::function<fluid_synth_set_reverb_width_ftype> _fluid_synth_set_reverb_width;
-
+		std::function<fluid_synth_process_ftype> _fluid_synth_process;
+		std::function<fluid_synth_count_audio_channels_ftype> _fluid_synth_count_audio_channels;
 
 		fluid_settings_t *settings = nullptr;
 		fluid_synth_t *synth = nullptr;

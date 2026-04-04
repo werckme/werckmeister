@@ -202,6 +202,8 @@ namespace app
             _fluid_synth_set_reverb_on = _library->get<fluid_synth_set_reverb_on_ftype>("fluid_synth_set_reverb_on");
             _fluid_synth_set_reverb_roomsize = _library->get<fluid_synth_set_reverb_roomsize_ftype>("fluid_synth_set_reverb_roomsize");
             _fluid_synth_set_reverb_width = _library->get<fluid_synth_set_reverb_width_ftype>("fluid_synth_set_reverb_width");
+            _fluid_synth_process = _library->get<fluid_synth_process_ftype>("fluid_synth_process");
+            _fluid_synth_count_audio_channels = _library->get<fluid_synth_count_audio_channels_ftype>("fluid_synth_count_audio_channels");
         }
         catch (const std::exception &ex)
         {

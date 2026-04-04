@@ -24,7 +24,7 @@ namespace app
         virtual ~FluidSynthWriter() = default;
         virtual void initSynth() override;
         virtual SoundFontId addSoundFont(const DeviceId& deviceId, const std::string &soundFontPath) override;
-        void render(int len, float* lout, int loff, int lincr, float* rout, int roff, int rincr);
+        void render(int len, int numOut, float *out[]);
         void libPath(const com::String &path) { _libPath = path; }
         com::String libPath() const { return _libPath; }
         void sampleRate(const double &sampleRate) { _sampleRate = sampleRate; }
@@ -33,15 +33,16 @@ namespace app
         double tempo() const { return _tempo; }
         double getSongPositionSeconds() const;
         void setSongPositionSeconds(double songPosSeconds);
-        void renderToFile(const std::string &outputPath, double seconds);
         void setMidiFileData(const unsigned char* data, size_t length, VisitEventFunction visitEventFunction = nullptr);
         void onTickEventCallback(int tick);
         void onPlaybackCallback(fluid_midi_event_t *event);
         void setPerformerScriptPath(const com::String &path);
         void sendCustomController(int controller, int value);
+        void setNumChannelGroups(int numChannelGroups) { this->numChannelGroups = numChannelGroups; }
         void stop();
         void play();
     protected:
+        int numChannelGroups = 1;
         typedef std::queue<com::midi::Event> EventQueue;
         EventQueue _eventQueue;
         typedef std::mutex QueueLock;

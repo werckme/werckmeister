@@ -60,7 +60,8 @@ namespace app
         _fluid_settings_setstr(settings, "audio.driver", "file");
         _fluid_settings_setnum(settings, "synth.gain", FLUID_SYNTH_DEFAULT_GAIN);
         _fluid_settings_setnum(settings, "synth.sample-rate", sampleRate());
-        _fluid_settings_setstr(settings, "synth.midi-bank-select", "mma");
+        _fluid_settings_setint(settings, "synth.audio-groups", numChannelGroups);
+        _fluid_settings_setint(settings, "synth.audio-channels", numChannelGroups);
         synth = _new_fluid_synth(settings);
         seq = _new_fluid_sequencer2(0);
         _fluid_sequencer_set_time_scale(seq, FLUID_SYNTH_SEQUENCER_TIMESCALE);
@@ -428,16 +429,18 @@ namespace app
         _fluid_player_play(player);
     }
 
-    void FluidSynthWriter::render(int len, float* lout, int loff, int lincr, float* rout, int roff, int rincr)
+    void FluidSynthWriter::render(int len, int numOut, float *out[])
     {
         if (synth == nullptr)
         {
             return;
         }
-        auto result = _fluid_synth_write_float(synth, len, lout, loff, lincr, rout, roff, rincr);
+        auto result = _fluid_synth_process(synth, len, 0, nullptr, numOut, out);
+        //auto result = _fluid_synth_write_float(synth, len, out[0], 0, 1, out[1], 0, 1);
+        
         if (result != FLUID_OK)
         {
-            throw std::runtime_error("fluid_synth_nwrite_float failed.");
+            throw std::runtime_error("fluid_synth_process failed.");
         }
     }
 
@@ -465,22 +468,6 @@ namespace app
             return;
         }
         _fluid_player_play(player);
-    }
-
-    void FluidSynthWriter::renderToFile(const std::string &outputPath, double)
-    {
-        const int blockSize = 1024;
-        _fluid_settings_setint(settings, "audio.period-size", blockSize);
-        _fluid_settings_setstr(settings, "audio.file.name", outputPath.c_str());
-        _fluid_settings_setstr(settings, "audio.file.format", "wav");
-        int totalSamples = blockSize * 100; //sampleRate() * seconds;
-        auto renderer = _new_fluid_file_renderer(synth);
-        while (totalSamples > 0) 
-        {
-            _fluid_file_renderer_process_block(renderer);
-            totalSamples -= blockSize;
-        }
-        _delete_fluid_file_renderer(renderer);
     }
 
     void FluidSynthWriter::setSongPositionSeconds(double songPosSeconds)
