@@ -200,7 +200,7 @@ extern "C"
 		return WERCKM_OK;
 	}
 
-	WERCKM_EXPORT WERCKM_EXPORT int wm_synthRender(WmSession sessionPtr, int len, int numOut, float *out[])
+	WERCKM_EXPORT int wm_synthRender(WmSession sessionPtr, int len, int numOut, float *out[])
 	{
 		if (sessionPtr == nullptr)
 		{

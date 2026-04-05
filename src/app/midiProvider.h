@@ -4,6 +4,7 @@
 #include <com/midi.hpp>
 #include <map>
 #include <climits>
+#include <cstdint>
 #include <functional>
 #include <com/config.hpp>
 #include <com/units.hpp>
