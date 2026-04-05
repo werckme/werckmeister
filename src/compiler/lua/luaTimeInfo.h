@@ -16,6 +16,6 @@ namespace lua
         void push(lua_State *L);
 
     protected:
-        const compiler::TimeInfo &timeInfo_;
+        compiler::TimeInfo timeInfo_;
     };
 }
