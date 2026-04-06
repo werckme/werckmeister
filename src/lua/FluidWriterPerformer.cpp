@@ -59,5 +59,28 @@ namespace lua
                 enqueue(nullptr, std::move(midiEv));
            }
         };
+        lua["SendSysexPayload"] = [this](std::vector<int> bytes)
+        {
+            if (!_sysexHandler)
+            {
+                return;
+            }
+            handleSysex(std::move(bytes));
+        };
+    }
+
+    void FluidWriterPerformer::handleSysex(std::vector<int> ints)
+    {
+        std::vector<unsigned char> bytes;
+        bytes.reserve(ints.size());
+        for(auto byte : ints)
+        {
+            if (byte < 0 || byte > 255)
+            {
+                throw std::runtime_error("invalid byte value: " + std::to_string(byte));
+            }
+            bytes.push_back((unsigned char)byte);
+        }
+        _sysexHandler(bytes.data(), bytes.size());
     }
 }

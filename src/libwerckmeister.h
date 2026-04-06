@@ -11,8 +11,10 @@
 #define WERCKM_OK 0
 #define WERCKM_ERR -1
 
+
 extern "C"  
 {
+  typedef void (*HandleSyexPayloadPtr)(const unsigned char* payload, unsigned int length, void* custom);
   WERCKM_EXPORT const char * wm_getStrVersion();
   WERCKM_EXPORT WmSession wm_createSession();
   WERCKM_EXPORT int wm_releaseSession(WmSession);
@@ -33,9 +35,9 @@ extern "C"
   WERCKM_EXPORT const char * wm_getMidiCuePointText(WmSession, int index);
   WERCKM_EXPORT unsigned int wm_getMidiCuePositionMillis(WmSession, int index);
   WERCKM_EXPORT int wm_addMidiFileData(WmSession, const unsigned char* data, unsigned int length);
-  WERCKM_EXPORT int wm_setPerformerScriptPath(WmSession, const char* path, unsigned int length);
+  WERCKM_EXPORT int wm_setPerformerScriptPath(WmSession, const char* path, unsigned int length, HandleSyexPayloadPtr optSysexHandler, void* custom);
   WERCKM_EXPORT int wm_setCC(WmSession, int ch, int cc, int value);
-  WERCKM_EXPORT int wm_sendCustomController(WmSession, int controllerNumber, int value);  
+  WERCKM_EXPORT int wm_sendCustomController(WmSession, int controllerNumber, int value);
   WERCKM_EXPORT int wm_play(WmSession);
   WERCKM_EXPORT int wm_stop(WmSession);
 }

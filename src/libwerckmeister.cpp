@@ -165,7 +165,7 @@ extern "C"
 		return WERCKM_OK;
 	}
 
-	WERCKM_EXPORT int wm_setPerformerScriptPath(WmSession sessionPtr, const char* path, unsigned int length)
+	WERCKM_EXPORT int wm_setPerformerScriptPath(WmSession sessionPtr, const char* path, unsigned int length, HandleSyexPayloadPtr optSysexHandler, void* custom)
 	{
 		if (sessionPtr == nullptr)
 		{
@@ -179,7 +179,10 @@ extern "C"
 			{
 				return WERCKM_OK;
 			}
-			session->fluidSynth->setPerformerScriptPath(com::String(path, length));
+			session->fluidSynth->setPerformerScriptPath(com::String(path, length), [optSysexHandler, custom](auto bytes, auto size)
+			{
+				optSysexHandler(bytes, size, custom);
+			});
 			return WERCKM_OK;
 		}
 		catch (const std::exception &ex) 

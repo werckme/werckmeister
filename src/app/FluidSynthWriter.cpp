@@ -246,13 +246,13 @@ namespace app
         _delete_fluid_event(fluid_event);
     }    
 
-    void FluidSynthWriter::setPerformerScriptPath(const com::String &path)
+    void FluidSynthWriter::setPerformerScriptPath(const com::String &path, lua::FluidWriterPerformer::SysexHandler sysexHandler)
     {
         _scriptPath = path;
-        initScriptIfReady();
+        initScriptIfReady(sysexHandler);
     }
 
-    void FluidSynthWriter::initScriptIfReady()
+    void FluidSynthWriter::initScriptIfReady(lua::FluidWriterPerformer::SysexHandler sysexHandler)
     {
         if (_scriptPath.empty())
         {
@@ -267,6 +267,7 @@ namespace app
             return;
         }
         performerScript = std::make_shared<lua::FluidWriterPerformer>(midiProvider.midi());
+        performerScript->sysexHandler(sysexHandler);
         performerScript->scriptPath(_scriptPath);
         performerScript->init();
         performerScript->setSeekRequestHandler([this](auto position)

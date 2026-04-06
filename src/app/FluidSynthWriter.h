@@ -36,7 +36,7 @@ namespace app
         void setMidiFileData(const unsigned char* data, size_t length, VisitEventFunction visitEventFunction = nullptr);
         void onTickEventCallback(int tick);
         void onPlaybackCallback(fluid_midi_event_t *event);
-        void setPerformerScriptPath(const com::String &path);
+        void setPerformerScriptPath(const com::String &path, lua::FluidWriterPerformer::SysexHandler sysexHandler = nullptr);
         void sendCustomController(int controller, int value);
         void setNumChannelGroups(int numChannelGroups) { this->numChannelGroups = numChannelGroups; }
         void stop();
@@ -49,7 +49,7 @@ namespace app
         QueueLock _queueLock;
         void sendNow(const com::midi::Event &ev, fluid_event_t* target = nullptr);
         void sendAt(const com::midi::Event &ev, int ticks);
-        void initScriptIfReady();
+        void initScriptIfReady(lua::FluidWriterPerformer::SysexHandler sysexHandler = nullptr);
         void processEventQueue();
         lua::FluidWriterPerformerPtr performerScript;
         MidiProvider midiProvider;
