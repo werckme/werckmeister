@@ -280,6 +280,16 @@ namespace app
         performerScript->setSendMidiEventHandler([this](const auto *, const auto *midiEvent)
         {
             auto pos = midiEvent->absPosition();
+            if (midiEvent->eventType() == com::midi::MetaEvent && midiEvent->metaEventType() == com::midi::Tempo)
+            {
+                if(pos > 0) 
+                {
+                    throw std::runtime_error("tempo events with pos <> 0 is not supported");
+                }
+                auto bpm = com::midi::Event::GetBpm(*midiEvent);
+                _fluid_player_set_tempo(player, FLUID_PLAYER_TEMPO_EXTERNAL_BPM, bpm);
+                return;
+            }
             if (pos == 0)
             {
                 sendNow(*midiEvent);

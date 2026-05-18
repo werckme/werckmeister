@@ -142,6 +142,7 @@ namespace app
             _fluid_player_get_midi_tempo = _library->get<fluid_player_get_midi_tempo_ftype>("fluid_player_get_midi_tempo");
             _fluid_player_get_division = _library->get<fluid_player_get_division_ftype>("fluid_player_get_division");
             _fluid_player_set_tick_callback = _library->get<fluid_player_set_tick_callback_ftype>("fluid_player_set_tick_callback");
+            _fluid_player_set_tempo = _library->get<fluid_player_set_tempo_ftype>("fluid_player_set_tempo");
             _fluid_synth_handle_midi_event = _library->get<fluid_synth_handle_midi_event_ftype>("fluid_synth_handle_midi_event");
             _fluid_midi_event_get_channel = _library->get<fluid_midi_event_get_channel_ftype>("fluid_midi_event_get_channel");
             _fluid_midi_event_get_control = _library->get<fluid_midi_event_get_control_ftype>("fluid_midi_event_get_control");

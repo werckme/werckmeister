@@ -35,7 +35,7 @@ namespace lua
         result.eventType((com::midi::EventType)luaMidi.type);
         if (result.eventType() == com::midi::MetaEvent)
         {
-            throw std::runtime_error("copy lua midi meta events to midi events not supported");
+            result.metaData((com::midi::MetaEventType)luaMidi.metaType, (com::Byte*)luaMidi.data.data(), luaMidi.data.length());
         }
         result.channel(luaMidi.channel);
         result.parameter1(luaMidi.parameter1);
@@ -170,6 +170,11 @@ namespace lua
                 [](const LuaMidi& m)
                 {
                     return m.data;
+                },
+                [](LuaMidi& m, LuaMidiData value)
+                {
+                    m.data = value;
+                    m.modified();
                 }
             ),
             "parameter1", sol::property(
