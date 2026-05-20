@@ -59,6 +59,7 @@ namespace
 	{
 		com::String cueText;
 		unsigned int timePointMillis = 0;
+		double timePointQuarters = 0;
 	};
 	typedef std::vector<CueDate> CueDates;
 	struct Session 
@@ -350,6 +351,26 @@ extern "C"
 		}
 	}
 
+	WERCKM_EXPORT double wm_getMidiCuePositionQuarters(WmSession sessionPtr, int index)
+	{
+		if (sessionPtr == nullptr)
+		{
+			return 0;
+		}
+		Session* session = reinterpret_cast<Session*>(sessionPtr);
+		auto _logger = session->logger;
+		try 
+		{
+			const auto& cueDate = session->cueDates.at(index);
+			return cueDate.timePointQuarters;
+		}
+		catch(...)
+		{
+			ERR("failed to get cue position");
+			return 0;
+		}
+	}	
+
 	WERCKM_EXPORT int wm_addMidiFileData(WmSession sessionPtr, const unsigned char* data, unsigned int length)
 	{
 		if (sessionPtr == nullptr)
@@ -545,6 +566,7 @@ static void handleIfMetaEvent(Session* session, const com::midi::Event& event)
 		CueDate cue;
 		cue.cueText = com::midi::Event::MetaGetStringValue(event.metaData(), event.metaDataSize());
 		cue.timePointMillis = 60.0 * 1000.0 * event.absPosition() / (bpm * com::PPQ);
+		cue.timePointQuarters = event.absPosition() / com::PPQ;
 		cueDates.push_back(cue);
 	}
 }

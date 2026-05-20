@@ -36,6 +36,7 @@ extern "C"
   WERCKM_EXPORT int wm_getNumMidiCuePoints(WmSession);
   WERCKM_EXPORT const char * wm_getMidiCuePointText(WmSession, int index);
   WERCKM_EXPORT unsigned int wm_getMidiCuePositionMillis(WmSession, int index);
+  WERCKM_EXPORT double wm_getMidiCuePositionQuarters(WmSession, int index);
   WERCKM_EXPORT int wm_addMidiFileData(WmSession, const unsigned char* data, unsigned int length);
   WERCKM_EXPORT int wm_setPerformerScriptPath(WmSession, const char* path, unsigned int length, HandleSyexPayloadPtr optSysexHandler, void* custom);
   WERCKM_EXPORT int wm_setCC(WmSession, int ch, int cc, int value);
