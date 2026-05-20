@@ -109,8 +109,7 @@ namespace app
     {
         if (event.eventType() == com::midi::MetaEvent && event.metaEventType() == com::midi::Tempo)
         {
-            auto metaIntValue = com::midi::Event::MetaGetIntValue(event.metaData(), event.metaDataSize());
-            _tempo = com::midi::MicrosecondsPerMinute / (double)metaIntValue;
+            _tempo = com::midi::Event::GetBpm(event);
         }
         if (event.metaEventType() == com::midi::CustomMetaEvent)
         {
@@ -286,8 +285,8 @@ namespace app
                 {
                     throw std::runtime_error("tempo events with pos <> 0 is not supported");
                 }
-                auto bpm = com::midi::Event::GetBpm(*midiEvent);
-                _fluid_player_set_tempo(player, FLUID_PLAYER_TEMPO_EXTERNAL_BPM, bpm);
+                _tempo = com::midi::Event::GetBpm(*midiEvent);
+                _fluid_player_set_tempo(player, FLUID_PLAYER_TEMPO_EXTERNAL_BPM, _tempo);
                 return;
             }
             if (pos == 0)
@@ -510,9 +509,35 @@ namespace app
         }
         if (seq != nullptr)
         {
+            double ticks   = _fluid_sequencer_get_tick(seq);
+            double seconds = ticks / FLUID_SYNTH_SEQUENCER_TIMESCALE;
+            return seconds * _tempo / 60.0;
+        }
+        return 0;
+    }
+
+    double FluidSynthWriter::getSongPositionQuarters() const
+    {
+        if (synth == nullptr)
+        {
+            return 0;
+        }
+        if (player != nullptr)
+        {
+            int ticks    = _fluid_player_get_current_tick(player);
+            int division = _fluid_player_get_division(player);
+            if (division <= 0)
+            {
+                return 0;
+            }
+            return static_cast<double>(ticks) / division;
+        }
+        if (seq != nullptr)
+        {
             double ticks = _fluid_sequencer_get_tick(seq);
             return ticks / FLUID_SYNTH_SEQUENCER_TIMESCALE;
         }
         return 0;
     }
+
 }

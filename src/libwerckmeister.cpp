@@ -247,6 +247,34 @@ extern "C"
 		return session->fluidSynth->getSongPositionSeconds();
 	}
 
+	WERCKM_EXPORT double wm_getSongPositionQuarters(WmSession sessionPtr)
+	{
+		if (sessionPtr == nullptr)
+		{
+			return WERCKM_OK;
+		}
+		Session* session = reinterpret_cast<Session*>(sessionPtr);
+		if (!session->fluidSynth)
+		{
+			return WERCKM_OK;
+		}
+		return session->fluidSynth->getSongPositionQuarters();
+	}
+	
+	WERCKM_EXPORT double wm_getTempo(WmSession sessionPtr)
+	{
+		if (sessionPtr == nullptr)
+		{
+			return WERCKM_OK;
+		}
+		Session* session = reinterpret_cast<Session*>(sessionPtr);
+		if (!session->fluidSynth)
+		{
+			return WERCKM_OK;
+		}
+		return session->fluidSynth->tempo();
+	}	
+
 	WERCKM_EXPORT double wm_setSongPositionSeconds(WmSession sessionPtr, double songPosSeconds)
 	{
 		if (sessionPtr == nullptr)

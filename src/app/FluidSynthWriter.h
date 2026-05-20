@@ -32,6 +32,7 @@ namespace app
         virtual void tearDownSynth() override;
         double tempo() const { return _tempo; }
         double getSongPositionSeconds() const;
+        double getSongPositionQuarters() const;
         void setSongPositionSeconds(double songPosSeconds);
         void setMidiFileData(const unsigned char* data, size_t length, VisitEventFunction visitEventFunction = nullptr);
         void onTickEventCallback(int tick);

@@ -409,14 +409,8 @@ namespace com
 			{
 				return 0;
 			}
-			auto data = event.metaData();
-			auto length = event.metaDataSize();
-			if (length != 3)
-			{
-				return 0;
-			}
-			auto usPerQuarter = (static_cast<int>(data[0]) << 16) | (static_cast<int>(data[1]) << 8) | data[2];
-			return 60000000.0 / usPerQuarter;
+			auto metaIntValue = com::midi::Event::MetaGetIntValue(event.metaData(), event.metaDataSize());
+            return com::midi::MicrosecondsPerMinute / (double)metaIntValue;
 		}
 		Event Event::MetaSignature(Byte nominator, Byte denominator, Byte clocksBetweenMetronomeClick, Byte nth32PerQuarter)
 		{
