@@ -12,6 +12,7 @@
 #include <unordered_map>
 #include <memory>
 #include <array>
+#include <compiler/modification/EventFunction.h>
 
 #define DEBUGX(x)
 
@@ -534,20 +535,43 @@ namespace compiler
 		return *(newServer.get());
 	}
 
+	void SheetTemplateRenderer::call(const documentModel::Event &callEvent, AModification::Events &outEvents)
+	{
+		auto &wm = com::getWerckmeister();
+		if (callEvent.metaArgs.empty())
+		{
+			FM_THROW(Exception, "missing execute function name");
+		}
+		auto modName = callEvent.metaArgs.front().value;
+		auto function = wm.getEventFunction(modName);
+		function->setArguments(callEvent.metaArgs);
+		function->execute(_ctx, outEvents);
+	}
+
 	void SheetTemplateRenderer::render(Track *chordTrack)
 	{
 		DegreeEventServers degreeEventServers;
 		auto sheetMeta = _ctx->voiceMetaData(_ctx->chordVoiceId());
 		AModification::Events& chordTrackEvents = chordTrack->voices.begin()->events;
 
+		AModification::Events eventCopies;
+		eventCopies.reserve(chordTrackEvents.size());
+
 		for(auto &ev : chordTrackEvents) // to keep interface in line with the other mod, process every event at once
 		{
-			AModification::Events copy = {ev};
-			sheetEventRenderer->processContextMods(sheetMeta, copy);
-			ev = copy.front();
+			if (ev.isMeta() && ev.stringValue == SHEET_META__CALL_EVENTFUNCTION)
+			{
+				AModification::Events genreatedEvents;
+				call(ev, genreatedEvents);
+				eventCopies.insert(eventCopies.end(), genreatedEvents.begin(), genreatedEvents.end());
+				continue;
+			}
+			AModification::Events copiedEvents = {ev};
+			sheetEventRenderer->processContextMods(sheetMeta, copiedEvents);
+			eventCopies.insert(eventCopies.end(), copiedEvents.begin(), copiedEvents.end());
 		}
 
-		auto templatesAndItsChords = __collectChordsPerTemplate(*this, chordTrackEvents);
+		auto templatesAndItsChords = __collectChordsPerTemplate(*this, eventCopies);
 		const TemplatesAndItsChords *previousTemplateAndChords = nullptr;
 		for (auto const &templateAndChords : templatesAndItsChords)
 		{
