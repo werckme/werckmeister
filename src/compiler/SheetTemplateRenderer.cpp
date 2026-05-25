@@ -148,7 +148,7 @@ namespace compiler
 			return fillCommand;
 		}
 
-		std::list<TemplatesAndItsChords> __collectChordsPerTemplate(SheetTemplateRenderer &sheetTemplateRenderer, Track *chordTrack)
+		std::list<TemplatesAndItsChords> __collectChordsPerTemplate(SheetTemplateRenderer &sheetTemplateRenderer, Voice::Events &chordTrackEvents)
 		{
 			auto ctx = sheetTemplateRenderer.context();
 			std::list<TemplatesAndItsChords> templatesAndItsChords;
@@ -158,7 +158,6 @@ namespace compiler
 			tmpContext->setChordTrackTarget();
 			auto tmpEventRenderer = sheetTemplateRenderer.sheetEventRenderer->createNewSheetEventRenderer(tmpContext);
 
-			auto &chordTrackEvents = chordTrack->voices.begin()->events;
 			for (auto &ev : chordTrackEvents)
 			{
 				try
@@ -539,7 +538,11 @@ namespace compiler
 	{
 		DegreeEventServers degreeEventServers;
 		auto sheetMeta = _ctx->voiceMetaData(_ctx->chordVoiceId());
-		auto templatesAndItsChords = __collectChordsPerTemplate(*this, chordTrack);
+		AModification::Events& chordTrackEvents = chordTrack->voices.begin()->events;
+
+		//sheetEventRenderer->processContextMods(sheetMeta, chordTrackEvents);
+
+		auto templatesAndItsChords = __collectChordsPerTemplate(*this, chordTrackEvents);
 		const TemplatesAndItsChords *previousTemplateAndChords = nullptr;
 		for (auto const &templateAndChords : templatesAndItsChords)
 		{
@@ -658,5 +661,7 @@ namespace compiler
 			}
 			previousTemplateAndChords = &templateAndChords;
 		}
+	
+		
 	}
 }

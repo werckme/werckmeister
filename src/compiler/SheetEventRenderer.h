@@ -6,9 +6,10 @@
 #include "ASheetEventRenderer.h"
 #include <com/ILogger.h>
 #include "ICompilerVisitor.h"
-#include <list>
 #include "IDefinitionsServer.h"
+#include <list>
 #include <set>
+
 
 namespace compiler
 {
@@ -31,7 +32,7 @@ namespace compiler
         virtual void _renderEventPitches(const documentModel::Event &noteEvent);
         virtual void _renderPitchBendEvent(const documentModel::Event &pitchBendEvent);
         virtual void _renderControllerEvent(const documentModel::Event &controllerEvent);
-
+        virtual void processContextMods(IContext::VoiceMetaDataPtr meta, AModification::Events &events) override;
     protected:
         void onWarning(const com::String &message, const documentModel::Event &event);
 

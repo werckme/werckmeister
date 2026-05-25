@@ -4,6 +4,7 @@
 #include <compiler/error.hpp>
 #include <memory>
 #include <compiler/context/IContext.h>
+#include "modification/AModification.h"
 
 namespace documentModel
 {
@@ -22,6 +23,7 @@ namespace compiler
         template <class TContainer>
         void handleMetaEvents(const TContainer &container,
                               std::function<documentModel::Event(const typename TContainer::value_type &)> fGetMetaEvent);
+        virtual void processContextMods(IContext::VoiceMetaDataPtr, AModification::Events&) {}; 
     };
     typedef std::shared_ptr<ASheetEventRenderer> ASheetEventRendererPtr;
     //---------------------------------------------------------------------

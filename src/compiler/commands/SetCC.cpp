@@ -79,7 +79,7 @@ namespace compiler
             {
                 FM_THROW(Exception, "expecting SheetEventRenderer");
             }
-            std::list<documentModel::Event> events({controllerEvent});
+            std::vector<documentModel::Event> events({controllerEvent});
             instrument->renderEvents(sheetEventRenderer, events);
             return;
         }

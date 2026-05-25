@@ -22,17 +22,17 @@ namespace compiler
         {
             return;
         }
-        Event &mainNote = events.front();
         auto vorschlagCopy = vorschlagNote;
         vorschlagCopy.type = vorschlagNote.subType;
         vorschlagCopy.duration = vorschlagNote.duration != Event::NoDuration ? vorschlagNote.duration : defaultDuration;
         vorschlagCopy.velocity = ctx->velocity();
-        if (vorschlagCopy.type == Event::Degree) 
+        if (vorschlagCopy.type == Event::Degree)
         {
             const auto &chord = ctx->currentChordEvent();
             definitionsServer->degreeToAbsoluteNote(ctx, chord, vorschlagCopy, vorschlagCopy);
         }
-        events.push_front(vorschlagCopy);
+        events.insert(events.begin(), vorschlagCopy);
+        Event &mainNote = events[1];
         mainNote.duration -= vorschlagCopy.duration;
         mainNote.offset = vorschlagCopy.duration;
     }
