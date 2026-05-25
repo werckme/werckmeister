@@ -1,5 +1,5 @@
 using "./chords/default.chords";
-using "./529_lua_script_support.lua";
+using "./529_lua_script_support_as_is.lua";
 
 device: SC1 _isType="midi" _useDevice="FLUID";
 instrumentDef: piano      SC1 _ch=0 _pc=0;
@@ -26,7 +26,7 @@ template: tmpl;
 [
 type: accomp;
 {
-    /mod: "529_lua_script_support"/
+    /mod: "529_lua_script_support_as_is" _xvalue="xyz"/
     /template: tmpl/ r1 |:
     C | C | A- | G :(x4)|
 }

@@ -540,7 +540,12 @@ namespace compiler
 		auto sheetMeta = _ctx->voiceMetaData(_ctx->chordVoiceId());
 		AModification::Events& chordTrackEvents = chordTrack->voices.begin()->events;
 
-		//sheetEventRenderer->processContextMods(sheetMeta, chordTrackEvents);
+		for(auto &ev : chordTrackEvents) // to keep interface in line with the other mod, process every event at once
+		{
+			AModification::Events copy = {ev};
+			sheetEventRenderer->processContextMods(sheetMeta, copy);
+			ev = copy.front();
+		}
 
 		auto templatesAndItsChords = __collectChordsPerTemplate(*this, chordTrackEvents);
 		const TemplatesAndItsChords *previousTemplateAndChords = nullptr;

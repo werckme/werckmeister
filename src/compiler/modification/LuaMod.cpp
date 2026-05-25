@@ -18,7 +18,11 @@ static const char *LUA_EVENT_TYPE_DEGREE = "degree";
 static const char *LUA_EVENT_TYPE_PITCHBEND = "pitchBend";
 static const char *LUA_EVENT_TYPE_CC = "cc";
 static const char *LUA_EVENT_TYPE_SYSEX = "sysex";
-static const char *LUA_EVENT_TYPE_META = "meta";
+static const char *LUA_EVENT_TYPE_MIDI_META = "meta";
+static const char *LUA_EVENT_TYPE_CHORD = "chord";
+static const char *LUA_EVENT_TYPE_WM_COMMAND = "werckmeisterCommand";
+static const char *LUA_EVENT_TYPE_BAR = "bar";
+
 static const char *LUA_EVENT_PROPERTY_SYSEX_DATA = "sysexData";
 static const char *LUA_EVENT_TYPE_UNKNOWN = "unknown";
 static const char *LUA_EVENT_PROPERTY_VELOCITY = "velocity";
@@ -30,6 +34,7 @@ static const char *LUA_EVENT_PROPERTY_META_STR_VALUE = "metaValue";
 static const char *LUA_EVENT_PROPERTY_CC_NR = "ccNr";
 static const char *LUA_EVENT_PROPERTY_CC_VALUE = "ccValue";
 static const char *LUA_EVENT_PROPERTY_PITCHES = "pitches";
+static const char *LUA_EVENT_PROPERTY_COMMAND = "command";
 static const char *LUA_EVENT_PROPERTY_TYPE = "type";
 static const char *LUA_EVENT_PROPERTY_PITCHBENDVALUE = "pitchBendValue";
 static const char *LUA_EVENT_PITCH_PROPERTY_PITCH = "pitch";
@@ -41,6 +46,12 @@ static const char *LUA_EVENT_PROPERTY_TIED_DURATION = "tiedDuration";
 static const char* LUA_EVENT_PROPERTY_TRACK_ID = "trackId";
 static const char* LUA_EVENT_PROPERTY_VOICE_ID = "voiceId";
 static const char* LUA_EVENT_PROPERTY_PRIO = "prio";
+static const char *LUA_EVENT_PROPERTY_CHORD = "chordName";
+static const char *LUA_EVENT_COMMAND_PROPERTY_ID = "id";
+static const char *LUA_EVENT_COMMAND_PROPERTY_ARGS = "args";
+static const char *LUA_EVENT_COMMAND_PROPERTY_ARG_NAME = "name";
+static const char *LUA_EVENT_COMMAND_PROPERTY_ARG_VALUE = "value";
+
 
 namespace compiler
 {
@@ -56,6 +67,7 @@ namespace compiler
         using Base::push;
         void push(lua_State *L);
         void pushPitches(lua_State *L);
+        void pushWerckmeisterCommand(lua_State *L);
         void pushTags(lua_State *L);
         void pushPitchBendValue(lua_State *L, int top, const documentModel::Event &event);
         const char *getTypename() const;
@@ -85,7 +97,25 @@ namespace compiler
                 lua::setTableValue(L, LUA_EVENT_PROPERTY_CC_NR, top, event->controllerNumber);
                 lua::setTableValue(L, LUA_EVENT_PROPERTY_CC_VALUE, top, event->controllerValue);
                 break;
+            case Event::Chord:
+            {
+                lua::setTableValue(L, LUA_EVENT_PROPERTY_DURATION, top, event->duration / com::PPQ);
+                lua::setTableValue(L, LUA_EVENT_PROPERTY_CHORD, top, event->stringValue);
+                break;
+            }
+            case Event::Meta:
+            {
+                lua_pushstring(L, LUA_EVENT_PROPERTY_COMMAND);
+                pushWerckmeisterCommand(L);
+                lua_settable(L, top);
+                break;
+            }
+            case Event::EOB:
+            {
+                break;
+            }
             default:
+            {
                 // pitches
                 lua_pushstring(L, LUA_EVENT_PROPERTY_PITCHES);
                 pushPitches(L);
@@ -102,6 +132,7 @@ namespace compiler
                 lua::setTableValue(L, LUA_EVENT_PROPERTY_TOAL_TIED_DURATION, top, event->tiedDurationTotal / com::PPQ);
                 // tiedDuration
                 lua::setTableValue(L, LUA_EVENT_PROPERTY_TIED_DURATION, top, event->tiedDuration / com::PPQ);
+            }
         }
     }
 
@@ -141,6 +172,37 @@ namespace compiler
             lua_settable(L, top);
         }
     }
+    void LuaEvent::pushWerckmeisterCommand(lua_State *L)
+    {
+        lua_createtable(L, event->pitches.size(), 0);
+        auto top = lua_gettop(L);
+        lua_pushstring(L, LUA_EVENT_COMMAND_PROPERTY_ID);
+        lua_pushstring(L, event->stringValue.c_str());
+        lua_settable(L, top);
+
+        lua_pushstring(L, LUA_EVENT_COMMAND_PROPERTY_ARGS);
+        int index = 1;
+        lua_createtable(L, 0, event->metaArgs.size());
+        auto tabletop = lua_gettop(L);
+        for (const auto &arg : event->metaArgs)
+        {
+            lua_pushinteger(L, index++);
+            lua_createtable(L, 0, 2);
+            auto valueTop = lua_gettop(L);
+            if (!arg.name.empty())
+            {
+                lua_pushstring(L, LUA_EVENT_COMMAND_PROPERTY_ARG_NAME);
+                lua_pushstring(L, arg.name.c_str());
+                lua_settable(L, valueTop);
+            }
+            lua_pushstring(L, LUA_EVENT_COMMAND_PROPERTY_ARG_VALUE);
+            lua_pushstring(L, arg.value.c_str());
+            lua_settable(L, valueTop);
+            lua_settable(L, tabletop);
+
+        }
+        lua_settable(L, top);
+    }
     void LuaEvent::pushTags(lua_State *L)
     {
         lua_createtable(L, event->tags.size(), 0);
@@ -172,6 +234,12 @@ namespace compiler
             return LUA_EVENT_TYPE_REST;
         case Event::Controller:
             return LUA_EVENT_TYPE_CC;
+        case Event::Chord:
+            return LUA_EVENT_TYPE_CHORD;
+        case Event::Meta:
+            return LUA_EVENT_TYPE_WM_COMMAND;
+        case Event::EOB:
+            return LUA_EVENT_TYPE_BAR;
         default:
             return LUA_EVENT_TYPE_UNKNOWN;
         }
@@ -260,8 +328,54 @@ namespace compiler
         lua::getTableValue(L, LUA_EVENT_PROPERTY_OFFSET, event.offset);
         event.offset *= com::PPQ;
         lua::getTableValue(L, LUA_EVENT_PROPERTY_DURATION, event.duration);
+        event.duration *= com::PPQ;
     }
 
+    void LuaModification::popChordEvent(documentModel::Event &event)
+    {
+        using namespace documentModel;
+        event.type = Event::Chord;
+        lua::getTableValue(L, LUA_EVENT_PROPERTY_CHORD, event.stringValue);
+        lua::getTableValue(L, LUA_EVENT_PROPERTY_DURATION, event.duration);
+        event.duration *= com::PPQ;
+    }
+
+    void LuaModification::popWerckmeisterCommand(documentModel::Event &event)
+    {
+        using namespace documentModel;
+        event.type = Event::Meta;
+
+        lua_pushstring(L, LUA_EVENT_PROPERTY_COMMAND);
+        lua_gettable(L, -2);
+        if (!lua_istable(L, -1))
+        {
+            FM_THROW(Exception, "missing werckmeister command value");
+        }
+        lua::getTableValue(L, LUA_EVENT_COMMAND_PROPERTY_ID, event.stringValue);
+
+        lua_pushstring(L, LUA_EVENT_COMMAND_PROPERTY_ARGS);
+        lua_gettable(L, -2);
+        if (!lua_istable(L, -1))
+        {
+            FM_THROW(Exception, "missing werckmeister command args");
+        }
+        lua_pushnil(L);
+
+        while (lua_next(L, -2) != 0)
+        {
+            if (!lua_istable(L, -1))
+            {
+                FM_THROW(Exception, "invalid werckmeister command args value");
+            }
+            Argument arg;
+            lua::getTableValue(L, LUA_EVENT_COMMAND_PROPERTY_ARG_NAME, arg.name, false);
+            lua::getTableValue(L, LUA_EVENT_COMMAND_PROPERTY_ARG_VALUE, arg.value, true);
+            lua_pop(L, 1);
+            event.metaArgs.push_back(arg);
+        }
+        lua_pop(L, 2);
+    }
+    
     AModification::Events LuaModification::popEvents(IContextPtr ctx)
     {
         using namespace documentModel;
@@ -272,7 +386,7 @@ namespace compiler
         }
         lua_pushnil(L);
         while (lua_next(L, -2) != 0)
-        { // every events
+        { // every event
             if (!lua_istable(L, -1))
             {
                 lua_pop(L, 1);
@@ -301,6 +415,24 @@ namespace compiler
                 popNoteEvent(event);
                 result.push_back(event);
             }
+            if (type == LUA_EVENT_TYPE_BAR)
+            {
+                Event event;
+                event.type = Event::EOB;
+                result.push_back(event);
+            }
+            if (type == LUA_EVENT_TYPE_CHORD)
+            {
+                Event event;
+                popChordEvent(event);
+                result.push_back(event);
+            }
+            if (type == LUA_EVENT_TYPE_WM_COMMAND)
+            {
+                Event event;
+                popWerckmeisterCommand(event);
+                result.push_back(event);
+            } 
             if(type == LUA_EVENT_TYPE_CC)
             {
                 popAndExecuteCc(ctx);
@@ -309,7 +441,7 @@ namespace compiler
             {
                 popAndExecuteSysex(ctx);
             }
-            if (type == LUA_EVENT_TYPE_META)
+            if (type == LUA_EVENT_TYPE_MIDI_META)
             {
                 popAndExecuteMeta(ctx);
             }

@@ -33,6 +33,8 @@ namespace compiler
         void popAndExecuteCc(IContextPtr ctx);
         void popAndExecuteSysex(IContextPtr ctx);
         void popAndExecuteMeta(IContextPtr ctx);
+        void popChordEvent(documentModel::Event &event);
+        void popWerckmeisterCommand(documentModel::Event &event);
     private:
         documentModel::Event::Args args_;
     };
