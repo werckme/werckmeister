@@ -12,6 +12,7 @@
 #include <exception>
 #include <com/config.hpp>
 #include <app/JsonStringInputReader.hpp>
+#include <boost/algorithm/string.hpp>
 #include <boost/algorithm/string/join.hpp>
 #include <compiler/error.hpp>
 #include <lua/luaHelper.h>
@@ -26,9 +27,9 @@ void SheetCompilerProgram::prepareEnvironment()
     {
         _logger->logLevel(com::ILogger::LevelBabble);
     }
-    _logger->babble(WMLogLambda(printIntro(log)));
     prepareSearchPaths();
     prepareContext();
+    _logger->babble(WMLogLambda(printIntro(log)));
 }
 
 void SheetCompilerProgram::printIntro(std::ostream &os)
@@ -45,6 +46,19 @@ void SheetCompilerProgram::printIntro(std::ostream &os)
        << "\tversion: " << SHEET_VERSION << std::endl
        << "\tlua version: " << lua::getVersion() << std::endl
        << "\tMIDI ppq value: " << com::PPQ << std::endl;
+    
+    const auto& searchPaths = com::getWerckmeister().searchPaths();
+    std::set<com::String> uniquePaths(searchPaths.begin(), searchPaths.end());
+    auto pathIt = uniquePaths.begin();
+    if (pathIt != uniquePaths.end())
+    {
+        os << "\t" << *(pathIt++);
+    }
+    for(; pathIt != uniquePaths.end(); ++pathIt)
+    {
+        os << ":" << *pathIt;
+    }
+    
 }
 
 void SheetCompilerProgram::prepareContext()
@@ -110,6 +124,19 @@ void SheetCompilerProgram::prepareSearchPaths()
     {
         addSearchPath(sfPath);
     }
+
+    const char* wmsPath = std::getenv("WM_SEARCH_PATH");
+    if (wmsPath)
+    {
+        std::vector<com::String> paths;
+        boost::split(paths, wmsPath, boost::is_any_of(","));
+        for(const auto& path : paths)
+        {
+            addSearchPath(path);
+        }
+    }
+
+
 }
 
 void SheetCompilerProgram::printSearchPaths() const
