@@ -1076,7 +1076,7 @@ This table contains all input events.
         totalTiedDuration = number,
 
         -- the event type
-        type = "note" | "rest" | "degree" | "pitchBend" | "cc" | "sysex" | "meta",
+        type = "note" | "rest" | "degree" | "pitchBend" | "cc" | "sysex" | "meta" | "chord" | "werckmeisterCommand",
 
         -- the events velocity value in a range from 0 to 1
         -- only relevant if type is "note" or "degree"
@@ -1101,11 +1101,22 @@ This table contains all input events.
 
         -- the midi meta event type
         -- only relevant if type is "meta"
-        metaType  = "textEvent" | "copyright" | "sequenceOrTrackName" | "instrumentName" | "lyricText" | "markerText" | "cuePoint"
+        metaType  = "textEvent" | "copyright" | "sequenceOrTrackName" | "instrumentName" | "lyricText" | "markerText" | "cuePoint" ,
 
         -- the midi meta value
         -- only relevant if type is "meta"
-        metaValue  = string
+        metaValue  = string,
+
+        -- the chord name,
+        -- only relevant if type is "chord"
+        chordName = string,
+        
+        -- the command data,
+        -- only relevant if type is "werckmeisterCommand"
+        command = {
+            id = string -- the command id
+            args = {} -- an arguments key, value table
+        }
     }
     ...
 }
@@ -1519,7 +1530,7 @@ Defines a device which can be used when adding instruments (see [instrumentDef](
 
  soundfont change will be triggered internally. 
 
- You can set an environment variable `WM_SOUNDFONT_PATH` to add a search path for soundfont files. *(only one path supported)*
+ You can set an environment variable `WM_SOUNDFONT_PATH` or `WM_SEARCH_PATH` to add a search path for soundfont files. *(WM_SOUNDFONT_PATH supports only one path, separated by ':' otherwise)*
 <br><br><br>
 
 ### `do`
