@@ -129,7 +129,7 @@ void SheetCompilerProgram::prepareSearchPaths()
     if (wmsPath)
     {
         std::vector<com::String> paths;
-        boost::split(paths, wmsPath, boost::is_any_of(","));
+        boost::split(paths, wmsPath, boost::is_any_of(":"));
         for(const auto& path : paths)
         {
             addSearchPath(path);
