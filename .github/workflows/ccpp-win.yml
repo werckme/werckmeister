@@ -39,10 +39,7 @@ jobs:
       run: |
         cd boost-src
         # Bootstrap für Windows
-        # Toolset explizit angeben, da vswhere auf windows-latest inzwischen
-        # auch neuere/Preview-VS-Installationen findet, deren Version das
-        # bootstrap-Skript nicht erkennt ("Unknown toolset: vcunk").
-        .\bootstrap.bat --prefix="$Env:USERPROFILE\local" vc143
+        .\bootstrap.bat vc143
         # Build + Install
         .\b2.exe --prefix="$Env:USERPROFILE\local" toolset=msvc-14.3 link=static runtime-link=static `
           --with-filesystem --with-program_options --with-locale `
