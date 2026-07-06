@@ -1530,7 +1530,7 @@ Defines a device which can be used when adding instruments (see [instrumentDef](
 
  soundfont change will be triggered internally. 
 
- You can set an environment variable `WM_SOUNDFONT_PATH` or `WM_SEARCH_PATH` to add a search path for soundfont files. *(WM_SOUNDFONT_PATH supports only one path, separated by ':' otherwise)*
+ You can set an environment variable `WM_SOUNDFONT_PATH` or `WM_SEARCH_PATH` to add a search path for soundfont files. *(WM_SOUNDFONT_PATH supports only one path, separated by ';' otherwise)*
 <br><br><br>
 
 ### `do`
