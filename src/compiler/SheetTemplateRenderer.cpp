@@ -12,6 +12,7 @@
 #include <unordered_map>
 #include <memory>
 #include <array>
+#include <compiler/modification/EventFunction.h>
 
 #define DEBUGX(x)
 
@@ -148,7 +149,7 @@ namespace compiler
 			return fillCommand;
 		}
 
-		std::list<TemplatesAndItsChords> __collectChordsPerTemplate(SheetTemplateRenderer &sheetTemplateRenderer, Track *chordTrack)
+		std::list<TemplatesAndItsChords> __collectChordsPerTemplate(SheetTemplateRenderer &sheetTemplateRenderer, Voice::Events &chordTrackEvents)
 		{
 			auto ctx = sheetTemplateRenderer.context();
 			std::list<TemplatesAndItsChords> templatesAndItsChords;
@@ -158,7 +159,6 @@ namespace compiler
 			tmpContext->setChordTrackTarget();
 			auto tmpEventRenderer = sheetTemplateRenderer.sheetEventRenderer->createNewSheetEventRenderer(tmpContext);
 
-			auto &chordTrackEvents = chordTrack->voices.begin()->events;
 			for (auto &ev : chordTrackEvents)
 			{
 				try
@@ -535,11 +535,43 @@ namespace compiler
 		return *(newServer.get());
 	}
 
+	void SheetTemplateRenderer::call(const documentModel::Event &callEvent, AModification::Events &outEvents)
+	{
+		auto &wm = com::getWerckmeister();
+		if (callEvent.metaArgs.empty())
+		{
+			FM_THROW(Exception, "missing execute function name");
+		}
+		auto modName = callEvent.metaArgs.front().value;
+		auto function = wm.getEventFunction(modName);
+		function->setArguments(callEvent.metaArgs);
+		function->execute(_ctx, outEvents);
+	}
+
 	void SheetTemplateRenderer::render(Track *chordTrack)
 	{
 		DegreeEventServers degreeEventServers;
 		auto sheetMeta = _ctx->voiceMetaData(_ctx->chordVoiceId());
-		auto templatesAndItsChords = __collectChordsPerTemplate(*this, chordTrack);
+		AModification::Events& chordTrackEvents = chordTrack->voices.begin()->events;
+
+		AModification::Events eventCopies;
+		eventCopies.reserve(chordTrackEvents.size());
+
+		for(auto &ev : chordTrackEvents) // to keep interface in line with the other mod, process every event at once
+		{
+			if (ev.isMeta() && ev.stringValue == SHEET_META__CALL_EVENTFUNCTION)
+			{
+				AModification::Events genreatedEvents;
+				call(ev, genreatedEvents);
+				eventCopies.insert(eventCopies.end(), genreatedEvents.begin(), genreatedEvents.end());
+				continue;
+			}
+			AModification::Events copiedEvents = {ev};
+			sheetEventRenderer->processContextMods(sheetMeta, copiedEvents);
+			eventCopies.insert(eventCopies.end(), copiedEvents.begin(), copiedEvents.end());
+		}
+
+		auto templatesAndItsChords = __collectChordsPerTemplate(*this, eventCopies);
 		const TemplatesAndItsChords *previousTemplateAndChords = nullptr;
 		for (auto const &templateAndChords : templatesAndItsChords)
 		{
@@ -658,5 +690,7 @@ namespace compiler
 			}
 			previousTemplateAndChords = &templateAndChords;
 		}
+	
+		
 	}
 }

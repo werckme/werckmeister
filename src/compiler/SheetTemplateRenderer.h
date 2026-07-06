@@ -41,5 +41,6 @@ namespace compiler
         Container2ContextElementId _contextElementIdMap;
         ICompilerVisitorPtr _compilerVisitor;
         IDefinitionsServerPtr definitionsServer_;
+        void call(const documentModel::Event &callEvent, AModification::Events &outEvents);
     };
 }

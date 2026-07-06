@@ -2,7 +2,6 @@
 #include "spielanweisung/ASpielanweisung.h"
 #include "spielanweisung/spielanweisungen.h"
 #include "spielanweisung/Vorschlag.h"
-#include "modification/AModification.h"
 #include <com/werckmeister.hpp>
 #include <compiler/commands/ACommand.h>
 #include <compiler/commands/AUsingAnEvent.h>
@@ -210,6 +209,18 @@ namespace compiler
 		eventLogger->warn(WMLogLambda(log << message), event);
 	}
 
+	void SheetEventRenderer::processContextMods(IContext::VoiceMetaDataPtr meta, AModification::Events &events)
+	{
+		for (auto mod : meta->modifications)
+		{
+			mod->perform(ctx_, events);
+		}
+		for (auto mod : meta->modificationsOnce)
+		{
+			mod->perform(ctx_, events);
+		}
+	}
+
 	void SheetEventRenderer::_renderEvent(const Event &_ev)
 	{
 		Event ev = _ev;
@@ -228,14 +239,7 @@ namespace compiler
 		{
 			sanweis->perform(ctx_, events);
 		}
-		for (auto mod : meta->modifications)
-		{
-			mod->perform(ctx_, events);
-		}
-		for (auto mod : meta->modificationsOnce)
-		{
-			mod->perform(ctx_, events);
-		}
+		processContextMods(meta, events);
 		auto instrument = ctx_->currentInstrumentDef();
 		if (instrument)
 		{

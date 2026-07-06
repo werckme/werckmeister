@@ -1,0 +1,33 @@
+using "./chords/default.chords";
+using "./529_lua_script_support_as_is.lua";
+
+device: SC1 _isType="midi" _useDevice="FLUID";
+instrumentDef: piano      SC1 _ch=0 _pc=0;
+instrumentDef: bass      SC1 _ch=1 _gmInstrument="Electric Bass Finger";
+
+tempo: 150;
+
+[
+instrument: piano;
+template: tmpl;
+{
+    <I, V, III>1
+}
+]
+
+[
+instrument: bass;
+template: tmpl;
+{
+   I,,4 & & &
+}
+]
+
+[
+type: accomp;
+{
+    /mod: "529_lua_script_support_as_is" _xvalue="xyz"/
+    /template: tmpl/ r1 |:
+    C | C | A- | G :(x4)|
+}
+]

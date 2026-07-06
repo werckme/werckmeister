@@ -16,7 +16,7 @@ on:
 jobs:
   build:
     if: true
-    runs-on: windows-latest
+    runs-on: windows-2022
 
     steps:
     - uses: actions/checkout@v2
@@ -39,9 +39,9 @@ jobs:
       run: |
         cd boost-src
         # Bootstrap für Windows
-        .\bootstrap.bat --prefix="$Env:USERPROFILE\local"
+        .\bootstrap.bat vc143
         # Build + Install
-        .\b2.exe --prefix="$Env:USERPROFILE\local" link=static runtime-link=static `
+        .\b2.exe --prefix="$Env:USERPROFILE\local" toolset=msvc-14.3 link=static runtime-link=static `
           --with-filesystem --with-program_options --with-locale `
           --with-system --with-test --with-date_time install
 

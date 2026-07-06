@@ -12,6 +12,11 @@ namespace compiler
     {
         com::String modName = parameters[argumentNames.AddMod.Use].value<com::String>();
         auto meta = context->voiceMetaData();
+        bool isChordTrack = context->chordTrackId() == context->track();
+        if (isChordTrack)
+        {
+            return;
+        }
         auto theEventFunction = loadEventFunction(context, modName);
         AModification::Events events;
         theEventFunction->execute(context, events);

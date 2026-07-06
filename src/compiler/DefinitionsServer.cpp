@@ -255,8 +255,11 @@ namespace compiler
 				}
 			}
 		}
-		std::set<documentModel::PitchDef> uniquePitches(absolutePitches.begin(), absolutePitches.end());
-		absolutePitches = documentModel::Event::Pitches(uniquePitches.begin(), uniquePitches.end());
+		if (voicingStrategies.size() > 1)
+		{
+			std::set<documentModel::PitchDef> uniquePitches(absolutePitches.begin(), absolutePitches.end());
+			absolutePitches = documentModel::Event::Pitches(uniquePitches.begin(), uniquePitches.end());
+		}
 		if (visit) 
 		{
 			compilerVisitor_->visitDegree(chordEvent, *chordDef, degreeEvent);
