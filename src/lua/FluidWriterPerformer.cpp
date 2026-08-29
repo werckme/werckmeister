@@ -67,6 +67,14 @@ namespace lua
             }
             handleSysex(std::move(bytes));
         };
+        lua["CancelQueuedEvents"] = [this](int channelFilter)
+        {
+            if (!_sysexHandler)
+            {
+                return;
+            }
+            cancelQueuedEvents(channelFilter);  
+        };
     }
 
     void FluidWriterPerformer::handleSysex(std::vector<int> ints)

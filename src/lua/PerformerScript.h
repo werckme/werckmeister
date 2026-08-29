@@ -12,7 +12,7 @@
 #include <sol/sol.hpp>
 #include <optional>
 #include <mutex>
-#include <queue>
+#include <deque>
 
 
 namespace sol
@@ -25,6 +25,7 @@ namespace lua
     class PerformerScript : public IPerformerScript, public ALuaScript
     {
     public:
+        enum { ALL_CHANNELS = -1 };
         typedef std::string LuaMidiData;
         struct LuaMidi
         {
@@ -51,6 +52,7 @@ namespace lua
         {
             const Output *output;
             com::midi::Event event;
+            bool canceled = false;
         };
         struct NoteOnCacheValue  
         {
@@ -92,6 +94,7 @@ namespace lua
         virtual ~PerformerScript();
         void scriptPath(const com::String &scriptPath);
         void script(const com::String &scriptText);
+        virtual void cancelQueuedEvents(int channelFilter = ALL_CHANNELS);
         virtual void enqueue(const Output* output, com::midi::Event) override;
         virtual bool canExecute() const override { return false; }
         virtual void assertCanExecute() const override {}
@@ -104,7 +107,7 @@ namespace lua
     protected:
         com::String _script;
         app::AMidiBackend::Inputs _midiInputs;
-        typedef std::queue<MidiEventWithOutput> EventQueue;
+        typedef std::deque<MidiEventWithOutput> EventQueue;
         EventQueue _eventQueue;
         typedef std::recursive_mutex QueueLock;
         QueueLock _queueLock;
