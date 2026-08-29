@@ -285,24 +285,10 @@ namespace lua
     void PerformerScript::enqueue(const Output* output, com::midi::Event ev)
     {
         std::lock_guard<QueueLock> lock(_queueLock);
-        _eventQueue.emplace_back(MidiEventWithOutput {
+        _eventQueue.emplace(MidiEventWithOutput {
             output,
             std::move(ev)
         });
-    }
-
-    void PerformerScript::PerformerScript::cancelQueuedEvents(int channelFilter)
-    {
-        std::lock_guard<QueueLock> lock(_queueLock);
-        for (auto &queEnty : _eventQueue)
-        {
-            auto isChannelMatch = channelFilter >= 0 && queEnty.event.channel() == channelFilter;
-            if ((channelFilter == ALL_CHANNELS) || isChannelMatch)
-            {
-                queEnty.canceled = true;
-            }
-        }
-        
     }
 
     void PerformerScript::processEventQueue()
@@ -311,11 +297,8 @@ namespace lua
         while(!_eventQueue.empty())
         {
             const auto &eventAndOutput = _eventQueue.front();
-            if(eventAndOutput.canceled == false)
-            {
-                onSendMidiEvent(eventAndOutput.output, &eventAndOutput.event);
-            }
-            _eventQueue.pop_front();
+            onSendMidiEvent(eventAndOutput.output, &eventAndOutput.event);
+            _eventQueue.pop();
         }
     }
 
