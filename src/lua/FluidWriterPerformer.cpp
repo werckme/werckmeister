@@ -69,10 +69,6 @@ namespace lua
         };
         lua["CancelQueuedEvents"] = [this](int channelFilter)
         {
-            if (!_sysexHandler)
-            {
-                return;
-            }
             cancelQueuedEvents(channelFilter);  
         };
     }
