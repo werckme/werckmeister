@@ -6,6 +6,7 @@
 #include <boost/algorithm/string/join.hpp>
 #include <exception>
 #include <fstream>
+#include <algorithm>
 #include "compiler/Compiler.h"
 #include <compiler/context/MidiContext.h>
 #include <memory>
@@ -375,7 +376,14 @@ namespace com
 			return;
 		}
 #endif
-		_searchPaths.push_front(path.string());
+		auto pathStr = path.string();
+		// check for duplicates, a set wont work here because order matters
+		bool exists = std::find(_searchPaths.begin(), _searchPaths.end(), pathStr) != _searchPaths.end();
+		if (exists)
+		{
+			return;
+		}
+		_searchPaths.push_front(pathStr);
 	}
 
 	const Werckmeister::CreateContextFunction &Werckmeister::createContextHandler() const
