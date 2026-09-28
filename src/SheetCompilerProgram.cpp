@@ -113,6 +113,7 @@ void SheetCompilerProgram::prepareSearchPaths()
     using boost::filesystem::path;
     using boost::filesystem::system_complete;
 
+    addSearchPath(".");
     auto execPath = path(app::os::getExecutablePath());
     addSearchPath(execPath.string());
     addSearchPath(system_complete(execPath / path("../share/werckmeister")).string());
