@@ -6,6 +6,7 @@
 #include "compiler/voicings/VoicingStrategy.h"
 #include <unordered_map>
 #include <list>
+#include <functional>
 
 namespace compiler
 {
@@ -59,6 +60,8 @@ namespace compiler
 		virtual void setToContext(IContext *context) override;
 		virtual void renderEvents(SheetEventRenderer *renderer, std::vector<documentModel::Event> &events, const com::String& parentInsrtumentSectionName) override;
 		virtual std::shared_ptr<AInstrumentDef> activeInstrument() override { return _currentInstrument.lock(); }
+		typedef std::function<void(AInstrumentDef*)> InstrumentAction;
+		void forEachInstrument(IContext *ctx, InstrumentAction action);
 
 	private:
 		std::weak_ptr<AInstrumentDef> _currentInstrument;

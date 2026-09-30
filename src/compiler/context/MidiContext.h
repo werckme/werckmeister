@@ -50,6 +50,10 @@ namespace compiler
 		virtual void renderPitchbend(double value, com::Ticks absolutePosition) override;
 		virtual void startEvent(const documentModel::PitchDef &pitch, com::Ticks absolutePosition, double velocity) override;
 		virtual void stopEvent(const documentModel::PitchDef &pitch, com::Ticks absolutePosition) override;
+		/**
+		 * sends note off to all pitches where its tie process wasn't completed yet
+		 */
+		virtual void stopAllPendingTies() override;		
 		virtual void selectMidiSound(int bankMsb, int bankLsb, int pc);
 		virtual void defineInstrumentSection(const com::String &uname, std::list<com::String> &sectionInstrumentUNames);
 		virtual void defineMidiInstrument(const com::String &uname, int channel, int bankMsb, int bankLsb, int pc);
