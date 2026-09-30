@@ -111,6 +111,37 @@ namespace compiler
 		addEvent(event);
 	}
 
+
+	void MidiContext::stopAllPendingTies()
+	{
+		assertMidi(midi_);
+		auto trackMeta = trackMetaData<MidiContext::TrackMetaData>();
+		if (!trackMeta)
+		{
+			FM_THROW(Exception, "meta data = null");
+		}
+		auto instrument = trackMeta->instrument;
+		if (!instrument)
+		{
+			FM_THROW(Exception, "instrument = null");
+		}
+		auto instrumentSection = std::dynamic_pointer_cast<InstrumentSectionDef>(instrument);
+		if (instrumentSection != nullptr)
+		{
+			auto meta = voiceMetaData();
+			instrumentSection->forEachInstrument(this, [this, meta](auto _) 
+			{
+				for (const auto &tie : meta->waitForTieBuffer)
+				{
+					stopEvent(tie.first, meta->position);
+				}
+			});
+			meta->waitForTieBuffer.clear();
+			return;
+		}
+		Base::stopAllPendingTies();
+	}
+
 	void MidiContext::stopEvent(const documentModel::PitchDef &pitch, com::Ticks absolutePosition)
 	{
 		Base::stopEvent(pitch, absolutePosition);

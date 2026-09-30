@@ -1,0 +1,26 @@
+using "/chords/default.chords";
+
+device: Canvas _isType="midi" _useDevice="FLUID";
+instrumentDef: guitar1.noPose       midi _onDevice="Canvas" _ch=0;
+instrumentDef: guitar1.pose       midi _onDevice="Canvas" _ch=1 _gmInstrument="Vibraphone";
+instrumentSection: guitar1.common guitar1.pose guitar1.noPose;
+
+
+[
+instrument: guitar1.common;
+template: guitar1.chorus;
+{
+    <I V I' VII' III' I''>1~ | &
+}
+]
+
+
+tempo: 110;
+
+[
+type: accomp;
+{
+   /template: guitar1.chorus/
+   G | C
+}
+]

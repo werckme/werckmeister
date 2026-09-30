@@ -94,4 +94,19 @@ namespace compiler
 		}
 		_currentInstrument.reset();
 	}
+
+	void InstrumentSectionDef::forEachInstrument(IContext *ctx, InstrumentAction action)
+	{
+		for (const auto &uname : instrumentNames)
+		{
+			auto instrumentDef = ctx->getInstrumentDef(uname);
+			if (!instrumentDef)
+			{
+				FM_THROW(Exception, "section instrument not found: " + uname);
+			}
+			_currentInstrument = instrumentDef;
+			action(instrumentDef.get());	
+		}
+		_currentInstrument.reset();
+	}
 }

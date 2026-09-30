@@ -60,6 +60,9 @@ def postprocess(testdata: dict, test_tags: list[str]) -> None:
 if __name__ == '__main__':
     term = Terminal()
     cwd = os.path.dirname(os.path.abspath(__file__))
+    specific_file = None
+    if len(argv) > 1:
+        specific_file = os.path.abspath(argv[1])
     refdir = os.path.join(cwd, 'references')
     indir = os.path.join(cwd, 'tests')
     isfile = lambda x: True #os.path.isfile(x)
@@ -72,6 +75,8 @@ if __name__ == '__main__':
         exit(1)
     for testfile in [x for x in os.listdir(indir) if issheet(x)]:
         infile = os.path.abspath(os.path.join(indir,testfile))
+        if specific_file is not None and specific_file != infile :
+            continue
         test_tags = get_test_tags(infile)
         midifile = f"{testfile}.mid"
         reffile = os.path.abspath(os.path.join(refdir,midifile))
