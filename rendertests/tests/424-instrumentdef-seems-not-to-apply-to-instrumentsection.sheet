@@ -1,0 +1,17 @@
+using "./424-instrumentdef.conductions";
+using "/lua/mods/myArpeggio.lua";
+
+device: MyDevice _isType=midi _useDevice="FLUID";
+instrumentDef: _setName=p1 _onDevice=MyDevice _ch=1 _gmInstrument="Piano";
+instrumentDef: _setName=p2 _onDevice=MyDevice _ch=2 _gmInstrument="Electric Bass";
+instrumentSection: mySection p1 p2;
+instrumentConf: mySection mod myArpeggio;
+
+
+
+[
+instrument: mySection;
+{
+  <c e g b c'>1 | <d f a c' d'> | <g b d f' g'> | <g b c' e'>
+}
+]
