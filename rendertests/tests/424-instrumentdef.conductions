@@ -1,0 +1,4 @@
+instrument (p2)
+{
+    pitch -= 12;
+}

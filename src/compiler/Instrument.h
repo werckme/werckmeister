@@ -27,13 +27,13 @@ namespace compiler
 		virtual void setToContext(IContext *context) = 0;
 		virtual void renderEvents(SheetEventRenderer *renderer, std::vector<documentModel::Event> &events, const com::String &parentInsrtumentSectionName = com::String()) = 0;
 		virtual std::shared_ptr<AInstrumentDef> activeInstrument() = 0;
+		virtual void addModification(IContext *ctx, AModificationPtr);
 		struct CcValue {
 			int nr;
 			int value;
 		};
 		typedef std::list<CcValue> CcValues;
 		CcValues ccValues;
-
 	protected:
 		template <class TImpl>
 		std::shared_ptr<TImpl> getThis() { return std::dynamic_pointer_cast<TImpl>(shared_from_this()); }
@@ -62,7 +62,7 @@ namespace compiler
 		virtual std::shared_ptr<AInstrumentDef> activeInstrument() override { return _currentInstrument.lock(); }
 		typedef std::function<void(AInstrumentDef*)> InstrumentAction;
 		void forEachInstrument(IContext *ctx, InstrumentAction action);
-
+		virtual void addModification(IContext *ctx, AModificationPtr) override;
 	private:
 		std::weak_ptr<AInstrumentDef> _currentInstrument;
 	};

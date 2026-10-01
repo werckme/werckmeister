@@ -12,6 +12,6 @@ namespace compiler
         com::String modName = parameters[argumentNames.AddMod.Use].value<com::String>();
         auto meta = context->voiceMetaData();
         auto theModification = loadMod(context, modName);
-        this->getInstrument()->modifications.push_back(theModification);
+        this->getInstrument()->addModification(context.get(), theModification);
     }
 }
