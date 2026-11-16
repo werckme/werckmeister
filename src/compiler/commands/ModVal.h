@@ -9,7 +9,12 @@ namespace compiler
     /// <command name="modval" where="voice">
     /// Changes an argument value of a mod.
     /// #### examples
-    /// `/modval: arpeggio _direction="down"/`
+    /// ```
+    /// /mod: arpeggio _direction="up"/ -- load mod \n
+    /// -- some music ... \n
+    /// /modval: arpeggio _direction="down"/ -- change mod value \n
+    /// ```
+    /// </command>    
     /// <param name="mod" position="0" type="text">The name of the modification to adjust. This is the only "unique" parameter for this command. All further parameters are specific to its related modification.</param>
     class ModVal : public ACommand
     {
