@@ -25,14 +25,13 @@ namespace compiler
         if (theMod == nullptr) 
         {
             auto instrument = context->currentInstrumentDef();
-            for(auto modptr : instrument->modifications)
+            instrument->forEachModification(context.get(), [&theMod, modName] (auto modPtr) 
             {
-                if (modptr->name == modName)
+                if (modPtr->name == modName)
                 {
-                    theMod = modptr;
-                    break;
+                    theMod = modPtr;
                 }
-            }
+            });
         }
         if (theMod == nullptr)
         {

@@ -28,6 +28,8 @@ namespace compiler
 		virtual void renderEvents(SheetEventRenderer *renderer, std::vector<documentModel::Event> &events, const com::String &parentInsrtumentSectionName = com::String()) = 0;
 		virtual std::shared_ptr<AInstrumentDef> activeInstrument() = 0;
 		virtual void addModification(IContext *ctx, AModificationPtr);
+		typedef std::function<void(AModificationPtr)> ModAction;
+		virtual void forEachModification(IContext *ctx, ModAction action);
 		struct CcValue {
 			int nr;
 			int value;
@@ -63,6 +65,7 @@ namespace compiler
 		typedef std::function<void(AInstrumentDef*)> InstrumentAction;
 		void forEachInstrument(IContext *ctx, InstrumentAction action);
 		virtual void addModification(IContext *ctx, AModificationPtr) override;
+		virtual void forEachModification(IContext *ctx, ModAction action) override;
 	private:
 		std::weak_ptr<AInstrumentDef> _currentInstrument;
 	};
