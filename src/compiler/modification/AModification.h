@@ -15,6 +15,7 @@ namespace compiler
         AModification() = default;
 
     public:
+        com::String name;
         typedef std::vector<documentModel::Event> Events;
         virtual ~AModification() = default;
         virtual void perform(IContextPtr ctx, Events &events) = 0;

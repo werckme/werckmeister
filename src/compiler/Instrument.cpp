@@ -7,7 +7,7 @@
 namespace compiler
 {
 
-	void AInstrumentDef::addModification(IContext *ctx, AModificationPtr mod)
+	void AInstrumentDef::addModification(IContext*, AModificationPtr mod)
 	{
 		modifications.push_back(mod);
 	}

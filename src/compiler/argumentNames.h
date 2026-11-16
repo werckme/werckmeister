@@ -74,6 +74,11 @@ struct ArgumentNames
 
     struct
     {
+        std::string Mod = "mod";
+    } ModVal;
+
+    struct
+    {
         std::string CC = "cc";
         std::string BankLsb = "bankLsb";
         std::string BankMsb = "bankMsb";
