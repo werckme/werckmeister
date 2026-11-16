@@ -80,6 +80,7 @@ SET (SRC_FETZER_LIB
     compiler/commands/SetSpielanweisung.cpp
     compiler/commands/SetSpielanweisungPlayedOnce.cpp
     compiler/commands/AddMod.cpp
+    compiler/commands/ModVal.cpp
     compiler/commands/AddModPlayedOnce.cpp
     compiler/commands/ExecuteEventFunction.cpp
     compiler/commands/SetInstrument.cpp

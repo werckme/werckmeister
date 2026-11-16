@@ -2027,6 +2027,25 @@ Like [mod](#mod). But with the difference, that the loaded mod will be only exec
  `/modOnce: arpeggio/`
 <br><br><br>
 
+### `modval`
+
+#### parameters
+| name | position | description | type |
+|:--- |:--- |:--- |:--- |
+| mod | 1 | The name of the modification to adjust. This is the only "unique" parameter for this command. All further parameters are specific to its related modification. | text |
+
+Changes an argument value of a mod.
+
+ #### examples
+
+ ```
+
+ /mod: arpeggio _direction="up"/ -- load mod 
+ -- some music ... 
+ /modval: arpeggio _direction="down"/ -- change mod value 
+ ```
+<br><br><br>
+
 ### `pan`
 
 #### parameters

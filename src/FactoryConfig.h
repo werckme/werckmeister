@@ -82,6 +82,7 @@ void FactoryConfig<TInjector>::initModifications()
 #include <compiler/commands/SetVoicingStrategy.h>
 #include <compiler/commands/InstrumentConfigSetVoicingStrategy.h>
 #include <compiler/commands/AddMod.h>
+#include <compiler/commands/ModVal.h>
 #include <compiler/commands/AddModPlayedOnce.h>
 #include <compiler/commands/AddVorschlag.h>
 #include <compiler/commands/SelectMidiSound.h>
@@ -123,6 +124,7 @@ void FactoryConfig<TInjector>::initCommands()
     register_<SetVoicingStrategy>(SHEET_META__SET_VOICING_STRATEGY);
     register_<InstrumentConfigSetVoicingStrategy>(InstrumentConfigCommandName(SHEET_META__SET_VOICING_STRATEGY));
     register_<AddMod>(SHEET_META__SET_MOD);
+    register_<ModVal>(SHEET_META__MODVAL);
     register_<AddModPlayedOnce>(SHEET_META__SET_MOD_ONCE);
     register_<AddVorschlag>(SHEET_META__SET_VORSCHLAG);
     register_<SelectMidiSound>(SHEET_META__MIDI_SOUNDSELECT);

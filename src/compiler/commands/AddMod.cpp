@@ -54,6 +54,7 @@ namespace compiler
             theModification = wm.getModification(modName);
         }
         theModification->setArguments(modArgs);
+        theModification->name = modName;
         return theModification;
     }
 }

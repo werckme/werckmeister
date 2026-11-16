@@ -7,11 +7,18 @@
 namespace compiler
 {
 
-	void AInstrumentDef::addModification(IContext *ctx, AModificationPtr mod)
+	void AInstrumentDef::addModification(IContext*, AModificationPtr mod)
 	{
 		modifications.push_back(mod);
 	}
 
+	void AInstrumentDef::forEachModification(IContext *ctx, ModAction action)
+	{
+		for(auto mod : modifications)
+		{
+			action(mod);
+		}
+	}
 
 	void MidiInstrumentDef::setToContext(IContext *ctx)
 	{
@@ -122,6 +129,15 @@ namespace compiler
 		forEachInstrument(ctx, [ctx, mod](auto instrument)
 		{
 			instrument->addModification(ctx, mod);
+		});
+	}
+
+	void InstrumentSectionDef::forEachModification(IContext *ctx, ModAction action)
+	{
+		AInstrumentDef::forEachModification(ctx, action);
+		forEachInstrument(ctx, [ctx, action](auto instrument)
+		{
+			instrument->forEachModification(ctx, action);
 		});
 	}
 	
