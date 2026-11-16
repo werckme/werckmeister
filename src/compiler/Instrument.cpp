@@ -6,6 +6,13 @@
 
 namespace compiler
 {
+
+	void AInstrumentDef::addModification(IContext *ctx, AModificationPtr mod)
+	{
+		modifications.push_back(mod);
+	}
+
+
 	void MidiInstrumentDef::setToContext(IContext *ctx)
 	{
 		auto midiContext = dynamic_cast<MidiContext *>(ctx);
@@ -109,4 +116,13 @@ namespace compiler
 		}
 		_currentInstrument.reset();
 	}
+
+	void InstrumentSectionDef::addModification(IContext *ctx, AModificationPtr mod)
+	{
+		forEachInstrument(ctx, [ctx, mod](auto instrument)
+		{
+			instrument->addModification(ctx, mod);
+		});
+	}
+	
 }
