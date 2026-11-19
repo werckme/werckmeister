@@ -754,7 +754,7 @@ A declaration knows 3 types of value assignment:
 
 ### Add
 ```
-  aDeclaration = newValue; 
+  aDeclaration += newValue; 
 ```
 ### Substract
 ```
