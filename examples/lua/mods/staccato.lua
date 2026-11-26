@@ -1,4 +1,4 @@
--- <command name="staccato" where="mod" using="lua/mod/staccato.lua">
+-- <command name="staccato" where="mod" using="lua/mods/staccato.lua">
 -- Performs every note staccato. It is also possible to tag single notes.
 -- If a tag is given, only the tagged notes are performed staccato.
 -- ```language=Werckmeister\n

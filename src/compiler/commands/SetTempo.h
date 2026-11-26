@@ -10,7 +10,7 @@ namespace compiler
     /// #### example
     /// `tempo: 120;`
     /// It is also possible to set different tempo values for several tracks:
-    /// [see here](/manual#tempo)
+    /// [see here](#tempo)
     /// </command>
     /// <param name="bpm" position="0">The tempo bpm value.</param>
     class SetTempo : public ACommand

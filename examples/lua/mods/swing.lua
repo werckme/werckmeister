@@ -1,4 +1,4 @@
--- <command name="swing" where="mod" using="lua/mod/swing.lua">
+-- <command name="swing" where="mod" using="lua/mods/swing.lua">
 -- Performs a swing groove.
 -- ```language=Werckmeister\n
 --using "lua/mods/swing.lua";\n

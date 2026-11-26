@@ -1,4 +1,4 @@
--- <command name="slide" where="mod" using="lua/mod/slide.lua">
+-- <command name="slide" where="mod" using="lua/mods/slide.lua">
 -- Performs a chromatic slide to the target note.
 -- > Works only with absolute notes, not with degree notes !
 -- ```language=Werckmeister\n

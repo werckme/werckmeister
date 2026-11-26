@@ -6,7 +6,7 @@
 namespace compiler
 {
     /// <command name="jump" where="voice">
-    ///     Jumps to a previous defined mark See [mark](manual/#mark).
+    ///     Jumps to a previous defined mark See [mark](#mark).
     /// #### example
     /// <![CDATA[
     /// ```language=Werckmeister\n

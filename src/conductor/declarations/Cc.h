@@ -19,7 +19,7 @@ namespace conductor
     /// } \n
     /// ```
     /// </declaration>
-    /// <value name="cc type and value" type="string">a contoller name followed by the target number enlcosed by parentheses. See https://werckme.github.io/manual#cc. Alternatively you can write cc0..127.</value>
+    /// <value name="cc type and value" type="string">a contoller name followed by the target number enlcosed by parentheses. See [cc](#cc). Alternatively you can write cc0..127.</value>
     class Cc : public ADeclaration
     {
     public:

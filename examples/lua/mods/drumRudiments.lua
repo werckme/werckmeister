@@ -1,4 +1,4 @@
--- <command name="drumRudiments" where="mod" using="lua/mod/drumRudiments.lua">
+-- <command name="drumRudiments" where="mod" using="lua/mods/drumRudiments.lua">
 -- <![CDATA[
 -- Implements a collection of different drum rudiments. ([see Wikipedia](https://en.wikipedia.org/wiki/Drum_rudiment))
 -- You can specify which notes are for `L` and `R` and performing duration.

@@ -10,7 +10,7 @@ namespace compiler
     /// Executes a lua function.
     /// See [Example](https://www.werckme.org/editor?wid=lua-event-functions-example)
     /// </command>
-    /// <param name="name" position="0" type="text">The name of the lua function. This is the only "unique" parameter for this command. All further parameters are specific to its related implementation (see [The Execute Function](/manual#the-execute-function)).</param>
+    /// <param name="name" position="0" type="text">The name of the lua function. This is the only "unique" parameter for this command. All further parameters are specific to its related implementation (see [The Execute Function](#the-execute-function)).</param>
     class ExecuteEventFunction : public AddMod, public AUsingAnEvent
     {
     public:

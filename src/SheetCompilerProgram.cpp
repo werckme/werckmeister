@@ -42,7 +42,7 @@ void SheetCompilerProgram::printIntro(std::ostream &os)
     shown = true;
     os << "\tWERCKMEISTER" << std::endl
        << "\t(c) Samba Godschynski " << std::endl
-       << "\thttps://werckme.github.io" << std::endl
+       << "\thttps://www.werckme.org" << std::endl
        << "\tversion: " << SHEET_VERSION << std::endl
        << "\tlua version: " << lua::getVersion() << std::endl
        << "\tMIDI ppq value: " << com::PPQ << std::endl;

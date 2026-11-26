@@ -47,7 +47,7 @@ namespace conductor
                 auto ccIt = contollerNameMap.find(strValue);
                 if (ccIt == contollerNameMap.end())
                 {
-                    FM_THROW(compiler::Exception, "invalid cc name: '" + strValue + "'. Please find here a complete list of supported cc names https://werckme.github.io/manual#cc");
+                    FM_THROW(compiler::Exception, "invalid cc name: '" + strValue + "'. Please find here a complete list of supported cc names https://www.werckme.org/manual#cc");
 
                 }
                 options.type = ccIt->second;

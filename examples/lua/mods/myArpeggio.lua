@@ -1,4 +1,4 @@
--- <command name="myArpeggio" where="mod" using="lua/mod/myArpeggio.lua">
+-- <command name="myArpeggio" where="mod" using="lua/mods/myArpeggio.lua">
 -- <![CDATA[
 -- A simple arpeggio implementation.
 -- **Example**

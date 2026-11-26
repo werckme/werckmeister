@@ -7,7 +7,7 @@
 namespace compiler
 {
     /// <command name="endTag" where="voice">
-    /// Ends a tag region where its including events will receive the given tags. See [beginTag](manual/#begintag).
+    /// Ends a tag region where its including events will receive the given tags. See [beginTag](#begintag).
     /// [Example](https://www.werckme.org/editor?wid=mariounderworld)
     /// </command>
     /// <param name="tags" position="0" type="text">a space separated list of tag names</param>

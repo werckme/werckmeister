@@ -1,4 +1,4 @@
--- <command name="guitarStroke" where="mod" using="lua/mod/guitarStroke.lua">
+-- <command name="guitarStroke" where="mod" using="lua/mods/guitarStroke.lua">
 -- <![CDATA[
 -- Simulates guitar strokes as mini arpeggios.
 -- *Note: the alternate mode works only if this mod is set via instrumentConf.*

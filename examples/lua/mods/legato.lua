@@ -1,4 +1,4 @@
--- <command name="legato" where="mod" using="lua/mod/legato.lua">
+-- <command name="legato" where="mod" using="lua/mods/legato.lua">
 -- Performs every note legato. It is also possible to tag single notes.
 -- If a tag is given, only the tagged notes are performed legato.
 -- ```language=Werckmeister\n

@@ -96,7 +96,7 @@ namespace compiler
         const auto &it = _controllerNames.find(name);
         if (it == _controllerNames.end())
         {
-            FM_THROW(Exception, "invalid cc name: '" + name + "'. Please find here a complete list of supported cc names https://werckme.github.io/manual#cc");
+            FM_THROW(Exception, "invalid cc name: '" + name + "'. Please find here a complete list of supported cc names https://www.werckme.org/manual#cc");
         }
         return it->second;
     }

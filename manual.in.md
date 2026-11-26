@@ -182,7 +182,7 @@ The recommended way to edit Werckmeister sheet files, is using Visual Studio Cod
 Have a look [here](/code-extension).
 
 ## Using Werckmeister along with a DAW
-The best way to use Werckmeister along with your DAW is [Werckmeister VST](#werckmeister-vst).
+The best way to use Werckmeister along with your DAW is [Werckmeister VST](/vst).
 
 As an alternative, all you need is to connect the `sheetp` player with the MIDI inputs of your DAW.
 
@@ -208,7 +208,7 @@ I want to ...
 
 [... see an overview of all commands](#commands)
 
-[... see an overview of lua extensions](#lua-extensions)
+[... see an overview of lua extensions](#modifications)
 
 ## It's just text
 The Werckmeister language knows only a few statement types. It's all about tracks, voices, and events. That's it. 
@@ -337,7 +337,7 @@ g a b c'
 ```
 
 ## Parameters
-[Meta Events](#metaevents) or Config Statements will be configurated with parameters. Parameters can be defined in two ways:
+[Meta Events](#meta-events) or Config Statements will be configurated with parameters. Parameters can be defined in two ways:
 
 #### Positional
 `/volume: 50/` 
@@ -368,6 +368,24 @@ The path of your file is written between double quotes (`"`).
 
 The path can be absolute or relative to the current document.
 *(It is recommended to use relative path values)*
+
+The file type is determined by its extension:
+
+| Extension | Content |
+| --------- | ------- |
+| `.sheet` | the main document *(can not be included)* |
+| `.config` | settings like `device`, `instrumentDef` or `instrumentConf` |
+| `.part` | further tracks, to split a piece into several files |
+| `.chords` | [chord definitions](#chords) |
+| `.template` | [accompaniment templates](#accomp-my-melodies) |
+| `.pitchmap` | [pitchmaps](#pitchmaps) |
+| `.conductions` | [conduction rules](#conduction-rules) |
+| `.lua` | [mods](#mods) and voicing strategies |
+
+For example, to keep your instruments in a separate file, put the `instrumentDef` statements into a `.config` file:
+```language=Werckmeister,type=mute
+using "./myInstruments.config";
+```
 
 ### Devices & Instruments
 #### Adding a device
@@ -560,6 +578,11 @@ Lower octaves are marked by a comma (`,`) after the note, upper octaves by a sin
 c,,  e,,  g,, b,, | c, e, g, b, | c e g b | c' e' g' b' | c'' e'' g'' b''
 ```
 
+`c` is the middle C (MIDI note 60).
+*(unlike the Helmholtz notation, where the middle C is written `c'`)*
+
+The range goes from `c,,,,,` (MIDI note 0) up to `g'''''` (MIDI note 127).
+
 ### Accidentals
 
 `#` raises a pitch by a half step.
@@ -670,20 +693,33 @@ c'1 |
 
 ## Write for drums
 ### Pitchmaps
-With pitchmaps you are able to define own note symbols. This is useful espacially for drum notes.<br>
-In a pitchmap file you can define note symbols like that:
+With pitchmaps you are able to define own note symbols. This is useful especially for drum notes.<br>
+Create a text file with the extension `.pitchmap` and define your note symbols like that:
 ```
 "sn": c'  -- snare
 "bd": c,  -- bass drum
+"h": f#,  -- high hat
 ```
 *(a custom note symbol is also called alias)*
+
+Include the pitchmap in your sheet with [using](#using):
+```language=Werckmeister,type=mute
+using "./myDrums.pitchmap";
+```
+
+Now you can write the aliases like regular notes:
+```language=Werckmeister,type=mute
+"bd"4 "sn" "bd" "sn" | h8 h h h h h h h |
+```
+
+*(the example sheets come with ready to use pitchmaps, see `examples/pitchmaps`)*
 
 
 Since a delimited string like "bd" is harder to read than a single character, there are the following rules:
 
 * every single lowercase alphabetic character is allowed as note
 * a note can also have more than one character but then a delimiter is neccessary
-* single character notes can be followed by the octave symbols `'` or `,`
+* single character notes can be followed by the octave symbols `'` or `,`, but every variant needs its own entry in the pitchmap (e.g. `"h'": a#,`)
 * the characters c, d, e, f, g, a, b, r, t are predefined events
 * predefined events can **not** be overwritten in a pitchmap
 
@@ -743,7 +779,7 @@ Referring to the rules above the selector `instrument(drums) pitch(h)` selects e
 
 The declaration `velocity = 51;` set the velocity to the value `51` to the selected notes.
 
-Find [here](#conductor-rules) a complete list of all supported selectors and declarations.
+Find here a complete list of all supported [selectors](#conductor-selectors) and [declarations](#conductor-declarations).
 
 A declaration knows 3 types of value assignment:
 
@@ -855,6 +891,16 @@ type: accomp;
 ```
 > the `template` command should always appear at the begining of a bar, not at the end.
 
+**Several chords in one bar**
+
+Chords have no duration value. If you write several chords in one bar, the bar is divided equally among them:
+```language=Werckmeister,type=mute
+C E | F | G C |
+```
+*(`C` and `E` get a half bar each, three chords would get a third each. How well this sounds depends on your template.)*
+
+Durations like `C4` or `C2` are not supported.
+
 ## Chords
 Since there are no standardized chord symbol rules you need to define your own chord symbols and their meanings.
 You do that by writing a `.chords` file. 
@@ -920,6 +966,9 @@ A phrase is a sequence of events, you can use arbitary in your piece.
 ```
 PHRASE_NAME = PHRASE_EVENTS;
 ```
+
+A phrase contains no bar lines (`|`), so it can be stretched or compressed to any duration.
+To play a phrase over several bars, use ties *(see the example below)*.
 
 **Use a phrase**
 
@@ -1391,7 +1440,7 @@ Werckmeister VST
 ======
 The VST Plugin allows you to use Werckmeister within your favourite DAW. Just load a `*.sheet` file, the Plugin compiles it and sends its MIDI data into your DAW track. For live editing you can connect VSCode with your plugin instances.
 
-[Download Here](https://werckme.github.io/vst#download)
+[Download Here](/vst#download)
 
 ### Load a sheet file
 <img src="https://raw.githubusercontent.com/werckme/werckmeister/master/assets/vst-loading-sheet.gif">

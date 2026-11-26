@@ -20,11 +20,11 @@ namespace conductor
     /// ```
     /// </declaration>
     /// <value name="fade options" type="string">a comma separated list of fade options. E.g. \"type(Modulation)\, from(0) ...", </value>
-    /// <value name="type" type="string">could be either a controller (See https://werckme.github.io/manual#cc-declr) or type(bend)</value>
+    /// <value name="type" type="string">could be either a controller (see [cc](#cc-decl)) or type(bend)</value>
     /// <value name="from" type="0..N">the fade start value, in case of a bend the range is 0..100 where 50 is the neutral position. Otherwise it is 0..127</value>
     /// <value name="to" type="0..N">Optional. the fade end value, in case of a bend the range is 0..100 where 50 is the neutral position. Otherwise it is 0..127</value>
     /// <value name="duration" type="0..N">the fade duration in quarters</value>
-    /// <value name="curve" type="0..N">Optional. the curve type see https://www.werckme.org/manual#fade</value>
+    /// <value name="curve" type="0..N">Optional. the curve type see [fade](#fade)</value>
     /// <value name="offset" type="-N..N">an optional position offset in quarters</value>
     class Fade : public ADeclaration
     {

@@ -67,7 +67,7 @@ namespace conductor
         auto ccIt = _controllerNames().find(controllerStr);
         if (ccIt == _controllerNames().end())
         {
-             FM_THROW(compiler::Exception, "invalid cc name: '" + controllerStr + "'. Please find here a complete list of supported cc names https://werckme.github.io/manual#cc");
+             FM_THROW(compiler::Exception, "invalid cc name: '" + controllerStr + "'. Please find here a complete list of supported cc names https://www.werckme.org/manual#cc");
 
         }
         auto ccNr = ccIt->second;

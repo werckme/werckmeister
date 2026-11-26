@@ -10,7 +10,7 @@ namespace conductor
     /// ```
     /// toBar(4) {...}
     /// ```
-    /// see also: [fromBar](#toBar), [onBar](#onBar), [nthBar](#nthBar).
+    /// see also: [fromBar](#fromBar), [onBar](#onBar), [nthBar](#nthBar).
     /// </selector>
     /// <param name="bar" type="bar number"></param>
     class ToBar : public ISelector
