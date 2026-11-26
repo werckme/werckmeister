@@ -1,0 +1,39 @@
+using "./538modsetvalue.lua";
+
+device: MyDevice  midi _useDevice="FLUID";
+instrumentDef: piano MyDevice 1 1 1;
+instrumentDef: piano2 MyDevice 1 1 1;
+
+instrumentConf: piano 
+    volume 100 
+    pan    0
+    mod 538modsetvalue _x=0
+;
+
+instrumentConf: piano2
+    volume 100 
+    pan    0
+;
+
+[
+instrument: piano;
+{
+                                    c4 & & & 
+    | /modval: 538modsetvalue _x=1/ c4 & & &
+    | /modval: 538modsetvalue _x=2/ c4 & & &
+    | /modval: 538modsetvalue _x=3/ c4 & & &
+}
+]
+
+[
+instrument: piano2;
+{
+    =4= |
+      /mod: 538modsetvalue/
+                                    c4 & & & 
+    | /modval: 538modsetvalue _x=1/ c4 & & &
+    | /modval: 538modsetvalue _x=2/ c4 & & &
+    | /modval: 538modsetvalue _x=3/ c4 & & &
+}
+]
+

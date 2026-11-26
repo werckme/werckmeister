@@ -129,7 +129,7 @@ namespace compiler
 		if (instrumentSection != nullptr)
 		{
 			auto meta = voiceMetaData();
-			instrumentSection->forEachInstrument(this, [this, meta](auto _) 
+			instrumentSection->forEachInstrument(this, [this, meta](auto) 
 			{
 				for (const auto &tie : meta->waitForTieBuffer)
 				{
